@@ -1,0 +1,185 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/unified-share-modal/ContactsField render should have scrollable dropdown if contacts > 5 1`] = `
+<PillSelectorDropdown
+  allowCustomPills={true}
+  className="scrollable"
+  disabled={false}
+  error=""
+  inputProps={
+    Object {
+      "autoFocus": true,
+      "onChange": [Function],
+    }
+  }
+  label={
+    <FormattedMessage
+      defaultMessage="Invite People"
+      id="boxui.unifiedShare.inviteFieldLabel"
+    />
+  }
+  onInput={[Function]}
+  onRemove={[MockFunction]}
+  onSelect={[MockFunction]}
+  parseItems={[Function]}
+  placeholder=""
+  selectedOptions={Array []}
+  selectorOptions={
+    Array [
+      Object {
+        "email": "aholloway@box.com",
+        "id": "12345",
+        "text": "Andrew Holloway",
+        "type": "group",
+        "value": "aholloway@box.com",
+      },
+      Object {
+        "email": "tgupta@box.com",
+        "id": "23456",
+        "text": "Tim Gupta",
+        "type": "user",
+        "value": "tgupta@box.com",
+      },
+      Object {
+        "email": "saziz@box.com",
+        "id": "34567",
+        "text": "Shahzad Aziz",
+        "type": "user",
+        "value": "saziz@box.com",
+      },
+      Object {
+        "email": "a@box.com",
+        "id": "12",
+        "text": "a b",
+        "type": "user",
+        "value": "a@box.com",
+      },
+      Object {
+        "email": "b@box.com",
+        "id": "13",
+        "text": "a b",
+        "type": "user",
+        "value": "b@box.com",
+      },
+      Object {
+        "email": "c@box.com",
+        "id": "14",
+        "text": "a c",
+        "type": "user",
+        "value": "c@box.com",
+      },
+      Object {
+        "email": "d@box.com",
+        "id": "14",
+        "text": "a d",
+        "type": "user",
+        "value": "d@box.com",
+      },
+      Object {
+        "email": "e@box.com",
+        "id": "14",
+        "text": "a e",
+        "type": "user",
+        "value": "e@box.com",
+      },
+    ]
+  }
+  validateForError={[MockFunction]}
+  validator={[MockFunction]}
+>
+  <ContactDatalistItem
+    key="12345"
+    name="Andrew Holloway"
+    subtitle="aholloway@box.com"
+  />
+  <ContactDatalistItem
+    key="23456"
+    name="Tim Gupta"
+    subtitle="tgupta@box.com"
+  />
+  <ContactDatalistItem
+    key="34567"
+    name="Shahzad Aziz"
+    subtitle="saziz@box.com"
+  />
+  <ContactDatalistItem
+    key="12"
+    name="a b"
+    subtitle="a@box.com"
+  />
+  <ContactDatalistItem
+    key="13"
+    name="a b"
+    subtitle="b@box.com"
+  />
+  <ContactDatalistItem
+    key="14"
+    name="a c"
+    subtitle="c@box.com"
+  />
+  <ContactDatalistItem
+    key="14"
+    name="a d"
+    subtitle="d@box.com"
+  />
+  <ContactDatalistItem
+    key="14"
+    name="a e"
+    subtitle="e@box.com"
+  />
+</PillSelectorDropdown>
+`;
+
+exports[`features/unified-share-modal/ContactsField render should render default component 1`] = `
+<PillSelectorDropdown
+  allowCustomPills={true}
+  className=""
+  disabled={false}
+  error=""
+  inputProps={
+    Object {
+      "autoFocus": true,
+      "onChange": [Function],
+    }
+  }
+  label={
+    <FormattedMessage
+      defaultMessage="Invite People"
+      id="boxui.unifiedShare.inviteFieldLabel"
+    />
+  }
+  onInput={[Function]}
+  onRemove={[MockFunction]}
+  onSelect={[MockFunction]}
+  parseItems={[Function]}
+  placeholder=""
+  selectedOptions={
+    Array [
+      Object {
+        "email": "aholloway@box.com",
+        "id": "12345",
+        "text": "Andrew Holloway",
+        "type": "group",
+        "value": "aholloway@box.com",
+      },
+      Object {
+        "email": "tgupta@box.com",
+        "id": "23456",
+        "text": "Tim Gupta",
+        "type": "user",
+        "value": "tgupta@box.com",
+      },
+      Object {
+        "email": "saziz@box.com",
+        "id": "34567",
+        "text": "Shahzad Aziz",
+        "type": "user",
+        "value": "saziz@box.com",
+      },
+    ]
+  }
+  selectorOptions={Array []}
+  validateForError={[MockFunction]}
+  validator={[MockFunction]}
+/>
+`;

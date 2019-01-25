@@ -1,0 +1,148 @@
+@import '../../styles/variables';
+@import '../../styles/inputs';
+
+// Flyout is a tethered component and as such will be rendered outside the scope
+// of the parent container and may not get all box styles.
+.metadata-instance-editor-template-dropdown-flyout {
+    @include box-sizing;
+
+    &::before {
+        border: none;
+    }
+
+    div.overlay {
+        border: 1px solid $sf-fog;
+        border-radius: 4px;
+        overflow: hidden;
+        padding: 0;
+        width: 288px;
+    }
+
+    ul.overlay {
+        border: none;
+    }
+
+    .metadata-instance-editor-template-dropdown-menu {
+        background-color: $white;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 1;
+
+        .overlay-wrapper {
+            border-radius: 0 0 4px 4px;
+            border-top: none;
+            overflow: hidden;
+
+            // NOTE (cwei): targets ie11
+            @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+                max-height: 300px;
+            }
+        }
+
+        .overlay {
+            border-radius: 0%;
+            padding: 0;
+            position: static;
+
+            .datalist-item {
+                padding: 0;
+            }
+        }
+
+        .scroll-container {
+            max-height: 300px;
+        }
+
+        .scroll-wrap-container {
+            flex-grow: 1;
+            overflow-x: hidden;
+
+            // NOTE: targets ie11
+            @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+                // Note (lbarrick) in IE11 the scrollbar gets cut off when a user scrolls to the bottom, this makes it so the list item isn't cut off
+                margin-bottom: 20px;
+            }
+
+            &::before {
+                border-radius: inherit;
+                box-shadow: 0 -2px 25px 0 rgba(0, 0, 0, .25);
+                margin: 0 -5%;
+                width: 110%;
+            }
+
+            &::after {
+                border-radius: inherit;
+                box-shadow: 0 -2px 25px 0 rgba(0, 0, 0, .15);
+                width: 110%;
+            }
+        }
+
+        // input re-styling due to tethering
+        .search-input-container {
+            border-bottom: 1px solid $sf-fog;
+            border-radius: 4px 4px 0 0;
+            margin: 0;
+            padding: 10px 12px 12px;
+
+            input[type="text"] {
+                @include box-inputs;
+
+                width: 100%;
+            }
+
+            input[type="text"]:focus {
+                @include box-inputs-focus;
+            }
+
+            input[type="text"]:hover {
+                @include box-inputs-hover;
+            }
+        }
+
+        .search-button {
+            pointer-events: none;
+        }
+    }
+
+    .btn-plain.metadata-template-dropdown-select-template {
+        align-items: center;
+        color: inherit;
+        display: flex;
+        font-size: 13px;
+        line-height: 20px;
+        overflow: hidden;
+        padding: 5px 35px 5px 15px;
+        text-align: inherit;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+
+        &.metadata-template-dropdown-is-selected {
+            color: $box-blue;
+        }
+
+        .template-display-name {
+            flex: 10;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .metadata-instance-editor-template-message {
+        background-color: $white;
+        border: 1px solid $sf-fog;
+        border-radius: 0 0 4px 4px;
+        border-top-color: transparent;
+        color: $nines;
+        padding: 16px 15px;
+        position: absolute;
+        right: 0;
+        width: 288px;
+
+        &.template-dropdown-loading-indicator {
+            display: flex;
+            justify-content: center;
+        }
+    }
+}

@@ -1,0 +1,12 @@
+@import '../../styles/variables';
+
+.quick-search-message {
+    width: 100%;
+
+    > .overlay {
+        background-color: $karl-fog;
+        color: $eights;
+        text-align: center;
+        width: 100%;
+    }
+}

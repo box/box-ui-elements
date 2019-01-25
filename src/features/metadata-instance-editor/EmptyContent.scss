@@ -1,0 +1,25 @@
+.metadata-instance-editor-no-instances {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    text-align: center;
+
+    svg {
+        margin-left: -5px;
+    }
+
+    .icon-add-metadata-empty-state {
+        height: 105px;
+    }
+}
+
+.metadata-instance-editor-no-instances--call-out {
+    font-weight: bold;
+    margin: 20px 0 10px;
+}
+
+.metadata-instance-editor-no-instances--how-add-template {
+    width: 200px;
+}

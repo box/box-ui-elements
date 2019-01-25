@@ -1,0 +1,309 @@
+@import './variables';
+@import './sizes.media';
+
+.left-sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 0;
+    transition:
+        left .4s cubic-bezier(.215, .61, .355, 1),
+        width .4s cubic-bezier(.215, .61, .355, 1);
+    width: $lsb-width;
+    z-index: $lsb-z-index;
+
+    &.is-forced-open {
+        left: 0;
+    }
+
+    h2 {
+        // override for nav-list
+        text-transform: none;
+    }
+
+    @include small-size {
+        box-shadow: 1px 5px 5px 1px $lsb-menu-shadow-fill;
+        left: -$lsb-width;
+    }
+
+    @include medium-size {
+        overflow-y: hidden;
+        width: $lsb-width-medium;
+
+        &.is-forced-open {
+            overflow-y: auto;
+            width: $lsb-width;
+        }
+    }
+}
+
+.left-sidebar-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 0;
+
+    /* modify the spacing for the left sidebar */
+    .left-sidebar-drop-veil {
+        margin: $lsb-drop-zone-margin;
+        margin-top: 0;
+        width: calc(100% - #{$lsb-drop-zone-margin * 2});
+
+        @include medium-size {
+            height: 50 - ($lsb-drop-zone-margin * 2);
+            top: $lsb-drop-zone-margin;
+            width: calc(100% - #{$lsb-drop-zone-margin * 2});
+
+            .left-sidebar-drop-wrapper-text {
+                display: none;
+            }
+
+            .is-forced-open & {
+                height: 100%;
+                top: 0;
+            }
+        }
+    }
+}
+
+.favorites-loading-wrapper {
+    @include medium-size {
+        // Override default veil display
+        .loading-indicator-veil {
+            display: none;
+        }
+    }
+
+    display: flex;
+    flex-grow: 1;
+
+    .loading-indicator-veil.is-with-top-crawler .crawler {
+        margin-top: 40px;
+    }
+}
+
+.left-sidebar-list {
+    margin-bottom: $lsb-item-separator-margin;
+    position: relative;
+
+    @include medium-size {
+        margin-bottom: 0;
+    }
+
+    // Override nav-list default color for link
+    .left-sidebar-link:not(.is-selected) {
+        color: $light-charcoal;
+
+        &:hover {
+            color: $twos;
+        }
+    }
+
+    &:first-child {
+        .is-forced-open & {
+            margin-bottom: $lsb-item-separator-margin;
+        }
+    }
+
+    &:last-child {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        margin-bottom: 0;
+        max-width: 100%;
+        // If the window is squished, this shows the header + 5 items in scrollable list
+        min-height: calc(6 * #{$lsb-item-height});
+
+        ul {
+            flex-grow: 1;
+            height: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+
+            &::before {
+                box-shadow: 0 4px 6px -4px rgba(0, 0, 0, .35);
+                content: '';
+                display: block;
+                height: $lsb-scroll-shadow-height;
+                left: 7.5%;
+                opacity: 0;
+                position: absolute;
+                top: #{$lsb-item-height - $lsb-scroll-shadow-height};
+                transition: opacity .1s ease-in-out;
+                width: 85%;
+                z-index: 2;
+            }
+
+            &::after {
+                bottom: 0;
+                box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
+                content: '';
+                height: $lsb-scroll-shadow-height;
+                left: 7.5%;
+                margin-bottom: -$lsb-scroll-shadow-height;
+                opacity: 0;
+                position: absolute;
+                transition: opacity .1s ease-in-out;
+                width: 85%;
+                z-index: 3;
+            }
+        }
+
+        &.lsb-scrollable-shadow-top {
+            ul::before {
+                opacity: 1;
+            }
+        }
+
+        &.lsb-scrollable-shadow-bottom {
+            ul::after {
+                opacity: 1;
+            }
+        }
+
+        @include medium-size {
+            margin-top: 0;
+
+            li {
+                display: none;
+            }
+        }
+
+        .is-forced-open & {
+            margin-bottom: 0;
+
+            li {
+                display: block;
+            }
+        }
+    }
+
+    > .placeholder,
+    .loading-indicator-veil {
+        .loading-indicator-crawler {
+            margin-top: $lsb-item-separator-margin;
+        }
+
+        @include medium-size {
+            display: none;
+        }
+    }
+
+    > ul > li {
+        // override for nav-list
+        margin: 0;
+    }
+
+    // override: hide collapse button on responsive breakpoint
+    .nav-list-collapse {
+        top: 0;
+
+        .fill-color {
+            fill: $lsb-menu-icon-fill;
+        }
+
+        @include medium-size {
+            display: none;
+
+            .is-forced-open & {
+                display: block;
+            }
+        }
+    }
+}
+
+.left-sidebar-list:last-child {
+    ul::before,
+    ul::after {
+        @include medium-size {
+            display: none;
+
+            .is-forced-open & {
+                display: block;
+            }
+        }
+    }
+}
+
+.left-sidebar-link {
+    align-items: center;
+    color: $light-charcoal;
+    display: flex;
+    font-size: $lsb-font-size;
+    height: 28px;
+    letter-spacing: .3px;
+    line-height: 30px;
+    padding: 0 $lsb-padding-x;
+    position: relative;
+    width: $lsb-width;
+
+    .scaled-icon svg {
+        transform: scale(1.4, 1.4);
+    }
+
+    &:active,
+    &:focus,
+    &:hover,
+    &.nav-link-callout-enabled {
+        background-color: $lsb-menu-hover-link-bg;
+        color: $twos;
+        text-decoration: none;
+
+        & + .lsb-remove-button {
+            opacity: 1;
+            padding: 0 8px 0 7px;
+
+            .lsb-remove-button-icon {
+                transform: scale(1, 1);
+            }
+        }
+
+        .left-sidebar-icon-wrapper .fill-color {
+            fill: $light-charcoal;
+        }
+
+        .left-sidebar-link-text {
+            color: $twos;
+            text-decoration: none;
+        }
+
+        .new-items-indicator {
+            border: 2px solid $lsb-menu-hover-link-bg;
+        }
+    }
+
+    &.is-selected,
+    &.nav-link-callout-enabled {
+        color: $charcoal;
+        font-weight: bold;
+
+        .left-sidebar-icon-wrapper .fill-color {
+            fill: $lsb-menu-selected-bg-highlight;
+        }
+
+        .is-selected .fill-color {
+            fill: currentColor;
+        }
+    }
+
+    &.is-selected:not(.nav-link-callout-enabled) {
+        box-shadow: inset 2px 0 0 $lsb-menu-selected-bg-highlight;
+
+        @include medium-size {
+            // Default AND custom themes should not apply to this property
+            box-shadow: 0 0 0 transparent !important;
+        }
+    }
+
+    @include medium-size {
+        height: 50px;
+        padding: 15px $lsb-padding-x;
+        width: $lsb-width-medium;
+
+        .is-forced-open & {
+            height: 28px;
+            padding: 0 $lsb-padding-x;
+            width: $lsb-width;
+        }
+    }
+}

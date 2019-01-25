@@ -1,0 +1,16 @@
+@import '../../styles/variables';
+
+.public-DraftEditorPlaceholder-root {
+    margin: 8px 10px;
+}
+
+.is-disabled .public-DraftStyleDefault-block {
+    border: 1px solid $seesee;
+    border-radius: 3px;
+    padding: 8px 10px;
+    width: 262px;
+}
+
+.draft-js-editor {
+    overflow: hidden;
+}

@@ -1,0 +1,319 @@
+@import '../../styles/variables';
+
+// Menus are rendered at the root of the DOM, so this style is not nested
+.usm-menu-description {
+    color: $seventy-sixers;
+    display: block;
+    font-size: 12px;
+}
+
+.usm-ftux-tooltip {
+    max-width: 325px;
+    padding: 20px;
+
+    .ftux-tooltip-title {
+        font-weight: 700;
+    }
+
+    .tooltip-close-button {
+        right: 4px;
+        top: 8px;
+    }
+
+    .ftux-tooltip-controls {
+        overflow: hidden;
+    }
+
+    .ftux-tooltip-button {
+        float: right;
+        margin: 0;
+    }
+
+    h4 {
+        margin: 0 0 10px;
+    }
+
+    p {
+        margin: 0;
+    }
+}
+
+.usm-share-access-menu .menu-item.is-select-item.is-selected::before,
+.usm-share-permissions-menu .menu-item.is-select-item.is-selected::before {
+    bottom: inherit;
+}
+
+.unified-share-modal {
+    /** overrides for USM sub-components */
+    .text-area-container {
+        position: static;
+    }
+
+    .selector-dropdown-wrapper {
+        .is-visible {
+            z-index: 1;
+        }
+    }
+
+    .loading-indicator-veil {
+        z-index: $modal-dialog-z-index + 2;
+    }
+
+    .beta-badge {
+        margin-left: 5px;
+        transform: translateY(-2px);
+    }
+
+    /*** Invite collaborators section ***/
+    .invite-collaborator-container {
+        position: relative;
+    }
+
+    .invitee-menu-wrap {
+        display: flex;
+        margin-top: 10px;
+    }
+
+    /*** Email form ***/
+    .inline-alert {
+        margin-bottom: 20px;
+        margin-top: 0;
+    }
+
+    .pill-selector-wrapper .pill-selector-input-wrapper, // need both selectors for specificity
+    textarea {
+        /* override for DOM element in `TextArea` which provides no id/class for targeting */
+        width: 100%;
+    }
+
+    .pill-selector-wrapper {
+        margin-bottom: 10px;
+    }
+
+    .pill-selector-wrapper.scrollable {
+        .overlay-wrapper {
+            border: 1px solid $sf-fog;
+            height: 280px;
+            overflow-y: scroll;
+            position: absolute;
+        }
+
+        .overlay {
+            border: none;
+        }
+    }
+
+    .is-expanded {
+        .text-area-container {
+            height: 89px;
+            margin: 20px 0 0;
+        }
+
+        .text-area-container textarea::placeholder {
+            color: $nines;
+        }
+
+        .pill-selector-input-wrapper {
+            height: 68px;
+        }
+    }
+
+    .pill-selector-input-wrapper {
+        border: 1px solid $seesee;
+        margin-top: 10px;
+
+        .pill-selector-input::placeholder {
+            color: $nines;
+        }
+
+        &.is-disabled {
+            background-color: $haze;
+            box-shadow: none;
+            color: $bfive;
+
+            .pill-selector-input::placeholder {
+                color: $nines;
+            }
+
+            &:hover {
+                border-color: $sf-fog;
+            }
+        }
+    }
+
+    /*** Shared link section ***/
+    .shared-link-toggle-row {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+
+        .share-toggle-container {
+            flex: 0 1 80%;
+            margin-bottom: 0;
+            overflow-y: hidden;
+
+            .toggle-container {
+                margin-bottom: 0;
+            }
+
+            .toggle-simple-label {
+                color: $twos;
+            }
+        }
+
+        .shared-link-settings-btn-container {
+            flex: 0 1 20%;
+            text-align: right;
+
+            .shared-link-settings-btn {
+                color: $primary-color;
+                margin-left: 5px;
+            }
+        }
+    }
+
+    .shared-link-field-row {
+        display: flex;
+        margin: 10px 0;
+
+        .shared-link-field-container {
+            align-items: center;
+            flex: 1;
+        }
+
+        .text-input-with-copy-button-container {
+            margin-bottom: 0;
+        }
+
+        .text-input-container {
+            flex: 1;
+
+            input {
+                margin-top: 0;
+            }
+        }
+
+        .email-shared-link-btn {
+            margin: 0 0 0 5px;
+            padding: 10px 10px 9px;
+        }
+    }
+
+    .shared-link-access-row {
+        .btn-plain {
+            margin-right: 10px;
+        }
+    }
+
+    .upgrade-badge {
+        margin-right: 5px;
+    }
+
+    .upgrade-link {
+        color: $box-blue;
+    }
+
+    .upgrade-description {
+        margin-bottom: 20px;
+        margin-top: 15px;
+    }
+
+    .shared-link-expiration-badge {
+        padding: 0 5px;
+
+        .icon-clock {
+            display: inline-block;
+            margin-bottom: -3px;
+        }
+    }
+
+    .manage-all-btn {
+        color: $box-blue;
+        float: right;
+        margin: -5px 0 10px 0;
+    }
+
+    .collaborator-list {
+        border: solid 1px $seesee;
+        border-radius: 4px;
+        box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .08) inset;
+        height: 210px;
+        margin: 0;
+        min-width: 400px;
+        overflow-y: scroll;
+
+        .collaborator-list-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px;
+
+            .user {
+                align-items: center;
+                display: flex;
+                white-space: nowrap;
+            }
+
+            .avatar {
+                height: 32px;
+                margin-right: 8px;
+                width: 32px;
+            }
+
+            .name {
+                color: $twos;
+                font-size: 13px;
+                font-weight: bold;
+                line-height: 16px;
+                max-width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .name .link {
+                color: $twos;
+            }
+
+            .email .link {
+                color: $seventy-sixers;
+            }
+
+            .name .link:hover,
+            .email .link:hover {
+                text-decoration: underline;
+            }
+
+            .name.group {
+                line-height: 32px;
+            }
+
+            .email {
+                color: $seventy-sixers;
+                font-size: 12px;
+                line-height: 16px;
+                max-width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .role {
+                color: $seventy-sixers;
+                line-height: 32px;
+            }
+        }
+
+        .collaborator-list-item.more {
+            justify-content: inherit;
+
+            .link {
+                color: $box-blue;
+                line-height: 32px;
+                text-decoration: none;
+            }
+
+            .collaboration-badge {
+                margin-right: 8px;
+            }
+        }
+    }
+}

@@ -1,0 +1,288 @@
+### Description
+
+This is the simplified sharing modal, interally referred to as the Unified Share Modal
+(a combination of the previous invite collaborators modal and the shared link modal).
+
+### Examples
+
+#### Click each button to see different modal states and behaviors
+```js
+const Button = require('box-ui-elements/es/components/button').default;
+
+// Base Example. Extend for different initial loads, or to demonstrate different interactions
+class USMExample extends React.Component {
+    constructor() {
+        super();
+
+        this.setInitialState();
+
+        this.contacts = [
+            { id: 0, collabID: 0, name: 'Jackie', email: 'jackie@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Owner', userID: '0', profileURL: 'https://foo.bar' },
+            { id: 1, collabID: 1, name: 'Jeff', email: 'jtan@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Viewer', userID: '1', },
+            { id: 2, collabID: 2, name: 'David', email: 'dtong@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '2', },
+            { id: 3, collabID: 3, name: 'Yang', email: 'yzhao@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '3', },
+            { id: 4, collabID: 4, name: 'Yong', email: 'ysu@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '4', },
+            { id: 5, collabID: 5, name: 'Will', email: 'wyau@box.com', type: 'pending', hasCustomAvatar: false, translatedRole: 'Editor', userID: '5', },
+            { id: 6, collabID: 6, name: 'Dave', email: 'djordan@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '6', },
+            { id: 7, collabID: 7, name: 'Ke', email: 'kehuang@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '7', },
+            { id: 8, collabID: 8, name: 'Wenbo', email: 'wyu@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '8', },
+            { id: 11, collabID: 11, name: 'Supersupersupersuperreallyreallyreallylongfirstname incrediblyspectacularlylonglastname', email: 'Supersupersupersuperreallyreallyreallyincrediblyspectacularlylongemail@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '11', },
+            { /* example group contact */
+                    id: 14,
+                    collabID: 14,
+                    type: 'group',
+                    name: 'my group',
+                    hasCustomAvatar: false,
+                    translatedRole: 'Viewer',
+                    userID: null,
+            },
+        ];
+
+        this.closeModal = this.closeModal.bind(this);
+        this.fakeRequest = this.fakeRequest.bind(this);
+        this.getInitialData = this.getInitialData.bind(this);
+    }
+
+    setInitialState() {
+        return this.state = {
+            isOpen: false,
+            item: {
+                grantedPermissions: {
+                    itemShare: true
+                },
+                hideCollaborators: false,
+                id: 12345,
+                name: 'My Example Folder',
+                type: 'folder',
+                typedID: 'd_12345'
+
+            },
+            collaboratorsList: {
+                collaborators: [],
+            },
+            selectorOptions: [],
+            sharedLink: this.setDefaultSharedLinkState(),
+            submitting: false
+        };
+    }
+
+    setDefaultSharedLinkState() {
+        return this.defaultSharedLinkState = {
+            accessLevel: '',
+            allowedAccessLevels: {},
+            canChangeAccessLevel: true,
+            enterpriseName: '',
+            expirationTimestamp: null,
+            isDownloadSettingAvailable: true,
+            isNewSharedLink: false,
+            permissionLevel: '',
+            url: '',
+        };
+    }
+
+    closeModal() {
+        this.setState({
+            isOpen: false,
+            sharedLink: this.setDefaultSharedLinkState(),
+            collaboratorsList: {
+                collaborators: [],
+            },
+        });
+    }
+
+    getInitialData() {
+        const initialPromise = this.fakeRequest();
+        const fetchCollaborators = new Promise(resolved => {
+            setTimeout(() => {
+                const collaborators = this.contacts.slice();
+
+                const collaboratorsList = {
+                    collaborators,
+                };
+                this.setState({collaboratorsList});
+                resolved();
+            }, 1000);
+        })
+        return Promise.all([initialPromise, fetchCollaborators]);
+    }
+
+    fakeRequest() {
+        // submitting is used to disable input fields, and not to show the loading indicator
+        this.setState({ submitting: true });
+        return new Promise(resolve => {
+            setTimeout(() => {
+                console.log('Request succeeded!');
+                this.setState({ submitting: false });
+                resolve();
+            }, 500)
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                { this.state.isOpen &&
+                <UnifiedShareModal
+                    canInvite={ true }
+                    changeSharedLinkAccessLevel={
+                        newLevel => this.fakeRequest().then(() => {
+                            this.setState({
+                                sharedLink: {
+                                    ...this.state.sharedLink,
+                                    accessLevel: newLevel,
+                                }
+                            })
+                        })
+                    }
+
+                    changeSharedLinkPermissionLevel={
+                        newLevel => this.fakeRequest().then(() => {
+                            this.setState({
+                                sharedLink: {
+                                    ...this.state.sharedLink,
+                                    permissionLevel: newLevel,
+                                }
+                            })
+                        })
+                    }
+
+                    collaboratorsList={this.state.collaboratorsList}
+                    collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+                    currentUserID="0"
+                    focusSharedLinkOnLoad={ this.props.shouldFocusSharedLinkOnLoad }
+                    getCollaboratorContacts={ () => {
+                        return Promise.resolve(this.contacts);
+                    } }
+                    getSharedLinkContacts={ () => {
+                        return Promise.resolve(this.contacts);
+                    } }
+                    getInitialData={this.getInitialData}
+                    inviteePermissions={
+                        [
+                            {value: 'Co-owner', text: 'Co-owner'},
+                            {value: 'Editor', text: 'Editor'},
+                            {value: 'Viewer Uploader', text: 'Viewer Uploader'},
+                            {value: 'Previewer Uploader', text: 'Previewer Uploader'},
+                            {value: 'Viewer', text: 'Viewer'},
+                            {value: 'Previewer', text: 'Previewer'},
+                            {value: 'Uploader', text: 'Uploader'},
+                        ]
+                    }
+                    isOpen={ this.state.isOpen }
+                    isToggleEnabled={ true }
+                    item={ this.state.item }
+                    onAddLink={
+                        () => this.fakeRequest().then(() => {
+                            this.setState({
+                                sharedLink: {
+                                    accessLevel: 'peopleInYourCompany',
+                                    allowedAccessLevels: {
+                                        peopleWithTheLink: true,
+                                        peopleInYourCompany: true,
+                                        peopleInThisItem: true,
+                                    },
+                                    canChangeAccessLevel: true,
+                                    enterpriseName: 'Box',
+                                    expirationTimestamp: 1509173940,
+                                    isDownloadSettingAvailable: true,
+                                    isNewSharedLink: true,
+                                    permissionLevel: 'canViewDownload',
+                                    url: 'https://box.com/s/abcdefg',
+                                }
+                            });
+                        })
+                    }
+                    onRemoveLink={
+                        () => this.fakeRequest().then(() => {
+                            this.setState({
+                                sharedLink: this.defaultSharedLinkState
+                            });
+                            this.closeModal();
+                        })
+                    }
+                    onRequestClose={ this.closeModal }
+                    onSettingsClick={ () => alert('hi!') }
+                    sendInvites={
+                        () => this.fakeRequest().then(() => {
+                            this.closeModal();
+                        })
+                    }
+                    sendInvitesError={''}
+                    sendSharedLink={ ({ emails, emailMessage }) => this.fakeRequest().then(() => {
+                        this.closeModal();
+                        console.log(`Sent invite to ${emails} with message "${emailMessage}"`);
+                    })}
+                    sendSharedLinkError={''}
+
+                    sharedLink={ this.state.sharedLink }
+                    showCalloutForUser={true}
+                    showUpgradeOptions
+                    submitting={ this.state.submitting }
+                    trackingProps={ {
+                        inviteCollabsEmailTracking: {},
+                        sharedLinkEmailTracking: {},
+                        sharedLinkTracking: {},
+                        inviteCollabTracking: {},
+                        modalTracking: {},
+                        collaboratorListTracking: {},
+                    } }
+                /> }
+                <Button
+                    onClick={ () =>
+                        this.setState({
+                            isOpen: true,
+                        }) }
+                >
+                    {this.props.buttonText}
+                </Button>
+            </div>
+        )
+    }
+}
+
+class USMSharedLinkExample extends USMExample {
+    getInitialData() {
+        const resolveSharedLink = new Promise(resolved => {
+            setTimeout(() => {
+                this.setState({
+                    sharedLink: {
+                        accessLevel: 'peopleInYourCompany',
+                        allowedAccessLevels: {
+                            peopleWithTheLink: true,
+                            peopleInYourCompany: true,
+                            peopleInThisItem: true,
+                        },
+                        canChangeAccessLevel: true,
+                        enterpriseName: 'Box',
+                        expirationTimestamp: 1509173940,
+                        isDownloadSettingAvailable: true,
+                        permissionLevel: 'canViewDownload',
+                        url: 'https://box.com/s/abcdefg',
+                    }
+                });
+                resolved();
+            }, 400);
+        });
+
+        return Promise.all([this.fakeRequest, resolveSharedLink]);
+    }
+}
+
+<div>
+    <div>
+        This shows the Unified share modal in its initial state, with some collaborators.
+        <USMExample buttonText="Open USM Modal" />
+    </div>
+    <hr/>
+    <div>
+        This shows the Unified share modal when it has a shared link to fetch, but should not auto-focus this link.
+        <USMSharedLinkExample buttonText="Open USM Modal" shouldFocusSharedLinkOnLoad={false}/>
+    </div>
+    <hr/>
+    <div>
+        This shows the Unified share modal when it has a shared link to fetch, and should auto-focus.
+        <USMSharedLinkExample buttonText="Open USM Modal" shouldFocusSharedLinkOnLoad/>
+    </div>
+</div>
+
+```

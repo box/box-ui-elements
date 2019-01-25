@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/time/ReadableTime Correctly renders timestamp that is 1 hour in the future with future timestamps disabled 1`] = `
+<FormattedMessage
+  defaultMessage="Today at {time, time, short}"
+  id="boxui.readableTime.eventTimeToday"
+  values={
+    Object {
+      "date": null,
+      "time": 1506547856000,
+    }
+  }
+/>
+`;
+
+exports[`components/time/ReadableTime Correctly renders timestamp that is 1 hour in the future with future timestamps enabled 1`] = `
+<Component
+  value={1506555056000}
+/>
+`;
+
+exports[`components/time/ReadableTime Correctly renders timestamp that is a few days ago in the same year 1`] = `
+<FormattedDate
+  day="numeric"
+  month="short"
+  value={1506378656000}
+/>
+`;
+
+exports[`components/time/ReadableTime Correctly renders timestamp that is a few days ago in the same year with the time 1`] = `
+<FormattedMessage
+  defaultMessage="{date} at {time, time, short}"
+  id="boxui.readableTime.eventTimeDateShort"
+  values={
+    Object {
+      "date": <FormattedDate
+        day="numeric"
+        month="short"
+        value={1506378656000}
+      />,
+      "time": 1506378656000,
+    }
+  }
+/>
+`;
+
+exports[`components/time/ReadableTime Correctly renders timestamp that is the distant past 1`] = `
+<FormattedMessage
+  defaultMessage="{time, date, medium}"
+  id="boxui.readableTime.eventTime"
+  values={
+    Object {
+      "date": null,
+      "time": 946627200000,
+    }
+  }
+/>
+`;
+
+exports[`components/time/ReadableTime Correctly renders timestamp that is yesterday 1`] = `
+<FormattedMessage
+  defaultMessage="Yesterday at {time, time, short}"
+  id="boxui.readableTime.eventTimeYesterday"
+  values={
+    Object {
+      "date": null,
+      "time": 1506465056000,
+    }
+  }
+/>
+`;

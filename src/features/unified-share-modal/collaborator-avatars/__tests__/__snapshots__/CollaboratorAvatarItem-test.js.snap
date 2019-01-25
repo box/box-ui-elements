@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render avatar if badges are disabled 1`] = `
+<Badgeable
+  bottomLeft={null}
+  topLeft={null}
+>
+  <Avatar
+    id={1}
+    name="foo bar"
+  />
+</Badgeable>
+`;
+
+exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render badges with expiration lacking an execution date value 1`] = `
+<Badgeable
+  bottomLeft={null}
+  topLeft={null}
+>
+  <Avatar
+    id={1}
+    name="foo bar"
+  />
+</Badgeable>
+`;
+
+exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render badges with expiration, but badging not allowed 1`] = `
+<Badgeable
+  bottomLeft={null}
+  topLeft={null}
+>
+  <Avatar
+    id={1}
+    name="foo bar"
+  />
+</Badgeable>
+`;
+
+exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render if email is missing 1`] = `
+<Badgeable
+  bottomLeft={null}
+  topLeft={null}
+>
+  <Avatar
+    id={1}
+    name="foo bar"
+  />
+</Badgeable>
+`;
+
+exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render if external collab is disabled 1`] = `
+<Badgeable
+  bottomLeft={null}
+  topLeft={null}
+>
+  <Avatar
+    id={1}
+    name="foo bar"
+  />
+</Badgeable>
+`;
+
+exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should render avatar with expiration if we allow badging 1`] = `
+<Badgeable
+  bottomLeft={null}
+  topLeft={
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="middle-right"
+      text={
+        <FormattedMessage
+          defaultMessage="Access expires on {date}"
+          id="boxui.unifiedShare.collaborators.expirationTooltipText"
+          values={
+            Object {
+              "date": "January 1, 2009",
+            }
+          }
+        />
+      }
+      theme="default"
+    >
+      <div>
+        <IconExpirationBadge
+          className="themed"
+          height={14}
+          width={14}
+        />
+      </div>
+    </Tooltip>
+  }
+>
+  <Avatar
+    id={1}
+    name="foo bar"
+  />
+</Badgeable>
+`;
+
+exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should render avatar with external collab if all preconditions are met 1`] = `
+<Badgeable
+  bottomLeft={
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="middle-right"
+      text={
+        <FormattedMessage
+          defaultMessage="{email} is from outside of your company"
+          id="boxui.unifiedShare.collaborators.externalCollabTooltipText"
+          values={
+            Object {
+              "email": "test@example.org",
+            }
+          }
+        />
+      }
+      theme="default"
+    >
+      <div>
+        <IconGlobe
+          className="themed"
+          height={14}
+          width={14}
+        />
+      </div>
+    </Tooltip>
+  }
+  topLeft={null}
+>
+  <Avatar
+    id={1}
+    name="foo bar"
+  />
+</Badgeable>
+`;
+
+exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should render custom avatar 1`] = `
+<Badgeable
+  bottomLeft={null}
+  topLeft={null}
+>
+  <Avatar
+    avatarUrl="http://foo.bar"
+    id={1}
+    name="foo bar"
+  />
+</Badgeable>
+`;
+
+exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should render default component 1`] = `
+<Badgeable
+  bottomLeft={null}
+  topLeft={null}
+>
+  <Avatar
+    id={1}
+    name="foo bar"
+  />
+</Badgeable>
+`;

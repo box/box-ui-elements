@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should render disabled pill selector 1`] = `
+<SelectorDropdown
+  className="pill-selector-wrapper"
+  onEnter={[Function]}
+  onSelect={[Function]}
+  selector={
+    <Label
+      text=""
+    >
+      <PillSelector
+        disabled={true}
+        error=""
+        inputProps={Object {}}
+        onBlur={[Function]}
+        onInput={[Function]}
+        onPaste={[Function]}
+        onRemove={[Function]}
+        placeholder=""
+        selectedOptions={Array []}
+        value=""
+      />
+    </Label>
+  }
+/>
+`;

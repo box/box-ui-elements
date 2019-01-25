@@ -1,0 +1,162 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Tabs
+ **************************************/
+
+.tab-view {
+    margin-top: 6px;
+}
+
+.dynamic-tabs {
+    .dynamic-tabs-bar {
+        display: flex;
+        flex: none;
+
+        .left-arrow {
+            flex: 0 0 8px;
+            margin: 0 5px 0 -13px;
+        }
+
+        .right-arrow {
+            flex: 0 0 8px;
+            margin: 0 -13px 0 5px;
+        }
+    }
+
+    .dynamic-tabs-wrapper {
+        flex: 0 0 100%;
+        overflow: hidden;
+    }
+
+    .tabs {
+        position: relative;
+        transition: left .2s;
+
+        .tab,
+        .tab:hover {
+            flex: none;
+            max-width: 90%;
+
+            .tab-title {
+                padding: 0 7px;
+            }
+        }
+    }
+}
+
+.tabs {
+    display: flex;
+
+    .tab,
+    .tab:hover {
+        border-bottom: 1px solid $off-white;
+        color: $downtown-grey;
+        display: inline-block;
+        flex: 1;
+        font-size: 13px;
+        letter-spacing: .035em;
+        line-height: 40px;
+        position: relative;
+
+        &.single-tab-showing {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        &.is-selected {
+            color: $twos;
+
+            .tab-underline {
+                opacity: 1;
+            }
+
+            .tab-close {
+                display: block;
+            }
+        }
+
+        .tab-underline {
+            background-color: $primary-color;
+            bottom: -1px; /* offset because border is outset  */
+            height: 2px;
+            opacity: 0;
+            position: absolute; /* relative to .tab */
+            transition: opacity .3s cubic-bezier(.215, .61, .355, 1);
+            width: 100%;
+        }
+
+        .tab-content {
+            display: flex;
+        }
+
+        .tab-title {
+            overflow: hidden;
+            padding-right: 5px;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tab-close {
+            display: none;
+            flex: none;
+            font-weight: bold;
+            padding-right: 7px;
+        }
+    }
+
+    .tab:focus {
+        outline: 1px dotted $primary-color;
+    }
+
+    .tab:hover,
+    .tab:focus {
+        .tab-title {
+            color: $twos;
+        }
+    }
+
+    .tab-spacer {
+        border-bottom: 1px solid $off-white;
+        flex: 1 1 auto;
+    }
+
+    .tab.btn-plain:not(.is-disabled) {
+        &:active {
+            background: transparent;
+            border-bottom: 1px solid $off-white;
+        }
+
+        &:focus {
+            border-color: $off-white;
+            box-shadow: none;
+        }
+
+        &:hover {
+            background: transparent;
+        }
+    }
+}
+
+.tab-panels {
+    height: 100%;
+    padding-top: 10px;
+
+    .tab-panel {
+        display: none;
+
+        &.is-selected {
+            display: block;
+            height: 100%;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.tab-view.show-outline .tab-panel:focus {
+    outline: 1px dotted $primary-color;
+}

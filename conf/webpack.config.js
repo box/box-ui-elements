@@ -15,6 +15,7 @@ const isRelease = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'dev';
 const language = process.env.LANGUAGE;
 const react = process.env.REACT === 'true';
+const examples = process.env.EXAMPLES === 'true';
 const token = process.env.TOKEN; // used for examples only
 const folderId = process.env.FOLDERID; // used for examples only
 const fileId = process.env.FILEID; // used for examples only
@@ -50,11 +51,13 @@ function getConfig(isReactExternalized) {
         resolve: {
             modules: ['src', 'node_modules'],
             alias: {
-                examples: path.join(__dirname, '../examples/src'),
+                'box-ui-elements/es': path.join(__dirname, '../src'), // for examples only
+                examples: path.join(__dirname, '../examples/src'), // for examples only
                 'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
                 'box-react-ui-locale-data': path.resolve(`node_modules/box-react-ui/i18n/${language}`),
                 moment: path.resolve('src/utils/MomentShim'), // Hack to leverage Intl instead
+                'rsg-components/Wrapper': path.join(__dirname, '../examples/Wrapper'), // for examples only
             },
         },
         devServer: {
@@ -114,12 +117,14 @@ function getConfig(isReactExternalized) {
     if (isDev) {
         config.devtool = 'source-map';
         config.plugins.push(Translations);
-        config.plugins.push(
-            new CircularDependencyPlugin({
-                exclude: /node_modules/,
-                failOnError: true,
-            }),
-        );
+        if (!examples) {
+            config.plugins.push(
+                new CircularDependencyPlugin({
+                    exclude: /node_modules/,
+                    failOnError: true,
+                }),
+            );
+        }
     }
 
     if (isRelease && language === 'en-US') {

@@ -1,0 +1,186 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Pikaday
+ **************************************/
+
+.pika-single {
+    @include common-typography;
+    @include box-sizing;
+
+    background: $white;
+    border: 1px solid $sf-fog;
+    border-bottom-color: $downtown-grey;
+    color: $sunset-grey;
+    display: block;
+    position: relative;
+    z-index: 9999;
+
+    &.is-hidden {
+        display: none;
+    }
+
+    &.is-bound {
+        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .1);
+        margin-top: 5px;
+        position: absolute;
+    }
+}
+
+.pika-lendar {
+    padding: 10px;
+}
+
+.pika-title {
+    margin-bottom: 10px;
+    position: relative;
+    text-align: center;
+
+    select {
+        cursor: pointer;
+        left: 0;
+        margin: 0;
+        opacity: 0;
+        position: absolute;
+        top: 5px;
+        z-index: 9998;
+    }
+}
+
+.pika-label {
+    background-color: $white;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+    overflow: hidden;
+    padding: 5px 15px 5px 5px;
+    position: relative;
+    z-index: 9999;
+
+    &::after {
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid $better-black;
+        content: '';
+        position: absolute;
+        right: 4px;
+        top: 13px;
+    }
+}
+
+.pika-button,
+.pika-next,
+.pika-prev {
+    background: none;
+    border: 0;
+    outline: none;
+}
+
+.pika-prev,
+.pika-next {
+    cursor: pointer;
+    display: block;
+    height: 30px;
+    overflow: hidden;
+
+    /* hide text using text-indent trick. */
+
+    /* negative because firefox indents pseudo-elements when text-indent is positive. 999 because i18n consideration */
+    text-indent: -999px;
+    white-space: nowrap;
+    width: 20px;
+
+    &.is-disabled {
+        cursor: default;
+        opacity: .2;
+    }
+}
+
+.pika-prev {
+    float: left;
+
+    &::before {
+        border-bottom: 4px solid transparent;
+        border-right: 4px solid $better-black;
+        border-top: 4px solid transparent;
+        content: '';
+        left: 10px;
+        position: absolute;
+        top: 10px;
+    }
+}
+
+.pika-next {
+    float: right;
+
+    &::after {
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid $better-black;
+        border-radius: 2px;
+        border-top: 4px solid transparent;
+        content: '';
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+}
+
+.pika-select {
+    display: inline-block;
+}
+
+.pika-table {
+    abbr {
+        font-weight: bold;
+    }
+
+    th {
+        color: $primary-color;
+        font-size: 13px;
+        text-align: center;
+        width: 32px;
+    }
+
+    th,
+    td {
+        width: 14.285714285714286%;
+    }
+
+    > thead > tr {
+        height: 25px;
+        vertical-align: top;
+    }
+
+    > tbody > tr {
+        height: 33px;
+    }
+}
+
+.pika-button {
+    font-size: 13px;
+    height: 30px;
+    margin: 3px;
+    text-align: center;
+    width: 30px;
+}
+
+.is-today .pika-button {
+    font-weight: bold;
+}
+
+.pika-button:hover,
+.is-selected .pika-button {
+    background-color: $primary-color;
+    border-radius: 3px;
+    color: $white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.is-disabled .pika-button,
+.is-outside-current-month .pika-button {
+    cursor: default;
+    opacity: .3;
+    pointer-events: none;
+}

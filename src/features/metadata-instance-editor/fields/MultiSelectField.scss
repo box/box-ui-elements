@@ -1,0 +1,23 @@
+@import '../../../styles/variables';
+
+.metadata-instance-editor-field-multi-select {
+    margin: 0 0 20px;
+
+    .label {
+        word-wrap: break-word;
+    }
+
+    label .select-container {
+        display: block;
+        margin-top: 5px;
+
+        .select-button {
+            z-index: inherit;
+        }
+    }
+
+    &-desc {
+        color: $sevens;
+        word-wrap: break-word;
+    }
+}

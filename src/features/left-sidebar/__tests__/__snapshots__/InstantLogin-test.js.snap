@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`feature/left-sidebar/InstantLogin should render 1`] = `
+<LeftSidebarLink
+  className="instant-login-link"
+  htmlAttributes={
+    Object {
+      "href": "/master",
+    }
+  }
+  icon={null}
+  message="message"
+  showTooltip={false}
+/>
+`;
+
+exports[`feature/left-sidebar/InstantLogin should render without icon 1`] = `
+<LeftSidebarLink
+  className="instant-login-link"
+  htmlAttributes={
+    Object {
+      "href": "/master",
+    }
+  }
+  icon={null}
+  message="message"
+  showTooltip={false}
+/>
+`;

@@ -1,0 +1,27 @@
+@import '../../../styles/variables';
+
+.metadata-instance-editor-field-enum {
+    margin: 0 0 20px;
+
+    .label {
+        word-wrap: break-word;
+    }
+
+    label .select-container {
+        display: block;
+        margin-top: 5px;
+
+        .datalist-item.select-option:first-child {
+            color: $sevens;
+
+            .select-option-check-icon {
+                visibility: hidden;
+            }
+        }
+    }
+
+    .metadata-instance-editor-field-enum-desc {
+        color: $sevens;
+        word-wrap: break-word;
+    }
+}

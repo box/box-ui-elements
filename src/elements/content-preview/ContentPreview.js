@@ -790,7 +790,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
             // Respect 'Retry-After' header if present, otherwise retry with exponential back-off
             let timeoutMs = 2 ** this.retryCount * MS_IN_S;
-            const retryAfter = getProp(`fileError.response.headers[${HEADER_RETRY_AFTER}]`);
+            const retryAfter = getProp(fileError, `response.headers[${HEADER_RETRY_AFTER}]`);
             if (retryAfter) {
                 const retryAfterS = parseInt(retryAfter, 10);
                 if (!Number.isNaN(retryAfterS)) {
@@ -976,38 +976,34 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    onMouseMove = throttle(
-        () => {
-            const viewer = this.getViewer();
-            const isPreviewing = !!viewer;
-            const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
+    onMouseMove = throttle(() => {
+        const viewer = this.getViewer();
+        const isPreviewing = !!viewer;
+        const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
 
-            clearTimeout(this.mouseMoveTimeoutID);
+        clearTimeout(this.mouseMoveTimeoutID);
 
-            if (!this.previewContainer) {
-                return;
+        if (!this.previewContainer) {
+            return;
+        }
+
+        // Always assume that navigation arrows will be hidden
+        this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
+
+        // Only show it if either we aren't previewing or if we are then the viewer
+        // is not blocking the show. If we are previewing then the viewer may choose
+        // to not allow navigation arrows. This is mostly useful for videos since the
+        // navigation arrows may interfere with the settings menu inside video player.
+        if (this.previewContainer && (!isPreviewing || viewer.allowNavigationArrows())) {
+            this.previewContainer.classList.add(CLASS_NAVIGATION_VISIBILITY);
+        }
+
+        this.mouseMoveTimeoutID = setTimeout(() => {
+            if (this.previewContainer) {
+                this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
             }
-
-            // Always assume that navigation arrows will be hidden
-            this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
-
-            // Only show it if either we aren't previewing or if we are then the viewer
-            // is not blocking the show. If we are previewing then the viewer may choose
-            // to not allow navigation arrows. This is mostly useful for videos since the
-            // navigation arrows may interfere with the settings menu inside video player.
-            if (this.previewContainer && (!isPreviewing || viewer.allowNavigationArrows())) {
-                this.previewContainer.classList.add(CLASS_NAVIGATION_VISIBILITY);
-            }
-
-            this.mouseMoveTimeoutID = setTimeout(() => {
-                if (this.previewContainer) {
-                    this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
-                }
-            }, 1500);
-        },
-        1000,
-        true,
-    );
+        }, 1500);
+    }, 1000);
 
     /**
      * Keyboard events

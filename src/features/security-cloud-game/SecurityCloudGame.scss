@@ -1,0 +1,78 @@
+@import '../../styles/variables';
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.25);
+    }
+
+    50% {
+        transform: scale(1.5);
+    }
+
+    75% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.box-ui-security-cloud-game {
+    background-color: $koray-ing;
+    display: flex;
+    flex-flow: column;
+    position: relative;
+
+    .box-ui-security-cloud-game-message {
+        background-color: rgba(0, 0, 0, .1);
+        color: $white;
+        flex: none;
+        font-size: 16px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .box-ui-security-cloud-game-board {
+        display: flex;
+        flex: 1;
+        position: relative;
+    }
+}
+
+.drag-cloud {
+    cursor: move;
+    fill: $white;
+    position: absolute;
+}
+
+.drop-cloud {
+    display: inline-block;
+    fill: darken($koray-ing, 20%);
+    position: absolute;
+
+    .logo {
+        bottom: -5px;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+
+        svg {
+            width: 50%;
+
+            path {
+                fill: $white;
+            }
+        }
+    }
+
+    &.is-over {
+        .icon-cloud {
+            animation: pulse 1s ease-in-out infinite;
+        }
+    }
+}

@@ -1,0 +1,8 @@
+@import '../../styles/variables';
+@import 'PillSelector';
+
+.pill-selector-input-wrapper {
+    &.show-error {
+        border-color: $amaranth;
+    }
+}

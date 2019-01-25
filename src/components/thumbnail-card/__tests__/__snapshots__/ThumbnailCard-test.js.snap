@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/thumbnail-card/ThumbnailCard should pass down icon and subtitle 1`] = `
+<div
+  className="thumbnail-card "
+>
+  <ThumbnailCardThumbnail
+    thumbnail={
+      <div>
+        Foo Bar!
+      </div>
+    }
+  />
+  <ThumbnailCardDetails
+    icon={
+      <img
+        alt="icon"
+      />
+    }
+    subtitle={
+      <div>
+        Subtitle!
+      </div>
+    }
+    title={
+      <div>
+        Hello World!
+      </div>
+    }
+  />
+</div>
+`;
+
+exports[`components/thumbnail-card/ThumbnailCard should render 1`] = `
+<div
+  className="thumbnail-card "
+>
+  <ThumbnailCardThumbnail
+    thumbnail={
+      <div>
+        Foo Bar!
+      </div>
+    }
+  />
+  <ThumbnailCardDetails
+    title={
+      <div>
+        Hello World!
+      </div>
+    }
+  />
+</div>
+`;
+
+exports[`components/thumbnail-card/ThumbnailCard should use additional className 1`] = `
+<div
+  className="thumbnail-card fooBar"
+>
+  <ThumbnailCardThumbnail
+    thumbnail={
+      <div>
+        Foo Bar!
+      </div>
+    }
+  />
+  <ThumbnailCardDetails
+    title={
+      <div>
+        Hello World!
+      </div>
+    }
+  />
+</div>
+`;

@@ -1,0 +1,127 @@
+// colors defined by BDL
+$bdl-box-blue: #0061d5 !default;
+$bdl-secondary-blue: #003c84 !default;
+
+// Neutral colors
+$bdl-neutral-01: #222 !default;
+$bdl-neutral-02: #767676 !default;
+$bdl-neutral-03: #999 !default;
+$bdl-neutral-04: #f3f3f3 !default;
+$bdl-neutral-05: #fafafa !default;
+
+$bdl-green-light: #26c281 !default;
+$bdl-watermelon-red: #ed3757 !default;
+$bdl-yellorange: #f5b31b !default;
+$bdl-purple-rain: #9f3fed !default;
+$bdl-coral: #fc627a !default;
+
+// Primary colors
+$box-blue: $bdl-box-blue !default;
+$primary-color: $bdl-box-blue !default;
+$koray-ing: #2a62b9 !default;
+$picton-blue: #3392ec !default;
+$white: #fff !default;
+$black: #000 !default;
+$hover-blue-background: #f6fafd !default;
+$hover-blue-border: #d9e3e9 !default;
+$selected-blue-background: #ecf4fc !default;
+$selected-blue-border: #bfd4df !default;
+
+// Secondary colors
+$baby-blue: #bed4de !default;
+$blue-purple: #6d83ff !default;
+$hover-blue: #48b6f3 !default;
+$dusty-plum: #9b59b6 !default;
+$sad-sunjin: #72388f !default;
+$pale-mint: #eefbf5 !default;
+$thats-mint: $bdl-green-light !default;
+$shady-acres: #15aa61 !default;
+$wild-rice: #ede097 !default;
+$early-dawn: #fffbe5 !default;
+$lemon-meringue: #ffd522 !default;
+$dehydrated: $bdl-yellorange !default;
+$kumera: #81721b !default;
+$mad-max: #f39c12 !default;
+$ayers-rock: #e06e2b !default;
+$amaranth: $bdl-watermelon-red !default;
+$lavender-blush: #feeff2 !default;
+$carissma: #eb8b9c !default;
+$great-balls-of-fire: #ef4836 !default;
+$king-crimson: #c82341 !default;
+$bfive: #b5b5b5 !default;
+$dtwo: #d2d2d2 !default;
+$efive: #e5e5e5 !default;
+$ffive: #f5f5f5 !default;
+$fnine: #f9f9f9 !default;
+$seesee: #ccc !default;
+$haze: #fcfcfc !default;
+$off-white: #eaeaea !default;
+$sf-fog: #bdc3c7 !default;
+$karl-fog: #fbfbfc !default;
+$silver-chalice: #afafaf !default;
+$storms-a-comin: #737f8b !default;
+$blue-steel: #2c3e50 !default;
+$better-black: #494949 !default;
+$downtown-grey: #999ea4 !default;
+$twos: #222 !default;
+$fours: #444 !default;
+$sevens: #777 !default;
+$eights: #888 !default;
+$nines: #999 !default;
+$eees: #eee !default;
+$tendemob-grey: #64686d !default;
+$sunset-grey: #464a4f !default;
+$seventy-sixers: #767676 !default;
+$approx-mischka-grey: #a3adb9 !default;
+$lightest-charcoal: #c4c4c4;
+$purple-rain: $bdl-purple-rain;
+
+//
+// -- Z-INDEX
+$modal-dialog-z-index: 160 !default;
+$menu-z-index: 170 !default;
+$notifications-wrapper-z-index: 180 !default;
+$overlay-z-index: 190 !default;
+$tooltip-z-index: 190 !default;
+
+// Fonts
+@mixin font-family {
+    font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@mixin font-aliasing {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+@mixin fonts {
+    @include font-family;
+    @include font-aliasing;
+
+    font-size: 13px;
+    font-weight: 400;
+}
+
+// Box sizing
+@mixin box-sizing {
+    box-sizing: border-box !important;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box !important;
+    }
+}
+
+// Common typography
+@mixin common-typography {
+    @include fonts;
+
+    color: $better-black;
+    letter-spacing: .01em;
+    line-height: 20px;
+}
+
+// Borders
+$bdl-border-radius-size: 4px;

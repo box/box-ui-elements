@@ -1,0 +1,33 @@
+.shared-link-settings-modal {
+    hr {
+        /* We have to get rid of top margin because fieldsets do not support margin collapsing */
+        margin-top: 0;
+    }
+
+    .date-picker-wrapper {
+        margin-bottom: 0;
+    }
+
+    .inline-alert {
+        margin: 0 0 20px;
+    }
+
+    .vanity-name-section {
+        .text-input-container {
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 100%;
+        }
+    }
+
+    .direct-link-input .text-input-container {
+        flex: 1;
+    }
+
+    /* Since margin collapsing doesn't work for fieldsets, adjust modal-actions top margin */
+    .modal-actions {
+        margin-top: 10px;
+    }
+}

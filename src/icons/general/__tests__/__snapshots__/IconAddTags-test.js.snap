@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`icons/general/IconAddTags should correctly render icon with all props specified 1`] = `
+<AccessibleSVG
+  className="icon-add-tags test"
+  height={100}
+  title="title"
+  viewBox="0 0 14.52 14.38"
+  width={200}
+>
+  <path
+    className="fill-color"
+    d="M.52 9.61a1.91 1.91 0 0 1 0-2.71L7.15.34A1.2 1.2 0 0 1 8 0l4.5.06a1.94 1.94 0 0 1 1.91 1.9l.05 4.45a1.18 1.18 0 0 1-.35.85l-6.59 6.55a2 2 0 0 1-2.73 0L.52 9.62zm12.73-8.38a1.07 1.07 0 0 0-.74-.31L8.01.86a.32.32 0 0 0-.23.09l-6.6 6.6a1 1 0 0 0 0 1.48l4.24 4.19a1.07 1.07 0 0 0 1.5 0l6.6-6.59a.3.3 0 0 0 .09-.22l-.05-4.45a1 1 0 0 0-.27-.72z"
+    fill="#987654"
+  />
+  <circle
+    className="fill-color"
+    cx="11.01"
+    cy="3.47"
+    fill="#987654"
+    r=".87"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/general/IconAddTags should correctly render icon with default values 1`] = `
+<AccessibleSVG
+  className="icon-add-tags "
+  height={15}
+  viewBox="0 0 14.52 14.38"
+  width={15}
+>
+  <path
+    className="fill-color"
+    d="M.52 9.61a1.91 1.91 0 0 1 0-2.71L7.15.34A1.2 1.2 0 0 1 8 0l4.5.06a1.94 1.94 0 0 1 1.91 1.9l.05 4.45a1.18 1.18 0 0 1-.35.85l-6.59 6.55a2 2 0 0 1-2.73 0L.52 9.62zm12.73-8.38a1.07 1.07 0 0 0-.74-.31L8.01.86a.32.32 0 0 0-.23.09l-6.6 6.6a1 1 0 0 0 0 1.48l4.24 4.19a1.07 1.07 0 0 0 1.5 0l6.6-6.59a.3.3 0 0 0 .09-.22l-.05-4.45a1 1 0 0 0-.27-.72z"
+    fill="#444"
+  />
+  <circle
+    className="fill-color"
+    cx="11.01"
+    cy="3.47"
+    fill="#444"
+    r=".87"
+  />
+</AccessibleSVG>
+`;

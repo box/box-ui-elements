@@ -1,0 +1,57 @@
+@import '../../styles/variables';
+
+.quick-search-item {
+    align-items: center;
+    display: flex;
+    line-height: normal;
+    padding: 10px 15px;
+
+    &.is-active {
+        background-color: rgba(232, 243, 250, .4);
+    }
+
+    svg {
+        flex: none;
+    }
+
+    .item-info {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+        min-width: 1px; /* 0 doesn't work for IE11 */
+    }
+
+    .item-name {
+        color: $twos;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .search-term {
+        background-color: transparent;
+        font-weight: bold;
+    }
+
+    .item-subtext {
+        align-items: center;
+        color: $nines;
+        display: flex;
+        font-size: 12px;
+        max-width: 100%;
+    }
+
+    .parent-folder {
+        margin-left: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .separator {
+        flex: none;
+        margin: 0 10px;
+    }
+}

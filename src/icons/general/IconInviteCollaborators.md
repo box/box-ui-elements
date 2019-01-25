@@ -1,0 +1,3 @@
+```
+<IconInviteCollaborators />
+```

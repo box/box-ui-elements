@@ -1,0 +1,409 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/metadata-view/components/MetadataView should render 1`] = `
+<section
+  className="metadata-view"
+>
+  <section
+    className="metadata-view-header"
+  >
+    <div
+      className="metadata-view-title-container"
+    >
+      <div
+        className="metadata-view-title"
+      >
+        <FormattedMessage
+          defaultMessage="METADATA VIEW • {filesNumber} FILES"
+          id="boxui.metadataView.metadataViewTitle"
+          values={
+            Object {
+              "filesNumber": 3,
+            }
+          }
+        />
+      </div>
+      <div
+        className="metadata-view-template-name"
+      >
+        <p>
+          Vendor Contracts
+        </p>
+      </div>
+    </div>
+    <div
+      className="metadata-view-pagination"
+    />
+  </section>
+  <QueryBar
+    activeTemplate={
+      Object {
+        "Expiration Month": Object {
+          "operators": Array [
+            "is",
+            "is greater than",
+            "is less than",
+            "is not",
+          ],
+          "values": Array [
+            "August 2018",
+            "September 2018",
+            "October 2018",
+          ],
+        },
+        "File Type": Object {
+          "operators": Array [
+            "is",
+            "is not",
+          ],
+          "values": Array [
+            ".docx",
+            ".mp3",
+            "mp4",
+          ],
+        },
+        "Vendor Name": Object {
+          "operators": Array [
+            "is",
+            "is greater than",
+            "is less than",
+            "is not",
+            "is blank",
+            "matches any",
+          ],
+          "values": Array [
+            "Google",
+            "Apple",
+            "Facebook",
+          ],
+        },
+        "displayName": "template1 title",
+        "fields": Array [
+          Object {
+            "displayName": "Size",
+            "id": "item_27",
+            "key": "size",
+            "type": "integer",
+          },
+          Object {
+            "displayName": "Vendor Name",
+            "id": "item_28",
+            "key": "vendor name",
+            "type": "string",
+          },
+          Object {
+            "displayName": "Updated",
+            "id": "item_26",
+            "key": "updated",
+            "type": "enum",
+          },
+          Object {
+            "displayName": "Contract Value",
+            "id": "item_29",
+            "key": "contract value",
+            "type": "enum",
+          },
+          Object {
+            "displayName": "Expiration Month",
+            "id": "item_30",
+            "key": "expiration month",
+            "type": "enum",
+          },
+          Object {
+            "displayName": "Country",
+            "id": "item_31",
+            "key": "country",
+            "type": "string",
+          },
+          Object {
+            "displayName": "State",
+            "id": "item_32",
+            "key": "state",
+            "type": "string",
+          },
+          Object {
+            "displayName": "Function",
+            "id": "item_33",
+            "key": "function",
+            "type": "string",
+          },
+        ],
+        "filesList": Array [
+          Object {
+            "name": "1",
+          },
+          Object {
+            "name": "2",
+          },
+          Object {
+            "name": "3",
+          },
+        ],
+        "id": "template1",
+        "scope": "enterprise_123",
+        "templateKey": "template1",
+        "templateName": "Vendor Contracts",
+      }
+    }
+    onColumnChange={[Function]}
+    onTemplateChange={[Function]}
+    visibleColumns={
+      Array [
+        Object {
+          "id": "item_1",
+          "isChecked": true,
+          "key": "size",
+          "label": "Size",
+        },
+        Object {
+          "id": "item_2",
+          "isChecked": true,
+          "key": "vendor name",
+          "label": "Vendor Name",
+        },
+        Object {
+          "id": "item_3",
+          "isChecked": true,
+          "key": "updated",
+          "label": "Updated",
+        },
+        Object {
+          "id": "item_4",
+          "isChecked": true,
+          "key": "contract value",
+          "label": "Contract Value",
+        },
+        Object {
+          "id": "item_5",
+          "isChecked": true,
+          "key": "expiration month",
+          "label": "Expiration Month",
+        },
+        Object {
+          "id": "item_6",
+          "isChecked": true,
+          "key": "country",
+          "label": "Country",
+        },
+        Object {
+          "id": "item_7",
+          "isChecked": true,
+          "key": "state",
+          "label": "State",
+        },
+        Object {
+          "id": "item_8",
+          "isChecked": true,
+          "key": "function",
+          "label": "Function",
+        },
+      ]
+    }
+  />
+  <section
+    className="metadata-items-container"
+  >
+    <Table
+      columnWidths={
+        Object {
+          "contractValue": 0.3,
+          "icon": 0.1,
+          "lastModified": 0.6,
+          "name": 0.4,
+          "size": 0.3,
+        }
+      }
+      columns={
+        Array [
+          Object {
+            "id": "item_1",
+            "isChecked": true,
+            "key": "size",
+            "label": "Size",
+          },
+          Object {
+            "id": "item_2",
+            "isChecked": true,
+            "key": "vendor name",
+            "label": "Vendor Name",
+          },
+          Object {
+            "id": "item_3",
+            "isChecked": true,
+            "key": "updated",
+            "label": "Updated",
+          },
+          Object {
+            "id": "item_4",
+            "isChecked": true,
+            "key": "contract value",
+            "label": "Contract Value",
+          },
+          Object {
+            "id": "item_5",
+            "isChecked": true,
+            "key": "expiration month",
+            "label": "Expiration Month",
+          },
+          Object {
+            "id": "item_6",
+            "isChecked": true,
+            "key": "country",
+            "label": "Country",
+          },
+          Object {
+            "id": "item_7",
+            "isChecked": true,
+            "key": "state",
+            "label": "State",
+          },
+          Object {
+            "id": "item_8",
+            "isChecked": true,
+            "key": "function",
+            "label": "Function",
+          },
+        ]
+      }
+      items={
+        Array [
+          Object {
+            "contractValue": 3,
+            "fileType": "pdf",
+            "lastModified": "2018-06-20T00:00:00.000Z",
+            "name": "google",
+            "size": 1,
+          },
+          Object {
+            "contractValue": 34,
+            "fileType": "powerpoint-presentation",
+            "lastModified": "2018-06-20T00:00:00.000Z",
+            "name": "facebook",
+            "size": 12,
+          },
+          Object {
+            "contractValue": 5,
+            "fileType": "video",
+            "lastModified": "2018-06-20T00:00:00.000Z",
+            "name": "amazon",
+            "size": 45,
+          },
+        ]
+      }
+      tableHeaderHeight={40}
+      tableHeight={300}
+      tableRowHeight={50}
+      template={
+        Object {
+          "Expiration Month": Object {
+            "operators": Array [
+              "is",
+              "is greater than",
+              "is less than",
+              "is not",
+            ],
+            "values": Array [
+              "August 2018",
+              "September 2018",
+              "October 2018",
+            ],
+          },
+          "File Type": Object {
+            "operators": Array [
+              "is",
+              "is not",
+            ],
+            "values": Array [
+              ".docx",
+              ".mp3",
+              "mp4",
+            ],
+          },
+          "Vendor Name": Object {
+            "operators": Array [
+              "is",
+              "is greater than",
+              "is less than",
+              "is not",
+              "is blank",
+              "matches any",
+            ],
+            "values": Array [
+              "Google",
+              "Apple",
+              "Facebook",
+            ],
+          },
+          "displayName": "template1 title",
+          "fields": Array [
+            Object {
+              "displayName": "Size",
+              "id": "item_27",
+              "key": "size",
+              "type": "integer",
+            },
+            Object {
+              "displayName": "Vendor Name",
+              "id": "item_28",
+              "key": "vendor name",
+              "type": "string",
+            },
+            Object {
+              "displayName": "Updated",
+              "id": "item_26",
+              "key": "updated",
+              "type": "enum",
+            },
+            Object {
+              "displayName": "Contract Value",
+              "id": "item_29",
+              "key": "contract value",
+              "type": "enum",
+            },
+            Object {
+              "displayName": "Expiration Month",
+              "id": "item_30",
+              "key": "expiration month",
+              "type": "enum",
+            },
+            Object {
+              "displayName": "Country",
+              "id": "item_31",
+              "key": "country",
+              "type": "string",
+            },
+            Object {
+              "displayName": "State",
+              "id": "item_32",
+              "key": "state",
+              "type": "string",
+            },
+            Object {
+              "displayName": "Function",
+              "id": "item_33",
+              "key": "function",
+              "type": "string",
+            },
+          ],
+          "filesList": Array [
+            Object {
+              "name": "1",
+            },
+            Object {
+              "name": "2",
+            },
+            Object {
+              "name": "3",
+            },
+          ],
+          "id": "template1",
+          "scope": "enterprise_123",
+          "templateKey": "template1",
+          "templateName": "Vendor Contracts",
+        }
+      }
+      totalWidth={700}
+    />
+  </section>
+</section>
+`;

@@ -1,0 +1,10 @@
+@import '../../styles/variables';
+
+.datalist-item {
+    padding: 5px 35px 5px 15px;
+
+    &.is-active {
+        background-color: fade-out($blue-steel, .95);
+        cursor: pointer;
+    }
+}

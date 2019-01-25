@@ -1,0 +1,101 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Search Form
+ **************************************/
+
+.search-input-container {
+    display: inline-block;
+    min-height: 32px;
+
+    .action-button {
+        align-items: center;
+        background: none;
+        border: 0;
+        cursor: pointer;
+        display: flex;
+        padding: 0;
+        width: 30px;
+
+        &:hover,
+        &:focus {
+            outline: none;
+        }
+
+        path {
+            transition: fill linear .1s;
+        }
+
+        svg {
+            flex: 1;
+        }
+    }
+
+    .action-buttons,
+    .search-form-loading-indicator {
+        bottom: 0;
+        display: flex;
+        position: absolute;
+        top: 0;
+    }
+
+    .action-buttons {
+        align-items: stretch;
+        right: 0;
+    }
+
+    .search-form-loading-indicator {
+        align-items: center;
+        right: 10px;
+    }
+
+    .clear-button {
+        display: none;
+
+        path:first-of-type {
+            fill: $silver-chalice;
+        }
+    }
+
+    .search-form.use-clear-button {
+        .clear-button {
+            display: flex;
+        }
+
+        .search-button {
+            display: none;
+        }
+
+        &.is-empty {
+            .clear-button {
+                display: none;
+            }
+
+            .search-button {
+                display: flex;
+            }
+        }
+    }
+
+    .search-input {
+        padding-right: 30px;
+    }
+
+    .search-input:focus ~ .clear-button {
+        path:first-of-type {
+            fill: $better-black;
+        }
+    }
+
+    .search-input:focus + .search-button {
+        path {
+            fill: $better-black;
+        }
+    }
+
+    .search-form {
+        align-items: stretch;
+        display: flex;
+        position: relative;
+    }
+}

@@ -1,0 +1,31 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Text Area
+ **************************************/
+
+.text-area-container {
+    margin: 0 0 20px;
+    position: relative;
+
+    label {
+        display: block;
+    }
+
+    textarea {
+        font-family: inherit;
+        margin-top: 5px;
+    }
+
+    &:not(.show-error) {
+        .caution {
+            display: none;
+        }
+    }
+
+    &.show-error {
+        textarea {
+            border-color: $amaranth;
+        }
+    }
+}

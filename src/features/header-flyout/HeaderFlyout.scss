@@ -1,0 +1,38 @@
+@import '../../styles/variables';
+
+$flyout-list-width: 460px;
+$flyout-list-max-height: 368px;
+
+.header-flyout-overlay {
+    .overlay {
+        padding: 30px;
+    }
+}
+
+.header-flyout-list-container {
+    padding: 0;
+    width: $flyout-list-width;
+
+    .flyout-list-container-title {
+        font-size: 15px;
+        margin-bottom: 20px;
+    }
+
+    .flyout-list-title {
+        margin: 0;
+    }
+
+    .flyout-list-container-body {
+        height: $flyout-list-max-height;
+    }
+
+    .flyout-list-container-footer {
+        border-top: 1px solid $off-white;
+        font-size: 13px;
+        padding-top: 20px;
+
+        &.hidden {
+            display: none;
+        }
+    }
+}

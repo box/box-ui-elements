@@ -1,0 +1,10 @@
+@import '../../styles/variables';
+
+.metadata-instance-editor-header {
+    align-items: center;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-between;
+    padding-bottom: 5px;
+    z-index: 3;
+}

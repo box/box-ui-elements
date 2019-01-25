@@ -13,6 +13,7 @@
 .*/node_modules/draft-js*
 .*/node_modules/findup*
 .*/node_modules/config-chain*
+.*/__tests__/.*
 
 [untyped]
 .*/node_modules/box-react-ui/*
@@ -23,6 +24,9 @@
 [libs]
 
 [options]
+esproposal.export_star_as=enable
+module.file_ext=.js
+module.file_ext=.scss
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=./src
 module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/SCSSFlowStub.js.flow'
@@ -35,5 +39,7 @@ module.name_mapper='react-virtualized/dist/es/AutoSizer' -> '<PROJECT_ROOT>/flow
 module.name_mapper='react-virtualized/dist/es/CellMeasurer' -> '<PROJECT_ROOT>/flow/ReactVirtualizedStub.js.flow'
 module.name_mapper='draft-js' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.js.flow'
 module.name_mapper='draft-js/EditorState' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.js.flow'
+module.name_mapper='draft-js/CompositeDecorator' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.js.flow'
+module.name_mapper='draft-js/Modifier' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.js.flow'
 module.name_mapper='react-measure' -> '<PROJECT_ROOT>/flow/ReactMeasure.js.flow'
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe

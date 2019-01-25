@@ -1,0 +1,44 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Badges
+ **************************************/
+
+.badge {
+    background: $efive;
+    border-radius: 3px;
+    color: $tendemob-grey;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 12px;
+    padding: 2px 4px 3px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.badge-info {
+    background: $baby-blue;
+    color: $white;
+}
+
+.badge-warning {
+    background: $dehydrated;
+    color: $white;
+}
+
+.badge-highlight {
+    background: $picton-blue;
+    color: $white;
+}
+
+.badge-alert,
+.badge-error {
+    background: $amaranth;
+    color: $white;
+}
+
+.badge-success {
+    background: $thats-mint;
+    color: $white;
+}

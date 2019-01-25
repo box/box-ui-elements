@@ -1,0 +1,38 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Avatars
+ **************************************/
+
+.avatar {
+    display: inline-block;
+    height: 32px;
+    position: relative;
+    user-select: none;
+    width: 32px;
+
+    %circle {
+        backface-visibility: hidden;
+        border-radius: 100%;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        transition: transform .3s;
+        width: 100%;
+    }
+
+    .avatar-icon,
+    .avatar-image {
+        @extend %circle;
+    }
+
+    .avatar-initials {
+        @extend %circle;
+
+        align-items: center;
+        color: $white;
+        display: flex;
+        justify-content: center;
+    }
+}

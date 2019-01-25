@@ -1,0 +1,59 @@
+
+// Constraints for the shadow shape
+$scroll-shadow-height: 35px;
+
+.scroll-container {
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+
+    .scroll-wrap-container {
+        flex-grow: 1;
+        overflow-y: auto;
+
+        &::before,
+        &::after {
+            border-radius: inherit;
+            content: '';
+            display: block;
+            height: $scroll-shadow-height;
+            opacity: 0;
+            position: absolute;
+            transition: opacity .1s ease-in-out;
+            width: 100%;
+        }
+
+        &::before {
+            box-shadow: 0 -2px 25px 0 rgba(0, 0, 0, .25);
+            height: $scroll-shadow-height;
+            margin: 0 -5%;
+            top: -$scroll-shadow-height;
+            width: 110%;
+            z-index: 20;
+        }
+
+        &::after {
+            bottom: 0;
+            box-shadow: 0 -14px 17px -12px rgba(0, 0, 0, .2);
+            margin: 0 -5%;
+            margin-bottom: -$scroll-shadow-height;
+            transition: opacity .1s ease-in-out;
+            width: 110%;
+            z-index: 30;
+        }
+    }
+
+    &.is-showing-top-shadow {
+        .scroll-wrap-container::before {
+            opacity: 1;
+        }
+    }
+
+    &.is-showing-bottom-shadow {
+        .scroll-wrap-container::after {
+            opacity: 1;
+        }
+    }
+}

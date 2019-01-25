@@ -1,0 +1,42 @@
+@import '../../styles/variables';
+
+.metadata-instance-editor {
+    .collapsible-card-content {
+        position: relative;
+    }
+}
+
+.metadata-instance-editor-instance-title {
+    align-items: center;
+    display: flex;
+}
+
+.metadata-instance-editor-instance-title-text {
+    color: $black;
+    margin: 0 10px;
+
+    &.metadata-instance-editor-instance-has-error {
+        color: $king-crimson;
+    }
+}
+
+.btn-plain.metadata-instance-editor-instance-edit {
+    align-items: center;
+    border-radius: 3px;
+    display: flex;
+    height: 24px;
+    justify-content: center;
+    position: absolute;
+    right: 25px;
+    top: 8px;
+    width: 24px;
+    z-index: 10;
+
+    &:hover svg path {
+        fill: $twos;
+    }
+
+    &.metadata-instance-editor-instance-is-editing {
+        background-color: $off-white;
+    }
+}

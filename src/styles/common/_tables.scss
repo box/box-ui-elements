@@ -1,0 +1,239 @@
+/**************************************
+ * Tables
+ **************************************/
+
+.tbl th,
+.tbl td {
+    padding: 10px 8px;
+}
+
+.tbl tr {
+    background: $ffive;
+}
+
+.tbl th {
+    background: $efive;
+    color: $twos;
+    font-weight: bold;
+}
+
+.tbl td {
+    border-top: 1px solid $eees; /* Horizontal border - Also helps with browsers lacking nth-child support */
+}
+
+/*
+ * Rounded corners are applied this way because border-radius on the table element
+ * doesn't prevent inner table elements from peeking out
+ */
+.tbl-rounded th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.tbl-rounded th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.tbl-rounded tr:last-child td:first-child {
+    border-bottom-left-radius: 5px;
+}
+
+.tbl-rounded tr:last-child td:last-child {
+    border-bottom-right-radius: 5px;
+}
+
+/* box-react-ui styles.  TODO: MERGE THIS */
+.table {
+    font-size: inherit;
+    width: 100%;
+
+    // Compact table overrides
+    &.is-compact .table-body {
+        .table-row {
+            height: 32px; // Extra 2px for border box
+        }
+
+        .table-cell {
+            padding: 5px 10px;
+        }
+    }
+
+    &.is-selectable {
+        cursor: default;
+        user-select: none;
+    }
+}
+
+.table.is-scrolling .table-header {
+    box-shadow: 0 4px 6px -2px fade-out($black, .96);
+}
+
+.table-row {
+    display: flex;
+    height: 52px; // Extra 2px for border box
+    position: relative;
+
+    .table-header & {
+        border-bottom: 1px solid $off-white;
+        height: 40px;
+    }
+}
+
+.table-cell {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex: 1;
+    min-width: 0; // Tells flexbox to respect overflow
+    overflow: hidden;
+    padding: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &.is-fixed-width {
+        flex: none;
+    }
+}
+
+.table-body .table-row {
+    border-top: 1px solid $off-white;
+
+    .table.has-hover-styles &:not(.is-selected):hover,
+    .table.has-hover-styles &:not(.is-selected).hover-styles {
+        background-color: $hover-blue-background;
+        border-top: 1px solid $hover-blue-border;
+        color: darken($primary-color, 25%);
+
+        & + .table-row:not(.is-selected) {
+            border-top: 1px solid $hover-blue-border;
+        }
+
+        &:first-child {
+            border-top: none;
+        }
+
+        &:last-child {
+            border-bottom: 1px solid $hover-blue-border;
+        }
+    }
+
+    .table &.is-selected {
+        background-color: $selected-blue-background;
+        border-top: 1px solid $selected-blue-border;
+        color: darken($primary-color, 25%);
+
+        a {
+            color: inherit;
+        }
+
+        & + .table-row,
+        & + .table-row:hover {
+            border-top: 1px solid $selected-blue-border;
+        }
+
+        &:first-child {
+            border-top: none;
+        }
+
+        &:last-child {
+            border-bottom: 1px solid $selected-blue-border;
+        }
+    }
+
+    &:focus,
+    &.is-focused {
+        outline: none;
+
+        &::before {
+            background-color: $bfive;
+            bottom: 0;
+            content: ' ';
+            position: absolute;
+            top: 0;
+            width: 2px;
+        }
+    }
+
+    &:first-child {
+        border-top: none;
+    }
+
+    &:last-child {
+        border-bottom: 1px solid $off-white;
+    }
+}
+
+// Filter and sortable header styles
+.table-filterable-header,
+.table-sortable-header {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    height: 100%;
+    padding: 0;
+    text-align: left;
+    width: 100%;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.sortable-header-arrow {
+    margin: 0 3px;
+
+    svg {
+        path {
+            transform: rotate(0deg);
+            transform-origin: 50% 50%;
+            transition: transform .25s;
+        }
+    }
+}
+
+.desc {
+    .sortable-header-arrow {
+        svg {
+            path {
+                transform: rotate(180deg);
+                transform-origin: 50% 50%;
+            }
+        }
+    }
+}
+
+.table-filterable-header + .overlay-wrapper {
+    position: inherit;
+}
+
+// Waypoint loader
+.table-waypoint {
+    cursor: default;
+    outline: 0;
+    text-align: center;
+
+    .crawler {
+        margin: 20px auto;
+    }
+}
+
+.tbl-striped tr:nth-of-type(odd) {
+    /* IE9+ only */
+    background: $eees;
+}
+
+.table.is-compact {
+    .table-body {
+        .table-row {
+            border-color: transparent;
+
+            &:nth-child(odd) {
+                background-color: $ffive;
+            }
+
+            &.is-selected {
+                background-color: fade-out($primary-color, .9);
+            }
+        }
+    }
+}

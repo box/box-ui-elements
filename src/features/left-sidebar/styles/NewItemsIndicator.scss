@@ -1,0 +1,37 @@
+@import './variables';
+@import './sizes.media';
+
+.new-items-indicator {
+    background-color: $lsb-menu-notification-icon;
+    border: 2px solid $karl-fog;
+    border-radius: 50%;
+    display: inline-block;
+    height: 11px;
+    left: 14px;
+    margin-left: .5em;
+    opacity: 0;
+    position: absolute;
+    top: 3px;
+    transform: scale(0, 0);
+    transition: opacity .3s, transform .3s cubic-bezier(0, 0, .5, 1.5);
+    width: 11px;
+
+    &.is-showing {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+
+    @include medium-size {
+        height: 14px;
+        left: 13px;
+        top: 10px;
+        width: 14px;
+
+        .is-forced-open & {
+            height: 11px;
+            left: 14px;
+            top: 3px;
+            width: 11px;
+        }
+    }
+}

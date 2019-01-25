@@ -1,0 +1,48 @@
+@import '../../styles/variables';
+
+.slide-carousel {
+    text-align: center;
+}
+
+.slide-panel,
+.slide-navigator,
+.slide-carousel-header {
+    margin: 20px;
+}
+
+.slide-carousel-title {
+    font-weight: bold;
+}
+
+.slide-navigator > .slide-selector {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.slide-panel[aria-hidden="true"] {
+    display: none;
+}
+
+.slide-selector {
+    background: $baby-blue;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+
+    &:active {
+        background: $koray-ing;
+    }
+
+    &:focus {
+        background: $baby-blue;
+    }
+
+    &:hover {
+        background: $hover-blue;
+    }
+
+    &.is-selected {
+        background: $box-blue;
+    }
+}

@@ -1,0 +1,373 @@
+// @flow
+import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+import classNames from 'classnames';
+import { EditorState, Modifier } from 'draft-js';
+
+import DatalistItem from '../../datalist-item';
+import DraftJSEditor from '../../draft-js-editor';
+import SelectorDropdown from '../../selector-dropdown';
+
+import messages from './messages';
+
+import './MentionSelector.scss';
+
+type DefaultSelectorRowProps = {
+    item?: {
+        name?: string,
+        email?: string,
+    },
+};
+
+const DefaultSelectorRow = ({ item = {}, ...rest }: DefaultSelectorRowProps) => (
+    <DatalistItem {...rest}>
+        {item.name} <span className="dropdown-secondary-text">{item.email}</span>
+    </DatalistItem>
+);
+
+const DefaultStartMentionMessage = () => <FormattedMessage {...messages.startMention} />;
+
+type MentionStartStateProps = {
+    message?: React.Node,
+};
+
+const MentionStartState = ({ message }: MentionStartStateProps) => <div className="mention-start-state">{message}</div>;
+
+// babel-plugin-flow-react-proptypes doesn't understand imported types
+type ContactsProp = Array<{
+    id?: number | string,
+    name: string,
+}>;
+
+type Props = {
+    className?: string,
+    contacts: ContactsProp,
+    editorState: EditorState,
+    error?: ?Object,
+    hideLabel?: boolean,
+    isDisabled?: boolean,
+    isRequired?: boolean,
+    label: React.Node,
+    mentionTriggers: Array<string>,
+    onBlur?: Function,
+    onChange?: Function,
+    onFocus?: Function,
+    onMention?: Function,
+    onReturn?: Function,
+    placeholder?: string,
+    selectorRow: React.Element<any>,
+    startMentionMessage?: React.Node,
+};
+
+type State = {
+    activeMention: Object | null,
+    isFocused: boolean,
+    mentionPattern: RegExp,
+};
+
+class DraftJSMentionSelector extends React.Component<Props, State> {
+    static defaultProps = {
+        className: '',
+        contacts: [],
+        isDisabled: false,
+        isRequired: false,
+        mentionTriggers: ['@', '＠', '﹫'],
+        selectorRow: <DefaultSelectorRow />,
+        startMentionMessage: <DefaultStartMentionMessage />,
+    };
+
+    constructor(props: Props) {
+        super(props);
+        const mentionTriggers = props.mentionTriggers.reduce((prev, current) => `${prev}\\${current}`, '');
+
+        this.state = {
+            activeMention: null,
+            isFocused: false,
+            mentionPattern: new RegExp(`([${mentionTriggers}])([^${mentionTriggers}]*)$`),
+        };
+    }
+
+    /**
+     * Lifecycle method that gets called when a component is receiving new props
+     * @param {object} nextProps Props the component is receiving
+     * @returns {void}
+     */
+    componentWillReceiveProps(nextProps: Props, nextState: State) {
+        const { contacts: newContacts } = nextProps;
+        const { contacts: currentContacts } = this.props;
+        const { activeMention } = nextState;
+
+        if (
+            activeMention !== null &&
+            !newContacts.length &&
+            newContacts !== currentContacts &&
+            newContacts.length !== currentContacts.length
+        ) {
+            // if empty set of contacts get passed in, set active mention to null
+            this.setState({
+                activeMention: null,
+            });
+        }
+    }
+
+    /**
+     * Extracts the active mention from the editor state
+     *
+     * @param {EditorState} editorState
+     * @returns {object}
+     */
+    getActiveMentionForEditorState(editorState: EditorState) {
+        const { mentionPattern } = this.state;
+
+        const contentState = editorState.getCurrentContent();
+        const selectionState = editorState.getSelection();
+
+        const startKey = selectionState.getStartKey();
+        const activeBlock = contentState.getBlockForKey(startKey);
+
+        const cursorPosition = selectionState.getStartOffset();
+
+        let result = null;
+
+        // Break the active block into entity ranges.
+        activeBlock.findEntityRanges(
+            character => character.getEntity() === null,
+            (start, end) => {
+                // Find the active range (is the cursor inside this range?)
+                if (start <= cursorPosition && cursorPosition <= end) {
+                    // Determine if the active range contains a mention.
+                    const activeRangeText = activeBlock.getText().substr(start, cursorPosition - start);
+                    const mentionMatch = activeRangeText.match(mentionPattern);
+
+                    if (mentionMatch) {
+                        result = {
+                            blockID: startKey,
+                            mentionString: mentionMatch[2],
+                            mentionTrigger: mentionMatch[1],
+                            start: start + mentionMatch.index,
+                            end: cursorPosition,
+                        };
+                    }
+                }
+
+                return null;
+            },
+        );
+
+        return result;
+    }
+
+    /**
+     * Called on each keypress when a mention is being composed
+     * @returns {void}
+     */
+    handleMention = () => {
+        const { onMention } = this.props;
+        const { activeMention } = this.state;
+
+        if (onMention) {
+            onMention(activeMention ? activeMention.mentionString : '');
+        }
+    };
+
+    /**
+     * Method that gets called when a mention contact is selected
+     * @param {number} index The selected index
+     * @returns {void}
+     */
+    handleContactSelected = (index: number) => {
+        const { contacts } = this.props;
+        this.addMention(contacts[index]);
+        this.setState(
+            {
+                activeMention: null,
+                isFocused: true,
+            },
+            () => {
+                this.handleMention();
+            },
+        );
+    };
+
+    handleBlur = (event: SyntheticEvent<>) => {
+        const { onBlur } = this.props;
+
+        this.setState({
+            isFocused: false,
+        });
+
+        if (onBlur) {
+            onBlur(event);
+        }
+    };
+
+    handleFocus = (event: SyntheticEvent<>) => {
+        const { onFocus } = this.props;
+
+        this.setState({
+            isFocused: true,
+        });
+
+        if (onFocus) {
+            onFocus(event);
+        }
+    };
+
+    /**
+     * Event handler called when DraftJSEditor emits onChange
+     * Checks current text to see if any mentions were made
+     * @param {EditorState} editorState The new editor state
+     * @returns {void}
+     */
+    handleChange = (nextEditorState: EditorState) => {
+        const { onChange } = this.props;
+
+        const activeMention = this.getActiveMentionForEditorState(nextEditorState);
+
+        this.setState(
+            {
+                activeMention,
+            },
+            () => {
+                if (onChange) {
+                    onChange(nextEditorState);
+                }
+
+                if (activeMention && activeMention.mentionString) {
+                    this.handleMention();
+                }
+            },
+        );
+    };
+
+    /**
+     * Inserts a selected mention into the editor
+     * @param {object} mention The selected mention to insert
+     */
+    addMention(mention: Object) {
+        const { activeMention } = this.state;
+        const { editorState } = this.props;
+        const { start, end } = activeMention || {};
+
+        const { id, name } = mention;
+
+        const contentState = editorState.getCurrentContent();
+        const selectionState = editorState.getSelection();
+
+        const preInsertionSelectionState = selectionState.merge({
+            anchorOffset: start,
+            focusOffset: end,
+        });
+
+        const textToInsert = `@${name}`;
+
+        const contentStateWithEntity = contentState.createEntity('MENTION', 'IMMUTABLE', { id });
+
+        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+
+        const contentStateWithLink = Modifier.replaceText(
+            contentState,
+            preInsertionSelectionState,
+            textToInsert,
+            null,
+            entityKey,
+        );
+
+        const spaceOffset = preInsertionSelectionState.getStartOffset() + textToInsert.length;
+        const selectionStateForAddingSpace = preInsertionSelectionState.merge({
+            anchorOffset: spaceOffset,
+            focusOffset: spaceOffset,
+        });
+
+        const contentStateWithLinkAndExtraSpace = Modifier.insertText(
+            contentStateWithLink,
+            selectionStateForAddingSpace,
+            ' ',
+        );
+
+        const editorStateWithLink = EditorState.push(
+            editorState,
+            contentStateWithLinkAndExtraSpace,
+            'change-block-type',
+        );
+
+        this.setState(
+            {
+                activeMention: null,
+            },
+            () => {
+                this.handleChange(editorStateWithLink);
+            },
+        );
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    shouldDisplayMentionLookup = () => {
+        const { contacts } = this.props;
+        const { activeMention } = this.state;
+
+        return !!(activeMention && activeMention.mentionString && contacts.length);
+    };
+
+    render() {
+        const {
+            className,
+            contacts,
+            editorState,
+            error,
+            hideLabel,
+            isDisabled,
+            isRequired,
+            label,
+            onReturn,
+            placeholder,
+            selectorRow,
+            startMentionMessage,
+            onMention,
+        } = this.props;
+        const { activeMention, isFocused } = this.state;
+
+        const classes = classNames('mention-selector-wrapper', className);
+
+        const showMentionStartState = !!(onMention && activeMention && !activeMention.mentionString && isFocused);
+
+        return (
+            <div className={classes}>
+                <SelectorDropdown
+                    onSelect={this.handleContactSelected}
+                    selector={
+                        <DraftJSEditor
+                            editorState={editorState}
+                            error={error}
+                            hideLabel={hideLabel}
+                            isDisabled={isDisabled}
+                            isFocused={isFocused}
+                            isRequired={isRequired}
+                            label={label}
+                            onBlur={this.handleBlur}
+                            onFocus={this.handleFocus}
+                            onChange={this.handleChange}
+                            onReturn={onReturn}
+                            placeholder={placeholder}
+                        />
+                    }
+                >
+                    {this.shouldDisplayMentionLookup()
+                        ? contacts.map(contact =>
+                              React.cloneElement(selectorRow, {
+                                  ...selectorRow.props,
+                                  ...contact,
+                                  key: contact.id,
+                              }),
+                          )
+                        : []}
+                </SelectorDropdown>
+                {showMentionStartState ? <MentionStartState message={startMentionMessage} /> : null}
+            </div>
+        );
+    }
+}
+
+export default DraftJSMentionSelector;

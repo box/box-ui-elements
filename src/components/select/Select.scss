@@ -1,0 +1,25 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Select
+ **************************************/
+
+.select-input-container {
+    margin: 0 0 20px;
+
+    .select-container {
+        margin-top: 5px;
+    }
+
+    .tooltip-icon-container {
+        margin-left: 10px;
+        margin-top: 9px;
+        position: absolute;
+    }
+
+    &.show-error {
+        .select-overlay {
+            border-color: $amaranth;
+        }
+    }
+}

@@ -1,0 +1,32 @@
+@import './variables';
+
+.lsb-remove-button {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    opacity: 0;
+    padding: 0 8px 0 7px;
+    position: absolute;
+    right: 0;
+    transition: opacity 100ms ease-in-out;
+
+    .lsb-remove-button-icon {
+        transform: scale(.5, .5);
+        transition: transform 50ms ease-in-out;
+    }
+
+    &:active,
+    &:hover,
+    &:focus {
+        opacity: 1;
+        padding: 0 8px 0 7px;
+
+        .lsb-remove-button-icon {
+            transform: scale(1, 1);
+        }
+    }
+
+    .fill-color {
+        fill: $light-charcoal;
+    }
+}

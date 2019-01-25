@@ -1,0 +1,41 @@
+// @flow
+import * as React from 'react';
+
+import AccessibleSVG from '../accessible-svg';
+
+type Props = {
+    className?: string,
+    height?: number,
+    /** A text-only string describing the icon if it's not purely decorative for accessibility */
+    title?: string | React.Element<any>,
+    width?: number,
+};
+
+const IconAlertBlank = ({ className = '', height = 26, title, width = 26 }: Props) => (
+    <AccessibleSVG
+        className={`icon-alert-blank ${className}`}
+        title={title}
+        height={height}
+        width={width}
+        viewBox="0 0 26 26"
+    >
+        <defs>
+            <circle id="b" cx="8" cy="8" r="8" />
+            <filter x="-46.9%" y="-46.9%" width="193.8%" height="193.8%" filterUnits="objectBoundingBox" id="a">
+                <feMorphology radius=".5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1" />
+                <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1" />
+                <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                <feColorMatrix
+                    values="0 0 0 0 0.733285502 0 0 0 0 0.733285502 0 0 0 0 0.733285502 0 0 0 0.5 0"
+                    in="shadowBlurOuter1"
+                />
+            </filter>
+        </defs>
+        <g transform="translate(5 5)" fill="none" fillRule="evenodd">
+            <use fill="#000" filter="url(#a)" xlinkHref="#b" />
+            <use fill="#F7931D" xlinkHref="#b" />
+        </g>
+    </AccessibleSVG>
+);
+
+export default IconAlertBlank;

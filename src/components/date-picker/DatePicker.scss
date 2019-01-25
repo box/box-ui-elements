@@ -1,0 +1,111 @@
+@import '../../styles/variables';
+@import 'pikaday';
+
+/**************************************
+ * Date Picker
+ **************************************/
+
+.date-picker-wrapper {
+    margin: 0 0 20px;
+    position: relative;
+
+    button:focus {
+        outline: none;
+    }
+
+    .date-picker-icon-holder {
+        display: inline-block;
+        position: relative;
+    }
+
+    .date-picker-description {
+        color: $sevens;
+        display: block;
+    }
+
+    .date-picker-input {
+        margin-bottom: 0;
+        margin-top: 5px;
+        padding-right: 30px;
+        text-overflow: ellipsis;
+    }
+
+    .date-picker-input:focus ~ .tooltip,
+    .date-picker-unix-time-input {
+        display: none;
+    }
+
+    .date-picker-open-btn {
+        bottom: 10px;
+        display: inline-block;
+        height: 17px;
+        position: absolute;
+        right: 7px;
+    }
+
+    .date-picker-clear-btn,
+    .date-picker-icon-alert {
+        bottom: 10px;
+        display: inline-block;
+        position: absolute;
+        right: 30px;
+
+        span {
+            display: inline-block;
+        }
+    }
+
+    .date-picker-clear-btn,
+    .date-picker-clear-btn:active,
+    .date-picker-clear-btn:focus,
+    .date-picker-clear-btn:hover,
+    .date-picker-clear-btn:active:focus,
+    .date-picker-clear-btn:active:hover,
+    .date-picker-clear-btn span {
+        height: 14px;
+    }
+
+    .date-picker-clear-btn {
+        path {
+            fill: $silver-chalice;
+            transition: fill linear .1s;
+        }
+    }
+
+    > .date-picker-clear-btn:hover,
+    > .date-picker-clear-btn:focus {
+        path {
+            fill: $better-black;
+            path: $better-black;
+        }
+    }
+
+    > .date-picker-open-btn:disabled {
+        cursor: default;
+    }
+
+    > .date-picker-open-btn:hover:enabled,
+    > .date-picker-open-btn:focus:enabled {
+        .fill-color {
+            fill: $better-black;
+        }
+    }
+
+    .date-picker-icon-alert {
+        path {
+            fill: $great-balls-of-fire;
+        }
+    }
+
+    &.show-clear-btn.show-error {
+        .date-picker-clear-btn,
+        .date-picker-clear-btn:hover,
+        .date-picker-clear-btn:active {
+            right: 25px;
+        }
+
+        .date-picker-input {
+            padding-right: 50px;
+        }
+    }
+}
