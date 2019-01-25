@@ -21,7 +21,7 @@ type Props = {
     error: ?any,
     icon?: string,
     isLoading: boolean,
-    onClick?: Function,
+    onClick?: Integration => void,
     tooltipText?: string | Object,
 };
 
@@ -74,7 +74,7 @@ const OpenWithButton = ({ error, onClick = noop, displayIntegration, isLoading }
             <Button
                 data-testid="singleintegrationbutton"
                 isDisabled={isDisabled}
-                onClick={() => onClick(displayIntegration)}
+                onClick={() => (displayIntegration ? onClick(displayIntegration) : noop)}
             >
                 <OpenWithButtonContents>
                     <Icon
