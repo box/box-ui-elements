@@ -18,6 +18,7 @@ import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import BoxToolsInstallMessage from './BoxToolsInstallMessage';
 import OpenWithButton from './OpenWithButton';
+import OpenWithFallbackButton from './OpenWithFallbackButton';
 import ExecuteForm from './ExecuteForm';
 import 'elements/common/base.scss';
 import './ContentOpenWith.scss';
@@ -593,4 +594,4 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
 export type ContentOpenWithProps = Props & ExternalProps;
 export { ContentOpenWith as ContentOpenWithComponent };
-export default withErrorBoundary(ORIGIN_OPEN_WITH)(ContentOpenWith);
+export default withErrorBoundary(ORIGIN_OPEN_WITH, OpenWithFallbackButton)(ContentOpenWith);

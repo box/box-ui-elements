@@ -5,12 +5,15 @@
  */
 
 import * as React from 'react';
+import DefaultError from './DefaultError';
 import ErrorBoundary from './ErrorBoundary';
 
-const withErrorBoundary = (errorOrigin: ElementOrigin) => (WrappedComponent: React.ComponentType<any>) =>
+const withErrorBoundary = (errorOrigin: ElementOrigin, errorComponent: React.Element = DefaultError) => (
+    WrappedComponent: React.ComponentType<any>,
+) =>
     // $FlowFixMe doesn't know about forwardRef (https://github.com/facebook/flow/issues/6103)
     React.forwardRef((props: Object, ref: React.Ref<any>) => (
-        <ErrorBoundary {...props} errorOrigin={errorOrigin}>
+        <ErrorBoundary errorOrigin={errorOrigin} errorComponent={errorComponent} {...props}>
             <WrappedComponent ref={ref} />
         </ErrorBoundary>
     ));
