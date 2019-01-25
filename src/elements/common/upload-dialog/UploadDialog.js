@@ -13,7 +13,7 @@ import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from
 
 type Props = {
     isOpen: boolean,
-    currentFolderId: string,
+    currentFolderId: ?string,
     token: Token,
     sharedLink?: string,
     sharedLinkPassword?: string,
@@ -25,8 +25,7 @@ type Props = {
     onUpload?: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 const UploadDialog = ({
     isOpen,

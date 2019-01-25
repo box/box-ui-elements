@@ -110,7 +110,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      allowedAccessLevels={Array []}
+      allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
@@ -236,7 +236,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      allowedAccessLevels={Array []}
+      allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
@@ -393,7 +393,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      allowedAccessLevels={Array []}
+      allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
@@ -541,7 +541,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      allowedAccessLevels={Array []}
+      allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
@@ -655,7 +655,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      allowedAccessLevels={Array []}
+      allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
@@ -794,7 +794,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInThisItem"
-      allowedAccessLevels={Array []}
+      allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"

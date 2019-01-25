@@ -11,7 +11,7 @@ import omit from 'lodash/omit';
 
 import { CLIENT_NAME_CONTENT_PICKER, CLIENT_NAME_CONTENT_UPLOADER } from '../../constants';
 
-type PropsShape = {
+type Props = {
     onCancel?: Function,
     onChoose?: Function,
     onClose?: Function,
@@ -23,12 +23,8 @@ type State = {
     isOpen: boolean,
 };
 
-const makePopup = (kit: string) => <Props: PropsShape>(Wrapped: any) =>
+const makePopup = (kit: string) => (Wrapped: any) =>
     class Wrapper extends PureComponent<Props, State> {
-        props: Props;
-
-        state: State;
-
         /**
          * [constructor]
          *

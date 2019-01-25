@@ -12,12 +12,11 @@ import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import messages from 'elements/common/messages';
 
 type Props = {
-    collection: Array<String | BoxItem>,
+    collection: Array<string | BoxItem>,
     currentIndex: number,
-    intl: any,
     onNavigateLeft: Function,
     onNavigateRight: Function,
-};
+} & InjectIntlProvidedProps;
 
 const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft, onNavigateRight }: Props) => {
     const hasLeftNavigation = collection.length > 1 && currentIndex > 0 && currentIndex < collection.length;

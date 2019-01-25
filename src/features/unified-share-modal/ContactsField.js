@@ -67,7 +67,7 @@ class ContactsField extends React.Component<Props, State> {
                     // filter contacts who have already been selected
                     ({ email, id }) => !selectedContacts.find(({ value }) => value === email || value === id),
                 )
-                .map(({ email, id, name, type }) => ({
+                .map<Object>(({ email, id, name, type }) => ({
                     // map to standardized DatalistItem format
                     email,
                     id,
@@ -161,7 +161,7 @@ class ContactsField extends React.Component<Props, State> {
                 validateForError={validateForError}
                 validator={validator}
             >
-                {contacts.map(({ email, text, id }) => (
+                {contacts.map(({ email, text = null, id }) => (
                     <ContactDatalistItem key={id} name={text} subtitle={email || groupLabel} />
                 ))}
             </PillSelectorDropdown>

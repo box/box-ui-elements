@@ -17,8 +17,7 @@ type Props = {
     currentCollection: Collection,
     view: View,
     isSmall: boolean,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick, intl }: Props) => {
     let crumbs;

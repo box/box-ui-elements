@@ -12,7 +12,7 @@ import '../styles/FilterItem.scss';
 
 type Props = {
     formatMessage: Function,
-    selectedValue?: string | Date | number,
+    selectedValue?: string | number,
     shouldDisplayErrorMessage: boolean,
     updateValueField: Function,
     updateSelectedField: Function,

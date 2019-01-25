@@ -29,7 +29,6 @@ type Props = {
     updateTask?: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
-    intl: any,
     isDisabled?: boolean,
     isOpen: boolean,
     approverSelectorContacts?: SelectorItems,
@@ -42,7 +41,7 @@ type Props = {
     entityId?: string,
     tagged_message?: string,
     getAvatarUrl: string => Promise<?string>,
-};
+} & InjectIntlProvidedProps;
 
 type State = {
     approvalDate: ?Date,

@@ -487,7 +487,7 @@ class Feed extends Base {
         currentUser: User,
         message: string,
         assignees: SelectorItems,
-        dueAt: string,
+        dueAt: ?string,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {

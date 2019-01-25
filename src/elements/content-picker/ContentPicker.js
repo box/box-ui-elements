@@ -875,7 +875,7 @@ class ContentPicker extends Component<Props, State> {
      * @param {Component} react component
      * @return {void}
      */
-    tableRef = (table: React$Component<*, *, *>) => {
+    tableRef = (table: React$Component<*, *>) => {
         this.table = table;
     };
 

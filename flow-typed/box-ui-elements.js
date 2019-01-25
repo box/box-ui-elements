@@ -4,6 +4,8 @@
  * @author Box
  */
 /* eslint-disable no-use-before-define */
+import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor, InjectIntlProvidedProps } from 'react-intl';
 import type { $AxiosError, Axios, CancelTokenSource } from 'axios';
 import type FolderAPI from '../src/api/Folder';
@@ -623,6 +625,8 @@ type ExecuteAPI = {
     method: HTTP_POST | HTTP_GET,
 };
 
+type DisabledReason = string | React.Element<typeof FormattedMessage>;
+
 type Integration = {
     appIntegrationId: string,
     disabledReasons: Array<DisabledReason>,
@@ -635,8 +639,6 @@ type Integration = {
     requiresConsent: boolean,
     type: APP_INTEGRATION,
 };
-
-type DisabledReason = ?string | ?Element;
 
 type Alignment = 'left' | 'right';
 
@@ -741,10 +743,10 @@ type ActivityFeedFeatures = {
     avatars?: boolean, // Show avatars
     tasks?: {|
         createButton?: boolean, // Show the Create Task button
-        createFromComment?: boolean // Show the Add Task checkbox
-    |}
+        createFromComment?: boolean, // Show the Add Task checkbox
+    |},
 };
 
 type ContentSidebarFeatures = {
-    activityFeed?: ActivityFeedFeatures
+    activityFeed?: ActivityFeedFeatures,
 } & FeatureConfig;
