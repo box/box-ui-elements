@@ -740,8 +740,8 @@ type WithLoggerProps = {
 };
 
 type ActivityFeedFeatures = {
-    avatars?: boolean, // Show avatars
     tasks?: {|
+        avatars?: boolean, // Show avatars in task cards
         createButton?: boolean, // Show the Create Task button
         createFromComment?: boolean, // Show the Add Task checkbox
     |},

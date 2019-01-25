@@ -67,7 +67,7 @@ const ActiveState = ({
                     return item.task_assignment_collection.total_count ? (
                         <li className="bcs-activity-feed-task" key={type + id}>
                             <FeatureFlag
-                                feature="tasks"
+                                feature="activityFeed.tasks.avatars"
                                 enabled={() => (
                                     <Task
                                         {...item}
