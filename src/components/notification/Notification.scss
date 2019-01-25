@@ -1,0 +1,96 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Notifications
+ **************************************/
+
+.notifications-wrapper {
+    height: 0; /* allows elements around notifications to be clickable */
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: $notifications-wrapper-z-index;
+}
+
+.notification {
+    align-items: center;
+    background-color: $sunset-grey;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px fade-out($black, .85);
+    color: $white;
+    display: flex;
+    font-weight: bold;
+    margin: 10px auto;
+    max-width: 572px;
+    min-height: 48px;
+    opacity: .9;
+    overflow: hidden;
+    padding: 10px 10px 10px 20px;
+    transition: opacity .1s ease-out;
+
+    &.info {
+        background-color: $thats-mint;
+    }
+
+    &.warn {
+        background-color: $dehydrated;
+    }
+
+    &.error {
+        background-color: $amaranth;
+    }
+
+    &.is-hidden {
+        box-shadow: none; /* to improve compositing performance */
+        opacity: 0;
+    }
+
+    > span {
+        font-size: 15px;
+        margin-right: auto;
+        padding-right: 10px;
+    }
+
+    > svg {
+        flex: none;
+        margin-right: 15px;
+    }
+
+    &.wrap > span {
+        overflow: hidden;
+        overflow-wrap: break-word;
+        word-wrap: break-word; /* Include legacy name to support older browsers */
+    }
+
+    &.ellipsis > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    button,
+    a {
+        color: $white;
+        flex: none;
+
+        &.btn.is-disabled,
+        &.btn:not(.is-disabled) {
+            background-color: transparent;
+            border-color: $off-white;
+            margin: 0 5px;
+            padding: 7px 13px;
+        }
+
+        &.close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            font-size: 14px;
+            font-weight: bold;
+            opacity: .6;
+            outline: none;
+            padding: 2px 7px;
+        }
+    }
+}

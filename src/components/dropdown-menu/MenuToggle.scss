@@ -1,0 +1,33 @@
+@import '../../styles/variables';
+
+.menu-toggle {
+    align-items: center;
+    display: flex;
+
+    > .toggle-arrow {
+        flex: none;
+        margin-left: 5px;
+        transition: transform .2s ease-in;
+
+        .dropdown-menu-enabled &,
+        .is-toggled & {
+            transform: rotate(180deg);
+        }
+
+        .lnk & {
+            margin-top: 2px;
+
+            & path {
+                fill: $box-blue;
+            }
+        }
+    }
+
+    .btn-primary & .fill-color {
+        fill: $white;
+    }
+
+    .lnk.is-disabled & .fill-color {
+        fill: $nines;
+    }
+}

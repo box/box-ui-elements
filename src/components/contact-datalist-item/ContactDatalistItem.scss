@@ -1,0 +1,16 @@
+@import '../../styles/variables';
+
+.contact-name {
+    font-size: 14px;
+}
+
+.contact-sub-name {
+    color: $eights;
+    font-size: 12px;
+}
+
+.contact-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

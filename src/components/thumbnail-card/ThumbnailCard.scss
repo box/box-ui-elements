@@ -1,0 +1,69 @@
+@import '../../styles/variables';
+@import './variables';
+
+.thumbnail-card {
+    border: $thumbnail-card-border solid $off-white;
+    border-radius: 4px;
+    box-shadow: 0 5px 10px 0 rgba(198, 198, 198, .2);
+    display: flex;
+    flex: 1 0 $thumbnail-card-min-width;
+    flex-direction: column;
+    height: 200px;
+    max-width: $thumbnail-card-max-width;
+    min-width: $thumbnail-card-min-width;
+}
+
+.thumbnail-card-details {
+    align-items: center;
+    border-top: 1px solid $ffive;
+    display: flex;
+    flex: 1;
+    line-height: 16px;
+    padding: 12px;
+
+    .thumbnail-card-details-content {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .thumbnail-card-title,
+    .thumbnail-card-subtitle {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .thumbnail-card-subtitle {
+        color: $sevens;
+    }
+}
+
+.thumbnail-card-thumbnail-container {
+    align-items: center;
+    background-color: $ffive;
+    display: flex;
+    height: $thumbnail-height;
+    width: 100%;
+
+    .thumbnail-card-thumbnail-viewport {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        height: $thumbnail-height;
+        max-height: $thumbnail-height;
+        overflow: hidden;
+        position: relative;
+        text-align: center;
+        width: 100%;
+
+        img,
+        svg {
+            max-height: $thumbnail-height;
+            max-width: 100%;
+            vertical-align: middle;
+        }
+
+        img {
+            box-shadow: 0 0 8px 0 rgba(177, 177, 177, .5);
+        }
+    }
+}

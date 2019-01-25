@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/quick-search/QuickSearchItem should not render parent folder or separator if no parentName or parentFolderRenderer 1`] = `
+<span
+  className="item-subtext"
+>
+  <span
+    className="txt-ellipsis"
+    title="{date, date, medium} by {user}"
+  >
+    {date, date, medium} by {user}
+  </span>
+</span>
+`;

@@ -1,0 +1,204 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Toggle
+ **************************************/
+
+.toggle-container {
+    margin: 0 0 20px;
+
+    .toggle-label {
+        display: inline-block;
+        line-height: 15px;
+        margin: 5px 10px;
+        vertical-align: top;
+    }
+}
+
+.toggle {
+    display: none;
+
+    &,
+    &::after,
+    &::before,
+    *,
+    *::after,
+    *::before,
+    & + .toggle-btn {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        &::selection {
+            background: none;
+        }
+    }
+
+    + .toggle-btn {
+        background: $sf-fog;
+        border-radius: 40px;
+        cursor: pointer;
+        display: inline-block;
+        height: 24px;
+        margin: 1px 0;
+        outline: 0;
+        padding: 2px;
+        position: relative;
+        transition: left .4s ease, background .4s ease;
+        width: 50px;
+
+        &::after,
+        &::before {
+            content: '';
+            display: block;
+            position: relative;
+            width: 26px;
+        }
+
+        &::after {
+            background: $white;
+            border: 1px solid $storms-a-comin;
+            border-radius: 50%;
+            box-shadow: 0 1px 2px fade-out($black, .9);
+            height: 26px;
+            left: -3px;
+            top: -3px;
+            transition: left .2s ease, background .2s ease;
+        }
+
+        &::before {
+            display: none;
+        }
+    }
+
+    &:checked {
+        + .toggle-btn {
+            background: $primary-color;
+
+            &::after {
+                left: 50%;
+            }
+        }
+    }
+}
+
+/**********************************************************
+ * A simpler version of toggle that does not use ids
+ * Eventually we should remove the webapp specific version
+ **********************************************************/
+$height: 20px;
+$width: $height * 2;
+
+.toggle-simple {
+    border-radius: $height;
+    display: flex;
+    height: $height;
+    outline: none;
+    position: relative;
+    user-select: none;
+    width: $width;
+
+    .is-toggle-right-aligned & {
+        width: 100%;
+    }
+}
+
+.toggle-simple-input {
+    left: -9999px;
+    opacity: 0;  // this keeps the element tab-able
+    position: absolute;
+}
+
+.toggle-simple-label {
+    display: inline-block;
+    margin-left: $width + 6;
+    min-width: 0;
+    white-space: nowrap;
+
+    .is-toggle-right-aligned & {
+        flex: 1;
+        margin-left: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.toggle-simple-description {
+    color: $downtown-grey;
+    margin-left: $width + 6;
+    margin-top: 2px;
+
+    .is-toggle-right-aligned & {
+        margin-left: auto;
+        margin-right: $width + 6;
+    }
+}
+
+.toggle-simple-switch {
+    display: inline-block;
+
+    .is-toggle-right-aligned & {
+        position: relative;
+        width: $width;
+    }
+
+    &::before,
+    &::after {
+        bottom: 0;
+        content: '';
+        cursor: pointer;
+        display: block;
+        left: 0;
+        position: absolute;
+        top: 0;
+    }
+
+    &::before {
+        background-color: $sf-fog;
+        border-radius: $height;
+        right: 0;
+        transition: background .4s;
+    }
+
+    &::after {
+        background-color: $white;
+        border: 1px solid $storms-a-comin;
+        border-radius: 100%;
+        height: $height;
+        transition: margin .4s;
+        width: $height;
+    }
+
+    .toggle-simple-input:checked ~ & {
+        &::before {
+            background-color: $primary-color;
+        }
+
+        &::after {
+            margin-left: $height;
+        }
+    }
+
+    .toggle-simple-input:disabled ~ & {
+        &::before,
+        &::after {
+            cursor: default;
+        }
+
+        &::before {
+            opacity: .5;
+        }
+
+        &::after {
+            background-color: darken($white, 2%);
+            border-color: lighten($storms-a-comin, 32%);
+        }
+    }
+
+    .toggle-simple-input:focus ~ & {
+        &::after {
+            border-color: $primary-color;
+        }
+    }
+}

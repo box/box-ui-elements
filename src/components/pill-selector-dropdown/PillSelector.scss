@@ -1,0 +1,112 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Pill Selector
+ **************************************/
+
+.pill-selector-hidden-input {
+    position: absolute;
+    visibility: hidden;
+}
+
+.pill-selector-wrapper {
+    margin: 0 0 20px;
+    position: relative;
+
+    .pill-selector-input-wrapper {
+        align-content: flex-start;
+        align-items: flex-start;
+        background-color: $white;
+        border: 1px solid darken($white, 20%);
+        border-radius: 2px;
+        box-shadow: inset 0 1px 1px fade-out($black, .92);
+        cursor: text;
+        display: flex;
+        flex-flow: row wrap;
+        -webkit-font-smoothing: antialiased;
+        margin-top: 5px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 5px;
+        -webkit-transition: border-color linear .15s, box-shadow linear .15s;
+        transition: border-color linear .15s, box-shadow linear .15s;
+        width: 262px;
+
+        &:hover {
+            border: 1px solid darken($primary-color, 10%);
+        }
+
+        &.is-disabled {
+            background-color: $haze;
+            box-shadow: none;
+            color: $bfive;
+
+            &:hover {
+                border-color: $sf-fog;
+            }
+        }
+
+        &.is-focused {
+            border-color: $primary-color;
+            box-shadow: none;
+            outline: 0;
+        }
+
+        &.show-error {
+            border-color: $amaranth;
+        }
+
+        &:not(.show-error) {
+            .icon-alert {
+                display: none;
+            }
+        }
+
+        .icon-alert {
+            bottom: 10px;
+            height: 16px;
+            position: absolute;
+            right: 10px;
+            width: 16px;
+
+            path {
+                fill: $amaranth;
+            }
+        }
+
+        .tooltip {
+            margin-top: 0 !important;
+            right: 10px !important;
+            top: calc(100% - 5px) !important;
+        }
+
+        .pills-list {
+            margin: 0;
+
+            li {
+                display: inline-block;
+                float: left;
+            }
+        }
+
+        .pill-selector-input,
+        input[type=text].pill-selector-input {
+            background-color: transparent;
+            border: 0;
+            box-shadow: none;
+            box-sizing: content-box !important;
+            color: lighten($black, 31%);
+            flex: 1;
+            height: 16px;
+            margin: 0;
+            min-width: 0;
+            overflow: hidden;
+            padding: 5px 3px 3px;
+
+            &:focus,
+            &:hover {
+                outline: none;
+            }
+        }
+    }
+}

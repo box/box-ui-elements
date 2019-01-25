@@ -1,0 +1,75 @@
+@import '../../../styles/variables';
+@import './variables';
+
+$arrow-size: 6px;
+
+.nav-link-callout {
+    background-color: $blue-purple;
+    border-color: $blue-purple;
+    border-radius: 4px;
+    color: $white;
+    max-width: 330px;
+    padding: 20px;
+    position: relative;
+    word-wrap: break-word;
+
+    &::before {
+        border: $arrow-size solid transparent;
+        content: '';
+        height: 0;
+        position: absolute;
+        width: 0;
+    }
+
+    .nav-link-callout-target-attached-middle.nav-link-callout-target-attached-right > & {
+        &::before {
+            border-right-color: inherit;
+            margin-top: -$arrow-size;
+            right: 100%;
+            top: 50%;
+        }
+    }
+}
+
+.nav-link-callout-close-button {
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+}
+
+.nav-link-callout-element {
+    z-index: $tooltip-z-index;
+}
+
+.left-nav-callout {
+    cursor: default;
+    display: flex;
+    flex-flow: column;
+    font-size: 13px;
+    font-weight: normal;
+    letter-spacing: .3px;
+    line-height: 1.54;
+
+    .left-nav-callout-title {
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: .4px;
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+
+    .left-nav-callout-button-container {
+        margin-left: auto;
+
+        .left-nav-callout-button {
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .left-nav-callout-secondary-button {
+            background: transparent;
+            border-color: $white;
+            color: $white;
+        }
+    }
+}

@@ -1,0 +1,27 @@
+@import '../../styles/variables';
+
+.loading-indicator-wrapper {
+    position: relative;
+
+    .loading-indicator-veil {
+        bottom: 0;
+        display: flex;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 1;
+
+        &.is-with-center-crawler {
+            align-items: center;
+        }
+
+        &.blur-content {
+            background-color: rgba($karl-fog, .75);
+        }
+
+        &.hide-content {
+            background-color: $white;
+        }
+    }
+}

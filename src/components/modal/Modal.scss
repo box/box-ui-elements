@@ -1,0 +1,132 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Modal
+ **************************************/
+
+@keyframes popup_bounce_in {
+    0% {
+        transform: scale3d(.1, .1, 1);
+    }
+
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+// Container modal div
+.modal {
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    flex: 1;
+    left: 0;
+    outline: 0;
+    overflow: auto;
+    padding: 30px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: $modal-dialog-z-index;
+
+    .modal-dialog {
+        animation: popup_bounce_in .3s;
+        border: none;
+        box-shadow: none;
+    }
+
+    .modal-header {
+        margin-right: 20px;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid $seesee;
+        margin: 20px 0;
+    }
+}
+
+.modal-dialog-container {
+    margin: auto;
+}
+
+.modal-dialog {
+    background-clip: padding-box;
+    background-color: $white;
+    border: 1px solid $sf-fog;
+    border-radius: $bdl-border-radius-size;
+    box-shadow: 0 1px 1px 1px fade-out($black, .95);
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 30px;
+    position: relative;
+    width: 460px;
+}
+
+.modal-title {
+    display: inline-block;
+    flex: 1;
+    font-size: 16px;
+    line-height: inherit;
+    margin: 0;
+    max-width: 100%;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.modal-content {
+    margin-top: 20px;
+}
+
+.modal-close-button {
+    background: none;
+    border: 0;
+    color: $downtown-grey;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.modal-backdrop {
+    background: fade-out($black, .25);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: -1; // .modal creates a new stacking context. Let's just make sure that backdrop is below dialog.
+}
+
+.modal-actions {
+    align-items: center;
+    display: flex;
+    flex: none;
+    justify-content: flex-end;
+    margin-top: 30px;
+    text-align: right;
+
+    .btn:last-of-type {
+        margin-right: 0;
+    }
+
+    .btn {
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+}
+
+.modal-container {
+    bottom: 0;
+    display: flex;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 89;
+}

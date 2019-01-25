@@ -1,0 +1,34 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Selector Dropdown
+ **************************************/
+
+.selector-dropdown-wrapper {
+    position: relative;
+    z-index: 3; /* increase z-index based on max-height of dropdown wrapper */
+
+    .overlay-wrapper,
+    .overlay {
+        display: block;
+        width: 100%;
+    }
+
+    .text-input-container {
+        margin-bottom: 5px;
+    }
+
+    .link-group {
+        ul {
+            list-style: none;
+        }
+    }
+
+    .link {
+        color: $sunset-grey !important;
+
+        &.is-selected {
+            background-color: fade-out($blue-steel, .95);
+        }
+    }
+}

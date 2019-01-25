@@ -1,0 +1,137 @@
+@import '../../../styles/variables';
+
+$query-bar-button-width: 240px;
+
+@mixin activeButton {
+    border: 1px solid $box-blue;
+    color: $box-blue;
+    font-weight: bold;
+
+    .fill-color {
+        fill: $box-blue;
+    }
+
+    path {
+        fill: $box-blue;
+    }
+}
+
+@mixin dropdownFooter {
+    border-top: 1px solid $off-white;
+    display: flex;
+    padding: 15px;
+}
+
+.query-bar-button {
+    width: $query-bar-button-width;
+
+    &.is-active {
+        @include activeButton();
+    }
+
+    .icon-caret-down {
+        margin-left: 4px;
+    }
+
+    .button-label {
+        display: flex;
+        flex: 10;
+        letter-spacing: normal;
+        line-height: 20px;
+        overflow: hidden;
+        padding-left: 5px;
+        text-align: left;
+        text-overflow: ellipsis;
+    }
+
+    .crawler.loading-indicator {
+        height: 10px;
+    }
+}
+
+.flyout-overlay.query-bar-template-dropdown-flyout {
+    .overlay {
+        width: $query-bar-button-width;
+    }
+
+    .metadata-instance-editor-template-message {
+        width: 100%;
+    }
+
+    .template-dropdown-list-title {
+        color: $eights;
+        display: flex;
+        font-size: 10px;
+        letter-spacing: .6px;
+        padding-bottom: 0;
+        padding-left: 17px;
+        padding-top: 5px;
+    }
+
+    .template-display-name {
+        padding-left: 5px;
+    }
+}
+
+.flyout-overlay.query-bar-filter-dropdown-flyout {
+    &::before {
+        display: none;
+    }
+
+    .overlay {
+        padding: 0;
+    }
+
+    .filter-button-dropdown {
+        width: 625px;
+
+        .filter-button-dropdown-header {
+            padding: 20px;
+        }
+
+        .filter-button-dropdown-footer {
+            @include dropdownFooter();
+
+            justify-content: space-between;
+
+            .apply-filters-button {
+                background-color: $box-blue;
+                border: none;
+                border-radius: 5px;
+                color: $white;
+            }
+        }
+    }
+}
+
+.flyout-overlay.query-bar-column-dropdown-flyout {
+    .overlay {
+        padding: 0;
+    }
+
+    .column-button-dropdown {
+        .column-button-dropdown-header {
+            height: 50%;
+            width: 100%;
+
+            .checkbox-container {
+                margin: inherit;
+            }
+        }
+
+        .column-button-dropdown-footer {
+            @include dropdownFooter();
+
+            justify-content: flex-end;
+        }
+
+        .draggable-list-example {
+            padding: 15px;
+            width: $query-bar-button-width;
+
+            .draggable-list {
+                padding-bottom: 10px;
+            }
+        }
+    }
+}

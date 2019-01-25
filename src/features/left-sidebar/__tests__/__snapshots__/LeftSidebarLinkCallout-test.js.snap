@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/tooltip/LeftSidebarLinkCallout render() should hide callout when isShown state is false 1`] = `
+<TetherComponent
+  attachment="middle left"
+  classPrefix="nav-link-callout"
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="middle right"
+>
+  <button />
+</TetherComponent>
+`;
+
+exports[`components/tooltip/LeftSidebarLinkCallout render() should render default component 1`] = `
+<TetherComponent
+  attachment="middle left"
+  classPrefix="nav-link-callout"
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="middle right"
+>
+  <button />
+  <div
+    className="nav-link-callout"
+  >
+    <PlainButton
+      className="nav-link-callout-close-button"
+      onClick={[Function]}
+    >
+      <IconClose
+        color="#fff"
+        height={16}
+        width={16}
+      />
+    </PlainButton>
+    <div>
+      Hi
+    </div>
+  </div>
+</TetherComponent>
+`;

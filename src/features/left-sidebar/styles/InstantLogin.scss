@@ -1,0 +1,36 @@
+@import './variables';
+@import './sizes.media';
+
+.instant-login-link {
+    align-items: center;
+    background-color: $twos;
+    color: $white;
+    display: flex;
+    font-size: 13px;
+    height: 40px;
+    margin-bottom: $lsb-item-separator-margin;
+    min-height: 40px;
+    padding: 0 13px;
+    text-decoration: none;
+
+    @include medium-size {
+        min-height: 50px;
+        padding: 0 $lsb-padding-x;
+    }
+
+    .fill-color {
+        fill: $white;
+    }
+}
+
+.instant-login-text {
+    white-space: nowrap;
+
+    @include medium-size {
+        display: none;
+
+        .is-forced-open & {
+            display: block;
+        }
+    }
+}

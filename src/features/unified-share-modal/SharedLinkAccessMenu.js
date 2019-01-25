@@ -1,0 +1,130 @@
+// @flow
+import React, { Component } from 'react';
+import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
+
+import DropdownMenu, { MenuToggle } from 'components/dropdown-menu';
+import { Menu, SelectMenuItem } from 'components/menu';
+import PlainButton from 'components/plain-button';
+import Tooltip from 'components/tooltip';
+import type { itemType } from '../../common/box-types';
+
+import SharedLinkAccessLabel from './SharedLinkAccessLabel';
+import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from './constants';
+import messages from './messages';
+import type { accessLevelType, allowedAccessLevelsType } from './flowTypes';
+
+const accessLevels = [ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM];
+
+type Props = {
+    accessLevel?: accessLevelType,
+    allowedAccessLevels: allowedAccessLevelsType,
+    changeAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
+    classificationName?: string,
+    enterpriseName?: string,
+    itemType: itemType,
+    submitting: boolean,
+    trackingProps: {
+        onChangeSharedLinkAccessLevel?: Function,
+        sharedLinkAccessMenuButtonProps?: Object,
+    },
+};
+
+class SharedLinkAccessMenu extends Component<Props> {
+    static defaultProps = {
+        allowedAccessLevels: [],
+        trackingProps: {},
+    };
+
+    onChangeAccessLevel = (newAccessLevel: accessLevelType) => {
+        const { accessLevel, changeAccessLevel, trackingProps } = this.props;
+        const { onChangeSharedLinkAccessLevel } = trackingProps;
+
+        if (accessLevel !== newAccessLevel) {
+            changeAccessLevel(newAccessLevel);
+
+            if (onChangeSharedLinkAccessLevel) {
+                onChangeSharedLinkAccessLevel(newAccessLevel);
+            }
+        }
+    };
+
+    renderMenu() {
+        const { accessLevel, allowedAccessLevels, classificationName, enterpriseName, itemType } = this.props;
+
+        return (
+            <Menu className="usm-share-access-menu">
+                {accessLevels.map(level => {
+                    const isDisabled = !allowedAccessLevels[level];
+                    const isDisabledByClassification = isDisabled && classificationName;
+                    let menuItem = null;
+                    if (!isDisabled || isDisabledByClassification) {
+                        menuItem = (
+                            <SelectMenuItem
+                                onClick={() => this.onChangeAccessLevel(level)}
+                                isSelected={level === accessLevel}
+                                key={level}
+                                isDisabled={isDisabled}
+                            >
+                                <SharedLinkAccessLabel
+                                    accessLevel={level}
+                                    enterpriseName={enterpriseName}
+                                    hasDescription
+                                    itemType={itemType}
+                                />
+                            </SelectMenuItem>
+                        );
+                    }
+                    if (menuItem && isDisabledByClassification) {
+                        return (
+                            <Tooltip
+                                key={`tooltip-${level}`}
+                                text={
+                                    <FormattedMessage
+                                        {...messages.disabledShareLinkPermission}
+                                        values={{
+                                            classification: classificationName,
+                                        }}
+                                    />
+                                }
+                                position="top-center"
+                            >
+                                {menuItem}
+                            </Tooltip>
+                        );
+                    }
+                    return menuItem;
+                })}
+            </Menu>
+        );
+    }
+
+    render() {
+        const { accessLevel, enterpriseName, itemType, submitting, trackingProps } = this.props;
+        const { sharedLinkAccessMenuButtonProps } = trackingProps;
+
+        return (
+            <DropdownMenu>
+                <PlainButton
+                    className={classNames('lnk', {
+                        'is-disabled': submitting,
+                    })}
+                    disabled={submitting}
+                    {...sharedLinkAccessMenuButtonProps}
+                >
+                    <MenuToggle>
+                        <SharedLinkAccessLabel
+                            accessLevel={accessLevel}
+                            enterpriseName={enterpriseName}
+                            hasDescription={false}
+                            itemType={itemType}
+                        />
+                    </MenuToggle>
+                </PlainButton>
+                {this.renderMenu()}
+            </DropdownMenu>
+        );
+    }
+}
+
+export default SharedLinkAccessMenu;

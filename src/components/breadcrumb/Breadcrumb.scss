@@ -1,0 +1,85 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Breadcrumbs
+ **************************************/
+
+.breadcrumbs {
+    align-items: center;
+    display: flex;
+    font-size: 15px;
+    min-width: 0;
+
+    > ol {
+        display: flex;
+        margin: 0;
+        min-width: 0;
+    }
+
+    .breadcrumb-item {
+        align-items: center;
+        display: flex;
+        min-width: 20px;
+
+        &.breadcrumb-item-last {
+            * {
+                color: $sunset-grey;
+            }
+        }
+
+        &.no-shrink {
+            flex: none;
+        }
+
+        * {
+            color: $downtown-grey;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &:hover {
+                color: $sunset-grey;
+            }
+        }
+
+        .breadcrumb-toggler {
+            cursor: pointer;
+            font-size: 25px;
+
+            &:hover,
+            &:focus {
+                color: $sunset-grey;
+                outline: none;
+            }
+        }
+
+        & + .breadcrumb-item::before {
+            border-color: $downtown-grey;
+            border-style: solid solid none none;
+            border-width: 2px;
+            content: '';
+            display: inline-block;
+            flex: none;
+            height: 8px;
+            margin: 8px 10px 6px 6px;
+            transform: rotate(45deg);
+            width: 8px;
+        }
+    }
+
+    .icon-home {
+        svg {
+            height: 16px;
+            width: 16px;
+        }
+    }
+
+    .icon-caret-down {
+        flex: none;
+        margin-left: 5px;
+
+        svg {
+            width: 7px;
+        }
+    }
+}

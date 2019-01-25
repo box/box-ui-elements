@@ -1,0 +1,9 @@
+@import '../../../styles/variables';
+
+.metadata-instance-editor-field-text {
+    &.text-input-container {
+        input[type="text"] {
+            width: 100%;
+        }
+    }
+}

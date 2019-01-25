@@ -1,0 +1,35 @@
+.email-shared-link {
+    .pill-selector-wrapper {
+        margin: 0;
+    }
+
+    .text-area-container {
+        display: block;
+        height: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .text-area-container {
+        transition: height .2s;
+    }
+
+    .pill-selector-input-wrapper,
+    textarea {
+        width: 100%;
+    }
+
+    &.is-expanded {
+        .pill-selector-wrapper {
+            margin-bottom: 20px;
+        }
+
+        .text-area-container {
+            height: 100px;
+        }
+
+        .pill-selector-input-wrapper {
+            height: 58px;
+        }
+    }
+}

@@ -1,0 +1,16 @@
+@import '../../styles/variables';
+
+.metadata-instance-editor-footer {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    .metadata-instance-editor-footer-delete .btn-plain {
+        color: $amaranth;
+    }
+
+    .metadata-instance-editor-footer-save-cancel .btn:last-child {
+        margin-right: 0;
+    }
+}

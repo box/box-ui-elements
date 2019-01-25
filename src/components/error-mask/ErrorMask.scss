@@ -1,0 +1,31 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Error Mask
+ **************************************/
+
+.error-mask {
+    align-items: center;
+    border: 1px dashed $downtown-grey;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 40px;
+
+    .error-mask-sad-cloud {
+        margin-bottom: 20px;
+    }
+
+    h4 {
+        margin-top: -10px;
+    }
+
+    h4,
+    h5 {
+        color: $storms-a-comin;
+        margin-bottom: 0;
+        text-align: center;
+        width: 100%; // IE11 Bug with flexbox
+    }
+}

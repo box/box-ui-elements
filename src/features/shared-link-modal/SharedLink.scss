@@ -1,0 +1,54 @@
+@import '../../styles/variables';
+
+.shared-link {
+    position: relative;
+
+    .text-input-container {
+        flex: 1;
+        margin: 0;
+
+        input {
+            width: 100%;
+        }
+    }
+
+    .text-input-with-copy-button-container {
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    .shared-link-access {
+        p {
+            color: $nines;
+            margin: 0 0 5px;
+        }
+
+        .btn-plain {
+            margin-right: 10px;
+        }
+    }
+
+    .shared-link-icons {
+        align-items: center;
+        display: flex;
+        position: absolute;
+        right: 0;
+
+        .shared-link-settings-btn {
+            margin-left: 5px;
+
+            svg {
+                display: block;
+            }
+        }
+    }
+
+    .shared-link-expiration {
+        height: 16px;
+        width: 16px;
+    }
+}
+
+.share-access-menu {
+    margin-bottom: 5px;
+}

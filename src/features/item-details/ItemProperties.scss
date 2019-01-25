@@ -1,0 +1,60 @@
+@import '../../styles/variables';
+
+.item-properties {
+    margin: 0;
+
+    dt {
+        color: $seventy-sixers;
+    }
+
+    dd {
+        line-height: 16px;
+        margin-bottom: 20px;
+    }
+
+    textarea.description-textarea {
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+        margin-left: -1px;
+        max-height: 110px;
+        min-height: 34px;
+        padding: 0;
+        resize: none;
+        transition: background-color .2s, border-color .2s, margin-left .2s, padding .2s;
+        width: 100%;
+
+        &:focus {
+            background-color: $karl-fog;
+            border-color: $off-white;
+            margin-left: 0;
+            max-height: none;
+            padding: 7px;
+        }
+    }
+
+    .url-input {
+        input {
+            margin: 0;
+            width: 100%;
+        }
+
+        &:not(.show-error) input {
+            border: none;
+            box-shadow: none;
+            height: 16px;
+            padding: 0;
+            transition: border .2s, height .2s, padding .2s;
+
+            &:focus {
+                border: 1px solid $box-blue;
+                height: 32px;
+                padding: 7px;
+            }
+        }
+    }
+
+    button {
+        display: block;
+    }
+}

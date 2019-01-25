@@ -1,0 +1,16 @@
+@import '../../styles/variables';
+
+.draggable-list {
+    align-items: center;
+    display: flex;
+
+    .draggable-list-content {
+        align-items: center;
+        display: flex;
+        flex: 1;
+    }
+
+    .draggable-list-handle {
+        display: flex;
+    }
+}

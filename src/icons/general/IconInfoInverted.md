@@ -1,0 +1,3 @@
+```
+<IconInfoInverted />
+```

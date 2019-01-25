@@ -1,0 +1,70 @@
+@import '../../styles/variables';
+
+.nav-sidebar {
+    background-color: $karl-fog;
+    border-right: 1px solid $off-white;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 25px 10px 0 20px;
+    width: 200px;
+    z-index: 2;
+}
+
+.nav-list {
+    margin-bottom: 20px;
+
+    > h2 {
+        color: $approx-mischka-grey;
+        font-size: 10px;
+        letter-spacing: .1em;
+        line-height: 28px;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    > ul {
+        margin: 0;
+
+        > li {
+            margin: 5px 0;
+        }
+    }
+
+    > .placeholder {
+        color: $lightest-charcoal;
+        padding: 0 18px 0 28px;
+        width: 180px;
+    }
+
+    a {
+        color: $sevens;
+    }
+
+    .nav-list-collapse-header {
+        align-items: center;
+        display: flex;
+        position: relative;
+
+        .nav-list-collapse {
+            height: 100%;
+            padding: 0 10px;
+            position: absolute;
+            right: 0;
+
+            > svg {
+                transition: transform 100ms ease-in-out;
+            }
+        }
+    }
+
+    &.is-collapsed {
+        > ul,
+        .placeholder {
+            display: none;
+        }
+
+        .nav-list-collapse > svg {
+            transform: rotateZ(-90deg);
+        }
+    }
+}

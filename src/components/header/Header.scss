@@ -1,0 +1,21 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Header
+ **************************************/
+
+.header {
+    align-items: center;
+    background: $haze;
+    box-shadow: inset 0 -1px 0 $off-white;
+    display: flex;
+    flex-grow: 1;
+    height: 56px;
+    padding: 0 30px;
+
+    &.is-fixed {
+        left: 0;
+        position: fixed;
+        right: 0;
+    }
+}
