@@ -7,7 +7,7 @@
     display: flex;
     flex: 0 0 70px;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 15px;
 
     .bcp-selected-count {
         margin-left: 2px;
@@ -22,14 +22,6 @@
 
     .bcp-footer-right {
         display: flex;
-    }
-
-    .bcp-footer-actions {
-        margin-left: 20px;
-
-        .btn {
-            margin-left: 8px;
-        }
     }
 }
 

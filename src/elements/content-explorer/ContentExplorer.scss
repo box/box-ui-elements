@@ -1,0 +1,7 @@
+@import '../common/variables';
+
+.be {
+    &.bce {
+        min-width: $minimumWidth;
+    }
+}
