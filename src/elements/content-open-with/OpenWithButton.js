@@ -20,7 +20,7 @@ type Props = {
     error: ?any,
     icon?: string,
     isLoading: boolean,
-    onClick: Function,
+    onClick?: Function,
     tooltipText?: string | Object,
 };
 

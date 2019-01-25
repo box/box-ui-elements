@@ -13,7 +13,7 @@ const withErrorBoundary = (errorOrigin: ElementOrigin, errorComponent: React.Nod
 ) =>
     // $FlowFixMe doesn't know about forwardRef (https://github.com/facebook/flow/issues/6103)
     React.forwardRef((props: Object, ref: React.Ref<any>) => (
-        <ErrorBoundary {...props} errorOrigin={errorOrigin} errorComponent={errorComponent}>
+        <ErrorBoundary errorOrigin={errorOrigin} errorComponent={errorComponent} {...props}>
             <WrappedComponent ref={ref} />
         </ErrorBoundary>
     ));
