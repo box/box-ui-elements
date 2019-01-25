@@ -8,6 +8,7 @@ import * as React from 'react';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
+import noop from 'lodash/noop';
 import Tooltip from 'elements/common/Tooltip';
 import messages from 'elements/common/messages';
 import OpenWithButtonContents from './OpenWithButtonContents';
@@ -52,7 +53,7 @@ export const getTooltip = (
     return message;
 };
 
-const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props) => {
+const OpenWithButton = ({ error, onClick = noop, displayIntegration, isLoading }: Props) => {
     const { displayName, isDisabled: isDisplayIntegrationDisabled, extension, disabledReasons, displayDescription } =
         displayIntegration || {};
 
