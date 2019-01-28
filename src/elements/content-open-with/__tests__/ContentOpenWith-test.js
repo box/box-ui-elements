@@ -327,10 +327,17 @@ describe('elements/content-open-with/ContentOpenWith', () => {
 
         it('should not perform any window management for a box edit integration', () => {
             instance.isBoxEditIntegration = jest.fn().mockReturnValue(true);
+            instance.executeBoxEditErrorHandler = jest.fn();
 
             instance.onIntegrationClick(displayIntegration);
             expect(api.getAppIntegrationsAPI().execute).toBeCalled();
             expect(instance.setState).not.toBeCalled();
+            expect(api.getAppIntegrationsAPI().execute).toBeCalledWith(
+                expect.any(String),
+                expect.any(String),
+                expect.any(Function),
+                instance.executeBoxEditErrorHandler,
+            );
         });
     });
 

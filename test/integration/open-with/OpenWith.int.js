@@ -142,5 +142,35 @@ describe('OpenWith', () => {
             // Tooltip should render on mouseover
             getTooltip().contains(l('be.boxEditBlacklistedError'));
         });
+
+        it('the box edit integration cannot be executed', () => {
+            cy.route('GET', '**/status', 'fixture:open-with/box-edit-status');
+            cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integration-box-edit');
+            cy.route({
+                method: 'POST',
+                url: '**/app_integrations/**/execute',
+                status: 503,
+                response: {},
+            });
+            cy.route(
+                'POST',
+                '**/application_request?application=BoxEdit&*',
+                'fixture:open-with/box-edit-application-request',
+            ).as('boxEditAvailable');
+
+            cy.visit('/ContentOpenWith');
+
+            // Wait until we know what integrations are available
+            cy.wait(['@boxEditAvailable']);
+
+            // Click the Open With button
+            getSingleButton().click();
+
+            // Hover over the Open With button
+            getOpenWithContent().trigger('mouseover');
+
+            // The button should still display the normal tooltip
+            getTooltip().contains('Open this file on your computer');
+        });
     });
 });
