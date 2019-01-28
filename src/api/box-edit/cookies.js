@@ -74,7 +74,7 @@ function set(name: string, value: any, expires: number, path: string = '/', doma
  * @returns {void}
  */
 function remove(name: string): void {
-    set(name, '', new Date(0));
+    set(name, '', new Date(0).getTime());
 }
 
 /**

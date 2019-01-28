@@ -25,7 +25,7 @@ import type { contactType as Contact } from './flowTypes';
 type Props = {
     cancelButtonProps?: Object,
     contactsFieldAvatars?: React.Node,
-    contactsFieldDisabledTooltip?: React.Node,
+    contactsFieldDisabledTooltip: React.Node,
     contactsFieldLabel: React.Node,
     children?: React.Node,
     messageProps?: Object,
@@ -57,6 +57,7 @@ type State = {
 class EmailForm extends React.Component<Props, State> {
     static defaultProps = {
         messageProps: {},
+        contactsFieldDisabledTooltip: null,
     };
 
     constructor(props: Props) {

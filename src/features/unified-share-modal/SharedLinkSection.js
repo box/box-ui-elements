@@ -103,7 +103,6 @@ class SharedLinkSection extends Component<Props> {
         }
 
         const autofocus = !!(autofocusSharedLink && (sharedLink.isNewSharedLink || triggerCopyOnLoad));
-
         return (
             <React.Fragment>
                 <div className="shared-link-field-row">
@@ -145,7 +144,6 @@ class SharedLinkSection extends Component<Props> {
                             sharedLinkAccessMenuButtonProps,
                         }}
                     />
-
                     {accessLevel !== PEOPLE_IN_ITEM && (
                         <SharedLinkPermissionMenu
                             allowedPermissionLevels={allowedPermissionLevels}

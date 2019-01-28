@@ -15,8 +15,7 @@ import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 type Props = {
     toEdit: Function,
     id: string,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 class InlineEdit extends React.Component<Props> {
     onEdit = (): void => {

@@ -15,7 +15,7 @@ function withFeatureProvider(WrappedComponent: React.ComponentType<any>) {
             </FeatureProvider>
         );
     }
-    const wrappedName = WrappedComponent.displayName || WrappedComponent.name;
+    const wrappedName = WrappedComponent.displayName || WrappedComponent.name || 'component';
     wrapComponent.displayName = `withFeatureProvider(${wrappedName})`;
     // $FlowFixMe forwardRef not supported until Flow 0.89.0
     return React.forwardRef(wrapComponent);

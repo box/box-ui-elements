@@ -19,8 +19,7 @@ type Props = {
     accessStats?: FileAccessStats,
     file: BoxItem,
     error?: MessageDescriptor,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 const SidebarAccessStats = ({
     onAccessStatsClick,

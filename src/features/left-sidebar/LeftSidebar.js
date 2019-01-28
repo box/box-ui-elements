@@ -255,7 +255,7 @@ class LeftSidebar extends React.Component<Props, State> {
                 key={`list-${id}`}
                 ulProps={ulProps}
             >
-                {menuItems && menuItems.map(props => this.getNavLink(props, leftSidebarProps))}
+                {(menuItems && menuItems.map(props => this.getNavLink(props, leftSidebarProps))) || null}
             </NavList>
         );
 

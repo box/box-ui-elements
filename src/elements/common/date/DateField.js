@@ -16,8 +16,7 @@ type Props = {
     omitCommas?: boolean,
     relative?: boolean,
     capitalize?: boolean,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 const DEFAULT_DATE_FORMAT = {
     weekday: 'short',

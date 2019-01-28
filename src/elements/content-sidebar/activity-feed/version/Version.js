@@ -20,6 +20,9 @@ import {
     PLACEHOLDER_USER,
 } from '../../../../constants';
 
+// eslint-disable-next-line
+import type { InjectIntlProvidedProps } from 'react-intl';
+
 function getMessageForAction(name: React.Node, action: string, version_number: string): React.Node {
     switch (action) {
         case VERSION_UPLOAD_ACTION:
@@ -61,10 +64,9 @@ type Props = {
     action: 'delete' | 'restore' | 'upload',
     modified_by: User,
     id: string,
-    intl: any,
     onInfo?: Function,
     version_number: string,
-};
+} & InjectIntlProvidedProps;
 
 const Version = ({ action, modified_by, id, intl, onInfo, version_number }: Props): React.Node => {
     const modifiedByUser = modified_by || PLACEHOLDER_USER;
