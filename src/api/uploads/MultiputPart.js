@@ -267,7 +267,7 @@ class MultiputPart extends BaseMultiput {
 
             await retryNumOfTimes(
                 (resolve: Function, reject: Function): void => {
-                    this.logEvent('eventInfoString', eventInfoString)
+                    this.logEvent('part_failure', eventInfoString)
                         .then(resolve)
                         .catch(reject);
                 },
