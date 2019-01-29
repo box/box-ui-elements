@@ -7,19 +7,19 @@ The children should be `DatalistItem` components for the dropdown options.
 ### Examples
 ```js
 const users = [
-    { id: 0, name: 'jackie@box.com' },
-    { id: 1, name: 'sla@box.com' },
-    { id: 2, name: 'jtan@box.com' },
-    { id: 3, name: 'yliu@box.com' },
-    { id: 4, name: 'dtong@box.com' },
-    { id: 5, name: 'yzhao@box.com' },
-    { id: 6, name: 'ysu@box.com' },
-    { id: 7, name: 'wyau@box.com' },
-    { id: 8, name: 'djordan@box.com' },
-    { id: 9, name: 'kehuang@box.com' },
-    { id: 10, name: 'wyu@box.com' },
-    { id: 11, name: 'longlonglonglonglonglonglonglonglonglonglonglongemail@box.com' },
-    { id: 12, name: 'anotherlonglonglonglonglonglonglonglonglonglonglonglongemail@box.com' },
+    { id: 0, name: 'j@example.com' },
+    { id: 1, name: 's@example.com' },
+    { id: 2, name: 'jt@example.com' },
+    { id: 3, name: 'yl@example.com' },
+    { id: 4, name: 'dt@example.com' },
+    { id: 5, name: 'yz@example.com' },
+    { id: 6, name: 'ysu@example.com' },
+    { id: 7, name: 'wy@example.com' },
+    { id: 8, name: 'd@example.com' },
+    { id: 9, name: 'k@example.com' },
+    { id: 10, name: 'w@example.com' },
+    { id: 11, name: 'longlonglonglonglonglonglonglonglonglonglonglongemail@example.com' },
+    { id: 12, name: 'anotherlonglonglonglonglonglonglonglonglonglonglonglongemail@example.com' },
 ];
 
 initialState = {

@@ -4,15 +4,15 @@ import sinon from 'sinon';
 import { InviteCollaboratorsModalBase as InviteCollaboratorsModal } from '../InviteCollaboratorsModal';
 
 const contacts = [
-    { id: 0, name: 'Jackie', email: 'jackie@box.com', type: 'user' },
-    { id: 1, name: 'Jeff', email: 'jtan@box.com', type: 'user' },
-    { id: 2, name: 'David', email: 'dtong@box.com', type: 'user' },
-    { id: 3, name: 'Yang', email: 'yzhao@box.com', type: 'user' },
-    { id: 4, name: 'Yong', email: 'ysu@box.com', type: 'user' },
-    { id: 5, name: 'Will', email: 'wyau@box.com', type: 'user' },
-    { id: 6, name: 'Dave', email: 'djordan@box.com', type: 'user' },
-    { id: 7, name: 'Ke', email: 'kehuang@box.com', type: 'user' },
-    { id: 8, name: 'Wenbo', email: 'wyu@box.com', type: 'user' },
+    { id: 0, name: 'Jackie', email: 'j@example.com', type: 'user' },
+    { id: 1, name: 'Jeff', email: 'jt@example.com', type: 'user' },
+    { id: 2, name: 'David', email: 'dt@example.com', type: 'user' },
+    { id: 3, name: 'Yang', email: 'yz@example.com', type: 'user' },
+    { id: 4, name: 'Yong', email: 'ysu@example.com', type: 'user' },
+    { id: 5, name: 'Will', email: 'wy@example.com', type: 'user' },
+    { id: 6, name: 'Dave', email: 'dj@example.com', type: 'user' },
+    { id: 7, name: 'Ke', email: 'k@example.com', type: 'user' },
+    { id: 8, name: 'Wenbo', email: 'w@example.com', type: 'user' },
     { id: 9, name: 'Engineers', type: 'group' },
     { id: 10, name: 'Junior Ballers', type: 'group' },
 ];
@@ -65,11 +65,11 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
         test('should correctly filter options that have yet to be selected by name and email', () => {
             const expectedSelectorOptions = [
                 {
-                    email: 'jtan@box.com',
+                    email: 'jt@example.com',
                     id: 1,
                     text: 'Jeff',
                     type: 'user',
-                    value: 'jtan@box.com',
+                    value: 'jt@example.com',
                 },
                 {
                     email: undefined,
@@ -81,18 +81,18 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
             ];
             const selectedOptions = [
                 {
-                    email: 'jackie@box.com',
+                    email: 'j@example.com',
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
-                    email: 'djordan@box.com',
+                    email: 'dj@example.com',
                     id: 6,
                     text: 'Dave',
                     type: 'user',
-                    value: 'djordan@box.com',
+                    value: 'dj@example.com',
                 },
             ];
             const wrapper = getWrapper({
@@ -116,7 +116,7 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
             wrapper.setState({
                 pillSelectorError: 'oops',
                 pillSelectorInputValue: 'hello',
-                selectedOptions: [{ text: 'Jackie', value: 'jackie@box.com' }],
+                selectedOptions: [{ text: 'Jackie', value: 'j@example.com' }],
             });
 
             wrapper.instance().closeModal();
@@ -134,7 +134,7 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
             });
             wrapper.setState({
                 pillSelectorError: 'oops',
-                selectedOptions: [{ text: 'Jackie', value: 'jackie@box.com' }],
+                selectedOptions: [{ text: 'Jackie', value: 'j@example.com' }],
             });
 
             wrapper.instance().sendInvites();
@@ -169,12 +169,12 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
                     // user contact
                     text: 'Test',
                     type: 'user',
-                    value: 'test@box.com',
+                    value: 'test@example.com',
                 },
                 {
                     // custom contact
                     text: 'Unicorn',
-                    value: 'unicorn@box.com',
+                    value: 'unicorn@example.com',
                 },
                 {
                     // group contact
@@ -187,7 +187,7 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
             const permission = 'Owner';
 
             const props = {
-                emails: 'test@box.com,unicorn@box.com',
+                emails: 'test@example.com,unicorn@example.com',
                 groupIDs: '55,79',
                 emailMessage: message,
                 permission,
@@ -220,27 +220,27 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
                     // user contact
                     text: 'Test',
                     type: 'user',
-                    value: 'test@box.com',
+                    value: 'test@example.com',
                 },
                 {
                     // custom contact
                     text: 'Unicorn',
-                    value: 'unicorn@box.com',
+                    value: 'unicorn@example.com',
                 },
                 {
                     // user contact
                     text: 'Aaron',
                     type: 'user',
-                    value: 'aaron@box.com',
+                    value: 'aaron@example.com',
                 },
                 {
                     // custom contact
                     text: 'Hello',
-                    value: 'hello@box.com',
+                    value: 'hello@example.com',
                 },
             ];
 
-            const invitedEmails = ['hello@box.com', 'test@box.com', 'aaron@box.com'];
+            const invitedEmails = ['hello@example.com', 'test@example.com', 'aaron@example.com'];
             const wrapper = getWrapper();
             wrapper.setState({
                 selectedOptions,
@@ -251,7 +251,7 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
             expect(wrapper.state('selectedOptions')).toEqual([
                 {
                     text: 'Unicorn',
-                    value: 'unicorn@box.com',
+                    value: 'unicorn@example.com',
                 },
             ]);
         });
@@ -287,13 +287,13 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
                     id: 1,
                     text: 'Jeff',
                     type: 'user',
-                    value: 'jtan@box.com',
+                    value: 'jt@example.com',
                 },
                 {
                     id: 10,
@@ -328,13 +328,13 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
                     id: 1,
                     text: 'Jeff',
                     type: 'user',
-                    value: 'jtan@box.com',
+                    value: 'jt@example.com',
                 },
                 {
                     id: 10,
@@ -355,7 +355,7 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
                     id: 10,
@@ -391,7 +391,7 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
                 pillSelectorError: '',
             });
 
-            wrapper.instance().validateForError('validEmail@box.com');
+            wrapper.instance().validateForError('validEmail@example.com');
 
             expect(wrapper.state('pillSelectorError')).toEqual('');
         });
@@ -405,7 +405,7 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
 
         test('should return true if text is a valid email', () => {
             const wrapper = getWrapper();
-            expect(wrapper.instance().validator('validEmail@box.com')).toBe(true);
+            expect(wrapper.instance().validator('validEmail@example.com')).toBe(true);
         });
     });
 
@@ -609,13 +609,13 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
                     id: 1,
                     text: 'Jeff',
                     type: 'user',
-                    value: 'jtan@box.com',
+                    value: 'jt@example.com',
                 },
                 {
                     id: 10,
@@ -626,11 +626,11 @@ describe('features/invite-collaborators-modal/InviteCollaboratorsModal', () => {
             ];
             const selectorOptions = [
                 {
-                    email: 'djordan@box.com',
+                    email: 'dj@example.com',
                     id: 6,
                     text: 'Dave',
                     type: 'user',
-                    value: 'djordan@box.com',
+                    value: 'dj@example.com',
                 },
             ];
             const wrapper = getWrapper({

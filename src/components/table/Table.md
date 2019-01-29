@@ -11,9 +11,9 @@ const TableRow = require('box-ui-elements/es/components/table').TableRow;
 const columnHeaders = ['First Name', 'Last Name', 'Email'];
 
 const data = [
-    ['Phil', 'Sheffield', 'phil@box.com'],
-    ['Jake', 'Thomas', 'jake@box.com'],
-    ['Janette', 'Heininger', 'jheininger@box.com'],
+    ['Phil', 'User', 'phil@example.com'],
+    ['Jake', 'User', 'jake@example.com'],
+    ['Janette', 'User', 'jheininger@example.com'],
 ];
 
 <Table>

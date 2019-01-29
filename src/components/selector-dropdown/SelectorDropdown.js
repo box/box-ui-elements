@@ -82,7 +82,7 @@ class SelectorDropdown extends React.Component<Props, State> {
     selectorDropdownRef: { current: null | HTMLDivElement };
 
     scrollItemIntoView = (id: string | null) => {
-        // @NOTE(jackiechen): breaks encapsulation but alternative is unknown child ref
+        // @NOTE: breaks encapsulation but alternative is unknown child ref
         const itemEl = id ? document.getElementById(id) : null;
         if (itemEl) {
             let parentEl = itemEl;

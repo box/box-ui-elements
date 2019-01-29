@@ -95,7 +95,7 @@ class BaseSelectField extends React.Component<Props, State> {
     selectFieldID: string;
 
     scrollItemIntoView = (id: ?string) => {
-        // @NOTE(jackiechen): breaks encapsulation but alternative is unknown child ref
+        // @NOTE: breaks encapsulation but alternative is unknown child ref
         const itemEl = id ? document.getElementById(id) : null;
         if (itemEl) {
             scrollIntoViewIfNeeded(itemEl, false);
@@ -360,7 +360,7 @@ class BaseSelectField extends React.Component<Props, State> {
         const { className, multiple } = this.props;
         const { isOpen } = this.state;
 
-        // @TODO(jtan): Need invariants on specific conditions.
+        // @TODO: Need invariants on specific conditions.
         // 1) # of options should be non-zero
         // 2) selectedValues, if defined, should all exist in options
         // 3) defaultValue, if defined, should exist in options

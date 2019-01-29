@@ -42,8 +42,8 @@ jest.mock('../Tasks', () => {
                         assigned_to: {
                             type: 'user',
                             id: '3086276240',
-                            name: 'Daniel DeMicco',
-                            login: 'ddemicco@foo.com',
+                            name: 'Test User',
+                            login: 'testuser@foo.com',
                         },
                         status: 'completed',
                     },
@@ -147,8 +147,8 @@ describe('api/Feed', () => {
                 assigned_to: {
                     type: 'user',
                     id: '3086276240',
-                    name: 'Daniel DeMicco',
-                    login: 'ddemicco@foo.com',
+                    name: 'Test User',
+                    login: 'testuser@foo.com',
                 },
                 status: 'completed',
             },

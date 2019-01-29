@@ -17,16 +17,16 @@ class USMExample extends React.Component {
         this.setInitialState();
 
         this.contacts = [
-            { id: 0, collabID: 0, name: 'Jackie', email: 'jackie@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Owner', userID: '0', profileURL: 'https://foo.bar' },
-            { id: 1, collabID: 1, name: 'Jeff', email: 'jtan@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Viewer', userID: '1', },
-            { id: 2, collabID: 2, name: 'David', email: 'dtong@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '2', },
-            { id: 3, collabID: 3, name: 'Yang', email: 'yzhao@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '3', },
-            { id: 4, collabID: 4, name: 'Yong', email: 'ysu@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '4', },
-            { id: 5, collabID: 5, name: 'Will', email: 'wyau@box.com', type: 'pending', hasCustomAvatar: false, translatedRole: 'Editor', userID: '5', },
-            { id: 6, collabID: 6, name: 'Dave', email: 'djordan@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '6', },
-            { id: 7, collabID: 7, name: 'Ke', email: 'kehuang@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '7', },
-            { id: 8, collabID: 8, name: 'Wenbo', email: 'wyu@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '8', },
-            { id: 11, collabID: 11, name: 'Supersupersupersuperreallyreallyreallylongfirstname incrediblyspectacularlylonglastname', email: 'Supersupersupersuperreallyreallyreallyincrediblyspectacularlylongemail@box.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '11', },
+            { id: 0, collabID: 0, name: 'Jackie', email: 'j@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Owner', userID: '0', profileURL: 'https://foo.bar' },
+            { id: 1, collabID: 1, name: 'Jeff', email: 'jt@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Viewer', userID: '1', },
+            { id: 2, collabID: 2, name: 'David', email: 'dt@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '2', },
+            { id: 3, collabID: 3, name: 'Yang', email: 'yz@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '3', },
+            { id: 4, collabID: 4, name: 'Yong', email: 'ysu@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '4', },
+            { id: 5, collabID: 5, name: 'Will', email: 'wy@example.com', type: 'pending', hasCustomAvatar: false, translatedRole: 'Editor', userID: '5', },
+            { id: 6, collabID: 6, name: 'Dave', email: 'd@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '6', },
+            { id: 7, collabID: 7, name: 'Ke', email: 'k@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '7', },
+            { id: 8, collabID: 8, name: 'Wenbo', email: 'w@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '8', },
+            { id: 11, collabID: 11, name: 'Supersupersupersuperreallyreallyreallylongfirstname incrediblyspectacularlylonglastname', email: 'Supersupersupersuperreallyreallyreallyincrediblyspectacularlylongemail@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '11', },
             { /* example group contact */
                     id: 14,
                     collabID: 14,

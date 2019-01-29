@@ -164,7 +164,7 @@ class SearchForm extends React.Component<Props, State> {
 
         const LoadableSearchActions = makeLoadable(SearchActions);
 
-        // @NOTE(jtan)Prevent errors from React about controlled inputs
+        // @NOTE Prevent errors from React about controlled inputs
         const onChangeStub = () => {};
 
         return (

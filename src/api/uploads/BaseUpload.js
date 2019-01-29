@@ -73,7 +73,7 @@ class BaseUpload extends Base {
 
         this.fileName = this.file ? this.file.name : '';
 
-        // TODO(tonyjin): Normalize error object and clean up error handling
+        // TODO: Normalize error object and clean up error handling
         let errorData = error;
         const { response } = error;
         if (response && response.data) {

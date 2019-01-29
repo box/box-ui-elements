@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-// @NOTE(jtan): We need to find a replacement for pikaday. It's poorly supported and has a lot of undesirable blur() behavior.
 import Pikaday from 'pikaday';
 import range from 'lodash/range';
 

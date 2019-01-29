@@ -15,12 +15,12 @@ describe('features/item-details/ItemProperties', () => {
         const wrapper = getWrapper({
             createdAt: '2012-12-12T11:04:26-08:00',
             description: 'Hi\ntesting this link http://box.com',
-            enterpriseOwner: 'David Lee',
+            enterpriseOwner: 'Test Enterprise Owner',
             modifiedAt: 1459832991883,
-            owner: 'Jackie Chen',
+            owner: 'Test Owner',
             size: '3.3 KB',
             trashedAt: '2013-02-07T10:49:34-08:00',
-            uploader: 'Wenbo Yu',
+            uploader: 'Test Uploader',
         });
 
         expect(wrapper).toMatchSnapshot();

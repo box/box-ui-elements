@@ -31,7 +31,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
       collaborator={
         Object {
           "collabID": 1,
-          "email": "testa@box.com",
+          "email": "testa@example.com",
           "hasCustomAvatar": false,
           "name": "test a",
           "type": "user",
@@ -51,7 +51,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
       collaborator={
         Object {
           "collabID": 2,
-          "email": "testb@box.com",
+          "email": "testb@example.com",
           "name": "test b",
           "type": "user",
           "userID": 2,
@@ -70,7 +70,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
       collaborator={
         Object {
           "collabID": 3,
-          "email": "testc@box.com",
+          "email": "testc@example.com",
           "hasCustomAvatar": true,
           "imageUrl": "https://foo.bar",
           "name": "test c",
@@ -133,7 +133,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
       collaborator={
         Object {
           "collabID": 1,
-          "email": "testa@box.com",
+          "email": "testa@example.com",
           "hasCustomAvatar": false,
           "name": "test a",
           "type": "user",
@@ -153,7 +153,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
       collaborator={
         Object {
           "collabID": 2,
-          "email": "testb@box.com",
+          "email": "testb@example.com",
           "name": "test b",
           "type": "user",
           "userID": 2,

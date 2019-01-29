@@ -34,7 +34,7 @@
             border-top: none;
             overflow: hidden;
 
-            // NOTE (cwei): targets ie11
+            // NOTE: targets ie11
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
                 max-height: 300px;
             }
@@ -60,7 +60,7 @@
 
             // NOTE: targets ie11
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-                // Note (lbarrick) in IE11 the scrollbar gets cut off when a user scrolls to the bottom, this makes it so the list item isn't cut off
+                // Note: in IE11 the scrollbar gets cut off when a user scrolls to the bottom, this makes it so the list item isn't cut off
                 margin-bottom: 20px;
             }
 

@@ -85,7 +85,7 @@ class DropdownMenu extends React.Component<Props, State> {
     };
 
     focusButton = () => {
-        // @NOTE(jtan): This breaks encapsulation a bit, but the only other way is passing ref functions to unknown children components
+        // @NOTE: This breaks encapsulation a bit, but the only other way is passing ref functions to unknown children components
         const menuButtonEl = document.getElementById(this.menuButtonID);
         if (menuButtonEl) {
             menuButtonEl.focus();

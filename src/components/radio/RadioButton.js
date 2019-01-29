@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import './RadioButton.scss';
 
-// @NOTE(jackiechen): readonly is not a valid attribute for input type radio so
+// @NOTE: readonly is not a valid attribute for input type radio so
 // this avoids the propType error that "checked" is set without "onChange"
 const onChangeStub = () => {};
 

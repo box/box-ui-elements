@@ -31,7 +31,7 @@ class SingleSelectField extends React.Component<Props> {
     render() {
         const { isDisabled, selectedValue, placeholder, ...rest } = this.props;
 
-        // @TODO(jtan): Invariant testing
+        // @TODO: Invariant testing
         // 1) selectedValue is required to be contained in the options
         // 2) # of options should be non-zero
 

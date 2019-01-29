@@ -52,7 +52,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 
-    // @NOTE (cwei 04-23-2018): Safari automatically overrides showing of tooltips
+    // @NOTE (04-23-2018): Safari automatically overrides showing of tooltips
     // https://stackoverflow.com/questions/20974276/prevent-safari-from-showing-tooltip-when-text-overflow-is-hidden-with-ellipsis
     &::after {
         content: '';
