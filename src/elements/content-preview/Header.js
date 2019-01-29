@@ -23,12 +23,11 @@ type Props = {
     canDownload: boolean,
     contentOpenWithProps?: ContentOpenWithProps,
     file?: BoxItem,
-    intl: any,
     onClose?: Function,
     onDownload: Function,
     onPrint: Function,
     token: ?string,
-};
+} & InjectIntlProvidedProps;
 
 const Header = ({
     canAnnotate,

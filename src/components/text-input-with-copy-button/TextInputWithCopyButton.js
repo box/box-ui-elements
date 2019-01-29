@@ -19,7 +19,7 @@ type Props = {
     /** Set the focus to input when component loads */
     autofocus?: boolean,
     /** Default copy button text */
-    buttonDefaultText?: string | React.Node,
+    buttonDefaultText: string | React.Node,
     /** Copy button text when copy is successful */
     buttonSuccessText?: string | React.Node,
     buttonProps?: Object,

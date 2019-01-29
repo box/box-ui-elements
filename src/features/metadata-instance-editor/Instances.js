@@ -13,7 +13,7 @@ type Props = {
 };
 
 const Instances = ({ isCascadingPolicyApplicable = false, editors = [], onModification, onRemove, onSave }: Props) =>
-    editors.map(({ isDirty = false, instance, hasError = false, template }: Editor) => (
+    editors.map<React.Element<typeof Instance>>(({ isDirty = false, instance, hasError = false, template }: Editor) => (
         <Instance
             canEdit={instance.canEdit}
             cascadePolicy={instance.cascadePolicy}

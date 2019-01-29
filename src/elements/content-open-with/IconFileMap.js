@@ -19,7 +19,7 @@ const ICON_FILE_MAP = {
     'Google Slides (beta)': IconGoogleSlides,
 };
 
-function getIcon(iconName: string): Element {
+function getIcon(iconName: string): React.Element<any> {
     return ICON_FILE_MAP[iconName] || FileIcon;
 }
 

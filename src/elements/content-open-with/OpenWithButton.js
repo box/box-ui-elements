@@ -36,7 +36,7 @@ export const getTooltip = (
     isLoading: boolean,
     error: ?Error,
     disabledReasons: Array<DisabledReason> = [],
-): ?(string | Element) => {
+): ?(string | React.Element<typeof FormattedMessage>) => {
     if (isLoading) {
         return null;
     }

@@ -18,9 +18,9 @@ type Props = {
     logoUrl?: string,
     isSmall: boolean,
     view: View,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
+// eslint-disable-next-line react/prop-types
 const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {
     const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) => onSearch(currentTarget.value);
     const isFolder = view === VIEW_FOLDER;

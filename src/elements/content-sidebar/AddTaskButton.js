@@ -6,21 +6,20 @@ import { FormattedMessage } from 'react-intl';
 import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
 
-type AddTaskButtonProps = {
+type AddTaskButtonProps = {|
     isDisabled: boolean,
-};
+|};
 
 // These are used by the wrapped form
-type PassThroughProps = {
-    createTask: any,
-    getApproverWithQuery: any,
-    getMentionWithQuery: any,
+type PassThroughProps = {|
     approverSelectorContacts: any,
-    mentionSelectorContacts: any,
+    className?: string,
+    createTask: any,
+    getApproverWithQuery?: any,
     getAvatarUrl: any,
-};
+|};
 
-type Props = AddTaskButtonProps & PassThroughProps;
+type Props = {| ...AddTaskButtonProps, ...PassThroughProps |};
 
 type State = {
     isTaskFormOpen: boolean,
@@ -57,14 +56,7 @@ class AddTaskButton extends React.Component<Props, State> {
                     className="be task-modal"
                     data-testid="create-task-modal"
                 >
-                    <TaskForm
-                        {...passThrough}
-                        isOpen
-                        className=""
-                        isEditing={isTaskFormOpen}
-                        onCancel={this.handleClose}
-                        onSubmit={this.handleSubmit}
-                    />
+                    <TaskForm {...passThrough} onCancel={this.handleClose} onSubmit={this.handleSubmit} />
                 </Modal>
             </React.Fragment>
         );

@@ -192,9 +192,10 @@ class TabViewPrimitive extends React.Component<Props, State> {
         }
     };
 
-    calculateNextIndex = (currentIndex: number, childrenCount) => (currentIndex + 1) % childrenCount;
+    calculateNextIndex = (currentIndex: number, childrenCount: number) => (currentIndex + 1) % childrenCount;
 
-    calculatePrevIndex = (currentIndex: number, childrenCount) => (currentIndex - 1 + childrenCount) % childrenCount;
+    calculatePrevIndex = (currentIndex: number, childrenCount: number) =>
+        (currentIndex - 1 + childrenCount) % childrenCount;
 
     /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
     renderTabs() {

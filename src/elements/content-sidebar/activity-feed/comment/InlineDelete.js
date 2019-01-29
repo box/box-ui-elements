@@ -18,9 +18,8 @@ type Props = {
     onDelete: Function,
     permissions: BoxItemPermission,
     id: string,
-    intl: any,
     message: React.Node,
-};
+} & InjectIntlProvidedProps;
 
 type State = {
     isConfirming?: boolean,

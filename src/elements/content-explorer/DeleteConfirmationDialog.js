@@ -20,8 +20,7 @@ type Props = {
     isLoading: boolean,
     parentElement: HTMLElement,
     appElement: HTMLElement,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 const DeleteConfirmationDialog = ({
     isOpen,

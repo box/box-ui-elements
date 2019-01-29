@@ -22,9 +22,9 @@ import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactio
 
 import './TaskForm.scss';
 
-export type TaskFormProps = {|
+type TaskFormProps = {|
     approverSelectorContacts: SelectorItems,
-    className: string,
+    className?: string,
     createTask: (text: string, approvers: SelectorItems, dueDate: ?Date) => any,
     getApproverWithQuery?: Function,
     getAvatarUrl: string => Promise<?string>,

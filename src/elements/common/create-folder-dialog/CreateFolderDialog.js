@@ -26,8 +26,7 @@ type Props = {
     errorCode: string,
     parentElement: HTMLElement,
     appElement: HTMLElement,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 /* eslint-disable jsx-a11y/label-has-for */
 const CreateFolderDialog = ({

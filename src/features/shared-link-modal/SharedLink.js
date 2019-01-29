@@ -26,7 +26,6 @@ type Props = {
     copyButtonProps?: Object,
     enterpriseName?: string,
     expiration?: number,
-    intl: intlShape,
     isDownloadAllowed?: boolean,
     isEditAllowed?: boolean,
     isPreviewAllowed?: boolean,
@@ -39,7 +38,7 @@ type Props = {
     settingsButtonProps?: Object,
     sharedLink: string,
     submitting?: boolean,
-};
+} & InjectIntlProvidedProps;
 
 const SharedLink = (props: Props) => {
     const {

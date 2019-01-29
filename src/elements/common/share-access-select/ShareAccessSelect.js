@@ -15,8 +15,7 @@ type Props = {
     onChange: Function,
     item: BoxItem,
     className: string,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, intl }: Props) => {
     const { allowed_shared_link_access_levels: allowedSharedAccessLevels, permissions, shared_link: sharedLink } = item;

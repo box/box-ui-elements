@@ -105,7 +105,7 @@ class MetadataViewTable extends React.PureComponent<Props, State> {
         const { intl, width } = this.props;
         const { visibleColumns, widths } = this.state;
 
-        return visibleColumns.map((templateField: TemplateField, index: number) => {
+        return visibleColumns.map<React.Element<Column>>((templateField: TemplateField, index: number) => {
             const { displayName, key, type } = templateField;
 
             const isNameCell = key === 'name';

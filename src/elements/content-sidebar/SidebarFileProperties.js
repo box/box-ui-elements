@@ -24,9 +24,8 @@ type Props = {
     retentionPolicy?: Object,
     bannerPolicy?: Object,
     onRetentionPolicyExtendClick?: Function,
-    intl: any,
     isLoading: boolean,
-};
+} & InjectIntlProvidedProps;
 
 /**
  * Gets the openModal prop for ItemProperties

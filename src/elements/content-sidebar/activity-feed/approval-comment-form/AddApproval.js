@@ -22,8 +22,7 @@ type Props = {
     onApproverSelectorInput: Function,
     onApproverSelectorRemove: Function,
     onApproverSelectorSelect: Function,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 const AddApproval = ({
     approvalDate,

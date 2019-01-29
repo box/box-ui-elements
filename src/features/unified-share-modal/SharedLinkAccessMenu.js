@@ -32,7 +32,7 @@ type Props = {
 
 class SharedLinkAccessMenu extends Component<Props> {
     static defaultProps = {
-        allowedAccessLevels: [],
+        allowedAccessLevels: {},
         trackingProps: {},
     };
 

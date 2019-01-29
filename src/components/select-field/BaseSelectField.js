@@ -308,7 +308,7 @@ class BaseSelectField extends React.Component<Props, State> {
         const { options, selectedValues, separatorIndices } = this.props;
         const { activeItemIndex } = this.state;
 
-        const selectOptions = options.map((item, index) => {
+        const selectOptions = options.map<React.Element<typeof DatalistItem | 'li'>>((item, index) => {
             const { displayText, value } = item;
 
             const isSelected = selectedValues.includes(value);

@@ -4,5 +4,6 @@
  * @author Box
  */
 import React from 'react';
+import API from 'api';
 
-export default React.createContext();
+export default React.createContext<?API>();

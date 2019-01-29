@@ -22,8 +22,7 @@ type Props = {
     status: UploadStatus,
     onClick: Function,
     isFolder?: boolean,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     let icon = <IconClose />;

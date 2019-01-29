@@ -33,8 +33,7 @@ type Props = {
     contentPreviewProps: ContentPreviewProps,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    intl: any,
-};
+} & InjectIntlProvidedProps;
 
 const PreviewDialog = ({
     item,

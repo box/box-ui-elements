@@ -1087,7 +1087,7 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Component} react component
      * @return {void}
      */
-    tableRef = (table: React$Component<*, *, *>): void => {
+    tableRef = (table: React$Component<*, *>): void => {
         this.table = table;
     };
 
