@@ -326,12 +326,10 @@ describe('elements/content-preview/ContentPreview', () => {
         beforeEach(() => {
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
-            instance.retryCount = 5;
         });
 
-        test('should reset the retry count and set state', () => {
+        test('should set state to the new file', () => {
             instance.fetchFileSuccessCallback(file);
-            expect(instance.retryCount).toEqual(0);
             expect(instance.state.file).toEqual(file);
             expect(instance.state.isFileError).toEqual(false);
             expect(instance.state.isReloadNotificationVisible).toEqual(false);
@@ -343,7 +341,6 @@ describe('elements/content-preview/ContentPreview', () => {
             instance.setState({ file });
             instance.fetchFileSuccessCallback(newFile);
 
-            expect(instance.retryCount).toEqual(0);
             expect(instance.state.file).toEqual(newFile);
             expect(instance.state.isFileError).toEqual(false);
             expect(instance.state.isReloadNotificationVisible).toEqual(false);
@@ -358,7 +355,6 @@ describe('elements/content-preview/ContentPreview', () => {
             });
             instance.fetchFileSuccessCallback(newFile);
 
-            expect(instance.retryCount).toEqual(0);
             expect(instance.state.file).toEqual(file);
         });
 
@@ -373,7 +369,6 @@ describe('elements/content-preview/ContentPreview', () => {
             });
             instance.fetchFileSuccessCallback(newFile);
 
-            expect(instance.retryCount).toEqual(0);
             expect(instance.stagedFile).toEqual(newFile);
             expect(instance.state.file).toEqual(file);
             expect(instance.state.isFileError).toBeFalsy();
@@ -394,26 +389,14 @@ describe('elements/content-preview/ContentPreview', () => {
             });
             instance = wrapper.instance();
             instance.fetchFile = jest.fn();
-            instance.retryCount = 5;
             error = new Error('foo');
         });
 
-        test('should set the file error state if we have surpassed our retry count', () => {
+        test('should set the file error state', () => {
             instance.fetchFileErrorCallback(error);
             expect(instance.state.isFileError).toEqual(true);
             expect(instance.fetchFile).not.toBeCalled();
             expect(onError).toHaveBeenCalled();
-        });
-
-        jest.useFakeTimers();
-
-        test('should try to fetch the file again after the timeout', () => {
-            instance.retryCount = 0;
-            instance.fetchFileErrorCallback(error);
-            jest.runAllTimers();
-
-            expect(instance.fetchFile).toBeCalled();
-            expect(onError).not.toHaveBeenCalled();
         });
     });
 
