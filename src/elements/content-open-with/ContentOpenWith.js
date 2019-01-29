@@ -341,16 +341,17 @@ class ContentOpenWith extends PureComponent<Props, State> {
      */
     onIntegrationClick = ({ appIntegrationId, displayName }: Integration): void => {
         const { fileId }: Props = this.props;
+        const isBoxEditIntegration = this.isBoxEditIntegration(appIntegrationId);
         this.api
             .getAppIntegrationsAPI(false)
             .execute(
                 appIntegrationId,
                 fileId,
                 this.executeIntegrationSuccessHandler.bind(this, appIntegrationId),
-                this.executeIntegrationErrorHandler,
+                isBoxEditIntegration ? this.executeBoxEditErrorHandler : this.executeIntegrationErrorHandler,
             );
 
-        if (this.isBoxEditIntegration(appIntegrationId)) {
+        if (isBoxEditIntegration) {
             // No window management is required when using Box Edit.
             return;
         }
