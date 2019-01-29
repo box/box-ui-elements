@@ -214,21 +214,21 @@ push_new_release() {
     # Check untracked files
     check_untracked_files || return 1
 
-    # Build examples
-    if ! build_examples; then
-        printf "${red}Failed building styleguide!${end}"
-        return 1
-    fi
+    # # Build examples
+    # if ! build_examples; then
+    #     printf "${red}Failed building styleguide!${end}"
+    #     return 1
+    # fi
 
-    # Publish gh-pages
-    if ! push_to_gh_pages; then
-        printf "${red}Failed pushing styleguide to gh-pages!${end}"
-        return 1
-    fi
+    # # Publish gh-pages
+    # if ! push_to_gh_pages; then
+    #     printf "${red}Failed pushing styleguide to gh-pages!${end}"
+    #     return 1
+    # fi
 
-    # Check uncommitted files
-    check_uncommitted_files || return 1
+    # # Check uncommitted files
+    # check_uncommitted_files || return 1
 
-    # Check untracked files
-    check_untracked_files || return 1
+    # # Check untracked files
+    # check_untracked_files || return 1
 }
