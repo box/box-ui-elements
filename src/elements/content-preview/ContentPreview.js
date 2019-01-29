@@ -135,8 +135,6 @@ type PreviewError = {
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
-const RETRY_COUNT = 3; // number of times to retry network request for a file
-const MS_IN_S = 1000; // ms in a sec
 const PREVIEW_LOAD_METRIC_EVENT = 'load';
 const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_PREVIEW}_${EVENT_JS_READY}`;
 
@@ -158,10 +156,6 @@ class ContentPreview extends PureComponent<Props, State> {
     mouseMoveTimeoutID: TimeoutID;
 
     rootElement: HTMLElement;
-
-    retryCount: number = 0;
-
-    retryTimeout: TimeoutID;
 
     stagedFile: ?BoxItem;
 
@@ -250,9 +244,6 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillUnmount(): void {
-        if (this.retryTimeout) {
-            clearTimeout(this.retryTimeout);
-        }
         // Don't destroy the cache while unmounting
         this.api.destroy(false);
     }
@@ -750,7 +741,6 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
         this.fetchFileEndTime = performance.now();
-        this.retryCount = 0;
 
         const { file: currentFile }: State = this.state;
         const isExistingFile = currentFile ? currentFile.id === file.id : false;
@@ -779,29 +769,10 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     fetchFileErrorCallback = (fileError: ElementsXhrError, code: string): void => {
         const { currentFileId } = this.state;
-        if (this.retryCount >= RETRY_COUNT) {
-            this.setState({ isFileError: true });
-            this.props.onError(fileError, code, {
-                error: fileError,
-            });
-        } else {
-            this.retryCount += 1;
-            clearTimeout(this.retryTimeout);
-
-            // Respect 'Retry-After' header if present, otherwise retry with exponential back-off
-            let timeoutMs = 2 ** this.retryCount * MS_IN_S;
-            const retryAfter = getProp(fileError, `response.headers[${HEADER_RETRY_AFTER}]`);
-            if (retryAfter) {
-                const retryAfterS = parseInt(retryAfter, 10);
-                if (!Number.isNaN(retryAfterS)) {
-                    timeoutMs = retryAfterS * MS_IN_S;
-                }
-            }
-
-            this.retryTimeout = setTimeout(() => {
-                this.fetchFile(currentFileId);
-            }, timeoutMs);
-        }
+        this.setState({ isFileError: true });
+        this.props.onError(fileError, code, {
+            error: fileError,
+        });
     };
 
     /**
