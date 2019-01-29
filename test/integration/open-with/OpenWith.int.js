@@ -151,7 +151,7 @@ describe('OpenWith', () => {
                 url: '**/app_integrations/**/execute',
                 status: 503,
                 response: {},
-            });
+            }).as('executionFailure');
             cy.route(
                 'POST',
                 '**/application_request?application=BoxEdit&*',
@@ -165,6 +165,9 @@ describe('OpenWith', () => {
 
             // Click the Open With button
             getSingleButton().click();
+
+            // Wait until the execution of the integration has failed
+            cy.wait(['@executionFailure']);
 
             // Hover over the Open With button
             getOpenWithContent().trigger('mouseover');
