@@ -113,7 +113,7 @@ testing this link http://box.com"
     tagName="dt"
   />
   <dd>
-    Jackie Chen
+    Test Owner
   </dd>
   <FormattedMessage
     defaultMessage="Enterprise Owner"
@@ -121,7 +121,7 @@ testing this link http://box.com"
     tagName="dt"
   />
   <dd>
-    David Lee
+    Test Enterprise Owner
   </dd>
   <FormattedMessage
     defaultMessage="Uploader"
@@ -129,7 +129,7 @@ testing this link http://box.com"
     tagName="dt"
   />
   <dd>
-    Wenbo Yu
+    Test Uploader
   </dd>
   <FormattedMessage
     defaultMessage="Created"

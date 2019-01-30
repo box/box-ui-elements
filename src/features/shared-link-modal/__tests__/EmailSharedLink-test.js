@@ -6,15 +6,15 @@ import { EmailSharedLinkBase as EmailSharedLink } from '../EmailSharedLink';
 const sandbox = sinon.sandbox.create();
 
 const contacts = [
-    { id: 0, name: 'Jackie', email: 'jackie@box.com', type: 'user' },
-    { id: 1, name: 'Jeff', email: 'jtan@box.com', type: 'user' },
-    { id: 2, name: 'David', email: 'dtong@box.com', type: 'user' },
-    { id: 3, name: 'Yang', email: 'yzhao@box.com', type: 'user' },
-    { id: 4, name: 'Yong', email: 'ysu@box.com', type: 'user' },
-    { id: 5, name: 'Will', email: 'wyau@box.com', type: 'user' },
-    { id: 6, name: 'Dave', email: 'djordan@box.com', type: 'user' },
-    { id: 7, name: 'Ke', email: 'kehuang@box.com', type: 'user' },
-    { id: 8, name: 'Wenbo', email: 'wyu@box.com', type: 'user' },
+    { id: 0, name: 'Jackie', email: 'j@example.com', type: 'user' },
+    { id: 1, name: 'Jeff', email: 'jt@example.com', type: 'user' },
+    { id: 2, name: 'David', email: 'dt@example.com', type: 'user' },
+    { id: 3, name: 'Yang', email: 'yz@example.com', type: 'user' },
+    { id: 4, name: 'Yong', email: 'ysu@example.com', type: 'user' },
+    { id: 5, name: 'Will', email: 'wy@example.com', type: 'user' },
+    { id: 6, name: 'Dave', email: 'd@example.com', type: 'user' },
+    { id: 7, name: 'Ke', email: 'k@example.com', type: 'user' },
+    { id: 8, name: 'Wenbo', email: 'w@example.com', type: 'user' },
     { id: 9, name: 'Engineers', type: 'group' },
     { id: 10, name: 'Junior Ballers', type: 'group' },
 ];
@@ -53,18 +53,18 @@ describe('features/shared-link-modal/EmailSharedLink', () => {
         test('should correctly filter options that have yet to be selected by name and email', () => {
             const selectedOptions = [
                 {
-                    email: 'jackie@box.com',
+                    email: 'j@example.com',
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
-                    email: 'djordan@box.com',
+                    email: 'd@example.com',
                     id: 6,
                     text: 'Dave',
                     type: 'user',
-                    value: 'djordan@box.com',
+                    value: 'd@example.com',
                 },
             ];
             const wrapper = getWrapper({
@@ -110,13 +110,13 @@ describe('features/shared-link-modal/EmailSharedLink', () => {
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
                     id: 1,
                     text: 'Jeff',
                     type: 'user',
-                    value: 'jtan@box.com',
+                    value: 'jt@example.com',
                 },
                 {
                     id: 10,
@@ -151,13 +151,13 @@ describe('features/shared-link-modal/EmailSharedLink', () => {
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
                     id: 1,
                     text: 'Jeff',
                     type: 'user',
-                    value: 'jtan@box.com',
+                    value: 'jt@example.com',
                 },
                 {
                     id: 10,
@@ -178,7 +178,7 @@ describe('features/shared-link-modal/EmailSharedLink', () => {
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
                     id: 10,
@@ -214,7 +214,7 @@ describe('features/shared-link-modal/EmailSharedLink', () => {
                 pillSelectorError: '',
             });
 
-            wrapper.instance().validateForError('validEmail@box.com');
+            wrapper.instance().validateForError('validEmail@example.com');
 
             expect(wrapper.state('pillSelectorError')).toEqual('');
         });
@@ -228,7 +228,7 @@ describe('features/shared-link-modal/EmailSharedLink', () => {
 
         test('should return true if text is a valid email', () => {
             const wrapper = getWrapper();
-            expect(wrapper.instance().validator('validEmail@box.com')).toBe(true);
+            expect(wrapper.instance().validator('validEmail@example.com')).toBe(true);
         });
     });
 
@@ -239,19 +239,19 @@ describe('features/shared-link-modal/EmailSharedLink', () => {
                     id: 0,
                     text: 'Jackie',
                     type: 'user',
-                    value: 'jackie@box.com',
+                    value: 'j@example.com',
                 },
                 {
                     id: 1,
                     text: 'Jeff',
                     type: 'user',
-                    value: 'jtan@box.com',
+                    value: 'jt@example.com',
                 },
             ];
             const emailMessage = 'message';
 
             const expectedResult = {
-                emails: ['jackie@box.com', 'jtan@box.com'],
+                emails: ['j@example.com', 'jt@example.com'],
                 emailMessage,
             };
 

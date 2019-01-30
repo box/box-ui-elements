@@ -9,25 +9,25 @@ import messages from '../messages';
 describe('features/unified-share-modal/EmailForm', () => {
     const expectedContacts = [
         {
-            email: 'aholloway@box.com',
+            email: 'x@example.com',
             id: '12345',
-            text: 'Andrew Holloway',
+            text: 'X User',
             type: 'group',
-            value: 'aholloway@box.com',
+            value: 'x@example.com',
         },
         {
-            email: 'tgupta@box.com',
+            email: 'y@example.com',
             id: '23456',
-            text: 'Tim Gupta',
+            text: 'Y User',
             type: 'user',
-            value: 'tgupta@box.com',
+            value: 'y@example.com',
         },
         {
-            email: 'saziz@box.com',
+            email: 'z@example.com',
             id: '34567',
-            text: 'Shahzad Aziz',
+            text: 'Z User',
             type: 'user',
-            value: 'saziz@box.com',
+            value: 'z@example.com',
         },
     ];
 
@@ -171,8 +171,8 @@ describe('features/unified-share-modal/EmailForm', () => {
         test('should call sendInvites prop with the correct params', () => {
             const message = 'test message';
             const expectedParam = {
-                emails: ['tgupta@box.com'],
-                groupIDs: ['aholloway@box.com'],
+                emails: ['y@example.com'],
+                groupIDs: ['x@example.com'],
                 message,
             };
             const onSubmit = jest.fn().mockReturnValue(Promise.resolve());
@@ -194,12 +194,12 @@ describe('features/unified-share-modal/EmailForm', () => {
             const message = 'test message';
             const expectedParam = {
                 emails: [],
-                groupIDs: ['aholloway@box.com'],
+                groupIDs: ['x@example.com'],
                 message,
             };
             const onSubmit = jest.fn().mockReturnValue(
                 Promise.reject({
-                    invitedEmails: ['aholloway@box.com'],
+                    invitedEmails: ['x@example.com'],
                 }),
             );
             const wrapper = getWrapper({
@@ -225,7 +225,7 @@ describe('features/unified-share-modal/EmailForm', () => {
                 updateSelectedContacts,
             });
 
-            const sentEmails = ['aholloway@box.com'];
+            const sentEmails = ['x@example.com'];
 
             wrapper.instance().filterSentEmails(sentEmails);
             expect(updateSelectedContacts).toHaveBeenCalledWith([]);
@@ -237,7 +237,7 @@ describe('features/unified-share-modal/EmailForm', () => {
                 selectedContacts: [expectedContacts[0]],
                 updateSelectedContacts,
             });
-            const sentEmails = ['tgupta@box.com'];
+            const sentEmails = ['y@example.com'];
 
             wrapper.instance().filterSentEmails(sentEmails);
             expect(updateSelectedContacts).toHaveBeenCalledWith([expectedContacts[0]]);
@@ -247,15 +247,15 @@ describe('features/unified-share-modal/EmailForm', () => {
     describe('validateContactField()', () => {
         [
             {
-                email: 'aholloway@box.com',
+                email: 'x@example.com',
                 expectedValue: true,
             },
             {
-                email: 'aholloway.box.com',
+                email: 'test.box.com',
                 expectedValue: false,
             },
             {
-                email: 'aholloway@@box.com',
+                email: 'test@@example.com',
                 expectedValue: false,
             },
         ].forEach(({ email, expectedValue }) => {
@@ -274,15 +274,15 @@ describe('features/unified-share-modal/EmailForm', () => {
     describe('isValidEmail()', () => {
         [
             {
-                email: 'aholloway@box.com',
+                email: 'x@example.com',
                 expectedValue: true,
             },
             {
-                email: 'aholloway.box.com',
+                email: 'test.box.com',
                 expectedValue: false,
             },
             {
-                email: 'aholloway@@box.com',
+                email: 'test@@example.com',
                 expectedValue: false,
             },
         ].forEach(({ email, expectedValue }) => {

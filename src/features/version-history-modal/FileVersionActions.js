@@ -8,7 +8,7 @@ import PlainButton from 'components/plain-button';
 import { VersionPropType } from './prop-types';
 import messages from './messages';
 
-// @NOTE(jtan): Having an identical "key" on the restore and remove button
+// @NOTE: Having an identical "key" on the restore and remove button
 //    allows browser to maintain focus correctly on the link, otherwise it focuses
 //    body after the links swap. This let's the ESCAPE key work correctly.
 const REMOVE_RESTORE_BUTTON_KEY = 'remove-restore-button';

@@ -6,8 +6,8 @@
  * @return {array} A list of separated emails
  *
  * @example
- * parseEmails('Patrick Paul <ppaul@box.com>; Brad Monroe <bmonroe@box.com>')
- * returns ["ppaul@box.com","bmonroe@box.com"]
+ * parseEmails('Foo Bar <fbar@example.com>; Test User <test@example.com>')
+ * returns ["fbar@example.com","test@example.com"]
  */
 function parseEmails(text) {
     if (text === null || typeof text === 'undefined') {

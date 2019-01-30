@@ -7,46 +7,46 @@ import messages from '../messages';
 describe('features/unified-share-modal/ContactsField', () => {
     const contactsFromServer = [
         {
-            email: 'aholloway@box.com',
+            email: 'x@example.com',
             id: '12345',
-            name: 'Andrew Holloway',
+            name: 'X User',
             type: 'group',
         },
         {
-            email: 'tgupta@box.com',
+            email: 'y@example.com',
             id: '23456',
-            name: 'Tim Gupta',
+            name: 'Y User',
             type: 'user',
         },
         {
-            email: 'saziz@box.com',
+            email: 'z@example.com',
             id: '34567',
-            name: 'Shahzad Aziz',
+            name: 'Z User',
             type: 'user',
         },
     ];
 
     const expectedContacts = [
         {
-            email: 'aholloway@box.com',
+            email: 'x@example.com',
             id: '12345',
-            text: 'Andrew Holloway',
+            text: 'X User',
             type: 'group',
-            value: 'aholloway@box.com',
+            value: 'x@example.com',
         },
         {
-            email: 'tgupta@box.com',
+            email: 'y@example.com',
             id: '23456',
-            text: 'Tim Gupta',
+            text: 'Y User',
             type: 'user',
-            value: 'tgupta@box.com',
+            value: 'y@example.com',
         },
         {
-            email: 'saziz@box.com',
+            email: 'z@example.com',
             id: '34567',
-            text: 'Shahzad Aziz',
+            text: 'Z User',
             type: 'user',
-            value: 'saziz@box.com',
+            value: 'z@example.com',
         },
     ];
 
@@ -85,7 +85,7 @@ describe('features/unified-share-modal/ContactsField', () => {
         test('should return the user based on the input value set in state', () => {
             const wrapper = getWrapper({ selectedContacts: [] });
 
-            wrapper.setState({ pillSelectorInputValue: 'ahollo' });
+            wrapper.setState({ pillSelectorInputValue: 'x@' });
 
             const options = wrapper.instance().filterContacts(contactsFromServer);
 
@@ -100,7 +100,7 @@ describe('features/unified-share-modal/ContactsField', () => {
 
             wrapper.setState({
                 contacts: [contactsFromServer[0]],
-                pillSelectorInputValue: 'ahollo',
+                pillSelectorInputValue: 'x@',
             });
 
             const options = wrapper.instance().filterContacts(contactsFromServer);
@@ -118,9 +118,9 @@ describe('features/unified-share-modal/ContactsField', () => {
                 selectedContacts: [],
             });
 
-            wrapper.setState({ pillSelectorInputValue: 'ahollo' });
+            wrapper.setState({ pillSelectorInputValue: 'x@' });
 
-            await wrapper.instance().getContactsPromise('ahollo');
+            await wrapper.instance().getContactsPromise('x@');
             expect(wrapper.state('contacts')).toEqual([expectedContacts[0]]);
         });
 
@@ -198,31 +198,31 @@ describe('features/unified-share-modal/ContactsField', () => {
             const contactsFromServerLarge = [
                 ...contactsFromServer,
                 {
-                    email: 'a@box.com',
+                    email: 'a@example.com',
                     id: '12',
                     name: 'a b',
                     type: 'user',
                 },
                 {
-                    email: 'b@box.com',
+                    email: 'b@example.com',
                     id: '13',
                     name: 'a b',
                     type: 'user',
                 },
                 {
-                    email: 'c@box.com',
+                    email: 'c@example.com',
                     id: '14',
                     name: 'a c',
                     type: 'user',
                 },
                 {
-                    email: 'd@box.com',
+                    email: 'd@example.com',
                     id: '14',
                     name: 'a d',
                     type: 'user',
                 },
                 {
-                    email: 'e@box.com',
+                    email: 'e@example.com',
                     id: '14',
                     name: 'a e',
                     type: 'user',

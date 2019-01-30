@@ -27,60 +27,60 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   selectorOptions={
     Array [
       Object {
-        "email": "aholloway@box.com",
+        "email": "x@example.com",
         "id": "12345",
-        "text": "Andrew Holloway",
+        "text": "X User",
         "type": "group",
-        "value": "aholloway@box.com",
+        "value": "x@example.com",
       },
       Object {
-        "email": "tgupta@box.com",
+        "email": "y@example.com",
         "id": "23456",
-        "text": "Tim Gupta",
+        "text": "Y User",
         "type": "user",
-        "value": "tgupta@box.com",
+        "value": "y@example.com",
       },
       Object {
-        "email": "saziz@box.com",
+        "email": "z@example.com",
         "id": "34567",
-        "text": "Shahzad Aziz",
+        "text": "Z User",
         "type": "user",
-        "value": "saziz@box.com",
+        "value": "z@example.com",
       },
       Object {
-        "email": "a@box.com",
+        "email": "a@example.com",
         "id": "12",
         "text": "a b",
         "type": "user",
-        "value": "a@box.com",
+        "value": "a@example.com",
       },
       Object {
-        "email": "b@box.com",
+        "email": "b@example.com",
         "id": "13",
         "text": "a b",
         "type": "user",
-        "value": "b@box.com",
+        "value": "b@example.com",
       },
       Object {
-        "email": "c@box.com",
+        "email": "c@example.com",
         "id": "14",
         "text": "a c",
         "type": "user",
-        "value": "c@box.com",
+        "value": "c@example.com",
       },
       Object {
-        "email": "d@box.com",
+        "email": "d@example.com",
         "id": "14",
         "text": "a d",
         "type": "user",
-        "value": "d@box.com",
+        "value": "d@example.com",
       },
       Object {
-        "email": "e@box.com",
+        "email": "e@example.com",
         "id": "14",
         "text": "a e",
         "type": "user",
-        "value": "e@box.com",
+        "value": "e@example.com",
       },
     ]
   }
@@ -89,43 +89,43 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
 >
   <ContactDatalistItem
     key="12345"
-    name="Andrew Holloway"
-    subtitle="aholloway@box.com"
+    name="X User"
+    subtitle="x@example.com"
   />
   <ContactDatalistItem
     key="23456"
-    name="Tim Gupta"
-    subtitle="tgupta@box.com"
+    name="Y User"
+    subtitle="y@example.com"
   />
   <ContactDatalistItem
     key="34567"
-    name="Shahzad Aziz"
-    subtitle="saziz@box.com"
+    name="Z User"
+    subtitle="z@example.com"
   />
   <ContactDatalistItem
     key="12"
     name="a b"
-    subtitle="a@box.com"
+    subtitle="a@example.com"
   />
   <ContactDatalistItem
     key="13"
     name="a b"
-    subtitle="b@box.com"
+    subtitle="b@example.com"
   />
   <ContactDatalistItem
     key="14"
     name="a c"
-    subtitle="c@box.com"
+    subtitle="c@example.com"
   />
   <ContactDatalistItem
     key="14"
     name="a d"
-    subtitle="d@box.com"
+    subtitle="d@example.com"
   />
   <ContactDatalistItem
     key="14"
     name="a e"
-    subtitle="e@box.com"
+    subtitle="e@example.com"
   />
 </PillSelectorDropdown>
 `;
@@ -156,25 +156,25 @@ exports[`features/unified-share-modal/ContactsField render should render default
   selectedOptions={
     Array [
       Object {
-        "email": "aholloway@box.com",
+        "email": "x@example.com",
         "id": "12345",
-        "text": "Andrew Holloway",
+        "text": "X User",
         "type": "group",
-        "value": "aholloway@box.com",
+        "value": "x@example.com",
       },
       Object {
-        "email": "tgupta@box.com",
+        "email": "y@example.com",
         "id": "23456",
-        "text": "Tim Gupta",
+        "text": "Y User",
         "type": "user",
-        "value": "tgupta@box.com",
+        "value": "y@example.com",
       },
       Object {
-        "email": "saziz@box.com",
+        "email": "z@example.com",
         "id": "34567",
-        "text": "Shahzad Aziz",
+        "text": "Z User",
         "type": "user",
-        "value": "saziz@box.com",
+        "value": "z@example.com",
       },
     ]
   }

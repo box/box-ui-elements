@@ -31,7 +31,7 @@
 
 **Image**
 ```
-// @NOTE (wyu): Although this is a simple example, I'm writing it in a JS file and requiring
+// @NOTE: Although this is a simple example, I'm writing it in a JS file and requiring
 // it here because the PNG image is huge, don't really want to blow up our package size.
 
 const AvatarImageExample = require('examples').AvatarImageExample;

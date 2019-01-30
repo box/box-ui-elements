@@ -7,7 +7,7 @@ This version wraps `Modal` with a `HotkeyLayer`, which stops shortcuts registere
 ```
 const onRequestClose = () => setState({ isOpen: false });
 
-// @NOTE(davidlee): the demo hotkeys are actually being registered in SelectableTableExamples
+// @NOTE: the demo hotkeys are actually being registered in SelectableTableExamples
 
 <div>
     <PrimaryButton onClick={ () => setState({ isOpen: true }) }>

@@ -10,7 +10,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
     >
       <CollaboratorAvatarItem
         allowBadging={true}
-        email="testc@box.com"
+        email="testc@example.com"
         expiration={
           Object {
             "expiresAt": "Jan 1, 1966",
@@ -41,10 +41,10 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
         >
           <Link
             className=""
-            href="mailto:testc@box.com"
-            title="testc@box.com"
+            href="mailto:testc@example.com"
+            title="testc@example.com"
           >
-            testc@box.com
+            testc@example.com
           </Link>
         </div>
       </div>
@@ -66,7 +66,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
     >
       <CollaboratorAvatarItem
         allowBadging={true}
-        email="testc@box.com"
+        email="testc@example.com"
         expiration={
           Object {
             "expiresAt": "Jan 1, 1966",
@@ -103,7 +103,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
     >
       <CollaboratorAvatarItem
         allowBadging={true}
-        email="testc@box.com"
+        email="testc@example.com"
         expiration={
           Object {
             "expiresAt": "Jan 1, 1966",
@@ -134,10 +134,10 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
         >
           <Link
             className=""
-            href="mailto:testc@box.com"
-            title="testc@box.com"
+            href="mailto:testc@example.com"
+            title="testc@example.com"
           >
-            testc@box.com
+            testc@example.com
           </Link>
         </div>
       </div>

@@ -398,13 +398,13 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             const wrapper = getWrapper({ sendInvites });
             wrapper.setState({ inviteePermissionLevel: 'Editor' });
             wrapper.instance().handleSendInvites({
-                emails: ['tgupta@box.com', 'saziz@box.com'],
-                groupIDs: ['eng@box.com', 'product@box.com'],
+                emails: ['dvader@example.com', 'fbar@example.com'],
+                groupIDs: ['eng@example.com', 'product@example.com'],
                 message: 'Yo',
             });
             expect(sendInvites).toBeCalledWith({
-                emails: 'tgupta@box.com,saziz@box.com',
-                groupIDs: 'eng@box.com,product@box.com',
+                emails: 'dvader@example.com,fbar@example.com',
+                groupIDs: 'eng@example.com,product@example.com',
                 emailMessage: 'Yo',
                 permission: 'Editor',
                 numsOfInvitees: 2,

@@ -20,8 +20,6 @@ class Overlay extends React.Component<Props> {
         if (!onClose) {
             return;
         }
-        // @Note(wyu): I have absolutely no idea why we have to wrap it in a setTimeout here, but it works ¯\_(ツ)_/¯
-        // Otherwise there will be a 'React DOM tree root should always have a node reference' error.
         setTimeout(() => onClose(), 0);
     };
 

@@ -1,6 +1,6 @@
 // @flow
 
-const BOX_TOOLS_PLUGIN_NAME = 'Box.BoxTools'; // @TODO (sumitrochatterjee 2017-12-20) should be passed as a config
+const BOX_TOOLS_PLUGIN_NAME = 'Box.BoxTools'; // @TODO Should be passed as a config
 const BOX_SECURE_LOCAL_BASE_URL = 'https://edit.boxlocalhost.com:';
 const BOX_UNSECURE_LOCAL_BASE_URL = 'http://127.0.0.1:';
 const ACTIVEX_CHANNEL_NAME = 'activex_channel';

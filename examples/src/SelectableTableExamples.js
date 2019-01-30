@@ -12,14 +12,14 @@ import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, ma
 const columnHeaders = ['First Name', 'Last Name', 'Email'];
 
 const data = [
-    ['Wenbo', 'Yu', 'wyu@box.com'],
-    ['David', 'Lee', 'davidlee@box.com'],
-    ['Jackie', 'Chen', 'jackiechen@box.com'],
-    ['Jeff', 'Tan', 'jtan@box.com'],
-    ['Ittai', 'Shay', 'ishay@box.com'],
+    ['Weee', 'Yuuu', 'w@example.com'],
+    ['Dee', 'Lee', 'd@example.com'],
+    ['Jay', 'Chan', 'jchan@example.com'],
+    ['Jeff', 'Tool', 'jt@example.com'],
+    ['John', 'Doe', 'jdoe@example.com'],
 ];
 
-// @NOTE(davidlee): since this component needs a hotkey layer, we're registering hotkeys in this example instead of the hotkey examples
+// @NOTE: since this component needs a hotkey layer, we're registering hotkeys in this example instead of the hotkey examples
 const configs = [
     new HotkeyRecord({
         description: 'Says "hello!"',

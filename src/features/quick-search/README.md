@@ -44,7 +44,7 @@ const inputProps = {
                     nameWithMarkedQuery: '<mark>Test<mark>ing.boxnote',
                     parentName: 'All Files and Folders',
                     type: 'file',
-                    updatedBy: 'Jackie Chen',
+                    updatedBy: 'Test User',
                     updatedDate: 1473186140,
                 } }
             />
@@ -61,7 +61,7 @@ const inputProps = {
         nameWithMarkedQuery: '<mark>Test<mark>ing.boxnote',
         parentName: 'All Files and Folders',
         type: 'file',
-        updatedBy: 'Jackie Chen',
+        updatedBy: 'Test User',
         updatedDate: 1473186140,
     } }
 />
@@ -76,7 +76,7 @@ const inputProps = {
         nameWithMarkedQuery: '<mark>Test<mark>in<mark>g<mark>.boxnote',
         parentName: 'All Files and Folders',
         type: 'file',
-        updatedBy: 'Andrew Holloway',
+        updatedBy: 'Test User',
         updatedDate: 1513030164,
     } }
 />

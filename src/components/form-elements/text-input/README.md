@@ -8,7 +8,7 @@ const TextInput = require('box-ui-elements/es/components/form-elements/text-inpu
     name="email"
     placeholder="user@example.com"
     type="email"
-    value="aaron@box.com"
+    value="aaron@example.com"
 />
 ```
 **Url**

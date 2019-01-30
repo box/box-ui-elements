@@ -7,7 +7,7 @@ Following the following standards: [WAI-ARIA Menu Buttons](https://www.w3.org/TR
 ### Examples
 **Simple Menu**
 ```js
-// @NOTE (wyu): You can only use require instead of import in markdown.
+// @NOTE: You can only use require instead of import in markdown.
 const Menu = require('../menu').Menu;
 const MenuItem = require('../menu').MenuItem;
 const MenuLinkItem = require('../menu').MenuLinkItem;

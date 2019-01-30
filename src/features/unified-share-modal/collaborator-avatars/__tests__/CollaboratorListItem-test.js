@@ -5,7 +5,7 @@ import CollaboratorListItem from '../CollaboratorListItem';
 describe('features/unified-share-modal/collaborator-avatar-group/CollaboratorListItem', () => {
     const collaborator = {
         name: 'test c',
-        email: 'testc@box.com',
+        email: 'testc@example.com',
         profileUrl: 'http://foo.bar.profile',
         hasCustomAvatar: true,
         imageUrl: 'https://foo.bar',
@@ -38,7 +38,7 @@ describe('features/unified-share-modal/collaborator-avatar-group/CollaboratorLis
             const wrapper = getWrapper({
                 collaborator: {
                     name: 'test c',
-                    email: 'testc@box.com',
+                    email: 'testc@example.com',
                     profileUrl: 'http://foo.bar.profile',
                     hasCustomAvatar: true,
                     imageUrl: 'https://foo.bar',
@@ -56,7 +56,7 @@ describe('features/unified-share-modal/collaborator-avatar-group/CollaboratorLis
             const wrapper = getWrapper({
                 collaborator: {
                     name: 'test c',
-                    email: 'testc@box.com',
+                    email: 'testc@example.com',
                     profileUrl: 'http://foo.bar.profile',
                     hasCustomAvatar: true,
                     imageUrl: 'https://foo.bar',
