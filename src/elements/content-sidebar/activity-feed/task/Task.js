@@ -122,7 +122,14 @@ class Task extends React.Component<Props> {
                                   .map(fillUserPlaceholder)
                                   .slice(0, MAX_AVATARS)
                                   .map(({ id: assignmentId, assigned_to, status }) => {
-                                      return <AssigneeStatus key={assignmentId} status={status} user={assigned_to} />;
+                                      return (
+                                          <AssigneeStatus
+                                              key={assignmentId}
+                                              status={status}
+                                              user={assigned_to}
+                                              getAvatarUrl={getAvatarUrl}
+                                          />
+                                      );
                                   })
                             : null}
                         {hiddenAssigneeCount > 0 ? (
