@@ -19,13 +19,14 @@ const DEFAULT_BACKOFF_FACTOR = 2;
 const NullComponent = () => null;
 
 const AsyncLoad = (asyncProps: Props = {}) => {
-    const retryPromise = retryNumOfTimes(
-        (successCallback, errorCallback) => asyncProps.loader().then(successCallback, errorCallback),
-        DEFAULT_NUM_TIMES,
-        DEFAULT_INITIAL_DELAY,
-        DEFAULT_BACKOFF_FACTOR,
-    );
-    const LazyComponent = React.lazy(() => retryPromise);
+    const asyncLoadWithRetry = () =>
+        retryNumOfTimes(
+            (successCallback, errorCallback) => asyncProps.loader().then(successCallback, errorCallback),
+            DEFAULT_NUM_TIMES,
+            DEFAULT_INITIAL_DELAY,
+            DEFAULT_BACKOFF_FACTOR,
+        );
+    const LazyComponent = React.lazy(asyncLoadWithRetry);
 
     return class extends React.Component<Object, State> {
         state = {

@@ -1,13 +1,22 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import { retryNumOfTimes } from 'utils/function';
 import AsyncLoad from '../AsyncLoad';
 
+jest.mock('utils/function', () => ({
+    retryNumOfTimes: jest.fn(),
+}));
+
 describe('elements/common/async-load/AsyncLoad', () => {
-    const defaultProps = {
-        loader: jest.fn(),
-    };
+    let defaultProps;
 
     const getAsyncComponent = (props = defaultProps) => AsyncLoad(props);
+
+    beforeEach(() => {
+        defaultProps = {
+            loader: jest.fn(),
+        };
+    });
 
     test('should return a react component', () => {
         const AsyncComponent = getAsyncComponent();
@@ -33,5 +42,10 @@ describe('elements/common/async-load/AsyncLoad', () => {
         });
 
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should not invoke the loader until component mounted', () => {
+        const AsyncComponent = getAsyncComponent();
+        expect(retryNumOfTimes).not.toHaveBeenCalled();
     });
 });
