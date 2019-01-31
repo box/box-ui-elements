@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
-import Button from 'box-react-ui/lib/components/button';
-import Modal from 'box-react-ui/lib/components/modal/Modal';
+import Button from 'components/button';
+import Modal from 'components/modal/Modal';
 import { FormattedMessage } from 'react-intl';
 import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';

@@ -5,7 +5,6 @@ import { injectIntl } from 'react-intl';
 import Label from 'components/label/Label';
 import SingleSelectField from 'components/select-field/SingleSelectField';
 
-import type { FieldValue, TemplateFieldOption } from '../flowTypes';
 import messages from '../messages';
 import './EnumField.scss';
 
@@ -17,13 +16,13 @@ type Option = {
 
 type Props = {
     dataKey: string,
-    dataValue?: FieldValue,
+    dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
     intl: any,
-    onChange: (key: string, value: FieldValue) => void,
+    onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
-    options?: Array<TemplateFieldOption>,
+    options?: Array<MetadataTemplateFieldOption>,
 };
 
 const EnumField = ({ dataKey, dataValue, displayName, description, intl, onChange, onRemove, options = [] }: Props) => {

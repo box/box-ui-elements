@@ -110,7 +110,7 @@ class Metadata extends File {
      *
      * @return {Object} temaplte for custom properties
      */
-    getCustomPropertiesTemplate(): MetadataEditorTemplate {
+    getCustomPropertiesTemplate(): MetadataTemplate {
         return {
             id: uniqueId('metadata_template_'),
             scope: METADATA_SCOPE_GLOBAL,
@@ -128,10 +128,11 @@ class Metadata extends File {
      * @param {boolean} canEdit - is instance editable
      * @return {Object} metadata editor
      */
-    createEditor(instance: MetadataInstance, template: MetadataEditorTemplate, canEdit: boolean): MetadataEditor {
-        const data = {};
+    createEditor(instance: MetadataInstanceV2, template: MetadataTemplate, canEdit: boolean): MetadataEditor {
+        const data: MetadataFields = {};
         Object.keys(instance).forEach(key => {
             if (!key.startsWith('$')) {
+                // $FlowFixMe
                 data[key] = instance[key];
             }
         });
@@ -154,7 +155,7 @@ class Metadata extends File {
      * @param {string|void} [instanceId] - metadata instance id
      * @return {Object} array of metadata templates
      */
-    async getTemplates(id: string, scope: string, instanceId?: string): Promise<Array<MetadataEditorTemplate>> {
+    async getTemplates(id: string, scope: string, instanceId?: string): Promise<Array<MetadataTemplate>> {
         this.errorCode = ERROR_CODE_FETCH_METADATA_TEMPLATES;
         let templates = {};
         const url = instanceId
@@ -185,7 +186,7 @@ class Metadata extends File {
      * @param {string} id - file id
      * @return {Object} array of metadata instances
      */
-    async getInstances(id: string): Promise<Array<MetadataInstance>> {
+    async getInstances(id: string): Promise<Array<MetadataInstanceV2>> {
         this.errorCode = ERROR_CODE_FETCH_METADATA;
         let instances = {};
         try {
@@ -209,12 +210,12 @@ class Metadata extends File {
      * @return {Object} template for custom properties
      */
     getUserAddableTemplates(
-        customPropertiesTemplate: MetadataEditorTemplate,
-        enterpriseTemplates: Array<MetadataEditorTemplate>,
+        customPropertiesTemplate: MetadataTemplate,
+        enterpriseTemplates: Array<MetadataTemplate>,
         hasMetadataFeature: boolean,
         isExternallyOwned?: boolean,
-    ): Array<MetadataEditorTemplate> {
-        let userAddableTemplates: Array<MetadataEditorTemplate> = [];
+    ): Array<MetadataTemplate> {
+        let userAddableTemplates: Array<MetadataTemplate> = [];
         if (hasMetadataFeature) {
             userAddableTemplates = isExternallyOwned
                 ? [customPropertiesTemplate]
@@ -233,7 +234,7 @@ class Metadata extends File {
      * @param {Array} instances - metadata instances
      * @return {Array} metadata instances without classification
      */
-    extractClassification(id: string, instances: Array<MetadataInstance>): Array<MetadataInstance> {
+    extractClassification(id: string, instances: Array<MetadataInstanceV2>): Array<MetadataInstanceV2> {
         const classification = instances.find(instance => instance.$template === METADATA_TEMPLATE_CLASSIFICATION);
         if (classification) {
             instances.splice(instances.indexOf(classification), 1);
@@ -254,9 +255,9 @@ class Metadata extends File {
      */
     async getTemplateForInstance(
         id: string,
-        instance: MetadataInstance,
-        templates: Array<MetadataEditorTemplate>,
-    ): Promise<?MetadataEditorTemplate> {
+        instance: MetadataInstanceV2,
+        templates: Array<MetadataTemplate>,
+    ): Promise<?MetadataTemplate> {
         const instanceId = instance.$id;
         const templateKey = instance.$template;
         const scope = instance.$scope;
@@ -287,14 +288,14 @@ class Metadata extends File {
      */
     async getEditors(
         id: string,
-        instances: Array<MetadataInstance>,
-        customPropertiesTemplate: MetadataEditorTemplate,
-        enterpriseTemplates: Array<MetadataEditorTemplate>,
-        globalTemplates: Array<MetadataEditorTemplate>,
+        instances: Array<MetadataInstanceV2>,
+        customPropertiesTemplate: MetadataTemplate,
+        enterpriseTemplates: Array<MetadataTemplate>,
+        globalTemplates: Array<MetadataTemplate>,
         canEdit: boolean,
     ): Promise<Array<MetadataEditor>> {
         // All usable templates for metadata instances
-        const templates: Array<MetadataEditorTemplate> = [customPropertiesTemplate].concat(
+        const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
             enterpriseTemplates,
             globalTemplates,
         );
@@ -307,7 +308,7 @@ class Metadata extends File {
         const editors: Array<MetadataEditor> = [];
         await Promise.all(
             filteredInstances.map(async instance => {
-                const template: ?MetadataEditorTemplate = await this.getTemplateForInstance(id, instance, templates);
+                const template: ?MetadataTemplate = await this.getTemplateForInstance(id, instance, templates);
                 if (template) {
                     editors.push(this.createEditor(instance, template, canEdit));
                 }
@@ -328,7 +329,7 @@ class Metadata extends File {
      */
     async getMetadata(
         file: BoxItem,
-        successCallback: ({ editors: Array<MetadataEditor>, templates: Array<MetadataEditorTemplate> }) => void,
+        successCallback: ({ editors: Array<MetadataEditor>, templates: Array<MetadataTemplate> }) => void,
         errorCallback: ElementsErrorCallback,
         hasMetadataFeature: boolean,
         options: FetchOptions = {},
@@ -362,7 +363,7 @@ class Metadata extends File {
         }
 
         try {
-            const customPropertiesTemplate: MetadataEditorTemplate = this.getCustomPropertiesTemplate();
+            const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
             const [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
                 this.getInstances(id),
                 this.getTemplates(id, METADATA_SCOPE_GLOBAL),
@@ -468,7 +469,7 @@ class Metadata extends File {
      */
     async updateSkills(
         file: BoxItem,
-        operations: JsonPatchData,
+        operations: JSONPatchOperations,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
@@ -575,8 +576,8 @@ class Metadata extends File {
      */
     async updateMetadata(
         file: BoxItem,
-        template: MetadataEditorTemplate,
-        operations: JsonPatchData,
+        template: MetadataTemplate,
+        operations: JSONPatchOperations,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
@@ -634,7 +635,7 @@ class Metadata extends File {
      */
     async createMetadata(
         file: BoxItem,
-        template: MetadataEditorTemplate,
+        template: MetadataTemplate,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
@@ -694,7 +695,7 @@ class Metadata extends File {
      */
     async deleteMetadata(
         file: BoxItem,
-        template: MetadataEditorTemplate,
+        template: MetadataTemplate,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
@@ -704,7 +705,7 @@ class Metadata extends File {
             return;
         }
 
-        const { scope, templateKey }: MetadataEditorTemplate = template;
+        const { scope, templateKey }: MetadataTemplate = template;
         const { id, permissions }: BoxItem = file;
 
         if (!id || !permissions) {

@@ -5,17 +5,16 @@ import { injectIntl } from 'react-intl';
 import DatePicker from 'components/date-picker';
 import { convertISOStringToUTCDate } from 'utils/datetime';
 
-import type { FieldValue } from '../flowTypes';
 import messages from '../messages';
 import './DateField.scss';
 
 type Props = {
     dataKey: string,
-    dataValue?: FieldValue,
+    dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
     intl: any,
-    onChange: (key: string, value: FieldValue) => void,
+    onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
 };
 

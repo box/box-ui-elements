@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Button from 'box-react-ui/lib/components/button/Button';
+import Button from 'components/button/Button';
 import Pagination from '../Pagination';
 
 describe('elements/Pagination/Pagination', () => {

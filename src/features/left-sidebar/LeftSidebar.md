@@ -1,6 +1,6 @@
 ### Description
 
-Customizable menu that provides for implementing interactive items, subitems, and icons pulled from `box-react-ui`. Icons take the form of those in `/icons` for this feature.
+Customizable menu that provides for implementing interactive items, subitems, and icons pulled from `box-ui-elements`. Icons take the form of those in `/icons` for this feature.
 
 Responsive states exist for large, medium and small. To override the medium state, add an `is-forced-open` class to the container element.
 

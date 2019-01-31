@@ -8,7 +8,7 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
 import flow from 'lodash/flow';
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
+import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
 import { mark } from 'utils/performance';
 import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import messages from 'elements/common/messages';
@@ -157,7 +157,7 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
         const { cards = [] }: State = this.state;
         const card = cards[index];
         const path = `/cards/${index}`;
-        const ops: JsonPatchData = [];
+        const ops: JSONPatchOperations = [];
         const canEdit = getProp(file, FIELD_PERMISSIONS_CAN_UPLOAD, false);
 
         if (!canEdit || !card) {

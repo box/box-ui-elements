@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import PillCloud from 'box-react-ui/lib/components/pill-cloud/PillCloud';
+import PillCloud from 'components/pill-cloud/PillCloud';
 import { SKILLS_TARGETS, INTERACTION_TARGET } from 'elements/common/interactionTargets';
 import Timeline from '../timeline';
 import getPills from './keywordUtils';
@@ -38,7 +38,7 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
      */
     onSelect = (pill: Pill) => {
         const { selectedIndex }: State = this.state;
-        const newIndex = pill.value;
+        const newIndex: number = ((pill.value: any): number);
         this.setState({
             selectedIndex: selectedIndex === newIndex ? -1 : newIndex,
         });

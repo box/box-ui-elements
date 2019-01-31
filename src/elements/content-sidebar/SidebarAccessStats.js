@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
+import AccessStats from 'features/access-stats/AccessStats';
 import isFinite from 'lodash/isFinite';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import messages from 'elements/common/messages';

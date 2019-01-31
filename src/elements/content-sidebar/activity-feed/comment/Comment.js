@@ -9,8 +9,8 @@ import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
 
-import { ReadableTime } from 'box-react-ui/lib/components/time';
-import Tooltip from 'box-react-ui/lib/components/tooltip';
+import { ReadableTime } from 'components/time';
+import Tooltip from 'components/tooltip';
 
 import messages from 'elements/common/messages';
 import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';

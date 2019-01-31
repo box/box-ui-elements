@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import IconCheck from 'box-react-ui/lib/icons/general/IconCheck';
+import IconCheck from 'icons/general/IconCheck';
 
 import messages from 'elements/common/messages';
 

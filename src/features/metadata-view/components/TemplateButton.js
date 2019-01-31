@@ -12,11 +12,9 @@ import TemplateDropdown from '../../metadata-instance-editor/TemplateDropdown';
 
 import messages from '../messages';
 
-import type { Template } from '../../metadata-instance-editor/flowTypes';
-
 type State = {
     isTemplateMenuOpen: boolean,
-    selectedTemplate: Template | null,
+    selectedTemplate: MetadataTemplate | null,
 };
 
 type Props = {
@@ -40,7 +38,7 @@ class TemplateButton extends React.Component<Props, State> {
         this.setState({ isTemplateMenuOpen: !this.state.isTemplateMenuOpen });
     };
 
-    updateSelectedTemplate = (template: Template) => {
+    updateSelectedTemplate = (template: MetadataTemplate) => {
         const { onTemplateChange } = this.props;
         this.setState({
             // TODO: Remove local state for selectedTemplate and have this component listen for template passed down from props

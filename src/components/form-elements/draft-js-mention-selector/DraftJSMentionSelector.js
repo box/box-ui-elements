@@ -23,15 +23,9 @@ const mentionStrategy = (contentBlock, callback, contentState) => {
     }, callback);
 };
 
-// babel-plugin-flow-react-proptypes doesn't understand imported types
-type ContactsProp = Array<{
-    id?: number | string,
-    name: string,
-}>;
-
 type Props = {
     className?: string,
-    contacts: ContactsProp,
+    contacts: SelectorItems,
     editorState?: EditorState,
     hideLabel?: boolean,
     isDisabled?: boolean,
@@ -43,7 +37,7 @@ type Props = {
     name: string,
     onChange?: Function,
     onFocus?: Function,
-    onMention: Function,
+    onMention?: Function,
     onReturn?: Function,
     placeholder?: string,
     selectorRow?: React.Element<any>,
@@ -52,7 +46,7 @@ type Props = {
 };
 
 type State = {
-    contacts: ContactsProp,
+    contacts: SelectorItems,
     hasReceivedFirstInteraction: boolean,
     internalEditorState: ?EditorState,
     error: ?Object,

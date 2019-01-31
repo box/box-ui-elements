@@ -10,7 +10,7 @@ import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
+import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
 import APIContext from 'elements/common/api-context';
 import Internationalize from 'elements/common/Internationalize';
 import { withErrorBoundary } from 'elements/common/error-boundary';

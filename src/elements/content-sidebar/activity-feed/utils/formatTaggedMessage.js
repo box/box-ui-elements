@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { Link } from 'box-react-ui/lib/components/link';
+import { Link } from 'components/link';
 import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 import UserLink from '../comment/UserLink';
 

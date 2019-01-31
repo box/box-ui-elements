@@ -5,9 +5,9 @@
  */
 
 import * as React from 'react';
-import MenuToggle from 'box-react-ui/lib/components/dropdown-menu/MenuToggle';
-import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
-import Button from 'box-react-ui/lib/components/button/Button';
+import MenuToggle from 'components/dropdown-menu/MenuToggle';
+import IconOpenWith from 'icons/general/IconOpenWith';
+import Button from 'components/button/Button';
 import { FormattedMessage } from 'react-intl';
 import Tooltip from 'elements/common/Tooltip';
 import messages from 'elements/common/messages';

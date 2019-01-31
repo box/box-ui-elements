@@ -6,7 +6,6 @@ import { FormattedMessage } from 'react-intl';
 import QueryBar from './components/QueryBar';
 import Table from './components/Table';
 import Message from './components/Message';
-import type { InstanceType, Template } from '../metadata-instance-editor/flowTypes';
 import type { ColumnType } from './flowTypes';
 
 import messages from './messages';
@@ -17,20 +16,20 @@ type Props = {
     columnWidths: Object, // TODO: Replace Object with type.
     currentMessage?: string, // TODO: Rename to messageKeyPrefix.
     filesList: Array<Object>, // TODO: Replace Object with type.
-    instances: Array<InstanceType>,
+    instances: Array<MetadataInstance>,
     shouldDisableColumnButton: boolean,
     tableHeaderHeight: number,
     tableHeight: number,
     tableRowHeight: number,
-    template: Template,
-    templates: Array<Template>,
+    template: MetadataTemplate,
+    templates: Array<MetadataTemplate>,
     templateName: string,
     totalWidth: number,
 };
 
 type State = {
     visibleColumns: Array<ColumnType>,
-    activeTemplate?: Template,
+    activeTemplate?: MetadataTemplate,
 };
 
 class MetadataView extends React.Component<Props, State> {
@@ -42,13 +41,13 @@ class MetadataView extends React.Component<Props, State> {
         };
     }
 
-    onTemplateChange = (template: Template) => {
+    onTemplateChange = (template: MetadataTemplate) => {
         this.setState({
             activeTemplate: template,
         });
     };
 
-    generateColumnsFromFields = (template: Template): Array<ColumnType> => {
+    generateColumnsFromFields = (template: MetadataTemplate): Array<ColumnType> => {
         const { fields } = template;
         let fieldColumns = [];
         if (fields) {

@@ -1,7 +1,7 @@
 /** @flow */
 import * as React from 'react';
 
-import type { CellData } from '../../metadata-instance-editor/flowTypes';
+import type { CellData } from '../flowTypes';
 
 import '../styles/MetadataViewCell.scss';
 

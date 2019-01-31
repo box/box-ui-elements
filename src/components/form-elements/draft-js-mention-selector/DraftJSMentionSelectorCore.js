@@ -33,15 +33,9 @@ type MentionStartStateProps = {
 
 const MentionStartState = ({ message }: MentionStartStateProps) => <div className="mention-start-state">{message}</div>;
 
-// babel-plugin-flow-react-proptypes doesn't understand imported types
-type ContactsProp = Array<{
-    id?: number | string,
-    name: string,
-}>;
-
 type Props = {
     className?: string,
-    contacts: ContactsProp,
+    contacts: SelectorItems,
     editorState: EditorState,
     error?: ?Object,
     hideLabel?: boolean,

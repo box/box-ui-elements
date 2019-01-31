@@ -5,10 +5,10 @@
  */
 
 import React from 'react';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
-import Menu from 'box-react-ui/lib/components/menu/Menu';
-import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
+import PlainButton from 'components/plain-button/PlainButton';
+import DropdownMenu from 'components/dropdown-menu/DropdownMenu';
+import Menu from 'components/menu/Menu';
+import MenuItem from 'components/menu/MenuItem';
 import './BreadcrumbDropdown.scss';
 
 type Props = {

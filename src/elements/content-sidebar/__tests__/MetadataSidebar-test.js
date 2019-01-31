@@ -1,11 +1,11 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
-import Instances from 'box-react-ui/lib/features/metadata-instance-editor/Instances';
-import EmptyContent from 'box-react-ui/lib/features/metadata-instance-editor/EmptyContent';
-import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
+import LoadingIndicatorWrapper from 'components/loading-indicator/LoadingIndicatorWrapper';
+import Instances from 'features/metadata-instance-editor/Instances';
+import EmptyContent from 'features/metadata-instance-editor/EmptyContent';
+import InlineError from 'components/inline-error/InlineError';
 import messages from 'elements/common/messages';
 import { MetadataSidebarComponent as MetadataSidebar } from '../MetadataSidebar';
 import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS } from '../../../constants';

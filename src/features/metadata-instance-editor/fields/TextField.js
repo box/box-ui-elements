@@ -5,17 +5,16 @@ import { injectIntl } from 'react-intl';
 import TextInput from 'components/text-input';
 
 import messages from '../messages';
-import type { FieldValue } from '../flowTypes';
 import './TextField.scss';
 
 type Props = {
     dataKey: string,
-    dataValue?: FieldValue,
+    dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
     error?: React.Node,
     intl: any,
-    onChange: (key: string, value: FieldValue) => void,
+    onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
     type?: string,
 };

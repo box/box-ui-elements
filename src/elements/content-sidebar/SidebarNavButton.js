@@ -6,8 +6,8 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
+import PlainButton from 'components/plain-button/PlainButton';
+import Tooltip from 'components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
 
 type Props = {

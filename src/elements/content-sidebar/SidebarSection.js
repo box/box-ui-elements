@@ -6,8 +6,8 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import IconCaretDown from 'box-react-ui/lib/icons/general/IconCaretDown';
+import PlainButton from 'components/plain-button/PlainButton';
+import IconCaretDown from 'icons/general/IconCaretDown';
 import { COLOR_999 } from '../../constants';
 import './SidebarSection.scss';
 

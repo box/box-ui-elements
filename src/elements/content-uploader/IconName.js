@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import FileIcon from 'box-react-ui/lib/icons/file-icon/FileIcon';
-import IconFolderPersonal from 'box-react-ui/lib/icons/folder/IconFolderPersonal';
+import FileIcon from 'icons/file-icon/FileIcon';
+import IconFolderPersonal from 'icons/folder/IconFolderPersonal';
 import ItemName from './ItemName';
 import './IconName.scss';
 

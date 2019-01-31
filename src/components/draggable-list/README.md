@@ -1,6 +1,6 @@
 # DraggableList
 
-This component exposes a draggable list for use in box-react-ui.
+This component exposes a draggable list for use in box-ui-elements.
 It was initially written for use with MetadataView components.
 
 It doesn't own its own `state`. Any changes in the ordering of the elements in the list will require the parent component to update and keep track of what order the elements are now in.

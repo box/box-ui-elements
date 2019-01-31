@@ -16,7 +16,6 @@
 .*/__tests__/.*
 
 [untyped]
-.*/node_modules/box-react-ui/*
 
 [include]
 ./src

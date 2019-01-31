@@ -7,14 +7,14 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import Form from 'box-react-ui/lib/components/form-elements/form/Form';
-import commonMessages from 'box-react-ui/lib/common/messages';
-import ContactDatalistItem from 'box-react-ui/lib/components/contact-datalist-item/ContactDatalistItem';
-import TextArea from 'box-react-ui/lib/components/text-area';
-import DatePicker from 'box-react-ui/lib/components/date-picker/DatePicker';
-import PillSelectorDropdown from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelectorDropdown';
-import Button from 'box-react-ui/lib/components/button/Button';
-import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
+import Form from 'components/form-elements/form/Form';
+import commonMessages from 'common/messages';
+import ContactDatalistItem from 'components/contact-datalist-item/ContactDatalistItem';
+import TextArea from 'components/text-area';
+import DatePicker from 'components/date-picker/DatePicker';
+import PillSelectorDropdown from 'components/pill-selector-dropdown/PillSelectorDropdown';
+import Button from 'components/button/Button';
+import PrimaryButton from 'components/primary-button/PrimaryButton';
 import type { InjectIntlProvidedProps } from 'react-intl';
 
 import messages from '../../../common/messages';
@@ -223,7 +223,7 @@ class TaskForm extends React.Component<Props, State> {
                             onBlur={() => this.validateForm('taskDueDate')}
                             onChange={this.handleDueDateChange}
                             placeholder={intl.formatMessage(messages.approvalSelectDate)}
-                            value={dueDate}
+                            value={dueDate || undefined}
                         />
                         <div className="bcs-task-input-controls">
                             <Button

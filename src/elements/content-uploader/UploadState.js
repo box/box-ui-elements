@@ -6,9 +6,9 @@
 import React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import ErrorEmptyState from 'box-react-ui/lib/icons/states/ErrorEmptyState';
-import UploadEmptyState from 'box-react-ui/lib/icons/states/UploadEmptyState';
-import UploadSuccessState from 'box-react-ui/lib/icons/states/UploadSuccessState';
+import ErrorEmptyState from 'icons/states/ErrorEmptyState';
+import UploadEmptyState from 'icons/states/UploadEmptyState';
+import UploadSuccessState from 'icons/states/UploadSuccessState';
 import messages from 'elements/common/messages';
 import Browser from 'utils/Browser';
 import UploadStateContent from './UploadStateContent';

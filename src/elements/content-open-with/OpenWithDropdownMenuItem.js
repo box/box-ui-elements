@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
+import MenuItem from 'components/menu/MenuItem';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import messages from 'elements/common/messages';

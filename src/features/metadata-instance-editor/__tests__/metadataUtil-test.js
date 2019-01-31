@@ -11,7 +11,7 @@ import isHidden from '../metadataUtil';
             fields: [],
             hidden: true,
         },
-        description: 'Hidden Template 1',
+        description: 'Hidden MetadataTemplate 1',
         expected: true,
     },
     {
@@ -23,7 +23,7 @@ import isHidden from '../metadataUtil';
             fields: [],
             isHidden: true,
         },
-        description: 'Hidden Template 2',
+        description: 'Hidden MetadataTemplate 2',
         expected: true,
     },
     {
@@ -35,7 +35,7 @@ import isHidden from '../metadataUtil';
             fields: [],
             isHidden: false,
         },
-        description: 'Visible Template 3',
+        description: 'Visible MetadataTemplate 3',
         expected: false,
     },
     {
@@ -47,7 +47,7 @@ import isHidden from '../metadataUtil';
             fields: [],
             hidden: false,
         },
-        description: 'Visible Template 4',
+        description: 'Visible MetadataTemplate 4',
         expected: false,
     },
     {

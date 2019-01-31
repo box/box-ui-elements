@@ -6,19 +6,23 @@ import ScrollWrapper from 'components/scroll-wrapper';
 import Header from './Header';
 import Instances from './Instances';
 import EmptyContent from './EmptyContent';
-import type { Editor, Template, JSONPatchOperations, CascadingPolicyData } from './flowTypes';
 import './MetadataInstanceEditor.scss';
 
 type Props = {
     canAdd: boolean,
-    editors?: Array<Editor>,
+    editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,
     onModification?: (id: string, isDirty: boolean) => void,
-    onAdd?: (template: Template) => void,
+    onAdd?: (template: MetadataTemplate) => void,
     onRemove?: (id: string) => void,
-    onSave?: (id: string, data: JSONPatchOperations, cascadingPolicy?: CascadingPolicyData, rawData: Object) => void,
-    templates: Array<Template>,
+    onSave?: (
+        id: string,
+        data: JSONPatchOperations,
+        cascadingPolicy?: MetadataCascadingPolicyData,
+        rawData: Object,
+    ) => void,
+    templates: Array<MetadataTemplate>,
     title?: React.Node,
 };
 

@@ -6,9 +6,9 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import IconTrackNext from 'box-react-ui/lib/icons/general/IconTrackNext';
-import IconTrackPrevious from 'box-react-ui/lib/icons/general/IconTrackPrevious';
+import PlainButton from 'components/plain-button/PlainButton';
+import IconTrackNext from 'icons/general/IconTrackNext';
+import IconTrackPrevious from 'icons/general/IconTrackPrevious';
 import messages from 'elements/common/messages';
 import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
 import Timeslice from './Timeslice';

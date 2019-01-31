@@ -7,11 +7,11 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
-import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
-import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
-import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
+import PlainButton from 'components/plain-button/PlainButton';
+import IconEdit from 'icons/general/IconEdit';
+import LoadingIndicatorWrapper from 'components/loading-indicator/LoadingIndicatorWrapper';
+import InlineError from 'components/inline-error/InlineError';
+import Tooltip from 'components/tooltip/Tooltip';
 import messages from 'elements/common/messages';
 import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
 import EditableKeywords from './EditableKeywords';

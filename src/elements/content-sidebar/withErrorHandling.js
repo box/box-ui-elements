@@ -5,8 +5,8 @@
  */
 
 import * as React from 'react';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
-import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import ErrorMask from 'components/error-mask/ErrorMask';
+import InlineError from 'components/inline-error/InlineError';
 import { FormattedMessage } from 'react-intl';
 
 import SidebarSection from './SidebarSection';

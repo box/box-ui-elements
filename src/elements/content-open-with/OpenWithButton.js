@@ -5,8 +5,8 @@
  */
 
 import * as React from 'react';
-import Button from 'box-react-ui/lib/components/button/Button';
-import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
+import Button from 'components/button/Button';
+import IconOpenWith from 'icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 import Tooltip from 'elements/common/Tooltip';

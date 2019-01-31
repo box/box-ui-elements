@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
-import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
+import InlineError from 'components/inline-error/InlineError';
+import ItemProperties from 'features/item-details/ItemProperties';
 import SidebarFileProperties, {
     SidebarFilePropertiesComponent,
     getClassificationModal,

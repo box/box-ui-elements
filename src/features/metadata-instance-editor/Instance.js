@@ -33,30 +33,26 @@ import {
 import { isValidValue } from './fields/validateField';
 import isHidden from './metadataUtil';
 import { RESIN_TAG_TARGET } from '../../common/variables';
-import type {
-    CascadePolicyType,
-    Fields,
-    FieldValue,
-    Template,
-    TemplateField,
-    JSONPatchOperations,
-    CascadingPolicyData,
-} from './flowTypes';
 import './Instance.scss';
 
 type Props = {
     canEdit: boolean,
-    cascadePolicy?: CascadePolicyType, // eslint-disable-line
-    data: Fields,
+    cascadePolicy?: MetadataCascadePolicy, // eslint-disable-line
+    data: MetadataFields,
     hasError: boolean,
     id: string,
     isCascadingPolicyApplicable?: boolean,
     isDirty: boolean,
     onModification?: (id: string, isDirty: boolean, type?: string) => void,
-    onSave?: (id: string, data: JSONPatchOperations, cascadingPolicy?: CascadingPolicyData, rawData: Object) => void,
+    onSave?: (
+        id: string,
+        data: JSONPatchOperations,
+        cascadingPolicy?: MetadataCascadingPolicyData,
+        rawData: Object,
+    ) => void,
     onRemove?: (id: string) => void,
     isOpen: boolean,
-    template: Template,
+    template: MetadataTemplate,
 };
 
 type State = {
@@ -70,7 +66,7 @@ type State = {
     shouldShowCascadeOptions: boolean,
 };
 
-const createFieldKeyToTypeMap = (fields?: Array<TemplateField> = []) =>
+const createFieldKeyToTypeMap = (fields?: Array<MetadataTemplateField> = []) =>
     fields.reduce((prev, { key, type }) => {
         prev[key] = type;
         return prev;
@@ -244,7 +240,7 @@ class Instance extends React.PureComponent<Props, State> {
      * @param {string} type - type of field
      * @return {void}
      */
-    onFieldChange = (key: string, value: FieldValue, type: string): void => {
+    onFieldChange = (key: string, value: MetadataFieldValue, type: string): void => {
         const { data, errors }: State = this.state;
 
         // Don't do anything if data is the same or not in edit mode

@@ -4,9 +4,7 @@
  * @author Box
  */
 
-export type Pill = {
-    text: string,
-    value: number,
-};
+import type { PillOption } from 'components/pill-cloud/PillCloud';
 
-export type Pills = Array<Pill>;
+export type Pill = PillOption;
+export type Pills = Array<PillOption>;

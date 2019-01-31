@@ -3,8 +3,6 @@ import * as React from 'react';
 
 import MetadataView from '../../src/features/metadata-view/MetadataView';
 
-import type { Template } from '../../src/features/metadata-instance-editor/flowTypes';
-
 const totalWidth = 700;
 const tableHeight = 300;
 const tableHeaderHeight = 40;
@@ -152,8 +150,8 @@ export const template2 = {
 
 type Props = {
     currentMessage?: string,
-    template: Template,
-    templates?: Array<Template>,
+    template: MetadataTemplate,
+    templates?: Array<MetadataTemplate>,
 };
 
 class MetadataViewExamples extends React.Component<Props> {

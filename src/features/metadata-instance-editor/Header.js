@@ -4,16 +4,15 @@ import { FormattedMessage } from 'react-intl';
 
 import TemplateDropdown from './TemplateDropdown';
 import messages from './messages';
-import type { Editor, Template } from './flowTypes';
 import isHidden from './metadataUtil';
 import './Header.scss';
 
 type Props = {
     canAdd: boolean,
-    editors: Array<Editor>,
+    editors: Array<MetadataEditor>,
     isDropdownBusy?: boolean,
-    onAdd?: (template: Template) => void,
-    templates: Array<Template>,
+    onAdd?: (template: MetadataTemplate) => void,
+    templates: Array<MetadataTemplate>,
     title?: React.Node,
 };
 
@@ -29,9 +28,9 @@ const Header = ({ canAdd, editors, isDropdownBusy, onAdd, templates, title }: Pr
                 isDropdownBusy={isDropdownBusy}
                 onAdd={onAdd}
                 templates={templates.filter(
-                    (template: Template) => !isHidden(template), // Checking both isHidden and hidden attributes due to differences in V2 and V3 APIs
+                    (template: MetadataTemplate) => !isHidden(template), // Checking both isHidden and hidden attributes due to differences in V2 and V3 APIs
                 )}
-                usedTemplates={editors.map((editor: Editor) => editor.template)}
+                usedTemplates={editors.map((editor: MetadataEditor) => editor.template)}
             />
         )}
     </div>

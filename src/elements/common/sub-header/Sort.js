@@ -6,12 +6,12 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from 'box-react-ui/lib/components/button/Button';
-import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
-import Menu from 'box-react-ui/lib/components/menu/Menu';
-import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
-import IconCheck from 'box-react-ui/lib/icons/general/IconCheck';
-import IconSort from 'box-react-ui/lib/icons/general/IconSort';
+import Button from 'components/button/Button';
+import DropdownMenu from 'components/dropdown-menu/DropdownMenu';
+import Menu from 'components/menu/Menu';
+import MenuItem from 'components/menu/MenuItem';
+import IconCheck from 'icons/general/IconCheck';
+import IconSort from 'icons/general/IconSort';
 import messages from '../messages';
 import { FIELD_NAME, FIELD_DATE, SORT_ASC, SORT_DESC } from '../../../constants';
 

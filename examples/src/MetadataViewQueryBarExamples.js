@@ -2,13 +2,12 @@
 import * as React from 'react';
 
 import QueryBar from '../../src/features/metadata-view/components/QueryBar';
-import type { Template } from '../../src/features/metadata-instance-editor/flowTypes';
 import type { ColumnType } from '../../src/features/metadata-view/flowTypes';
 
 type Props = {
-    activeTemplate?: Template,
+    activeTemplate?: MetadataTemplate,
     onTemplateChange?: Function,
-    templates?: Array<Template>,
+    templates?: Array<MetadataTemplate>,
     visibleColumns?: Array<ColumnType>,
 };
 

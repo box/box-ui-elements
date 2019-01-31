@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { isToday, isYesterday } from 'box-react-ui/lib/utils/datetime';
+import { isToday, isYesterday } from 'utils/datetime';
 import messages from '../messages';
 import './DateField.scss';
 

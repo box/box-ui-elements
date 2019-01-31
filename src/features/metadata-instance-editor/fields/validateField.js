@@ -1,6 +1,5 @@
 // @flow
 import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../constants';
-import type { FieldValue } from '../flowTypes';
 
 const floatRegexAllowTrailingPeriod = /^[-+]?[0-9]*\.?[0-9]*$/;
 const floatRegex = /^[-+]?[0-9]*\.?[0-9]+$/;
@@ -14,7 +13,7 @@ type Options = {
     allowTrailingPeriod?: boolean,
 };
 
-const isValidValue = (type: string, value: FieldValue, options?: Options = {}) => {
+const isValidValue = (type: string, value: MetadataFieldValue, options?: Options = {}) => {
     if (type === FIELD_TYPE_FLOAT && typeof value === 'string') {
         return options.allowTrailingPeriod ? floatValidatorAllowTrailingPeriod(value) : floatValidator(value);
     }

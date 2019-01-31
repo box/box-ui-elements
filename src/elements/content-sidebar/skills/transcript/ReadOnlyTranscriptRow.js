@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import PlainButton from 'components/plain-button/PlainButton';
 
 type Props = {
     time?: string,
