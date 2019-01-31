@@ -21,7 +21,8 @@ import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import ActivityFeed from './activity-feed';
 import SidebarContent from './SidebarContent';
 import AddTaskButton from './AddTaskButton';
-import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
+import SidebarUtils from './SidebarUtils';
+import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, SIDEBAR_VIEW_ACTIVITY } from '../../constants';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {
@@ -72,6 +73,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        // eslint-disable-next-line react/prop-types
         const { logger } = this.props;
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
@@ -331,6 +333,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         console.error(error);
         /* eslint-enable no-console */
 
+        // eslint-disable-next-line react/prop-types
         this.props.onError(error, code, contextInfo);
     };
 
@@ -476,7 +479,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent
-                title={<FormattedMessage {...messages.sidebarActivityTitle} />}
+                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_ACTIVITY)}
                 actions={<FeatureFlag feature="activityFeed.tasks.createButton" enabled={this.renderAddTaskButton} />}
             >
                 <ActivityFeed

@@ -127,6 +127,22 @@ function getConfig(isReactExternalized) {
         }
     }
 
+    if (isRelease) {
+        // For release builds, disable code splitting. https://webpack.js.org/api/module-methods/#magic-comments
+        config.module.rules = [
+            {
+                test: /\.js$/,
+                loader: 'string-replace-loader',
+                options: {
+                    search: 'webpackMode: "lazy"',
+                    replace: 'webpackMode: "eager"',
+                    flags: 'g',
+                },
+            },
+            ...config.module.rules,
+        ];
+    }
+
     if (isRelease && language === 'en-US') {
         config.plugins.push(
             new BundleAnalyzerPlugin({

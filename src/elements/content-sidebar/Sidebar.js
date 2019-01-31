@@ -5,11 +5,7 @@
  */
 
 import * as React from 'react';
-import { mark } from 'utils/performance';
-import DetailsSidebar from './DetailsSidebar';
-import SkillsSidebar from './SkillsSidebar';
-import ActivitySidebar from './ActivitySidebar';
-import MetadataSidebar from './MetadataSidebar';
+import SidebarUtils from './SidebarUtils';
 import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
@@ -45,10 +41,16 @@ const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}${BASE_EVENT_NA
 const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
 
-mark(MARK_NAME_JS_LOADING_DETAILS);
-mark(MARK_NAME_JS_LOADING_ACTIVITY);
-mark(MARK_NAME_JS_LOADING_SKILLS);
-mark(MARK_NAME_JS_LOADING_METADATA);
+const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
+const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
+    SIDEBAR_VIEW_ACTIVITY,
+    MARK_NAME_JS_LOADING_ACTIVITY,
+);
+const LoadableSkillsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_SKILLS, MARK_NAME_JS_LOADING_SKILLS);
+const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
+    SIDEBAR_VIEW_METADATA,
+    MARK_NAME_JS_LOADING_METADATA,
+);
 
 const Sidebar = ({
     activitySidebarProps,
@@ -64,7 +66,7 @@ const Sidebar = ({
 }: Props) => (
     <React.Fragment>
         {selectedView === SIDEBAR_VIEW_DETAILS && (
-            <DetailsSidebar
+            <LoadableDetailsSidebar
                 key={fileId}
                 fileId={fileId}
                 onVersionHistoryClick={onVersionHistoryClick}
@@ -73,7 +75,7 @@ const Sidebar = ({
             />
         )}
         {selectedView === SIDEBAR_VIEW_SKILLS && (
-            <SkillsSidebar
+            <LoadableSkillsSidebar
                 key={file.id}
                 file={file}
                 getPreview={getPreview}
@@ -82,7 +84,7 @@ const Sidebar = ({
             />
         )}
         {selectedView === SIDEBAR_VIEW_ACTIVITY && (
-            <ActivitySidebar
+            <LoadableActivitySidebar
                 currentUser={currentUser}
                 file={file}
                 onVersionHistoryClick={onVersionHistoryClick}
@@ -91,7 +93,11 @@ const Sidebar = ({
             />
         )}
         {selectedView === SIDEBAR_VIEW_METADATA && (
-            <MetadataSidebar fileId={fileId} {...metadataSidebarProps} startMarkName={MARK_NAME_JS_LOADING_METADATA} />
+            <LoadableMetadataSidebar
+                fileId={fileId}
+                {...metadataSidebarProps}
+                startMarkName={MARK_NAME_JS_LOADING_METADATA}
+            />
         )}
     </React.Fragment>
 );

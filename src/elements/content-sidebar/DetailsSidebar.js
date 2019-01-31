@@ -25,7 +25,13 @@ import SidebarContent from './SidebarContent';
 import SidebarVersions from './SidebarVersions';
 import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
-import { HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR, IS_ERROR_DISPLAYED } from '../../constants';
+import SidebarUtils from './SidebarUtils';
+import {
+    HTTP_STATUS_CODE_FORBIDDEN,
+    ORIGIN_DETAILS_SIDEBAR,
+    IS_ERROR_DISPLAYED,
+    SIDEBAR_VIEW_DETAILS,
+} from '../../constants';
 import './DetailsSidebar.scss';
 
 type ExternalProps = {
@@ -440,7 +446,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         }
 
         return (
-            <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
+            <SidebarContent title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_DETAILS)}>
                 {hasNotices && (
                     <div className="bcs-details-content">{hasNotices && <SidebarNotices file={file} />}</div>
                 )}

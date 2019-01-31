@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/common/async-load/AsyncLoad should load the lazy component 1`] = `
+<React.Suspense
+  fallback={null}
+>
+  <React.Lazy
+    foo="bar"
+  />
+</React.Suspense>
+`;
+
+exports[`elements/common/async-load/AsyncLoad should render the error component if there is an error 1`] = `
+<errorComponent
+  error={[Error: foo]}
+/>
+`;

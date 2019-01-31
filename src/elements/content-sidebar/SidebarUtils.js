@@ -3,8 +3,20 @@
  * @file Utility for sidebar
  * @author Box
  */
-
+import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+import AsyncLoad from 'elements/common/async-load';
+import SidebarLoading from './SidebarLoading';
+import SidebarLoadingError from './SidebarLoadingError';
 import { hasSkills as hasSkillsData } from './skills/skillUtils';
+import messages from '../common/messages';
+import { mark } from '../../utils/performance';
+import {
+    SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_METADATA,
+    SIDEBAR_VIEW_DETAILS,
+} from '../../constants';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 
 class SidebarUtils {
@@ -118,6 +130,74 @@ class SidebarUtils {
                 SidebarUtils.canHaveActivitySidebar(props) ||
                 SidebarUtils.shouldRenderMetadataSidebar(props, editors))
         );
+    }
+
+    /**
+     * Gets the title for a given sidebar view
+     *
+     * @param {string} view - the view name
+     * @return {React.Node} - the node to render
+     */
+    static getTitleForView(view: SidebarView): React.Node {
+        switch (view) {
+            case SIDEBAR_VIEW_SKILLS:
+                return <FormattedMessage {...messages.sidebarSkillsTitle} />;
+            case SIDEBAR_VIEW_DETAILS:
+                return <FormattedMessage {...messages.sidebarDetailsTitle} />;
+            case SIDEBAR_VIEW_METADATA:
+                return <FormattedMessage {...messages.sidebarMetadataTitle} />;
+            case SIDEBAR_VIEW_ACTIVITY:
+                return <FormattedMessage {...messages.sidebarActivityTitle} />;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Marks and gets the loader for a given sidebar view
+     *
+     * @param {String} view - the view name
+     * @param {String} markName -  the name to be used by performance.mark
+     * @return {Function} - a function which will resolve the module to load
+     */
+    static getLoaderForView(view: SidebarView, markName: string): Promise<any> {
+        mark(markName);
+        let importFn;
+        switch (view) {
+            case SIDEBAR_VIEW_SKILLS:
+                importFn = import(/* webpackMode: "lazy", webpackChunkName: "skills-sidebar" */ './SkillsSidebar');
+                break;
+            case SIDEBAR_VIEW_DETAILS:
+                importFn = import(/* webpackMode: "lazy", webpackChunkName: "details-sidebar" */ './DetailsSidebar');
+                break;
+            case SIDEBAR_VIEW_METADATA:
+                importFn = import(/* webpackMode: "lazy", webpackChunkName: "metadata-sidebar" */ './MetadataSidebar');
+                break;
+            case SIDEBAR_VIEW_ACTIVITY:
+                importFn = import(/* webpackMode: "lazy", webpackChunkName: "activity-sidebar" */ './ActivitySidebar');
+                break;
+            default:
+                return Promise.resolve(null);
+        }
+
+        return importFn;
+    }
+
+    /**
+     * Gets the component which async loads a given sidebar view
+     *
+     * @param {String} view - the view name
+     * @param {String} markName -  the name to be used by performance.mark
+     * @param {Object} props - additional props
+     * @return {React.Node} - the node to render
+     */
+    static getAsyncSidebarContent(view: SidebarView, markName: string, props: Object = {}) {
+        return AsyncLoad({
+            errorComponent: SidebarLoadingError,
+            fallback: <SidebarLoading title={this.getTitleForView(view)} />,
+            loader: () => this.getLoaderForView(view, markName),
+            ...props,
+        });
     }
 }
 
