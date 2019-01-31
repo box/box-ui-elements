@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import retry from 'utils/retry';
+import { retryNumOfTimes } from 'utils/function';
 
 type Props = {
     loader: () => Promise<any>,
@@ -12,10 +12,20 @@ type State = {
     error: ?Error,
 };
 
+const DEFAULT_NUM_TIMES = 3;
+const DEFAULT_INITIAL_DELAY = 500;
+const DEFAULT_BACKOFF_FACTOR = 2;
+
 const NullComponent = () => null;
 
-const AsyncLoad = (asyncProps: Props) => {
-    const LazyComponent = React.lazy(() => retry(() => asyncProps.loader()));
+const AsyncLoad = (asyncProps: Props = {}) => {
+    const retryPromise = retryNumOfTimes(
+        (successCallback, errorCallback) => asyncProps.loader().then(successCallback, errorCallback),
+        DEFAULT_NUM_TIMES,
+        DEFAULT_INITIAL_DELAY,
+        DEFAULT_BACKOFF_FACTOR,
+    );
+    const LazyComponent = React.lazy(() => retryPromise);
 
     return class extends React.Component<Object, State> {
         state = {
