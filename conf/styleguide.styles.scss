@@ -9,19 +9,23 @@
     &.bcp,
     &.bcpr {
         height: 600px;
+
+        .bcs {
+            box-shadow: initial;
+        }
     }
 
     &.bcu {
         height: 400px;
-    }
-
-    &.bcs {
-        height: 1000px;
     }
 }
 
 [data-preview="ContentSidebar"] {
     > div {
         display: inline-block;
+    }
+
+    .bcs {
+        height: 1000px;
     }
 }

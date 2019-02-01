@@ -31,16 +31,16 @@ var ContentSidebar = require('./ContentSidebar').default;
 | --- | --- | --- | --- |
 | fileId* | string | | The id of the file to preview. |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
-| language | string | `en-US` | *See the [Internationalization](../README.md#internationalization) section* |
-| messages | Map<string, string> |  | *See the [Internationalization](../README.md#internationalization) section* |
-| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
-| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| activitySidebarProps | ActivitySidebarProps | `{}` | *See below* |
+| detailsSidebarProps | DetailsSidebarProps | `{}` | *See below* |
 | hasActivityFeed | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | hasMetadata | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | hasSkills | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
-| activitySidebarProps | ActivitySidebarProps | `{}` | *See below* |
-| detailsSidebarProps | DetailsSidebarProps | `{}` | *See below* |
+| language | string | `en-US` | *See the [Internationalization](../README.md#internationalization) section* |
+| messages | Map<string, string> |  | *See the [Internationalization](../README.md#internationalization) section* |
 | metadataSidebarProps | MetadataSidebarProps | `{}` | *See below* |
+| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | skillsSidebarProps | SkillsSidebarProps | `{}` | *See below* |
 
 #### ActivitySidebarProps
@@ -52,10 +52,10 @@ var ContentSidebar = require('./ContentSidebar').default;
 #### DetailsSidebarProps
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| hasProperties | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 | hasAccessStats | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
-| hasVersions | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 | hasNotices | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
+| hasProperties | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
+| hasVersions | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 
 #### MetadataSidebarProps
 | Prop | Type | Default | Description |
