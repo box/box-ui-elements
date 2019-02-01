@@ -1,0 +1,27 @@
+.be {
+    box-shadow: 0 0 20px 0 rgba(85, 85, 85, .42);
+
+    &.bcow {
+        width: 100px;
+    }
+
+    &.bce,
+    &.bcp,
+    &.bcpr {
+        height: 600px;
+    }
+
+    &.bcu {
+        height: 400px;
+    }
+
+    &.bcs {
+        height: 1000px;
+    }
+}
+
+[data-preview="ContentSidebar"] {
+    > div {
+        display: inline-block;
+    }
+}

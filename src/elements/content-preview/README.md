@@ -1,37 +1,27 @@
-## Content Preview ([Documentation](https://developer.box.com/docs/box-content-preview))
-
-<img src="https://user-images.githubusercontent.com/1075325/27419184-596b485c-56d4-11e7-8d42-c65328089c95.png" width="75%"/>
+### Screenshot
+<img src="https://user-images.githubusercontent.com/1075325/27419184-596b485c-56d4-11e7-8d42-c65328089c95.png" style="border: 1px solid #e8e8e8" width="600" />
 ---
-### Usage
+
+### Demo ([Documentation](https://developer.box.com/docs/box-content-preview))
 ***IMPORTANT:*** The Content Preview UI Element works differently from the other UI Elements above. The React component is a wrapper for the [Preview library](https://developer.box.com/docs/box-content-preview). It also requires a langauge (defaults to en-US) to be passed in since the preview library bundles are localized. Providing a language will automatically pull in the corresponding preview.js bundle and dynamically load it by adding a script tag. It will also dynamically load the additional required preview.css file by adding a link tag.
 
-```js
-import React from 'react';
-import { render } from 'react-dom';
-import { addLocaleData } from 'react-intl';
-import enLocaleData from 'react-intl/locale-data/en';
-import { ContentPreview } from 'box-ui-elements';
-import messages from 'box-ui-elements/i18n/en-US';
-import 'box-ui-elements/dist/preview.css';
+```jsx
+var ContentPreview = require('./ContentPreview').default;
 
-addLocaleData(enLocaleData);
-
-render(
+<IntlProvider locale="en" textComponent={React.Fragment}>
     <ContentPreview
-        fileId='FILE_ID'
-        token='ACCESS_TOKEN'
-        language='en-US'
-        messages={messages}
-    />,
-    document.querySelector('.container')
-);
+        features={FEATURES}
+        fileId={FILE_ID}
+        token={TOKEN}
+    />
+</IntlProvider>
 ```
 
 ### Props
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | fileId* | string | | The id of the file to preview. |
+| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | language | string | `en-US` | *See the [Internationalization](../README.md#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](../README.md#internationalization) section* |
 | canDownload | boolean | `true` | Visually hides the download and print buttons in the preview header if this is set to `false`. *This prop has no effect when the file permission `can_download` is set to `false`.* |

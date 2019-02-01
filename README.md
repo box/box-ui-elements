@@ -36,7 +36,7 @@ This documentation describes how to use UI Elements in a [React](https://faceboo
 ### Code Splitting
 [Code splitting](https://webpack.js.org/guides/code-splitting/) is currently supported for some UI Elements. In order to use an Element with code splitting, you will need to build the Element with webpack by importing it from the `es` folder in our npm package.
 
-### Styles
+### Stylesheets
 Each Box UI Elements requires its corresponding stylesheet to render properly. To import these stylesheets as modules (e.g. `import 'box-ui-elements/dist/sidebar.css';`), your project must integrate with Webpack's style-loader and css-loader. Alternatively, you can include the stylesheets in your application's HTML via `<style>` tags.
 
 ### Browser Support

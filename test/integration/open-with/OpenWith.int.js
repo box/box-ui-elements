@@ -13,7 +13,7 @@ describe('OpenWith', () => {
 
     it('A single integration', () => {
         cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integration-adobe');
-        cy.visit('/ContentOpenWith');
+        cy.visit('/Elements/ContentOpenWith');
 
         // The button should be enabled
         getSingleButton().should('not.have.attr', 'aria-disabled', 'true');
@@ -26,7 +26,7 @@ describe('OpenWith', () => {
 
     it('A custom integration', () => {
         cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integration-custom');
-        cy.visit('/ContentOpenWith');
+        cy.visit('/Elements/ContentOpenWith');
 
         // The button should be enabled
         getSingleButton().should('not.have.attr', 'aria-disabled', 'true');
@@ -39,7 +39,7 @@ describe('OpenWith', () => {
 
     it('Multiple integrations', () => {
         cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integrations-multiple');
-        cy.visit('/ContentOpenWith');
+        cy.visit('/Elements/ContentOpenWith');
 
         // Click the Open With button
         cy.getByTestId('multipleintegrationsbutton').click();
@@ -63,7 +63,7 @@ describe('OpenWith', () => {
     describe('box edit', () => {
         it('is uninstalled', () => {
             cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integration-box-edit');
-            cy.visit('/ContentOpenWith');
+            cy.visit('/Elements/ContentOpenWith');
 
             // The button should be disabled
             getSingleButton().should('have.attr', 'aria-disabled', 'true');
@@ -107,7 +107,7 @@ describe('OpenWith', () => {
                     'fixture:open-with/box-edit-application-request',
                 );
                 cy.route('GET', '**/files/*/open_with_integrations', test.fixture);
-                cy.visit('/ContentOpenWith');
+                cy.visit('/Elements/ContentOpenWith');
 
                 // The button should be enabled
                 getSingleButton().should('not.have.attr', 'aria-disabled', 'true');
@@ -128,7 +128,7 @@ describe('OpenWith', () => {
                 '**/application_request?application=BoxEdit&*',
                 'fixture:open-with/box-edit-application-request-fail',
             ).as('getApplications');
-            cy.visit('/ContentOpenWith');
+            cy.visit('/Elements/ContentOpenWith');
 
             // The button should be disabled
             getSingleButton().should('have.attr', 'aria-disabled', 'true');
@@ -158,7 +158,7 @@ describe('OpenWith', () => {
                 'fixture:open-with/box-edit-application-request',
             ).as('boxEditAvailable');
 
-            cy.visit('/ContentOpenWith');
+            cy.visit('/Elements/ContentOpenWith');
 
             // Wait until we know what integrations are available
             cy.wait(['@boxEditAvailable']);

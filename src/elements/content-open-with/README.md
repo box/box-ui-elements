@@ -1,40 +1,34 @@
-## Content Open With ([Documentation](https://developer.box.com/docs/box-content-open-with))
+### Screenshot
+<img src="https://cdn-images-1.medium.com/max/1600/1*dd2YfUFtbt9z6Lrv6hNF_g.gif" style="border: 1px solid #e8e8e8" width="600" />
+---
 
-<img src="https://cdn-images-1.medium.com/max/1600/1*dd2YfUFtbt9z6Lrv6hNF_g.gif" width="75%"/>
+### Demo ([Documentation](https://developer.box.com/docs/box-content-open-with))
+**Note:** The Open With UI Element works only with server generated [app user tokens](https://developer.box.com/docs/work-with-users#section-creating-a-new-app-user-jwt-applications-only-).
+For more information on this element, see this [documentation](https://developer.box.com/docs/box-content-open-with).
 
-### Usage
-```js
-import React from 'react';
-import { render } from 'react-dom';
-import { addLocaleData } from 'react-intl';
-import enLocaleData from 'react-intl/locale-data/en';
-import { ContentOpenWith } from 'box-ui-elements';
-import messages from 'box-ui-elements/i18n/en-US';
-import 'box-ui-elements/dist/openwith.css';
+```jsx
+var ContentOpenWith = require('./ContentOpenWith').default;
 
-addLocaleData(enLocaleData);
-
-render(
+<IntlProvider locale="en" textComponent={React.Fragment}>
     <ContentOpenWith
-        fileId='FILE_ID'
-        token='ACCESS_TOKEN'
-        language='en-US'
-        messages={messages}
-    />,
-    document.querySelector('.container')
-);
+        features={FEATURES}
+        fileId={FILE_ID}
+        token={TOKEN}
+    />
+</IntlProvider>
 ```
+
 ### Props
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| fileId* | string | | The id of the file to preview. |
+| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | dropdownAlignment | string | _left_ or _right_ | Determines the dropdown's alignment to the Open With button. |
 | boxToolsName | string | _Box Tools_ | This string will replace the name of Box Tools in the _Install Box Tools to open this file on your desktop_ message. |
 | boxToolsInstallUrl | string | Box's install instructions | This URL will be used instead of the default Box installation instructions which are linked in the _Install Box Tools to open this file on your desktop_ message. |
 | onExecute | Function | | A callback that executes when an integration invocation is attempted. |
-| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | language | string | `en-US` | *See the [Internationalization](../README.md#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](../README.md#internationalization) section* |
-| fileId* | string | | The id of the file to preview. |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 

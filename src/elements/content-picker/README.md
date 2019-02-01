@@ -1,27 +1,18 @@
-## Content Picker ([Documentation](https://developer.box.com/docs/box-content-picker))
+### Screenshot
+<img src="https://user-images.githubusercontent.com/1075325/27887156-0940ee3e-6194-11e7-8e22-961139e82dfe.png" style="border: 1px solid #e8e8e8" width="600" />
+---
 
-<img src="https://user-images.githubusercontent.com/1075325/27887156-0940ee3e-6194-11e7-8e22-961139e82dfe.png" width="75%"/>
+### Demo ([Documentation](https://developer.box.com/docs/box-content-picker))
+```jsx
+var ContentPicker = require('./ContentPicker').default;
 
-### Usage
-```js
-import React from 'react';
-import { render } from 'react-dom';
-import { addLocaleData } from 'react-intl';
-import enLocaleData from 'react-intl/locale-data/en';
-import { ContentPicker } from 'box-ui-elements';
-import messages from 'box-ui-elements/i18n/en-US';
-import 'box-ui-elements/dist/picker.css';
-
-addLocaleData(enLocaleData);
-
-render(
+<IntlProvider locale="en" textComponent={React.Fragment}>
     <ContentPicker
-        token='ACCESS_TOKEN'
-        language='en-US'
-        messages={messages}
-    />,
-    document.querySelector('.container')
-);
+        features={FEATURES}
+        rootFolderId={FOLDER_ID}
+        token={TOKEN}
+    />
+</IntlProvider>
 ```
 
 ### Props

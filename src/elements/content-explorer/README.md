@@ -1,27 +1,33 @@
-## Content Explorer ([Documentation](https://developer.box.com/docs/box-content-explorer))
+### Screenshot
+<img src="https://user-images.githubusercontent.com/1075325/27887154-092a232a-6194-11e7-82f4-697331ac5cbe.png" style="border: 1px solid #e8e8e8" style="border: 1px solid #e8e8e8" width="600" />
+---
 
-<img src="https://user-images.githubusercontent.com/1075325/27887154-092a232a-6194-11e7-82f4-697331ac5cbe.png" width="75%"/>
+### Demo ([Documentation](https://developer.box.com/docs/box-content-explorer))
+```jsx
+var ContentExplorer = require('./ContentExplorer').default;
 
-### Usage
-```js
-import React from 'react';
-import { render } from 'react-dom';
-import { addLocaleData } from 'react-intl';
-import enLocaleData from 'react-intl/locale-data/en';
-import { ContentExplorer } from 'box-ui-elements';
-import messages from 'box-ui-elements/i18n/en-US';
-import 'box-ui-elements/dist/explorer.css';
-
-addLocaleData(enLocaleData);
-
-render(
+<IntlProvider locale="en" textComponent={React.Fragment}>
     <ContentExplorer
-        token='ACCESS_TOKEN'
-        language='en-US'
-        messages={messages}
-    />,
-    document.querySelector('.container')
-);
+        contentPreviewProps={{
+            contentSidebarProps: {
+                hasActivityFeed: true,
+                hasSkills: true,
+                hasMetadata: true,
+                detailsSidebarProps: {
+                    hasProperties: true,
+                    hasNotices: true,
+                    hasAccessStats: true,
+                    hasClassification: true,
+                    hasRetentionPolicy: true,
+                    hasVersions: true,
+                },
+            },
+        }}
+        features={FEATURES}
+        rootFolderId={FOLDER_ID}
+        token={TOKEN}
+    />
+</IntlProvider>
 ```
 
 ### Props

@@ -1,26 +1,18 @@
-## Content Uploader ([Documentation](https://developer.box.com/docs/box-content-uploader))
+### Screenshot
 <img src="https://user-images.githubusercontent.com/1075325/27887153-09243762-6194-11e7-8d2d-cf654d9364bc.png" width="75%"/>
+---
 
-### Usage
-```js
-import React from 'react';
-import { render } from 'react-dom';
-import { addLocaleData } from 'react-intl';
-import enLocaleData from 'react-intl/locale-data/en';
-import { ContentUploader } from 'box-ui-elements';
-import messages from 'box-ui-elements/i18n/en-US';
-import 'box-ui-elements/dist/uploader.css';
+### Demo ([Documentation](https://developer.box.com/docs/box-content-uploader))
+```jsx
+var ContentUploader = require('./ContentUploader').default;
 
-addLocaleData(enLocaleData);
-
-render(
+<IntlProvider locale="en" textComponent={React.Fragment}>
     <ContentUploader
-        token='ACCESS_TOKEN'
-        language='en-US'
-        messages={messages}
-    />,
-    document.querySelector('.container')
-);
+        features={FEATURES}
+        rootFolderId={FOLDER_ID}
+        token={TOKEN}
+    />
+</IntlProvider>
 ```
 
 ### Props
