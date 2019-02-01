@@ -27,7 +27,7 @@ import type {
     collaboratorsListType,
     permissionLevelType,
     inviteePermissionType as InviteePermissions,
-    item,
+    item as ItemType,
     contactType as Contact,
     trackingPropsType,
     sharedLinkType,
@@ -48,26 +48,26 @@ type Props = {
     /** If item is classified this property contains the classification name */
     classificationName?: string,
     /** List of existing collaborators */
-    collaboratorsList?: collaboratorsListType,
-    /** Message warning about restrictions regarding inviting collaborators to the item */
     collaborationRestrictionWarning: React.Node,
+    /** Message warning about restrictions regarding inviting collaborators to the item */
+    collaboratorsList?: collaboratorsListType,
     /** User ID of currently logged in user */
     currentUserID: string,
     /** Handler function for when the user types into invite collaborators field to fetch contacts. */
-    getCollaboratorContacts: (query: string) => Promise<Array<Contact>>,
-    /** Handler function for when the user types into email shared link field to fetch contacts. */
-    getSharedLinkContacts: (query: string) => Promise<Array<Contact>>,
-    /** Whether the modal should focus the shared link after the URL is resolved */
     focusSharedLinkOnLoad?: boolean,
-    /** Handler function for getting intial data for modal */
+    /** Handler function for when the user types into email shared link field to fetch contacts. */
+    getCollaboratorContacts: (query: string) => Promise<Array<Contact>>,
+    /** Whether the modal should focus the shared link after the URL is resolved */
     getInitialData: Function,
+    /** Handler function for getting intial data for modal */
+    getSharedLinkContacts: (query: string) => Promise<Array<Contact>>,
     intl: IntlShape,
     /** An array of invitee permissions */
     inviteePermissions: Array<InviteePermissions>,
     /** Flag to set whether the unified share modal is open */
     isOpen: boolean,
     /** Item data */
-    item: item,
+    item: ItemType,
     /** Handler function that adds the shared link */
     onAddLink: () => void,
     /** Handler function that removes the shared link */
@@ -77,21 +77,21 @@ type Props = {
     /** Handler function for clicks on the settings icon. If not provided, the settings icon won't be rendered. */
     onSettingsClick?: Function,
     /** Shared link data */
-    sharedLink: sharedLinkType,
+    sendInvites: (params: Object) => Promise<Object>,
     /**
      * Function to send collab invitations based on the given parameters object.
      * This function should return a Promise.
      */
-    sendInvites: (params: Object) => Promise<Object>,
-    /** Message indicating an error occurred while sending the invites. */
     sendInvitesError: React.Node,
+    /** Message indicating an error occurred while sending the invites. */
+    sendSharedLink: (params: Object) => Promise<Object>,
     /**
      * Function to send shared link email based on the given parameters object.
      * This function should return a Promise.
      */
-    sendSharedLink: (params: Object) => Promise<Object>,
-    /** Message indicating an error occurred while sending the shared link. */
     sendSharedLinkError: React.Node,
+    /** Message indicating an error occurred while sending the shared link. */
+    sharedLink: sharedLinkType,
     /** Determine whether to show the First-time experience tooltip on load */
     showCalloutForUser?: boolean,
     /** Shows a callout tooltip next to the names / email addresses input field encouraging users to fill out coworkers contact info */
@@ -111,16 +111,16 @@ type Props = {
 
 type State = {
     emailSharedLinkContacts: Array<Contact>,
+    getInitialDataCalled: boolean,
     inviteCollabsContacts: Array<Contact>,
     inviteePermissionLevel: string,
     isConfirmModalOpen: boolean,
     isEmailLinkSectionExpanded: boolean,
     isFetching: boolean,
     isInviteSectionExpanded: boolean,
-    showCollaboratorList: boolean,
-    getInitialDataCalled: boolean,
-    shouldRenderFTUXTooltip: boolean,
     sharedLinkLoaded: boolean,
+    shouldRenderFTUXTooltip: boolean,
+    showCollaboratorList: boolean,
 };
 
 class UnifiedShareModal extends React.Component<Props, State> {

@@ -4,7 +4,7 @@ import * as React from 'react';
 import TemplateButton from '../TemplateButton';
 
 describe('feature/metadata-view/components/TemplateButton', () => {
-    const getWrapper = (props = {}) => {
+    const getWrapper = () => {
         return shallow(<TemplateButton />);
     };
 
@@ -49,16 +49,16 @@ describe('feature/metadata-view/components/TemplateButton', () => {
     });
 
     describe('renderEntryButton()', () => {
-        const selectedTemplate = {
+        const template = {
             id: '123',
             displayName: 'template name 1',
         };
         const selectedTemplateClassName = 'is-active';
 
         test.each`
-            selectedTemplate    | expectedReturn | description
-            ${selectedTemplate} | ${true}        | ${'Should render div with class containing is-active'}
-            ${null}             | ${false}       | ${'Should render div with class that does not contain is-active'}
+            selectedTemplate | expectedReturn | description
+            ${template}      | ${true}        | ${'Should render div with class containing is-active'}
+            ${null}          | ${false}       | ${'Should render div with class that does not contain is-active'}
         `('$description', ({ selectedTemplate, expectedReturn }) => {
             const wrapper = getWrapper();
             wrapper.instance().setState({

@@ -10,15 +10,15 @@ import BreadcrumbDelimiter from './BreadcrumbDelimiter';
 import './Breadcrumb.scss';
 
 type Props = {
+    delimiter?: Delimiter,
+    isLast?: boolean,
     name: string,
     onClick?: Function,
-    isLast?: boolean,
-    delimiter?: Delimiter,
 };
 
 const Breadcrumb = ({ name = '', onClick, isLast, delimiter }: Props) => {
     const title = onClick ? (
-        <PlainButton type="button" onClick={onClick}>
+        <PlainButton onClick={onClick} type="button">
             {name}
         </PlainButton>
     ) : (

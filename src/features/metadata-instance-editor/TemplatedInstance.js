@@ -9,10 +9,10 @@ import './TemplatedInstance.scss';
 
 type Props = {
     canEdit: boolean,
+    data: MetadataFields,
     errors: { [string]: React.Node },
     onFieldChange?: (key: string, value: MetadataFieldValue, type: string) => void,
     onFieldRemove?: (key: string) => void,
-    data: MetadataFields,
     template: MetadataTemplate,
 };
 

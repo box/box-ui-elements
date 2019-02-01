@@ -15,13 +15,13 @@ type Props = {
 const IconAddThin = ({ className = '', color = '#222222', height = 17, title, width = 17 }: Props) => (
     <AccessibleSVG
         className={`icon-add-thin ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 17 17"
+        width={width}
     >
-        <path className="fill-color" fill={color} d="M8 0h1v17H8z" />
-        <path className="fill-color" fill={color} d="M17 8v1H0V8z" />
+        <path className="fill-color" d="M8 0h1v17H8z" fill={color} />
+        <path className="fill-color" d="M17 8v1H0V8z" fill={color} />
     </AccessibleSVG>
 );
 

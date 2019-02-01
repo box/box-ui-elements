@@ -34,13 +34,13 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     const render = (props = {}) =>
         shallow(
             <Comment
-                created_by={{ name: '50 Cent', id: 10 }}
-                id="123"
-                tagged_message="test"
-                handlers={allHandlers}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
+                created_by={{ name: '50 Cent', id: 10 }}
+                currentUser={currentUser}
+                handlers={allHandlers}
+                id="123"
                 mentionSelectorContacts={mentionSelectorContacts}
+                tagged_message="test"
                 {...props}
             />,
         );
@@ -57,10 +57,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
             />,
         );
 
@@ -96,10 +96,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 translations={translations}
             />,
         );
@@ -118,10 +118,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
             />,
         );
 
@@ -141,10 +141,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onDelete={jest.fn()}
             />,
         );
@@ -165,10 +165,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onDelete={jest.fn()}
             />,
         );
@@ -188,10 +188,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...task}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onDelete={jest.fn()}
             />,
         );
@@ -210,10 +210,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onEdit={jest.fn()}
             />,
         );
@@ -251,10 +251,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onDelete={jest.fn()}
             />,
         );
@@ -274,10 +274,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onEdit={jest.fn()}
             />,
         );
@@ -296,8 +296,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
+                currentUser={currentUser}
                 mentionSelectorContacts={mentionSelectorContacts}
             />,
         );
@@ -316,10 +316,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
             />,
         );
 
@@ -337,15 +337,15 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
-                handlers={allHandlers}
-                onDelete={jest.fn()}
+                currentUser={currentUser}
                 error={{
                     title: 'error',
                     message: 'errorrrrr',
                 }}
+                handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
+                onDelete={jest.fn()}
             />,
         );
 
@@ -364,11 +364,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
-                handlers={allHandlers}
-                onDelete={jest.fn()}
+                currentUser={currentUser}
                 error={{
                     title: 'error',
                     message: 'errorrrrr',
@@ -377,6 +374,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                         onAction: onActionSpy,
                     },
                 }}
+                handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
+                onDelete={jest.fn()}
             />,
         );
         const inlineErrorActionLink = wrapper.find('InlineError').find('PlainButton.lnk');
@@ -398,10 +398,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onEdit={jest.fn()}
             />,
         );

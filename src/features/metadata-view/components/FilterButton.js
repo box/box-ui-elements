@@ -15,10 +15,9 @@ import { isValidCondition } from '../validator';
 import messages from '../messages';
 
 type State = {
-    activeFilterConditions: Array<Object>,
+    filterConditions: Array<Object>,
     isDisabled: boolean,
     isFilterMenuOpen: boolean,
-    filterConditions: Array<Object>,
     numberOfActiveFilters: number,
     numberOfValidConditions: number,
 };
@@ -29,7 +28,6 @@ type Props = {
 
 class FilterButton extends React.Component<Props, State> {
     state = {
-        activeFilterConditions: [],
         isDisabled: true,
         isFilterMenuOpen: false,
         filterConditions: [
@@ -86,11 +84,9 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     applyFilters = () => {
-        const { isDisabled, filterConditions } = this.state;
+        const { isDisabled } = this.state;
         if (!isDisabled) {
-            const validConditions = this.getValidConditions(filterConditions);
             this.setState({
-                activeFilterConditions: validConditions,
                 numberOfActiveFilters: this.state.numberOfValidConditions,
             });
         }
@@ -127,9 +123,7 @@ class FilterButton extends React.Component<Props, State> {
             newFilterCondition.isValidCondition = this.checkValidCondition(newFilterCondition);
 
             const filteredConditions = filterConditions.slice(0);
-            const foundIndex = filterConditions.findIndex(
-                condition => condition.conditionId === newFilterCondition.conditionId,
-            );
+            const foundIndex = filterConditions.findIndex(cond => cond.conditionId === newFilterCondition.conditionId);
             filteredConditions[foundIndex] = newFilterCondition;
 
             const validConditions = this.getValidConditions(filteredConditions);
@@ -203,12 +197,12 @@ class FilterButton extends React.Component<Props, State> {
                 className="query-bar-filter-dropdown-flyout"
                 closeOnClick
                 closeOnClickOutside
+                closeOnClickPredicate={this.shouldClose}
                 onClose={this.onClose}
                 onOpen={this.onOpen}
-                position="bottom-right"
-                closeOnClickPredicate={this.shouldClose}
-                shouldDefaultFocus
                 overlayIsVisible={isFilterMenuOpen}
+                position="bottom-right"
+                shouldDefaultFocus
             >
                 <Button
                     className={buttonClasses}
@@ -244,25 +238,25 @@ class FilterButton extends React.Component<Props, State> {
                                     return (
                                         <FilterItem
                                             key={`metadata-view-filter-item-${condition.conditionId}`}
-                                            template={template}
                                             condition={condition}
-                                            index={index}
-                                            updateFilterCondition={this.updateFilterCondition}
                                             deleteCondition={this.deleteCondition}
+                                            index={index}
+                                            template={template}
+                                            updateFilterCondition={this.updateFilterCondition}
                                         />
                                     );
                                 })}
                             </div>
                             <div className="filter-button-dropdown-footer">
-                                <Button type="button" onClick={this.addFilter}>
+                                <Button onClick={this.addFilter} type="button">
                                     <FormattedMessage {...messages.addFilterButtonText} />
                                 </Button>
 
                                 <PrimaryButton
                                     className="apply-filters-button"
-                                    type="button"
-                                    onClick={this.applyFilters}
                                     isDisabled={isDisabled}
+                                    onClick={this.applyFilters}
+                                    type="button"
                                 >
                                     <FormattedMessage {...messages.applyFiltersButtonText} />
                                 </PrimaryButton>

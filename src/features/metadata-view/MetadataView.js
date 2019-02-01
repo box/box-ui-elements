@@ -22,14 +22,14 @@ type Props = {
     tableHeight: number,
     tableRowHeight: number,
     template: MetadataTemplate,
-    templates: Array<MetadataTemplate>,
     templateName: string,
+    templates: Array<MetadataTemplate>,
     totalWidth: number,
 };
 
 type State = {
-    visibleColumns: Array<ColumnType>,
     activeTemplate?: MetadataTemplate,
+    visibleColumns: Array<ColumnType>,
 };
 
 class MetadataView extends React.Component<Props, State> {
@@ -37,12 +37,14 @@ class MetadataView extends React.Component<Props, State> {
         super(props);
         this.state = {
             visibleColumns: this.generateColumnsFromFields(props.template),
+            // eslint-disable-next-line react/no-unused-state
             activeTemplate: undefined,
         };
     }
 
     onTemplateChange = (template: MetadataTemplate) => {
         this.setState({
+            // eslint-disable-next-line react/no-unused-state
             activeTemplate: template,
         });
     };
@@ -110,9 +112,9 @@ class MetadataView extends React.Component<Props, State> {
                 <QueryBar
                     activeTemplate={template}
                     onColumnChange={this.setColumnFilters}
+                    onTemplateChange={this.onTemplateChange}
                     shouldDisableColumnButton={shouldDisableColumnButton}
                     templates={templates}
-                    onTemplateChange={this.onTemplateChange}
                     visibleColumns={visibleColumns}
                 />
                 <section className="metadata-items-container">
@@ -120,6 +122,7 @@ class MetadataView extends React.Component<Props, State> {
                         <Message message={currentMessage} />
                     ) : (
                         <Table
+                            columns={visibleColumns}
                             columnWidths={columnWidths}
                             items={tableItems}
                             tableHeaderHeight={tableHeaderHeight}
@@ -127,7 +130,6 @@ class MetadataView extends React.Component<Props, State> {
                             tableRowHeight={tableRowHeight}
                             template={template}
                             totalWidth={totalWidth}
-                            columns={visibleColumns}
                         />
                     )}
                 </section>

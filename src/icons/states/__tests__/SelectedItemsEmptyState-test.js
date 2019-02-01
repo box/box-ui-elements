@@ -18,7 +18,7 @@ describe('icons/states/SelectedItemsEmptyState', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 17;
         const height = 21;
-        const wrapper = shallow(<SelectedItemsEmptyState width={width} height={height} />);
+        const wrapper = shallow(<SelectedItemsEmptyState height={height} width={width} />);
 
         expect(wrapper.prop('width')).toEqual(width);
         expect(wrapper.prop('height')).toEqual(height);

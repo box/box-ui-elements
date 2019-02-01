@@ -3,7 +3,7 @@ import React from 'react';
 import FilterValueField from '../FilterValueField';
 
 describe('features/metadata-view/components/FilterValueField', () => {
-    const getWrapper = (props = {}) => {
+    const getWrapper = () => {
         const intl = {
             formatMessage: jest.fn(),
         };

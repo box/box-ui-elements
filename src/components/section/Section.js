@@ -4,13 +4,13 @@ import * as React from 'react';
 import './Section.scss';
 
 type Props = {
-    id?: string,
     children: React.Node,
     className?: string,
-    /** Section title */
-    title: React.Node,
-    /** Section description */
     description?: React.Node,
+    /** Section title */
+    id?: string,
+    /** Section description */
+    title: React.Node,
 };
 
 const Section = ({ children, id, className = '', description, title }: Props) => (

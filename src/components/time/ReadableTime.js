@@ -8,13 +8,13 @@ import messages from './messages';
 
 type Props = {
     /** The timestamp which should be used to display the date */
-    timestamp: number,
-    /** The number of milliseconds before now that a relative (vs. absolute) time should be displayed */
-    relativeThreshold: number,
-    /** A boolean that will cause future timestamps (usually due to incorrect computer time) to be corrected to the isToday message */
     allowFutureTimestamps?: boolean,
-    /** A boolean that will include the time alongside the date, if the date is shown */
+    /** The number of milliseconds before now that a relative (vs. absolute) time should be displayed */
     alwaysShowTime?: boolean,
+    /** A boolean that will cause future timestamps (usually due to incorrect computer time) to be corrected to the isToday message */
+    relativeThreshold: number,
+    /** A boolean that will include the time alongside the date, if the date is shown */
+    timestamp: number,
 };
 
 const ReadableTime = ({
@@ -45,10 +45,10 @@ const ReadableTime = ({
     } else if (!shouldShowYear && alwaysShowTime) {
         // e.g. Oct 5 at 10:30 PM
         dateMessage = messages.eventTimeDateShort;
-        date = <FormattedDate value={timestamp} month="short" day="numeric" />;
+        date = <FormattedDate day="numeric" month="short" value={timestamp} />;
     } else if (!shouldShowYear && !alwaysShowTime) {
         // e.g. Oct 5
-        return <FormattedDate value={timestamp} month="short" day="numeric" />;
+        return <FormattedDate day="numeric" month="short" value={timestamp} />;
     }
 
     return timestamp > relativeIfNewerThanTs ? (

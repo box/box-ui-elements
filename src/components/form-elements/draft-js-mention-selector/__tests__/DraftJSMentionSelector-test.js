@@ -95,8 +95,8 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                         {...requiredProps}
                         editorState={editorState}
                         isRequired={isRequired}
-                        minLength={minLength}
                         maxLength={maxLength}
+                        minLength={minLength}
                     />,
                 );
 

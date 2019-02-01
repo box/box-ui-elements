@@ -116,14 +116,14 @@ class PresenceDropdown extends React.Component<Props> {
             const { avatarUrl, id, isActive, interactedAt, interactionType, name, profileUrl } = collaborator;
 
             return (
-                <div className="presence-dropdown-item" key={id}>
-                    <PresenceAvatar avatarUrl={avatarUrl} id={id} name={name} isActive={isActive} isDropDownAvatar />
+                <div key={id} className="presence-dropdown-item">
+                    <PresenceAvatar avatarUrl={avatarUrl} id={id} isActive={isActive} isDropDownAvatar name={name} />
                     <div className="presence-dropdown-item-info-container">
                         <div className="presence-dropdown-item-info-name">
                             {isEmpty(profileUrl) ? (
                                 <span>{name}</span>
                             ) : (
-                                <Link target="_blank" href={profileUrl}>
+                                <Link href={profileUrl} target="_blank">
                                     {name}
                                 </Link>
                             )}
@@ -184,11 +184,11 @@ class PresenceDropdown extends React.Component<Props> {
             <div className="presence-dropdown">
                 {title}
                 <div
-                    className={dropdownListClasses}
-                    onScroll={this.throttledHandleScroll}
                     ref={list => {
                         this.elDropdownList = list;
                     }}
+                    className={dropdownListClasses}
+                    onScroll={this.throttledHandleScroll}
                 >
                     {collabList}
                 </div>

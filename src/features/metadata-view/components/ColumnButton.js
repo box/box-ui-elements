@@ -155,10 +155,10 @@ class ColumnButton extends React.Component<Props, State> {
                                     if (index !== 0) {
                                         return (
                                             <PortaledDraggableListItem
+                                                key={index}
                                                 id={item.id}
                                                 index={index}
                                                 isDraggableViaHandle
-                                                key={index}
                                             >
                                                 <Checkbox
                                                     isChecked={item.isChecked}
@@ -174,7 +174,7 @@ class ColumnButton extends React.Component<Props, State> {
                             </DraggableList>
                         </div>
                         <div className="column-button-dropdown-footer">
-                            <PrimaryButton type="button" onClick={this.applyFilters}>
+                            <PrimaryButton onClick={this.applyFilters} type="button">
                                 <FormattedMessage {...messages.applyFiltersButtonText} />
                             </PrimaryButton>
                         </div>

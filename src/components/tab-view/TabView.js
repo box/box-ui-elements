@@ -14,8 +14,8 @@ type Props = {
 
 type State = {
     focusedIndex: number,
-    showOutline: boolean,
     selectedIndex: number,
+    showOutline: boolean,
 };
 
 class TabView extends React.Component<Props, State> {
@@ -91,14 +91,14 @@ class TabView extends React.Component<Props, State> {
                 className={classNames(className, {
                     'show-outline': showOutline,
                 })}
-                isDynamic={isDynamic}
                 focusedIndex={focusedIndex}
+                isDynamic={isDynamic}
+                onKeyUp={this.handleKeyUp}
                 onTabFocus={this.handleOnTabFocus}
                 onTabSelect={this.handleOnTabSelect}
                 resetActiveTab={this.resetActiveTab}
                 resetFocusedTab={this.resetFocusedTab}
                 selectedIndex={selectedIndex}
-                onKeyUp={this.handleKeyUp}
             >
                 {children}
             </TabViewPrimitive>

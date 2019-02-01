@@ -18,7 +18,7 @@ describe('icons/general/IconFlagSolid', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 18;
         const height = 18;
-        const wrapper = shallow(<IconFlagSolid width={width} height={height} />);
+        const wrapper = shallow(<IconFlagSolid height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

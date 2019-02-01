@@ -15,10 +15,10 @@ type Props = {
 const IconRemove = ({ className = '', color = '#979797', height = 10, title, width = 10 }: Props) => (
     <AccessibleSVG
         className={`icon-remove ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 10 10"
+        width={width}
     >
         <path
             className="fill-color"

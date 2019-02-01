@@ -8,22 +8,22 @@ import throttle from 'lodash/throttle';
 
 type Props = {
     /** Does the resource have more entities */
-    hasMore: boolean,
-    /** Are more entities being loaded */
-    isLoading: boolean,
-    /** Callback to load more entities */
-    onLoadMore: () => void,
-    /** Scroll threshold */
-    threshold: number,
-    /** Throttle rate */
-    throttle: number,
-    /** Components to render, should include entities/loading states/end message */
     children: React.Node,
+    /** Are more entities being loaded */
+    hasMore: boolean,
+    /** Callback to load more entities */
+    isLoading: boolean,
+    /** Scroll threshold */
+    onLoadMore: () => void,
+    /** Throttle rate */
+    scrollContainerNode?: ?HTMLElement,
+    /** Components to render, should include entities/loading states/end message */
+    threshold: number,
     /** React ref of the scroll container
      * Used to listen to scroll events and calculate onLoadMore calls
      * Set useWindow to true to use the window as scroll container
      */
-    scrollContainerNode?: ?HTMLElement,
+    throttle: number,
     useWindow: boolean,
 };
 

@@ -31,7 +31,6 @@ import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
 import Header from './Header';
-import ContentSidebar from '../content-sidebar';
 import PreviewNavigation from './PreviewNavigation';
 import PreviewLoading from './PreviewLoading';
 import {
@@ -42,7 +41,6 @@ import {
     DEFAULT_LOCALE,
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW,
-    HEADER_RETRY_AFTER,
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
@@ -89,41 +87,41 @@ type Props = {
     WithLoggerProps;
 
 type State = {
+    currentFileId?: string,
     file?: BoxItem,
     isFileError: boolean,
-    isReloadNotificationVisible: boolean,
-    currentFileId?: string, // the currently displayed file id in the collection
-    prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
-    isThumbnailSidebarOpen: boolean,
+    isReloadNotificationVisible: boolean, // the currently displayed file id in the collection
+    isThumbnailSidebarOpen: boolean, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
+    prevFileIdProp?: string,
 };
 
 // Emitted by preview's 'load' event
 type PreviewTimeMetrics = {
     conversion: number,
+    preload?: number,
     rendering: number,
     total: number,
-    preload?: number,
 };
 
 // Emitted by preview's 'preview_metric' event
 type PreviewMetrics = {
-    error?: Object,
-    event_name?: string,
-    value: number, // Sum of all available load times.
-    file_info_time: number,
+    browser_name: string,
+    client_version: string,
+    content_type: string, // Sum of all available load times.
     convert_time: number,
     download_response_time: number,
-    full_document_load_time: number,
-    timestamp: string,
-    file_id: string,
-    file_version_id: string,
-    content_type: string,
+    error?: Object,
+    event_name?: string,
     extension: string,
+    file_id: string,
+    file_info_time: number,
+    file_version_id: string,
+    full_document_load_time: number,
     locale: string,
-    rep_type: string,
-    client_version: string,
-    browser_name: string,
     logger_session_id: string,
+    rep_type: string,
+    timestamp: string,
+    value: number,
 };
 
 type PreviewError = {
@@ -235,6 +233,7 @@ class ContentPreview extends PureComponent<Props, State> {
         this.state = {
             ...this.initialState,
             currentFileId: fileId,
+            // eslint-disable-next-line react/no-unused-state
             prevFileIdProp: fileId,
         };
         const { logger } = this.props;
@@ -773,7 +772,6 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileErrorCallback = (fileError: ElementsXhrError, code: string): void => {
-        const { currentFileId } = this.state;
         this.setState({ isFileError: true });
         this.props.onError(fileError, code, {
             error: fileError,

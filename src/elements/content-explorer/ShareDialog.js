@@ -17,14 +17,14 @@ import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../con
 import './ShareDialog.scss';
 
 type Props = {
-    canSetShareAccess: boolean,
-    isOpen: boolean,
-    onShareAccessChange: Function,
-    onCancel: Function,
-    item: BoxItem,
-    isLoading: boolean,
-    parentElement: HTMLElement,
     appElement: HTMLElement,
+    canSetShareAccess: boolean,
+    isLoading: boolean,
+    isOpen: boolean,
+    item: BoxItem,
+    onCancel: Function,
+    onShareAccessChange: Function,
+    parentElement: HTMLElement,
 } & InjectIntlProvidedProps;
 
 const ShareDialog = ({
@@ -55,28 +55,28 @@ const ShareDialog = ({
     /* eslint-disable jsx-a11y/label-has-for */
     return (
         <Modal
+            appElement={appElement}
+            className={CLASS_MODAL_CONTENT}
+            contentLabel={intl.formatMessage(messages.shareDialogLabel)}
             isOpen={isOpen}
+            onRequestClose={onCancel}
+            overlayClassName={CLASS_MODAL_OVERLAY}
             parentSelector={() => parentElement}
             portalClassName={`${CLASS_MODAL} be-modal-share`}
-            className={CLASS_MODAL_CONTENT}
-            overlayClassName={CLASS_MODAL_OVERLAY}
-            onRequestClose={onCancel}
-            contentLabel={intl.formatMessage(messages.shareDialogLabel)}
-            appElement={appElement}
         >
             <div className="be-modal-content">
                 <label>
                     <FormattedMessage tagName="div" {...messages.shareDialogText} />
                     <span>
                         <input
-                            type="text"
-                            onChange={noop}
                             ref={input => {
                                 textInput = input;
                             }}
+                            onChange={noop}
+                            type="text"
                             value={url}
                         />
-                        <PrimaryButton type="button" className="be-modal-button-copy" onClick={copy} autoFocus>
+                        <PrimaryButton autoFocus className="be-modal-button-copy" onClick={copy} type="button">
                             <FormattedMessage {...messages.copy} />
                         </PrimaryButton>
                     </span>
@@ -84,12 +84,12 @@ const ShareDialog = ({
             </div>
             <div className="be-modal-btns">
                 <ShareAccessSelect
-                    className="bce-shared-access-select"
                     canSetShareAccess={canSetShareAccess}
-                    onChange={onShareAccessChange}
+                    className="bce-shared-access-select"
                     item={item}
+                    onChange={onShareAccessChange}
                 />
-                <Button type="button" onClick={onCancel} isLoading={isLoading}>
+                <Button isLoading={isLoading} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.close} />
                 </Button>
             </div>

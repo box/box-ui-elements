@@ -21,17 +21,17 @@ type Props = {
     /** Default copy button text */
     buttonDefaultText: string | React.Node,
     /** Copy button text when copy is successful */
-    buttonSuccessText?: string | React.Node,
     buttonProps?: Object,
+    buttonSuccessText?: string | React.Node,
     className: string,
     disabled?: boolean,
     /** Label displayed for the text input */
     // TODO: Make label required
     label?: React.Node,
     /** onFocus handler for the input el */
-    onFocus?: Function,
-    /** Function called when link is copied by keyboard or button */
     onCopySuccess?: Function,
+    /** Function called when link is copied by keyboard or button */
+    onFocus?: Function,
     /** Duration (milliseconds) in which to show the copy success state */
     successStateDuration: number,
     /** trigger the copy animation when the component loads (used to simulate a click on copy button) */
@@ -43,8 +43,8 @@ type Props = {
 };
 
 type State = {
-    copySuccess: boolean,
     buttonText: string | React.Node,
+    copySuccess: boolean,
     hasFocused: boolean,
 };
 
@@ -175,9 +175,9 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
     renderCopyButton = () =>
         this.isCopyCommandSupported ? (
             <Button
+                isDisabled={this.props.disabled}
                 onClick={this.handleCopyButtonClick}
                 type="button"
-                isDisabled={this.props.disabled}
                 {...this.props.buttonProps}
             >
                 {this.state.buttonText}

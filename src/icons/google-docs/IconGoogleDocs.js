@@ -35,13 +35,13 @@ class IconGoogleDocs extends React.Component<Props> {
             >
                 <defs>
                     <linearGradient
-                        id={`${this.idPrefix}a`}
-                        x1="-215.49"
-                        y1="505.79"
-                        x2="-215.49"
-                        y2="503.19"
                         gradientTransform="matrix(2.67 0 0 -2.67 596.67 1357)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}a`}
+                        x1="-215.49"
+                        x2="-215.49"
+                        y1="505.79"
+                        y2="503.19"
                     >
                         <stop offset="0" stopColor="#1a237e" stopOpacity=".2" />
                         <stop offset="1" stopColor="#1a237e" stopOpacity=".02" />
@@ -51,7 +51,7 @@ class IconGoogleDocs extends React.Component<Props> {
                     d="M17.64 0H6.05A2.05 2.05 0 0 0 4 2.05V28a2.05 2.05 0 0 0 2.05 2h17.72a2.05 2.05 0 0 0 2.05-2V8.18l-4.77-3.41z"
                     fill="#4285f4"
                 />
-                <path fill={`url(#${this.idPrefix}a)`} d="M18.23 7.58l7.59 7.58V8.18l-7.59-.6z" />
+                <path d="M18.23 7.58l7.59 7.58V8.18l-7.59-.6z" fill={`url(#${this.idPrefix}a)`} />
                 <path
                     d="M9.45 21.82h10.91v-1.37H9.45zm0 2.73h8.19v-1.37H9.45zm0-9.55v1.36h10.91V15zm0 4.09h10.91v-1.36H9.45z"
                     fill="#f1f1f1"

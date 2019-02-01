@@ -13,7 +13,7 @@ describe('components/form-elements/form/Form', () => {
 
     test('should correctly render default component', () => {
         const wrapper = shallow(
-            <Form onValidSubmit={() => {}} onInvalidSubmit={() => {}}>
+            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
                 <input type="text" />
             </Form>,
         );
@@ -28,7 +28,7 @@ describe('components/form-elements/form/Form', () => {
         const onInvalidSubmitMock = sandbox.mock().never();
 
         const wrapper = mount(
-            <Form onChange={onChangeSpy} onValidSubmit={onValidSubmitMock} onInvalidSubmit={onInvalidSubmitMock}>
+            <Form onChange={onChangeSpy} onInvalidSubmit={onInvalidSubmitMock} onValidSubmit={onValidSubmitMock}>
                 <input id="input" type="text" />
             </Form>,
         );
@@ -49,7 +49,7 @@ describe('components/form-elements/form/Form', () => {
         const onInvalidSubmitMock = sandbox.mock().never();
 
         const wrapper = mount(
-            <Form onValidSubmit={onValidSubmit} onInvalidSubmit={onInvalidSubmitMock}>
+            <Form onInvalidSubmit={onInvalidSubmitMock} onValidSubmit={onValidSubmit}>
                 <input id="input" type="text" />
             </Form>,
         );
@@ -68,8 +68,8 @@ describe('components/form-elements/form/Form', () => {
         const onInvalidSubmit = sinon.spy();
 
         const wrapper = mount(
-            <Form onValidSubmit={onValidSubmitMock} onInvalidSubmit={onInvalidSubmit}>
-                <input id="input" name="input1" type="text" required />
+            <Form onInvalidSubmit={onInvalidSubmit} onValidSubmit={onValidSubmitMock}>
+                <input id="input" name="input1" required type="text" />
             </Form>,
         );
 
@@ -92,8 +92,8 @@ describe('components/form-elements/form/Form', () => {
         };
 
         const wrapper = mount(
-            <Form onValidSubmit={onValidSubmit} onInvalidSubmit={onInvalidSubmitMock}>
-                <input id="input" name="input1" type="text" defaultValue="boom" />
+            <Form onInvalidSubmit={onInvalidSubmitMock} onValidSubmit={onValidSubmit}>
+                <input defaultValue="boom" id="input" name="input1" type="text" />
                 <input id="input" type="text" />
             </Form>,
         );
@@ -112,8 +112,8 @@ describe('components/form-elements/form/Form', () => {
         };
 
         const wrapper = mount(
-            <Form onValidSubmit={onValidSubmitMock} onInvalidSubmit={onInvalidSubmit}>
-                <input id="input" name="input1" type="text" required />
+            <Form onInvalidSubmit={onInvalidSubmit} onValidSubmit={onValidSubmitMock}>
+                <input id="input" name="input1" required type="text" />
                 <input id="input" type="text" />
             </Form>,
         );
@@ -125,14 +125,14 @@ describe('components/form-elements/form/Form', () => {
     });
 
     test('should expose form register/unregister function on the context', () => {
-        const wrapper = shallow(<Form onValidSubmit={() => {}} onInvalidSubmit={() => {}} />);
+        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
 
         expect(wrapper.instance().getChildContext().form.registerInput).toBeTruthy();
         expect(wrapper.instance().getChildContext().form.unregisterInput).toBeTruthy();
     });
 
     test('should register an input when registerInput is called', () => {
-        const wrapper = shallow(<Form onValidSubmit={() => {}} onInvalidSubmit={() => {}} />);
+        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
 
         const inputHandlerSpy = sinon.spy();
         wrapper
@@ -143,7 +143,7 @@ describe('components/form-elements/form/Form', () => {
     });
 
     test('should correctly register multiple inputs when registerInput is called', () => {
-        const wrapper = shallow(<Form onValidSubmit={() => {}} onInvalidSubmit={() => {}} />);
+        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
 
         const inputHandlerSpy = sinon.spy();
         wrapper
@@ -159,7 +159,7 @@ describe('components/form-elements/form/Form', () => {
     });
 
     test('should throw an error if registerInput is called for already registered input', done => {
-        const wrapper = shallow(<Form onValidSubmit={() => {}} onInvalidSubmit={() => {}} />);
+        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
 
         wrapper
             .instance()
@@ -178,7 +178,7 @@ describe('components/form-elements/form/Form', () => {
     });
 
     test('should unregister an input when unregisterInput is called', () => {
-        const wrapper = shallow(<Form onValidSubmit={() => {}} onInvalidSubmit={() => {}} />);
+        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
 
         const inputHandlerSpy = sinon.spy();
         wrapper

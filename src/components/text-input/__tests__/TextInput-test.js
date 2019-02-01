@@ -29,7 +29,7 @@ describe('components/text-input/TextInput', () => {
 
     test('should correctly render the label', () => {
         const label = 'a label';
-        const wrapper = shallow(<TextInput label={label} name="input" isRequired />);
+        const wrapper = shallow(<TextInput isRequired label={label} name="input" />);
 
         expect(wrapper.find('Label').prop('text')).toEqual(label);
     });
@@ -42,25 +42,25 @@ describe('components/text-input/TextInput', () => {
 
     test('should correctly render label tooltip when specified', () => {
         const labelTooltip = 'This is a label.';
-        const wrapper = mount(<TextInput label="label" name="input" labelTooltip={labelTooltip} />);
+        const wrapper = mount(<TextInput label="label" labelTooltip={labelTooltip} name="input" />);
 
         expect(wrapper.find('Label').prop('tooltip')).toEqual(labelTooltip);
     });
 
     test('should hide optional label text when specified', () => {
-        const wrapper = mount(<TextInput label="label" name="input" hideOptionalLabel />);
+        const wrapper = mount(<TextInput hideOptionalLabel label="label" name="input" />);
 
         expect(wrapper.find('Label').prop('showOptionalText')).toBe(false);
     });
 
     test('should correctly render LoadingIndicator if it is loading', () => {
-        const wrapper = shallow(<TextInput label="label" isLoading />);
+        const wrapper = shallow(<TextInput isLoading label="label" />);
 
         expect(wrapper.find('.text-input-loading').length).toBe(1);
     });
 
     test('should correctly render IconVerified if it is valid', () => {
-        const wrapper = shallow(<TextInput label="label" isValid />);
+        const wrapper = shallow(<TextInput isValid label="label" />);
 
         expect(wrapper.find('.text-input-verified').length).toBe(1);
     });
@@ -78,21 +78,21 @@ describe('components/text-input/TextInput', () => {
     });
 
     test('should not render LoadingIndicator or IconVerified if both loading and valid', () => {
-        const wrapper = shallow(<TextInput label="label" isLoading isValid />);
+        const wrapper = shallow(<TextInput isLoading isValid label="label" />);
 
         expect(wrapper.find('.text-input-loading').length).toBe(0);
         expect(wrapper.find('.text-input-verified').length).toBe(0);
     });
 
     test('should show Tooltip when error exists', () => {
-        const wrapper = shallow(<TextInput label="label" error="error" />);
+        const wrapper = shallow(<TextInput error="error" label="label" />);
 
         const tooltip = wrapper.find('Tooltip');
         expect(tooltip.prop('isShown')).toBe(true);
     });
 
     test('should show Tooltip for an error at a custom position', () => {
-        const wrapper = shallow(<TextInput label="label" error="error" errorPosition="bottom-center" />);
+        const wrapper = shallow(<TextInput error="error" errorPosition="bottom-center" label="label" />);
 
         const tooltip = wrapper.find('Tooltip');
         expect(tooltip.prop('position')).toBe('bottom-center');

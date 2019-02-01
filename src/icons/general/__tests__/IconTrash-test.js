@@ -19,7 +19,7 @@ describe('icons/general/IconTrash', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 17;
         const height = 17;
-        const wrapper = shallow(<IconTrash width={width} height={height} />);
+        const wrapper = shallow(<IconTrash height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

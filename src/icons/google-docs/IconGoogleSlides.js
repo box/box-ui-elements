@@ -35,13 +35,13 @@ class IconGoogleSlides extends React.Component<Props> {
             >
                 <defs>
                     <linearGradient
-                        id={`${this.idPrefix}a`}
-                        x1="-215.49"
-                        y1="505.79"
-                        x2="-215.49"
-                        y2="503.19"
                         gradientTransform="matrix(2.67 0 0 -2.67 596.67 1357)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}a`}
+                        x1="-215.49"
+                        x2="-215.49"
+                        y1="505.79"
+                        y2="503.19"
                     >
                         <stop offset="0" stopColor="#d08714" stopOpacity=".88" />
                         <stop offset=".55" stopColor="#cf8714" stopOpacity=".2" />
@@ -51,7 +51,7 @@ class IconGoogleSlides extends React.Component<Props> {
                     d="M17.64 0H6.05A2.05 2.05 0 0 0 4 2.05V28a2.05 2.05 0 0 0 2.05 2h17.72a2.05 2.05 0 0 0 2.05-2V8.18l-4.77-3.41z"
                     fill="#f4b912"
                 />
-                <path fill={`url(#${this.idPrefix}a)`} d="M18.23 7.58l7.59 7.58V8.18l-7.59-.6z" />
+                <path d="M18.23 7.58l7.59 7.58V8.18l-7.59-.6z" fill={`url(#${this.idPrefix}a)`} />
                 <path d="M17.64 0v6.14a2 2 0 0 0 2 2h6.14z" fill="#fadc87" />
                 <path
                     d="M6.05 0A2.05 2.05 0 0 0 4 2.05v.17A2.05 2.05 0 0 1 6.05.17h11.59V0z"

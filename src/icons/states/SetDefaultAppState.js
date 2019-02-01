@@ -32,7 +32,7 @@ const SetDefaultAppState = ({ className = '', color = BOX_BLUE, height = 160, ti
             d="M91 18h6.71a1 1 0 0 1 1 1 .94.94 0 0 1-.24.64l-3.35 4a1 1 0 0 1-1.41.12l-.12-.12-3.36-4a1 1 0 0 1 .13-1.41A1 1 0 0 1 91 18z"
             fill={color}
         />
-        <rect x={9} y={10} width={22} height={22} rx={4} ry={4} fill="#fff" />
+        <rect fill="#fff" height={22} rx={4} ry={4} width={22} x={9} y={10} />
         <path
             className="fill-color"
             d="M27 33H13a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5h14a5 5 0 0 1 5 5v14a5 5 0 0 1-5 5zM13 11a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V14a3 3 0 0 0-3-3z"

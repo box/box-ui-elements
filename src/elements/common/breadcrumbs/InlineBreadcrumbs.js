@@ -12,9 +12,9 @@ import { DELIMITER_SLASH } from '../../../constants';
 import './InlineBreadcrumbs.scss';
 
 type Props = {
-    rootId: string,
     item: BoxItem,
     onItemClick: Function,
+    rootId: string,
 };
 
 const InlineBreadcrumbs = ({ rootId, item, onItemClick }: Props) => {
@@ -24,7 +24,7 @@ const InlineBreadcrumbs = ({ rootId, item, onItemClick }: Props) => {
         <span className="be-inline-breadcrumbs">
             <FormattedMessage {...messages.in} />
             &nbsp;
-            <Breadcrumbs rootId={rootId} crumbs={breadcrumbs} onCrumbClick={onItemClick} delimiter={DELIMITER_SLASH} />
+            <Breadcrumbs crumbs={breadcrumbs} delimiter={DELIMITER_SLASH} onCrumbClick={onItemClick} rootId={rootId} />
         </span>
     );
 };

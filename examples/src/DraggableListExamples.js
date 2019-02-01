@@ -56,7 +56,7 @@ class DraggableListExamples extends Component<Props, State> {
         const { items, listId } = this.state;
 
         return (
-            <DraggableList className="draggable-list-example-container" onDragEnd={this.onDragEnd} listId={listId}>
+            <DraggableList className="draggable-list-example-container" listId={listId} onDragEnd={this.onDragEnd}>
                 {items.map((item, index) => (
                     <DraggableListItem
                         key={`draggable-${index}`}

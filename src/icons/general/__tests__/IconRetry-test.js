@@ -22,7 +22,7 @@ describe('icons/general/IconRetry', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconRetry width={width} height={height} />);
+        const wrapper = shallow(<IconRetry height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

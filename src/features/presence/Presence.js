@@ -27,6 +27,7 @@ import messages from './messages';
 import './Presence.scss';
 
 class Presence extends Component {
+    /* eslint-disable no-underscore-dangle */
     static propTypes = {
         /** Addtional attributes for avatar container */
         avatarAttributes: PropTypes.object,
@@ -225,7 +226,8 @@ class Presence extends Component {
 
         if (!showActivityPrompt && experimentBucket === GROWTH_382_EXPERIMENT_BUCKET) {
             requestAccessStats = (
-                <a href="#" className="presence-dropdown-request-stats" onClick={onAccessStatsRequested}>
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                <a className="presence-dropdown-request-stats" href="#" onClick={onAccessStatsRequested}>
                     <FormattedMessage {...messages.previewPresenceFlyoutAccessStatsLink} />
                 </a>
             );
@@ -247,27 +249,28 @@ class Presence extends Component {
             <PresenceDropdown
                 className="presence-dropdown"
                 collaborators={collaborators}
+                experimentBucket={experimentBucket}
                 getLinkCallback={getLinkCallback}
                 inviteCallback={inviteCallback}
-                experimentBucket={experimentBucket}
                 onScroll={onFlyoutScroll}
             />
         );
         return (
             <Flyout
                 className={`presence ${className}`}
-                position={flyoutPosition}
-                onOpen={this._handleOverlayOpen}
-                onClose={this._handleOverlayClose}
-                isVisibleByDefault={showActivityPrompt}
+                closeOnWindowBlur={closeOnWindowBlur}
                 constrainToScrollParent={constrainToScrollParent}
                 constrainToWindow={constrainToWindow}
-                closeOnWindowBlur={closeOnWindowBlur}
+                isVisibleByDefault={showActivityPrompt}
+                onClose={this._handleOverlayClose}
+                onOpen={this._handleOverlayOpen}
+                position={flyoutPosition}
             >
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <div
+                    ref={this.saveRefToContainer}
                     className="presence-avatar-container"
                     onKeyDown={this.handleKeyDown}
-                    ref={this.saveRefToContainer}
                     {...containerAttributes}
                 >
                     {collaborators.slice(0, maxDisplayedAvatars).map(collaborator => {
@@ -275,19 +278,19 @@ class Presence extends Component {
                         return (
                             <Tooltip
                                 key={id}
-                                text={this._renderAvatarTooltip(name, interactedAt, interactionType, isActive)}
                                 isShown={!isDropdownActive && activeTooltip === id}
                                 position="bottom-center"
+                                text={this._renderAvatarTooltip(name, interactedAt, interactionType, isActive)}
                             >
                                 <PresenceAvatar
-                                    id={id}
                                     avatarUrl={avatarUrl}
-                                    name={name}
+                                    id={id}
                                     isActive={isActive}
+                                    name={name}
+                                    onBlur={this._hideTooltip}
+                                    onFocus={this._showTooltip.bind(this, id)}
                                     onMouseEnter={this._showTooltip.bind(this, id)}
                                     onMouseLeave={this._hideTooltip}
-                                    onFocus={this._showTooltip.bind(this, id)}
-                                    onBlur={this._hideTooltip}
                                     {...avatarAttributes}
                                 />
                             </Tooltip>
@@ -295,6 +298,7 @@ class Presence extends Component {
                     })}
 
                     {collaborators.length > maxDisplayedAvatars && (
+                        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                         <div className={presenceCountClassName} tabIndex="0" {...avatarAttributes}>
                             {collaborators.length - maxDisplayedAvatars > maxAdditionalCollaboratorsNum
                                 ? `${maxAdditionalCollaboratorsNum}+`

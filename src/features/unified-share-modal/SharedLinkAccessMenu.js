@@ -7,7 +7,7 @@ import DropdownMenu, { MenuToggle } from 'components/dropdown-menu';
 import { Menu, SelectMenuItem } from 'components/menu';
 import PlainButton from 'components/plain-button';
 import Tooltip from 'components/tooltip';
-import type { itemType } from '../../common/box-types';
+import type { itemType as ItemType } from '../../common/box-types';
 
 import SharedLinkAccessLabel from './SharedLinkAccessLabel';
 import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from './constants';
@@ -22,7 +22,7 @@ type Props = {
     changeAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
     classificationName?: string,
     enterpriseName?: string,
-    itemType: itemType,
+    itemType: ItemType,
     submitting: boolean,
     trackingProps: {
         onChangeSharedLinkAccessLevel?: Function,
@@ -61,10 +61,10 @@ class SharedLinkAccessMenu extends Component<Props> {
                     if (!isDisabled || isDisabledByClassification) {
                         menuItem = (
                             <SelectMenuItem
-                                onClick={() => this.onChangeAccessLevel(level)}
-                                isSelected={level === accessLevel}
                                 key={level}
                                 isDisabled={isDisabled}
+                                isSelected={level === accessLevel}
+                                onClick={() => this.onChangeAccessLevel(level)}
                             >
                                 <SharedLinkAccessLabel
                                     accessLevel={level}
@@ -79,6 +79,7 @@ class SharedLinkAccessMenu extends Component<Props> {
                         return (
                             <Tooltip
                                 key={`tooltip-${level}`}
+                                position="top-center"
                                 text={
                                     <FormattedMessage
                                         {...messages.disabledShareLinkPermission}
@@ -87,7 +88,6 @@ class SharedLinkAccessMenu extends Component<Props> {
                                         }}
                                     />
                                 }
-                                position="top-center"
                             >
                                 {menuItem}
                             </Tooltip>

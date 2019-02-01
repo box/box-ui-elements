@@ -4,7 +4,7 @@ import AccessStatsItem from '../AccessStatsItem';
 
 describe('features/access-stats/AccessStatsItem', () => {
     const getWrapper = (props = {}) =>
-        shallow(<AccessStatsItem type="preview" count={100} statButtonProps={{}} {...props} />);
+        shallow(<AccessStatsItem count={100} statButtonProps={{}} type="preview" {...props} />);
     [
         {
             type: 'preview',

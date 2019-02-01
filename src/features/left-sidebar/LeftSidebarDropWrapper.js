@@ -19,7 +19,7 @@ const LeftSidebarDropWrapper = ({
     dropTargetRef,
     ...rest
 }: Props) => (
-    <div className={`left-sidebar-drop-wrapper ${className}`} ref={dropTargetRef} {...rest}>
+    <div ref={dropTargetRef} className={`left-sidebar-drop-wrapper ${className}`} {...rest}>
         {isDragging ? (
             <div className="left-sidebar-drop-veil">
                 <span className="left-sidebar-drop-wrapper-text">{message}</span>

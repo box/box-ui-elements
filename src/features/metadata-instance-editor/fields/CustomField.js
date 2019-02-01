@@ -12,10 +12,10 @@ import messages from '../messages';
 import './CustomField.scss';
 
 type Props = {
+    canEdit: boolean,
     dataKey: string,
     dataValue: MetadataFieldValue,
     intl: any,
-    canEdit: boolean,
     isLast: boolean,
     onAdd: () => void,
     onChange: (key: string, value: MetadataFieldValue) => void,
@@ -29,8 +29,8 @@ const CustomField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChang
         <Button
             aria-label={intl.formatMessage(messages.customAdd)}
             data-resin-target="metadata-customfieldnew"
-            type="button"
             onClick={onAdd}
+            type="button"
         >
             <IconPlus color={COLOR_999} />
         </Button>
@@ -40,12 +40,12 @@ const CustomField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChang
         <Button
             aria-label={intl.formatMessage(messages.customRemove)}
             data-resin-target="metadata-customfieldremove"
-            type="button"
             onClick={() => {
                 if (onRemove) {
                     onRemove(dataKey);
                 }
             }}
+            type="button"
         >
             <IconMinus color={COLOR_999} />
         </Button>
@@ -55,10 +55,10 @@ const CustomField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChang
         <div className="metadata-instance-editor-field-custom">
             {/* $FlowFixMe */}
             <Field
+                canEdit={canEdit}
                 dataKey={dataKey}
                 dataValue={dataValue}
                 displayName={dataKey}
-                canEdit={canEdit}
                 onChange={onChange}
                 // Custom metadata doesn't allow removing of props if the value is emptied out, leave it as empty string
                 onRemove={(key: string) => onChange(key, '')}

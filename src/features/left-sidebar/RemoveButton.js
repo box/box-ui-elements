@@ -12,7 +12,7 @@ type Props = {
 };
 
 const RemoveButton = ({ onClickRemove, removeButtonHtmlAttributes = {} }: Props) => (
-    <PlainButton onClick={onClickRemove} className="lsb-remove-button" {...removeButtonHtmlAttributes}>
+    <PlainButton className="lsb-remove-button" onClick={onClickRemove} {...removeButtonHtmlAttributes}>
         <IconClose className="lsb-remove-button-icon" width={13} />
     </PlainButton>
 );

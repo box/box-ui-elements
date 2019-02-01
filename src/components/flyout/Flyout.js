@@ -122,7 +122,7 @@ export type FlyoutProps = {
     /**
      * Will fire this callback when the flyout should open
      */
-    onOpen?: Function,
+    offset?: string,
     /**
      * Will fire this callback when the flyout should close
      */
@@ -130,7 +130,7 @@ export type FlyoutProps = {
     /**
      * Adjusts placement of the overlay (SEE http://tether.io/#options)
      */
-    offset?: string,
+    onOpen?: Function,
     /**
      * Whether overlay should open on hover
      */
@@ -160,8 +160,8 @@ export type FlyoutProps = {
 };
 
 type State = {
-    isVisible: boolean,
     isButtonClicked: boolean,
+    isVisible: boolean,
 };
 
 type Props = FlyoutProps;
@@ -240,13 +240,13 @@ class Flyout extends React.Component<Props, State> {
             return;
         }
 
-        this.handleOverlayClose(event);
+        this.handleOverlayClose();
     };
 
     handleButtonClick = (event: SyntheticUIEvent<>) => {
         const { isVisible } = this.state;
         if (isVisible) {
-            this.closeOverlay(event);
+            this.closeOverlay();
         } else {
             this.openOverlay();
         }
@@ -263,7 +263,7 @@ class Flyout extends React.Component<Props, State> {
 
     hoverDelay: TimeoutID | void;
 
-    handleButtonHover = (event: SyntheticUIEvent<>) => {
+    handleButtonHover = () => {
         const { openOnHover, openOnHoverDelayTimeout } = this.props;
         if (openOnHover) {
             clearTimeout(this.hoverDelay);
@@ -274,7 +274,7 @@ class Flyout extends React.Component<Props, State> {
         }
     };
 
-    handleButtonHoverLeave = (event: SyntheticUIEvent<>) => {
+    handleButtonHoverLeave = () => {
         const { openOnHover, openOnHoverDelayTimeout } = this.props;
         if (openOnHover) {
             clearTimeout(this.hoverDelay);
@@ -296,7 +296,7 @@ class Flyout extends React.Component<Props, State> {
         }
     };
 
-    closeOverlay = (event?: SyntheticEvent<>) => {
+    closeOverlay = () => {
         this.setState({
             isVisible: false,
         });
@@ -314,9 +314,9 @@ class Flyout extends React.Component<Props, State> {
         }
     };
 
-    handleOverlayClose = (event?: SyntheticEvent<>) => {
+    handleOverlayClose = () => {
         this.focusButton();
-        this.closeOverlay(event);
+        this.closeOverlay();
     };
 
     handleDocumentClickOrWindowBlur = (event: MouseEvent | FocusEvent) => {

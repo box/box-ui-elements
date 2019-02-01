@@ -28,7 +28,7 @@ describe('components/label/Label', () => {
 
     test('should render the hidden label when hideLabel is set', () => {
         const wrapper = shallow(
-            <Label text={text} hideLabel>
+            <Label hideLabel text={text}>
                 <input type="text" />
             </Label>,
         );
@@ -40,7 +40,7 @@ describe('components/label/Label', () => {
 
     test('should correctly render optional text when specified', () => {
         const wrapper = mount(
-            <Label text={text} showOptionalText>
+            <Label showOptionalText text={text}>
                 <input type="text" />
             </Label>,
         );

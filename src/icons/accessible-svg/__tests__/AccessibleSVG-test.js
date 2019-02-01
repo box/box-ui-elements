@@ -7,12 +7,12 @@ describe('icons/accessible-svg/AccessibleSVG', () => {
         test('should correctly svg with correct props and aria labels', () => {
             const wrapper = shallow(
                 <AccessibleSVG
-                    className="whatup"
-                    width={24}
-                    height={24}
-                    viewBox="0 0 24 24"
                     aria-labelledby="blagh"
+                    className="whatup"
+                    height={24}
                     role="img"
+                    viewBox="0 0 24 24"
+                    width={24}
                 >
                     <path d="M0 1h10l-.7 1H0z" />
                 </AccessibleSVG>,

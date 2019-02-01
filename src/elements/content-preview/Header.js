@@ -72,54 +72,54 @@ const Header = ({
                     {canAnnotate && (
                         <React.Fragment>
                             <PlainButton
-                                type="button"
+                                aria-label={drawMsg}
                                 className="bcpr-btn bp-btn-annotate-draw bp-is-hidden"
                                 title={drawMsg}
-                                aria-label={drawMsg}
+                                type="button"
                             >
-                                <IconDrawAnnotationMode color={COLOR_999} width={18} height={18} />
+                                <IconDrawAnnotationMode color={COLOR_999} height={18} width={18} />
                             </PlainButton>
                             <PlainButton
-                                type="button"
+                                aria-label={pointMsg}
                                 className="bcpr-btn bp-btn-annotate-point bp-is-hidden"
                                 title={pointMsg}
-                                aria-label={pointMsg}
+                                type="button"
                             >
-                                <IconPointAnnotation color={COLOR_999} width={18} height={18} />
+                                <IconPointAnnotation color={COLOR_999} height={18} width={18} />
                             </PlainButton>
                         </React.Fragment>
                     )}
                     {canDownload && (
                         <PlainButton
-                            type="button"
+                            aria-label={printMsg}
                             className="bcpr-btn"
                             onClick={onPrint}
                             title={printMsg}
-                            aria-label={printMsg}
+                            type="button"
                         >
-                            <IconPrint color={COLOR_999} width={22} height={22} />
+                            <IconPrint color={COLOR_999} height={22} width={22} />
                         </PlainButton>
                     )}
                     {canDownload && (
                         <PlainButton
-                            type="button"
+                            aria-label={downloadMsg}
                             className="bcpr-btn"
                             onClick={onDownload}
                             title={downloadMsg}
-                            aria-label={downloadMsg}
+                            type="button"
                         >
-                            <IconDownload color={COLOR_999} width={18} height={18} />
+                            <IconDownload color={COLOR_999} height={18} width={18} />
                         </PlainButton>
                     )}
                     {onClose && (
                         <PlainButton
-                            type="button"
+                            aria-label={closeMsg}
                             className="bcpr-btn"
                             onClick={onClose}
                             title={closeMsg}
-                            aria-label={closeMsg}
+                            type="button"
                         >
-                            <IconClose color={COLOR_999} width={24} height={24} />
+                            <IconClose color={COLOR_999} height={24} width={24} />
                         </PlainButton>
                     )}
                 </div>

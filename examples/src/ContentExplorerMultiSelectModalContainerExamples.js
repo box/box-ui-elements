@@ -127,11 +127,11 @@ class ContentExplorerMultiSelectModalContainerExamples extends Component {
         });
     };
 
-    handleEnterFolder = (enteredFolder, newFoldersPath) => {
+    handleEnterFolder = enteredFolder => {
         this.setState({ folderId: enteredFolder.id });
     };
 
-    handleSearchSubmit = searchQuery => {
+    handleSearchSubmit = () => {
         this.setState({
             folderId: 'search',
         });
@@ -150,7 +150,7 @@ class ContentExplorerMultiSelectModalContainerExamples extends Component {
         });
     };
 
-    handleOnItemRemove = (item, index) => {
+    handleOnItemRemove = () => {
         this.setState({
             exampleMessage: 'User Filtered Removed',
             folderId: '0',

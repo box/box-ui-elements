@@ -30,70 +30,70 @@ class FileCircleIllustration extends React.PureComponent<Props> {
                 className={`${ICON_CLASS} ${className}`}
                 height={height}
                 title={title}
-                width={width}
                 viewBox="0 0 140 140"
+                width={width}
             >
                 <defs>
-                    <rect id="b" width={18} height={18} rx={2} />
-                    <filter x="-86.1%" y="-80.6%" width="272.2%" height="272.2%" filterUnits="objectBoundingBox" id="a">
+                    <rect height={18} id="b" rx={2} width={18} />
+                    <filter filterUnits="objectBoundingBox" height="272.2%" id="a" width="272.2%" x="-86.1%" y="-80.6%">
                         <feOffset dy={1} in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation={5} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation={5} />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
                     </filter>
-                    <rect id="d" width={18} height={18} rx={2} />
-                    <filter x="-86.1%" y="-80.6%" width="272.2%" height="272.2%" filterUnits="objectBoundingBox" id="c">
+                    <rect height={18} id="d" rx={2} width={18} />
+                    <filter filterUnits="objectBoundingBox" height="272.2%" id="c" width="272.2%" x="-86.1%" y="-80.6%">
                         <feOffset dy={1} in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation={5} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation={5} />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
                     </filter>
-                    <rect id="f" width={18} height={18} rx={2} />
-                    <filter x="-86.1%" y="-80.6%" width="272.2%" height="272.2%" filterUnits="objectBoundingBox" id="e">
+                    <rect height={18} id="f" rx={2} width={18} />
+                    <filter filterUnits="objectBoundingBox" height="272.2%" id="e" width="272.2%" x="-86.1%" y="-80.6%">
                         <feOffset dy={1} in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation={5} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation={5} />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
                     </filter>
-                    <rect id="h" width={18} height={18} rx={2} />
-                    <filter x="-86.1%" y="-80.6%" width="272.2%" height="272.2%" filterUnits="objectBoundingBox" id="g">
+                    <rect height={18} id="h" rx={2} width={18} />
+                    <filter filterUnits="objectBoundingBox" height="272.2%" id="g" width="272.2%" x="-86.1%" y="-80.6%">
                         <feOffset dy={1} in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation={5} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation={5} />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
                     </filter>
-                    <rect id="j" width={18} height={18} rx={2} />
-                    <filter x="-86.1%" y="-80.6%" width="272.2%" height="272.2%" filterUnits="objectBoundingBox" id="i">
+                    <rect height={18} id="j" rx={2} width={18} />
+                    <filter filterUnits="objectBoundingBox" height="272.2%" id="i" width="272.2%" x="-86.1%" y="-80.6%">
                         <feOffset dy={1} in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation={5} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation={5} />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
                     </filter>
-                    <rect id="l" width={18} height={18} rx={2} />
-                    <filter x="-86.1%" y="-80.6%" width="272.2%" height="272.2%" filterUnits="objectBoundingBox" id="k">
+                    <rect height={18} id="l" rx={2} width={18} />
+                    <filter filterUnits="objectBoundingBox" height="272.2%" id="k" width="272.2%" x="-86.1%" y="-80.6%">
                         <feOffset dy={1} in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation={5} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation={5} />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
                     </filter>
-                    <rect id="n" width={18} height={18} rx={2} />
-                    <filter x="-86.1%" y="-80.6%" width="272.2%" height="272.2%" filterUnits="objectBoundingBox" id="m">
+                    <rect height={18} id="n" rx={2} width={18} />
+                    <filter filterUnits="objectBoundingBox" height="272.2%" id="m" width="272.2%" x="-86.1%" y="-80.6%">
                         <feOffset dy={1} in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation={5} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation={5} />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
                     </filter>
-                    <rect id="o" x=".86" width="4.29" height={9} rx=".78" />
+                    <rect height={9} id="o" rx=".78" width="4.29" x=".86" />
                 </defs>
-                <g transform="translate(10 10)" fill="none" fillRule="evenodd">
-                    <circle fill="#FC627A" cx={60} cy={60} r={60} />
+                <g fill="none" fillRule="evenodd" transform="translate(10 10)">
+                    <circle cx={60} cy={60} fill="#FC627A" r={60} />
                     <path
                         d="M36.6 41.4a1 1 0 0 0 .81.44h35.6a1 1 0 0 1 .99 1.01V82a1 1 0 0 1-1 1H15a1 1 0 0 1-1-1.01V38a1 1 0 0 1 1-1h18.05a1 1 0 0 1 .82.47l2.73 3.94z"
                         fill="#F7D271"
                         fillRule="nonzero"
                     />
                     <g transform="translate(20 49)">
-                        <rect fill="#FFF" opacity=".24" width={28} height={28} rx={14} />
+                        <rect fill="#FFF" height={28} opacity=".24" rx={14} width={28} />
                         <path d="M19.7 17a5.7 5.7 0 1 0-11.4 0 5.7 5.7 0 0 0 11.4 0z" stroke="#FFF" strokeWidth=".6" />
                         <path
                             d="M10 12.8v-2.57C10 7.89 11.8 6 14 6s4 1.9 4 4.23v2.57M14 15v4"
                             stroke="#FFF"
-                            strokeWidth=".6"
                             strokeLinecap="round"
                             strokeLinejoin="round"
+                            strokeWidth=".6"
                         />
                     </g>
                     <g transform="translate(54 8)">
@@ -103,8 +103,8 @@ class FileCircleIllustration extends React.PureComponent<Props> {
                         </g>
                         <path
                             d="M56.81 55v-2.95H51.1v4.29a1.43 1.43 0 1 1-1.43-1.43c.17-.02.33.01.48.1v-6.77h7.62v8.1a1.43 1.43 0 1 1-1.42-1.43c.16-.02.33.01.47.1zm-5.72-3.9h5.72v-1.91H51.1v1.9z"
-                            fillOpacity=".6"
                             fill="#980DE0"
+                            fillOpacity=".6"
                             fillRule="nonzero"
                         />
                         <g transform="translate(0 44)">
@@ -158,37 +158,37 @@ class FileCircleIllustration extends React.PureComponent<Props> {
                         <g transform="rotate(45 -9.1 67.5)">
                             <use fill="#FFF" xlinkHref="#o" />
                             <rect
+                                fill="#BDC3C7"
+                                fillOpacity=".05"
+                                height="9.78"
+                                rx=".78"
                                 stroke="#FFF"
                                 strokeWidth=".78"
-                                fillOpacity=".05"
-                                fill="#BDC3C7"
+                                width="5.06"
                                 x=".47"
                                 y="-.39"
-                                width="5.06"
-                                height="9.78"
-                                rx=".78"
                             />
                             <rect
-                                stroke="#737F8B"
-                                strokeWidth=".78"
-                                x=".47"
-                                y="-.39"
-                                width="5.06"
                                 height="9.78"
                                 rx=".78"
+                                stroke="#737F8B"
+                                strokeWidth=".78"
+                                width="5.06"
+                                x=".47"
+                                y="-.39"
                             />
                         </g>
-                        <path fill="#FBFCFC" d="M42.17 29.09l4.24 4.24-.7.7-4.25-4.23z" />
-                        <path fill="#737F8B" d="M45.15 29.75l.7.7-2.89 2.9-.7-.71z" />
-                        <rect fill="#FFF" opacity=".2" x={22} width={18} height={18} rx={2} />
-                        <rect fill="#FFF" opacity=".2" x={44} width={18} height={18} rx={2} />
-                        <rect fill="#FFF" opacity=".2" x={57} y={22} width={18} height={18} rx={2} />
-                        <rect fill="#FFF" opacity=".2" x={54} y={66} width={18} height={18} rx={2} />
-                        <rect fill="#FFF" opacity=".2" x={57} y={88} width={18} height={18} rx={2} />
-                        <rect fill="#FFF" opacity=".2" x={66} y={44} width={18} height={18} rx={2} />
-                        <rect fill="#FFF" opacity=".2" x={35} y={88} width={18} height={18} rx={2} />
-                        <rect fill="#FFF" opacity=".2" x={13} y={88} width={18} height={18} rx={2} />
-                        <rect fill="#FFF" opacity=".2" x={21} y={110} width={18} height={18} rx={2} />
+                        <path d="M42.17 29.09l4.24 4.24-.7.7-4.25-4.23z" fill="#FBFCFC" />
+                        <path d="M45.15 29.75l.7.7-2.89 2.9-.7-.71z" fill="#737F8B" />
+                        <rect fill="#FFF" height={18} opacity=".2" rx={2} width={18} x={22} />
+                        <rect fill="#FFF" height={18} opacity=".2" rx={2} width={18} x={44} />
+                        <rect fill="#FFF" height={18} opacity=".2" rx={2} width={18} x={57} y={22} />
+                        <rect fill="#FFF" height={18} opacity=".2" rx={2} width={18} x={54} y={66} />
+                        <rect fill="#FFF" height={18} opacity=".2" rx={2} width={18} x={57} y={88} />
+                        <rect fill="#FFF" height={18} opacity=".2" rx={2} width={18} x={66} y={44} />
+                        <rect fill="#FFF" height={18} opacity=".2" rx={2} width={18} x={35} y={88} />
+                        <rect fill="#FFF" height={18} opacity=".2" rx={2} width={18} x={13} y={88} />
+                        <rect fill="#FFF" height={18} opacity=".2" rx={2} width={18} x={21} y={110} />
                     </g>
                 </g>
             </AccessibleSVG>

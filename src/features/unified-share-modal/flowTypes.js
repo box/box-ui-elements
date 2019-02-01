@@ -24,9 +24,9 @@ const collaboratorGroupValues = {
 export type collaboratorGroupType = $Keys<typeof collaboratorGroupValues>;
 
 export type allowedAccessLevelsType = {
-    peopleWithTheLink?: boolean,
-    peopleInYourCompany?: boolean,
     peopleInThisItem?: boolean,
+    peopleInYourCompany?: boolean,
+    peopleWithTheLink?: boolean,
 };
 
 export type contactType = {
@@ -56,11 +56,11 @@ export type item = {
 };
 
 export type emailFormTrackingType = {
+    cancelButtonProps?: Object,
+    messageProps?: Object,
     onContactAdd?: Function,
     onContactRemove?: Function,
     onSendClick?: Function,
-    cancelButtonProps?: Object,
-    messageProps?: Object,
 };
 
 export type sharedLinkTrackingType = {
@@ -77,38 +77,38 @@ export type sharedLinkTrackingType = {
 
 export type collaboratorListTrackingType = {
     doneButtonProps?: Object,
+    emailProps?: Object,
     manageLinkProps?: Object,
     usernameProps?: Object,
-    emailProps?: Object,
     viewAdditionalProps?: Object,
 };
 
 export type trackingPropsType = {
+    collaboratorListTracking: collaboratorListTrackingType,
+    inviteCollabTracking: {
+        inviteePermissionsButtonProps?: Object,
+        onEnterInviteCollabs?: Function,
+        onInviteePermissionChange?: Function,
+    },
     inviteCollabsEmailTracking: {
         ...emailFormTrackingType,
         upgradeLinkProps?: Object,
     },
-    sharedLinkEmailTracking: emailFormTrackingType,
-    sharedLinkTracking: sharedLinkTrackingType,
-    inviteCollabTracking: {
-        onEnterInviteCollabs?: Function,
-        onInviteePermissionChange?: Function,
-        inviteePermissionsButtonProps?: Object,
-    },
     modalTracking: {
-        onLoad?: Function,
-        modalProps?: Object,
         betaLabelProps?: Object,
         collaboratorAvatarsProps?: Object,
         ftuxConfirmButtonProps?: Object,
+        modalProps?: Object,
+        onLoad?: Function,
     },
     removeLinkConfirmModalTracking: {
-        modalProps?: Object,
         cancelButtonProps?: Object,
+        modalProps?: Object,
         okayButtonProps?: Object,
         onLoad?: Function,
     },
-    collaboratorListTracking: collaboratorListTrackingType,
+    sharedLinkEmailTracking: emailFormTrackingType,
+    sharedLinkTracking: sharedLinkTrackingType,
 };
 
 // this type is a strict subset of the SharedLinkRecord data returned from the server

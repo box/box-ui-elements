@@ -7,14 +7,14 @@ import { getTypedFileId } from 'utils/file';
 import Base from './Base';
 
 type Params = {
-    marker: string,
     limit: number,
+    marker: string,
 };
 
 type Data = {
-    next_marker: string,
-    limit: number,
     entries: Array<any>,
+    limit: number,
+    next_marker: string,
 };
 
 class MarkerBasedApi extends Base {
@@ -106,13 +106,13 @@ class MarkerBasedApi extends Base {
         requestData,
         shouldFetchAll = true,
     }: {
-        id: string,
-        successCallback: Function,
         errorCallback: ElementsErrorCallback,
-        marker?: string,
+        id: string,
         limit?: number,
+        marker?: string,
         requestData?: Object,
         shouldFetchAll?: boolean,
+        successCallback: Function,
     }): Promise<void> {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;

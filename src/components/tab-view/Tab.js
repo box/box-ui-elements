@@ -5,10 +5,10 @@ import * as React from 'react';
 type Props = {
     children?: React.Node,
     className?: string,
-    title: string,
-    href?: string,
     component?: React.ElementType,
+    href?: string,
     refProp?: string,
+    title: string,
 };
 /* eslint-enable react/no-unused-prop-types */
 

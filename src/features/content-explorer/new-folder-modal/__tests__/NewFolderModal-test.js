@@ -11,8 +11,8 @@ describe('features/content-explorer/new-folder-modal/NewFolderModal', () => {
             <NewFolderModal
                 intl={{ formatMessage: () => '' }}
                 isOpen
-                onRequestClose={() => {}}
                 onCreateFolderSubmit={() => {}}
+                onRequestClose={() => {}}
                 {...props}
             />,
         );

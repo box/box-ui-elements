@@ -8,7 +8,9 @@ exports[`components/tooltip/LeftSidebarLinkCallout render() should hide callout 
   renderElementTo={null}
   targetAttachment="middle right"
 >
-  <button />
+  <button
+    type="button"
+  />
 </TetherComponent>
 `;
 
@@ -20,7 +22,9 @@ exports[`components/tooltip/LeftSidebarLinkCallout render() should render defaul
   renderElementTo={null}
   targetAttachment="middle right"
 >
-  <button />
+  <button
+    type="button"
+  />
   <div
     className="nav-link-callout"
   >

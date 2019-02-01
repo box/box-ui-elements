@@ -13,16 +13,16 @@ import commonMessages from '../../../common/messages';
 import CollaboratorListItem from './CollaboratorListItem';
 import messages from '../messages';
 
-import type { collaboratorListTrackingType, item, collaboratorType } from '../flowTypes';
+import type { collaboratorListTrackingType, item as ItemType, collaboratorType } from '../flowTypes';
 
 const MAX_COLLABORATOR_LIST_SIZE = 90;
 
 type Props = {
-    item: item,
     collaborators: Array<collaboratorType>,
+    doneButtonProps?: Object,
+    item: ItemType,
     maxCollaboratorListSize: number,
     onDoneClick: Function,
-    doneButtonProps?: Object,
     trackingProps: collaboratorListTrackingType,
 };
 

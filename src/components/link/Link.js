@@ -8,6 +8,7 @@ type Props = {
     className: string,
 };
 
+// eslint-disable-next-line react/prefer-stateless-function
 class Link extends React.Component<Props> {
     static defaultProps = {
         className: '',

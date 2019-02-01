@@ -14,7 +14,7 @@ describe('components/avatar/AvatarInitials', () => {
     });
 
     test('should set a backgroundColor based on id', () => {
-        const wrapper = shallow(<AvatarInitials name="hello world" id="10" />);
+        const wrapper = shallow(<AvatarInitials id="10" name="hello world" />);
         expect(wrapper.prop('style').backgroundColor).toEqual('#0D67C7');
     });
 

@@ -43,15 +43,15 @@ type Props = {
     id: string,
     isCascadingPolicyApplicable?: boolean,
     isDirty: boolean,
+    isOpen: boolean,
     onModification?: (id: string, isDirty: boolean, type?: string) => void,
+    onRemove?: (id: string) => void,
     onSave?: (
         id: string,
         data: JSONPatchOperations,
         cascadingPolicy?: MetadataCascadingPolicyData,
         rawData: Object,
     ) => void,
-    onRemove?: (id: string) => void,
-    isOpen: boolean,
     template: MetadataTemplate,
 };
 
@@ -558,12 +558,12 @@ class Instance extends React.PureComponent<Props, State> {
 
         if (canEdit && !isDirty && !isBusy) {
             return (
-                <Tooltip text={<FormattedMessage {...messages.metadataEditTooltip} />} position="top-left">
+                <Tooltip position="top-left" text={<FormattedMessage {...messages.metadataEditTooltip} />}>
                     <PlainButton
-                        data-resin-target="metadata-instanceedit"
-                        type="button"
                         className={editClassName}
+                        data-resin-target="metadata-instanceedit"
                         onClick={this.toggleIsEditing}
+                        type="button"
                     >
                         <IconEdit />
                     </PlainButton>
@@ -602,9 +602,9 @@ class Instance extends React.PureComponent<Props, State> {
                     buttonProps={{
                         [RESIN_TAG_TARGET]: 'metadata-card',
                     }}
-                    isBordered
                     hasStickyHeader
                     headerActionItems={this.renderEditButton()}
+                    isBordered
                     isOpen={isOpen}
                     title={this.getTitle()}
                 >
@@ -612,8 +612,8 @@ class Instance extends React.PureComponent<Props, State> {
                         <LoadingIndicatorWrapper isLoading={isBusy}>
                             <MetadataInstanceConfirmDialog
                                 confirmationMessage={this.getConfirmationMessage()}
-                                onConfirm={this.onRemove}
                                 onCancel={this.onConfirmCancel}
+                                onConfirm={this.onRemove}
                             />
                         </LoadingIndicatorWrapper>
                     )}
@@ -626,8 +626,8 @@ class Instance extends React.PureComponent<Props, State> {
                                         isCascadingEnabled={isCascadingEnabled}
                                         isCascadingOverwritten={isCascadingOverwritten}
                                         isCustomMetadata={isProperties}
-                                        onCascadeToggle={this.onCascadeToggle}
                                         onCascadeModeChange={this.onCascadeModeChange}
+                                        onCascadeToggle={this.onCascadeToggle}
                                         shouldShowCascadeOptions={shouldShowCascadeOptions}
                                     />
                                 )}
@@ -643,17 +643,17 @@ class Instance extends React.PureComponent<Props, State> {
                                         canEdit={isEditing}
                                         data={data}
                                         errors={errors}
-                                        template={template}
                                         onFieldChange={this.onFieldChange}
                                         onFieldRemove={this.onFieldRemove}
+                                        template={template}
                                     />
                                 )}
                             </div>
                             {isEditing && (
                                 <Footer
-                                    onSave={isDirty ? this.onSave : undefined}
                                     onCancel={this.onCancel}
                                     onRemove={this.onConfirmRemove}
+                                    onSave={isDirty ? this.onSave : undefined}
                                 />
                             )}
                         </LoadingIndicatorWrapper>

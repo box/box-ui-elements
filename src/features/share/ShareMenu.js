@@ -72,7 +72,7 @@ const ShareMenu = ({
             {canInvite ? (
                 inviteCollabsOption
             ) : (
-                <Tooltip text={inviteCollabTooltip} position="middle-left">
+                <Tooltip position="middle-left" text={inviteCollabTooltip}>
                     {inviteCollabsOption}
                 </Tooltip>
             )}

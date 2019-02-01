@@ -24,22 +24,22 @@ import type { contactType as Contact } from './flowTypes';
 
 type Props = {
     cancelButtonProps?: Object,
+    children?: React.Node,
     contactsFieldAvatars?: React.Node,
     contactsFieldDisabledTooltip: React.Node,
     contactsFieldLabel: React.Node,
-    children?: React.Node,
-    messageProps?: Object,
+    getContacts: (query: string) => Promise<Array<Contact>>,
     inlineNotice: {
-        type: inlineNoticeType,
         content: React.Node,
+        type: inlineNoticeType,
     },
     intl: IntlShape,
     isContactsFieldEnabled: boolean,
     isExpanded: boolean,
-    getContacts: (query: string) => Promise<Array<Contact>>,
+    messageProps?: Object,
     onContactAdd?: Function,
-    onContactRemove?: Function,
     onContactInput?: Function,
+    onContactRemove?: Function,
     onRequestClose: Function,
     onSubmit: Function,
     selectedContacts: Array<Contact>,
@@ -250,7 +250,7 @@ class EmailForm extends React.Component<Props, State> {
             contactsFieldWrap = contactsField;
         } else {
             contactsFieldWrap = (
-                <Tooltip text={contactsFieldDisabledTooltip} position="bottom-center">
+                <Tooltip position="bottom-center" text={contactsFieldDisabledTooltip}>
                     {contactsField}
                 </Tooltip>
             );
@@ -258,10 +258,10 @@ class EmailForm extends React.Component<Props, State> {
 
         return (
             <form
-                onSubmit={this.handleSubmit}
                 className={classNames({
                     'is-expanded': isExpanded,
                 })}
+                onSubmit={this.handleSubmit}
             >
                 {inlineNotice.content && isExpanded && (
                     <InlineNotice type={inlineNotice.type}>{inlineNotice.content}</InlineNotice>
@@ -272,8 +272,8 @@ class EmailForm extends React.Component<Props, State> {
                 {isExpanded && (
                     <TextArea
                         label={<FormattedMessage {...messages.messageTitle} />}
-                        placeholder={intl.formatMessage(commonMessages.messageSelectorPlaceholder)}
                         onChange={this.handleMessageChange}
+                        placeholder={intl.formatMessage(commonMessages.messageSelectorPlaceholder)}
                         rows={3}
                         value={message}
                         {...messageProps}

@@ -22,10 +22,10 @@ import {
 import './SidebarNav.scss';
 
 type Props = {
-    hasSkills: boolean,
-    hasMetadata: boolean,
     hasActivityFeed: boolean,
     hasDetails: boolean,
+    hasMetadata: boolean,
+    hasSkills: boolean,
     onToggle: Function,
     selectedView?: SidebarView,
 };
@@ -34,40 +34,40 @@ const SidebarNav = ({ hasSkills, hasMetadata, hasActivityFeed, hasDetails, onTog
     <nav>
         {hasActivityFeed && (
             <SidebarNavButton
-                tooltip={<FormattedMessage {...messages.sidebarActivityTitle} />}
-                onClick={() => onToggle(SIDEBAR_VIEW_ACTIVITY)}
                 interactionTarget={SIDEBAR_NAV_TARGETS.ACTIVITY}
                 isSelected={SIDEBAR_VIEW_ACTIVITY === selectedView}
+                onClick={() => onToggle(SIDEBAR_VIEW_ACTIVITY)}
+                tooltip={<FormattedMessage {...messages.sidebarActivityTitle} />}
             >
                 <IconChatRound />
             </SidebarNavButton>
         )}
         {hasDetails && (
             <SidebarNavButton
-                tooltip={<FormattedMessage {...messages.sidebarDetailsTitle} />}
-                onClick={() => onToggle(SIDEBAR_VIEW_DETAILS)}
                 interactionTarget={SIDEBAR_NAV_TARGETS.DETAILS}
                 isSelected={SIDEBAR_VIEW_DETAILS === selectedView}
+                onClick={() => onToggle(SIDEBAR_VIEW_DETAILS)}
+                tooltip={<FormattedMessage {...messages.sidebarDetailsTitle} />}
             >
                 <IconDocInfo />
             </SidebarNavButton>
         )}
         {hasSkills && (
             <SidebarNavButton
-                tooltip={<FormattedMessage {...messages.sidebarSkillsTitle} />}
-                onClick={() => onToggle(SIDEBAR_VIEW_SKILLS)}
                 interactionTarget={SIDEBAR_NAV_TARGETS.SKILLS}
                 isSelected={SIDEBAR_VIEW_SKILLS === selectedView}
+                onClick={() => onToggle(SIDEBAR_VIEW_SKILLS)}
+                tooltip={<FormattedMessage {...messages.sidebarSkillsTitle} />}
             >
                 <IconMagicWand />
             </SidebarNavButton>
         )}
         {hasMetadata && (
             <SidebarNavButton
-                tooltip={<FormattedMessage {...messages.sidebarMetadataTitle} />}
-                onClick={() => onToggle(SIDEBAR_VIEW_METADATA)}
                 interactionTarget={SIDEBAR_NAV_TARGETS.METADATA}
                 isSelected={SIDEBAR_VIEW_METADATA === selectedView}
+                onClick={() => onToggle(SIDEBAR_VIEW_METADATA)}
+                tooltip={<FormattedMessage {...messages.sidebarMetadataTitle} />}
             >
                 <IconMetadataThick />
             </SidebarNavButton>

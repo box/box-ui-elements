@@ -15,8 +15,8 @@ type Props = {
     className?: string,
     crawlerPosition?: Position,
     crawlerSize?: 'small' | 'medium' | 'large' | 'default',
-    isLoading?: boolean,
     hideContent?: boolean,
+    isLoading?: boolean,
 };
 
 const LoadingIndicatorWrapper = ({

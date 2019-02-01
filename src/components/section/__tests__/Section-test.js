@@ -21,7 +21,7 @@ describe('components/section/Section', () => {
     test('should correctly render description in Section', () => {
         const children = <div>yea</div>;
         const wrapper = shallow(
-            <Section title="yeah buddy" description="get it">
+            <Section description="get it" title="yeah buddy">
                 {children}
             </Section>,
         );

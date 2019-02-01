@@ -17,8 +17,8 @@ type Props = {
 
 type State = {
     isScrollHeightEqualClientHeight: boolean,
-    shouldShowTopScrollShadow: boolean,
     shouldShowBottomScrollShadow: boolean,
+    shouldShowTopScrollShadow: boolean,
 };
 
 class ScrollWrapper extends React.Component<Props, State> {
@@ -126,14 +126,15 @@ class ScrollWrapper extends React.Component<Props, State> {
 
         return (
             <div className={classes} {...rest}>
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
                 <div
-                    className="scroll-wrap-container"
-                    onClick={this.onContentClick}
-                    onScroll={this.throttledOnContentScroll}
                     ref={el => {
                         this.scrollRef = el;
                         scrollRefFn(el);
                     }}
+                    className="scroll-wrap-container"
+                    onClick={this.onContentClick}
+                    onScroll={this.throttledOnContentScroll}
                 >
                     {children}
                 </div>

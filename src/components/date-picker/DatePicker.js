@@ -401,7 +401,7 @@ class DatePicker extends React.Component<Props> {
         return (
             <div className={classes}>
                 <span className="date-picker-icon-holder">
-                    <Label hideLabel={hideLabel} text={label} showOptionalText={!hideOptionalLabel && !isRequired}>
+                    <Label hideLabel={hideLabel} showOptionalText={!hideOptionalLabel && !isRequired} text={label}>
                         {!!description && <i className="date-picker-description">{description}</i>}
                         <Tooltip
                             className="date-picker-error-tooltip"
@@ -411,15 +411,15 @@ class DatePicker extends React.Component<Props> {
                             theme="error"
                         >
                             <input
-                                className="date-picker-input"
-                                type="text"
                                 ref={ref => {
                                     this.dateInputEl = ref;
                                 }}
+                                className="date-picker-input"
                                 disabled={isDisabled}
+                                onBlur={this.handleInputBlur}
                                 placeholder={placeholder || formatMessage(messages.chooseDate)}
                                 required={isRequired}
-                                onBlur={this.handleInputBlur}
+                                type="text"
                                 {...onChangeAttr}
                                 onFocus={onFocus}
                                 onKeyDown={this.handleInputKeyDown}
@@ -431,40 +431,40 @@ class DatePicker extends React.Component<Props> {
                     </Label>
                     {isClearable && !!value && !isDisabled ? (
                         <PlainButton
-                            className="date-picker-clear-btn"
-                            type="button"
-                            onClick={this.clearDate}
                             aria-label={formatMessage(messages.dateClearButton)}
+                            className="date-picker-clear-btn"
+                            onClick={this.clearDate}
+                            type="button"
                         >
-                            <IconClear width={12} height={12} />
+                            <IconClear height={12} width={12} />
                         </PlainButton>
                     ) : null}
                     {error ? (
                         <IconAlert
                             className="date-picker-icon-alert"
-                            width={13}
                             height={13}
                             title={<FormattedMessage {...messages.iconAlertText} />}
+                            width={13}
                         />
                     ) : null}
                     <PlainButton
+                        aria-label={formatMessage(messages.chooseDate)}
                         className="date-picker-open-btn"
                         disabled={isDisabled}
-                        type="button"
-                        onClick={this.handleButtonClick}
-                        aria-label={formatMessage(messages.chooseDate)}
                         getDOMRef={ref => {
                             this.datePickerButtonEl = ref;
                         }}
+                        onClick={this.handleButtonClick}
+                        type="button"
                     >
-                        <IconCalendar width={16} height={17} />
+                        <IconCalendar height={17} width={16} />
                     </PlainButton>
                     <input
-                        type="hidden"
                         className="date-picker-unix-time-input"
                         name={name}
-                        value={this.formatValue(value)}
                         readOnly
+                        type="hidden"
+                        value={this.formatValue(value)}
                     />
                 </span>
             </div>

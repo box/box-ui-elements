@@ -13,8 +13,8 @@ const DEFAULT_BOX_TOOLS_INSTALLATION_URL = 'https://cloud.box.com/v/installboxto
 const DEFAULT_BOX_TOOLS_NAME = 'Box Tools';
 
 type Props = {
-    boxToolsName?: string,
     boxToolsInstallUrl?: string,
+    boxToolsName?: string,
 };
 
 const BoxToolsInstallMessage = ({
@@ -32,7 +32,7 @@ const BoxToolsInstallMessage = ({
             values={{
                 boxTools: (
                     // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <a onClick={onLinkClick} href="#" rel="noopener noreferrer">
+                    <a href="#" onClick={onLinkClick} rel="noopener noreferrer">
                         {boxToolsName}
                     </a>
                 ),

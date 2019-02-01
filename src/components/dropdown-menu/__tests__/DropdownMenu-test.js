@@ -7,6 +7,7 @@ import DropdownMenu from '../DropdownMenu';
 const sandbox = sinon.sandbox.create();
 
 describe('components/dropdown-menu/DropdownMenu', () => {
+    // eslint-disable-next-line react/button-has-type
     const FakeButton = props => <button {...props}>Some Button</button>;
     FakeButton.displayName = 'FakeButton';
 

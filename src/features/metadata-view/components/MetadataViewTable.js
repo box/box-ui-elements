@@ -17,11 +17,11 @@ import FloatCell from './FloatCell';
 import '../styles/MetadataView.scss';
 
 type Props = {
-    columns: Array<Object>,
     columnWidths: Object,
+    columns: Array<Object>,
     height: number,
-    items: Array<any>,
     intl: Object,
+    items: Array<any>,
     tableHeaderHeight: number,
     tableHeight: number,
     tableRowHeight: number,
@@ -118,6 +118,7 @@ class MetadataViewTable extends React.PureComponent<Props, State> {
 
             return (
                 <Column
+                    key={`metadataview-column-${key}-${index}`}
                     cellRenderer={cellData => <CellComponent cellData={cellData} intl={intl} />}
                     className="cell-text-content-container"
                     dataKey={key}
@@ -128,7 +129,6 @@ class MetadataViewTable extends React.PureComponent<Props, State> {
                             shouldRenderResizeColumnIcon={!isNameCell}
                         />
                     )}
-                    key={`metadataview-column-${key}-${index}`}
                     label={displayName}
                     minWidth={45}
                     width={widths[key] * width}
@@ -152,8 +152,9 @@ class MetadataViewTable extends React.PureComponent<Props, State> {
                     },
                 };
             }
+
+            return {};
         });
-        return {};
     };
 
     getPreviousColumn = (dataKey: string) => {
@@ -167,14 +168,14 @@ class MetadataViewTable extends React.PureComponent<Props, State> {
 
         return (
             <Table
-                height={height}
                 headerClassName="table-header"
                 headerHeight={tableHeaderHeight}
-                rowHeight={tableRowHeight}
+                height={height}
+                minWidth
                 rowClassName="table-header-row-container"
                 rowCount={items.length}
                 rowGetter={({ index }) => items[index]}
-                minWidth
+                rowHeight={tableRowHeight}
                 width={width}
             >
                 {this.renderOptionalColumns()}

@@ -24,7 +24,7 @@ export default ({ dataKey, label, sortBy, sortDirection }: Props) => {
         <div>
             {label}
             &nbsp;&nbsp;
-            {by === dataKey && <IconChevron size="6px" thickness="1px" color={COLOR_999} direction={direction} />}
+            {by === dataKey && <IconChevron color={COLOR_999} direction={direction} size="6px" thickness="1px" />}
         </div>
     );
 };

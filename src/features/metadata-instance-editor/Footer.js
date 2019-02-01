@@ -10,24 +10,24 @@ import messages from './messages';
 import './Footer.scss';
 
 type Props = {
-    onSave?: () => void,
     onCancel: () => void,
     onRemove: () => void,
+    onSave?: () => void,
 };
 
 const Footer = ({ onCancel, onRemove, onSave }: Props) => (
     <div className="metadata-instance-editor-footer">
         <div className="metadata-instance-editor-footer-delete">
-            <PlainButton data-resin-target="metadata-instanceremove" type="button" onClick={onRemove}>
+            <PlainButton data-resin-target="metadata-instanceremove" onClick={onRemove} type="button">
                 <FormattedMessage {...messages.metadataRemoveTemplate} />
             </PlainButton>
         </div>
         <div className="metadata-instance-editor-footer-save-cancel">
-            <Button data-resin-target="metadata-instancecancel" type="button" onClick={onCancel}>
+            <Button data-resin-target="metadata-instancecancel" onClick={onCancel} type="button">
                 <FormattedMessage {...messages.metadataCancel} />
             </Button>
             {onSave && (
-                <PrimaryButton data-resin-target="metadata-instancesave" type="button" onClick={onSave}>
+                <PrimaryButton data-resin-target="metadata-instancesave" onClick={onSave} type="button">
                     <FormattedMessage {...messages.metadataSave} />
                 </PrimaryButton>
             )}

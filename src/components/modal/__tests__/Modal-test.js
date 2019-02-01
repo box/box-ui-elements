@@ -1,3 +1,5 @@
+/* eslint-disable react/button-has-type */
+
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
@@ -113,7 +115,7 @@ describe('components/modal/Modal', () => {
         const backdropHandler = sinon.spy();
         beforeEach(() => {
             wrapper = shallow(
-                <Modal isOpen onRequestClose={onRequestClose} onBackdropClick={backdropHandler}>
+                <Modal isOpen onBackdropClick={backdropHandler} onRequestClose={onRequestClose}>
                     children
                 </Modal>,
             );
@@ -159,7 +161,7 @@ describe('components/modal/Modal', () => {
 
         test('should focus first element when loading state is removed', () => {
             wrapper = mount(
-                <Modal onRequestClose={onRequestClose} isOpen isLoading>
+                <Modal isLoading isOpen onRequestClose={onRequestClose}>
                     <button id="first" />
                     <button id="last" />
                 </Modal>,
@@ -171,7 +173,7 @@ describe('components/modal/Modal', () => {
 
         test('should focus on close button on mount when no other focusable elements in modal', () => {
             wrapper = mount(
-                <Modal onRequestClose={onRequestClose} isOpen>
+                <Modal isOpen onRequestClose={onRequestClose}>
                     <div />
                 </Modal>,
             );
@@ -181,7 +183,7 @@ describe('components/modal/Modal', () => {
 
         test('should focus custom element when opening', () => {
             wrapper = mount(
-                <Modal onRequestClose={onRequestClose} focusElementSelector=".custom-element">
+                <Modal focusElementSelector=".custom-element" onRequestClose={onRequestClose}>
                     <button id="last" />
                     <button className="custom-element" />
                 </Modal>,
@@ -193,7 +195,7 @@ describe('components/modal/Modal', () => {
 
         test('should focus custom element when loading state is removed', () => {
             wrapper = mount(
-                <Modal onRequestClose={onRequestClose} focusElementSelector=".custom-element" isOpen isLoading>
+                <Modal focusElementSelector=".custom-element" isLoading isOpen onRequestClose={onRequestClose}>
                     <button id="last" />
                     <button className="custom-element" />
                 </Modal>,
@@ -206,7 +208,7 @@ describe('components/modal/Modal', () => {
 
         test('should throw an error if custom element is not found', () => {
             wrapper = mount(
-                <Modal onRequestClose={onRequestClose} focusElementSelector=".selector-with-no-matching-element">
+                <Modal focusElementSelector=".selector-with-no-matching-element" onRequestClose={onRequestClose}>
                     <button id="last" />
                     <button className="custom-element" />
                 </Modal>,

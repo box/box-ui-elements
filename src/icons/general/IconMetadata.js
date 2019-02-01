@@ -7,18 +7,18 @@ type Props = {
     className?: string,
     color?: string,
     /** A text-only string describing the icon if it's not purely decorative for accessibility */
+    height?: number,
     title?: string | React.Element<any>,
     width?: number,
-    height?: number,
 };
 
 const IconMetadata = ({ className = '', color = '#333', title, width = 14, height = 14 }: Props) => (
     <AccessibleSVG
         className={`icon-metadata ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 14 14"
+        width={width}
     >
         <path
             className="fill-color"

@@ -104,7 +104,7 @@ const QuickSearchItem = ({ className, closeDropdown, intl, itemData, parentFolde
     }
 
     const itemName = href ? (
-        <Link onClick={e => e.stopPropagation()} className="item-name" href={href} title={name} {...targetProps}>
+        <Link className="item-name" href={href} onClick={e => e.stopPropagation()} title={name} {...targetProps}>
             {markedQueryMatches}
         </Link>
     ) : (

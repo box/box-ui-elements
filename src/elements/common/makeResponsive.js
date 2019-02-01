@@ -11,10 +11,10 @@ import classNames from 'classnames';
 import { SIZE_LARGE, SIZE_MEDIUM, SIZE_SMALL, CLASS_IS_SMALL, CLASS_IS_TOUCH, CLASS_IS_MEDIUM } from '../../constants';
 
 type PropsShape = {
-    isTouch: boolean,
-    size?: Size,
     className: string,
     componentRef?: Function,
+    isTouch: boolean,
+    size?: Size,
 };
 
 type State = {
@@ -118,11 +118,11 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
                 return (
                     <Wrapped
                         ref={componentRef}
-                        isTouch={isTouch}
-                        isSmall={isSmall}
+                        className={className}
                         isLarge={isLarge}
                         isMedium={isMedium}
-                        className={className}
+                        isSmall={isSmall}
+                        isTouch={isTouch}
                         {...rest}
                     />
                 );
@@ -142,17 +142,17 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
             );
 
             return (
-                <Measure bounds onResize={this.onResize} innerRef={this.innerRef}>
+                <Measure bounds innerRef={this.innerRef} onResize={this.onResize}>
                     {({ measureRef }) => (
                         <Wrapped
-                            getInnerRef={this.getInnerElement}
                             ref={componentRef}
-                            isTouch={isTouch}
-                            isSmall={isSmall}
+                            className={styleClassName}
+                            getInnerRef={this.getInnerElement}
                             isLarge={isLarge}
                             isMedium={isMedium}
+                            isSmall={isSmall}
+                            isTouch={isTouch}
                             measureRef={measureRef}
-                            className={styleClassName}
                             {...rest}
                         />
                     )}

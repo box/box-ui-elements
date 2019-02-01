@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import IconName from '../IconName';
 
 describe('elements/content-uploader/IconName', () => {
-    const getWrapper = props => shallow(<IconName name="hi" extension="pdf" {...props} />);
+    const getWrapper = props => shallow(<IconName extension="pdf" name="hi" {...props} />);
 
     test('should render file IconName correctly', () => {
         const wrapper = getWrapper();

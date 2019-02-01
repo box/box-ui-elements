@@ -10,10 +10,10 @@ function FeatureFlag({
     disabled = () => null,
     children,
 }: {
-    feature: string,
-    enabled?: types.FeatureOptions => React.Node,
-    disabled?: () => React.Node,
     children?: React.Node,
+    disabled?: () => React.Node,
+    enabled?: types.FeatureOptions => React.Node,
+    feature: string,
 }) {
     return (
         <FeatureConsumer>

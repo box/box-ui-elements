@@ -24,7 +24,7 @@ describe('icons/general/IconClockPast', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 13;
         const height = 17;
-        const wrapper = shallow(<IconClockPast width={width} height={height} />);
+        const wrapper = shallow(<IconClockPast height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

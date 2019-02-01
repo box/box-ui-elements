@@ -8,9 +8,9 @@ import Base from './Base';
 import { DEFAULT_FETCH_START, DEFAULT_FETCH_END } from '../constants';
 
 type Params = {
-    offset: number,
-    limit: number,
     fields?: string,
+    limit: number,
+    offset: number,
 };
 
 type Data = {

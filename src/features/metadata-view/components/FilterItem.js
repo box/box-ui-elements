@@ -58,6 +58,7 @@ class FilterItem extends React.Component<Props, State> {
         selectedAttributeDisplayText: this.props.condition.attributeDisplayText || '',
         selectedOperator: this.props.condition.operatorKey,
         selectedValue: this.props.condition.valueKey,
+        // eslint-disable-next-line react/no-unused-state
         valueType: '',
     };
 
@@ -73,8 +74,8 @@ class FilterItem extends React.Component<Props, State> {
         const fieldId = option.fieldId || condition.fieldId;
 
         const displayText = option.displayText;
-        let displayTextType = '',
-            keyType = '';
+        let displayTextType = '';
+        let keyType = '';
 
         if (fieldType === ATTRIBUTE) {
             this.setState({
@@ -82,6 +83,7 @@ class FilterItem extends React.Component<Props, State> {
                 selectedAttributeDisplayText: displayText,
                 selectedOperator: '',
                 selectedValue: null,
+                // eslint-disable-next-line react/no-unused-state
                 valueType,
             });
             displayTextType = ATTRIBUTE_DISPLAY_TEXT;
@@ -110,7 +112,7 @@ class FilterItem extends React.Component<Props, State> {
         });
     };
 
-    getOperatorsForAttribute = (attribute: string) => {
+    getOperatorsForAttribute = () => {
         const { condition } = this.props;
         if (condition.valueType === '') {
             return [];
@@ -125,8 +127,8 @@ class FilterItem extends React.Component<Props, State> {
 
         const field =
             template &&
-            template.fields.find(field => {
-                return field.id === fieldId;
+            template.fields.find(f => {
+                return f.id === fieldId;
             });
 
         if (field && field.options) {
@@ -193,8 +195,8 @@ class FilterItem extends React.Component<Props, State> {
                     formatMessage={formatMessage}
                     selectedValue={selectedValue}
                     shouldDisplayErrorMessage={shouldDisplayErrorMessage}
-                    updateValueField={this.updateValueField}
                     updateSelectedField={this.updateSelectedField}
+                    updateValueField={this.updateValueField}
                     valueKey={valueKey}
                     valueOptions={valueOptions}
                     valueType={valueType}
@@ -206,19 +208,19 @@ class FilterItem extends React.Component<Props, State> {
     render() {
         const { template, intl } = this.props;
         const { formatMessage } = intl;
-        const { selectedAttribute, selectedAttributeDisplayText, selectedOperator } = this.state;
+        const { selectedAttribute, selectedOperator } = this.state;
 
         const templateAttributes = (template && template.fields) || [];
         const attributeOptions = this.getFormattedOptions(templateAttributes);
 
-        const operatorsForAttribute = this.getOperatorsForAttribute(selectedAttributeDisplayText);
+        const operatorsForAttribute = this.getOperatorsForAttribute();
         const operatorOptions = this.getFormattedOptions(operatorsForAttribute);
 
         return (
             <div className="filter-item-container">
                 <div className="filter-item-delete-button">
-                    <button className="delete-button" onClick={this.onDeleteButtonClick}>
-                        <IconClose width={deleteButtonIconWidth} height={deleteButtonIconHeight} color="#999EA4" />
+                    <button type="button" className="delete-button" onClick={this.onDeleteButtonClick}>
+                        <IconClose color="#999EA4" height={deleteButtonIconHeight} width={deleteButtonIconWidth} />
                     </button>
                 </div>
                 <div className="filter-item-prefix-container">

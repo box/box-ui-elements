@@ -19,7 +19,7 @@ describe('components/loading-indicator/makeLoadable', () => {
 
     test('should pass props down to BaseComponent', () => {
         const LoadableComponent = makeLoadable(TestComponent);
-        const wrapper = shallow(<LoadableComponent isLoading={false} hello="123" className="foo" />);
+        const wrapper = shallow(<LoadableComponent className="foo" hello="123" isLoading={false} />);
 
         expect(wrapper.find('TestComponent').prop('hello')).toEqual('123');
         expect(wrapper.find('TestComponent').prop('className')).toEqual('foo');

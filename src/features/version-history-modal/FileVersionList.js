@@ -17,6 +17,7 @@ const LIST_HEIGHT_PX = 300;
 const LIST_WIDTH_PX = 400;
 
 class FileVersionList extends Component {
+    /* eslint-disable no-underscore-dangle */
     static propTypes = {
         canDelete: PropTypes.bool,
         canUpload: PropTypes.bool,
@@ -97,7 +98,7 @@ class FileVersionList extends Component {
         const key = version.id;
 
         return (
-            <CellMeasurer cache={this._cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+            <CellMeasurer key={key} cache={this._cache} columnIndex={0} parent={parent} rowIndex={index}>
                 <FileVersionListItem
                     canDelete={canDelete}
                     canUpload={canUpload}
@@ -125,14 +126,14 @@ class FileVersionList extends Component {
         return (
             <div className={classNames('file-version-list', className)}>
                 <List
+                    ref={this._setListRef}
                     deferredMeasurementCache={this._cache}
                     height={LIST_HEIGHT_PX}
-                    ref={this._setListRef}
                     rowCount={versions.length}
                     rowHeight={this._cache.rowHeight}
                     rowRenderer={this.rowRenderer}
-                    width={LIST_WIDTH_PX}
                     scrollToAlignment="start"
+                    width={LIST_WIDTH_PX}
                 />
             </div>
         );

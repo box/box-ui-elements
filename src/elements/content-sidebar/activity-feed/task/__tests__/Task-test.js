@@ -47,7 +47,7 @@ describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
     };
 
     test('should correctly render task', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
+        const wrapper = shallow(<Task currentUser={currentUser} onDelete={jest.fn()} onEdit={jest.fn()} {...task} />);
 
         expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_edit).toBe(true);
         expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_delete).toBe(true);
@@ -91,7 +91,7 @@ describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
             isPending: true,
         };
 
-        const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...myTask} />);
+        const wrapper = shallow(<Task currentUser={currentUser} onDelete={jest.fn()} onEdit={jest.fn()} {...myTask} />);
         expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
     });
 
@@ -144,9 +144,9 @@ describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
             <Task
                 currentUser={currentUser}
                 {...task}
-                onAssignmentUpdate={onAssignmentUpdateSpy}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
+                onAssignmentUpdate={onAssignmentUpdateSpy}
             />,
         );
 
@@ -162,9 +162,9 @@ describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
             <Task
                 currentUser={currentUser}
                 {...task}
-                onAssignmentUpdate={onAssignmentUpdateSpy}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
+                onAssignmentUpdate={onAssignmentUpdateSpy}
             />,
         );
 
@@ -202,10 +202,10 @@ describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
         const wrapper = shallow(
             <Task
                 {...myTask}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onDelete={jest.fn()}
             />,
         );
@@ -241,10 +241,10 @@ describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
         const wrapper = mount(
             <Task
                 {...myTask}
-                currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
+                currentUser={currentUser}
                 handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onEdit={jest.fn()}
             />,
         );

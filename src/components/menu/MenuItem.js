@@ -3,14 +3,14 @@ import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 
-import { RadarAnimation } from '../radar';
+import RadarAnimation from '../radar';
 
 type Props = {
     children: React.Node,
     className?: string,
     isDisabled?: boolean,
-    isSelected?: boolean,
     isSelectItem?: boolean,
+    isSelected?: boolean,
     onClick?: Function,
     showRadar?: boolean,
 };

@@ -4,7 +4,7 @@ import * as React from 'react';
 import ThumbnailCard from '../ThumbnailCard';
 
 const getWrapper = (props = {}) =>
-    shallow(<ThumbnailCard title={<div>Hello World!</div>} thumbnail={<div>Foo Bar!</div>} {...props} />);
+    shallow(<ThumbnailCard thumbnail={<div>Foo Bar!</div>} title={<div>Hello World!</div>} {...props} />);
 
 describe('components/thumbnail-card/ThumbnailCard', () => {
     test('should render', () => {

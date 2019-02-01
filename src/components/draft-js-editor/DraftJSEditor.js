@@ -20,30 +20,18 @@ type Props = {
     isRequired?: boolean,
     label: React.Node,
     onBlur: Function,
-    onFocus: Function,
     onChange: Function,
+    onFocus: Function,
     onReturn?: Function,
     placeholder?: string,
 };
 
-type State = {
-    error?: ?Object,
-};
-
-class DraftJSEditor extends React.Component<Props, State> {
+class DraftJSEditor extends React.Component<Props> {
     static defaultProps = {
         inputProps: {},
         isRequired: false,
         isFocused: false,
     };
-
-    constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            error: props.error,
-        };
-    }
 
     /**
      * Calls onChange handler passed in
@@ -116,19 +104,19 @@ class DraftJSEditor extends React.Component<Props, State> {
 
         return (
             <div className={classes}>
-                <Label text={label} showOptionalText={!isRequired} hideLabel={hideLabel}>
-                    <Tooltip isShown={!!error} text={error ? error.message : ''} theme="error" position="bottom-left">
+                <Label hideLabel={hideLabel} showOptionalText={!isRequired} text={label}>
+                    <Tooltip isShown={!!error} position="bottom-left" text={error ? error.message : ''} theme="error">
                         {/* need div so tooltip can set aria-describedby */}
                         <div>
                             <Editor
                                 {...a11yProps}
                                 editorState={editorState}
+                                handleReturn={this.handleReturn}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 onFocus={onFocus}
                                 placeholder={placeholder}
                                 readOnly={isDisabled}
-                                handleReturn={this.handleReturn}
                                 stripPastedStyles
                             />
                         </div>

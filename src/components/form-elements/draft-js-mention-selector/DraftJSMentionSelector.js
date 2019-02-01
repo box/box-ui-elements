@@ -31,8 +31,8 @@ type Props = {
     isDisabled?: boolean,
     isRequired?: boolean,
     label: React.Node,
-    mentionTriggers?: Array<string>,
     maxLength?: number,
+    mentionTriggers?: Array<string>,
     minLength?: number,
     name: string,
     onChange?: Function,
@@ -47,9 +47,9 @@ type Props = {
 
 type State = {
     contacts: SelectorItems,
+    error: ?Object,
     hasReceivedFirstInteraction: boolean,
     internalEditorState: ?EditorState,
-    error: ?Object,
 };
 
 class DraftJSMentionSelector extends React.Component<Props, State> {
@@ -218,10 +218,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         return (
             <div
-                className={className}
                 ref={containerEl => {
                     this.containerEl = containerEl;
                 }}
+                className={className}
             >
                 <FormInput name={name} onValidityStateUpdate={this.handleValidityStateUpdateHandler}>
                     <DraftJSMentionSelectorCore

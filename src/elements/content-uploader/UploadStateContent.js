@@ -34,14 +34,14 @@ const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChang
     };
 
     const fileInputContent = (
-        <UploadInput inputLabelClass={inputLabelClass} inputLabel={fileInputLabel} handleChange={handleChange} />
+        <UploadInput handleChange={handleChange} inputLabel={fileInputLabel} inputLabelClass={inputLabelClass} />
     );
     const folderInputContent = shouldShowFolderUploadInput ? (
         <UploadInput
-            isFolderUpload
-            inputLabelClass={inputLabelClass}
-            inputLabel={folderInputLabel}
             handleChange={handleChange}
+            inputLabel={folderInputLabel}
+            inputLabelClass={inputLabelClass}
+            isFolderUpload
         />
     ) : null;
 

@@ -168,9 +168,9 @@ class TaskForm extends React.Component<Props, State> {
             <div className={inputContainerClassNames}>
                 <div className="bcs-task-input-form-container">
                     <Form
-                        onValidSubmit={this.handleValidSubmit}
-                        onInvalidSubmit={this.handleInvalidSubmit}
                         formValidityState={formValidityState}
+                        onInvalidSubmit={this.handleInvalidSubmit}
+                        onValidSubmit={this.handleValidSubmit}
                     >
                         <PillSelectorDropdown
                             error={this.getErrorByFieldname('taskAssignees')}
@@ -190,9 +190,9 @@ class TaskForm extends React.Component<Props, State> {
                             {approverOptions.map(({ id, name, email }) => (
                                 <ContactDatalistItem
                                     key={id}
+                                    data-testid="task-assignee-option"
                                     name={name}
                                     subtitle={email}
-                                    data-testid="task-assignee-option"
                                 />
                             ))}
                         </PillSelectorDropdown>
@@ -228,8 +228,8 @@ class TaskForm extends React.Component<Props, State> {
                         <div className="bcs-task-input-controls">
                             <Button
                                 className="bcs-task-input-cancel-btn"
-                                data-testid="task-form-cancel-button"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_CANCEL}
+                                data-testid="task-form-cancel-button"
                                 onClick={this.handleCancelClick}
                                 type="button"
                             >
@@ -237,8 +237,8 @@ class TaskForm extends React.Component<Props, State> {
                             </Button>
                             <PrimaryButton
                                 className="bcs-task-input-submit-btn"
-                                data-testid="task-form-submit-button"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
+                                data-testid="task-form-submit-button"
                                 isDisabled={!isValid}
                                 onFocus={this.handleFocusChange}
                                 onMouseEnter={this.handleFocusChange}

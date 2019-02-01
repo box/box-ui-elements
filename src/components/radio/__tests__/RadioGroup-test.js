@@ -13,10 +13,10 @@ describe('components/radio/RadioGroup', () => {
 
     const renderRadioButtons = onChange =>
         mount(
-            <RadioGroup name="radiogroup" value="radio3" onChange={onChange}>
-                <RadioButton label="Radio Button 1" value="radio1" description="radio1desc" />
+            <RadioGroup name="radiogroup" onChange={onChange} value="radio3">
+                <RadioButton description="radio1desc" label="Radio Button 1" value="radio1" />
                 <RadioButton label="Radio Button 2" value="radio2" />
-                <RadioButton label="Radio Button 3" value="radio3" description="radio3desc" />
+                <RadioButton description="radio3desc" label="Radio Button 3" value="radio3" />
                 <RadioButton label="Radio Button 4" value="radio4" />
             </RadioGroup>,
         );

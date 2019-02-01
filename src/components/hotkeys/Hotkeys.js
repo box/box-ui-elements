@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { HotkeyPropType } from './HotkeyRecord';
 
 class Hotkeys extends Component {
+    /* eslint-disable no-underscore-dangle */
+
     static propTypes = {
         children: PropTypes.node,
         /** Array of hotkey configs, either in the specified shape, or instances of HotkeyRecord */

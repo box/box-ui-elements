@@ -116,30 +116,34 @@ class FocusTrap extends React.Component<Props> {
             ...rest
         } = this.props;
         return (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                className={classNames(className, {
-                    'should-outline-focus': shouldOutlineFocus,
-                })}
                 ref={ref => {
                     this.el = ref;
                     if (getRef) {
                         getRef(ref);
                     }
                 }}
+                className={classNames(className, {
+                    'should-outline-focus': shouldOutlineFocus,
+                })}
                 onKeyDown={this.handleElKeyDown}
                 {...rest}
             >
-                <i aria-hidden tabIndex="0" onFocus={this.focusLastElement} />
+                {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+                <i aria-hidden onFocus={this.focusLastElement} tabIndex="0" />
                 {children}
-                <i aria-hidden tabIndex="0" onFocus={this.focusFirstElement} />
+                {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+                <i aria-hidden onFocus={this.focusFirstElement} tabIndex="0" />
                 {/* in case children doesn't contain any focusable elements, focus on trap */}
                 <i
-                    aria-hidden
                     ref={ref => {
                         this.trapEl = ref;
                     }}
-                    tabIndex="0"
+                    aria-hidden
                     onKeyDown={this.handleTrapElKeyDown}
+                    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                    tabIndex="0"
                 />
             </div>
         );

@@ -5,7 +5,7 @@ import Toggle from '..';
 
 describe('components/toggle/Toggle', () => {
     const getWrapper = (props = {}) =>
-        shallow(<Toggle name="toggle" label="Enter things" onChange={() => {}} {...props} />);
+        shallow(<Toggle label="Enter things" name="toggle" onChange={() => {}} {...props} />);
 
     test('should correctly render default component', () => {
         const wrapper = getWrapper();

@@ -13,13 +13,13 @@ import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
 
 type Props = {
+    getUserProfileUrl?: string => Promise<string>,
     id: string,
+    onTranslate?: Function,
     tagged_message: string,
     translatedTaggedMessage?: string,
     translationEnabled?: boolean,
-    onTranslate?: Function,
     translationFailed?: ?boolean,
-    getUserProfileUrl?: string => Promise<string>,
 };
 
 type State = {

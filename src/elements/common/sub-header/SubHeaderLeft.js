@@ -11,12 +11,12 @@ import { Breadcrumbs } from '../breadcrumbs';
 import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../../constants';
 
 type Props = {
+    currentCollection: Collection,
+    isSmall: boolean,
+    onItemClick: Function,
     rootId: string,
     rootName?: string,
-    onItemClick: Function,
-    currentCollection: Collection,
     view: View,
-    isSmall: boolean,
 } & InjectIntlProvidedProps;
 
 const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick, intl }: Props) => {
@@ -52,11 +52,11 @@ const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onI
 
     return (
         <Breadcrumbs
-            isSmall={isSmall}
-            rootId={rootId}
             crumbs={crumbs}
-            onCrumbClick={onItemClick}
             delimiter={DELIMITER_CARET}
+            isSmall={isSmall}
+            onCrumbClick={onItemClick}
+            rootId={rootId}
         />
     );
 };

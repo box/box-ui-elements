@@ -17,7 +17,7 @@ describe('components/modal/ModalDialog', () => {
         };
         onRequestClose = sinon.spy();
         wrapper = shallow(
-            <ModalDialogBase title={title} onRequestClose={onRequestClose} intl={intlShape}>
+            <ModalDialogBase intl={intlShape} onRequestClose={onRequestClose} title={title}>
                 children
             </ModalDialogBase>,
         );

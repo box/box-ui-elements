@@ -13,11 +13,11 @@ describe('components/badgeable/Badgeable', () => {
     test('should render badges to any corner when given an element', () => {
         const wrapper = shallow(
             <Badgeable
-                className="custom-class"
-                topRight={<p>top right</p>}
-                topLeft={<p>top left</p>}
-                bottomRight={<p>bottom right</p>}
                 bottomLeft={<p>bottom left</p>}
+                bottomRight={<p>bottom right</p>}
+                className="custom-class"
+                topLeft={<p>top left</p>}
+                topRight={<p>top right</p>}
             >
                 <div>Test</div>
             </Badgeable>,

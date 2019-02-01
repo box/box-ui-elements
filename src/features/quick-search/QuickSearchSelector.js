@@ -19,12 +19,12 @@ const QuickSearchSelector = ({
         <input
             {...rest}
             {...inputProps}
+            ref={inputRef}
             aria-label={placeholder}
             autoComplete="off"
             className={classNames('search-input', className)}
             onInput={onInput}
             placeholder={placeholder}
-            ref={inputRef}
             type="text"
         />
         {isLoading && <LoadingIndicator className="loading-indicator" />}

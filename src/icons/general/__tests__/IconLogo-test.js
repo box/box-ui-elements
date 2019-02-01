@@ -25,7 +25,7 @@ describe('icons/general/IconLogo', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconLogo width={width} height={height} />);
+        const wrapper = shallow(<IconLogo height={height} width={width} />);
 
         expect(wrapper.prop('width')).toEqual(width);
         expect(wrapper.prop('height')).toEqual(height);

@@ -5,10 +5,10 @@ import classNames from 'classnames';
 import './Header.scss';
 
 type Props = {
-    color?: string,
-    /** Header contents */
     children?: React.Node,
+    /** Header contents */
     className?: string,
+    color?: string,
     /** Is header fixed */
     fixed?: boolean,
 };

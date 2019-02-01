@@ -77,7 +77,7 @@ class ContentExplorerExamples extends Component {
         };
     }
 
-    handleEnterFolder = (enteredFolder, newFoldersPath) => {
+    handleEnterFolder = enteredFolder => {
         this.setState({
             exampleMessage: `Enter folder { id: ${enteredFolder.id}, name: ${enteredFolder.name} }`,
             folderId: enteredFolder.id,
@@ -116,13 +116,13 @@ class ContentExplorerExamples extends Component {
                 <ContentExplorer
                     contentExplorerMode="selectFolder"
                     initialFoldersPath={INITIAL_FOLDERS_PATH}
-                    onEnterFolder={this.handleEnterFolder}
-                    onChooseItems={this.handleChooseItems}
-                    onSearchSubmit={this.handleSearchSubmit}
-                    onExitSearch={this.handleExitSearch}
                     items={items}
-                    listWidth={600}
                     listHeight={350}
+                    listWidth={600}
+                    onChooseItems={this.handleChooseItems}
+                    onEnterFolder={this.handleEnterFolder}
+                    onExitSearch={this.handleExitSearch}
+                    onSearchSubmit={this.handleSearchSubmit}
                 />
                 <h5>{exampleMessage}</h5>
             </div>

@@ -19,7 +19,7 @@ function getLogo(url?: string) {
         return <IconLogo />;
     }
     if (typeof url === 'string') {
-        return <img alt="" src={url} className="be-logo-custom" />;
+        return <img alt="" className="be-logo-custom" src={url} />;
     }
 
     return (

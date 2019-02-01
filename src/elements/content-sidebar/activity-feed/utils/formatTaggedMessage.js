@@ -44,12 +44,12 @@ const formatTaggedMessage = (
 
             return (
                 <UserLink
+                    key={contentKey}
+                    className="bcs-comment-mention"
+                    data-resin-target={ACTIVITY_TARGETS.MENTION}
+                    getUserProfileUrl={getUserProfileUrl}
                     id={id}
                     name={`${trigger}${name}`}
-                    data-resin-target={ACTIVITY_TARGETS.MENTION}
-                    className="bcs-comment-mention"
-                    getUserProfileUrl={getUserProfileUrl}
-                    key={contentKey}
                 />
             );
         }

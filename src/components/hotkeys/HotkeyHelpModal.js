@@ -142,7 +142,7 @@ class HotkeyHelpModal extends Component {
     }
 
     renderHotkey = (hotkey, i) => (
-        <li className="hotkey-item" key={i}>
+        <li key={i} className="hotkey-item">
             <div className="hotkey-description">{hotkey.description}</div>
             <div className="hotkey-key">{this.prettyPrintHotkey(hotkey)}</div>
         </li>

@@ -11,8 +11,8 @@ import messages from './messages';
 type Props = {
     className: string,
     /** the number of saved versions that exist for this item, should be 2 or more */
-    versionCount: number,
     onClick?: Function,
+    versionCount: number,
 };
 
 const VersionHistoryLink = ({ className, versionCount, onClick, ...rest }: Props) => {
@@ -21,7 +21,7 @@ const VersionHistoryLink = ({ className, versionCount, onClick, ...rest }: Props
     // Only render it as a link if there is an onClick
     if (onClick) {
         return (
-            <PlainButton onClick={onClick} className={classNames('lnk', className)} {...rest}>
+            <PlainButton className={classNames('lnk', className)} onClick={onClick} {...rest}>
                 {formattedMessageComponent}
             </PlainButton>
         );

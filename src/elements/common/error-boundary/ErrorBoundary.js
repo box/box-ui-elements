@@ -10,9 +10,9 @@ import { ERROR_CODE_UNEXPECTED_EXCEPTION, IS_ERROR_DISPLAYED } from '../../../co
 import DefaultError from './DefaultError';
 
 type Props = {
+    children: React.Element<any>,
     errorComponent: React.ComponentType<any>,
     errorOrigin: ElementOrigin,
-    children: React.Element<any>,
     onError: (error: ElementsError) => void,
 };
 

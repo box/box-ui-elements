@@ -13,21 +13,21 @@ import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
 import './Content.scss';
 
 type Props = {
-    rootId: string,
-    isSmall: boolean,
-    rootElement?: HTMLElement,
-    focusedRow: number,
-    selectableType: string,
-    tableRef: Function,
     canSetShareAccess: boolean,
+    currentCollection: Collection,
+    extensionsWhitelist: string[],
+    focusedRow: number,
+    hasHitSelectionLimit: boolean,
+    isSmall: boolean,
+    onFocusChange: Function,
     onItemClick: Function,
     onItemSelect: Function,
-    onFocusChange: Function,
     onShareAccessChange: Function,
-    extensionsWhitelist: string[],
-    hasHitSelectionLimit: boolean,
+    rootElement?: HTMLElement,
+    rootId: string,
+    selectableType: string,
+    tableRef: Function,
     view: View,
-    currentCollection: Collection,
 };
 
 /**

@@ -12,19 +12,19 @@ import messages from '../messages';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../../constants';
 
 type Props = {
-    isOpen: boolean,
-    currentFolderId: ?string,
-    token: Token,
-    sharedLink?: string,
-    sharedLinkPassword?: string,
     apiHost: string,
-    uploadHost: string,
-    onClose: Function,
-    parentElement: HTMLElement,
     appElement: HTMLElement,
+    currentFolderId: ?string,
+    isOpen: boolean,
+    onClose: Function,
     onUpload?: Function,
+    parentElement: HTMLElement,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
+    sharedLink?: string,
+    sharedLinkPassword?: string,
+    token: Token,
+    uploadHost: string,
 } & InjectIntlProvidedProps;
 
 const UploadDialog = ({
@@ -44,26 +44,26 @@ const UploadDialog = ({
     intl,
 }: Props) => (
     <Modal
+        appElement={appElement}
+        className={CLASS_MODAL_CONTENT_FULL_BLEED}
+        contentLabel={intl.formatMessage(messages.upload)}
         isOpen={isOpen}
+        onRequestClose={onClose}
+        overlayClassName={CLASS_MODAL_OVERLAY}
         parentSelector={() => parentElement}
         portalClassName={`${CLASS_MODAL} be-modal-upload`}
-        className={CLASS_MODAL_CONTENT_FULL_BLEED}
-        overlayClassName={CLASS_MODAL_OVERLAY}
-        onRequestClose={onClose}
-        contentLabel={intl.formatMessage(messages.upload)}
-        appElement={appElement}
     >
         <ContentUploader
-            rootFolderId={currentFolderId}
-            token={token}
-            sharedLink={sharedLink}
-            sharedLinkPassword={sharedLinkPassword}
             apiHost={apiHost}
-            uploadHost={uploadHost}
             onClose={onClose}
             onComplete={onUpload}
             requestInterceptor={requestInterceptor}
             responseInterceptor={responseInterceptor}
+            rootFolderId={currentFolderId}
+            sharedLink={sharedLink}
+            sharedLinkPassword={sharedLinkPassword}
+            token={token}
+            uploadHost={uploadHost}
         />
     </Modal>
 );

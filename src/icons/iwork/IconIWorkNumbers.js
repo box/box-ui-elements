@@ -35,25 +35,25 @@ class IconIWorkNumbers extends React.Component<Props> {
             >
                 <defs>
                     <linearGradient
-                        id={`${this.idPrefix}b`}
-                        x1="-1016.86"
-                        y1="-1332.01"
-                        x2="-1016.84"
-                        y2="-1354.15"
                         gradientTransform="matrix(1.33 0 0 1.33 1370.77 1805.85)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}b`}
+                        x1="-1016.86"
+                        x2="-1016.84"
+                        y1="-1332.01"
+                        y2="-1354.15"
                     >
                         <stop offset="0" stopColor="#11d51d" />
                         <stop offset="1" stopColor="#82fa6c" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}a`}
-                        x1="-1035.54"
-                        y1="-1124.31"
-                        x2="-1035.87"
-                        y2="-1105.94"
                         gradientTransform="translate(1047.93 1130.18)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}a`}
+                        x1="-1035.54"
+                        x2="-1035.87"
+                        y1="-1124.31"
+                        y2="-1105.94"
                     >
                         <stop offset="0" stopColor="#fff" />
                         <stop offset="1" stopColor="#fff" />
@@ -61,34 +61,34 @@ class IconIWorkNumbers extends React.Component<Props> {
                     <linearGradient
                         id={`${this.idPrefix}c`}
                         x1="-1041.03"
-                        y1="-1124.41"
                         x2="-1041.35"
-                        y2="-1106.03"
                         xlinkHref={`#${this.idPrefix}a`}
+                        y1="-1124.41"
+                        y2="-1106.03"
                     />
                     <linearGradient
                         id={`${this.idPrefix}d`}
                         x1="-1030.07"
-                        y1="-1124.22"
                         x2="-1030.4"
-                        y2="-1105.84"
                         xlinkHref={`#${this.idPrefix}a`}
+                        y1="-1124.22"
+                        y2="-1105.84"
                     />
                     <linearGradient
                         id={`${this.idPrefix}e`}
                         x1="-1024.48"
-                        y1="-1124.12"
                         x2="-1024.8"
-                        y2="-1105.74"
                         xlinkHref={`#${this.idPrefix}a`}
+                        y1="-1124.12"
+                        y2="-1105.74"
                     />
                     <linearGradient
                         id={`${this.idPrefix}f`}
                         x1="-1032.65"
-                        y1="-1124.26"
                         x2="-1032.97"
-                        y2="-1105.89"
                         xlinkHref={`#${this.idPrefix}a`}
+                        y1="-1124.26"
+                        y2="-1105.89"
                     />
                 </defs>
                 <path

@@ -18,11 +18,11 @@ const ItemListName = ({ type, name, label = '', isSelected = false, onClick, lin
         children: [
             <span key="name">{name}</span>,
             <IconChevron
+                key="icon"
+                color={isSelected ? '#447991' : '#333'}
                 direction="right"
                 size="4px"
                 thickness="1px"
-                color={isSelected ? '#447991' : '#333'}
-                key="icon"
             />,
         ],
     };

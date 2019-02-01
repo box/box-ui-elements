@@ -66,8 +66,8 @@ export default (
 
     return (
         <div className="bce-more-options">
-            <DropdownMenu isRightAligned constrainToScrollParent>
-                <Button type="button" onFocus={onFocus} className="bce-btn-more-options">
+            <DropdownMenu constrainToScrollParent isRightAligned>
+                <Button className="bce-btn-more-options" onFocus={onFocus} type="button">
                     ···
                 </Button>
                 <Menu>
@@ -104,7 +104,7 @@ export default (
                 </Menu>
             </DropdownMenu>
             {allowShare && !isSmall ? (
-                <Button type="button" onFocus={onFocus} onClick={onShare}>
+                <Button onClick={onShare} onFocus={onFocus} type="button">
                     <FormattedMessage {...messages.share} />
                 </Button>
             ) : null}

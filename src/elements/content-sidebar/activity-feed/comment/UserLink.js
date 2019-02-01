@@ -8,10 +8,10 @@ import * as React from 'react';
 import { Link } from 'components/link';
 
 type Props = {
-    id: string,
-    name: string,
-    mentionTrigger?: any,
     getUserProfileUrl?: string => Promise<string>,
+    id: string,
+    mentionTrigger?: any,
+    name: string,
 };
 
 type State = {

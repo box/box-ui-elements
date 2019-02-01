@@ -20,14 +20,14 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     let getFile;
     let getStats;
     let setFileDescription;
-    const onError = jest.fn();
+    let onError = jest.fn();
     const getWrapper = (props, options) =>
         shallow(
             <DetailsSidebar
-                fileId={file.id}
                 api={api}
-                onError={onError}
+                fileId={file.id}
                 logger={{ onReadyMetric: jest.fn() }}
+                onError={onError}
                 {...props}
             />,
             options,
@@ -379,7 +379,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         });
 
         test('should invoke onError prop with error details', () => {
-            const onError = jest.fn();
+            onError = jest.fn();
             const error = {};
             wrapper.setProps({
                 onError,
@@ -392,7 +392,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         });
 
         test('should not display inline error when a forbidden error', () => {
-            const onError = jest.fn();
+            onError = jest.fn();
             const error = {
                 status: 403,
             };

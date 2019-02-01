@@ -16,10 +16,10 @@ type Props = {
 const IconGridView = ({ className = '', color = '#444', height = 9, opacity = 1, title, width = 9 }: Props) => (
     <AccessibleSVG
         className={`icon-grid-view ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 9 9"
+        width={width}
     >
         <path
             className="fill-color"

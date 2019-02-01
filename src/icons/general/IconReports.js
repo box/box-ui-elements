@@ -15,10 +15,10 @@ type Props = {
 const IconReports = ({ className = '', color = '#888888', height = 14, title, width = 12 }: Props) => (
     <AccessibleSVG
         className={`icon-reports ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 12 14"
+        width={width}
     >
         <path
             className="fill-color"
@@ -50,9 +50,9 @@ const IconReports = ({ className = '', color = '#888888', height = 14, title, wi
             d="M9.5 5h-3c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h3c.3 0 .5.2.5.5s-.2.5-.5.5z"
             fill={color}
         />
-        <circle className="fill-color" cx="4.5" cy="4.5" r=".5" fill={color} />
-        <circle className="fill-color" cx="4.5" cy="6.5" r=".5" fill={color} />
-        <circle className="fill-color" cx="4.5" cy="8.5" r=".5" fill={color} />
+        <circle className="fill-color" cx="4.5" cy="4.5" fill={color} r=".5" />
+        <circle className="fill-color" cx="4.5" cy="6.5" fill={color} r=".5" />
+        <circle className="fill-color" cx="4.5" cy="8.5" fill={color} r=".5" />
     </AccessibleSVG>
 );
 

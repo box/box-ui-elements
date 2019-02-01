@@ -154,6 +154,7 @@ type Props = {
     templates?: Array<MetadataTemplate>,
 };
 
+// eslint-disable-next-line react/prefer-stateless-function
 class MetadataViewExamples extends React.Component<Props> {
     render() {
         const filesList = [{ name: '1' }, { name: '2' }, { name: '3' }];
@@ -162,10 +163,10 @@ class MetadataViewExamples extends React.Component<Props> {
 
         return (
             <MetadataView
-                instances={instances}
                 columnWidths={widths}
                 currentMessage={currentMessage}
                 filesList={filesList}
+                instances={instances}
                 shouldDisableColumnButton={!(template && template.fields && template.fields.length > 1)}
                 tableHeaderHeight={tableHeaderHeight}
                 tableHeight={tableHeight}

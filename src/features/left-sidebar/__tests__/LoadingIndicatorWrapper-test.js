@@ -32,7 +32,7 @@ describe('features/left-sidebar/LeftSidebarDropWrapper', () => {
     test('should pass thru any rest properties', () => {
         const child = <div>child</div>;
         const wrapper = shallow(
-            <LeftSidebarDropWrapper data-resin-target="test" className="test-name" isDragging="true">
+            <LeftSidebarDropWrapper className="test-name" data-resin-target="test" isDragging="true">
                 {child}
             </LeftSidebarDropWrapper>,
         );

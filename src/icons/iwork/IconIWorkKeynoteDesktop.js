@@ -35,13 +35,13 @@ class IconIWorkKeynoteDesktop extends React.Component<Props> {
             >
                 <defs>
                     <linearGradient
-                        id={`${this.idPrefix}a`}
-                        x1="26.5"
-                        y1="-47.68"
-                        x2="62.47"
-                        y2="-47.68"
                         gradientTransform="translate(-6.64 127.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}a`}
+                        x1="26.5"
+                        x2="62.47"
+                        y1="-47.68"
+                        y2="-47.68"
                     >
                         <stop offset="0" stopColor="#847b70" />
                         <stop offset=".08" stopColor="#b5cfe1" />
@@ -55,39 +55,39 @@ class IconIWorkKeynoteDesktop extends React.Component<Props> {
                         <stop offset="1" stopColor="#5e5851" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}b`}
-                        x1="19.86"
-                        y1="-55.93"
-                        x2="55.82"
-                        y2="-55.93"
                         gradientTransform="translate(0 132)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}b`}
+                        x1="19.86"
+                        x2="55.82"
+                        y1="-55.93"
+                        y2="-55.93"
                     >
                         <stop offset="0" stopColor="#d0e6f5" />
                         <stop offset=".5" stopColor="#fff" />
                         <stop offset="1" stopColor="#d0e6f5" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}c`}
-                        x1="37.84"
-                        y1="-62.16"
-                        x2="37.84"
-                        y2="-50.26"
                         gradientTransform="translate(0 132)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}c`}
+                        x1="37.84"
+                        x2="37.84"
+                        y1="-62.16"
+                        y2="-50.26"
                     >
                         <stop offset="0" stopColor="#c5d9e6" />
                         <stop offset=".5" stopColor="#b5cfe1" />
                         <stop offset="1" stopColor="#dfecf2" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}d`}
-                        x1="41.66"
-                        y1="-73.76"
-                        x2="47.31"
-                        y2="-73.76"
                         gradientTransform="translate(-6.64 127.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}d`}
+                        x1="41.66"
+                        x2="47.31"
+                        y1="-73.76"
+                        y2="-73.76"
                     >
                         <stop offset="0" stopColor="#847b70" />
                         <stop offset=".11" stopColor="#c5dae8" />
@@ -99,38 +99,38 @@ class IconIWorkKeynoteDesktop extends React.Component<Props> {
                         <stop offset="1" stopColor="#5e5851" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}e`}
-                        x1="44.41"
-                        y1="-92.82"
-                        x2="44.41"
-                        y2="-95.79"
                         gradientTransform="translate(-6.64 127.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}e`}
+                        x1="44.41"
+                        x2="44.41"
+                        y1="-92.82"
+                        y2="-95.79"
                     >
                         <stop offset="0" stopColor="#00588a" />
                         <stop offset=".5" stopColor="#0088b1" />
                         <stop offset="1" stopColor="#00588a" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}f`}
-                        x1="44.41"
-                        y1="-127.59"
-                        x2="44.41"
-                        y2="-94.47"
                         gradientTransform="translate(-6.64 127.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}f`}
+                        x1="44.41"
+                        x2="44.41"
+                        y1="-127.59"
+                        y2="-94.47"
                     >
                         <stop offset="0" stopColor="#00a0e8" />
                         <stop offset="1" stopColor="#4fc8ec" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}g`}
-                        x1="44.41"
-                        y1="-126.1"
-                        x2="44.41"
-                        y2="-94.5"
                         gradientTransform="translate(-6.64 127.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}g`}
+                        x1="44.41"
+                        x2="44.41"
+                        y1="-126.1"
+                        y2="-94.5"
                     >
                         <stop offset="0" stopColor="#00a9fa" />
                         <stop offset="1" stopColor="#7ce1fd" />
@@ -141,8 +141,8 @@ class IconIWorkKeynoteDesktop extends React.Component<Props> {
                     d="M55.83 78c0 3.43-8.06 6.2-18 6.2S19.9 81.38 19.9 78v-2.21h35.92z"
                     fill={`url(#${this.idPrefix}a)`}
                 />
-                <ellipse cx="37.84" cy="76.07" rx="17.98" ry="5.95" fill={`url(#${this.idPrefix}b)`} />
-                <ellipse cx="37.84" cy="75.79" rx="17.98" ry="5.95" fill={`url(#${this.idPrefix}c)`} />
+                <ellipse cx="37.84" cy="76.07" fill={`url(#${this.idPrefix}b)`} rx="17.98" ry="5.95" />
+                <ellipse cx="37.84" cy="75.79" fill={`url(#${this.idPrefix}c)`} rx="17.98" ry="5.95" />
                 <path
                     d="M40.55 74.92c0 .52-1.23 1-2.77 1s-2.76-.44-2.76-1V31.86h5.73z"
                     fill={`url(#${this.idPrefix}d)`}
@@ -168,11 +168,11 @@ class IconIWorkKeynoteDesktop extends React.Component<Props> {
                     fill="#0098c1"
                 />
                 <path d="M62.14 26.74H13.27l3-22h43.05z" fill="#fff" />
-                <ellipse cx="42.31" cy="12.67" rx="1.04" ry=".61" fill="#06bff8" />
-                <ellipse cx="42.41" cy="14.89" rx="1.04" ry=".61" fill="#f19cf8" />
-                <ellipse cx="42.41" cy="17.16" rx="1.04" ry=".61" fill="#ff6d65" />
-                <ellipse cx="42.5" cy="19.58" rx="1.04" ry=".7" fill="#ffe65f" />
-                <ellipse cx="42.58" cy={22} rx="1.04" ry=".74" fill="#98e87c" />
+                <ellipse cx="42.31" cy="12.67" fill="#06bff8" rx="1.04" ry=".61" />
+                <ellipse cx="42.41" cy="14.89" fill="#f19cf8" rx="1.04" ry=".61" />
+                <ellipse cx="42.41" cy="17.16" fill="#ff6d65" rx="1.04" ry=".61" />
+                <ellipse cx="42.5" cy="19.58" fill="#ffe65f" rx="1.04" ry=".7" />
+                <ellipse cx="42.58" cy={22} fill="#98e87c" rx="1.04" ry=".74" />
                 <path
                     d="M44.94 12.24h7.89v.82h-7.89zm0 2.24h7.61v.82h-7.61zm.14 2.27h9v.82h-9zm.07 2.42h7.53V20h-7.53zm.09 2.42h10.38v.82H45.24z"
                     fill="#c8cdd6"

@@ -19,7 +19,7 @@ describe('icons/general/IconMinus', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconMinus width={width} height={height} />);
+        const wrapper = shallow(<IconMinus height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

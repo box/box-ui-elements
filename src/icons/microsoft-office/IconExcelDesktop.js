@@ -52,12 +52,12 @@ class IconExcelDesktop extends React.Component<Props> {
                 <path clipRule="evenodd" d="M56 4L4 13v70l52 9V4z" fill="#217346" fillRule="evenodd" />
                 <g opacity=".05">
                     <linearGradient
+                        gradientUnits="userSpaceOnUse"
                         id={`${this.idPrefix}a`}
                         x1="4"
                         x2="56"
                         y1="48"
                         y2="48"
-                        gradientUnits="userSpaceOnUse"
                     >
                         <stop offset="0" stopColor="#FFF" />
                         <stop offset="1" />

@@ -8,10 +8,10 @@ import './RadioButton.scss';
 const onChangeStub = () => {};
 
 type Props = {
-    isDisabled?: boolean,
-    isSelected?: boolean,
     description?: React.Node,
     hideLabel?: boolean,
+    isDisabled?: boolean,
+    isSelected?: boolean,
     label: React.Node,
     name?: string,
     value: string,
@@ -28,13 +28,14 @@ const RadioButton = ({
     ...rest
 }: Props) => (
     <div className="radio-container">
+        {/* eslint-disable-next-line jsx-a11y/label-has-for */}
         <label className="radio-label">
             <input
+                checked={isSelected}
                 disabled={isDisabled}
                 name={name}
                 onChange={onChangeStub}
                 type="radio"
-                checked={isSelected}
                 value={value}
                 {...rest}
             />

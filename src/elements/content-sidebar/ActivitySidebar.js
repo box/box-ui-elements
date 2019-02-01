@@ -8,7 +8,6 @@ import * as React from 'react';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
-import { FormattedMessage } from 'react-intl';
 import messages from 'elements/common/messages';
 import { withAPIContext } from 'elements/common/api-context';
 import { withErrorBoundary } from 'elements/common/error-boundary';
@@ -26,21 +25,21 @@ import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, SIDEBAR_VIEW_ACTIVITY
 import './ActivitySidebar.scss';
 
 type ExternalProps = {
+    currentUser?: User,
+    getUserProfileUrl?: string => Promise<string>,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
+    onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
-    onTaskAssignmentUpdate?: Function,
-    getUserProfileUrl?: string => Promise<string>,
-    currentUser?: User,
 } & ErrorContextProps;
 
 type PropsWithoutContext = {
     file: BoxItem,
-    translations?: Translations,
     isDisabled: boolean,
     onVersionHistoryClick?: Function,
+    translations?: Translations,
 } & ExternalProps &
     WithLoggerProps;
 
@@ -49,12 +48,12 @@ type Props = {
 } & PropsWithoutContext;
 
 type State = {
-    currentUser?: User,
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
     activityFeedError?: Errors,
+    approverSelectorContacts?: SelectorItems,
+    currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
+    mentionSelectorContacts?: SelectorItems,
 };
 
 export const activityFeedInlineError: Errors = {
@@ -161,7 +160,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Object} args - A subset of the task
      * @return void
      */
-    updateTask = ({ text, id }: { text: string, id: string }): void => {
+    updateTask = ({ text, id }: { id: string, text: string }): void => {
         const { file, api } = this.props;
         api.getFeedAPI(false).updateTask(file, id, text, this.feedSuccessCallback, this.feedErrorCallback);
 

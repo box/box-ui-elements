@@ -51,11 +51,11 @@ describe('components/pill-cloud/PillCloud', () => {
         const pills = [{ value: 1, text: 'Hello' }];
         const wrapper = shallow(
             <PillCloud
-                options={pills}
                 onSelect={option => {
                     expect(option.text).toEqual('Hello');
                     expect(option.value).toEqual(1);
                 }}
+                options={pills}
             />,
         );
 

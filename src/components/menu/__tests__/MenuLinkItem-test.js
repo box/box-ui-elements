@@ -39,7 +39,7 @@ describe('components/menu/MenuLinkItem', () => {
 
     test('should correctly render a selected item', () => {
         const wrapper = shallow(
-            <MenuLinkItem isSelectItem isSelected>
+            <MenuLinkItem isSelected isSelectItem>
                 <a href="/awesome">Foo</a>
             </MenuLinkItem>,
         );

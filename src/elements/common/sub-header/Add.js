@@ -15,16 +15,16 @@ import messages from '../messages';
 import './Add.scss';
 
 type Props = {
-    showUpload: boolean,
-    showCreate: boolean,
-    onUpload: Function,
-    onCreate: Function,
     isLoaded: boolean,
+    onCreate: Function,
+    onUpload: Function,
+    showCreate: boolean,
+    showUpload: boolean,
 };
 
 const Add = ({ onUpload, onCreate, isLoaded, showUpload = true, showCreate = true }: Props) => (
-    <DropdownMenu isRightAligned constrainToScrollParent>
-        <Button type="button" className="be-btn-add" isDisabled={!isLoaded}>
+    <DropdownMenu constrainToScrollParent isRightAligned>
+        <Button className="be-btn-add" isDisabled={!isLoaded} type="button">
             <IconAddThin />
         </Button>
         <Menu>

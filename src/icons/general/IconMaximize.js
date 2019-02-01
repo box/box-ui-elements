@@ -15,12 +15,12 @@ type Props = {
 const IconMaximize = ({ className = '', color = '#000000', height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={`icon-maximize ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 16 16"
+        width={width}
     >
-        <path d="M8 8V3H2v5h6zm1 0v1H1V1h8v7z" fill={color} fillRule="evenodd" className="fill-color" />
+        <path className="fill-color" d="M8 8V3H2v5h6zm1 0v1H1V1h8v7z" fill={color} fillRule="evenodd" />
     </AccessibleSVG>
 );
 

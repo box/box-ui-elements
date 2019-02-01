@@ -19,21 +19,21 @@ describe('components/form-elements/text-input/TextInput', () => {
     });
 
     test('should mark required fields invalid when empty', () => {
-        const wrapper = mount(<TextInput className="coverage" label="label" name="input" isRequired />);
+        const wrapper = mount(<TextInput className="coverage" isRequired label="label" name="input" />);
         const input = wrapper.find('input');
         input.simulate('blur');
         expect(wrapper.find('.text-input-container').hasClass('show-error')).toBeTruthy();
     });
 
     test('should mark required fields valid when not empty', () => {
-        const wrapper = mount(<TextInput label="label" name="input" value="baba" isRequired />);
+        const wrapper = mount(<TextInput isRequired label="label" name="input" value="baba" />);
         const input = wrapper.find('input');
         input.simulate('blur');
         expect(wrapper.find('.text-input-container').hasClass('show-error')).toBeFalsy();
     });
 
     test('should correctly validate when change event is fired', () => {
-        const wrapper = mount(<TextInput label="label" name="input" value="" isRequired />);
+        const wrapper = mount(<TextInput isRequired label="label" name="input" value="" />);
         const input = wrapper.find('input');
         input.simulate('blur');
 
@@ -158,7 +158,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         }
 
         const wrapper = mount(
-            <TextInput label="label" name="input" type="custom" validation={validityFn} isRequired />,
+            <TextInput isRequired label="label" name="input" type="custom" validation={validityFn} />,
         );
         const input = wrapper.find('input');
         const setCustomValiditySpy = jest.spyOn(input.getDOMNode(), 'setCustomValidity');
@@ -168,7 +168,7 @@ describe('components/form-elements/text-input/TextInput', () => {
     });
 
     test('should re-validate when input is set via props programaticallly', () => {
-        const wrapper = mount(<TextInput label="label" name="input" value="" isRequired />);
+        const wrapper = mount(<TextInput isRequired label="label" name="input" value="" />);
         const input = wrapper.find('input');
         input.simulate('blur');
 
@@ -188,7 +188,7 @@ describe('components/form-elements/text-input/TextInput', () => {
     });
 
     test('should validate onChange when input is already in error state', () => {
-        const wrapper = mount(<TextInput label="label" name="input" value="" isRequired />);
+        const wrapper = mount(<TextInput isRequired label="label" name="input" value="" />);
         const input = wrapper.find('input');
         input.simulate('blur');
 

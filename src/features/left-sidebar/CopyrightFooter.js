@@ -6,8 +6,8 @@ import LinkBase from 'components/link/LinkBase';
 import './styles/CopyrightFooter.scss';
 
 type Props = {
-    linkProps?: Object,
     date?: Date,
+    linkProps?: Object,
 };
 
 const CopyrightLink = (props: Props) => {

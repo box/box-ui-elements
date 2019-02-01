@@ -49,6 +49,7 @@ const Toggle = ({
 
     return (
         <div className={classes}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-for */}
             <label className="toggle-simple">
                 <input
                     checked={isOn}

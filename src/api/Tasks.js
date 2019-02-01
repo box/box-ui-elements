@@ -84,11 +84,11 @@ class Tasks extends Base {
         successCallback,
         errorCallback,
     }: {
+        dueAt?: string,
+        errorCallback: (e: ElementsXhrError, code: string) => void,
         file: BoxItem,
         message: string,
-        dueAt?: string,
         successCallback: Function,
-        errorCallback: (e: ElementsXhrError, code: string) => void,
     }): void {
         const { id = '', permissions } = file;
         this.errorCode = ERROR_CODE_CREATE_TASK;
@@ -139,12 +139,12 @@ class Tasks extends Base {
         successCallback,
         errorCallback,
     }: {
-        file: BoxItem,
-        taskId: string,
-        message: string,
         dueAt?: string,
-        successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        file: BoxItem,
+        message: string,
+        successCallback: Function,
+        taskId: string,
     }): void {
         const { id = '', permissions } = file;
         this.errorCode = ERROR_CODE_UPDATE_TASK;
@@ -156,7 +156,7 @@ class Tasks extends Base {
             return;
         }
 
-        const data: { message: string, due_at?: string } = { message };
+        const data: { due_at?: string, message: string } = { message };
         const requestData = { data };
 
         if (dueAt) {
@@ -187,10 +187,10 @@ class Tasks extends Base {
         successCallback,
         errorCallback,
     }: {
-        file: BoxItem,
-        taskId: string,
-        successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        file: BoxItem,
+        successCallback: Function,
+        taskId: string,
     }): void {
         this.errorCode = ERROR_CODE_DELETE_TASK;
         const { id = '', permissions } = file;

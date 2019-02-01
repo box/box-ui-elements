@@ -2,13 +2,13 @@
 import * as React from 'react';
 
 type Props = {
-    href?: string,
     children: React.Node,
-    linkRef?: Function,
-    target?: string,
-    rel?: string,
     component?: React.ElementType,
+    href?: string,
+    linkRef?: Function,
     refProp?: string,
+    rel?: string,
+    target?: string,
 };
 
 const LinkBase = ({ children, href = '#', linkRef, target, rel, component, refProp, ...rest }: Props) => {

@@ -13,8 +13,8 @@ import messages from 'elements/common/messages';
 import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 
 type Props = {
-    toEdit: Function,
     id: string,
+    toEdit: Function,
 } & InjectIntlProvidedProps;
 
 class InlineEdit extends React.Component<Props> {
@@ -30,9 +30,9 @@ class InlineEdit extends React.Component<Props> {
                 <PlainButton
                     aria-label={this.props.intl.formatMessage(messages.editLabel)}
                     className="bcs-comment-edit"
+                    data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
                     onClick={onEdit}
                     type="button"
-                    data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
                 >
                     <IconPencil />
                 </PlainButton>

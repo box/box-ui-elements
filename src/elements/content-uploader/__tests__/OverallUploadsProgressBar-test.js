@@ -10,10 +10,10 @@ describe('elements/content-uploader/OverallUploadsProgressBar', () => {
             <OverallUploadsProgressBar
                 isDragging={false}
                 isVisible
-                view={VIEW_UPLOAD_EMPTY}
-                percent={2}
                 onClick={noop}
                 onKeyDown={noop}
+                percent={2}
+                view={VIEW_UPLOAD_EMPTY}
                 {...props}
             />,
         );

@@ -53,9 +53,9 @@ const getPercent = (view: string, percent: number): number => {
 type Props = {
     isDragging: boolean,
     isVisible: boolean,
-    percent: number,
     onClick: Function,
     onKeyDown: Function,
+    percent: number,
     view: View,
 };
 

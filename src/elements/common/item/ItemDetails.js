@@ -12,18 +12,18 @@ import ItemSubDetails from './ItemSubDetails';
 import './ItemDetails.scss';
 
 type Props = {
-    rootId: string,
     item: BoxItem,
     onItemClick: Function,
+    rootId: string,
     view: View,
 };
 
 const ItemDetails = ({ view, rootId, item, onItemClick }: Props) => (
     <div className="be-item-details">
         {view === VIEW_SELECTED || view === VIEW_SEARCH ? (
-            <InlineBreadcrumbs rootId={rootId} item={item} onItemClick={onItemClick} />
+            <InlineBreadcrumbs item={item} onItemClick={onItemClick} rootId={rootId} />
         ) : (
-            <ItemSubDetails view={view} item={item} />
+            <ItemSubDetails item={item} view={view} />
         )}
     </div>
 );

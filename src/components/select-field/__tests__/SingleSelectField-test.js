@@ -21,7 +21,7 @@ describe('components/select-field/SingleSelectField', () => {
     describe('render()', () => {
         test('should render a BaseSelectField with a selectedValues prop matching passed in selected value when called', () => {
             const wrapper = shallow(
-                <SingleSelectField isDisabled={false} options={options} onChange={onChangeStub} selectedValue="bar" />,
+                <SingleSelectField isDisabled={false} onChange={onChangeStub} options={options} selectedValue="bar" />,
             );
             const instance = wrapper.instance();
 
@@ -36,12 +36,12 @@ describe('components/select-field/SingleSelectField', () => {
         test('should strip out props that are multi-select specific when called', () => {
             const wrapper = shallow(
                 <SingleSelectField
-                    options={options}
-                    onChange={onChangeStub}
-                    selectedValue="foo"
-                    multiple
                     defaultValue="foo"
+                    multiple
+                    onChange={onChangeStub}
+                    options={options}
                     placeholder="Select something"
+                    selectedValue="foo"
                 />,
             );
 
@@ -59,7 +59,7 @@ describe('components/select-field/SingleSelectField', () => {
         test('should not call onChange() when there is no selected items', () => {
             const onChangeMock = sandbox.mock().never();
             const wrapper = shallow(
-                <SingleSelectField options={options} onChange={onChangeMock} selectedValue="foo" />,
+                <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
             const instance = wrapper.instance();
 
@@ -69,7 +69,7 @@ describe('components/select-field/SingleSelectField', () => {
         test('should call onChange() when there is a selected item', () => {
             const onChangeMock = sandbox.mock().withArgs('foo');
             const wrapper = shallow(
-                <SingleSelectField options={options} onChange={onChangeMock} selectedValue="foo" />,
+                <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
             const instance = wrapper.instance();
 
@@ -79,7 +79,7 @@ describe('components/select-field/SingleSelectField', () => {
         test('should not call onChange() when there are more than 1 selected items (potentially an error)', () => {
             const onChangeMock = sandbox.mock().never();
             const wrapper = shallow(
-                <SingleSelectField options={options} onChange={onChangeMock} selectedValue="foo" />,
+                <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
             const instance = wrapper.instance();
 

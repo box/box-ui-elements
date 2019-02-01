@@ -12,7 +12,7 @@ const withErrorBoundary = (errorOrigin: ElementOrigin, errorComponent: React.Com
     WrappedComponent: React.ComponentType<any>,
 ) =>
     React.forwardRef<Object, React.Ref<any>>((props: Object, ref: React.Ref<any>) => (
-        <ErrorBoundary errorOrigin={errorOrigin} errorComponent={errorComponent} {...props}>
+        <ErrorBoundary errorComponent={errorComponent} errorOrigin={errorOrigin} {...props}>
             <WrappedComponent ref={ref} />
         </ErrorBoundary>
     ));

@@ -34,7 +34,7 @@ class IconBoxToolsInstall extends React.Component<Props> {
                 width={width}
             >
                 <defs>
-                    <rect id={`${this.idPrefix}a`} width="68.9" height="68.9" rx="15.9" />
+                    <rect height="68.9" id={`${this.idPrefix}a`} rx="15.9" width="68.9" />
                 </defs>
                 <g fill="none" fillRule="evenodd">
                     <path
@@ -44,7 +44,7 @@ class IconBoxToolsInstall extends React.Component<Props> {
                     />
                     <g fill="#0061D5" transform="translate(90.4 4.5)">
                         <circle cx="1.6" cy="2.5" r="1.5" />
-                        <rect width="15.2" height="3" x="4.1" y="1" rx="1.5" />
+                        <rect height="3" rx="1.5" width="15.2" x="4.1" y="1" />
                     </g>
                     <path
                         d="M10.6 119.7h83.7c0 1.4.8 2 2.3 2h10.8c1 0 1.5-.6 1.5-2h80.5"
@@ -56,10 +56,10 @@ class IconBoxToolsInstall extends React.Component<Props> {
                         <use fill="#0065E3" xlinkHref={`#${this.idPrefix}a`} />
                         <rect
                             height="70.2"
+                            rx="15.9"
                             stroke="#C3D1D9"
                             strokeOpacity=".2"
                             strokeWidth="1.3"
-                            rx="15.9"
                             width="70.2"
                             x="-.7"
                             y="-.7"

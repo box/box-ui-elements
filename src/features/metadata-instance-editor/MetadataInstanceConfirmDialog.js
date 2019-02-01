@@ -10,9 +10,9 @@ import messages from './messages';
 import './MetadataInstanceConfirmDialog.scss';
 
 type Props = {
+    confirmationMessage: string | React.Node,
     onCancel: Function,
     onConfirm: Function,
-    confirmationMessage: string | React.Node,
 };
 
 const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessage }: Props) => (
@@ -20,10 +20,10 @@ const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessag
         <div className="metadata-instance-confim-container">
             <p className="metadata-instance-confirm-text">{confirmationMessage}</p>
             <div className="metadata-instance-confirm-buttons">
-                <Button data-resin-target="metadata-confirmcancel" type="button" onClick={onCancel}>
+                <Button data-resin-target="metadata-confirmcancel" onClick={onCancel} type="button">
                     <FormattedMessage {...messages.metadataCancel} />
                 </Button>
-                <PrimaryButton data-resin-target="metadata-confirmremove" type="button" onClick={onConfirm}>
+                <PrimaryButton data-resin-target="metadata-confirmremove" onClick={onConfirm} type="button">
                     <FormattedMessage {...messages.customRemove} />
                 </PrimaryButton>
             </div>

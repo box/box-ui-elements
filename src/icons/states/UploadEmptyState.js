@@ -16,10 +16,10 @@ type Props = {
 const UploadEmptyState = ({ className = '', color = BOX_BLUE, height = 55, title, width = 46 }: Props) => (
     <AccessibleSVG
         className={`upload-empty-state ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 46 55"
+        width={width}
     >
         <path
             d="M1,52V3A2,2,0,0,1,3,1H30.91a2,2,0,0,1,1.41.59L44.41,13.68A2,2,0,0,1,45,15.09V52a2,2,0,0,1-2,2H3A2,2,0,0,1,1,52Z"

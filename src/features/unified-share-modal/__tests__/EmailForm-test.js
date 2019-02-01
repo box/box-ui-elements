@@ -198,6 +198,7 @@ describe('features/unified-share-modal/EmailForm', () => {
                 message,
             };
             const onSubmit = jest.fn().mockReturnValue(
+                // eslint-disable-next-line prefer-promise-reject-errors
                 Promise.reject({
                     invitedEmails: ['x@example.com'],
                 }),

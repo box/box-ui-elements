@@ -25,4 +25,5 @@ const isValidValue = (type: string, value: MetadataFieldValue, options?: Options
     return true;
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export { isValidValue };

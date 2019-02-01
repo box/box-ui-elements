@@ -13,14 +13,14 @@ import messages from 'elements/common/messages';
 import './Footer.scss';
 
 type Props = {
-    selectedCount: number,
-    onSelectedClick: Function,
-    hasHitSelectionLimit: boolean,
-    onChoose: Function,
-    onCancel: Function,
-    chooseButtonLabel?: string,
     cancelButtonLabel?: string,
     children?: any,
+    chooseButtonLabel?: string,
+    hasHitSelectionLimit: boolean,
+    onCancel: Function,
+    onChoose: Function,
+    onSelectedClick: Function,
+    selectedCount: number,
 };
 
 const Footer = ({
@@ -35,7 +35,7 @@ const Footer = ({
 }: Props) => (
     <footer className="bcp-footer">
         <div className="bcp-footer-left">
-            <PlainButton type="button" onClick={onSelectedClick}>
+            <PlainButton onClick={onSelectedClick} type="button">
                 <span className="bcp-selected-count">{selectedCount}</span>
                 &nbsp;
                 <FormattedMessage {...messages.selected} />
@@ -51,10 +51,10 @@ const Footer = ({
             {children}
 
             <div className="bcp-footer-actions">
-                <Button type="button" onClick={onCancel}>
+                <Button onClick={onCancel} type="button">
                     {cancelButtonLabel || <FormattedMessage {...messages.cancel} />}
                 </Button>
-                <PrimaryButton type="button" onClick={onChoose}>
+                <PrimaryButton onClick={onChoose} type="button">
                     {chooseButtonLabel || <FormattedMessage {...messages.choose} />}
                 </PrimaryButton>
             </div>

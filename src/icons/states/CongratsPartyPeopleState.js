@@ -30,11 +30,11 @@ class CongratsPartyPeopleState extends React.PureComponent<Props> {
                 className={`${ICON_CLASS} ${className}`}
                 height={height}
                 title={title}
-                width={width}
                 viewBox="0 0 194 202"
+                width={width}
             >
                 <defs>
-                    <ellipse id={`${this.idPrefix}a`} cx="90.395" cy="90.474" rx="90.395" ry="90.474" />
+                    <ellipse cx="90.395" cy="90.474" id={`${this.idPrefix}a`} rx="90.395" ry="90.474" />
                     <path
                         d="M10.655 9.563c1.037 0 2.435-1.701 2.476-1.166A25248.81 25248.81 0 0 0 14.9 31.748c.066.872 8.741 5.641 10.675 7.213 1.934 1.572 8.095 2.883 9.414 8.8 1.38 6.192-.415 13.247-5.347 10.476-1.903-1.069-20.758-20.986-21.487-22.303-.486-.879-.305-10.183.544-27.913.04-.535.92 1.542 1.957 1.542z"
                         id={`${this.idPrefix}c`}
@@ -44,8 +44,8 @@ class CongratsPartyPeopleState extends React.PureComponent<Props> {
                         id={`${this.idPrefix}d`}
                     />
                 </defs>
-                <g transform="translate(-6 -2)" fill="none" fillRule="evenodd">
-                    <ellipse fill="#50BEC3" opacity=".42" cx="103.955" cy="111.961" rx="90.395" ry="90.474" />
+                <g fill="none" fillRule="evenodd" transform="translate(-6 -2)">
+                    <ellipse cx="103.955" cy="111.961" fill="#50BEC3" opacity=".42" rx="90.395" ry="90.474" />
                     <path
                         d="M20.534 50.98l4.198-1.282a.565.565 0 0 1 .724.623c-.136.919.249 2.162 1.154 3.73 1.128 1.954 3.297 3.357 6.506 4.209a.565.565 0 0 1 .137 1.035l-6.076 3.508a.565.565 0 0 1-.317.075c-2.75-.17-4.727-1.297-5.93-3.38-1.188-2.06-1.45-4.755-.785-8.087a.565.565 0 0 1 .39-.43z"
                         fill="#50BEC3"
@@ -81,62 +81,62 @@ class CongratsPartyPeopleState extends React.PureComponent<Props> {
                     <path
                         d="M142.267 18.245c2.253 1.215 4.59 4.702 3.208 7.184-1.383 2.482-5.092 4.087-6.44 3.302-1.968-1.145-1.963-3.059-.946-3.913 1.018-.853 2.47-.888 3.35.552.88 1.44.444 10.665-1.156 12.22-1.6 1.555-3.508 1.046-4.083-.861-.574-1.908.524-3.67 2.196-3.458 1.672.213 3.406 2.14 3.723 5.168.212 2.018-2.165 4.466-7.132 7.342"
                         stroke="#F0A226"
-                        strokeWidth="2.825"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        strokeWidth="2.825"
                     />
                     <path
                         d="M11.393 74.79c-2.253 1.216-4.59 4.703-3.208 7.185 1.383 2.482 5.092 4.087 6.44 3.302 1.968-1.145 1.964-3.059.946-3.913-1.018-.854-2.47-.888-3.35.552-.88 1.44-.444 10.665 1.156 12.22 1.6 1.555 3.508 1.046 4.083-.861.575-1.908-.524-3.67-2.196-3.458-1.672.213-3.406 2.14-3.723 5.168-.212 2.018 2.165 4.466 7.132 7.342"
                         stroke="#26C281"
-                        strokeWidth="2.825"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        strokeWidth="2.825"
                     />
                     <path
                         d="M51.872 174.877c2.253 1.215 4.59 4.703 3.207 7.185-1.382 2.482-5.092 4.086-6.44 3.301-1.967-1.145-1.963-3.058-.945-3.912 1.017-.854 2.47-.889 3.35.551.88 1.44.444 10.665-1.156 12.22-1.6 1.555-3.508 1.046-4.083-.861-.575-1.907.524-3.67 2.195-3.458 1.672.213 3.406 2.14 3.724 5.168.212 2.019-2.166 4.466-7.132 7.342"
                         stroke="#4A90E2"
-                        strokeWidth="2.825"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        strokeWidth="2.825"
                     />
                     <ellipse
-                        stroke="#8B37E4"
-                        strokeWidth="2.26"
-                        fill="none"
                         cx="49.153"
                         cy="50.891"
+                        fill="none"
                         rx="2.26"
                         ry="2.262"
+                        stroke="#8B37E4"
+                        strokeWidth="2.26"
                     />
                     <ellipse
-                        stroke="#F0A226"
-                        strokeWidth="2.26"
-                        fill="none"
                         cx="44.633"
                         cy="57.111"
+                        fill="none"
                         rx="2.26"
                         ry="2.262"
+                        stroke="#F0A226"
+                        strokeWidth="2.26"
                     />
                     <ellipse
-                        stroke="#F8E71C"
-                        strokeWidth="2.26"
-                        fill="none"
                         cx="154.237"
                         cy="131.752"
+                        fill="none"
                         rx="2.26"
                         ry="2.262"
+                        stroke="#F8E71C"
+                        strokeWidth="2.26"
                     />
                     <ellipse
-                        stroke="#4A90E2"
-                        strokeWidth="2.26"
-                        fill="none"
                         cx="157.627"
                         cy="136.276"
+                        fill="none"
                         rx="2.26"
                         ry="2.262"
+                        stroke="#4A90E2"
+                        strokeWidth="2.26"
                     />
                     <g transform="translate(13.56 21.487)">
-                        <mask id={`${this.idPrefix}b`} fill="#fff">
+                        <mask fill="#fff" id={`${this.idPrefix}b`}>
                             <use xlinkHref={`#${this.idPrefix}a`} />
                         </mask>
                         <g mask={`url(#${this.idPrefix}b)`}>
@@ -220,44 +220,44 @@ class CongratsPartyPeopleState extends React.PureComponent<Props> {
                                     fill="#FA6476"
                                 />
                                 <ellipse
-                                    fill="#5E6F77"
-                                    transform="rotate(-40 31.395 15.015)"
                                     cx="31.395"
                                     cy="15.015"
+                                    fill="#5E6F77"
                                     rx="7.524"
                                     ry="5.162"
+                                    transform="rotate(-40 31.395 15.015)"
                                 />
                                 <ellipse
-                                    fill="#5E6F77"
-                                    transform="scale(-1 1) rotate(-40 0 125.507)"
                                     cx="41.039"
                                     cy="12.753"
+                                    fill="#5E6F77"
                                     rx="7.524"
                                     ry="5.162"
+                                    transform="scale(-1 1) rotate(-40 0 125.507)"
                                 />
                                 <ellipse
-                                    fill="#5E6F77"
-                                    transform="scale(-1 1) rotate(-40 0 113.025)"
                                     cx="37.8"
                                     cy="9.17"
+                                    fill="#5E6F77"
                                     rx="4.592"
                                     ry="5.162"
+                                    transform="scale(-1 1) rotate(-40 0 113.025)"
                                 />
                                 <ellipse
-                                    fill="#5E6F77"
-                                    transform="scale(-1 1) rotate(-40 0 96.657)"
                                     cx="31.227"
                                     cy="10.863"
+                                    fill="#5E6F77"
                                     rx="5.465"
                                     ry="5.162"
+                                    transform="scale(-1 1) rotate(-40 0 96.657)"
                                 />
                                 <ellipse
-                                    fill="#5E6F77"
-                                    transform="scale(-1 1) rotate(-40 0 96.657)"
                                     cx="31.227"
                                     cy="10.863"
+                                    fill="#5E6F77"
                                     rx="5.465"
                                     ry="5.162"
+                                    transform="scale(-1 1) rotate(-40 0 96.657)"
                                 />
                             </g>
                         </g>

@@ -15,12 +15,12 @@ type Props = {
 const IconCaretDown = ({ className = '', color = '#000', height = 6, title, width = 10 }: Props) => (
     <AccessibleSVG
         className={`icon-caret-down ${className}`}
-        title={title}
         height={height}
-        width={width}
+        title={title}
         viewBox="0 0 10 6"
+        width={width}
     >
-        <path className="fill-color" fill={color} fillRule="evenodd" d="M0 .5l5 5 5-5H0z" />
+        <path className="fill-color" d="M0 .5l5 5 5-5H0z" fill={color} fillRule="evenodd" />
     </AccessibleSVG>
 );
 

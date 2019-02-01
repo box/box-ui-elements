@@ -19,7 +19,7 @@ describe('icons/general/IconPencil', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 17;
         const height = 17;
-        const wrapper = shallow(<IconPencil width={width} height={height} />);
+        const wrapper = shallow(<IconPencil height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

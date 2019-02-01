@@ -32,7 +32,7 @@ describe('icons/general/IconBell', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconBell width={width} height={height} />);
+        const wrapper = shallow(<IconBell height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

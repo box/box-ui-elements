@@ -14,9 +14,9 @@ import AddApprovalFields from './AddApprovalFields';
 
 type Props = {
     approvalDate: ?Date,
-    approvers: SelectorItems,
     approverSelectorContacts?: SelectorItems,
     approverSelectorError: string,
+    approvers: SelectorItems,
     isAddApprovalVisible: boolean,
     onApprovalDateChange: Function,
     onApproverSelectorInput: Function,
@@ -40,9 +40,9 @@ const AddApproval = ({
         <Checkbox
             className="bcs-comment-add-approver-checkbox"
             data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_ADD_TASK}
+            isChecked={isAddApprovalVisible}
             label={intl.formatMessage(messages.approvalAddTask)}
             name="addApproval"
-            isChecked={isAddApprovalVisible}
             tooltip={intl.formatMessage(messages.approvalAddTaskTooltip)}
         />
         {isAddApprovalVisible ? (
@@ -51,10 +51,10 @@ const AddApproval = ({
                 approvers={approvers}
                 approverSelectorContacts={approverSelectorContacts}
                 approverSelectorError={approverSelectorError}
+                onApprovalDateChange={onApprovalDateChange}
                 onApproverSelectorInput={onApproverSelectorInput}
                 onApproverSelectorRemove={onApproverSelectorRemove}
                 onApproverSelectorSelect={onApproverSelectorSelect}
-                onApprovalDateChange={onApprovalDateChange}
             />
         ) : null}
     </div>

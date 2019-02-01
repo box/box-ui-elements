@@ -10,8 +10,8 @@ import type { Callout } from './Callout';
 import './styles/LeftSidebarLinkCallout.scss';
 
 type Props = {
-    children: React.Node,
     callout: Callout,
+    children: React.Node,
 };
 
 type State = {

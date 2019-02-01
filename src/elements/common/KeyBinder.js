@@ -12,24 +12,24 @@ type Props = {
     children: Function,
     className: string,
     columnCount: number,
+    id: string | void,
+    items: BoxItem[],
+    onDelete: Function,
+    onDownload: Function,
+    onOpen: Function,
+    onRename: Function,
     onScrollToChange: Function,
+    onSelect: Function,
+    onShare: Function,
     rowCount: number,
     scrollToColumn: number,
     scrollToRow: number,
-    onRename: Function,
-    onShare: Function,
-    onDownload: Function,
-    onOpen: Function,
-    onSelect: Function,
-    onDelete: Function,
-    items: BoxItem[],
-    id: string | void,
 };
 
 type State = {
+    focusOnRender: boolean,
     scrollToColumn: number,
     scrollToRow: number,
-    focusOnRender: boolean,
 };
 
 class KeyBinder extends PureComponent<Props, State> {

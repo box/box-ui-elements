@@ -30,8 +30,8 @@ class PeopleOpeningEnvelopeIllustration extends React.PureComponent<Props> {
                 className={`${ICON_CLASS} ${className}`}
                 height={height}
                 title={title}
-                width={width}
                 viewBox="0 0 200 200"
+                width={width}
             >
                 <defs>
                     <path
@@ -39,12 +39,12 @@ class PeopleOpeningEnvelopeIllustration extends React.PureComponent<Props> {
                         id="a"
                     />
                     <path d="M95.88 88.679l63.635 49.412H23.905L87.54 88.679a6.8 6.8 0 0 1 8.34 0z" id="c" />
-                    <filter x="-16.2%" y="-53.1%" width="132.4%" height="186.5%" filterUnits="objectBoundingBox" id="b">
+                    <filter filterUnits="objectBoundingBox" height="186.5%" id="b" width="132.4%" x="-16.2%" y="-53.1%">
                         <feOffset dy="-5" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="6.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="6.5" />
                         <feColorMatrix
-                            values="0 0 0 0 0.0823529412 0 0 0 0 0.121568627 0 0 0 0 0.149019608 0 0 0 0.06 0"
                             in="shadowBlurOuter1"
+                            values="0 0 0 0 0.0823529412 0 0 0 0 0.121568627 0 0 0 0 0.149019608 0 0 0 0.06 0"
                         />
                     </filter>
                     <path
@@ -56,18 +56,18 @@ class PeopleOpeningEnvelopeIllustration extends React.PureComponent<Props> {
                         id="e"
                     />
                 </defs>
-                <g transform="translate(10 10)" fill="none" fillRule="evenodd">
-                    <ellipse fill="#DDE6ED" opacity=".6" cx="90.95" cy="90" rx="90.05" ry="90" />
+                <g fill="none" fillRule="evenodd" transform="translate(10 10)">
+                    <ellipse cx="90.95" cy="90" fill="#DDE6ED" opacity=".6" rx="90.05" ry="90" />
                     <g fillRule="evenodd" transform="translate(0 7.2)">
                         <use fill="#FC627A" xlinkHref="#a" />
-                        <use fillOpacity=".12" fill="#000" xlinkHref="#a" />
+                        <use fill="#000" fillOpacity=".12" xlinkHref="#a" />
                     </g>
                     <path
+                        d="M23.906 95.908h135.61v31.703H23.906z"
                         fill="#90A0B0"
                         fillRule="nonzero"
                         opacity=".5"
                         style={{ mixBlendMode: 'multiply' }}
-                        d="M23.906 95.908h135.61v31.703H23.906z"
                     />
                     <path
                         d="M131.263 43.37v84.241H35.206V43.37a6.315 6.315 0 0 1 1.886-4.49 6.437 6.437 0 0 1 4.542-1.85h83.224c3.535 0 6.402 2.838 6.405 6.34"
@@ -88,7 +88,7 @@ class PeopleOpeningEnvelopeIllustration extends React.PureComponent<Props> {
                         fill="#FFF"
                         fillRule="nonzero"
                     />
-                    <path fill="#002947" fillRule="nonzero" d="M43.682 41.56h96.057v86.051H43.682z" />
+                    <path d="M43.682 41.56h96.057v86.051H43.682z" fill="#002947" fillRule="nonzero" />
                     <path
                         d="M134.088 127.611v-60.62c0-.446-.179-.874-.497-1.19l-17.208-16.957a1.728 1.728 0 0 0-1.206-.49h-64.13c-.947 0-1.715.757-1.715 1.691v77.566"
                         fill="#F9F9F9"
@@ -99,13 +99,13 @@ class PeopleOpeningEnvelopeIllustration extends React.PureComponent<Props> {
                         fill="#E9EEF3"
                         fillRule="nonzero"
                     />
-                    <path fill="#0061D5" fillRule="nonzero" d="M55.548 57.977H91.71v5.096H55.548z" />
+                    <path d="M55.548 57.977H91.71v5.096H55.548z" fill="#0061D5" fillRule="nonzero" />
                     <path
                         d="M118.324 63.639c.175-.566-.786-.957-1.232-1.048a4.45 4.45 0 0 0-1.757.085c-1.667.34-3.458.963-5.176.804a.565.565 0 0 1-.48-.283c-.379-.753-1.628-.113-2.091.38.313-.336.541-.742.667-1.184.3-1.053-2.227.498-2.464.617 1.028-.498 2.899-1.25 2.752-2.632-.271-2.548-6.419 1.794-7.154 2.395a5.7 5.7 0 0 0 2.622-.827c.938-.566 1.695-1.285 2.61-1.88 1.334-.888 2.736-1.54 3.803-2.762.277-.317.532-.787.266-1.133-.266-.345-.627-.232-.972-.18a19.395 19.395 0 0 0-8.345 3.543c-1.515 1.099-3.39 2.463-3.916 4.309"
                         stroke="#0061D5"
-                        strokeWidth=".567"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        strokeWidth=".567"
                     />
                     <path
                         d="M18.255 69.474l72.992 32.721c.295.133.632.133.927 0l72.992-32.72v73.652a2.267 2.267 0 0 1-2.267 2.267H20.522a2.267 2.267 0 0 1-2.267-2.267V69.474z"
@@ -115,7 +115,7 @@ class PeopleOpeningEnvelopeIllustration extends React.PureComponent<Props> {
                     <g fillRule="nonzero" transform="translate(0 7.2)">
                         <use fill="#000" filter="url(#b)" xlinkHref="#c" />
                         <use fill="#FC627A" fillRule="evenodd" xlinkHref="#c" />
-                        <use fillOpacity=".12" fill="#FFF" fillRule="evenodd" xlinkHref="#c" />
+                        <use fill="#FFF" fillOpacity=".12" fillRule="evenodd" xlinkHref="#c" />
                     </g>
                     <g>
                         <path

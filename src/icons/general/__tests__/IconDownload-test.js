@@ -10,7 +10,7 @@ describe('icons/general/IconDownload', () => {
         expect(wrapper.prop('height')).toEqual(14);
         expect(wrapper.prop('width')).toEqual(12);
         const strokeColors = wrapper.find('.stroke-color');
-        for (let i = 0; i < strokeColors.length; i++) {
+        for (let i = 0; i < strokeColors.length; i += 1) {
             expect(strokeColors.at(i).prop('stroke')).toEqual('#444');
         }
     });
@@ -27,7 +27,7 @@ describe('icons/general/IconDownload', () => {
         const wrapper = shallow(<IconDownload color={color} />);
 
         const strokeColors = wrapper.find('.stroke-color');
-        for (let i = 0; i < strokeColors.length; i++) {
+        for (let i = 0; i < strokeColors.length; i += 1) {
             expect(strokeColors.at(i).prop('stroke')).toEqual(color);
         }
     });
@@ -35,7 +35,7 @@ describe('icons/general/IconDownload', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconDownload width={width} height={height} />);
+        const wrapper = shallow(<IconDownload height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

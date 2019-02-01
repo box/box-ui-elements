@@ -35,13 +35,13 @@ class IconIWorkKeynote extends React.Component<Props> {
             >
                 <defs>
                     <linearGradient
-                        id={`${this.idPrefix}a`}
-                        x1="-1016.86"
-                        y1="-1332.01"
-                        x2="-1016.84"
-                        y2="-1354.15"
                         gradientTransform="matrix(1.33 0 0 1.33 1370.77 1805.85)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}a`}
+                        x1="-1016.86"
+                        x2="-1016.84"
+                        y1="-1332.01"
+                        y2="-1354.15"
                     >
                         <stop offset="0" stopColor="#155ff4" />
                         <stop offset="1" stopColor="#00d4ff" />

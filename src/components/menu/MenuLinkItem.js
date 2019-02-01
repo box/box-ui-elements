@@ -5,8 +5,8 @@ import omit from 'lodash/omit';
 
 type Props = {
     children: React.Node,
-    isSelected?: boolean,
     isSelectItem?: boolean,
+    isSelected?: boolean,
 };
 
 const MenuLinkItem = ({ children, isSelected = false, isSelectItem = false, ...rest }: Props) => {

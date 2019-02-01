@@ -234,10 +234,10 @@ class Base {
         requestData,
         url,
     }: {
-        id: string,
-        successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        id: string,
         requestData?: Object,
+        successCallback: Function,
         url?: string,
     }): Promise<any> {
         const apiUrl = url || this.getUrl(id);
@@ -260,11 +260,11 @@ class Base {
         successCallback,
         errorCallback,
     }: {
-        id: string,
-        url: string,
         data: Object,
-        successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        id: string,
+        successCallback: Function,
+        url: string,
     }): Promise<any> {
         return this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
     }
@@ -285,11 +285,11 @@ class Base {
         successCallback,
         errorCallback,
     }: {
-        id: string,
-        url: string,
         data: Object,
-        successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        id: string,
+        successCallback: Function,
+        url: string,
     }): Promise<any> {
         return this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
     }
@@ -310,11 +310,11 @@ class Base {
         successCallback,
         errorCallback,
     }: {
-        id: string,
-        url: string,
         data?: Object,
-        successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        id: string,
+        successCallback: Function,
+        url: string,
     }): Promise<any> {
         return this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
     }

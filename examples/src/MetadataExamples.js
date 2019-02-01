@@ -954,7 +954,7 @@ class MetadataExamples extends React.PureComponent {
         }, 1000);
     };
 
-    onSave = (id, ops, cascadePolicy = {}, rawData) => {
+    onSave = (id, ops, cascadePolicy = {}) => {
         // Whats being sent to the server to show in the examples page
         document.querySelector('.metadata-operations').textContent = JSON.stringify(ops, null, 2);
         document.querySelector('.metadata-cascading-policy').textContent = JSON.stringify(cascadePolicy, null, 2);
@@ -1033,13 +1033,13 @@ class MetadataExamples extends React.PureComponent {
                 <h3>Editable Metadata with Cascade Policy applicable</h3>
                 <div className="metadata-container">
                     <MetadataInstanceEditor
-                        isCascadingPolicyApplicable
                         canAdd
                         editors={this.state.editors}
-                        onSave={this.onSave}
-                        onModification={this.onModification}
+                        isCascadingPolicyApplicable
                         onAdd={this.onAdd}
+                        onModification={this.onModification}
                         onRemove={this.onRemove}
+                        onSave={this.onSave}
                         templates={this.state.templates}
                     />
                 </div>
@@ -1053,10 +1053,10 @@ class MetadataExamples extends React.PureComponent {
                     <MetadataInstanceEditor
                         canAdd
                         editors={this.state.editors}
-                        onModification={this.onModification}
-                        onSave={this.onSave}
                         onAdd={this.onAdd}
+                        onModification={this.onModification}
                         onRemove={this.onRemove}
+                        onSave={this.onSave}
                         templates={this.state.templates}
                         title={<h3>Metadata</h3>}
                     />
@@ -1067,10 +1067,10 @@ class MetadataExamples extends React.PureComponent {
                 <div className="metadata-container">
                     <MetadataInstanceEditor
                         canAdd
-                        onModification={this.onModification}
-                        onSave={this.onSave}
                         onAdd={this.onAdd}
+                        onModification={this.onModification}
                         onRemove={this.onRemove}
+                        onSave={this.onSave}
                         templates={this.state.templates}
                     />
                 </div>
@@ -1082,10 +1082,10 @@ class MetadataExamples extends React.PureComponent {
                     <MetadataInstanceEditor
                         canAdd
                         editors={this.state.editors}
-                        onSave={this.onSave}
-                        onModification={this.onModification}
                         onAdd={this.onAdd}
+                        onModification={this.onModification}
                         onRemove={this.onRemove}
+                        onSave={this.onSave}
                         templates={[]}
                     />
                     {this.state.isBusy && (

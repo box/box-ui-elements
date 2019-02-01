@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
@@ -41,7 +42,7 @@ describe('components/link/Link', () => {
 
     test('should render Link but not override "rel" when target="_blank"', () => {
         const wrapper = mount(
-            <Link href="foo" target="_blank" rel="noreferrer">
+            <Link href="foo" rel="noreferrer" target="_blank">
                 a link
             </Link>,
         );
@@ -59,7 +60,7 @@ describe('components/link/Link', () => {
             </a>
         );
         const wrapper = mount(
-            <Link to="my-route" component={MyLink}>
+            <Link component={MyLink} to="my-route">
                 a link
             </Link>,
         );
@@ -73,7 +74,7 @@ describe('components/link/Link', () => {
     test('should use "refProp" prop for element if passed', () => {
         const linkRef = jest.fn();
         mount(
-            <Link to="my-route" linkRef={linkRef} refProp="ref">
+            <Link linkRef={linkRef} refProp="ref" to="my-route">
                 a link
             </Link>,
         );

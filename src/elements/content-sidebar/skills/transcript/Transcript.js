@@ -25,16 +25,16 @@ import './Transcript.scss';
 
 type Props = {
     card: SkillCard,
-    isEditable: boolean,
     getViewer?: Function,
+    isEditable: boolean,
     onSkillChange: Function,
 };
 
 type State = {
+    isCollapsed: boolean,
     isEditingIndex?: number,
     isLoading: boolean,
     newTranscriptText: string,
-    isCollapsed: boolean,
 };
 
 class Transcript extends React.PureComponent<Props, State> {
@@ -93,14 +93,14 @@ class Transcript extends React.PureComponent<Props, State> {
         return (
             <TranscriptRow
                 key={index}
-                isEditing={isEditingRow}
                 appears={appears}
-                text={transcriptText}
-                onClick={() => this.onClick(index)}
-                onSave={this.onSave}
+                interactionTarget={interactionTarget}
+                isEditing={isEditingRow}
                 onCancel={this.onCancel}
                 onChange={this.onChange}
-                interactionTarget={interactionTarget}
+                onClick={() => this.onClick(index)}
+                onSave={this.onSave}
+                text={transcriptText}
             />
         );
     };
@@ -289,16 +289,16 @@ class Transcript extends React.PureComponent<Props, State> {
         const expandCollapseMessage = isCollapsed ? messages.expand : messages.collapse;
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading} className="be-transcript">
+            <LoadingIndicatorWrapper className="be-transcript" isLoading={isLoading}>
                 {hasEntries && !isLoading && (
                     <div className="be-transcript-actions">
                         <Tooltip text={<FormattedMessage {...messages.copy} />}>
                             <PlainButton
-                                type="button"
                                 className="be-transcript-copy"
+                                data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.COPY}
                                 getDOMRef={this.copyBtnRef}
                                 onClick={this.copyTranscript}
-                                data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.COPY}
+                                type="button"
                             >
                                 <IconCopy color={nines} />
                             </PlainButton>
@@ -306,10 +306,10 @@ class Transcript extends React.PureComponent<Props, State> {
                         {hasManyEntries && (
                             <Tooltip text={<FormattedMessage {...expandCollapseMessage} />}>
                                 <PlainButton
-                                    type="button"
                                     className="be-transcript-expand"
-                                    onClick={this.toggleExpandCollapse}
                                     data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EXPAND}
+                                    onClick={this.toggleExpandCollapse}
+                                    type="button"
                                 >
                                     {isCollapsed ? <IconExpand color={nines} /> : <IconCollapse color={nines} />}
                                 </PlainButton>
@@ -318,10 +318,10 @@ class Transcript extends React.PureComponent<Props, State> {
                         {isEditable && (
                             <Tooltip text={<FormattedMessage {...messages.editLabel} />}>
                                 <PlainButton
-                                    type="button"
                                     className={editBtnClassName}
-                                    onClick={this.toggleIsEditing}
                                     data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
+                                    onClick={this.toggleIsEditing}
+                                    type="button"
                                 >
                                     <IconEdit />
                                 </PlainButton>

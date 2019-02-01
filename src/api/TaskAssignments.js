@@ -43,11 +43,11 @@ class TaskAssignments extends Base {
         successCallback,
         errorCallback,
     }: {
-        file: BoxItem,
-        taskId: string,
         assignTo: { id: string },
-        successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        file: BoxItem,
+        successCallback: Function,
+        taskId: string,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_TASK_ASSIGNMENT;
         const { id = '', permissions } = file;
@@ -95,11 +95,11 @@ class TaskAssignments extends Base {
         successCallback,
         errorCallback,
     }: {
+        errorCallback: ElementsErrorCallback,
         file: BoxItem,
+        successCallback: Function,
         taskAssignmentId: string,
         taskStatus: TaskAssignmentStatus,
-        successCallback: Function,
-        errorCallback: ElementsErrorCallback,
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_TASK_ASSIGNMENT;
         const { id = '', permissions } = file;
@@ -140,10 +140,10 @@ class TaskAssignments extends Base {
         successCallback,
         errorCallback,
     }: {
-        file: BoxItem,
-        taskAssignmentId: string,
-        successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        file: BoxItem,
+        successCallback: Function,
+        taskAssignmentId: string,
     }): void {
         this.errorCode = ERROR_CODE_DELETE_TASK_ASSIGNMENT;
         const { id = '', permissions } = file;

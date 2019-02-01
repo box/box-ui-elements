@@ -32,7 +32,7 @@ const IWorkIcon = ({ className, dimension = 30, extension, title }: Props) => {
     }
 
     if (Component !== null) {
-        return <Component className={className} height={dimension} width={dimension} title={title} />;
+        return <Component className={className} height={dimension} title={title} width={dimension} />;
     }
     return null;
 };

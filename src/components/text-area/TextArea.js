@@ -36,10 +36,10 @@ const TextArea = ({
     return (
         <div className={classes}>
             <Label hideLabel={hideLabel} showOptionalText={!isRequired} text={label}>
-                <Tooltip isShown={!!error} text={error || ''} position="bottom-left" theme="error">
+                <Tooltip isShown={!!error} position="bottom-left" text={error || ''} theme="error">
                     <textarea
-                        required={isRequired}
                         ref={textareaRef}
+                        required={isRequired}
                         style={{ resize: isResizable ? '' : 'none' }}
                         {...rest}
                     />

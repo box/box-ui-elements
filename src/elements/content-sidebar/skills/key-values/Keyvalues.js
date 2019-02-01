@@ -20,7 +20,7 @@ const Keyvalues = ({ card: { entries } }: Props) => (
                     !!label &&
                     !!text && (
                         /* eslint-disable react/no-array-index-key */
-                        <dl className="be-keyvalue" key={index}>
+                        <dl key={index} className="be-keyvalue">
                             <dt>{label}</dt>
                             <dd>{text}</dd>
                         </dl>

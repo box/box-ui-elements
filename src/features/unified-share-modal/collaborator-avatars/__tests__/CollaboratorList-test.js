@@ -39,7 +39,7 @@ describe('features/unified-share-modal/collaborator-avatar-group/CollaboratorLis
     };
     const getWrapper = (props = {}) =>
         shallow(
-            <CollaboratorList collaborators={collaborators} name="test" item={item} trackingProps={{}} {...props} />,
+            <CollaboratorList collaborators={collaborators} item={item} name="test" trackingProps={{}} {...props} />,
         );
 
     describe('render()', () => {

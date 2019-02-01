@@ -55,7 +55,7 @@ class Avatar extends React.PureComponent<Props, State> {
 
         let avatar;
         if (avatarUrl && !hasImageErrored) {
-            avatar = <AvatarImage url={avatarUrl} onError={this.onImageError} />;
+            avatar = <AvatarImage onError={this.onImageError} url={avatarUrl} />;
         } else if (name) {
             avatar = <AvatarInitials id={id} name={name} />;
         } else {

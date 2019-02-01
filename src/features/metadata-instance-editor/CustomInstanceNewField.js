@@ -20,9 +20,9 @@ type Props = {
 };
 
 type State = {
+    error: React.Node,
     key: string,
     value: string,
-    error: React.Node,
 };
 
 class CustomInstanceNewField extends React.PureComponent<Props, State> {
@@ -101,14 +101,14 @@ class CustomInstanceNewField extends React.PureComponent<Props, State> {
                     <FormattedMessage tagName="h5" {...messages.customNewField} />
                     <Tooltip text={<FormattedMessage {...messages.customNewFieldMessage} />}>
                         <div tabIndex="-1">
-                            <IconInfo color="#777" width={18} height={18} />
+                            <IconInfo color="#777" height={18} width={18} />
                         </div>
                     </Tooltip>
                 </div>
                 <TextInput
                     error={error}
-                    label={<FormattedMessage {...messages.customKey} />}
                     isRequired
+                    label={<FormattedMessage {...messages.customKey} />}
                     onChange={this.onKeyChange}
                     placeholder={intl.formatMessage(messages.customKeyPlaceholder)}
                     type="text"
@@ -124,11 +124,11 @@ class CustomInstanceNewField extends React.PureComponent<Props, State> {
                 />
                 <div className="custom-new-field-actions">
                     {isCancellable && (
-                        <Button type="button" data-resin-target="metadata-customfieldcancel" onClick={onCancel}>
+                        <Button data-resin-target="metadata-customfieldcancel" onClick={onCancel} type="button">
                             <FormattedMessage {...commonMessages.cancel} />
                         </Button>
                     )}
-                    <Button type="button" data-resin-target="metadata-customfieldadd" onClick={this.onAdd}>
+                    <Button data-resin-target="metadata-customfieldadd" onClick={this.onAdd} type="button">
                         <FormattedMessage {...messages.customAdd} />
                     </Button>
                 </div>

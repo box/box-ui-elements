@@ -9,8 +9,8 @@ import './SidebarContent.scss';
 
 type Props = {
     actions?: React.Node,
-    title: React.Node,
     children: any,
+    title: React.Node,
 };
 
 const SidebarContent = ({ actions, title, children }: Props) => (

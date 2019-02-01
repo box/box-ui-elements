@@ -81,10 +81,10 @@ class DraftJSMentionSelectorExamples extends Component {
                 <h3>Mention Selector</h3>
                 <Section id="mention-selector-external-editor-state-draft" title="External Editor State">
                     <MentionSelectorContainer
-                        isRequired
                         editorState={exampleExternalEditorState}
-                        onChange={this.onExternalEditorStateChange}
+                        isRequired
                         name="comments1"
+                        onChange={this.onExternalEditorStateChange}
                     />
                     <PrimaryButton onClick={this.initializeEditorState}>Reset State</PrimaryButton>
                 </Section>
@@ -94,25 +94,25 @@ class DraftJSMentionSelectorExamples extends Component {
                 <Section id="mention-selector-required-draft" title="Handle Return Key">
                     <MentionSelectorContainer
                         name="comments1"
-                        placeholder="Enter a comment (uses draft)"
                         onReturn={event => !event.shiftKey}
+                        placeholder="Enter a comment (uses draft)"
                     />
                 </Section>
                 <Section id="mention-selector-disabled-draft" title="Disabled">
-                    <MentionSelectorContainer name="comments1" isDisabled placeholder="this one is disabled" />
+                    <MentionSelectorContainer isDisabled name="comments1" placeholder="this one is disabled" />
                 </Section>
                 <Section id="mention-selector-required-all-props" title="All possible props set">
                     <MentionSelectorContainer
                         isRequired
-                        name="comments1"
                         label="several props"
-                        placeholder="Lots of props"
+                        name="comments1"
                         onChange={x => {
                             console.log('a change: ', x.toJS()); // eslint-disable-line
                         }}
                         onFocus={() => {
                             console.log('the draft mention selector was focused'); // eslint-disable-line
                         }}
+                        placeholder="Lots of props"
                     />
                 </Section>
             </div>

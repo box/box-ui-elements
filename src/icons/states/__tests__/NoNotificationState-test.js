@@ -18,7 +18,7 @@ describe('icons/states/NoNotificationStae', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 140;
         const height = 150;
-        const wrapper = shallow(<NoNotificationState width={width} height={height} />);
+        const wrapper = shallow(<NoNotificationState height={height} width={width} />);
 
         expect(wrapper.prop('width')).toEqual(width);
         expect(wrapper.prop('height')).toEqual(height);

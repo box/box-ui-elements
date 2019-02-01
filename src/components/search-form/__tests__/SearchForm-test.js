@@ -54,7 +54,7 @@ describe('components/search-form/SearchForm', () => {
                 ],
             },
         };
-        const wrapper = mount(<SearchForm placeholder="search" onSubmit={onSubmitSpy} value="cheese" />);
+        const wrapper = mount(<SearchForm onSubmit={onSubmitSpy} placeholder="search" value="cheese" />);
         const form = wrapper.find('form');
         form.simulate('submit', event);
         sinon.assert.calledWithMatch(onSubmitSpy, 'cheese', event);
@@ -62,7 +62,7 @@ describe('components/search-form/SearchForm', () => {
 
     test('should call onchange on form change', () => {
         const onChangeSpy = sinon.spy();
-        const wrapper = mount(<SearchForm placeholder="search" onChange={onChangeSpy} value="cheese" />);
+        const wrapper = mount(<SearchForm onChange={onChangeSpy} placeholder="search" value="cheese" />);
         const form = wrapper.find('form');
         form.simulate('change');
         sinon.assert.called(onChangeSpy);
@@ -125,7 +125,7 @@ describe('components/search-form/SearchForm', () => {
         });
 
         test('should set isEmpty state to true', () => {
-            const wrapper = shallow(<SearchForm name="query" intl={intlShape} />).shallow();
+            const wrapper = shallow(<SearchForm intl={intlShape} name="query" />).shallow();
             const instance = wrapper.instance();
             instance.setState({ isEmpty: false });
             instance.searchInput = { value: 'abc' };
@@ -137,7 +137,7 @@ describe('components/search-form/SearchForm', () => {
 
         test('should stop propagation if stopDefaultEvent param is passed', () => {
             const wrapper = shallow(
-                <SearchForm name="query" intl={intlShape} shouldPreventClearEventPropagation />,
+                <SearchForm intl={intlShape} name="query" shouldPreventClearEventPropagation />,
             ).shallow();
             const instance = wrapper.instance();
             const stopPropagationStub = sandbox.stub();
@@ -178,7 +178,7 @@ describe('components/search-form/SearchForm', () => {
             },
         ].forEach(({ value, isEmpty }) => {
             test('should set isEmpty state correctly', () => {
-                const wrapper = shallow(<SearchForm name="query" intl={intlShape} />).shallow();
+                const wrapper = shallow(<SearchForm intl={intlShape} name="query" />).shallow();
                 const instance = wrapper.instance();
 
                 instance.onChangeHandler({
@@ -193,7 +193,7 @@ describe('components/search-form/SearchForm', () => {
     });
 
     test('should render loading indicator and not search/clear buttons when isLoading is true', () => {
-        const wrapper = mount(<SearchForm placeholder="search" isLoading />);
+        const wrapper = mount(<SearchForm isLoading placeholder="search" />);
 
         expect(wrapper.find('.action-button').length).toEqual(0);
         expect(wrapper.find('.search-form-loading-indicator').hostNodes().length).toEqual(1);

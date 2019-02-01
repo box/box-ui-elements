@@ -3,7 +3,7 @@ import * as React from 'react';
 import CollaboratorAvatarItem from '../CollaboratorAvatarItem';
 
 describe('features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem', () => {
-    const getWrapper = (props = {}) => shallow(<CollaboratorAvatarItem name="foo bar" id={1} {...props} />);
+    const getWrapper = (props = {}) => shallow(<CollaboratorAvatarItem id={1} name="foo bar" {...props} />);
 
     describe('render()', () => {
         test('should render default component', () => {

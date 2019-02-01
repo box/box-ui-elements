@@ -125,13 +125,13 @@ class PlainUpload extends BaseUpload {
         progressCallback = noop,
         overwrite = true,
     }: {
-        folderId: string,
-        fileId: ?string,
-        file: File,
-        successCallback: Function,
         errorCallback: Function,
-        progressCallback: Function,
+        file: File,
+        fileId: ?string,
+        folderId: string,
         overwrite: boolean,
+        progressCallback: Function,
+        successCallback: Function,
     }): void {
         if (this.isDestroyed()) {
             return;

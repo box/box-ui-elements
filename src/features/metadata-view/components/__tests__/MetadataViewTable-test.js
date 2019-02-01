@@ -18,21 +18,21 @@ const { totalWidth, tableHeight, tableHeaderHeight, tableRowHeight, widths } = m
 
 const instance = { instances };
 
-const items = instance.instances.map(instance => instance.data);
+const items = instance.instances.map(i => i.data);
 
 describe('features/metadata-view/components/MetadataViewTable', () => {
     const stateAfterMount = metadataTableStateAfterMount;
 
-    const getWrapper = (props = {}) => {
+    const getWrapper = () => {
         return shallow(
             <MetadataTable
                 columns={visibleColumns}
                 columnWidths={widths}
                 height={100}
                 items={items}
-                tableRowHeight={tableRowHeight}
                 tableHeaderHeight={tableHeaderHeight}
                 tableHeight={tableHeight}
+                tableRowHeight={tableRowHeight}
                 template={template}
                 totalWidth={totalWidth}
                 width={100}

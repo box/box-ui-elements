@@ -46,8 +46,8 @@ class BaseMultiput extends BaseUpload {
      */
     logEvent = (eventType: string, eventInfo?: string) => {
         const data: {
-            event_type: string,
             event_info?: string,
+            event_type: string,
         } = {
             event_type: eventType,
         };

@@ -240,10 +240,10 @@ class Xhr {
         params = {},
         headers = {},
     }: {
-        url: string,
+        headers?: StringMap,
         id?: string,
         params?: StringAnyMap,
-        headers?: StringMap,
+        url: string,
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then(hdrs =>
             this.axios.get(url, {
@@ -274,12 +274,12 @@ class Xhr {
         headers = {},
         method = HTTP_POST,
     }: {
-        url: string,
-        id?: string,
         data: PayloadType,
-        params?: StringAnyMap,
         headers?: StringMap,
+        id?: string,
         method?: Method,
+        params?: StringAnyMap,
+        url: string,
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then(hdrs =>
             this.axios({
@@ -310,11 +310,11 @@ class Xhr {
         params,
         headers = {},
     }: {
-        url: string,
-        id?: string,
         data: PayloadType,
-        params?: StringAnyMap,
         headers?: StringMap,
+        id?: string,
+        params?: StringAnyMap,
+        url: string,
     }): Promise<StringAnyMap> {
         return this.post({ id, url, data, params, headers, method: HTTP_PUT });
     }
@@ -334,10 +334,10 @@ class Xhr {
         data = {},
         headers = {},
     }: {
-        url: string,
-        id?: string,
         data?: StringAnyMap,
         headers?: StringMap,
+        id?: string,
+        url: string,
     }): Promise<StringAnyMap> {
         return this.post({ id, url, data, headers, method: HTTP_DELETE });
     }
@@ -361,13 +361,13 @@ class Xhr {
         successHandler,
         errorHandler,
     }: {
-        url: string,
         data: StringAnyMap,
-        id?: string,
-        headers?: StringMap,
-        successHandler: Function,
         errorHandler: Function,
+        headers?: StringMap,
+        id?: string,
         progressHandler?: Function,
+        successHandler: Function,
+        url: string,
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers)
             .then(hdrs =>
@@ -412,17 +412,17 @@ class Xhr {
         idleTimeoutDuration = DEFAULT_UPLOAD_TIMEOUT_MS,
         idleTimeoutHandler,
     }: {
-        url: string,
-        id?: string,
         data?: ?Blob | ?StringAnyMap,
-        headers?: StringMap,
-        method?: Method,
-        successHandler: Function,
         errorHandler: Function,
-        progressHandler: Function,
-        withIdleTimeout?: boolean,
+        headers?: StringMap,
+        id?: string,
         idleTimeoutDuration?: number,
         idleTimeoutHandler?: Function,
+        method?: Method,
+        progressHandler: Function,
+        successHandler: Function,
+        url: string,
+        withIdleTimeout?: boolean,
     }): Promise<any> {
         return this.getHeaders(id, headers)
             .then(hdrs => {

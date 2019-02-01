@@ -15,10 +15,10 @@ type Props = {
 const IconSortChevron = ({ className = '', color = '#aeaeae', height = 11, title, width = 11 }: Props) => (
     <AccessibleSVG
         className={`icon-sort-chevron ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 9.8 9.7"
+        width={width}
     >
         <path
             className="fill-color"

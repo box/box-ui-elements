@@ -10,9 +10,9 @@ type Props = {
     /** Pure function that returns a panel id unique to the given value  */
     getPanelIdFromValue: Function,
     /** Gets called when a slide is selected. Called with the appropriate slide index  */
-    onSelection: Function,
-    /** The number of slides. Each is associated to an index, starting from 0 */
     numOptions: number,
+    /** The number of slides. Each is associated to an index, starting from 0 */
+    onSelection: Function,
     selectedIndex: number,
 };
 
@@ -61,11 +61,12 @@ class SlideNavigator extends React.Component<Props> {
             <nav
                 className="slide-navigator"
                 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
-                role="tablist"
                 onKeyDown={this.handleKeyDown}
+                role="tablist"
             >
                 {range(numOptions).map((child, i) => (
                     <SlideButton
+                        key={i}
                         aria-controls={getPanelIdFromValue(i)}
                         aria-label={`slide${i}`}
                         buttonRef={buttonEl => {
@@ -73,7 +74,6 @@ class SlideNavigator extends React.Component<Props> {
                         }}
                         id={getButtonIdFromValue(i)}
                         isSelected={i === selectedIndex}
-                        key={i}
                         onClick={() => onSelection(i)}
                         tabIndex={i === selectedIndex ? '0' : '-1'}
                     />

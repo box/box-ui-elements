@@ -12,7 +12,7 @@ const mockIntl = {
 };
 
 const render = props =>
-    mount(<TaskForm getMentionWithQuery={() => {}} user={{ id: 123, name: 'foo bar' }} intl={mockIntl} {...props} />);
+    mount(<TaskForm getMentionWithQuery={() => {}} intl={mockIntl} user={{ id: 123, name: 'foo bar' }} {...props} />);
 
 describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
     test('should render form fields', () => {

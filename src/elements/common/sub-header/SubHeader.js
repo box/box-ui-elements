@@ -11,17 +11,17 @@ import SubHeaderRight from './SubHeaderRight';
 import './SubHeader.scss';
 
 type Props = {
-    rootId: string,
-    rootName?: string,
+    canCreateNewFolder: boolean,
+    canUpload: boolean,
+    currentCollection: Collection,
+    isSmall: boolean,
+    onCreate: Function,
     onItemClick: Function,
     onSortChange: Function,
-    currentCollection: Collection,
     onUpload: Function,
-    onCreate: Function,
-    canUpload: boolean,
-    canCreateNewFolder: boolean,
+    rootId: string,
+    rootName?: string,
     view: View,
-    isSmall: boolean,
 };
 
 const SubHeader = ({
@@ -39,21 +39,21 @@ const SubHeader = ({
 }: Props) => (
     <div className="be-sub-header">
         <SubHeaderLeft
+            currentCollection={currentCollection}
+            isSmall={isSmall}
+            onItemClick={onItemClick}
             rootId={rootId}
             rootName={rootName}
-            onItemClick={onItemClick}
-            currentCollection={currentCollection}
             view={view}
-            isSmall={isSmall}
         />
         <SubHeaderRight
-            view={view}
-            currentCollection={currentCollection}
-            canUpload={canUpload}
             canCreateNewFolder={canCreateNewFolder}
-            onUpload={onUpload}
+            canUpload={canUpload}
+            currentCollection={currentCollection}
             onCreate={onCreate}
             onSortChange={onSortChange}
+            onUpload={onUpload}
+            view={view}
         />
     </div>
 );

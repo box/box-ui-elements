@@ -22,14 +22,15 @@ const PresenceAvatar = ({
             'presence-avatar-dropdown': isDropDownAvatar,
             'is-active': isActive,
         })}
+        onBlur={onBlur}
+        onFocus={onFocus}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        onFocus={onFocus}
-        onBlur={onBlur}
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
         tabIndex={!isDropDownAvatar ? '0' : ''}
         {...rest}
     >
-        <Avatar avatarUrl={avatarUrl} id={id} name={name} className={!isDropDownAvatar ? 'presence-notehead' : ''} />
+        <Avatar avatarUrl={avatarUrl} className={!isDropDownAvatar ? 'presence-notehead' : ''} id={id} name={name} />
     </div>
 );
 

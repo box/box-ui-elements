@@ -24,8 +24,8 @@ const IconDrawAnnotationMode = ({ className = '', color = fours, height = 21, ti
         <path
             className="fill-color"
             d="M11.65,6.64,5.11,13.17.06,14.94,1.83,9.89,8.37,3.35Zm1.41-1.41L9.78,1.94,11.37.35a1,1,0,0,1,1.41,0l1.87,1.87a1,1,0,0,1,0,1.41Z"
-            fillRule="evenodd"
             fill={color}
+            fillRule="evenodd"
         />
     </AccessibleSVG>
 );

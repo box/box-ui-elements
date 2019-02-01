@@ -29,7 +29,7 @@ describe('components/collapsible/Collapsible', () => {
 
     test('should apply correct border class', () => {
         wrapper = shallow(
-            <Collapsible isOpen title="foo" isBordered>
+            <Collapsible isBordered isOpen title="foo">
                 <span>foobar</span>
             </Collapsible>,
         );
@@ -49,7 +49,7 @@ describe('components/collapsible/Collapsible', () => {
 
     test('should apply buttonProps correctly', () => {
         wrapper = shallow(
-            <Collapsible isOpen buttonProps={{ a: 1, b: 2 }} title="foo">
+            <Collapsible buttonProps={{ a: 1, b: 2 }} isOpen title="foo">
                 <span>foobar</span>
             </Collapsible>,
         );
@@ -82,7 +82,7 @@ describe('components/collapsible/Collapsible', () => {
         const openSpy = sinon.spy();
 
         wrapper = shallow(
-            <Collapsible isOpen onOpen={openSpy} onClose={closeSpy} buttonProps={{ a: 1, b: 2 }} title="foo">
+            <Collapsible buttonProps={{ a: 1, b: 2 }} isOpen onClose={closeSpy} onOpen={openSpy} title="foo">
                 <span>foobar</span>
             </Collapsible>,
         );

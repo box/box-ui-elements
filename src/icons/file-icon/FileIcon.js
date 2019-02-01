@@ -188,7 +188,7 @@ type Props = {
 
 const FileIcon = ({ dimension = 32, extension = '', title }: Props) => {
     const IconComponent = Components[getFileIconComponent(extension)];
-    return <IconComponent height={dimension} width={dimension} title={title} />;
+    return <IconComponent height={dimension} title={title} width={dimension} />;
 };
 
 export default FileIcon;

@@ -52,8 +52,10 @@ type Props = {
     chunked: boolean,
     className: string,
     clientName: string,
+    dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
     fileLimit: number,
     files?: Array<UploadFileWithAPIOptions | File>,
+    isDraggingItemsToUploadsManager?: boolean,
     isFolderUploadEnabled: boolean,
     isLarge: boolean,
     isSmall: boolean,
@@ -61,12 +63,12 @@ type Props = {
     language?: string,
     measureRef: Function,
     messages?: StringMap,
+    onBeforeUpload: (file: Array<UploadFileWithAPIOptions | File>) => void,
     onCancel: Function,
     onClose: Function,
     onComplete: Function,
     onError: Function,
     onMinimize?: Function,
-    onBeforeUpload: (file: Array<UploadFileWithAPIOptions | File>) => void,
     onUpload: Function,
     overwrite: boolean,
     requestInterceptor?: Function,
@@ -77,8 +79,6 @@ type Props = {
     token?: Token,
     uploadHost: string,
     useUploadsManager?: boolean,
-    dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
-    isDraggingItemsToUploadsManager?: boolean,
 };
 
 type State = {
@@ -1048,34 +1048,34 @@ class ContentUploader extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 {useUploadsManager ? (
-                    <div className={styleClassName} id={this.id} ref={measureRef}>
+                    <div ref={measureRef} className={styleClassName} id={this.id}>
                         <UploadsManager
+                            isDragging={isDraggingItemsToUploadsManager}
                             isExpanded={isUploadsManagerExpanded}
                             isVisible={isVisible}
                             items={items}
                             onItemActionClick={this.onClick}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}
-                            isDragging={isDraggingItemsToUploadsManager}
                         />
                     </div>
                 ) : (
-                    <div className={styleClassName} id={this.id} ref={measureRef}>
+                    <div ref={measureRef} className={styleClassName} id={this.id}>
                         <DroppableContent
-                            addFiles={this.addFilesToUploadQueue}
                             addDataTransferItemsToUploadQueue={this.addDataTransferItemsToUploadQueue}
+                            addFiles={this.addFilesToUploadQueue}
                             allowedTypes={['Files']}
-                            items={items}
-                            isTouch={isTouch}
-                            view={view}
-                            onClick={this.onClick}
                             isFolderUploadEnabled={isFolderUploadEnabled}
+                            isTouch={isTouch}
+                            items={items}
+                            onClick={this.onClick}
+                            view={view}
                         />
                         <Footer
-                            hasFiles={hasFiles}
-                            isLoading={isLoading}
                             errorCode={errorCode}
                             fileLimit={fileLimit}
+                            hasFiles={hasFiles}
+                            isLoading={isLoading}
                             onCancel={this.cancel}
                             onClose={onClose}
                             onUpload={this.upload}

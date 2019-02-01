@@ -9,12 +9,12 @@ import PlainButton from 'components/plain-button/PlainButton';
 import './Timeslice.scss';
 
 type Props = {
-    start: number,
     duration: number,
     end?: number,
     index: number,
-    onClick: Function,
     interactionTarget: string,
+    onClick: Function,
+    start: number,
 };
 
 const LENGTH_TEXT_ITEMLINE = 290; // match with css
@@ -41,14 +41,14 @@ const Timeslice = ({ start, end, duration, onClick, index, interactionTarget }: 
 
     return (
         <PlainButton
-            type="button"
             className="be-timeline-time"
+            data-resin-target={interactionTarget}
+            onClick={() => onClick(index)}
             style={{
                 left: `${startLeft}px`,
                 width: `${width}px`,
             }}
-            onClick={() => onClick(index)}
-            data-resin-target={interactionTarget}
+            type="button"
         />
     );
 };

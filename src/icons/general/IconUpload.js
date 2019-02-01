@@ -15,13 +15,13 @@ type Props = {
 const IconUpload = ({ className = '', color = '#444444', height = 14, title, width = 12 }: Props) => (
     <AccessibleSVG
         className={`icon-upload ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 12 14"
+        width={width}
     >
-        <path stroke={color} className="stroke-color" fill="none" d="M3.5 10.4h5v-5h2.3L6 .6 1.2 5.4h2.3v5z" />
-        <path stroke={color} className="stroke-color" fill="none" d="M12 13.5H0" />
+        <path className="stroke-color" d="M3.5 10.4h5v-5h2.3L6 .6 1.2 5.4h2.3v5z" fill="none" stroke={color} />
+        <path className="stroke-color" d="M12 13.5H0" fill="none" stroke={color} />
     </AccessibleSVG>
 );
 

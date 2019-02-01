@@ -19,10 +19,10 @@ export type CellData = {
 };
 
 export type HeaderData = {
+    SortDirection?: any,
     columnData?: any,
     dataKey: string,
     disableSort?: boolean,
     label: string,
     sortBy?: string,
-    SortDirection?: any,
 };

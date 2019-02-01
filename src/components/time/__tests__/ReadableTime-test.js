@@ -22,8 +22,6 @@ describe('components/time/ReadableTime', () => {
     // In order to leverage withData and not have flakey tests, we need to set a consistent test timestamp
     const today = new Date(TEST_TIMESTAMP);
     const now = today.getTime();
-    const ms10SecsAgo = now - 10 * 1000;
-    const ms10MinsAgo = now - 60 * 10 * 1000;
     const msYesterday = now - oneDayInMs;
     const msTwoDaysAgo = now - 2 * oneDayInMs;
     const msBeginningOfCenturyTime = new Date(2000, 0, 0).getTime();
@@ -62,7 +60,7 @@ describe('components/time/ReadableTime', () => {
         },
     ].forEach(({ timestamp, hasFormattedRelativeComp, hasFormattedMessageComp, expectedValue }) => {
         test('should correctly render comment posted time when component is rendered with different times', () => {
-            const wrapper = shallow(<ReadableTime timestamp={timestamp} relativeThreshold={oneHourInMs} />);
+            const wrapper = shallow(<ReadableTime relativeThreshold={oneHourInMs} timestamp={timestamp} />);
 
             expect(wrapper.find('FormattedRelative').length === 1).toEqual(hasFormattedRelativeComp);
             expect(wrapper.find('FormattedMessage').length === 1).toEqual(hasFormattedMessageComp);
@@ -105,10 +103,10 @@ describe('components/time/ReadableTime', () => {
         test(description, () => {
             const wrapper = shallow(
                 <ReadableTime
-                    timestamp={timestamp}
-                    relativeThreshold={oneHourInMs}
                     allowFutureTimestamps={allowFutureTimestamps}
                     alwaysShowTime={alwaysShowTime}
+                    relativeThreshold={oneHourInMs}
+                    timestamp={timestamp}
                 />,
             );
 

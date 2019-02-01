@@ -40,12 +40,12 @@ class NewFolderModalExamples extends Component {
             <div>
                 <Button onClick={this.openModal}>New Folder</Button>
                 <NewFolderModal
+                    createFolderError={error}
                     isOpen={isOpen}
-                    onRequestClose={this.closeModal}
                     onCreateFolderInput={this.handleCreateFolderInput}
                     onCreateFolderSubmit={this.handleCreateFolderSubmit}
+                    onRequestClose={this.closeModal}
                     parentFolderName="My Favorite Folder"
-                    createFolderError={error}
                 />
             </div>
         );

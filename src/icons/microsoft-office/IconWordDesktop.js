@@ -34,26 +34,26 @@ class IconWordDesktop extends React.Component<Props> {
                 width={width}
             >
                 <path
-                    fill="#FFF"
                     d="M47 81.5c-.8 0-1.5-.7-1.5-1.5V16c0-.8.7-1.5 1.5-1.5h42c.8 0 1.5.7 1.5 1.5v64c0 .8-.7 1.5-1.5 1.5H47z"
+                    fill="#FFF"
                 />
                 <path
-                    fill="#2B579A"
                     d="M89 16v64H47V16h42m0-3H47c-1.7 0-3 1.3-3 3v64c0 1.7 1.3 3 3 3h42c1.7 0 3-1.3 3-3V16c0-1.7-1.3-3-3-3z"
+                    fill="#2B579A"
                 />
                 <path
-                    fill="#2B579A"
                     d="M50 23h32v4H50zm0 9h32v4H50zm0 9h32v4H50zm0 9h32v4H50zm0 9h32v4H50zm0 9h32v4H50z"
+                    fill="#2B579A"
                 />
-                <path fill="#2B579A" fillRule="evenodd" d="M56 4L4 13v70l52 9V4z" clipRule="evenodd" />
+                <path clipRule="evenodd" d="M56 4L4 13v70l52 9V4z" fill="#2B579A" fillRule="evenodd" />
                 <g opacity="0.05">
                     <linearGradient
+                        gradientUnits="userSpaceOnUse"
                         id={`${this.idPrefix}a`}
                         x1="4"
                         x2="56"
                         y1="48"
                         y2="48"
-                        gradientUnits="userSpaceOnUse"
                     >
                         <stop offset="0" stopColor="#FFF" />
                         <stop offset="1" />
@@ -66,8 +66,8 @@ class IconWordDesktop extends React.Component<Props> {
                     />
                 </g>
                 <path
-                    fill="#FFF"
                     d="M43.6 32.7L38 33l-3.3 19.3c0 .3-.1.5-.1.8 0 .3-.1.5-.1.8 0 .3-.1.5-.1.8v.8h-.1c0-.3-.1-.7-.1-1 0-.3-.1-.6-.1-.8 0-.3-.1-.5-.1-.7 0-.2-.1-.4-.1-.6l-3.8-18.9-5.3.3-3.9 18.1c-.1.3-.1.5-.2.8 0 .3-.1.5-.1.8 0 .3-.1.5-.1.8v.7h-.1v-.9c0-.3 0-.6-.1-.8 0-.3 0-.5-.1-.7 0-.2-.1-.4-.1-.6l-2.9-17.6-4.9.3 5.2 26.1 5.4.3 3.7-17.5c0-.2.1-.4.1-.7 0-.2.1-.5.1-.7 0-.3.1-.5.1-.8 0-.3.1-.6.1-.9h.1v.9c0 .3 0 .5.1.8 0 .3.1.5.1.7 0 .2.1.5.1.7l3.7 18 5.9.4 6.6-29.3"
+                    fill="#FFF"
                 />
             </AccessibleSVG>
         );

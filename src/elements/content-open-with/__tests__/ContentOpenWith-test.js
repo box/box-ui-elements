@@ -78,7 +78,7 @@ describe('elements/content-open-with/ContentOpenWith', () => {
         };
 
         test('should should fetch Open With integrations', () => {
-            const instance = getWrapper({
+            instance = getWrapper({
                 fileId: '1234',
                 language: 'en-US',
             }).instance();
@@ -533,7 +533,7 @@ describe('elements/content-open-with/ContentOpenWith', () => {
         });
 
         test('should return the sole integration as the display integration', () => {
-            const instance = getWrapper({ fileId }).instance();
+            instance = getWrapper({ fileId }).instance();
             instance.setState({ integrations: ['Adobe'] });
             const result = instance.getDisplayIntegration();
             expect(result).toEqual('Adobe');

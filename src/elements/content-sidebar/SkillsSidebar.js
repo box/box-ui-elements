@@ -11,7 +11,6 @@ import flow from 'lodash/flow';
 import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
 import { mark } from 'utils/performance';
 import { EVENT_JS_READY } from 'elements/common/logger/constants';
-import messages from 'elements/common/messages';
 import { withAPIContext } from 'elements/common/api-context';
 import { withErrorBoundary } from 'elements/common/error-boundary';
 import { withLogger } from 'elements/common/logger';
@@ -240,9 +239,9 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
             <SidebarContent title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_SKILLS)}>
                 {cards ? (
                     <SidebarSkills
-                        file={file}
                         cards={cards}
                         errors={errors}
+                        file={file}
                         getViewer={getViewer}
                         onSkillChange={this.onSave}
                     />

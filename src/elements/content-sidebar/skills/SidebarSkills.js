@@ -22,9 +22,9 @@ import {
 } from '../../../constants';
 
 type Props = {
-    file: BoxItem,
     cards: Array<SkillCard>,
     errors: NumberBooleanMap,
+    file: BoxItem,
     getViewer: Function,
     onSkillChange: Function,
 };
@@ -97,13 +97,13 @@ const SidebarSkills = ({ file, cards, errors, getViewer, onSkillChange }: Props)
         const hasEntries = Array.isArray(card.entries) ? card.entries.length > 0 : isValid;
 
         return isValid ? (
-            <SidebarSection key={cardId} isOpen={hasEntries} interactionTarget={interactionTarget} title={title}>
+            <SidebarSection key={cardId} interactionTarget={interactionTarget} isOpen={hasEntries} title={title}>
                 <SidebarSkillsCard
                     card={card}
                     cards={cards}
+                    getViewer={getViewer}
                     hasError={!!errors[index]}
                     isEditable={isSkillEditable}
-                    getViewer={getViewer}
                     onSkillChange={(...args) => onSkillChange(index, ...args)}
                 />
             </SidebarSection>

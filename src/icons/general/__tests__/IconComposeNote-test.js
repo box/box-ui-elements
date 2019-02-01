@@ -14,7 +14,7 @@ describe('icons/general/IconComposeNote', () => {
         const wrapper = shallow(<IconComposeNote color={color} />);
 
         const paths = wrapper.find('path');
-        for (let i = 0; i < paths.length; i++) {
+        for (let i = 0; i < paths.length; i += 1) {
             expect(paths.at(i).prop('fill')).toEqual(color);
         }
     });
@@ -22,7 +22,7 @@ describe('icons/general/IconComposeNote', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconComposeNote width={width} height={height} />);
+        const wrapper = shallow(<IconComposeNote height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

@@ -8,9 +8,9 @@ import { FIELD_TYPE_STRING } from './constants';
 
 type Props = {
     canEdit: boolean,
+    data: MetadataFields,
     onFieldChange?: (key: string, value: MetadataFieldValue, type: string) => void,
     onFieldRemove?: (key: string) => void,
-    data: MetadataFields,
 };
 
 type State = {
@@ -89,22 +89,22 @@ class CustomInstance extends React.PureComponent<Props, State> {
                 {fields.map((key, index) => (
                     <CustomField
                         key={key}
-                        isLast={!isAddFieldVisible && index === fields.length - 1}
                         canEdit={canEdit}
                         dataKey={key}
                         dataValue={properties[key]}
+                        isLast={!isAddFieldVisible && index === fields.length - 1}
+                        onAdd={this.onAddFieldToggle}
                         onChange={this.onFieldChange}
                         onRemove={this.onFieldRemove}
-                        onAdd={this.onAddFieldToggle}
                     />
                 ))}
                 {!canAddFields && fields.length === 0 && <EmptyContent />}
                 {canAddFields && (
                     <CustomNewField
                         isCancellable={fields.length !== 0}
-                        properties={this.props.data}
                         onAdd={this.onFieldChange}
                         onCancel={this.onAddFieldToggle}
+                        properties={this.props.data}
                     />
                 )}
             </React.Fragment>

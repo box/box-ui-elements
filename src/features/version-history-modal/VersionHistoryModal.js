@@ -54,9 +54,9 @@ class VersionHistoryModal extends Component {
                 onDownload={onDownload}
                 onMakeCurrent={onMakeCurrent}
                 onRestore={onRestore}
+                scrollToVersionNumber={scrollToVersionNumber}
                 versionLimit={versionLimit}
                 versions={versions}
-                scrollToVersionNumber={scrollToVersionNumber}
             />
         );
     }

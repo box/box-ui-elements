@@ -259,13 +259,13 @@ class InviteCollaboratorsModal extends Component {
             <div className="invite-permissions-container">
                 <Select
                     className="select-container-medium"
-                    label={<FormattedMessage {...messages.inviteePermissionsFieldLabel} />}
-                    onChange={this.handlePermissionChange}
-                    name="invite-permission"
                     data-resin-target="selectpermission"
+                    label={<FormattedMessage {...messages.inviteePermissionsFieldLabel} />}
+                    name="invite-permission"
+                    onChange={this.handlePermissionChange}
                 >
                     {inviteePermissions.map(({ value, disabled = false, text }) => (
-                        <option data-resin-option={value} disabled={disabled} key={value} value={value}>
+                        <option key={value} data-resin-option={value} disabled={disabled} value={value}>
                             {text}
                         </option>
                     ))}
@@ -288,14 +288,14 @@ class InviteCollaboratorsModal extends Component {
                 )}
                 {defaultPersonalMessage && (
                     <TextArea
-                        label={<FormattedMessage {...messages.personalMessageLabel} />}
-                        defaultValue={defaultPersonalMessage}
-                        onChange={this.handleMessageChange}
-                        name="collab-message"
                         cols="30"
-                        rows="4"
                         data-resin-feature="personalmessage"
                         data-resin-target="message"
+                        defaultValue={defaultPersonalMessage}
+                        label={<FormattedMessage {...messages.personalMessageLabel} />}
+                        name="collab-message"
+                        onChange={this.handleMessageChange}
+                        rows="4"
                     />
                 )}
             </div>
@@ -342,13 +342,13 @@ class InviteCollaboratorsModal extends Component {
         return (
             <Modal
                 className="invite-collaborators-modal"
-                title={title}
-                onRequestClose={this.closeModal}
-                data-resin-component="modal"
-                data-resin-feature="invitecollaborators"
                 closeButtonProps={{
                     [RESIN_TAG_TARGET]: 'close',
                 }}
+                data-resin-component="modal"
+                data-resin-feature="invitecollaborators"
+                onRequestClose={this.closeModal}
+                title={title}
                 {...modalProps}
             >
                 {submissionError && <InlineNotice type="error">{submissionError}</InlineNotice>}

@@ -12,11 +12,11 @@ import omit from 'lodash/omit';
 import { CLIENT_NAME_CONTENT_PICKER, CLIENT_NAME_CONTENT_UPLOADER } from '../../constants';
 
 type Props = {
+    modal: ModalOptions,
     onCancel?: Function,
     onChoose?: Function,
-    onClose?: Function,
     onClick?: Function,
-    modal: ModalOptions,
+    onClose?: Function,
 };
 
 type State = {
@@ -131,13 +131,13 @@ const makePopup = (kit: string) => (Wrapped: any) =>
 
             return (
                 <div>
-                    <button type="button" onClick={this.onButtonClick} className={buttonClassName}>
+                    <button className={buttonClassName} onClick={this.onButtonClick} type="button">
                         {buttonLabel}
                     </button>
                     <Modal
-                        isOpen={isOpen}
-                        contentLabel={kit}
                         className={modalClassName}
+                        contentLabel={kit}
+                        isOpen={isOpen}
                         overlayClassName={overlayClassName}
                     >
                         <Wrapped {...wrappedProps} />

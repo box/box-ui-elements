@@ -21,7 +21,7 @@ const ReadOnlyField = ({ dataValue, description, displayName, type }: Props) => 
     if (dataValue || typeof dataValue === 'number') {
         if (typeof dataValue === 'string' && type === FIELD_TYPE_DATE) {
             value = (
-                <FormattedDate value={convertISOStringToUTCDate(dataValue)} year="numeric" month="long" day="numeric" />
+                <FormattedDate day="numeric" month="long" value={convertISOStringToUTCDate(dataValue)} year="numeric" />
             );
         } else if (Array.isArray(dataValue)) {
             value = dataValue.join(', ');

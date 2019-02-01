@@ -15,6 +15,7 @@ type Props = {
     value?: number | string,
 };
 
+// eslint-disable-next-line react/prefer-stateless-function
 class CountBadge extends React.Component<Props> {
     static defaultProps = {
         isVisible: true,

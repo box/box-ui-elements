@@ -5,8 +5,8 @@ import PlainButton from '../plain-button';
 
 type Props = {
     buttonRef?: Function,
-    onClick?: Function,
     isSelected?: boolean,
+    onClick?: Function,
 };
 
 const SlideButton = ({ buttonRef, onClick, isSelected = false, ...rest }: Props) => (

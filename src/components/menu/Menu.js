@@ -19,12 +19,12 @@ type Props = {
     className: string,
     /** Focuses a specific menu item index when menu is mounted */
     initialFocusIndex?: number,
-    isSubmenu?: boolean,
     isHidden?: boolean,
-    shouldOutlineFocus?: boolean,
-    /** Will fire this callback when menu should "close' */
+    isSubmenu?: boolean,
     onClose?: Function,
+    /** Will fire this callback when menu should "close' */
     setRef?: Function,
+    shouldOutlineFocus?: boolean,
 };
 
 class Menu extends React.Component<Props> {
@@ -99,7 +99,7 @@ class Menu extends React.Component<Props> {
         let menuItemEl = null;
         let menuIndex = -1;
 
-        for (let i = 0; i < this.menuItemEls.length; i++) {
+        for (let i = 0; i < this.menuItemEls.length; i += 1) {
             if (this.menuItemEls[i].contains(target)) {
                 menuItemEl = this.menuItemEls[i];
                 menuIndex = i;

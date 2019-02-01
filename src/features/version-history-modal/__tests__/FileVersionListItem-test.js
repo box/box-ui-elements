@@ -23,8 +23,8 @@ describe('features/version-history-modal/FileVersionListItem', () => {
     const getWrapper = (props = {}) =>
         shallow(
             <FileVersionListItem
-                canUpload
                 canDelete
+                canUpload
                 intl={{ formatMessage: sandbox.stub() }}
                 isOverVersionLimit={false}
                 isProcessing={false}

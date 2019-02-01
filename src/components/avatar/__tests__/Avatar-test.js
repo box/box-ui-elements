@@ -33,14 +33,14 @@ describe('components/avatar/Avatar', () => {
     });
 
     test('should render an UnknownUserAvatar when empty name and url are passed', () => {
-        const wrapper = shallow(<Avatar id={2} name="" avatarUrl={null} />);
+        const wrapper = shallow(<Avatar avatarUrl={null} id={2} name="" />);
         const avatarIcon = wrapper.find('UnknownUserAvatar');
         expect(avatarIcon.length).toEqual(1);
         expect(avatarIcon.prop('className')).toEqual('avatar-icon');
     });
 
     test('should fall back to AvatarInitials when there is an error in AvatarImage', () => {
-        const wrapper = shallow(<Avatar id="1" name="hello world" avatarUrl="http://foo.bar/baz123_invalid" />);
+        const wrapper = shallow(<Avatar avatarUrl="http://foo.bar/baz123_invalid" id="1" name="hello world" />);
 
         wrapper.instance().onImageError();
         expect(wrapper.state('hasImageErrored')).toEqual(true);

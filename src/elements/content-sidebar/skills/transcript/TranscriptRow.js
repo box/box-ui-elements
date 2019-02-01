@@ -13,14 +13,14 @@ import { isValidTimeSlice } from './timeSliceUtils';
 import './TranscriptRow.scss';
 
 type Props = {
-    isEditing: boolean,
-    onClick: Function,
-    onSave: Function,
-    onCancel: Function,
-    onChange: Function,
-    text?: string,
     appears?: Array<SkillCardEntryTimeSlice>,
     interactionTarget: string,
+    isEditing: boolean,
+    onCancel: Function,
+    onChange: Function,
+    onClick: Function,
+    onSave: Function,
+    text?: string,
 };
 
 const TranscriptRow = ({ appears, text, isEditing, onClick, onSave, onCancel, onChange, interactionTarget }: Props) => {
@@ -29,9 +29,9 @@ const TranscriptRow = ({ appears, text, isEditing, onClick, onSave, onCancel, on
     const start = isValid ? formatTime(timeSlice[0].start) : undefined;
 
     return isEditing ? (
-        <EditingTranscriptRow onSave={onSave} onCancel={onCancel} onChange={onChange} time={start} text={text} />
+        <EditingTranscriptRow onCancel={onCancel} onChange={onChange} onSave={onSave} text={text} time={start} />
     ) : (
-        <ReadOnlyTranscriptRow interactionTarget={interactionTarget} onClick={onClick} time={start} text={text} />
+        <ReadOnlyTranscriptRow interactionTarget={interactionTarget} onClick={onClick} text={text} time={start} />
     );
 };
 

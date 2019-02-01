@@ -8,10 +8,10 @@ import Button from '../button';
 type Option = { text: string, value: number | string };
 
 type Props = {
-    options: Array<Option>,
-    onSelect?: Function,
-    selectedOptions?: Array<Option>,
     buttonProps?: Object,
+    onSelect?: Function,
+    options: Array<Option>,
+    selectedOptions?: Array<Option>,
 };
 
 const PillCloud = ({ options, onSelect, selectedOptions = [], buttonProps = {} }: Props) => (
@@ -19,10 +19,10 @@ const PillCloud = ({ options, onSelect, selectedOptions = [], buttonProps = {} }
         {options &&
             options.map(option => (
                 <Button
+                    key={option.value}
                     className={classNames('pill', 'pill-cloud-button', {
                         'is-selected': selectedOptions.find(op => isEqual(op, option)),
                     })}
-                    key={option.value}
                     onClick={onSelect ? () => onSelect(option) : undefined}
                     {...buttonProps}
                 >

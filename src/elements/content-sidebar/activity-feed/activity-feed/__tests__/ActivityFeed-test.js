@@ -50,7 +50,7 @@ const file = {
 
 const feedItems = [...comments.entries];
 const currentUser = { name: 'Kanye West', id: 10 };
-const getWrapper = props => shallow(<ActivityFeed file={file} currentUser={currentUser} {...props} />);
+const getWrapper = props => shallow(<ActivityFeed currentUser={currentUser} file={file} {...props} />);
 
 describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     test('should correctly render empty loading state', () => {
@@ -64,7 +64,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             entries: [],
         };
         const wrapper = shallow(
-            <ActivityFeed file={file} currentUser={currentUser} comments={items} tasks={items} versions={items} />,
+            <ActivityFeed comments={items} currentUser={currentUser} file={file} tasks={items} versions={items} />,
         );
         expect(wrapper).toMatchSnapshot();
     });
@@ -90,13 +90,13 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
     test('should not render approval comment form if only comment submit handler is not passed in', () => {
         file.permissions.can_comment = true;
-        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not render approval comment form if comment permissions are not present', () => {
         file.permissions.can_comment = false;
-        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} onCommentCreate={jest.fn()} />);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -109,7 +109,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
     test('should not expose add approval ui if task submit handler is not passed', () => {
         file.permissions.can_comment = true;
-        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} onCommentCreate={jest.fn()} />);
 
         expect(wrapper.find('[name="addApproval"]').length).toEqual(0);
     });
@@ -231,9 +231,9 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         const createCommentSpy = jest.fn().mockReturnValue(Promise.resolve({}));
         const wrapper = shallow(
             <ActivityFeed
-                file={file}
-                feedItems={feedItems}
                 currentUser={currentUser}
+                feedItems={feedItems}
+                file={file}
                 onCommentCreate={createCommentSpy}
             />,
         );
@@ -253,9 +253,9 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         const createTaskSpy = jest.fn();
         const wrapper = shallow(
             <ActivityFeed
-                file={file}
-                feedItems={feedItems}
                 currentUser={currentUser}
+                feedItems={feedItems}
+                file={file}
                 onCommentCreate={jest.fn()}
                 onTaskCreate={createTaskSpy}
             />,

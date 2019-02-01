@@ -16,10 +16,10 @@ import './Face.scss';
 
 type Props = {
     face: SkillCardEntry,
-    selected?: SkillCardEntry,
     isEditing: boolean,
     onDelete: Function,
     onSelect: Function,
+    selected?: SkillCardEntry,
 };
 
 const Face = ({ face, selected, isEditing, onDelete, onSelect }: Props) => {
@@ -33,22 +33,22 @@ const Face = ({ face, selected, isEditing, onDelete, onSelect }: Props) => {
     return (
         <div className={faceClassName}>
             <PlainButton
-                type="button"
                 className="be-face"
                 data-resin-target={SKILLS_TARGETS.FACES.FACE}
                 onClick={() => !isEditing && onSelect(face)}
+                type="button"
             >
-                <img alt={face.text} title={face.text} src={face.image_url} />
+                <img alt={face.text} src={face.image_url} title={face.text} />
                 {isFaceSelected && <IconMinus color={COLOR_WHITE} />}
             </PlainButton>
             {isEditing && (
                 <PlainButton
-                    type="button"
                     className="be-face-delete"
                     data-resin-target={SKILLS_TARGETS.FACES.DELETE}
                     onClick={() => onDelete(face)}
+                    type="button"
                 >
-                    <IconClose color={COLOR_999} width={16} height={16} />
+                    <IconClose color={COLOR_999} height={16} width={16} />
                 </PlainButton>
             )}
         </div>

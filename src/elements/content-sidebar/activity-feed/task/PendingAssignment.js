@@ -29,8 +29,8 @@ const PendingAssignment = ({ name, onTaskApproval, onTaskReject, shouldShowActio
                 <Tooltip position="bottom-center" text={<FormattedMessage {...messages.taskApprove} />}>
                     <PlainButton
                         className="bcs-task-check-btn"
-                        onClick={onTaskApproval}
                         data-resin-target={ACTIVITY_TARGETS.TASK_APPROVE}
+                        onClick={onTaskApproval}
                     >
                         <IconCheck className="bcs-task-check-icon" height={18} width={18} />
                     </PlainButton>
@@ -38,8 +38,8 @@ const PendingAssignment = ({ name, onTaskApproval, onTaskReject, shouldShowActio
                 <Tooltip position="bottom-center" text={<FormattedMessage {...messages.taskReject} />}>
                     <PlainButton
                         className="bcs-task-x-btn"
-                        onClick={onTaskReject}
                         data-resin-target={ACTIVITY_TARGETS.TASK_REJECT}
+                        onClick={onTaskReject}
                     >
                         <IconClose className="bcs-task-x-icon" height={18} width={18} />
                     </PlainButton>

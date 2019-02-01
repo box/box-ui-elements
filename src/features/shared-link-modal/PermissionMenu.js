@@ -44,9 +44,9 @@ const PermissionMenu = (props: Props) => {
             <Menu>
                 {permissionLevels.map(level => (
                     <SelectMenuItem
-                        onClick={() => changePermissionLevel(level)}
-                        isSelected={level === permissionLevel}
                         key={level}
+                        isSelected={level === permissionLevel}
+                        onClick={() => changePermissionLevel(level)}
                     >
                         {permissionLabels[level]}
                     </SelectMenuItem>

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import './QuickSearchMessage.scss';
 
+// eslint-disable-next-line react/prefer-stateless-function
 class QuickSearchMessage extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,

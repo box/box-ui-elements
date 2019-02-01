@@ -11,15 +11,15 @@ import UploadState from './UploadState';
 import './DroppableContent.scss';
 
 type Props = {
+    addDataTransferItemsToUploadQueue: Function,
+    addFiles: Function,
     canDrop: boolean,
+    isFolderUploadEnabled: boolean,
     isOver: boolean,
     isTouch: boolean,
-    view: View,
     items: UploadItem[],
-    addFiles: Function,
     onClick: Function,
-    addDataTransferItemsToUploadQueue: Function,
-    isFolderUploadEnabled: boolean,
+    view: View,
 };
 
 /**
@@ -51,15 +51,15 @@ const DroppableContent = makeDroppable(dropDefinition)(
 
         return (
             <div className="bcu-droppable-content">
-                <ItemList items={items} view={view} onClick={onClick} />
+                <ItemList items={items} onClick={onClick} view={view} />
                 <UploadState
                     canDrop={canDrop}
                     hasItems={hasItems}
+                    isFolderUploadEnabled={isFolderUploadEnabled}
                     isOver={isOver}
                     isTouch={isTouch}
-                    view={view}
                     onSelect={handleSelectFiles}
-                    isFolderUploadEnabled={isFolderUploadEnabled}
+                    view={view}
                 />
             </div>
         );

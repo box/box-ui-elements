@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import React, { Component } from 'react';
 
 import Button from 'components/button';
@@ -265,9 +266,9 @@ class VersionHistoryModalExamples extends Component {
             <div>
                 {isOpen && (
                     <VersionHistoryModal
+                        isDownloadAllowed
                         isOpen={isOpen}
                         isProcessing={isProcessing}
-                        isDownloadAllowed
                         onDelete={this.onDelete}
                         onDownload={this.onDownload}
                         onMakeCurrent={this.onMakeCurrent}

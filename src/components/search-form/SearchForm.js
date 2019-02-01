@@ -148,7 +148,11 @@ class SearchForm extends React.Component<Props, State> {
 
         const SearchActions = () => (
             <div className="action-buttons">
-                <button className="action-button search-button" title={formatMessage(messages.searchButtonTitle)}>
+                <button
+                    type="button"
+                    className="action-button search-button"
+                    title={formatMessage(messages.searchButtonTitle)}
+                >
                     <IconSearch />
                 </button>
                 <button
@@ -178,13 +182,13 @@ class SearchForm extends React.Component<Props, State> {
                     role="search"
                 >
                     <input
-                        autoComplete="off"
+                        ref={this.setInputRef}
                         aria-label={formatMessage(messages.searchLabel)}
+                        autoComplete="off"
                         className="search-input"
                         name={name}
-                        ref={this.setInputRef}
-                        type="search"
                         onChange={onChangeStub}
+                        type="search"
                         {...inputProps}
                     />
                     <LoadableSearchActions

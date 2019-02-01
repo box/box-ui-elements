@@ -34,7 +34,6 @@ class SubmenuItem extends React.Component<Props, State> {
     state = {
         isSubmenuOpen: false,
         submenuFocusIndex: null,
-        submenuClasses: [],
     };
 
     getMenuAlignmentClasses = () => {

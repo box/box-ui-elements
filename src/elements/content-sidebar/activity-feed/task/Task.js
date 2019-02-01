@@ -19,26 +19,26 @@ import { TASK_APPROVED, TASK_REJECTED, TASK_COMPLETED, TASK_INCOMPLETE } from '.
 import './Task.scss';
 
 type Props = {
-    task_assignment_collection: TaskAssignments | SelectorItems,
     created_at: number | string,
     created_by: User,
     currentUser?: User,
     due_at: any,
     error?: ActionItemError,
+    getAvatarUrl: string => Promise<?string>,
+    getMentionWithQuery?: Function,
+    getUserProfileUrl?: string => Promise<string>,
     id: string,
+    isDisabled?: boolean,
     isPending?: boolean,
+    mentionSelectorContacts?: SelectorItems,
+    message: string,
+    onAssignmentUpdate: Function,
     onDelete?: Function,
     onEdit?: Function,
-    onAssignmentUpdate: Function,
     permissions?: BoxItemPermission,
+    task_assignment_collection: TaskAssignments | SelectorItems,
     translatedTaggedMessage?: string,
     translations?: Translations,
-    isDisabled?: boolean,
-    message: string,
-    mentionSelectorContacts?: SelectorItems,
-    getMentionWithQuery?: Function,
-    getAvatarUrl: string => Promise<?string>,
-    getUserProfileUrl?: string => Promise<string>,
 };
 
 // eslint-disable-next-line

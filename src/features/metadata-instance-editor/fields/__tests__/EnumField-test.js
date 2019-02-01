@@ -16,9 +16,9 @@ describe('features/metadata-instance-editor/fields/EnumField', () => {
     test('should correctly render an enum field with description', () => {
         const wrapper = shallow(
             <EnumField
-                intl={intl}
                 dataValue="value"
                 description="description"
+                intl={intl}
                 options={[{ key: 'foo' }, { key: 'bar' }, { key: 'baz' }]}
             />,
         );

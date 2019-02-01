@@ -204,8 +204,8 @@ class SharedLinkSettingsModal extends Component {
                 isPasswordAvailable={isPasswordAvailable}
                 isPasswordEnabled={isPasswordEnabled}
                 isPasswordInitiallyEnabled={this.props.isPasswordEnabled}
-                onPasswordChange={this.onPasswordChange}
                 onCheckboxChange={this.onPasswordCheckboxChange}
+                onPasswordChange={this.onPasswordChange}
                 password={password}
                 passwordCheckboxProps={passwordCheckboxProps}
                 passwordInputProps={passwordInputProps}
@@ -245,14 +245,14 @@ class SharedLinkSettingsModal extends Component {
 
         return (
             <AllowDownloadSection
-                isDownloadAvailable={isDownloadAvailable}
-                isDownloadEnabled={isDownloadEnabled}
                 canChangeDownload={canChangeDownload}
                 directLink={directLink}
                 directLinkInputProps={directLinkInputProps}
                 downloadCheckboxProps={downloadCheckboxProps}
                 isDirectLinkAvailable={isDirectLinkAvailable}
                 isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
+                isDownloadAvailable={isDownloadAvailable}
+                isDownloadEnabled={isDownloadEnabled}
                 onChange={this.onAllowDownloadChange}
             />
         );

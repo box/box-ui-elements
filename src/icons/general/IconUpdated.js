@@ -15,10 +15,10 @@ type Props = {
 const IconUpdated = ({ className = '', color = '#15AA61', height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={`icon-updated ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 16 16"
+        width={width}
     >
         <g fill="none" fillRule="evenodd">
             <circle

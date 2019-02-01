@@ -33,8 +33,8 @@ const FileVersionActions = ({
         }
         return (
             <PlainButton
-                className={btnClasses}
                 key={REMOVE_RESTORE_BUTTON_KEY}
+                className={btnClasses}
                 onClick={() => !isProcessing && onRestore(version)}
             >
                 <FormattedMessage {...messages.restore} />
@@ -73,8 +73,8 @@ const FileVersionActions = ({
 
         return (
             <PlainButton
-                className={btnClasses}
                 key={REMOVE_RESTORE_BUTTON_KEY}
+                className={btnClasses}
                 onClick={() => !isProcessing && onDelete(version)}
             >
                 <FormattedMessage {...messages.remove} />
