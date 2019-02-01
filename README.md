@@ -24,12 +24,12 @@ This documentation describes how to use UI Elements in a [React](https://faceboo
 * [Internationalization (i18n)](src/elements/README.md#internationalization)
 
 ### Elements
-* [ContentExplorer](src/elements/content-explorer/README.md)
-* [ContentOpenWith](src/elements/content-open-with/README.md)
-* [ContentPicker](src/elements/content-picker/README.md)
-* [ContentPreview](src/elements/content-preview/README.md)*
-* [ContentSidebar](src/elements/content-sidebar/README.md)*
-* [ContentUploader](src/elements/content-uploader/README.md)
+* [ContentExplorer](src/elements/content-explorer)
+* [ContentOpenWith](src/elements/content-open-with)
+* [ContentPicker](src/elements/content-picker)
+* [ContentPreview](src/elements/content-preview)*
+* [ContentSidebar](src/elements/content-sidebar)*
+* [ContentUploader](src/elements/content-uploader)
 
 \* _These components utilize code splitting. See the [Code Splitting](#code-splitting) section for more information._
 

@@ -1,6 +1,5 @@
 ### Screenshot
 <img src="https://user-images.githubusercontent.com/1075325/50999865-3707d200-14e0-11e9-8488-81a4e2a5fe43.png" width="400" />
----
 
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-sidebar))
 ```jsx

@@ -1,6 +1,5 @@
 ### Screenshot
 <img src="https://user-images.githubusercontent.com/1075325/27887156-0940ee3e-6194-11e7-8e22-961139e82dfe.png" style="border: 1px solid #e8e8e8" width="600" />
----
 
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-picker))
 ```jsx
