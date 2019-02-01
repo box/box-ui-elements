@@ -1,35 +1,69 @@
 @import '../../styles/variables';
 
 $flyout-list-width: 460px;
-$flyout-list-max-height: 368px;
+$flyout-list-height: 460px;
+$flyout-list-padding: 30px;
+$flyout-label-spacer: 20px;
+
+$flyout-title-font-size: 15px;
+$flyout-title-line-height: 16px;
+$flyout-footer-font-size: 13px;
+$flyout-footer-line-height: 16px;
 
 .header-flyout-overlay {
+    height: $flyout-list-height;
+    width: $flyout-list-width;
+
     .overlay {
-        padding: 30px;
+        padding: $flyout-list-padding;
+        padding-bottom: 0;
     }
 }
 
 .header-flyout-list-container {
     padding: 0;
-    width: $flyout-list-width;
 
     .flyout-list-container-title {
-        font-size: 15px;
-        margin-bottom: 20px;
+        padding-bottom: $flyout-label-spacer;
     }
 
     .flyout-list-title {
+        font-size: $flyout-title-font-size;
+        line-height: $flyout-title-line-height;
         margin: 0;
     }
 
     .flyout-list-container-body {
-        height: $flyout-list-max-height;
+        $title-height: $flyout-title-line-height + $flyout-label-spacer;
+        $footer-height: $flyout-title-line-height +  2 * $flyout-label-spacer;
+
+        // the overall height, minus the top and bottom padding
+        height: $flyout-list-height - 2 * $flyout-list-padding;
+        margin-bottom: $flyout-list-padding;
+
+        &.with-header {
+            // the overall height minus the padding, and header height
+            height: $flyout-list-height - (2 * $flyout-list-padding + $title-height);
+        }
+
+        &.with-footer {
+            // the overall height minus the padding, and the footer height
+            height: $flyout-list-height - ($flyout-list-padding + $footer-height);
+            margin-bottom: 0;
+        }
+
+        &.with-header.with-footer {
+            // the overall height minus the padding, and both text heights
+            height: $flyout-list-height - ($flyout-list-padding + $title-height + $footer-height);
+            margin-bottom: 0;
+        }
     }
 
     .flyout-list-container-footer {
         border-top: 1px solid $off-white;
-        font-size: 13px;
-        padding-top: 20px;
+        font-size: $flyout-footer-font-size;
+        line-height: $flyout-footer-line-height;
+        padding: $flyout-label-spacer 0;
 
         &.hidden {
             display: none;

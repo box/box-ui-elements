@@ -83,6 +83,7 @@ class Form extends Component {
 
     onSubmit = event => {
         const form = event.target;
+        event.preventDefault();
         const isValid = form.checkValidity();
         const { onInvalidSubmit, onValidSubmit } = this.props;
         const { registeredInputs } = this.state;
@@ -102,8 +103,6 @@ class Form extends Component {
                 onInvalidSubmit(formValidityState);
             }
         }
-
-        event.preventDefault();
     };
 
     registerInput = (name, setValidityStateHandler) => {

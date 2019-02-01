@@ -11,27 +11,16 @@ describe('icons/general/IconHelp', () => {
     });
 
     test('should correctly render icon with specified color', () => {
-        const color = '#ffffff';
+        const color = '#123456';
         const wrapper = shallow(<IconHelp color={color} />);
 
-        expect(
-            wrapper
-                .find('path')
-                .at(0)
-                .prop('fill'),
-        ).toEqual(color);
-        expect(
-            wrapper
-                .find('path')
-                .at(1)
-                .prop('fill'),
-        ).toEqual(color);
+        expect(wrapper.find('path').prop('fill')).toEqual(color);
     });
 
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconHelp height={height} width={width} />);
+        const wrapper = shallow(<IconHelp width={width} height={height} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

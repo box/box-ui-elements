@@ -761,6 +761,7 @@ exports[`features/metadata-editor-editor/MetadataInstanceEditor should correctly
   />
   <ScrollWrapper
     scrollRefFn={[Function]}
+    shadowSize="cover"
   >
     <Instances
       editors={

@@ -72,12 +72,12 @@ describe('feature/metadata-view/FilterItem', () => {
 
         return shallow(
             <FilterItem
+                index={0}
+                template={template}
                 condition={condition}
                 deleteCondition={() => {}}
-                index={0}
+                update={() => {}}
                 intl={{ formatMessage: () => {} }}
-                template={template}
-                updateFilterCondition={() => {}}
                 {...props}
             />,
         );

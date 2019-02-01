@@ -17,6 +17,7 @@ type Props = {
     currentMessage?: string, // TODO: Rename to messageKeyPrefix.
     filesList: Array<Object>, // TODO: Replace Object with type.
     instances: Array<MetadataInstance>,
+    onFilterChange?: Function,
     shouldDisableColumnButton: boolean,
     tableHeaderHeight: number,
     tableHeight: number,
@@ -28,7 +29,6 @@ type Props = {
 };
 
 type State = {
-    activeTemplate?: MetadataTemplate,
     visibleColumns: Array<ColumnType>,
 };
 
@@ -37,17 +37,10 @@ class MetadataView extends React.Component<Props, State> {
         super(props);
         this.state = {
             visibleColumns: this.generateColumnsFromFields(props.template),
-            // eslint-disable-next-line react/no-unused-state
-            activeTemplate: undefined,
         };
     }
 
-    onTemplateChange = (template: MetadataTemplate) => {
-        this.setState({
-            // eslint-disable-next-line react/no-unused-state
-            activeTemplate: template,
-        });
-    };
+    onTemplateChange = () => {};
 
     generateColumnsFromFields = (template: MetadataTemplate): Array<ColumnType> => {
         const { fields } = template;
@@ -81,6 +74,7 @@ class MetadataView extends React.Component<Props, State> {
             currentMessage,
             filesList,
             instances,
+            onFilterChange,
             shouldDisableColumnButton,
             tableHeaderHeight,
             tableHeight,
@@ -112,9 +106,10 @@ class MetadataView extends React.Component<Props, State> {
                 <QueryBar
                     activeTemplate={template}
                     onColumnChange={this.setColumnFilters}
-                    onTemplateChange={this.onTemplateChange}
+                    onFilterChange={onFilterChange}
                     shouldDisableColumnButton={shouldDisableColumnButton}
                     templates={templates}
+                    onTemplateChange={this.onTemplateChange}
                     visibleColumns={visibleColumns}
                 />
                 <section className="metadata-items-container">
@@ -122,7 +117,6 @@ class MetadataView extends React.Component<Props, State> {
                         <Message message={currentMessage} />
                     ) : (
                         <Table
-                            columns={visibleColumns}
                             columnWidths={columnWidths}
                             items={tableItems}
                             tableHeaderHeight={tableHeaderHeight}
@@ -130,6 +124,7 @@ class MetadataView extends React.Component<Props, State> {
                             tableRowHeight={tableRowHeight}
                             template={template}
                             totalWidth={totalWidth}
+                            columns={visibleColumns}
                         />
                     )}
                 </section>

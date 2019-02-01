@@ -34,13 +34,13 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
         shallow(
             <UnifiedShareModal
                 collaborationRestrictionWarning=""
-                collaboratorsList={collaboratorsList}
                 getInitialData={jest.fn().mockImplementation(() => Promise.resolve('test'))}
                 intl={intl}
-                inviteePermissions={[testPermission]}
                 item={defaultItem}
-                sharedLink={{}}
+                inviteePermissions={[testPermission]}
                 trackingProps={props.trackingProps || defaultTrackingProps}
+                sharedLink={{}}
+                collaboratorsList={collaboratorsList}
                 {...props}
             />,
         );
@@ -317,7 +317,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
     describe('onToggleSharedLink()', () => {
         test('should open the confirm modal when the toggle is set to false', () => {
             const onToggleSharedLinkStub = jest.fn();
-            const input = mount(<input readOnly type="checkbox" />);
+            const input = mount(<input type="checkbox" readOnly />);
             const trackingProps = {
                 ...defaultTrackingProps,
                 shouldRenderFTUXTooltip: true,
@@ -351,7 +351,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
                     onToggleLink: onToggleSharedLinkStub,
                 },
             };
-            const input = mount(<input checked readOnly type="checkbox" />);
+            const input = mount(<input type="checkbox" checked readOnly />);
 
             const wrapper = getWrapper({
                 sharedLink: {

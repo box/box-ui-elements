@@ -1,13 +1,14 @@
 ### Description
 
-This is a basic wrapper component that handles functionality to show/hide shadows along the vertical edges. This kicks in once the container's size is smaller than the overall height of the content within.
+This is a basic wrapper component that handles functionality to show/hide shadows along the vertical edges. This kicks in once the container's size is smaller than the overall height of the content within. For this to work, the element above the scroll wrapper must have a fixed height. The effect kicks in once the children of the scroll wrapper expand height above that fixed height.
+
+There are two shadow styles: one that runs edge-to-edge (i.e., `cover`), and one that fits within the viewport of the container (i.e., `contain`).
 
 ## Examples
 
 ### Specify a fixed height for the wrapper which may force scroll
 
 ```js
-const ScrollWrapper = require('./ScrollWrapper').default;
 <div style={{ height: '500px' }}>
     <ScrollWrapper>
         <div
@@ -33,14 +34,12 @@ const ScrollWrapper = require('./ScrollWrapper').default;
             </p>
         </div>
     </ScrollWrapper>
-</div>;
+</div>
 ```
 
 ### The wrapper will flow normally if the there are no size constraints around it
 
 ```js
-const ScrollWrapper = require('./ScrollWrapper').default;
-
 <ScrollWrapper>
     <div
         style={{
@@ -63,5 +62,5 @@ const ScrollWrapper = require('./ScrollWrapper').default;
             explicabo!
         </p>
     </div>
-</ScrollWrapper>;
+</ScrollWrapper>
 ```

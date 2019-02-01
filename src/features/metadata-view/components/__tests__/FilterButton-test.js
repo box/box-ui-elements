@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
 
+import { FLOAT, ENUM } from '../../constants';
+
 import { template } from '../fixtures';
 import FilterButton from '../FilterButton';
 
@@ -21,13 +23,13 @@ describe('feature/metadata-view/components/FilterButton', () => {
         });
     });
 
-    describe('updateFilterCondition()', () => {
+    describe('update()', () => {
         [
             {
                 description: 'should set conditions with an object with attribute',
                 index: 0,
                 condition: {
-                    conditionId: '3',
+                    id: '3',
                     attributeDisplayText: '',
                     attributeKey: null,
                     isValidCondition: false,
@@ -36,9 +38,9 @@ describe('feature/metadata-view/components/FilterButton', () => {
                     valueDisplayText: '',
                     valueKey: null,
                 },
-                filterConditions: [
+                conditions: [
                     {
-                        conditionId: '3',
+                        id: '3',
                         attributeDisplayText: '',
                         attributeKey: null,
                         isValidCondition: false,
@@ -57,7 +59,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 valueType: 'string',
                 updatedCondition: [
                     {
-                        conditionId: '3',
+                        id: '3',
                         attributeDisplayText: 'myAttribute',
                         attributeKey: 0,
                         fieldId: 1,
@@ -74,7 +76,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 description: 'should set conditions with an object with operator',
                 index: 0,
                 condition: {
-                    conditionId: '4',
+                    id: '4',
                     attributeDisplayText: '',
                     attributeKey: null,
                     isValidCondition: false,
@@ -83,9 +85,9 @@ describe('feature/metadata-view/components/FilterButton', () => {
                     valueDisplayText: '',
                     valueKey: null,
                 },
-                filterConditions: [
+                conditions: [
                     {
-                        conditionId: '4',
+                        id: '4',
                         attributeDisplayText: '',
                         attributeKey: null,
                         isValidCondition: false,
@@ -103,7 +105,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 fieldKeyType: 'operatorKey',
                 updatedCondition: [
                     {
-                        conditionId: '4',
+                        id: '4',
                         attributeDisplayText: '',
                         attributeKey: null,
                         fieldId: 1,
@@ -119,7 +121,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 description: 'should set conditions with an object with value',
                 index: 0,
                 condition: {
-                    conditionId: '5',
+                    id: '5',
                     attributeDisplayText: '',
                     attributeKey: null,
                     isValidCondition: false,
@@ -128,9 +130,9 @@ describe('feature/metadata-view/components/FilterButton', () => {
                     valueDisplayText: '',
                     valueKey: null,
                 },
-                filterConditions: [
+                conditions: [
                     {
-                        conditionId: '5',
+                        id: '5',
                         attributeDisplayText: '',
                         attributeKey: null,
                         isValidCondition: false,
@@ -148,7 +150,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 fieldKeyType: 'valueKey',
                 updatedCondition: [
                     {
-                        conditionId: '5',
+                        id: '5',
                         attributeDisplayText: '',
                         attributeKey: null,
                         fieldId: 1,
@@ -165,7 +167,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 description,
                 index,
                 condition,
-                filterConditions,
+                conditions,
                 fieldDisplayText,
                 fieldDisplayTextType,
                 fieldId,
@@ -177,11 +179,11 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 test(`${description}`, () => {
                     const wrapper = getWrapper();
                     wrapper.setState({
-                        filterConditions,
+                        conditions,
                     });
                     wrapper
                         .instance()
-                        .updateFilterCondition(
+                        .update(
                             index,
                             condition,
                             fieldDisplayText,
@@ -192,7 +194,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                             valueType,
                         );
 
-                    expect(wrapper.state('filterConditions')).toEqual(updatedCondition);
+                    expect(wrapper.state('conditions')).toEqual(updatedCondition);
                 });
             },
         );
@@ -206,7 +208,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 index: 0,
                 conditions: [
                     {
-                        conditionId: '2',
+                        id: '2',
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
@@ -215,7 +217,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                         valueKey: null,
                     },
                     {
-                        conditionId: '3',
+                        id: '3',
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
@@ -231,7 +233,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 fieldKeyType: 'attributeKey',
                 updatedConditions: [
                     {
-                        conditionId: '3',
+                        id: '3',
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
@@ -240,15 +242,15 @@ describe('feature/metadata-view/components/FilterButton', () => {
                         valueKey: null,
                     },
                 ],
-                isDisabled: true,
+                isApplyDisabled: true,
             },
             {
                 description:
-                    'should delete condition at index 0 and set isDisabled to false since there are no conditions remaining',
+                    'should delete condition at index 0 and set isApplyDisbled to false since there are no conditions remaining',
                 index: 0,
                 conditions: [
                     {
-                        conditionId: '2',
+                        id: '2',
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
@@ -263,18 +265,18 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 fieldKey: 0,
                 fieldKeyType: 'attributeKey',
                 updatedConditions: [],
-                isDisabled: false,
+                isApplyDisabled: false,
             },
-        ].forEach(({ description, index, conditions, updatedConditions, isDisabled }) => {
+        ].forEach(({ description, index, conditions, updatedConditions, isApplyDisabled }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.instance().setState({
-                    filterConditions: conditions,
+                    conditions,
                 });
                 wrapper.instance().deleteCondition(index);
 
-                expect(wrapper.state('filterConditions')).toEqual(updatedConditions);
-                expect(wrapper.state('isDisabled')).toEqual(isDisabled);
+                expect(wrapper.state('conditions')).toEqual(updatedConditions);
+                expect(wrapper.state('isApplyDisabled')).toEqual(isApplyDisabled);
             });
         });
     });
@@ -284,7 +286,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
             {
                 description: 'Should update state with new ordering',
                 updatedState: {
-                    isFilterMenuOpen: false,
+                    isMenuOpen: false,
                 },
             },
         ].forEach(({ description, updatedState }) => {
@@ -292,7 +294,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 const wrapper = getWrapper();
                 wrapper.instance().onClose();
 
-                expect(wrapper.state('isFilterMenuOpen')).toEqual(updatedState.isFilterMenuOpen);
+                expect(wrapper.state('isMenuOpen')).toEqual(updatedState.isMenuOpen);
             });
         });
     });
@@ -302,7 +304,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
             {
                 description: 'Should update state with new ordering',
                 updatedState: {
-                    isFilterMenuOpen: true,
+                    isMenuOpen: true,
                 },
             },
         ].forEach(({ description, updatedState }) => {
@@ -310,64 +312,25 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 const wrapper = getWrapper();
                 wrapper.instance().onOpen();
 
-                expect(wrapper.state('isFilterMenuOpen')).toEqual(updatedState.isFilterMenuOpen);
+                expect(wrapper.state('isMenuOpen')).toEqual(updatedState.isMenuOpen);
             });
         });
     });
 
-    describe('toggleFilterButton()', () => {
+    describe('toggleButton()', () => {
         [
             {
                 description: 'Should update state with new ordering',
                 updatedState: {
-                    isFilterMenuOpen: true,
+                    isMenuOpen: true,
                 },
             },
         ].forEach(({ description, updatedState }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
-                wrapper.instance().toggleFilterButton();
+                wrapper.instance().toggleButton();
 
-                expect(wrapper.state('isFilterMenuOpen')).toEqual(updatedState.isFilterMenuOpen);
-            });
-        });
-    });
-
-    describe('checkValidCondition()', () => {
-        [
-            {
-                description: 'Should return true if the condition is a float and has keys that are not null',
-                condition: {
-                    valueType: 'float',
-                    valueKey: 1,
-                },
-                result: true,
-            },
-            {
-                description: 'Should return true if the condition is not a float and has keys that are not null',
-                condition: {
-                    valueType: 'string',
-                    attributeKey: 'attributeKey',
-                    valueKey: 1,
-                    operatorKey: 'operatorKey',
-                },
-                result: true,
-            },
-            {
-                description: 'Should return false if the condition is not a float and has keys that are null',
-                condition: {
-                    valueType: null,
-                    attributeKey: null,
-                    valueKey: 1,
-                    operatorKey: null,
-                },
-                result: false,
-            },
-        ].forEach(({ description, condition, result }) => {
-            test(`${description}`, () => {
-                const wrapper = getWrapper();
-                const checkValidConditionResult = wrapper.instance().checkValidCondition(condition);
-                expect(checkValidConditionResult).toEqual(result);
+                expect(wrapper.state('isMenuOpen')).toEqual(updatedState.isMenuOpen);
             });
         });
     });
@@ -376,28 +339,31 @@ describe('feature/metadata-view/components/FilterButton', () => {
         [
             {
                 description: 'Should return the valid conditions from filteredConditions',
-                filterConditions: [
+                conditions: [
                     {
-                        isValidCondition: true,
+                        id: 1,
+                        type: ENUM,
                     },
                     {
-                        isValidCondition: false,
+                        id: 2,
+                        type: FLOAT,
                     },
                 ],
                 validConditions: [
                     {
-                        isValidCondition: true,
+                        id: 1,
+                        type: ENUM,
                     },
                 ],
             },
-        ].forEach(({ description, filterConditions, validConditions }) => {
+        ].forEach(({ description, conditions, validConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
-                    filterConditions,
+                    conditions,
                 });
 
-                const result = wrapper.instance().getValidConditions(filterConditions);
+                const result = wrapper.instance().getValidConditions(conditions);
                 expect(result).toEqual(validConditions);
             });
         });
@@ -413,7 +379,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
-                    isDisabled: false,
+                    isApplyDisabled: false,
                 });
                 const targetWithClassName = {
                     target: document.createElement('button'),

@@ -2,16 +2,29 @@
 import * as React from 'react';
 
 import TemplateButton from '../TemplateButton';
+import { template } from '../fixtures';
 
 describe('feature/metadata-view/components/TemplateButton', () => {
-    const getWrapper = () => {
-        return shallow(<TemplateButton />);
+    const getWrapper = (props = {}) => {
+        return shallow(<TemplateButton {...props} />);
     };
 
     describe('render()', () => {
         test('should render TemplateButton', () => {
             const wrapper = getWrapper();
             expect(wrapper).toMatchSnapshot();
+        });
+    });
+
+    describe('updateActiveTemplate', () => {
+        test('should call onTemplateChange', () => {
+            const onTemplateChangeMock = jest.fn();
+            const wrapper = getWrapper({
+                onTemplateChange: onTemplateChangeMock,
+            });
+
+            wrapper.instance().updateActiveTemplate(template);
+            expect(onTemplateChangeMock.mock.calls.length).toBe(1);
         });
     });
 
@@ -49,25 +62,24 @@ describe('feature/metadata-view/components/TemplateButton', () => {
     });
 
     describe('renderEntryButton()', () => {
-        const template = {
+        const temp = {
             id: '123',
             displayName: 'template name 1',
         };
-        const selectedTemplateClassName = 'is-active';
+        const activeTemplateClassName = 'is-active';
 
         test.each`
-            selectedTemplate | expectedReturn | description
-            ${template}      | ${true}        | ${'Should render div with class containing is-active'}
-            ${null}          | ${false}       | ${'Should render div with class that does not contain is-active'}
-        `('$description', ({ selectedTemplate, expectedReturn }) => {
-            const wrapper = getWrapper();
+            activeTemplate | expectedReturn | description
+            ${temp}        | ${true}        | ${'Should render div with class containing is-active'}
+            ${null}        | ${false}       | ${'Should render div with class that does not contain is-active'}
+        `('$description', ({ activeTemplate, expectedReturn }) => {
+            const wrapper = getWrapper({ activeTemplate });
             wrapper.instance().setState({
                 isTemplateMenuOpen: true,
-                selectedTemplate,
             });
 
             const entryButtonWrapper = shallow(wrapper.instance().renderEntryButton());
-            expect(entryButtonWrapper.props().className.includes(selectedTemplateClassName)).toEqual(expectedReturn);
+            expect(entryButtonWrapper.props().className.includes(activeTemplateClassName)).toEqual(expectedReturn);
         });
     });
 });

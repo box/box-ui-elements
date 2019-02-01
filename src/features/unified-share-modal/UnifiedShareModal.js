@@ -7,13 +7,13 @@ import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
-import LoadingIndicatorWrapper from 'components/loading-indicator/LoadingIndicatorWrapper';
-import { Modal } from 'components/modal';
-import { Link } from 'components/link';
-import Button from 'components/button';
-import { UpgradeBadge, BetaBadge } from 'components/badge';
-import Tooltip from 'components/tooltip';
+import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
+import { Modal } from '../../components/modal';
+import { Link } from '../../components/link';
+import Button from '../../components/button';
+import { UpgradeBadge, BetaBadge } from '../../components/badge';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
+import Tooltip from '../../components/tooltip';
 
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
