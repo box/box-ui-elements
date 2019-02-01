@@ -9,7 +9,7 @@ describe('Create Task', () => {
     const username = 'Platform '; // will be used as assignee
 
     beforeEach(() => {
-        cy.visit('/ContentSidebar'); // Open sidebar example page
+        cy.visit('/Elements/ContentSidebar'); // Open sidebar example page
         cy.getByTestId('sidebaractivity').click(); // Open activity tab
     });
 
