@@ -3,13 +3,13 @@
 exports[`components/scroll-wrapper/ScrollWrapper should render children as specified 1`] = `
 <ScrollWrapper
   scrollRefFn={[Function]}
+  shadowSize="cover"
 >
   <div
     className="scroll-container"
   >
     <div
-      className="scroll-wrap-container"
-      onClick={[Function]}
+      className="scroll-wrap-container style--cover"
       onScroll={[Function]}
     >
       <p>
@@ -25,8 +25,7 @@ exports[`components/scroll-wrapper/ScrollWrapper should render with default prop
   className="scroll-container"
 >
   <div
-    className="scroll-wrap-container"
-    onClick={[Function]}
+    className="scroll-wrap-container style--cover"
     onScroll={[Function]}
   />
 </div>
@@ -37,8 +36,7 @@ exports[`components/scroll-wrapper/ScrollWrapper should respect custom class nam
   className="scroll-container test-classname"
 >
   <div
-    className="scroll-wrap-container"
-    onClick={[Function]}
+    className="scroll-wrap-container style--cover"
     onScroll={[Function]}
   />
 </div>

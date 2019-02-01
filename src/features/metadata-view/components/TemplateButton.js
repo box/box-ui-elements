@@ -3,21 +3,22 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-import Button from 'components/button/Button';
-import MenuToggle from 'components/dropdown-menu/MenuToggle';
-import LoadingIndicator from 'components/loading-indicator';
 import MetadataDefaultBadge from '../../../icons/badges/MetadataDefaultBadge';
 import MetadataActiveBadge from '../../../icons/badges/MetadataActiveBadge';
 import TemplateDropdown from '../../metadata-instance-editor/TemplateDropdown';
+import Button from '../../../components/button/Button';
+import MenuToggle from '../../../components/dropdown-menu/MenuToggle';
 
 import messages from '../messages';
 
+import LoadingIndicator from '../../../components/loading-indicator';
+
 type State = {
     isTemplateMenuOpen: boolean,
-    selectedTemplate: MetadataTemplate | null,
 };
 
 type Props = {
+    activeTemplate?: MetadataTemplate,
     onAdd?: Function,
     onTemplateChange?: Function,
     templates?: Array<Object>,
@@ -31,19 +32,14 @@ class TemplateButton extends React.Component<Props, State> {
 
     state = {
         isTemplateMenuOpen: false,
-        selectedTemplate: null,
     };
 
     toggleTemplateDropdownButton = () => {
         this.setState({ isTemplateMenuOpen: !this.state.isTemplateMenuOpen });
     };
 
-    updateSelectedTemplate = (template: MetadataTemplate) => {
+    updateActiveTemplate = (template: MetadataTemplate) => {
         const { onTemplateChange } = this.props;
-        this.setState({
-            // TODO: Remove local state for selectedTemplate and have this component listen for template passed down from props
-            selectedTemplate: template,
-        });
 
         if (onTemplateChange) {
             onTemplateChange(template);
@@ -51,8 +47,7 @@ class TemplateButton extends React.Component<Props, State> {
     };
 
     renderEntryButton = () => {
-        const { templates } = this.props;
-        const { selectedTemplate } = this.state;
+        const { templates, activeTemplate } = this.props;
 
         let icon;
         let text;
@@ -60,24 +55,24 @@ class TemplateButton extends React.Component<Props, State> {
         if (!templates) {
             icon = <LoadingIndicator className="loading-indicator" />;
             text = <FormattedMessage {...messages.templatesLoadingButtonText} />;
-        } else if (selectedTemplate) {
+        } else if (activeTemplate) {
             icon = <MetadataActiveBadge />;
-            text = selectedTemplate.displayName;
-        } else if (!selectedTemplate) {
+            text = activeTemplate.displayName;
+        } else if (!activeTemplate) {
             icon = <MetadataDefaultBadge />;
             text = <FormattedMessage {...messages.templatesButtonText} />;
         }
 
         const buttonClasses = classNames('query-bar-button', {
-            'is-active': selectedTemplate,
+            'is-active': activeTemplate,
         });
 
         return (
             <Button
                 className={buttonClasses}
                 isDisabled={!templates}
-                onClick={this.toggleTemplateDropdownButton}
                 type="button"
+                onClick={this.toggleTemplateDropdownButton}
             >
                 <MenuToggle>
                     {icon}
@@ -94,19 +89,18 @@ class TemplateButton extends React.Component<Props, State> {
     );
 
     render() {
-        const { templates, usedTemplates } = this.props;
-        const { selectedTemplate } = this.state;
+        const { activeTemplate, templates, usedTemplates } = this.props;
         return (
             <TemplateDropdown
                 className="query-bar-template-dropdown-flyout"
                 defaultTemplateIcon={<MetadataDefaultBadge className="template-list-item-badge" />}
-                entryButton={this.renderEntryButton()}
-                onAdd={this.updateSelectedTemplate}
-                selectedTemplate={selectedTemplate}
-                selectedTemplateIcon={<MetadataActiveBadge className="template-list-item-badge" />}
-                templates={templates || []}
                 title={this.renderTitle()}
+                onAdd={this.updateActiveTemplate}
+                activeTemplate={activeTemplate}
+                activeTemplateIcon={<MetadataActiveBadge className="template-list-item-badge" />}
+                templates={templates || []}
                 usedTemplates={usedTemplates}
+                entryButton={this.renderEntryButton()}
             />
         );
     }

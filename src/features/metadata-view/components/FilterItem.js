@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
-import SingleSelectField from 'components/select-field/SingleSelectField';
 import IconClose from '../../../icons/general/IconClose';
+import SingleSelectField from '../../../components/select-field/SingleSelectField';
 import FilterValueField from './FilterValueField';
 import { isValidValue } from '../validator';
 
@@ -37,7 +37,7 @@ type Props = {
     index: number,
     intl: Object,
     template?: Object,
-    updateFilterCondition: (
+    update: (
         index: number,
         condition: Object,
         fieldDisplayText: string | Date,
@@ -68,7 +68,7 @@ class FilterItem extends React.Component<Props, State> {
     };
 
     updateSelectedField = (option: Object, fieldType?: string) => {
-        const { condition, updateFilterCondition, index } = this.props;
+        const { condition, update, index } = this.props;
         const value = option.value;
         const valueType = option.type;
         const fieldId = option.fieldId || condition.fieldId;
@@ -98,7 +98,7 @@ class FilterItem extends React.Component<Props, State> {
             keyType = VALUE_KEY;
         }
 
-        updateFilterCondition(index, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
+        update(index, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
     };
 
     getFormattedOptions = (options: Array<Object>): any[] => {
@@ -147,7 +147,7 @@ class FilterItem extends React.Component<Props, State> {
     };
 
     updateValueField = (fieldValue: Object) => {
-        const { condition, updateFilterCondition, index } = this.props;
+        const { condition, update, index } = this.props;
         let displayText = '';
         const displayTextType = VALUE_DISPLAY_TEXT;
         const fieldId = condition.fieldId;
@@ -170,7 +170,7 @@ class FilterItem extends React.Component<Props, State> {
             });
         }
 
-        updateFilterCondition(index, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
+        update(index, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
     };
 
     shouldDisplayErrorMessage = (valueType: string, selectedValue?: string | Date | number) => {
@@ -195,8 +195,8 @@ class FilterItem extends React.Component<Props, State> {
                     formatMessage={formatMessage}
                     selectedValue={selectedValue}
                     shouldDisplayErrorMessage={shouldDisplayErrorMessage}
-                    updateSelectedField={this.updateSelectedField}
                     updateValueField={this.updateValueField}
+                    updateSelectedField={this.updateSelectedField}
                     valueKey={valueKey}
                     valueOptions={valueOptions}
                     valueType={valueType}
@@ -220,7 +220,7 @@ class FilterItem extends React.Component<Props, State> {
             <div className="filter-item-container">
                 <div className="filter-item-delete-button">
                     <button type="button" className="delete-button" onClick={this.onDeleteButtonClick}>
-                        <IconClose color="#999EA4" height={deleteButtonIconHeight} width={deleteButtonIconWidth} />
+                        <IconClose width={deleteButtonIconWidth} height={deleteButtonIconHeight} color="#999EA4" />
                     </button>
                 </div>
                 <div className="filter-item-prefix-container">

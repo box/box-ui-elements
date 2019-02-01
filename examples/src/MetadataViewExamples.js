@@ -3,6 +3,8 @@ import * as React from 'react';
 
 import MetadataView from '../../src/features/metadata-view/MetadataView';
 
+import '../styles/MetadataViewExamples.scss';
+
 const totalWidth = 700;
 const tableHeight = 300;
 const tableHeaderHeight = 40;
@@ -154,28 +156,47 @@ type Props = {
     templates?: Array<MetadataTemplate>,
 };
 
-// eslint-disable-next-line react/prefer-stateless-function
-class MetadataViewExamples extends React.Component<Props> {
+type State = {
+    filterConditions: Array<Object>,
+};
+
+class MetadataViewExamples extends React.Component<Props, State> {
+    state = {
+        filterConditions: [],
+    };
+
+    onFilterChange = (conditions: Array<Object>) => {
+        this.setState({
+            filterConditions: conditions,
+        });
+    };
+
     render() {
         const filesList = [{ name: '1' }, { name: '2' }, { name: '3' }];
         const templateName = 'Vendor Contracts';
         const { currentMessage, template, templates } = this.props;
+        const { filterConditions } = this.state;
 
         return (
-            <MetadataView
-                columnWidths={widths}
-                currentMessage={currentMessage}
-                filesList={filesList}
-                instances={instances}
-                shouldDisableColumnButton={!(template && template.fields && template.fields.length > 1)}
-                tableHeaderHeight={tableHeaderHeight}
-                tableHeight={tableHeight}
-                tableRowHeight={tableRowHeight}
-                template={template}
-                templates={templates || []}
-                templateName={templateName}
-                totalWidth={totalWidth}
-            />
+            <div>
+                <h3>Applied filters</h3>
+                <pre className="applied-filters">{JSON.stringify(filterConditions, null, 4)}</pre>
+                <MetadataView
+                    instances={instances}
+                    columnWidths={widths}
+                    currentMessage={currentMessage}
+                    filesList={filesList}
+                    onFilterChange={this.onFilterChange}
+                    shouldDisableColumnButton={!(template && template.fields && template.fields.length > 1)}
+                    tableHeaderHeight={tableHeaderHeight}
+                    tableHeight={tableHeight}
+                    tableRowHeight={tableRowHeight}
+                    template={template}
+                    templates={templates || []}
+                    templateName={templateName}
+                    totalWidth={totalWidth}
+                />
+            </div>
         );
     }
 }

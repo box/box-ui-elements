@@ -3,27 +3,27 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import DatalistItem from 'components/datalist-item';
-import SelectorDropdown from 'components/selector-dropdown';
-import SearchForm from 'components/search-form/SearchForm';
-import PlainButton from 'components/plain-button';
-import LoadingIndicator from 'components/loading-indicator';
-import { Flyout, Overlay } from 'components/flyout';
+import DatalistItem from '../../components/datalist-item';
+import SelectorDropdown from '../../components/selector-dropdown';
+import SearchForm from '../../components/search-form/SearchForm';
+import PlainButton from '../../components/plain-button';
+import LoadingIndicator from '../../components/loading-indicator';
+import { Flyout, Overlay } from '../../components/flyout';
 
-import MenuToggle from 'components/dropdown-menu/MenuToggle';
+import MenuToggle from '../../components/dropdown-menu/MenuToggle';
 import messages from './messages';
 import { TEMPLATE_CUSTOM_PROPERTIES } from './constants';
 import './TemplateDropdown.scss';
 
 type Props = {
+    activeTemplate?: ?MetadataTemplate,
+    activeTemplateIcon?: React.Node,
     className?: string,
     defaultTemplateIcon?: React.Node,
     entryButton?: React.Node,
     intl: any,
     isDropdownBusy?: boolean,
     onAdd: (template: MetadataTemplate) => void,
-    selectedTemplate?: MetadataTemplate | null,
-    selectedTemplateIcon?: React.Node,
     templates: Array<MetadataTemplate>,
     title?: React.Node,
     usedTemplates: Array<MetadataTemplate>,
@@ -39,8 +39,8 @@ const InputContainer = ({ inputProps = {}, ...rest }: { inputProps?: Object }) =
     <SearchForm
         {...inputProps}
         {...rest}
-        data-resin-target="metadata-templatesearch"
         shouldPreventClearEventPropagation
+        data-resin-target="metadata-templatesearch"
     />
 );
 
@@ -79,9 +79,9 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
         const {
             isDropdownBusy,
             onAdd,
-            selectedTemplate,
+            activeTemplate,
             defaultTemplateIcon,
-            selectedTemplateIcon,
+            activeTemplateIcon,
             templates: allTemplates,
             title,
             usedTemplates,
@@ -116,7 +116,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
         }
 
         const renderedTemplates = templates.map(template => {
-            const isTemplateSelected = selectedTemplate && selectedTemplate.id === template.id;
+            const isTemplateSelected = activeTemplate && activeTemplate.id === template.id;
 
             const buttonClassName = classNames('metadata-template-dropdown-select-template', {
                 'metadata-template-dropdown-is-selected': isTemplateSelected,
@@ -125,7 +125,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
             return (
                 <DatalistItem key={template.id}>
                     <PlainButton className={buttonClassName} tabIndex="-1" type="button">
-                        {isTemplateSelected ? selectedTemplateIcon : defaultTemplateIcon}
+                        {isTemplateSelected ? activeTemplateIcon : defaultTemplateIcon}
                         {this.getTemplateName(template)}
                     </PlainButton>
                 </DatalistItem>
@@ -136,13 +136,13 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
             <React.Fragment>
                 <SelectorDropdown
                     className="metadata-instance-editor-template-dropdown-menu"
+                    title={title}
                     isAlwaysOpen
                     onSelect={(index: number) => {
                         onAdd(templates[index]);
                     }}
                     selector={this.getSelector()}
                     shouldScroll
-                    title={title}
                 >
                     {indicatorOrMessage ? null : renderedTemplates}
                 </SelectorDropdown>
@@ -231,7 +231,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
             return entryButton;
         }
         return (
-            <PlainButton className={buttonToggleClassName} data-resin-target="metadata-templateaddmenu" type="button">
+            <PlainButton data-resin-target="metadata-templateaddmenu" className={buttonToggleClassName} type="button">
                 <MenuToggle>
                     <FormattedMessage {...messages.metadataTemplateAdd} />
                 </MenuToggle>

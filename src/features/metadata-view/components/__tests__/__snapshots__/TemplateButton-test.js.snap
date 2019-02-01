@@ -2,6 +2,11 @@
 
 exports[`feature/metadata-view/components/TemplateButton render() should render TemplateButton 1`] = `
 <TemplateDropdown
+  activeTemplateIcon={
+    <MetadataActiveBadge
+      className="template-list-item-badge"
+    />
+  }
   className="query-bar-template-dropdown-flyout"
   defaultTemplateIcon={
     <MetadataDefaultBadge
@@ -31,12 +36,6 @@ exports[`feature/metadata-view/components/TemplateButton render() should render 
     </Button>
   }
   onAdd={[Function]}
-  selectedTemplate={null}
-  selectedTemplateIcon={
-    <MetadataActiveBadge
-      className="template-list-item-badge"
-    />
-  }
   templates={Array []}
   title={
     <div

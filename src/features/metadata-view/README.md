@@ -28,7 +28,7 @@ const template1 = require('examples/MetadataViewExamples').template1;
 const MetadataViewExamples = require('examples').MetadataViewExamples;
 const template = require('examples/MetadataViewExamples').template1;
 <div>
-    <MetadataViewExamples template={template} currentMessage="" />
+    <MetadataViewExamples template={template} currentMessage="" templates={[template]} />
 </div>
 ```
 

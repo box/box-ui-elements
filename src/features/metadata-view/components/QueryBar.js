@@ -12,15 +12,23 @@ import '../styles/QueryBarButtons.scss';
 type Props = {
     activeTemplate?: MetadataTemplate,
     onColumnChange?: Function,
+    onFilterChange?: Function,
     onTemplateChange?: Function,
     templates?: Array<MetadataTemplate>,
     visibleColumns?: Array<ColumnType>,
 };
 
-const QueryBar = ({ activeTemplate, onColumnChange, onTemplateChange, templates, visibleColumns }: Props) => (
+const QueryBar = ({
+    activeTemplate,
+    onColumnChange,
+    onFilterChange,
+    onTemplateChange,
+    templates,
+    visibleColumns,
+}: Props) => (
     <section className="metadata-view-query-bar">
-        <TemplateButton onTemplateChange={onTemplateChange} templates={templates} />
-        <FilterButton template={activeTemplate} />
+        <TemplateButton activeTemplate={activeTemplate} onTemplateChange={onTemplateChange} templates={templates} />
+        <FilterButton onFilterChange={onFilterChange} template={activeTemplate} />
         <ColumnButton onColumnChange={onColumnChange} template={activeTemplate} visibleColumns={visibleColumns} />
     </section>
 );

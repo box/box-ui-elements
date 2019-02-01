@@ -1,8 +1,10 @@
 // @flow
 import * as React from 'react';
-import { Flyout, Overlay } from 'components/flyout';
-import ScrollWrapper from 'components/scroll-wrapper';
-import type { FlyoutProps } from 'components/flyout/Flyout';
+import classNames from 'classnames';
+import { Flyout, Overlay } from '../../components/flyout';
+import ScrollWrapper from '../../components/scroll-wrapper';
+import type { FlyoutProps } from '../../components/flyout/Flyout';
+
 import './HeaderFlyout.scss';
 
 type Props = FlyoutProps & {
@@ -40,8 +42,17 @@ class HeaderFlyout extends React.Component<Props> {
                                 <h4 className="flyout-list-title">{header}</h4>
                             </div>
                         )}
-                        <div className="flyout-list-container-body">
-                            {children != null && <ScrollWrapper scrollRefFn={scrollRefFn}>{children}</ScrollWrapper>}
+                        <div
+                            className={classNames('flyout-list-container-body', {
+                                'with-header': !!header,
+                                'with-footer': !!footer,
+                            })}
+                        >
+                            {children != null && (
+                                <ScrollWrapper scrollRefFn={scrollRefFn} shadowSize="contain">
+                                    {children}
+                                </ScrollWrapper>
+                            )}
                         </div>
                         {footer && <div className="flyout-list-container-footer">{footer}</div>}
                     </div>

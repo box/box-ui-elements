@@ -13,10 +13,11 @@ type Props = {
     className?: string,
     /** Optional function to get the scrollRef in parent components */
     scrollRefFn: (?HTMLElement) => void,
+    /** Optional prop to set the shadow size, like background-size ('cover' or 'contain') */
+    shadowSize: 'cover' | 'contain',
 };
 
 type State = {
-    isScrollHeightEqualClientHeight: boolean,
     shouldShowBottomScrollShadow: boolean,
     shouldShowTopScrollShadow: boolean,
 };
@@ -24,66 +25,51 @@ type State = {
 class ScrollWrapper extends React.Component<Props, State> {
     static defaultProps = {
         scrollRefFn: noop,
+        shadowSize: 'cover',
     };
 
     state = {
         shouldShowTopScrollShadow: false,
         shouldShowBottomScrollShadow: false,
-        isScrollHeightEqualClientHeight: false,
     };
+
+    constructor(props: Props) {
+        super(props);
+
+        this.observer = new MutationObserver(this.throttledOnContentScroll);
+    }
 
     componentDidMount = () => {
         const newState = this.getScrollShadowState();
         this.setState(newState);
+
+        if (this.scrollRef) {
+            this.scrollRef.addEventListener('transitionend', this.throttledOnContentScroll);
+
+            // Apparently, flow only allows for one truthy check per command, so I have to either:
+            // 1) duplicate this check per call, or
+            // 2) nest if checks (_slightly more performant_)
+            if (this.scrollRef) {
+                this.observer.observe(this.scrollRef, {
+                    attributes: true,
+                    childlist: true,
+                    subtree: true,
+                });
+            }
+        }
     };
+
+    componentWillUnmount() {
+        this.observer.disconnect();
+
+        if (this.scrollRef) {
+            this.scrollRef.removeEventListener('transitionend', this.throttledOnContentScroll);
+        }
+    }
 
     onContentScroll = (): void => {
         const newState = this.getScrollShadowState();
         this.setState(newState);
-    };
-
-    onContentClick = (): void => {
-        const newState = this.getClickShadowState();
-        this.setState(newState);
-    };
-
-    /** Note: This will only get triggered if the child elements of ScrollWrapper do not have a stopPropagation method attached to their click events.
-     * Also, asynchronous updates triggered by clicks will not fire this method.
-     */
-    getClickShadowState = () => {
-        const { scrollTop, scrollHeight, clientHeight } = this.scrollRef || {};
-        const newState = {};
-
-        /**
-         * This case handles when the scrollview does not have enough elements to scroll and a collapsible card was opened.
-         */
-        if (scrollTop === 0 && scrollHeight === clientHeight) {
-            newState.shouldShowBottomScrollShadow = true;
-            newState.isScrollHeightEqualClientHeight = true;
-        }
-
-        /**
-         * This case handles when the scrollview has enough elements to scroll and a collapsible card was opened.
-         */
-        if (scrollTop === 0 && scrollHeight > clientHeight) {
-            if (this.state.isScrollHeightEqualClientHeight) {
-                newState.shouldShowBottomScrollShadow = false;
-            }
-            newState.isScrollHeightEqualClientHeight = false;
-        }
-
-        /**
-         * This case handles when we have already partially scrolled and a collapsible card was opened.
-         */
-        if (scrollTop > 0) {
-            if (scrollTop + clientHeight === scrollHeight) {
-                newState.shouldShowBottomScrollShadow = true;
-            } else if (scrollHeight > clientHeight) {
-                newState.shouldShowBottomScrollShadow = false;
-            }
-        }
-
-        return newState;
     };
 
     getScrollShadowState = () => {
@@ -110,13 +96,15 @@ class ScrollWrapper extends React.Component<Props, State> {
         return newState;
     };
 
+    observer: MutationObserver;
+
     scrollRef: ?HTMLDivElement = null;
 
     // Throttle to 10 fps
     throttledOnContentScroll = throttle(this.onContentScroll, 100);
 
     render() {
-        const { children, className = '', scrollRefFn, ...rest } = this.props;
+        const { children, className = '', scrollRefFn, shadowSize, ...rest } = this.props;
         const { shouldShowTopScrollShadow, shouldShowBottomScrollShadow } = this.state;
 
         const classes = classNames(`scroll-container`, className, {
@@ -126,15 +114,13 @@ class ScrollWrapper extends React.Component<Props, State> {
 
         return (
             <div className={classes} {...rest}>
-                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
                 <div
+                    className={classNames('scroll-wrap-container', `style--${shadowSize}`)}
+                    onScroll={this.throttledOnContentScroll}
                     ref={el => {
                         this.scrollRef = el;
                         scrollRefFn(el);
                     }}
-                    className="scroll-wrap-container"
-                    onClick={this.onContentClick}
-                    onScroll={this.throttledOnContentScroll}
                 >
                     {children}
                 </div>

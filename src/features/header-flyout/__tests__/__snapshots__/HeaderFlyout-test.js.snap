@@ -35,10 +35,11 @@ exports[`components/core/header/components/HeaderFlyout render() should include 
         </h4>
       </div>
       <div
-        className="flyout-list-container-body"
+        className="flyout-list-container-body with-header with-footer"
       >
         <ScrollWrapper
           scrollRefFn={[Function]}
+          shadowSize="contain"
         >
           <span>
             test
@@ -85,6 +86,7 @@ exports[`components/core/header/components/HeaderFlyout render() should render d
       >
         <ScrollWrapper
           scrollRefFn={[Function]}
+          shadowSize="contain"
         >
           <span>
             test
@@ -127,6 +129,7 @@ exports[`components/core/header/components/HeaderFlyout render() should render t
       >
         <ScrollWrapper
           scrollRefFn={[Function]}
+          shadowSize="contain"
         >
           <span>
             content here

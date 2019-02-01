@@ -2,7 +2,7 @@
 import React from 'react';
 import { FormattedMessage, FormattedRelative, FormattedDate } from 'react-intl';
 
-import { isToday, isYesterday, isCurrentYear } from 'utils/datetime';
+import { isToday, isYesterday, isCurrentYear } from '../../utils/datetime';
 
 import messages from './messages';
 
@@ -45,17 +45,19 @@ const ReadableTime = ({
     } else if (!shouldShowYear && alwaysShowTime) {
         // e.g. Oct 5 at 10:30 PM
         dateMessage = messages.eventTimeDateShort;
-        date = <FormattedDate day="numeric" month="short" value={timestamp} />;
+        date = <FormattedDate value={timestamp} month="short" day="numeric" />;
     } else if (!shouldShowYear && !alwaysShowTime) {
         // e.g. Oct 5
-        return <FormattedDate day="numeric" month="short" value={timestamp} />;
+        return <FormattedDate value={timestamp} month="short" day="numeric" />;
     }
 
-    return timestamp > relativeIfNewerThanTs ? (
-        <FormattedRelative value={timestamp} />
-    ) : (
-        <FormattedMessage {...dateMessage} values={{ time: timestamp, date }} />
-    );
+    let output = <FormattedMessage {...dateMessage} values={{ time: timestamp, date }} />;
+
+    if (timestamp > relativeIfNewerThanTs) {
+        output = <FormattedRelative value={timestamp} />;
+    }
+
+    return output;
 };
 
 export default ReadableTime;
