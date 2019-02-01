@@ -62,8 +62,8 @@ function getMessageForAction(name: React.Node, action: string, version_number: s
 
 type Props = {
     action: 'delete' | 'restore' | 'upload',
-    modified_by: User,
     id: string,
+    modified_by: User,
     onInfo?: Function,
     version_number: string,
 } & InjectIntlProvidedProps;
@@ -80,11 +80,11 @@ const Version = ({ action, modified_by, id, intl, onInfo, version_number }: Prop
                     <PlainButton
                         aria-label={intl.formatMessage(messages.getVersionInfo)}
                         className="bcs-version-info"
+                        data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                         onClick={() => {
                             onInfo({ id, version_number });
                         }}
                         type="button"
-                        data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                     >
                         <IconInfoInverted height={16} width={16} />
                     </PlainButton>

@@ -37,10 +37,10 @@ const FileVersionListItem = ({
             <div className="file-version-content">
                 <div className="file-version-title">
                     <Badge
-                        className="file-version-badge"
                         aria-label={intl.formatMessage(messages.versionNumberLabel, {
                             versionNumber: version.versionNumber,
                         })}
+                        className="file-version-badge"
                     >
                         <FormattedMessage
                             {...messages.versionNumberBadge}
@@ -49,7 +49,7 @@ const FileVersionListItem = ({
                     </Badge>
                     <span className="file-version-name">{version.itemName}</span>
                     {version.isCurrent && (
-                        <Badge type="highlight" aria-label={intl.formatMessage(messages.currentVersionLabel)}>
+                        <Badge aria-label={intl.formatMessage(messages.currentVersionLabel)} type="highlight">
                             <FormattedMessage {...messages.current} />
                         </Badge>
                     )}

@@ -14,16 +14,16 @@ type Props = {
 const IconLeftArrow = ({ className = '', color = '#888888', height = 14, title, width = 12 }: Props) => (
     <AccessibleSVG
         className={`icon-governance ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 12 14"
+        width={width}
     >
         <path
             className="stroke-color"
+            d="M9.5 4.5h-9m4-4l-4 4m4 4l-4-4"
             fill="none"
             stroke={color}
-            d="M9.5 4.5h-9m4-4l-4 4m4 4l-4-4"
             strokeLinecap="round"
         />
     </AccessibleSVG>

@@ -34,14 +34,14 @@ class UnknownUserAvatar extends React.PureComponent<Props> {
                 width={width}
             >
                 <defs>
-                    <circle id={`${this.idPrefix}a`} cx="14" cy="14" r="14" />
+                    <circle cx="14" cy="14" id={`${this.idPrefix}a`} r="14" />
                 </defs>
                 <g fill="none" fillRule="evenodd">
                     <use className="background-fill-color" fill="#EDEDED" xlinkHref={`#${this.idPrefix}a`} />
                     <path
                         className="fill-color"
-                        fill="#C3C3C3"
                         d="M5.5 25.1C6.7 21 10 18 14 18s7.3 3 8.5 7.1a14 14 0 0 1-17 0zM14 16a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"
+                        fill="#C3C3C3"
                     />
                 </g>
             </AccessibleSVG>

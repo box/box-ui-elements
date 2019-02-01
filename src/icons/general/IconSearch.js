@@ -15,10 +15,10 @@ type Props = {
 const IconSearch = ({ className = 'icon-search', color = '#AFAFAF', height = 14, title, width = 14 }: Props) => (
     <AccessibleSVG
         className={`icon-search ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 14 14"
+        width={width}
     >
         <path
             className="fill-color"

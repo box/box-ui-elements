@@ -19,7 +19,7 @@ describe('icons/general/IconVerified', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconVerified width={width} height={height} />);
+        const wrapper = shallow(<IconVerified height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

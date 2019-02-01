@@ -19,7 +19,7 @@ describe('icons/general/IconAdd', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconAdd width={width} height={height} />);
+        const wrapper = shallow(<IconAdd height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

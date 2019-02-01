@@ -17,12 +17,12 @@ describe('features/shared-link-settings-modal/AllowDownloadSection', () => {
     const getWrapper = (props = {}) =>
         shallow(
             <AllowDownloadSection
-                isDownloadAvailable={isDownloadAvailable}
                 canChangeDownload={canChangeDownload}
-                isDownloadEnabled={isDownloadEnabled}
                 directLink={directLink}
                 isDirectLinkAvailable={isDirectLinkAvailable}
                 isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
+                isDownloadAvailable={isDownloadAvailable}
+                isDownloadEnabled={isDownloadEnabled}
                 onChange={sandbox.stub()}
                 {...props}
             />,

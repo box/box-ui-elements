@@ -15,10 +15,10 @@ type Props = {
 const IconShield2 = ({ className = '', color = '#8EA6B2', height = 12, title, width = 12 }: Props) => (
     <AccessibleSVG
         className={`icon-shield-2 ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 12 12"
+        width={width}
     >
         <path
             className="fill-color"

@@ -14,9 +14,9 @@ const MAX_ADDITIONAL_COLLABORATOR_NUM_CAP = 99;
 type Props = {
     collaborators: Array<collaboratorType>,
     containerAttributes: Object,
-    onClick: Function,
-    maxDisplayedUserAvatars: number,
     maxAdditionalCollaboratorsNum: number,
+    maxDisplayedUserAvatars: number,
+    onClick: Function,
 };
 
 class CollaboratorAvatars extends Component<Props> {
@@ -58,6 +58,7 @@ class CollaboratorAvatars extends Component<Props> {
         const { collaborators, maxDisplayedUserAvatars, containerAttributes, onClick } = this.props;
 
         return (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
             <a
                 className={classNames('collaborator-avatar-container', {
                     'are-avatars-hidden': !this.isVisible(),
@@ -65,6 +66,7 @@ class CollaboratorAvatars extends Component<Props> {
                 onClick={onClick}
                 {...containerAttributes}
                 aria-hidden={this.isVisible() ? 'false' : 'true'}
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 tabIndex="0"
             >
                 <div className="avatars-label">
@@ -78,9 +80,9 @@ class CollaboratorAvatars extends Component<Props> {
                             return (
                                 <CollaboratorAvatarItem
                                     key={`collab-avatar-${collabID}`}
-                                    id={index}
-                                    hasCustomAvatar={hasCustomAvatar}
                                     avatarUrl={imageURL}
+                                    hasCustomAvatar={hasCustomAvatar}
+                                    id={index}
                                     name={name}
                                 />
                             );

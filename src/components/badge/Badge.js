@@ -8,9 +8,9 @@ type Props = {
     /** Child components */
     children: React.Node,
     /** A predefined badge type */
-    type?: 'info' | 'warning' | 'highlight' | 'error' | 'alert' | 'success',
-    /** Adds a class to the component */
     className?: string,
+    /** Adds a class to the component */
+    type?: 'info' | 'warning' | 'highlight' | 'error' | 'alert' | 'success',
 };
 
 const Badge = ({ children, className = '', type = 'default', ...rest }: Props) => {

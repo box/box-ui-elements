@@ -24,8 +24,8 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         mount(
             <ApprovalCommentForm
                 getMentionWithQuery={() => {}}
-                user={{ id: 123, name: 'foo bar' }}
                 intl={intlFake}
+                user={{ id: 123, name: 'foo bar' }}
                 {...props}
             />,
         );
@@ -92,10 +92,10 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         const wrapper = mount(
             <FeatureProvider features={features}>
                 <ApprovalCommentForm
-                    getMentionWithQuery={() => {}}
-                    user={{ id: 123, name: 'foo bar' }}
-                    intl={intlFake}
                     createTask={jest.fn()}
+                    getMentionWithQuery={() => {}}
+                    intl={intlFake}
+                    user={{ id: 123, name: 'foo bar' }}
                 />
             </FeatureProvider>,
         );
@@ -107,10 +107,10 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         const wrapper = mount(
             <FeatureProvider features={features}>
                 <ApprovalCommentForm
-                    getMentionWithQuery={() => {}}
-                    user={{ id: 123, name: 'foo bar' }}
-                    intl={intlFake}
                     createTask={jest.fn()}
+                    getMentionWithQuery={() => {}}
+                    intl={intlFake}
+                    user={{ id: 123, name: 'foo bar' }}
                 />
             </FeatureProvider>,
         );
@@ -229,10 +229,10 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         const wrapper = mount(
             <FeatureProvider features={features}>
                 <ApprovalCommentForm
-                    getMentionWithQuery={() => {}}
-                    user={{ id: 123, name: 'foo bar' }}
-                    intl={intlFake}
                     createTask={jest.fn()}
+                    getMentionWithQuery={() => {}}
+                    intl={intlFake}
+                    user={{ id: 123, name: 'foo bar' }}
                     {...props}
                 />
             </FeatureProvider>,

@@ -16,15 +16,15 @@ type Props = {
 const IconUpgradeCloud = ({ className = '', color = BOX_BLUE, height = 50, title, width = 82 }: Props) => (
     <AccessibleSVG
         className={`icon-upgrade-cloud ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 82 50"
+        width={width}
     >
-        <g transform="translate(0 1)" fill="none" fillRule="evenodd">
-            <rect className="fill-color" fill={color} opacity="0.3" x="6" y="48" width="63" height="1" rx="100" />
-            <rect className="fill-color" fill={color} opacity="0.3" x="71" y="48" width="11" height="1" rx="100" />
-            <rect className="fill-color" fill={color} opacity="0.3" y="48" width="4" height="1" rx="100" />
+        <g fill="none" fillRule="evenodd" transform="translate(0 1)">
+            <rect className="fill-color" fill={color} height="1" opacity="0.3" rx="100" width="63" x="6" y="48" />
+            <rect className="fill-color" fill={color} height="1" opacity="0.3" rx="100" width="11" x="71" y="48" />
+            <rect className="fill-color" fill={color} height="1" opacity="0.3" rx="100" width="4" y="48" />
             <path
                 className="stroke-color"
                 d="M59.5 15C57.75 6.5 50.25 0 41 0c-7.25 0-13.5 4-16.5 10C16.75 11 11 17.25 11 25c0 8.25 6.75 15 15 15h32.5c7 0 12.5-5.5 12.5-12.5 0-6.5-5.25-12-11.5-12.5z"
@@ -34,10 +34,10 @@ const IconUpgradeCloud = ({ className = '', color = BOX_BLUE, height = 50, title
             <path
                 className="stroke-color"
                 d="M14 24c0 7.15 5.826 13 12.947 13H55"
+                opacity=".3"
                 stroke={color}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                opacity=".3"
             />
             <path
                 className="fill-color"

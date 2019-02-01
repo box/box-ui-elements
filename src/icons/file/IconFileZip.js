@@ -14,21 +14,21 @@ type Props = {
 const IconFileZip = ({ className = '', height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
         className={`icon-file-zip ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 32 32"
+        width={width}
     >
-        <path fill="#fff" d="M25 27H7V5h13l5 5v17z" />
+        <path d="M25 27H7V5h13l5 5v17z" fill="#fff" />
         <path
-            fill="#737f8b"
             d="M11 25h1v1h-1zM11 23h1v1h-1zM11 21h1v1h-1zM11 19h1v1h-1zM11 17h1v1h-1zM11 15h1v1h-1zM11 13h1v1h-1zM11 11h1v1h-1zM11 9h1v1h-1zM11 7h1v1h-1zM11 5h1v1h-1zM12 24h1v1h-1zM12 22h1v1h-1zM12 20h1v1h-1zM12 18h1v1h-1zM12 16h1v1h-1zM12 14h1v1h-1zM12 12h1v1h-1zM12 10h1v1h-1zM12 8h1v1h-1zM12 6h1v1h-1z"
+            fill="#737f8b"
         />
         <path
             d="M20 4H7a.94.94 0 0 0-1 1v22a.94.94 0 0 0 1 1h18a.94.94 0 0 0 1-1V9.9zm5 23H7V5h13v4a.94.94 0 0 0 1 1h4z"
             fill="#737f8b"
         />
-        <path fill="#737f8b" d="M12 26h1v1h-1z" />
+        <path d="M12 26h1v1h-1z" fill="#737f8b" />
     </AccessibleSVG>
 );
 

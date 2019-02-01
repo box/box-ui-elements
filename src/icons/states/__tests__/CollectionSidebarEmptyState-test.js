@@ -30,7 +30,7 @@ describe('icons/states/CollectionSidebarEmptyState', () => {
     test('should correctly render state svg with specified width and height', () => {
         const width = 17;
         const height = 21;
-        const wrapper = shallow(<CollectionSidebarEmptyState width={width} height={height} />);
+        const wrapper = shallow(<CollectionSidebarEmptyState height={height} width={width} />);
 
         expect(wrapper.prop('width')).toEqual(width);
         expect(wrapper.prop('height')).toEqual(height);

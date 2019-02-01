@@ -10,8 +10,8 @@ import './EnumField.scss';
 
 type Option = {
     displayText: string,
-    value: string,
     isSelectable: boolean,
+    value: string,
 };
 
 type Props = {

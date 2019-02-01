@@ -2,8 +2,8 @@
 import * as React from 'react';
 
 type Props = {
-    getPanelIdFromValue: Function,
     children?: React.Node,
+    getPanelIdFromValue: Function,
     onSelection?: Function,
     selectedIndex: number,
     style?: Object,
@@ -56,23 +56,25 @@ class SlidePanels extends React.Component<Props> {
         const { getPanelIdFromValue, children, selectedIndex, style } = this.props;
 
         return (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                className="slide-panels"
-                onKeyDown={this.handleKeyDown}
                 ref={containerEl => {
                     this.containerEl = containerEl;
                 }}
-                tabIndex="0"
+                className="slide-panels"
+                onKeyDown={this.handleKeyDown}
                 style={style}
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                tabIndex="0"
             >
                 {React.Children.map(children, (child, i) => {
                     const isSelected = i === selectedIndex;
                     return (
                         <div
+                            key={i}
                             aria-hidden={!isSelected}
                             className="slide-panel"
                             id={getPanelIdFromValue(i)}
-                            key={i}
                             role="tabpanel"
                         >
                             {child}

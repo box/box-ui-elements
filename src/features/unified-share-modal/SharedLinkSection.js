@@ -16,12 +16,18 @@ import { convertToMs } from 'utils/datetime';
 import IconMail from '../../icons/general/IconMail';
 import IconClock from '../../icons/general/IconClock';
 import { amaranth } from '../../styles/variables';
-import type { itemType } from '../../common/box-types';
+import type { itemType as ItemType } from '../../common/box-types';
 
 import SharedLinkAccessMenu from './SharedLinkAccessMenu';
 import SharedLinkPermissionMenu from './SharedLinkPermissionMenu';
 import messages from './messages';
-import type { accessLevelType, item, permissionLevelType, sharedLinkType, sharedLinkTrackingType } from './flowTypes';
+import type {
+    accessLevelType,
+    item as itemtype,
+    permissionLevelType,
+    sharedLinkType,
+    sharedLinkTrackingType,
+} from './flowTypes';
 import { PEOPLE_IN_ITEM, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 
 type Props = {
@@ -32,8 +38,8 @@ type Props = {
     ) => Promise<{ permissionLevel: permissionLevelType }>,
     classificationName?: string,
     intl: IntlShape,
-    item: item,
-    itemType: itemType,
+    item: itemtype,
+    itemType: ItemType,
     onEmailSharedLinkClick: Function,
     onSettingsClick?: Function,
     onToggleSharedLink: Function,
@@ -113,11 +119,11 @@ class SharedLinkSection extends Component<Props> {
                         disabled={submitting}
                         label=""
                         onCopySuccess={onSharedLinkCopy}
-                        type="url"
                         triggerCopyOnLoad={triggerCopyOnLoad}
+                        type="url"
                         value={url}
                     />
-                    <Tooltip text={<FormattedMessage {...messages.sendSharedLink} />} position="top-left">
+                    <Tooltip position="top-left" text={<FormattedMessage {...messages.sendSharedLink} />}>
                         <Button
                             className="email-shared-link-btn"
                             isDisabled={submitting}
@@ -204,6 +210,7 @@ class SharedLinkSection extends Component<Props> {
                     <span>
                         <FormattedMessage {...messages.linkShareOn} />
                         <Tooltip
+                            position="top-center"
                             text={
                                 <FormattedMessage
                                     {...messages.sharedLinkExpirationTooltip}
@@ -212,7 +219,6 @@ class SharedLinkSection extends Component<Props> {
                                     }}
                                 />
                             }
-                            position="top-center"
                         >
                             <span className="shared-link-expiration-badge">
                                 <IconClock color={amaranth} />
@@ -235,9 +241,9 @@ class SharedLinkSection extends Component<Props> {
                 <Toggle
                     isDisabled={!isToggleEnabled}
                     isOn={isSharedLinkEnabled}
-                    onChange={onToggleSharedLink}
                     label={linkText}
                     name="toggle"
+                    onChange={onToggleSharedLink}
                 />
             </div>
         );
@@ -246,8 +252,8 @@ class SharedLinkSection extends Component<Props> {
             if (this.canAddSharedLink(isSharedLinkEnabled, item.grantedPermissions.itemShare)) {
                 return (
                     <Tooltip
-                        text={<FormattedMessage {...messages.sharedLinkDisabledTooltipCopy} />}
                         position="top-right"
+                        text={<FormattedMessage {...messages.sharedLinkDisabledTooltipCopy} />}
                     >
                         {toggleComponent}
                     </Tooltip>
@@ -256,7 +262,7 @@ class SharedLinkSection extends Component<Props> {
 
             if (!this.canRemoveSharedLink(isSharedLinkEnabled, canChangeAccessLevel)) {
                 return (
-                    <Tooltip text={<FormattedMessage {...messages.removeLinkTooltip} />} position="top-right">
+                    <Tooltip position="top-right" text={<FormattedMessage {...messages.removeLinkTooltip} />}>
                         {toggleComponent}
                     </Tooltip>
                 );
@@ -273,6 +279,7 @@ class SharedLinkSection extends Component<Props> {
         return (
             <div>
                 <hr />
+                {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label>
                     <span className="label">
                         <FormattedMessage {...messages.sharedLinkSectionLabel} />

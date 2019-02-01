@@ -19,14 +19,14 @@ import {
 } from '../../constants';
 
 type Props = {
-    isOpen: boolean,
-    onRename: Function,
-    onCancel: Function,
-    item: BoxItem,
-    isLoading: boolean,
-    errorCode: string,
-    parentElement: HTMLElement,
     appElement: HTMLElement,
+    errorCode: string,
+    isLoading: boolean,
+    isOpen: boolean,
+    item: BoxItem,
+    onCancel: Function,
+    onRename: Function,
+    parentElement: HTMLElement,
 } & InjectIntlProvidedProps;
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -99,14 +99,14 @@ const RenameDialog = ({
 
     return (
         <Modal
+            appElement={appElement}
+            className={CLASS_MODAL_CONTENT}
+            contentLabel={intl.formatMessage(messages.renameDialogLabel)}
             isOpen={isOpen}
+            onRequestClose={onCancel}
+            overlayClassName={CLASS_MODAL_OVERLAY}
             parentSelector={() => parentElement}
             portalClassName={`${CLASS_MODAL} be-modal-rename`}
-            className={CLASS_MODAL_CONTENT}
-            overlayClassName={CLASS_MODAL_OVERLAY}
-            onRequestClose={onCancel}
-            contentLabel={intl.formatMessage(messages.renameDialogLabel)}
-            appElement={appElement}
         >
             <label>
                 {error ? (
@@ -115,13 +115,13 @@ const RenameDialog = ({
                     </div>
                 ) : null}
                 <FormattedMessage tagName="div" {...messages.renameDialogText} values={{ name: nameWithoutExt }} />
-                <input type="text" required ref={ref} defaultValue={nameWithoutExt} onKeyDown={onKeyDown} />
+                <input ref={ref} defaultValue={nameWithoutExt} onKeyDown={onKeyDown} required type="text" />
             </label>
             <div className="be-modal-btns">
-                <PrimaryButton type="button" onClick={rename} isLoading={isLoading}>
+                <PrimaryButton isLoading={isLoading} onClick={rename} type="button">
                     <FormattedMessage {...messages.rename} />
                 </PrimaryButton>
-                <Button type="button" onClick={onCancel} isDisabled={isLoading}>
+                <Button isDisabled={isLoading} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

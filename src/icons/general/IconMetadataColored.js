@@ -7,10 +7,10 @@ import AccessibleSVG from '../accessible-svg';
 type Props = {
     className?: string,
     color?: string,
+    height?: number,
     title?: string | React.Element<any>,
     type?: 'cascade' | 'default',
     width?: number,
-    height?: number,
 };
 
 const IconMetadataColored = ({ className = '', color, title, type, width = 16, height = 16 }: Props) => {
@@ -29,10 +29,10 @@ const IconMetadataColored = ({ className = '', color, title, type, width = 16, h
     return (
         <AccessibleSVG
             className={`icon-metadata ${className}`}
-            title={title}
-            width={width}
             height={height}
+            title={title}
             viewBox="0 0 16 16"
+            width={width}
         >
             <path
                 className="fill-color"

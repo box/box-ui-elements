@@ -35,169 +35,169 @@ class IconIWorkNumbersDesktop extends React.Component<Props> {
             >
                 <defs>
                     <linearGradient
-                        id={`${this.idPrefix}a`}
-                        x1="3.7"
-                        y1="-64.17"
-                        x2="88.9"
-                        y2="-64.17"
                         gradientTransform="translate(-3.7 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}a`}
+                        x1="3.7"
+                        x2="88.9"
+                        y1="-64.17"
+                        y2="-64.17"
                     >
                         <stop offset="0" stopColor="#8c8c8c" />
                         <stop offset=".02" stopColor="#939493" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}b`}
-                        x1="46.3"
-                        y1="-48.22"
-                        x2="46.3"
-                        y2="-81.41"
                         gradientTransform="translate(-3.7 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}b`}
+                        x1="46.3"
+                        x2="46.3"
+                        y1="-48.22"
+                        y2="-81.41"
                     >
                         <stop offset="0" stopColor="#e0e0e0" />
                         <stop offset="1" stopColor="#fff" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}c`}
-                        x1="74.66"
-                        y1="-110.68"
-                        x2="74.66"
-                        y2="-55.91"
                         gradientTransform="translate(-3.7 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}c`}
+                        x1="74.66"
+                        x2="74.66"
+                        y1="-110.68"
+                        y2="-55.91"
                     >
                         <stop offset="0" stopColor="#4dc4fc" />
                         <stop offset="1" stopColor="#0f67f7" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}d`}
-                        x1="97.76"
-                        y1="-56.2"
-                        x2="97.76"
-                        y2="-108.93"
                         gradientTransform="matrix(-1 0 0 1 175.62 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}d`}
+                        x1="97.76"
+                        x2="97.76"
+                        y1="-56.2"
+                        y2="-108.93"
                     >
                         <stop offset="0" stopColor="#0b55d3" />
                         <stop offset="1" stopColor="#409fcd" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}e`}
-                        x1="70.89"
-                        y1="-114.21"
-                        x2="70.89"
-                        y2="-118.45"
                         gradientTransform="translate(0 132)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}e`}
+                        x1="70.89"
+                        x2="70.89"
+                        y1="-114.21"
+                        y2="-118.45"
                     >
                         <stop offset="0" stopColor="#76cffd" />
                         <stop offset="1" stopColor="#4dc4fc" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}f`}
-                        x1="41.45"
-                        y1="-100.9"
-                        x2="41.45"
-                        y2="-55.9"
                         gradientTransform="translate(-3.7 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}f`}
+                        x1="41.45"
+                        x2="41.45"
+                        y1="-100.9"
+                        y2="-55.9"
                     >
                         <stop offset="0" stopColor="#fba51e" />
                         <stop offset="1" stopColor="#e64e04" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}g`}
-                        x1="130.97"
-                        y1="-56.18"
-                        x2="130.97"
-                        y2="-99.15"
                         gradientTransform="matrix(-1 0 0 1 175.62 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}g`}
+                        x1="130.97"
+                        x2="130.97"
+                        y1="-56.18"
+                        y2="-99.15"
                     >
                         <stop offset="0" stopColor="#c83600" />
                         <stop offset="1" stopColor="#bc6a15" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}h`}
-                        x1="37.73"
-                        y1="-104.44"
-                        x2="37.73"
-                        y2="-109.04"
                         gradientTransform="translate(0 132)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}h`}
+                        x1="37.73"
+                        x2="37.73"
+                        y1="-104.44"
+                        y2="-109.04"
                     >
                         <stop offset="0" stopColor="#fcbf56" />
                         <stop offset="1" stopColor="#fcbd4a" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}i`}
-                        x1="24.85"
-                        y1="-84.31"
-                        x2="24.85"
-                        y2="-55.91"
                         gradientTransform="translate(-3.7 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}i`}
+                        x1="24.85"
+                        x2="24.85"
+                        y1="-84.31"
+                        y2="-55.91"
                     >
                         <stop offset="0" stopColor="#e93f54" />
                         <stop offset="1" stopColor="#d20b2f" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}j`}
-                        x1="31.75"
-                        y1="-56.2"
-                        x2="31.75"
-                        y2="-82.57"
                         gradientTransform="translate(-3.7 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}j`}
+                        x1="31.75"
+                        x2="31.75"
+                        y1="-56.2"
+                        y2="-82.57"
                     >
                         <stop offset="0" stopColor="#bb0e2b" />
                         <stop offset="1" stopColor="#ba2c3d" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}k`}
-                        x1="21.12"
-                        y1="-87.84"
-                        x2="21.12"
-                        y2="-93.2"
                         gradientTransform="translate(0 132)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}k`}
+                        x1="21.12"
+                        x2="21.12"
+                        y1="-87.84"
+                        y2="-93.2"
                     >
                         <stop offset="0" stopColor="#f87e7a" />
                         <stop offset="1" stopColor="#f3636b" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}l`}
-                        x1="58.04"
-                        y1="-123.99"
-                        x2="58.04"
-                        y2="-55.94"
                         gradientTransform="translate(-3.7 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}l`}
+                        x1="58.04"
+                        x2="58.04"
+                        y1="-123.99"
+                        y2="-55.94"
                     >
                         <stop offset="0" stopColor="#54e56c" />
                         <stop offset="1" stopColor="#2ab203" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}m`}
-                        x1="114.37"
-                        y1="-56.26"
-                        x2="114.37"
-                        y2="-123.23"
                         gradientTransform="matrix(-1 0 0 1 175.62 125.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}m`}
+                        x1="114.37"
+                        x2="114.37"
+                        y1="-56.26"
+                        y2="-123.23"
                     >
                         <stop offset="0" stopColor="#2d9e20" />
                         <stop offset="1" stopColor="#43b656" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}n`}
-                        x1="54.31"
-                        y1="-128.5"
-                        x2="54.31"
-                        y2="-131.97"
                         gradientTransform="translate(0 132)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}n`}
+                        x1="54.31"
+                        x2="54.31"
+                        y1="-128.5"
+                        y2="-131.97"
                     >
                         <stop offset="0" stopColor="#98e97d" />
                         <stop offset="1" stopColor="#74f482" />

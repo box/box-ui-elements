@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import type { itemType } from '../../common/box-types';
+import type { itemType as ItemType } from '../../common/box-types';
 
 import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from './constants';
 
@@ -15,7 +15,7 @@ type Props = {
     accessLevel?: accessLevelType,
     enterpriseName?: string,
     hasDescription?: boolean,
-    itemType: itemType,
+    itemType: ItemType,
 };
 
 const SharedLinkAccessLabel = ({ accessLevel, enterpriseName, hasDescription, itemType }: Props) => {

@@ -15,9 +15,9 @@ type ElementsMetric = {
 } & ElementsLoadMetricData;
 
 type Props = {
+    children: React.Element<any>,
     fileId?: string,
     onMetric: (data: Object) => void,
-    children: React.Element<any>,
     source: ElementOrigin,
     startMarkName?: string,
 };

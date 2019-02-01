@@ -25,8 +25,8 @@ const CheckboxTooltip = ({ label, tooltip }: Props) => (
             <div className="info-tooltip">
                 <IconInfo
                     height={16}
-                    width={16}
                     title={<FormattedMessage {...messages.checkboxTooltipIconInfoText} />}
+                    width={16}
                 />
             </div>
         </Tooltip>

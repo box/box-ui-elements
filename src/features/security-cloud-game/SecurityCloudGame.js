@@ -196,8 +196,8 @@ class SecurityCloudGame extends Component {
 
         if (dragCloudPosition) {
             return (
-                <Draggable disabled={isValidDrop} onDrag={this.onDrag} onStop={this.onDragStop} bounds="parent">
-                    <DragCloud position={this.state.dragCloudPosition} cloudSize={this.props.cloudSize} />
+                <Draggable bounds="parent" disabled={isValidDrop} onDrag={this.onDrag} onStop={this.onDragStop}>
+                    <DragCloud cloudSize={this.props.cloudSize} position={this.state.dragCloudPosition} />
                 </Draggable>
             );
         }
@@ -226,7 +226,7 @@ class SecurityCloudGame extends Component {
 
         return (
             <div className="box-ui-security-cloud-game" style={{ height: `${height}px`, width: `${width}px` }}>
-                <div className="box-ui-security-cloud-game-message" ref={this.setGameBoardHeight}>
+                <div ref={this.setGameBoardHeight} className="box-ui-security-cloud-game-message">
                     {this.renderMessage()}
                 </div>
                 <div className="box-ui-security-cloud-game-board">

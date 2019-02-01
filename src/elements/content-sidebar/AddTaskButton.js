@@ -46,15 +46,15 @@ class AddTaskButton extends React.Component<Props, State> {
 
         return (
             <React.Fragment>
-                <Button type="button" onClick={this.handleClickAdd} isDisabled={isDisabled}>
+                <Button isDisabled={isDisabled} onClick={this.handleClickAdd} type="button">
                     <FormattedMessage {...messages.tasksAddTask} />
                 </Button>
                 <Modal
+                    className="be task-modal"
+                    data-testid="create-task-modal"
                     isOpen={isTaskFormOpen}
                     onRequestClose={this.handleClose}
                     title={<FormattedMessage {...messages.tasksAddTaskFormTitle} />}
-                    className="be task-modal"
-                    data-testid="create-task-modal"
                 >
                     <TaskForm {...passThrough} onCancel={this.handleClose} onSubmit={this.handleSubmit} />
                 </Modal>

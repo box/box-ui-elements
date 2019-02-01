@@ -14,8 +14,8 @@ import './MentionSelector.scss';
 
 type DefaultSelectorRowProps = {
     item?: {
-        name?: string,
         email?: string,
+        name?: string,
     },
 };
 

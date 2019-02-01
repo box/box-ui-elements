@@ -17,7 +17,7 @@ const ReadonlyDescription = ({ value }) =>
             regex: URL_REGEX,
             // eslint-disable-next-line react/display-name
             fn: (key, result) => (
-                <a href={result[0]} key={key} rel="noopener noreferrer" target="_blank">
+                <a key={key} href={result[0]} rel="noopener noreferrer" target="_blank">
                     {result[0]}
                 </a>
             ),

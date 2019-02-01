@@ -15,10 +15,10 @@ type Props = {
     avatarUrl: ?string,
     email?: string,
     expiration?: Object,
-    isExternalCollab?: boolean,
-    name: string,
     hasCustomAvatar: ?boolean,
     id: number,
+    isExternalCollab?: boolean,
+    name: string,
 };
 
 const CollaboratorAvatarItem = (props: Props) => {
@@ -43,8 +43,8 @@ const CollaboratorAvatarItem = (props: Props) => {
     const expirationBadge =
         allowBadging && expiration && expiration.executeAt ? (
             <Tooltip
-                text={<FormattedMessage {...messages.expirationTooltipText} values={{ date: expiration.executeAt }} />}
                 position="middle-right"
+                text={<FormattedMessage {...messages.expirationTooltipText} values={{ date: expiration.executeAt }} />}
             >
                 <div>
                     <IconExpirationBadge className="themed" height={14} width={14} />
@@ -55,8 +55,8 @@ const CollaboratorAvatarItem = (props: Props) => {
     const externalCollabBadge =
         allowBadging && email && isExternalCollab ? (
             <Tooltip
-                text={<FormattedMessage {...messages.externalCollabTooltipText} values={{ email }} />}
                 position="middle-right"
+                text={<FormattedMessage {...messages.externalCollabTooltipText} values={{ email }} />}
             >
                 <div>
                     <IconGlobe className="themed" height={14} width={14} />
@@ -65,7 +65,7 @@ const CollaboratorAvatarItem = (props: Props) => {
         ) : null;
 
     return (
-        <Badgeable topLeft={expirationBadge} bottomLeft={externalCollabBadge}>
+        <Badgeable bottomLeft={externalCollabBadge} topLeft={expirationBadge}>
             {avatarInstance}
         </Badgeable>
     );

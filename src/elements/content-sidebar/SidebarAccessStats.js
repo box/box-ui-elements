@@ -15,10 +15,10 @@ import SidebarSection from './SidebarSection';
 import withErrorHandling from './withErrorHandling';
 
 type Props = {
-    onAccessStatsClick?: Function,
     accessStats?: FileAccessStats,
-    file: BoxItem,
     error?: MessageDescriptor,
+    file: BoxItem,
+    onAccessStatsClick?: Function,
 } & InjectIntlProvidedProps;
 
 const SidebarAccessStats = ({

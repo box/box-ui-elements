@@ -11,8 +11,8 @@ import '../styles/QueryBarButtons.scss';
 
 type Props = {
     activeTemplate?: MetadataTemplate,
-    onTemplateChange?: Function,
     onColumnChange?: Function,
+    onTemplateChange?: Function,
     templates?: Array<MetadataTemplate>,
     visibleColumns?: Array<ColumnType>,
 };

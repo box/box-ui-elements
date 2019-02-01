@@ -24,7 +24,7 @@ describe('icons/general/IconUpgradeCloud', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 16;
-        const wrapper = shallow(<IconUpgradeCloud width={width} height={height} />);
+        const wrapper = shallow(<IconUpgradeCloud height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

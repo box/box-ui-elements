@@ -31,7 +31,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     const file = {
         id: 'I_AM_A_FILE',
     };
-    const currentUser = {
+    let currentUser = {
         id: 'foo',
     };
     const collaborators = {
@@ -43,14 +43,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             },
         ],
     };
-    const onError = jest.fn();
+    let onError = jest.fn();
     const getWrapper = (props = {}) =>
         shallow(
             <ActivitySidebarComponent
                 api={api}
                 file={file}
-                onError={onError}
                 logger={{ onReadyMetric: jest.fn() }}
+                onError={onError}
                 {...props}
             />,
         );
@@ -72,7 +72,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     describe('componentDidMount()', () => {
         let wrapper;
         let instance;
-        const currentUser = {
+        currentUser = {
             id: '123',
         };
         beforeEach(() => {
@@ -373,7 +373,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     describe('errorCallback()', () => {
         let instance;
         let wrapper;
-        let onError;
         let error;
         const code = 'some_code';
         const contextInfo = {

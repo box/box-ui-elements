@@ -9,15 +9,15 @@ type Props = {
     bodyElement?: HTMLElement,
     children: React.Node,
     /** Forces menu to render within the scroll parent */
-    constrainToScrollParent: boolean,
-    /** Forces menu to render within the visible window */
-    constrainToWindow: boolean,
-    /** Right aligns menu to button */
-    isRightAligned: boolean,
-    /** Function called when menu is opened */
-    onMenuOpen?: () => void,
-    /** Class name to apply to the dropdown menu */
     className?: string,
+    /** Forces menu to render within the visible window */
+    constrainToScrollParent: boolean,
+    /** Right aligns menu to button */
+    constrainToWindow: boolean,
+    /** Function called when menu is opened */
+    isRightAligned: boolean,
+    /** Class name to apply to the dropdown menu */
+    onMenuOpen?: () => void,
 };
 
 type State = {
@@ -227,11 +227,11 @@ class DropdownMenu extends React.Component<Props, State> {
             <TetherComponent
                 attachment={attachment}
                 bodyElement={bodyEl}
+                className={className}
                 classPrefix="dropdown-menu"
-                targetAttachment={targetAttachment}
                 constraints={constraints}
                 enabled={isOpen}
-                className={className}
+                targetAttachment={targetAttachment}
             >
                 {React.cloneElement(menuButton, menuButtonProps)}
                 {isOpen ? React.cloneElement(menu, menuProps) : null}

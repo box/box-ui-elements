@@ -69,8 +69,8 @@ describe('FeatureFlag', () => {
                     bar,
                 }}
             >
-                <FeatureFlag feature="foo" enabled={enabledFn} disabled={disabledFn} />
-                <FeatureFlag feature="bar" enabled={enabledFn} disabled={disabledFn} />
+                <FeatureFlag disabled={disabledFn} enabled={enabledFn} feature="foo" />
+                <FeatureFlag disabled={disabledFn} enabled={enabledFn} feature="bar" />
             </FeatureProvider>,
         );
         expect(enabledFn).toHaveBeenCalledWith(foo);
@@ -86,7 +86,7 @@ describe('FeatureFlag', () => {
                     foo,
                 }}
             >
-                <FeatureFlag feature="foo" enabled={enabledFn}>
+                <FeatureFlag enabled={enabledFn} feature="foo">
                     <MockChild />
                 </FeatureFlag>
             </FeatureProvider>,

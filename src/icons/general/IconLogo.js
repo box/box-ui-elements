@@ -14,11 +14,9 @@ type Props = {
 };
 
 const IconLogo = ({ className = '', color = BOX_BLUE, height = 25, title, width = 45 }: Props) => (
-    <AccessibleSVG className={`icon-logo ${className}`} title={title} height={height} width={width} viewBox="0 0 98 52">
+    <AccessibleSVG className={`icon-logo ${className}`} height={height} title={title} viewBox="0 0 98 52" width={width}>
         <path
             className="fill-color"
-            fill={color}
-            fillRule="evenodd"
             d="M95.34 44.7c1.1 1.53.8 3.66-.75 4.8-1.56
                     1.13-3.74.84-4.93-.64l-7.8-10.23-7.82 10.23c-1.2 1.48-3.36
                     1.77-4.9.63-1.55-1.15-1.87-3.28-.75-4.8l9.06-11.86L68.4
@@ -33,6 +31,8 @@ const IconLogo = ({ className = '', color = BOX_BLUE, height = 25, title, width 
                     2.52 10.45 1 8.53 1 6.6 1 5.03 2.5 5 4.4v28.7c.16 9.43 8 17.03
                     17.67 17.03 6.77 0 12.64-3.73 15.6-9.2 2.98 5.47 8.86 9.2 15.62
                     9.2 9.74 0 17.66-7.75 17.66-17.32 0-9.55-7.92-17.3-17.68-17.3z"
+            fill={color}
+            fillRule="evenodd"
         />
     </AccessibleSVG>
 );

@@ -15,10 +15,10 @@ type Props = {
 const IconPrint = ({ className = '', color = '#000', height = 24, title, width = 24 }: Props) => (
     <AccessibleSVG
         className={`icon-print ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 24 24"
+        width={width}
     >
         <path
             className="fill-color"

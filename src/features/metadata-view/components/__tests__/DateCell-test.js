@@ -5,7 +5,7 @@ import { dateCellData } from '../fixtures';
 import DateCell from '../DateCell';
 
 const intlShape = {
-    formatDate: date => 'February 2016',
+    formatDate: () => 'February 2016',
 };
 
 describe('features/metadata-view/components/DateCell', () => {

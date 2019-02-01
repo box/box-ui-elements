@@ -32,13 +32,14 @@ const DragCloud = ({
 }) => {
     const { x, y } = position;
     return (
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div
             className={`drag-cloud ${className}`}
-            style={{ ...style, top: `${y}px`, left: `${x}px` }}
             onMouseDown={onMouseDown}
             onMouseUp={onMouseUp}
-            onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
+            onTouchStart={onTouchStart}
+            style={{ ...style, top: `${y}px`, left: `${x}px` }}
         >
             <IconCloud
                 filter={{ id: 'drop-shadow', definition: <DropShadowFilter /> }}

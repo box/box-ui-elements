@@ -14,11 +14,11 @@ import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
 import './EditingTranscriptRow.scss';
 
 type Props = {
-    time?: string,
-    text?: string,
-    onSave: Function,
     onCancel: Function,
     onChange: Function,
+    onSave: Function,
+    text?: string,
+    time?: string,
 };
 
 const EditingTranscriptRow = ({ time, text = '', onSave, onCancel, onChange }: Props) => (
@@ -27,10 +27,10 @@ const EditingTranscriptRow = ({ time, text = '', onSave, onCancel, onChange }: P
         <div className="be-transcript-text">
             <TextareaAutosize maxRows={10} onChange={onChange} value={text} />
             <div className="be-transcript-buttons">
-                <Button type="button" onClick={onCancel} data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT_CANCEL}>
+                <Button data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT_CANCEL} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.cancel} />
                 </Button>
-                <PrimaryButton type="button" onClick={onSave} data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT_SAVE}>
+                <PrimaryButton data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT_SAVE} onClick={onSave} type="button">
                     <FormattedMessage {...messages.save} />
                 </PrimaryButton>
             </div>

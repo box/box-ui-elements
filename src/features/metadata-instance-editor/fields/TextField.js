@@ -47,8 +47,7 @@ const TextField = ({
             label={displayName}
             onChange={(event: SyntheticKeyboardEvent<HTMLInputElement>) => {
                 const currentTarget = (event.currentTarget: HTMLInputElement);
-                const value = currentTarget.value;
-                if (value) {
+                if (currentTarget.value) {
                     onChange(dataKey, currentTarget.value);
                 } else {
                     onRemove(dataKey);

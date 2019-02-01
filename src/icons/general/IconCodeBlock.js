@@ -15,10 +15,10 @@ type Props = {
 const IconCodeBlock = ({ className = '', color = '#979797', height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={`icon-code-block ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 16 16"
+        width={width}
     >
         <path
             className="fill-color"

@@ -9,14 +9,14 @@ import SidebarUtils from '../../content-sidebar/SidebarUtils';
 
 jest.mock('elements/common/Internationalize', () => 'mock-internationalize');
 
-let props;
-let file;
-
 describe('elements/content-preview/ContentPreview', () => {
     const getWrapper = (props = {}) =>
         shallow(<ContentPreview logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }} {...props} />);
 
     const PERFORMANCE_TIME = 100;
+    let props;
+    let file;
+
     beforeEach(() => {
         global.Box = {};
         global.Box.Preview = function Preview() {
@@ -74,7 +74,6 @@ describe('elements/content-preview/ContentPreview', () => {
     describe('shouldLoadPreview()', () => {
         let wrapper;
         let instance;
-        let file;
 
         beforeEach(() => {
             wrapper = getWrapper(props);
@@ -104,7 +103,6 @@ describe('elements/content-preview/ContentPreview', () => {
     describe('canDownload()', () => {
         let wrapper;
         let instance;
-        let file;
 
         beforeEach(() => {
             file = {
@@ -832,7 +830,6 @@ describe('elements/content-preview/ContentPreview', () => {
     describe('canAnnotate()', () => {
         let wrapper;
         let instance;
-        let file;
 
         beforeEach(() => {
             file = {
@@ -870,7 +867,6 @@ describe('elements/content-preview/ContentPreview', () => {
     describe('canViewAnnotations()', () => {
         let wrapper;
         let instance;
-        let file;
 
         beforeEach(() => {
             props.showAnnotations = true;

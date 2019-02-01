@@ -22,14 +22,14 @@ export default (
 ) => ({ rowData }: { rowData: BoxItem }) => (
     <div className="be-item-name">
         <ItemName
+            canPreview={canPreview}
             isTouch={isTouch}
             item={rowData}
-            canPreview={canPreview}
             onClick={onItemClick}
             onFocus={onItemSelect}
         />
         {view === VIEW_SEARCH || showDetails ? (
-            <ItemDetails item={rowData} view={view} rootId={rootId} onItemClick={onItemClick} />
+            <ItemDetails item={rowData} onItemClick={onItemClick} rootId={rootId} view={view} />
         ) : null}
     </div>
 );

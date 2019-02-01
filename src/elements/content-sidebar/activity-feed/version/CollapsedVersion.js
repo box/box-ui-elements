@@ -62,9 +62,9 @@ type Props = {
     action: 'upload',
     collaborators: { [collaborator_id: string]: User },
     onInfo?: Function,
-    versions: FileVersions,
-    version_start: number,
     version_end: number,
+    version_start: number,
+    versions: FileVersions,
 } & InjectIntlProvidedProps;
 
 const CollapsedVersion = ({
@@ -85,11 +85,11 @@ const CollapsedVersion = ({
                 <PlainButton
                     aria-label={intl.formatMessage(messages.getVersionInfo)}
                     className="bcs-version-info"
+                    data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                     onClick={() => {
                         onInfo({ versions });
                     }}
                     type="button"
-                    data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                 >
                     <IconInfoInverted height={16} width={16} />
                 </PlainButton>

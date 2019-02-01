@@ -12,12 +12,12 @@ import Faces from './faces';
 import { SKILLS_TRANSCRIPT, SKILLS_KEYWORD, SKILLS_TIMELINE, SKILLS_FACE, SKILLS_STATUS } from '../../../constants';
 
 type Props = {
-    getViewer: Function,
-    onSkillChange: Function,
     card: SkillCard,
-    hasError: boolean,
     cards: Array<SkillCard>,
+    getViewer: Function,
+    hasError: boolean,
     isEditable: boolean,
+    onSkillChange: Function,
 };
 
 const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, getViewer }: Props) => {
@@ -26,15 +26,15 @@ const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, g
             return (
                 <Keywords
                     card={card}
+                    getViewer={getViewer}
                     hasError={hasError}
+                    isEditable={isEditable}
+                    onSkillChange={onSkillChange}
                     transcript={
                         isEditable
                             ? cards.find(({ skill_card_type }) => skill_card_type === SKILLS_TRANSCRIPT)
                             : undefined
                     }
-                    isEditable={isEditable}
-                    getViewer={getViewer}
-                    onSkillChange={onSkillChange}
                 />
             );
         case SKILLS_TIMELINE:
@@ -42,9 +42,9 @@ const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, g
             return (
                 <Faces
                     card={card}
+                    getViewer={getViewer}
                     hasError={hasError}
                     isEditable={isEditable}
-                    getViewer={getViewer}
                     onSkillChange={onSkillChange}
                 />
             );
@@ -52,8 +52,8 @@ const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, g
             return (
                 <Transcript
                     card={card}
-                    hasError={hasError}
                     getViewer={getViewer}
+                    hasError={hasError}
                     isEditable={isEditable}
                     onSkillChange={onSkillChange}
                 />

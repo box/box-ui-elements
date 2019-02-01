@@ -20,20 +20,20 @@ import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } f
 import './ItemList.scss';
 
 type Props = {
-    rootId: string,
-    rootElement?: HTMLElement,
-    focusedRow: number,
-    onItemSelect: Function,
-    onItemClick: Function,
     canSetShareAccess: boolean,
-    tableRef: Function,
-    selectableType: string,
-    hasHitSelectionLimit: boolean,
-    onShareAccessChange: Function,
-    onFocusChange: Function,
-    extensionsWhitelist: string[],
     currentCollection: Collection,
+    extensionsWhitelist: string[],
+    focusedRow: number,
+    hasHitSelectionLimit: boolean,
     isSmall: boolean,
+    onFocusChange: Function,
+    onItemClick: Function,
+    onItemSelect: Function,
+    onShareAccessChange: Function,
+    rootElement?: HTMLElement,
+    rootId: string,
+    selectableType: string,
+    tableRef: Function,
     view: View,
 };
 
@@ -86,8 +86,8 @@ const ItemList = ({
         index,
     }: {
         event: Event & { target: HTMLElement },
-        rowData: BoxItem,
         index: number,
+        rowData: BoxItem,
     }) => {
         // If the click is happening on a clickable element on the item row, ignore row selection
         if (

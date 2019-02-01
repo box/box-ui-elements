@@ -14,10 +14,10 @@ type Props = {
 const IconFileExcelSpreadsheet = ({ className = '', height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
         className={`icon-file-excel-spreadsheet ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 32 32"
+        width={width}
     >
         <path d="M25 27H7V5h13l5 5z" fill="#FFFFFF" />
         <path

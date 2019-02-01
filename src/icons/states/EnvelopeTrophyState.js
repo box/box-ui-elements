@@ -30,8 +30,8 @@ class EnvelopeTrophyState extends React.PureComponent<Props> {
                 className={`${ICON_CLASS} ${className}`}
                 height={height}
                 title={title}
-                width={width}
                 viewBox="0 0 448 418"
+                width={width}
             >
                 <defs>
                     <path
@@ -39,35 +39,35 @@ class EnvelopeTrophyState extends React.PureComponent<Props> {
                         id="a"
                     />
                     <path d="M168.86 212.968L307 320H13l138.14-107.032a14.466 14.466 0 0 1 17.72 0z" id="c" />
-                    <filter x="-15.3%" y="-49.1%" width="130.6%" height="181.8%" filterUnits="objectBoundingBox" id="b">
+                    <filter filterUnits="objectBoundingBox" height="181.8%" id="b" width="130.6%" x="-15.3%" y="-49.1%">
                         <feOffset dy="-9" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="13.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="13.5" />
                         <feColorMatrix
-                            values="0 0 0 0 0.0823529412 0 0 0 0 0.121568627 0 0 0 0 0.149019608 0 0 0 0.06 0"
                             in="shadowBlurOuter1"
+                            values="0 0 0 0 0.0823529412 0 0 0 0 0.121568627 0 0 0 0 0.149019608 0 0 0 0.06 0"
                         />
                     </filter>
                     <path d="M76 71c30.376 0 55-24.624 55-55H21c0 30.376 24.624 55 55 55z" id="e" />
-                    <filter x="-4.5%" y="-7.3%" width="109.1%" height="118.2%" filterUnits="objectBoundingBox" id="d">
+                    <filter filterUnits="objectBoundingBox" height="118.2%" id="d" width="109.1%" x="-4.5%" y="-7.3%">
                         <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1.5" />
                         <feColorMatrix
-                            values="0 0 0 0 0.960784314 0 0 0 0 0.725490196 0 0 0 0 0.352941176 0 0 0 0.32 0"
                             in="shadowBlurOuter1"
+                            values="0 0 0 0 0.960784314 0 0 0 0 0.725490196 0 0 0 0 0.352941176 0 0 0 0.32 0"
                         />
                     </filter>
                 </defs>
                 <g fill="none" fillRule="evenodd">
                     <g fillRule="evenodd" transform="translate(65 52)">
                         <use fill="#5FC9CF" xlinkHref="#a" />
-                        <use fillOpacity=".12" fill="#000" xlinkHref="#a" />
+                        <use fill="#000" fillOpacity=".12" xlinkHref="#a" />
                     </g>
                     <path
+                        d="M78 235.016h293.951v68.78H78z"
                         fill="#90A0B0"
                         fillRule="nonzero"
                         opacity=".5"
                         style={{ mixBlendMode: 'multiply' }}
-                        d="M78 235.016h293.951v68.78H78z"
                     />
                     <path
                         d="M309 121.557V315H101V121.557c.003-3.871 1.473-7.581 4.084-10.312 2.611-2.731 6.15-4.259 9.835-4.245H295.13c7.655 0 13.863 6.515 13.87 14.557"
@@ -88,7 +88,7 @@ class EnvelopeTrophyState extends React.PureComponent<Props> {
                         fill="#E9EEF3"
                         fillRule="nonzero"
                     />
-                    <path fill="#002947" fillRule="nonzero" d="M121 117h208v208H121z" />
+                    <path d="M121 117h208v208H121z" fill="#002947" fillRule="nonzero" />
                     <path
                         d="M317 304V171.68c0-.972-.389-1.906-1.08-2.597l-37.356-37.012a3.74 3.74 0 0 0-2.62-1.071h-139.22c-2.057 0-3.724 1.653-3.724 3.693V304"
                         fill="#F9F9F9"
@@ -102,9 +102,9 @@ class EnvelopeTrophyState extends React.PureComponent<Props> {
                     <path
                         d="M254.94 161.64c.503-1.002-2.257-1.694-3.539-1.854a20.576 20.576 0 0 0-5.048.15c-4.788.601-9.933 1.703-14.867 1.423-.57-.006-1.094-.196-1.38-.501-1.087-1.333-4.674-.2-6.005.671.899-.594 1.556-1.312 1.916-2.094.86-1.863-6.395.882-7.077 1.092 2.954-.881 8.326-2.214 7.904-4.658-.779-4.508-18.438 3.176-20.548 4.238 2.666-.102 5.252-.604 7.531-1.463 2.695-1.002 4.87-2.274 7.499-3.326 3.83-1.573 7.856-2.725 10.923-4.89.795-.56 1.526-1.392.763-2.003-.763-.61-1.802-.41-2.792-.32-8.68.893-16.895 3.042-23.972 6.271-4.35 1.944-9.739 4.358-11.248 7.624"
                         stroke="#002947"
-                        strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        strokeWidth="3"
                     />
                     <path
                         d="M65 188l158.81 90.174c.738.42 1.642.42 2.38 0L385 188v179.178a4.822 4.822 0 0 1-4.822 4.822H69.822A4.822 4.822 0 0 1 65 367.178V188z"
@@ -130,22 +130,22 @@ class EnvelopeTrophyState extends React.PureComponent<Props> {
                             d="M23.617 0h104.766A2.617 2.617 0 0 1 131 2.617V16H21V2.617A2.617 2.617 0 0 1 23.617 0z"
                             fill="#F5B95A"
                         />
-                        <rect fill="#F5B95A" x="50" y="85" width="52" height="16" rx="2.617" />
-                        <rect fill="#0061D5" x="37" y="98" width="79" height="42" rx="2.617" />
+                        <rect fill="#F5B95A" height="16" rx="2.617" width="52" x="50" y="85" />
+                        <rect fill="#0061D5" height="42" rx="2.617" width="79" x="37" y="98" />
                         <path
                             d="M39.617 98h73.766a2.617 2.617 0 0 1 2.617 2.617V140H37v-39.383A2.617 2.617 0 0 1 39.617 98z"
                             fill="#0061D5"
                         />
                         <path
                             d="M45.617 98h60.766a2.617 2.617 0 0 1 2.617 2.617V140H43v-39.383A2.617 2.617 0 0 1 45.617 98z"
-                            fillOpacity=".2"
                             fill="#FFF"
+                            fillOpacity=".2"
                         />
                         <path
                             d="M58.617 98h33.766A2.617 2.617 0 0 1 95 100.617V140H56v-39.383A2.617 2.617 0 0 1 58.617 98z"
                             fill="#0061D5"
                         />
-                        <path fill="#F5B95A" d="M64 59h24l-8 39h-8z" />
+                        <path d="M64 59h24l-8 39h-8z" fill="#F5B95A" />
                         <use fill="#000" filter="url(#d)" xlinkHref="#e" />
                         <use fill="#F8D371" xlinkHref="#e" />
                     </g>
@@ -156,8 +156,8 @@ class EnvelopeTrophyState extends React.PureComponent<Props> {
                         />
                         <path
                             d="M87.854 89.511L107.29 78.29a1.6 1.6 0 0 1 2.185.585l22.489 38.952a1.6 1.6 0 0 1-1.305 2.398l-23.38 1.188a1.6 1.6 0 0 1-1.467-.798L87.854 89.511z"
-                            fillOpacity=".2"
                             fill="#FFF"
+                            fillOpacity=".2"
                         />
                         <path
                             d="M25.918 77.832l38.872 22.443a1.6 1.6 0 0 1 .585 2.186l-22.488 38.95a1.6 1.6 0 0 1-2.73.07l-12.806-19.789a1.6 1.6 0 0 0-1.262-.728l-23.54-1.197a1.6 1.6 0 0 1-1.305-2.398l22.488-38.951a1.6 1.6 0 0 1 2.186-.586z"
@@ -165,16 +165,16 @@ class EnvelopeTrophyState extends React.PureComponent<Props> {
                         />
                         <path
                             d="M45.354 89.054l19.436 11.22a1.6 1.6 0 0 1 .585 2.187l-22.488 38.95a1.6 1.6 0 0 1-2.73.07l-12.719-19.654a1.6 1.6 0 0 1-.042-1.67l17.958-31.103z"
-                            fillOpacity=".2"
                             fill="#FFF"
+                            fillOpacity=".2"
                         />
                         <path
                             d="M51.677 10.66L64.982.833c.716-.528 1.016-.665 1.372-.756.357-.09.71-.09 1.068-.002.356.089.657.224 1.375.75l13.376 9.786 16.596-.13c.89-.007 1.213.059 1.554.195.341.137.629.344.865.626.236.281.4.568.672 1.415l5.058 15.746 13.503 9.65c.724.517.946.76 1.143 1.07.196.312.306.649.332 1.015.025.367-.01.695-.288 1.54l-5.174 15.745 5.234 15.69c.281.844.319 1.171.295 1.538a2.153 2.153 0 0 1-.328 1.016c-.195.312-.416.556-1.138 1.076l-13.486 9.73-4.977 15.737c-.269.848-.43 1.135-.666 1.418a2.153 2.153 0 0 1-.862.63c-.341.137-.664.204-1.554.201l-16.63-.055-13.304 9.826c-.716.529-1.016.666-1.372.756-.357.09-.71.091-1.068.002-.356-.088-.657-.224-1.375-.75l-13.376-9.786-16.596.13c-.89.007-1.213-.059-1.554-.195a2.153 2.153 0 0 1-.865-.625c-.236-.282-.4-.568-.672-1.415L27.082 86.66l-13.503-9.65c-.724-.517-.946-.76-1.143-1.071a2.153 2.153 0 0 1-.332-1.015c-.025-.367.01-.694.288-1.54l5.174-15.744-5.234-15.69c-.281-.844-.319-1.172-.295-1.539.024-.367.133-.704.328-1.016.195-.311.416-.556 1.138-1.076l13.486-9.73 4.977-15.737c.269-.848.43-1.135.666-1.417.235-.283.521-.492.862-.63.341-.138.664-.205 1.554-.202l16.63.056z"
                             fill="#FC6279"
                         />
-                        <circle fill="#FFF" opacity=".18" cx="67" cy="58" r="36" />
-                        <circle fill="#FFF" opacity=".18" cx="67" cy="58" r="30" />
-                        <circle fill="#FC6279" cx="67" cy="58" r="26" />
+                        <circle cx="67" cy="58" fill="#FFF" opacity=".18" r="36" />
+                        <circle cx="67" cy="58" fill="#FFF" opacity=".18" r="30" />
+                        <circle cx="67" cy="58" fill="#FC6279" r="26" />
                     </g>
                     <g>
                         <path
@@ -212,23 +212,23 @@ class EnvelopeTrophyState extends React.PureComponent<Props> {
                         <path
                             d="M127.499 34.147c-4.839 2.607-9.855 10.094-6.882 15.427 2.973 5.332 10.944 8.783 13.839 7.1 4.226-2.458 4.214-6.568 2.026-8.403-2.187-1.835-5.306-1.911-7.195 1.18-1.89 3.091-.94 22.905 2.499 26.247 3.439 3.342 7.536 2.252 8.769-1.844 1.233-4.096-1.13-7.883-4.72-7.429-3.592.454-7.314 4.59-7.993 11.094-.453 4.336 4.658 9.595 15.331 15.778"
                             stroke="#F0A226"
-                            strokeWidth="6.069"
                             strokeLinecap="round"
                             strokeLinejoin="round"
+                            strokeWidth="6.069"
                         />
                         <path
                             d="M418.527 183.453c4.839 2.607 9.855 10.095 6.882 15.427-2.973 5.333-10.944 8.783-13.839 7.1-4.225-2.458-4.213-6.568-2.026-8.403 2.187-1.835 5.306-1.91 7.195 1.18 1.89 3.092.94 22.906-2.499 26.248-3.439 3.342-7.536 2.25-8.769-1.845-1.232-4.096 1.13-7.883 4.721-7.429 3.591.455 7.314 4.59 7.992 11.094.453 4.336-4.658 9.595-15.331 15.778"
                             stroke="#26C281"
-                            strokeWidth="6.069"
                             strokeLinecap="round"
                             strokeLinejoin="round"
+                            strokeWidth="6.069"
                         />
                         <path
                             d="M241.629 354.925c-4.839 2.607-9.855 10.095-6.882 15.427 2.973 5.333 10.944 8.784 13.839 7.1 4.225-2.458 4.213-6.567 2.026-8.402-2.187-1.836-5.306-1.911-7.195 1.18-1.89 3.091-.94 22.905 2.499 26.247 3.439 3.342 7.536 2.251 8.769-1.845 1.232-4.095-1.13-7.883-4.721-7.428-3.591.454-7.314 4.59-7.992 11.093-.453 4.336 4.658 9.595 15.33 15.778"
                             stroke="#8B37E4"
-                            strokeWidth="6.069"
                             strokeLinecap="round"
                             strokeLinejoin="round"
+                            strokeWidth="6.069"
                         />
                     </g>
                 </g>

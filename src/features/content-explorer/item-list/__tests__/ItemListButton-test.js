@@ -16,7 +16,7 @@ describe('features/content-explorer/item-list/ItemListButton', () => {
             },
         ].forEach(({ contentExplorerMode }) => {
             const renderComponent = props =>
-                shallow(<ItemListButton id="123" name="test" contentExplorerMode={contentExplorerMode} {...props} />);
+                shallow(<ItemListButton contentExplorerMode={contentExplorerMode} id="123" name="test" {...props} />);
 
             const buttonType = contentExplorerMode === ContentExplorerMode.MULTI_SELECT ? 'Checkbox' : 'RadioButton';
 

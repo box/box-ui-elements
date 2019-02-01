@@ -14,12 +14,12 @@ class ContentPreview extends ES6Wrapper {
     render() {
         render(
             <ContentPreviewResponsive
+                componentRef={this.setComponent}
+                fileId={this.id}
                 language={this.language}
                 messages={this.messages}
-                fileId={this.id}
-                token={this.token}
-                componentRef={this.setComponent}
                 onInteraction={this.onInteraction}
+                token={this.token}
                 {...this.options}
             />,
             this.container,

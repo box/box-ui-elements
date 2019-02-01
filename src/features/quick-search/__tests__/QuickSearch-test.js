@@ -73,7 +73,7 @@ describe('features/quick-search/QuickSearch', () => {
 
         test('should render no items message when specified', () => {
             const noItems = 'no items';
-            const wrapper = shallow(<QuickSearch noItemsMessage={noItems} inputProps={inputProps} />);
+            const wrapper = shallow(<QuickSearch inputProps={inputProps} noItemsMessage={noItems} />);
             const message = wrapper.find('QuickSearchMessage');
 
             expect(message.length).toBe(1);
@@ -82,7 +82,7 @@ describe('features/quick-search/QuickSearch', () => {
         });
 
         test('should show no items message when specified and showMessage is true', () => {
-            const wrapper = shallow(<QuickSearch noItemsMessage="no items" inputProps={inputProps} />);
+            const wrapper = shallow(<QuickSearch inputProps={inputProps} noItemsMessage="no items" />);
             wrapper.setState({ showMessage: true });
 
             expect(wrapper.find('QuickSearchMessage').prop('isShown')).toBe(true);

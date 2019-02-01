@@ -14,25 +14,25 @@ import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import './ActivityFeed.scss';
 
 type Props = {
-    file: BoxItem,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
     currentUser?: User,
+    feedItems?: FeedItems,
+    file: BoxItem,
+    getApproverWithQuery?: Function,
+    getAvatarUrl: string => Promise<?string>,
+    getMentionWithQuery?: Function,
+    getUserProfileUrl?: string => Promise<string>,
     isDisabled?: boolean,
+    mentionSelectorContacts?: SelectorItems,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
+    onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
-    onTaskAssignmentUpdate?: Function,
-    getApproverWithQuery?: Function,
-    getMentionWithQuery?: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
-    getAvatarUrl: string => Promise<?string>,
-    getUserProfileUrl?: string => Promise<string>,
-    feedItems?: FeedItems,
 };
 
 type State = {
@@ -103,7 +103,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
-    onCommentCreate = ({ text, hasMention }: { text: string, hasMention: boolean }) => {
+    onCommentCreate = ({ text, hasMention }: { hasMention: boolean, text: string }) => {
         const { onCommentCreate = noop } = this.props;
         onCommentCreate(text, hasMention);
         this.approvalCommentFormSubmitHandler();
@@ -117,7 +117,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {number} dueAt - Task's due date
      * @return {void}
      */
-    onTaskCreate = ({ text, assignees, dueAt }: { text: string, assignees: SelectorItems, dueAt: string }): void => {
+    onTaskCreate = ({ text, assignees, dueAt }: { assignees: SelectorItems, dueAt: string, text: string }): void => {
         const { onTaskCreate = noop } = this.props;
         onTaskCreate(text, assignees, dueAt);
         this.approvalCommentFormSubmitHandler();

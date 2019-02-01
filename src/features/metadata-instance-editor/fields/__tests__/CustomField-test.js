@@ -8,15 +8,15 @@ describe('features/metadata-instance-editor/fields/CustomField', () => {
     };
 
     test('should correctly render a custom field when editable', () => {
-        const wrapper = shallow(<CustomField intl={intl} canEdit dataValue="value" />);
+        const wrapper = shallow(<CustomField canEdit dataValue="value" intl={intl} />);
         expect(wrapper).toMatchSnapshot();
     });
     test('should correctly render a custom field when not editable', () => {
-        const wrapper = shallow(<CustomField intl={intl} dataValue="value" />);
+        const wrapper = shallow(<CustomField dataValue="value" intl={intl} />);
         expect(wrapper).toMatchSnapshot();
     });
     test('should correctly render a custom field is last', () => {
-        const wrapper = shallow(<CustomField intl={intl} isLast dataValue="value" />);
+        const wrapper = shallow(<CustomField dataValue="value" intl={intl} isLast />);
         expect(wrapper).toMatchSnapshot();
     });
 });

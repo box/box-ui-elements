@@ -29,8 +29,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
         const onTabSelect = () => {};
         const component = shallow(
             <TabViewPrimitive
-                onTabFocus={onTabFocus}
                 focusedIndex={0}
+                onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
                 resetActiveTab={() => {}}
                 resetFocusedTab={() => {}}
@@ -51,15 +51,15 @@ describe('components/tab-view/TabViewPrimitive', () => {
         const onTabSelect = () => {};
         const component = shallow(
             <TabViewPrimitive
-                onTabFocus={onTabFocus}
                 focusedIndex={0}
+                onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
                 resetActiveTab={() => {}}
                 resetFocusedTab={() => {}}
                 selectedIndex={0}
             >
                 <Tab title="tab1">Tab 1</Tab>
-                <Tab title="tab2" href="https://www.box.com/" />
+                <Tab href="https://www.box.com/" title="tab2" />
             </TabViewPrimitive>,
         );
 
@@ -72,8 +72,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
         const onTabSelect = () => {};
         const component = shallow(
             <TabViewPrimitive
-                onTabFocus={onTabFocus}
                 focusedIndex={0}
+                onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
                 resetActiveTab={() => {}}
                 resetFocusedTab={() => {}}
@@ -95,8 +95,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
         const event = { type: 'click' };
         const component = shallow(
             <TabViewPrimitive
-                onTabFocus={onTabFocus}
                 focusedIndex={0}
+                onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
                 resetActiveTab={() => {}}
                 resetFocusedTab={() => {}}
@@ -234,8 +234,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
             test('should render tabs with correct style', () => {
                 const component = shallow(
                     <TabViewPrimitive
-                        isDynamic={isDynamic}
                         focusedIndex={0}
+                        isDynamic={isDynamic}
                         onTabFocus={sandbox.stub()}
                         onTabSelect={sandbox.stub()}
                         resetActiveTab={sandbox.stub()}
@@ -262,12 +262,12 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 const onTabSelect = sinon.mock();
                 component = mount(
                     <TabViewPrimitive
+                        focusedIndex={0}
                         isDynamic
                         onTabFocus={onTabFocus}
                         onTabSelect={onTabSelect}
                         resetActiveTab={() => {}}
                         resetFocusedTab={() => {}}
-                        focusedIndex={0}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>
@@ -284,12 +284,12 @@ describe('components/tab-view/TabViewPrimitive', () => {
             test('should not do anything if component is not dynamic', () => {
                 component = mount(
                     <TabViewPrimitive
+                        focusedIndex={0}
                         isDynamic
                         onTabFocus={() => {}}
                         onTabSelect={() => {}}
                         resetActiveTab={() => {}}
                         resetFocusedTab={() => {}}
-                        focusedIndex={0}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>
@@ -362,12 +362,12 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 const onTabSelect = sinon.mock();
                 component = mount(
                     <TabViewPrimitive
+                        focusedIndex={1}
                         isDynamic
                         onTabFocus={onTabFocus}
                         onTabSelect={onTabSelect}
                         resetActiveTab={() => {}}
                         resetFocusedTab={() => {}}
-                        focusedIndex={1}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>
@@ -464,12 +464,12 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 const onTabSelect = sinon.mock();
                 component = mount(
                     <TabViewPrimitive
+                        focusedIndex={0}
                         isDynamic
                         onTabFocus={onTabFocus}
                         onTabSelect={onTabSelect}
                         resetActiveTab={() => {}}
                         resetFocusedTab={() => {}}
-                        focusedIndex={0}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>
@@ -587,12 +587,12 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 const resetFocusedTab = sinon.mock();
                 const component = mount(
                     <TabViewPrimitive
+                        focusedIndex={0}
                         isDynamic
                         onTabFocus={() => {}}
                         onTabSelect={() => {}}
                         resetActiveTab={() => {}}
                         resetFocusedTab={resetFocusedTab}
-                        focusedIndex={0}
                         selectedIndex={1}
                     >
                         <Tab title="tab1">Tab 1</Tab>
@@ -615,12 +615,12 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 onTabSelect = sinon.mock().never();
                 component = mount(
                     <TabViewPrimitive
+                        focusedIndex={0}
                         isDynamic
                         onTabFocus={onTabFocus}
                         onTabSelect={onTabSelect}
                         resetActiveTab={() => {}}
                         resetFocusedTab={() => {}}
-                        focusedIndex={0}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>

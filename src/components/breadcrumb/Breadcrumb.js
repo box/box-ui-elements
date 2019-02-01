@@ -42,9 +42,9 @@ const renderBreadcrumbs = (children, threshold) => {
 
 type Props = {
     /** Class name for Breadcrumb */
-    className?: string,
-    /** Breadcrumb contents */
     children: React.Node,
+    /** Breadcrumb contents */
+    className?: string,
     /** Aria label (should be a translation of "Breadcrumb") */
     label: string,
     /** Number of crumbs to show before they collapse into an ellipsis */

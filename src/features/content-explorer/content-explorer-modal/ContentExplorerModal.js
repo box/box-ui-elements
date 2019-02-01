@@ -11,10 +11,10 @@ import './ContentExplorerModal.scss';
 type Props = {
     className?: string,
     customInput?: React.ComponentType<any>,
-    title?: string,
     description?: string,
     isOpen?: boolean,
     onRequestClose?: Function,
+    title?: string,
 };
 
 const ContentExplorerModal = ({

@@ -15,8 +15,8 @@ type Props = {
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
     isCustomMetadata: boolean,
-    onCascadeToggle: (value: boolean) => void,
     onCascadeModeChange: (value: boolean) => void,
+    onCascadeToggle: (value: boolean) => void,
     shouldShowCascadeOptions: boolean,
 };
 
@@ -42,9 +42,9 @@ const CascadePolicy = ({
                     <FormattedMessage tagName="strong" {...messages.enableCascadePolicy} />
                     {!isCustomMetadata && (
                         <Toggle
-                            label=""
                             className={`metadata-cascade-toggle ${isCascadingEnabled ? 'cascade-on' : 'cascade-off'}`}
                             isOn={isCascadingEnabled}
+                            label=""
                             onChange={e => onCascadeToggle(e.target.checked)}
                         />
                     )}
@@ -70,8 +70,8 @@ const CascadePolicy = ({
                         <FormattedMessage {...messages.cascadePolicyModeQuestion} />
                         <RadioGroup
                             className="metadata-cascading-options"
-                            value={isCascadingOverwritten ? 'overwrite' : 'skip'}
                             onChange={e => onCascadeModeChange(e.target.value === 'overwrite')}
+                            value={isCascadingOverwritten ? 'overwrite' : 'skip'}
                         >
                             <RadioButton
                                 label={<FormattedMessage {...messages.cascadePolicySkipMode} />}

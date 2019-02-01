@@ -17,21 +17,21 @@ import './TemplateDropdown.scss';
 
 type Props = {
     className?: string,
-    isDropdownBusy?: boolean,
-    intl: any,
-    title?: React.Node,
+    defaultTemplateIcon?: React.Node,
     entryButton?: React.Node,
+    intl: any,
+    isDropdownBusy?: boolean,
     onAdd: (template: MetadataTemplate) => void,
     selectedTemplate?: MetadataTemplate | null,
-    defaultTemplateIcon?: React.Node,
     selectedTemplateIcon?: React.Node,
     templates: Array<MetadataTemplate>,
+    title?: React.Node,
     usedTemplates: Array<MetadataTemplate>,
 };
 
 type State = {
-    isDropdownOpen: boolean,
     filterText: string,
+    isDropdownOpen: boolean,
     templates: Array<MetadataTemplate>,
 };
 
@@ -39,8 +39,8 @@ const InputContainer = ({ inputProps = {}, ...rest }: { inputProps?: Object }) =
     <SearchForm
         {...inputProps}
         {...rest}
-        shouldPreventClearEventPropagation
         data-resin-target="metadata-templatesearch"
+        shouldPreventClearEventPropagation
     />
 );
 
@@ -136,13 +136,13 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
             <React.Fragment>
                 <SelectorDropdown
                     className="metadata-instance-editor-template-dropdown-menu"
-                    title={title}
                     isAlwaysOpen
                     onSelect={(index: number) => {
                         onAdd(templates[index]);
                     }}
                     selector={this.getSelector()}
                     shouldScroll
+                    title={title}
                 >
                     {indicatorOrMessage ? null : renderedTemplates}
                 </SelectorDropdown>
@@ -231,7 +231,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
             return entryButton;
         }
         return (
-            <PlainButton data-resin-target="metadata-templateaddmenu" className={buttonToggleClassName} type="button">
+            <PlainButton className={buttonToggleClassName} data-resin-target="metadata-templateaddmenu" type="button">
                 <MenuToggle>
                     <FormattedMessage {...messages.metadataTemplateAdd} />
                 </MenuToggle>

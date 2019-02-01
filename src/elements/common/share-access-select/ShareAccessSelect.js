@@ -12,9 +12,9 @@ import './ShareAccessSelect.scss';
 
 type Props = {
     canSetShareAccess: boolean,
-    onChange: Function,
-    item: BoxItem,
     className: string,
+    item: BoxItem,
+    onChange: Function,
 } & InjectIntlProvidedProps;
 
 const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, intl }: Props) => {
@@ -39,7 +39,7 @@ const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, intl 
 
     /* eslint-disable jsx-a11y/no-onchange */
     return (
-        <select className={`be-share-access-select ${className}`} value={access} onChange={changeHandler}>
+        <select className={`be-share-access-select ${className}`} onChange={changeHandler} value={access}>
             {allowOpen ? <option value={ACCESS_OPEN}>{intl.formatMessage(messages.shareAccessOpen)}</option> : null}
             {allowCollab ? (
                 <option value={ACCESS_COLLAB}>{intl.formatMessage(messages.shareAccessCollab)}</option>

@@ -95,10 +95,10 @@ class LeftSidebarLink extends React.Component<Props, State> {
             >
                 {icon}
                 <span
-                    className="left-sidebar-link-text"
                     ref={leftSidebarLinkText => {
                         this.leftSidebarLinkText = leftSidebarLinkText;
                     }}
+                    className="left-sidebar-link-text"
                 >
                     {message}
                 </span>

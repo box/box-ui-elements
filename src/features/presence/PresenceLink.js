@@ -8,6 +8,7 @@ import { collaboratorsPropType, flyoutPositionPropType } from './propTypes';
 
 import './Presence.scss';
 
+// eslint-disable-next-line react/prefer-stateless-function
 class PresenceLink extends Component {
     static propTypes = {
         children: PropTypes.node,

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 
 import Presence from '../Presence';
@@ -100,8 +101,8 @@ describe('features/presence/Presence', () => {
             const wrapper = shallow(
                 <Presence
                     collaborators={collaboratorList}
-                    onFlyoutOpen={onFlyoutOpenSpy}
                     onFlyoutClose={onFlyoutCloseSpy}
+                    onFlyoutOpen={onFlyoutOpenSpy}
                 />,
             );
 
@@ -146,8 +147,8 @@ describe('features/presence/Presence', () => {
             const containerAttr = { 'data-resin-feature': 'presence' };
             const wrapper = shallow(
                 <Presence
-                    collaborators={collaboratorList}
                     avatarAttributes={avatarAttr}
+                    collaborators={collaboratorList}
                     containerAttributes={containerAttr}
                 />,
             );
@@ -167,8 +168,8 @@ describe('features/presence/Presence', () => {
             const wrapper = shallow(
                 <Presence
                     collaborators={collaboratorList}
-                    maxDisplayedAvatars={maxDisplayedAvatars}
                     maxAdditionalCollaboratorsNum={maxAdditionalCollaboratorsNum}
+                    maxDisplayedAvatars={maxDisplayedAvatars}
                 />,
             );
 
@@ -184,8 +185,8 @@ describe('features/presence/Presence', () => {
             const wrapper = shallow(
                 <Presence
                     collaborators={collaboratorList}
-                    maxDisplayedAvatars={maxDisplayedAvatars}
                     maxAdditionalCollaboratorsNum={maxAdditionalCollaboratorsNum}
+                    maxDisplayedAvatars={maxDisplayedAvatars}
                 />,
             );
 
@@ -201,8 +202,8 @@ describe('features/presence/Presence', () => {
                 const wrapper = shallow(
                     <Presence
                         collaborators={collaboratorList}
-                        onClickViewCollaborators={jest.fn()}
                         experimentBucket="flyout"
+                        onClickViewCollaborators={jest.fn()}
                     />,
                 );
                 expect(wrapper).toMatchSnapshot();
@@ -221,8 +222,8 @@ describe('features/presence/Presence', () => {
                     const wrapper = shallow(
                         <Presence
                             collaborators={collaboratorList}
-                            onClickViewCollaborators={jest.fn()}
                             experimentBucket={bucketName}
+                            onClickViewCollaborators={jest.fn()}
                         />,
                     );
                     expect(wrapper).toMatchSnapshot();
@@ -235,8 +236,8 @@ describe('features/presence/Presence', () => {
                 const wrapper = shallow(
                     <Presence
                         collaborators={noCollaborators}
-                        onClickViewCollaborators={jest.fn()}
                         experimentBucket="flyout"
+                        onClickViewCollaborators={jest.fn()}
                     />,
                 );
                 expect(wrapper).toMatchSnapshot();
@@ -258,8 +259,8 @@ describe('features/presence/Presence', () => {
                 const wrapper = shallow(
                     <Presence
                         collaborators={collaboratorList}
-                        onClickViewCollaborators={mockOnClickViewCollaborators}
                         experimentBucket="flyout"
+                        onClickViewCollaborators={mockOnClickViewCollaborators}
                     />,
                 );
 
@@ -272,8 +273,8 @@ describe('features/presence/Presence', () => {
                 const wrapper = shallow(
                     <Presence
                         collaborators={collaboratorList}
-                        onClickViewCollaborators={jest.fn()}
                         experimentBucket="flyout"
+                        onClickViewCollaborators={jest.fn()}
                     />,
                 );
                 expect(wrapper.find('.presence-dropdown').length).toBe(0);
@@ -287,9 +288,9 @@ describe('features/presence/Presence', () => {
                 const wrapper = shallow(
                     <Presence
                         collaborators={collaboratorList}
-                        onClickViewCollaborators={jest.fn()}
-                        onAccessStatsRequested={mockRequestAccessStats}
                         experimentBucket="flyout"
+                        onAccessStatsRequested={mockRequestAccessStats}
+                        onClickViewCollaborators={jest.fn()}
                     />,
                 );
                 wrapper.setState({ showActivityPrompt: false }).update();

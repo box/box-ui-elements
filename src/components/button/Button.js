@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 
 import LoadingIndicator from '../loading-indicator';
-import { RadarAnimation } from '../radar';
+import RadarAnimation from '../radar';
 
 type Props = {
     /** Child components */
@@ -64,16 +64,17 @@ class Button extends React.Component<Props> {
         );
 
         let button = (
+            // eslint-disable-next-line react/button-has-type
             <button
-                className={styleClassName}
-                type={type}
-                onClick={this.handleClick}
                 ref={element => {
                     this.btnElement = element;
                     if (setRef) {
                         setRef(element);
                     }
                 }}
+                className={styleClassName}
+                onClick={this.handleClick}
+                type={type}
                 {...buttonProps}
             >
                 <span className="btn-content">{children}</span>

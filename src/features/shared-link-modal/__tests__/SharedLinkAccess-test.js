@@ -26,12 +26,12 @@ describe('features/shared-link-modal/SharedLinkAccess', () => {
             <SharedLinkAccess
                 accessDropdownMenuProps={{ constrainToWindow: true }}
                 accessLevel={accessLevel}
+                accessMenuButtonProps={accessMenuButtonProps}
                 allowedAccessLevels={allowedAccessLevels}
                 changeAccessLevel={changeAccessLevel}
                 itemType={itemType}
-                removeLink={removeLink}
                 permissionLevel={permissionLevel}
-                accessMenuButtonProps={accessMenuButtonProps}
+                removeLink={removeLink}
                 removeLinkButtonProps={removeLinkButtonProps}
             />,
         );

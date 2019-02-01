@@ -35,7 +35,7 @@ describe('components/menu/MenuItem', () => {
 
         test('should add correct class and aria attributes when item is selected', () => {
             const wrapper = shallow(
-                <MenuItem isSelectItem isSelected>
+                <MenuItem isSelected isSelectItem>
                     Test
                 </MenuItem>,
             );
@@ -58,7 +58,7 @@ describe('components/menu/MenuItem', () => {
     describe('onClickHandler()', () => {
         test('should click when menu item has isDisabled prop', () => {
             const wrapper = shallow(
-                <MenuItem onClick={sandbox.mock().never()} isDisabled>
+                <MenuItem isDisabled onClick={sandbox.mock().never()}>
                     Test
                 </MenuItem>,
             );

@@ -10,14 +10,14 @@ import commonMessages from '../../common/messages';
 import messages from './messages';
 
 type Props = {
+    cancelButtonProps?: Object,
     isOpen: boolean,
+    modalProps?: Object,
+    okayButtonProps?: Object,
+    onLoad?: Function,
     onRequestClose: Function,
     removeLink: Function,
     submitting: boolean,
-    onLoad?: Function,
-    okayButtonProps?: Object,
-    cancelButtonProps?: Object,
-    modalProps?: Object,
 };
 
 class RemoveLinkConfirmModal extends Component<Props> {
@@ -43,9 +43,9 @@ class RemoveLinkConfirmModal extends Component<Props> {
         return (
             <Modal
                 focusElementSelector=".btn-primary"
-                title={<FormattedMessage {...messages.removeLinkConfirmationTitle} />}
                 isOpen={isOpen}
                 onRequestClose={submitting ? undefined : onRequestClose}
+                title={<FormattedMessage {...messages.removeLinkConfirmationTitle} />}
                 type="alert"
                 {...modalProps}
             >

@@ -23,9 +23,9 @@ export default (
     return (
         <Checkbox
             hideLabel
+            isChecked={selected}
             label={((name: any): string)}
             name={((name: any): string)}
-            isChecked={selected}
             onChange={() => onItemSelect(rowData)}
         />
     );

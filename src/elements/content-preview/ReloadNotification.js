@@ -18,7 +18,7 @@ type Props = {
 
 const ReloadNotification = ({ onClick, onClose }: Props) => (
     <span className="bcpr-notification">
-        <Notification type={NotificationConstants.TYPE_INFO} onClose={onClose}>
+        <Notification onClose={onClose} type={NotificationConstants.TYPE_INFO}>
             <FormattedMessage {...messages.previewUpdate} />
             <Button onClick={onClick}>
                 <FormattedMessage {...messages.reload} />

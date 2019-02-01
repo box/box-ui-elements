@@ -8,9 +8,9 @@ type Props = {
     className?: string,
     color?: string,
     /** A text-only string describing the icon if it's not purely decorative for accessibility */
+    selected?: boolean,
     title?: string | React.Element<any>,
     width?: number,
-    selected?: boolean,
 };
 
 const iconName = 'icon-owned-by-me';
@@ -21,8 +21,8 @@ const IconOwnedByMe = ({ className = '', color = '#c4c4c4', title, width = 14, s
             'is-selected': selected,
         })}
         title={title}
-        width={width}
         viewBox="0 0 14 14"
+        width={width}
     >
         <path
             className="fill-color"

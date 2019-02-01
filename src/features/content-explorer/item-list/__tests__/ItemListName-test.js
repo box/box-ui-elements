@@ -54,7 +54,7 @@ describe('features/content-explorer/item-list/ItemListName', () => {
     describe('linkRenderer', () => {
         test('should use linkRenderer when specified', () => {
             const name = 'item';
-            const linkRenderer = () => <button className="name-test" />;
+            const linkRenderer = () => <button type="button" className="name-test" />;
             const wrapper = renderComponent({
                 name,
                 type: 'folder',

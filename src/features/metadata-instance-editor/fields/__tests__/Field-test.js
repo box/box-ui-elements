@@ -11,49 +11,49 @@ describe('features/metadata-instance-editor/fields/Field', () => {
     });
     test('should correctly not render a text field', () => {
         const wrapper = shallow(
-            <Field canEdit isHidden type="string" dataValue="value" onChange={onChange} onRemove={onRemove} />,
+            <Field canEdit dataValue="value" isHidden onChange={onChange} onRemove={onRemove} type="string" />,
         );
         expect(wrapper).toMatchSnapshot();
     });
     test('should correctly render a text field', () => {
         const wrapper = shallow(
-            <Field canEdit type="string" dataValue="value" onChange={onChange} onRemove={onRemove} />,
+            <Field canEdit dataValue="value" onChange={onChange} onRemove={onRemove} type="string" />,
         );
         expect(wrapper).toMatchSnapshot();
     });
     test('should correctly render an enum field', () => {
         const wrapper = shallow(
-            <Field canEdit type="enum" dataValue="value" onChange={onChange} onRemove={onRemove} />,
+            <Field canEdit dataValue="value" onChange={onChange} onRemove={onRemove} type="enum" />,
         );
         expect(wrapper).toMatchSnapshot();
     });
     test('should correctly render a date field', () => {
         const wrapper = shallow(
-            <Field canEdit type="date" dataValue="value" onChange={onChange} onRemove={onRemove} />,
+            <Field canEdit dataValue="value" onChange={onChange} onRemove={onRemove} type="date" />,
         );
         expect(wrapper).toMatchSnapshot();
     });
     test('should correctly render a float field', () => {
         const wrapper = shallow(
-            <Field canEdit type="float" dataValue="value" onChange={onChange} onRemove={onRemove} />,
+            <Field canEdit dataValue="value" onChange={onChange} onRemove={onRemove} type="float" />,
         );
         expect(wrapper).toMatchSnapshot();
     });
     test('should correctly render a multi-select field', () => {
         const wrapper = shallow(
-            <Field canEdit type="multiSelect" dataValue={['value']} onChange={onChange} onRemove={onRemove} />,
+            <Field canEdit dataValue={['value']} onChange={onChange} onRemove={onRemove} type="multiSelect" />,
         );
         expect(wrapper).toMatchSnapshot();
     });
     test('should correctly render an integer field', () => {
         const wrapper = shallow(
-            <Field canEdit type="integer" dataValue="value" onChange={onChange} onRemove={onRemove} />,
+            <Field canEdit dataValue="value" onChange={onChange} onRemove={onRemove} type="integer" />,
         );
         expect(wrapper).toMatchSnapshot();
     });
     test('should correctly render an inline error for an invalid field type', () => {
         const wrapper = shallow(
-            <Field canEdit type="badbadbad" dataValue="value" onChange={onChange} onRemove={onRemove} />,
+            <Field canEdit dataValue="value" onChange={onChange} onRemove={onRemove} type="badbadbad" />,
         );
         expect(wrapper).toMatchSnapshot();
     });

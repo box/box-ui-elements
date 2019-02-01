@@ -22,19 +22,19 @@ import './Faces.scss';
 
 type Props = {
     card: SkillCard,
-    isEditable: boolean,
-    hasError: boolean,
     getViewer?: Function,
+    hasError: boolean,
+    isEditable: boolean,
     onSkillChange: Function,
 };
 
 type State = {
-    selected?: SkillCardEntry,
+    faces: Array<SkillCardEntry>,
+    hasError: boolean,
     isEditing: boolean,
     isLoading: boolean,
-    faces: Array<SkillCardEntry>,
     removes: Array<SkillCardEntry>,
-    hasError: boolean,
+    selected?: SkillCardEntry,
 };
 
 class Faces extends React.PureComponent<Props, State> {
@@ -157,14 +157,14 @@ class Faces extends React.PureComponent<Props, State> {
         });
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading} className="be-faces">
+            <LoadingIndicatorWrapper className="be-faces" isLoading={isLoading}>
                 {hasFaces && isEditable && !isLoading && (
                     <Tooltip text={<FormattedMessage {...messages.editLabel} />}>
                         <PlainButton
-                            type="button"
                             className={editClassName}
-                            onClick={this.toggleIsEditing}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT}
+                            onClick={this.toggleIsEditing}
+                            type="button"
                         >
                             <IconEdit />
                         </PlainButton>
@@ -181,10 +181,10 @@ class Faces extends React.PureComponent<Props, State> {
                         <Face
                             key={index}
                             face={face}
-                            selected={selected}
                             isEditing={isEditing}
                             onDelete={this.onDelete}
                             onSelect={this.onSelect}
+                            selected={selected}
                         />
                         /* eslint-enable react/no-array-index-key */
                     ))
@@ -193,25 +193,25 @@ class Faces extends React.PureComponent<Props, State> {
                 )}
                 {!!selected && !isEditing && Array.isArray(selected.appears) && selected.appears.length > 0 && (
                     <Timeline
-                        timeslices={selected.appears}
                         duration={duration}
                         getViewer={getViewer}
                         interactionTarget={SKILLS_TARGETS.FACES.TIMELINE}
+                        timeslices={selected.appears}
                     />
                 )}
                 {isEditing && (
                     <div className="be-faces-buttons">
                         <Button
-                            type="button"
-                            onClick={this.onCancel}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}
+                            onClick={this.onCancel}
+                            type="button"
                         >
                             <FormattedMessage {...messages.cancel} />
                         </Button>
                         <PrimaryButton
-                            type="button"
-                            onClick={this.onSave}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}
+                            onClick={this.onSave}
+                            type="button"
                         >
                             <FormattedMessage {...messages.save} />
                         </PrimaryButton>

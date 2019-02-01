@@ -22,10 +22,10 @@ const IconAlignLeft = ({ className = '', color = '#444', height = 10, title, wid
     >
         <path
             className="stroke-color"
-            stroke={color}
-            fill="none"
-            strokeMiterlimit={10}
             d="M.3.5h11.9M.3 3.5h9.3m-9.3 6h9.3m-9.3-3H5"
+            fill="none"
+            stroke={color}
+            strokeMiterlimit={10}
         />
     </AccessibleSVG>
 );

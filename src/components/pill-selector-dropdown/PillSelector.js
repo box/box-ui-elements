@@ -143,7 +143,8 @@ class PillSelector extends Component {
         });
 
         return (
-            <Tooltip isShown={!!error} text={error} position="middle-right" theme="error">
+            <Tooltip isShown={!!error} position="middle-right" text={error} theme="error">
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <span
                     className={classes}
                     onBlur={this.handleBlur}
@@ -153,31 +154,31 @@ class PillSelector extends Component {
                 >
                     {selectedOptions.map((option, index) => (
                         <Pill
-                            isSelected={index === selectedIndex}
                             key={option.value}
+                            isSelected={index === selectedIndex}
                             onRemove={onRemove.bind(this, option, index)}
                             text={option.text}
                         />
                     ))}
                     {/* hidden element for focus/key events during pill selection */}
                     <span
+                        ref={this.hiddenRef}
                         aria-hidden="true"
                         className="accessibility-hidden"
                         onBlur={this.resetSelectedIndex}
-                        ref={this.hiddenRef}
                         tabIndex={-1}
                     />
                     <input
                         {...rest}
                         {...inputProps}
+                        ref={input => {
+                            this.inputEl = input;
+                        }}
                         autoComplete="off"
                         className={classNames('pill-selector-input', className)}
                         disabled={disabled}
                         onInput={onInput}
                         placeholder={this.getNumSelected() === 0 ? placeholder : ''}
-                        ref={input => {
-                            this.inputEl = input;
-                        }}
                         type="text"
                     />
                 </span>

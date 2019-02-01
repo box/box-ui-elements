@@ -27,7 +27,7 @@ describe('icons/folder/*', () => {
         });
 
         test('should correctly render icon with props', () => {
-            const component = shallow(<IconComponent className="test" width={42} height={42} title="awesome title" />);
+            const component = shallow(<IconComponent className="test" height={42} title="awesome title" width={42} />);
 
             expect(component.find('AccessibleSVG').length).toEqual(1);
             expect(component.find('.test').length).toEqual(1);

@@ -24,7 +24,7 @@ describe('icons/general/IconCalendar', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 32;
         const height = 34;
-        const wrapper = shallow(<IconCalendar width={width} height={height} />);
+        const wrapper = shallow(<IconCalendar height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

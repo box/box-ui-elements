@@ -15,16 +15,16 @@ type Props = {
 const IconPageForward = ({ className = '', color = '#000000', height = 13, title, width = 8 }: Props) => (
     <AccessibleSVG
         className={`icon-page-forward ${className}`}
-        title={title}
         height={height}
-        width={width}
+        title={title}
         viewBox="0 0 8 13"
+        width={width}
     >
         <path
             className="fill-color"
+            d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
             fill={color}
             fillRule="evenodd"
-            d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
         />
     </AccessibleSVG>
 );

@@ -51,7 +51,7 @@ describe('icons/badges/CollaborationBadge', () => {
         const wrapper = getWrapper({ color });
 
         const fillColors = wrapper.find('.fill-color');
-        for (let i = 0; i < fillColors.length; i++) {
+        for (let i = 0; i < fillColors.length; i += 1) {
             expect(fillColors.at(i).prop('fill')).toEqual(color);
         }
     });

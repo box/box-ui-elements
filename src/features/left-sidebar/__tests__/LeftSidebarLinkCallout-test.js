@@ -19,7 +19,7 @@ describe('components/tooltip/LeftSidebarLinkCallout', () => {
                 }}
                 {...props}
             >
-                <button />
+                <button type="button" />
             </LeftSidebarLinkCallout>,
         );
 

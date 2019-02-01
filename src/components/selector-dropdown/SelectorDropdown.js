@@ -15,21 +15,21 @@ function stopDefaultEvent(event) {
 
 type Props = {
     /** Options to keep the results always open */
-    isAlwaysOpen?: boolean,
-    /** Options to render in the dropdown filtered based on the input text */
     children?: React.Node,
-    /** CSS class for the wrapper div */
+    /** Options to render in the dropdown filtered based on the input text */
     className?: string,
+    /** CSS class for the wrapper div */
+    isAlwaysOpen?: boolean,
     /** Optional title text that will be rendered above the list */
-    title?: React.Node,
-    /** Function called on keyboard "Enter" event only if enter does not trigger selection */
     onEnter?: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void,
-    /** Function called with the index of the selected option and the event (selected by keyboard or click) */
+    /** Function called on keyboard "Enter" event only if enter does not trigger selection */
     onSelect?: Function,
-    /** Component containing an input text field and takes `inputProps` to spread onto the input element */
+    /** Function called with the index of the selected option and the event (selected by keyboard or click) */
     selector: React.Element<any>,
-    /** Boolean to indicate whether the dropdown should scroll */
+    /** Component containing an input text field and takes `inputProps` to spread onto the input element */
     shouldScroll?: boolean,
+    /** Boolean to indicate whether the dropdown should scroll */
+    title?: React.Node,
 };
 
 type State = {
@@ -268,13 +268,14 @@ class SelectorDropdown extends React.Component<Props, State> {
         // click listener as a proxy because IE will trigger a blur when
         // using the scrollbar in the dropdown which indavertently closes the dropdown.
         return (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
+                ref={this.selectorDropdownRef}
                 className={classNames('selector-dropdown-wrapper', className)}
                 onFocus={this.handleFocus}
                 onKeyDown={this.handleKeyDown}
                 onKeyPress={this.handleInput}
                 onPaste={this.handleInput}
-                ref={this.selectorDropdownRef}
             >
                 {React.cloneElement(selector, { inputProps })}
                 {isOpen && (

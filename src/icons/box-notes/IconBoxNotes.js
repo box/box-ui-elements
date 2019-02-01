@@ -14,10 +14,10 @@ type Props = {
 const IconBoxNotes = ({ className = '', height = 20, title, width = 19 }: Props) => (
     <AccessibleSVG
         className={`icon-boxnotes ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 19 20"
+        width={width}
     >
         <path d="M14.25 3H1a1 1 0 0 0 0 2h11.85z" fill="#980de0" />
         <path d="M10.68 8H1a1 1 0 0 0 0 2h8.36z" fill="#0061d5" />

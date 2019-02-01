@@ -11,8 +11,8 @@ import { DETAILS_TARGETS } from 'elements/common/interactionTargets';
 import { isBoxNote } from 'utils/file';
 
 type Props = {
-    onVersionHistoryClick?: Function,
     file: BoxItem,
+    onVersionHistoryClick?: Function,
 };
 
 const SidebarVersions = ({ onVersionHistoryClick, file }: Props) => {

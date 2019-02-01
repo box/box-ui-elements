@@ -149,19 +149,20 @@ class Modal extends React.Component<Props> {
         // Render a style tag to prevent body from scrolling as long as the Modal is open
         return (
             <WrapperComponent className={classNames('modal', className)} onKeyDown={this.onKeyDown} tabIndex="-1">
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
                 <div className="modal-backdrop" onClick={this.onBackdropClick} style={style.backdrop} />
                 <FocusTrap className="modal-dialog-container">
                     {isLoading ? (
                         <LoadingIndicator size="large" />
                     ) : (
                         <ModalDialog
-                            onRequestClose={onRequestClose}
-                            style={style.dialog}
                             modalRef={modalEl => {
                                 // This callback gets passed through as a regular prop since
                                 // ModalDialog is wrapped in a HOC
                                 this.dialog = modalEl;
                             }}
+                            onRequestClose={onRequestClose}
+                            style={style.dialog}
                             {...modalProps}
                         />
                     )}

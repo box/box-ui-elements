@@ -34,49 +34,49 @@ class IconIWorkTrio extends React.Component<Props> {
             >
                 <defs>
                     <linearGradient
-                        id={`${this.idPrefix}g`}
-                        x1="55.87"
-                        y1="77.59"
-                        x2="128.97"
-                        y2="77.59"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}g`}
+                        x1="55.87"
+                        x2="128.97"
+                        y1="77.59"
+                        y2="77.59"
                     >
                         <stop offset="0" stopColor="#fff" />
                         <stop offset="1" stopColor="#fff" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}h`}
-                        x1="87.53"
-                        y1="96.72"
-                        x2="87.53"
-                        y2="119.82"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}h`}
+                        x1="87.53"
+                        x2="87.53"
+                        y1="96.72"
+                        y2="119.82"
                     >
                         <stop offset="0" stopColor="#fb960d" />
                         <stop offset="1" stopColor="#f98905" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}i`}
-                        x1="99.29"
-                        y1="36.02"
-                        x2="100.38"
-                        y2="35.52"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}i`}
+                        x1="99.29"
+                        x2="100.38"
+                        y1="36.02"
+                        y2="35.52"
                     >
                         <stop offset=".11" stopColor="#686969" />
                         <stop offset="1" stopColor="#161717" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}j`}
-                        x1="101.65"
-                        y1="33.91"
-                        x2="103.33"
-                        y2="33.26"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}j`}
+                        x1="101.65"
+                        x2="103.33"
+                        y1="33.91"
+                        y2="33.26"
                     >
                         <stop offset="0" stopColor="#c2edff" />
                         <stop offset=".15" stopColor="#def5ff" />
@@ -84,13 +84,13 @@ class IconIWorkTrio extends React.Component<Props> {
                         <stop offset=".88" stopColor="#607a7a" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}k`}
-                        x1="101.55"
-                        y1="38.1"
-                        x2="108.43"
-                        y2="38.1"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}k`}
+                        x1="101.55"
+                        x2="108.43"
+                        y1="38.1"
+                        y2="38.1"
                     >
                         <stop offset="0" stopColor="#c2edff" />
                         <stop offset=".11" stopColor="#fff" />
@@ -98,13 +98,13 @@ class IconIWorkTrio extends React.Component<Props> {
                         <stop offset=".88" stopColor="#c2edff" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}a`}
-                        x1="118.93"
-                        y1="100.77"
-                        x2="126.82"
-                        y2="98.21"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}a`}
+                        x1="118.93"
+                        x2="126.82"
+                        y1="100.77"
+                        y2="98.21"
                     >
                         <stop offset="0" stopColor="#e28d0c" />
                         <stop offset=".18" stopColor="#fedb65" />
@@ -113,49 +113,49 @@ class IconIWorkTrio extends React.Component<Props> {
                         <stop offset="1" stopColor="#973e07" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}l`}
-                        x1="115.01"
-                        y1="101.65"
-                        x2="124.98"
-                        y2="101.65"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}l`}
+                        x1="115.01"
+                        x2="124.98"
+                        y1="101.65"
+                        y2="101.65"
                     >
                         <stop offset="0" stopColor="#ae988a" />
                         <stop offset="1" stopColor="#8a715e" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}m`}
-                        x1="115.01"
-                        y1="101.84"
-                        x2="124.91"
-                        y2="101.84"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}m`}
+                        x1="115.01"
+                        x2="124.91"
+                        y1="101.84"
+                        y2="101.84"
                     >
                         <stop offset="0" stopColor="#9ecdf7" />
                         <stop offset="1" stopColor="#cfe6ff" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}n`}
-                        x1="115.01"
-                        y1="101.78"
-                        x2="124.91"
-                        y2="101.78"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}n`}
+                        x1="115.01"
+                        x2="124.91"
+                        y1="101.78"
+                        y2="101.78"
                     >
                         <stop offset="0" stopColor="#fff" />
                         <stop offset="1" stopColor="#e3f0ff" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}o`}
-                        x1="104.11"
-                        y1="51.08"
-                        x2="111.05"
-                        y2="49.08"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}o`}
+                        x1="104.11"
+                        x2="111.05"
+                        y1="51.08"
+                        y2="49.08"
                     >
                         <stop offset="0" stopColor="#363838" />
                         <stop offset=".18" stopColor="#686969" />
@@ -164,31 +164,31 @@ class IconIWorkTrio extends React.Component<Props> {
                     <linearGradient
                         id={`${this.idPrefix}p`}
                         x1="110.22"
-                        y1="72.24"
                         x2="117.49"
-                        y2="69.88"
                         xlinkHref="#a"
+                        y1="72.24"
+                        y2="69.88"
                     />
                     <linearGradient
-                        id={`${this.idPrefix}q`}
-                        x1="80.41"
-                        y1="72.59"
-                        x2="80.41"
-                        y2="97.24"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}q`}
+                        x1="80.41"
+                        x2="80.41"
+                        y1="72.59"
+                        y2="97.24"
                     >
                         <stop offset="0" stopColor="#2dbffe" />
                         <stop offset="1" stopColor="#1b67f4" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}r`}
-                        x1="84.98"
-                        y1="89.03"
-                        x2="84.98"
-                        y2="76.11"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}r`}
+                        x1="84.98"
+                        x2="84.98"
+                        y1="89.03"
+                        y2="76.11"
                     >
                         <stop offset="0" stopColor="#fdd500" />
                         <stop offset=".28" stopColor="#fa8f00" />
@@ -196,25 +196,25 @@ class IconIWorkTrio extends React.Component<Props> {
                         <stop offset=".92" stopColor="#f27d09" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}s`}
-                        x1="81.42"
-                        y1="85.76"
-                        x2="81.42"
-                        y2="76.79"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}s`}
+                        x1="81.42"
+                        x2="81.42"
+                        y1="85.76"
+                        y2="76.79"
                     >
                         <stop offset="0" stopColor="#dd5400" />
                         <stop offset="1" stopColor="#e54800" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}t`}
-                        x1="79.42"
-                        y1="89.08"
-                        x2="79.42"
-                        y2="84.64"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}t`}
+                        x1="79.42"
+                        x2="79.42"
+                        y1="89.08"
+                        y2="84.64"
                     >
                         <stop offset=".01" stopColor="#fedb65" />
                         <stop offset=".31" stopColor="#fdd500" />
@@ -222,38 +222,38 @@ class IconIWorkTrio extends React.Component<Props> {
                         <stop offset="1" stopColor="#f86900" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}u`}
-                        x1="76.37"
-                        y1="79.02"
-                        x2="82.65"
-                        y2="79.02"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}u`}
+                        x1="76.37"
+                        x2="82.65"
+                        y1="79.02"
+                        y2="79.02"
                     >
                         <stop offset="0" stopColor="#fedb65" />
                         <stop offset=".24" stopColor="#fdd200" />
                         <stop offset="1" stopColor="#fa8f00" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}v`}
-                        x1="78.52"
-                        y1="82.23"
-                        x2="78.52"
-                        y2="76.27"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}v`}
+                        x1="78.52"
+                        x2="78.52"
+                        y1="82.23"
+                        y2="76.27"
                     >
                         <stop offset="0" stopColor="#fb970f" />
                         <stop offset="1" stopColor="#d05904" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}w`}
-                        x1="79.01"
-                        y1="88.87"
-                        x2="79.01"
-                        y2="75.98"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}w`}
+                        x1="79.01"
+                        x2="79.01"
+                        y1="88.87"
+                        y2="75.98"
                     >
                         <stop offset="0" stopColor="#fdd500" />
                         <stop offset=".21" stopColor="#fa8f00" />
@@ -261,13 +261,13 @@ class IconIWorkTrio extends React.Component<Props> {
                         <stop offset=".97" stopColor="#f86900" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}x`}
-                        x1="83.92"
-                        y1="76.09"
-                        x2="83.92"
-                        y2="71.99"
                         gradientTransform="matrix(1 0 0 -1 -2.48 149.27)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}x`}
+                        x1="83.92"
+                        x2="83.92"
+                        y1="76.09"
+                        y2="71.99"
                     >
                         <stop offset="0" stopColor="#6b5411" />
                         <stop offset=".1" stopColor="#515103" />
@@ -275,13 +275,13 @@ class IconIWorkTrio extends React.Component<Props> {
                         <stop offset=".59" stopColor="#1b4406" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}y`}
-                        x1="295.18"
-                        y1="34.98"
-                        x2="331.15"
-                        y2="34.98"
                         gradientTransform="matrix(1 0 0 -1 -6.64 147.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}y`}
+                        x1="295.18"
+                        x2="331.15"
+                        y1="34.98"
+                        y2="34.98"
                     >
                         <stop offset="0" stopColor="#847b70" />
                         <stop offset=".08" stopColor="#b5cfe1" />
@@ -295,39 +295,39 @@ class IconIWorkTrio extends React.Component<Props> {
                         <stop offset="1" stopColor="#5e5851" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}z`}
-                        x1="288.54"
-                        y1="43.23"
-                        x2="324.51"
-                        y2="43.23"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}z`}
+                        x1="288.54"
+                        x2="324.51"
+                        y1="43.23"
+                        y2="43.23"
                     >
                         <stop offset="0" stopColor="#d0e6f5" />
                         <stop offset=".5" stopColor="#fff" />
                         <stop offset="1" stopColor="#d0e6f5" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}A`}
-                        x1="306.52"
-                        y1="49.47"
-                        x2="306.52"
-                        y2="37.56"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}A`}
+                        x1="306.52"
+                        x2="306.52"
+                        y1="49.47"
+                        y2="37.56"
                     >
                         <stop offset="0" stopColor="#c5d9e6" />
                         <stop offset=".5" stopColor="#b5cfe1" />
                         <stop offset="1" stopColor="#dfecf2" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}B`}
-                        x1="310.34"
-                        y1="61.08"
-                        x2="315.99"
-                        y2="61.08"
                         gradientTransform="matrix(1 0 0 -1 -6.64 147.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}B`}
+                        x1="310.34"
+                        x2="315.99"
+                        y1="61.08"
+                        y2="61.08"
                     >
                         <stop offset="0" stopColor="#847b70" />
                         <stop offset=".11" stopColor="#c5dae8" />
@@ -339,38 +339,38 @@ class IconIWorkTrio extends React.Component<Props> {
                         <stop offset="1" stopColor="#5e5851" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}b`}
-                        x1="313.09"
-                        y1="80.12"
-                        x2="313.09"
-                        y2="83.09"
                         gradientTransform="matrix(1 0 0 -1 -6.64 147.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}b`}
+                        x1="313.09"
+                        x2="313.09"
+                        y1="80.12"
+                        y2="83.09"
                     >
                         <stop offset="0" stopColor="#00588a" />
                         <stop offset=".5" stopColor="#0088b1" />
                         <stop offset="1" stopColor="#00588a" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}C`}
-                        x1="313.08"
-                        y1="114.89"
-                        x2="313.08"
-                        y2="81.77"
                         gradientTransform="matrix(1 0 0 -1 -6.64 147.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}C`}
+                        x1="313.08"
+                        x2="313.08"
+                        y1="114.89"
+                        y2="81.77"
                     >
                         <stop offset="0" stopColor="#00a0e8" />
                         <stop offset="1" stopColor="#4fc8ec" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}D`}
-                        x1="313.09"
-                        y1="113.4"
-                        x2="313.09"
-                        y2="81.8"
                         gradientTransform="matrix(1 0 0 -1 -6.64 147.65)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}D`}
+                        x1="313.09"
+                        x2="313.09"
+                        y1="113.4"
+                        y2="81.8"
                     >
                         <stop offset="0" stopColor="#00a9fa" />
                         <stop offset="1" stopColor="#7ce1fd" />
@@ -378,145 +378,145 @@ class IconIWorkTrio extends React.Component<Props> {
                     <linearGradient
                         id={`${this.idPrefix}E`}
                         x1="277.7"
-                        y1="84.36"
                         x2="348.47"
-                        y2="84.36"
                         xlinkHref="#b"
+                        y1="84.36"
+                        y2="84.36"
                     />
                     <linearGradient
-                        id={`${this.idPrefix}F`}
-                        x1="161.18"
-                        y1="49.2"
-                        x2="246.37"
-                        y2="49.2"
                         gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}F`}
+                        x1="161.18"
+                        x2="246.37"
+                        y1="49.2"
+                        y2="49.2"
                     >
                         <stop offset="0" stopColor="#8c8c8c" />
                         <stop offset=".02" stopColor="#939493" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}G`}
-                        x1="203.78"
-                        y1="33.22"
-                        x2="203.78"
-                        y2="66.41"
                         gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}G`}
+                        x1="203.78"
+                        x2="203.78"
+                        y1="33.22"
+                        y2="66.41"
                     >
                         <stop offset="0" stopColor="#e0e0e0" />
                         <stop offset="1" stopColor="#fff" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}H`}
-                        x1="232.11"
-                        y1="95.68"
-                        x2="232.11"
-                        y2="40.91"
                         gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}H`}
+                        x1="232.11"
+                        x2="232.11"
+                        y1="95.68"
+                        y2="40.91"
                     >
                         <stop offset="0" stopColor="#4dc4fc" />
                         <stop offset="1" stopColor="#0f67f7" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}c`}
-                        x1="-124.74"
-                        y1="41.2"
-                        x2="-124.74"
-                        y2="93.93"
                         gradientTransform="rotate(180 55.29 72.995)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}c`}
+                        x1="-124.74"
+                        x2="-124.74"
+                        y1="41.2"
+                        y2="93.93"
                     >
                         <stop offset="0" stopColor="#0b55d3" />
                         <stop offset="1" stopColor="#409fcd" />
                     </linearGradient>
                     <linearGradient
+                        gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         id={`${this.idPrefix}I`}
                         x1="225.2"
-                        y1="41.2"
                         x2="225.2"
-                        y2="93.93"
-                        gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         xlinkHref="#c"
+                        y1="41.2"
+                        y2="93.93"
                     />
                     <linearGradient
-                        id={`${this.idPrefix}J`}
-                        x1="228.38"
-                        y1="99.21"
-                        x2="228.38"
-                        y2="103.45"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}J`}
+                        x1="228.38"
+                        x2="228.38"
+                        y1="99.21"
+                        y2="103.45"
                     >
                         <stop offset="0" stopColor="#76cffd" />
                         <stop offset="1" stopColor="#4dc4fc" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}K`}
-                        x1="198.92"
-                        y1="85.9"
-                        x2="198.92"
-                        y2="40.91"
                         gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}K`}
+                        x1="198.92"
+                        x2="198.92"
+                        y1="85.9"
+                        y2="40.91"
                     >
                         <stop offset="0" stopColor="#fba51e" />
                         <stop offset="1" stopColor="#e64e04" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}d`}
-                        x1="-91.55"
-                        y1="41.2"
-                        x2="-91.55"
-                        y2="84.17"
                         gradientTransform="rotate(180 55.29 72.995)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}d`}
+                        x1="-91.55"
+                        x2="-91.55"
+                        y1="41.2"
+                        y2="84.17"
                     >
                         <stop offset="0" stopColor="#c83600" />
                         <stop offset="1" stopColor="#bc6a15" />
                     </linearGradient>
                     <linearGradient
+                        gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         id={`${this.idPrefix}L`}
                         x1="192.01"
-                        y1="41.2"
                         x2="192.01"
-                        y2="84.17"
-                        gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         xlinkHref="#d"
+                        y1="41.2"
+                        y2="84.17"
                     />
                     <linearGradient
-                        id={`${this.idPrefix}M`}
-                        x1="195.21"
-                        y1="89.44"
-                        x2="195.21"
-                        y2="94.04"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}M`}
+                        x1="195.21"
+                        x2="195.21"
+                        y1="89.44"
+                        y2="94.04"
                     >
                         <stop offset="0" stopColor="#fcbf56" />
                         <stop offset="1" stopColor="#fcbd4a" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}N`}
-                        x1="182.33"
-                        y1="69.31"
-                        x2="182.33"
-                        y2="40.91"
                         gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}N`}
+                        x1="182.33"
+                        x2="182.33"
+                        y1="69.31"
+                        y2="40.91"
                     >
                         <stop offset="0" stopColor="#e93f54" />
                         <stop offset="1" stopColor="#d20b2f" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}e`}
-                        x1="189.24"
-                        y1="41.2"
-                        x2="189.24"
-                        y2="67.57"
                         gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}e`}
+                        x1="189.24"
+                        x2="189.24"
+                        y1="41.2"
+                        y2="67.57"
                     >
                         <stop offset="0" stopColor="#bb0e2b" />
                         <stop offset="1" stopColor="#ba2c3d" />
@@ -524,70 +524,70 @@ class IconIWorkTrio extends React.Component<Props> {
                     <linearGradient
                         id={`${this.idPrefix}O`}
                         x1="175.42"
-                        y1="41.2"
                         x2="175.42"
-                        y2="67.57"
                         xlinkHref="#e"
+                        y1="41.2"
+                        y2="67.57"
                     />
                     <linearGradient
-                        id={`${this.idPrefix}P`}
-                        x1="178.6"
-                        y1="72.84"
-                        x2="178.6"
-                        y2="78.2"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}P`}
+                        x1="178.6"
+                        x2="178.6"
+                        y1="72.84"
+                        y2="78.2"
                     >
                         <stop offset="0" stopColor="#f87e7a" />
                         <stop offset="1" stopColor="#f3636b" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}Q`}
-                        x1="215.52"
-                        y1="108.96"
-                        x2="215.52"
-                        y2="40.91"
                         gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}Q`}
+                        x1="215.52"
+                        x2="215.52"
+                        y1="108.96"
+                        y2="40.91"
                     >
                         <stop offset="0" stopColor="#54e56c" />
                         <stop offset="1" stopColor="#2ab203" />
                     </linearGradient>
                     <linearGradient
-                        id={`${this.idPrefix}f`}
-                        x1="-108.15"
-                        y1="41.26"
-                        x2="-108.15"
-                        y2="108.23"
                         gradientTransform="rotate(180 55.29 72.995)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}f`}
+                        x1="-108.15"
+                        x2="-108.15"
+                        y1="41.26"
+                        y2="108.23"
                     >
                         <stop offset="0" stopColor="#2d9e20" />
                         <stop offset="1" stopColor="#43b656" />
                     </linearGradient>
                     <linearGradient
+                        gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         id={`${this.idPrefix}R`}
                         x1="208.61"
-                        y1="41.26"
                         x2="208.61"
-                        y2="108.23"
-                        gradientTransform="matrix(1 0 0 -1 -3.7 145.99)"
                         xlinkHref="#f"
+                        y1="41.26"
+                        y2="108.23"
                     />
                     <linearGradient
-                        id={`${this.idPrefix}S`}
-                        x1="211.79"
-                        y1="113.5"
-                        x2="211.79"
-                        y2="116.97"
                         gradientTransform="matrix(1 0 0 -1 0 152)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}S`}
+                        x1="211.79"
+                        x2="211.79"
+                        y1="113.5"
+                        y2="116.97"
                     >
                         <stop offset="0" stopColor="#98e97d" />
                         <stop offset="1" stopColor="#74f482" />
                     </linearGradient>
                 </defs>
-                <path fill="#9b9b9b" d="M55.46 41.62l61.9-9.85 12.03 75.47-61.93 9.81-12-75.43z" />
+                <path d="M55.46 41.62l61.9-9.85 12.03 75.47-61.93 9.81-12-75.43z" fill="#9b9b9b" />
                 <path
                     d="M130.7 36.17a5.77 5.77 0 0 0-4.87-2.88h-.37a3.66 3.66 0 0 0-2.67.75 1.71 1.71 0 0 0-.69.79l-.28.78a1.42 1.42 0 0 0-.8.91L119.88 40l-1.14-7a1.44 1.44 0 0 0-1.57-1.14l-60.26 9.6a1.44 1.44 0 0 0-1.14 1.57l11.75 73.79a1.44 1.44 0 0 0 1.57 1.18l30.72-4.87v4.68l.2-.06a1.45 1.45 0 0 0 1.52 1.36 1.5 1.5 0 0 0 1-.51 1.05 1.05 0 0 0 .44-.49l.1-.16a1.1 1.1 0 0 0 .44-.36l3.87-5.6 22-3.49a1.43 1.43 0 0 0 1.14-1.57l-6.84-43 7.3-26a2.51 2.51 0 0 0-.28-1.76z"
                     fill="#9b9b9b"
@@ -598,19 +598,19 @@ class IconIWorkTrio extends React.Component<Props> {
                     fill="#b7b7b7"
                 />
                 <path
-                    fill={`url(#${this.idPrefix}g)`}
                     d="M55.88 41.92l11.88 74.71 61.21-9.69-11.91-74.76-61.18 9.74z"
+                    fill={`url(#${this.idPrefix}g)`}
                 />
                 <path
-                    fill="#e2e2e2"
                     d="M72.206 104.232l48.508-8.161.327 1.942-48.508 8.162zm1.295 2.973l23.512-4.038.335 1.95-23.512 4.038zm-1.914-6.33l48.526-8.051.323 1.943-48.527 8.051zm-.35-3.111l48.699-7.87.315 1.95-48.698 7.87zm-1.63-9.822l48.556-7.874.316 1.945-48.556 7.873zm.569 3.18l19.358-3.128.316 1.954-19.358 3.129zm-.936-6.192l48.698-7.87.315 1.95-48.698 7.87zm-.83-3.103l48.698-7.87.315 1.95-48.698 7.87zm29.442-8.247l18.619-3.009.316 1.955-18.619 3.009zm-.5-3.34l18.552-3.044.319 1.944-18.552 3.045zm-.476-3.052l18.618-3.009.316 1.955-18.619 3.009zm-.474-3.046l13.495-2.18.315 1.954-13.495 2.18zm-.626-3.478l14.358-2.357.319 1.944-14.358 2.357zm-.473-3.238l15.483-2.541.319 1.944-15.483 2.54zm-.572-3.245l15.868-2.604.319 1.944-15.868 2.604z"
+                    fill="#e2e2e2"
                 />
                 <path
                     d="M119.25 45.87l-4.83 14.84a.57.57 0 0 0 0 .26l-1.59 5.36c0 .15 0 .39.09.46a1.26 1.26 0 0 0 .22.39.29.29 0 0 0 0 .13l-7.64 24.86-4.63 16.21v3l7-1.11 5.29-15.78 7.64-24.68c0-.12.06-.24.08-.36a1.28 1.28 0 0 0 .48-.09.35.35 0 0 0 .23-.23l.88-3.13z"
                     fill="#c4c4c4"
                 />
-                <path fill="#f27d09" d="M119.25 45.86l-2.12-13.32-61.2 9.74 2.12 13.36 61.2-9.78z" />
-                <path fill={`url(#${this.idPrefix}h)`} d="M119.19 45.5l-2.13-13.32-61.18 9.74 2.11 13.36 61.2-9.78z" />
+                <path d="M119.25 45.86l-2.12-13.32-61.2 9.74 2.12 13.36 61.2-9.78z" fill="#f27d09" />
+                <path d="M119.19 45.5l-2.13-13.32-61.18 9.74 2.11 13.36 61.2-9.78z" fill={`url(#${this.idPrefix}h)`} />
                 <path
                     d="M64.92 43.82a2 2 0 0 1 1.44.26 1.86 1.86 0 0 1 .7 1.27 1.7 1.7 0 0 1-1.62 2.13l-1.89.29.45 2.52-.82.13-1-6.16zm.18 3a1.42 1.42 0 0 0 1-.44 1.11 1.11 0 0 0 .18-.9 1 1 0 0 0-.44-.79 1.53 1.53 0 0 0-1.07-.13l-1.61.24.36 2.34zm4.42-3.67l3.36 5.76-.91.15L71 47.3l-2.6.4-.41 2-.83.13 1.44-6.54zm1.12 3.53L69.2 44l-.6 3zm6.11 1.61a3 3 0 0 1-1 .38 3.07 3.07 0 0 1-1.28 0 3 3 0 0 1-1-.55 3.13 3.13 0 0 1-.75-1 3.55 3.55 0 0 1-.46-1.12 4.11 4.11 0 0 1 0-1.31 2.91 2.91 0 0 1 .39-1.15 2.67 2.67 0 0 1 .8-.87 2.93 2.93 0 0 1 1.24-.47 3.94 3.94 0 0 1 1 0 2.58 2.58 0 0 1 .85.24 2.3 2.3 0 0 1 .69.55 2.48 2.48 0 0 1 .46.88l-.82.13a1.65 1.65 0 0 0-.32-.58 1.51 1.51 0 0 0-.47-.36 1.86 1.86 0 0 0-.54-.24 2.43 2.43 0 0 0-.66 0 1.89 1.89 0 0 0-1.44 1.06 2.56 2.56 0 0 0-.24.9 3.22 3.22 0 0 0 0 1 3.14 3.14 0 0 0 .28.9 2.57 2.57 0 0 0 .54.72 1.86 1.86 0 0 0 .75.45 1.83 1.83 0 0 0 .93 0 2.27 2.27 0 0 0 .84-.29 1.76 1.76 0 0 0 .85-1.22 2.21 2.21 0 0 0 0-.81l-2 .3-.1-.69L78 44.7l.41 3.4-.52.09-.33-.73a2.13 2.13 0 0 1-.81.83zm5.74-7.13l.1.69-3.44.53.3 2 3.27-.49.1.7-3.21.41.23 2.1 3.47-.53.1.69-4.32.74-1-6.17zm3.77.22a1.71 1.71 0 0 0-1.09-.13 1.91 1.91 0 0 0-.51.13 1.3 1.3 0 0 0-.41.24.86.86 0 0 0-.25.38.92.92 0 0 0 0 .52.69.69 0 0 0 .24.44 1.26 1.26 0 0 0 .49.21 3.74 3.74 0 0 0 .66.09h.75l.75.08a2.58 2.58 0 0 1 .68.22 1.48 1.48 0 0 1 .53.43 1.77 1.77 0 0 1 .16 1.72 1.94 1.94 0 0 1-.47.66 2.65 2.65 0 0 1-.72.43 3.49 3.49 0 0 1-.84.23 3.42 3.42 0 0 1-1 0 2.31 2.31 0 0 1-.88-.27 1.87 1.87 0 0 1-.66-.59 2.23 2.23 0 0 1-.35-.94l.78-.11a1.46 1.46 0 0 0 .26.65 1.56 1.56 0 0 0 .48.4 1.63 1.63 0 0 0 .62.17 2.66 2.66 0 0 0 .69 0 3.7 3.7 0 0 0 .55-.14 1.66 1.66 0 0 0 .47-.26 1 1 0 0 0 .36-1 .84.84 0 0 0-.24-.49 1.37 1.37 0 0 0-.51-.26 3.63 3.63 0 0 0-.66-.1h-.75l-.77-.09a3.28 3.28 0 0 1-.68-.19 1.27 1.27 0 0 1-.79-1.07 1.67 1.67 0 0 1 0-.83 1.7 1.7 0 0 1 .42-.64 2.42 2.42 0 0 1 .66-.43 3.26 3.26 0 0 1 .81-.23 3.32 3.32 0 0 1 .89 0 1.94 1.94 0 0 1 .77.25 1.7 1.7 0 0 1 .57.53 2.22 2.22 0 0 1 .33.85l-.77.11a1.29 1.29 0 0 0-.57-.97z"
                     fill="#ee8100"
@@ -623,7 +623,7 @@ class IconIWorkTrio extends React.Component<Props> {
                     d="M111 64.53a1.44 1.44 0 0 0 .36.91l7.64 2.23s.66 0 .78-.32c0 0 .3-2-3.6-2.88s-4.64-.36-5.18.06z"
                     fill="#973e07"
                 />
-                <circle cx="99.84" cy="116.23" r=".61" fill={`url(#${this.idPrefix}i)`} />
+                <circle cx="99.84" cy="116.23" fill={`url(#${this.idPrefix}i)`} r=".61" />
                 <path
                     d="M99.26 115.11v.69a.3.3 0 0 0 .22.2 1.16 1.16 0 0 1 .76.27.32.32 0 0 1 .1.2s.12.13.23-.13l.38-.59a.92.92 0 0 0-.62-.62 2 2 0 0 0-1.07-.02z"
                     fill={`url(#${this.idPrefix}j)`}
@@ -662,7 +662,7 @@ class IconIWorkTrio extends React.Component<Props> {
                     fill={`url(#${this.idPrefix}p)`}
                 />
                 <path d="M100.51 115.39l-.39.81.11.1.51-.73z" fill="#4a5e5e" />
-                <path fill={`url(#${this.idPrefix}q)`} d="M65.03 59.16l27.54-4.4 3.22 20.33-27.49 4.33-3.27-20.26z" />
+                <path d="M65.03 59.16l27.54-4.4 3.22 20.33-27.49 4.33-3.27-20.26z" fill={`url(#${this.idPrefix}q)`} />
                 <path d="M82.46 60.91s1-1.44 2.16-1.44c0 0 .68 0 .58 1.05z" fill="#f98905" />
                 <path
                     d="M77.45 62.74a.74.74 0 0 1 .38-.69 8.33 8.33 0 0 0 2-1.14 1.44 1.44 0 0 1 1.28-.27c.89.16 1 0 1 0a3.29 3.29 0 0 1 1.32.16 2.49 2.49 0 0 0 1.16-.32 2.28 2.28 0 0 1 1.7-.07 4.19 4.19 0 0 0 .94.43s1.28.19 1 1a2 2 0 0 1-.51 1 13.38 13.38 0 0 0-1.78 3.9l-1.11 3.43s-.94 2.18-2.25 2.6l-.23.34-1-.06s-1.79-2.29-3.79-5.27a9.7 9.7 0 0 1-.74-3.64 1.48 1.48 0 0 1 .39-1 .71.71 0 0 0 .24-.4z"
@@ -702,8 +702,8 @@ class IconIWorkTrio extends React.Component<Props> {
                     d="M324.51 110.65c0 3.43-8.06 6.2-18 6.2s-17.93-2.77-17.93-6.2v-2.16h35.92z"
                     fill={`url(#${this.idPrefix}y)`}
                 />
-                <ellipse cx="306.52" cy="108.77" rx="17.98" ry="5.95" fill={`url(#${this.idPrefix}z)`} />
-                <ellipse cx="306.52" cy="108.49" rx="17.98" ry="5.95" fill={`url(#${this.idPrefix}A)`} />
+                <ellipse cx="306.52" cy="108.77" fill={`url(#${this.idPrefix}z)`} rx="17.98" ry="5.95" />
+                <ellipse cx="306.52" cy="108.49" fill={`url(#${this.idPrefix}A)`} rx="17.98" ry="5.95" />
                 <path
                     d="M309.23 107.62c0 .52-1.23 1-2.77 1s-2.76-.44-2.76-1V64.56h5.73z"
                     fill={`url(#${this.idPrefix}B)`}
@@ -728,15 +728,15 @@ class IconIWorkTrio extends React.Component<Props> {
                     d="M328.38 37.39a.39.39 0 0 0-.39-.34H285a.43.43 0 0 0-.43.37l-3 22.33v.4h49.73v-.4z"
                     fill="#0098c1"
                 />
-                <path fill="#fff" d="M330.82 59.44h-48.87l2.96-22.02H328l2.82 22.02z" />
-                <ellipse cx="310.99" cy="45.37" rx="1.04" ry=".61" fill="#06bff8" />
-                <ellipse cx="311.09" cy="47.59" rx="1.04" ry=".61" fill="#f19cf8" />
-                <ellipse cx="311.09" cy="49.86" rx="1.04" ry=".61" fill="#ff6d65" />
-                <ellipse cx="311.18" cy="52.28" rx="1.04" ry=".7" fill="#ffe65f" />
-                <ellipse cx="311.26" cy="54.7" rx="1.04" ry=".74" fill="#98e87c" />
+                <path d="M330.82 59.44h-48.87l2.96-22.02H328l2.82 22.02z" fill="#fff" />
+                <ellipse cx="310.99" cy="45.37" fill="#06bff8" rx="1.04" ry=".61" />
+                <ellipse cx="311.09" cy="47.59" fill="#f19cf8" rx="1.04" ry=".61" />
+                <ellipse cx="311.09" cy="49.86" fill="#ff6d65" rx="1.04" ry=".61" />
+                <ellipse cx="311.18" cy="52.28" fill="#ffe65f" rx="1.04" ry=".7" />
+                <ellipse cx="311.26" cy="54.7" fill="#98e87c" rx="1.04" ry=".74" />
                 <path
-                    fill="#c8cdd6"
                     d="M313.62 44.94h7.89v.82h-7.89zm0 2.24h7.61V48h-7.61zm.14 2.27h9.05v.82h-9.05zm.07 2.42h7.53v.82h-7.53zm.09 2.42h10.38v.82h-10.38z"
+                    fill="#c8cdd6"
                 />
                 <path
                     d="M297.23 56.44a11.87 11.87 0 0 0 6.26-1.63l-6-4.56-8.48 2.64c1.32 2.11 4.28 3.55 8.22 3.55z"
@@ -753,7 +753,7 @@ class IconIWorkTrio extends React.Component<Props> {
                     fill="#00a9fa"
                 />
                 <path d="M287.78 39h.54l-.09 1 .36-.27 1.35-.76h.67l-1.61.83 1.66 1.2h-.73l-1.34-1-.42.22V41h-.54zm5.79 1h-1.78v.73h2V41h-2.54l.1-2h2.41v.23h-1.87v.64h1.78zm1.95 1v-.85L294.2 39h.61l.59.55.42.42c.12-.13.27-.27.42-.42l.61-.55h.67L296 40.11V41zm2.48 0v-2h.57l1.28 1a7.3 7.3 0 0 1 .71.65 5.75 5.75 0 0 1 0-.83V39h.5v2h-.55l-1.29-1a7.85 7.85 0 0 1-.74-.67 5.75 5.75 0 0 1 0 .83V41zm7.17-1.06c0 .69-.85 1.05-1.88 1.05s-1.81-.41-1.81-1 .8-1.06 1.87-1.06 1.82.41 1.82 1.01zM302 40c0 .43.47.81 1.3.81s1.29-.38 1.29-.83-.41-.82-1.29-.82-1.3.36-1.3.84zm4.45-.82h-1.28V39h3.11v.23H307V41h-.55zm4.47.82h-1.76v.73h2V41h-2.55v-2h2.46v.23h-1.92v.62h1.76z" />
-                <path fill="#1e1e1e" d="M287.1 42.29h38.62v.13H287.1z" />
+                <path d="M287.1 42.29h38.62v.13H287.1z" fill="#1e1e1e" />
                 <path d="M271.24 61.79l-.18.92s0 .11.18.11h70.4s.21 0 .21-.14l-.22-.89z" fill="#8ae7fb" />
                 <path
                     d="M271.3 63.66s0 .24.21.24h69.86a.31.31 0 0 0 .24-.24l.22-1h-70.77z"

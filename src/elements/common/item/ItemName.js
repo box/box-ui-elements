@@ -11,11 +11,11 @@ import { TYPE_FOLDER, TYPE_WEBLINK } from '../../../constants';
 import './ItemName.scss';
 
 type Props = {
-    item: BoxItem,
     canPreview: boolean,
+    isTouch: boolean,
+    item: BoxItem,
     onClick: Function,
     onFocus?: Function,
-    isTouch: boolean,
 };
 
 const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
@@ -24,7 +24,7 @@ const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
     const onItemClick: Function = (): void => onClick(item);
 
     return type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview)) ? (
-        <PlainButton type="button" className="be-item-label" onFocus={onItemFocus} onClick={onItemClick}>
+        <PlainButton className="be-item-label" onClick={onItemClick} onFocus={onItemFocus} type="button">
             {name}
         </PlainButton>
     ) : (

@@ -77,9 +77,9 @@ class SharedLinkPermissionMenu extends Component<Props> {
                 <Menu className="ums-share-permissions-menu">
                     {allowedPermissionLevels.map(level => (
                         <SelectMenuItem
-                            onClick={() => this.onChangePermissionLevel(level)}
-                            isSelected={level === permissionLevel}
                             key={level}
+                            isSelected={level === permissionLevel}
+                            onClick={() => this.onChangePermissionLevel(level)}
                         >
                             <div>
                                 <strong>{permissionLevels[level].label}</strong>

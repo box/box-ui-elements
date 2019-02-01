@@ -23,7 +23,7 @@ describe('components/label/LabelPrimitive', () => {
         const className = 'this is a test';
 
         const wrapper = shallow(
-            <LabelPrimitive labelContent={labelContent} className={className}>
+            <LabelPrimitive className={className} labelContent={labelContent}>
                 <input type="text" />
             </LabelPrimitive>,
         );
@@ -35,7 +35,7 @@ describe('components/label/LabelPrimitive', () => {
         let firedCount = 0;
 
         function onMouseEnter() {
-            firedCount++;
+            firedCount += 1;
         }
 
         const wrapper = shallow(
@@ -54,7 +54,7 @@ describe('components/label/LabelPrimitive', () => {
         let firedCount = 0;
 
         function onMouseLeave() {
-            firedCount++;
+            firedCount += 1;
         }
 
         const wrapper = shallow(

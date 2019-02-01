@@ -16,8 +16,8 @@ import { VIEW_ERROR, VIEW_FOLDER, VIEW_SEARCH, VIEW_SELECTED } from '../../../co
 import './EmptyState.scss';
 
 type Props = {
-    view: View,
     isLoading: boolean,
+    view: View,
 };
 
 const EmptyState = ({ view, isLoading }: Props) => {

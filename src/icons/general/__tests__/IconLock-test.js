@@ -10,7 +10,7 @@ describe('icons/general/IconLock', () => {
         expect(wrapper.prop('height')).toEqual(14);
         expect(wrapper.prop('width')).toEqual(13);
         const fillColors = wrapper.find('.fill-color');
-        for (let i = 0; i < fillColors.length; i++) {
+        for (let i = 0; i < fillColors.length; i += 1) {
             expect(fillColors.at(i).prop('fill')).toEqual('#444');
         }
     });
@@ -27,7 +27,7 @@ describe('icons/general/IconLock', () => {
         const wrapper = shallow(<IconLock color={color} />);
 
         const fillColors = wrapper.find('.fill-color');
-        for (let i = 0; i < fillColors.length; i++) {
+        for (let i = 0; i < fillColors.length; i += 1) {
             expect(fillColors.at(i).prop('fill')).toEqual(color);
         }
     });
@@ -35,7 +35,7 @@ describe('icons/general/IconLock', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconLock width={width} height={height} />);
+        const wrapper = shallow(<IconLock height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

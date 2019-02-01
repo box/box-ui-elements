@@ -12,11 +12,11 @@ import { DELIMITER_SLASH, DELIMITER_CARET } from '../../../constants';
 import './Breadcrumbs.scss';
 
 type Props = {
-    rootId: string,
-    onCrumbClick: Function,
     crumbs: Crumb[],
     delimiter: Delimiter,
     isSmall?: boolean,
+    onCrumbClick: Function,
+    rootId: string,
 };
 
 /**
@@ -47,9 +47,9 @@ function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: F
         return (
             <span className="be-breadcrumb-more">
                 <BreadcrumbDropdown
-                    onCrumbClick={onCrumbClick}
-                    crumbs={crumbs}
                     className={condensed ? 'be-breadcrumbs-condensed' : ''}
+                    crumbs={crumbs}
+                    onCrumbClick={onCrumbClick}
                 />
                 <BreadcrumbDelimiter delimiter={condensed ? DELIMITER_SLASH : DELIMITER_CARET} />
             </span>
@@ -57,7 +57,7 @@ function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: F
     }
 
     const { id, name } = crumbs;
-    return <Breadcrumb name={name} onClick={() => onCrumbClick(id)} isLast={isLast} delimiter={delimiter} />;
+    return <Breadcrumb delimiter={delimiter} isLast={isLast} name={name} onClick={() => onCrumbClick(id)} />;
 }
 
 const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false }: Props) => {
@@ -72,7 +72,7 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
     // Always show the last/leaf breadcrumb.
     const crumb = filteredCrumbs[length - 1];
     const onClick = crumb.id ? () => onCrumbClick(crumb.id) : undefined;
-    const lastBreadcrumb = <Breadcrumb name={crumb.name} onClick={onClick} isLast />;
+    const lastBreadcrumb = <Breadcrumb isLast name={crumb.name} onClick={onClick} />;
 
     // Always show the second last/parent breadcrumb when there are at least 2 crumbs.
     const secondLastBreadcrumb =

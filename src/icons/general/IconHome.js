@@ -13,8 +13,8 @@ type Props = {
 };
 
 const IconHome = ({ className = '', color = '#000000', height = 18, title, width = 20 }: Props) => (
-    <AccessibleSVG className={`icon-home ${className}`} title={title} height={height} width={width} viewBox="0 0 20 18">
-        <path className="fill-color" fill={color} fillRule="evenodd" d="M8 17.5v-6h4v6h5v-8h3l-10-9-10 9h3v8h5z" />
+    <AccessibleSVG className={`icon-home ${className}`} height={height} title={title} viewBox="0 0 20 18" width={width}>
+        <path className="fill-color" d="M8 17.5v-6h4v6h5v-8h3l-10-9-10 9h3v8h5z" fill={color} fillRule="evenodd" />
     </AccessibleSVG>
 );
 

@@ -15,10 +15,10 @@ type Props = {
 const IconComment = ({ className = '', color = '#000000', height = 11, title, width = 11 }: Props) => (
     <AccessibleSVG
         className={`icon-comment ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 11 11"
+        width={width}
     >
         <path
             className="fill-color"

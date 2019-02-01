@@ -113,10 +113,10 @@ describe('components/tab-view/TabView', () => {
     test('should render Tabs with resin data on the buttons', () => {
         const component = mount(
             <TabView defaultSelectedIndex={0}>
-                <Tab title="tab1" data-resin-tag="test1">
+                <Tab data-resin-tag="test1" title="tab1">
                     Tab 1
                 </Tab>
-                <Tab title="tab2" data-resin-tag="test2">
+                <Tab data-resin-tag="test2" title="tab2">
                     Tab 2
                 </Tab>
             </TabView>,
@@ -173,10 +173,10 @@ describe('components/tab-view/TabView', () => {
         beforeEach(() => {
             component = mount(
                 <TabView defaultSelectedIndex={0}>
-                    <Tab title="tab1" data-resin-tag="test1">
+                    <Tab data-resin-tag="test1" title="tab1">
                         Tab 1
                     </Tab>
-                    <Tab title="tab2" data-resin-tag="test2">
+                    <Tab data-resin-tag="test2" title="tab2">
                         Tab 2
                     </Tab>
                 </TabView>,

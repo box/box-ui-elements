@@ -78,11 +78,11 @@ const SelectableTable = makeSelectable(({ className, onRowClick, onRowFocus, foc
                 {data.map((row, index) => (
                     <ContextMenu key={index}>
                         <FocusableTableRow
-                            tabIndex={0}
-                            onFocus={event => onRowFocus(event, index)}
-                            onClick={event => onRowClick(event, index)}
-                            isFocused={row[2] === focusedItem}
                             className={selectedItems.has(row[2]) ? 'is-selected ' : ''}
+                            isFocused={row[2] === focusedItem}
+                            onClick={event => onRowClick(event, index)}
+                            onFocus={event => onRowFocus(event, index)}
+                            tabIndex={0}
                         >
                             {row.map(cell => (
                                 <TableCell key={cell}>{cell}</TableCell>
@@ -119,11 +119,12 @@ class SelectableTableExamples extends Component {
             <HotkeyLayer configs={configs} enableHelpModal>
                 <SelectableTable
                     data={data.map(user => user[2])}
-                    searchStrings={data.map(([firstName, lastName]) => `${firstName} ${lastName}`)}
                     enableHotkeys
                     hotkeyType="Item Selection"
-                    selectedItems={this.state.selectedItems}
+                    // eslint-disable-next-line react/no-unused-state
                     onSelect={(selectedItems, focusedItem) => this.setState({ selectedItems, focusedItem })}
+                    searchStrings={data.map(([firstName, lastName]) => `${firstName} ${lastName}`)}
+                    selectedItems={this.state.selectedItems}
                 />
             </HotkeyLayer>
         );

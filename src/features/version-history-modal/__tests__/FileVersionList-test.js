@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import sinon from 'sinon';
 
@@ -31,12 +32,12 @@ describe('features/version-history-modal/FileVersionList', () => {
                 onMakeCurrent={() => {}}
                 onRestore={() => {}}
                 style={{}}
+                versionLimit={100}
                 versions={[
                     getTestVersion({ id: '1', versionNumber: 1 }),
                     getTestVersion({ id: '2', versionNumber: 2 }),
                     getTestVersion({ id: '3', versionNumber: 3 }),
                 ]}
-                versionLimit={100}
                 {...props}
             />,
         );

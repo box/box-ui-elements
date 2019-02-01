@@ -68,12 +68,12 @@ const Pagination = ({ offset = 0, onChange = noop, pageSize = DEFAULT_PAGE_SIZE,
 
             <ButtonGroup>
                 <Tooltip isDisabled={!hasPreviousPage} text={<FormattedMessage {...messages.previousPage} />}>
-                    <Button onClick={handlePreviousClick} isDisabled={!hasPreviousPage}>
+                    <Button isDisabled={!hasPreviousPage} onClick={handlePreviousClick}>
                         <IconPageBack {...PAGE_ICON_STYLE} />
                     </Button>
                 </Tooltip>
                 <Tooltip isDisabled={!hasNextPage} text={<FormattedMessage {...messages.nextPage} />}>
-                    <Button onClick={handleNextClick} isDisabled={!hasNextPage}>
+                    <Button isDisabled={!hasNextPage} onClick={handleNextClick}>
                         <IconPageForward {...PAGE_ICON_STYLE} />
                     </Button>
                 </Tooltip>

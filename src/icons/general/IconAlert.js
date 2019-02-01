@@ -15,16 +15,16 @@ type Props = {
 const IconAlert = ({ className = '', color = '#000000', height = 24, title, width = 24 }: Props) => (
     <AccessibleSVG
         className={`icon-alert ${className}`}
-        title={title}
         height={height}
-        width={width}
+        title={title}
         viewBox="0 0 24 24"
+        width={width}
     >
         <path
             className="fill-color"
+            d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"
             fill={color}
             fillRule="evenodd"
-            d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"
         />
     </AccessibleSVG>
 );

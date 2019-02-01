@@ -19,8 +19,8 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
                 changeSharedLinkAccessLevel={sandbox.stub()}
                 changeSharedLinkPermissionLevel={sandbox.stub()}
                 intl={intl}
-                itemType="file"
                 item={defaultItem}
+                itemType="file"
                 showSharedLinkSettingsCallout
                 {...props}
             />,

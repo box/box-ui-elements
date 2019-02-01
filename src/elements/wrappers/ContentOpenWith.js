@@ -33,15 +33,15 @@ class ContentOpenWith extends ES6Wrapper {
     render() {
         render(
             <ContentOpenWithReactComponent
+                componentRef={this.setComponent}
+                fileId={this.id}
                 language={this.language}
                 messages={this.messages}
-                fileId={this.id}
-                token={this.token}
-                componentRef={this.setComponent}
                 onInteraction={this.onInteraction}
+                token={this.token}
                 {...this.options}
-                onExecute={this.onExecute}
                 onError={this.onError}
+                onExecute={this.onExecute}
             />,
             this.container,
         );

@@ -21,30 +21,30 @@ import Avatar from '../Avatar';
 import './ApprovalCommentForm.scss';
 
 type Props = {
+    approverSelectorContacts?: SelectorItems,
     className: string,
     createComment?: Function,
     createTask?: Function,
-    updateTask?: Function,
+    entityId?: string,
     getApproverWithQuery?: Function,
+    getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery?: Function,
     isDisabled?: boolean,
+    isEditing?: boolean,
     isOpen: boolean,
-    approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     onCancel: Function,
     onFocus: Function,
     onSubmit: Function,
-    user: User,
-    isEditing?: boolean,
-    entityId?: string,
     tagged_message?: string,
-    getAvatarUrl: string => Promise<?string>,
+    updateTask?: Function,
+    user: User,
 } & InjectIntlProvidedProps;
 
 type State = {
     approvalDate: ?Date,
-    approvers: SelectorItems,
     approverSelectorError: string,
+    approvers: SelectorItems,
     commentEditorState: any,
     isAddApprovalVisible: boolean,
 };
@@ -137,7 +137,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
      *
      * @returns {Object}
      */
-    getFormattedCommentText = (): { text: string, hasMention: boolean } => {
+    getFormattedCommentText = (): { hasMention: boolean, text: string } => {
         const { commentEditorState } = this.state;
 
         const contentState = commentEditorState.getCurrentContent();

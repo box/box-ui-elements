@@ -7,11 +7,11 @@
 import * as React from 'react';
 
 type Props = {
-    isMultiple?: boolean,
-    isFolderUpload?: boolean,
-    inputLabelClass?: string,
-    inputLabel?: React.Node,
     handleChange: Function,
+    inputLabel?: React.Node,
+    inputLabelClass?: string,
+    isFolderUpload?: boolean,
+    isMultiple?: boolean,
 };
 
 const UploadInput = ({
@@ -26,10 +26,10 @@ const UploadInput = ({
         <label className={inputLabelClass}>
             {inputLabel}
             <input
-                multiple={isMultiple}
-                type="file"
-                onChange={handleChange}
                 directory={isFolderUpload ? '' : undefined}
+                multiple={isMultiple}
+                onChange={handleChange}
+                type="file"
                 webkitdirectory={isFolderUpload ? '' : undefined}
             />
         </label>

@@ -19,21 +19,21 @@ describe('components/form-elements/text-area/TextArea', () => {
     });
 
     test('should mark required fields invalid when empty', () => {
-        const wrapper = mount(<TextArea className="coverage" label="label" name="input" isRequired />);
+        const wrapper = mount(<TextArea className="coverage" isRequired label="label" name="input" />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
         expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeTruthy();
     });
 
     test('should mark required fields valid when not empty', () => {
-        const wrapper = mount(<TextArea label="label" name="textarea" value="baba" isRequired />);
+        const wrapper = mount(<TextArea isRequired label="label" name="textarea" value="baba" />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
         expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeFalsy();
     });
 
     test('should correctly validate when change event is fired', () => {
-        const wrapper = mount(<TextArea label="label" name="textarea" value="" isRequired />);
+        const wrapper = mount(<TextArea isRequired label="label" name="textarea" value="" />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 
@@ -121,7 +121,7 @@ describe('components/form-elements/text-area/TextArea', () => {
         }
 
         const wrapper = mount(
-            <TextArea label="label" name="textarea" type="custom" validation={validityFn} isRequired />,
+            <TextArea isRequired label="label" name="textarea" type="custom" validation={validityFn} />,
         );
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
@@ -130,7 +130,7 @@ describe('components/form-elements/text-area/TextArea', () => {
     });
 
     test('should re-validate when textarea is set via props programaticallly', () => {
-        const wrapper = mount(<TextArea label="label" name="textarea" value="" isRequired />);
+        const wrapper = mount(<TextArea isRequired label="label" name="textarea" value="" />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 
@@ -150,7 +150,7 @@ describe('components/form-elements/text-area/TextArea', () => {
     });
 
     test('should validate onChange when textarea is already in error state', () => {
-        const wrapper = mount(<TextArea label="label" name="textarea" value="" isRequired />);
+        const wrapper = mount(<TextArea isRequired label="label" name="textarea" value="" />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 

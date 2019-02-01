@@ -1,2 +1,2 @@
 // @flow
-export { default as RadarAnimation } from './RadarAnimation';
+export { default } from './RadarAnimation';

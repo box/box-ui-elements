@@ -15,10 +15,10 @@ type Props = {
 const IconExpirationInverted = ({ className = '', color = '#444444', height = 24, title, width = 24 }: Props) => (
     <AccessibleSVG
         className={`icon-expiration-inverted ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 24 24"
+        width={width}
     >
         <g className="fill-color" fill={color}>
             <path

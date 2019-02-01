@@ -14,10 +14,10 @@ type Props = {
 const IconFilePages = ({ className = '', height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
         className={`icon-file-pages ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 32 32"
+        width={width}
     >
         <path
             d="M7 26.5v-21a.47.47 0 0 1 .5-.5H20v4a.94.94 0 0 0 1 1h4v12H10.5a.5.5 0 0 0 0 1H25v3.5a.47.47 0 0 1-.5.5h-17a.47.47 0 0 1-.5-.5z"

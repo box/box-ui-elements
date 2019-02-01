@@ -10,9 +10,9 @@ import ItemName from './ItemName';
 import './IconName.scss';
 
 type Props = {
-    name: string,
     extension: string,
     isFolder?: boolean,
+    name: string,
 };
 
 const IconName = ({ name, extension, isFolder = false }: Props) => (

@@ -54,8 +54,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const onFocusStub = sandbox.stub();
             const wrapper = shallow(
                 <PillSelectorDropdown
-                    onFocus={onFocusStub}
                     inputProps={inputProps}
+                    onFocus={onFocusStub}
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
                     onSelect={onSelectStub}
@@ -85,8 +85,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const onFocusStub = sandbox.stub();
             const wrapper = shallow(
                 <PillSelectorDropdown
-                    onFocus={onFocusStub}
                     inputProps={inputProps}
+                    onFocus={onFocusStub}
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
                     onSelect={onSelectStub}

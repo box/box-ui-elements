@@ -11,11 +11,11 @@ import Tooltip from 'components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
 
 type Props = {
-    tooltip: React.Node,
+    children: React.Node,
+    interactionTarget: string,
     isSelected: boolean,
     onClick: Function,
-    interactionTarget: string,
-    children: React.Node,
+    tooltip: React.Node,
 };
 
 const SidebarNavButton = ({ tooltip, isSelected, onClick, interactionTarget, children }: Props) => {
@@ -24,7 +24,7 @@ const SidebarNavButton = ({ tooltip, isSelected, onClick, interactionTarget, chi
     });
 
     return (
-        <Tooltip text={tooltip} position="middle-left">
+        <Tooltip position="middle-left" text={tooltip}>
             <PlainButton
                 className={buttonClass}
                 data-resin-target={interactionTarget}

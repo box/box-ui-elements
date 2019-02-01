@@ -71,9 +71,9 @@ class AccessMenu extends Component<Props, State> {
                 {accessLevels.map(level =>
                     allowedAccessLevels[level] ? (
                         <SelectMenuItem
-                            onClick={() => changeAccessLevel(level)}
-                            isSelected={level === accessLevel}
                             key={level}
+                            isSelected={level === accessLevel}
+                            onClick={() => changeAccessLevel(level)}
                         >
                             <AccessLabel accessLevel={level} enterpriseName={enterpriseName} itemType={itemType} />
                         </SelectMenuItem>

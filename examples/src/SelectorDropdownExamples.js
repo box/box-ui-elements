@@ -121,8 +121,6 @@ class SelectorDropdownContainer extends Component {
 
 const SelectorDropdownExamples = () => (
     <SelectorDropdownContainer
-        title="Album"
-        placeholder="Select an album"
         initialItems={[
             'Illmatic',
             'The Marshall Mathers LP',
@@ -135,6 +133,8 @@ const SelectorDropdownExamples = () => (
             'Reasonable Doubt',
             'Super long name that should be truncated, we should see the dots at the very end, adding some more text here, should truncate at any moment now, please truncate soon',
         ]}
+        placeholder="Select an album"
+        title="Album"
     />
 );
 

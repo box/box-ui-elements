@@ -35,13 +35,13 @@ class IconIWorkPages extends React.Component<Props> {
             >
                 <defs>
                     <linearGradient
-                        id={`${this.idPrefix}a`}
-                        x1="-1015.61"
-                        y1="-1562.33"
-                        x2="-1015.59"
-                        y2="-1584.47"
                         gradientTransform="matrix(1.33 0 0 1.33 1369.1 2112.94)"
                         gradientUnits="userSpaceOnUse"
+                        id={`${this.idPrefix}a`}
+                        x1="-1015.61"
+                        x2="-1015.59"
+                        y1="-1562.33"
+                        y2="-1584.47"
                     >
                         <stop offset="0" stopColor="#ff8500" />
                         <stop offset="1" stopColor="#ffb900" />

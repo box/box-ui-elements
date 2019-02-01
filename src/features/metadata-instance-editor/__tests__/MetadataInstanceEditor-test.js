@@ -450,7 +450,7 @@ describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
 
     test('should render EmptyContent if no editors', () => {
         const wrapper = shallow(
-            <MetadataInstanceEditor editors={[]} templates={[]} onSave={jest.fn()} onModification={jest.fn()} />,
+            <MetadataInstanceEditor editors={[]} onModification={jest.fn()} onSave={jest.fn()} templates={[]} />,
         );
 
         expect(wrapper).toMatchSnapshot();

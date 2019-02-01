@@ -19,11 +19,11 @@ import './UploadState.scss';
 type Props = {
     canDrop: boolean,
     hasItems: boolean,
+    isFolderUploadEnabled: boolean,
     isOver: boolean,
     isTouch: boolean,
-    view: View,
     onSelect: Function,
-    isFolderUploadEnabled: boolean,
+    view: View,
 };
 
 const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFolderUploadEnabled }: Props) => {
@@ -43,8 +43,8 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
                 ) : isTouch ? (
                     <UploadStateContent
                         fileInputLabel={<FormattedMessage {...messages.uploadNoDragDrop} />}
-                        useButton
                         onChange={onSelect}
+                        useButton
                     />
                 ) : (
                     <UploadStateContent
@@ -78,8 +78,8 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
                         isFolderUploadEnabled && <FormattedMessage {...messages.uploadSuccessFolderInput} />
                     }
                     message={<FormattedMessage {...messages.uploadSuccess} />}
-                    useButton={isTouch}
                     onChange={onSelect}
+                    useButton={isTouch}
                 />
             );
             break;

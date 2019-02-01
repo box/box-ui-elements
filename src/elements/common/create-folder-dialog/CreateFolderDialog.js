@@ -19,13 +19,13 @@ import {
 } from '../../../constants';
 
 type Props = {
-    isOpen: boolean,
-    onCreate: Function,
-    onCancel: Function,
-    isLoading: boolean,
-    errorCode: string,
-    parentElement: HTMLElement,
     appElement: HTMLElement,
+    errorCode: string,
+    isLoading: boolean,
+    isOpen: boolean,
+    onCancel: Function,
+    onCreate: Function,
+    parentElement: HTMLElement,
 } & InjectIntlProvidedProps;
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -89,14 +89,14 @@ const CreateFolderDialog = ({
 
     return (
         <Modal
+            appElement={appElement}
+            className={CLASS_MODAL_CONTENT}
+            contentLabel={intl.formatMessage(messages.createDialogLabel)}
             isOpen={isOpen}
+            onRequestClose={onCancel}
+            overlayClassName={CLASS_MODAL_OVERLAY}
             parentSelector={() => parentElement}
             portalClassName={CLASS_MODAL}
-            className={CLASS_MODAL_CONTENT}
-            overlayClassName={CLASS_MODAL_OVERLAY}
-            onRequestClose={onCancel}
-            contentLabel={intl.formatMessage(messages.createDialogLabel)}
-            appElement={appElement}
         >
             <label>
                 {error ? (
@@ -105,13 +105,13 @@ const CreateFolderDialog = ({
                     </div>
                 ) : null}
                 <FormattedMessage tagName="div" {...messages.createDialogText} />
-                <input type="text" required ref={ref} onKeyDown={onKeyDown} />
+                <input ref={ref} onKeyDown={onKeyDown} required type="text" />
             </label>
             <div className="be-modal-btns">
-                <PrimaryButton type="button" onClick={create} isLoading={isLoading}>
+                <PrimaryButton isLoading={isLoading} onClick={create} type="button">
                     <FormattedMessage {...messages.create} />
                 </PrimaryButton>
-                <Button type="button" onClick={onCancel} isDisabled={isLoading}>
+                <Button isDisabled={isLoading} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

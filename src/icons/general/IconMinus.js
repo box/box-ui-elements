@@ -15,12 +15,12 @@ type Props = {
 const IconMinus = ({ className = '', color = '#000000', height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={`icon-minus ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 16 16"
+        width={width}
     >
-        <path fill={color} d="M2 5h8v2H2z" fillRule="evenodd" />
+        <path d="M2 5h8v2H2z" fill={color} fillRule="evenodd" />
     </AccessibleSVG>
 );
 

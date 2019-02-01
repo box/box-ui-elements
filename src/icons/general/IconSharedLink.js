@@ -15,10 +15,10 @@ type Props = {
 const IconSharedLink = ({ className = '', color = '#444444', height = 15, title, width = 15 }: Props) => (
     <AccessibleSVG
         className={`icon-shared-link ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 15 15"
+        width={width}
     >
         <g className="stroke-color" fill="none" fillRule="evenodd" stroke={color} transform="translate(1 1)">
             <path

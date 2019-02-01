@@ -15,16 +15,16 @@ import withErrorHandling from './withErrorHandling';
 import { FIELD_PERMISSIONS_CAN_UPLOAD, KEY_CLASSIFICATION_TYPE } from '../../constants';
 
 type Props = {
+    bannerPolicy?: Object,
     classification?: ClassificationInfo,
     file: BoxItem,
-    onDescriptionChange: Function,
     hasClassification: boolean,
-    onClassificationClick: ?Function,
     hasRetentionPolicy: boolean,
-    retentionPolicy?: Object,
-    bannerPolicy?: Object,
-    onRetentionPolicyExtendClick?: Function,
     isLoading: boolean,
+    onClassificationClick: ?Function,
+    onDescriptionChange: Function,
+    onRetentionPolicyExtendClick?: Function,
+    retentionPolicy?: Object,
 } & InjectIntlProvidedProps;
 
 /**
@@ -61,16 +61,6 @@ const SidebarFileProperties = ({
     return (
         <LoadingIndicatorWrapper isLoading={isLoading}>
             <ItemProperties
-                createdAt={file.content_created_at}
-                description={file.description}
-                modifiedAt={file.content_modified_at}
-                owner={getProp(file, 'owned_by.name')}
-                size={getFileSize(file.size, intl.locale)}
-                uploader={getProp(file, 'created_by.name')}
-                onDescriptionChange={getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined}
-                descriptionTextareaProps={{
-                    [INTERACTION_TARGET]: DETAILS_TARGETS.DESCRIPTION,
-                }}
                 classificationProps={
                     hasClassification
                         ? {
@@ -83,6 +73,14 @@ const SidebarFileProperties = ({
                           }
                         : {}
                 }
+                createdAt={file.content_created_at}
+                description={file.description}
+                descriptionTextareaProps={{
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.DESCRIPTION,
+                }}
+                modifiedAt={file.content_modified_at}
+                onDescriptionChange={getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined}
+                owner={getProp(file, 'owned_by.name')}
                 retentionPolicyProps={
                     hasRetentionPolicy
                         ? {
@@ -91,6 +89,8 @@ const SidebarFileProperties = ({
                           }
                         : {}
                 }
+                size={getFileSize(file.size, intl.locale)}
+                uploader={getProp(file, 'created_by.name')}
             />
         </LoadingIndicatorWrapper>
     );

@@ -11,8 +11,8 @@ import OpenWithDropdownMenuItem from './OpenWithDropdownMenuItem';
 import MultipleIntegrationsOpenWithButton from './MultipleIntegrationsOpenWithButton';
 
 type Props = {
-    integrations: Array<Integration>,
     dropdownAlignment: Alignment,
+    integrations: Array<Integration>,
     onClick: Function,
 };
 
@@ -24,9 +24,9 @@ const OpenWithDropdownMenu = ({ dropdownAlignment = RIGHT_ALIGNMENT, integration
         <Menu className="bcow-menu">
             {integrations.map(integration => (
                 <OpenWithDropdownMenuItem
+                    key={integration.appIntegrationId}
                     integration={integration}
                     onClick={onClick}
-                    key={integration.appIntegrationId}
                 />
             ))}
         </Menu>

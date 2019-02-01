@@ -15,10 +15,10 @@ type Props = {
 const IconUploadCloud = ({ className = '', color = '#444', height = 13, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={`icon-upload-cloud ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 16 13"
+        width={width}
     >
         <g className="fill-color" fill={color}>
             <path d="M8.5 6.1v6.8h-1V6.1L5.4 8.3l-.8-.8L8 4.2l3.3 3.4-.7.7-2.1-2.2z" />
@@ -26,8 +26,8 @@ const IconUploadCloud = ({ className = '', color = '#444', height = 13, title, w
         </g>
         <path
             className="fill-color"
-            fill={color}
             d="M11.8 2.7s.2.5.2.9-1-.4-1-.4l-.1-.5h.9zm-8.7 1s-.1.5-.1.7.9-.5.9-.5l-.8-.2z"
+            fill={color}
         />
     </AccessibleSVG>
 );

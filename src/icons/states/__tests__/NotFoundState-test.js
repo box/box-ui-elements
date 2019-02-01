@@ -18,7 +18,7 @@ describe('icons/states/NotFoundState', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 17;
         const height = 21;
-        const wrapper = shallow(<NotFoundState width={width} height={height} />);
+        const wrapper = shallow(<NotFoundState height={height} width={width} />);
 
         expect(wrapper.prop('width')).toEqual(width);
         expect(wrapper.prop('height')).toEqual(height);

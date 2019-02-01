@@ -8,17 +8,17 @@ describe('features/metadata-instance-editor/fields/TextField', () => {
     };
 
     test('should correctly render a text field', () => {
-        const wrapper = shallow(<TextField intl={intl} dataValue="value" />);
+        const wrapper = shallow(<TextField dataValue="value" intl={intl} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render a number field', () => {
-        const wrapper = shallow(<TextField intl={intl} dataValue="value" type="number" />);
+        const wrapper = shallow(<TextField dataValue="value" intl={intl} type="number" />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render a zero in a number field', () => {
-        const wrapper = shallow(<TextField intl={intl} dataValue={0} type="number" />);
+        const wrapper = shallow(<TextField dataValue={0} intl={intl} type="number" />);
         expect(wrapper).toMatchSnapshot();
     });
 });

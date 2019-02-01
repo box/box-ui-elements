@@ -15,10 +15,10 @@ type Props = {
 const IconFlagSolid = ({ className = '', color = '#979797', height = 18, title, width = 18 }: Props) => (
     <AccessibleSVG
         className={`icon-flag-solid ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 18 18"
+        width={width}
     >
         <path
             className="fill-color"

@@ -16,7 +16,7 @@ describe('features/quick-search/QuickSearchItem', () => {
     };
 
     test('should render datalist item', () => {
-        const wrapper = mount(<QuickSearchItem className="test" itemData={itemData} data-resin-query="test" />);
+        const wrapper = mount(<QuickSearchItem className="test" data-resin-query="test" itemData={itemData} />);
 
         expect(wrapper.find('DatalistItem').hasClass('quick-search-item')).toBe(true);
         expect(wrapper.find('DatalistItem').hasClass('test')).toBe(true);
@@ -101,6 +101,7 @@ describe('features/quick-search/QuickSearchItem', () => {
     });
 
     test('should render parent name with parentFolderRenderer when specified', () => {
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         const renderer = data => <a className="parent-folder">{data.parentName}</a>;
         const wrapper = mount(<QuickSearchItem itemData={itemData} parentFolderRenderer={renderer} />);
 

@@ -36,7 +36,7 @@ describe('components/form-elements/form/FormInput', () => {
         };
 
         const component = mount(
-            <FormInput label="label" name="input" value="" onValidityStateUpdate={sinon.stub()}>
+            <FormInput label="label" name="input" onValidityStateUpdate={sinon.stub()} value="">
                 Children
             </FormInput>,
             { context },

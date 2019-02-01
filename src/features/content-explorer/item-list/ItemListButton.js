@@ -13,23 +13,23 @@ const ItemListButton = ({ contentExplorerMode, id = '', isDisabled = false, isSe
     if (contentExplorerMode === ContentExplorerModes.MULTI_SELECT) {
         return (
             <Checkbox
-                label={<FormattedMessage {...messages.selectItem} values={{ name }} />}
-                value={id}
                 hideLabel
-                isDisabled={isDisabled}
                 isChecked={!isDisabled && isSelected}
+                isDisabled={isDisabled}
+                label={<FormattedMessage {...messages.selectItem} values={{ name }} />}
                 name="item"
+                value={id}
             />
         );
     }
     return (
         <RadioButton
-            label={<FormattedMessage {...messages.selectItem} values={{ name }} />}
-            value={id}
             hideLabel
             isDisabled={isDisabled}
             isSelected={!isDisabled && isSelected}
+            label={<FormattedMessage {...messages.selectItem} values={{ name }} />}
             name="item"
+            value={id}
         />
     );
 };

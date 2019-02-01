@@ -11,8 +11,8 @@ type Props = {
 const ListItem = ({ children, draggableProvided, isDraggableViaHandle }: Props) => {
     return (
         <div
-            className="draggable-list"
             ref={draggableProvided.innerRef}
+            className="draggable-list"
             {...draggableProvided.draggableProps}
             {...(isDraggableViaHandle ? {} : draggableProvided.dragHandleProps)}
         >

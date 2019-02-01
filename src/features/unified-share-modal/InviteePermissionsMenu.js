@@ -8,7 +8,7 @@ import DropdownMenu, { MenuToggle } from 'components/dropdown-menu';
 import { Menu, SelectMenuItem } from 'components/menu';
 import Tooltip from 'components/tooltip';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
-import type { itemType } from '../../common/box-types';
+import type { itemType as ItemType } from '../../common/box-types';
 
 import InviteePermissionsLabel from './InviteePermissionsLabel';
 import messages from './messages';
@@ -16,12 +16,12 @@ import messages from './messages';
 import type { inviteePermissionType } from './flowTypes';
 
 type Props = {
+    changeInviteePermissionLevel: Function,
     disabled: boolean,
-    inviteePermissionsButtonProps?: Object,
     inviteePermissionLevel: string,
     inviteePermissions: Array<inviteePermissionType>,
-    changeInviteePermissionLevel: Function,
-    itemType: itemType,
+    inviteePermissionsButtonProps?: Object,
+    itemType: ItemType,
 };
 
 class InviteePermissionsMenu extends Component<Props> {
@@ -47,10 +47,10 @@ class InviteePermissionsMenu extends Component<Props> {
                 {inviteePermissions.map(level =>
                     level.value ? (
                         <SelectMenuItem
-                            onClick={() => this.onChangeInviteePermissionsLevel(level.value)}
-                            isSelected={level.value === inviteePermissionLevel}
                             key={level.value}
                             isDisabled={level.disabled}
+                            isSelected={level.value === inviteePermissionLevel}
+                            onClick={() => this.onChangeInviteePermissionsLevel(level.value)}
                         >
                             <InviteePermissionsLabel
                                 hasDescription
@@ -94,7 +94,7 @@ class InviteePermissionsMenu extends Component<Props> {
         );
 
         const plainButtonWrap = disabled ? (
-            <Tooltip text={disabledTooltip} position="bottom-center">
+            <Tooltip position="bottom-center" text={disabledTooltip}>
                 <div className="tooltip-target">{plainButton}</div>
             </Tooltip>
         ) : (

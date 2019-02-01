@@ -29,10 +29,10 @@ class IconTrophyCup extends React.PureComponent<Props> {
         return (
             <AccessibleSVG
                 className={`${ICON_CLASS} ${className}`}
-                title={title}
-                width={width}
                 height={height}
+                title={title}
                 viewBox="0 0 36 30"
+                width={width}
             >
                 <defs>
                     <path
@@ -40,18 +40,18 @@ class IconTrophyCup extends React.PureComponent<Props> {
                         id={`${this.idPrefix}b`}
                     />
                     <filter
+                        filterUnits="objectBoundingBox"
+                        height="126.3%"
+                        id={`${this.idPrefix}a`}
+                        width="113%"
                         x="-6.5%"
                         y="-13.2%"
-                        width="113%"
-                        height="126.3%"
-                        filterUnits="objectBoundingBox"
-                        id={`${this.idPrefix}a`}
                     >
                         <feOffset in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation=".5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation=".5" />
                         <feColorMatrix
-                            values="0 0 0 0 0.960784314 0 0 0 0 0.725490196 0 0 0 0 0.352941176 0 0 0 0.32 0"
                             in="shadowBlurOuter1"
+                            values="0 0 0 0 0.960784314 0 0 0 0 0.725490196 0 0 0 0 0.352941176 0 0 0 0.32 0"
                         />
                     </filter>
                 </defs>
@@ -70,18 +70,18 @@ class IconTrophyCup extends React.PureComponent<Props> {
                         d="M6.972 1h22.056a.55.55 0 0 1 .55.55v2.764H6.422V1.551A.55.55 0 0 1 6.971 1z"
                         fill="#F5B95A"
                     />
-                    <rect fill="#F5B95A" x="12.526" y="18.607" width="10.947" height="3.314" rx=".551" />
-                    <rect fill="#0061D5" x="9.789" y="20.3" width="16.632" height="8" rx=".551" />
+                    <rect fill="#F5B95A" height="3.314" rx=".551" width="10.947" x="12.526" y="18.607" />
+                    <rect fill="#0061D5" height="8" rx=".551" width="16.632" x="9.789" y="20.3" />
                     <path
                         d="M10.34 20.3h15.53a.55.55 0 0 1 .551.55v7.45H9.79v-7.45a.55.55 0 0 1 .551-.55z"
                         fill="#FC627A"
                     />
                     <path
                         d="M11.603 20.3h12.794a.55.55 0 0 1 .55.55v7.45H11.053v-7.45a.55.55 0 0 1 .55-.55z"
-                        fillOpacity=".2"
                         fill="#FFF"
+                        fillOpacity=".2"
                     />
-                    <path fill="#F5B95A" d="M15.474 13.221h5.052L18.842 21.3h-1.684z" />
+                    <path d="M15.474 13.221h5.052L18.842 21.3h-1.684z" fill="#F5B95A" />
                     <path
                         d="M14.34 20.3h7.11a.55.55 0 0 1 .55.55v7.45h-8.21v-7.45a.55.55 0 0 1 .55-.55z"
                         fill="#FC627A"

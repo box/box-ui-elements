@@ -7,6 +7,7 @@ describe('components/checkbox/CheckboxTooltip', () => {
     let tooltip;
 
     beforeEach(() => {
+        // eslint-disable-next-line jsx-a11y/label-has-for
         wrapper = shallow(<CheckboxTooltip label={<label />} tooltip="foobar" />);
         tooltip = wrapper.find('Tooltip');
     });

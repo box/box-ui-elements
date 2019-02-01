@@ -14,9 +14,9 @@ describe('features/shared-link-settings-modla/VanityNameSection', () => {
             <VanityNameSection
                 canChangeVanityName
                 intl={{ formatMessage: sandbox.stub() }}
-                vanityName={vanityName}
-                serverURL={serverURL}
                 onChange={sandbox.stub()}
+                serverURL={serverURL}
+                vanityName={vanityName}
                 {...props}
             />,
         );

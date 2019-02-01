@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
@@ -34,7 +35,7 @@ describe('components/menu/Menu', () => {
                     <li className="menu-item" role="menuitem" />
                     <li role="separator" />
                     <li className="menu-item" role="menuitem" />
-                    <li className="menu-item" role="menuitem" aria-disabled="true" />
+                    <li aria-disabled="true" className="menu-item" role="menuitem" />
                     <li>
                         <a className="menu-item" role="menuitem">
                             Link
@@ -124,7 +125,7 @@ describe('components/menu/Menu', () => {
     describe('componentWillReceiveProps()', () => {
         test('should call setInitialFocusIndex() when isSubmenu is true and isHidden changes from false to true', () => {
             const wrapper = shallow(
-                <Menu isHidden className="awesome-menu">
+                <Menu className="awesome-menu" isHidden>
                     <li />
                 </Menu>,
             );
@@ -144,7 +145,7 @@ describe('components/menu/Menu', () => {
             const clock = sandbox.useFakeTimers();
             const wrapper = mount(
                 <Menu initialFocusIndex={1}>
-                    <li className="menu-item" key="1" role="menuitem" />
+                    <li key="1" className="menu-item" role="menuitem" />
                     <li key="2" role="separator" />
                     {false}
                 </Menu>,
@@ -159,9 +160,9 @@ describe('components/menu/Menu', () => {
 
             wrapper.setProps({
                 children: [
-                    <li className="menu-item" key="1" role="menuitem" />,
+                    <li key="1" className="menu-item" role="menuitem" />,
                     <li key="2" role="separator" />,
-                    <li className="menu-item" key="3" role="menuitem" />,
+                    <li key="3" className="menu-item" role="menuitem" />,
                 ],
             });
         });

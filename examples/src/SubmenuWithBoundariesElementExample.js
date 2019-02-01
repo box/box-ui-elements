@@ -10,16 +10,16 @@ class SubmenuWithBoundariesElementExample extends React.Component {
     render() {
         return (
             <div
-                style={{
-                    height: '200px',
-                    paddingLeft: '700px',
-                }}
                 ref={ref => {
                     // eslint-disable-next-line
                     !this.state.rightBoundaryElement &&
                         this.setState({
                             rightBoundaryElement: ref,
                         });
+                }}
+                style={{
+                    height: '200px',
+                    paddingLeft: '700px',
                 }}
             >
                 <div

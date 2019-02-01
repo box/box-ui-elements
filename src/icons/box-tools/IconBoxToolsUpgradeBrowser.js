@@ -48,7 +48,7 @@ class IconBoxToolsUpgradeBrowser extends React.Component<Props> {
                     <circle cx="8" cy="15" fill="#0061D5" r="2" />
                     <circle cx="14" cy="15" fill="#0061D5" r="2" />
                     <circle cx="21" cy="15" fill="#0061D5" r="2" />
-                    <rect height="4" width="102" fill="#FFF" rx="2" x="29" y="13" />
+                    <rect fill="#FFF" height="4" rx="2" width="102" x="29" y="13" />
                     <path
                         d="M149.4003 20.307L138.89 2.2387c-1.7167-2.9848-6.0579-2.9848-7.7684 0L120.605 20.3071c-1.7167 2.9848.42 6.6929 3.8843 6.6929h20.9896c3.4643 0 5.638-3.7448 3.9213-6.693z"
                         fill="#ED3757"

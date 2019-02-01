@@ -90,9 +90,9 @@ class NewFolderModal extends Component {
         return (
             <Modal
                 className={classNames('new-folder-modal', className)}
+                focusElementSelector=".folder-name-input input"
                 isOpen={isOpen}
                 onRequestClose={onRequestClose}
-                focusElementSelector=".folder-name-input input"
                 title={
                     <FormattedMessage
                         {...messages.newFolderModalTitle}
@@ -104,24 +104,24 @@ class NewFolderModal extends Component {
             >
                 <TextInput
                     className="folder-name-input"
-                    type="text"
-                    onInput={this.handleFolderNameInput}
-                    label={<FormattedMessage {...messages.newFolderModalFolderNameLabel} />}
-                    placeholder={intl.formatMessage(messages.newFolderModalFolderNamePlaceholder)}
                     error={createFolderError}
-                    value={folderNameInput}
                     isRequired
+                    label={<FormattedMessage {...messages.newFolderModalFolderNameLabel} />}
+                    onInput={this.handleFolderNameInput}
+                    placeholder={intl.formatMessage(messages.newFolderModalFolderNamePlaceholder)}
+                    type="text"
+                    value={folderNameInput}
                 />
                 <ModalActions>
-                    <Button className="new-folder-modal-cancel-button" type="button" onClick={onRequestClose}>
+                    <Button className="new-folder-modal-cancel-button" onClick={onRequestClose} type="button">
                         <FormattedMessage {...messages.newFolderModalCancel} />
                     </Button>
                     <PrimaryButton
                         className="new-folder-modal-create-button"
-                        type="button"
-                        onClick={this.handleCreateClick}
-                        isLoading={isCreatingFolder}
                         isDisabled={isCreateButtonDisabled}
+                        isLoading={isCreatingFolder}
+                        onClick={this.handleCreateClick}
+                        type="button"
                     >
                         <FormattedMessage {...messages.newFolderModalCreate} />
                     </PrimaryButton>

@@ -21,7 +21,7 @@ const DraggableList = ({ children, className, listId, onDragEnd }: Props) => {
         >
             <Droppable droppableId={listId}>
                 {droppableProvided => (
-                    <div className={className} ref={droppableProvided.innerRef}>
+                    <div ref={droppableProvided.innerRef} className={className}>
                         {children}
                     </div>
                 )}

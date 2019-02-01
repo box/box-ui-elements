@@ -12,12 +12,12 @@ import { VIEW_FOLDER } from '../../../constants';
 import './SubHeaderRight.scss';
 
 type Props = {
-    onSortChange: Function,
-    currentCollection: Collection,
-    onUpload: Function,
-    onCreate: Function,
-    canUpload: boolean,
     canCreateNewFolder: boolean,
+    canUpload: boolean,
+    currentCollection: Collection,
+    onCreate: Function,
+    onSortChange: Function,
+    onUpload: Function,
     view: View,
 };
 
@@ -43,12 +43,12 @@ const SubHeaderRight = ({
             )}
             {showAdd && (
                 <Add
-                    showUpload={canUpload}
-                    showCreate={canCreateNewFolder}
-                    onUpload={onUpload}
-                    onCreate={onCreate}
                     isDisabled={!isFolder}
                     isLoaded={isLoaded}
+                    onCreate={onCreate}
+                    onUpload={onUpload}
+                    showCreate={canCreateNewFolder}
+                    showUpload={canUpload}
                 />
             )}
         </div>

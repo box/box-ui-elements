@@ -15,7 +15,7 @@ export default () => ({ dataKey, rowData }: { dataKey: string, rowData: BoxItem 
     const modifiedBy: string = modified_by ? modified_by.name || '' : '';
     const isRecents: boolean = dataKey === FIELD_INTERACTED_AT;
     const date: string = isRecents ? interacted_at || modified_at : modified_at;
-    const DateValue = <Datefield date={date} capitalize omitCommas />;
+    const DateValue = <Datefield capitalize date={date} omitCommas />;
 
     if (isRecents || !modifiedBy) {
         return DateValue;

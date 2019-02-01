@@ -265,30 +265,18 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 updatedConditions: [],
                 isDisabled: false,
             },
-        ].forEach(
-            ({
-                description,
-                index,
-                conditions,
-                fieldDisplayText,
-                fieldDisplayTextType,
-                fieldKey,
-                fieldKeyType,
-                updatedConditions,
-                isDisabled,
-            }) => {
-                test(`${description}`, () => {
-                    const wrapper = getWrapper();
-                    wrapper.instance().setState({
-                        filterConditions: conditions,
-                    });
-                    wrapper.instance().deleteCondition(index);
-
-                    expect(wrapper.state('filterConditions')).toEqual(updatedConditions);
-                    expect(wrapper.state('isDisabled')).toEqual(isDisabled);
+        ].forEach(({ description, index, conditions, updatedConditions, isDisabled }) => {
+            test(`${description}`, () => {
+                const wrapper = getWrapper();
+                wrapper.instance().setState({
+                    filterConditions: conditions,
                 });
-            },
-        );
+                wrapper.instance().deleteCondition(index);
+
+                expect(wrapper.state('filterConditions')).toEqual(updatedConditions);
+                expect(wrapper.state('isDisabled')).toEqual(isDisabled);
+            });
+        });
     });
 
     describe('onClose()', () => {

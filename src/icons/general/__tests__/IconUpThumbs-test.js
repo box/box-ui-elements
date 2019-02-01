@@ -19,7 +19,7 @@ describe('icons/general/IconThumbsUp', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 99;
         const height = 101;
-        const wrapper = shallow(<IconThumbsUp width={width} height={height} />);
+        const wrapper = shallow(<IconThumbsUp height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

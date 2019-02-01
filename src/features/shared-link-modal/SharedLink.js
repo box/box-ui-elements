@@ -1,6 +1,6 @@
 /* @flow */
 import React from 'react';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import TextInputWithCopyButton from 'components/text-input-with-copy-button';
 import Tooltip from 'components/tooltip';
@@ -72,6 +72,7 @@ const SharedLink = (props: Props) => {
             <div className="shared-link-icons">
                 {expiration ? (
                     <Tooltip
+                        position="middle-left"
                         text={
                             <FormattedMessage
                                 {...messages.sharedLinkExpirationTooltip}
@@ -80,7 +81,6 @@ const SharedLink = (props: Props) => {
                                 }}
                             />
                         }
-                        position="middle-left"
                     >
                         <span className="shared-link-expiration">
                             <IconExpirationInverted height={16} width={16} />

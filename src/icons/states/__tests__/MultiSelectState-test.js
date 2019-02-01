@@ -26,7 +26,7 @@ describe('icons/states/MultiSelectState', () => {
     test('should correctly render state svg with specified width and height', () => {
         const width = 17;
         const height = 21;
-        const wrapper = shallow(<MultiSelectState width={width} height={height} />);
+        const wrapper = shallow(<MultiSelectState height={height} width={width} />);
 
         expect(wrapper.prop('width')).toEqual(width);
         expect(wrapper.prop('height')).toEqual(height);

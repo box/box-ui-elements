@@ -29,7 +29,7 @@ function withInfiniteLoader(WrappedComponent: Class<React.Component<{ onRowsRend
             threshold={threshold}
         >
             {({ onRowsRendered, registerChild }) => (
-                <WrappedComponent {...rest} onRowsRendered={onRowsRendered} ref={registerChild} />
+                <WrappedComponent {...rest} ref={registerChild} onRowsRendered={onRowsRendered} />
             )}
         </InfiniteLoader>
     );

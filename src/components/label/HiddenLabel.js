@@ -11,7 +11,7 @@ type Props = {
 };
 
 const HiddenLabel = ({ children, labelContent }: Props) => (
-    <LabelPrimitive labelContent={labelContent} className={HIDDEN_CLASS_NAME}>
+    <LabelPrimitive className={HIDDEN_CLASS_NAME} labelContent={labelContent}>
         {children}
     </LabelPrimitive>
 );

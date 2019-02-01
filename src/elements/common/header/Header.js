@@ -13,10 +13,10 @@ import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
 import './Header.scss';
 
 type Props = {
-    searchQuery: string,
-    onSearch: Function,
-    logoUrl?: string,
     isSmall: boolean,
+    logoUrl?: string,
+    onSearch: Function,
+    searchQuery: string,
     view: View,
 } & InjectIntlProvidedProps;
 
@@ -27,14 +27,14 @@ const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) 
     const isSearch = view === VIEW_SEARCH;
     return (
         <div className="be-header">
-            <Logo url={logoUrl} isSmall={isSmall} />
+            <Logo isSmall={isSmall} url={logoUrl} />
             <div className="be-search">
                 <input
-                    type="search"
                     disabled={!isFolder && !isSearch}
-                    placeholder={intl.formatMessage(messages.searchPlaceholder)}
-                    value={searchQuery}
                     onChange={search}
+                    placeholder={intl.formatMessage(messages.searchPlaceholder)}
+                    type="search"
+                    value={searchQuery}
                 />
             </div>
         </div>

@@ -8,9 +8,9 @@ describe('elements/content-uploader/ItemAction', () => {
     const getWrapper = props =>
         shallow(
             <ItemAction
-                status={STATUS_PENDING}
-                onClick={noop}
                 intl={{ formatMessage: data => <span {...data} /> }}
+                onClick={noop}
+                status={STATUS_PENDING}
                 {...props}
             />,
         );

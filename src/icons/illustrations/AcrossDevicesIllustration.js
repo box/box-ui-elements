@@ -30,44 +30,44 @@ class AcrossDevicesIllustration extends React.PureComponent<Props> {
                 className={`${ICON_CLASS} ${className}`}
                 height={height}
                 title={title}
-                width={width}
                 viewBox="0 0 420 130"
+                width={width}
             >
                 <defs>
                     <path
                         d="M153.12 90.671c0 2.612-3.013 4.729-6.731 4.729H89.451c-3.718 0-6.731-2.117-6.731-4.729V5.53c0-2.613 3.013-4.73 6.731-4.73h56.938c3.718 0 6.731 2.117 6.731 4.73V90.67z"
                         id="b"
                     />
-                    <filter x="-8.5%" y="-11.6%" width="134.1%" height="123.3%" filterUnits="objectBoundingBox" id="a">
+                    <filter filterUnits="objectBoundingBox" height="123.3%" id="a" width="134.1%" x="-8.5%" y="-11.6%">
                         <feOffset dx="7" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="2.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="2.5" />
                         <feColorMatrix
-                            values="0 0 0 0 0 0 0 0 0 0.160784314 0 0 0 0 0.278431373 0 0 0 0.28 0"
                             in="shadowBlurOuter1"
+                            values="0 0 0 0 0 0 0 0 0 0.160784314 0 0 0 0 0.278431373 0 0 0 0.28 0"
                         />
                     </filter>
                     <path
                         d="M199.76 91.617a3.784 3.784 0 0 1-3.786 3.783h-32.028a3.784 3.784 0 0 1-3.786-3.783V23.504a3.785 3.785 0 0 1 3.786-3.784h32.028a3.785 3.785 0 0 1 3.786 3.784v68.113z"
                         id="d"
                     />
-                    <filter x="-15.2%" y="-14.5%" width="160.6%" height="129.1%" filterUnits="objectBoundingBox" id="c">
+                    <filter filterUnits="objectBoundingBox" height="129.1%" id="c" width="160.6%" x="-15.2%" y="-14.5%">
                         <feOffset dx="7" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="2.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="2.5" />
                         <feColorMatrix
-                            values="0 0 0 0 0 0 0 0 0 0.160784314 0 0 0 0 0.278431373 0 0 0 0.28 0"
                             in="shadowBlurOuter1"
+                            values="0 0 0 0 0 0 0 0 0 0.160784314 0 0 0 0 0.278431373 0 0 0 0.28 0"
                         />
                     </filter>
                     <path
                         d="M76.12 92.43c0 1.64-1.318 2.97-2.945 2.97h-24.91c-1.627 0-2.945-1.33-2.945-2.97V38.97c0-1.64 1.318-2.97 2.945-2.97h24.91c1.627 0 2.945 1.33 2.945 2.97v53.46z"
                         id="f"
                     />
-                    <filter x="-19.5%" y="-18.5%" width="177.9%" height="137%" filterUnits="objectBoundingBox" id="e">
+                    <filter filterUnits="objectBoundingBox" height="137%" id="e" width="177.9%" x="-19.5%" y="-18.5%">
                         <feOffset dx="7" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="2.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="2.5" />
                         <feColorMatrix
-                            values="0 0 0 0 0 0 0 0 0 0.160784314 0 0 0 0 0.278431373 0 0 0 0.28 0"
                             in="shadowBlurOuter1"
+                            values="0 0 0 0 0 0 0 0 0 0.160784314 0 0 0 0 0.278431373 0 0 0 0.28 0"
                         />
                     </filter>
                 </defs>
@@ -84,15 +84,15 @@ class AcrossDevicesIllustration extends React.PureComponent<Props> {
                     <g transform="translate(90 26)">
                         <use fill="#000" filter="url(#a)" xlinkHref="#b" />
                         <use fill="#FFF" xlinkHref="#b" />
-                        <path fill="#002947" fillRule="nonzero" d="M82.72 7.4h70.4v80.121h-70.4z" />
+                        <path d="M82.72 7.4h70.4v80.121h-70.4z" fill="#002947" fillRule="nonzero" />
                         <use fill="#000" filter="url(#c)" xlinkHref="#d" />
                         <use fill="#FFF" xlinkHref="#d" />
                         <use fill="#000" filter="url(#e)" xlinkHref="#f" />
                         <use fill="#FFF" xlinkHref="#f" />
                         <path
+                            d="M45.32 43.48h30.8v44.249h-30.8zM160.16 28.96h39.542v58.76H160.16z"
                             fill="#002947"
                             fillRule="nonzero"
-                            d="M45.32 43.48h30.8v44.249h-30.8zM160.16 28.96h39.542v58.76H160.16z"
                         />
                         <path
                             d="M109.56 88.448V71.2M58.08 54.48v34.209M70.84 69.44v18.988M96.8 57.56v30.282M109.56 47.88v39.862M122.76 38.64v49.27M135.52 34.68v53.197M148.28 36.44v51.367M174.24 51.84v36.268M187 38.2v50.108"
@@ -104,15 +104,15 @@ class AcrossDevicesIllustration extends React.PureComponent<Props> {
                             stroke="#5FC9CF"
                             strokeWidth=".5"
                         />
-                        <path fill="#FFF" fillRule="nonzero" d="M90.513 30.002h15.963v1.445H90.513z" />
-                        <path fill="#F7647D" fillRule="nonzero" d="M90.513 33.296h7.981v1.445h-7.981z" />
-                        <path fill="#FFF" fillRule="nonzero" d="M60.385 54.202h9.99v1.445h-9.99z" />
-                        <path fill="#F7647D" fillRule="nonzero" d="M60.385 57.502h4.995v1.445h-4.995z" />
-                        <path fill="#FFF" fillRule="nonzero" d="M171.517 37.907h12.893v1.445h-12.893z" />
-                        <path fill="#F7647D" fillRule="nonzero" d="M171.517 41.201h6.447v1.445h-6.447z" />
-                        <circle fill="#F7647D" fillRule="nonzero" cx="58.083" cy="71.144" r="3.185" />
-                        <circle fill="#F7647D" fillRule="nonzero" cx="109.655" cy="47.347" r="3.185" />
-                        <circle fill="#F7647D" fillRule="nonzero" cx="187.013" cy="57.733" r="3.185" />
+                        <path d="M90.513 30.002h15.963v1.445H90.513z" fill="#FFF" fillRule="nonzero" />
+                        <path d="M90.513 33.296h7.981v1.445h-7.981z" fill="#F7647D" fillRule="nonzero" />
+                        <path d="M60.385 54.202h9.99v1.445h-9.99z" fill="#FFF" fillRule="nonzero" />
+                        <path d="M60.385 57.502h4.995v1.445h-4.995z" fill="#F7647D" fillRule="nonzero" />
+                        <path d="M171.517 37.907h12.893v1.445h-12.893z" fill="#FFF" fillRule="nonzero" />
+                        <path d="M171.517 41.201h6.447v1.445h-6.447z" fill="#F7647D" fillRule="nonzero" />
+                        <circle cx="58.083" cy="71.144" fill="#F7647D" fillRule="nonzero" r="3.185" />
+                        <circle cx="109.655" cy="47.347" fill="#F7647D" fillRule="nonzero" r="3.185" />
+                        <circle cx="187.013" cy="57.733" fill="#F7647D" fillRule="nonzero" r="3.185" />
                     </g>
                 </g>
             </AccessibleSVG>

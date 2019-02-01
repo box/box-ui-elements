@@ -13,7 +13,7 @@ type Props = {
 };
 
 const IconPlay = ({ className = '', color = '#000000', height = 24, title, width = 24 }: Props) => (
-    <AccessibleSVG className={`icon-play ${className}`} title={title} width={width} height={height} viewBox="0 0 24 24">
+    <AccessibleSVG className={`icon-play ${className}`} height={height} title={title} viewBox="0 0 24 24" width={width}>
         <path className="fill-color" d="M8 5v14l11-7z" fill={color} />
         <path d="M0 0h24v24H0z" fill="none" />
     </AccessibleSVG>

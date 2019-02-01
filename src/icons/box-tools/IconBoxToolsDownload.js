@@ -34,18 +34,18 @@ class IconBoxToolsDownload extends React.Component<Props> {
                 width={width}
             >
                 <defs>
-                    <rect height="120" id={`${this.idPrefix}a`} width="120" rx="27.692" />
+                    <rect height="120" id={`${this.idPrefix}a`} rx="27.692" width="120" />
                 </defs>
                 <g fill="none" fillRule="evenodd">
                     <g transform="translate(3 11)">
                         <use fill="#0065E3" xlinkHref={`#${this.idPrefix}a`} />
                         <rect
                             height="122.308"
-                            width="122.308"
                             rx="27.692"
                             stroke="#C3D1D9"
                             strokeOpacity=".154"
                             strokeWidth="2.308"
+                            width="122.308"
                             x="-1.154"
                             y="-1.154"
                         />

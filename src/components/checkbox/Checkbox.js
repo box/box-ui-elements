@@ -46,14 +46,15 @@ const Checkbox = ({
     ...rest
 }: Props) => {
     const checkboxLabel = (
+        // eslint-disable-next-line jsx-a11y/label-has-for
         <label className="checkbox-label">
             <input
-                id={id}
+                checked={isChecked}
                 disabled={isDisabled}
+                id={id}
                 name={name}
                 onChange={onChange}
                 type="checkbox"
-                checked={isChecked}
                 {...rest}
             />
             {/* This span is used for the before/after checkbox styles, mouse clicks will target this element */}

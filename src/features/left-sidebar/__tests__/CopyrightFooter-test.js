@@ -17,7 +17,7 @@ describe('feature/left-sidebar/CopyrightFooter', () => {
             href: '/test',
             'data-resin-target': 'testtarget',
         };
-        const wrapper = shallow(<CopyrightFooter linkProps={cProps} date={date} />);
+        const wrapper = shallow(<CopyrightFooter date={date} linkProps={cProps} />);
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -27,7 +27,7 @@ describe('feature/left-sidebar/CopyrightFooter', () => {
             'data-resin-target': 'testtarget',
         };
 
-        const wrapper = shallow(<CopyrightFooter linkProps={cProps} date={date} />);
+        const wrapper = shallow(<CopyrightFooter date={date} linkProps={cProps} />);
 
         expect(wrapper).toMatchSnapshot();
     });

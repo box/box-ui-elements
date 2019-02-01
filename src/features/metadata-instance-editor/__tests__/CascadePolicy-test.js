@@ -11,10 +11,10 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
         const wrapper = shallow(
             <CascadePolicy
                 id="fakeId"
-                isEditable
                 isCascadingEnabled
-                onCascadeToggle={jest.fn()}
+                isEditable
                 onCascadeModeChange={jest.fn()}
+                onCascadeToggle={jest.fn()}
                 shouldShowCascadeOptions
             />,
         );
@@ -24,10 +24,10 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
         const wrapper = shallow(
             <CascadePolicy
                 id="fakeId"
-                isEditable
                 isCascadingEnabled
-                onCascadeToggle={jest.fn()}
+                isEditable
                 onCascadeModeChange={jest.fn()}
+                onCascadeToggle={jest.fn()}
                 shouldCascadeOverwrite
                 shouldShowCascadeOptions
             />,
@@ -39,10 +39,10 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
             <CascadePolicy
                 canEdit
                 id="fakeId"
-                isEditable
                 isCustomMetadata
-                onCascadeToggle={jest.fn()}
+                isEditable
                 onCascadeModeChange={jest.fn()}
+                onCascadeToggle={jest.fn()}
                 shouldShowCascadeOptions
             />,
         );

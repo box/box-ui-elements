@@ -67,8 +67,8 @@ const OpenWithButton = ({ error, onClick = noop, displayIntegration, isLoading }
     return (
         <Tooltip
             className="bcow-tooltip"
-            text={getTooltip(displayDescription, isLoading, error, disabledReasons)}
             position="bottom-center"
+            text={getTooltip(displayDescription, isLoading, error, disabledReasons)}
             {...tooltipDisplayProps}
         >
             <Button

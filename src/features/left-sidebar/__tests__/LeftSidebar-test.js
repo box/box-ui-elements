@@ -174,7 +174,7 @@ describe('feature/left-sidebar/LeftSidebar', () => {
             },
         };
 
-        const wrapper = shallow(<LeftSidebar menuItems={oneMenuItem} leftSidebarProps={leftSidebarProps} />);
+        const wrapper = shallow(<LeftSidebar leftSidebarProps={leftSidebarProps} menuItems={oneMenuItem} />);
 
         expect(wrapper).toMatchSnapshot();
     });

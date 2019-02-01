@@ -13,7 +13,7 @@ describe('elements/content-sidebar/ActivityFeed/icons/IconActivityFeedEmptyState
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconActivityFeedEmptyState width={width} height={height} />);
+        const wrapper = shallow(<IconActivityFeedEmptyState height={height} width={width} />);
 
         expect(wrapper).toMatchSnapshot();
     });

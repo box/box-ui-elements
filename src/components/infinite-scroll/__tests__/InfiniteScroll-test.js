@@ -65,7 +65,7 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
             <InfiniteScroll {...propsList} hasMore>
                 <div>
                     {items.map((item, i) => (
-                        <div style={{ height: '100px' }} key={i}>
+                        <div key={i} style={{ height: '100px' }}>
                             {item}
                         </div>
                     ))}
@@ -107,10 +107,10 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
 
         const items = new Array(20).fill('ITEM');
         mount(
-            <InfiniteScroll {...propsList} hasMore useWindow={false} scrollContainerNode={scrollContainer}>
+            <InfiniteScroll {...propsList} hasMore scrollContainerNode={scrollContainer} useWindow={false}>
                 <div>
                     {items.map((item, i) => (
-                        <div style={{ height: '100px' }} key={i}>
+                        <div key={i} style={{ height: '100px' }}>
                             {item}
                         </div>
                     ))}
@@ -132,10 +132,10 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
 
         const items = new Array(20).fill('ITEM');
         mount(
-            <InfiniteScroll {...propsList} hasMore useWindow={false} scrollContainerNode={scrollContainer}>
+            <InfiniteScroll {...propsList} hasMore scrollContainerNode={scrollContainer} useWindow={false}>
                 <div>
                     {items.map((item, i) => (
-                        <div style={{ height: '100px' }} key={i}>
+                        <div key={i} style={{ height: '100px' }}>
                             {item}
                         </div>
                     ))}
@@ -170,15 +170,15 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
 
     describe('with sentinel in range', () => {
         let component;
-        const mockOnLoadMore = jest.fn();
+        const mockedOnLoadMore = jest.fn();
         beforeEach(() => {
             const items = new Array(20).fill('ITEM');
 
             component = mount(
-                <InfiniteScroll {...propsList} hasMore useWindow onLoadMore={mockOnLoadMore}>
+                <InfiniteScroll {...propsList} hasMore onLoadMore={mockedOnLoadMore} useWindow>
                     <div>
                         {items.map((item, i) => (
-                            <div style={{ height: '100px' }} key={i}>
+                            <div key={i} style={{ height: '100px' }}>
                                 {item}
                             </div>
                         ))}
@@ -192,20 +192,20 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         });
 
         afterEach(() => {
-            mockOnLoadMore.mockReset();
+            mockedOnLoadMore.mockReset();
         });
 
         it('should not call onLoadMore if isLoading', () => {
             component.setProps({ isLoading: true }, () => {
                 window.dispatchEvent(new Event('scroll'));
-                expect(mockOnLoadMore).not.toHaveBeenCalled();
+                expect(mockedOnLoadMore).not.toHaveBeenCalled();
             });
         });
 
         it('should not call onLoadMore if !hasMore', () => {
             component.setProps({ hasMore: false }, () => {
                 window.dispatchEvent(new Event('scroll'));
-                expect(mockOnLoadMore).not.toHaveBeenCalled();
+                expect(mockedOnLoadMore).not.toHaveBeenCalled();
             });
         });
     });

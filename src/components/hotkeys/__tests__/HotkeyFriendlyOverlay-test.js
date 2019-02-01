@@ -15,7 +15,7 @@ describe('components/hotkeys/HotkeyFriendlyOverlay', () => {
 
     test('should pass properties on to the underlying Overlay', () => {
         const wrapper = shallow(
-            <HotkeyFriendlyOverlay shouldDefaultFocus className="test-class">
+            <HotkeyFriendlyOverlay className="test-class" shouldDefaultFocus>
                 <div />
             </HotkeyFriendlyOverlay>,
         );

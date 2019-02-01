@@ -21,19 +21,19 @@ const IconNotesLogo = ({ className = '', color = BOX_BLUE, height = 130, title, 
         viewBox="0 -40 90 130"
         width={width}
     >
-        <rect x="5" y="5" width="80" height="80" rx="8" ry="8" fill="#fff" />
+        <rect fill="#fff" height="80" rx="8" ry="8" width="80" x="5" y="5" />
         <path
+            className="fill-color"
             d="M77 7a6 6 0 0 1 6 6v64a6 6 0 0 1-6 6H13a6 6 0 0 1-6-6V13a6 6 0 0 1 6-6h64m0-2H13a8 8 0 0 0-8 8v64a8 8 0 0 0 8 8h64a8 8 0 0 0 8-8V13a8 8 0 0 0-8-8z"
             fill={color}
             opacity=".3"
-            className="fill-color"
         />
-        <rect x="5" y="5" width="80" height="80" rx="8" ry="8" transform="rotate(-8 44.997 44.965)" fill="#fff" />
+        <rect fill="#fff" height="80" rx="8" ry="8" transform="rotate(-8 44.997 44.965)" width="80" x="5" y="5" />
         <path
+            className="fill-color"
             d="M71.4 2.92A6 6 0 0 1 78.18 8l8.9 63.38a6 6 0 0 1-5.08 6.8l-63.4 8.9A6 6 0 0 1 11.82 82l-8.9-63.4A6 6 0 0 1 8 11.82l63.4-8.9m-.28-2L7.74 9.84a8 8 0 0 0-6.8 9l8.9 63.38a8 8 0 0 0 9 6.8l63.38-8.9a8 8 0 0 0 6.8-9L80.16 7.74a8 8 0 0 0-9-6.8z"
             fill={color}
             opacity=".3"
-            className="fill-color"
         />
         <path d="M56.86 30.39l-2.77 5.92-29.36 4.13A2.74 2.74 0 1 1 24 35z" fill="#9725dd" />
         <path d="M50.28 43.17l-2.85 5.93-21.07 3a2.74 2.74 0 1 1-.76-5.42z" fill="#0061d5" />

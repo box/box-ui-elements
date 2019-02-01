@@ -965,17 +965,17 @@ describe('api/Feed', () => {
         });
 
         test('should invoke update the feed item with an AF error and call the success callback', () => {
-            const error = { status: 409 };
-            feed.createCommentErrorCallback(error, errorCode, id);
+            const e = { status: 409 };
+            feed.createCommentErrorCallback(e, errorCode, id);
             expect(feed.createFeedError).toBeCalledWith(messages.commentCreateConflictMessage);
             expect(feed.updateFeedItem).toBeCalledWith(message, id);
-            expect(feed.feedErrorCallback).toHaveBeenCalledWith(false, error, errorCode);
+            expect(feed.feedErrorCallback).toHaveBeenCalledWith(false, e, errorCode);
         });
 
         test('should invoke update the feed item with an AF error', () => {
-            const error = { status: 500 };
+            const e = { status: 500 };
             feed.isDestroyed = jest.fn().mockReturnValue(true);
-            feed.createCommentErrorCallback(error, errorCode, id);
+            feed.createCommentErrorCallback(e, errorCode, id);
             expect(feed.createFeedError).toBeCalledWith(messages.commentCreateErrorMessage);
             expect(feed.updateFeedItem).toBeCalledWith(message, id);
         });

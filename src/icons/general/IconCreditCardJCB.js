@@ -23,14 +23,14 @@ const IconCreditCardJCB = ({
 }: Props) => (
     <AccessibleSVG
         className={`icon-credit-card-jcb ${className}`}
-        title={title}
-        width={width}
         height={height}
         opacity={opacity}
+        title={title}
         viewBox="0 0 25 16"
+        width={width}
     >
         <g fill="none" fillRule="evenodd">
-            <rect stroke={color} x=".5" y=".5" width="24" height="15" rx="2" />
+            <rect height="15" rx="2" stroke={color} width="24" x=".5" y=".5" />
             <path
                 d="M9 4H5.497913C4.672928 4 4 4.671878 4 5.497392V12h3.502087C8.327072 12 9 11.328122 9 10.502608V4zM3 5.497392C3 4.119242 4.120993 3 5.497913 3H9.80655C9.91339 3 10 3.084258 10 3.200677v7.30193C10 11.880758 8.879007 13 7.502087 13H3.19345C3.08661 13 3 12.915742 3 12.799323v-7.30193z"
                 fill={color}

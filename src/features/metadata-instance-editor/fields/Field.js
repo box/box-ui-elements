@@ -23,13 +23,13 @@ import {
 } from '../constants';
 
 type Props = {
+    canEdit: boolean,
     dataKey: string,
-    displayName: string,
     dataValue?: MetadataFieldValue,
     description?: string,
+    displayName: string,
     error?: React.Node,
     isHidden?: boolean,
-    canEdit: boolean,
     onChange?: (key: string, value: MetadataFieldValue) => void,
     onRemove?: (key: string) => void,
     options?: Array<MetadataTemplateFieldOption>,
@@ -107,8 +107,8 @@ const Field = ({
                 <EnumField
                     dataKey={dataKey}
                     dataValue={dataValue}
-                    displayName={displayName}
                     description={description}
+                    displayName={displayName}
                     onChange={onChange}
                     onRemove={onRemove}
                     options={options}
@@ -120,8 +120,8 @@ const Field = ({
                 <MultiSelectField
                     dataKey={dataKey}
                     dataValue={dataValue}
-                    displayName={displayName}
                     description={description}
+                    displayName={displayName}
                     onChange={onChange}
                     onRemove={onRemove}
                     options={options}
@@ -133,8 +133,8 @@ const Field = ({
                 <DateField
                     dataKey={dataKey}
                     dataValue={dataValue}
-                    displayName={displayName}
                     description={description}
+                    displayName={displayName}
                     onChange={onChange}
                     onRemove={onRemove}
                 />

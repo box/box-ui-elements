@@ -18,14 +18,14 @@ type Props = {
 
 const FolderIcon = ({ dimension = 32, isCollab = false, isExternal = false, title }: Props) => {
     if (isExternal) {
-        return <IconFolderExternal height={dimension} width={dimension} title={title} />;
+        return <IconFolderExternal height={dimension} title={title} width={dimension} />;
     }
 
     if (isCollab) {
-        return <IconFolderCollab height={dimension} width={dimension} title={title} />;
+        return <IconFolderCollab height={dimension} title={title} width={dimension} />;
     }
 
-    return <IconFolderPersonal height={dimension} width={dimension} title={title} />;
+    return <IconFolderPersonal height={dimension} title={title} width={dimension} />;
 };
 
 export default FolderIcon;

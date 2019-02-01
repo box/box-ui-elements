@@ -15,17 +15,17 @@ type Props = {
 const IconRejected = ({ className = '', color = '#ED3757', height = 18, title, width = 18 }: Props) => (
     <AccessibleSVG
         className={`icon-rejected ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 18 18"
+        width={width}
     >
         <g fill="none" fillRule="evenodd">
-            <circle fill={color} cx={9} cy={9} r={9} />
+            <circle cx={9} cy={9} fill={color} r={9} />
             <path
+                d="M9 7.586l2.828-2.829 1.415 1.415L10.414 9l2.829 2.828-1.415 1.415L9 10.414l-2.828 2.829-1.415-1.415L7.586 9 4.757 6.172l1.415-1.415z"
                 fill="#FFF"
                 fillRule="nonzero"
-                d="M9 7.586l2.828-2.829 1.415 1.415L10.414 9l2.829 2.828-1.415 1.415L9 10.414l-2.828 2.829-1.415-1.415L7.586 9 4.757 6.172l1.415-1.415z"
             />
         </g>
     </AccessibleSVG>

@@ -278,6 +278,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
     renderDynamicTabs() {
         const { onTabFocus, focusedIndex } = this.props;
         return (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div className="dynamic-tabs-bar" onKeyDown={this.handleKeyDown}>
                 <button
                     className={classNames('btn-plain svg-container left-arrow', {
@@ -307,6 +308,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
     render() {
         const { children, className = '', isDynamic = false, onKeyUp, selectedIndex } = this.props;
         return (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
                 className={`tab-view ${classNames(className, {
                     'dynamic-tabs': isDynamic,
@@ -323,6 +325,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
                             aria-hidden={selectedIndex !== i}
                             className={`tab-panel ${i === selectedIndex ? 'is-selected' : ''}`}
                             role={TAB_PANEL_ROLE}
+                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                             tabIndex="0"
                         >
                             {child.props.children}

@@ -16,10 +16,10 @@ type Props = {
 const UploadSuccessState = ({ className = '', color = BOX_BLUE, height = 49, title, width = 50 }: Props) => (
     <AccessibleSVG
         className={`upload-success-state ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 50 49"
+        width={width}
     >
         <path
             className="fill-color"
@@ -28,34 +28,34 @@ const UploadSuccessState = ({ className = '', color = BOX_BLUE, height = 49, tit
         />
         <rect
             className="fill-color"
-            width="6"
-            height="3"
             fill={color}
             fillOpacity="0.2"
+            height="3"
             rx="1.5"
             ry="1.5"
+            width="6"
             x="4"
             y="46"
         />
         <rect
             className="fill-color"
-            width="6"
-            height="3"
             fill={color}
             fillOpacity="0.2"
+            height="3"
             rx="1.5"
             ry="1.5"
+            width="6"
             x="33"
             y="46"
         />
         <rect
             className="fill-color"
-            width="21"
-            height="3"
             fill={color}
             fillOpacity="0.2"
+            height="3"
             rx="1.5"
             ry="1.5"
+            width="21"
             x="11"
             y="46"
         />

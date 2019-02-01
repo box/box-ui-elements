@@ -171,7 +171,7 @@ class ContentExplorer extends Component {
             }
 
             nodeOfInterest = nodeOfInterest.parentNode;
-            counter++;
+            counter += 1;
         }
 
         return false;
@@ -398,6 +398,7 @@ class ContentExplorer extends Component {
         }
 
         return (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
             <div
                 className={classNames('content-explorer', className)}
                 onClick={this.handleContentExplorerClick}

@@ -86,7 +86,7 @@ describe('icons/left-sidebar', () => {
         test('should respect selected state', () => {
             const title = 'pity';
             const isSelected = true;
-            const wrapper = shallow(<Icon title={title} selected={isSelected} />);
+            const wrapper = shallow(<Icon selected={isSelected} title={title} />);
 
             expect(wrapper).toMatchSnapshot();
         });

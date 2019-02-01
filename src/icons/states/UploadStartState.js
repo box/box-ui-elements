@@ -16,10 +16,10 @@ type Props = {
 const UploadStartState = ({ className = '', color = BOX_BLUE, height = 85, title, width = 128 }: Props) => (
     <AccessibleSVG
         className={`upload-start-state ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 128 85"
+        width={width}
     >
         <path
             className="fill-color"
@@ -37,7 +37,7 @@ const UploadStartState = ({ className = '', color = BOX_BLUE, height = 85, title
             d="M45,50H85V20H45Zm6.08-2L57,40.66l5,6.94,10-11.05,9,11.45ZM47,22H83V47.38L72.05,33.45l-9.95,11L57,37.34,48.52,48H47Z"
             fill={color}
         />
-        <circle cx="54" cy="30" r="3" className="fill-color" fill={color} />
+        <circle className="fill-color" cx="54" cy="30" fill={color} r="3" />
         <path
             className="fill-color"
             d="M46.5 56h29a1.5 1.5 0 0 0 0-3h-29a1.5 1.5 0 0 0 0 3zM80.5 59h-34a1.5 1.5 0 0 0 0 3h34a1.5 1.5 0 0 0 0-3zM59.5 65h-13a1.5 1.5 0 0 0 0 3h13a1.5 1.5 0 0 0 0-3z"

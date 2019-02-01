@@ -80,7 +80,7 @@ type Props = {
 
 const ItemIcon = ({ className, dimension = 32, iconType, title }: Props) => {
     const IconComponent = itemIconTable[iconType] || IconFileDefault;
-    return <IconComponent className={className} height={dimension} width={dimension} title={title} />;
+    return <IconComponent className={className} height={dimension} title={title} width={dimension} />;
 };
 
 export default ItemIcon;

@@ -14,8 +14,8 @@ type Props = {
     formatMessage: Function,
     selectedValue?: string | number,
     shouldDisplayErrorMessage: boolean,
-    updateValueField: Function,
     updateSelectedField: Function,
+    updateValueField: Function,
     valueKey?: string | Date | number,
     valueOptions: Array<Object>,
     valueType: string,
@@ -62,8 +62,8 @@ const FilterValueField = ({
             return (
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
-                        hideLabel
                         error={shouldDisplayErrorMessage ? 'Please enter a number' : null}
+                        hideLabel
                         label="Float input"
                         name="float field"
                         onChange={updateValueField}
@@ -105,8 +105,8 @@ const FilterValueField = ({
             return (
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
-                        hideLabel
                         disabled
+                        hideLabel
                         label="Text Input"
                         name="Text field"
                         onChange={updateValueField}

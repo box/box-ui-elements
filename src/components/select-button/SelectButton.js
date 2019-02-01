@@ -8,7 +8,7 @@ type Props = {
 };
 
 const SelectButton = ({ children, className = '', isDisabled = false, ...rest }: Props) => (
-    <button className={`select-button ${className}`} type="button" disabled={isDisabled} {...rest}>
+    <button className={`select-button ${className}`} disabled={isDisabled} type="button" {...rest}>
         {children}
     </button>
 );

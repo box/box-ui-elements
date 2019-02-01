@@ -52,8 +52,8 @@ type Props = {
 
 type State = {
     editors?: Array<MetadataEditor>,
-    file?: BoxItem,
     error?: MessageDescriptor,
+    file?: BoxItem,
     isLoading: boolean,
     templates?: Array<MetadataTemplate>,
 };
@@ -63,7 +63,7 @@ const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
 
 class MetadataSidebar extends React.PureComponent<Props, State> {
-    state = { hasError: false, isLoading: false };
+    state = { isLoading: false };
 
     static defaultProps = {
         isFeatureEnabled: true,
@@ -382,7 +382,6 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent
-                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_METADATA)}
                 actions={
                     showTemplateDropdown ? (
                         <TemplateDropdown
@@ -396,6 +395,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                         />
                     ) : null
                 }
+                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_METADATA)}
             >
                 {error && (
                     <InlineError title={<FormattedMessage {...messages.error} />}>
@@ -411,8 +411,8 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                             <Instances
                                 editors={editors}
                                 onModification={this.onModification}
-                                onSave={this.onSave}
                                 onRemove={this.onRemove}
+                                onSave={this.onSave}
                             />
                         )}
                     </LoadingIndicatorWrapper>

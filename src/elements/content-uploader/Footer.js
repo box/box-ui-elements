@@ -12,10 +12,10 @@ import { ERROR_CODE_UPLOAD_FILE_LIMIT } from '../../constants';
 import './Footer.scss';
 
 type Props = {
-    isLoading: boolean,
-    hasFiles: boolean,
-    fileLimit: number,
     errorCode?: string,
+    fileLimit: number,
+    hasFiles: boolean,
+    isLoading: boolean,
     onCancel: Function,
     onClose?: Function,
     onUpload: Function,
@@ -35,17 +35,17 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
         <div className="bcu-footer">
             <div className="bcu-footer-left">
                 {onClose ? (
-                    <Button type="button" isDisabled={hasFiles} onClick={onClose}>
+                    <Button isDisabled={hasFiles} onClick={onClose} type="button">
                         <FormattedMessage {...messages.close} />
                     </Button>
                 ) : null}
             </div>
             {message && <div className="bcu-footer-message">{message}</div>}
             <div className="bcu-footer-right">
-                <Button type="button" isDisabled={!hasFiles} onClick={onCancel}>
+                <Button isDisabled={!hasFiles} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.cancelUploads} />
                 </Button>
-                <PrimaryButton type="button" isDisabled={!hasFiles} isLoading={isLoading} onClick={onUpload}>
+                <PrimaryButton isDisabled={!hasFiles} isLoading={isLoading} onClick={onUpload} type="button">
                     <FormattedMessage {...messages.upload} />
                 </PrimaryButton>
             </div>

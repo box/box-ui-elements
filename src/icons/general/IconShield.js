@@ -15,10 +15,10 @@ type Props = {
 const IconShield = ({ className = '', color = '#888888', height = 14, title, width = 12 }: Props) => (
     <AccessibleSVG
         className={`icon-governance ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 12 14"
+        width={width}
     >
         <g
             className="stroke-color"

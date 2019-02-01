@@ -26,7 +26,7 @@ describe('components/text-area/TextArea', () => {
     });
 
     test('should correctly render label with hideLabel when hideLabel is passed', () => {
-        const component = shallow(<TextArea label="hidden label" name="name" hideLabel />);
+        const component = shallow(<TextArea hideLabel label="hidden label" name="name" />);
 
         expect(component.find('Label').prop('hideLabel')).toEqual(true);
     });
@@ -34,7 +34,7 @@ describe('components/text-area/TextArea', () => {
     test('should correctly render label when defined and required', () => {
         const label = 'a label';
 
-        const component = shallow(<TextArea label={label} name="name" isRequired />);
+        const component = shallow(<TextArea isRequired label={label} name="name" />);
 
         expect(component.find('Label').prop('text')).toEqual(label);
     });
@@ -56,7 +56,7 @@ describe('components/text-area/TextArea', () => {
     });
 
     test('should show Tooltip when error exists', () => {
-        const wrapper = shallow(<TextArea label="label" error="error" />);
+        const wrapper = shallow(<TextArea error="error" label="label" />);
 
         const tooltip = wrapper.find('Tooltip');
         expect(tooltip.prop('isShown')).toBe(true);

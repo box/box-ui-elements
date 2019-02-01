@@ -7,9 +7,9 @@ import * as React from 'react';
 import AvatarComponent from 'components/avatar';
 
 type Props = {
-    user: User,
     className?: string,
     getAvatarUrl?: string => Promise<?string>,
+    user: User,
 };
 
 type State = {
@@ -53,7 +53,7 @@ class Avatar extends React.PureComponent<Props, State> {
         const { avatarUrl }: State = this.state;
         const { id, name } = user;
 
-        return <AvatarComponent className={className} id={id} name={name} avatarUrl={avatarUrl} />;
+        return <AvatarComponent avatarUrl={avatarUrl} className={className} id={id} name={name} />;
     }
 }
 

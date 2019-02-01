@@ -2,14 +2,14 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import type { itemType } from '../../common/box-types';
+import type { itemType as ItemType } from '../../common/box-types';
 
 import { EDITOR, CO_OWNER, PREVIEWER, PREVIEWER_UPLOADER, VIEWER, VIEWER_UPLOADER, UPLOADER } from './constants';
 import messages from './messages';
 
 type Props = {
     inviteePermissionLevel: string,
-    itemType: itemType,
+    itemType: ItemType,
 };
 
 const InviteePermissionDescription = ({ inviteePermissionLevel, itemType }: Props) => {

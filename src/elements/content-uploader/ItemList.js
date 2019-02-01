@@ -41,15 +41,15 @@ const ItemList = ({ items, onClick }: Props) => (
                         dataKey="progress"
                         flexGrow={1}
                         flexShrink={1}
-                        width={300}
                         style={{ textAlign: 'right' }}
+                        width={300}
                     />
                     <Column
                         cellRenderer={actionCell}
                         dataKey="status"
                         flexShrink={0}
-                        width={25}
                         style={{ marginRight: 18 }}
+                        width={25}
                     />
                 </Table>
             );

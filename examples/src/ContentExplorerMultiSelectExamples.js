@@ -109,11 +109,10 @@ class ContentExplorerMultiSelectExamples extends Component {
         this.state = {
             exampleMessage: 'Content Explorer is configured for multi select.',
             folderId: '0',
-            user: null,
         };
     }
 
-    handleEnterFolder = (enteredFolder, newFoldersPath) => {
+    handleEnterFolder = enteredFolder => {
         this.setState({
             exampleMessage: `Enter folder { id: ${enteredFolder.id}, name: ${enteredFolder.name} }`,
             folderId: enteredFolder.id,
@@ -150,7 +149,7 @@ class ContentExplorerMultiSelectExamples extends Component {
         });
     };
 
-    handleOnItemRemove = (item, index) => {
+    handleOnItemRemove = () => {
         this.setState({
             exampleMessage: 'User Filtered Removed',
             folderId: '0',

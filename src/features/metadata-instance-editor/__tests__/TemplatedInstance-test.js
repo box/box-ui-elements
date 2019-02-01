@@ -122,12 +122,12 @@ describe('features/metadata-instance-editor/fields/TemplatedInstance', () => {
     test('should correctly render fields that are visible', () => {
         const wrapper = shallow(
             <TemplatedInstance
-                template={{
-                    fields,
-                }}
                 data={data}
                 dataValue="value"
                 errors={{}}
+                template={{
+                    fields,
+                }}
             />,
         );
         expect(wrapper).toMatchSnapshot();
@@ -136,12 +136,12 @@ describe('features/metadata-instance-editor/fields/TemplatedInstance', () => {
     test('should correctly render attributes hidden message', () => {
         const wrapper = shallow(
             <TemplatedInstance
-                template={{
-                    fields: allFieldsHidden,
-                }}
                 data={data}
                 dataValue="value"
                 errors={{}}
+                template={{
+                    fields: allFieldsHidden,
+                }}
             />,
         );
         expect(wrapper).toMatchSnapshot();
@@ -150,12 +150,12 @@ describe('features/metadata-instance-editor/fields/TemplatedInstance', () => {
     test('should correctly render no attributes message', () => {
         const wrapper = shallow(
             <TemplatedInstance
-                template={{
-                    fields: noFieldsForTemplate,
-                }}
                 data={data}
                 dataValue="value"
                 errors={{}}
+                template={{
+                    fields: noFieldsForTemplate,
+                }}
             />,
         );
         expect(wrapper).toMatchSnapshot();

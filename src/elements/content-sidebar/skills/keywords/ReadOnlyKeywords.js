@@ -14,8 +14,8 @@ import './ReadOnlyKeywords.scss';
 
 type Props = {
     duration?: number,
-    keywords: Array<SkillCardEntry>,
     getViewer?: Function,
+    keywords: Array<SkillCardEntry>,
 };
 
 type State = {
@@ -60,8 +60,8 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
         return (
             <React.Fragment>
                 <PillCloud
-                    options={options}
                     onSelect={this.onSelect}
+                    options={options}
                     {...pillCloudProps}
                     buttonProps={{
                         [INTERACTION_TARGET]: SKILLS_TARGETS.KEYWORDS.SELECT,
@@ -69,11 +69,11 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
                 />
                 {!!selected && Array.isArray(selected.appears) && selected.appears.length > 0 && (
                     <Timeline
-                        text={selected.text}
-                        timeslices={selected.appears}
                         duration={duration}
                         getViewer={getViewer}
                         interactionTarget={SKILLS_TARGETS.KEYWORDS.TIMELINE}
+                        text={selected.text}
+                        timeslices={selected.appears}
                     />
                 )}
             </React.Fragment>

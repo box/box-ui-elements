@@ -38,7 +38,7 @@ describe('components/loading-indicator/LoadingIndicatorWrapper', () => {
     test('should take in crawler position top', () => {
         const child = <div>child</div>;
         const wrapper = shallow(
-            <LoadingIndicatorWrapper crawlerPosition="top" className="test-name" isLoading="true">
+            <LoadingIndicatorWrapper className="test-name" crawlerPosition="top" isLoading="true">
                 {child}
             </LoadingIndicatorWrapper>,
         );
@@ -48,14 +48,14 @@ describe('components/loading-indicator/LoadingIndicatorWrapper', () => {
 
     test('should pass thru any rest properties', () => {
         const wrapper = shallow(
-            <LoadingIndicatorWrapper data-resin-target="test" className="test-name" isLoading="true" />,
+            <LoadingIndicatorWrapper className="test-name" data-resin-target="test" isLoading="true" />,
         );
 
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should hide content', () => {
-        const wrapper = shallow(<LoadingIndicatorWrapper hideContent className="test-name" isLoading="true" />);
+        const wrapper = shallow(<LoadingIndicatorWrapper className="test-name" hideContent isLoading="true" />);
 
         expect(wrapper).toMatchSnapshot();
     });

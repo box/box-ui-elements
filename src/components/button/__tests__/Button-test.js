@@ -45,7 +45,7 @@ describe('components/button/Button', () => {
         const preventDefault = sinon.spy();
         const stopPropagation = sinon.spy();
 
-        const wrapper = shallow(<Button onClick={onClickHandler} isDisabled />);
+        const wrapper = shallow(<Button isDisabled onClick={onClickHandler} />);
 
         const contains = sinon.stub();
         contains.withArgs('is-disabled').returns(true);
@@ -62,7 +62,7 @@ describe('components/button/Button', () => {
         const preventDefault = sinon.spy();
         const stopPropagation = sinon.spy();
 
-        const wrapper = shallow(<Button onClick={onClickHandler} className="is-disabled" />);
+        const wrapper = shallow(<Button className="is-disabled" onClick={onClickHandler} />);
 
         const contains = sinon.stub();
         contains.withArgs('is-disabled').returns(true);

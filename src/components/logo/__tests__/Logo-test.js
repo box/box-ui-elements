@@ -23,7 +23,7 @@ describe('components/logo/Logo', () => {
     test('should correctly render Logo specified width and height', () => {
         const width = 55;
         const height = 445;
-        const wrapper = shallow(<Logo width={width} height={height} />);
+        const wrapper = shallow(<Logo height={height} width={width} />);
 
         expect(wrapper.find('IconLogo').prop('width')).toEqual(width);
         expect(wrapper.find('IconLogo').prop('height')).toEqual(height);

@@ -15,13 +15,13 @@ type Props = {
 const IconAccepted = ({ className = '', color = '#26C281', height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={`icon-accepted ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 16 16"
+        width={width}
     >
         <g fill="none" fillRule="evenodd">
-            <circle fill={color} cx={8} cy={8} r={8} />
+            <circle cx={8} cy={8} fill={color} r={8} />
             <path
                 d="M7.051 9.253L4.965 7.172 3.75 8.423l3.301 3.327 5.699-5.751-1.235-1.249-4.464 4.503z"
                 fill="#FFF"

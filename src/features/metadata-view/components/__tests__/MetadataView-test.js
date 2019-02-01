@@ -35,7 +35,7 @@ describe('features/metadata-view/components/MetadataView', () => {
     test('generateColumnsFromFields()', () => {
         const wrapper = getWrapper();
         const generatedColumns = wrapper.instance().generateColumnsFromFields(template);
-        generatedColumns.forEach(column => {
+        generatedColumns.forEach(() => {
             expect.objectContaining({
                 id: expect.any(String),
                 label: expect.any(String),

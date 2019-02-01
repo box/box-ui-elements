@@ -14,13 +14,13 @@ type Props = {
     children?: React.Node,
     className?: string,
     error?: React.Node,
-    infoTooltip?: React.Node,
     infoIconProps?: Object,
+    infoTooltip?: React.Node,
     isDisabled?: boolean,
     /** Label displayed for the input */
     label: React.Node,
-    name: string,
     labelTooltip?: string,
+    name: string,
     /** Handler for the change event on the select element */
     onChange?: Function,
     showErrorOutline?: boolean,
@@ -50,16 +50,17 @@ const Select = ({
     return (
         <div className={classes}>
             <Label hideLabel={!showLabel} text={label} tooltip={labelTooltip}>
-                <Tooltip isShown={!!error} text={error || ''} position="middle-right" theme="error">
+                <Tooltip isShown={!!error} position="middle-right" text={error || ''} theme="error">
                     <span className="select-container">
                         <span className="select-container-inner">
-                            <select name={name} disabled={isDisabled} onChange={onChange} {...rest}>
+                            {/* eslint-disable-next-line jsx-a11y/no-onchange */}
+                            <select disabled={isDisabled} name={name} onChange={onChange} {...rest}>
                                 {children}
                             </select>
                             <span className="select-overlay" />
                         </span>
                         {infoTooltip && (
-                            <Tooltip text={infoTooltip} position="middle-right">
+                            <Tooltip position="middle-right" text={infoTooltip}>
                                 <span className="tooltip-icon-container">
                                     <IconInfo height={16} width={16} {...infoIconProps} />
                                 </span>

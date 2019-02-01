@@ -31,9 +31,9 @@ type SubMenuItem = {
     /** Optional HTML attributes to append to menu item */
     htmlAttributes?: Object,
     /** React element representing an svg icon */
-    iconElement?: ?React.Element<any>,
-    /** React component representing an svg icon */
     iconComponent?: ?React.ComponentType<any>,
+    /** React component representing an svg icon */
+    iconElement?: ?React.Element<any>,
     /** Unique identifier for menu item */
     id: string,
     /** Localized text string to use for individual menu items */
@@ -68,9 +68,9 @@ type MenuItem = {
     /** Optional HTML attributes to append to menu item */
     htmlAttributes?: Object,
     /** React element or component representing an svg icon */
-    iconElement?: ?React.Element<any>,
-    /** React component representing an svg icon */
     iconComponent?: ?React.ComponentType<any>,
+    /** React component representing an svg icon */
+    iconElement?: ?React.Element<any>,
     /** Unique identifier for menu item */
     id: string,
     /** Sub menu items for the top-level menu */

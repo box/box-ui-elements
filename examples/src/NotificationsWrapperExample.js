@@ -22,7 +22,7 @@ class NotificationsWrapperExample extends Component {
 
         const type = [undefined, 'info', 'warn', 'error'][id % 4];
         const notification = (
-            <Notification key={id} type={type} duration={duration} onClose={() => this.closeNotification(id)}>
+            <Notification key={id} duration={duration} onClose={() => this.closeNotification(id)} type={type}>
                 <span>Hello world! I was made at {new Date().toTimeString()}</span>
                 <Button>Okay</Button>
             </Notification>

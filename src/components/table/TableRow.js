@@ -9,7 +9,7 @@ type Props = {
 };
 
 const TableRow = ({ children, className = '', rowRef, ...rest }: Props) => (
-    <tr className={classNames('table-row', className)} ref={rowRef} {...rest}>
+    <tr ref={rowRef} className={classNames('table-row', className)} {...rest}>
         {children}
     </tr>
 );

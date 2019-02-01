@@ -21,19 +21,19 @@ import './Keywords.scss';
 
 type Props = {
     card: SkillCard,
-    hasError: boolean,
-    transcript?: SkillCard,
-    isEditable: boolean,
     getViewer?: Function,
+    hasError: boolean,
+    isEditable: boolean,
     onSkillChange: Function,
+    transcript?: SkillCard,
 };
 
 type State = {
+    adds: Array<SkillCardEntry>,
+    hasError: boolean,
     isEditing: boolean,
     isLoading: boolean,
-    hasError: boolean,
     keywords: Array<SkillCardEntry>,
-    adds: Array<SkillCardEntry>,
     removes: Array<SkillCardEntry>,
 };
 
@@ -179,14 +179,14 @@ class Keywords extends PureComponent<Props, State> {
         });
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading} className="be-keywords">
+            <LoadingIndicatorWrapper className="be-keywords" isLoading={isLoading}>
                 {hasKeywords && isEditable && !isLoading && (
                     <Tooltip text={<FormattedMessage {...messages.editLabel} />}>
                         <PlainButton
-                            type="button"
                             className={editClassName}
-                            onClick={this.toggleIsEditing}
                             data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
+                            onClick={this.toggleIsEditing}
+                            type="button"
                         >
                             <IconEdit />
                         </PlainButton>
@@ -200,14 +200,14 @@ class Keywords extends PureComponent<Props, State> {
                 {isEditing && (
                     <EditableKeywords
                         keywords={entries}
-                        onSave={this.onSave}
                         onAdd={this.onAdd}
-                        onDelete={this.onDelete}
                         onCancel={this.onCancel}
+                        onDelete={this.onDelete}
+                        onSave={this.onSave}
                     />
                 )}
                 {!isEditing && hasKeywords && (
-                    <ReadOnlyKeywords keywords={entries} duration={duration} getViewer={getViewer} />
+                    <ReadOnlyKeywords duration={duration} getViewer={getViewer} keywords={entries} />
                 )}
                 {!isEditing && !hasKeywords && <FormattedMessage {...messages.skillNoInfoFoundError} />}
             </LoadingIndicatorWrapper>

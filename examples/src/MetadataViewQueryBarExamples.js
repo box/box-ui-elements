@@ -14,8 +14,8 @@ type Props = {
 const MetadataViewQueryBarExamples = ({ activeTemplate, onTemplateChange, templates, visibleColumns }: Props) => (
     <QueryBar
         activeTemplate={activeTemplate}
-        onTemplateChange={onTemplateChange}
         onColumnChange={() => {}}
+        onTemplateChange={onTemplateChange}
         templates={templates}
         visibleColumns={visibleColumns || []}
     />

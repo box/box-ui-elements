@@ -11,11 +11,11 @@ type Props = {
     /** The select field is disabled if true */
     isDisabled?: boolean,
     /** The currently selected option value */
-    selectedValue?: SelectOptionValueProp,
+    onChange: Function,
     /** The placeholder text for the field  */
     placeholder?: string,
     /** Function will be called with the selected option after user selects a new option */
-    onChange: Function,
+    selectedValue?: SelectOptionValueProp,
 };
 
 class SingleSelectField extends React.Component<Props> {
@@ -44,10 +44,10 @@ class SingleSelectField extends React.Component<Props> {
 
         return (
             <BaseSelectField
+                className={!isFieldSelected && placeholder ? 'placeholder' : ''}
                 isDisabled={isDisabled}
                 onChange={this.handleChange}
                 placeholder={placeholder}
-                className={!isFieldSelected && placeholder ? 'placeholder' : ''}
                 {...selectFieldProps}
             />
         );

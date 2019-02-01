@@ -1,3 +1,5 @@
+/* eslint-disable react/button-has-type */
+
 import React from 'react';
 import sinon from 'sinon';
 
@@ -110,7 +112,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render tooltip class when specified', () => {
             const wrapper = shallow(
-                <Tooltip text="hi" className="testing" isShown>
+                <Tooltip className="testing" isShown text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -120,7 +122,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should constrain to scroll parent when specified', () => {
             const wrapper = shallow(
-                <Tooltip text="hi" constrainToScrollParent>
+                <Tooltip constrainToScrollParent text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -139,7 +141,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render correct attachments when position is specified', () => {
             const wrapper = shallow(
-                <Tooltip text="hi" position="middle-right">
+                <Tooltip position="middle-right" text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -172,7 +174,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should show tooltip when isShown prop is true', () => {
             const wrapper = shallow(
-                <Tooltip text="hi" isShown>
+                <Tooltip isShown text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -194,7 +196,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render error class when theme is error', () => {
             const wrapper = shallow(
-                <Tooltip text="hi" isShown theme="error">
+                <Tooltip isShown text="hi" theme="error">
                     <button />
                 </Tooltip>,
             );

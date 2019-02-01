@@ -20,8 +20,8 @@ const IconDownload = ({ className = '', color = '#444', height = 14, title, widt
         viewBox="0 0 12 14"
         width={width}
     >
-        <path className="stroke-color" stroke={color} fill="none" d="M8.5.8h-5v5H1.2L6 10.6l4.8-4.8H8.5v-5z" />
-        <path className="stroke-color" stroke={color} fill="none" d="M0 13.3h12" />
+        <path className="stroke-color" d="M8.5.8h-5v5H1.2L6 10.6l4.8-4.8H8.5v-5z" fill="none" stroke={color} />
+        <path className="stroke-color" d="M0 13.3h12" fill="none" stroke={color} />
     </AccessibleSVG>
 );
 

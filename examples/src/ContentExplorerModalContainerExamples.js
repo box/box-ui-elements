@@ -108,7 +108,7 @@ class ContentExplorerModalContainerExamples extends Component {
         });
     };
 
-    handleEnterFolder = (enteredFolder, newFoldersPath) => {
+    handleEnterFolder = enteredFolder => {
         this.setState({ folderId: enteredFolder.id });
     };
 
@@ -126,7 +126,7 @@ class ContentExplorerModalContainerExamples extends Component {
         this.closeModal();
     };
 
-    handleSearchSubmit = searchQuery => {
+    handleSearchSubmit = () => {
         this.setState({
             folderId: 'search',
         });

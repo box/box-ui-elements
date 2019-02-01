@@ -35,19 +35,19 @@ import {
 import './DetailsSidebar.scss';
 
 type ExternalProps = {
-    fileId: string, // TODO: add fileVersionId
-    hasNotices?: boolean,
-    hasProperties?: boolean,
+    bannerPolicy?: Object, // TODO: add fileVersionId
+    fileId: string,
     hasAccessStats?: boolean,
     hasClassification?: boolean,
+    hasNotices?: boolean,
+    hasProperties?: boolean,
     hasRetentionPolicy?: boolean,
     hasVersions?: boolean,
-    retentionPolicy?: Object,
-    bannerPolicy?: Object,
     onAccessStatsClick?: Function,
     onClassificationClick: Function,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
+    retentionPolicy?: Object,
 } & ErrorContextProps &
     WithLoggerProps;
 type Props = {
@@ -59,12 +59,12 @@ type Props = {
 type State = {
     accessStats?: FileAccessStats,
     accessStatsError?: Errors,
-    isLoadingAccessStats: boolean,
     classification?: ClassificationInfo,
     classificationError?: Errors,
-    isLoadingClassification: boolean,
     file?: BoxItem,
     fileError?: Errors,
+    isLoadingAccessStats: boolean,
+    isLoadingClassification: boolean,
 };
 
 const MARK_NAME_JS_READY = `${ORIGIN_DETAILS_SIDEBAR}_${EVENT_JS_READY}`;
@@ -453,8 +453,8 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                 {hasAccessStats && (
                     <SidebarAccessStats
                         accessStats={accessStats}
-                        onAccessStatsClick={onAccessStatsClick}
                         file={file}
+                        onAccessStatsClick={onAccessStatsClick}
                         {...accessStatsError}
                     />
                 )}
@@ -466,22 +466,22 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                         {hasVersions && (
                             <div className="bcs-details-content">
                                 {hasVersions && (
-                                    <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} file={file} />
+                                    <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />
                                 )}
                             </div>
                         )}
                         <SidebarFileProperties
-                            onDescriptionChange={this.onDescriptionChange}
                             file={file}
+                            onDescriptionChange={this.onDescriptionChange}
                             {...fileError}
-                            hasClassification={hasClassification}
-                            onClassificationClick={this.onClassificationClick}
-                            classification={classification}
-                            hasRetentionPolicy={hasRetentionPolicy}
-                            retentionPolicy={retentionPolicy}
                             bannerPolicy={bannerPolicy}
-                            onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
+                            classification={classification}
+                            hasClassification={hasClassification}
+                            hasRetentionPolicy={hasRetentionPolicy}
                             isLoading={isLoadingAccessStats && isLoadingClassification}
+                            onClassificationClick={this.onClassificationClick}
+                            onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
+                            retentionPolicy={retentionPolicy}
                             {...classificationError}
                         />
                     </SidebarSection>

@@ -2,11 +2,12 @@
 import * as React from 'react';
 
 type Props = {
-    title?: React.Node,
     children: React.Node,
     className: string,
+    title?: React.Node,
 };
 
+// eslint-disable-next-line react/prefer-stateless-function
 class LinkGroup extends React.Component<Props> {
     static defaultProps = {
         title: '',

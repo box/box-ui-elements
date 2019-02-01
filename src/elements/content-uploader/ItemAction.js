@@ -19,9 +19,9 @@ import './ItemAction.scss';
 const ICON_CHECK_COLOR = '#26C281';
 
 type Props = {
-    status: UploadStatus,
-    onClick: Function,
     isFolder?: boolean,
+    onClick: Function,
+    status: UploadStatus,
 } & InjectIntlProvidedProps;
 
 const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
@@ -51,8 +51,8 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
 
     return (
         <div className="bcu-item-action">
-            <Tooltip text={tooltip} position="top-left">
-                <PlainButton type="button" onClick={onClick}>
+            <Tooltip position="top-left" text={tooltip}>
+                <PlainButton onClick={onClick} type="button">
                     {icon}
                 </PlainButton>
             </Tooltip>

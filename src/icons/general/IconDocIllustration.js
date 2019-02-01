@@ -28,10 +28,10 @@ class IconDocIllustration extends React.PureComponent<Props> {
         return (
             <AccessibleSVG
                 className={`${ICON_CLASS} ${className}`}
-                title={title}
-                width={width}
                 height={height}
+                title={title}
                 viewBox="0 0 170 170"
+                width={width}
             >
                 <defs>
                     <path
@@ -43,79 +43,79 @@ class IconDocIllustration extends React.PureComponent<Props> {
                         id={`${this.idPrefix}c`}
                     />
                     <filter
+                        filterUnits="objectBoundingBox"
+                        height="119.8%"
+                        id={`${this.idPrefix}b`}
+                        width="124.9%"
                         x="-12.4%"
                         y="-6.7%"
-                        width="124.9%"
-                        height="119.8%"
-                        filterUnits="objectBoundingBox"
-                        id={`${this.idPrefix}b`}
                     >
                         <feOffset dy="4" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="3.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5" />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
                     </filter>
                     <path
                         d="M153.574 33.655V152.2c0 1.54-1.255 2.8-2.789 2.8H44.79A2.803 2.803 0 0 1 42 152.2V17.8c0-1.54 1.255-2.8 2.79-2.8h90.2c.733 0 1.465.28 1.988.805l15.795 15.855c.523.56.801 1.26.801 1.995z"
                         id={`${this.idPrefix}e`}
                     />
                     <filter
+                        filterUnits="objectBoundingBox"
+                        height="135%"
+                        id={`${this.idPrefix}d`}
+                        width="143.9%"
                         x="-22%"
                         y="-12.5%"
-                        width="143.9%"
-                        height="135%"
-                        filterUnits="objectBoundingBox"
-                        id={`${this.idPrefix}d`}
                     >
                         <feOffset dy="7" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="7" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="7" />
                         <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" in="shadowBlurOuter1" />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
                     </filter>
                     <path
                         d="M59.859 39.5c-3.835 0-6.973-3.15-6.973-7s3.138-7 6.973-7 6.973 3.15 6.973 7-3.138 7-6.973 7z"
                         id={`${this.idPrefix}g`}
                     />
                     <filter
+                        filterUnits="objectBoundingBox"
+                        height="278.6%"
+                        id={`${this.idPrefix}f`}
+                        width="279.3%"
                         x="-89.6%"
                         y="-60.7%"
-                        width="279.3%"
-                        height="278.6%"
-                        filterUnits="objectBoundingBox"
-                        id={`${this.idPrefix}f`}
                     >
                         <feOffset dy="4" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="3.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5" />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
                     </filter>
                     <filter
+                        filterUnits="objectBoundingBox"
+                        height="274.7%"
+                        id={`${this.idPrefix}h`}
+                        width="249.1%"
                         x="-74.5%"
                         y="-87.4%"
-                        width="249.1%"
-                        height="274.7%"
-                        filterUnits="objectBoundingBox"
-                        id={`${this.idPrefix}h`}
                     >
-                        <feGaussianBlur stdDeviation="3.465" in="SourceGraphic" />
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="3.465" />
                     </filter>
                     <path
                         d="M84.998 136.38a19.765 19.765 0 0 0 5.788-14.035c0-10.955-8.856-19.845-19.77-19.845v19.845l13.982 14.035z"
                         id={`${this.idPrefix}j`}
                     />
                     <filter
+                        filterUnits="objectBoundingBox"
+                        height="182.6%"
+                        id={`${this.idPrefix}i`}
+                        width="241.6%"
                         x="-70.8%"
                         y="-20.7%"
-                        width="241.6%"
-                        height="182.6%"
-                        filterUnits="objectBoundingBox"
-                        id={`${this.idPrefix}i`}
                     >
                         <feOffset dy="7" in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="3.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" in="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5" />
+                        <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
                     </filter>
                 </defs>
                 <g fill="none" fillRule="evenodd">
-                    <g opacity=".2" fill="#8EA6B2">
+                    <g fill="#8EA6B2" opacity=".2">
                         <use xlinkHref={`#${this.idPrefix}a`} />
                         <use xlinkHref={`#${this.idPrefix}a`} />
                     </g>
@@ -125,7 +125,7 @@ class IconDocIllustration extends React.PureComponent<Props> {
                         <use fill="#8EA6B2" xlinkHref={`#${this.idPrefix}c`} />
                     </g>
                     <use fill="#000" filter={`url(#${this.idPrefix}d)`} xlinkHref={`#${this.idPrefix}e`} />
-                    <use fillOpacity=".95" fill="#FFF" xlinkHref={`#${this.idPrefix}e`} />
+                    <use fill="#FFF" fillOpacity=".95" xlinkHref={`#${this.idPrefix}e`} />
                     <path d="M70.912 102.5c-10.913 0-19.77 8.89-19.77 19.845h19.77V102.5z" fill="#0061D5" />
                     <path
                         d="M70.912 122.45h-19.77c0 10.955 8.857 19.845 19.77 19.845 5.44 0 10.39-2.205 13.982-5.81L70.912 122.45z"
@@ -134,14 +134,14 @@ class IconDocIllustration extends React.PureComponent<Props> {
                     <use fill="#000" filter={`url(#${this.idPrefix}f)`} xlinkHref={`#${this.idPrefix}g`} />
                     <use fill="#8EA6B2" xlinkHref={`#${this.idPrefix}g`} />
                     <path
-                        fillOpacity=".2"
-                        fill="#005ECF"
-                        filter={`url(#${this.idPrefix}h)`}
                         d="M52.537 30.75h13.947v11.9H52.537z"
+                        fill="#005ECF"
+                        fillOpacity=".2"
+                        filter={`url(#${this.idPrefix}h)`}
                     />
                     <use fill="#000" filter={`url(#${this.idPrefix}i)`} xlinkHref={`#${this.idPrefix}j`} />
                     <use fill="#76AEF1" xlinkHref={`#${this.idPrefix}j`} />
-                    <path stroke="#FFF" strokeWidth=".5" d="M57.418 32.57l1.465 1.47 2.929-2.94" />
+                    <path d="M57.418 32.57l1.465 1.47 2.929-2.94" stroke="#FFF" strokeWidth=".5" />
                     <path
                         d="M77.293 37.75a5.233 5.233 0 0 1-5.23-5.25 5.233 5.233 0 0 1 5.23-5.25 5.233 5.233 0 0 1 5.23 5.25 5.233 5.233 0 0 1-5.23 5.25zM90.193 36c-1.917 0-3.486-1.575-3.486-3.5s1.569-3.5 3.486-3.5c1.918 0 3.487 1.575 3.487 3.5S92.111 36 90.193 36z"
                         fill="#8EA6B2"

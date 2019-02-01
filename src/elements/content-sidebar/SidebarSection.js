@@ -14,9 +14,9 @@ import './SidebarSection.scss';
 type Props = {
     children?: any,
     className: string,
-    title?: string | React.Node,
-    isOpen: boolean,
     interactionTarget?: string,
+    isOpen: boolean,
+    title?: string | React.Node,
 };
 
 type State = {
@@ -82,10 +82,10 @@ class SidebarSection extends React.PureComponent<Props, State> {
             <div className={sectionClassName}>
                 {title && (
                     <PlainButton
-                        type="button"
-                        onClick={this.toggleVisibility}
                         className="bcs-section-title"
                         data-resin-target={interactionTarget}
+                        onClick={this.toggleVisibility}
+                        type="button"
                     >
                         {title}
                         <IconCaretDown color={COLOR_999} width={8} />

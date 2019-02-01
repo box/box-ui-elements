@@ -4,7 +4,7 @@ import { RadioButton } from '..';
 
 describe('components/radio/RadioButton', () => {
     const renderRadioButtons = props => (
-        <RadioButton name="name1" label="Select things" value="1" description="radio1desc" {...props} />
+        <RadioButton description="radio1desc" label="Select things" name="name1" value="1" {...props} />
     );
 
     test('should correctly render default component', () => {

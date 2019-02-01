@@ -10,6 +10,7 @@ exports[`feature/metadata-view/FilterItem render() should render FilterItem 1`] 
     <button
       className="delete-button"
       onClick={[Function]}
+      type="button"
     >
       <IconClose
         color="#999EA4"

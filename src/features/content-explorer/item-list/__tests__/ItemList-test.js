@@ -172,7 +172,7 @@ describe('features/content-explorer/item-list/ItemList', () => {
     describe('itemIconRenderer', () => {
         test('should use itemIconRenderer when specified', () => {
             const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }];
-            const itemIconRenderer = () => <button className="icon-test" />;
+            const itemIconRenderer = () => <button type="button" className="icon-test" />;
             const wrapper = renderComponent({
                 items,
                 itemIconRenderer,
@@ -185,7 +185,7 @@ describe('features/content-explorer/item-list/ItemList', () => {
     describe('itemButtonRenderer', () => {
         test('should use itemButtonRenderer when specified', () => {
             const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }];
-            const itemButtonRenderer = () => <button className="button-test" />;
+            const itemButtonRenderer = () => <button type="button" className="button-test" />;
             const wrapper = renderComponent({
                 items,
                 itemButtonRenderer,

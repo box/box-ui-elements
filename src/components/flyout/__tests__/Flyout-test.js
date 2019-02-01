@@ -17,6 +17,7 @@ const TOP_RIGHT = 'top-right';
 
 describe('components/flyout/Flyout', () => {
     const FakeButton = props => (
+        // eslint-disable-next-line react/button-has-type
         <button className="fake-button" {...props}>
             Some Button
         </button>

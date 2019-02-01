@@ -53,13 +53,13 @@ const TextInput = ({
     return (
         <div className={classes}>
             <Label
-                text={label}
-                showOptionalText={!hideOptionalLabel && !isRequired}
                 hideLabel={hideLabel}
+                showOptionalText={!hideOptionalLabel && !isRequired}
+                text={label}
                 tooltip={labelTooltip}
             >
                 {!!description && <i className="text-input-description">{description}</i>}
-                <Tooltip isShown={!!error} text={error || ''} position={errorPosition || 'middle-right'} theme="error">
+                <Tooltip isShown={!!error} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
                     <input ref={inputRef} required={isRequired} {...rest} />
                 </Tooltip>
                 {isLoading && !isValid && <LoadingIndicator className="text-input-loading" />}

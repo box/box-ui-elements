@@ -15,8 +15,8 @@ type Props = {
 const IconCheck = ({ className = '', color = '#000000', height = 24, title, width = 24 }: Props) => (
     <AccessibleSVG
         className={`icon-check ${className}`}
-        title={title}
         height={height}
+        title={title}
         viewBox="0 0 24 24"
         width={width}
     >

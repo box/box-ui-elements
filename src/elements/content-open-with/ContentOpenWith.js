@@ -49,13 +49,13 @@ type Props = {
     /** Box API url. */
     apiHost: string,
     /** Class name applied to base component. */
-    className: string,
-    /** Application client name. */
-    clientName: string,
-    /** Custom name for Box Tools to display to users */
-    boxToolsName?: string,
-    /** Custom URL to direct users to install Box Tools */
     boxToolsInstallUrl?: string,
+    /** Application client name. */
+    boxToolsName?: string,
+    /** Custom name for Box Tools to display to users */
+    className: string,
+    /** Custom URL to direct users to install Box Tools */
+    clientName: string,
     /** Determines positioning of menu dropdown */
     dropdownAlignment: Alignment,
     /** Box File ID. */
@@ -65,9 +65,9 @@ type Props = {
     /** Messages to be translated. */
     messages?: StringMap,
     /** Callback that executes when an integration attempts to open the given file */
-    onExecute: Function,
-    /** Callback that executes when an integration invocation fails. The two most common cases being API failures or blocking of a new window */
     onError: Function,
+    /** Callback that executes when an integration invocation fails. The two most common cases being API failures or blocking of a new window */
+    onExecute: Function,
     /** Axios request interceptor that runs before a network request. */
     requestInterceptor?: Function,
     /** Axios response interceptor that runs before a network response is returned. */
@@ -77,11 +77,11 @@ type Props = {
 };
 
 type State = {
-    isDropdownOpen: boolean,
-    integrations: ?Array<Integration>,
-    isLoading: boolean,
-    fetchError: ?Error,
     executePostData: ?Object,
+    fetchError: ?Error,
+    integrations: ?Array<Integration>,
+    isDropdownOpen: boolean,
+    isLoading: boolean,
     shouldRenderErrorIntegrationPortal: boolean,
     shouldRenderLoadingIntegrationPortal: boolean,
 };
@@ -255,7 +255,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 let formattedErrorMessage = <FormattedMessage {...errorMessageObject} />;
                 if (error.message === BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY) {
                     formattedErrorMessage = (
-                        <BoxToolsInstallMessage boxToolsName={boxToolsName} boxToolsInstallUrl={boxToolsInstallUrl} />
+                        <BoxToolsInstallMessage boxToolsInstallUrl={boxToolsInstallUrl} boxToolsName={boxToolsName} />
                     );
                 }
 
@@ -558,19 +558,19 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
         return (
             <Internationalize language={language} messages={intlMessages}>
-                <div id={this.id} className={className} data-testid="bcow-content">
+                <div className={className} data-testid="bcow-content" id={this.id}>
                     {numIntegrations <= 1 ? (
                         <OpenWithButton
-                            error={fetchError}
-                            onClick={this.onIntegrationClick}
                             displayIntegration={displayIntegration}
+                            error={fetchError}
                             isLoading={isLoading}
+                            onClick={this.onIntegrationClick}
                         />
                     ) : (
                         <OpenWithDropdownMenu
                             dropdownAlignment={dropdownAlignment}
-                            onClick={this.onIntegrationClick}
                             integrations={((integrations: any): Array<Integration>)}
+                            onClick={this.onIntegrationClick}
                         />
                     )}
                     {(shouldRenderLoadingIntegrationPortal || shouldRenderErrorIntegrationPortal) && (
@@ -581,10 +581,10 @@ class ContentOpenWith extends PureComponent<Props, State> {
                     )}
                     {executePostData && (
                         <ExecuteForm
-                            onSubmit={this.onExecuteFormSubmit}
                             executePostData={executePostData}
-                            windowName={this.integrationWindow && this.integrationWindow.name}
                             id={this.id}
+                            onSubmit={this.onExecuteFormSubmit}
+                            windowName={this.integrationWindow && this.integrationWindow.name}
                         />
                     )}
                 </div>

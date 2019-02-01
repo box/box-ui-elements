@@ -9,7 +9,7 @@ describe('components/checkbox/Checkbox', () => {
 
     beforeEach(() => {
         onChange = sinon.spy();
-        wrapper = shallow(<Checkbox id="1" name="name" label="Check things" onChange={onChange} />);
+        wrapper = shallow(<Checkbox id="1" label="Check things" name="name" onChange={onChange} />);
     });
 
     test('should correctly render default component', () => {

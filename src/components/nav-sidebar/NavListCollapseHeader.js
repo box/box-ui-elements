@@ -17,7 +17,7 @@ type Props = {
 const NavListCollapseHeader = ({ children, onToggleCollapse, containerProps = {} }: Props) => (
     <div className="nav-list-collapse-header" {...containerProps}>
         {children}
-        <PlainButton type="button" onClick={onToggleCollapse} className="nav-list-collapse">
+        <PlainButton className="nav-list-collapse" onClick={onToggleCollapse} type="button">
             <IconCaretDown width={8} />
         </PlainButton>
     </div>

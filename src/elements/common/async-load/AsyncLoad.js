@@ -3,9 +3,9 @@ import * as React from 'react';
 import { retryNumOfTimes } from 'utils/function';
 
 type Props = {
-    loader: () => Promise<any>,
-    fallback?: React.Element<any>,
     errorComponent?: React.ComponentType<any>,
+    fallback?: React.Element<any>,
+    loader: () => Promise<any>,
 };
 
 type State = {

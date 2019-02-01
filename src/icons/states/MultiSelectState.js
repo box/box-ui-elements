@@ -16,8 +16,8 @@ type Props = {
 const MultiSelectState = ({ className = '', color = BOX_BLUE, height = 149, title, width = 180 }: Props) => (
     <AccessibleSVG
         className={`multi-select-state ${className}`}
-        title={title}
         height={height}
+        title={title}
         viewBox="0 0 180 140"
         width={width}
     >

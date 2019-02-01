@@ -19,8 +19,8 @@ type State = {
 
 type Props = {
     onAdd?: Function,
-    templates?: Array<Object>,
     onTemplateChange?: Function,
+    templates?: Array<Object>,
     usedTemplates: Array<Object>,
 };
 
@@ -76,8 +76,8 @@ class TemplateButton extends React.Component<Props, State> {
             <Button
                 className={buttonClasses}
                 isDisabled={!templates}
-                type="button"
                 onClick={this.toggleTemplateDropdownButton}
+                type="button"
             >
                 <MenuToggle>
                     {icon}
@@ -100,13 +100,13 @@ class TemplateButton extends React.Component<Props, State> {
             <TemplateDropdown
                 className="query-bar-template-dropdown-flyout"
                 defaultTemplateIcon={<MetadataDefaultBadge className="template-list-item-badge" />}
-                title={this.renderTitle()}
+                entryButton={this.renderEntryButton()}
                 onAdd={this.updateSelectedTemplate}
                 selectedTemplate={selectedTemplate}
                 selectedTemplateIcon={<MetadataActiveBadge className="template-list-item-badge" />}
                 templates={templates || []}
+                title={this.renderTitle()}
                 usedTemplates={usedTemplates}
-                entryButton={this.renderEntryButton()}
             />
         );
     }

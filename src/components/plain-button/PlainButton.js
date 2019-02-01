@@ -21,7 +21,8 @@ const PlainButton = ({ children, className = '', getDOMRef, isDisabled = false, 
     }
 
     return (
-        <button className={`btn-plain ${className}`} type={type} ref={getDOMRef} {...rest} {...buttonProps}>
+        // eslint-disable-next-line react/button-has-type
+        <button ref={getDOMRef} className={`btn-plain ${className}`} type={type} {...rest} {...buttonProps}>
             {children}
         </button>
     );

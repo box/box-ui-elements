@@ -15,8 +15,8 @@ type Props = {
 const IconClear = ({ className = '', color = '#AEAEAE', height = 12, title, width = 12 }: Props) => (
     <AccessibleSVG
         className={`icon-clear ${className}`}
-        title={title}
         height={height}
+        title={title}
         viewBox="0 0 12 13"
         width={width}
     >

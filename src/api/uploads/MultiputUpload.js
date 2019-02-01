@@ -141,13 +141,13 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         fileId,
     }: {
-        file: File,
-        folderId: string,
         errorCallback?: Function,
+        file: File,
+        fileId: ?string,
+        folderId: string,
+        overwrite?: boolean,
         progressCallback?: Function,
         successCallback?: Function,
-        overwrite?: boolean,
-        fileId: ?string,
     }): void {
         this.file = file;
         this.fileName = this.file.name;

@@ -31,9 +31,9 @@ const PermissionFlyout = ({ intl: { formatMessage } }) => {
     ];
 
     return (
-        <Flyout position="top-center" className="invitation-permission-flyout-overlay">
+        <Flyout className="invitation-permission-flyout-overlay" position="top-center">
             <span className="invitation-permission-flyout-target" data-resin-target="learnmore">
-                <IconInfo with={16} height={16} />
+                <IconInfo height={16} with={16} />
                 <FormattedMessage {...messages.inviteePermissionsLearnMore} />
             </span>
             <Overlay>

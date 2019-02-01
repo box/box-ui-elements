@@ -68,15 +68,15 @@ const UploadsManager = ({
             })}
         >
             <OverallUploadsProgressBar
-                isVisible={isVisible}
                 isDragging={isDragging}
-                percent={percent}
+                isVisible={isVisible}
                 onClick={toggleUploadsManager}
                 onKeyDown={handleProgressBarKeyDown}
+                percent={percent}
                 view={view}
             />
             <div className="bcu-uploads-manager-item-list">
-                <ItemList items={items} view={view} onClick={onItemActionClick} />
+                <ItemList items={items} onClick={onItemActionClick} view={view} />
             </div>
         </div>
     );

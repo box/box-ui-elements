@@ -22,12 +22,12 @@ const DateField = ({ dataKey, dataValue, displayName, description, intl, onChang
     <DatePicker
         className="metadata-instance-editor-field-date"
         dateFormat="utcISOString"
+        description={description}
         displayFormat={{
             day: 'numeric',
             month: 'long',
             year: 'numeric',
         }}
-        description={description}
         hideOptionalLabel
         label={displayName}
         onChange={(date: Date, isoDate: string) => {

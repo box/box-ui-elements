@@ -45,7 +45,6 @@ describe('elements/common/async-load/AsyncLoad', () => {
     });
 
     test('should not invoke the loader until component mounted', () => {
-        const AsyncComponent = getAsyncComponent();
         expect(retryNumOfTimes).not.toHaveBeenCalled();
     });
 });

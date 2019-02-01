@@ -50,13 +50,13 @@ type Props = {
      */
     children: React.Node,
     /** Function that gets executed when close button is clicked or when duration expires. */
-    onClose?: Function,
+    duration?: 'short' | 'long',
     /** `duration`: When set, dictates how long the notification will exist before calling `onClose`.
      *  If unset, the notification will not automatically call `onClose`.
      * - `short`: 5s
      * - `long`: 10s */
-    duration?: 'short' | 'long',
     intl: Object,
+    onClose?: Function,
     /**
      * Determines notification colors
      * - `default`: black
@@ -64,8 +64,8 @@ type Props = {
      * - `warn`: yellow
      * - `error`: red
      */
-    type: 'default' | 'info' | 'warn' | 'error',
     overflow?: 'wrap' | 'ellipsis',
+    type: 'default' | 'info' | 'warn' | 'error',
 };
 
 class Notification extends React.Component<Props> {
@@ -111,11 +111,12 @@ class Notification extends React.Component<Props> {
                 })}
                 {contents}
                 <button
+                    aria-label={formatMessage(messages.clearNotificationButtonText)}
                     className="close-btn"
                     onClick={this.onClose}
-                    aria-label={formatMessage(messages.clearNotificationButtonText)}
+                    type="button"
                 >
-                    <IconClose color="#FFF" width={18} height={18} />
+                    <IconClose color="#FFF" height={18} width={18} />
                 </button>
             </div>
         );

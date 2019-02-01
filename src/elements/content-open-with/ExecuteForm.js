@@ -37,13 +37,13 @@ class ExecuteForm extends PureComponent<Props> {
         return (
             <form
                 ref={this.ref}
-                id={`bcow-execute-form-${id}`}
                 action={url}
-                target={windowName || '_blank'}
-                rel="noreferrer noopener"
+                id={`bcow-execute-form-${id}`}
                 method={HTTP_POST}
+                rel="noreferrer noopener"
+                target={windowName || '_blank'}
             >
-                {params && params.map(({ key, value }) => <input key={key} name={key} value={value} type="hidden" />)}
+                {params && params.map(({ key, value }) => <input key={key} name={key} type="hidden" value={value} />)}
             </form>
         );
     }

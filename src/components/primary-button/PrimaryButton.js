@@ -7,16 +7,16 @@ type Props = {
     children?: React.Node,
     className?: string,
     isDisabled?: boolean,
-    isSelected?: boolean,
     isLoading?: boolean,
+    isSelected?: boolean,
 };
 
 const PrimaryButton = ({ children, className = '', isDisabled, isSelected, isLoading, ...rest }: Props) => (
     <Button
         className={`btn-primary ${className}`}
         isDisabled={isDisabled}
-        isSelected={isSelected}
         isLoading={isLoading}
+        isSelected={isSelected}
         {...rest}
     >
         {children}

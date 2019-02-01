@@ -10,8 +10,8 @@ type Props = {
     className?: string,
     icon?: React.Node,
     subtitle?: React.Node,
-    title: React.Node,
     thumbnail: React.Node,
+    title: React.Node,
 };
 
 const ThumbnailCard = ({ className = '', icon, subtitle, title, thumbnail, ...rest }: Props) => (

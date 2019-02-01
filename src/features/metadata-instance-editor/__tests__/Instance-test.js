@@ -153,12 +153,12 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
     test('should correctly render templated metadata instance', () => {
         const wrapper = shallow(
             <Instance
-                template={{
-                    fields,
-                }}
                 data={data}
                 dataValue="value"
                 intl={intl}
+                template={{
+                    fields,
+                }}
             />,
         );
         expect(wrapper).toMatchSnapshot();
@@ -167,18 +167,18 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
     test('should correctly render templated metadata instance with CascadePolicy', () => {
         const wrapper = shallow(
             <Instance
-                template={{
-                    fields,
-                }}
-                data={data}
-                dataValue="value"
                 cascadePolicy={{
                     canEdit: true,
                     id: 'hello',
                 }}
+                data={data}
+                dataValue="value"
                 intl={intl}
                 isCascadingPolicyApplicable
                 shouldShowCascadingOptions
+                template={{
+                    fields,
+                }}
             />,
         );
         expect(wrapper).toMatchSnapshot();
@@ -187,13 +187,13 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
     test('should correctly render custom metadata instance', () => {
         const wrapper = shallow(
             <Instance
+                data={data}
+                dataValue="value"
+                intl={intl}
                 template={{
                     fields,
                     templateKey: 'properties',
                 }}
-                data={data}
-                dataValue="value"
-                intl={intl}
             />,
         );
         expect(wrapper).toMatchSnapshot();
@@ -203,13 +203,13 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         const wrapper = shallow(
             <Instance
                 canEdit
+                data={data}
+                dataValue="value"
+                intl={intl}
                 onRemove={jest.fn()}
                 template={{
                     fields,
                 }}
-                data={data}
-                dataValue="value"
-                intl={intl}
             />,
         );
 
@@ -220,15 +220,15 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         const wrapper = shallow(
             <Instance
                 canEdit
-                onRemove={jest.fn()}
+                data={data}
+                dataValue="value"
+                intl={intl}
                 onModification={jest.fn()}
+                onRemove={jest.fn()}
                 onSave={jest.fn()}
                 template={{
                     fields,
                 }}
-                data={data}
-                dataValue="value"
-                intl={intl}
             />,
         );
 
@@ -240,15 +240,15 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         const wrapper = shallow(
             <Instance
                 canEdit
-                onRemove={jest.fn()}
+                data={data}
+                dataValue="value"
+                intl={intl}
                 onModification={jest.fn()}
+                onRemove={jest.fn()}
                 onSave={jest.fn()}
                 template={{
                     fields: allFieldsHidden,
                 }}
-                data={data}
-                dataValue="value"
-                intl={intl}
             />,
         );
 
@@ -260,15 +260,15 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         const wrapper = shallow(
             <Instance
                 canEdit
-                onRemove={jest.fn()}
+                data={data}
+                dataValue="value"
+                intl={intl}
                 onModification={jest.fn()}
+                onRemove={jest.fn()}
                 onSave={jest.fn()}
                 template={{
                     fields: noFieldsInTemplate,
                 }}
-                data={data}
-                dataValue="value"
-                intl={intl}
             />,
         );
 
@@ -280,16 +280,16 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         const wrapper = shallow(
             <Instance
                 canEdit
+                data={data}
+                dataValue="value"
+                intl={intl}
                 isDirty
-                onRemove={jest.fn()}
                 onModification={jest.fn()}
+                onRemove={jest.fn()}
                 onSave={jest.fn()}
                 template={{
                     fields,
                 }}
-                data={data}
-                dataValue="value"
-                intl={intl}
             />,
         );
 
@@ -301,15 +301,15 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         const wrapper = shallow(
             <Instance
                 canEdit
-                onRemove={jest.fn()}
+                data={data}
+                dataValue="value"
+                intl={intl}
                 onModification={jest.fn()}
+                onRemove={jest.fn()}
                 onSave={jest.fn()}
                 template={{
                     fields,
                 }}
-                data={data}
-                dataValue="value"
-                intl={intl}
             />,
         );
 
@@ -324,10 +324,10 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 data={data}
                 dataValue="value"
                 intl={intl}
+                isOpen={singleTemplateField.length === 1}
                 onModification={jest.fn()}
                 onRemove={jest.fn()}
                 onSave={jest.fn()}
-                isOpen={singleTemplateField.length === 1}
                 template={{
                     singleTemplateField,
                 }}
@@ -343,10 +343,10 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 data={data}
                 dataValue="value"
                 intl={intl}
+                isOpen={singleTemplateField.length === 1}
                 onModification={jest.fn()}
                 onRemove={jest.fn()}
                 onSave={jest.fn()}
-                isOpen={singleTemplateField.length === 1}
                 template={{
                     singleTemplateField,
                 }}
@@ -362,10 +362,10 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 data={data}
                 dataValue="value"
                 intl={intl}
+                isOpen={customTemplateField.length === 1}
                 onModification={jest.fn()}
                 onRemove={jest.fn()}
                 onSave={jest.fn()}
-                isOpen={customTemplateField.length === 1}
                 template={{
                     customTemplateField,
                 }}
@@ -385,10 +385,10 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 data={data}
                 dataValue="value"
                 intl={intl}
+                isOpen={customTemplateField.length === 1}
                 onModification={jest.fn()}
                 onRemove={jest.fn()}
                 onSave={jest.fn()}
-                isOpen={customTemplateField.length === 1}
                 template={{
                     customTemplateField,
                 }}
@@ -408,10 +408,10 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 data={data}
                 dataValue="value"
                 intl={intl}
+                isOpen={userDefinedTemplateField.length === 1}
                 onModification={jest.fn()}
                 onRemove={jest.fn()}
                 onSave={jest.fn()}
-                isOpen={userDefinedTemplateField.length === 1}
                 template={{
                     userDefinedTemplateField,
                 }}
@@ -431,10 +431,10 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 data={data}
                 dataValue="value"
                 intl={intl}
+                isOpen={userDefinedTemplateField.length === 1}
                 onModification={jest.fn()}
                 onRemove={jest.fn()}
                 onSave={jest.fn()}
-                isOpen={userDefinedTemplateField.length === 1}
                 template={{
                     userDefinedTemplateField,
                 }}

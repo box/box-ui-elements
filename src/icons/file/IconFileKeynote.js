@@ -14,12 +14,12 @@ type Props = {
 const IconFileKeynote = ({ className = '', height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
         className={`icon-file-keynote ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="0 0 32 32"
+        width={width}
     >
-        <path fill="#fff" d="M25 27H7V5h13l5 5v17" />
+        <path d="M25 27H7V5h13l5 5v17" fill="#fff" />
         <path
             d="M20 4H7a.94.94 0 0 0-1 1v22a.94.94 0 0 0 1 1h18a.94.94 0 0 0 1-1V9.9zm5 23H7V5h13v4a.94.94 0 0 0 1 1h4z"
             fill="#157ef8"

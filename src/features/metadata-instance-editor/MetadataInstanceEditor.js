@@ -13,8 +13,8 @@ type Props = {
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,
-    onModification?: (id: string, isDirty: boolean) => void,
     onAdd?: (template: MetadataTemplate) => void,
+    onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
     onSave?: (
         id: string,
@@ -52,11 +52,11 @@ const MetadataInstanceEditor = ({
         ) : (
             <ScrollWrapper>
                 <Instances
-                    isCascadingPolicyApplicable={isCascadingPolicyApplicable}
                     editors={editors}
+                    isCascadingPolicyApplicable={isCascadingPolicyApplicable}
                     onModification={onModification}
-                    onSave={onSave}
                     onRemove={onRemove}
+                    onSave={onSave}
                 />
             </ScrollWrapper>
         )}

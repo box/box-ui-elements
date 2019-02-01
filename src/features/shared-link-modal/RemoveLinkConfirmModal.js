@@ -22,9 +22,9 @@ const RemoveLinkConfirmModal = (props: Props) => {
     return (
         <Modal
             focusElementSelector=".btn-primary"
-            title={<FormattedMessage {...messages.removeLinkConfirmationTitle} />}
             isOpen={isOpen}
             onRequestClose={submitting ? undefined : onRequestClose}
+            title={<FormattedMessage {...messages.removeLinkConfirmationTitle} />}
             type="alert"
         >
             <FormattedMessage {...messages.removeLinkConfirmationDescription} />

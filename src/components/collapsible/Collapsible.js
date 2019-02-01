@@ -21,17 +21,17 @@ type Props = {
     /** CSS class for the wrapper div */
     className?: string,
     /** Determines look of component */
-    isBordered?: boolean,
-    /** Determines stickiness of the header */
     hasStickyHeader?: boolean,
-    /** Determines optional header action items */
+    /** Determines stickiness of the header */
     headerActionItems?: React.Node,
+    /** Determines optional header action items */
+    isBordered?: boolean,
     /** Initial state of the collapsible card */
     isOpen: boolean,
     /** callback called when collapsible is opened */
-    onOpen?: Function,
-    /** callback called when collapsible is collapsed */
     onClose?: Function,
+    /** callback called when collapsible is collapsed */
+    onOpen?: Function,
     /** Title string or component */
     title: string | React.Node,
 };
@@ -110,9 +110,9 @@ class Collapsible extends React.Component<Props, State> {
                 <div className={buttonClassName}>
                     <PlainButton
                         {...modifiedButtonProps}
-                        type="button"
-                        onClick={this.toggleVisibility}
                         className="collapsible-card-title"
+                        onClick={this.toggleVisibility}
+                        type="button"
                     >
                         {title}
                         <IconCaretDown className="collapsible-card-header-caret" color={nines} width={8} />

@@ -15,10 +15,10 @@ import messages from 'elements/common/messages';
 import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 
 type Props = {
-    onDelete: Function,
-    permissions: BoxItemPermission,
     id: string,
     message: React.Node,
+    onDelete: Function,
+    permissions: BoxItemPermission,
 } & InjectIntlProvidedProps;
 
 type State = {

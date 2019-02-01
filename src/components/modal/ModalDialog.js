@@ -65,13 +65,14 @@ class ModalDialog extends React.Component<Props> {
         }
 
         return (
+            // eslint-disable-next-line react/button-has-type
             <button
                 {...closeButtonProps}
+                aria-label={formatMessage(messages.closeModalText)}
                 className="modal-close-button"
                 onClick={this.onCloseButtonClick}
-                aria-label={formatMessage(messages.closeModalText)}
             >
-                <IconClose width={18} height={18} color="#999EA4" />
+                <IconClose color="#999EA4" height={18} width={18} />
             </button>
         );
     }

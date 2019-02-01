@@ -12,17 +12,17 @@ import withErrorHandling from '../../withErrorHandling';
 
 type Props = {
     currentUser?: User,
+    getAvatarUrl: string => Promise<?string>,
+    getMentionWithQuery?: Function,
+    getUserProfileUrl?: string => Promise<string>,
     items: FeedItems,
+    mentionSelectorContacts?: SelectorItems,
     onCommentDelete?: Function,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
     onTaskEdit?: Function,
     onVersionInfo?: Function,
     translations?: Translations,
-    mentionSelectorContacts?: SelectorItems,
-    getMentionWithQuery?: Function,
-    getAvatarUrl: string => Promise<?string>,
-    getUserProfileUrl?: string => Promise<string>,
 };
 
 const ActiveState = ({
@@ -46,46 +46,46 @@ const ActiveState = ({
             switch (type) {
                 case 'comment':
                     return (
-                        <li className="bcs-activity-feed-comment" key={type + id}>
+                        <li key={type + id} className="bcs-activity-feed-comment">
                             <Comment
                                 {...item}
                                 currentUser={currentUser}
-                                onDelete={onCommentDelete}
-                                translations={translations}
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
+                                onDelete={onCommentDelete}
                                 permissions={{
                                     can_delete: getProp(permissions, 'can_delete', false),
                                     can_edit: getProp(permissions, 'can_edit', false),
                                 }}
+                                translations={translations}
                             />
                         </li>
                     );
                 case 'task':
                     return item.task_assignment_collection.total_count ? (
-                        <li className="bcs-activity-feed-task" key={type + id}>
+                        <li key={type + id} className="bcs-activity-feed-task">
                             <Task
                                 {...item}
                                 currentUser={currentUser}
-                                onDelete={onTaskDelete}
-                                onEdit={onTaskEdit}
-                                onAssignmentUpdate={onTaskAssignmentUpdate}
-                                translations={translations}
                                 getAvatarUrl={getAvatarUrl}
+                                getMentionWithQuery={getMentionWithQuery}
                                 getUserProfileUrl={getUserProfileUrl}
                                 mentionSelectorContacts={mentionSelectorContacts}
-                                getMentionWithQuery={getMentionWithQuery}
-                                // permissions are not part of task API so hard code to true
+                                onAssignmentUpdate={onTaskAssignmentUpdate}
+                                onDelete={onTaskDelete}
+                                onEdit={onTaskEdit}
                                 permissions={{
                                     can_delete: true,
                                     can_edit: true,
                                 }}
+                                // permissions are not part of task API so hard code to true
+                                translations={translations}
                             />
                         </li>
                     ) : null;
                 case 'file_version':
                     return (
-                        <li className="bcs-version-item" key={type + id}>
+                        <li key={type + id} className="bcs-version-item">
                             {versions ? (
                                 <CollapsedVersion {...item} onInfo={onVersionInfo} />
                             ) : (
@@ -95,7 +95,7 @@ const ActiveState = ({
                     );
                 case 'keywords':
                     return (
-                        <li className="bcs-keywords-item" key={type + id}>
+                        <li key={type + id} className="bcs-keywords-item">
                             <Keywords {...item} />
                         </li>
                     );

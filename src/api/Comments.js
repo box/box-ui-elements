@@ -97,11 +97,11 @@ class Comments extends OffsetBasedAPI {
         successCallback,
         errorCallback,
     }: {
+        errorCallback: ElementsErrorCallback,
         file: BoxItem,
         message?: string,
-        taggedMessage?: string,
         successCallback: Function,
-        errorCallback: ElementsErrorCallback,
+        taggedMessage?: string,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_COMMENT;
         const { id = '', permissions } = file;
@@ -155,12 +155,12 @@ class Comments extends OffsetBasedAPI {
         successCallback,
         errorCallback,
     }: {
-        file: BoxItem,
         commentId: string,
+        errorCallback: ElementsErrorCallback,
+        file: BoxItem,
         message: string,
         permissions: BoxItemPermission,
         successCallback: Function,
-        errorCallback: ElementsErrorCallback,
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_COMMENT;
         const { id = '' } = file;
@@ -202,11 +202,11 @@ class Comments extends OffsetBasedAPI {
         successCallback,
         errorCallback,
     }: {
-        file: BoxItem,
         commentId: string,
+        errorCallback: ElementsErrorCallback,
+        file: BoxItem,
         permissions: BoxItemPermission,
         successCallback: Function,
-        errorCallback: ElementsErrorCallback,
     }): void {
         this.errorCode = ERROR_CODE_DELETE_COMMENT;
         const { id = '' } = file;

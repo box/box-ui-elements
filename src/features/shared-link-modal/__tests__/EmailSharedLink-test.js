@@ -24,8 +24,8 @@ describe('features/shared-link-modal/EmailSharedLink', () => {
         shallow(
             <EmailSharedLink
                 contacts={contacts}
-                intl={{ formatMessage: sandbox.stub() }}
                 getContacts={sandbox.stub()}
+                intl={{ formatMessage: sandbox.stub() }}
                 itemType="folder"
                 onExpand={sandbox.stub()}
                 onRequestClose={sandbox.stub()}

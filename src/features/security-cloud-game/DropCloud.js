@@ -7,11 +7,11 @@ import IconCloud from '../../icons/general/IconCloud';
 const InsetFilter = () => (
     <filter id="inset-shadow">
         <feOffset dx="0" dy="1.5" />
-        <feGaussianBlur stdDeviation="0.5" result="offset-blur" />
-        <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse" />
+        <feGaussianBlur result="offset-blur" stdDeviation="0.5" />
+        <feComposite in="SourceGraphic" in2="offset-blur" operator="out" result="inverse" />
         <feFlood floodColor="black" floodOpacity="1" result="color" />
-        <feComposite operator="in" in="color" in2="inverse" result="shadow" />
-        <feComposite operator="over" in="shadow" in2="SourceGraphic" />
+        <feComposite in="color" in2="inverse" operator="in" result="shadow" />
+        <feComposite in="shadow" in2="SourceGraphic" operator="over" />
     </filter>
 );
 

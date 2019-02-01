@@ -7,6 +7,7 @@ import ContextMenu from '../ContextMenu';
 const sandbox = sinon.sandbox.create();
 
 describe('components/context-menu/ContextMenu', () => {
+    // eslint-disable-next-line react/button-has-type
     const FakeButton = props => <button {...props}>Some Button</button>;
     FakeButton.displayName = 'FakeButton';
 

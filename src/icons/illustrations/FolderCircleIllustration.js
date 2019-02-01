@@ -30,39 +30,39 @@ class FolderCircleIllustration extends React.PureComponent<Props> {
                 className={`${ICON_CLASS} ${className}`}
                 height={height}
                 title={title}
-                width={width}
                 viewBox="0 0 140 140"
+                width={width}
             >
                 <defs>
-                    <rect id="b" width={30} height={30} rx={15} />
-                    <filter x="-160%" y="-150%" width="420%" height="420%" filterUnits="objectBoundingBox" id="a">
+                    <rect height={30} id="b" rx={15} width={30} />
+                    <filter filterUnits="objectBoundingBox" height="420%" id="a" width="420%" x="-160%" y="-150%">
                         <feOffset dy={1} in="SourceAlpha" result="shadowOffsetOuter1" />
-                        <feGaussianBlur stdDeviation="2.5" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+                        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="2.5" />
                         <feColorMatrix
-                            values="0 0 0 0 0 0 0 0 0 0.380392157 0 0 0 0 0.839215686 0 0 0 0.1 0"
                             in="shadowBlurOuter1"
                             result="shadowMatrixOuter1"
+                            values="0 0 0 0 0 0 0 0 0 0.380392157 0 0 0 0 0.839215686 0 0 0 0.1 0"
                         />
                         <feOffset in="SourceAlpha" result="shadowOffsetOuter2" />
-                        <feGaussianBlur stdDeviation={4} in="shadowOffsetOuter2" result="shadowBlurOuter2" />
+                        <feGaussianBlur in="shadowOffsetOuter2" result="shadowBlurOuter2" stdDeviation={4} />
                         <feColorMatrix
-                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0"
                             in="shadowBlurOuter2"
                             result="shadowMatrixOuter2"
+                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0"
                         />
                         <feOffset in="SourceAlpha" result="shadowOffsetOuter3" />
-                        <feGaussianBlur stdDeviation={8} in="shadowOffsetOuter3" result="shadowBlurOuter3" />
+                        <feGaussianBlur in="shadowOffsetOuter3" result="shadowBlurOuter3" stdDeviation={8} />
                         <feColorMatrix
-                            values="0 0 0 0 0 0 0 0 0 0.380392157 0 0 0 0 0.839215686 0 0 0 0.05 0"
                             in="shadowBlurOuter3"
                             result="shadowMatrixOuter3"
+                            values="0 0 0 0 0 0 0 0 0 0.380392157 0 0 0 0 0.839215686 0 0 0 0.05 0"
                         />
                         <feOffset dy={2} in="SourceAlpha" result="shadowOffsetOuter4" />
-                        <feGaussianBlur stdDeviation="5.5" in="shadowOffsetOuter4" result="shadowBlurOuter4" />
+                        <feGaussianBlur in="shadowOffsetOuter4" result="shadowBlurOuter4" stdDeviation="5.5" />
                         <feColorMatrix
-                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"
                             in="shadowBlurOuter4"
                             result="shadowMatrixOuter4"
+                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"
                         />
                         <feMerge>
                             <feMergeNode in="shadowMatrixOuter1" />
@@ -73,7 +73,7 @@ class FolderCircleIllustration extends React.PureComponent<Props> {
                     </filter>
                 </defs>
                 <g fill="none" fillRule="evenodd">
-                    <circle fill="#5FC9CF" cx={70} cy={70} r={60} />
+                    <circle cx={70} cy={70} fill="#5FC9CF" r={60} />
                     <path
                         d="M61.616 45.983c.211.302.553.483.918.485h40.335A1.14 1.14 0 0 1 104 47.615v44.238A1.14 1.14 0 0 1 102.869 93H37.13A1.14 1.14 0 0 1 36 91.853V42.147A1.14 1.14 0 0 1 37.131 41h20.463c.379.01.728.21.93.535l3.092 4.448z"
                         fill="#0061D5"
@@ -83,16 +83,16 @@ class FolderCircleIllustration extends React.PureComponent<Props> {
                         <use fill="#000" filter="url(#a)" xlinkHref="#b" />
                         <use fill="#F7D271" xlinkHref="#b" />
                     </g>
-                    <g transform="translate(84.4 80)" stroke="#F9F9F9" strokeWidth=".6">
+                    <g stroke="#F9F9F9" strokeWidth=".6" transform="translate(84.4 80)">
                         <circle cx="1.98" cy="1.98" r="1.98" />
-                        <path strokeLinecap="square" d="M3.96 1.98h11.52v2.88m-3.42-2.88v2.16" />
+                        <path d="M3.96 1.98h11.52v2.88m-3.42-2.88v2.16" strokeLinecap="square" />
                     </g>
-                    <g transform="rotate(180 49.94 46.02)" stroke="#F9F9F9" strokeWidth=".6">
+                    <g stroke="#F9F9F9" strokeWidth=".6" transform="rotate(180 49.94 46.02)">
                         <circle cx="1.98" cy="1.98" r="1.98" />
-                        <path strokeLinecap="square" d="M3.96 1.98h11.52v2.88m-3.42-2.88v2.16" />
+                        <path d="M3.96 1.98h11.52v2.88m-3.42-2.88v2.16" strokeLinecap="square" />
                     </g>
                     <g transform="translate(46 56)">
-                        <rect fill="#FFF" opacity=".24" width={28} height={28} rx={14} />
+                        <rect fill="#FFF" height={28} opacity=".24" rx={14} width={28} />
                         <g stroke="#FFF" strokeWidth=".6">
                             <path d="M12.7 10a2.7 2.7 0 1 0-5.4 0 2.7 2.7 0 0 0 5.4 0z" />
                             <path

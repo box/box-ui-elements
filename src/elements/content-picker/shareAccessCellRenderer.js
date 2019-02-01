@@ -21,10 +21,10 @@ export default (
 
     return (
         <ShareAccessSelect
-            className="bcp-shared-access-select"
             canSetShareAccess={canSetShareAccess}
-            onChange={onChange}
+            className="bcp-shared-access-select"
             item={rowData}
+            onChange={onChange}
         />
     );
 };

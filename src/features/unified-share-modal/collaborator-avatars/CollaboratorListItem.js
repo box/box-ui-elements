@@ -12,7 +12,7 @@ import CollaboratorAvatarItem from './CollaboratorAvatarItem';
 type Props = {
     collaborator: Object,
     index: number,
-    trackingProps: { usernameProps: ?Object, emailProps: ?Object },
+    trackingProps: { emailProps: ?Object, usernameProps: ?Object },
 };
 
 const CollaboratorListItem = (props: Props) => {
@@ -63,12 +63,12 @@ const CollaboratorListItem = (props: Props) => {
                 <div className="user">
                     <CollaboratorAvatarItem
                         allowBadging
-                        expiration={expiration}
+                        avatarUrl={imageURL}
                         email={email}
+                        expiration={expiration}
+                        hasCustomAvatar={hasCustomAvatar}
                         id={index}
                         isExternalCollab={isExternalCollab}
-                        hasCustomAvatar={hasCustomAvatar}
-                        avatarUrl={imageURL}
                         name={name}
                     />
                     <div className="info">

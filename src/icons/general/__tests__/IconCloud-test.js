@@ -12,7 +12,7 @@ describe('icons/general/IconCloud', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconCloud width={width} height={height} />);
+        const wrapper = shallow(<IconCloud height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);
@@ -31,7 +31,7 @@ describe('icons/general/IconCloud', () => {
             id: 'test',
             definition: <div />,
         };
-        const wrapper = shallow(<IconCloud title={title} filter={filter} />);
+        const wrapper = shallow(<IconCloud filter={filter} title={title} />);
 
         expect(wrapper).toMatchSnapshot();
     });

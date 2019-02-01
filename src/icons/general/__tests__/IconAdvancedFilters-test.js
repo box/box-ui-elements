@@ -19,7 +19,7 @@ describe('icons/general/IconAdvancedFilters', () => {
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconAdvancedFilters width={width} height={height} />);
+        const wrapper = shallow(<IconAdvancedFilters height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);

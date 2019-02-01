@@ -18,9 +18,9 @@ import './EditableKeywords.scss';
 type Props = {
     keywords: Array<SkillCardEntry>,
     onAdd: Function,
+    onCancel: Function,
     onDelete: Function,
     onSave: Function,
-    onCancel: Function,
 };
 
 type State = {
@@ -153,8 +153,8 @@ class EditableKeywords extends React.PureComponent<Props, State> {
             <span className="pill-selector-wrapper">
                 <PillSelector
                     onBlur={this.onBlur}
-                    onCompositionStart={this.onCompositionStart}
                     onCompositionEnd={this.onCompositionEnd}
+                    onCompositionStart={this.onCompositionStart}
                     onInput={this.onInput}
                     onKeyDown={this.onKeyDown}
                     onPaste={this.onInput}
@@ -163,10 +163,10 @@ class EditableKeywords extends React.PureComponent<Props, State> {
                     value={keyword}
                 />
                 <div className="be-keywords-buttons">
-                    <Button type="button" onClick={onCancel} data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_CANCEL}>
+                    <Button data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_CANCEL} onClick={onCancel} type="button">
                         <FormattedMessage {...messages.cancel} />
                     </Button>
-                    <PrimaryButton type="button" onClick={onSave} data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_SAVE}>
+                    <PrimaryButton data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_SAVE} onClick={onSave} type="button">
                         <FormattedMessage {...messages.save} />
                     </PrimaryButton>
                 </div>

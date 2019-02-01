@@ -11,11 +11,11 @@ import messages from '../messages';
 import './DateField.scss';
 
 type Props = {
+    capitalize?: boolean,
     date: string,
     dateFormat?: Object,
     omitCommas?: boolean,
     relative?: boolean,
-    capitalize?: boolean,
 } & InjectIntlProvidedProps;
 
 const DEFAULT_DATE_FORMAT = {

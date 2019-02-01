@@ -15,9 +15,9 @@ import { ACTIVITY_TARGETS, INTERACTION_TARGET } from 'elements/common/interactio
 
 type Props = {
     approvalDate?: Date,
-    approvers: SelectorItems,
     approverSelectorContacts?: SelectorItems,
     approverSelectorError: string,
+    approvers: SelectorItems,
     onApprovalDateChange: Function,
     onApproverSelectorInput: Function,
     onApproverSelectorRemove: Function,
@@ -63,15 +63,15 @@ const AddApprovalFields = ({
             </PillSelectorDropdown>
             <DatePicker
                 className="bcs-comment-add-approver-date-input"
-                label={<FormattedMessage {...messages.approvalDueDate} />}
-                minDate={new Date()}
-                name="approverDateInput"
-                placeholder={intl.formatMessage(messages.approvalSelectDate)}
-                onChange={onApprovalDateChange}
-                value={approvalDate}
                 inputProps={{
                     [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                 }}
+                label={<FormattedMessage {...messages.approvalDueDate} />}
+                minDate={new Date()}
+                name="approverDateInput"
+                onChange={onApprovalDateChange}
+                placeholder={intl.formatMessage(messages.approvalSelectDate)}
+                value={approvalDate}
             />
         </div>
     );

@@ -32,8 +32,8 @@ const SORT_ITEMS: Array<Array<SortBy>> = [
 ];
 
 const Sort = ({ isLoaded, sortBy, sortDirection, onSortChange }: Props) => (
-    <DropdownMenu isRightAligned constrainToScrollParent>
-        <Button type="button" isDisabled={!isLoaded} className="be-btn-sort">
+    <DropdownMenu constrainToScrollParent isRightAligned>
+        <Button className="be-btn-sort" isDisabled={!isLoaded} type="button">
             <IconSort />
         </Button>
         <Menu className="be-menu-sort">
@@ -43,7 +43,7 @@ const Sort = ({ isLoaded, sortBy, sortDirection, onSortChange }: Props) => (
 
                 return (
                     <MenuItem key={sortItemKey} onClick={() => onSortChange(sortByValue, sortDirectionValue)}>
-                        <div className="be-sort-selected">{isSelected && <IconCheck width={16} height={16} />}</div>
+                        <div className="be-sort-selected">{isSelected && <IconCheck height={16} width={16} />}</div>
                         <FormattedMessage {...messages[sortItemKey]} />
                     </MenuItem>
                 );

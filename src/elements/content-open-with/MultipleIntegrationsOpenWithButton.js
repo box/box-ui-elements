@@ -19,7 +19,7 @@ type Props = {
 };
 
 const MultipleIntegrationsOpenWithButton = (buttonProps: Props) => (
-    <Tooltip text={<FormattedMessage {...messages.defaultOpenWithDescription} />} position="middle-left">
+    <Tooltip position="middle-left" text={<FormattedMessage {...messages.defaultOpenWithDescription} />}>
         <Button data-testid="multipleintegrationsbutton" {...buttonProps}>
             <MenuToggle>
                 <OpenWithButtonContents>

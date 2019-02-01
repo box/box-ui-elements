@@ -21,9 +21,9 @@ describe('components/select-field/BaseSelectField', () => {
         shallow(
             <BaseSelectField
                 isDisabled={false}
-                options={options}
                 onChange={() => {}}
                 onOptionSelect={onOptionSelectSpy}
+                options={options}
                 {...props}
             />,
         );

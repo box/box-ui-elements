@@ -15,17 +15,17 @@ type Props = {
 const IconAdd = ({ className = '', color = '#000000', height = 24, title, width = 24 }: Props) => (
     <AccessibleSVG
         className={`icon-add ${className}`}
-        title={title}
-        width={width}
         height={height}
+        title={title}
         viewBox="-603 389 16 16"
+        width={width}
     >
         <path
             className="fill-color"
-            fill={color}
-            fillRule="evenodd"
             d="M-593 395.5v-4c0-.8-.7-1.5-1.5-1.5s-1.5.7-1.5 1.5v4h-4c-.8 0-1.5.7-1.5 1.5s.7
                     1.5 1.5 1.5h4v4c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5v-4h4c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5h-4z"
+            fill={color}
+            fillRule="evenodd"
         />
     </AccessibleSVG>
 );
