@@ -1,6 +1,7 @@
 [ignore]
 .*/conf/.*
 .*/build/.*
+.*/es/.*
 .*/dist/.*
 .*/reports/.*
 .*/node_modules/babel-plugin-flow-react-proptypes.*
