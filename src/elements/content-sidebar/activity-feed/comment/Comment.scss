@@ -127,20 +127,20 @@
             color: $fours;
             flex: 1;
             min-width: 0;
+        }
 
-            .bcs-comment-user-name {
-                color: $twos;
-                font-weight: bold;
-                line-height: 19.5px;
-                margin-right: 10px;
-            }
+        .bcs-comment-user-name {
+            color: $twos;
+            font-weight: bold;
+            line-height: 19.5px;
+            margin-right: 10px;
+        }
 
-            .bcs-comment-created-at {
-                color: $sevens;
-                cursor: default;
-                font-size: 11px;
-                line-height: 20px;
-            }
+        .bcs-comment-created-at {
+            color: $sevens;
+            cursor: default;
+            font-size: 11px;
+            line-height: 20px;
         }
 
         .bcs-comment-headline {
