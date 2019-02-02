@@ -76,6 +76,23 @@ describe('FeatureFlag', () => {
         expect(enabledFn).toHaveBeenCalledWith(foo);
         expect(disabledFn).toHaveBeenCalled();
     });
+
+    test('"not" prop inverts flag', () => {
+        const enabledFn = jest.fn(() => null);
+        const disabledFn = jest.fn(() => null);
+        const foo = { otherProp: 'foo' };
+        mount(
+            <FeatureProvider
+                features={{
+                    foo,
+                }}
+            >
+                <FeatureFlag disabled={disabledFn} enabled={enabledFn} not feature="foo" />
+            </FeatureProvider>,
+        );
+        expect(disabledFn).toHaveBeenCalled();
+        expect(enabledFn).not.toHaveBeenCalled();
+    });
     test('uses children prop instead of enabled prop if both are provided', () => {
         const MockChild = jest.fn(() => null);
         const enabledFn = jest.fn(() => null);
