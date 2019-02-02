@@ -7,13 +7,15 @@ const allSections = [
     {
         name: 'Elements',
         components: () => [
-            '../src/elements/content-picker/ContentPicker.js',
             '../src/elements/content-explorer/ContentExplorer.js',
-            '../src/elements/content-uploader/ContentUploader.js',
-            '../src/elements/content-sidebar/ContentSidebar.js',
-            '../src/elements/content-preview/ContentPreview.js',
             '../src/elements/content-open-with/ContentOpenWith.js',
+            '../src/elements/content-picker/ContentPicker.js',
+            '../src/elements/content-preview/ContentPreview.js',
+            '../src/elements/content-sidebar/ContentSidebar.js',
+            '../src/elements/content-uploader/ContentUploader.js',
         ],
+        content: '../src/elements/README.md',
+        sectionDepth: 2,
     },
     {
         name: 'Colors',
@@ -236,9 +238,17 @@ const allSections = [
 ];
 
 module.exports = {
-    webpackConfig,
+    pagePerSection: true,
+    require: [path.resolve(__dirname, 'styleguide.setup.js'), path.resolve(__dirname, 'styleguide.styles.scss')],
     styleguideDir: path.join(__dirname, '../styleguide'),
     sections: allSections,
+    styles: {
+        Heading: {
+            heading: {
+                lineHeight: 1,
+            },
+        },
+    },
     title: 'Box UI Elements',
     theme: {
         color: {
@@ -248,7 +258,8 @@ module.exports = {
         fontFamily: {
             base: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
         },
+        lineHeight: 'inherit',
         maxWidth: '100%',
     },
-    pagePerSection: true,
+    webpackConfig,
 };

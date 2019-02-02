@@ -2,7 +2,7 @@
 
 describe('ContentExplorer', () => {
     beforeEach(() => {
-        cy.visit('/ContentExplorer');
+        cy.visit('/Elements/ContentExplorer');
     });
 
     describe('ContentPreview', () => {

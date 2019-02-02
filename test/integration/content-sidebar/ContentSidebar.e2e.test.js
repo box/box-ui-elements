@@ -2,7 +2,7 @@
 
 describe('ContentSidebar', () => {
     beforeEach(() => {
-        cy.visit('/ContentSidebar');
+        cy.visit('/Elements/ContentSidebar');
     });
 
     it('Toggling the skills button should hide the sidebar', () => {
