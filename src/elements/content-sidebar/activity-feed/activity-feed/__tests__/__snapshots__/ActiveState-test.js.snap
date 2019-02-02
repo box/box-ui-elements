@@ -52,51 +52,107 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
       type="comment"
     />
   </li>
-  <li
-    className="bcs-activity-feed-task"
-    key="task234"
-  >
-    <Task
-      created_at="2018-07-03T14:43:52-07:00"
-      created_by={
-        Object {
-          "id": 11,
-          "name": "Akon",
-        }
-      }
-      dueAt="2018-07-03T14:43:52-07:00"
-      id={234}
-      modified_at="2018-07-03T14:43:52-07:00"
-      modified_by={
-        Object {
-          "id": 10,
-          "name": "Jay-Z",
-        }
-      }
-      permissions={
-        Object {
-          "can_delete": true,
-          "can_edit": true,
-        }
-      }
-      tagged_message="test"
-      task_assignment_collection={
-        Object {
-          "entries": Array [
+  <div>
+    <FeatureFlag
+      feature="activityFeed.tasks.avatars"
+      not={true}
+    >
+      <li
+        className="bcs-activity-feed-task"
+        key="task234"
+      >
+        <Task
+          created_at="2018-07-03T14:43:52-07:00"
+          created_by={
             Object {
-              "assigned_to": Object {
-                "id": 11,
-                "name": "Akon",
-              },
-              "status": "incomplete",
-            },
-          ],
-          "total_count": 1,
-        }
-      }
-      type="task"
-    />
-  </li>
+              "id": 11,
+              "name": "Akon",
+            }
+          }
+          dueAt="2018-07-03T14:43:52-07:00"
+          id={234}
+          modified_at="2018-07-03T14:43:52-07:00"
+          modified_by={
+            Object {
+              "id": 10,
+              "name": "Jay-Z",
+            }
+          }
+          permissions={
+            Object {
+              "can_delete": true,
+              "can_edit": true,
+            }
+          }
+          tagged_message="test"
+          task_assignment_collection={
+            Object {
+              "entries": Array [
+                Object {
+                  "assigned_to": Object {
+                    "id": 11,
+                    "name": "Akon",
+                  },
+                  "status": "incomplete",
+                },
+              ],
+              "total_count": 1,
+            }
+          }
+          type="task"
+        />
+      </li>
+    </FeatureFlag>
+    <FeatureFlag
+      feature="activityFeed.tasks.avatars"
+    >
+      <li
+        className="bcs-activity-feed-task-new"
+        key="task234"
+      >
+        <Task
+          created_at="2018-07-03T14:43:52-07:00"
+          created_by={
+            Object {
+              "id": 11,
+              "name": "Akon",
+            }
+          }
+          dueAt="2018-07-03T14:43:52-07:00"
+          id={234}
+          modified_at="2018-07-03T14:43:52-07:00"
+          modified_by={
+            Object {
+              "id": 10,
+              "name": "Jay-Z",
+            }
+          }
+          permissions={
+            Object {
+              "can_delete": true,
+              "can_edit": true,
+            }
+          }
+          tagged_message="test"
+          task_assignment_collection={
+            Object {
+              "entries": Array [
+                Object {
+                  "assigned_to": Object {
+                    "id": 11,
+                    "name": "Akon",
+                  },
+                  "status": "incomplete",
+                },
+              ],
+              "total_count": 1,
+            }
+          }
+          type="task"
+        />
+      </li>
+    </FeatureFlag>
+  </div>
   <li
     className="bcs-version-item"
     key="file_version345"
@@ -115,5 +171,54 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
       type="file_version"
     />
   </li>
+  <div>
+    <FeatureFlag
+      feature="activityFeed.tasks.avatars"
+      not={true}
+    >
+      0
+    </FeatureFlag>
+    <FeatureFlag
+      feature="activityFeed.tasks.avatars"
+    >
+      <li
+        className="bcs-activity-feed-task-new"
+        key="task234"
+      >
+        <Task
+          created_at="2018-07-03T14:43:52-07:00"
+          created_by={
+            Object {
+              "id": 11,
+              "name": "Akon",
+            }
+          }
+          dueAt="2018-07-03T14:43:52-07:00"
+          id={234}
+          modified_at="2018-07-03T14:43:52-07:00"
+          modified_by={
+            Object {
+              "id": 10,
+              "name": "Jay-Z",
+            }
+          }
+          permissions={
+            Object {
+              "can_delete": true,
+              "can_edit": true,
+            }
+          }
+          tagged_message="test"
+          task_assignment_collection={
+            Object {
+              "entries": Array [],
+              "total_count": 0,
+            }
+          }
+          type="task"
+        />
+      </li>
+    </FeatureFlag>
+  </div>
 </ul>
 `;
