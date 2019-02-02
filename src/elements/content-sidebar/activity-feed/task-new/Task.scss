@@ -1,0 +1,85 @@
+@import '../../../common/variables';
+
+.be .bcs-task {
+    .bcs-task-assignment-container {
+        margin-left: 40px;
+    }
+
+    .bcs-task-due-date {
+        color: $threes;
+        font-weight: bold;
+        margin: 5px 0;
+
+        span:first-child {
+            padding-right: 3px;
+        }
+    }
+
+    .bcs-task-assignments {
+        display: flex;
+        margin: 8px 0;
+    }
+
+    .bcs-task-assignment-avatar {
+        height: 32px;
+        width: 32px;
+    }
+
+    .bcs-task-assignment-count {
+        align-items: center;
+        background: $grey;
+        border-radius: 100%;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+    }
+
+    .bcs-task-assignment-status {
+        display: inline-block;
+        height: 32px;
+        position: relative;
+        width: 32px;
+
+        &:not(:last-child) {
+            margin-right: 3px;
+        }
+    }
+
+    .bcs-task-assignment-status-icon {
+        background: $grey;
+        border: 1px solid $white;
+        border-radius: 50%;
+        bottom: 0;
+        height: 12px;
+        position: absolute;
+        right: 0;
+        width: 12px;
+
+        .fill-color {
+            fill: $white;
+        }
+
+        &.completed,
+        &.approved {
+            background: $shady-acres;
+        }
+
+        &.rejected {
+            background: $red;
+        }
+
+        &.pending,
+        &.incomplete, {
+            background: $grey;
+            border: none; // icon has border
+        }
+    }
+
+    .bcs-task-pending-assignment {
+        margin-top: 5px;
+    }
+
+    .bcs-task-action-button:first-of-type {
+        margin-left: 0;
+    }
+}
