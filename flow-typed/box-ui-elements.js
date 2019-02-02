@@ -92,6 +92,7 @@ import {
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
 } from '../src/features/metadata-instance-editor/constants';
+
 type Method =
     | typeof HTTP_DELETE
     | typeof HTTP_GET
@@ -132,8 +133,8 @@ type TaskAssignmentStatus =
     | typeof TASK_REJECTED;
 
 type SharedLink = {
-    url: string,
     access: Access,
+    url: string,
 };
 
 type Order = {
@@ -143,52 +144,52 @@ type Order = {
 
 type BoxItemPermission = {
     can_comment?: boolean,
+    can_delete?: boolean,
+    can_download?: boolean,
+    can_edit?: boolean,
     can_preview?: boolean,
     can_rename?: boolean,
-    can_download?: boolean,
-    can_delete?: boolean,
-    can_edit?: boolean,
-    can_upload?: boolean,
-    can_share?: boolean,
     can_set_share_access?: boolean,
+    can_share?: boolean,
+    can_upload?: boolean,
 };
 
 type User = {
-    type: 'user',
-    id: string,
-    name: string,
-    login?: string,
-    email?: string,
     avatar_url?: string,
+    email?: string,
+    id: string,
+    login?: string,
+    name: string,
+    type: 'user',
 };
 
 type UserCollection = {
-    total_count?: number,
     entries?: Array<User>,
-    order?: Array<Order>,
     isLoaded?: boolean,
     limit?: number,
-    offset?: number,
-    previous_marker?: string,
     next_marker?: string,
+    offset?: number,
+    order?: Array<Order>,
+    previous_marker?: string,
+    total_count?: number,
 };
 
 type SelectorItem = {
     id: string,
-    name: string,
     item: Object,
+    name: string,
     value?: any,
 };
 
 type SelectorItems = Array<SelectorItem>;
 
 type ActionItemError = {
-    title: MessageDescriptor,
-    message: MessageDescriptor,
     action?: {
-        text: MessageDescriptor,
         onAction: Function,
+        text: MessageDescriptor,
     },
+    message: MessageDescriptor,
+    title: MessageDescriptor,
 };
 
 type OptionItem = {
@@ -213,29 +214,29 @@ type SkillCardLocalizableType = {
 };
 
 type SkillCardEntryTimeSlice = {
-    start: number,
     end?: number,
+    start: number,
 };
 
 type SkillCardEntry = {
-    type?: SkillCardEntryType,
-    text?: string,
-    label?: string,
-    image_url?: string,
     appears?: Array<SkillCardEntryTimeSlice>,
+    image_url?: string,
+    label?: string,
+    text?: string,
+    type?: SkillCardEntryType,
 };
 
 type SkillCard = {
-    type: 'skill_card',
-    id?: string,
-    file_version: BoxItemVersion,
-    status?: SkillCardLocalizableType,
-    skill_card_title: SkillCardLocalizableType,
-    skill_card_type: SkillCardType,
-    title?: string,
     duration?: number,
     entries: Array<SkillCardEntry>,
     error?: string,
+    file_version: BoxItemVersion,
+    id?: string,
+    skill_card_title: SkillCardLocalizableType,
+    skill_card_type: SkillCardType,
+    status?: SkillCardLocalizableType,
+    title?: string,
+    type: 'skill_card',
 };
 
 type SkillCards = {
@@ -267,24 +268,24 @@ type MetadataTemplateFieldOption = {
 };
 
 type MetadataTemplateField = {
-    id: string,
-    type: MetadataFieldType,
-    key: string,
-    displayName: string,
     description?: string,
-    isHidden?: boolean, // V2
-    hidden?: boolean, // V3
-    options?: Array<MetadataTemplateFieldOption>,
+    displayName: string,
+    hidden?: boolean,
+    id: string,
+    isHidden?: boolean,
+    key: string, // V2
+    options?: Array<MetadataTemplateFieldOption>, // V3
+    type: MetadataFieldType,
 };
 
 type MetadataTemplate = {
-    id: string,
-    scope: string,
-    templateKey: string,
     displayName?: string,
     fields?: Array<MetadataTemplateField>,
-    isHidden?: boolean, // V2
-    hidden?: boolean, // V3
+    hidden?: boolean,
+    id: string,
+    isHidden?: boolean,
+    scope: string, // V2
+    templateKey: string, // V3
 };
 
 type MetadataCascadePolicy = {
@@ -299,18 +300,18 @@ type MetadataCascadingPolicyData = {
 };
 
 type MetadataInstance = {
-    id: string,
-    data: MetadataFields,
     canEdit: boolean,
     cascadePolicy?: MetadataCascadePolicy,
+    data: MetadataFields,
+    id: string,
 };
 
 type MetadataInstanceV2 = {
-    $id: string,
-    $template: string,
     $canEdit: boolean,
-    $scope: string,
+    $id: string,
     $parent: string,
+    $scope: string,
+    $template: string,
     $type: string,
     $typeVersion: number,
     $version: number,
@@ -336,122 +337,122 @@ type JSONPatch = {
 type JSONPatchOperations = Array<JSONPatch>;
 
 type BoxItemVersion = {
-    id: string,
-    type: string,
-    sha1?: string,
-    name?: string,
-    size?: number,
+    action: 'upload' | 'delete' | 'restore',
+    collaborators?: Object,
     created_at: string,
+    id: string,
     modified_at?: string,
     modified_by: User,
+    name?: string,
+    sha1?: string,
+    size?: number,
     trashed_at: ?string,
-    action: 'upload' | 'delete' | 'restore',
-    versions?: Array<BoxItemVersion>,
+    type: string,
+    version_end?: number,
     version_number: string,
     version_start?: number,
-    version_end?: number,
-    collaborators?: Object,
+    versions?: Array<BoxItemVersion>,
 };
 
 type BoxItem = {
-    id: string,
-    name?: string,
-    size?: number,
-    type?: ItemType,
-    parent?: BoxItem,
-    extension?: string,
-    description?: string,
-    permissions?: BoxItemPermission,
-    item_collection?: BoxItemCollection,
-    path_collection?: BoxPathCollection,
-    interacted_at?: string,
+    allowed_shared_link_access_levels?: Array<Access>,
     content_created_at?: string,
     content_modified_at?: string,
-    modified_at?: string,
     created_at?: string,
-    shared_link?: SharedLink,
-    allowed_shared_link_access_levels?: Array<Access>,
-    has_collaborations?: boolean,
-    is_externally_owned?: boolean,
-    download_url?: string,
-    url?: string,
-    owned_by?: User,
-    modified_by?: User,
     created_by?: User,
-    selected?: boolean,
-    metadata?: MetadataType,
+    description?: string,
+    download_url?: string,
+    extension?: string,
     file_version?: BoxItemVersion,
+    has_collaborations?: boolean,
+    id: string,
+    interacted_at?: string,
     is_download_available?: boolean,
-    version_number?: string,
+    is_externally_owned?: boolean,
+    item_collection?: BoxItemCollection,
+    metadata?: MetadataType,
+    modified_at?: string,
+    modified_by?: User,
+    name?: string,
+    owned_by?: User,
+    parent?: BoxItem,
+    path_collection?: BoxPathCollection,
+    permissions?: BoxItemPermission,
     restored_from?: BoxItemVersion,
+    selected?: boolean,
+    shared_link?: SharedLink,
+    size?: number,
+    type?: ItemType,
+    url?: string,
+    version_number?: string,
 };
 
 type BoxItemCollection = {
-    total_count?: number,
     entries?: Array<BoxItem>,
-    order?: Array<Order>,
     isLoaded?: boolean,
     limit?: number,
-    offset?: number,
-    previous_marker?: string,
     next_marker?: string,
+    offset?: number,
+    order?: Array<Order>,
+    previous_marker?: string,
+    total_count?: number,
 };
 
 type FlattenedBoxItem = {
+    allowed_shared_link_access_levels?: Array<Access>,
+    created_at?: string,
+    created_by?: User,
+    description?: string,
+    download_url?: string,
+    extension?: string,
+    file_version?: BoxItemVersion,
+    has_collaborations?: boolean,
     id?: string,
+    interacted_at?: string,
+    is_externally_owned?: boolean,
+    item_collection?: FlattenedBoxItemCollection,
+    metadata?: MetadataType,
+    modified_at?: string,
+    modified_by?: User,
     name?: string,
+    owned_by?: User,
+    parent?: BoxItem,
+    path_collection?: BoxPathCollection,
+    permissions?: BoxItemPermission,
+    selected?: boolean,
+    shared_link?: SharedLink,
     size?: number,
     type?: ItemType,
-    parent?: BoxItem,
-    extension?: string,
-    description?: string,
-    permissions?: BoxItemPermission,
-    item_collection?: FlattenedBoxItemCollection,
-    path_collection?: BoxPathCollection,
-    interacted_at?: string,
-    modified_at?: string,
-    created_at?: string,
-    shared_link?: SharedLink,
-    allowed_shared_link_access_levels?: Array<Access>,
-    has_collaborations?: boolean,
-    is_externally_owned?: boolean,
-    download_url?: string,
     url?: string,
-    owned_by?: User,
-    modified_by?: User,
-    created_by?: User,
-    selected?: boolean,
-    metadata?: MetadataType,
-    file_version?: BoxItemVersion,
 };
 
 type FlattenedBoxItemCollection = {
-    total_count?: number,
     entries?: Array<string>,
-    order?: Array<Order>,
     isLoaded?: boolean,
     limit?: number,
-    offset?: number,
-    previous_marker?: string,
     next_marker?: string,
+    offset?: number,
+    order?: Array<Order>,
+    previous_marker?: string,
+    total_count?: number,
 };
 
 type BoxPathCollection = {
-    total_count: number,
     entries: Array<Crumb>,
+    total_count: number,
 };
 
 type Collection = {
-    id?: string,
-    name?: string,
-    permissions?: BoxItemPermission,
+    boxItem?: FlattenedBoxItem,
     breadcrumbs?: Array<Crumb>,
+    id?: string,
+    items?: Array<BoxItem>,
+    name?: string,
     offset?: number,
     percentLoaded?: number,
+    permissions?: BoxItemPermission,
     sortBy?: SortBy,
     sortDirection?: SortDirection,
-    items?: Array<BoxItem>,
-    boxItem?: FlattenedBoxItem,
     totalCount?: number,
 };
 
@@ -459,12 +460,12 @@ type FolderUploadItem = {
     boxFile?: BoxItem,
     error?: Object,
     extension: string,
+    isFolder?: boolean,
     name: string,
+    options?: UploadItemAPIOptions,
     progress: number,
     size: number,
     status: UploadStatus,
-    options?: UploadItemAPIOptions,
-    isFolder?: boolean,
 };
 
 type UploadItem = {
@@ -473,12 +474,12 @@ type UploadItem = {
     error?: Object,
     extension: string,
     file: UploadFile,
+    isFolder?: boolean,
     name: string,
+    options?: UploadItemAPIOptions,
     progress: number,
     size: number,
     status: UploadStatus,
-    options?: UploadItemAPIOptions,
-    isFolder?: boolean,
 };
 
 type UploadItemAPIOptions = {
@@ -495,18 +496,18 @@ type UploadFileWithAPIOptions = {
 };
 
 type ModalOptions = {
-    buttonLabel: string,
     buttonClassName: string,
+    buttonLabel: string,
     modalClassName: string,
     overlayClassName: string,
 };
 
 type IconType = {
-    color?: string,
-    secondaryColor?: string,
     className?: string,
-    width?: number,
+    color?: string,
     height?: number,
+    secondaryColor?: string,
+    width?: number,
 };
 
 type Crumb = {
@@ -515,20 +516,20 @@ type Crumb = {
 };
 
 type Options = {
-    id?: string,
-    token: Token,
+    apiHost?: string,
+    cache?: APICache,
     clientName?: string,
-    version?: string,
+    consoleError?: boolean,
+    consoleLog?: boolean,
+    id?: string,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    cache?: APICache,
-    apiHost?: string,
-    uploadHost?: string,
-    responseInterceptor?: Function,
-    requestInterceptor?: Function,
-    consoleLog?: boolean,
-    consoleError?: boolean,
     shouldRetry?: boolean,
+    token: Token,
+    uploadHost?: string,
+    version?: string,
 };
 
 type Recent = {
@@ -537,8 +538,8 @@ type Recent = {
 };
 
 type RecentCollection = {
-    order: Order,
     entries: Array<Recent>,
+    order: Order,
 };
 
 type MultiputConfig = {
@@ -562,8 +563,8 @@ type MultiputData = {
 };
 
 type FileVersions = {
-    total_count: number,
     entries: Array<BoxItemVersion>,
+    total_count: number,
 };
 
 type MaskError = {
@@ -572,77 +573,77 @@ type MaskError = {
 };
 
 type InlineError = {
-    title: MessageDescriptor,
     content: MessageDescriptor,
+    title: MessageDescriptor,
 };
 
 type Errors = {
-    maskError?: MaskError,
-    inlineError?: InlineError,
     error?: MessageDescriptor,
+    inlineError?: InlineError,
+    maskError?: MaskError,
 };
 
 type FileAccessStats = {
-    preview_count?: number,
-    download_count?: number,
     comment_count?: number,
+    download_count?: number,
     edit_count?: number,
     has_count_overflowed: boolean,
+    preview_count?: number,
 };
 
 type TaskAssignment = {
-    type: 'task_assignment',
-    id: string,
     assigned_to: User,
+    id: string,
     status: TaskAssignmentStatus,
+    type: 'task_assignment',
 };
 
 type TaskAssignments = {
-    total_count: number,
     entries: Array<TaskAssignment>,
+    total_count: number,
 };
 
 type Task = {
-    type: 'task',
-    id: string,
     created_at: string,
     created_by: User,
     due_at?: string,
+    id: string,
     message: string,
     task_assignment_collection: TaskAssignments,
+    type: 'task',
 };
 
 type Tasks = {
-    total_count: number,
     entries: Array<Task>,
+    total_count: number,
 };
 
 type Comment = {
-    type: 'comment',
+    created_at: string,
+    created_by: User,
     id: string,
     is_reply_comment?: boolean,
-    tagged_message: string,
     message?: string,
-    created_by: User,
-    created_at: string,
     modified_at: string,
+    tagged_message: string,
+    type: 'comment',
 };
 
 type Comments = {
-    total_count: number,
     entries: Array<Comment>,
+    total_count: number,
 };
 
 type FeedItems = Array<Comment | Task | BoxItemVersion>;
 
 type Collaborators = {
-    next_marker: 'string' | null,
     entries: Array<SelectorItem>,
+    next_marker: 'string' | null,
 };
 
 type Translations = {
-    translationEnabled?: boolean,
     onTranslate?: Function,
+    translationEnabled?: boolean,
 };
 
 type OpenWithAPI = {
@@ -674,10 +675,10 @@ type ExecuteAPIParam = {
 };
 
 type ExecuteAPI = {
-    url: string,
-    params: ?Array<ExecuteAPIParam>,
     integration_type: string,
     method: HTTP_POST | HTTP_GET,
+    params: ?Array<ExecuteAPIParam>,
+    url: string,
 };
 
 type DisabledReason = string | React.Element<typeof FormattedMessage>;
@@ -716,7 +717,7 @@ type UploadDataTransferItemWithAPIOptions = {
     options?: UploadItemAPIOptions,
 };
 
-type UploadFile = File & { webkitRelativePath?: string, lastModifiedDate?: Date };
+type UploadFile = File & { lastModifiedDate?: Date, webkitRelativePath?: string };
 
 type DirectoryReader = {
     readEntries: (Function, Function) => void,
@@ -730,9 +731,9 @@ type FetchOptions = {
 
 type ErrorResponseData = {
     code: string,
+    context_info: Object,
     help_url: string,
     message: string,
-    context_info: Object,
     request_id: string,
     status: number,
     type: 'error',
@@ -750,11 +751,11 @@ type ElementOrigin =
     | typeof ORIGIN_METADATA_SIDEBAR;
 
 type ElementsError = {
-    type: 'error',
     code: string,
+    context_info: Object,
     message: string,
     origin: ElementOrigin,
-    context_info: Object,
+    type: 'error',
 };
 
 type ErrorContextProps = {
@@ -773,8 +774,8 @@ type MetricType =
     | typeof METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC;
 
 type ElementsLoadMetricData = {
-    startMarkName?: string,
     endMarkName: string,
+    startMarkName?: string,
 };
 
 type LoggerProps = {
