@@ -57,6 +57,7 @@ describe('FeatureFlag', () => {
         expect(wrapper.html()).toBeNull();
         expect(MockChild).not.toHaveBeenCalled();
     });
+
     test('calls enabled/disabled props', () => {
         const enabledFn = jest.fn(() => null);
         const disabledFn = jest.fn(() => null);
@@ -76,6 +77,52 @@ describe('FeatureFlag', () => {
         expect(enabledFn).toHaveBeenCalledWith(foo);
         expect(disabledFn).toHaveBeenCalled();
     });
+
+    test('"not" prop inverts flag with children prop', () => {
+        const FeatEnabled = jest.fn(() => null);
+        const FeatEnabledNot = jest.fn(() => null);
+        const FeatDisabledNot = jest.fn(() => null);
+        mount(
+            <FeatureProvider
+                features={{
+                    foo: true,
+                    bar: false,
+                }}
+            >
+                <FeatureFlag feature="foo">
+                    <FeatEnabled />
+                </FeatureFlag>
+                <FeatureFlag not feature="foo">
+                    <FeatEnabledNot />
+                </FeatureFlag>
+                <FeatureFlag not feature="bar">
+                    <FeatDisabledNot />
+                </FeatureFlag>
+            </FeatureProvider>,
+        );
+        expect(FeatEnabled).toHaveBeenCalled();
+        expect(FeatEnabledNot).not.toHaveBeenCalled();
+        expect(FeatDisabledNot).toHaveBeenCalled();
+    });
+
+    test('"not" prop inverts flag with enabled/disabled', () => {
+        // NOTE: "not" is recommended for use with a single child, not "enabled"/"disabled"
+        const enabledFn = jest.fn(() => null);
+        const disabledFn = jest.fn(() => null);
+        const foo = { otherProp: 'foo' };
+        mount(
+            <FeatureProvider
+                features={{
+                    foo,
+                }}
+            >
+                <FeatureFlag disabled={disabledFn} enabled={enabledFn} not feature="foo" />
+            </FeatureProvider>,
+        );
+        expect(disabledFn).toHaveBeenCalled();
+        expect(enabledFn).not.toHaveBeenCalled();
+    });
+
     test('uses children prop instead of enabled prop if both are provided', () => {
         const MockChild = jest.fn(() => null);
         const enabledFn = jest.fn(() => null);
@@ -94,6 +141,7 @@ describe('FeatureFlag', () => {
         expect(MockChild).toHaveBeenCalled();
         expect(enabledFn).not.toHaveBeenCalled();
     });
+
     test('defaults to rendering nothing', () => {
         const foo = undefined;
         const bar = { enabled: true };
