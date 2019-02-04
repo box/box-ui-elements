@@ -139,8 +139,6 @@ class Comment extends React.Component<Props, State> {
                                 name={createdByUser.name}
                                 getUserProfileUrl={getUserProfileUrl}
                             />
-                        </div>
-                        <div className="bcs-comment-meta">
                             {!!onEdit && !!canEdit && !isPending && <InlineEdit id={id} toEdit={toEdit} />}
                             {!!onDelete && !!canDelete && !isPending && (
                                 <InlineDelete
@@ -150,6 +148,8 @@ class Comment extends React.Component<Props, State> {
                                     onDelete={onDelete}
                                 />
                             )}
+                        </div>
+                        <div>
                             <Tooltip
                                 text={
                                     <FormattedMessage

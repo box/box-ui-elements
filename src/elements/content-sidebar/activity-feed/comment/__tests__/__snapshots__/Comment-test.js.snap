@@ -31,9 +31,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           name="50 Cent"
         />
       </div>
-      <div
-        className="bcs-comment-meta"
-      >
+      <div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -103,9 +101,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           name="50 Cent"
         />
       </div>
-      <div
-        className="bcs-comment-meta"
-      >
+      <div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -176,9 +172,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
           name="50 Cent"
         />
       </div>
-      <div
-        className="bcs-comment-meta"
-      >
+      <div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -252,9 +246,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
           name="50 Cent"
         />
       </div>
-      <div
-        className="bcs-comment-meta"
-      >
+      <div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
