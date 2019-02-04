@@ -15,12 +15,12 @@ function FeatureFlag({
     disabled?: () => React.Node,
     enabled?: types.FeatureOptions => React.Node,
     feature: string,
-    not: boolean,
+    not: boolean, // invert the flag - recommended for use with a child component, not "enabled"/"disabled"
 }) {
     return (
         <FeatureConsumer>
             {features => {
-                const isEnabled = !not && isFeatureEnabled(features, feature);
+                const isEnabled = not ? !isFeatureEnabled(features, feature) : isFeatureEnabled(features, feature);
                 const featureConfig = getFeatureConfig(features, feature);
                 if (children) return isEnabled && children;
                 return isEnabled ? enabled(featureConfig) : disabled();
