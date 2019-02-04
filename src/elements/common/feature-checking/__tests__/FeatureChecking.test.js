@@ -76,8 +76,30 @@ describe('FeatureFlag', () => {
         expect(enabledFn).toHaveBeenCalledWith(foo);
         expect(disabledFn).toHaveBeenCalled();
     });
+    test('"not" prop inverts flag with children prop', () => {
+        const ChildComponentEnabled = jest.fn(() => null);
+        const ChildComponentDisabled = jest.fn(() => null);
+        const foo = { otherProp: 'foo' };
+        mount(
+            <FeatureProvider
+                features={{
+                    foo,
+                }}
+            >
+                <FeatureFlag feature="foo">
+                    <ChildComponentEnabled />
+                </FeatureFlag>
+                <FeatureFlag>
+                    <ChildComponentDisabled />
+                </FeatureFlag>
+            </FeatureProvider>,
+        );
+        expect(ChildComponentEnabled).toHaveBeenCalled();
+        expect(ChildComponentDisabled).not.toHaveBeenCalled();
+    });
 
-    test('"not" prop inverts flag', () => {
+    test('"not" prop inverts flag with enabled/disable', () => {
+        // NOTE: "not" is recommended for use with a single child, not "enabled"/"disabled"
         const enabledFn = jest.fn(() => null);
         const disabledFn = jest.fn(() => null);
         const foo = { otherProp: 'foo' };
@@ -93,6 +115,7 @@ describe('FeatureFlag', () => {
         expect(disabledFn).toHaveBeenCalled();
         expect(enabledFn).not.toHaveBeenCalled();
     });
+
     test('uses children prop instead of enabled prop if both are provided', () => {
         const MockChild = jest.fn(() => null);
         const enabledFn = jest.fn(() => null);
