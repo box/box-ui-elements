@@ -30,6 +30,8 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           id={10}
           name="50 Cent"
         />
+      </div>
+      <div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -98,6 +100,8 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           id={10}
           name="50 Cent"
         />
+      </div>
+      <div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -167,6 +171,8 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
           id={10}
           name="50 Cent"
         />
+      </div>
+      <div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -239,6 +245,8 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
           id={10}
           name="50 Cent"
         />
+      </div>
+      <div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
