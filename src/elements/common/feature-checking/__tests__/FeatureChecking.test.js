@@ -82,11 +82,11 @@ describe('FeatureFlag', () => {
         const FeatEnabled = jest.fn(() => null);
         const FeatEnabledNot = jest.fn(() => null);
         const FeatDisabledNot = jest.fn(() => null);
-        const foo = { otherProp: 'foo' };
         mount(
             <FeatureProvider
                 features={{
-                    foo,
+                    foo: true,
+                    bar: false,
                 }}
             >
                 <FeatureFlag feature="foo">
