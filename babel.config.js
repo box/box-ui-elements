@@ -43,15 +43,7 @@ module.exports = {
             plugins: ['flow-react-proptypes'],
         },
         npm: {
-            plugins: [
-                [
-                    'babel-plugin-transform-require-ignore',
-                    {
-                        extensions: ['.scss', '.css'],
-                    },
-                ],
-                ['react-remove-properties', { properties: ['data-testid'] }],
-            ],
+            plugins: [['react-remove-properties', { properties: ['data-testid'] }]],
         },
         production: {
             plugins: [['react-remove-properties', { properties: ['data-resin-target', 'data-testid'] }]],
@@ -64,12 +56,6 @@ module.exports = {
                     'react-intl',
                     {
                         enforceDescriptions: false,
-                    },
-                ],
-                [
-                    'babel-plugin-transform-require-ignore',
-                    {
-                        extensions: ['.scss', '.css'],
                     },
                 ],
             ],

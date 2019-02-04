@@ -38,7 +38,7 @@ Create a branch with a descriptive name, such as `add-search`.
 
 ### Step 4: Push your feature branch to your fork
 
-We use [semantic-release](https://github.com/semantic-release/semantic-release#commit-message-format) and the [conventional commit message format](https://github.com/marionebl/commitlint/tree/master/%40commitlint/config-conventional). Keep a separate feature branch for each issue you want to address. As you develop code, continue to push code to your remote feature branch. If applicable, please make sure to include the issue number you're addressing in your commit message, such as:
+We use [semantic-release](https://github.com/semantic-release/semantic-release#commit-message-format) and the [conventional commit message format](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional). Keep a separate feature branch for each issue you want to address. As you develop code, continue to push code to your remote feature branch. If applicable, please make sure to include the issue number you're addressing in your commit message, such as:
 
 ```
 tag(optional scope): short description
@@ -48,7 +48,7 @@ longer description here if necessary.
 include BREAKING CHANGE keyword for breaking changes.
 ```
 
-The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/marionebl/commitlint/tree/master/%40commitlint/config-conventional#type-enum). We use the angular style for tags. See the [default release rules](https://github.com/semantic-release/commit-analyzer/blob/master/lib/default-release-rules.js) based on the commit tag. Shown below is an example of the release type that will be done based on a commit message.
+The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional#type-enum). We use the angular style for tags. See the [default release rules](https://github.com/semantic-release/commit-analyzer/blob/master/lib/default-release-rules.js) based on the commit tag. Shown below is an example of the release type that will be done based on a commit message.
 
 | Commit message                                                                                                                                          | Release type               |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |

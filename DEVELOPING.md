@@ -53,11 +53,12 @@ Install the following plugins in your preferred editor
 
 ## Common script commands
 
--   `yarn start` to launch a local styleguide examples server. Uses demo data.
--   `yarn start:dev` to launch a local webpack server. Uses your own data.
--   `yarn start:npm` to symlink via `yarn link` to a parent project.
+-   `yarn start` to launch a local styleguide examples server. Uses demo live data for Elements.
+-   `yarn start:npm` to symlink Elements via `yarn link` to a parent project.
+-   `yarn start:dev` to launch a local webpack dev server. Uses your own data for Elements.
 -   `yarn lint` to lint js and css.
--   `yarn lint --fix` to lint js and fix issues.
+-   `yarn lint:js --fix` to lint js and fix issues.
+-   `yarn lint:css --fix` to lint styles and fix issues.
 -   `yarn test` to launch tests with jest.
 -   `yarn test --watch` to launch tests with jest in watch mode.
 -   `yarn test --coverage` to launch tests with jest with coverage.

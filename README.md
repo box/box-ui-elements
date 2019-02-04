@@ -17,7 +17,7 @@ Box UI Elements are pre-built UI components that allow developers to add feature
 To prevent library duplication, the UI Elements require certain peer dependencies to be installed manually. For a list of required peer dependencies, see [package.json](package.json).
 
 # Usage
-This documentation describes how to use UI Elements in a [React](https://facebook.github.io/react) application. If instead you require a framework-agnostic solution, please refer to our [developer documentation](https://developer.box.com/docs/box-ui-elements). You can also reference our [Elements Demo App](https://github.com/box/box-ui-elements-demo) and [Preview Demo App](https://github.com/box/box-content-preview-demo) for examples of minimal React applications using ContentExplorer and ContentPreview, respectively.
+This documentation describes how to use UI Elements in a [React](https://facebook.github.io/react) application using [webpack](https://webpack.js.org/). If instead you require a framework-agnostic solution, please refer to our [developer documentation](https://developer.box.com/docs/box-ui-elements). You can also reference our [Elements Demo App](https://github.com/box/box-ui-elements-demo) and [Preview Demo App](https://github.com/box/box-content-preview-demo) for examples of minimal React applications using ContentExplorer and ContentPreview, respectively.
 
 ### Common
 * [Authentication](src/elements/README.md#authentication)
@@ -34,10 +34,10 @@ This documentation describes how to use UI Elements in a [React](https://faceboo
 \* _These components utilize code splitting. See the [Code Splitting](#code-splitting) section for more information._
 
 ### Code Splitting
-[Code splitting](https://webpack.js.org/guides/code-splitting/) is currently supported for some UI Elements. In order to use an Element with code splitting, you will need to build the Element with webpack by importing it from the `es` folder in our npm package.
+[Code splitting](https://webpack.js.org/guides/code-splitting/) is currently supported for some UI Elements. In order to use an Element with code splitting, you need to set it up in webpack.
 
 ### Stylesheets
-Each Box UI Elements requires its corresponding stylesheet to render properly. To import these stylesheets as modules (e.g. `import 'box-ui-elements/dist/sidebar.css';`), your project must integrate with Webpack's style-loader and css-loader. Alternatively, you can include the stylesheets in your application's HTML via `<style>` tags.
+Box UI Elements use [SCSS stylesheets](https://sass-lang.com/guide). Each of the Elements include their corresponding SCSS stylesheet to render properly. Once you `import` an Element within your React app, the corresponding stylesheet will automatically get included. However, you will need to [setup webpack](https://github.com/webpack-contrib/mini-css-extract-plugin#minimal-example) to handle `.scss` files by using the sass-loader / css-loader. This will direct webpack to properly include our SCSS files in your final CSS output. A sample configuration is [shown here](https://github.com/box/box-ui-elements-demo/blob/master/webpack.config.js) under the rules section.
 
 ### Browser Support
 * Desktop Chrome, Firefox, Safari, Edge (latest 2 versions)
