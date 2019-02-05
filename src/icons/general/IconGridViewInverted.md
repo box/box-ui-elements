@@ -1,0 +1,3 @@
+```
+<IconGridViewInverted />
+```

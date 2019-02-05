@@ -13228,10 +13228,10 @@ react-test-renderer@^16.0.0-0:
     react-is "^16.7.0"
     scheduler "^0.12.0"
 
-react-tether@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/react-tether/-/react-tether-0.6.1.tgz#de64dd81a5e40053a9f275c4fef0beb0877b3e4e"
-  integrity sha512-/1o2d77RyL78S1IjS1+yGMTKSldYMBVtu4H20zNIC9eAGsgA/KMxdLRcE3k32wj4TWCsVMPDnxeTokHuVWNLag==
+react-tether@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-tether/-/react-tether-1.0.3.tgz#5883c8c914d59a3b0753fe4380a949de220b95bf"
+  integrity sha512-bh2Yg/M70f1eflx1QmQCqAqv3kRp6CMLCZuQMxbBZG2PE0eMJhfcdk2tLES79QMwAPu2eivQ2WJacTmcpW0fog==
   dependencies:
     prop-types "^15.5.8"
     tether "^1.4.3"
