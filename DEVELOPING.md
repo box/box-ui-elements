@@ -62,6 +62,7 @@ Install the following plugins in your preferred editor
 -   `yarn test` to launch tests with jest.
 -   `yarn test --watch` to launch tests with jest in watch mode.
 -   `yarn test --coverage` to launch tests with jest with coverage.
+-   `yarn release` to run a release.
 
 For more script commands see `package.json`. Test coverage reports are available under reports/coverage.
 
@@ -73,15 +74,4 @@ For test debugging follow instructions provided in the [jest documentation](http
 
 **_Note: For Box employees only_**
 
-This project is published on public [npmjs](https://www.npmjs.com/package/box-ui-elements). Before doing a release, make sure you have `GITHUB_TOKEN` environment variable set on your machine.
-
-1. Generate a token from [here](https://github.com/settings/tokens/new), with `repo` scope selected.
-2. Add `export GITHUB_TOKEN="<your-token>"` in your `~/.bash_profile` (or `~/.bashrc`).
-3. Make sure the token is set in your current terminal window.
-
-Releases are done from the `release` branch. To push a new release use `yarn release`. Doing so will reset the `release` branch to match the latest `master` branch and thereafter run a release. If you want to do a hotfix on a prior release, instead use `yarn release:hotfix` which will skip resetting to the `master` branch. When doing a hotfix release, it is assumed some hotfix is cherry picked to the release branch locally prior to running the release. Essentially, for a hotfix you want to:
-
-1. git checkout release (or -b release) locally.
-2. git reset --hard upstream/release
-3. Merge/cherry-pick your hotfix and commit locally.
-4. yarn release:hotfix
+See the publishing section of the `UI Elements Runbook` on confluence.

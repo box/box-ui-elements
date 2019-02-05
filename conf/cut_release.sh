@@ -2,6 +2,7 @@
 
 # Temp version
 VERSION="XXX"
+DISTTAG="XXX"
 
 # Styling variables
 red=$"\n\e[1;31m(✖) "
@@ -11,13 +12,15 @@ end=$"\e[0m\n"
 
 check_release_scripts_changed() {
     if [[ $(git diff --shortstat HEAD..release/master conf  2> /dev/null | tail -n1) != "" ]] ; then
-        printf "${red}Build scripts have changed, aborting! Reset to master before running release.${end}"
+        printf "${red}Build scripts have changed, aborting! Run release command from master.${end}"
         return 1
     fi
 }
 
-setup() {
-    # Add release remote branch
+setup_remote() {
+    # Adds the release remote branch by nuking existing if any.
+    # We add this because we don't want to assume what people call their
+    # origin or what people call their upstream.
     if git remote get-url release; then
         printf "${blue}Removing existing release remote branch...${end}"
         git remote remove release || return 1
@@ -26,40 +29,68 @@ setup() {
     printf "${blue}Adding release remote branch...${end}"
     git remote add release git@github.com:box/box-ui-elements.git || return 1
     printf "${green}Release remote branch added!${end}"
+}
 
-    # Checkout the release branch
-    printf "${blue}Checking out or creating release branch...${end}"
-    if ! git checkout release; then
-        git checkout -b release || return 1
+fetch_and_prune_tags() {
+    # Fetch from release remote and prune tags
+    printf "${blue}Fetching release remote and pruning tags...${end}"
+    git fetch release --prune 'refs/tags/*:refs/tags/*' || return 1
+    printf "${green}Fetched and pruned tags!${end}"
+}
+
+checkout_branch() {
+    printf "${blue}Determining dist-tag and checking out ${BRANCH}...${end}"
+    if [[ "$HOTFIX" == true ]] && [[ "$BRANCH" != "" ]] && [[ "$BRANCH" != "master" ]] && [[ "$BRANCH" != "release" ]]; then
+        printf "${blue}This is a hotfix release, using latest dist-tag...${end}"
+        DISTTAG='latest'
+        printf "${blue}Checking out ${BRANCH}...${end}"
+        git checkout $BRANCH || return 1
+    elif [[ "$HOTFIX" != true ]] && [[ "$BRANCH" == "master" ]]; then
+        printf "${blue}This is a master branch release, using beta dist-tag...${end}"
+        DISTTAG='beta'
+        printf "${blue}Checking out master...${end}"
+        git checkout master || return 1
+        printf "${blue}Resetting to remote release/master...${end}"
+        git reset --hard release/master || return 1
+    elif [[ "$HOTFIX" != true ]] && [[ "$BRANCH" == "release" ]]; then
+        printf "${blue}This is a stable branch release, using latest dist-tag...${end}"
+        DISTTAG='latest'
+        printf "${blue}Checking out release...${end}"
+        git checkout release || return 1
+        printf "${blue}Resetting to remote release/master...${end}"
+        git reset --hard release/master || return 1
+        printf "${blue}Updating remote release branch with latest from master...${end}"
+        git push release release --force --no-verify || return 1
     fi
-    printf "${green}Checked out release branch!${end}"
 
-    # Fetch latest from the release remote
-    printf "${blue}Fetching from remote release branch...${end}"
-    git fetch release || return 1
-    printf "${green}Fetched from remote release branch!${end}"
+    if [[ "$DISTTAG" == "XXX" ]]; then
+        printf "${red}Could not determine a dist-tag based on the provided branch=${BRANCH}${end}"
+        if [[ "$HOTFIX" == true ]]; then
+            printf "${red}For hotfix you must pass in the git tag branch, eg: BRANCH=vX.X.X yarn release:hotfix${end}"
+        else
+            printf "${red}Branch can only be master or release${end}"
+        fi
+        return 1
+    else
+        printf "${green}${BRANCH} checkout complete and dist-tag determined!${end}"
+    fi
+}
+
+setup() {
+    # Setup remote git url
+    setup_remote || return 1
+
+    # Fetch and prune
+    fetch_and_prune_tags || return 1
 
     # Only proceed if release scripts haven't changed
+    # Master branch should have latest build scripts
+    printf "${blue}Checking out master...${end}"
+    git checkout master || return 1
     check_release_scripts_changed || return 1
 
-    if [ "$HOTFIX" == true ]; then
-        printf "${blue}This is a hotfix release, ignoring reset to master...${end}"
-    else
-        # Reset hard to master branch on release remote
-        printf "${blue}Resetting to remote release branch...${end}"
-        git reset --hard release/master || return 1
-        printf "${green}Reset to remote release branch!${end}"
-    fi
-
-    # Remove old local tags in case a build failed
-    printf "${blue}Pruning tags...${end}"
-    git fetch --prune release '+refs/tags/*:refs/tags/*' || return 1
-    printf "${green}Pruned tags!${end}"
-
-    # Clean untracked files
-    printf "${blue}Updating remote release branch...${end}"
-    git push release release --force --no-verify || return 1
-    printf "${green}Updated remote release branch!${end}"
+    # Checkout the branch from which we want to release
+    checkout_branch || return 1
 
     # Clean untracked files
     printf "${blue}Cleaning untracked files...${end}"
@@ -97,8 +128,8 @@ build_assets() {
 
 push_to_npm() {
     printf "${blue}Publishing assets to npmjs...${end}"
-    npm publish --access public || return 1
-    printf "${green}Published npm!${end}"
+    npm publish --access public --tag "$DISTTAG" || return 1
+    printf "${green}Published npm using dist-tag=${DISTTAG}!${end}"
 }
 
 build_examples() {
