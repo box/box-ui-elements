@@ -24,6 +24,7 @@ const locale = language.substr(0, language.indexOf('-'));
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
 const Translations = new TranslationsPlugin();
+const excludeFromBabel = [/@babel(?:\/|\\{1,2})runtime/];
 const entries = {
     picker: path.resolve('src/elements/wrappers/ContentPickers.js'),
     uploader: path.resolve('src/elements/wrappers/ContentUploader.js'),
@@ -137,6 +138,12 @@ function getConfig(isReactExternalized) {
                     replace: 'webpackMode: "eager"',
                     flags: 'g',
                 },
+            },
+            {
+                test: /\.(js|mjs)$/,
+                loader: 'babel-loader',
+                include: /(node_modules)/,
+                exclude: excludeFromBabel,
             },
             ...config.module.rules,
         ];
