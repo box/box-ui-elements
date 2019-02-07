@@ -935,4 +935,26 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.canViewAnnotations()).toBeFalsy();
         });
     });
+
+    describe('componentWillUnmount()', () => {
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            wrapper = getWrapper(props, {
+                disableLifecycleMethods: true,
+            });
+            instance = wrapper.instance();
+            instance.api = {
+                destroy: jest.fn(),
+            };
+            instance.destroyPreview = jest.fn();
+        });
+
+        test('shoud destroy the API and preview', () => {
+            instance.componentWillUnmount();
+            expect(instance.api.destroy).toHaveBeenCalledWith(false);
+            expect(instance.destroyPreview).toHaveBeenCalled();
+        });
+    });
 });
