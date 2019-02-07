@@ -6,6 +6,9 @@
 
 import Browser from 'utils/Browser';
 
+/* ------------------------ API ---------------------------- */
+export const API_PAGE_LIMIT = 1000; // default limit for paginated api calls
+
 /* ----------------------- Size ---------------------------- */
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_LARGE: 'large' = 'large';
@@ -112,6 +115,7 @@ export const FIELD_METADATA_PROPERTIES = `${FIELD_METADATA}.${METADATA_SCOPE_GLO
 export const FIELD_METADATA_CLASSIFICATION = `${FIELD_METADATA}.${METADATA_SCOPE_ENTERPRISE}.${METADATA_TEMPLATE_CLASSIFICATION}`;
 export const FIELD_DUE_AT = 'due_at';
 export const FIELD_TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
+export const FIELD_TASK_COLLABORATOR_COLLECTION = 'task_collaborator_collection';
 export const FIELD_IS_COMPLETED = 'is_completed';
 export const FIELD_MESSAGE = 'message';
 export const FIELD_TAGGED_MESSAGE = 'tagged_message';
@@ -197,6 +201,7 @@ export const ERROR_CODE_FETCH_VERSIONS = 'fetch_versions_error';
 export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
 export const ERROR_CODE_FETCH_CURRENT_USER = 'fetch_current_user_error';
 export const ERROR_CODE_FETCH_TASK_ASSIGNMENT = 'fetch_task_assignment_error';
+export const ERROR_CODE_FETCH_TASK_COLLABORATOR = 'fetch_task_collaborator_error';
 export const ERROR_CODE_FETCH_INTEGRATIONS = 'fetch_integrations_error';
 export const ERROR_CODE_FETCH_METADATA = 'fetch_metadata_error';
 export const ERROR_CODE_FETCH_METADATA_TEMPLATES = 'fetch_metadata_templates_error';
@@ -206,16 +211,20 @@ export const ERROR_CODE_FETCH_RECENTS = 'fetch_recents_error';
 export const ERROR_CODE_EXECUTE_INTEGRATION = 'execute_integrations_error';
 export const ERROR_CODE_CREATE_COMMENT = 'create_comment_error';
 export const ERROR_CODE_CREATE_TASK = 'create_task_error';
+export const ERROR_CODE_CREATE_TASK_LINK = 'create_task_link_error';
 export const ERROR_CODE_CREATE_TASK_ASSIGNMENT = 'create_task_assignment_error';
+export const ERROR_CODE_CREATE_TASK_COLLABORATOR = 'create_task_collaborator_error';
 export const ERROR_CODE_CREATE_FOLDER = 'create_folder_error';
 export const ERROR_CODE_CREATE_METADATA = 'create_metadata_error';
 export const ERROR_CODE_DELETE_COMMENT = 'delete_comment_error';
 export const ERROR_CODE_DELETE_TASK = 'delete_task_error';
 export const ERROR_CODE_DELETE_TASK_ASSIGNMENT = 'delete_task_assignment_error';
+export const ERROR_CODE_DELETE_TASK_COLLABORATOR = 'delete_task_collaborator_error';
 export const ERROR_CODE_DELETE_ITEM = 'delete_item_error';
 export const ERROR_CODE_DELETE_METADATA = 'delete_metadata_error';
 export const ERROR_CODE_UPDATE_TASK = 'update_task_error';
 export const ERROR_CODE_UPDATE_TASK_ASSIGNMENT = 'update_task_assignment_error';
+export const ERROR_CODE_UPDATE_TASK_COLLABORATOR = 'update_task_collaborator_error';
 export const ERROR_CODE_UPDATE_COMMENT = 'update_comment_error';
 export const ERROR_CODE_UPDATE_SKILLS = 'update_skills_error';
 export const ERROR_CODE_UPDATE_METADATA = 'update_metadata_error';
