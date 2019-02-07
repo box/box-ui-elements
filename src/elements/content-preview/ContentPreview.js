@@ -250,6 +250,7 @@ class ContentPreview extends PureComponent<Props, State> {
     componentWillUnmount(): void {
         // Don't destroy the cache while unmounting
         this.api.destroy(false);
+        this.destroyPreview();
     }
 
     /**
