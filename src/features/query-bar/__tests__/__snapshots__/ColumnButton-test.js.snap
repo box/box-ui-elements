@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/metadata-view/components/ColumnButton render should render ColumnButton default state when menu is closed 1`] = `
+<Flyout
+  className="query-bar-column-dropdown-flyout"
+  closeOnClick={true}
+  closeOnClickOutside={true}
+  closeOnWindowBlur={false}
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isVisibleByDefault={false}
+  onClose={[Function]}
+  onOpen={[Function]}
+  openOnHover={false}
+  openOnHoverDelayTimeout={300}
+  portaledClasses={Array []}
+  position="bottom-right"
+>
+  <Button
+    className="query-bar-button"
+    isDisabled={true}
+    onClick={[Function]}
+    type="button"
+  >
+    <MenuToggle>
+      <IconMetadataColumns />
+      <span
+        className="button-label"
+      >
+        <FormattedMessage
+          defaultMessage="Columns"
+          id="boxui.queryBar.columnsButtonText"
+        />
+      </span>
+    </MenuToggle>
+  </Button>
+  <Overlay>
+    <div />
+  </Overlay>
+</Flyout>
+`;
+
+exports[`features/metadata-view/components/ColumnButton render should render ColumnButton default state when menu is open 1`] = `
+<Flyout
+  className="query-bar-column-dropdown-flyout"
+  closeOnClick={true}
+  closeOnClickOutside={true}
+  closeOnWindowBlur={false}
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isVisibleByDefault={false}
+  onClose={[Function]}
+  onOpen={[Function]}
+  openOnHover={false}
+  openOnHoverDelayTimeout={300}
+  portaledClasses={Array []}
+  position="bottom-right"
+>
+  <Button
+    className="query-bar-button"
+    isDisabled={true}
+    onClick={[Function]}
+    type="button"
+  >
+    <MenuToggle>
+      <IconMetadataColumns />
+      <span
+        className="button-label"
+      >
+        <FormattedMessage
+          defaultMessage="Columns"
+          id="boxui.queryBar.columnsButtonText"
+        />
+      </span>
+    </MenuToggle>
+  </Button>
+  <Overlay>
+    <ColumnButtonOverlay
+      columns={
+        Array [
+          Object {
+            "displayName": "Last Modified",
+            "id": "field7",
+            "isShown": true,
+            "property": "lastUpdatedByName",
+            "source": "item",
+            "type": "date",
+          },
+          Object {
+            "displayName": "Contract Value",
+            "id": "field_874",
+            "isShown": true,
+            "property": "demo key",
+            "source": "metadata",
+            "type": "enum",
+          },
+        ]
+      }
+      onColumnChange={[MockFunction]}
+    />
+  </Overlay>
+</Flyout>
+`;
+
+exports[`features/metadata-view/components/ColumnButton render should render ColumnButton with template passed in 1`] = `
+<Flyout
+  className="query-bar-column-dropdown-flyout"
+  closeOnClick={true}
+  closeOnClickOutside={true}
+  closeOnWindowBlur={false}
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isVisibleByDefault={false}
+  onClose={[Function]}
+  onOpen={[Function]}
+  openOnHover={false}
+  openOnHoverDelayTimeout={300}
+  portaledClasses={Array []}
+  position="bottom-right"
+>
+  <Button
+    className="query-bar-button"
+    isDisabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    <MenuToggle>
+      <IconMetadataColumns />
+      <span
+        className="button-label"
+      >
+        <FormattedMessage
+          defaultMessage="Columns"
+          id="boxui.queryBar.columnsButtonText"
+        />
+      </span>
+    </MenuToggle>
+  </Button>
+  <Overlay>
+    <div />
+  </Overlay>
+</Flyout>
+`;

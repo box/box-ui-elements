@@ -16,7 +16,7 @@ const NameCell = ({ cellData }: Props) => {
         <React.Fragment>
             <div className="cell-container item-name-cell-container">
                 <div className="icon-cell-container">
-                    <IconItem height={32} iconType={rowData.fileType} width={32} />
+                    <IconItem height={32} width={32} iconType={rowData.fileType} />
                 </div>
                 <div className="item-name-cell">
                     <span>{cellData.cellData}</span>
