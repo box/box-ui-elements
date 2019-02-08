@@ -68,7 +68,7 @@ export const METADATA_TEMPLATE_SKILLS = 'boxSkillsCards';
 export const METADATA_TEMPLATE_PROPERTIES = 'properties';
 export const METADATA_SCOPE_GLOBAL = 'global';
 export const METADATA_SCOPE_ENTERPRISE = 'enterprise';
-export const METADATA_TEMPLATE_FETCH_LIMIT = 1000;
+export const METADATA_TEMPLATE_FETCH_LIMIT = METADATA_TEMPLATE_FETCH_LIMIT;
 
 /* ----------------------- Fields --------------------------- */
 export const FIELD_ID = 'id';
