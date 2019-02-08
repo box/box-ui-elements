@@ -1,0 +1,32 @@
+@import '../../../styles/variables';
+
+.metadata-items-container {
+    display: flex;
+    flex-direction: row;
+
+    .item-list-column-header {
+        color: $seventy-sixers;
+        display: flex;
+        font-weight: 400;
+        justify-content: center;
+        letter-spacing: .035em;
+        text-transform: none;
+        width: 100%;
+    }
+
+    .item-list-name-cell {
+        border-top: 1px solid $off-white;
+        color: $twos;
+        display: flex;
+        justify-content: center;
+        padding-top: 8px;
+    }
+
+    .item-list-column-cell {
+        border-top: 1px solid $off-white;
+        color: $seventy-sixers;
+        display: flex;
+        justify-content: center;
+        padding-top: 8px;
+    }
+}

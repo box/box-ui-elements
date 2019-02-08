@@ -200,10 +200,11 @@ const allSections = [
         sections: [
             {
                 name: 'Metadata',
-                components: () => [
-                    '../src/features/metadata-instance-editor/MetadataInstanceEditor.js',
-                    '../src/features/metadata-view/MetadataView.js',
-                ],
+                components: () => ['../src/features/metadata-instance-editor/MetadataInstanceEditor.js'],
+            },
+            {
+                name: 'Metadata View',
+                components: () => ['../src/features/query-bar/QueryBar.js', '../src/features/list-view/ListView.js'],
             },
             {
                 name: 'Content Explorer',

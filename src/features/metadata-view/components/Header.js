@@ -3,7 +3,6 @@ import * as React from 'react';
 import Draggable from 'react-draggable';
 
 import type { HeaderData } from '../flowTypes';
-
 import '../styles/Header.scss';
 
 type Props = {
