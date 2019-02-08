@@ -34,6 +34,7 @@ setup_remote() {
 fetch_and_prune_tags() {
     # Fetch from release remote and prune tags
     printf "${blue}Fetching release remote and pruning tags...${end}"
+    git fetch release || return 1
     git fetch release --prune 'refs/tags/*:refs/tags/*' || return 1
     printf "${green}Fetched and pruned tags!${end}"
 }
