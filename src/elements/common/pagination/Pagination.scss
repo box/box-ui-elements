@@ -2,18 +2,18 @@
 
 .be-pagination {
     display: flex;
-}
 
-.be-pagination-count {
-    align-items: center;
-    display: flex;
+    .be-pagination-count {
+        align-items: center;
+        display: flex;
 
-    .be-is-small & {
-        display: none;
+        .be-is-small & {
+            display: none;
+        }
     }
-}
 
-.be-pagination-nav {
-    margin-left: 5px;
-    margin-right: 5px;
+    .be-pagination-toggle {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
 }
