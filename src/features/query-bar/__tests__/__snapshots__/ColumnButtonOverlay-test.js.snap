@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/metadata-view/components/ColumnButtonOverlay render should render ColumnButtonOverlay default state 1`] = `
+<div
+  className="column-button-dropdown"
+>
+  <div
+    className="column-button-dropdown-header"
+  >
+    <DraggableList
+      className="draggable-list-example"
+      listId="1"
+      onDragEnd={[Function]}
+    >
+      <PortaledDraggableListItem
+        id="field7"
+        index={0}
+        isDraggableViaHandle={true}
+        key="0"
+      >
+        <Checkbox
+          isChecked={true}
+          label="Last Modified"
+          name="Last Modified"
+          onChange={[Function]}
+        />
+      </PortaledDraggableListItem>
+      <PortaledDraggableListItem
+        id="field_874"
+        index={1}
+        isDraggableViaHandle={true}
+        key="1"
+      >
+        <Checkbox
+          isChecked={true}
+          label="Contract Value"
+          name="Contract Value"
+          onChange={[Function]}
+        />
+      </PortaledDraggableListItem>
+    </DraggableList>
+  </div>
+  <div
+    className="column-button-dropdown-footer"
+  >
+    <PrimaryButton
+      onClick={[Function]}
+      type="button"
+    >
+      <FormattedMessage
+        defaultMessage="Apply"
+        id="boxui.queryBar.applyFiltersButtonText"
+      />
+    </PrimaryButton>
+  </div>
+</div>
+`;

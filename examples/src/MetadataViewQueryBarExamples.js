@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 
-import QueryBar from '../../src/features/metadata-view/components/QueryBar';
-import type { ColumnType } from '../../src/features/metadata-view/flowTypes';
+import QueryBar from '../../src/features/query-bar/QueryBar';
+import type { ColumnType } from '../../src/features/query-bar/flowTypes';
 
 type Props = {
     activeTemplate?: MetadataTemplate,

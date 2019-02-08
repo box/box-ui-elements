@@ -1,0 +1,157 @@
+@import '../../../styles/variables';
+
+.filter-item-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    padding-bottom: 10px;
+    width: 100%;
+
+    .filter-item-delete-button {
+        align-items: center;
+        display: flex;
+        flex: 0;
+
+        .delete-button {
+            background: none;
+            border: 0;
+            color: $downtown-grey;
+            cursor: pointer;
+            display: flex;
+            font-size: 11px;
+            font-weight: bold;
+            padding-bottom: 0;
+            padding-left: 10px;
+            padding-top: 0;
+            position: relative;
+        }
+    }
+
+    .filter-item-prefix-container {
+        align-items: center;
+        display: flex;
+        flex: 0;
+        padding-left: 10px;
+        padding-right: 70px;
+        width: 70px;
+
+        .filter-item-prefix-text {
+            color: $black;
+            margin: auto;
+            position: relative;
+        }
+    }
+
+    .filter-item-attribute-dropdown-container {
+        align-items: center;
+        display: flex;
+        flex: 0;
+
+        .filter-dropdown-single-select-field-container {
+            flex: 1;
+        }
+
+        .select-field {
+            .select-button {
+                border-radius: 5px;
+                width: 150px;
+            }
+
+            .select-button.placeholder {
+                color: $seventy-sixers;
+            }
+        }
+    }
+
+    .filter-item-operator-dropdown-container {
+        align-items: center;
+        display: flex;
+        flex: 0 0;
+
+        .filter-dropdown-single-select-field-container {
+            flex: 1;
+        }
+
+        .select-container {
+            padding-left: 10px;
+            padding-right: 10px;
+
+            .select-button {
+                border-radius: 5px;
+            }
+        }
+    }
+
+    .filter-item-value-dropdown-container {
+        align-items: center;
+        display: flex;
+        flex: 1;
+        height: 100%;
+        padding-right: 20px;
+
+        .filter-dropdown-text-field-container {
+            flex: 1;
+
+            .text-input-container {
+                margin: auto;
+            }
+
+            input {
+                border: 1px solid #d2d2d2;
+                border-radius: 5px;
+                box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
+                height: auto;
+                margin: auto;
+                margin-top: auto;
+                padding: 8px;
+                position: auto;
+                width: 100%;
+            }
+        }
+
+        .filter-dropdown-date-field-container {
+            flex: 1;
+
+            .date-picker-wrapper {
+                margin: auto;
+            }
+
+            .date-picker-wrapper .date-picker-icon-holder {
+                width: 100%;
+            }
+
+            .text-input-container {
+                margin: auto;
+            }
+
+            input {
+                border: 1px solid #d2d2d2;
+                border-radius: 5px;
+                box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
+                height: auto;
+                margin: auto;
+                margin-top: auto;
+                padding: 8px;
+                position: auto;
+                width: 100%;
+            }
+        }
+
+        .filter-dropdown-single-select-field-container {
+            flex: 1;
+        }
+
+        .select-container {
+            width: 100%;
+
+            .select-button {
+                border-radius: 5px;
+                width: 100%;
+            }
+
+            .select-button.placeholder {
+                color: $seventy-sixers;
+            }
+        }
+    }
+}

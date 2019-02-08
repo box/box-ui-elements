@@ -12,7 +12,7 @@ type Props = {
 const IconCell = ({ cellData }: Props) => {
     return (
         <div className="cell-container">
-            <IconItem height={32} iconType={cellData} width={32} />
+            <IconItem height={32} width={32} iconType={cellData} />
         </div>
     );
 };

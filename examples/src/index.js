@@ -11,8 +11,6 @@ export {
 export { default as DraftJSMentionSelectorExamples } from './DraftJSMentionSelectorExamples';
 export { default as MentionSelectorContainer } from './MentionSelectorContainer';
 export { default as DraggableListExamples } from './DraggableListExamples';
-export { default as MetadataViewExamples } from './MetadataViewExamples';
-export { default as SkeletonItemListExample } from './SkeletonItemListExample';
 export { default as MetadataViewQueryBarExamples } from './MetadataViewQueryBarExamples';
 export { default as NewFolderModalExamples } from './NewFolderModalExamples';
 export { default as NotificationsWrapperExample } from './NotificationsWrapperExample';
