@@ -16,6 +16,9 @@ import VersionsAPI from './Versions';
 import CommentsAPI from './Comments';
 import TasksAPI from './Tasks';
 import TaskAssignmentsAPI from './TaskAssignments';
+import TasksNewAPI from './TasksNew';
+import TaskCollaboratorsAPI from './TaskCollaborators';
+import TaskLinksAPI from './TaskLinks';
 import FileAccessStatsAPI from './FileAccessStats';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
@@ -86,6 +89,21 @@ class APIFactory {
      * @property {TaskAssignmentsAPI}
      */
     taskAssignmentsAPI: TaskAssignmentsAPI;
+
+    /**
+     * @property {TasksNewAPI}
+     */
+    tasksNewAPI: TasksNewAPI;
+
+    /**
+     * @property {TaskCollaboratorsAPI}
+     */
+    taskCollaboratorsAPI: TaskCollaboratorsAPI;
+
+    /**
+     * @property {TaskLinksAPI}
+     */
+    taskLinksAPI: TaskLinksAPI;
 
     /*
      * @property {FileAccessStatsAPI}
@@ -202,6 +220,21 @@ class APIFactory {
         if (this.tasksAPI) {
             this.tasksAPI.destroy();
             delete this.tasksAPI;
+        }
+
+        if (this.tasksNewAPI) {
+            this.tasksNewAPI.destroy();
+            delete this.tasksNewAPI;
+        }
+
+        if (this.taskCollaboratorsAPI) {
+            this.taskCollaboratorsAPI.destroy();
+            delete this.taskCollaboratorsAPI;
+        }
+
+        if (this.taskLinksAPI) {
+            this.taskLinksAPI.destroy();
+            delete this.taskLinksAPI;
         }
 
         if (this.commentsAPI) {
@@ -425,6 +458,51 @@ class APIFactory {
 
         this.taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
         return this.taskAssignmentsAPI;
+    }
+
+    /**
+     * API for tasks
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {TasksAPI} TaskAssignmentsAPI instance
+     */
+    getTasksNewAPI(shouldDestroy: boolean): TasksNewAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.tasksNewAPI = new TasksNewAPI(this.options);
+        return this.tasksNewAPI;
+    }
+
+    /**
+     * API for taskCollaborators
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {TasksAPI} TaskCollaboratorsAPI instance
+     */
+    getTaskCollaboratorsAPI(shouldDestroy: boolean): TaskCollaboratorsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
+        return this.taskCollaboratorsAPI;
+    }
+
+    /**
+     * API for taskLinks
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {TasksAPI} TaskLinksAPI instance
+     */
+    getTaskLinksAPI(shouldDestroy: boolean): TaskLinksAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.taskLinksAPI = new TaskLinksAPI(this.options);
+        return this.taskLinksAPI;
     }
 
     /**
