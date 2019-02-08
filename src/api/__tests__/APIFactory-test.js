@@ -10,6 +10,9 @@ import RecentsAPI from '../Recents';
 import VersionsAPI from '../Versions';
 import CommentsAPI from '../Comments';
 import TasksAPI from '../Tasks';
+import TasksNewAPI from '../TasksNew';
+import TaskCollaboratorsAPI from '../TaskCollaborators';
+import TaskLinksAPI from '../TaskLinks';
 import FileAccessStatsAPI from '../FileAccessStats';
 import MetadataAPI from '../Metadata';
 import FileCollaboratorsAPI from '../FileCollaborators';
@@ -42,6 +45,9 @@ describe('api/APIFactory', () => {
             factory.versionsAPI = { destroy: jest.fn() };
             factory.metadataAPI = { destroy: jest.fn() };
             factory.usersAPI = { destroy: jest.fn() };
+            factory.tasksNewAPI = { destroy: jest.fn() };
+            factory.taskLinksAPI = { destroy: jest.fn() };
+            factory.taskCollaboratorsAPI = { destroy: jest.fn() };
             factory.boxEditAPI = { destroy: jest.fn() };
             factory.destroy();
             expect(factory.fileAPI).toBeUndefined();
@@ -53,6 +59,9 @@ describe('api/APIFactory', () => {
             expect(factory.recentsAPI).toBeUndefined();
             expect(factory.versionsAPI).toBeUndefined();
             expect(factory.metadataAPI).toBeUndefined();
+            expect(factory.taskCollaboratorsAPI).toBeUndefined();
+            expect(factory.taskLinksAPI).toBeUndefined();
+            expect(factory.tasksNewAPI).toBeUndefined();
             expect(factory.usersAPI).toBeUndefined();
         });
         test('should not destroy cache by default', () => {
@@ -233,6 +242,72 @@ describe('api/APIFactory', () => {
             expect(tasksAPI.options.cache).toBeInstanceOf(Cache);
             expect(tasksAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(tasksAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getTasksNewAPI()', () => {
+        test('should call destroy and return tasksNew API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const tasksNewAPI = factory.getTasksNewAPI(true);
+            expect(spy).toBeCalled();
+            expect(tasksNewAPI).toBeInstanceOf(TasksNewAPI);
+            expect(tasksNewAPI.options.cache).toBeInstanceOf(Cache);
+            expect(tasksNewAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(tasksNewAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return tasksNew API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const tasksNewApi = factory.getTasksNewAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(tasksNewApi).toBeInstanceOf(TasksNewAPI);
+            expect(tasksNewApi.options.cache).toBeInstanceOf(Cache);
+            expect(tasksNewApi.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(tasksNewApi.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getTaskCollaboratorsAPI()', () => {
+        test('should call destroy and return taskCollaborators API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const tasksCollaboratorsAPI = factory.getTaskCollaboratorsAPI(true);
+            expect(spy).toBeCalled();
+            expect(tasksCollaboratorsAPI).toBeInstanceOf(TaskCollaboratorsAPI);
+            expect(tasksCollaboratorsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(tasksCollaboratorsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(tasksCollaboratorsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return taskCollaborators API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const taskCollaboratorsApi = factory.getTaskCollaboratorsAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(taskCollaboratorsApi).toBeInstanceOf(TaskCollaboratorsAPI);
+            expect(taskCollaboratorsApi.options.cache).toBeInstanceOf(Cache);
+            expect(taskCollaboratorsApi.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(taskCollaboratorsApi.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getTaskLinksAPI()', () => {
+        test('should call destroy and return taskLinks API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const tasksLinksAPI = factory.getTaskLinksAPI(true);
+            expect(spy).toBeCalled();
+            expect(tasksLinksAPI).toBeInstanceOf(TaskLinksAPI);
+            expect(tasksLinksAPI.options.cache).toBeInstanceOf(Cache);
+            expect(tasksLinksAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(tasksLinksAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return taskLinks API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const taskLinksApi = factory.getTaskLinksAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(taskLinksApi).toBeInstanceOf(TaskLinksAPI);
+            expect(taskLinksApi.options.cache).toBeInstanceOf(Cache);
+            expect(taskLinksApi.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(taskLinksApi.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 
