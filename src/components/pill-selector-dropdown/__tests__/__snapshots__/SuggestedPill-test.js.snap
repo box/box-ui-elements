@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/pill-selector-dropdown/SuggestedPill render() should render the SuggestedPill 1`] = `
+<Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  position="bottom-center"
+  text="foo@bar.com"
+  theme="default"
+>
+  <PlainButton
+    className="invisible-button"
+    onClick={[Function]}
+    onKeyDown={[Function]}
+  >
+    <span
+      className="pill-text suggested-pill"
+    >
+      Foo
+    </span>
+  </PlainButton>
+</Tooltip>
+`;

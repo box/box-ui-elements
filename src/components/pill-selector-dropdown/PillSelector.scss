@@ -56,6 +56,10 @@
             border-color: $amaranth;
         }
 
+        &.pill-selector-suggestions-enabled {
+            min-height: 80px;
+        }
+
         &:not(.show-error) {
             .icon-alert {
                 display: none;
@@ -84,7 +88,6 @@
             margin: 0;
 
             li {
-                display: inline-block;
                 float: left;
             }
         }
@@ -97,7 +100,7 @@
             box-sizing: content-box !important;
             color: lighten($black, 31%);
             flex: 1;
-            height: 16px;
+            height: 18px;
             margin: 0;
             min-width: 0;
             overflow: hidden;
