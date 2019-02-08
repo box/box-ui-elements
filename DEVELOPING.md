@@ -69,9 +69,3 @@ For more script commands see `package.json`. Test coverage reports are available
 ## Testing
 
 For test debugging follow instructions provided in the [jest documentation](https://facebook.github.io/jest/docs/en/troubleshooting.html).
-
-## Publishing
-
-**_Note: For Box employees only_**
-
-See the publishing section of the `UI Elements Runbook` on confluence.
