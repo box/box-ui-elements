@@ -1,7 +1,14 @@
 [![Project Status](https://img.shields.io/badge/status-active-brightgreen.svg)](http://opensource.box.com/badges)
 [![build status](https://travis-ci.com/box/box-ui-elements.svg?branch=master)](https://travis-ci.com/box/box-ui-elements)
 [![Styled With Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![npm version](https://img.shields.io/npm/v/box-ui-elements.svg)](https://www.npmjs.com/package/box-ui-elements)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+
+<a href="https://www.npmjs.com/package/box-ui-elements">
+<img alt="npm latest version" src="https://img.shields.io/npm/v/box-ui-elements/latest.svg">
+</a>
+<a href="https://www.npmjs.com/package/box-ui-elements">
+<img alt="npm beta version" src="https://img.shields.io/npm/v/box-ui-elements/beta.svg">
+</a>
 
 
 [Box UI Elements](https://developer.box.com/docs/box-ui-elements)
