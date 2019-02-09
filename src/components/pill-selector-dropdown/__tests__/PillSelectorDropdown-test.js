@@ -54,8 +54,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const onFocusStub = sandbox.stub();
             const wrapper = shallow(
                 <PillSelectorDropdown
-                    onFocus={onFocusStub}
                     inputProps={inputProps}
+                    onFocus={onFocusStub}
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
                     onSelect={onSelectStub}
@@ -85,8 +85,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const onFocusStub = sandbox.stub();
             const wrapper = shallow(
                 <PillSelectorDropdown
-                    onFocus={onFocusStub}
                     inputProps={inputProps}
+                    onFocus={onFocusStub}
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
                     onSelect={onSelectStub}
@@ -137,12 +137,12 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             );
             const instance = wrapper.instance();
             wrapper.setState({
-                inputValue: 'aaron@box.com, bademail,hello@gmail.com',
+                inputValue: 'aaron@example.com, bademail,hello@gmail.com',
             });
 
             const result = instance.parsePills();
             expect(result).toEqual([
-                { text: 'aaron@box.com', value: 'aaron@box.com' },
+                { text: 'aaron@example.com', value: 'aaron@example.com' },
                 { text: 'hello@gmail.com', value: 'hello@gmail.com' },
             ]);
         });

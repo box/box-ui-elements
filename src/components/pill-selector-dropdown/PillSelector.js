@@ -2,11 +2,12 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-import Tooltip from '../tooltip';
+import Tooltip from 'components/tooltip';
+import { KEYS } from '../../constants';
 
 import Pill from './Pill';
 import SuggestedPillsRow from './SuggestedPillsRow';
-import { type SelectedOptions } from './flowTypes';
+import type { SelectedOptions } from './flowTypes';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -80,7 +81,7 @@ class PillSelector extends React.Component<Props, State> {
         const { selectedIndex } = this.state;
 
         switch (event.key) {
-            case 'Backspace': {
+            case KEYS.backspace: {
                 let index = -1;
                 if (selectedIndex >= 0) {
                     // remove selected pill
@@ -101,7 +102,7 @@ class PillSelector extends React.Component<Props, State> {
                 }
                 break;
             }
-            case 'ArrowLeft':
+            case KEYS.arrowLeft:
                 if (selectedIndex >= 0) {
                     // select previous pill
                     this.setState({
@@ -115,7 +116,7 @@ class PillSelector extends React.Component<Props, State> {
                     stopDefaultEvent(event);
                 }
                 break;
-            case 'ArrowRight': {
+            case KEYS.arrowRight: {
                 if (selectedIndex >= 0) {
                     const index = selectedIndex + 1;
                     if (index >= numPills) {

@@ -1,14 +1,9 @@
 // @flow
 import { List } from 'immutable';
 
-export type SelectedOption = {
-    id?: number,
-    name?: string,
-    text: string,
-    value: number | string,
-};
+import type { PillOption } from 'components/pill-cloud/PillCloud';
 
-export type SelectedOptions = Array<SelectedOption> | List<SelectedOption>;
+export type SelectedOptions = Array<PillOption> | List<PillOption>;
 
 export type SuggestedPill = {
     email: string,

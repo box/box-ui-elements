@@ -9,9 +9,10 @@ exports[`components/pill-selector-dropdown/SuggestedPill render() should render 
   theme="default"
 >
   <PlainButton
-    className="invisible-button"
+    className="suggested-pill-invisible-button"
     onClick={[Function]}
     onKeyDown={[Function]}
+    type="button"
   >
     <span
       className="pill-text suggested-pill"

@@ -21,7 +21,7 @@ describe('components/pill-selector-dropdown/SuggestedPill', () => {
                 onAdd,
             });
 
-            wrapper.find('.invisible-button').simulate('click', basicEvent);
+            wrapper.find('.suggested-pill-invisible-button').simulate('click', basicEvent);
 
             expect(onAdd).toHaveBeenCalled();
         });
@@ -33,7 +33,7 @@ describe('components/pill-selector-dropdown/SuggestedPill', () => {
             });
 
             const fakeEvent = { ...basicEvent, key: 'Enter' };
-            wrapper.find('.invisible-button').simulate('keyDown', fakeEvent);
+            wrapper.find('.suggested-pill-invisible-button').simulate('keyDown', fakeEvent);
 
             expect(onAdd).toHaveBeenCalled();
         });
@@ -45,7 +45,7 @@ describe('components/pill-selector-dropdown/SuggestedPill', () => {
             });
 
             const fakeEvent = { ...basicEvent, key: 'foo' };
-            wrapper.find('.invisible-button').simulate('keyDown', fakeEvent);
+            wrapper.find('.suggested-pill-invisible-button').simulate('keyDown', fakeEvent);
 
             expect(onAdd).not.toHaveBeenCalled();
         });
@@ -54,7 +54,7 @@ describe('components/pill-selector-dropdown/SuggestedPill', () => {
     describe('addSuggestedCollab()', () => {
         test('should call preventDefault', () => {
             const wrapper = getWrapper();
-            wrapper.find('.invisible-button').simulate('click', basicEvent);
+            wrapper.find('.suggested-pill-invisible-button').simulate('click', basicEvent);
 
             expect(preventDefaultStub).toHaveBeenCalled();
         });
@@ -70,7 +70,7 @@ describe('components/pill-selector-dropdown/SuggestedPill', () => {
                 name,
                 onAdd,
             });
-            wrapper.find('.invisible-button').simulate('click', basicEvent);
+            wrapper.find('.suggested-pill-invisible-button').simulate('click', basicEvent);
 
             expect(onAdd).toHaveBeenCalledWith({
                 email,

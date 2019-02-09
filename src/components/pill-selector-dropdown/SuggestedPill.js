@@ -1,8 +1,10 @@
 // @flow
 import React from 'react';
 
-import PlainButton from '../plain-button';
-import Tooltip from '../tooltip';
+import PlainButton from 'components/plain-button';
+import Tooltip from 'components/tooltip';
+import { KEYS } from '../../constants';
+
 import { type SuggestedPill as SuggestedPillType } from './flowTypes';
 
 import './SuggestedPillsRow.scss';
@@ -29,14 +31,19 @@ const SuggestedPill = ({ email, id, name, onAdd }: Props) => {
     };
 
     const handleKeyPress = (event: SyntheticKeyboardEvent<HTMLButtonElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === KEYS.enter) {
             addSuggestedPill(event);
         }
     };
 
     return (
         <Tooltip position="bottom-center" text={email}>
-            <PlainButton className="invisible-button" onClick={addSuggestedPill} onKeyDown={handleKeyPress}>
+            <PlainButton
+                className="suggested-pill-invisible-button"
+                onClick={addSuggestedPill}
+                onKeyDown={handleKeyPress}
+                type="button"
+            >
                 <span className="pill-text suggested-pill">{name}</span>
             </PlainButton>
         </Tooltip>

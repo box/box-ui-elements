@@ -3,7 +3,7 @@ import React from 'react';
 import noop from 'lodash/noop';
 
 import SuggestedPill from './SuggestedPill';
-import { type SuggestedPills, type SuggestedPill as SuggestedPillType } from './flowTypes';
+import type { SuggestedPills, SuggestedPill as SuggestedPillType } from './flowTypes';
 
 import './SuggestedPillsRow.scss';
 
