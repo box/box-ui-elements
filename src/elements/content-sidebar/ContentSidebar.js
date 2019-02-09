@@ -33,7 +33,6 @@ import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
-import type { $AxiosXHR } from 'axios'; // eslint-disable-line
 import SidebarNav from './SidebarNav';
 import Sidebar from './Sidebar';
 import 'elements/common/fonts.scss';

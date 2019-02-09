@@ -18,7 +18,6 @@ import {
     HTTP_OPTIONS,
     HTTP_STATUS_CODE_RATE_LIMIT,
 } from '../constants';
-import type { $AxiosXHR, $AxiosError } from 'axios'; //eslint-disable-line
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
 

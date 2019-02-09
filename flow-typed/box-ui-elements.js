@@ -3,21 +3,21 @@
  * @file Flow types
  * @author Box
  */
-/* eslint-disable no-use-before-define */
+/* eslint-disable no-use-before-define, no-unused-vars */
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor, InjectIntlProvidedProps } from 'react-intl';
-import type { $AxiosError, Axios, CancelTokenSource } from 'axios';
+import type { $AxiosXHR, $AxiosError, Axios, CancelTokenSource } from 'axios';
 import type FolderAPI from '../src/api/Folder';
 import type FileAPI from '../src/api/File';
 import type WebLinkAPI from '../src/api/WebLink';
 import type MultiputUploadAPI from '../src/api/uploads/MultiputUpload';
 import type PlainUploadAPI from '../src/api/uploads/PlainUpload';
-import type APICache from '../src/util/Cache';
-import type { ContentSidebarProps } from '../src/components/ContentSidebar';
-import type { ContentOpenWithProps } from '../src/components/ContentOpenWithProps';
-import type { ContentPreviewProps } from '../src/components/ContentPreview';
-import type { FeatureConfig } from '../FeatureChecking';
+import type APICache from '../src/utils/Cache';
+import type { ContentSidebarProps } from '../src/elements/content-sidebar';
+import type { ContentOpenWithProps } from '../src/elements/content-open-with';
+import type { ContentPreviewProps } from '../src/elements/content-preview';
+import type { FeatureConfig } from '../src/elements/common/feature-checking';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
