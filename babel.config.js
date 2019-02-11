@@ -16,13 +16,6 @@ module.exports = {
         '@babel/plugin-proposal-class-properties',
         '@babel/plugin-proposal-object-rest-spread',
         [
-            'react-intl',
-            {
-                enforceDescriptions: true,
-                messagesDir: './i18n/json',
-            },
-        ],
-        [
             'module-resolver',
             {
                 alias: {
@@ -43,7 +36,16 @@ module.exports = {
             plugins: ['flow-react-proptypes'],
         },
         npm: {
-            plugins: [['react-remove-properties', { properties: ['data-testid'] }]],
+            plugins: [
+                ['react-remove-properties', { properties: ['data-testid'] }],
+                [
+                    'react-intl',
+                    {
+                        enforceDescriptions: true,
+                        messagesDir: './i18n/json',
+                    },
+                ],
+            ],
         },
         production: {
             plugins: [['react-remove-properties', { properties: ['data-resin-target', 'data-testid'] }]],

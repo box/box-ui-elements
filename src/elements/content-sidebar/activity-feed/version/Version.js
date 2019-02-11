@@ -20,9 +20,6 @@ import {
     PLACEHOLDER_USER,
 } from '../../../../constants';
 
-// eslint-disable-next-line
-import type { InjectIntlProvidedProps } from 'react-intl';
-
 function getMessageForAction(name: React.Node, action: string, version_number: string): React.Node {
     switch (action) {
         case VERSION_UPLOAD_ACTION:

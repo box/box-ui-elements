@@ -33,8 +33,8 @@ coverage
 cypress.json
 desktop.ini
 examples
-flow
-flow-typed
+flow/
+flow-typed/npm/
 jsconfig.json
 npm-debug.log
 npm-error.log

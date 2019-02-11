@@ -15,7 +15,6 @@ import DatePicker from 'components/date-picker/DatePicker';
 import PillSelectorDropdown from 'components/pill-selector-dropdown/PillSelectorDropdown';
 import Button from 'components/button/Button';
 import PrimaryButton from 'components/primary-button/PrimaryButton';
-import type { InjectIntlProvidedProps } from 'react-intl';
 
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';

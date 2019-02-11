@@ -125,6 +125,9 @@ build_assets() {
     printf "${blue}Building assets...${end}"
     yarn build:npm || return 1
     printf "${green}Built assets!${end}"
+    printf "${blue}Building locales...${end}"
+    yarn build:i18n || return 1
+    printf "${green}Built locales!${end}"
 }
 
 push_to_npm() {
@@ -202,6 +205,12 @@ push_new_release() {
         return 1
     fi
 
+    # Build npm assets
+    if ! build_assets; then
+        printf "${red}Failed building npm assets!${end}"
+        return 1
+    fi
+
     # Check uncommitted files
     check_uncommitted_files || return 1
 
@@ -228,12 +237,6 @@ push_new_release() {
 
     # Check untracked files
     check_untracked_files || return 1
-
-    # Build npm assets
-    if ! build_assets; then
-        printf "${red}Failed building npm assets!${end}"
-        return 1
-    fi
 
     # Publish to npm
     if ! push_to_npm; then

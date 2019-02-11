@@ -33,7 +33,6 @@ module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/SCSSFlowStub.js.flow
 module.name_mapper.extension='css' -> '<PROJECT_ROOT>/flow/SCSSFlowStub.js.flow'
 module.name_mapper='react-intl-locale-data' -> '<PROJECT_ROOT>/flow/WebpackI18N.js.flow'
 module.name_mapper='box-ui-elements-locale-data' -> '<PROJECT_ROOT>/flow/WebpackI18N.js.flow'
-module.name_mapper='box-react-ui-locale-data' -> '<PROJECT_ROOT>/flow/WebpackI18N.js.flow'
 module.name_mapper='react-virtualized/dist/es/Table' -> '<PROJECT_ROOT>/flow/ReactVirtualizedStub.js.flow'
 module.name_mapper='react-virtualized/dist/es/AutoSizer' -> '<PROJECT_ROOT>/flow/ReactVirtualizedStub.js.flow'
 module.name_mapper='react-virtualized/dist/es/CellMeasurer' -> '<PROJECT_ROOT>/flow/ReactVirtualizedStub.js.flow'

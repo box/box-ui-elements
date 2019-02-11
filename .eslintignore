@@ -1,7 +1,9 @@
-flow/
-es/
+build/
 dist/
-flow-typed/
+es/
+flow/
+flow-typed/npm/
 i18n/
 node_modules/
 reports/
+styleguide/
