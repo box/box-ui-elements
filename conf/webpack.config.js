@@ -24,6 +24,7 @@ const locale = language.substr(0, language.indexOf('-'));
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
 const Translations = new TranslationsPlugin();
+const excludeFromBabel = [/@babel(?:\/|\\{1,2})runtime/];
 const entries = {
     picker: path.resolve('src/elements/wrappers/ContentPickers.js'),
     uploader: path.resolve('src/elements/wrappers/ContentUploader.js'),
@@ -138,10 +139,24 @@ function getConfig(isReactExternalized) {
                     flags: 'g',
                 },
             },
+            {
+                test: /\.(js|mjs)$/,
+                loader: 'babel-loader',
+                include: /(node_modules)/,
+                exclude: excludeFromBabel,
+                options: {
+                    babelrc: false,
+                    cacheCompression: false,
+                    cacheDirectory: true,
+                    compact: false,
+                    configFile: false,
+                    presets: [[require.resolve('babel-preset-react-app/dependencies'), { helpers: true }]],
+                    sourceMaps: false,
+                },
+            },
             ...config.module.rules,
         ];
     }
-
     if (isRelease && language === 'en-US') {
         config.plugins.push(
             new BundleAnalyzerPlugin({
@@ -153,15 +168,12 @@ function getConfig(isReactExternalized) {
             }),
         );
     }
-
     if (isReactExternalized) {
         config.externals = {
             react: 'React',
             'react-dom': 'ReactDOM',
         };
     }
-
     return config;
 }
-
 module.exports = isDev ? [getConfig(false), getConfig(true)] : getConfig(!react);
