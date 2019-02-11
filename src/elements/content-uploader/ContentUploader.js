@@ -292,16 +292,24 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
-        const { itemIds } = this.state;
         const newFiles = this.getNewFiles(files);
 
         if (newFiles.length === 0) {
             return;
         }
 
+        const newItemIds = {};
+
         newFiles.forEach(file => {
-            itemIds[getFileId(file, rootFolderId)] = true;
+            newItemIds[getFileId(file, rootFolderId)] = true;
         });
+
+        this.setState(state => ({
+            itemIds: {
+                ...state.itemIds,
+                ...newItemIds,
+            },
+        }));
 
         clearTimeout(this.resetItemsTimeout);
 
