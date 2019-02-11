@@ -1,52 +1,64 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+// @flow
+import * as React from 'react';
 import classNames from 'classnames';
+import { List } from 'immutable';
+import noop from 'lodash/noop';
 
 import parseCSV from 'utils/parseCSV';
-import { OptionsPropType } from 'common/box-proptypes';
 import Label from '../label';
 import SelectorDropdown from '../selector-dropdown';
 
 import PillSelector from './PillSelector';
+import { type SelectedOptions } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
 
-class PillSelectorDropdown extends Component {
-    static propTypes = {
-        /** If true, user can add pills not included in selector options */
-        allowCustomPills: PropTypes.bool,
-        /** `DatalistItem` components for dropdown options to select */
-        children: PropTypes.node,
-        /** CSS class for the component */
-        className: PropTypes.string,
-        /** If true, the input control is disabled so no more input can be made */
-        disabled: PropTypes.bool,
-        /** Error message */
-        error: PropTypes.node,
-        /** Passed in by `SelectorDropdown` for accessibility */
-        inputProps: PropTypes.object.isRequired,
-        /** Input label */
-        label: PropTypes.node,
-        /** Should update selectorOptions based on the given input value */
-        onInput: PropTypes.func.isRequired,
-        /** Should update selectedOptions given the option and index to remove */
-        onRemove: PropTypes.func.isRequired,
-        /** Should update selectedOptions given an array of pills and the event */
-        onSelect: PropTypes.func.isRequired,
-        /** function to parse user input into an array of items to be validated and then added to pill selector. If this function is not passed, a default CSV parser is used. */
-        parseItems: PropTypes.func,
-        /** A placeholder to show in the input when there are no pills */
-        placeholder: PropTypes.string.isRequired,
-        /** Array or Immutable list with data for the selected options shown as pills */
-        selectedOptions: OptionsPropType,
-        /** Array or Immutable list with data for the dropdown options to select */
-        selectorOptions: OptionsPropType,
-        /** Validate the given input value, and update `error` prop if necessary */
-        validateForError: PropTypes.func,
-        /** Called to check if pill item data is valid. The `item` is passed in. */
-        validator: PropTypes.func,
-    };
+type Props = {
+    /** If true, user can add pills not included in selector options */
+    allowCustomPills?: boolean,
+    /** `DatalistItem` components for dropdown options to select */
+    children: React.Node,
+    /** CSS class for the component */
+    className?: string,
+    /** If true, the input control is disabled so no more input can be made */
+    disabled?: boolean,
+    /** Error message */
+    error?: React.Node,
+    /** Passed in by `SelectorDropdown` for accessibility */
+    inputProps: Object,
+    /** Input label */
+    label: React.Node,
+    /** Should update selectorOptions based on the given input value */
+    onInput: Function,
+    /** Should update selectedOptions given the option and index to remove */
+    onRemove: Function,
+    /** Should update selectedOptions given an array of pills and the event */
+    onSelect: Function,
+    /** Function adds a collaborator from suggested collabs to form */
+    onSuggestedPillAdd?: Function,
+    /** function to parse user input into an array of items to be validated and then added to pill selector. If this function is not passed, a default CSV parser is used. */
+    parseItems?: Function,
+    /** A placeholder to show in the input when there are no pills */
+    placeholder: string,
+    /** Array or Immutable list with data for the selected options shown as pills */
+    selectedOptions: SelectedOptions,
+    /** Array or Immutable list with data for the dropdown options to select */
+    selectorOptions: Array<Object> | List<Object>,
+    /** Array of suggested collaborators */
+    suggestedPillsData?: Array<Object>,
+    /** String describes the suggested pills */
+    suggestedPillsTitle?: string,
+    /** Validate the given input value, and update `error` prop if necessary */
+    validateForError?: Function,
+    /** Called to check if pill item data is valid. The `item` is passed in. */
+    validator?: Function,
+};
 
+type State = {
+    inputValue: string,
+};
+
+class PillSelectorDropdown extends React.Component<Props, State> {
     static defaultProps = {
         allowCustomPills: false,
         disabled: false,
@@ -113,13 +125,13 @@ class PillSelectorDropdown extends Component {
         this.addPillsFromInput();
     };
 
-    handleInput = ({ target }) => {
+    handleInput = ({ target }: { target: HTMLInputElement | Object }) => {
         const { value } = target;
         this.setState({ inputValue: value });
         this.props.onInput(value);
     };
 
-    handleEnter = event => {
+    handleEnter = (event: SyntheticEvent<>) => {
         event.preventDefault();
         this.addPillsFromInput();
     };
@@ -134,9 +146,10 @@ class PillSelectorDropdown extends Component {
         setTimeout(this.addPillsFromInput, 0);
     };
 
-    handleSelect = (index, event) => {
+    handleSelect = (index: number, event: SyntheticEvent<>) => {
         const { onSelect, selectorOptions } = this.props;
         const selectedOption =
+            // $FlowFixMe
             typeof selectorOptions.get === 'function' ? selectorOptions.get(index) : selectorOptions[index];
 
         onSelect([selectedOption], event);
@@ -153,8 +166,11 @@ class PillSelectorDropdown extends Component {
             inputProps,
             label,
             onRemove,
+            onSuggestedPillAdd,
             placeholder,
             selectedOptions,
+            suggestedPillsData,
+            suggestedPillsTitle,
         } = this.props;
 
         return (
@@ -165,6 +181,7 @@ class PillSelectorDropdown extends Component {
                 selector={
                     <Label text={label}>
                         <PillSelector
+                            onChange={noop} // fix console error
                             {...inputProps}
                             disabled={disabled}
                             error={error}
@@ -172,8 +189,11 @@ class PillSelectorDropdown extends Component {
                             onInput={this.handleInput}
                             onPaste={this.handlePaste}
                             onRemove={onRemove}
+                            onSuggestedPillAdd={onSuggestedPillAdd}
                             placeholder={placeholder}
                             selectedOptions={selectedOptions}
+                            suggestedPillsData={suggestedPillsData}
+                            suggestedPillsTitle={suggestedPillsTitle}
                             value={this.state.inputValue}
                         />
                     </Label>

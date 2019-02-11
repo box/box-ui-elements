@@ -334,3 +334,13 @@ export const TASK_APPROVED: 'approved' = 'approved';
 export const TASK_COMPLETED: 'completed' = 'completed';
 export const TASK_INCOMPLETE: 'incomplete' = 'incomplete';
 export const TASK_REJECTED: 'rejected' = 'rejected';
+
+/* ------------------ Keyboard Events ----------------- */
+export const KEYS = {
+    arrowDown: 'ArrowDown',
+    arrowLeft: 'ArrowLeft',
+    arrowRight: 'ArrowRight',
+    arrowUp: 'ArrowUp',
+    backspace: 'Backspace',
+    enter: 'Enter',
+};

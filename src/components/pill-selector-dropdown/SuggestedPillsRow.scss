@@ -1,0 +1,38 @@
+@import '../../styles/variables';
+
+.pill-selector-suggested {
+    align-items: center;
+    color: $downtown-grey;
+    display: flex;
+    flex-flow: wrap;
+    margin-top: 1rem;
+    width: 100%;
+
+    > span {
+        margin-left: 3px;
+    }
+
+    .suggested-pill-invisible-button {
+        padding: 0;
+    }
+
+    .suggested-pill {
+        color: $downtown-grey;
+        margin: 0 3px;
+        padding: 0;
+        text-decoration: underline;
+        transition: 100ms ease;
+    }
+
+    .suggested-pill:hover {
+        cursor: pointer;
+    }
+
+    .suggested-pill span {
+        padding: 0 3px;
+    }
+
+    .invisible-button:hover .suggested-pill {
+        color: $sunset-grey;
+    }
+}
