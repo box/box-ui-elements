@@ -1,29 +1,39 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+// @flow
+import * as React from 'react';
 import classNames from 'classnames';
 
-import { OptionsPropType } from 'common/box-proptypes';
-import Tooltip from '../tooltip';
+import Tooltip from 'components/tooltip';
+import { KEYS } from '../../constants';
 
 import Pill from './Pill';
+import SuggestedPillsRow from './SuggestedPillsRow';
+import type { SelectedOptions } from './flowTypes';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
     event.stopPropagation();
 }
 
-class PillSelector extends Component {
-    static propTypes = {
-        className: PropTypes.string,
-        disabled: PropTypes.bool,
-        error: PropTypes.node,
-        inputProps: PropTypes.object.isRequired,
-        onInput: PropTypes.func.isRequired,
-        onRemove: PropTypes.func.isRequired,
-        placeholder: PropTypes.string.isRequired,
-        selectedOptions: OptionsPropType,
-    };
+type Props = {
+    className?: string,
+    disabled?: boolean,
+    error?: React.Node,
+    inputProps: Object,
+    onInput: Function,
+    onRemove: Function,
+    onSuggestedPillAdd?: Function,
+    placeholder: string,
+    selectedOptions: SelectedOptions,
+    suggestedPillsData?: Array<Object>,
+    suggestedPillsTitle?: string,
+};
 
+type State = {
+    isFocused: boolean,
+    selectedIndex: number,
+};
+
+class PillSelector extends React.Component<Props, State> {
     static defaultProps = {
         disabled: false,
         error: '',
@@ -37,10 +47,19 @@ class PillSelector extends Component {
         selectedIndex: -1,
     };
 
-    getNumSelected = () => {
+    getNumSelected = (): number => {
         const { selectedOptions } = this.props;
-        return typeof selectedOptions.length === 'number' ? selectedOptions.length : selectedOptions.size;
+
+        return typeof selectedOptions.size === 'number' ? selectedOptions.size : selectedOptions.length;
     };
+
+    getPillsByKey = (key: string): Array<any> => {
+        const { selectedOptions } = this.props;
+
+        return selectedOptions.map(option => option[key]);
+    };
+
+    inputEl: HTMLInputElement;
 
     handleClick = () => {
         this.inputEl.focus();
@@ -54,13 +73,15 @@ class PillSelector extends Component {
         this.setState({ isFocused: false });
     };
 
-    handleKeyDown = event => {
+    hiddenEl: HTMLSpanElement;
+
+    handleKeyDown = (event: SyntheticKeyboardEvent<>) => {
         const inputValue = this.inputEl.value;
         const numPills = this.getNumSelected();
         const { selectedIndex } = this.state;
 
         switch (event.key) {
-            case 'Backspace': {
+            case KEYS.backspace: {
                 let index = -1;
                 if (selectedIndex >= 0) {
                     // remove selected pill
@@ -74,13 +95,14 @@ class PillSelector extends Component {
                 if (index >= 0) {
                     const { onRemove, selectedOptions } = this.props;
                     const selectedOption =
+                        // $FlowFixMe
                         typeof selectedOptions.get === 'function' ? selectedOptions.get(index) : selectedOptions[index];
                     onRemove(selectedOption, index);
                     stopDefaultEvent(event);
                 }
                 break;
             }
-            case 'ArrowLeft':
+            case KEYS.arrowLeft:
                 if (selectedIndex >= 0) {
                     // select previous pill
                     this.setState({
@@ -94,7 +116,7 @@ class PillSelector extends Component {
                     stopDefaultEvent(event);
                 }
                 break;
-            case 'ArrowRight': {
+            case KEYS.arrowRight: {
                 if (selectedIndex >= 0) {
                     const index = selectedIndex + 1;
                     if (index >= numPills) {
@@ -113,8 +135,10 @@ class PillSelector extends Component {
         }
     };
 
-    hiddenRef = hiddenEl => {
-        this.hiddenEl = hiddenEl;
+    hiddenRef = (hiddenEl: ?HTMLSpanElement) => {
+        if (hiddenEl) {
+            this.hiddenEl = hiddenEl;
+        }
     };
 
     resetSelectedIndex = () => {
@@ -132,54 +156,66 @@ class PillSelector extends Component {
             inputProps,
             onInput,
             onRemove,
+            onSuggestedPillAdd,
             placeholder,
             selectedOptions,
+            suggestedPillsData,
+            suggestedPillsTitle,
             ...rest
         } = this.props;
+        const suggestedPillsEnabled = suggestedPillsData && suggestedPillsData.length > 0;
         const classes = classNames('pill-selector-input-wrapper', {
             'is-disabled': disabled,
             'is-focused': isFocused,
             'show-error': !!error,
+            'pill-selector-suggestions-enabled': suggestedPillsEnabled,
         });
 
         return (
-            <Tooltip isShown={!!error} position="middle-right" text={error} theme="error">
-                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+            <Tooltip isShown={!!error} text={error || ''} position="middle-right" theme="error">
                 <span
                     className={classes}
                     onBlur={this.handleBlur}
                     onClick={this.handleClick}
                     onFocus={this.handleFocus}
                     onKeyDown={this.handleKeyDown}
+                    role="button"
+                    tabIndex={0}
                 >
                     {selectedOptions.map((option, index) => (
                         <Pill
-                            key={option.value}
                             isSelected={index === selectedIndex}
+                            key={option.value}
                             onRemove={onRemove.bind(this, option, index)}
                             text={option.text}
                         />
                     ))}
                     {/* hidden element for focus/key events during pill selection */}
                     <span
-                        ref={this.hiddenRef}
                         aria-hidden="true"
                         className="accessibility-hidden"
                         onBlur={this.resetSelectedIndex}
+                        ref={this.hiddenRef}
                         tabIndex={-1}
                     />
                     <input
                         {...rest}
                         {...inputProps}
-                        ref={input => {
-                            this.inputEl = input;
-                        }}
                         autoComplete="off"
                         className={classNames('pill-selector-input', className)}
                         disabled={disabled}
                         onInput={onInput}
                         placeholder={this.getNumSelected() === 0 ? placeholder : ''}
+                        ref={input => {
+                            this.inputEl = input;
+                        }}
                         type="text"
+                    />
+                    <SuggestedPillsRow
+                        onSuggestedPillAdd={onSuggestedPillAdd}
+                        selectedPillsIDs={this.getPillsByKey('id')}
+                        suggestedPillsData={suggestedPillsData}
+                        title={suggestedPillsTitle}
                     />
                 </span>
             </Tooltip>

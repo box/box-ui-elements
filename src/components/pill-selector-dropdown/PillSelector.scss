@@ -28,7 +28,6 @@
         overflow-x: hidden;
         overflow-y: auto;
         padding: 5px;
-        -webkit-transition: border-color linear .15s, box-shadow linear .15s;
         transition: border-color linear .15s, box-shadow linear .15s;
         width: 262px;
 
@@ -54,6 +53,10 @@
 
         &.show-error {
             border-color: $amaranth;
+        }
+
+        &.pill-selector-suggestions-enabled {
+            min-height: 80px;
         }
 
         &:not(.show-error) {
@@ -84,7 +87,6 @@
             margin: 0;
 
             li {
-                display: inline-block;
                 float: left;
             }
         }
@@ -97,7 +99,7 @@
             box-sizing: content-box !important;
             color: lighten($black, 31%);
             flex: 1;
-            height: 16px;
+            height: 18px;
             margin: 0;
             min-width: 0;
             overflow: hidden;
