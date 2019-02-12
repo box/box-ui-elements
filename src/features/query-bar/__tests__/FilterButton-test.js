@@ -298,6 +298,42 @@ describe('feature/metadata-view/components/FilterButton', () => {
         });
     });
 
+    describe('createCondition()', () => {
+        test('Should return a condition object if template is defined', () => {
+            const wrapper = getWrapper();
+            const props = {
+                template,
+            };
+            const conditionID = 123;
+            const expected = {
+                attributeDisplayText: 'Size',
+                attributeKey: 0,
+                id: conditionID,
+                fieldId: 'item_27',
+                operatorDisplayText: '',
+                operatorKey: 0,
+                valueDisplayText: '',
+                valueKey: null,
+                valueType: 'float',
+            };
+
+            const condition = wrapper.instance().createCondition(props, conditionID);
+
+            expect(condition).toEqual(expected);
+        });
+
+        test('Should return an empty object if template is not defined', () => {
+            const wrapper = getWrapper();
+            const props = {};
+            const conditionID = 123;
+            const expected = {};
+
+            const condition = wrapper.instance().createCondition(props, conditionID);
+
+            expect(condition).toEqual(expected);
+        });
+    });
+
     describe('closeOnClickPredicate()', () => {
         test('Should return true if Apply button was clicked', () => {
             const wrapper = getWrapper();

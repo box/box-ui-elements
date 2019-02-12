@@ -16,7 +16,7 @@ describe('features/quick-search/QuickSearchItem', () => {
     };
 
     test('should render datalist item', () => {
-        const wrapper = mount(<QuickSearchItem className="test" data-resin-query="test" itemData={itemData} />);
+        const wrapper = mount(<QuickSearchItem className="test" itemData={itemData} data-resin-query="test" />);
 
         expect(wrapper.find('DatalistItem').hasClass('quick-search-item')).toBe(true);
         expect(wrapper.find('DatalistItem').hasClass('test')).toBe(true);
@@ -27,6 +27,7 @@ describe('features/quick-search/QuickSearchItem', () => {
         ['file', 'txt', null, 1, false, '/file/321'],
         ['file', 'txt', 'http://www.google.com', 1, false, 'http://www.google.com'],
         ['file', 'boxnote', null, 1, true, '/notes/321'],
+        ['file', 'boxnote', 'https://app.box.com/s/hi', 1, true, 'https://app.box.com/s/hi'],
         ['folder', null, null, 1, false, '/folder/321'],
         ['web_link', null, null, 1, true, '/web_link/321'],
         ['foo', 'text', null, 0, false, false],

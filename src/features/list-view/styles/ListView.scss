@@ -1,10 +1,10 @@
 @import '../../../styles/variables';
 
-.metadata-items-container {
+.metadata-views-list-view {
     display: flex;
     flex-direction: row;
 
-    .item-list-column-header {
+    .list-view-column-header {
         color: $seventy-sixers;
         display: flex;
         font-weight: 400;
@@ -14,7 +14,7 @@
         width: 100%;
     }
 
-    .item-list-name-cell {
+    .list-view-name-cell {
         border-top: 1px solid $off-white;
         color: $twos;
         display: flex;
@@ -22,7 +22,7 @@
         padding-top: 8px;
     }
 
-    .item-list-column-cell {
+    .list-view-column-cell {
         border-top: 1px solid $off-white;
         color: $seventy-sixers;
         display: flex;
