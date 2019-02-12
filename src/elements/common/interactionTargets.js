@@ -36,6 +36,7 @@ export const ACTIVITY_TARGETS = {
     VERSION_CARD: 'activityfeed-versioninfo',
     TASK_DATE_PICKER: 'activityfeed-taskdatepicker',
     TASK_APPROVE: 'activityfeed-taskapprove',
+    TASK_COMPLETE: 'activityfeed-taskcomplete',
     TASK_REJECT: 'activityfeed-taskreject',
 };
 

@@ -11,7 +11,7 @@ import flow from 'lodash/flow';
 import messages from 'elements/common/messages';
 import { withAPIContext } from 'elements/common/api-context';
 import { withErrorBoundary } from 'elements/common/error-boundary';
-import { FeatureFlag } from 'elements/common/feature-checking';
+import { FeatureFlag, withFeatureConsumer, isFeatureEnabled } from 'elements/common/feature-checking';
 import { getBadUserError, getBadItemError } from 'utils/error';
 import API from 'api';
 import { withLogger } from 'elements/common/logger';
@@ -45,6 +45,7 @@ type PropsWithoutContext = {
 
 type Props = {
     api: API,
+    features: FeatureConfig,
 } & PropsWithoutContext;
 
 type State = {
@@ -131,6 +132,67 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     feedErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => {
         this.errorCallback(e, code, contextInfo);
         this.fetchFeedItems();
+    };
+
+    tasksApiNew = {
+        createTask: (message: string, assignees: SelectorItems, dueAt: ?string): void => {
+            const { currentUser } = this.state;
+            const { file, api } = this.props;
+
+            if (!currentUser) {
+                throw getBadUserError();
+            }
+
+            api.getFeedAPI(false).createTaskNew(
+                file,
+                currentUser,
+                message,
+                assignees,
+                dueAt,
+                this.feedSuccessCallback,
+                this.feedErrorCallback,
+            );
+
+            // need to load the pending item
+            this.fetchFeedItems();
+        },
+        deleteTask: ({ id }: { id: string }): void => {
+            const { file, api, onTaskDelete = noop } = this.props;
+            api.getFeedAPI(false).deleteTask(
+                file,
+                id,
+                (taskId: string) => {
+                    this.feedSuccessCallback();
+                    onTaskDelete(taskId);
+                },
+                this.feedErrorCallback,
+            );
+
+            // need to load the pending item
+            this.fetchFeedItems();
+        },
+        updateTask: ({ text, id }: { id: string, text: string }): void => {
+            const { file, api } = this.props;
+            api.getFeedAPI(false).updateTask(file, id, text, this.feedSuccessCallback, this.feedErrorCallback);
+
+            // need to load the pending item
+            this.fetchFeedItems();
+        },
+        updateTaskAssignment: (taskId: string, taskAssignmentId: string, status: TaskAssignmentStatus): void => {
+            const { file, api } = this.props;
+
+            api.getFeedAPI(false).updateTaskAssignment(
+                file,
+                taskId,
+                taskAssignmentId,
+                status,
+                this.feedSuccessCallback,
+                this.feedErrorCallback,
+            );
+
+            // need to load the pending item
+            this.fetchFeedItems();
+        },
     };
 
     /**
@@ -283,13 +345,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {boolean} shouldDestroy true if the api factory should be destroyed
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
-        const { file, api } = this.props;
+        const { file, api, features } = this.props;
+        const shouldShowNewTasks = isFeatureEnabled(features, 'activityFeed.tasks.avatars');
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
             shouldRefreshCache,
             this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
+            shouldShowNewTasks,
         );
     }
 
@@ -454,7 +518,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     renderAddTaskButton = () => {
         const { isDisabled } = this.props;
         const { approverSelectorContacts } = this.state;
-        const { createTask, getApproverWithQuery, getAvatarUrl } = this;
+        const {
+            getApproverWithQuery,
+            getAvatarUrl,
+            tasksApiNew: { createTask },
+        } = this;
         const props = {
             isDisabled,
             createTask,
@@ -509,6 +577,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default flow([withLogger(ORIGIN_ACTIVITY_SIDEBAR), withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR), withAPIContext])(
-    ActivitySidebar,
-);
+export default flow([
+    withLogger(ORIGIN_ACTIVITY_SIDEBAR),
+    withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR),
+    withAPIContext,
+    withFeatureConsumer,
+])(ActivitySidebar);

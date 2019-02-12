@@ -13,7 +13,18 @@ import {
     API_PAGE_LIMIT,
 } from '../constants';
 
+// For some reason the microservices need different headers than other APIs
+const headers = {
+    Accept: 'application/json;version=1',
+    'Content-Type': 'application/json;version=1', // TODO: may need vendor header
+};
+
 class TaskCollaborators extends Base {
+    // Root route only works on Box internal dev env
+    getBaseApiUrl(): string {
+        return '/api/2.0';
+    }
+
     getUrlForTaskCollaborators(taskId: string): string {
         return `${this.getBaseApiUrl()}/undoc/tasks/${taskId}/task_collaborators?limit=${API_PAGE_LIMIT}`;
     }
@@ -57,7 +68,7 @@ class TaskCollaborators extends Base {
         this.post({
             id: file.id,
             url: this.getUrlForTaskCollaboratorCreate(),
-            data: requestData,
+            data: { ...requestData, headers },
             successCallback,
             errorCallback,
         });
@@ -76,7 +87,7 @@ class TaskCollaborators extends Base {
     }): void {
         this.errorCode = ERROR_CODE_FETCH_TASK_COLLABORATOR;
         const url = this.getUrlForTaskCollaborators(task.id);
-        this.get({ id: file.id, successCallback, errorCallback, url });
+        this.get({ id: file.id, successCallback, errorCallback, url, requestData: { headers } });
     }
 
     updateTaskCollaborator({
@@ -99,7 +110,7 @@ class TaskCollaborators extends Base {
         this.put({
             id: file.id,
             url: this.getUrlForTaskCollaborator(taskCollaborator.id),
-            data: requestData,
+            data: { ...requestData, headers },
             successCallback,
             errorCallback,
         });

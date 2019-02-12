@@ -7,7 +7,18 @@
 import Base from './Base';
 import { ERROR_CODE_CREATE_TASK_LINK } from '../constants';
 
+// For some reason the microservices need different headers than other APIs
+const headers = {
+    Accept: 'application/json;version=1',
+    'Content-Type': 'application/json;version=1', // TODO: may need vendor header
+};
+
 class TaskLinks extends Base {
+    // Root route only works on Box internal dev env
+    getBaseApiUrl(): string {
+        return '/api/2.0';
+    }
+
     getUrlForTaskLinkCreate(): string {
         return `${this.getBaseApiUrl()}/undoc/task_links`;
     }
@@ -41,7 +52,7 @@ class TaskLinks extends Base {
         this.post({
             id: file.id,
             url: this.getUrlForTaskLinkCreate(),
-            data: requestData,
+            data: { ...requestData, headers },
             successCallback,
             errorCallback,
         });

@@ -66,10 +66,34 @@ const ActiveState = ({
                 case 'task':
                     return (
                         <div>
-                            <FeatureFlag not feature="activityFeed.tasks.avatars">
-                                {item.task_assignment_collection.total_count && (
-                                    <li key={type + id} className="bcs-activity-feed-task">
-                                        <Task
+                            <FeatureFlag
+                                feature="activityFeed.tasks.avatars"
+                                disabled={() =>
+                                    item.task_assignment_collection.total_count && (
+                                        <li key={type + id} className="bcs-activity-feed-task">
+                                            <Task
+                                                {...item}
+                                                currentUser={currentUser}
+                                                getAvatarUrl={getAvatarUrl}
+                                                getMentionWithQuery={getMentionWithQuery}
+                                                getUserProfileUrl={getUserProfileUrl}
+                                                mentionSelectorContacts={mentionSelectorContacts}
+                                                onAssignmentUpdate={onTaskAssignmentUpdate}
+                                                onDelete={onTaskDelete}
+                                                onEdit={onTaskEdit}
+                                                // permissions are not part of task API so hard code to true
+                                                permissions={{
+                                                    can_delete: true,
+                                                    can_edit: true,
+                                                }}
+                                                translations={translations}
+                                            />
+                                        </li>
+                                    )
+                                }
+                                enabled={() => (
+                                    <li key={type + id} className="bcs-activity-feed-task-new">
+                                        <TaskNew
                                             {...item}
                                             currentUser={currentUser}
                                             getAvatarUrl={getAvatarUrl}
@@ -88,28 +112,7 @@ const ActiveState = ({
                                         />
                                     </li>
                                 )}
-                            </FeatureFlag>
-                            <FeatureFlag feature="activityFeed.tasks.avatars">
-                                <li key={type + id} className="bcs-activity-feed-task-new">
-                                    <TaskNew
-                                        {...item}
-                                        currentUser={currentUser}
-                                        getAvatarUrl={getAvatarUrl}
-                                        getMentionWithQuery={getMentionWithQuery}
-                                        getUserProfileUrl={getUserProfileUrl}
-                                        mentionSelectorContacts={mentionSelectorContacts}
-                                        onAssignmentUpdate={onTaskAssignmentUpdate}
-                                        onDelete={onTaskDelete}
-                                        onEdit={onTaskEdit}
-                                        // permissions are not part of task API so hard code to true
-                                        permissions={{
-                                            can_delete: true,
-                                            can_edit: true,
-                                        }}
-                                        translations={translations}
-                                    />
-                                </li>
-                            </FeatureFlag>
+                            />
                         </div>
                     );
                 case 'file_version':

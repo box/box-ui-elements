@@ -883,6 +883,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: 'Approve',
         description: 'Approve option for an approval task',
     },
+    tasksFeedCompleteAction: {
+        id: 'be.tasks.feed.completeAction',
+        defaultMessage: 'Complete',
+        description: 'Completion option for a general task',
+    },
     tasksFeedRejectAction: {
         id: 'be.tasks.feed.rejectAction',
         defaultMessage: 'Reject',

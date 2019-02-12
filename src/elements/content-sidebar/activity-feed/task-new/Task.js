@@ -9,31 +9,25 @@ import { FormattedTime, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import messages from 'elements/common/messages';
 import { fillUserPlaceholder } from 'utils/fields';
+import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_INCOMPLETE, TASK_NEW_COMPLETED } from '../../../../constants';
 import Comment from '../comment';
 import AssigneeStatus from './AssigneeStatus';
 import PendingAssignment from './PendingAssignment';
-import { TASK_APPROVED, TASK_REJECTED, TASK_INCOMPLETE } from '../../../../constants';
 import './Task.scss';
 
 type Props = {
-    created_at: number | string,
-    created_by: User,
-    currentUser?: User,
-    due_at: any,
+    ...TaskNew,
+    currentUser: User,
     error?: ActionItemError,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: string => Promise<string>,
-    id: string,
     isDisabled?: boolean,
     isPending?: boolean,
     mentionSelectorContacts?: SelectorItems,
-    message: string,
     onAssignmentUpdate: Function,
     onDelete?: Function,
     onEdit?: Function,
-    permissions?: BoxItemPermission,
-    task_assignment_collection: TaskAssignments | SelectorItems,
     translatedTaggedMessage?: string,
     translations?: Translations,
 };
@@ -44,7 +38,7 @@ const MAX_AVATARS = 3;
 class Task extends React.Component<Props> {
     render(): React.Node {
         const {
-            task_assignment_collection,
+            assigned_to,
             created_at,
             created_by,
             currentUser,
@@ -55,7 +49,7 @@ class Task extends React.Component<Props> {
             onDelete,
             onEdit,
             onAssignmentUpdate = noop,
-            message,
+            name,
             translatedTaggedMessage,
             translations,
             getAvatarUrl,
@@ -74,13 +68,11 @@ class Task extends React.Component<Props> {
         // // find assignment for current user if permitted
 
         const currentUserAssignment =
-            task_assignment_collection && task_assignment_collection.entries
-                ? task_assignment_collection.entries
-                      .map(fillUserPlaceholder)
-                      .find(({ assigned_to }) => assigned_to.id === currentUser.id)
+            assigned_to && assigned_to.entries
+                ? assigned_to.entries.find(({ target }) => target.id === currentUser.id)
                 : null;
 
-        const assigneeCount = (task_assignment_collection && task_assignment_collection.entries.length) || 0;
+        const assigneeCount = (assigned_to && assigned_to.entries.length) || 0;
         const hiddenAssigneeCount = assigneeCount - MAX_AVATARS;
 
         return (
@@ -92,7 +84,7 @@ class Task extends React.Component<Props> {
             >
                 <Comment
                     created_at={created_at}
-                    created_by={created_by}
+                    created_by={created_by.target}
                     currentUser={currentUser}
                     error={error}
                     id={id}
@@ -101,7 +93,7 @@ class Task extends React.Component<Props> {
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={taskPermissions}
-                    tagged_message={message}
+                    tagged_message={name}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
                     getAvatarUrl={getAvatarUrl}
@@ -117,16 +109,16 @@ class Task extends React.Component<Props> {
                         </div>
                     ) : null}
                     <div className="bcs-task-assignments">
-                        {task_assignment_collection && task_assignment_collection.entries
-                            ? task_assignment_collection.entries
+                        {assigned_to && assigned_to.entries
+                            ? assigned_to.entries
                                   .map(fillUserPlaceholder)
                                   .slice(0, MAX_AVATARS)
-                                  .map(({ id: assignmentId, assigned_to, status }) => {
+                                  .map(({ id: assignmentId, target, status }) => {
                                       return (
                                           <AssigneeStatus
                                               key={assignmentId}
                                               status={status}
-                                              user={assigned_to}
+                                              user={target}
                                               getAvatarUrl={getAvatarUrl}
                                           />
                                       );
@@ -138,16 +130,24 @@ class Task extends React.Component<Props> {
                             </span>
                         ) : null}
                     </div>
-                    {currentUserAssignment && currentUserAssignment.status === TASK_INCOMPLETE ? (
+                    {currentUserAssignment && currentUserAssignment.status === TASK_NEW_INCOMPLETE ? (
                         <PendingAssignment
                             {...currentUserAssignment}
                             onTaskApproval={
-                                isPending ? noop : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_APPROVED)
+                                isPending
+                                    ? noop
+                                    : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_APPROVED)
                             }
                             onTaskReject={
-                                isPending ? noop : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_REJECTED)
+                                isPending
+                                    ? noop
+                                    : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_REJECTED)
                             }
-                            shouldShowActions={onAssignmentUpdate !== noop}
+                            onTaskComplete={
+                                isPending
+                                    ? noop
+                                    : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_COMPLETED)
+                            }
                         />
                     ) : null}
                 </div>

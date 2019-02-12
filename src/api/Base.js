@@ -231,7 +231,7 @@ class Base {
         id,
         successCallback,
         errorCallback,
-        requestData,
+        requestData, // Note: this is inconsistent, other methods use `data`
         url,
     }: {
         errorCallback: ElementsErrorCallback,
@@ -346,7 +346,6 @@ class Base {
 
         // $FlowFixMe
         const xhrMethod: Function = this.xhr[method.toLowerCase()].bind(this.xhr);
-
         try {
             const { data } = await xhrMethod({
                 id: getTypedFileId(id),

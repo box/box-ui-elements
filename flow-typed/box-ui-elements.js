@@ -618,6 +618,111 @@ type Tasks = {
     total_count: number,
 };
 
+/* New Task Types START */
+
+type ID = string;
+type ISODate = string;
+
+type UserMini = {
+    avatar_url?: string,
+    email?: string,
+    id: ID,
+    login?: string,
+    name: string,
+    type: 'user',
+};
+
+type FileMini = {
+    id: ID,
+    name: string,
+    type: 'file',
+};
+
+type FolderMini = {
+    id: ID,
+    name: string,
+    type: 'folder',
+};
+
+type TaskStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'APPROVED' | 'REJECTED';
+
+type TaskCollabStatus = 'NOT_STARTED' | 'COMPLETED';
+
+type TaskMini = {|
+    created_at: ISODate,
+    id: ID,
+    modified_at: ISODate,
+    status: TaskStatus,
+    type: 'task',
+|};
+
+type TaskCollabRole = 'CREATOR' | 'ASSIGNEE';
+
+type TaskCollab<R> = {|
+    id: ID,
+    role: R,
+    status: TaskCollabStatus,
+    target: UserMini,
+    task?: TaskMini,
+    type: 'task_collaborator',
+|};
+
+type TaskCollabCreator = TaskCollab<'CREATOR'>;
+
+type TaskCollabAssignee = {|
+    ...TaskCollab<'ASSIGNEE'>,
+    permissions: {|
+        can_delete: boolean,
+        can_update: boolean,
+    |},
+|};
+
+type TaskLink = {|
+    description?: string,
+    id: ID,
+    permissions: {|
+        can_delete: boolean,
+        can_update: boolean,
+    |},
+    target?: ?FileMini | ?FolderMini | ?UserMini,
+    task?: TaskMini,
+    type: 'task_link',
+|};
+
+type MarkerPaginatedCollection<T> = {
+    entries: T[],
+    limit: number,
+    next_marker: ?string,
+};
+
+type TaskType = 'general' | 'approval' | null;
+
+type TaskNew = {|
+    assigned_to: MarkerPaginatedCollection<TaskCollabAssignee>,
+    completed_at?: ?ISODate,
+    completion_rule?: 'ANY_ASSIGNEE' | 'ALL_ASSIGNEES',
+    created_at: ISODate,
+    created_by: TaskCollabCreator,
+    description?: ?string,
+    due_at?: ?ISODate,
+    id: ID,
+    modified_at?: ISODate,
+    name: string,
+    permissions: {|
+        can_create_task_collaborator: boolean,
+        can_create_task_link: boolean,
+        can_delete: boolean,
+        can_update: boolean,
+    |},
+    progress_at?: ?ISODate,
+    status: TaskStatus,
+    task_links: MarkerPaginatedCollection<TaskLink>,
+    task_type?: TaskType,
+    type: 'task',
+|};
+
+/* New Task Types END */
+
 type Comment = {
     created_at: string,
     created_by: User,
@@ -634,7 +739,7 @@ type Comments = {
     total_count: number,
 };
 
-type FeedItems = Array<Comment | Task | BoxItemVersion>;
+type FeedItems = Array<Comment | Task | TaskNew | BoxItemVersion>;
 
 type Collaborators = {
     entries: Array<SelectorItem>,
