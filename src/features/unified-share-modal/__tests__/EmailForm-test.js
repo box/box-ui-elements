@@ -1,9 +1,9 @@
 import * as React from 'react';
 
+import CollaboratorAvatars from '../../collaborator-avatars/CollaboratorAvatars';
 import commonMessages from '../../../common/messages';
 
 import { EmailFormBase as EmailForm } from '../EmailForm';
-import CollaboratorAvatars from '../collaborator-avatars/CollaboratorAvatars';
 import messages from '../messages';
 
 describe('features/unified-share-modal/EmailForm', () => {

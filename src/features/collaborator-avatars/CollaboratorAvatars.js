@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
+import type { collaboratorType } from '../unified-share-modal/flowTypes';
+
 import CollaboratorAvatarItem from './CollaboratorAvatarItem';
-import messages from '../messages';
-import type { collaboratorType } from '../flowTypes';
+import messages from './messages';
 
 import './CollaboratorAvatars.scss';
 

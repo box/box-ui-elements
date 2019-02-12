@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import CollaboratorListItem from '../CollaboratorListItem';
 
-describe('features/unified-share-modal/collaborator-avatar-group/CollaboratorListItem', () => {
+describe('features/collaborator-avatars/CollaboratorListItem', () => {
     const collaborator = {
         name: 'test c',
         email: 'testc@example.com',

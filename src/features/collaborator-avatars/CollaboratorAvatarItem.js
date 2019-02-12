@@ -2,13 +2,13 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Badgeable from '../../../components/badgeable/Badgeable';
-import Tooltip from '../../../components/tooltip/Tooltip';
-import Avatar from '../../../components/avatar';
-import IconGlobe from '../../../icons/general/IconGlobe';
-import IconExpirationBadge from '../../../icons/general/IconExpirationBadge';
+import Badgeable from '../../components/badgeable/Badgeable';
+import Tooltip from '../../components/tooltip/Tooltip';
+import Avatar from '../../components/avatar';
+import IconGlobe from '../../icons/general/IconGlobe';
+import IconExpirationBadge from '../../icons/general/IconExpirationBadge';
 
-import messages from '../messages';
+import messages from './messages';
 
 type Props = {
     allowBadging?: boolean,

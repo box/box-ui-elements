@@ -1,0 +1,49 @@
+@import '../../styles/variables';
+
+.collaborator-avatar-container {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    float: right;
+    position: relative;
+    text-decoration: none;
+    z-index: $modal-dialog-z-index + 1;
+
+    &:focus,
+    &:active {
+        text-decoration: none;
+    }
+
+    &.are-avatars-hidden {
+        display: none;
+    }
+
+    .avatars-label {
+        color: $seventy-sixers;
+        margin-right: 10px;
+    }
+
+    .avatars {
+        line-height: 0;
+    }
+
+    .avatar {
+        font-size: 11px;
+        height: 24px;
+        margin-right: 2px;
+        width: 24px;
+    }
+
+    .avatars-count {
+        background-color: $seesee;
+        border-radius: 14px;
+        color: $twos;
+        font-size: 11px;
+        height: 24px;
+        line-height: 24px;
+        max-width: 30px;
+        min-width: 24px;
+        text-align: center;
+        vertical-align: top;
+    }
+}
