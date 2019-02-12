@@ -28,7 +28,7 @@ type Props = {
     onContactAdd: Function,
     onContactRemove: Function,
     onInput?: Function,
-    onSuggestedCollaboratorAdd: Function,
+    onSuggestedCollaboratorAdd: Contact => void,
     selectedContacts: Array<Contact>,
     suggestedCollaborators?: Array<Contact>,
     validateForError: Function,
