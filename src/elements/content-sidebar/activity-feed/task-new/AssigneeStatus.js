@@ -5,36 +5,28 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import IconCheck from 'icons/general/IconCheck';
-import IconClose from 'icons/general/IconClose';
-import IconPending from 'icons/general/IconHelp';
+import IconClose from '../../../../icons/general/IconClose';
+import IconCheck from '../../../../icons/general/IconCheck';
 import Avatar from '../Avatar';
-import { TASK_APPROVED, TASK_REJECTED, TASK_COMPLETED, TASK_INCOMPLETE } from '../../../../constants';
+import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_INCOMPLETE } from '../../../../constants';
 import messages from '../../../common/messages';
 
 type Props = {
     getAvatarUrl?: string => Promise<?string>,
-    status: TASK_APPROVED | TASK_COMPLETED | TASK_REJECTED | TASK_INCOMPLETE,
-    user: {
-        avatar_url?: string,
-        email?: string,
-        id: string,
-        login?: string,
-        name: string,
-        type: 'user',
-    },
+    status: TaskStatus,
+    user: UserMini,
 };
 
-const StatusIcon = ({ status, ...rest }: { status: 'pending' | 'complete' | 'approved' | 'rejected' }) => {
+const StatusIcon = ({ status, ...rest }: { status: TaskStatus }) => {
     switch (status) {
-        case TASK_APPROVED:
-        case TASK_COMPLETED:
+        case TASK_NEW_APPROVED:
+        case TASK_NEW_COMPLETED:
             return <IconCheck {...rest} />;
-        case TASK_REJECTED:
+        case TASK_NEW_REJECTED:
             return <IconClose {...rest} />;
-        case TASK_INCOMPLETE:
+        case TASK_NEW_INCOMPLETE:
         default:
-            return <IconPending {...rest} />;
+            return null;
     }
 };
 

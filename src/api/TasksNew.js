@@ -20,6 +20,11 @@ const headers = {
 };
 
 class TasksNew extends Base {
+    // Root route only works on Box internal dev env
+    getBaseApiUrl(): string {
+        return '/api/2.0';
+    }
+
     getUrlForFileTasks(id: string): string {
         return `${this.getBaseApiUrl()}/undoc/inbox?task_link_target_type=FILE&task_link_target_id=${id}&limit=${API_PAGE_LIMIT}`;
     }

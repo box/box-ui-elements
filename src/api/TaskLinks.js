@@ -14,6 +14,11 @@ const headers = {
 };
 
 class TaskLinks extends Base {
+    // Root route only works on Box internal dev env
+    getBaseApiUrl(): string {
+        return '/api/2.0';
+    }
+
     getUrlForTaskLinkCreate(): string {
         return `${this.getBaseApiUrl()}/undoc/task_links`;
     }

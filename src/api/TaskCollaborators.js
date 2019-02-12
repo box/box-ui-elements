@@ -20,6 +20,11 @@ const headers = {
 };
 
 class TaskCollaborators extends Base {
+    // Root route only works on Box internal dev env
+    getBaseApiUrl(): string {
+        return '/api/2.0';
+    }
+
     getUrlForTaskCollaborators(taskId: string): string {
         return `${this.getBaseApiUrl()}/undoc/tasks/${taskId}/task_collaborators?limit=${API_PAGE_LIMIT}`;
     }
