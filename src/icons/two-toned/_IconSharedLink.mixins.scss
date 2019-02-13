@@ -1,0 +1,9 @@
+@mixin icon-shared-link-style-override($primaryColor, $secondaryColor) {
+    .primary-color {
+        fill: $primaryColor;
+    }
+
+    .secondary-color {
+        fill: $secondaryColor;
+    }
+}

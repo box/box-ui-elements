@@ -1,24 +1,11 @@
 // @flow
 import * as React from 'react';
 
-import AccessibleSVG from '../accessible-svg';
+import IconFileBase from './IconFileBase';
+import type { Icon } from '../flowTypes';
 
-type Props = {
-    className?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
-
-const IconFileThreeD = ({ className = '', height = 32, title, width = 32 }: Props) => (
-    <AccessibleSVG
-        className={`icon-file-three-d ${className}`}
-        height={height}
-        title={title}
-        viewBox="0 0 32 32"
-        width={width}
-    >
+const IconFileThreeD = (props: Icon) => (
+    <IconFileBase {...props} baseClassName="icon-file-three-d">
         <path
             clipRule="evenodd"
             d="M24.5,27.5h-17c-0.6,0-1-0.4-1-1v-21c0-0.6,0.4-1,1-1h12l6,6v16
@@ -41,7 +28,7 @@ const IconFileThreeD = ({ className = '', height = 32, title, width = 32 }: Prop
                 c-0.2,0-0.3,0-0.4-0.1L11.9,21.2z"
             fill="#F69322"
         />
-    </AccessibleSVG>
+    </IconFileBase>
 );
 
 export default IconFileThreeD;

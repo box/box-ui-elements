@@ -1,3 +1,0 @@
-```
-<IconFileVideo />
-```

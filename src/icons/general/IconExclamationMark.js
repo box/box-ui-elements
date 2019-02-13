@@ -2,28 +2,20 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
+import type { Icon } from '../flowTypes';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
-
-const IconExclamationMark = ({ className = '', color = '#999', height = 20, title, width = 20 }: Props) => (
+const IconExclamationMark = ({ className = '', color = '#999', height = 20, title, width = 20 }: Icon) => (
     <AccessibleSVG
         className={`icon-exclamation-mark ${className}`}
-        height={height}
         title={title}
-        viewBox="0 0 20 20"
         width={width}
+        height={height}
+        viewBox="0 0 32 32"
     >
+        <circle className="fill-color" fill={color} fillRule="nonzero" cx="16" cy="16" r="12" />
         <path
-            className="fill-color"
-            d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-16a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0V5c0-.6-.4-1-1-1zm0 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
-            fill={color}
+            d="M16,8 C16.8284271,8 17.5,8.67157288 17.5,9.5 L17.5,17.5 C17.5,18.3284271 16.8284271,19 16,19 C15.1715729,19 14.5,18.3284271 14.5,17.5 L14.5,9.5 C14.5,8.67157288 15.1715729,8 16,8 Z M16,24 C15.1715729,24 14.5,23.3284271 14.5,22.5 C14.5,21.6715729 15.1715729,21 16,21 C16.8284271,21 17.5,21.6715729 17.5,22.5 C17.5,23.3284271 16.8284271,24 16,24 Z"
+            fill="#FFFFFF"
             fillRule="nonzero"
         />
     </AccessibleSVG>

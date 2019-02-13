@@ -1,0 +1,30 @@
+.icons-example {
+    .dark-toggle {
+        margin-right: 5px;
+    }
+
+    .icon-set {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 20px 0;
+
+        &.dark {
+            background: #333;
+
+            .icon-label {
+                color: #efefef;
+            }
+        }
+
+        .icon {
+            margin: 30px 20px;
+            text-align: center;
+            width: 150px;
+        }
+
+        .icon-label {
+            display: block;
+        }
+    }
+}
