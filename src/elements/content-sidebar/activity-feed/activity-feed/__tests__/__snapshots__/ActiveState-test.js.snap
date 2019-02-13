@@ -54,7 +54,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
   </li>
   <div>
     <FeatureFlag
-      feature="activityFeed.tasks.avatars"
+      feature="activityFeed.tasks.newCards"
       not={true}
     >
       <li
@@ -104,7 +104,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
       </li>
     </FeatureFlag>
     <FeatureFlag
-      feature="activityFeed.tasks.avatars"
+      feature="activityFeed.tasks.newCards"
     >
       <li
         className="bcs-activity-feed-task-new"
@@ -173,13 +173,13 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
   </li>
   <div>
     <FeatureFlag
-      feature="activityFeed.tasks.avatars"
+      feature="activityFeed.tasks.newCards"
       not={true}
     >
       0
     </FeatureFlag>
     <FeatureFlag
-      feature="activityFeed.tasks.avatars"
+      feature="activityFeed.tasks.newCards"
     >
       <li
         className="bcs-activity-feed-task-new"

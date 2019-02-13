@@ -346,7 +346,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const { file, api, features } = this.props;
-        const shouldShowNewTasks = isFeatureEnabled(features, 'activityFeed.tasks.avatars');
+        const shouldShowNewTasks = isFeatureEnabled(features, 'activityFeed.tasks.newApi');
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
             shouldRefreshCache,
