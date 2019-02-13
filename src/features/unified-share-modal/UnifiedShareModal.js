@@ -91,7 +91,7 @@ type Props = {
      */
     sendSharedLinkError: React.Node,
     /** Function hoists contact data upon updates to the parent component. Only needed for suggested collabs. */
-    setUpdatedContacts?: Function,
+    setUpdatedContacts?: (inviteCollabsContacts: Array<Contact>) => void,
     /** Message indicating an error occurred while sending the shared link. */
     sharedLink: sharedLinkType,
     /** Determine whether to show the First-time experience tooltip on load */
