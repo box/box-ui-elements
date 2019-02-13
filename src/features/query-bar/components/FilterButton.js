@@ -28,21 +28,10 @@ class FilterButton extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         const conditionID = this.generateConditionID();
+        const initialCondition = this.createCondition(props, conditionID);
         this.state = {
             appliedConditions: [],
-            conditions: [
-                {
-                    attributeDisplayText: '',
-                    attributeKey: null,
-                    id: conditionID,
-                    fieldId: '',
-                    operatorDisplayText: '',
-                    operatorKey: null,
-                    valueDisplayText: '',
-                    valueKey: null,
-                    valueType: '',
-                },
-            ],
+            conditions: [initialCondition],
             isMenuOpen: false,
         };
     }
@@ -61,27 +50,33 @@ class FilterButton extends React.Component<Props, State> {
         this.setState({ isMenuOpen: !this.state.isMenuOpen });
     };
 
+    createCondition = (props: Props, conditionID: string) => {
+        if (props && props.template) {
+            const firstField = props.template.fields[0];
+            return {
+                attributeDisplayText: firstField.displayName,
+                attributeKey: 0,
+                id: conditionID,
+                fieldId: firstField.id,
+                operatorDisplayText: '',
+                operatorKey: 0,
+                valueDisplayText: '',
+                valueKey: null,
+                valueType: firstField.type,
+            };
+        }
+        return {};
+    };
+
     generateConditionID = () => {
         return uniqueId();
     };
 
     addFilter = () => {
         const conditionID = this.generateConditionID();
+        const initialCondition = this.createCondition(this.props, conditionID);
         this.setState({
-            conditions: [
-                ...this.state.conditions,
-                {
-                    attributeDisplayText: '',
-                    attributeKey: null,
-                    id: conditionID,
-                    fieldId: '',
-                    operatorDisplayText: '',
-                    operatorKey: null,
-                    valueDisplayText: '',
-                    valueKey: null,
-                    valueType: '',
-                },
-            ],
+            conditions: [...this.state.conditions, initialCondition],
         });
     };
 

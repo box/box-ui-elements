@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 
-// importing from commonjs rather than es is required for the jest test to run.
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
 
 import './styles/ListView.scss';
@@ -33,35 +32,36 @@ class ListView extends React.PureComponent<Props> {
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
             return (
-                <div className="item-list-column-header" key={key} style={style}>
+                <div className="list-view-column-header" key={key} style={style}>
                     {displayName}
                 </div>
             );
         }
         if (columnIndex === 0) {
             return (
-                <div className="item-list-name-cell" key={key} style={style}>
+                <div className="list-view-name-cell" key={key} style={style}>
                     {cellData}
                 </div>
             );
         }
         return (
-            <div className="item-list-column-cell" key={key} style={style}>
+            <div className="list-view-column-cell" key={key} style={style}>
                 {cellData}
             </div>
         );
     };
 
     render() {
-        const { columnCount, rowCount, height, width } = this.props;
+        const { columnCount, height, rowCount, getColumnWidth, width } = this.props;
+
         return (
-            <div className="metadata-items-container">
+            <div className="metadata-views-list-view">
                 <MultiGrid
                     cellRenderer={this.cellRenderer}
-                    classNameBottomLeftGrid="item-list-bottom-left-grid"
-                    classNameTopLeftGrid="item-list-top-left-grid"
-                    classNameTopRightGrid="item-list-top-right-grid"
-                    columnWidth={100}
+                    classNameBottomLeftGrid="list-view-bottom-left-grid"
+                    classNameTopLeftGrid="list-view-top-left-grid"
+                    classNameTopRightGrid="list-view-top-right-grid"
+                    columnWidth={({ index: columnIndex }) => (getColumnWidth ? getColumnWidth(columnIndex) : 300)}
                     columnCount={columnCount}
                     enableFixedColumnScroll
                     enableFixedRowScroll

@@ -4,11 +4,11 @@ import classNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 
-import DatalistItem from 'components/datalist-item';
-import { Link } from 'components/link';
-import { convertToMs, isToday, isYesterday } from 'utils/datetime';
+import { convertToMs, isToday, isYesterday } from '../../utils/datetime';
+import DatalistItem from '../../components/datalist-item';
 import IconSmallFolder from '../../icons/folder/IconSmallFolder';
 import ItemIcon from '../../icons/item-icon';
+import { Link } from '../../components/link';
 
 import messages from './messages';
 
@@ -81,6 +81,7 @@ const QuickSearchItem = ({ className, closeDropdown, intl, itemData, parentFolde
 
     let href;
     let targetProps = {};
+    const isBoxNote = extension === 'boxnote';
 
     switch (type) {
         case 'folder':
@@ -91,20 +92,22 @@ const QuickSearchItem = ({ className, closeDropdown, intl, itemData, parentFolde
             targetProps = { target: '_blank' };
             break;
         case 'file':
-            if (extension === 'boxnote') {
-                href = `/notes/${id}`;
-                targetProps = { target: '_blank' };
-            } else if (sharedLink) {
+            // shared link should take precedence over other link types
+            if (sharedLink) {
                 href = sharedLink;
+            } else if (isBoxNote) {
+                href = `/notes/${id}`;
             } else {
                 href = `/file/${id}`;
             }
+
+            if (isBoxNote) targetProps = { target: '_blank' };
             break;
         default:
     }
 
     const itemName = href ? (
-        <Link className="item-name" href={href} onClick={e => e.stopPropagation()} title={name} {...targetProps}>
+        <Link onClick={e => e.stopPropagation()} className="item-name" href={href} title={name} {...targetProps}>
             {markedQueryMatches}
         </Link>
     ) : (

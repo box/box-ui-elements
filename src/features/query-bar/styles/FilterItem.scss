@@ -10,7 +10,7 @@
     .filter-item-delete-button {
         align-items: center;
         display: flex;
-        flex: 0;
+        width: 35px;
 
         .delete-button {
             background: none;
@@ -30,7 +30,6 @@
     .filter-item-prefix-container {
         align-items: center;
         display: flex;
-        flex: 0;
         padding-left: 10px;
         padding-right: 70px;
         width: 70px;
@@ -44,8 +43,6 @@
 
     .filter-item-attribute-dropdown-container {
         align-items: center;
-        display: flex;
-        flex: 0;
 
         .filter-dropdown-single-select-field-container {
             flex: 1;
@@ -54,7 +51,7 @@
         .select-field {
             .select-button {
                 border-radius: 5px;
-                width: 150px;
+                width: 160px;
             }
 
             .select-button.placeholder {
@@ -65,8 +62,6 @@
 
     .filter-item-operator-dropdown-container {
         align-items: center;
-        display: flex;
-        flex: 0 0;
 
         .filter-dropdown-single-select-field-container {
             flex: 1;
@@ -75,6 +70,7 @@
         .select-container {
             padding-left: 10px;
             padding-right: 10px;
+            width: 110px;
 
             .select-button {
                 border-radius: 5px;
@@ -84,10 +80,9 @@
 
     .filter-item-value-dropdown-container {
         align-items: center;
-        display: flex;
-        flex: 1;
         height: 100%;
         padding-right: 20px;
+        width: 160px;
 
         .filter-dropdown-text-field-container {
             flex: 1;
@@ -100,12 +95,11 @@
                 border: 1px solid #d2d2d2;
                 border-radius: 5px;
                 box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
-                height: auto;
+                height: 34px;
                 margin: auto;
                 margin-top: auto;
                 padding: 8px;
                 position: auto;
-                width: 100%;
             }
         }
 
