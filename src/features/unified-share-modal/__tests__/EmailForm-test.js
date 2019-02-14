@@ -42,6 +42,7 @@ describe('features/unified-share-modal/EmailForm', () => {
                 getContacts={jest.fn()}
                 onRequestClose={jest.fn()}
                 onSubmit={jest.fn()}
+                openInviteSection={jest.fn()}
                 selectedContacts={[]}
                 showEnterEmailsCallout
                 inlineNotice={{}}
@@ -215,6 +216,32 @@ describe('features/unified-share-modal/EmailForm', () => {
             wrapper.instance().handleSubmit(event);
 
             expect(onSubmit).toHaveBeenCalledWith(expectedParam);
+        });
+    });
+
+    describe('handleSuggestedCollaboratorAdd()', () => {
+        const contact = {
+            id: 123,
+            type: 'user',
+        };
+
+        test('should call handleContactAdd', () => {
+            const wrapper = getWrapper();
+            const handleContactAddSpy = jest.spyOn(wrapper.instance(), 'handleContactAdd');
+            wrapper.instance().handleSuggestedCollaboratorAdd(contact);
+
+            expect(handleContactAddSpy).toHaveBeenCalledWith([contact]);
+        });
+
+        test('should call openInviteCollaboratorsSection', () => {
+            const openInviteCollaboratorsSection = jest.fn();
+            const wrapper = getWrapper({
+                openInviteCollaboratorsSection,
+            });
+
+            wrapper.instance().handleSuggestedCollaboratorAdd(contact);
+
+            expect(openInviteCollaboratorsSection).toHaveBeenCalled();
         });
     });
 

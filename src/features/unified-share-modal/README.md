@@ -213,7 +213,6 @@ class USMExample extends React.Component {
                         console.log(`Sent invite to ${emails} with message "${emailMessage}"`);
                     })}
                     sendSharedLinkError={''}
-
                     sharedLink={ this.state.sharedLink }
                     showCalloutForUser={true}
                     showUpgradeOptions

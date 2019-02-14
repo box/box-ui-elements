@@ -481,6 +481,15 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
         });
     });
 
+    describe('openInviteCollaboratorsSection()', () => {
+        test('should set isInviteSectionExpanded to true', () => {
+            const wrapper = getWrapper();
+            wrapper.setState({ isInviteSectionExpanded: false });
+            wrapper.instance().openInviteCollaboratorsSection();
+            expect(wrapper.state('isInviteSectionExpanded')).toBe(true);
+        });
+    });
+
     describe('closeInviteCollaborators()', () => {
         test('should set state properly', () => {
             const wrapper = getWrapper();

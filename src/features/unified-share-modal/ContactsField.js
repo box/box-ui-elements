@@ -28,7 +28,9 @@ type Props = {
     onContactAdd: Function,
     onContactRemove: Function,
     onInput?: Function,
+    onSuggestedCollaboratorAdd: Contact => void,
     selectedContacts: Array<Contact>,
+    suggestedCollaborators?: Array<Contact>,
     validateForError: Function,
     validator: Function,
 };
@@ -130,6 +132,8 @@ class ContactsField extends React.Component<Props, State> {
             selectedContacts,
             onContactAdd,
             onContactRemove,
+            onSuggestedCollaboratorAdd,
+            suggestedCollaborators,
             validateForError,
             validator,
         } = this.props;
@@ -153,11 +157,14 @@ class ContactsField extends React.Component<Props, State> {
                 onInput={this.handlePillSelectorInput}
                 onRemove={onContactRemove}
                 onSelect={onContactAdd}
+                onSuggestedPillAdd={onSuggestedCollaboratorAdd}
                 parseItems={parseEmails}
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
                 ref={fieldRef}
                 selectedOptions={selectedContacts}
                 selectorOptions={contacts}
+                suggestedPillsData={suggestedCollaborators}
+                suggestedPillsTitle={intl.formatMessage(messages.suggestedCollabsTitle)}
                 validateForError={validateForError}
                 validator={validator}
             >
