@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`feature/metadata-view/FilterItem render() should render FilterItem 1`] = `
+exports[`features/query-bar/components/filter/Condition render() should render Condition 1`] = `
 <div
   className="filter-item-container"
 >
@@ -91,10 +91,9 @@ exports[`feature/metadata-view/FilterItem render() should render FilterItem 1`] 
   <div
     className="filter-item-value-dropdown-container"
   >
-    <FilterValueField
+    <ValueField
       formatMessage={[Function]}
       selectedValue={null}
-      shouldDisplayErrorMessage={true}
       updateSelectedField={[Function]}
       updateValueField={[Function]}
       valueKey={null}

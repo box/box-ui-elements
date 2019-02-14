@@ -3,7 +3,7 @@ import * as React from 'react';
 import { columns, template } from '../components/fixtures';
 import ColumnButton from '../components/ColumnButton';
 
-describe('features/metadata-view/components/ColumnButton', () => {
+describe('features/query-bar/components/ColumnButton', () => {
     const getWrapper = (props = {}) => {
         return shallow(<ColumnButton onColumnChange={jest.fn()} columns={columns} {...props} />);
     };

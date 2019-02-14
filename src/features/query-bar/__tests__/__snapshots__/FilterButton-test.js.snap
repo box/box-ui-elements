@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`feature/metadata-view/components/FilterButton render should render FilterButton default state 1`] = `
+exports[`feature/query-bar/components/filter/FilterButton render should render FilterButton default state 1`] = `
 <Flyout
   className="query-bar-filter-dropdown-flyout"
   closeOnClick={true}
@@ -45,7 +45,7 @@ exports[`feature/metadata-view/components/FilterButton render should render Filt
 </Flyout>
 `;
 
-exports[`feature/metadata-view/components/FilterButton render should render FilterButton with template passed in 1`] = `
+exports[`feature/query-bar/components/filter/FilterButton render should render FilterButton with template passed in 1`] = `
 <Flyout
   className="query-bar-filter-dropdown-flyout"
   closeOnClick={true}

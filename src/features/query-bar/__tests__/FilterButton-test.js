@@ -2,9 +2,9 @@
 import * as React from 'react';
 
 import { template } from '../components/fixtures';
-import FilterButton from '../components/FilterButton';
+import FilterButton from '../components/filter/FilterButton';
 
-describe('feature/metadata-view/components/FilterButton', () => {
+describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
         return shallow(<FilterButton {...props} />);
     };
@@ -31,7 +31,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                     attributeDisplayText: '',
                     attributeKey: null,
                     operatorDisplayText: '',
-                    operatorKey: null,
+                    operatorKey: 0,
                     valueDisplayText: '',
                     valueKey: null,
                 },
@@ -41,7 +41,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
-                        operatorKey: null,
+                        operatorKey: 0,
                         valueDisplayText: '',
                         valueKey: null,
                     },
@@ -60,7 +60,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                         attributeKey: 0,
                         fieldId: 1,
                         operatorDisplayText: '',
-                        operatorKey: null,
+                        operatorKey: 0,
                         valueDisplayText: '',
                         valueKey: null,
                         valueType: 'string',
@@ -75,7 +75,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                     attributeDisplayText: '',
                     attributeKey: null,
                     operatorDisplayText: '',
-                    operatorKey: null,
+                    operatorKey: 0,
                     valueDisplayText: '',
                     valueKey: null,
                 },
@@ -85,7 +85,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
-                        operatorKey: null,
+                        operatorKey: 0,
                         valueDisplayText: '',
                         valueKey: null,
                     },
@@ -117,7 +117,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                     attributeDisplayText: '',
                     attributeKey: null,
                     operatorDisplayText: '',
-                    operatorKey: null,
+                    operatorKey: 0,
                     valueDisplayText: '',
                     valueKey: null,
                 },
@@ -127,7 +127,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
-                        operatorKey: null,
+                        operatorKey: 0,
                         valueDisplayText: '',
                         valueKey: null,
                     },
@@ -145,7 +145,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                         attributeKey: null,
                         fieldId: 1,
                         operatorDisplayText: '',
-                        operatorKey: null,
+                        operatorKey: 0,
                         valueDisplayText: 'myValue',
                         valueKey: 0,
                     },
@@ -312,7 +312,7 @@ describe('feature/metadata-view/components/FilterButton', () => {
                 fieldId: 'item_27',
                 operatorDisplayText: '',
                 operatorKey: 0,
-                valueDisplayText: '',
+                valueDisplayText: null,
                 valueKey: null,
                 valueType: 'float',
             };

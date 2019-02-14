@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`feature/metadata-view/components/TemplateButton render() should render TemplateButton 1`] = `
+exports[`feature/query-bar/components/TemplateButton render() should render TemplateButton 1`] = `
 <TemplateDropdown
   activeTemplateIcon={
     <MetadataActiveBadge

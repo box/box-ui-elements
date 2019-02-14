@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a DatePicker for a valueType of date" 1`] = `
+<div
+  className="filter-dropdown-date-field-container"
+>
+  <DatePicker
+    displayFormat={
+      Object {
+        "day": "numeric",
+        "month": "long",
+        "year": "numeric",
+      }
+    }
+    hideLabel={true}
+    label="Date"
+    name="datepicker"
+    placeholder="Date"
+    value={2000-01-01T08:00:00.000Z}
+  />
+</div>
+`;
+
+exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a SingleSelectField for a valueType of enum" 1`] = `
+<SingleSelectField
+  fieldType="value"
+  onChange={[MockFunction]}
+  options={
+    Array [
+      Object {
+        "displayText": "Hello",
+        "fieldId": "field0",
+        "type": "enum",
+        "value": 0,
+      },
+    ]
+  }
+  selectedValue=""
+/>
+`;
+
+exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a TextInput for a valueType of float" 1`] = `
+<div
+  className="filter-dropdown-text-field-container"
+>
+  <TextInput
+    hideLabel={true}
+    label="Float input"
+    name="float field"
+    placeholder="Enter a float"
+    value=""
+  />
+</div>
+`;
+
+exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a TextInput for a valueType of number" 1`] = `
+<div
+  className="filter-dropdown-text-field-container"
+>
+  <TextInput
+    hideLabel={true}
+    label="Number input"
+    name="number field"
+    placeholder="Enter a number"
+    value=""
+  />
+</div>
+`;
+
+exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a TextInput for a valueType of string" 1`] = `
+<div
+  className="filter-dropdown-text-field-container"
+>
+  <TextInput
+    hideLabel={true}
+    label="String input"
+    name="string field"
+    placeholder="Enter a string"
+    value=""
+  />
+</div>
+`;

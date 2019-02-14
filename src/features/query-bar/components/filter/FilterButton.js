@@ -4,17 +4,18 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 
-import IconMetadataFilter from '../../../icons/metadata-view/IconMetadataFilter';
-import FilterItem from './FilterItem';
-import Button from '../../../components/button/Button';
-import PrimaryButton from '../../../components/primary-button/PrimaryButton';
-import MenuToggle from '../../../components/dropdown-menu/MenuToggle';
-import { Flyout, Overlay } from '../../../components/flyout';
+import IconMetadataFilter from '../../../../icons/metadata-view/IconMetadataFilter';
+import Condition from './Condition';
+import Button from '../../../../components/button/Button';
+import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
+import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
+import { Flyout, Overlay } from '../../../../components/flyout';
 
-import messages from '../messages';
+import messages from '../../messages';
 
 type State = {
     appliedConditions: Array<Object>,
+    areErrorsEnabled: boolean,
     conditions: Array<Object>,
     isMenuOpen: boolean,
 };
@@ -32,6 +33,7 @@ class FilterButton extends React.Component<Props, State> {
         this.state = {
             appliedConditions: [],
             conditions: [initialCondition],
+            areErrorsEnabled: false,
             isMenuOpen: false,
         };
     }
@@ -60,7 +62,7 @@ class FilterButton extends React.Component<Props, State> {
                 fieldId: firstField.id,
                 operatorDisplayText: '',
                 operatorKey: 0,
-                valueDisplayText: '',
+                valueDisplayText: null,
                 valueKey: null,
                 valueType: firstField.type,
             };
@@ -77,18 +79,28 @@ class FilterButton extends React.Component<Props, State> {
         const initialCondition = this.createCondition(this.props, conditionID);
         this.setState({
             conditions: [...this.state.conditions, initialCondition],
+            areErrorsEnabled: false,
         });
     };
 
     applyFilters = () => {
         const { onFilterChange } = this.props;
         const { conditions } = this.state;
-        if (onFilterChange) {
-            onFilterChange(conditions);
+
+        const areAllValid = this.areAllValid();
+
+        if (areAllValid) {
+            if (onFilterChange) {
+                onFilterChange(conditions);
+            }
+            this.setState({
+                appliedConditions: conditions,
+            });
+        } else {
+            this.setState({
+                areErrorsEnabled: true,
+            });
         }
-        this.setState({
-            appliedConditions: conditions,
-        });
     };
 
     update = (
@@ -115,7 +127,10 @@ class FilterButton extends React.Component<Props, State> {
             };
 
             if (fieldKeyType === 'attributeKey') {
-                updatedCondition.operatorKey = null;
+                // Upon selecting a new attribute, the operator and value fields should be reset.
+                updatedCondition.operatorKey = 0;
+                updatedCondition.operatorDisplayText = '';
+                updatedCondition.valueDisplayText = '';
                 updatedCondition.valueKey = null;
             }
 
@@ -141,9 +156,23 @@ class FilterButton extends React.Component<Props, State> {
         });
     };
 
+    areAllValid = () => {
+        const { conditions } = this.state;
+        let areAllValid = true;
+        conditions.forEach(condition => {
+            if (condition.valueDisplayText === null || condition.valueDisplayText === '') {
+                areAllValid = false;
+            }
+        });
+        return areAllValid;
+    };
+
+    // Should close when all the conditions have a value set and the apply button is pressed.
     shouldClose = (event?: SyntheticEvent<>) => {
-        // The current approach assumes that the Apply button contains at most one child element
-        if (event && event.target) {
+        // The current approach assumes that the Apply button contains at most one child element.
+        const areAllValid = this.areAllValid();
+
+        if (event && event.target && areAllValid) {
             if (
                 (event.target: window.HTMLButtonElement).classList.contains('apply-filters-button') ||
                 (event.target: window.HTMLSpanElement).parentNode.classList.contains('apply-filters-button')
@@ -156,7 +185,7 @@ class FilterButton extends React.Component<Props, State> {
 
     render() {
         const { template } = this.props;
-        const { appliedConditions, conditions, isMenuOpen } = this.state;
+        const { appliedConditions, conditions, areErrorsEnabled, isMenuOpen } = this.state;
 
         const numberOfAppliedConditions = appliedConditions.length;
 
@@ -208,10 +237,11 @@ class FilterButton extends React.Component<Props, State> {
                                 ) : null}
                                 {conditions.map((condition, index) => {
                                     return (
-                                        <FilterItem
+                                        <Condition
                                             key={`metadata-view-filter-item-${condition.id}`}
                                             condition={condition}
                                             deleteCondition={this.deleteCondition}
+                                            areErrorsEnabled={areErrorsEnabled}
                                             index={index}
                                             template={template}
                                             update={this.update}
