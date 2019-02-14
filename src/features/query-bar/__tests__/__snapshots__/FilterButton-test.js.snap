@@ -45,7 +45,7 @@ exports[`feature/query-bar/components/filter/FilterButton render should render F
 </Flyout>
 `;
 
-exports[`feature/query-bar/components/filter/FilterButton render should render FilterButton with template passed in 1`] = `
+exports[`feature/query-bar/components/filter/FilterButton render should render FilterButton with columns passed in 1`] = `
 <Flyout
   className="query-bar-filter-dropdown-flyout"
   closeOnClick={true}

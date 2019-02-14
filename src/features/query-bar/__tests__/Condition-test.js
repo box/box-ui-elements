@@ -1,71 +1,16 @@
 // @flow
 import * as React from 'react';
 
-import {
-    FIELD_TYPE_STRING,
-    FIELD_TYPE_DATE,
-    FIELD_TYPE_FLOAT,
-    FIELD_TYPE_ENUM,
-} from '../../metadata-instance-editor/constants';
-import { initialCondition } from '../components/fixtures';
-
-import { ATTRIBUTE_KEY, OPERATOR_KEY, VALUE_KEY } from '../constants';
-
+import { initialCondition, columns } from '../components/fixtures';
+import { COLUMN_KEY, OPERATOR_KEY, VALUE_KEY } from '../constants';
 import { BaseCondition as Condition } from '../components/filter/Condition';
 
 describe('features/query-bar/components/filter/Condition', () => {
     const getWrapper = (props = {}) => {
-        const template = {
-            id: 'template1',
-            templateKey: 'template1',
-            displayName: 'template1 title',
-            scope: 'enterprise_123',
-            'Vendor Name': {
-                operators: ['is', 'is greater than', 'is less than', 'is not', 'is blank', 'matches any'],
-                values: ['Google', 'Apple', 'Facebook'],
-            },
-            'Expiration Month': {
-                operators: ['is', 'is greater than', 'is less than', 'is not'],
-                values: ['August 2018', 'September 2018', 'October 2018'],
-            },
-            'File Type': {
-                operators: ['is', 'is not'],
-                values: ['.docx', '.mp3', 'mp4'],
-            },
-            fields: [
-                {
-                    id: 'field1',
-                    type: FIELD_TYPE_STRING,
-                    key: 'name',
-                    displayName: 'Name',
-                },
-                {
-                    id: 'field7',
-                    type: FIELD_TYPE_DATE,
-                    key: 'lastModified',
-                    displayName: 'Last Modified',
-                },
-                {
-                    id: 'field11',
-                    type: FIELD_TYPE_FLOAT,
-                    key: 'size',
-                    displayName: 'Size',
-                    description: 'example of an integer field',
-                },
-                {
-                    id: 'field5',
-                    type: FIELD_TYPE_ENUM,
-                    key: 'contractValue',
-                    displayName: 'Contract Value',
-                    options: [{ key: '$100' }, { key: '$2000' }, { key: '$10000' }, { key: '$200000' }],
-                },
-            ],
-        };
-
         return shallow(
             <Condition
                 index={0}
-                template={template}
+                columns={columns}
                 condition={initialCondition}
                 deleteCondition={() => {}}
                 update={() => {}}
@@ -97,10 +42,10 @@ describe('features/query-bar/components/filter/Condition', () => {
         const valueType = 'string';
 
         test.each`
-            description                         | fieldType      | selectedOptionType     | displayTextType           | keyType
-            ${'user has selected an attribute'} | ${'attribute'} | ${'selectedAttribute'} | ${'attributeDisplayText'} | ${ATTRIBUTE_KEY}
-            ${'user has selected an operator'}  | ${'operator'}  | ${'selectedOperator'}  | ${'operatorDisplayText'}  | ${OPERATOR_KEY}
-            ${'user has selected a value'}      | ${'value'}     | ${'selectedValue'}     | ${'valueDisplayText'}     | ${VALUE_KEY}
+            description                         | fieldType      | displayTextType          | keyType
+            ${'user has selected an attribute'} | ${'attribute'} | ${'columnDisplayText'}   | ${COLUMN_KEY}
+            ${'user has selected an operator'}  | ${'operator'}  | ${'operatorDisplayText'} | ${OPERATOR_KEY}
+            ${'user has selected a value'}      | ${'value'}     | ${'valueDisplayText'}    | ${VALUE_KEY}
         `('$description', ({ fieldType, displayTextType, keyType }) => {
             const update = jest.fn();
             const wrapper = getWrapper({
