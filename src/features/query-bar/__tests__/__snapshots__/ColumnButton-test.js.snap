@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/metadata-view/components/ColumnButton render should render ColumnButton default state when menu is closed 1`] = `
+exports[`features/query-bar/components/ColumnButton render should render ColumnButton default state when menu is closed 1`] = `
 <Flyout
   className="query-bar-column-dropdown-flyout"
   closeOnClick={true}
@@ -40,7 +40,7 @@ exports[`features/metadata-view/components/ColumnButton render should render Col
 </Flyout>
 `;
 
-exports[`features/metadata-view/components/ColumnButton render should render ColumnButton default state when menu is open 1`] = `
+exports[`features/query-bar/components/ColumnButton render should render ColumnButton default state when menu is open 1`] = `
 <Flyout
   className="query-bar-column-dropdown-flyout"
   closeOnClick={true}
@@ -102,7 +102,7 @@ exports[`features/metadata-view/components/ColumnButton render should render Col
 </Flyout>
 `;
 
-exports[`features/metadata-view/components/ColumnButton render should render ColumnButton with template passed in 1`] = `
+exports[`features/query-bar/components/ColumnButton render should render ColumnButton with template passed in 1`] = `
 <Flyout
   className="query-bar-column-dropdown-flyout"
   closeOnClick={true}

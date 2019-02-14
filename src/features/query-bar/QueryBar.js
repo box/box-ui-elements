@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import TemplateButton from './components/TemplateButton';
-import FilterButton from './components/FilterButton';
+import FilterButton from './components/filter/FilterButton';
 import ColumnButton from './components/ColumnButton';
 
 import type { ColumnType } from './flowTypes';

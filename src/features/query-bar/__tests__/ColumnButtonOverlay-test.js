@@ -3,7 +3,7 @@ import * as React from 'react';
 import { columns, columnsWithNewOrder, columnsWithOneColumnNotShown } from '../components/fixtures';
 import ColumnButtonOverlay from '../components/ColumnButtonOverlay';
 
-describe('features/metadata-view/components/ColumnButtonOverlay', () => {
+describe('features/query-bar/components/ColumnButtonOverlay', () => {
     const getWrapper = (props = {}) => {
         return shallow(<ColumnButtonOverlay onColumnChange={jest.fn()} columns={columns} {...props} />);
     };

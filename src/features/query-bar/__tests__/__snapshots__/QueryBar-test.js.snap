@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/metadata-view/components/QueryBar should render 1`] = `
+exports[`features/query-bar/components/QueryBar should render 1`] = `
 <section
   className="metadata-view-query-bar"
 >
@@ -12,7 +12,7 @@ exports[`features/metadata-view/components/QueryBar should render 1`] = `
 </section>
 `;
 
-exports[`features/metadata-view/components/QueryBar should render when template is not selected 1`] = `
+exports[`features/query-bar/components/QueryBar should render when template is not selected 1`] = `
 <section
   className="metadata-view-query-bar"
 >
@@ -140,10 +140,10 @@ exports[`features/metadata-view/components/QueryBar should render when template 
               "type": "string",
             },
             Object {
-              "displayName": "State",
+              "displayName": "Submission",
               "id": "item_32",
-              "key": "state",
-              "type": "string",
+              "key": "Submission",
+              "type": "date",
             },
             Object {
               "displayName": "Function",

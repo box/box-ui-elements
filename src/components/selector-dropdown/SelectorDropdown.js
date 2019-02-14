@@ -88,7 +88,8 @@ class SelectorDropdown extends React.Component<Props, State> {
             let parentEl = itemEl;
             while (
                 parentEl.parentElement instanceof HTMLElement &&
-                !parentEl.classList.contains('modal') // body is scrolled incorrectly for dropdowns within modals
+                !parentEl.classList.contains('scroll-wrap-container') && // Scroll the container, not the body when contained in a scroll-container.
+                !parentEl.classList.contains('modal') // Scroll the modal, not the body when contained in a modal.
             ) {
                 parentEl = parentEl.parentElement;
             }
@@ -270,12 +271,12 @@ class SelectorDropdown extends React.Component<Props, State> {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                ref={this.selectorDropdownRef}
                 className={classNames('selector-dropdown-wrapper', className)}
                 onFocus={this.handleFocus}
                 onKeyDown={this.handleKeyDown}
                 onKeyPress={this.handleInput}
                 onPaste={this.handleInput}
+                ref={this.selectorDropdownRef}
             >
                 {React.cloneElement(selector, { inputProps })}
                 {isOpen && (

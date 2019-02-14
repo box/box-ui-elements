@@ -34,7 +34,7 @@
             border-top: none;
             overflow: hidden;
 
-            // NOTE: targets ie11
+            // NOTE (cwei): targets ie11
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
                 max-height: 300px;
             }
@@ -60,8 +60,8 @@
 
             // NOTE: targets ie11
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-                // Note: in IE11 the scrollbar gets cut off when a user scrolls to the bottom, this makes it so the list item isn't cut off
-                margin-bottom: 20px;
+                // Note (lbarrick) Avoids cutting off the last item in the list.
+                height: 300px;
             }
 
             &::before {

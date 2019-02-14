@@ -2,6 +2,16 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    tooltipSelectValueError: {
+        defaultMessage: 'Please Select a Value',
+        description: 'Text displayed on the Tooltip for a value field',
+        id: 'boxui.queryBar.tooltipSelectValueError',
+    },
+    tooltipSelectDateError: {
+        defaultMessage: 'Please Select a Date',
+        description: 'Text displayed on the Tooltip for a date field',
+        id: 'boxui.queryBar.tooltipSelectDateError',
+    },
     metadataViewTemplateListHeaderTitle: {
         defaultMessage: 'METADATA TEMPLATES',
         description: 'Header text shown in template dropdown',

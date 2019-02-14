@@ -1,19 +1,18 @@
 // @flow
 import * as React from 'react';
 
-import SingleSelectField from '../../../components/select-field/SingleSelectField';
-import TextInput from '../../../components/text-input';
-import DatePicker from '../../../components/date-picker';
+import SingleSelectField from '../../../../components/select-field/SingleSelectField';
+import TextInput from '../../../../components/text-input';
+import DatePicker from '../../../../components/date-picker';
 
-import messages from '../messages';
-import { VALUE } from '../constants';
+import messages from '../../messages';
+import { VALUE } from '../../constants';
 
-import '../styles/FilterItem.scss';
+import '../../styles/FilterItem.scss';
 
 type Props = {
     formatMessage: Function,
     selectedValue?: string | number,
-    shouldDisplayErrorMessage: boolean,
     updateSelectedField: Function,
     updateValueField: Function,
     valueKey?: string | Date | number,
@@ -21,10 +20,9 @@ type Props = {
     valueType: string,
 };
 
-const FilterValueField = ({
+const ValueField = ({
     formatMessage,
     selectedValue,
-    shouldDisplayErrorMessage,
     updateValueField,
     updateSelectedField,
     valueKey,
@@ -63,7 +61,6 @@ const FilterValueField = ({
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
                         hideLabel
-                        error={shouldDisplayErrorMessage ? 'Please enter a number' : null}
                         label="Float input"
                         name="float field"
                         onChange={updateValueField}
@@ -76,7 +73,6 @@ const FilterValueField = ({
             return (
                 <div className="filter-dropdown-date-field-container">
                     <DatePicker
-                        className="date-picker-example"
                         displayFormat={{
                             day: 'numeric',
                             month: 'long',
@@ -102,20 +98,8 @@ const FilterValueField = ({
                 />
             );
         default:
-            return (
-                <div className="filter-dropdown-text-field-container">
-                    <TextInput
-                        hideLabel
-                        disabled
-                        label="Text Input"
-                        name="Text field"
-                        onChange={updateValueField}
-                        placeholder="Enter value"
-                        value={selectedValue || ''}
-                    />
-                </div>
-            );
+            return null;
     }
 };
 
-export default FilterValueField;
+export default ValueField;

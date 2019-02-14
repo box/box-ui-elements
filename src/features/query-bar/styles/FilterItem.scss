@@ -1,5 +1,21 @@
 @import '../../../styles/variables';
 
+@mixin dropdown-input {
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
+    height: 34px;
+    margin: auto;
+    margin-top: auto;
+    padding: 8px;
+    position: auto;
+    width: 160px;
+}
+
+@mixin error-border {
+    border: 1px solid $bdl-watermelon-red;
+}
+
 .filter-item-container {
     display: flex;
     flex-direction: row;
@@ -78,11 +94,26 @@
         }
     }
 
+    .filter-item-value-dropdown-container.show-error {
+        .filter-dropdown-text-field-container {
+            .text-input-container input {
+                @include error-border();
+            }
+        }
+
+        .date-picker-wrapper input {
+            @include error-border();
+        }
+
+        .select-button.placeholder {
+            @include error-border();
+        }
+    }
+
     .filter-item-value-dropdown-container {
         align-items: center;
         height: 100%;
-        padding-right: 20px;
-        width: 160px;
+        padding-right: 5px;
 
         .filter-dropdown-text-field-container {
             flex: 1;
@@ -92,14 +123,7 @@
             }
 
             input {
-                border: 1px solid #d2d2d2;
-                border-radius: 5px;
-                box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
-                height: 34px;
-                margin: auto;
-                margin-top: auto;
-                padding: 8px;
-                position: auto;
+                @include dropdown-input();
             }
         }
 
@@ -119,15 +143,7 @@
             }
 
             input {
-                border: 1px solid #d2d2d2;
-                border-radius: 5px;
-                box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
-                height: auto;
-                margin: auto;
-                margin-top: auto;
-                padding: 8px;
-                position: auto;
-                width: 100%;
+                @include dropdown-input();
             }
         }
 
@@ -140,11 +156,25 @@
 
             .select-button {
                 border-radius: 5px;
-                width: 100%;
+                width: 160px;
             }
 
             .select-button.placeholder {
                 color: $seventy-sixers;
+            }
+        }
+    }
+
+    .filter-item-error-icon-status {
+        align-items: center;
+        display: flex;
+
+        .icon-alert-default {
+            display: block;
+            margin: 0 auto;
+
+            use:nth-child(2) {
+                fill: $bdl-watermelon-red;
             }
         }
     }

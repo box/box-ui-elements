@@ -138,6 +138,11 @@ $width: $height * 2;
 .toggle-simple-switch {
     display: inline-block;
 
+    // NOTE: targets ie11
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        cursor: pointer;
+    }
+
     .is-toggle-right-aligned & {
         position: relative;
         width: $width;

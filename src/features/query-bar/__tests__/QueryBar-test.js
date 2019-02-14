@@ -3,7 +3,7 @@ import * as React from 'react';
 import { template } from '../components/fixtures';
 import QueryBar from '../QueryBar';
 
-describe('features/metadata-view/components/QueryBar', () => {
+describe('features/query-bar/components/QueryBar', () => {
     const getWrapper = props => {
         return shallow(<QueryBar {...props} />);
     };

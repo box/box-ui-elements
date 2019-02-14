@@ -1,3 +1,14 @@
+const initialCondition = {
+    conditionId: 0,
+    attributeDisplayText: '',
+    attributeKey: null,
+    operatorDisplayText: '',
+    operatorKey: null,
+    valueDisplayText: '',
+    valueKey: null,
+    valueType: '',
+};
+
 const columns = [
     {
         displayName: 'Last Modified',
@@ -329,9 +340,9 @@ const template = {
         },
         {
             id: 'item_32',
-            type: 'string',
-            key: 'state',
-            displayName: 'State',
+            type: 'date',
+            key: 'Submission',
+            displayName: 'Submission',
         },
         {
             id: 'item_33',
@@ -473,6 +484,7 @@ const metadataTableStateAfterMount = {
 };
 
 export {
+    initialCondition,
     columns,
     columnsWithNewOrder,
     columnsWithOneColumnNotShown,
