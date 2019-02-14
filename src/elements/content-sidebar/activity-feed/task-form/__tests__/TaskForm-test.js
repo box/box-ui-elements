@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import DatePicker from 'components/date-picker/DatePicker'; // eslint-disable-line no-unused-vars
+import DatePicker from '../../../../../components/date-picker/DatePicker'; // eslint-disable-line no-unused-vars
 
 import { TaskFormUnwrapped as TaskForm } from '..';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
-jest.mock('components/date-picker/DatePicker', () => props => <input type="date" {...props} {...props.inputProps} />);
+jest.mock('../../../../../components/date-picker/DatePicker', () => props => (
+    <input type="date" {...props} {...props.inputProps} />
+));
 
 const mockIntl = {
     formatMessage: message => message.defaultMessage,

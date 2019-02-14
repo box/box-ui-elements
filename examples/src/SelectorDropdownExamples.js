@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Children, Component } from 'react';
 
-import DatalistItem from 'components/datalist-item';
-import SelectorDropdown from 'components/selector-dropdown';
-import TextInput from 'components/text-input';
+import DatalistItem from '../../src/components/datalist-item';
+import SelectorDropdown from '../../src/components/selector-dropdown';
+import TextInput from '../../src/components/text-input';
 
 const InputContainer = ({ inputProps, ...rest }) => <TextInput {...inputProps} {...rest} />;
 InputContainer.propTypes = { inputProps: PropTypes.object };

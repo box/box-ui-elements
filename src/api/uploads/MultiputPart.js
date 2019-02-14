@@ -5,9 +5,9 @@
  */
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
-import { updateQueryParameters } from 'utils/url';
-import { getBoundedExpBackoffRetryDelay } from 'utils/uploads';
-import { retryNumOfTimes } from 'utils/function';
+import { updateQueryParameters } from '../../utils/url';
+import { getBoundedExpBackoffRetryDelay } from '../../utils/uploads';
+import { retryNumOfTimes } from '../../utils/function';
 
 import BaseMultiput from './BaseMultiput';
 

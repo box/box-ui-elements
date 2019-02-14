@@ -2,7 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-import Tooltip from 'components/tooltip';
+import Tooltip from '../tooltip';
 import { KEYS } from '../../constants';
 
 import Pill from './Pill';

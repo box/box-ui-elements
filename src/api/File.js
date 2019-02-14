@@ -4,9 +4,9 @@
  * @author Box
  */
 
-import { findMissingProperties, fillMissingProperties } from 'utils/fields';
-import { getTypedFileId } from 'utils/file';
-import { getBadItemError, getBadPermissionsError } from 'utils/error';
+import { findMissingProperties, fillMissingProperties } from '../utils/fields';
+import { getTypedFileId } from '../utils/file';
+import { getBadItemError, getBadPermissionsError } from '../utils/error';
 import {
     FIELD_DOWNLOAD_URL,
     CACHE_PREFIX_FILE,

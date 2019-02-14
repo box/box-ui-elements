@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Button from 'components/button';
-import ProgressBar from 'components/progress-bar';
+import Button from '../../src/components/button';
+import ProgressBar from '../../src/components/progress-bar';
 
 class ProgressBarExamples extends Component {
     constructor(props) {

@@ -7,10 +7,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
-import Button from 'components/button';
-import ButtonGroup from 'components/button-group';
-import IconPageBack from 'icons/general/IconPageBack';
-import IconPageForward from 'icons/general/IconPageForward';
+import Button from '../../../components/button';
+import ButtonGroup from '../../../components/button-group';
+import IconPageBack from '../../../icons/general/IconPageBack';
+import IconPageForward from '../../../icons/general/IconPageForward';
 import PaginationMenu from './PaginationMenu';
 import Tooltip from '../Tooltip';
 import messages from '../messages';

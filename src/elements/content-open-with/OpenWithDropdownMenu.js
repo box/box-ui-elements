@@ -5,8 +5,8 @@
  */
 
 import * as React from 'react';
-import DropdownMenu from 'components/dropdown-menu/DropdownMenu';
-import Menu from 'components/menu/Menu';
+import DropdownMenu from '../../components/dropdown-menu/DropdownMenu';
+import Menu from '../../components/menu/Menu';
 import OpenWithDropdownMenuItem from './OpenWithDropdownMenuItem';
 import MultipleIntegrationsOpenWithButton from './MultipleIntegrationsOpenWithButton';
 

@@ -1,8 +1,8 @@
 /* eslint-disable no-plusplus */
 import React, { Component } from 'react';
 
-import Button from 'components/button';
-import VersionHistoryModal from 'features/version-history-modal';
+import Button from '../../src/components/button';
+import VersionHistoryModal from '../../src/features/version-history-modal';
 
 let currentVersionNumber = 0; // Just for examples
 

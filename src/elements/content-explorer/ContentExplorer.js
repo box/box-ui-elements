@@ -11,16 +11,16 @@ import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import cloneDeep from 'lodash/cloneDeep';
-import CreateFolderDialog from 'elements/common/create-folder-dialog';
-import UploadDialog from 'elements/common/upload-dialog';
-import Header from 'elements/common/header';
-import Pagination from 'elements/common/pagination';
-import SubHeader from 'elements/common/sub-header/SubHeader';
-import makeResponsive from 'elements/common/makeResponsive';
-import openUrlInsideIframe from 'utils/iframe';
-import { isFocusableElement, isInputElement, focus } from 'utils/dom';
-import Internationalize from 'elements/common/Internationalize';
-import API from 'api';
+import CreateFolderDialog from '../common/create-folder-dialog';
+import UploadDialog from '../common/upload-dialog';
+import Header from '../common/header';
+import Pagination from '../common/pagination';
+import SubHeader from '../common/sub-header/SubHeader';
+import makeResponsive from '../common/makeResponsive';
+import openUrlInsideIframe from '../../utils/iframe';
+import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import Internationalize from '../common/Internationalize';
+import API from '../../api';
 import Footer from './Footer';
 import PreviewDialog from './PreviewDialog';
 import ShareDialog from './ShareDialog';
@@ -52,9 +52,9 @@ import {
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
-import 'elements/common/fonts.scss';
-import 'elements/common/base.scss';
-import 'elements/common/modal.scss';
+import '../common/fonts.scss';
+import '../common/base.scss';
+import '../common/modal.scss';
 
 type Props = {
     apiHost: string,

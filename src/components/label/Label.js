@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import commonMessages from 'common/messages';
+import commonMessages from '../../common/messages';
 
 import InfoIconWithTooltip from './InfoIconWithTooltip';
 import StandardLabel from './StandardLabel';

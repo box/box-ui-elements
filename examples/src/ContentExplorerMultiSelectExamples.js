@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ContentExplorer } from 'features/content-explorer';
+import { ContentExplorer } from '../../src/features/content-explorer';
 
 import './ContentExplorerMultiSelectExamples.scss';
 

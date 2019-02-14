@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import AnimateHeight from 'react-animate-height';
 
-import { RESIN_TAG_TARGET } from 'common/variables';
+import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconCaretDown from '../../icons/general/IconCaretDown';
 import PlainButton from '../plain-button';
 import { nines } from '../../styles/variables';

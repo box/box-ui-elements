@@ -5,9 +5,9 @@
  */
 
 import noop from 'lodash/noop';
-import flatten from 'utils/flatten';
-import { FOLDER_FIELDS_TO_FETCH } from 'utils/fields';
-import { getBadItemError } from 'utils/error';
+import flatten from '../utils/flatten';
+import { FOLDER_FIELDS_TO_FETCH } from '../utils/fields';
+import { getBadItemError } from '../utils/error';
 import Item from './Item';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';

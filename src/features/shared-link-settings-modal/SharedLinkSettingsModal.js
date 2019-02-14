@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'components/button';
-import PrimaryButton from 'components/primary-button';
-import { Modal, ModalActions } from 'components/modal';
-import InlineNotice from 'components/inline-notice';
+import Button from '../../components/button';
+import PrimaryButton from '../../components/primary-button';
+import { Modal, ModalActions } from '../../components/modal';
+import InlineNotice from '../../components/inline-notice';
 import commonMessages from '../../common/messages';
 
 import VanityNameSection from './VanityNameSection';

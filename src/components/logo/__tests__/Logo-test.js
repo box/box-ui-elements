@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Logo from '..';
-import { BOX_BLUE } from 'common/variables';
+import { BOX_BLUE } from '../../../common/variables';
 
 describe('components/logo/Logo', () => {
     test('should correctly render default Logo', () => {

@@ -5,9 +5,9 @@
 
 import * as React from 'react';
 
-import InlineError from 'components/inline-error';
-import PlainButton from 'components/plain-button';
 import { FormattedMessage } from 'react-intl';
+import InlineError from '../../../../components/inline-error';
+import PlainButton from '../../../../components/plain-button';
 
 type Props = {
     action?: {

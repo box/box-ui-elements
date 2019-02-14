@@ -6,11 +6,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import ErrorEmptyState from 'icons/states/ErrorEmptyState';
-import UploadEmptyState from 'icons/states/UploadEmptyState';
-import UploadSuccessState from 'icons/states/UploadSuccessState';
-import messages from 'elements/common/messages';
-import Browser from 'utils/Browser';
+import ErrorEmptyState from '../../icons/states/ErrorEmptyState';
+import UploadEmptyState from '../../icons/states/UploadEmptyState';
+import UploadSuccessState from '../../icons/states/UploadSuccessState';
+import messages from '../common/messages';
+import Browser from '../../utils/Browser';
 import UploadStateContent from './UploadStateContent';
 import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
 

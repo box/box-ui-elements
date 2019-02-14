@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { convertToMs } from 'utils/datetime';
+import { convertToMs } from '../../utils/datetime';
 
 import { DISPOSITION_ACTION_REMOVE_RETENTION_ONLY, DISPOSITION_ACTION_DELETE_ITEMS } from './constants';
 import { VersionPropType } from './prop-types';

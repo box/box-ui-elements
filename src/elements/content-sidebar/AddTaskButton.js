@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
-import Button from 'components/button';
-import Modal from 'components/modal/Modal';
 import { FormattedMessage } from 'react-intl';
+import Button from '../../components/button';
+import Modal from '../../components/modal/Modal';
 import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
 

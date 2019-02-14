@@ -6,9 +6,9 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from 'components/button/Button';
-import { Notification, NotificationConstants } from 'components/notification';
-import messages from 'elements/common/messages';
+import Button from '../../components/button/Button';
+import { Notification, NotificationConstants } from '../../components/notification';
+import messages from '../common/messages';
 import './ReloadNotification.scss';
 
 type Props = {

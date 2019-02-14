@@ -4,7 +4,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
-import PlainButton from 'components/plain-button';
+import PlainButton from '../../components/plain-button';
 
 import messages from './messages';
 

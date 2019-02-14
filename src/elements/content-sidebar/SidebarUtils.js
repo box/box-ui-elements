@@ -5,7 +5,7 @@
  */
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import AsyncLoad from 'elements/common/async-load';
+import AsyncLoad from '../common/async-load';
 import SidebarLoading from './SidebarLoading';
 import SidebarLoadingError from './SidebarLoadingError';
 import { hasSkills as hasSkillsData } from './skills/skillUtils';

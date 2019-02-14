@@ -6,11 +6,11 @@
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import PlainButton from 'components/plain-button';
-import IconInfoInverted from 'icons/general/IconInfoInverted';
+import PlainButton from '../../../../components/plain-button';
+import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
 
-import messages from 'elements/common/messages';
-import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
+import messages from '../../../common/messages';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 import './Version.scss';
 

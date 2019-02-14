@@ -5,10 +5,10 @@
  */
 
 import noop from 'lodash/noop';
-import Xhr from 'utils/Xhr';
-import Cache from 'utils/Cache';
-import { getTypedFileId } from 'utils/file';
-import { getBadItemError, getBadPermissionsError } from 'utils/error';
+import Xhr from '../utils/Xhr';
+import Cache from '../utils/Cache';
+import { getTypedFileId } from '../utils/file';
+import { getBadItemError, getBadPermissionsError } from '../utils/error';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_UPLOAD,

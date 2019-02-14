@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import AccessStats from 'features/access-stats/AccessStats';
-import ErrorMask from 'components/error-mask/ErrorMask';
+import AccessStats from '../../../features/access-stats/AccessStats';
+import ErrorMask from '../../../components/error-mask/ErrorMask';
 import SidebarAccessStats, { SidebarAccessStatsComponent } from '../SidebarAccessStats';
 
 describe('elements/content-sidebar/SidebarAccessStats', () => {

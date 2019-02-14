@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import messages from 'elements/common/messages';
-import { getBadItemError } from 'utils/error';
-import { SIDEBAR_FIELDS_TO_FETCH } from 'utils/fields';
+import messages from '../../common/messages';
+import { getBadItemError } from '../../../utils/error';
+import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
 import { ERROR_CODE_FETCH_CLASSIFICATION, IS_ERROR_DISPLAYED } from '../../../constants';
 

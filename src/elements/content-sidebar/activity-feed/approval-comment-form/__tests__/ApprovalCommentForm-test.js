@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import { EditorState, convertFromRaw } from 'draft-js';
 
-import FeatureProvider from 'elements/common/feature-checking/FeatureProvider';
+import FeatureProvider from '../../../../common/feature-checking/FeatureProvider';
 import { ApprovalCommentFormUnwrapped as ApprovalCommentForm } from '../ApprovalCommentForm';
 
 jest.mock('../../Avatar', () => () => 'Avatar');

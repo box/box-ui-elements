@@ -6,13 +6,13 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import IconCheck from 'icons/general/IconCheck';
-import IconClose from 'icons/general/IconClose';
-import PlainButton from 'components/plain-button';
-import Tooltip from 'components/tooltip';
+import IconCheck from '../../../../icons/general/IconCheck';
+import IconClose from '../../../../icons/general/IconClose';
+import PlainButton from '../../../../components/plain-button';
+import Tooltip from '../../../../components/tooltip';
 
-import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
-import messages from 'elements/common/messages';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import messages from '../../../common/messages';
 
 type Props = {
     name: string,

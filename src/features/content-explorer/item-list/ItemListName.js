@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import PlainButton from 'components/plain-button';
+import PlainButton from '../../../components/plain-button';
 import IconChevron from '../../../icons/general/IconChevron';
 
 import ItemTypes from '../item-types';

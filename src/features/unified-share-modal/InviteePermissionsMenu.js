@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-import PlainButton from 'components/plain-button';
-import DropdownMenu, { MenuToggle } from 'components/dropdown-menu';
-import { Menu, SelectMenuItem } from 'components/menu';
-import Tooltip from 'components/tooltip';
+import PlainButton from '../../components/plain-button';
+import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
+import { Menu, SelectMenuItem } from '../../components/menu';
+import Tooltip from '../../components/tooltip';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import type { itemType as ItemType } from '../../common/box-types';
 

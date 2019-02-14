@@ -2,9 +2,9 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Modal, ModalActions } from 'components/modal';
-import Button from 'components/button';
-import PrimaryButton from 'components/primary-button';
+import { Modal, ModalActions } from '../../components/modal';
+import Button from '../../components/button';
+import PrimaryButton from '../../components/primary-button';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';

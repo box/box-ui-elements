@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Checkbox from 'components/checkbox';
-import DatePicker from 'components/date-picker';
-import Fieldset from 'components/fieldset';
+import Checkbox from '../../components/checkbox';
+import DatePicker from '../../components/date-picker';
+import Fieldset from '../../components/fieldset';
 
 import messages from './messages';
 

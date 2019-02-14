@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions */
 import * as React from 'react';
 
-import { Menu, SubmenuItem, MenuItem } from 'components/menu';
-import ContextMenu from 'components/context-menu';
+import { Menu, SubmenuItem, MenuItem } from '../../src/components/menu';
+import ContextMenu from '../../src/components/context-menu';
 
 class ContextMenuWithSubmenuWithBoundariesElementExample extends React.Component {
     state = {

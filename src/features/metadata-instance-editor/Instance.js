@@ -6,10 +6,10 @@ import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 
-import Collapsible from 'components/collapsible/Collapsible';
-import LoadingIndicatorWrapper from 'components/loading-indicator/LoadingIndicatorWrapper';
-import PlainButton from 'components/plain-button/PlainButton';
-import Tooltip from 'components/tooltip';
+import Collapsible from '../../components/collapsible/Collapsible';
+import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
+import PlainButton from '../../components/plain-button/PlainButton';
+import Tooltip from '../../components/tooltip';
 import IconMetadataColored from '../../icons/general/IconMetadataColored';
 import IconAlertCircle from '../../icons/general/IconAlertCircle';
 import IconEdit from '../../icons/general/IconEdit';

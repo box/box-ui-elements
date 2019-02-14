@@ -6,11 +6,11 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'components/button/Button';
-import PrimaryButton from 'components/primary-button/PrimaryButton';
+import Button from '../../../../components/button/Button';
+import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 
-import messages from 'elements/common/messages';
-import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
+import messages from '../../../common/messages';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 type Props = {
     onCancel: Function,

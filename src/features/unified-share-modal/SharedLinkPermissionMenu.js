@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
-import DropdownMenu, { MenuToggle } from 'components/dropdown-menu';
-import PlainButton from 'components/plain-button';
-import { Menu, SelectMenuItem } from 'components/menu';
+import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
+import PlainButton from '../../components/plain-button';
+import { Menu, SelectMenuItem } from '../../components/menu';
 
 import type { permissionLevelType } from './flowTypes';
 import { CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';

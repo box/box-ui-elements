@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Menu, SubmenuItem, MenuItem } from 'components/menu';
+import { Menu, SubmenuItem, MenuItem } from '../../src/components/menu';
 
 class SubmenuWithBoundariesElementExample extends React.Component {
     state = {

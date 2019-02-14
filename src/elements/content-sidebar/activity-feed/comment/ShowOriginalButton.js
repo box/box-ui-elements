@@ -6,9 +6,9 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import PlainButton from 'components/plain-button';
+import PlainButton from '../../../../components/plain-button';
 
-import messages from 'elements/common/messages';
+import messages from '../../../common/messages';
 
 type Props = {
     handleShowOriginal: Function,

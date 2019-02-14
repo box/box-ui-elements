@@ -5,7 +5,7 @@
 
 import * as React from 'react';
 
-import { Link } from 'components/link';
+import { Link } from '../../../../components/link';
 
 type Props = {
     getUserProfileUrl?: string => Promise<string>,

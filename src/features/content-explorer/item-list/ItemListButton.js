@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Checkbox from 'components/checkbox/Checkbox';
-import { RadioButton } from 'components/radio';
+import Checkbox from '../../../components/checkbox/Checkbox';
+import { RadioButton } from '../../../components/radio';
 import { ContentExplorerModePropType } from '../prop-types';
 import ContentExplorerModes from '../modes';
 

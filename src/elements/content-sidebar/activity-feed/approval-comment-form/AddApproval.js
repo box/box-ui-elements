@@ -6,10 +6,10 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import Checkbox from 'components/checkbox/Checkbox';
+import Checkbox from '../../../../components/checkbox/Checkbox';
 
-import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
-import messages from 'elements/common/messages';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import messages from '../../../common/messages';
 import AddApprovalFields from './AddApprovalFields';
 
 type Props = {

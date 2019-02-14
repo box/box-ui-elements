@@ -6,10 +6,10 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import PrimaryButton from 'components/primary-button/PrimaryButton';
-import Button from 'components/button/Button';
-import PlainButton from 'components/plain-button/PlainButton';
-import messages from 'elements/common/messages';
+import PrimaryButton from '../../components/primary-button/PrimaryButton';
+import Button from '../../components/button/Button';
+import PlainButton from '../../components/plain-button/PlainButton';
+import messages from '../common/messages';
 import './Footer.scss';
 
 type Props = {

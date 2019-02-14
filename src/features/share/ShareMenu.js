@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Tooltip from 'components/tooltip';
-import { Menu, MenuItem } from 'components/menu';
+import Tooltip from '../../components/tooltip';
+import { Menu, MenuItem } from '../../components/menu';
 import IconSharedLink from '../../icons/general/IconSharedLink';
 import IconInviteCollaborators from '../../icons/general/IconInviteCollaborators';
 import IconCollaboratorsRestricted from '../../icons/general/IconCollaboratorsRestricted';

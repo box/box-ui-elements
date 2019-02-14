@@ -3,8 +3,8 @@ import FolderUpload from '../FolderUpload';
 
 let folderUploadInstance;
 const destinationFolderID = '123';
-jest.mock('utils/uploads', () => ({
-    ...require.requireActual('utils/uploads'),
+jest.mock('../../../utils/uploads', () => ({
+    ...require.requireActual('../../../utils/uploads'),
     getDataTransferItem: jest.fn(item => item.item || item),
     getEntryFromDataTransferItem: jest.fn(item => item),
     getDataTransferItemAPIOptions: jest.fn(item => item.options || {}),

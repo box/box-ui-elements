@@ -6,10 +6,10 @@
 
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import IconNavigateLeft from 'icons/general/IconNavigateLeft';
-import IconNavigateRight from 'icons/general/IconNavigateRight';
-import PlainButton from 'components/plain-button/PlainButton';
-import messages from 'elements/common/messages';
+import IconNavigateLeft from '../../icons/general/IconNavigateLeft';
+import IconNavigateRight from '../../icons/general/IconNavigateRight';
+import PlainButton from '../../components/plain-button/PlainButton';
+import messages from '../common/messages';
 
 type Props = {
     collection: Array<string | BoxItem>,

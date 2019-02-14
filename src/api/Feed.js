@@ -6,9 +6,9 @@
 import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import omit from 'lodash/omit';
-import { getBadItemError, getBadUserError, isUserCorrectableError } from 'utils/error';
-import messages from 'elements/common/messages';
-import { sortFeedItems } from 'utils/sorter';
+import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
+import messages from '../elements/common/messages';
+import { sortFeedItems } from '../utils/sorter';
 import Base from './Base';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';

@@ -5,11 +5,11 @@
  */
 
 import noop from 'lodash/noop';
-import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from 'utils/uploads';
-import { retryNumOfTimes } from 'utils/function';
-import { digest } from 'utils/webcrypto';
-import hexToBase64 from 'utils/base64';
-import createWorker from 'utils/uploadsSHA1Worker';
+import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from '../../utils/uploads';
+import { retryNumOfTimes } from '../../utils/function';
+import { digest } from '../../utils/webcrypto';
+import hexToBase64 from '../../utils/base64';
+import createWorker from '../../utils/uploadsSHA1Worker';
 import {
     DEFAULT_RETRY_DELAY_MS,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,

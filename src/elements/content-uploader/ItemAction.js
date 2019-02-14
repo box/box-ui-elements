@@ -5,12 +5,12 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import PlainButton from 'components/plain-button/PlainButton';
-import Tooltip from 'components/tooltip';
-import IconCheck from 'icons/general/IconCheck';
-import IconClose from 'icons/general/IconClose';
-import IconRetry from 'icons/general/IconRetry';
-import messages from 'elements/common/messages';
+import PlainButton from '../../components/plain-button/PlainButton';
+import Tooltip from '../../components/tooltip';
+import IconCheck from '../../icons/general/IconCheck';
+import IconClose from '../../icons/general/IconClose';
+import IconRetry from '../../icons/general/IconRetry';
+import messages from '../common/messages';
 import IconInProgress from './IconInProgress';
 import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
 

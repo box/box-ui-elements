@@ -2,10 +2,10 @@
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import TextInputWithCopyButton from 'components/text-input-with-copy-button';
-import Tooltip from 'components/tooltip';
-import PlainButton from 'components/plain-button';
-import { convertToMs } from 'utils/datetime';
+import TextInputWithCopyButton from '../../components/text-input-with-copy-button';
+import Tooltip from '../../components/tooltip';
+import PlainButton from '../../components/plain-button';
+import { convertToMs } from '../../utils/datetime';
 import IconExpirationInverted from '../../icons/general/IconExpirationInverted';
 import IconSettingInverted from '../../icons/general/IconSettingInverted';
 

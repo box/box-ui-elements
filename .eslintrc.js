@@ -20,11 +20,6 @@ module.exports = {
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
     },
-    settings: {
-        'import/resolver': {
-            'babel-module': {},
-        },
-    },
     globals: {
         shallow: true,
         mount: true,

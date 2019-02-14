@@ -2,11 +2,11 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
 
-jest.mock('elements/common/header/Header', () => 'mock-header');
-jest.mock('elements/common/sub-header/SubHeader', () => 'mock-subheader');
+jest.mock('../../common/header/Header', () => 'mock-header');
+jest.mock('../../common/sub-header/SubHeader', () => 'mock-subheader');
 jest.mock('../Content', () => 'mock-content');
-jest.mock('elements/common/upload-dialog/UploadDialog', () => 'mock-uploaddialog');
-jest.mock('elements/common/create-folder-dialog/CreateFolderDialog', () => 'mock-createfolderdialog');
+jest.mock('../../common/upload-dialog/UploadDialog', () => 'mock-uploaddialog');
+jest.mock('../../common/create-folder-dialog/CreateFolderDialog', () => 'mock-createfolderdialog');
 jest.mock('../DeleteConfirmationDialog', () => 'mock-deletedialog');
 jest.mock('../RenameDialog', () => 'mock-renamedialog');
 jest.mock('../ShareDialog', () => 'mock-sharedialog');

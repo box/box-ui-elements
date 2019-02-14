@@ -4,7 +4,7 @@
  * @author Box
  */
 import * as React from 'react';
-import AvatarComponent from 'components/avatar';
+import AvatarComponent from '../../../components/avatar';
 
 type Props = {
     className?: string,

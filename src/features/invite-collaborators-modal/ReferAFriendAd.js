@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Badge from 'components/badge';
-import { Link } from 'components/link';
+import Badge from '../../components/badge';
+import { Link } from '../../components/link';
 
 import messages from './messages';
 

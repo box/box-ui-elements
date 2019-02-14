@@ -1,5 +1,5 @@
-import Cache from 'utils/Cache';
-import * as ErrorUtil from 'utils/error';
+import Cache from '../../utils/Cache';
+import * as ErrorUtil from '../../utils/error';
 import Metadata from '../Metadata';
 import {
     KEY_CLASSIFICATION_TYPE,

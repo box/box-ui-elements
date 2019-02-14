@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
-import SelectorDropdown from 'components/selector-dropdown';
+import SelectorDropdown from '../../components/selector-dropdown';
 
 import QuickSearchMessage from './QuickSearchMessage';
 import QuickSearchSelector from './QuickSearchSelector';

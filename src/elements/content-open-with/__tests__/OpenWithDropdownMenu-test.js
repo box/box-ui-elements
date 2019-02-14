@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import noop from 'lodash/noop';
-import Menu from 'components/menu/Menu';
+import Menu from '../../../components/menu/Menu';
 import OpenWithDropdownMenu from '../OpenWithDropdownMenu';
 
 describe('elements/content-open-with/OpenWithDropdownMenu', () => {

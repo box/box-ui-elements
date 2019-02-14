@@ -1,7 +1,7 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
-import messages from 'elements/common/messages';
+import messages from '../../common/messages';
 import OpenWithButton, { getTooltip } from '../OpenWithButton';
 import utils from '../openWithUtils';
 

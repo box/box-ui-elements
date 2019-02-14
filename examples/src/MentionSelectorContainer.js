@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import DraftJSMentionSelector from 'components/form-elements/draft-js-mention-selector';
+import DraftJSMentionSelector from '../../src/components/form-elements/draft-js-mention-selector';
 
 const contactData = [
     { email: 'ken@streetfighter.com', id: '1', name: 'Ken' },
