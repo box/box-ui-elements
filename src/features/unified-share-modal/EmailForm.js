@@ -42,10 +42,12 @@ type Props = {
     onContactRemove?: Function,
     onRequestClose: Function,
     onSubmit: Function,
+    openInviteCollaboratorsSection?: Function,
     selectedContacts: Array<Contact>,
     sendButtonProps?: Object,
     showEnterEmailsCallout: boolean,
     submitting: boolean,
+    suggestedCollaborators?: Array<Object>,
     updateSelectedContacts: Function,
 };
 
@@ -176,6 +178,16 @@ class EmailForm extends React.Component<Props, State> {
         });
     };
 
+    handleSuggestedCollaboratorAdd = (contact: Contact) => {
+        const { openInviteCollaboratorsSection } = this.props;
+
+        this.handleContactAdd([contact]);
+
+        if (openInviteCollaboratorsSection) {
+            openInviteCollaboratorsSection();
+        }
+    };
+
     filterSentEmails = (sentEmails: Array<string>) => {
         this.props.updateSelectedContacts(
             this.props.selectedContacts.filter(({ value }) => !sentEmails.includes(value)),
@@ -217,6 +229,7 @@ class EmailForm extends React.Component<Props, State> {
             showEnterEmailsCallout,
             selectedContacts,
             submitting,
+            suggestedCollaborators,
         } = this.props;
 
         const contactsField = (
@@ -237,7 +250,9 @@ class EmailForm extends React.Component<Props, State> {
                         onContactAdd={this.handleContactAdd}
                         onContactRemove={this.handleContactRemove}
                         onInput={this.handleContactInput}
+                        onSuggestedCollaboratorAdd={this.handleSuggestedCollaboratorAdd}
                         selectedContacts={selectedContacts}
+                        suggestedCollaborators={suggestedCollaborators}
                         validateForError={this.validateContactField}
                         validator={this.isValidEmail}
                     />

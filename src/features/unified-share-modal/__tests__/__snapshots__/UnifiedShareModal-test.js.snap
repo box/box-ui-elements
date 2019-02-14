@@ -126,6 +126,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -380,6 +381,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -559,6 +561,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -738,6 +741,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -922,6 +926,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1101,6 +1106,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1280,6 +1286,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1434,6 +1441,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1614,6 +1622,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1794,6 +1803,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1974,6 +1984,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -2211,6 +2222,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -2394,6 +2406,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -2578,6 +2591,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -2758,6 +2772,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             submitting={false}
@@ -2938,6 +2953,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -3092,6 +3108,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
+            openInviteCollaboratorsSection={[Function]}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}

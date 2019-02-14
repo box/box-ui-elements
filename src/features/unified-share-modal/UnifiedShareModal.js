@@ -90,6 +90,8 @@ type Props = {
      * This function should return a Promise.
      */
     sendSharedLinkError: React.Node,
+    /** Function hoists contact data upon updates to the parent component. Only needed for suggested collabs. */
+    setUpdatedContacts?: (inviteCollabsContacts: Array<Contact>) => void,
     /** Message indicating an error occurred while sending the shared link. */
     sharedLink: sharedLinkType,
     /** Determine whether to show the First-time experience tooltip on load */
@@ -105,6 +107,8 @@ type Props = {
     showUpgradeOptions: boolean,
     /** Whether or not a request is in progress */
     submitting: boolean,
+    /** Data for suggested collaborators shown at bottom of input box. UI doesn't render when this has length of 0. */
+    suggestedCollaborators?: Array<Object>,
     /** Object with props and handlers for tracking interactions in unified share modal */
     trackingProps: trackingPropsType,
 };
@@ -330,6 +334,12 @@ class UnifiedShareModal extends React.Component<Props, State> {
         }
     };
 
+    openInviteCollaboratorsSection = () => {
+        this.setState({
+            isInviteSectionExpanded: true,
+        });
+    };
+
     closeInviteCollaborators = () => {
         this.setState({
             isInviteSectionExpanded: false,
@@ -348,7 +358,11 @@ class UnifiedShareModal extends React.Component<Props, State> {
     };
 
     updateInviteCollabsContacts = (inviteCollabsContacts: Array<Contact>) => {
+        const { setUpdatedContacts } = this.props;
         this.setState({ inviteCollabsContacts });
+        if (setUpdatedContacts) {
+            setUpdatedContacts(inviteCollabsContacts);
+        }
     };
 
     updateEmailSharedLinkContacts = (emailSharedLinkContacts: Array<Contact>) => {
@@ -366,6 +380,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             showCalloutForUser = false,
             showUpgradeOptions,
             submitting,
+            suggestedCollaborators,
             trackingProps,
         } = this.props;
         const { type } = item;
@@ -430,9 +445,11 @@ class UnifiedShareModal extends React.Component<Props, State> {
                             onContactInput={this.openInviteCollaborators}
                             onRequestClose={this.closeInviteCollaborators}
                             onSubmit={this.handleSendInvites}
+                            openInviteCollaboratorsSection={this.openInviteCollaboratorsSection}
                             showEnterEmailsCallout={showEnterEmailsCallout}
                             submitting={submitting}
                             selectedContacts={this.state.inviteCollabsContacts}
+                            suggestedCollaborators={suggestedCollaborators}
                             updateSelectedContacts={this.updateInviteCollabsContacts}
                             {...inviteCollabsEmailTracking}
                         >
