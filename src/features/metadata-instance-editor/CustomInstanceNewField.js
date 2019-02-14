@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import Button from 'components/button/Button';
-import TextInput from 'components/text-input/TextInput';
-import Tooltip from 'components/tooltip/Tooltip';
+import Button from '../../components/button/Button';
+import TextInput from '../../components/text-input/TextInput';
+import Tooltip from '../../components/tooltip/Tooltip';
 import commonMessages from '../../common/messages';
 import IconInfo from '../../icons/general/IconInfo';
 

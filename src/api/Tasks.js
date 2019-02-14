@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from 'utils/fields';
+import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from '../utils/fields';
 import Base from './Base';
 import {
     PERMISSION_CAN_COMMENT,

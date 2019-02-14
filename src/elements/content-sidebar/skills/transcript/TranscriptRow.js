@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { formatTime } from 'utils/datetime';
+import { formatTime } from '../../../../utils/datetime';
 import ReadOnlyTranscriptRow from './ReadOnlyTranscriptRow';
 import EditingTranscriptRow from './EditingTranscriptRow';
 import { isValidTimeSlice } from './timeSliceUtils';

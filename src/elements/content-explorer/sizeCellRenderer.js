@@ -5,6 +5,6 @@
  */
 
 import React from 'react';
-import getSize from 'utils/size';
+import getSize from '../../utils/size';
 
 export default () => ({ cellData }: { cellData: number }) => <span>{getSize(cellData)}</span>;

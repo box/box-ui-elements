@@ -2,7 +2,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import commonMessages from 'common/messages';
+import commonMessages from '../../common/messages';
 
 const badInput = () => ({
     code: 'badInput',

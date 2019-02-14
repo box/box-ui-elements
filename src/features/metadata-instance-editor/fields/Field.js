@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import InlineError from 'components/inline-error/InlineError';
+import InlineError from '../../../components/inline-error/InlineError';
 
 import TextField from './TextField';
 import EnumField from './EnumField';

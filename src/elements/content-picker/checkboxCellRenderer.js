@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import Checkbox from 'components/checkbox/Checkbox';
+import Checkbox from '../../components/checkbox/Checkbox';
 import isRowSelectable from './cellRendererHelper';
 
 export default (

@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { ContentState, EditorState } from 'draft-js';
 
-import Avatar from 'components/avatar';
-import Section from 'components/section';
-import PrimaryButton from 'components/primary-button';
-import { DraftMentionDecorator } from 'components/form-elements/draft-js-mention-selector';
+import Avatar from '../../src/components/avatar';
+import Section from '../../src/components/section';
+import PrimaryButton from '../../src/components/primary-button';
+import { DraftMentionDecorator } from '../../src/components/form-elements/draft-js-mention-selector';
 
 import MentionSelectorContainer from './MentionSelectorContainer';
 

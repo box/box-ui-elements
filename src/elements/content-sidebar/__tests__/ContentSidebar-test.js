@@ -1,7 +1,7 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { mount } from 'enzyme';
-import { SIDEBAR_FIELDS_TO_FETCH } from 'utils/fields';
+import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { ContentSidebarComponent as ContentSidebar } from '../ContentSidebar';
 import SidebarUtils from '../SidebarUtils';
 

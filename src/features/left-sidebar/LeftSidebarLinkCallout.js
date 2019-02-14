@@ -2,7 +2,7 @@
 import * as React from 'react';
 import TetherComponent from 'react-tether';
 
-import PlainButton from 'components/plain-button';
+import PlainButton from '../../components/plain-button';
 import IconClose from '../../icons/general/IconClose';
 
 import type { Callout } from './Callout';

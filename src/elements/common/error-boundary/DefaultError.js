@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
-import ErrorMask from 'components/error-mask/ErrorMask';
 import { FormattedMessage } from 'react-intl';
+import ErrorMask from '../../../components/error-mask/ErrorMask';
 import messages from '../messages';
 import './DefaultError.scss';
 

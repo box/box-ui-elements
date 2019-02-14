@@ -8,8 +8,8 @@ import noop from 'lodash/noop';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-import messages from 'elements/common/messages';
-import { fillUserPlaceholder } from 'utils/fields';
+import messages from '../../../common/messages';
+import { fillUserPlaceholder } from '../../../../utils/fields';
 import Comment from '../comment';
 import CompletedAssignment from './CompletedAssignment';
 import PendingAssignment from './PendingAssignment';

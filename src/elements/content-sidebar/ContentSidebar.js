@@ -10,16 +10,16 @@ import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
-import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
-import APIContext from 'elements/common/api-context';
-import Internationalize from 'elements/common/Internationalize';
-import { withErrorBoundary } from 'elements/common/error-boundary';
-import { SIDEBAR_FIELDS_TO_FETCH } from 'utils/fields';
-import API from 'api';
-import { withLogger } from 'elements/common/logger';
-import { withFeatureProvider } from 'elements/common/feature-checking';
-import { mark } from 'utils/performance';
-import { EVENT_JS_READY } from 'elements/common/logger/constants';
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+import APIContext from '../common/api-context';
+import Internationalize from '../common/Internationalize';
+import { withErrorBoundary } from '../common/error-boundary';
+import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import API from '../../api';
+import { withLogger } from '../common/logger';
+import { withFeatureProvider } from '../common/feature-checking';
+import { mark } from '../../utils/performance';
+import { EVENT_JS_READY } from '../common/logger/constants';
 import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
@@ -35,9 +35,9 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import SidebarNav from './SidebarNav';
 import Sidebar from './Sidebar';
-import 'elements/common/fonts.scss';
-import 'elements/common/base.scss';
-import 'elements/common/modal.scss';
+import '../common/fonts.scss';
+import '../common/base.scss';
+import '../common/modal.scss';
 import './ContentSidebar.scss';
 
 type Props = {
@@ -139,7 +139,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
         this.state = { isLoading: true, isOpen: !!isLarge };
         /* eslint-disable react/prop-types */
-        const { logger } = this.props;
+        const { logger } = props;
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import PlainButton from 'components/plain-button';
+import PlainButton from '../../components/plain-button';
 import IconClose from '../../icons/general/IconClose';
 
 import './styles/RemoveButton.scss';

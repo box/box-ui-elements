@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import EmptyState from 'elements/common/empty-state';
-import ProgressBar from 'elements/common/progress-bar';
+import EmptyState from '../common/empty-state';
+import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
 import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
 import './Content.scss';

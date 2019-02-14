@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import Button from 'components/button/Button';
-import ButtonGroup from 'components/button-group/ButtonGroup';
+import Button from '../../../components/button/Button';
+import ButtonGroup from '../../../components/button-group/ButtonGroup';
 import IconMinus from '../../../icons/general/IconMinusThin';
 import IconPlus from '../../../icons/general/IconPlusThin';
 

@@ -7,10 +7,10 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import TextareaAutosize from 'react-textarea-autosize';
-import PrimaryButton from 'components/primary-button/PrimaryButton';
-import Button from 'components/button/Button';
-import messages from 'elements/common/messages';
-import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
+import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
+import Button from '../../../../components/button/Button';
+import messages from '../../../common/messages';
+import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import './EditingTranscriptRow.scss';
 
 type Props = {

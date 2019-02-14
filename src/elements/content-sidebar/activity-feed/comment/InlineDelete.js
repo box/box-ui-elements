@@ -7,12 +7,12 @@ import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
-import PlainButton from 'components/plain-button';
-import { Flyout, Overlay } from 'components/flyout';
-import IconTrash from 'icons/general/IconTrash';
+import PlainButton from '../../../../components/plain-button';
+import { Flyout, Overlay } from '../../../../components/flyout';
+import IconTrash from '../../../../icons/general/IconTrash';
 
-import messages from 'elements/common/messages';
-import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
+import messages from '../../../common/messages';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 type Props = {
     id: string,

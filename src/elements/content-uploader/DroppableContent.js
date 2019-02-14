@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import makeDroppable from 'elements/common/droppable';
+import makeDroppable from '../common/droppable';
 import ItemList from './ItemList';
 import UploadState from './UploadState';
 

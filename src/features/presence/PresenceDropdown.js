@@ -5,8 +5,8 @@ import throttle from 'lodash/throttle';
 import isEmpty from 'lodash/isEmpty';
 import classnames from 'classnames';
 
-import Button from 'components/button';
-import Link from 'components/link/LinkBase';
+import Button from '../../components/button';
+import Link from '../../components/link/LinkBase';
 
 import PresenceAvatar from './PresenceAvatar';
 import { determineInteractionMessage } from './utils/presenceUtils';

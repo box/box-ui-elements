@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import ThumbnailCard from 'components/thumbnail-card';
-import AccessibleSVG from 'icons/accessible-svg';
+import ThumbnailCard from '../../src/components/thumbnail-card';
+import AccessibleSVG from '../../src/icons/accessible-svg';
 
 const ThumbnailCardExamples = () => {
     const icon = (

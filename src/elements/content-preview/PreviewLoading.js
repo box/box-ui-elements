@@ -6,9 +6,9 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import IconFileDefault from 'icons/file/IconFileDefault';
-import makeLoadable from 'components/loading-indicator/makeLoadable';
-import messages from 'elements/common/messages';
+import IconFileDefault from '../../icons/file/IconFileDefault';
+import makeLoadable from '../../components/loading-indicator/makeLoadable';
+import messages from '../common/messages';
 import './PreviewLoading.scss';
 
 const PreviewLoading = () => (

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Logo from 'components/logo';
+import Logo from '../../components/logo';
 import IconCloud from '../../icons/general/IconCloud';
 
 const InsetFilter = () => (

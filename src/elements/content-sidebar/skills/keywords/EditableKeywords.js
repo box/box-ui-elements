@@ -6,11 +6,11 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import PillSelector from 'components/pill-selector-dropdown/PillSelector';
-import PrimaryButton from 'components/primary-button/PrimaryButton';
-import Button from 'components/button/Button';
-import messages from 'elements/common/messages';
-import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
+import PillSelector from '../../../../components/pill-selector-dropdown/PillSelector';
+import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
+import Button from '../../../../components/button/Button';
+import messages from '../../../common/messages';
+import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import getPills from './keywordUtils';
 import type { Pill, Pills } from './flowTypes';
 import './EditableKeywords.scss';

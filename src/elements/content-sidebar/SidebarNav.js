@@ -6,12 +6,12 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import IconMagicWand from 'icons/general/IconMagicWand';
-import IconMetadataThick from 'icons/general/IconMetadataThick';
-import IconDocInfo from 'icons/general/IconDocInfo';
-import IconChatRound from 'icons/general/IconChatRound';
-import messages from 'elements/common/messages';
-import { SIDEBAR_NAV_TARGETS } from 'elements/common/interactionTargets';
+import IconMagicWand from '../../icons/general/IconMagicWand';
+import IconMetadataThick from '../../icons/general/IconMetadataThick';
+import IconDocInfo from '../../icons/general/IconDocInfo';
+import IconChatRound from '../../icons/general/IconChatRound';
+import messages from '../common/messages';
+import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import SidebarNavButton from './SidebarNavButton';
 import {
     SIDEBAR_VIEW_SKILLS,

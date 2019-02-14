@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'components/button';
-import { Modal, ModalActions } from 'components/modal';
+import Button from '../../components/button';
+import { Modal, ModalActions } from '../../components/modal';
 import commonMessages from '../../common/messages';
 
 import SharedLink from './SharedLink';

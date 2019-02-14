@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import { Modal, ModalActions } from 'components/modal';
-import TextInput from 'components/text-input';
-import Button from 'components/button';
-import PrimaryButton from 'components/primary-button';
+import { Modal, ModalActions } from '../../../components/modal';
+import TextInput from '../../../components/text-input';
+import Button from '../../../components/button';
+import PrimaryButton from '../../../components/primary-button';
 
 import messages from '../messages';
 

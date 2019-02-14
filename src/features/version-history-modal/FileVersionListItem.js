@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import classNames from 'classnames';
 
-import Badge from 'components/badge';
+import Badge from '../../components/badge';
 import FileIcon from '../../icons/file-icon';
 
 import { VersionPropType } from './prop-types';

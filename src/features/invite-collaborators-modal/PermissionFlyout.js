@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from 'components/table';
-import { Flyout, Overlay } from 'components/flyout';
+import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from '../../components/table';
+import { Flyout, Overlay } from '../../components/flyout';
 import IconInfo from '../../icons/general/IconInfo';
 
 import messages from './messages';

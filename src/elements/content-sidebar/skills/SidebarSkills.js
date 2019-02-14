@@ -7,8 +7,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import uniqueId from 'lodash/uniqueId';
-import messages from 'elements/common/messages';
-import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
+import messages from '../../common/messages';
+import { SKILLS_TARGETS } from '../../common/interactionTargets';
 import SidebarSection from '../SidebarSection';
 import { isValidSkillsCard } from './skillUtils';
 import SidebarSkillsCard from './SidebarSkillsCard';

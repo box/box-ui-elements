@@ -1,5 +1,5 @@
 import noop from 'lodash/noop';
-import * as performance from 'utils/performance';
+import * as performance from '../../../utils/performance';
 import SidebarUtils from '../SidebarUtils';
 import * as skillUtils from '../skills/skillUtils';
 import {

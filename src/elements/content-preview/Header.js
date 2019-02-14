@@ -6,15 +6,15 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import PlainButton from 'components/plain-button/PlainButton';
-import IconClose from 'icons/general/IconClose';
-import IconDrawAnnotationMode from 'icons/annotations/IconDrawAnnotation';
-import IconPointAnnotation from 'icons/annotations/IconPointAnnotation';
-import IconPrint from 'icons/general/IconPrint';
-import IconDownload from 'icons/general/IconDownloadSolid';
-import AsyncLoad from 'elements/common/async-load';
-import messages from 'elements/common/messages';
-import { getIcon } from 'elements/common/item/iconCellRenderer';
+import PlainButton from '../../components/plain-button/PlainButton';
+import IconClose from '../../icons/general/IconClose';
+import IconDrawAnnotationMode from '../../icons/annotations/IconDrawAnnotation';
+import IconPointAnnotation from '../../icons/annotations/IconPointAnnotation';
+import IconPrint from '../../icons/general/IconPrint';
+import IconDownload from '../../icons/general/IconDownloadSolid';
+import AsyncLoad from '../common/async-load';
+import messages from '../common/messages';
+import { getIcon } from '../common/item/iconCellRenderer';
 import { COLOR_999 } from '../../constants';
 import './Header.scss';
 

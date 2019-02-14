@@ -5,12 +5,12 @@
  */
 
 import React from 'react';
-import AccessStats from 'features/access-stats/AccessStats';
 import isFinite from 'lodash/isFinite';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import messages from 'elements/common/messages';
-import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from 'elements/common/interactionTargets';
-import { isBoxNote } from 'utils/file';
+import AccessStats from '../../features/access-stats/AccessStats';
+import messages from '../common/messages';
+import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../common/interactionTargets';
+import { isBoxNote } from '../../utils/file';
 import SidebarSection from './SidebarSection';
 import withErrorHandling from './withErrorHandling';
 

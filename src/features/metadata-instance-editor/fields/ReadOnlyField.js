@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage, FormattedDate } from 'react-intl';
 
-import { convertISOStringToUTCDate } from 'utils/datetime';
+import { convertISOStringToUTCDate } from '../../../utils/datetime';
 
 import { FIELD_TYPE_DATE } from '../constants';
 import messages from '../messages';

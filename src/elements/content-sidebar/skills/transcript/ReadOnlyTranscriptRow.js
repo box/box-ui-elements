@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import PlainButton from 'components/plain-button/PlainButton';
+import PlainButton from '../../../../components/plain-button/PlainButton';
 
 type Props = {
     interactionTarget: string,

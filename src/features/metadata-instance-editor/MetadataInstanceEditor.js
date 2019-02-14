@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import ScrollWrapper from 'components/scroll-wrapper';
+import ScrollWrapper from '../../components/scroll-wrapper';
 
 import Header from './Header';
 import Instances from './Instances';

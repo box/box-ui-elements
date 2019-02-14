@@ -15,21 +15,6 @@ module.exports = {
         '@babel/plugin-transform-object-assign',
         '@babel/plugin-proposal-class-properties',
         '@babel/plugin-proposal-object-rest-spread',
-        [
-            'module-resolver',
-            {
-                alias: {
-                    api: './src/api',
-                    common: './src/common',
-                    components: './src/components',
-                    elements: './src/elements',
-                    features: './src/features',
-                    icons: './src/icons',
-                    styles: './src/styles',
-                    utils: './src/utils',
-                },
-            },
-        ],
     ],
     env: {
         dev: {

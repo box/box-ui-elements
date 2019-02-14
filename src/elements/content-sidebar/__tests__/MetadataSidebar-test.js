@@ -1,12 +1,12 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
-import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
-import LoadingIndicatorWrapper from 'components/loading-indicator/LoadingIndicatorWrapper';
-import Instances from 'features/metadata-instance-editor/Instances';
-import EmptyContent from 'features/metadata-instance-editor/EmptyContent';
-import InlineError from 'components/inline-error/InlineError';
-import messages from 'elements/common/messages';
+import Instances from '../../../features/metadata-instance-editor/Instances';
+import EmptyContent from '../../../features/metadata-instance-editor/EmptyContent';
+import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
+import LoadingIndicatorWrapper from '../../../components/loading-indicator/LoadingIndicatorWrapper';
+import InlineError from '../../../components/inline-error/InlineError';
+import messages from '../../common/messages';
 import { MetadataSidebarComponent as MetadataSidebar } from '../MetadataSidebar';
 import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS } from '../../../constants';
 

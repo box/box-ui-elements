@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import PillSelectorDropdown from 'components/pill-selector-dropdown';
-import ContactDatalistItem from 'components/contact-datalist-item';
-import TextArea from 'components/text-area';
-import PrimaryButton from 'components/primary-button';
-import { ModalActions } from 'components/modal';
-import Button from 'components/button';
-import parseEmails from 'utils/parseEmails';
+import PillSelectorDropdown from '../../components/pill-selector-dropdown';
+import ContactDatalistItem from '../../components/contact-datalist-item';
+import TextArea from '../../components/text-area';
+import PrimaryButton from '../../components/primary-button';
+import { ModalActions } from '../../components/modal';
+import Button from '../../components/button';
+import parseEmails from '../../utils/parseEmails';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';

@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
-import DropdownMenu, { MenuToggle } from 'components/dropdown-menu';
-import { Menu, SelectMenuItem } from 'components/menu';
-import PlainButton from 'components/plain-button';
-import Tooltip from 'components/tooltip';
+import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
+import { Menu, SelectMenuItem } from '../../components/menu';
+import PlainButton from '../../components/plain-button';
+import Tooltip from '../../components/tooltip';
 import type { itemType as ItemType } from '../../common/box-types';
 
 import SharedLinkAccessLabel from './SharedLinkAccessLabel';

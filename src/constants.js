@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import Browser from 'utils/Browser';
+import Browser from './utils/Browser';
 
 /* ------------------------ API ---------------------------- */
 export const API_PAGE_LIMIT = 1000; // default limit for paginated api calls

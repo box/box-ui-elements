@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import TextInput from 'components/text-input';
+import TextInput from '../../../components/text-input';
 
 import messages from '../messages';
 import './TextField.scss';
