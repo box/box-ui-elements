@@ -2,7 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
-import { scrollItemIntoView } from 'utils/dom';
+import { scrollItemIntoView } from '../../utils/dom';
 
 import ScrollWrapper from '../scroll-wrapper';
 

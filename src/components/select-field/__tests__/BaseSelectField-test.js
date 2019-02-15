@@ -1,12 +1,12 @@
 import React from 'react';
 import sinon from 'sinon';
-import { scrollItemIntoView } from 'utils/dom';
 
+import { scrollItemIntoView } from '../../../utils/dom';
 import BaseSelectField from '../BaseSelectField';
 
 const sandbox = sinon.sandbox.create();
 
-jest.mock('utils/dom', () => ({
+jest.mock('../../../utils/dom', () => ({
     scrollItemIntoView: jest.fn().mockReturnValue(null),
 }));
 
