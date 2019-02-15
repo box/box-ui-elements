@@ -13,7 +13,7 @@ type Props = {
     /** The currently selected option value */
     onChange: Function,
     /** The placeholder text for the field  */
-    placeholder?: string,
+    placeholder?: string | React.Node,
     /** Function will be called with the selected option after user selects a new option */
     selectedValue?: SelectOptionValueProp,
 };
