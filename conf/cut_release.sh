@@ -144,7 +144,10 @@ build_examples() {
 
 push_to_gh_pages() {
     printf "${blue}Pushing styleguide to gh-pages...${end}"
-    git branch -D gh-pages || return 1
+    if [[ $(git branch | grep -w "gh-pages") != "" ]] ; then
+        git branch -D gh-pages || return 1
+        printf "${green}Deleted existing gh-pages branch!${end}"
+    fi
     git checkout -b gh-pages || return 1
     rm -rf build
     cp -R styleguide/. ./ || return 1
