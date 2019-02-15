@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { template } from '../components/fixtures';
+import { columns } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
@@ -15,8 +15,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render FilterButton with template passed in', () => {
-            const wrapper = getWrapper({ template });
+        test('should render FilterButton with columns passed in', () => {
+            const wrapper = getWrapper({ columns });
             expect(wrapper).toMatchSnapshot();
         });
     });
@@ -28,8 +28,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 index: 0,
                 condition: {
                     id: '3',
-                    attributeDisplayText: '',
-                    attributeKey: null,
+                    columnDisplayText: '',
+                    columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
                     valueDisplayText: '',
@@ -38,8 +38,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '3',
-                        attributeDisplayText: '',
-                        attributeKey: null,
+                        columnDisplayText: '',
+                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: '',
@@ -47,17 +47,17 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
                 fieldDisplayText: 'myAttribute',
-                fieldDisplayTextType: 'attributeDisplayText',
+                fieldDisplayTextType: 'columnDisplayText',
                 fieldId: 1,
                 fieldType: 'attribute',
                 fieldKey: 0,
-                fieldKeyType: 'attributeKey',
+                fieldKeyType: 'columnKey',
                 valueType: 'string',
                 updatedCondition: [
                     {
                         id: '3',
-                        attributeDisplayText: 'myAttribute',
-                        attributeKey: 0,
+                        columnDisplayText: 'myAttribute',
+                        columnKey: 0,
                         fieldId: 1,
                         operatorDisplayText: '',
                         operatorKey: 0,
@@ -72,8 +72,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 index: 0,
                 condition: {
                     id: '4',
-                    attributeDisplayText: '',
-                    attributeKey: null,
+                    columnDisplayText: '',
+                    columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
                     valueDisplayText: '',
@@ -82,8 +82,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '4',
-                        attributeDisplayText: '',
-                        attributeKey: null,
+                        columnDisplayText: '',
+                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: '',
@@ -99,8 +99,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 updatedCondition: [
                     {
                         id: '4',
-                        attributeDisplayText: '',
-                        attributeKey: null,
+                        columnDisplayText: '',
+                        columnKey: null,
                         fieldId: 1,
                         operatorDisplayText: 'myOperator',
                         operatorKey: 0,
@@ -114,8 +114,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 index: 0,
                 condition: {
                     id: '5',
-                    attributeDisplayText: '',
-                    attributeKey: null,
+                    columnDisplayText: '',
+                    columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
                     valueDisplayText: '',
@@ -124,8 +124,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '5',
-                        attributeDisplayText: '',
-                        attributeKey: null,
+                        columnDisplayText: '',
+                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: '',
@@ -141,8 +141,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 updatedCondition: [
                     {
                         id: '5',
-                        attributeDisplayText: '',
-                        attributeKey: null,
+                        columnDisplayText: '',
+                        columnKey: null,
                         fieldId: 1,
                         operatorDisplayText: '',
                         operatorKey: 0,
@@ -197,8 +197,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '2',
-                        attributeDisplayText: '',
-                        attributeKey: null,
+                        columnDisplayText: '',
+                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
                         valueDisplayText: '',
@@ -206,24 +206,20 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                     {
                         id: '3',
-                        attributeDisplayText: '',
-                        attributeKey: null,
+                        columnDisplayText: '',
+                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
                         valueDisplayText: '',
                         valueKey: null,
                     },
                 ],
-                fieldDisplayText: 'myAttribute',
-                fieldDisplayTextType: 'attributeDisplayText',
                 fieldType: 'attribute',
-                fieldKey: 0,
-                fieldKeyType: 'attributeKey',
                 updatedConditions: [
                     {
                         id: '3',
-                        attributeDisplayText: '',
-                        attributeKey: null,
+                        columnDisplayText: '',
+                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
                         valueDisplayText: '',
@@ -299,22 +295,22 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('createCondition()', () => {
-        test('Should return a condition object if template is defined', () => {
+        test('Should return a condition object if columns is defined', () => {
             const wrapper = getWrapper();
             const props = {
-                template,
+                columns,
             };
             const conditionID = 123;
             const expected = {
-                attributeDisplayText: 'Size',
-                attributeKey: 0,
+                columnDisplayText: 'Hullo Thar',
+                columnKey: 0,
                 id: conditionID,
-                fieldId: 'item_27',
+                fieldId: '1',
                 operatorDisplayText: '',
                 operatorKey: 0,
                 valueDisplayText: null,
                 valueKey: null,
-                valueType: 'float',
+                valueType: 'string',
             };
 
             const condition = wrapper.instance().createCondition(props, conditionID);

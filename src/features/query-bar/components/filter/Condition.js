@@ -12,8 +12,8 @@ import ValueField from './ValueField';
 import messages from '../../messages';
 import {
     ATTRIBUTE,
-    ATTRIBUTE_DISPLAY_TEXT,
-    ATTRIBUTE_KEY,
+    COLUMN_DISPLAY_TEXT,
+    COLUMN_KEY,
     OPERATOR,
     OPERATOR_DISPLAY_TEXT,
     OPERATOR_KEY,
@@ -22,16 +22,17 @@ import {
     VALUE_DISPLAY_TEXT,
     VALUE_KEY,
 } from '../../constants';
+import type { ColumnType } from '../../flowTypes';
 
 import '../../styles/FilterItem.scss';
 
 type Props = {
     areErrorsEnabled: boolean,
+    columns?: Array<ColumnType>,
     condition: Object,
     deleteCondition: (index: number) => void,
     index: number,
     intl: Object,
-    template?: Object,
     update: (
         index: number,
         condition: Object,
@@ -49,11 +50,11 @@ const deleteButtonIconWidth = 18;
 
 const Condition = ({
     areErrorsEnabled,
+    columns,
     condition,
     deleteCondition,
     index,
     intl: { formatMessage },
-    template,
     update,
 }: Props) => {
     const onDeleteButtonClick = () => {
@@ -61,6 +62,7 @@ const Condition = ({
     };
 
     const updateSelectedField = (option: Object, fieldType?: string) => {
+        const conditionIndex = index;
         const value = option.value;
         const valueType = option.type;
         const fieldId = option.fieldId || condition.fieldId;
@@ -70,8 +72,8 @@ const Condition = ({
         let keyType = '';
 
         if (fieldType === ATTRIBUTE) {
-            displayTextType = ATTRIBUTE_DISPLAY_TEXT;
-            keyType = ATTRIBUTE_KEY;
+            displayTextType = COLUMN_DISPLAY_TEXT;
+            keyType = COLUMN_KEY;
         } else if (fieldType === OPERATOR) {
             displayTextType = OPERATOR_DISPLAY_TEXT;
             keyType = OPERATOR_KEY;
@@ -80,16 +82,16 @@ const Condition = ({
             keyType = VALUE_KEY;
         }
 
-        update(index, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
+        update(conditionIndex, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
-        return options.map((option, idx) => {
+        return options.map((option, optionIndex) => {
             return {
                 displayText: option.displayName,
                 fieldId: option.id,
                 type: option.type,
-                value: idx,
+                value: optionIndex,
             };
         });
     };
@@ -102,21 +104,21 @@ const Condition = ({
         return OPERATORS_FOR_ATTRIBUTE[valueType];
     };
 
-    const getValuesForAttribute = (attribute: string, templ?: Object) => {
+    const getValuesForAttribute = () => {
         const { fieldId } = condition;
         const field =
-            templ &&
-            templ.fields.find(f => {
-                return f.id === fieldId;
+            columns &&
+            columns.find(column => {
+                return column.id === fieldId;
             });
 
         if (field && field.options) {
-            const fieldOptions = field.options.map((option, idx) => {
+            const fieldOptions = field.options.map((option, optionIndex) => {
                 return {
                     displayName: option.key,
                     id: fieldId,
                     type: 'enum',
-                    value: idx,
+                    value: optionIndex,
                 };
             });
 
@@ -159,7 +161,7 @@ const Condition = ({
     const renderDeleteButton = () => {
         return (
             <div className="filter-item-delete-button">
-                <button type="button" className="delete-button" onClick={onDeleteButtonClick}>
+                <button className="delete-button" onClick={onDeleteButtonClick} type="button">
                     <IconClose width={deleteButtonIconWidth} height={deleteButtonIconHeight} color="#999EA4" />
                 </button>
             </div>
@@ -176,12 +178,52 @@ const Condition = ({
         );
     };
 
+    const renderAttributeField = () => {
+        const { columnKey } = condition;
+        const columnAttributes = columns || [];
+        const attributeOptions = getFormattedOptions(columnAttributes);
+
+        return (
+            <div className="filter-item-attribute-dropdown-container">
+                <div className="filter-dropdown-single-select-field-container">
+                    <SingleSelectField
+                        fieldType={ATTRIBUTE}
+                        isDisabled={false}
+                        onChange={updateSelectedField}
+                        options={attributeOptions}
+                        placeholder={formatMessage(messages.selectAttributePlaceholderText)}
+                        selectedValue={columnKey}
+                    />
+                </div>
+            </div>
+        );
+    };
+
+    const renderOperatorField = () => {
+        const { operatorKey } = condition;
+        const operatorsForAttribute = getOperatorsForAttribute();
+        const operatorOptions = getFormattedOptions(operatorsForAttribute);
+
+        return (
+            <div className="filter-item-operator-dropdown-container">
+                <div className="filter-dropdown-single-select-field-container">
+                    <SingleSelectField
+                        fieldType={OPERATOR}
+                        isDisabled={false}
+                        onChange={updateSelectedField}
+                        options={operatorOptions}
+                        selectedValue={operatorKey}
+                    />
+                </div>
+            </div>
+        );
+    };
+
     const renderValueField = () => {
-        const { valueDisplayText, valueKey, valueType } = condition;
+        const { valueKey, valueType } = condition;
 
-        const valuesForAttribute = getValuesForAttribute(valueDisplayText, template);
+        const valuesForAttribute = getValuesForAttribute();
         const valueOptions = getFormattedOptions(valuesForAttribute);
-
         const error = getErrorMessage();
 
         const classnames = classNames('filter-item-value-dropdown-container', {
@@ -203,7 +245,8 @@ const Condition = ({
         );
     };
 
-    const renderErrorIcon = (error: string | null) => {
+    const renderErrorIcon = () => {
+        const error = getErrorMessage();
         return (
             error && (
                 <div className="filter-item-error-icon-status">
@@ -217,48 +260,6 @@ const Condition = ({
         );
     };
 
-    const { attributeKey, operatorKey } = condition;
-    const templateAttributes = (template && template.fields) || [];
-    const attributeOptions = getFormattedOptions(templateAttributes);
-
-    const operatorsForAttribute = getOperatorsForAttribute();
-    const operatorOptions = getFormattedOptions(operatorsForAttribute);
-
-    const error = getErrorMessage();
-
-    const renderAttributeField = () => {
-        return (
-            <div className="filter-item-attribute-dropdown-container">
-                <div className="filter-dropdown-single-select-field-container">
-                    <SingleSelectField
-                        fieldType={ATTRIBUTE}
-                        isDisabled={false}
-                        onChange={updateSelectedField}
-                        options={attributeOptions}
-                        placeholder={formatMessage(messages.selectAttributePlaceholderText)}
-                        selectedValue={attributeKey}
-                    />
-                </div>
-            </div>
-        );
-    };
-
-    const renderOperatorField = () => {
-        return (
-            <div className="filter-item-operator-dropdown-container">
-                <div className="filter-dropdown-single-select-field-container">
-                    <SingleSelectField
-                        fieldType={OPERATOR}
-                        isDisabled={false}
-                        onChange={updateSelectedField}
-                        options={operatorOptions}
-                        selectedValue={operatorKey}
-                    />
-                </div>
-            </div>
-        );
-    };
-
     return (
         <div className="filter-item-container">
             {renderDeleteButton()}
@@ -266,7 +267,7 @@ const Condition = ({
             {renderAttributeField()}
             {renderOperatorField()}
             {renderValueField()}
-            {renderErrorIcon(error)}
+            {renderErrorIcon()}
         </div>
     );
 };
