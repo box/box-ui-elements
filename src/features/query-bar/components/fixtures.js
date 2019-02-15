@@ -6,8 +6,10 @@ const initialCondition = {
     operatorKey: null,
     valueDisplayText: '',
     valueKey: null,
-    valueType: '',
+    valueType: 'string',
 };
+
+const conditions = [initialCondition];
 
 const columns = [
     {
@@ -485,6 +487,7 @@ const metadataTableStateAfterMount = {
 
 export {
     initialCondition,
+    conditions,
     columns,
     columnsWithNewOrder,
     columnsWithOneColumnNotShown,

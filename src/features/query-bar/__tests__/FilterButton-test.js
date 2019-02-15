@@ -2,6 +2,8 @@
 import * as React from 'react';
 
 import { template } from '../components/fixtures';
+import { WHERE } from '../constants';
+
 import FilterButton from '../components/filter/FilterButton';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
@@ -32,7 +34,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     attributeKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
-                    valueDisplayText: '',
+                    valueDisplayText: null,
                     valueKey: null,
                 },
                 conditions: [
@@ -42,7 +44,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         attributeKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -61,7 +63,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         fieldId: 1,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                         valueType: 'string',
                     },
@@ -76,7 +78,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     attributeKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
-                    valueDisplayText: '',
+                    valueDisplayText: null,
                     valueKey: null,
                 },
                 conditions: [
@@ -86,7 +88,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         attributeKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -104,7 +106,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         fieldId: 1,
                         operatorDisplayText: 'myOperator',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -118,7 +120,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     attributeKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
-                    valueDisplayText: '',
+                    valueDisplayText: null,
                     valueKey: null,
                 },
                 conditions: [
@@ -128,7 +130,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         attributeKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -196,37 +198,35 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 index: 0,
                 conditions: [
                     {
+                        prefix: null,
                         id: '2',
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                     {
+                        prefix: 1,
                         id: '3',
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
-                fieldDisplayText: 'myAttribute',
-                fieldDisplayTextType: 'attributeDisplayText',
-                fieldType: 'attribute',
-                fieldKey: 0,
-                fieldKeyType: 'attributeKey',
                 updatedConditions: [
                     {
+                        prefix: null,
                         id: '3',
                         attributeDisplayText: '',
                         attributeKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -300,12 +300,10 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
 
     describe('createCondition()', () => {
         test('Should return a condition object if template is defined', () => {
-            const wrapper = getWrapper();
-            const props = {
-                template,
-            };
+            const wrapper = getWrapper({ template });
             const conditionID = 123;
             const expected = {
+                prefix: WHERE,
                 attributeDisplayText: 'Size',
                 attributeKey: 0,
                 id: conditionID,
@@ -316,8 +314,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 valueKey: null,
                 valueType: 'float',
             };
+            wrapper.instance().setState({
+                conditions: [],
+            });
 
-            const condition = wrapper.instance().createCondition(props, conditionID);
+            const condition = wrapper.instance().createCondition(conditionID);
 
             expect(condition).toEqual(expected);
         });

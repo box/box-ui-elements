@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
 import IconClose from '../../../../icons/general/IconClose';
@@ -21,6 +21,9 @@ import {
     VALUE,
     VALUE_DISPLAY_TEXT,
     VALUE_KEY,
+    WHERE,
+    AND,
+    OR,
 } from '../../constants';
 
 import '../../styles/FilterItem.scss';
@@ -42,6 +45,7 @@ type Props = {
         fieldKeyType: string,
         valueType: any,
     ) => void,
+    updateSelectedPrefix: (option: Object) => void,
 };
 
 const deleteButtonIconHeight = 18;
@@ -55,6 +59,7 @@ const Condition = ({
     intl: { formatMessage },
     template,
     update,
+    updateSelectedPrefix,
 }: Props) => {
     const onDeleteButtonClick = () => {
         deleteCondition(index);
@@ -84,12 +89,12 @@ const Condition = ({
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
-        return options.map((option, idx) => {
+        return options.map(option => {
             return {
                 displayText: option.displayName,
                 fieldId: option.id,
                 type: option.type,
-                value: idx,
+                value: option.displayName,
             };
         });
     };
@@ -102,21 +107,21 @@ const Condition = ({
         return OPERATORS_FOR_ATTRIBUTE[valueType];
     };
 
-    const getValuesForAttribute = (attribute: string, templ?: Object) => {
+    const getValuesForAttribute = () => {
         const { fieldId } = condition;
         const field =
-            templ &&
-            templ.fields.find(f => {
+            template &&
+            template.fields.find(f => {
                 return f.id === fieldId;
             });
 
         if (field && field.options) {
-            const fieldOptions = field.options.map((option, idx) => {
+            const fieldOptions = field.options.map((option, optionIndex) => {
                 return {
                     displayName: option.key,
                     id: fieldId,
                     type: 'enum',
-                    value: idx,
+                    value: optionIndex,
                 };
             });
 
@@ -159,7 +164,7 @@ const Condition = ({
     const renderDeleteButton = () => {
         return (
             <div className="filter-item-delete-button">
-                <button type="button" className="delete-button" onClick={onDeleteButtonClick}>
+                <button className="delete-button" onClick={onDeleteButtonClick} type="button">
                     <IconClose width={deleteButtonIconWidth} height={deleteButtonIconHeight} color="#999EA4" />
                 </button>
             </div>
@@ -167,11 +172,88 @@ const Condition = ({
     };
 
     const renderPrefixField = () => {
+        const { prefix } = condition;
+        let message = '';
+        switch (prefix) {
+            case WHERE:
+                message = { ...messages.prefixLabelWhereText };
+                break;
+            case AND:
+                message = { ...messages.prefixButtonAndText };
+                break;
+            case OR:
+                message = { ...messages.prefixButtonOrText };
+                break;
+            default:
+                break;
+        }
+
+        const prefixOptions = getFormattedOptions(
+            [AND, OR].map(key => ({
+                displayName: key,
+                value: key,
+            })),
+        );
+
         return (
             <div className="filter-item-prefix-container">
-                <p className="filter-item-prefix-text">
-                    <FormattedMessage {...messages.prefixButtonText} />
-                </p>
+                {prefix === WHERE ? (
+                    <p className="filter-item-prefix-text">{formatMessage(message)}</p>
+                ) : (
+                    <SingleSelectField
+                        isDisabled={false}
+                        onChange={updateSelectedPrefix}
+                        options={prefixOptions}
+                        placeholder={formatMessage(message)}
+                        selectedValue={prefix}
+                    />
+                )}
+            </div>
+        );
+    };
+
+    const renderAttributeField = () => {
+        const { attributeDisplayText } = condition;
+        const templateAttributes = (template && template.fields) || [];
+        const attributeOptions = getFormattedOptions(templateAttributes);
+
+        return (
+            <div className="filter-item-attribute-dropdown-container">
+                <div className="filter-dropdown-single-select-field-container">
+                    <SingleSelectField
+                        fieldType={ATTRIBUTE}
+                        isDisabled={false}
+                        onChange={updateSelectedField}
+                        options={attributeOptions}
+                        placeholder={formatMessage(messages.selectAttributePlaceholderText)}
+                        selectedValue={attributeDisplayText}
+                    />
+                </div>
+            </div>
+        );
+    };
+
+    const renderOperatorField = () => {
+        const { operatorDisplayText, attributeDisplayText } = condition;
+
+        const operatorsForAttribute = getOperatorsForAttribute(attributeDisplayText);
+        const operatorOptions = getFormattedOptions(operatorsForAttribute);
+
+        const selectedValue = operatorDisplayText || operatorOptions[0].displayText;
+
+        return (
+            <div className="filter-item-operator-dropdown-container">
+                <div className="filter-dropdown-single-select-field-container">
+                    <SingleSelectField
+                        fieldType={OPERATOR}
+                        isDisabled={false}
+                        onChange={updateSelectedField}
+                        options={operatorOptions}
+                        selectedValue={
+                            selectedValue // Default operator dropdown to first entry in options
+                        }
+                    />
+                </div>
             </div>
         );
     };
@@ -179,7 +261,7 @@ const Condition = ({
     const renderValueField = () => {
         const { valueDisplayText, valueKey, valueType } = condition;
 
-        const valuesForAttribute = getValuesForAttribute(valueDisplayText, template);
+        const valuesForAttribute = getValuesForAttribute();
         const valueOptions = getFormattedOptions(valuesForAttribute);
 
         const error = getErrorMessage();
@@ -192,7 +274,7 @@ const Condition = ({
             <div className={classnames}>
                 <ValueField
                     formatMessage={formatMessage}
-                    selectedValue={valueKey}
+                    selectedValue={valueDisplayText}
                     updateValueField={updateValueField}
                     updateSelectedField={updateSelectedField}
                     valueKey={valueKey}
@@ -217,47 +299,7 @@ const Condition = ({
         );
     };
 
-    const { attributeKey, operatorKey } = condition;
-    const templateAttributes = (template && template.fields) || [];
-    const attributeOptions = getFormattedOptions(templateAttributes);
-
-    const operatorsForAttribute = getOperatorsForAttribute();
-    const operatorOptions = getFormattedOptions(operatorsForAttribute);
-
     const error = getErrorMessage();
-
-    const renderAttributeField = () => {
-        return (
-            <div className="filter-item-attribute-dropdown-container">
-                <div className="filter-dropdown-single-select-field-container">
-                    <SingleSelectField
-                        fieldType={ATTRIBUTE}
-                        isDisabled={false}
-                        onChange={updateSelectedField}
-                        options={attributeOptions}
-                        placeholder={formatMessage(messages.selectAttributePlaceholderText)}
-                        selectedValue={attributeKey}
-                    />
-                </div>
-            </div>
-        );
-    };
-
-    const renderOperatorField = () => {
-        return (
-            <div className="filter-item-operator-dropdown-container">
-                <div className="filter-dropdown-single-select-field-container">
-                    <SingleSelectField
-                        fieldType={OPERATOR}
-                        isDisabled={false}
-                        onChange={updateSelectedField}
-                        options={operatorOptions}
-                        selectedValue={operatorKey}
-                    />
-                </div>
-            </div>
-        );
-    };
 
     return (
         <div className="filter-item-container">
