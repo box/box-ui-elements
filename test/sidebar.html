@@ -72,32 +72,32 @@
                 localStorage.setItem('file', fileId);
                 document.querySelector('.file').value = fileId;
 
-                const sidebar1 = new ContentSidebar();
-                sidebar1.show(fileId, token, {
-                    container: '.sidebar1',
-                    isLarge: true,
-                    defaultView: 'metadata',
-                    hasMetadata: true,
-                    detailsSidebarProps: {
-                        hasProperties: true,
-                        hasNotices: true,
-                        hasAccessStats: true,
-                        hasVersions: true,
-                        hasNotices: true,
-                        onAccessStatsClick: () => {
-                            alert('Hello, world!');
-                        },
-                        retentionPolicy: {
-                            dispositionTime: 1556317461,
-                            policyType: 'finite',
-                            retentionPolicyDescription: 'test policy (1 year retention & auto-deletion'
-                        },
-                        onRetentionPolicyExtendClick: () => alert('hello world!')
-                    },
-                    onVersionHistoryClick : function(){
-                        alert('hello, world!');
-                    }
-                });
+                // const sidebar1 = new ContentSidebar();
+                // sidebar1.show(fileId, token, {
+                //     container: '.sidebar1',
+                //     isLarge: true,
+                //     defaultView: 'metadata',
+                //     hasMetadata: true,
+                //     detailsSidebarProps: {
+                //         hasProperties: true,
+                //         hasNotices: true,
+                //         hasAccessStats: true,
+                //         hasVersions: true,
+                //         hasNotices: true,
+                //         onAccessStatsClick: () => {
+                //             alert('Hello, world!');
+                //         },
+                //         retentionPolicy: {
+                //             dispositionTime: 1556317461,
+                //             policyType: 'finite',
+                //             retentionPolicyDescription: 'test policy (1 year retention & auto-deletion'
+                //         },
+                //         onRetentionPolicyExtendClick: () => alert('hello world!')
+                //     },
+                //     onVersionHistoryClick : function(){
+                //         alert('hello, world!');
+                //     }
+                // });
 
                 const sidebar2 = new ContentSidebar();
                 sidebar2.show(fileId, token, {
@@ -114,51 +114,51 @@
                     hasSkills: true,
                 });
 
-                const sidebar3 = new ContentSidebar();
-                sidebar3.show(fileId, token, {
-                    container: '.sidebar3',
-                    detailsSidebarProps: {
-                        hasProperties: true,
-                        hasNotices: true,
-                        hasVersions: true,
-                        hasClassification: true,
-                        bannerPolicy: {
-                            body: 'classification tooltip'
-                        },
-                        onClassificationClick: (refreshFn) => {
-                            console.log('refreshing');
-                            refreshFn();
-                        }
-                    },
-                    hasSkills: true,
-                    hasActivityFeed:true,
-                    activitySidebarProps: {
-                        getUserProfileUrl: (id) => { return Promise.resolve('#'); }
-                    }
-                });
+                // const sidebar3 = new ContentSidebar();
+                // sidebar3.show(fileId, token, {
+                //     container: '.sidebar3',
+                //     detailsSidebarProps: {
+                //         hasProperties: true,
+                //         hasNotices: true,
+                //         hasVersions: true,
+                //         hasClassification: true,
+                //         bannerPolicy: {
+                //             body: 'classification tooltip'
+                //         },
+                //         onClassificationClick: (refreshFn) => {
+                //             console.log('refreshing');
+                //             refreshFn();
+                //         }
+                //     },
+                //     hasSkills: true,
+                //     hasActivityFeed:true,
+                //     activitySidebarProps: {
+                //         getUserProfileUrl: (id) => { return Promise.resolve('#'); }
+                //     }
+                // });
 
-                const sidebar4 = new ContentSidebar();
-                sidebar4.show(fileId, token, {
-                    container: '.sidebar4',
-                    isLarge: true,
-                    detailsSidebarProps: {
-                        hasProperties: true,
-                        hasNotices: true,
-                        hasVersions: true,
-                        hasAccessStats: true,
-                        hasClassification: true
-                    },
-                    hasActivityFeed: true,
-                    hasSkills: true,
-                    features: {
-                        activityFeed: {
-                            tasks: {
-                                createFromComment: true,
-                                createButton: true,
-                            },
-                        },
-                    }
-                });
+                // const sidebar4 = new ContentSidebar();
+                // sidebar4.show(fileId, token, {
+                //     container: '.sidebar4',
+                //     isLarge: true,
+                //     detailsSidebarProps: {
+                //         hasProperties: true,
+                //         hasNotices: true,
+                //         hasVersions: true,
+                //         hasAccessStats: true,
+                //         hasClassification: true
+                //     },
+                //     hasActivityFeed: true,
+                //     hasSkills: true,
+                //     features: {
+                //         activityFeed: {
+                //             tasks: {
+                //                 createFromComment: true,
+                //                 createButton: true,
+                //             },
+                //         },
+                //     }
+                // });
                 if (refreshOnComplete) window.location.reload();
             }
             load(false);

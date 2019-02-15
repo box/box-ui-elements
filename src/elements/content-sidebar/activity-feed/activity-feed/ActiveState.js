@@ -4,6 +4,10 @@
  */
 import * as React from 'react';
 import getProp from 'lodash/get';
+import List from 'react-virtualized/dist/commonjs/List';
+import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
+import { CellMeasurer, CellMeasurerCache } from 'react-virtualized';
+
 import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion } from '../version';
@@ -25,30 +29,50 @@ type Props = {
     translations?: Translations,
 };
 
-const ActiveState = ({
-    currentUser,
-    items,
-    onCommentDelete,
-    onTaskDelete,
-    onTaskEdit,
-    onTaskAssignmentUpdate,
-    onVersionInfo,
-    translations,
-    getAvatarUrl,
-    getUserProfileUrl,
-    getMentionWithQuery,
-    mentionSelectorContacts,
-}: Props): React.Node => (
-    <ul className="bcs-activity-feed-active-state">
-        {items.map((item: any) => {
-            const { type, id, versions, permissions } = item;
+class ActiveState extends React.Component<Props> {
+    cache: any;
 
-            switch (type) {
-                case 'comment':
-                    return (
-                        <li key={type + id} className="bcs-activity-feed-comment">
+    list: any;
+
+    constructor() {
+        super();
+        this.cache = new CellMeasurerCache({
+            defaultHeight: 81,
+            fixedWidth: true,
+        });
+    }
+
+    componentDidUpdate() {
+        this.cache.clearAll();
+        this.list.forceUpdateGrid();
+    }
+
+    renderActivityCard = ({ key, index, parent, style }: any) => {
+        const {
+            items,
+            currentUser,
+            getAvatarUrl,
+            getUserProfileUrl,
+            onCommentDelete,
+            translations,
+            getMentionWithQuery,
+            mentionSelectorContacts,
+            onTaskAssignmentUpdate,
+            onTaskDelete,
+            onTaskEdit,
+            onVersionInfo,
+        } = this.props;
+
+        const item: any = items[index];
+        const { type, id, versions, permissions } = item;
+        switch (type) {
+            case 'comment':
+                return (
+                    <CellMeasurer cache={this.cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+                        <li key={type + id} className="bcs-activity-feed-comment" style={style}>
                             <Comment
                                 {...item}
+                                cellMeasurerCache={this.cache}
                                 currentUser={currentUser}
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
@@ -60,13 +84,17 @@ const ActiveState = ({
                                 translations={translations}
                             />
                         </li>
-                    );
-                case 'task':
-                    return item.task_assignment_collection.total_count ? (
-                        <li key={type + id} className="bcs-activity-feed-task">
+                    </CellMeasurer>
+                );
+
+            case 'task':
+                return item.task_assignment_collection.total_count ? (
+                    <CellMeasurer cache={this.cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+                        <li key={type + id} className="bcs-activity-feed-task" style={style}>
                             <Task
                                 {...item}
                                 currentUser={currentUser}
+                                cellMeasurerCache={this.cache}
                                 getAvatarUrl={getAvatarUrl}
                                 getMentionWithQuery={getMentionWithQuery}
                                 getUserProfileUrl={getUserProfileUrl}
@@ -82,29 +110,54 @@ const ActiveState = ({
                                 translations={translations}
                             />
                         </li>
-                    ) : null;
-                case 'file_version':
-                    return (
-                        <li key={type + id} className="bcs-version-item">
+                    </CellMeasurer>
+                ) : null;
+            case 'file_version':
+                return (
+                    <CellMeasurer cache={this.cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+                        <li key={type + id} className="bcs-version-item" style={style}>
                             {versions ? (
                                 <CollapsedVersion {...item} onInfo={onVersionInfo} />
                             ) : (
                                 <Version {...item} onInfo={onVersionInfo} />
                             )}
                         </li>
-                    );
-                case 'keywords':
-                    return (
-                        <li key={type + id} className="bcs-keywords-item">
+                    </CellMeasurer>
+                );
+            case 'keywords':
+                return (
+                    <CellMeasurer cache={this.cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+                        <li key={type + id} className="bcs-keywords-item" style={style}>
                             <Keywords {...item} />
                         </li>
-                    );
-                default:
-                    return null;
-            }
-        })}
-    </ul>
-);
+                    </CellMeasurer>
+                );
+            default:
+                return null;
+        }
+    };
+
+    render = (): React.Node => (
+        <ul className="bcs-activity-feed-active-state">
+            <AutoSizer disableWidth>
+                {({ height }) => (
+                    <List
+                        ref={ref => {
+                            this.list = ref;
+                        }}
+                        overscanRowCount={10}
+                        className="bcs-activity-feed-active-state-content"
+                        rowCount={this.props.items.length}
+                        height={height}
+                        rowHeight={this.cache.rowHeight}
+                        rowRenderer={this.renderActivityCard}
+                        width={340}
+                    />
+                )}
+            </AutoSizer>
+        </ul>
+    );
+}
 
 export { ActiveState as ActiveStateComponent };
 export default withErrorHandling(ActiveState);

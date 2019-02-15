@@ -29,6 +29,7 @@ import { PLACEHOLDER_USER } from '../../../../constants';
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
 type Props = {
+    cellMeasurerCache: any,
     created_at: string | number,
     created_by: User,
     currentUser?: User,
@@ -71,7 +72,10 @@ class Comment extends React.Component<Props, State> {
 
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
 
-    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    approvalCommentFormCancelHandler = (): void =>
+        this.setState({ isInputOpen: false, isEditing: false }, () => {
+            this.props.cellMeasurerCache.clearAll();
+        });
 
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
@@ -81,7 +85,10 @@ class Comment extends React.Component<Props, State> {
         this.approvalCommentFormSubmitHandler();
     };
 
-    toEdit = (): void => this.setState({ isEditing: true, isInputOpen: true });
+    toEdit = (): void =>
+        this.setState({ isEditing: true, isInputOpen: true }, () => {
+            this.props.cellMeasurerCache.clearAll();
+        });
 
     handleCommentFocus = (): void => {
         this.setState({ isFocused: true });

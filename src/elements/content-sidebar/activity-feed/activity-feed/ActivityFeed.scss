@@ -21,24 +21,24 @@
         display: flex;
         flex: 1 1;
         flex-direction: column;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden;
         position: relative;
 
         > .inline-alert-error {
             margin: 9px 20px;
         }
 
+        &:first-child .bcs-version-item {
+            padding-top: 0;
+        }
+
         .bcs-version-item {
-            &:first-child .bcs-version {
-                margin-top: 0;
-            }
+            padding-top: 10px;
         }
 
         .bcs-activity-feed-task,
         .bcs-activity-feed-comment {
             border-bottom: 1px solid $ffive;
-            margin-top: 20px;
             padding-bottom: 20px;
 
             &:first-child .bcs-comment {
@@ -52,8 +52,15 @@
     }
 
     .bcs-activity-feed-active-state {
+        width: 100%;
+        height: 100%;
+    }
+
+    .bcs-activity-feed-active-state-content {
         padding: 9px 25px;
         width: 100%;
+        height: 100%;
+        outline: none;
 
         > li:last-child {
             margin-bottom: 10px;

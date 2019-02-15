@@ -19,6 +19,7 @@ import { TASK_APPROVED, TASK_REJECTED, TASK_COMPLETED, TASK_INCOMPLETE } from '.
 import './Task.scss';
 
 type Props = {
+    cellMeasurerCache: any,
     created_at: number | string,
     created_by: User,
     currentUser?: User,
@@ -45,6 +46,7 @@ type Props = {
 class Task extends React.Component<Props> {
     render(): React.Node {
         const {
+            cellMeasurerCache,
             task_assignment_collection,
             created_at,
             created_by,
@@ -80,6 +82,7 @@ class Task extends React.Component<Props> {
                 data-testid="task-card"
             >
                 <Comment
+                    cellMeasurerCache={cellMeasurerCache}
                     created_at={created_at}
                     created_by={created_by}
                     currentUser={currentUser}
