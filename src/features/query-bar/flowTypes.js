@@ -1,5 +1,12 @@
 // @flow
 
+export type SelectOptionType = {
+    displayText: string,
+    fieldId?: string,
+    type?: string,
+    value: string,
+};
+
 export type ColumnType = {
     displayName: string,
     id: string,

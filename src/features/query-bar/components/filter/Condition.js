@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
 import IconClose from '../../../../icons/general/IconClose';
@@ -25,7 +25,7 @@ import {
     AND,
     OR,
 } from '../../constants';
-import type { ColumnType } from '../../flowTypes';
+import type { ColumnType, SelectOptionType } from '../../flowTypes';
 
 import '../../styles/FilterItem.scss';
 
@@ -46,7 +46,7 @@ type Props = {
         fieldKeyType: string,
         valueType: any,
     ) => void,
-    updateSelectedPrefix: (option: Object) => void,
+    updateSelectedPrefix: (option: SelectOptionType) => void,
 };
 
 const deleteButtonIconHeight = 18;
@@ -58,7 +58,6 @@ const Condition = ({
     condition,
     deleteCondition,
     index,
-    intl: { formatMessage },
     update,
     updateSelectedPrefix,
 }: Props) => {
@@ -66,7 +65,7 @@ const Condition = ({
         deleteCondition(index);
     };
 
-    const updateSelectedField = (option: Object, fieldType?: string) => {
+    const updateSelectedField = (option: SelectOptionType, fieldType?: string) => {
         const conditionIndex = index;
         const value = option.value;
         const valueType = option.type;
@@ -155,10 +154,13 @@ const Condition = ({
         const { valueKey, valueType } = condition;
 
         const isValueSet = valueKey !== null && valueKey !== '';
-
-        const message = valueType === 'date' ? messages.tooltipSelectDateError : messages.tooltipSelectValueError;
-
-        const error = areErrorsEnabled && !isValueSet ? formatMessage(message) : null;
+        const message =
+            valueType === 'date' ? (
+                <FormattedMessage {...messages.tooltipSelectDateError} />
+            ) : (
+                <FormattedMessage {...messages.tooltipSelectValueError} />
+            );
+        const error = areErrorsEnabled && !isValueSet ? message : null;
 
         return error;
     };
@@ -178,13 +180,13 @@ const Condition = ({
         let message = '';
         switch (prefix) {
             case WHERE:
-                message = { ...messages.prefixLabelWhereText };
+                message = <FormattedMessage {...messages.prefixLabelWhereText} />;
                 break;
             case AND:
-                message = { ...messages.prefixButtonAndText };
+                message = <FormattedMessage {...messages.prefixButtonAndText} />;
                 break;
             case OR:
-                message = { ...messages.prefixButtonOrText };
+                message = <FormattedMessage {...messages.prefixButtonOrText} />;
                 break;
             default:
                 break;
@@ -200,13 +202,13 @@ const Condition = ({
         return (
             <div className="filter-item-prefix-container">
                 {prefix === WHERE ? (
-                    <p className="filter-item-prefix-text">{formatMessage(message)}</p>
+                    <p className="filter-item-prefix-text">{message}</p>
                 ) : (
                     <SingleSelectField
                         isDisabled={false}
                         onChange={updateSelectedPrefix}
                         options={prefixOptions}
-                        placeholder={formatMessage(message)}
+                        placeholder={message}
                         selectedValue={prefix}
                     />
                 )}
@@ -218,6 +220,7 @@ const Condition = ({
         const { columnDisplayText } = condition;
         const columnAttributes = columns || [];
         const attributeOptions = getFormattedOptions(columnAttributes);
+        const placeholder = <FormattedMessage {...messages.selectAttributePlaceholderText} />;
 
         return (
             <div className="filter-item-attribute-dropdown-container">
@@ -227,7 +230,7 @@ const Condition = ({
                         isDisabled={false}
                         onChange={updateSelectedField}
                         options={attributeOptions}
-                        placeholder={formatMessage(messages.selectAttributePlaceholderText)}
+                        placeholder={placeholder}
                         selectedValue={columnDisplayText}
                     />
                 </div>
@@ -269,7 +272,6 @@ const Condition = ({
         return (
             <div className={classnames}>
                 <ValueField
-                    formatMessage={formatMessage}
                     selectedValue={valueDisplayText}
                     updateValueField={updateValueField}
                     updateSelectedField={updateSelectedField}
@@ -308,5 +310,4 @@ const Condition = ({
     );
 };
 
-export { Condition as BaseCondition };
-export default injectIntl(Condition);
+export default Condition;
