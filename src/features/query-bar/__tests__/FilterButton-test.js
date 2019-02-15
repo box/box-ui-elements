@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { columns } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
-import { WHERE, AND } from '../constants';
+import { AND, WHERE } from '../constants';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
