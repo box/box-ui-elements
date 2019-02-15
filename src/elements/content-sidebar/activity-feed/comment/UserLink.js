@@ -59,7 +59,7 @@ class UserLink extends React.PureComponent<Props, State> {
                 {name}
             </Link>
         ) : (
-            <div {...rest}>{name}</div>
+            <span {...rest}>{name}</span>
         );
     }
 }
