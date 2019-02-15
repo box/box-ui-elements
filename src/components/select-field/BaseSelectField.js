@@ -2,8 +2,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
-import { scrollItemIntoView } from '../../utils/dom';
 
+import { scrollItemIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
 import DatalistItem from '../datalist-item';
