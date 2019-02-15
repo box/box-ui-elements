@@ -10,6 +10,7 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
+import { WHERE, AND, OR } from '../../constants';
 
 import messages from '../../messages';
 
@@ -20,6 +21,7 @@ type State = {
     areErrorsEnabled: boolean,
     conditions: Array<Object>,
     isMenuOpen: boolean,
+    selectedPrefix: string,
 };
 
 type Props = {
@@ -30,14 +32,23 @@ type Props = {
 class FilterButton extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        const conditionID = this.generateConditionID();
-        const initialCondition = this.createCondition(props, conditionID);
+
         this.state = {
             appliedConditions: [],
-            conditions: [initialCondition],
+            conditions: [],
+            selectedPrefix: AND,
             areErrorsEnabled: false,
             isMenuOpen: false,
         };
+    }
+
+    componentDidMount() {
+        const id = this.generateConditionID();
+        const initialCondition = this.createCondition(id);
+
+        this.setState({
+            conditions: [initialCondition],
+        });
     }
 
     onClose = () => {
@@ -54,10 +65,15 @@ class FilterButton extends React.Component<Props, State> {
         this.setState({ isMenuOpen: !this.state.isMenuOpen });
     };
 
-    createCondition = (props: Props, conditionID: string) => {
-        if (props && props.columns) {
-            const firstField = props.columns[0];
+    createCondition = (conditionID: string) => {
+        const { columns } = this.props;
+        const { selectedPrefix, conditions } = this.state;
+        if (columns) {
+            const firstField = columns[0];
+            const prefix = conditions.length === 0 ? WHERE : selectedPrefix;
+
             return {
+                prefix,
                 columnDisplayText: firstField.displayName,
                 columnKey: 0,
                 id: conditionID,
@@ -77,10 +93,10 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     addFilter = () => {
-        const conditionID = this.generateConditionID();
-        const initialCondition = this.createCondition(this.props, conditionID);
+        const id = this.generateConditionID();
+        const newCondition = this.createCondition(id);
         this.setState({
-            conditions: [...this.state.conditions, initialCondition],
+            conditions: [...this.state.conditions, newCondition],
             areErrorsEnabled: false,
         });
     };
@@ -132,7 +148,7 @@ class FilterButton extends React.Component<Props, State> {
                 // Upon selecting a new attribute, the operator and value fields should be reset.
                 updatedCondition.operatorKey = 0;
                 updatedCondition.operatorDisplayText = '';
-                updatedCondition.valueDisplayText = '';
+                updatedCondition.valueDisplayText = null;
                 updatedCondition.valueKey = null;
             }
 
@@ -148,16 +164,66 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    deleteCondition = (index: number) => {
-        const { conditions } = this.state;
+    updateSelectedPrefix = (option: Object) => {
+        const displayText = option.displayText;
+        let updatedPrefix = '';
 
-        const updatedConditions = conditions.filter((condition, conditionIndex) => {
-            return conditionIndex !== index;
+        switch (displayText) {
+            case 'AND':
+                updatedPrefix = AND;
+                break;
+            case 'OR':
+                updatedPrefix = OR;
+                break;
+            default:
+                break;
+        }
+
+        this.setState({
+            selectedPrefix: updatedPrefix,
+        });
+
+        this.updateConditionsPrefixes(updatedPrefix);
+    };
+
+    updateConditionsPrefixes = (prefix: string) => {
+        const { conditions } = this.state;
+        const updatedConditions = conditions.map((condition, index) => {
+            if (index !== 0) {
+                const updatedCondition = Object.assign({}, condition);
+                updatedCondition.prefix = prefix;
+                return updatedCondition;
+            }
+            return condition;
         });
 
         this.setState({
             conditions: updatedConditions,
         });
+    };
+
+    deleteCondition = (index: number) => {
+        const { conditions } = this.state;
+
+        const conditionsAfterDeletion = conditions.filter((condition, conditionIndex) => {
+            return conditionIndex !== index;
+        });
+
+        if (conditionsAfterDeletion.length === 0) {
+            this.setState({
+                conditions: [],
+            });
+        } else {
+            // The first condition must always have a prefix of WHERE.
+            const firstCondition = Object.assign({}, conditionsAfterDeletion[0]);
+            firstCondition.prefix = WHERE;
+
+            const updatedConditions = [firstCondition, ...conditionsAfterDeletion.slice(1)];
+
+            this.setState({
+                conditions: updatedConditions,
+            });
+        }
     };
 
     areAllValid = () => {
@@ -249,6 +315,7 @@ class FilterButton extends React.Component<Props, State> {
                                             index={index}
                                             columns={columns}
                                             update={this.update}
+                                            updateSelectedPrefix={this.updateSelectedPrefix}
                                         />
                                     );
                                 })}

@@ -9,7 +9,7 @@ const initialCondition: ConditionType = {
     operatorKey: null,
     valueDisplayText: '',
     valueKey: null,
-    valueType: '',
+    valueType: 'string',
 };
 
 const columns: Array<ColumnType> = [
@@ -547,6 +547,7 @@ const metadataTableStateAfterMount = {
 
 export {
     initialCondition,
+    conditions,
     columns,
     columnsWithNewOrder,
     columnsWithOneColumnNotShown,

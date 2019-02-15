@@ -22,14 +22,25 @@ exports[`features/query-bar/components/filter/Condition render() should render C
   <div
     className="filter-item-prefix-container"
   >
-    <p
-      className="filter-item-prefix-text"
-    >
-      <FormattedMessage
-        defaultMessage="WHERE"
-        id="boxui.queryBar.prefixButtonText"
-      />
-    </p>
+    <SingleSelectField
+      isDisabled={false}
+      options={
+        Array [
+          Object {
+            "displayText": "AND",
+            "fieldId": undefined,
+            "type": undefined,
+            "value": "AND",
+          },
+          Object {
+            "displayText": "OR",
+            "fieldId": undefined,
+            "type": undefined,
+            "value": "OR",
+          },
+        ]
+      }
+    />
   </div>
   <div
     className="filter-item-attribute-dropdown-container"
@@ -47,7 +58,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
               "displayText": "Hullo Thar",
               "fieldId": "1",
               "type": "string",
-              "value": 0,
+              "value": "Name",
             },
             Object {
               "displayText": "Last Updated",
@@ -63,7 +74,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
             },
           ]
         }
-        selectedValue={null}
+        selectedValue=""
       />
     </div>
   </div>
@@ -77,8 +88,17 @@ exports[`features/query-bar/components/filter/Condition render() should render C
         fieldType="operator"
         isDisabled={false}
         onChange={[Function]}
-        options={Array []}
-        selectedValue={null}
+        options={
+          Array [
+            Object {
+              "displayText": "is",
+              "fieldId": undefined,
+              "type": "string",
+              "value": "is",
+            },
+          ]
+        }
+        selectedValue="is"
       />
     </div>
   </div>
@@ -87,12 +107,12 @@ exports[`features/query-bar/components/filter/Condition render() should render C
   >
     <ValueField
       formatMessage={[Function]}
-      selectedValue={null}
+      selectedValue=""
       updateSelectedField={[Function]}
       updateValueField={[Function]}
       valueKey={null}
       valueOptions={Array []}
-      valueType=""
+      valueType="string"
     />
   </div>
 </div>

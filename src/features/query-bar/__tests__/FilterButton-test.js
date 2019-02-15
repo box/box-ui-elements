@@ -2,6 +2,8 @@
 import * as React from 'react';
 
 import { columns } from '../components/fixtures';
+import { WHERE } from '../constants';
+
 import FilterButton from '../components/filter/FilterButton';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
@@ -32,7 +34,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
-                    valueDisplayText: '',
+                    valueDisplayText: null,
                     valueKey: null,
                 },
                 conditions: [
@@ -42,7 +44,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -61,7 +63,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         fieldId: 1,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                         valueType: 'string',
                     },
@@ -76,7 +78,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
-                    valueDisplayText: '',
+                    valueDisplayText: null,
                     valueKey: null,
                 },
                 conditions: [
@@ -86,7 +88,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -104,7 +106,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         fieldId: 1,
                         operatorDisplayText: 'myOperator',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -118,7 +120,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
-                    valueDisplayText: '',
+                    valueDisplayText: null,
                     valueKey: null,
                 },
                 conditions: [
@@ -128,7 +130,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -196,33 +198,35 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 index: 0,
                 conditions: [
                     {
+                        prefix: null,
                         id: '2',
                         columnDisplayText: '',
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                     {
+                        prefix: 1,
                         id: '3',
                         columnDisplayText: '',
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
-                fieldType: 'attribute',
                 updatedConditions: [
                     {
+                        prefix: null,
                         id: '3',
                         columnDisplayText: '',
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -312,8 +316,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 valueKey: null,
                 valueType: 'string',
             };
+            wrapper.instance().setState({
+                conditions: [],
+            });
 
-            const condition = wrapper.instance().createCondition(props, conditionID);
+            const condition = wrapper.instance().createCondition(conditionID);
 
             expect(condition).toEqual(expected);
         });
