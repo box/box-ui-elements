@@ -58,19 +58,19 @@ exports[`features/query-bar/components/filter/Condition render() should render C
               "displayText": "Hullo Thar",
               "fieldId": "1",
               "type": "string",
-              "value": "Name",
+              "value": "Hullo Thar",
             },
             Object {
               "displayText": "Last Updated",
               "fieldId": "2",
               "type": "string",
-              "value": 1,
+              "value": "Last Updated",
             },
             Object {
               "displayText": "Contract Value",
               "fieldId": "3",
               "type": "enum",
-              "value": 2,
+              "value": "Contract Value",
             },
           ]
         }
