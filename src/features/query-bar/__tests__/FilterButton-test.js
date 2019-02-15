@@ -2,7 +2,6 @@
 import * as React from 'react';
 
 import { columns } from '../components/fixtures';
-import { WHERE } from '../constants';
 
 import FilterButton from '../components/filter/FilterButton';
 
@@ -301,9 +300,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     describe('createCondition()', () => {
         test('Should return a condition object if columns is defined', () => {
             const wrapper = getWrapper();
-            const props = {
-                columns,
-            };
             const conditionID = 123;
             const expected = {
                 columnDisplayText: 'Hullo Thar',

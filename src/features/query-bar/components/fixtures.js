@@ -12,6 +12,8 @@ const initialCondition: ConditionType = {
     valueType: 'string',
 };
 
+const conditions: Array<ConditionType> = [initialCondition];
+
 const columns: Array<ColumnType> = [
     {
         displayName: 'Hullo Thar',
