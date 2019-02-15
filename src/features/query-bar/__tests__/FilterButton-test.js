@@ -299,9 +299,10 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
 
     describe('createCondition()', () => {
         test('Should return a condition object if columns is defined', () => {
-            const wrapper = getWrapper();
+            const wrapper = getWrapper({ columns });
             const conditionID = 123;
             const expected = {
+                prefix: null,
                 columnDisplayText: 'Hullo Thar',
                 columnKey: 0,
                 id: conditionID,
@@ -321,7 +322,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             expect(condition).toEqual(expected);
         });
 
-        test('Should return an empty object if template is not defined', () => {
+        test('Should return an empty object if columns is not defined', () => {
             const wrapper = getWrapper();
             const props = {};
             const conditionID = 123;
