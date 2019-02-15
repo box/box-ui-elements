@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 
-import PlainButton from 'components/plain-button/PlainButton';
+import PlainButton from '../../components/plain-button/PlainButton';
 import IconEye from '../../icons/general/IconEye';
 import IconComment from '../../icons/general/IconComment';
 import IconDownloadSolid from '../../icons/general/IconDownloadSolid';

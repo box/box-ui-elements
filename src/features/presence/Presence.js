@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import classnames from 'classnames';
 
-import { Flyout, Overlay } from 'components/flyout';
-import Tooltip from 'components/tooltip';
+import { Flyout, Overlay } from '../../components/flyout';
+import Tooltip from '../../components/tooltip';
 
 // GROWTH-382
-import Button from 'components/button';
+import Button from '../../components/button';
 
 import { ARROW_DOWN, ENTER, SPACE } from '../../common/keyboard-events';
 

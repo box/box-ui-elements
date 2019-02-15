@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import SharedLinkExpirationNotice from 'features/item-details/SharedLinkExpirationNotice';
-import ItemExpirationNotice from 'features/item-details/ItemExpirationNotice';
+import SharedLinkExpirationNotice from '../../../features/item-details/SharedLinkExpirationNotice';
+import ItemExpirationNotice from '../../../features/item-details/ItemExpirationNotice';
 import SidebarNotices from '../SidebarNotices';
 
 describe('elements/content-sidebar/SidebarNotices', () => {

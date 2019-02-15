@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import DatePicker from 'components/date-picker';
-import { convertISOStringToUTCDate } from 'utils/datetime';
+import DatePicker from '../../../components/date-picker';
+import { convertISOStringToUTCDate } from '../../../utils/datetime';
 
 import messages from '../messages';
 import './DateField.scss';

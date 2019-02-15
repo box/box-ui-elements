@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import PlainButton from 'components/plain-button/PlainButton';
+import PlainButton from '../../components/plain-button/PlainButton';
 import AccessStatsItemsList from './AccessStatsItemsList';
 
 import messages from './messages';

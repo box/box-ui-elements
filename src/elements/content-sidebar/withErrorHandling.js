@@ -5,9 +5,9 @@
  */
 
 import * as React from 'react';
-import ErrorMask from 'components/error-mask/ErrorMask';
-import InlineError from 'components/inline-error/InlineError';
 import { FormattedMessage } from 'react-intl';
+import ErrorMask from '../../components/error-mask/ErrorMask';
+import InlineError from '../../components/inline-error/InlineError';
 
 import SidebarSection from './SidebarSection';
 

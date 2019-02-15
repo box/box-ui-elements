@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import FileIcon from 'icons/file-icon/FileIcon';
-import IconFolderPersonal from 'icons/folder/IconFolderPersonal';
+import FileIcon from '../../icons/file-icon/FileIcon';
+import IconFolderPersonal from '../../icons/folder/IconFolderPersonal';
 import ItemName from './ItemName';
 import './IconName.scss';
 

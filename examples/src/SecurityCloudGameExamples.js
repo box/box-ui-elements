@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Section from 'components/section';
-import SecurityCloudGame from 'features/security-cloud-game';
+import Section from '../../src/components/section';
+import SecurityCloudGame from '../../src/features/security-cloud-game';
 
 const SecurityCloudGameExamples = () => {
     return (

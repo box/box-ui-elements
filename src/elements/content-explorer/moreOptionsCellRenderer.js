@@ -6,12 +6,12 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from 'components/button/Button';
-import DropdownMenu from 'components/dropdown-menu/DropdownMenu';
-import Menu from 'components/menu/Menu';
-import MenuItem from 'components/menu/MenuItem';
-import Browser from 'utils/Browser';
-import messages from 'elements/common/messages';
+import Button from '../../components/button/Button';
+import DropdownMenu from '../../components/dropdown-menu/DropdownMenu';
+import Menu from '../../components/menu/Menu';
+import MenuItem from '../../components/menu/MenuItem';
+import Browser from '../../utils/Browser';
+import messages from '../common/messages';
 import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_RENAME,

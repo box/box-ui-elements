@@ -5,7 +5,7 @@
 
 import * as React from 'react';
 
-import AccessibleSVG from 'icons/accessible-svg';
+import AccessibleSVG from '../../../../icons/accessible-svg';
 
 type Props = {
     className?: string,

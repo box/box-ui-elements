@@ -4,17 +4,17 @@ import omit from 'lodash/omit';
 import throttle from 'lodash/throttle';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import { UpgradeBadge } from 'components/badge';
-import Button from 'components/button';
-import InlineNotice from 'components/inline-notice';
-import PrimaryButton from 'components/primary-button';
-import Select from 'components/select';
-import TextArea from 'components/text-area';
-import { Link } from 'components/link';
-import { Modal, ModalActions } from 'components/modal';
-import ContactDatalistItem from 'components/contact-datalist-item';
-import PillSelectorDropdown from 'components/pill-selector-dropdown';
-import parseEmails from 'utils/parseEmails';
+import { UpgradeBadge } from '../../components/badge';
+import Button from '../../components/button';
+import InlineNotice from '../../components/inline-notice';
+import PrimaryButton from '../../components/primary-button';
+import Select from '../../components/select';
+import TextArea from '../../components/text-area';
+import { Link } from '../../components/link';
+import { Modal, ModalActions } from '../../components/modal';
+import ContactDatalistItem from '../../components/contact-datalist-item';
+import PillSelectorDropdown from '../../components/pill-selector-dropdown';
+import parseEmails from '../../utils/parseEmails';
 import { RESIN_TAG_TARGET } from '../../common/variables';
 
 import PermissionFlyout from './PermissionFlyout';

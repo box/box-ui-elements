@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import Avatar from 'components/avatar';
+import Avatar from '../../components/avatar';
 
 const PresenceAvatar = ({
     avatarUrl,

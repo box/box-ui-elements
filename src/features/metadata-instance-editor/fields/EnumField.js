@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import Label from 'components/label/Label';
-import SingleSelectField from 'components/select-field/SingleSelectField';
+import Label from '../../../components/label/Label';
+import SingleSelectField from '../../../components/select-field/SingleSelectField';
 
 import messages from '../messages';
 import './EnumField.scss';

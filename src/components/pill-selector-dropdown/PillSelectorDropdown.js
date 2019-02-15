@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { List } from 'immutable';
 import noop from 'lodash/noop';
 
-import parseCSV from 'utils/parseCSV';
+import parseCSV from '../../utils/parseCSV';
 import Label from '../label';
 import SelectorDropdown from '../selector-dropdown';
 

@@ -6,12 +6,12 @@
 import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
-import ContactDatalistItem from 'components/contact-datalist-item/ContactDatalistItem';
-import DatePicker from 'components/date-picker/DatePicker';
-import PillSelectorDropdown from 'components/pill-selector-dropdown/PillSelectorDropdown';
+import ContactDatalistItem from '../../../../components/contact-datalist-item/ContactDatalistItem';
+import DatePicker from '../../../../components/date-picker/DatePicker';
+import PillSelectorDropdown from '../../../../components/pill-selector-dropdown/PillSelectorDropdown';
 
-import messages from 'elements/common/messages';
-import { ACTIVITY_TARGETS, INTERACTION_TARGET } from 'elements/common/interactionTargets';
+import messages from '../../../common/messages';
+import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
 
 type Props = {
     approvalDate?: Date,

@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
-import PlainButton from 'components/plain-button';
-import DropdownMenu, { MenuToggle } from 'components/dropdown-menu';
-import { Menu, MenuSeparator, MenuSectionHeader, SelectMenuItem } from 'components/menu';
+import PlainButton from '../../components/plain-button';
+import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
+import { Menu, MenuSeparator, MenuSectionHeader, SelectMenuItem } from '../../components/menu';
 
 import messages from './messages';
 import { PEOPLE_WITH_LINK, PEOPLE_IN_COMPANY, PEOPLE_IN_ITEM } from './constants';

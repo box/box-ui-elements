@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Button from 'components/button';
-import { ContentExplorerModalContainer } from 'features/content-explorer';
+import Button from '../../src/components/button';
+import { ContentExplorerModalContainer } from '../../src/features/content-explorer';
 
 const INITIAL_FOLDERS_PATH = [
     {

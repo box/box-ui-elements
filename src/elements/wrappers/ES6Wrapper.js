@@ -7,7 +7,7 @@
 import EventEmitter from 'events';
 import ReactDOM from 'react-dom';
 import { addLocaleData } from 'react-intl';
-import i18n from 'elements/common/i18n';
+import i18n from '../common/i18n';
 import { DEFAULT_CONTAINER } from '../../constants';
 
 declare var __VERSION__: string;

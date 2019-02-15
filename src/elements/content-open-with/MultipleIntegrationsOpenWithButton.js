@@ -5,12 +5,12 @@
  */
 
 import * as React from 'react';
-import MenuToggle from 'components/dropdown-menu/MenuToggle';
-import IconOpenWith from 'icons/general/IconOpenWith';
-import Button from 'components/button/Button';
 import { FormattedMessage } from 'react-intl';
-import Tooltip from 'elements/common/Tooltip';
-import messages from 'elements/common/messages';
+import MenuToggle from '../../components/dropdown-menu/MenuToggle';
+import IconOpenWith from '../../icons/general/IconOpenWith';
+import Button from '../../components/button/Button';
+import Tooltip from '../common/Tooltip';
+import messages from '../common/messages';
 import OpenWithButtonContents from './OpenWithButtonContents';
 import { CLASS_INTEGRATION_ICON, OPEN_WITH_BUTTON_ICON_SIZE } from '../../constants';
 

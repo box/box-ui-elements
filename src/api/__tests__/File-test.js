@@ -1,9 +1,9 @@
-import Cache from 'utils/Cache';
-import * as fields from 'utils/fields';
+import Cache from '../../utils/Cache';
+import * as fields from '../../utils/fields';
 import File from '../File';
 import { X_REP_HINTS, ERROR_CODE_FETCH_FILE, ERROR_CODE_GET_DOWNLOAD_URL, FIELD_EXTENSION } from '../../constants';
 
-jest.mock('utils/file', () => ({
+jest.mock('../../utils/file', () => ({
     getTypedFileId: jest.fn().mockReturnValue('file_id'),
 }));
 

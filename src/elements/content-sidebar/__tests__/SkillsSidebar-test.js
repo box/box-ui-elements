@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import noop from 'lodash/noop';
-import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
+import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
 import { SkillsSidebarComponent as SkillsSidebar } from '../SkillsSidebar';
 import SidebarSkills from '../skills/SidebarSkills';
 

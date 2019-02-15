@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Badge from 'components/badge';
-import Tooltip from 'components/tooltip';
+import Badge from '../../components/badge';
+import Tooltip from '../../components/tooltip';
 
 import './ClassificationBadge.scss';
 

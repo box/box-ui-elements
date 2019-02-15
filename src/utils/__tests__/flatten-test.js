@@ -1,6 +1,6 @@
-import FolderAPI from 'api/Folder';
-import FileAPI from 'api/File';
-import WebLinkAPI from 'api/WebLink';
+import FolderAPI from '../../api/Folder';
+import FileAPI from '../../api/File';
+import WebLinkAPI from '../../api/WebLink';
 import Cache from '../Cache';
 import flatten from '../flatten';
 

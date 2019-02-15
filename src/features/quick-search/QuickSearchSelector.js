@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 
-import LoadingIndicator from 'components/loading-indicator';
+import LoadingIndicator from '../../components/loading-indicator';
 
 import './QuickSearchSelector.scss';
 

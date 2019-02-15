@@ -10,9 +10,9 @@ import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 
-import PillSelectorDropdown from 'components/pill-selector-dropdown';
-import ContactDatalistItem from 'components/contact-datalist-item';
-import parseEmails from 'utils/parseEmails';
+import PillSelectorDropdown from '../../components/pill-selector-dropdown';
+import ContactDatalistItem from '../../components/contact-datalist-item';
+import parseEmails from '../../utils/parseEmails';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import IconChevron from 'icons/general/IconChevron';
+import IconChevron from '../../../icons/general/IconChevron';
 import { DELIMITER_CARET, COLOR_999 } from '../../../constants';
 
 type Props = {

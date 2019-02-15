@@ -6,11 +6,11 @@
 
 import * as React from 'react';
 import getProp from 'lodash/get';
-import SharedLinkExpirationNotice from 'features/item-details/SharedLinkExpirationNotice';
-import { addTime } from 'utils/datetime';
-import ItemExpirationNotice from 'features/item-details/ItemExpirationNotice';
+import SharedLinkExpirationNotice from '../../features/item-details/SharedLinkExpirationNotice';
+import ItemExpirationNotice from '../../features/item-details/ItemExpirationNotice';
+import { addTime } from '../../utils/datetime';
 
-import DateField from 'elements/common/date';
+import DateField from '../common/date';
 
 const ONE_MINUTE_IN_MS = 60000;
 

@@ -10,17 +10,17 @@ import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
-import Internationalize from 'elements/common/Internationalize';
-import messages from 'elements/common/messages';
-import { withErrorBoundary } from 'elements/common/error-boundary';
-import API from 'api';
+import Internationalize from '../common/Internationalize';
+import messages from '../common/messages';
+import { withErrorBoundary } from '../common/error-boundary';
+import API from '../../api';
 import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import BoxToolsInstallMessage from './BoxToolsInstallMessage';
 import OpenWithButton from './OpenWithButton';
 import OpenWithFallbackButton from './OpenWithFallbackButton';
 import ExecuteForm from './ExecuteForm';
-import 'elements/common/base.scss';
+import '../common/base.scss';
 import './ContentOpenWith.scss';
 import {
     BOX_EDIT_INTEGRATION_ID,

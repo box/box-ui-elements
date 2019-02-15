@@ -5,8 +5,8 @@
  */
 
 import * as React from 'react';
-import PillCloud from 'components/pill-cloud/PillCloud';
-import { SKILLS_TARGETS, INTERACTION_TARGET } from 'elements/common/interactionTargets';
+import PillCloud from '../../../../components/pill-cloud/PillCloud';
+import { SKILLS_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
 import Timeline from '../timeline';
 import getPills from './keywordUtils';
 import type { Pill, Pills } from './flowTypes';

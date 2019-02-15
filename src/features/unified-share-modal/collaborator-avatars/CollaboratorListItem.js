@@ -3,7 +3,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
-import { Link } from 'components/link';
+import { Link } from '../../../components/link';
 
 import { COLLAB_GROUP_TYPE, COLLAB_PENDING_TYPE } from '../constants';
 import messages from '../messages';

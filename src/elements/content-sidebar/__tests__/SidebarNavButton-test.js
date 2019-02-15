@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Tooltip from 'components/tooltip/Tooltip';
+import Tooltip from '../../../components/tooltip/Tooltip';
 import SidebarNavButton from '../SidebarNavButton';
 
 describe('elements/content-sidebar/SidebarNavButton', () => {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Button from 'components/button';
-import { NewFolderModal } from 'features/content-explorer';
+import Button from '../../src/components/button';
+import { NewFolderModal } from '../../src/features/content-explorer';
 
 class NewFolderModalExamples extends Component {
     constructor(props) {

@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Toggle from 'components/toggle';
-import { RadioButton, RadioGroup } from 'components/radio';
-import Link from 'components/link/Link';
+import Toggle from '../../components/toggle';
+import { RadioButton, RadioGroup } from '../../components/radio';
+import Link from '../../components/link/Link';
 import messages from './messages';
 import './CascadePolicy.scss';
 

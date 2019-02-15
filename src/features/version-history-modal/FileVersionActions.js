@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-import PlainButton from 'components/plain-button';
+import PlainButton from '../../components/plain-button';
 
 import { VersionPropType } from './prop-types';
 import messages from './messages';

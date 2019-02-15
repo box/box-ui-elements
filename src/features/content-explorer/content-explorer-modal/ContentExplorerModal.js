@@ -2,7 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-import { Modal } from 'components/modal';
+import { Modal } from '../../../components/modal';
 
 import ContentExplorer from '../content-explorer';
 

@@ -2,12 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Set } from 'immutable';
 
-import Button from 'components/button';
-import ContextMenu from 'components/context-menu';
-import DropdownMenu from 'components/dropdown-menu';
-import { Menu, MenuItem } from 'components/menu';
-import { HotkeyLayer, HotkeyRecord } from 'components/hotkeys';
-import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, makeSelectable } from 'components/table';
+import Button from '../../src/components/button';
+import ContextMenu from '../../src/components/context-menu';
+import DropdownMenu from '../../src/components/dropdown-menu';
+import { Menu, MenuItem } from '../../src/components/menu';
+import { HotkeyLayer, HotkeyRecord } from '../../src/components/hotkeys';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHeader,
+    TableHeaderCell,
+    TableRow,
+    makeSelectable,
+} from '../../src/components/table';
 
 const columnHeaders = ['First Name', 'Last Name', 'Email'];
 

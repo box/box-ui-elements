@@ -6,9 +6,9 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import IconClose from 'icons/general/IconClose';
+import IconClose from '../../../../icons/general/IconClose';
 
-import messages from 'elements/common/messages';
+import messages from '../../../common/messages';
 
 type Props = {
     name: string,

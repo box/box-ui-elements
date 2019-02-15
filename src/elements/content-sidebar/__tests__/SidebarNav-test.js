@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import IconMagicWand from 'icons/general/IconMagicWand';
-import IconMetadataThick from 'icons/general/IconMetadataThick';
-import IconDocInfo from 'icons/general/IconDocInfo';
-import IconChatRound from 'icons/general/IconChatRound';
+import IconMagicWand from '../../../icons/general/IconMagicWand';
+import IconMetadataThick from '../../../icons/general/IconMetadataThick';
+import IconDocInfo from '../../../icons/general/IconDocInfo';
+import IconChatRound from '../../../icons/general/IconChatRound';
 import SidebarNavButton from '../SidebarNavButton';
 import SidebarNav from '../SidebarNav';
 

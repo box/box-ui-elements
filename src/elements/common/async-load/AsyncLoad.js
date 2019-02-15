@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { retryNumOfTimes } from 'utils/function';
+import { retryNumOfTimes } from '../../../utils/function';
 
 type Props = {
     errorComponent?: React.ComponentType<any>,

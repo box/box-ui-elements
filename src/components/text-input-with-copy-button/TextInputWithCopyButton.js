@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { FormattedMessage } from 'react-intl';
 
-import messages from 'common/messages';
+import messages from '../../common/messages';
 import TextInput from '../text-input';
 import Button from '../button';
 

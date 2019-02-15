@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import PlainButton from 'components/plain-button';
+import PlainButton from '../../components/plain-button';
 
 import ClassificationBadge from './ClassificationBadge';
 import messages from './messages';

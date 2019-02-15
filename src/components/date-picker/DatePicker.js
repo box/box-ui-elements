@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Pikaday from 'pikaday';
 import range from 'lodash/range';
 
-import { RESIN_TAG_TARGET } from 'common/variables';
+import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconAlert from '../../icons/general/IconAlert';
 import IconCalendar from '../../icons/general/IconCalendar';
 import IconClear from '../../icons/general/IconClear';

@@ -8,12 +8,14 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { ContentState, EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import Form from 'components/form-elements/form/Form';
-import DraftJSMentionSelector, { DraftMentionDecorator } from 'components/form-elements/draft-js-mention-selector';
-import commonMessages from 'common/messages';
+import commonMessages from '../../../../common/messages';
+import Form from '../../../../components/form-elements/form/Form';
+import DraftJSMentionSelector, {
+    DraftMentionDecorator,
+} from '../../../../components/form-elements/draft-js-mention-selector';
 
-import messages from 'elements/common/messages';
-import { FeatureFlag } from 'elements/common/feature-checking';
+import messages from '../../../common/messages';
+import { FeatureFlag } from '../../../common/feature-checking';
 import AddApproval from './AddApproval';
 import CommentInputControls from './CommentInputControls';
 import Avatar from '../Avatar';
