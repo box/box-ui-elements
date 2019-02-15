@@ -21,7 +21,7 @@ type State = {
     areErrorsEnabled: boolean,
     conditions: Array<Object>,
     isMenuOpen: boolean,
-    selectedPrefix: typeof WHERE | typeof AND | typeof OR,
+    selectedConnector: typeof WHERE | typeof AND | typeof OR,
 };
 
 type Props = {
@@ -36,7 +36,7 @@ class FilterButton extends React.Component<Props, State> {
         this.state = {
             appliedConditions: [],
             conditions: [],
-            selectedPrefix: AND,
+            selectedConnector: AND,
             areErrorsEnabled: false,
             isMenuOpen: false,
         };
@@ -67,13 +67,10 @@ class FilterButton extends React.Component<Props, State> {
 
     createCondition = (conditionID: string) => {
         const { columns } = this.props;
-        const { selectedPrefix, conditions } = this.state;
         if (columns) {
             const firstField = columns[0];
-            const prefix = conditions.length === 0 ? WHERE : selectedPrefix;
 
             return {
-                prefix,
                 columnDisplayText: firstField.displayName,
                 columnKey: 0,
                 id: conditionID,
@@ -164,35 +161,11 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    updateSelectedPrefix = (option: SelectOptionType) => {
-        const prefix = option.displayText;
+    updateSelectedConnector = (option: SelectOptionType) => {
+        const connector = option.displayText;
 
         this.setState({
-            selectedPrefix: prefix,
-        });
-
-        this.updateConditionsPrefixes(prefix);
-    };
-
-    updateConditionsPrefixes = (prefix: string) => {
-        const { conditions } = this.state;
-        const conditionsAfterUpdate = conditions.map((condition, index) => {
-            if (index !== 0) {
-                const updatedCondition = Object.assign({}, condition);
-                updatedCondition.prefix = prefix;
-                return updatedCondition;
-            }
-            return condition;
-        });
-
-        // The first condition must always have a prefix of WHERE.
-        const firstCondition = Object.assign({}, conditionsAfterUpdate[0]);
-        firstCondition.prefix = WHERE;
-
-        const updatedConditions = [firstCondition, ...conditionsAfterUpdate.slice(1)];
-
-        this.setState({
-            conditions: updatedConditions,
+            selectedConnector: connector,
         });
     };
 
@@ -203,21 +176,9 @@ class FilterButton extends React.Component<Props, State> {
             return conditionIndex !== index;
         });
 
-        if (conditionsAfterDeletion.length === 0) {
-            this.setState({
-                conditions: [],
-            });
-        } else {
-            // The first condition must always have a prefix of WHERE.
-            const firstCondition = Object.assign({}, conditionsAfterDeletion[0]);
-            firstCondition.prefix = WHERE;
-
-            const updatedConditions = [firstCondition, ...conditionsAfterDeletion.slice(1)];
-
-            this.setState({
-                conditions: updatedConditions,
-            });
-        }
+        this.setState({
+            conditions: conditionsAfterDeletion,
+        });
     };
 
     areAllValid = () => {
@@ -249,7 +210,7 @@ class FilterButton extends React.Component<Props, State> {
 
     render() {
         const { columns } = this.props;
-        const { appliedConditions, conditions, areErrorsEnabled, isMenuOpen } = this.state;
+        const { appliedConditions, conditions, areErrorsEnabled, isMenuOpen, selectedConnector } = this.state;
 
         const numberOfAppliedConditions = appliedConditions.length;
 
@@ -308,8 +269,9 @@ class FilterButton extends React.Component<Props, State> {
                                             areErrorsEnabled={areErrorsEnabled}
                                             index={index}
                                             columns={columns}
+                                            selectedConnector={selectedConnector}
                                             update={this.update}
-                                            updateSelectedPrefix={this.updateSelectedPrefix}
+                                            updateselectedConnector={this.updateselectedConnector}
                                         />
                                     );
                                 })}
