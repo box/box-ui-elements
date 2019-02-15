@@ -9,6 +9,9 @@ export const OPERATOR_KEY: 'operatorKey' = 'operatorKey';
 export const VALUE: 'value' = 'value';
 export const VALUE_DISPLAY_TEXT: 'valueDisplayText' = 'valueDisplayText';
 export const VALUE_KEY: 'valueKey' = 'valueKey';
+export const WHERE: null = null;
+export const AND: 'AND' = 'AND';
+export const OR: 'OR' = 'OR';
 
 export const STRING: 'string' = 'string';
 export const NUMBER: 'number' = 'number';

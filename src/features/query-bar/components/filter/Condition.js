@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
 import IconClose from '../../../../icons/general/IconClose';
@@ -21,6 +21,9 @@ import {
     VALUE,
     VALUE_DISPLAY_TEXT,
     VALUE_KEY,
+    WHERE,
+    AND,
+    OR,
 } from '../../constants';
 import type { ColumnType } from '../../flowTypes';
 
@@ -43,6 +46,7 @@ type Props = {
         fieldKeyType: string,
         valueType: any,
     ) => void,
+    updateSelectedPrefix: (option: Object) => void,
 };
 
 const deleteButtonIconHeight = 18;
@@ -56,6 +60,7 @@ const Condition = ({
     index,
     intl: { formatMessage },
     update,
+    updateSelectedPrefix,
 }: Props) => {
     const onDeleteButtonClick = () => {
         deleteCondition(index);
@@ -86,12 +91,12 @@ const Condition = ({
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
-        return options.map((option, optionIndex) => {
+        return options.map(option => {
             return {
                 displayText: option.displayName,
                 fieldId: option.id,
                 type: option.type,
-                value: optionIndex,
+                value: option.displayName,
             };
         });
     };
@@ -169,19 +174,50 @@ const Condition = ({
     };
 
     const renderPrefixField = () => {
+        const { prefix } = condition;
+        let message = '';
+        switch (prefix) {
+            case WHERE:
+                message = { ...messages.prefixLabelWhereText };
+                break;
+            case AND:
+                message = { ...messages.prefixButtonAndText };
+                break;
+            case OR:
+                message = { ...messages.prefixButtonOrText };
+                break;
+            default:
+                break;
+        }
+
+        const prefixOptions = getFormattedOptions(
+            [AND, OR].map(key => ({
+                displayName: key,
+                value: key,
+            })),
+        );
+
         return (
             <div className="filter-item-prefix-container">
-                <p className="filter-item-prefix-text">
-                    <FormattedMessage {...messages.prefixButtonText} />
-                </p>
+                {prefix === WHERE ? (
+                    <p className="filter-item-prefix-text">{formatMessage(message)}</p>
+                ) : (
+                    <SingleSelectField
+                        isDisabled={false}
+                        onChange={updateSelectedPrefix}
+                        options={prefixOptions}
+                        placeholder={formatMessage(message)}
+                        selectedValue={prefix}
+                    />
+                )}
             </div>
         );
     };
 
     const renderAttributeField = () => {
-        const { columnKey } = condition;
-        const columnAttributes = columns || [];
-        const attributeOptions = getFormattedOptions(columnAttributes);
+        const { attributeDisplayText } = condition;
+        const templateAttributes = (template && template.fields) || [];
+        const attributeOptions = getFormattedOptions(templateAttributes);
 
         return (
             <div className="filter-item-attribute-dropdown-container">
@@ -192,7 +228,7 @@ const Condition = ({
                         onChange={updateSelectedField}
                         options={attributeOptions}
                         placeholder={formatMessage(messages.selectAttributePlaceholderText)}
-                        selectedValue={columnKey}
+                        selectedValue={attributeDisplayText}
                     />
                 </div>
             </div>
@@ -200,9 +236,12 @@ const Condition = ({
     };
 
     const renderOperatorField = () => {
-        const { operatorKey } = condition;
-        const operatorsForAttribute = getOperatorsForAttribute();
+        const { operatorDisplayText, attributeDisplayText } = condition;
+
+        const operatorsForAttribute = getOperatorsForAttribute(attributeDisplayText);
         const operatorOptions = getFormattedOptions(operatorsForAttribute);
+
+        const selectedValue = operatorDisplayText || operatorOptions[0].displayText;
 
         return (
             <div className="filter-item-operator-dropdown-container">
@@ -212,7 +251,9 @@ const Condition = ({
                         isDisabled={false}
                         onChange={updateSelectedField}
                         options={operatorOptions}
-                        selectedValue={operatorKey}
+                        selectedValue={
+                            selectedValue // Default operator dropdown to first entry in options
+                        }
                     />
                 </div>
             </div>
@@ -234,7 +275,7 @@ const Condition = ({
             <div className={classnames}>
                 <ValueField
                     formatMessage={formatMessage}
-                    selectedValue={valueKey}
+                    selectedValue={valueDisplayText}
                     updateValueField={updateValueField}
                     updateSelectedField={updateSelectedField}
                     valueKey={valueKey}

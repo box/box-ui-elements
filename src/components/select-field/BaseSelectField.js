@@ -98,7 +98,14 @@ class BaseSelectField extends React.Component<Props, State> {
         // @NOTE: breaks encapsulation but alternative is unknown child ref
         const itemEl = id ? document.getElementById(id) : null;
         if (itemEl) {
-            scrollIntoViewIfNeeded(itemEl, false);
+            let parentEl = itemEl;
+            while (
+                parentEl.parentElement instanceof HTMLElement &&
+                !parentEl.classList.contains('overlay-wrapper') // Scroll the wrapper, not the body when contained in a overlay-wrapper.
+            ) {
+                parentEl = parentEl.parentElement;
+            }
+            scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
         }
     };
 
