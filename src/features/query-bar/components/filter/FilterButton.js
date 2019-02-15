@@ -13,6 +13,8 @@ import { Flyout, Overlay } from '../../../../components/flyout';
 
 import messages from '../../messages';
 
+import type { ColumnType } from '../../flowTypes';
+
 type State = {
     appliedConditions: Array<Object>,
     areErrorsEnabled: boolean,
@@ -21,8 +23,8 @@ type State = {
 };
 
 type Props = {
+    columns?: Array<ColumnType>,
     onFilterChange?: Function,
-    template?: Object,
 };
 
 class FilterButton extends React.Component<Props, State> {
@@ -53,11 +55,11 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     createCondition = (props: Props, conditionID: string) => {
-        if (props && props.template) {
-            const firstField = props.template.fields[0];
+        if (props && props.columns) {
+            const firstField = props.columns[0];
             return {
-                attributeDisplayText: firstField.displayName,
-                attributeKey: 0,
+                columnDisplayText: firstField.displayName,
+                columnKey: 0,
                 id: conditionID,
                 fieldId: firstField.id,
                 operatorDisplayText: '',
@@ -126,7 +128,7 @@ class FilterButton extends React.Component<Props, State> {
                 fieldId,
             };
 
-            if (fieldKeyType === 'attributeKey') {
+            if (fieldKeyType === 'columnKey') {
                 // Upon selecting a new attribute, the operator and value fields should be reset.
                 updatedCondition.operatorKey = 0;
                 updatedCondition.operatorDisplayText = '';
@@ -135,8 +137,10 @@ class FilterButton extends React.Component<Props, State> {
             }
 
             const updatedConditions = conditions.slice(0);
-            const idx = conditions.findIndex(c => c.id === updatedCondition.id);
-            updatedConditions[idx] = updatedCondition;
+            const conditionIndex = conditions.findIndex(
+                currentCondition => currentCondition.id === updatedCondition.id,
+            );
+            updatedConditions[conditionIndex] = updatedCondition;
 
             this.setState({
                 conditions: updatedConditions,
@@ -184,14 +188,14 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     render() {
-        const { template } = this.props;
+        const { columns } = this.props;
         const { appliedConditions, conditions, areErrorsEnabled, isMenuOpen } = this.state;
 
         const numberOfAppliedConditions = appliedConditions.length;
 
         const buttonClasses = classNames('query-bar-button', numberOfAppliedConditions !== 0 ? 'is-active' : '');
 
-        const isFilterDisabled = template === undefined;
+        const isFilterDisabled = columns === undefined;
 
         return (
             <Flyout
@@ -243,7 +247,7 @@ class FilterButton extends React.Component<Props, State> {
                                             deleteCondition={this.deleteCondition}
                                             areErrorsEnabled={areErrorsEnabled}
                                             index={index}
-                                            template={template}
+                                            columns={columns}
                                             update={this.update}
                                         />
                                     );

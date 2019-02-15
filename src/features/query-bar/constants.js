@@ -1,8 +1,8 @@
 // @flow
 
 export const ATTRIBUTE: 'attribute' = 'attribute';
-export const ATTRIBUTE_DISPLAY_TEXT: 'attributeDisplayText' = 'attributeDisplayText';
-export const ATTRIBUTE_KEY: 'attributeKey' = 'attributeKey';
+export const COLUMN_DISPLAY_TEXT: 'columnDisplayText' = 'columnDisplayText';
+export const COLUMN_KEY: 'columnKey' = 'columnKey';
 export const OPERATOR: 'operator' = 'operator';
 export const OPERATOR_DISPLAY_TEXT: 'operatorDisplayText' = 'operatorDisplayText';
 export const OPERATOR_KEY: 'operatorKey' = 'operatorKey';
