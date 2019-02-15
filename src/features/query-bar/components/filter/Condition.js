@@ -11,19 +11,20 @@ import ValueField from './ValueField';
 
 import messages from '../../messages';
 import {
+    AND,
     ATTRIBUTE,
     COLUMN_DISPLAY_TEXT,
     COLUMN_KEY,
+    DATE,
     OPERATOR,
     OPERATOR_DISPLAY_TEXT,
     OPERATOR_KEY,
     OPERATORS_FOR_ATTRIBUTE,
+    OR,
     VALUE,
     VALUE_DISPLAY_TEXT,
     VALUE_KEY,
     WHERE,
-    AND,
-    OR,
 } from '../../constants';
 import type { ColumnType, SelectOptionType } from '../../flowTypes';
 
@@ -155,7 +156,7 @@ const Condition = ({
 
         const isValueSet = valueKey !== null && valueKey !== '';
         const message =
-            valueType === 'date' ? (
+            valueType === DATE ? (
                 <FormattedMessage {...messages.tooltipSelectDateError} />
             ) : (
                 <FormattedMessage {...messages.tooltipSelectValueError} />

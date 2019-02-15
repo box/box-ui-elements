@@ -10,7 +10,7 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { WHERE, AND, OR } from '../../constants';
+import { AND, OR, WHERE } from '../../constants';
 
 import messages from '../../messages';
 
@@ -176,7 +176,7 @@ class FilterButton extends React.Component<Props, State> {
 
     updateConditionsPrefixes = (prefix: string) => {
         const { conditions } = this.state;
-        const conditionsAfterDeletion = conditions.map((condition, index) => {
+        const conditionsAfterUpdate = conditions.map((condition, index) => {
             if (index !== 0) {
                 const updatedCondition = Object.assign({}, condition);
                 updatedCondition.prefix = prefix;
@@ -186,10 +186,10 @@ class FilterButton extends React.Component<Props, State> {
         });
 
         // The first condition must always have a prefix of WHERE.
-        const firstCondition = Object.assign({}, conditionsAfterDeletion[0]);
+        const firstCondition = Object.assign({}, conditionsAfterUpdate[0]);
         firstCondition.prefix = WHERE;
 
-        const updatedConditions = [firstCondition, ...conditionsAfterDeletion.slice(1)];
+        const updatedConditions = [firstCondition, ...conditionsAfterUpdate.slice(1)];
 
         this.setState({
             conditions: updatedConditions,
