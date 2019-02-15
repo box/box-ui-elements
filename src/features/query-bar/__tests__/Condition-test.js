@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { initialCondition, columns } from '../components/fixtures';
 import { COLUMN_KEY, OPERATOR_KEY, VALUE_KEY } from '../constants';
-import { BaseCondition as Condition } from '../components/filter/Condition';
+import Condition from '../components/filter/Condition';
 
 describe('features/query-bar/components/filter/Condition', () => {
     const getWrapper = (props = {}) => {

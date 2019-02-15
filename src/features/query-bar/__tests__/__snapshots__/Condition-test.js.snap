@@ -40,6 +40,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
           },
         ]
       }
+      placeholder=""
     />
   </div>
   <div
@@ -74,6 +75,12 @@ exports[`features/query-bar/components/filter/Condition render() should render C
             },
           ]
         }
+        placeholder={
+          <FormattedMessage
+            defaultMessage="Select attribute"
+            id="boxui.queryBar.selectAttributePlaceholderText"
+          />
+        }
         selectedValue=""
       />
     </div>
@@ -106,7 +113,6 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     className="filter-item-value-dropdown-container"
   >
     <ValueField
-      formatMessage={[Function]}
       selectedValue=""
       updateSelectedField={[Function]}
       updateValueField={[Function]}
