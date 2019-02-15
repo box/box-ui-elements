@@ -65,10 +65,15 @@ class FilterButton extends React.Component<Props, State> {
         this.setState({ isMenuOpen: !this.state.isMenuOpen });
     };
 
-    createCondition = (props: Props, conditionID: string) => {
-        if (props && props.columns) {
-            const firstField = props.columns[0];
+    createCondition = (conditionID: string) => {
+        const { columns } = this.props;
+        const { selectedPrefix, conditions } = this.state;
+        if (columns) {
+            const firstField = columns[0];
+            const prefix = conditions.length === 0 ? WHERE : selectedPrefix;
+
             return {
+                prefix,
                 columnDisplayText: firstField.displayName,
                 columnKey: 0,
                 id: conditionID,
@@ -192,6 +197,12 @@ class FilterButton extends React.Component<Props, State> {
             return condition;
         });
 
+        // The first condition must always have a prefix of WHERE.
+        const firstCondition = Object.assign({}, conditionsAfterDeletion[0]);
+        firstCondition.prefix = WHERE;
+
+        const updatedConditions = [firstCondition, ...conditionsAfterDeletion.slice(1)];
+
         this.setState({
             conditions: updatedConditions,
         });
@@ -204,15 +215,21 @@ class FilterButton extends React.Component<Props, State> {
             return conditionIndex !== index;
         });
 
-        // The first condition must always have a prefix of WHERE.
-        const firstCondition = Object.assign({}, conditionsAfterDeletion[0]);
-        firstCondition.prefix = WHERE;
+        if (conditionsAfterDeletion.length === 0) {
+            this.setState({
+                conditions: [],
+            });
+        } else {
+            // The first condition must always have a prefix of WHERE.
+            const firstCondition = Object.assign({}, conditionsAfterDeletion[0]);
+            firstCondition.prefix = WHERE;
 
-        const updatedConditions = [firstCondition, ...conditionsAfterDeletion.slice(1)];
+            const updatedConditions = [firstCondition, ...conditionsAfterDeletion.slice(1)];
 
-        this.setState({
-            conditions: updatedConditions,
-        });
+            this.setState({
+                conditions: updatedConditions,
+            });
+        }
     };
 
     areAllValid = () => {

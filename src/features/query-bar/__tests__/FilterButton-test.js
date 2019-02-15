@@ -2,6 +2,8 @@
 import * as React from 'react';
 
 import { columns } from '../components/fixtures';
+import { WHERE } from '../constants';
+
 import FilterButton from '../components/filter/FilterButton';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
@@ -216,7 +218,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         valueKey: null,
                     },
                 ],
-                fieldType: 'attribute',
                 updatedConditions: [
                     {
                         prefix: null,

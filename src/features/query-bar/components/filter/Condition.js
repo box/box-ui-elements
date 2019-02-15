@@ -215,9 +215,9 @@ const Condition = ({
     };
 
     const renderAttributeField = () => {
-        const { attributeDisplayText } = condition;
-        const templateAttributes = (template && template.fields) || [];
-        const attributeOptions = getFormattedOptions(templateAttributes);
+        const { columnDisplayText } = condition;
+        const columnAttributes = columns || [];
+        const attributeOptions = getFormattedOptions(columnAttributes);
 
         return (
             <div className="filter-item-attribute-dropdown-container">
@@ -228,7 +228,7 @@ const Condition = ({
                         onChange={updateSelectedField}
                         options={attributeOptions}
                         placeholder={formatMessage(messages.selectAttributePlaceholderText)}
-                        selectedValue={attributeDisplayText}
+                        selectedValue={columnDisplayText}
                     />
                 </div>
             </div>
@@ -236,9 +236,8 @@ const Condition = ({
     };
 
     const renderOperatorField = () => {
-        const { operatorDisplayText, attributeDisplayText } = condition;
-
-        const operatorsForAttribute = getOperatorsForAttribute(attributeDisplayText);
+        const { operatorDisplayText } = condition;
+        const operatorsForAttribute = getOperatorsForAttribute();
         const operatorOptions = getFormattedOptions(operatorsForAttribute);
 
         const selectedValue = operatorDisplayText || operatorOptions[0].displayText;
@@ -251,9 +250,7 @@ const Condition = ({
                         isDisabled={false}
                         onChange={updateSelectedField}
                         options={operatorOptions}
-                        selectedValue={
-                            selectedValue // Default operator dropdown to first entry in options
-                        }
+                        selectedValue={operatorDisplayText || operatorOptions[0].displayText}
                     />
                 </div>
             </div>
@@ -261,7 +258,7 @@ const Condition = ({
     };
 
     const renderValueField = () => {
-        const { valueKey, valueType } = condition;
+        const { valueKey, valueType, valueDisplayText } = condition;
 
         const valuesForAttribute = getValuesForAttribute();
         const valueOptions = getFormattedOptions(valuesForAttribute);
