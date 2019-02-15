@@ -41,8 +41,8 @@
         "build:ci:dist": "LANGUAGE=en-US REACT=true yarn build:prod:dist",
         "build:dev:dist": "LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev webpack --config conf/webpack.config.js --mode development --progress --colors",
         "build:dev:es": "BABEL_ENV=dev NODE_ENV=dev yarn build:es --copy-files --source-maps inline --watch --ignore \"**/__tests__/**\"",
-        "build:es": "babel src --out-dir es",
-        "build:i18n": "props2es",
+        "build:es": "yarn babel src --out-dir es",
+        "build:i18n": "yarn props2es",
         "build:npm": "npm-run-all clean build:i18n build:prod:npm build:prod:es",
         "build:prod:es": "BABEL_ENV=npm NODE_ENV=production yarn build:es --ignore \"**/__tests__/**\"",
         "build:prod:dist": "NODE_ENV=production webpack --config conf/webpack.config.js --mode production",
@@ -50,14 +50,14 @@
         "build:prod:npm": "BABEL_ENV=production OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
         "build:variables": "node ./conf/build-style-vars.js ./src/styles/_variables.scss ./src/styles/variables.js ./src/styles/variables.json",
         "clean": "rm -rf dist es i18n/json i18n/*.js reports styleguide",
-        "copy:styles": "copyfiles './src/**/*.scss' es --up 1",
-        "copy:flow": "flow-copy-source --ignore \"**/__tests__/**\" ./src ./es",
+        "copy:styles": "yarn copyfiles './src/**/*.scss' es --up 1",
+        "copy:flow": "yarn flow-copy-source --ignore \"**/__tests__/**\" ./src ./es",
         "cy:open": "yarn cy:wait; yarn cypress open",
         "cy:run": "yarn cy:wait; yarn cypress run --spec test/integration/**/*.test.js",
-        "cy:wait": "wait-on http-get://localhost:6060/#",
+        "cy:wait": "yarn wait-on http-get://localhost:6060/#",
         "lint": "npm-run-all lint:*",
-        "lint:js": "eslint --max-warnings=0 .",
-        "lint:css": "stylelint \"src/**/*.scss\" --syntax scss",
+        "lint:js": "yarn eslint --max-warnings=0 .",
+        "lint:css": "yarn stylelint \"src/**/*.scss\" --syntax scss",
         "prebuild:es": "npm-run-all build:variables copy:styles copy:flow",
         "release": "yarn release:beta",
         "release:beta": "BRANCH=master ./conf/release.sh",
@@ -86,9 +86,9 @@
     },
     "lint-staged": {
         "linters": {
-            "*.js": ["eslint --fix", "git add"],
-            "*.md": ["prettier --write --parser=markdown", "git add"],
-            "*.json": ["prettier --write --parser=json", "git add"]
+            "*.js": ["yarn eslint --fix", "git add"],
+            "*.md": ["yarn prettier --write --parser=markdown", "git add"],
+            "*.json": ["yarn prettier --write --parser=json", "git add"]
         }
     },
     "husky": {
