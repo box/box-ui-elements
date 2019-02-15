@@ -80,7 +80,7 @@ export function focus(root: ?HTMLElement, selector?: string, focusRoot: boolean 
     }
 }
 
-export function scrollItemIntoView(id: string | null, className: string): void {
+export function scrollItemIntoView(id: ?string, className: string): void {
     // @NOTE: breaks encapsulation but alternative is unknown child ref
     const itemEl = id ? document.getElementById(id) : null;
     if (itemEl) {
