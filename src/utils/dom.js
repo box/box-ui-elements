@@ -3,6 +3,7 @@
  * @file File for some simple dom utilities
  * @author Box
  */
+import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 
 /**
  * Checks if an html element is some type of input-able
@@ -76,5 +77,20 @@ export function focus(root: ?HTMLElement, selector?: string, focusRoot: boolean 
         element.focus();
     } else if (focusRoot) {
         root.focus();
+    }
+}
+
+export function scrollItemIntoView(id: string | null, className: string): void {
+    // @NOTE: breaks encapsulation but alternative is unknown child ref
+    const itemEl = id ? document.getElementById(id) : null;
+    if (itemEl) {
+        let parentEl = itemEl;
+        while (
+            parentEl.parentElement instanceof HTMLElement &&
+            !parentEl.classList.contains(className) // Scroll the container, not the body when contained in a scroll-container.
+        ) {
+            parentEl = parentEl.parentElement;
+        }
+        scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
     }
 }

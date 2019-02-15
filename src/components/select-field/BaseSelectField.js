@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import uniqueId from 'lodash/uniqueId';
+import { scrollItemIntoView } from 'utils/dom';
 
 import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
@@ -10,6 +10,8 @@ import DatalistItem from '../datalist-item';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
 
 import './SelectField.scss';
+
+const overlayWrapperClass = 'overlay-wrapper';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -89,18 +91,10 @@ class BaseSelectField extends React.Component<Props, State> {
 
     setActiveItemID = (id: ?string) => {
         this.setState({ activeItemID: id });
-        this.scrollItemIntoView(id);
+        scrollItemIntoView(id, overlayWrapperClass);
     };
 
     selectFieldID: string;
-
-    scrollItemIntoView = (id: ?string) => {
-        // @NOTE: breaks encapsulation but alternative is unknown child ref
-        const itemEl = id ? document.getElementById(id) : null;
-        if (itemEl) {
-            scrollIntoViewIfNeeded(itemEl, false);
-        }
-    };
 
     handleChange = (selectedItems: Array<SelectOptionProp>) => {
         const { onChange } = this.props;
@@ -382,7 +376,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 <div className="select-field">
                     {this.renderSelectButton()}
                     <div
-                        className={classNames('overlay-wrapper', {
+                        className={classNames(overlayWrapperClass, {
                             'is-visible': isOpen,
                         })}
                     >
