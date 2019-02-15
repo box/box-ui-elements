@@ -188,7 +188,7 @@ class FilterButton extends React.Component<Props, State> {
 
     updateConditionsPrefixes = (prefix: string) => {
         const { conditions } = this.state;
-        const updatedConditions = conditions.map((condition, index) => {
+        const conditionsAfterDeletion = conditions.map((condition, index) => {
             if (index !== 0) {
                 const updatedCondition = Object.assign({}, condition);
                 updatedCondition.prefix = prefix;
@@ -196,6 +196,12 @@ class FilterButton extends React.Component<Props, State> {
             }
             return condition;
         });
+
+        // The first condition must always have a prefix of WHERE.
+        const firstCondition = Object.assign({}, conditionsAfterDeletion[0]);
+        firstCondition.prefix = WHERE;
+
+        const updatedConditions = [firstCondition, ...conditionsAfterDeletion.slice(1)];
 
         this.setState({
             conditions: updatedConditions,
