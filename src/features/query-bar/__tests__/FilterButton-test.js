@@ -3,7 +3,6 @@ import * as React from 'react';
 
 import { columns } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
-import { AND, WHERE } from '../constants';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
@@ -197,7 +196,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 index: 0,
                 conditions: [
                     {
-                        prefix: WHERE,
                         id: '2',
                         columnDisplayText: '',
                         columnKey: null,
@@ -207,7 +205,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         valueKey: null,
                     },
                     {
-                        prefix: AND,
                         id: '3',
                         columnDisplayText: '',
                         columnKey: null,
@@ -219,7 +216,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 ],
                 updatedConditions: [
                     {
-                        prefix: WHERE,
                         id: '3',
                         columnDisplayText: '',
                         columnKey: null,
@@ -302,7 +298,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const wrapper = getWrapper({ columns });
             const conditionID = 123;
             const expected = {
-                prefix: WHERE,
                 columnDisplayText: 'Hullo Thar',
                 columnKey: 0,
                 id: conditionID,

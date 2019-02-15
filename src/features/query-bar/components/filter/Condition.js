@@ -24,7 +24,6 @@ import {
     VALUE,
     VALUE_DISPLAY_TEXT,
     VALUE_KEY,
-    WHERE,
 } from '../../constants';
 import type { ColumnType, SelectOptionType } from '../../flowTypes';
 
@@ -37,6 +36,7 @@ type Props = {
     deleteCondition: (index: number) => void,
     index: number,
     intl: Object,
+    selectedConnector: string,
     update: (
         index: number,
         condition: Object,
@@ -47,7 +47,7 @@ type Props = {
         fieldKeyType: string,
         valueType: any,
     ) => void,
-    updateSelectedPrefix: (option: SelectOptionType) => void,
+    updateSelectedConnector: (option: SelectOptionType) => void,
 };
 
 const deleteButtonIconHeight = 18;
@@ -59,8 +59,9 @@ const Condition = ({
     condition,
     deleteCondition,
     index,
+    selectedConnector,
     update,
-    updateSelectedPrefix,
+    updateSelectedConnector,
 }: Props) => {
     const onDeleteButtonClick = () => {
         deleteCondition(index);
@@ -176,24 +177,20 @@ const Condition = ({
         );
     };
 
-    const renderPrefixField = () => {
-        const { prefix } = condition;
+    const renderConnectorField = () => {
         let message = '';
-        switch (prefix) {
-            case WHERE:
-                message = <FormattedMessage {...messages.prefixLabelWhereText} />;
-                break;
+        switch (selectedConnector) {
             case AND:
-                message = <FormattedMessage {...messages.prefixButtonAndText} />;
+                message = <FormattedMessage {...messages.connectorAndText} />;
                 break;
             case OR:
-                message = <FormattedMessage {...messages.prefixButtonOrText} />;
+                message = <FormattedMessage {...messages.connectorOrText} />;
                 break;
             default:
                 break;
         }
 
-        const prefixOptions = getFormattedOptions(
+        const connectorOptions = getFormattedOptions(
             [AND, OR].map(key => ({
                 displayName: key,
                 value: key,
@@ -201,16 +198,18 @@ const Condition = ({
         );
 
         return (
-            <div className="filter-item-prefix-container">
-                {prefix === WHERE ? (
-                    <p className="filter-item-prefix-text">{message}</p>
+            <div className="filter-item-connector-container">
+                {index === 0 ? (
+                    <p className="filter-item-connector-text">
+                        <FormattedMessage {...messages.connectorWhereText} />
+                    </p>
                 ) : (
                     <SingleSelectField
                         isDisabled={false}
-                        onChange={updateSelectedPrefix}
-                        options={prefixOptions}
+                        onChange={updateSelectedConnector}
+                        options={connectorOptions}
                         placeholder={message}
-                        selectedValue={prefix}
+                        selectedValue={selectedConnector}
                     />
                 )}
             </div>
@@ -302,7 +301,7 @@ const Condition = ({
     return (
         <div className="filter-item-container">
             {renderDeleteButton()}
-            {renderPrefixField()}
+            {renderConnectorField()}
             {renderAttributeField()}
             {renderOperatorField()}
             {renderValueField()}

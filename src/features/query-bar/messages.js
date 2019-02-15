@@ -27,20 +27,20 @@ const messages = defineMessages({
         description: 'Placeholder text on the value button, on click should open a dropdown',
         id: 'boxui.queryBar.selectValuePlaceholderText',
     },
-    prefixLabelWhereText: {
+    connectorWhereText: {
         defaultMessage: 'WHERE',
-        description: 'Text on the prefix label, the first condition will show WHERE',
-        id: 'boxui.queryBar.prefixLabelWhereText',
+        description: 'Text on the label, the first condition will show WHERE',
+        id: 'boxui.queryBar.connectorWhereText',
     },
-    prefixButtonAndText: {
+    connectorAndText: {
         defaultMessage: 'AND',
-        description: 'Text on the prefix dropdown, on click should open a dropdown showing either AND or OR',
-        id: 'boxui.queryBar.prefixButtonAndText',
+        description: 'Text on the connector dropdown, on click should open a dropdown showing either AND or OR',
+        id: 'boxui.queryBar.connectorAndText',
     },
-    prefixButtonOrText: {
+    connectorOrText: {
         defaultMessage: 'OR',
-        description: 'Text on the prefix button, on click should open a dropdown showing either AND or OR',
-        id: 'boxui.queryBar.prefixButtonOrText',
+        description: 'Text on the connector dropdown, on click should open a dropdown showing either AND or OR',
+        id: 'boxui.queryBar.connectorOrText',
     },
     addFilterButtonText: {
         defaultMessage: '+ Add Filter',
