@@ -14,14 +14,14 @@ import { WHERE, AND, OR } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType } from '../../flowTypes';
+import type { ColumnType, SelectOptionType } from '../../flowTypes';
 
 type State = {
     appliedConditions: Array<Object>,
     areErrorsEnabled: boolean,
     conditions: Array<Object>,
     isMenuOpen: boolean,
-    selectedPrefix: string,
+    selectedPrefix: typeof WHERE | typeof AND | typeof OR,
 };
 
 type Props = {
@@ -164,26 +164,14 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    updateSelectedPrefix = (option: Object) => {
-        const displayText = option.displayText;
-        let updatedPrefix = '';
-
-        switch (displayText) {
-            case 'AND':
-                updatedPrefix = AND;
-                break;
-            case 'OR':
-                updatedPrefix = OR;
-                break;
-            default:
-                break;
-        }
+    updateSelectedPrefix = (option: SelectOptionType) => {
+        const prefix = option.displayText;
 
         this.setState({
-            selectedPrefix: updatedPrefix,
+            selectedPrefix: prefix,
         });
 
-        this.updateConditionsPrefixes(updatedPrefix);
+        this.updateConditionsPrefixes(prefix);
     };
 
     updateConditionsPrefixes = (prefix: string) => {
