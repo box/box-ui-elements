@@ -8,7 +8,7 @@ import ScrollWrapper from '../scroll-wrapper';
 
 import './SelectorDropdown.scss';
 
-const overlayWrapperClass = 'overlay-wrapper';
+const OVERLAY_WRAPPER_CLASS = 'overlay-wrapper';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -76,7 +76,7 @@ class SelectorDropdown extends React.Component<Props, State> {
 
     setActiveItemID = (id: string | null) => {
         this.setState({ activeItemID: id });
-        scrollItemIntoView(id, overlayWrapperClass);
+        scrollItemIntoView(id, OVERLAY_WRAPPER_CLASS);
     };
 
     listboxID: string;
@@ -266,7 +266,7 @@ class SelectorDropdown extends React.Component<Props, State> {
             >
                 {React.cloneElement(selector, { inputProps })}
                 {isOpen && (
-                    <div className={`${overlayWrapperClass} is-visible`}>
+                    <div className={`${OVERLAY_WRAPPER_CLASS} is-visible`}>
                         {title}
                         {shouldScroll ? <ScrollWrapper>{list}</ScrollWrapper> : list}
                     </div>

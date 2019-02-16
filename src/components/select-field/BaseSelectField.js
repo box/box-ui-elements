@@ -11,7 +11,7 @@ import type { SelectOptionValueProp, SelectOptionProp } from './props';
 
 import './SelectField.scss';
 
-const overlayWrapperClass = 'overlay-wrapper';
+const OVERLAY_WRAPPER_CLASS = 'overlay-wrapper';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -91,7 +91,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
     setActiveItemID = (id: ?string) => {
         this.setState({ activeItemID: id });
-        scrollItemIntoView(id, overlayWrapperClass);
+        scrollItemIntoView(id, OVERLAY_WRAPPER_CLASS);
     };
 
     selectFieldID: string;
@@ -376,7 +376,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 <div className="select-field">
                     {this.renderSelectButton()}
                     <div
-                        className={classNames(overlayWrapperClass, {
+                        className={classNames(OVERLAY_WRAPPER_CLASS, {
                             'is-visible': isOpen,
                         })}
                     >
