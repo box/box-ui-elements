@@ -10,7 +10,7 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND, OR, WHERE } from '../../constants';
+import { AND, OR } from '../../constants';
 
 import messages from '../../messages';
 
@@ -21,7 +21,7 @@ type State = {
     areErrorsEnabled: boolean,
     conditions: Array<Object>,
     isMenuOpen: boolean,
-    selectedConnector: typeof WHERE | typeof AND | typeof OR,
+    selectedConnector: typeof AND | typeof OR,
 };
 
 type Props = {
