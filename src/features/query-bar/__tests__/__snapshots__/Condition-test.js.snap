@@ -20,28 +20,16 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     </button>
   </div>
   <div
-    className="filter-item-prefix-container"
+    className="filter-item-connector-container"
   >
-    <SingleSelectField
-      isDisabled={false}
-      options={
-        Array [
-          Object {
-            "displayText": "AND",
-            "fieldId": undefined,
-            "type": undefined,
-            "value": "AND",
-          },
-          Object {
-            "displayText": "OR",
-            "fieldId": undefined,
-            "type": undefined,
-            "value": "OR",
-          },
-        ]
-      }
-      placeholder=""
-    />
+    <p
+      className="filter-item-connector-text"
+    >
+      <FormattedMessage
+        defaultMessage="WHERE"
+        id="boxui.queryBar.connectorWhereText"
+      />
+    </p>
   </div>
   <div
     className="filter-item-attribute-dropdown-container"
