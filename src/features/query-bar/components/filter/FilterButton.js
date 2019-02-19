@@ -10,18 +10,18 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND, OR } from '../../constants';
+import { AND } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType, SelectOptionType } from '../../flowTypes';
+import type { ColumnType, SelectOptionType, ConnectorType } from '../../flowTypes';
 
 type State = {
     appliedConditions: Array<Object>,
     areErrorsEnabled: boolean,
     conditions: Array<Object>,
     isMenuOpen: boolean,
-    selectedConnector: typeof AND | typeof OR,
+    selectedConnector: ConnectorType,
 };
 
 type Props = {
@@ -43,8 +43,7 @@ class FilterButton extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        const id = this.generateConditionID();
-        const initialCondition = this.createCondition(id);
+        const initialCondition = this.createCondition();
 
         this.setState({
             conditions: [initialCondition],
@@ -65,7 +64,8 @@ class FilterButton extends React.Component<Props, State> {
         this.setState({ isMenuOpen: !this.state.isMenuOpen });
     };
 
-    createCondition = (conditionID: string) => {
+    createCondition = () => {
+        const conditionID = this.generateConditionID();
         const { columns } = this.props;
         if (columns) {
             const firstField = columns[0];
@@ -90,8 +90,7 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     addFilter = () => {
-        const id = this.generateConditionID();
-        const newCondition = this.createCondition(id);
+        const newCondition = this.createCondition();
         this.setState({
             conditions: [...this.state.conditions, newCondition],
             areErrorsEnabled: false,
@@ -161,8 +160,8 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    updateSelectedConnector = (option: SelectOptionType) => {
-        const connector = option.displayText;
+    onConnectorChange = (option: SelectOptionType) => {
+        const connector = option.value;
 
         this.setState({
             selectedConnector: connector,
@@ -271,7 +270,7 @@ class FilterButton extends React.Component<Props, State> {
                                             columns={columns}
                                             selectedConnector={selectedConnector}
                                             update={this.update}
-                                            updateselectedConnector={this.updateselectedConnector}
+                                            onConnectorChange={this.onConnectorChange}
                                         />
                                     );
                                 })}

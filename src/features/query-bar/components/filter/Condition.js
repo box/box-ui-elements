@@ -15,6 +15,7 @@ import {
     ATTRIBUTE,
     COLUMN_DISPLAY_TEXT,
     COLUMN_KEY,
+    CONNECTOR_NAMES,
     DATE,
     OPERATOR,
     OPERATOR_DISPLAY_TEXT,
@@ -36,6 +37,7 @@ type Props = {
     deleteCondition: (index: number) => void,
     index: number,
     intl: Object,
+    onConnectorChange: (option: SelectOptionType) => void,
     selectedConnector: string,
     update: (
         index: number,
@@ -47,7 +49,6 @@ type Props = {
         fieldKeyType: string,
         valueType: any,
     ) => void,
-    updateSelectedConnector: (option: SelectOptionType) => void,
 };
 
 const deleteButtonIconHeight = 18;
@@ -61,7 +62,7 @@ const Condition = ({
     index,
     selectedConnector,
     update,
-    updateSelectedConnector,
+    onConnectorChange,
 }: Props) => {
     const onDeleteButtonClick = () => {
         deleteCondition(index);
@@ -190,9 +191,9 @@ const Condition = ({
         }
 
         const connectorOptions = getFormattedOptions(
-            [AND, OR].map(key => ({
-                displayName: key,
-                value: key,
+            [AND, OR].map(connector => ({
+                displayName: CONNECTOR_NAMES[connector],
+                value: connector,
             })),
         );
 
@@ -205,7 +206,7 @@ const Condition = ({
                 ) : (
                     <SingleSelectField
                         isDisabled={false}
-                        onChange={updateSelectedConnector}
+                        onChange={onConnectorChange}
                         options={connectorOptions}
                         placeholder={message}
                         selectedValue={selectedConnector}
