@@ -1,8 +1,15 @@
 // @flow
 
+export const AND: 'AND' = 'AND';
+export const OR: 'OR' = 'OR';
 export const ATTRIBUTE: 'attribute' = 'attribute';
 export const COLUMN_DISPLAY_TEXT: 'columnDisplayText' = 'columnDisplayText';
 export const COLUMN_KEY: 'columnKey' = 'columnKey';
+export const CONNECTOR_NAMES = {
+    // Used to change display text of connector while keeping the value the same
+    AND,
+    OR,
+};
 export const OPERATOR: 'operator' = 'operator';
 export const OPERATOR_DISPLAY_TEXT: 'operatorDisplayText' = 'operatorDisplayText';
 export const OPERATOR_KEY: 'operatorKey' = 'operatorKey';
@@ -10,8 +17,6 @@ export const VALUE: 'value' = 'value';
 export const VALUE_DISPLAY_TEXT: 'valueDisplayText' = 'valueDisplayText';
 export const VALUE_KEY: 'valueKey' = 'valueKey';
 export const WHERE: 'WHERE' = 'WHERE';
-export const AND: 'AND' = 'AND';
-export const OR: 'OR' = 'OR';
 
 export const STRING: 'string' = 'string';
 export const NUMBER: 'number' = 'number';

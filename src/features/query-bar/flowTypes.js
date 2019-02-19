@@ -28,3 +28,5 @@ export type ConditionType = {
     valueKey: string | null,
     valueType: string,
 };
+
+export type ConnectorType = string;
