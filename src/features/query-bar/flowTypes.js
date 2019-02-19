@@ -1,4 +1,5 @@
 // @flow
+import { AND, OR } from './constants';
 
 export type SelectOptionType = {
     displayText: string,
@@ -29,4 +30,4 @@ export type ConditionType = {
     valueType: string,
 };
 
-export type ConnectorType = string;
+export type ConnectorType = typeof AND | typeof OR;
