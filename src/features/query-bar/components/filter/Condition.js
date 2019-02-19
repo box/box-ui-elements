@@ -27,7 +27,7 @@ import {
 } from '../../constants';
 import type { ColumnType, SelectOptionType } from '../../flowTypes';
 
-import '../../styles/FilterItem.scss';
+import '../../styles/Condition.scss';
 
 type Props = {
     areErrorsEnabled: boolean,
@@ -156,12 +156,11 @@ const Condition = ({
         const { valueKey, valueType } = condition;
 
         const isValueSet = valueKey !== null && valueKey !== '';
-        const message =
-            valueType === DATE ? (
-                <FormattedMessage {...messages.tooltipSelectDateError} />
-            ) : (
-                <FormattedMessage {...messages.tooltipSelectValueError} />
-            );
+        const message = (
+            <FormattedMessage
+                {...(valueType === DATE ? messages.tooltipSelectDateError : messages.tooltipSelectValueError)}
+            />
+        );
         const error = areErrorsEnabled && !isValueSet ? message : null;
 
         return error;
@@ -169,7 +168,7 @@ const Condition = ({
 
     const renderDeleteButton = () => {
         return (
-            <div className="filter-item-delete-button">
+            <div className="condition-delete-button">
                 <button className="delete-button" onClick={onDeleteButtonClick} type="button">
                     <IconClose width={deleteButtonIconWidth} height={deleteButtonIconHeight} color="#999EA4" />
                 </button>
@@ -198,9 +197,9 @@ const Condition = ({
         );
 
         return (
-            <div className="filter-item-connector-container">
+            <div className="condition-connector">
                 {index === 0 ? (
-                    <p className="filter-item-connector-text">
+                    <p className="condition-connector-text">
                         <FormattedMessage {...messages.connectorWhereText} />
                     </p>
                 ) : (
@@ -223,7 +222,7 @@ const Condition = ({
         const placeholder = <FormattedMessage {...messages.selectAttributePlaceholderText} />;
 
         return (
-            <div className="filter-item-attribute-dropdown-container">
+            <div className="condition-attribute-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
                     <SingleSelectField
                         fieldType={ATTRIBUTE}
@@ -244,7 +243,7 @@ const Condition = ({
         const operatorOptions = getFormattedOptions(operatorsForAttribute);
 
         return (
-            <div className="filter-item-operator-dropdown-container">
+            <div className="condition-operator-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
                     <SingleSelectField
                         fieldType={OPERATOR}
@@ -265,7 +264,7 @@ const Condition = ({
         const valueOptions = getFormattedOptions(valuesForAttribute);
         const error = getErrorMessage();
 
-        const classnames = classNames('filter-item-value-dropdown-container', {
+        const classnames = classNames('condition-value-dropdown-container', {
             'show-error': error,
         });
 
@@ -287,7 +286,7 @@ const Condition = ({
         const error = getErrorMessage();
         return (
             error && (
-                <div className="filter-item-error-icon-status">
+                <div className="condition-error-icon-status">
                     <Tooltip text={error || ''} position="middle-right" theme="error">
                         <span>
                             <IconAlertDefault />
@@ -299,7 +298,7 @@ const Condition = ({
     };
 
     return (
-        <div className="filter-item-container">
+        <div className="condition-container">
             {renderDeleteButton()}
             {renderConnectorField()}
             {renderAttributeField()}
