@@ -296,7 +296,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     describe('createCondition()', () => {
         test('Should return a condition object if columns is defined', () => {
             const wrapper = getWrapper({ columns });
-            const conditionID = 123;
+            const conditionID = '11';
             const expected = {
                 columnDisplayText: 'Hullo Thar',
                 columnKey: 0,

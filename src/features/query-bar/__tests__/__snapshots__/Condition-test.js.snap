@@ -2,10 +2,10 @@
 
 exports[`features/query-bar/components/filter/Condition render() should render Condition 1`] = `
 <div
-  className="filter-item-container"
+  className="condition-container"
 >
   <div
-    className="filter-item-delete-button"
+    className="condition-delete-button"
   >
     <button
       className="delete-button"
@@ -20,10 +20,10 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     </button>
   </div>
   <div
-    className="filter-item-connector-container"
+    className="condition-connector"
   >
     <p
-      className="filter-item-connector-text"
+      className="condition-connector-text"
     >
       <FormattedMessage
         defaultMessage="WHERE"
@@ -32,7 +32,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     </p>
   </div>
   <div
-    className="filter-item-attribute-dropdown-container"
+    className="condition-attribute-dropdown-container"
   >
     <div
       className="filter-dropdown-single-select-field-container"
@@ -74,7 +74,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     </div>
   </div>
   <div
-    className="filter-item-operator-dropdown-container"
+    className="condition-operator-dropdown-container"
   >
     <div
       className="filter-dropdown-single-select-field-container"
@@ -98,7 +98,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     </div>
   </div>
   <div
-    className="filter-item-value-dropdown-container"
+    className="condition-value-dropdown-container"
   >
     <ValueField
       selectedValue=""
