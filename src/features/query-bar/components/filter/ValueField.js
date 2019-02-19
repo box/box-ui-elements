@@ -9,7 +9,7 @@ import DatePicker from '../../../../components/date-picker';
 import messages from '../../messages';
 import { VALUE } from '../../constants';
 
-import '../../styles/FilterItem.scss';
+import '../../styles/Condition.scss';
 
 type Props = {
     selectedValue?: string | number,
