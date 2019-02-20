@@ -8,10 +8,9 @@ import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
 import DatalistItem from '../datalist-item';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
+import { OVERLAY_WRAPPER_CLASS } from '../../constants';
 
 import './SelectField.scss';
-
-const OVERLAY_WRAPPER_CLASS = 'overlay-wrapper';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
