@@ -3,7 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 
-import { scrollItemIntoView } from '../../utils/dom';
+import { scrollIntoView } from '../../utils/dom';
 import ScrollWrapper from '../scroll-wrapper';
 
 import './SelectorDropdown.scss';
@@ -77,7 +77,7 @@ class SelectorDropdown extends React.Component<Props, State> {
     setActiveItemID = (id: string | null) => {
         const itemEl = id ? document.getElementById(id) : null;
         this.setState({ activeItemID: id });
-        scrollItemIntoView(itemEl);
+        scrollIntoView(itemEl);
     };
 
     listboxID: string;

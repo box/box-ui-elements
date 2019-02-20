@@ -80,17 +80,25 @@ export function focus(root: ?HTMLElement, selector?: string, focusRoot: boolean 
     }
 }
 
-export function scrollItemIntoView(id: ?string, className: string): void {
+/**
+ * Scrolls the container / modal / wrapper instead of the body
+ *
+ * @param {HTMLElement} itemEl - the base dom element to search
+ * @return {void}
+ */
+export function scrollIntoView(itemEl: ?HTMLElement): void {
     // @NOTE: breaks encapsulation but alternative is unknown child ref
-    const itemEl = id ? document.getElementById(id) : null;
     if (itemEl) {
-        let parentEl = itemEl;
-        while (
-            parentEl.parentElement instanceof HTMLElement &&
-            !parentEl.classList.contains(className) // Scroll the container, not the body when contained in a scroll-container.
-        ) {
-            parentEl = parentEl.parentElement;
-        }
+        const parentEl = itemEl.closest('html, .modal, .overlay-wrapper');
         scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
     }
 }
+
+Element.prototype.closest = function(s) {
+    let el = this;
+    do {
+        if (el.matches(s)) return el;
+        el = el.parentElement || el.parentNode;
+    } while (el !== null && el.nodeType === 1);
+    return null;
+};

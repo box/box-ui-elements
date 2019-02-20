@@ -3,7 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 
-import { scrollItemIntoView } from '../../utils/dom';
+import { scrollIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
 import DatalistItem from '../datalist-item';
@@ -92,7 +92,7 @@ class BaseSelectField extends React.Component<Props, State> {
     setActiveItemID = (id: ?string) => {
         const itemEl = id ? document.getElementById(id) : null;
         this.setState({ activeItemID: id });
-        scrollItemIntoView(itemEl);
+        scrollIntoView(itemEl);
     };
 
     selectFieldID: string;
