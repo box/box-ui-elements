@@ -16,8 +16,15 @@ describe('util/dom', () => {
 
         test('should call scrollIntoView', () => {
             const itemEl = document.querySelector('.button');
+            const parentEl = document.querySelector('.modal');
             scrollIntoView(itemEl);
-            expect(scrollIntoViewIfNeeded).toHaveBeenCalled();
+            expect(scrollIntoViewIfNeeded).toHaveBeenCalledWith(itemEl, false, undefined, parentEl);
+        });
+
+        test('should not call scrollIntoView when parent is evaluated as null', () => {
+            const itemEl = document.querySelector('.input');
+            scrollIntoView(itemEl);
+            expect(scrollIntoViewIfNeeded).not.toHaveBeenCalled();
         });
     });
 });

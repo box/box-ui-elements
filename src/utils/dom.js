@@ -90,7 +90,7 @@ export function focus(root: ?HTMLElement, selector?: string, focusRoot: boolean 
 export function scrollIntoView(itemEl: ?HTMLElement): void {
     // @NOTE: breaks encapsulation but alternative is unknown child ref
     if (itemEl) {
-        const parentEl = itemEl.closest('html, .modal, .overlay-wrapper');
+        const parentEl = itemEl.closest('body, .modal, .overlay-wrapper');
         scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
     }
 }
