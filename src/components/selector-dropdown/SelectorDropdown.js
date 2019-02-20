@@ -5,10 +5,9 @@ import uniqueId from 'lodash/uniqueId';
 
 import { scrollIntoView } from '../../utils/dom';
 import ScrollWrapper from '../scroll-wrapper';
+import { OVERLAY_WRAPPER_CLASS } from '../../constants';
 
 import './SelectorDropdown.scss';
-
-const OVERLAY_WRAPPER_CLASS = 'overlay-wrapper';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
