@@ -30,4 +30,4 @@ export type ConditionType = {
     valueType: string,
 };
 
-export type ConnectorType = typeof AND | typeof OR;
+export type ConnectorType = typeof AND | typeof OR | null;
