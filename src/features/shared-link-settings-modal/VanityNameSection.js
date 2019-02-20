@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import TextInput from 'components/text-input';
+import TextInput from '../../components/text-input';
 
 import messages from './messages';
 

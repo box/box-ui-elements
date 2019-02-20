@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import Button from 'components/button';
-import PrimaryButton from 'components/primary-button';
-import { Notification, NotificationsWrapper } from 'components/notification';
+import Button from '../../src/components/button';
+import PrimaryButton from '../../src/components/primary-button';
+import { Notification, NotificationsWrapper } from '../../src/components/notification';
 
 class NotificationsWrapperExample extends Component {
     state = {

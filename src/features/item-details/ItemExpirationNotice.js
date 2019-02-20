@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import InlineNotice from 'components/inline-notice';
+import InlineNotice from '../../components/inline-notice';
 
 import messages from './messages';
 

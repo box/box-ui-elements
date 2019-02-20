@@ -1,13 +1,13 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
-import * as TokenService from 'utils/TokenService';
-import { PREVIEW_FIELDS_TO_FETCH } from 'utils/fields';
+import * as TokenService from '../../../utils/TokenService';
+import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import PreviewLoading from '../PreviewLoading';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
 
-jest.mock('elements/common/Internationalize', () => 'mock-internationalize');
+jest.mock('../../common/Internationalize', () => 'mock-internationalize');
 
 describe('elements/content-preview/ContentPreview', () => {
     const getWrapper = (props = {}) =>

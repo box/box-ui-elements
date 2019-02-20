@@ -5,7 +5,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import messages from 'elements/common/messages';
+import messages from '../common/messages';
 import UploadInput from './UploadInput';
 
 type Props = {

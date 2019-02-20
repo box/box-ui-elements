@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import * as UploaderUtils from 'utils/uploads';
+import * as UploaderUtils from '../../../utils/uploads';
 import { ContentUploaderComponent } from '../ContentUploader';
 import { STATUS_PENDING, VIEW_UPLOAD_SUCCESS } from '../../../constants';
 

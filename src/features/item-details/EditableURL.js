@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import TextInput from 'components/text-input/TextInput';
+import TextInput from '../../components/text-input/TextInput';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';

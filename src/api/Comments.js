@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import { COMMENTS_FIELDS_TO_FETCH } from 'utils/fields';
+import { COMMENTS_FIELDS_TO_FETCH } from '../utils/fields';
 import OffsetBasedAPI from './OffsetBasedAPI';
 import {
     PERMISSION_CAN_COMMENT,

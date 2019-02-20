@@ -2,8 +2,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-import LinkBase from 'components/link/LinkBase';
-import Tooltip from 'components/tooltip';
+import LinkBase from '../../components/link/LinkBase';
+import Tooltip from '../../components/tooltip';
 import LeftSidebarLinkCallout from './LeftSidebarLinkCallout';
 import RemoveButton from './RemoveButton';
 

@@ -9,11 +9,11 @@ import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
 
-import { ReadableTime } from 'components/time';
-import Tooltip from 'components/tooltip';
+import { ReadableTime } from '../../../../components/time';
+import Tooltip from '../../../../components/tooltip';
 
-import messages from 'elements/common/messages';
-import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
+import messages from '../../../common/messages';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import UserLink from './UserLink';
 import InlineDelete from './InlineDelete';
 import InlineEdit from './InlineEdit';

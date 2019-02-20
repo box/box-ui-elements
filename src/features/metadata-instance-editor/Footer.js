@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'components/button/Button';
-import PlainButton from 'components/plain-button/PlainButton';
-import PrimaryButton from 'components/primary-button/PrimaryButton';
+import Button from '../../components/button/Button';
+import PlainButton from '../../components/plain-button/PlainButton';
+import PrimaryButton from '../../components/primary-button/PrimaryButton';
 
 import messages from './messages';
 import './Footer.scss';

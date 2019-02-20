@@ -1,6 +1,6 @@
-import messages from 'elements/common/messages';
-import * as sorter from 'utils/sorter';
-import * as error from 'utils/error';
+import messages from '../../elements/common/messages';
+import * as sorter from '../../utils/sorter';
+import * as error from '../../utils/error';
 import { IS_ERROR_DISPLAYED } from '../../constants';
 import Feed from '../Feed';
 

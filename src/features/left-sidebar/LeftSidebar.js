@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 
-import { NavSidebar, NavList, NavListCollapseHeader } from 'components/nav-sidebar';
-import LoadingIndicatorWrapper from 'components/loading-indicator/LoadingIndicatorWrapper';
+import { NavSidebar, NavList, NavListCollapseHeader } from '../../components/nav-sidebar';
+import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import { BOX_BLUE } from '../../common/variables';
 
 import CopyrightFooter from './CopyrightFooter';

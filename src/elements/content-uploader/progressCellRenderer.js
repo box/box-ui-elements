@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import messages from 'elements/common/messages';
+import messages from '../common/messages';
 import ItemProgress from './ItemProgress';
 import {
     ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,

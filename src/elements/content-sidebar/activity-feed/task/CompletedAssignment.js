@@ -6,9 +6,9 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import IconCheck from 'icons/general/IconCheck';
+import IconCheck from '../../../../icons/general/IconCheck';
 
-import messages from 'elements/common/messages';
+import messages from '../../../common/messages';
 
 type Props = {
     name: string,

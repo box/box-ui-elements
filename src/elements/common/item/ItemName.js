@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import PlainButton from 'components/plain-button/PlainButton';
+import PlainButton from '../../../components/plain-button/PlainButton';
 import { TYPE_FOLDER, TYPE_WEBLINK } from '../../../constants';
 
 import './ItemName.scss';

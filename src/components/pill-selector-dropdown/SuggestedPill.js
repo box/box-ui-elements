@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 
-import PlainButton from 'components/plain-button';
-import Tooltip from 'components/tooltip';
+import PlainButton from '../plain-button';
+import Tooltip from '../tooltip';
 import { KEYS } from '../../constants';
 
 import { type SuggestedPill as SuggestedPillType } from './flowTypes';

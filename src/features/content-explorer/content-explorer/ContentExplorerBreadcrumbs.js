@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 
-import Button from 'components/button';
-import PlainButton from 'components/plain-button';
-import Breadcrumb from 'components/breadcrumb';
+import Button from '../../../components/button';
+import PlainButton from '../../../components/plain-button';
+import Breadcrumb from '../../../components/breadcrumb';
 import IconChevron from '../../../icons/general/IconChevron';
 import IconAllFiles from '../../../icons/general/IconAllFiles';
 

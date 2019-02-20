@@ -5,12 +5,12 @@
  */
 
 import * as React from 'react';
-import Button from 'components/button/Button';
-import IconOpenWith from 'icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
-import Tooltip from 'elements/common/Tooltip';
-import messages from 'elements/common/messages';
+import Button from '../../components/button/Button';
+import IconOpenWith from '../../icons/general/IconOpenWith';
+import Tooltip from '../common/Tooltip';
+import messages from '../common/messages';
 import OpenWithButtonContents from './OpenWithButtonContents';
 import utils from './openWithUtils';
 import { CLASS_INTEGRATION_ICON, OPEN_WITH_BUTTON_ICON_SIZE } from '../../constants';

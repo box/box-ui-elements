@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'components/button/Button';
-import PlainButton from 'components/plain-button';
-import MenuToggle from 'components/dropdown-menu/MenuToggle';
+import Button from '../../../components/button/Button';
+import PlainButton from '../../../components/plain-button';
+import MenuToggle from '../../../components/dropdown-menu/MenuToggle';
 import { TemplateDropdownBase as TemplateDropdown } from '../TemplateDropdown';
 
 const template1 = {

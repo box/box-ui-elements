@@ -2,10 +2,10 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { ModalActions } from 'components/modal';
-import Button from 'components/button';
-import PlainButton from 'components/plain-button';
-import { Link } from 'components/link';
+import { ModalActions } from '../../../components/modal';
+import Button from '../../../components/button';
+import PlainButton from '../../../components/plain-button';
+import { Link } from '../../../components/link';
 import CollaborationBadge from '../../../icons/badges/CollaborationBadge';
 
 import commonMessages from '../../../common/messages';

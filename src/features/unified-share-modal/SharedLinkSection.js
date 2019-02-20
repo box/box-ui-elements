@@ -7,12 +7,12 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
-import PlainButton from 'components/plain-button';
-import Button from 'components/button';
-import TextInputWithCopyButton from 'components/text-input-with-copy-button';
-import Toggle from 'components/toggle/Toggle';
-import Tooltip from 'components/tooltip';
-import { convertToMs } from 'utils/datetime';
+import PlainButton from '../../components/plain-button';
+import Button from '../../components/button';
+import TextInputWithCopyButton from '../../components/text-input-with-copy-button';
+import Toggle from '../../components/toggle/Toggle';
+import Tooltip from '../../components/tooltip';
+import { convertToMs } from '../../utils/datetime';
 import IconMail from '../../icons/general/IconMail';
 import IconClock from '../../icons/general/IconClock';
 import { amaranth } from '../../styles/variables';

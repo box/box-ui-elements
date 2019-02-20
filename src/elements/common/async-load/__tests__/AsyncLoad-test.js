@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { retryNumOfTimes } from 'utils/function';
+import { retryNumOfTimes } from '../../../../utils/function';
 import AsyncLoad from '../AsyncLoad';
 
-jest.mock('utils/function', () => ({
+jest.mock('../../../../utils/function', () => ({
     retryNumOfTimes: jest.fn(),
 }));
 

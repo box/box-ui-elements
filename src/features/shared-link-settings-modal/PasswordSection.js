@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import Checkbox from 'components/checkbox';
-import TextInput from 'components/text-input';
-import Fieldset from 'components/fieldset';
+import Checkbox from '../../components/checkbox';
+import TextInput from '../../components/text-input';
+import Fieldset from '../../components/fieldset';
 
 import messages from './messages';
 

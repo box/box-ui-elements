@@ -21,7 +21,7 @@ type Props = {
 const QueryBar = ({ activeTemplate, columns, onColumnChange, onFilterChange, onTemplateChange, templates }: Props) => (
     <section className="metadata-view-query-bar">
         <TemplateButton activeTemplate={activeTemplate} onTemplateChange={onTemplateChange} templates={templates} />
-        <FilterButton onFilterChange={onFilterChange} template={activeTemplate} />
+        <FilterButton onFilterChange={onFilterChange} columns={columns} />
         <ColumnButton columns={columns} onColumnChange={onColumnChange} template={activeTemplate} />
     </section>
 );

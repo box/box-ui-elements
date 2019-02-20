@@ -5,10 +5,10 @@
  */
 
 import * as React from 'react';
-import ErrorMask from 'components/error-mask/ErrorMask';
-import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
 import { FormattedMessage } from 'react-intl';
-import messages from 'elements/common/messages';
+import ErrorMask from '../../components/error-mask/ErrorMask';
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+import messages from '../common/messages';
 import IntegrationPortal from './IntegrationPortal';
 
 type Props = {

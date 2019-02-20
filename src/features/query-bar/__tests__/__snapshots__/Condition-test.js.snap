@@ -44,28 +44,22 @@ exports[`features/query-bar/components/filter/Condition render() should render C
         options={
           Array [
             Object {
-              "displayText": "Name",
-              "fieldId": "field1",
+              "displayText": "Hullo Thar",
+              "fieldId": "1",
               "type": "string",
               "value": 0,
             },
             Object {
-              "displayText": "Last Modified",
-              "fieldId": "field7",
-              "type": "date",
+              "displayText": "Last Updated",
+              "fieldId": "2",
+              "type": "string",
               "value": 1,
             },
             Object {
-              "displayText": "Size",
-              "fieldId": "field11",
-              "type": "float",
-              "value": 2,
-            },
-            Object {
               "displayText": "Contract Value",
-              "fieldId": "field5",
+              "fieldId": "3",
               "type": "enum",
-              "value": 3,
+              "value": 2,
             },
           ]
         }

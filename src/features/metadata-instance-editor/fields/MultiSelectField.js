@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Label from 'components/label/Label';
-import MultiSelect from 'components/select-field/MultiSelectField';
-import type { SelectOptionProp } from 'components/select-field/props';
+import Label from '../../../components/label/Label';
+import MultiSelect from '../../../components/select-field/MultiSelectField';
+import type { SelectOptionProp } from '../../../components/select-field/props';
 
 import messages from '../messages';
 

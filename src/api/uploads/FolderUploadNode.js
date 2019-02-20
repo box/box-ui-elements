@@ -4,7 +4,7 @@
  * @author Box
  */
 import noop from 'lodash/noop';
-import { getFileFromEntry } from 'utils/uploads';
+import { getFileFromEntry } from '../../utils/uploads';
 import FolderAPI from '../Folder';
 import {
     STATUS_COMPLETE,

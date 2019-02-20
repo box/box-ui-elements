@@ -6,7 +6,7 @@
 
 import React, { PureComponent } from 'react';
 import noop from 'lodash/noop';
-import { isInputElement } from 'utils/dom';
+import { isInputElement } from '../../utils/dom';
 
 type Props = {
     children: Function,

@@ -4,9 +4,9 @@
  * @author Box
  */
 
-import flatten from 'utils/flatten';
-import { FOLDER_FIELDS_TO_FETCH } from 'utils/fields';
-import { getBadItemError } from 'utils/error';
+import flatten from '../utils/flatten';
+import { FOLDER_FIELDS_TO_FETCH } from '../utils/fields';
+import { getBadItemError } from '../utils/error';
 import Base from './Base';
 import FileAPI from './File';
 import FolderAPI from './Folder';

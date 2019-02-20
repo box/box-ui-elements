@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import messages from 'elements/common/messages';
+import messages from '../../common/messages';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 
 const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;

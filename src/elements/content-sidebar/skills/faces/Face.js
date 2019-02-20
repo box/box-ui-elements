@@ -6,10 +6,10 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import PlainButton from 'components/plain-button/PlainButton';
-import IconClose from 'icons/general/IconClose';
-import IconMinus from 'icons/general/IconMinus';
-import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
+import PlainButton from '../../../../components/plain-button/PlainButton';
+import IconClose from '../../../../icons/general/IconClose';
+import IconMinus from '../../../../icons/general/IconMinus';
+import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import { COLOR_999, COLOR_WHITE } from '../../../../constants';
 
 import './Face.scss';

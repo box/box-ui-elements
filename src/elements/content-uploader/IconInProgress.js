@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
-import IconClose from 'icons/general/IconClose';
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+import IconClose from '../../icons/general/IconClose';
 
 const IconInProgress = () => (
     <div className="be-icon-in-progress">

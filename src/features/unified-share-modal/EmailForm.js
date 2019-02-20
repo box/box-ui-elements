@@ -8,13 +8,13 @@ import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
-import TextArea from 'components/text-area';
-import PrimaryButton from 'components/primary-button';
-import { ModalActions } from 'components/modal';
-import Button from 'components/button';
-import Tooltip from 'components/tooltip';
-import InlineNotice from 'components/inline-notice';
-import PillSelectorDropdown from 'components/pill-selector-dropdown';
+import TextArea from '../../components/text-area';
+import PrimaryButton from '../../components/primary-button';
+import { ModalActions } from '../../components/modal';
+import Button from '../../components/button';
+import Tooltip from '../../components/tooltip';
+import InlineNotice from '../../components/inline-notice';
+import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import commonMessages from '../../common/messages';
 import type { inlineNoticeType } from '../../common/box-types';
 

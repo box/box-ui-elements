@@ -7,7 +7,7 @@ import Table from 'react-virtualized/dist/commonjs/Table';
 import defaultTableRowRenderer from 'react-virtualized/dist/commonjs/Table/defaultRowRenderer';
 import 'react-virtualized/styles.css';
 
-import { withInfiniteLoader } from 'components/react-virtualized-helpers';
+import { withInfiniteLoader } from '../../../components/react-virtualized-helpers';
 
 import { ContentExplorerModePropType, ItemsPropType, ItemsMapPropType } from '../prop-types';
 

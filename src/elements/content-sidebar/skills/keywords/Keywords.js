@@ -7,13 +7,13 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import PlainButton from 'components/plain-button/PlainButton';
-import IconEdit from 'icons/general/IconEdit';
-import LoadingIndicatorWrapper from 'components/loading-indicator/LoadingIndicatorWrapper';
-import InlineError from 'components/inline-error/InlineError';
-import Tooltip from 'components/tooltip/Tooltip';
-import messages from 'elements/common/messages';
-import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
+import PlainButton from '../../../../components/plain-button/PlainButton';
+import IconEdit from '../../../../icons/general/IconEdit';
+import LoadingIndicatorWrapper from '../../../../components/loading-indicator/LoadingIndicatorWrapper';
+import InlineError from '../../../../components/inline-error/InlineError';
+import Tooltip from '../../../../components/tooltip/Tooltip';
+import messages from '../../../common/messages';
+import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
 

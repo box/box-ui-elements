@@ -15,19 +15,19 @@ import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
-import { decode } from 'utils/keys';
-import makeResponsive from 'elements/common/makeResponsive';
-import Internationalize from 'elements/common/Internationalize';
-import AsyncLoad from 'elements/common/async-load';
-import TokenService from 'utils/TokenService';
-import { isInputElement, focus } from 'utils/dom';
-import { getTypedFileId } from 'utils/file';
-import { withErrorBoundary } from 'elements/common/error-boundary';
-import { withLogger } from 'elements/common/logger';
-import { PREVIEW_FIELDS_TO_FETCH } from 'utils/fields';
-import { mark } from 'utils/performance';
-import { withFeatureProvider } from 'elements/common/feature-checking';
-import { EVENT_JS_READY } from 'elements/common/logger/constants';
+import { decode } from '../../utils/keys';
+import makeResponsive from '../common/makeResponsive';
+import Internationalize from '../common/Internationalize';
+import AsyncLoad from '../common/async-load';
+import TokenService from '../../utils/TokenService';
+import { isInputElement, focus } from '../../utils/dom';
+import { getTypedFileId } from '../../utils/file';
+import { withErrorBoundary } from '../common/error-boundary';
+import { withLogger } from '../common/logger';
+import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
+import { mark } from '../../utils/performance';
+import { withFeatureProvider } from '../common/feature-checking';
+import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
 import Header from './Header';
@@ -45,8 +45,8 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
-import 'elements/common/fonts.scss';
-import 'elements/common/base.scss';
+import '../common/fonts.scss';
+import '../common/base.scss';
 import './ContentPreview.scss';
 
 type Props = {
@@ -236,7 +236,7 @@ class ContentPreview extends PureComponent<Props, State> {
             // eslint-disable-next-line react/no-unused-state
             prevFileIdProp: fileId,
         };
-        const { logger } = this.props;
+        const { logger } = props;
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });

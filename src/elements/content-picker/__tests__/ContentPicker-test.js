@@ -2,12 +2,12 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { ContentPickerComponent as ContentPicker } from '../ContentPicker';
 
-jest.mock('elements/common/header/Header', () => 'mock-header');
-jest.mock('elements/common/sub-header/SubHeader', () => 'mock-subheader');
+jest.mock('../../common/header/Header', () => 'mock-header');
+jest.mock('../../common/sub-header/SubHeader', () => 'mock-subheader');
 jest.mock('../Footer', () => 'mock-footer');
 jest.mock('../Content', () => 'mock-content');
-jest.mock('elements/common/upload-dialog/UploadDialog', () => 'mock-uploaddialog');
-jest.mock('elements/common/create-folder-dialog/CreateFolderDialog', () => 'mock-createfolderdialog');
+jest.mock('../../common/upload-dialog/UploadDialog', () => 'mock-uploaddialog');
+jest.mock('../../common/create-folder-dialog/CreateFolderDialog', () => 'mock-createfolderdialog');
 
 describe('elements/content-picker/ContentPicker', () => {
     let rootElement;

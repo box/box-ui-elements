@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PlainButton from 'components/plain-button';
-import { Flyout, Overlay } from 'components/flyout';
+import PlainButton from '../../components/plain-button';
+import { Flyout, Overlay } from '../../components/flyout';
 
 import PresenceDropdown from './PresenceDropdown';
 import { collaboratorsPropType, flyoutPositionPropType } from './propTypes';

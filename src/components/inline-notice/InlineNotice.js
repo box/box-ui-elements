@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import type { inlineNoticeType } from 'common/box-types';
+import type { inlineNoticeType } from '../../common/box-types';
 
 type Props = {
     children: React.Node,

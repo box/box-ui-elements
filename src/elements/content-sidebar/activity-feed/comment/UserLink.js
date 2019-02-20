@@ -5,7 +5,7 @@
 
 import * as React from 'react';
 
-import { Link } from 'components/link';
+import { Link } from '../../../../components/link';
 
 type Props = {
     getUserProfileUrl?: string => Promise<string>,
@@ -59,7 +59,7 @@ class UserLink extends React.PureComponent<Props, State> {
                 {name}
             </Link>
         ) : (
-            <div {...rest}>{name}</div>
+            <span {...rest}>{name}</span>
         );
     }
 }

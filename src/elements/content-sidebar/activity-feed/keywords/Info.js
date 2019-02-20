@@ -6,10 +6,10 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import IconInfoInverted from 'icons/general/IconInfoInverted';
-import Tooltip from 'components/tooltip';
+import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
+import Tooltip from '../../../../components/tooltip';
 
-import messages from 'elements/common/messages';
+import messages from '../../../common/messages';
 
 type Props = {
     words: string,
