@@ -1,10 +1,11 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import uniqueId from 'lodash/uniqueId';
 
+import { scrollIntoView } from '../../utils/dom';
 import ScrollWrapper from '../scroll-wrapper';
+import { OVERLAY_WRAPPER_CLASS } from '../../constants';
 
 import './SelectorDropdown.scss';
 
@@ -73,29 +74,14 @@ class SelectorDropdown extends React.Component<Props, State> {
     };
 
     setActiveItemID = (id: string | null) => {
+        const itemEl = id ? document.getElementById(id) : null;
         this.setState({ activeItemID: id });
-        this.scrollItemIntoView(id);
+        scrollIntoView(itemEl);
     };
 
     listboxID: string;
 
     selectorDropdownRef: { current: null | HTMLDivElement };
-
-    scrollItemIntoView = (id: string | null) => {
-        // @NOTE: breaks encapsulation but alternative is unknown child ref
-        const itemEl = id ? document.getElementById(id) : null;
-        if (itemEl) {
-            let parentEl = itemEl;
-            while (
-                parentEl.parentElement instanceof HTMLElement &&
-                !parentEl.classList.contains('scroll-wrap-container') && // Scroll the container, not the body when contained in a scroll-container.
-                !parentEl.classList.contains('modal') // Scroll the modal, not the body when contained in a modal.
-            ) {
-                parentEl = parentEl.parentElement;
-            }
-            scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
-        }
-    };
 
     haveChildrenChanged = (nextChildren?: React.Node) => {
         const { children } = this.props;
@@ -280,7 +266,7 @@ class SelectorDropdown extends React.Component<Props, State> {
             >
                 {React.cloneElement(selector, { inputProps })}
                 {isOpen && (
-                    <div className="overlay-wrapper is-visible">
+                    <div className={`${OVERLAY_WRAPPER_CLASS} is-visible`}>
                         {title}
                         {shouldScroll ? <ScrollWrapper>{list}</ScrollWrapper> : list}
                     </div>

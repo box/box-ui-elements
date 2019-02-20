@@ -3,6 +3,9 @@
  * @file File for some simple dom utilities
  * @author Box
  */
+import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
+import { OVERLAY_WRAPPER_CLASS } from '../constants';
+import './domPolyfill';
 
 /**
  * Checks if an html element is some type of input-able
@@ -76,5 +79,19 @@ export function focus(root: ?HTMLElement, selector?: string, focusRoot: boolean 
         element.focus();
     } else if (focusRoot) {
         root.focus();
+    }
+}
+
+/**
+ * Scrolls the container / modal / wrapper instead of the body
+ *
+ * @param {HTMLElement} itemEl - the base dom element to search
+ * @return {void}
+ */
+export function scrollIntoView(itemEl: ?HTMLElement): void {
+    // @NOTE: breaks encapsulation but alternative is unknown child ref
+    if (itemEl) {
+        const parentEl = itemEl.closest(`.body, .modal, .${OVERLAY_WRAPPER_CLASS}`);
+        scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
     }
 }

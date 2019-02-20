@@ -1,9 +1,14 @@
 import React from 'react';
 import sinon from 'sinon';
 
+import { scrollIntoView } from '../../../utils/dom';
 import BaseSelectField from '../BaseSelectField';
 
 const sandbox = sinon.sandbox.create();
+
+jest.mock('../../../utils/dom', () => ({
+    scrollIntoView: jest.fn(),
+}));
 
 describe('components/select-field/BaseSelectField', () => {
     afterEach(() => {
@@ -617,11 +622,8 @@ describe('components/select-field/BaseSelectField', () => {
         });
 
         test('should scroll into view when called', () => {
-            sandbox
-                .mock(instance)
-                .expects('scrollItemIntoView')
-                .withArgs(id);
             instance.setActiveItemID(id);
+            expect(scrollIntoView).toHaveBeenCalled();
         });
     });
 
