@@ -5,11 +5,6 @@ export const OR: 'OR' = 'OR';
 export const ATTRIBUTE: 'attribute' = 'attribute';
 export const COLUMN_DISPLAY_TEXT: 'columnDisplayText' = 'columnDisplayText';
 export const COLUMN_KEY: 'columnKey' = 'columnKey';
-export const CONNECTOR_NAMES = {
-    // Used to change display text of connector while keeping the value the same
-    AND,
-    OR,
-};
 export const OPERATOR: 'operator' = 'operator';
 export const OPERATOR_DISPLAY_TEXT: 'operatorDisplayText' = 'operatorDisplayText';
 export const OPERATOR_KEY: 'operatorKey' = 'operatorKey';
