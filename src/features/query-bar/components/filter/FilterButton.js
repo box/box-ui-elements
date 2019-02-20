@@ -65,7 +65,7 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     createCondition = () => {
-        const conditionID = this.generateConditionID();
+        const conditionID = uniqueId();
         const { columns } = this.props;
         if (columns) {
             const firstField = columns[0];
@@ -83,10 +83,6 @@ class FilterButton extends React.Component<Props, State> {
             };
         }
         return {};
-    };
-
-    generateConditionID = () => {
-        return uniqueId();
     };
 
     addFilter = () => {
@@ -160,7 +156,7 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    onConnectorChange = (option: SelectOptionType) => {
+    handleConnectorChange = (option: SelectOptionType) => {
         const connector = option.value;
 
         this.setState({
@@ -270,7 +266,7 @@ class FilterButton extends React.Component<Props, State> {
                                             columns={columns}
                                             selectedConnector={selectedConnector}
                                             update={this.update}
-                                            onConnectorChange={this.onConnectorChange}
+                                            onConnectorChange={this.handleConnectorChange}
                                         />
                                     );
                                 })}

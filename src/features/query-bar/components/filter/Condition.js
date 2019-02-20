@@ -15,7 +15,6 @@ import {
     ATTRIBUTE,
     COLUMN_DISPLAY_TEXT,
     COLUMN_KEY,
-    CONNECTOR_NAMES,
     DATE,
     OPERATOR,
     OPERATOR_DISPLAY_TEXT,
@@ -192,7 +191,7 @@ const Condition = ({
 
         const connectorOptions = getFormattedOptions(
             [AND, OR].map(connector => ({
-                displayName: CONNECTOR_NAMES[connector],
+                displayName: connector,
                 value: connector,
             })),
         );
