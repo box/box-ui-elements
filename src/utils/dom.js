@@ -94,7 +94,7 @@ export function scrollIntoView(itemEl: ?HTMLElement): void {
     }
 }
 
-Element.prototype.closest = function(s) {
+Element.prototype.closest = function closest(s) {
     let el = this;
     do {
         if (el.matches(s)) return el;
