@@ -7,7 +7,7 @@ import BaseSelectField from '../BaseSelectField';
 const sandbox = sinon.sandbox.create();
 
 jest.mock('../../../utils/dom', () => ({
-    scrollItemIntoView: jest.fn().mockReturnValue(null),
+    scrollItemIntoView: jest.fn(),
 }));
 
 describe('components/select-field/BaseSelectField', () => {
