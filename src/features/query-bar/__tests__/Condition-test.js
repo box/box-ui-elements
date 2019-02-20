@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { initialCondition, columns } from '../components/fixtures';
 import { COLUMN_KEY, OPERATOR_KEY, VALUE_KEY } from '../constants';
-import { BaseCondition as Condition } from '../components/filter/Condition';
+import Condition from '../components/filter/Condition';
 
 describe('features/query-bar/components/filter/Condition', () => {
     const getWrapper = (props = {}) => {
@@ -22,7 +22,8 @@ describe('features/query-bar/components/filter/Condition', () => {
 
     describe('render()', () => {
         test('should render Condition', () => {
-            const wrapper = getWrapper();
+            const condition = initialCondition;
+            const wrapper = getWrapper({ condition });
 
             expect(wrapper).toMatchSnapshot();
         });
@@ -54,7 +55,7 @@ describe('features/query-bar/components/filter/Condition', () => {
 
             wrapper
                 .find('SingleSelectField')
-                .at(0)
+                .at(1)
                 .simulate('change', option, fieldType);
 
             expect(update).toHaveBeenCalledWith(
@@ -80,14 +81,14 @@ describe('features/query-bar/components/filter/Condition', () => {
         const condition = initialCondition;
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
         const fieldId = undefined;
-        const valueType = '';
+        const valueType = 'string';
         const keyType = VALUE_KEY;
         const displayTextType = 'valueDisplayText';
 
         test.each`
-            description                                                | fieldValue          | result            | displayText       | value
-            ${'user has entered an empty string into the value field'} | ${stringFieldValue} | ${''}             | ${''}             | ${''}
-            ${'user has selected a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue} | ${dateFieldValue} | ${dateFieldValue}
+            description                                                | fieldValue          | displayText       | value
+            ${'user has entered an empty string into the value field'} | ${stringFieldValue} | ${''}             | ${''}
+            ${'user has selected a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue} | ${dateFieldValue}
         `('$description', ({ fieldValue, displayText, value }) => {
             const update = jest.fn();
             const wrapper = getWrapper({ update });

@@ -32,7 +32,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
-                    valueDisplayText: '',
+                    valueDisplayText: null,
                     valueKey: null,
                 },
                 conditions: [
@@ -42,7 +42,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -61,7 +61,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         fieldId: 1,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                         valueType: 'string',
                     },
@@ -76,7 +76,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
-                    valueDisplayText: '',
+                    valueDisplayText: null,
                     valueKey: null,
                 },
                 conditions: [
@@ -86,7 +86,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -104,7 +104,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         fieldId: 1,
                         operatorDisplayText: 'myOperator',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -118,7 +118,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
-                    valueDisplayText: '',
+                    valueDisplayText: null,
                     valueKey: null,
                 },
                 conditions: [
@@ -128,7 +128,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -201,7 +201,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                     {
@@ -210,11 +210,10 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
-                fieldType: 'attribute',
                 updatedConditions: [
                     {
                         id: '3',
@@ -222,7 +221,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
-                        valueDisplayText: '',
+                        valueDisplayText: null,
                         valueKey: null,
                     },
                 ],
@@ -296,11 +295,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
 
     describe('createCondition()', () => {
         test('Should return a condition object if columns is defined', () => {
-            const wrapper = getWrapper();
-            const props = {
-                columns,
-            };
-            const conditionID = 123;
+            const wrapper = getWrapper({ columns });
+            const conditionID = '11';
             const expected = {
                 columnDisplayText: 'Hullo Thar',
                 columnKey: 0,
@@ -312,13 +308,16 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 valueKey: null,
                 valueType: 'string',
             };
+            wrapper.instance().setState({
+                conditions: [],
+            });
 
-            const condition = wrapper.instance().createCondition(props, conditionID);
+            const condition = wrapper.instance().createCondition(conditionID);
 
             expect(condition).toEqual(expected);
         });
 
-        test('Should return an empty object if template is not defined', () => {
+        test('Should return an empty object if columns is not defined', () => {
             const wrapper = getWrapper();
             const props = {};
             const conditionID = 123;
