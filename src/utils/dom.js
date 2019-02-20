@@ -4,6 +4,7 @@
  * @author Box
  */
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
+import { OVERLAY_WRAPPER_CLASS } from '../constants';
 import './domPolyfill';
 
 /**
@@ -90,7 +91,7 @@ export function focus(root: ?HTMLElement, selector?: string, focusRoot: boolean 
 export function scrollIntoView(itemEl: ?HTMLElement): void {
     // @NOTE: breaks encapsulation but alternative is unknown child ref
     if (itemEl) {
-        const parentEl = itemEl.closest('body, .modal, .overlay-wrapper');
+        const parentEl = itemEl.closest(`.body, .modal, .${OVERLAY_WRAPPER_CLASS}`);
         scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
     }
 }
