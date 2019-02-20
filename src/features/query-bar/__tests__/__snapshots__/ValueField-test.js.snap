@@ -35,6 +35,12 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
       },
     ]
   }
+  placeholder={
+    <FormattedMessage
+      defaultMessage="Select value"
+      id="boxui.queryBar.selectValuePlaceholderText"
+    />
+  }
   selectedValue=""
 />
 `;

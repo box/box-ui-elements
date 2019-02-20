@@ -10,32 +10,44 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
+import { AND } from '../../constants';
 
 import messages from '../../messages';
+
+import type { ColumnType, SelectOptionType, ConnectorType } from '../../flowTypes';
 
 type State = {
     appliedConditions: Array<Object>,
     areErrorsEnabled: boolean,
     conditions: Array<Object>,
     isMenuOpen: boolean,
+    selectedConnector: ConnectorType,
 };
 
 type Props = {
+    columns?: Array<ColumnType>,
     onFilterChange?: Function,
-    template?: Object,
 };
 
 class FilterButton extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        const conditionID = this.generateConditionID();
-        const initialCondition = this.createCondition(props, conditionID);
+
         this.state = {
             appliedConditions: [],
-            conditions: [initialCondition],
+            conditions: [],
+            selectedConnector: AND,
             areErrorsEnabled: false,
             isMenuOpen: false,
         };
+    }
+
+    componentDidMount() {
+        const initialCondition = this.createCondition();
+
+        this.setState({
+            conditions: [initialCondition],
+        });
     }
 
     onClose = () => {
@@ -52,12 +64,15 @@ class FilterButton extends React.Component<Props, State> {
         this.setState({ isMenuOpen: !this.state.isMenuOpen });
     };
 
-    createCondition = (props: Props, conditionID: string) => {
-        if (props && props.template) {
-            const firstField = props.template.fields[0];
+    createCondition = () => {
+        const conditionID = uniqueId();
+        const { columns } = this.props;
+        if (columns) {
+            const firstField = columns[0];
+
             return {
-                attributeDisplayText: firstField.displayName,
-                attributeKey: 0,
+                columnDisplayText: firstField.displayName,
+                columnKey: 0,
                 id: conditionID,
                 fieldId: firstField.id,
                 operatorDisplayText: '',
@@ -70,15 +85,10 @@ class FilterButton extends React.Component<Props, State> {
         return {};
     };
 
-    generateConditionID = () => {
-        return uniqueId();
-    };
-
     addFilter = () => {
-        const conditionID = this.generateConditionID();
-        const initialCondition = this.createCondition(this.props, conditionID);
+        const newCondition = this.createCondition();
         this.setState({
-            conditions: [...this.state.conditions, initialCondition],
+            conditions: [...this.state.conditions, newCondition],
             areErrorsEnabled: false,
         });
     };
@@ -126,17 +136,19 @@ class FilterButton extends React.Component<Props, State> {
                 fieldId,
             };
 
-            if (fieldKeyType === 'attributeKey') {
+            if (fieldKeyType === 'columnKey') {
                 // Upon selecting a new attribute, the operator and value fields should be reset.
                 updatedCondition.operatorKey = 0;
                 updatedCondition.operatorDisplayText = '';
-                updatedCondition.valueDisplayText = '';
+                updatedCondition.valueDisplayText = null;
                 updatedCondition.valueKey = null;
             }
 
             const updatedConditions = conditions.slice(0);
-            const idx = conditions.findIndex(c => c.id === updatedCondition.id);
-            updatedConditions[idx] = updatedCondition;
+            const conditionIndex = conditions.findIndex(
+                currentCondition => currentCondition.id === updatedCondition.id,
+            );
+            updatedConditions[conditionIndex] = updatedCondition;
 
             this.setState({
                 conditions: updatedConditions,
@@ -144,15 +156,23 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
+    handleConnectorChange = (option: SelectOptionType) => {
+        const connector = option.value;
+
+        this.setState({
+            selectedConnector: connector,
+        });
+    };
+
     deleteCondition = (index: number) => {
         const { conditions } = this.state;
 
-        const updatedConditions = conditions.filter((condition, conditionIndex) => {
+        const conditionsAfterDeletion = conditions.filter((condition, conditionIndex) => {
             return conditionIndex !== index;
         });
 
         this.setState({
-            conditions: updatedConditions,
+            conditions: conditionsAfterDeletion,
         });
     };
 
@@ -184,14 +204,14 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     render() {
-        const { template } = this.props;
-        const { appliedConditions, conditions, areErrorsEnabled, isMenuOpen } = this.state;
+        const { columns } = this.props;
+        const { appliedConditions, conditions, areErrorsEnabled, isMenuOpen, selectedConnector } = this.state;
 
         const numberOfAppliedConditions = appliedConditions.length;
 
         const buttonClasses = classNames('query-bar-button', numberOfAppliedConditions !== 0 ? 'is-active' : '');
 
-        const isFilterDisabled = template === undefined;
+        const isFilterDisabled = columns === undefined;
 
         return (
             <Flyout
@@ -243,8 +263,10 @@ class FilterButton extends React.Component<Props, State> {
                                             deleteCondition={this.deleteCondition}
                                             areErrorsEnabled={areErrorsEnabled}
                                             index={index}
-                                            template={template}
+                                            columns={columns}
+                                            selectedConnector={selectedConnector}
                                             update={this.update}
+                                            onConnectorChange={this.handleConnectorChange}
                                         />
                                     );
                                 })}

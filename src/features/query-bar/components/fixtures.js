@@ -1,66 +1,130 @@
-const initialCondition = {
-    conditionId: 0,
-    attributeDisplayText: '',
-    attributeKey: null,
+// @flow
+import type { ColumnType, ConditionType } from '../flowTypes';
+
+const initialCondition: ConditionType = {
+    id: 0,
+    columnDisplayText: '',
+    columnKey: null,
     operatorDisplayText: '',
     operatorKey: null,
     valueDisplayText: '',
     valueKey: null,
-    valueType: '',
+    valueType: 'string',
 };
 
-const columns = [
+const conditions: Array<ConditionType> = [initialCondition];
+
+const columns: Array<ColumnType> = [
     {
-        displayName: 'Last Modified',
-        property: 'lastUpdatedByName',
-        id: 'field7',
+        displayName: 'Hullo Thar',
+        id: '1',
         isShown: true,
+        key: '',
+        options: null,
+        property: 'name',
         source: 'item',
-        type: 'date',
+        type: 'string',
+    },
+    {
+        displayName: 'Last Updated',
+        id: '2',
+        isShown: true,
+        key: '2',
+        options: null,
+        property: 'lastUpdatedByName',
+        source: 'item',
+        type: 'string',
     },
     {
         displayName: 'Contract Value',
-        property: 'demo key',
-        id: 'field_874',
+        id: '3',
         isShown: true,
+        property: 'contractValue',
+        key: '',
+        source: 'metadata',
+        type: 'enum',
+        options: [
+            {
+                id: '',
+                key: '$100',
+            },
+            {
+                id: '',
+                key: '$200',
+            },
+            {
+                id: '',
+                key: '$300',
+            },
+            {
+                id: '',
+                key: '$400',
+            },
+        ],
+    },
+];
+
+const columnsWithNewOrder: Array<ColumnType> = [
+    {
+        displayName: 'Last Updated',
+        id: '2',
+        isShown: true,
+        key: '2',
+        options: null,
+        property: 'lastUpdatedByName',
+        source: 'item',
+        type: 'string',
+    },
+    {
+        displayName: 'Hullo Thar',
+        id: '1',
+        isShown: true,
+        key: '',
+        options: null,
+        property: 'name',
+        source: 'item',
+        type: 'string',
+    },
+    {
+        displayName: 'Contract Value',
+        id: '3',
+        isShown: true,
+        key: '',
+        options: [{ id: '', key: '$100' }, { id: '', key: '$200' }, { id: '', key: '$300' }, { id: '', key: '$400' }],
+        property: 'contractValue',
         source: 'metadata',
         type: 'enum',
     },
 ];
 
-const columnsWithNewOrder = [
+const columnsWithOneColumnNotShown: Array<ColumnType> = [
     {
-        displayName: 'Contract Value',
-        property: 'demo key',
-        id: 'field_874',
-        isShown: true,
-        source: 'metadata',
-        type: 'enum',
-    },
-    {
-        displayName: 'Last Modified',
-        property: 'lastUpdatedByName',
-        id: 'field7',
-        isShown: true,
-        source: 'item',
-        type: 'date',
-    },
-];
-
-const columnsWithOneColumnNotShown = [
-    {
-        displayName: 'Last Modified',
-        property: 'lastUpdatedByName',
-        id: 'field7',
+        displayName: 'Hullo Thar',
+        id: '1',
         isShown: false,
+        key: '',
+        options: null,
+        property: 'name',
         source: 'item',
-        type: 'date',
+        type: 'string',
+    },
+    {
+        displayName: 'Last Updated',
+        id: '2',
+        isShown: true,
+        key: '2',
+        options: null,
+        property: 'lastUpdatedByName',
+        source: 'item',
+        type: 'string',
     },
     {
         displayName: 'Contract Value',
-        property: 'demo key',
-        id: 'field_874',
+        id: '3',
         isShown: true,
+        key: '',
+        options: [{ id: '', key: '$100' }, { id: '', key: '$200' }, { id: '', key: '$300' }, { id: '', key: '$400' }],
+        property: 'contractValue',
         source: 'metadata',
         type: 'enum',
     },
@@ -485,6 +549,7 @@ const metadataTableStateAfterMount = {
 
 export {
     initialCondition,
+    conditions,
     columns,
     columnsWithNewOrder,
     columnsWithOneColumnNotShown,

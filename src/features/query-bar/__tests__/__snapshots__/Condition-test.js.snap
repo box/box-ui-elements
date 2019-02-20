@@ -2,10 +2,10 @@
 
 exports[`features/query-bar/components/filter/Condition render() should render Condition 1`] = `
 <div
-  className="filter-item-container"
+  className="condition-container"
 >
   <div
-    className="filter-item-delete-button"
+    className="condition-delete-button"
   >
     <button
       className="delete-button"
@@ -20,19 +20,19 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     </button>
   </div>
   <div
-    className="filter-item-prefix-container"
+    className="condition-connector"
   >
     <p
-      className="filter-item-prefix-text"
+      className="condition-connector-text"
     >
       <FormattedMessage
         defaultMessage="WHERE"
-        id="boxui.queryBar.prefixButtonText"
+        id="boxui.queryBar.connectorWhereText"
       />
     </p>
   </div>
   <div
-    className="filter-item-attribute-dropdown-container"
+    className="condition-attribute-dropdown-container"
   >
     <div
       className="filter-dropdown-single-select-field-container"
@@ -44,37 +44,37 @@ exports[`features/query-bar/components/filter/Condition render() should render C
         options={
           Array [
             Object {
-              "displayText": "Name",
-              "fieldId": "field1",
+              "displayText": "Hullo Thar",
+              "fieldId": "1",
               "type": "string",
-              "value": 0,
+              "value": "Hullo Thar",
             },
             Object {
-              "displayText": "Last Modified",
-              "fieldId": "field7",
-              "type": "date",
-              "value": 1,
-            },
-            Object {
-              "displayText": "Size",
-              "fieldId": "field11",
-              "type": "float",
-              "value": 2,
+              "displayText": "Last Updated",
+              "fieldId": "2",
+              "type": "string",
+              "value": "Last Updated",
             },
             Object {
               "displayText": "Contract Value",
-              "fieldId": "field5",
+              "fieldId": "3",
               "type": "enum",
-              "value": 3,
+              "value": "Contract Value",
             },
           ]
         }
-        selectedValue={null}
+        placeholder={
+          <FormattedMessage
+            defaultMessage="Select attribute"
+            id="boxui.queryBar.selectAttributePlaceholderText"
+          />
+        }
+        selectedValue=""
       />
     </div>
   </div>
   <div
-    className="filter-item-operator-dropdown-container"
+    className="condition-operator-dropdown-container"
   >
     <div
       className="filter-dropdown-single-select-field-container"
@@ -83,22 +83,30 @@ exports[`features/query-bar/components/filter/Condition render() should render C
         fieldType="operator"
         isDisabled={false}
         onChange={[Function]}
-        options={Array []}
-        selectedValue={null}
+        options={
+          Array [
+            Object {
+              "displayText": "is",
+              "fieldId": undefined,
+              "type": "string",
+              "value": "is",
+            },
+          ]
+        }
+        selectedValue="is"
       />
     </div>
   </div>
   <div
-    className="filter-item-value-dropdown-container"
+    className="condition-value-dropdown-container"
   >
     <ValueField
-      formatMessage={[Function]}
-      selectedValue={null}
+      selectedValue=""
       updateSelectedField={[Function]}
       updateValueField={[Function]}
       valueKey={null}
       valueOptions={Array []}
-      valueType=""
+      valueType="string"
     />
   </div>
 </div>

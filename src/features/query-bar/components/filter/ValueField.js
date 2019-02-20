@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
 import TextInput from '../../../../components/text-input';
@@ -8,10 +9,9 @@ import DatePicker from '../../../../components/date-picker';
 import messages from '../../messages';
 import { VALUE } from '../../constants';
 
-import '../../styles/FilterItem.scss';
+import '../../styles/Condition.scss';
 
 type Props = {
-    formatMessage: Function,
     selectedValue?: string | number,
     updateSelectedField: Function,
     updateValueField: Function,
@@ -21,7 +21,6 @@ type Props = {
 };
 
 const ValueField = ({
-    formatMessage,
     selectedValue,
     updateValueField,
     updateSelectedField,
@@ -93,7 +92,7 @@ const ValueField = ({
                     fieldType={VALUE}
                     onChange={updateSelectedField}
                     options={valueOptions}
-                    placeholder={formatMessage(messages.selectValuePlaceholderText)}
+                    placeholder={<FormattedMessage {...messages.selectValuePlaceholderText} />}
                     selectedValue={selectedValue}
                 />
             );
