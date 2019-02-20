@@ -4,6 +4,7 @@
  * @author Box
  */
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
+import './domPolyfill';
 
 /**
  * Checks if an html element is some type of input-able
@@ -93,12 +94,3 @@ export function scrollIntoView(itemEl: ?HTMLElement): void {
         scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
     }
 }
-
-window.Element.prototype.closest = function closest(s) {
-    let el = this;
-    do {
-        if (el.matches(s)) return el;
-        el = el.parentElement || el.parentNode;
-    } while (el !== null && el.nodeType === 1);
-    return null;
-};
