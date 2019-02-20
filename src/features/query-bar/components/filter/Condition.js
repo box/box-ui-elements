@@ -242,8 +242,6 @@ const Condition = ({
         const operatorsForAttribute = getOperatorsForAttribute();
         const operatorOptions = getFormattedOptions(operatorsForAttribute);
 
-        const selectedValue = operatorDisplayText || operatorOptions[0].displayText;
-
         return (
             <div className="condition-operator-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
