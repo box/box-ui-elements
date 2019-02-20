@@ -1,25 +1,29 @@
-# UI Elements
-/CODEOWNERS             @box/ui-elements
-/LICENSE                @box/ui-elements
-/THIRD_PARTY_LICENSES   @box/ui-elements
-/src/api/               @box/ui-elements
-/src/elements/          @box/ui-elements
+# Source
+/src/                                       @box/ui-elements-extended
+/src/api/                                   @box/ui-elements
+/src/common/                                @box/ui-elements-extended
+/src/components/                            @box/ui-elements-extended
+/src/elements/                              @box/ui-elements
+/src/features/                              @box/webapp
+/src/features/item-details/                 @box/ui-elements
+/src/features/access-stats/                 @box/ui-elements
+/src/features/metadata-instance-editor/     @box/ui-elements
+/src/icons/                                 @box/ui-elements-extended
+/src/styles/                                @box/ui-elements-extended
+/src/utils/                                 @box/ui-elements-extended
 
-# UI Elements Extended
-/*.*                    @box/ui-elements-extended
-/.*                     @box/ui-elements-extended
-/conf/                  @box/ui-elements-extended
-/flow-typed/            @box/ui-elements-extended
-/src/                   @box/ui-elements-extended
-/src/common/            @box/ui-elements-extended
-/src/components/        @box/ui-elements-extended
-/src/icons/             @box/ui-elements-extended
-/src/styles/            @box/ui-elements-extended
-/src/utils/             @box/ui-elements-extended
-/test/                  @box/ui-elements-extended
+# Test
+/test/                                      @box/ui-elements-extended
+/test/integration/                          @box/webapp
 
-# Webapp
-/test/integration/      @box/webapp
-/src/features/          @box/webapp
-/i18n/                  @box/webapp
-
+# Root
+/*.*                                        @box/ui-elements-extended
+/.*                                         @box/ui-elements-extended
+/CODEOWNERS                                 @box/ui-elements
+/LICENSE                                    @box/ui-elements
+/THIRD_PARTY_LICENSES                       @box/ui-elements
+/conf/                                      @box/ui-elements-extended
+/examples/                                  @box/webapp
+/flow/                                      @box/ui-elements-extended
+/flow-typed/                                @box/ui-elements-extended
+/i18n/                                      @box/webapp

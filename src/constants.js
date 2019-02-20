@@ -183,6 +183,7 @@ export const CLASS_IS_MEDIUM = 'be-is-medium';
 export const CLASS_IS_TOUCH = 'be-is-touch';
 export const CLASS_MODAL = 'be-modal';
 export const CLASS_INTEGRATION_ICON = 'bcow-integration-icon';
+export const OVERLAY_WRAPPER_CLASS = 'overlay-wrapper';
 
 /* ------------------ Error Codes ---------------------- */
 export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
