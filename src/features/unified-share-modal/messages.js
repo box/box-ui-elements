@@ -39,30 +39,15 @@ const messages = defineMessages({
         description: 'This is label for the button so a user understands the new interface',
         id: 'boxui.unifiedShare.ftuxConfirmLabel',
     },
-    collaboratorAvatarsLabel: {
-        defaultMessage: 'Shared with',
-        description: 'Label for collaborator avatars',
-        id: 'boxui.unifiedShare.collaboratorAvatarsLabel',
-    },
     collaboratorListTitle: {
         defaultMessage: "People in '{itemName}'",
         description: 'Title for collaborator list modal',
         id: 'boxui.unifiedShare.collaboratorListTitle',
     },
-    expirationTooltipText: {
-        defaultMessage: 'Access expires on {date}',
-        description: 'Tooltip text for collaborator expiration badge',
-        id: 'boxui.unifiedShare.collaborators.expirationTooltipText',
-    },
     expirationTooltipClickableText: {
         defaultMessage: 'Access expires on {date}. Click for details.',
         description: 'This string is displayed as tooltip on hovering over expire icon for collab',
         id: 'boxui.unifiedShare.collaborators.expirationTooltipClickableText',
-    },
-    externalCollabTooltipText: {
-        defaultMessage: '{email} is from outside of your company',
-        description: 'This tooltip indicates that a collaborator is not in the same enterprise of the current user',
-        id: 'boxui.unifiedShare.collaborators.externalCollabTooltipText',
     },
     groupLabel: {
         defaultMessage: 'Group',
@@ -383,23 +368,8 @@ const messages = defineMessages({
         description: 'Description for Uploader permission level in invitee permission dropdown',
         id: 'boxui.unifiedShare.uploaderLevelDescription',
     },
-    manageAllLinkText: {
-        defaultMessage: 'Manage All',
-        description: 'Manage all link text on collaborator list',
-        id: 'boxui.unifiedShare.manageAllLinkText',
-    },
-    viewAdditionalPeopleText: {
-        defaultMessage: 'View additional people',
-        description: 'Text to display in collaborator list if there are more items',
-        id: 'boxui.unifiedShare.viewAdditionalPeopleText',
-    },
 
     // Collaboration group type messages
-    pendingCollabText: {
-        defaultMessage: 'Pending',
-        description: 'Text to display for users who have not accepted an invitation to collaborate yet',
-        id: 'boxui.unifiedShare.collaboration.pendingCollabText',
-    },
     userCollabText: {
         defaultMessage: 'User',
         description: 'Text to display for individual users who have accepted an invitation to collaborate',

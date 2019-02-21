@@ -14,14 +14,13 @@ import Button from '../../components/button';
 import { UpgradeBadge, BetaBadge } from '../../components/badge';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
+import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
 
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
 import RemoveLinkConfirmModal from './RemoveLinkConfirmModal';
 import SharedLinkSection from './SharedLinkSection';
 import EmailForm from './EmailForm';
-import CollaboratorList from './collaborator-avatars/CollaboratorList';
-import CollaboratorAvatars from './collaborator-avatars/CollaboratorAvatars';
 import type {
     accessLevelType,
     collaboratorsListType,

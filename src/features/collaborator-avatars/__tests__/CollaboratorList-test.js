@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import CollaboratorList from '../CollaboratorList';
 
-describe('features/unified-share-modal/collaborator-avatar-group/CollaboratorList', () => {
+describe('features/collaborator-avatars/CollaboratorList', () => {
     const collaborators = [
         {
             collabID: 1,
