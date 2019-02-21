@@ -102,11 +102,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Label for cancel action.',
         defaultMessage: 'Cancel',
     },
-    cancelUploads: {
-        id: 'be.cancelUploads',
-        description: 'Label for cancel uploads action.',
-        defaultMessage: 'Cancel Uploads',
-    },
     create: {
         id: 'be.create',
         description: 'Label for create action.',
@@ -121,6 +116,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.upload',
         description: 'Label for upload action.',
         defaultMessage: 'Upload',
+    },
+    add: {
+        id: 'be.add',
+        description: 'Label for add action',
+        defaultMessage: 'Add',
+    },
+    sort: {
+        id: 'be.sort',
+        description: 'Label for sort action',
+        defaultMessage: 'Sort',
     },
     newFolder: {
         id: 'be.newFolder',
@@ -140,7 +145,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     selected: {
         id: 'be.selected',
         description: 'Default label for selected items list in the footer.',
-        defaultMessage: 'Selected',
+        defaultMessage: '{count} Selected',
     },
     max: {
         id: 'be.max',

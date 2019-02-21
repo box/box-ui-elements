@@ -66,7 +66,7 @@ const Pagination = ({ offset = 0, onChange = noop, pageSize = DEFAULT_PAGE_SIZE,
                 <PaginationMenu onPageClick={updateOffset} pageCount={pageCount} pageNumber={pageNumber} />
             </div>
 
-            <ButtonGroup>
+            <ButtonGroup className="be-pagination-nav">
                 <Tooltip isDisabled={!hasPreviousPage} text={<FormattedMessage {...messages.previousPage} />}>
                     <Button isDisabled={!hasPreviousPage} onClick={handlePreviousClick}>
                         <IconPageBack {...PAGE_ICON_STYLE} />

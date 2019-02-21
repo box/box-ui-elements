@@ -43,7 +43,7 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
             {message && <div className="bcu-footer-message">{message}</div>}
             <div className="bcu-footer-right">
                 <Button isDisabled={!hasFiles} onClick={onCancel} type="button">
-                    <FormattedMessage {...messages.cancelUploads} />
+                    <FormattedMessage {...messages.cancel} />
                 </Button>
                 <PrimaryButton isDisabled={!hasFiles} isLoading={isLoading} onClick={onUpload} type="button">
                     <FormattedMessage {...messages.upload} />

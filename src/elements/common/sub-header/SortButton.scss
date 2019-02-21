@@ -1,0 +1,11 @@
+.btn.be-btn-sort {
+    padding: 7px 6px;
+
+    .bce:not(.be-is-small) & {
+        display: none;
+    }
+
+    svg {
+        display: block;
+    }
+}
