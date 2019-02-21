@@ -35,6 +35,7 @@ type Props = {
     onAssignmentUpdate: Function,
     onDelete?: Function,
     onEdit?: Function,
+    onEditStart?: Function,
     permissions?: BoxItemPermission,
     task_assignment_collection: TaskAssignments | SelectorItems,
     translatedTaggedMessage?: string,
@@ -55,6 +56,7 @@ class Task extends React.Component<Props> {
             isPending,
             onDelete,
             onEdit,
+            onEditStart,
             onAssignmentUpdate = noop,
             message,
             translatedTaggedMessage,
@@ -89,6 +91,7 @@ class Task extends React.Component<Props> {
                     isPending={isPending}
                     onDelete={onDelete}
                     onEdit={onEdit}
+                    onEditStart={onEditStart}
                     permissions={taskPermissions}
                     tagged_message={message}
                     translatedTaggedMessage={translatedTaggedMessage}

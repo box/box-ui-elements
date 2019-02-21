@@ -45,6 +45,7 @@ type Props = {
     modified_at?: string | number,
     onDelete?: Function,
     onEdit?: Function,
+    onEditStart?: Function,
     permissions?: BoxItemPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -71,7 +72,11 @@ class Comment extends React.Component<Props, State> {
 
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
 
-    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    approvalCommentFormCancelHandler = (): void =>
+        this.setState({ isInputOpen: false, isEditing: false }, () => {
+            const { onEditStart = noop } = this.props;
+            onEditStart();
+        });
 
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
@@ -81,7 +86,11 @@ class Comment extends React.Component<Props, State> {
         this.approvalCommentFormSubmitHandler();
     };
 
-    toEdit = (): void => this.setState({ isEditing: true, isInputOpen: true });
+    toEdit = (): void =>
+        this.setState({ isEditing: true, isInputOpen: true }, () => {
+            const { onEditStart = noop } = this.props;
+            onEditStart();
+        });
 
     handleCommentFocus = (): void => {
         this.setState({ isFocused: true });

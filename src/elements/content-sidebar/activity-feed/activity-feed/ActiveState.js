@@ -37,7 +37,6 @@ class ActiveState extends React.Component<Props> {
     constructor() {
         super();
         this.cache = new CellMeasurerCache({
-            defaultHeight: 81,
             fixedWidth: true,
         });
     }
@@ -46,6 +45,11 @@ class ActiveState extends React.Component<Props> {
         this.cache.clearAll();
         this.list.forceUpdateGrid();
     }
+
+    onEditChange = () => {
+        this.cache.clearAll();
+        this.list.forceUpdateGrid();
+    };
 
     renderActivityCard = ({ key, index, parent, style }: any) => {
         const {
@@ -72,7 +76,6 @@ class ActiveState extends React.Component<Props> {
                         <li key={type + id} className="bcs-activity-feed-comment" style={style}>
                             <Comment
                                 {...item}
-                                cellMeasurerCache={this.cache}
                                 currentUser={currentUser}
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
@@ -94,7 +97,6 @@ class ActiveState extends React.Component<Props> {
                             <Task
                                 {...item}
                                 currentUser={currentUser}
-                                cellMeasurerCache={this.cache}
                                 getAvatarUrl={getAvatarUrl}
                                 getMentionWithQuery={getMentionWithQuery}
                                 getUserProfileUrl={getUserProfileUrl}
@@ -102,6 +104,7 @@ class ActiveState extends React.Component<Props> {
                                 onAssignmentUpdate={onTaskAssignmentUpdate}
                                 onDelete={onTaskDelete}
                                 onEdit={onTaskEdit}
+                                onEditStart={this.onEditChange}
                                 permissions={{
                                     can_delete: true,
                                     can_edit: true,
