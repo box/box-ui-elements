@@ -5,12 +5,40 @@ const initialCondition: ConditionType = {
     id: 0,
     columnDisplayText: '',
     columnKey: null,
+    fieldId: '3',
     operatorDisplayText: '',
     operatorKey: null,
     valueDisplayText: '',
     valueKey: null,
     valueType: 'string',
 };
+
+const columnOptions = [
+    {
+        displayText: '$100',
+        fieldId: '3',
+        type: 'enum',
+        value: '$100',
+    },
+    {
+        displayText: '$200',
+        fieldId: '3',
+        type: 'enum',
+        value: '$200',
+    },
+    {
+        displayText: '$300',
+        fieldId: '3',
+        type: 'enum',
+        value: '$300',
+    },
+    {
+        displayText: '$400',
+        fieldId: '3',
+        type: 'enum',
+        value: '$400',
+    },
+];
 
 const conditions: Array<ConditionType> = [initialCondition];
 
@@ -551,6 +579,7 @@ export {
     initialCondition,
     conditions,
     columns,
+    columnOptions,
     columnsWithNewOrder,
     columnsWithOneColumnNotShown,
     expectedVisibleColumns,

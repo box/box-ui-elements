@@ -112,18 +112,14 @@ const Condition = ({
 
     const getColumnOptions = () => {
         const { fieldId } = condition;
-        const column =
-            columns &&
-            columns.find(c => {
-                return c.id === fieldId;
-            });
+        const column = columns && columns.find(c => c.id === fieldId);
         if (column && column.options) {
-            return column.options.map((o, idx) => {
+            return column.options.map(option => {
                 return {
-                    displayName: o.key,
+                    displayName: option.key,
                     id: fieldId,
                     type: 'enum',
-                    value: idx,
+                    value: option.key,
                 };
             });
         }
