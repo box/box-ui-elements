@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
 import IconClose from '../../../../icons/general/IconClose';
@@ -11,20 +11,23 @@ import ValueField from './ValueField';
 
 import messages from '../../messages';
 import {
+    AND,
     ATTRIBUTE,
     COLUMN_DISPLAY_TEXT,
     COLUMN_KEY,
+    DATE,
     OPERATOR,
     OPERATOR_DISPLAY_TEXT,
     OPERATOR_KEY,
     OPERATORS_FOR_ATTRIBUTE,
+    OR,
     VALUE,
     VALUE_DISPLAY_TEXT,
     VALUE_KEY,
 } from '../../constants';
-import type { ColumnType } from '../../flowTypes';
+import type { ColumnType, SelectOptionType } from '../../flowTypes';
 
-import '../../styles/FilterItem.scss';
+import '../../styles/Condition.scss';
 
 type Props = {
     areErrorsEnabled: boolean,
@@ -33,6 +36,8 @@ type Props = {
     deleteCondition: (index: number) => void,
     index: number,
     intl: Object,
+    onConnectorChange: (option: SelectOptionType) => void,
+    selectedConnector: string,
     update: (
         index: number,
         condition: Object,
@@ -54,14 +59,15 @@ const Condition = ({
     condition,
     deleteCondition,
     index,
-    intl: { formatMessage },
+    selectedConnector,
     update,
+    onConnectorChange,
 }: Props) => {
     const onDeleteButtonClick = () => {
         deleteCondition(index);
     };
 
-    const updateSelectedField = (option: Object, fieldType?: string) => {
+    const updateSelectedField = (option: SelectOptionType, fieldType?: string) => {
         const conditionIndex = index;
         const value = option.value;
         const valueType = option.type;
@@ -86,12 +92,12 @@ const Condition = ({
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
-        return options.map((option, optionIndex) => {
+        return options.map(option => {
             return {
                 displayText: option.displayName,
                 fieldId: option.id,
                 type: option.type,
-                value: optionIndex,
+                value: option.displayName,
             };
         });
     };
@@ -150,17 +156,19 @@ const Condition = ({
         const { valueKey, valueType } = condition;
 
         const isValueSet = valueKey !== null && valueKey !== '';
-
-        const message = valueType === 'date' ? messages.tooltipSelectDateError : messages.tooltipSelectValueError;
-
-        const error = areErrorsEnabled && !isValueSet ? formatMessage(message) : null;
+        const message = (
+            <FormattedMessage
+                {...(valueType === DATE ? messages.tooltipSelectDateError : messages.tooltipSelectValueError)}
+            />
+        );
+        const error = areErrorsEnabled && !isValueSet ? message : null;
 
         return error;
     };
 
     const renderDeleteButton = () => {
         return (
-            <div className="filter-item-delete-button">
+            <div className="condition-delete-button">
                 <button className="delete-button" onClick={onDeleteButtonClick} type="button">
                     <IconClose width={deleteButtonIconWidth} height={deleteButtonIconHeight} color="#999EA4" />
                 </button>
@@ -168,31 +176,61 @@ const Condition = ({
         );
     };
 
-    const renderPrefixField = () => {
+    const renderConnectorField = () => {
+        let message = '';
+        switch (selectedConnector) {
+            case AND:
+                message = <FormattedMessage {...messages.connectorAndText} />;
+                break;
+            case OR:
+                message = <FormattedMessage {...messages.connectorOrText} />;
+                break;
+            default:
+                break;
+        }
+
+        const connectorOptions = getFormattedOptions(
+            [AND, OR].map(connector => ({
+                displayName: connector,
+                value: connector,
+            })),
+        );
+
         return (
-            <div className="filter-item-prefix-container">
-                <p className="filter-item-prefix-text">
-                    <FormattedMessage {...messages.prefixButtonText} />
-                </p>
+            <div className="condition-connector">
+                {index === 0 ? (
+                    <p className="condition-connector-text">
+                        <FormattedMessage {...messages.connectorWhereText} />
+                    </p>
+                ) : (
+                    <SingleSelectField
+                        isDisabled={false}
+                        onChange={onConnectorChange}
+                        options={connectorOptions}
+                        placeholder={message}
+                        selectedValue={selectedConnector}
+                    />
+                )}
             </div>
         );
     };
 
     const renderAttributeField = () => {
-        const { columnKey } = condition;
+        const { columnDisplayText } = condition;
         const columnAttributes = columns || [];
         const attributeOptions = getFormattedOptions(columnAttributes);
+        const placeholder = <FormattedMessage {...messages.selectAttributePlaceholderText} />;
 
         return (
-            <div className="filter-item-attribute-dropdown-container">
+            <div className="condition-attribute-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
                     <SingleSelectField
                         fieldType={ATTRIBUTE}
                         isDisabled={false}
                         onChange={updateSelectedField}
                         options={attributeOptions}
-                        placeholder={formatMessage(messages.selectAttributePlaceholderText)}
-                        selectedValue={columnKey}
+                        placeholder={placeholder}
+                        selectedValue={columnDisplayText}
                     />
                 </div>
             </div>
@@ -200,19 +238,19 @@ const Condition = ({
     };
 
     const renderOperatorField = () => {
-        const { operatorKey } = condition;
+        const { operatorDisplayText } = condition;
         const operatorsForAttribute = getOperatorsForAttribute();
         const operatorOptions = getFormattedOptions(operatorsForAttribute);
 
         return (
-            <div className="filter-item-operator-dropdown-container">
+            <div className="condition-operator-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
                     <SingleSelectField
                         fieldType={OPERATOR}
                         isDisabled={false}
                         onChange={updateSelectedField}
                         options={operatorOptions}
-                        selectedValue={operatorKey}
+                        selectedValue={operatorDisplayText || operatorOptions[0].displayText}
                     />
                 </div>
             </div>
@@ -220,21 +258,20 @@ const Condition = ({
     };
 
     const renderValueField = () => {
-        const { valueKey, valueType } = condition;
+        const { valueKey, valueType, valueDisplayText } = condition;
 
         const valuesForAttribute = getValuesForAttribute();
         const valueOptions = getFormattedOptions(valuesForAttribute);
         const error = getErrorMessage();
 
-        const classnames = classNames('filter-item-value-dropdown-container', {
+        const classnames = classNames('condition-value-dropdown-container', {
             'show-error': error,
         });
 
         return (
             <div className={classnames}>
                 <ValueField
-                    formatMessage={formatMessage}
-                    selectedValue={valueKey}
+                    selectedValue={valueDisplayText}
                     updateValueField={updateValueField}
                     updateSelectedField={updateSelectedField}
                     valueKey={valueKey}
@@ -249,7 +286,7 @@ const Condition = ({
         const error = getErrorMessage();
         return (
             error && (
-                <div className="filter-item-error-icon-status">
+                <div className="condition-error-icon-status">
                     <Tooltip text={error || ''} position="middle-right" theme="error">
                         <span>
                             <IconAlertDefault />
@@ -261,9 +298,9 @@ const Condition = ({
     };
 
     return (
-        <div className="filter-item-container">
+        <div className="condition-container">
             {renderDeleteButton()}
-            {renderPrefixField()}
+            {renderConnectorField()}
             {renderAttributeField()}
             {renderOperatorField()}
             {renderValueField()}
@@ -272,5 +309,4 @@ const Condition = ({
     );
 };
 
-export { Condition as BaseCondition };
-export default injectIntl(Condition);
+export default Condition;

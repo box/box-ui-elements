@@ -32,6 +32,7 @@ $lighter-light-blue: rgba($light-blue, .4) !default;
 
 $font: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
+$minimumWidth: 300px;
 $sidebarContentWidth: 340px;
 
 @mixin rendering {

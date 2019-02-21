@@ -16,14 +16,14 @@
     border: 1px solid $bdl-watermelon-red;
 }
 
-.filter-item-container {
+.condition-container {
     display: flex;
     flex-direction: row;
     height: 100%;
     padding-bottom: 10px;
     width: 100%;
 
-    .filter-item-delete-button {
+    .condition-delete-button {
         align-items: center;
         display: flex;
         width: 35px;
@@ -43,21 +43,21 @@
         }
     }
 
-    .filter-item-prefix-container {
+    .condition-connector {
         align-items: center;
         display: flex;
         padding-left: 10px;
         padding-right: 70px;
         width: 70px;
 
-        .filter-item-prefix-text {
+        .condition-connector-text {
             color: $black;
             margin: auto;
             position: relative;
         }
     }
 
-    .filter-item-attribute-dropdown-container {
+    .condition-attribute-dropdown-container {
         align-items: center;
 
         .filter-dropdown-single-select-field-container {
@@ -76,7 +76,7 @@
         }
     }
 
-    .filter-item-operator-dropdown-container {
+    .condition-operator-dropdown-container {
         align-items: center;
 
         .filter-dropdown-single-select-field-container {
@@ -94,7 +94,7 @@
         }
     }
 
-    .filter-item-value-dropdown-container.show-error {
+    .condition-value-dropdown-container.show-error {
         .filter-dropdown-text-field-container {
             .text-input-container input {
                 @include error-border();
@@ -110,7 +110,7 @@
         }
     }
 
-    .filter-item-value-dropdown-container {
+    .condition-value-dropdown-container {
         align-items: center;
         height: 100%;
         padding-right: 5px;
@@ -165,7 +165,7 @@
         }
     }
 
-    .filter-item-error-icon-status {
+    .condition-error-icon-status {
         align-items: center;
         display: flex;
 
