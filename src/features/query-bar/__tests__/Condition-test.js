@@ -35,9 +35,10 @@ describe('features/query-bar/components/filter/Condition', () => {
         const condition = initialCondition;
         const value = 0;
         const option = {
-            value,
             displayText,
+            fieldId: '3',
             type: 'string',
+            value,
         };
         const fieldId = initialCondition.fieldId;
         const valueType = 'string';
