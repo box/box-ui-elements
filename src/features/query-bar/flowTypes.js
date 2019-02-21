@@ -3,7 +3,7 @@ import { AND, OR } from './constants';
 
 export type SelectOptionType = {
     displayText: string,
-    fieldId?: string,
+    fieldId: string,
     type?: string,
     value: string,
 };

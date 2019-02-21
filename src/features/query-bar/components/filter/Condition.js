@@ -35,7 +35,6 @@ type Props = {
     condition: Object,
     deleteCondition: (index: number) => void,
     index: number,
-    intl: Object,
     onConnectorChange: (option: SelectOptionType) => void,
     selectedConnector: string,
     update: (
@@ -68,36 +67,39 @@ const Condition = ({
     };
 
     const updateSelectedField = (option: SelectOptionType, fieldType?: string) => {
-        const conditionIndex = index;
-        const value = option.value;
-        const valueType = option.type;
-        const fieldId = option.fieldId || condition.fieldId;
+        const { displayText, fieldId, type, value } = option;
 
-        const displayText = option.displayText;
         let displayTextType = '';
         let keyType = '';
 
-        if (fieldType === COLUMN) {
-            displayTextType = COLUMN_DISPLAY_TEXT;
-            keyType = COLUMN_KEY;
-        } else if (fieldType === OPERATOR) {
-            displayTextType = OPERATOR_DISPLAY_TEXT;
-            keyType = OPERATOR_KEY;
-        } else if (fieldType === VALUE) {
-            displayTextType = VALUE_DISPLAY_TEXT;
-            keyType = VALUE_KEY;
+        switch (fieldType) {
+            case COLUMN:
+                displayTextType = COLUMN_DISPLAY_TEXT;
+                keyType = COLUMN_KEY;
+                break;
+            case OPERATOR:
+                displayTextType = OPERATOR_DISPLAY_TEXT;
+                keyType = OPERATOR_KEY;
+                break;
+            case VALUE:
+                displayTextType = VALUE_DISPLAY_TEXT;
+                keyType = VALUE_KEY;
+                break;
+            default:
+                break;
         }
 
-        update(conditionIndex, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
+        update(index, condition, displayText, displayTextType, fieldId, value, keyType, type);
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
         return options.map(option => {
+            const { displayName, id, type } = option;
             return {
-                displayText: option.displayName,
-                fieldId: option.id,
-                type: option.type,
-                value: option.displayName,
+                displayText: displayName,
+                fieldId: id,
+                type,
+                value: displayName,
             };
         });
     };
@@ -115,11 +117,12 @@ const Condition = ({
         const column = columns && columns.find(c => c.id === fieldId);
         if (column && column.options) {
             return column.options.map(option => {
+                const { key } = option;
                 return {
-                    displayName: option.key,
+                    displayName: key,
                     id: fieldId,
                     type: 'enum',
-                    value: option.key,
+                    value: key,
                 };
             });
         }
@@ -127,12 +130,13 @@ const Condition = ({
     };
 
     const updateValueField = (fieldValue: Object) => {
+        const { fieldId, valueType } = condition;
         let displayText = '';
         const displayTextType = VALUE_DISPLAY_TEXT;
-        const fieldId = condition.fieldId;
+
         let value = '';
         const keyType = VALUE_KEY;
-        const valueType = condition.valueType;
+
         if (!fieldValue || !fieldValue.target) {
             displayText = fieldValue;
             value = fieldValue;

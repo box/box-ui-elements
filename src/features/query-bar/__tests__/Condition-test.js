@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { columns, columnOptions, initialCondition } from '../components/fixtures';
+import { columnOptions, columns, initialCondition } from '../components/fixtures';
 import { COLUMN_KEY, OPERATOR_KEY, VALUE_KEY } from '../constants';
 import Condition from '../components/filter/Condition';
 
@@ -111,8 +111,8 @@ describe('features/query-bar/components/filter/Condition', () => {
     describe('getColumnOptions()', () => {
         const { fieldId } = initialCondition;
         test.each`
-            description                                                    | expectedColumnOptions
-            ${'user has opened the value dropdowhen and sees the options'} | ${columnOptions}
+            description                                                  | expectedColumnOptions
+            ${'user has opened the value dropdown and sees the options'} | ${columnOptions}
         `('$description', ({ expectedColumnOptions }) => {
             const wrapper = getWrapper({ fieldId });
             const ValueField = wrapper.find('ValueField');
