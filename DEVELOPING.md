@@ -12,26 +12,19 @@ Our development setup assumes a LINUX/BSD environemnt.
 6. Add the upstream repo to your remotes `git remote add upstream git@github.com:box/box-ui-elements.git`.
 7. Verify your remotes are properly set up `git remote -v`. You should pull updates from the `upstream` box repo and push changes to your fork `origin`.
 
-## Testing UI Elements with demo data
+## Examples Page (aka the Style Guide)
 
-Examples can be found in the [examples folder](examples). These examples use demo data within the UI Elements. Due to security restrictions, the data is read-only.
+A published version of the style guide can be seen at https://opensource.box.com/box-ui-elements/. The style guide uses **_live_** demo data within the UI Elements. Due to security restrictions this data is read-only. You can run a local version of the style guide as follows:
 
-1. Start the examples/styleguide server via `yarn start`.
-2. Navigate to `http://localhost:6060/` to see the UI Elements in action.
+1. Start the style guide server via `yarn start` (or via `yarn start:examples:legacy`, to include support for IE 11).
+2. Navigate to `http://localhost:6060/` to see the UI Elements in action. If testing on a different machine or VM, you can instead use the IP address shown on your terminal window.
 
-## Testing UI Elements with your data
+**_NOTE:_** _This note applies to testing top level UI Elements only and not the lower level components. If you want to use your own live data for the style guide, then start the style guide server using [your own developer auth token](https://developer.box.com/docs/authenticate-with-developer-token) and a file or folder ID via_
 
-To test the Box UI Elements with your own box data and auth token, launch a local webpack dev server via `yarn start:dev` and navigate to `http://localhost:8080/`. HTML test files for local development are located inside the [test folder](http://localhost:8080/test).
+-   `TOKEN=<YOUR_TOKEN> FILEID=<YOUR_FILE_ID> yarn start` or
+-   `TOKEN=<YOUR_TOKEN> FOLDERID=<YOUR_FOLDER_ID> yarn start`
 
-1. Open a test file, such as http://localhost:8080/test/sidebar.html
-2. When prompted, enter a file id and developer token.
-    1. Developer tokens can be created at https://app.box.com/developers/console.
-    2. Select `Custom App` and choose `Oauth 2.0 with JWT (Server Authentication)`.
-    3. Select `View Your App` > `Configuration` > `CORS Domains` and add `http://localhost:8080` to the domain whitelist. Save the configuration.
-    4. The developer token will be regenerated once the configuration is saved. Copy the token and paste into the prompt in the localhost test page. The token will be valid for an hour; return to the app configuration page to generate a new token.
-    5. For additional information about developing on the Box Platform, see the [Platform docs](https://developer.box.com/docs/box-ui-elements#section-using-the-box-ui-elements).
-
-## Testing UI Elements in a parent project
+## Testing UI Elements in a Parent Project
 
 To test the Box UI Elements with your own project use local Yarn linking.
 
@@ -40,20 +33,10 @@ To test the Box UI Elements with your own project use local Yarn linking.
 3. In your parent project run `yarn link box-ui-elements` every time you plan to use the local linked version.
 4. Run your parent project's build.
 
-## While Developing
+## Common Script Commands
 
-Install the following plugins in your preferred editor
-
--   Editor Config (standardizes basic editor configuration)
--   ESLint (Javascript linting)
--   Stylelint (CSS linting)
--   Prettier (Javscript formatting)
--   Sass (Stylesheets)
--   Babel (Transpiler)
-
-## Common script commands
-
--   `yarn start` to launch a local styleguide examples server. Uses demo live data for Elements.
+-   `yarn start` to launch a local style guide examples server. Uses demo live data for Elements.
+-   `yarn start:examples:legacy` same as above, but with IE 11 support.
 -   `yarn start:npm` to symlink Elements via `yarn link` to a parent project.
 -   `yarn start:dev` to launch a local webpack dev server. Uses your own data for Elements.
 -   `yarn lint` to lint js and css.
@@ -66,6 +49,29 @@ Install the following plugins in your preferred editor
 
 For more script commands see `package.json`. Test coverage reports are available under reports/coverage.
 
-## Testing
+## Useful Plugins
 
-For test debugging follow instructions provided in the [jest documentation](https://facebook.github.io/jest/docs/en/troubleshooting.html).
+Install the following plugins in your preferred editor
+
+-   Editor Config (standardizes basic editor configuration)
+-   ESLint (Javascript linting)
+-   Stylelint (CSS linting)
+-   Prettier (Javscript formatting)
+-   Sass (Stylesheets)
+-   Babel (Transpiler)
+
+## Testing Embedded UI Elements With Your Data
+
+Under most circumstances you should be using the style guide as mentioned earlier. This section is primarily for testing the Box UI Elements embedded in a custom HTML page with your own box data and auth token. For this, launch a local webpack dev server via `yarn start:dev` and navigate to `http://localhost:8080/`. HTML test files for local development are located inside the [test folder](http://localhost:8080/test).
+
+1. Open a test file, such as http://localhost:8080/test/sidebar.html
+2. When prompted, enter a file id and developer token.
+    1. Developer tokens can be created at https://app.box.com/developers/console.
+    2. Select `Custom App` and choose `Oauth 2.0 with JWT (Server Authentication)`.
+    3. Select `View Your App` > `Configuration` > `CORS Domains` and add `http://localhost:8080` to the domain whitelist. Save the configuration.
+    4. The developer token will be regenerated once the configuration is saved. Copy the token and paste into the prompt in the localhost test page. The token will be valid for an hour; return to the app configuration page to generate a new token.
+    5. For additional information about developing on the Box Platform, see the [Platform docs](https://developer.box.com/docs/box-ui-elements#section-using-the-box-ui-elements).
+
+## Unit Testing
+
+The project is setup with Jest for unit testing. For debugging follow instructions provided in the [jest documentation](https://jestjs.io/docs/en/troubleshooting).
