@@ -17,11 +17,6 @@ const messages = defineMessages({
         description: 'Header text shown in template dropdown',
         id: 'boxui.queryBar.metadataViewTemplateListHeaderTitle',
     },
-    selectAttributePlaceholderText: {
-        defaultMessage: 'Select attribute',
-        description: 'Placeholder text on the attribute button, on click should open a dropdown',
-        id: 'boxui.queryBar.selectAttributePlaceholderText',
-    },
     selectValuePlaceholderText: {
         defaultMessage: 'Select value',
         description: 'Placeholder text on the value button, on click should open a dropdown',

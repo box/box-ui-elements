@@ -63,12 +63,6 @@ exports[`features/query-bar/components/filter/Condition render() should render C
             },
           ]
         }
-        placeholder={
-          <FormattedMessage
-            defaultMessage="Select attribute"
-            id="boxui.queryBar.selectAttributePlaceholderText"
-          />
-        }
         selectedValue=""
       />
     </div>

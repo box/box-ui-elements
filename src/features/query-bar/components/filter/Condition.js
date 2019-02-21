@@ -118,12 +118,12 @@ const Condition = ({
                 return c.id === fieldId;
             });
         if (column && column.options) {
-            return column.options.map((option, optionIndex) => {
+            return column.options.map((o, idx) => {
                 return {
-                    displayName: option.key,
+                    displayName: o.key,
                     id: fieldId,
                     type: 'enum',
-                    value: optionIndex,
+                    value: idx,
                 };
             });
         }
@@ -174,18 +174,6 @@ const Condition = ({
     };
 
     const renderConnectorField = () => {
-        let message = '';
-        switch (selectedConnector) {
-            case AND:
-                message = <FormattedMessage {...messages.connectorAndText} />;
-                break;
-            case OR:
-                message = <FormattedMessage {...messages.connectorOrText} />;
-                break;
-            default:
-                break;
-        }
-
         const connectorOptions = getFormattedOptions(
             [AND, OR].map(connector => ({
                 displayName: connector,
@@ -204,7 +192,6 @@ const Condition = ({
                         isDisabled={false}
                         onChange={onConnectorChange}
                         options={connectorOptions}
-                        placeholder={message}
                         selectedValue={selectedConnector}
                     />
                 )}
@@ -215,7 +202,6 @@ const Condition = ({
     const renderColumnField = () => {
         const { columnDisplayText } = condition;
         const columnOptions = getFormattedOptions(columns || []);
-        const placeholder = <FormattedMessage {...messages.selectAttributePlaceholderText} />;
         return (
             <div className="condition-attribute-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
@@ -224,7 +210,6 @@ const Condition = ({
                         isDisabled={false}
                         onChange={updateSelectedField}
                         options={columnOptions}
-                        placeholder={placeholder}
                         selectedValue={columnDisplayText}
                     />
                 </div>
