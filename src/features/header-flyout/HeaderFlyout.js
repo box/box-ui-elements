@@ -5,7 +5,7 @@ import { Flyout, Overlay } from '../../components/flyout';
 import ScrollWrapper from '../../components/scroll-wrapper';
 import type { FlyoutProps } from '../../components/flyout/Flyout';
 
-import './HeaderFlyout.scss';
+import './styles/HeaderFlyout.scss';
 
 type Props = FlyoutProps & {
     /** Components to render in the overlay */
@@ -23,7 +23,7 @@ type Props = FlyoutProps & {
 };
 
 class HeaderFlyout extends React.Component<Props> {
-    static panelOffset = '-4px -2px';
+    static panelOffset = '-4px -1px';
 
     static defaultProps = {
         position: 'bottom-left',
