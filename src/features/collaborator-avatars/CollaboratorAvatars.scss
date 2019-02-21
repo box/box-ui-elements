@@ -20,7 +20,7 @@
 
     .avatars-label {
         color: $seventy-sixers;
-        margin-right: 10px;
+        margin-right: 5px;
     }
 
     .avatars {
@@ -30,7 +30,7 @@
     .avatar {
         font-size: 11px;
         height: 24px;
-        margin-right: 2px;
+        margin-left: 2px;
         width: 24px;
     }
 
@@ -41,9 +41,14 @@
         font-size: 11px;
         height: 24px;
         line-height: 24px;
+        margin-left: 2px;
         max-width: 30px;
         min-width: 24px;
         text-align: center;
         vertical-align: top;
+    }
+
+    .badgeable-container {
+        height: 24px;
     }
 }
