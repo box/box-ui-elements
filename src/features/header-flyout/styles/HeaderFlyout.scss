@@ -1,22 +1,14 @@
-@import '../../styles/variables';
-
-$flyout-list-width: 460px;
-$flyout-list-height: 460px;
-$flyout-list-padding: 30px;
-$flyout-label-spacer: 20px;
-
-$flyout-title-font-size: 15px;
-$flyout-title-line-height: 16px;
-$flyout-footer-font-size: 13px;
-$flyout-footer-line-height: 16px;
+@import '../../../styles/variables';
+@import './variables';
 
 .header-flyout-overlay {
     height: $flyout-list-height;
     width: $flyout-list-width;
 
     .overlay {
-        padding: $flyout-list-padding;
-        padding-bottom: 0;
+        // TODO: decide which BDL color applies here
+        border: 1px solid $off-white;
+        padding: 2 * $flyout-header-spacer $flyout-list-padding 0;
     }
 }
 
@@ -24,7 +16,7 @@ $flyout-footer-line-height: 16px;
     padding: 0;
 
     .flyout-list-container-title {
-        padding-bottom: $flyout-label-spacer;
+        padding-bottom: $flyout-header-spacer;
     }
 
     .flyout-list-title {
@@ -34,8 +26,8 @@ $flyout-footer-line-height: 16px;
     }
 
     .flyout-list-container-body {
-        $title-height: $flyout-title-line-height + $flyout-label-spacer;
-        $footer-height: $flyout-title-line-height +  2 * $flyout-label-spacer;
+        $title-height: $flyout-title-line-height + $flyout-header-spacer;
+        $footer-height: $flyout-title-line-height +  2 * $flyout-footer-spacer;
 
         // the overall height, minus the top and bottom padding
         height: $flyout-list-height - 2 * $flyout-list-padding;
@@ -63,7 +55,7 @@ $flyout-footer-line-height: 16px;
         border-top: 1px solid $off-white;
         font-size: $flyout-footer-font-size;
         line-height: $flyout-footer-line-height;
-        padding: $flyout-label-spacer 0;
+        padding: $flyout-footer-spacer 0;
 
         &.hidden {
             display: none;
