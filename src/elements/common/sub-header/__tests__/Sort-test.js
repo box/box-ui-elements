@@ -1,31 +1,27 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
-import Button from '../../../../components/button/Button';
 import DropdownMenu from '../../../../components/dropdown-menu/DropdownMenu';
 import Menu from '../../../../components/menu/Menu';
 import MenuItem from '../../../../components/menu/MenuItem';
 import Sort from '../Sort';
+import SortButton from '../SortButton';
 import messages from '../../messages';
 import { SORT_ASC, SORT_DESC } from '../../../../constants';
 
 describe('elements/SubHeader/Sort', () => {
     test('should render a button and menu with 4 menu items', () => {
-        const wrapper = shallow(
-            <Sort isLoaded={false} onSortChange={jest.fn()} sortBy="name" sortDirection={SORT_ASC} />,
-        );
-        expect(wrapper.find(Button)).toHaveLength(1);
+        const wrapper = shallow(<Sort onSortChange={jest.fn()} sortBy="name" sortDirection={SORT_ASC} />);
+
+        expect(wrapper.find(SortButton)).toHaveLength(1);
         expect(wrapper.find(DropdownMenu)).toHaveLength(1);
         expect(wrapper.find(Menu)).toHaveLength(1);
         expect(wrapper.find(MenuItem)).toHaveLength(4);
     });
 
     test('should render a select with 4 options', () => {
-        const wrapper = shallow(
-            <Sort isLoaded={false} onSortChange={jest.fn()} sortBy="name" sortDirection={SORT_ASC} />,
-        );
+        const wrapper = shallow(<Sort onSortChange={jest.fn()} sortBy="name" sortDirection={SORT_ASC} />);
         const options = wrapper.find(MenuItem);
-        expect(options).toHaveLength(4);
 
+        expect(options).toHaveLength(4);
         expect(
             options
                 .at(0)
@@ -81,7 +77,7 @@ describe('elements/SubHeader/Sort', () => {
 
     test('should pass correct parameters when clicked', () => {
         const sort = jest.fn();
-        const wrapper = shallow(<Sort isLoaded={false} onSortChange={sort} sortBy="name" sortDirection={SORT_ASC} />);
+        const wrapper = shallow(<Sort onSortChange={sort} sortBy="name" sortDirection={SORT_ASC} />);
         const options = wrapper.find(MenuItem);
 
         options.at(0).simulate('click');
@@ -98,12 +94,10 @@ describe('elements/SubHeader/Sort', () => {
     });
 
     test('should render a select with correct option selected', () => {
-        const wrapper = shallow(
-            <Sort isLoaded={false} onSortChange={jest.fn()} sortBy="date" sortDirection={SORT_DESC} />,
-        );
+        const wrapper = shallow(<Sort onSortChange={jest.fn()} sortBy="date" sortDirection={SORT_DESC} />);
         const options = wrapper.find(MenuItem);
-        expect(options).toHaveLength(4);
 
+        expect(options).toHaveLength(4);
         expect(
             options
                 .at(3)
@@ -116,17 +110,5 @@ describe('elements/SubHeader/Sort', () => {
                 .childAt(1)
                 .prop('id'),
         ).toBe(messages.dateDESC.id);
-    });
-
-    test('should render a disabled button when isLoaded is false', () => {
-        const wrapper = shallow(
-            <Sort isLoaded={false} onSortChange={jest.fn()} sortBy="name" sortDirection={SORT_ASC} />,
-        );
-        expect(wrapper.find(Button).prop('isDisabled')).toBe(true);
-    });
-
-    test('should render a non-disabled button when isLoaded is true', () => {
-        const wrapper = mount(<Sort isLoaded onSortChange={jest.fn()} sortBy="name" sortDirection={SORT_ASC} />);
-        expect(wrapper.find(Button).prop('isDisabled')).toBe(false);
     });
 });

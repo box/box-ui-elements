@@ -13,7 +13,9 @@ exports[`elements/Pagination/Pagination should render properly with offset -5 1`
       pageNumber={1}
     />
   </div>
-  <ButtonGroup>
+  <ButtonGroup
+    className="be-pagination-nav"
+  >
     <Tooltip
       isDisabled={true}
       text={
@@ -69,7 +71,9 @@ exports[`elements/Pagination/Pagination should render properly with offset 0 1`]
       pageNumber={1}
     />
   </div>
-  <ButtonGroup>
+  <ButtonGroup
+    className="be-pagination-nav"
+  >
     <Tooltip
       isDisabled={true}
       text={
@@ -125,7 +129,9 @@ exports[`elements/Pagination/Pagination should render properly with offset 10 1`
       pageNumber={1}
     />
   </div>
-  <ButtonGroup>
+  <ButtonGroup
+    className="be-pagination-nav"
+  >
     <Tooltip
       isDisabled={true}
       text={
@@ -181,7 +187,9 @@ exports[`elements/Pagination/Pagination should render properly with offset 20 1`
       pageNumber={2}
     />
   </div>
-  <ButtonGroup>
+  <ButtonGroup
+    className="be-pagination-nav"
+  >
     <Tooltip
       isDisabled={false}
       text={
@@ -237,7 +245,9 @@ exports[`elements/Pagination/Pagination should render properly with offset 75 1`
       pageNumber={4}
     />
   </div>
-  <ButtonGroup>
+  <ButtonGroup
+    className="be-pagination-nav"
+  >
     <Tooltip
       isDisabled={false}
       text={
@@ -293,7 +303,9 @@ exports[`elements/Pagination/Pagination should render properly with offset 100 1
       pageNumber={5}
     />
   </div>
-  <ButtonGroup>
+  <ButtonGroup
+    className="be-pagination-nav"
+  >
     <Tooltip
       isDisabled={false}
       text={
