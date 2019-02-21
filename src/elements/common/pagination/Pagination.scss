@@ -2,10 +2,18 @@
 
 .be-pagination {
     display: flex;
-}
 
-.be-pagination-count {
-    align-items: center;
-    display: flex;
-    margin-right: 20px;
+    .be-pagination-count {
+        align-items: center;
+        display: flex;
+
+        .be-is-small & {
+            display: none;
+        }
+    }
+
+    .be-pagination-toggle {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
 }

@@ -1,24 +1,21 @@
 /**
  * @flow
- * @file Content sub header component
+ * @file Sort component
  * @author Box
  */
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../../components/button/Button';
 import DropdownMenu from '../../../components/dropdown-menu/DropdownMenu';
 import Menu from '../../../components/menu/Menu';
 import MenuItem from '../../../components/menu/MenuItem';
 import IconCheck from '../../../icons/general/IconCheck';
-import IconSort from '../../../icons/general/IconSort';
+import SortButton from './SortButton';
 import messages from '../messages';
 import { FIELD_NAME, FIELD_DATE, SORT_ASC, SORT_DESC } from '../../../constants';
-
 import './Sort.scss';
 
 type Props = {
-    isLoaded: boolean,
     onSortChange: Function,
     sortBy: SortBy,
     sortDirection: SortDirection,
@@ -31,12 +28,10 @@ const SORT_ITEMS: Array<Array<SortBy>> = [
     [FIELD_DATE, SORT_DESC],
 ];
 
-const Sort = ({ isLoaded, sortBy, sortDirection, onSortChange }: Props) => (
-    <DropdownMenu constrainToScrollParent isRightAligned>
-        <Button className="be-btn-sort" isDisabled={!isLoaded} type="button">
-            <IconSort />
-        </Button>
-        <Menu className="be-menu-sort">
+const Sort = ({ sortBy, sortDirection, onSortChange }: Props) => (
+    <DropdownMenu isRightAligned>
+        <SortButton />
+        <Menu>
             {SORT_ITEMS.map(([sortByValue, sortDirectionValue]) => {
                 const isSelected = sortByValue === sortBy && sortDirectionValue === sortDirection;
                 const sortItemKey = `${sortByValue}${sortDirectionValue}`;

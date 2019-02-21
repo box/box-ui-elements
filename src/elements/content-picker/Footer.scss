@@ -9,8 +9,12 @@
     justify-content: space-between;
     padding: 0 20px;
 
-    .bcp-selected-count {
-        margin-left: 2px;
+    .bcp-selected {
+        margin: 0;
+
+        .btn-content {
+            display: flex;
+        }
     }
 
     .bcp-selected-max {
@@ -18,18 +22,32 @@
         color: $red;
         display: inline-block;
         font-size: 11px;
+        margin-left: 5px;
+    }
+
+    .bcp-footer-actions {
+        .btn {
+            height: 32px;
+            padding: 0;
+            width: 40px;
+        }
+
+        .btn:first-child {
+            border-right: 0;
+        }
+
+        .btn-primary svg {
+            fill: #fff;
+        }
     }
 
     .bcp-footer-right {
         display: flex;
     }
 
-    .bcp-footer-actions {
-        margin-left: 20px;
-
-        .btn {
-            margin-left: 8px;
-        }
+    .btn-group {
+        margin-left: 5px;
+        margin-right: 5px;
     }
 }
 
