@@ -43,10 +43,10 @@ describe('features/query-bar/components/filter/Condition', () => {
         const valueType = 'string';
 
         test.each`
-            description                         | fieldType      | displayTextType          | keyType
-            ${'user has selected an attribute'} | ${'attribute'} | ${'columnDisplayText'}   | ${COLUMN_KEY}
-            ${'user has selected an operator'}  | ${'operator'}  | ${'operatorDisplayText'} | ${OPERATOR_KEY}
-            ${'user has selected a value'}      | ${'value'}     | ${'valueDisplayText'}    | ${VALUE_KEY}
+            description                        | fieldType     | displayTextType          | keyType
+            ${'user has selected a column'}    | ${'column'}   | ${'columnDisplayText'}   | ${COLUMN_KEY}
+            ${'user has selected an operator'} | ${'operator'} | ${'operatorDisplayText'} | ${OPERATOR_KEY}
+            ${'user has selected a value'}     | ${'value'}    | ${'valueDisplayText'}    | ${VALUE_KEY}
         `('$description', ({ fieldType, displayTextType, keyType }) => {
             const update = jest.fn();
             const wrapper = getWrapper({

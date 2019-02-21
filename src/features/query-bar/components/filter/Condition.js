@@ -12,14 +12,14 @@ import ValueField from './ValueField';
 import messages from '../../messages';
 import {
     AND,
-    ATTRIBUTE,
+    COLUMN,
     COLUMN_DISPLAY_TEXT,
     COLUMN_KEY,
+    COLUMN_OPERATORS,
     DATE,
     OPERATOR,
     OPERATOR_DISPLAY_TEXT,
     OPERATOR_KEY,
-    OPERATORS_FOR_ATTRIBUTE,
     OR,
     VALUE,
     VALUE_DISPLAY_TEXT,
@@ -77,7 +77,7 @@ const Condition = ({
         let displayTextType = '';
         let keyType = '';
 
-        if (fieldType === ATTRIBUTE) {
+        if (fieldType === COLUMN) {
             displayTextType = COLUMN_DISPLAY_TEXT;
             keyType = COLUMN_KEY;
         } else if (fieldType === OPERATOR) {
@@ -102,24 +102,23 @@ const Condition = ({
         });
     };
 
-    const getOperatorsForAttribute = () => {
+    const getColumnOperators = () => {
         const { valueType } = condition;
         if (valueType === '') {
             return [];
         }
-        return OPERATORS_FOR_ATTRIBUTE[valueType];
+        return COLUMN_OPERATORS[valueType];
     };
 
-    const getValuesForAttribute = () => {
+    const getColumnOptions = () => {
         const { fieldId } = condition;
-        const field =
+        const column =
             columns &&
-            columns.find(column => {
-                return column.id === fieldId;
+            columns.find(c => {
+                return c.id === fieldId;
             });
-
-        if (field && field.options) {
-            const fieldOptions = field.options.map((option, optionIndex) => {
+        if (column && column.options) {
+            return column.options.map((option, optionIndex) => {
                 return {
                     displayName: option.key,
                     id: fieldId,
@@ -127,8 +126,6 @@ const Condition = ({
                     value: optionIndex,
                 };
             });
-
-            return fieldOptions;
         }
         return [];
     };
@@ -215,20 +212,18 @@ const Condition = ({
         );
     };
 
-    const renderAttributeField = () => {
+    const renderColumnField = () => {
         const { columnDisplayText } = condition;
-        const columnAttributes = columns || [];
-        const attributeOptions = getFormattedOptions(columnAttributes);
+        const columnOptions = getFormattedOptions(columns || []);
         const placeholder = <FormattedMessage {...messages.selectAttributePlaceholderText} />;
-
         return (
             <div className="condition-attribute-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
                     <SingleSelectField
-                        fieldType={ATTRIBUTE}
+                        fieldType={COLUMN}
                         isDisabled={false}
                         onChange={updateSelectedField}
-                        options={attributeOptions}
+                        options={columnOptions}
                         placeholder={placeholder}
                         selectedValue={columnDisplayText}
                     />
@@ -239,8 +234,8 @@ const Condition = ({
 
     const renderOperatorField = () => {
         const { operatorDisplayText } = condition;
-        const operatorsForAttribute = getOperatorsForAttribute();
-        const operatorOptions = getFormattedOptions(operatorsForAttribute);
+        const columnOperators = getColumnOperators();
+        const operatorOptions = getFormattedOptions(columnOperators);
 
         return (
             <div className="condition-operator-dropdown-container">
@@ -260,8 +255,8 @@ const Condition = ({
     const renderValueField = () => {
         const { valueKey, valueType, valueDisplayText } = condition;
 
-        const valuesForAttribute = getValuesForAttribute();
-        const valueOptions = getFormattedOptions(valuesForAttribute);
+        const columnOptions = getColumnOptions();
+        const valueOptions = getFormattedOptions(columnOptions);
         const error = getErrorMessage();
 
         const classnames = classNames('condition-value-dropdown-container', {
@@ -301,7 +296,7 @@ const Condition = ({
         <div className="condition-container">
             {renderDeleteButton()}
             {renderConnectorField()}
-            {renderAttributeField()}
+            {renderColumnField()}
             {renderOperatorField()}
             {renderValueField()}
             {renderErrorIcon()}

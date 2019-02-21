@@ -38,7 +38,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
       className="filter-dropdown-single-select-field-container"
     >
       <SingleSelectField
-        fieldType="attribute"
+        fieldType="column"
         isDisabled={false}
         onChange={[Function]}
         options={
