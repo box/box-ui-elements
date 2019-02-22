@@ -7,7 +7,7 @@ export type OptionType = {
     displayText: string,
     fieldId: string,
     type?: string,
-    value: ConnectorType,
+    value: string | ConnectorType,
 };
 
 export type ColumnType = {
