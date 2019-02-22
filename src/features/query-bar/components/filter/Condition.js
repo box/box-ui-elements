@@ -97,7 +97,7 @@ const Condition = ({
             const { displayName, id, type } = option;
             return {
                 displayText: displayName,
-                fieldId: id,
+                id,
                 type,
                 value: displayName,
             };

@@ -16,25 +16,25 @@ const initialCondition: ConditionType = {
 const columnOptions = [
     {
         displayText: '$100',
-        fieldId: '3',
+        id: '3',
         type: 'enum',
         value: '$100',
     },
     {
         displayText: '$200',
-        fieldId: '3',
+        id: '3',
         type: 'enum',
         value: '$200',
     },
     {
         displayText: '$300',
-        fieldId: '3',
+        id: '3',
         type: 'enum',
         value: '$300',
     },
     {
         displayText: '$400',
-        fieldId: '3',
+        id: '3',
         type: 'enum',
         value: '$400',
     },

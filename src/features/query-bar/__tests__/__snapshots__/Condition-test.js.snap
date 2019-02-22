@@ -45,19 +45,19 @@ exports[`features/query-bar/components/filter/Condition render() should render C
           Array [
             Object {
               "displayText": "Hullo Thar",
-              "fieldId": "1",
+              "id": "1",
               "type": "string",
               "value": "Hullo Thar",
             },
             Object {
               "displayText": "Last Updated",
-              "fieldId": "2",
+              "id": "2",
               "type": "string",
               "value": "Last Updated",
             },
             Object {
               "displayText": "Contract Value",
-              "fieldId": "3",
+              "id": "3",
               "type": "enum",
               "value": "Contract Value",
             },
@@ -81,7 +81,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
           Array [
             Object {
               "displayText": "is",
-              "fieldId": undefined,
+              "id": undefined,
               "type": "string",
               "value": "is",
             },
@@ -103,25 +103,25 @@ exports[`features/query-bar/components/filter/Condition render() should render C
         Array [
           Object {
             "displayText": "$100",
-            "fieldId": "3",
+            "id": "3",
             "type": "enum",
             "value": "$100",
           },
           Object {
             "displayText": "$200",
-            "fieldId": "3",
+            "id": "3",
             "type": "enum",
             "value": "$200",
           },
           Object {
             "displayText": "$300",
-            "fieldId": "3",
+            "id": "3",
             "type": "enum",
             "value": "$300",
           },
           Object {
             "displayText": "$400",
-            "fieldId": "3",
+            "id": "3",
             "type": "enum",
             "value": "$400",
           },
