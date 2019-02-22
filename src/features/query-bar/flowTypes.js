@@ -5,9 +5,9 @@ export type ConnectorType = typeof AND | typeof OR | typeof EMPTY_CONNECTOR;
 
 export type OptionType = {
     displayText: string,
-    fieldId: string,
+    id: string,
     type?: string,
-    value: string | ConnectorType,
+    value: ConnectorType,
 };
 
 export type ColumnType = {
@@ -24,6 +24,7 @@ export type ColumnType = {
 export type ConditionType = {
     columnDisplayText: string,
     columnKey: string | null,
+    fieldId: string,
     id: number,
     operatorDisplayText: string,
     operatorKey: string | null,

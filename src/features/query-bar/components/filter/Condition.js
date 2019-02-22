@@ -25,7 +25,7 @@ import {
     VALUE_DISPLAY_TEXT,
     VALUE_KEY,
 } from '../../constants';
-import type { ColumnType, OptionType, ConnectorType } from '../../flowTypes';
+import type { ColumnType, ConnectorType, OptionType } from '../../flowTypes';
 
 import '../../styles/Condition.scss';
 
@@ -67,7 +67,7 @@ const Condition = ({
     };
 
     const updateSelectedField = (option: OptionType, fieldType?: string) => {
-        const { displayText, fieldId, type, value } = option;
+        const { displayText, id, type, value } = option;
 
         let displayTextType = '';
         let keyType = '';
@@ -89,7 +89,7 @@ const Condition = ({
                 break;
         }
 
-        update(index, condition, displayText, displayTextType, fieldId, value, keyType, type);
+        update(index, condition, displayText, displayTextType, id, value, keyType, type);
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {

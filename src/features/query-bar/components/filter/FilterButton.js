@@ -118,7 +118,7 @@ class FilterButton extends React.Component<Props, State> {
         condition: Object,
         fieldDisplayText: string | Date,
         fieldDisplayTextType: string,
-        fieldId: string,
+        id: string,
         fieldKey: string | Date,
         fieldKeyType: string,
         valueType: string,
@@ -133,7 +133,7 @@ class FilterButton extends React.Component<Props, State> {
                 [fieldDisplayTextType]: fieldDisplayText,
                 [fieldKeyType]: fieldKey,
                 valueType,
-                fieldId,
+                fieldId: id,
             };
 
             if (fieldKeyType === 'columnKey') {
