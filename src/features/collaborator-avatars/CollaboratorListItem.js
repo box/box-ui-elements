@@ -8,6 +8,7 @@ import { Link } from '../../components/link';
 import { COLLAB_GROUP_TYPE, COLLAB_PENDING_TYPE } from './constants';
 import messages from './messages';
 import CollaboratorAvatarItem from './CollaboratorAvatarItem';
+import './CollaboratorListItem.scss';
 
 type Props = {
     collaborator: Object,
