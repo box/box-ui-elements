@@ -36,8 +36,7 @@ type Props = {
     deleteCondition: (index: number) => void,
     index: number,
     onConnectorChange: (option: OptionType) => void,
-    selectedConnector: ConnectorType,
-    update: (
+    onFieldChange: (
         index: number,
         condition: Object,
         fieldDisplayText: string | Date,
@@ -47,6 +46,7 @@ type Props = {
         fieldKeyType: string,
         valueType: any,
     ) => void,
+    selectedConnector: ConnectorType,
 };
 
 const deleteButtonIconHeight = 18;
@@ -57,9 +57,9 @@ const Condition = ({
     columns,
     condition,
     deleteCondition,
+    onFieldChange,
     index,
     selectedConnector,
-    update,
     onConnectorChange,
 }: Props) => {
     const onDeleteButtonClick = () => {
@@ -89,7 +89,7 @@ const Condition = ({
                 break;
         }
 
-        update(index, condition, displayText, displayTextType, id, value, keyType, type);
+        onFieldChange(index, condition, displayText, displayTextType, id, value, keyType, type);
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
@@ -146,7 +146,7 @@ const Condition = ({
             value = target.value;
         }
 
-        update(index, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
+        onFieldChange(index, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
     };
 
     const getErrorMessage = () => {

@@ -49,9 +49,9 @@ describe('features/query-bar/components/filter/Condition', () => {
             ${'user has selected an operator'} | ${'operator'} | ${'operatorDisplayText'} | ${OPERATOR_KEY}
             ${'user has selected a value'}     | ${'value'}    | ${'valueDisplayText'}    | ${VALUE_KEY}
         `('$description', ({ fieldType, displayTextType, keyType }) => {
-            const update = jest.fn();
+            const onFieldChange = jest.fn();
             const wrapper = getWrapper({
-                update,
+                onFieldChange,
             });
 
             wrapper
@@ -59,7 +59,7 @@ describe('features/query-bar/components/filter/Condition', () => {
                 .at(1)
                 .simulate('change', option, fieldType);
 
-            expect(update).toHaveBeenCalledWith(
+            expect(onFieldChange).toHaveBeenCalledWith(
                 index,
                 condition,
                 displayText,
@@ -91,12 +91,12 @@ describe('features/query-bar/components/filter/Condition', () => {
             ${'user has entered an empty string into the value field'} | ${stringFieldValue} | ${''}             | ${''}
             ${'user has selected a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue} | ${dateFieldValue}
         `('$description', ({ fieldValue, displayText, value }) => {
-            const update = jest.fn();
-            const wrapper = getWrapper({ update });
+            const onFieldChange = jest.fn();
+            const wrapper = getWrapper({ onFieldChange });
 
             wrapper.find('ValueField').prop('updateValueField')(fieldValue);
 
-            expect(update).toHaveBeenCalledWith(
+            expect(onFieldChange).toHaveBeenCalledWith(
                 index,
                 condition,
                 displayText,

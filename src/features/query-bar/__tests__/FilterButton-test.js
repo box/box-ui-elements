@@ -21,7 +21,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         });
     });
 
-    describe('update()', () => {
+    describe('handleFieldChange()', () => {
         [
             {
                 description: 'should set conditions with an object with attribute',
@@ -172,7 +172,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     });
                     wrapper
                         .instance()
-                        .update(
+                        .handleFieldChange(
                             index,
                             condition,
                             fieldDisplayText,

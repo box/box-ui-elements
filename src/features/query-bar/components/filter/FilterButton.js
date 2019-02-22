@@ -113,7 +113,7 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    update = (
+    handleFieldChange = (
         index: number,
         condition: Object,
         fieldDisplayText: string | Date,
@@ -274,7 +274,7 @@ class FilterButton extends React.Component<Props, State> {
                                             index={index}
                                             columns={columns}
                                             selectedConnector={selectedConnector}
-                                            update={this.update}
+                                            onFieldChange={this.handleFieldChange}
                                             onConnectorChange={this.handleConnectorChange}
                                         />
                                     );
