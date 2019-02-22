@@ -25,7 +25,7 @@ import {
     VALUE_DISPLAY_TEXT,
     VALUE_KEY,
 } from '../../constants';
-import type { ColumnType, SelectOptionType } from '../../flowTypes';
+import type { ColumnType, OptionType, ConnectorType } from '../../flowTypes';
 
 import '../../styles/Condition.scss';
 
@@ -35,8 +35,8 @@ type Props = {
     condition: Object,
     deleteCondition: (index: number) => void,
     index: number,
-    onConnectorChange: (option: SelectOptionType) => void,
-    selectedConnector: string,
+    onConnectorChange: (option: OptionType) => void,
+    selectedConnector: ConnectorType,
     update: (
         index: number,
         condition: Object,
@@ -66,7 +66,7 @@ const Condition = ({
         deleteCondition(index);
     };
 
-    const updateSelectedField = (option: SelectOptionType, fieldType?: string) => {
+    const updateSelectedField = (option: OptionType, fieldType?: string) => {
         const { displayText, fieldId, type, value } = option;
 
         let displayTextType = '';

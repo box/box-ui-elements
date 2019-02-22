@@ -2,6 +2,7 @@
 
 export const AND: 'AND' = 'AND';
 export const OR: 'OR' = 'OR';
+export const EMPTY_CONNECTOR: 'EMPTY_CONNECTOR' = 'EMPTY_CONNECTOR';
 export const COLUMN: 'column' = 'column';
 export const COLUMN_DISPLAY_TEXT: 'columnDisplayText' = 'columnDisplayText';
 export const COLUMN_KEY: 'columnKey' = 'columnKey';

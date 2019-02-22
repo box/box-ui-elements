@@ -14,7 +14,7 @@ import { AND } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType, SelectOptionType, ConnectorType } from '../../flowTypes';
+import type { ColumnType, OptionType, ConnectorType } from '../../flowTypes';
 
 type State = {
     appliedConditions: Array<Object>,
@@ -156,7 +156,7 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleConnectorChange = (option: SelectOptionType) => {
+    handleConnectorChange = (option: OptionType) => {
         const connector = option.value;
 
         this.setState({
