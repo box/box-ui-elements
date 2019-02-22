@@ -10,7 +10,7 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND } from '../../constants';
+import { AND, OR } from '../../constants';
 
 import messages from '../../messages';
 
@@ -157,10 +157,19 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     handleConnectorChange = (option: OptionType) => {
-        const connector = option.value;
+        const convert = str => {
+            switch (str) {
+                case AND:
+                    return AND;
+                case OR:
+                    return OR;
+                default:
+                    throw new Error('Invalid connector');
+            }
+        };
 
         this.setState({
-            selectedConnector: connector,
+            selectedConnector: convert(option.value),
         });
     };
 
