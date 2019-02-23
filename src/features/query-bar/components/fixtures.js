@@ -3,7 +3,7 @@ import type { ColumnType, ConditionType } from '../flowTypes';
 
 const initialCondition: ConditionType = {
     id: 0,
-    columnDisplayText: '',
+    columnDisplayText: 'Contract Value',
     columnKey: null,
     operatorDisplayText: '',
     operatorKey: null,
@@ -15,25 +15,21 @@ const initialCondition: ConditionType = {
 const columnOptions = [
     {
         displayText: '$100',
-        id: '3',
         type: 'enum',
         value: '$100',
     },
     {
         displayText: '$200',
-        id: '3',
         type: 'enum',
         value: '$200',
     },
     {
         displayText: '$300',
-        id: '3',
         type: 'enum',
         value: '$300',
     },
     {
         displayText: '$400',
-        id: '3',
         type: 'enum',
         value: '$400',
     },

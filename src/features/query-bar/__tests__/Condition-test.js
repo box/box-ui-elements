@@ -36,7 +36,6 @@ describe('features/query-bar/components/filter/Condition', () => {
         const value = 0;
         const option = {
             displayText,
-            id: '3',
             type: 'string',
             value,
         };
