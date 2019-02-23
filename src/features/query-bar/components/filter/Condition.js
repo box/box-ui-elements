@@ -41,7 +41,6 @@ type Props = {
         condition: Object,
         fieldDisplayText: string | Date,
         fieldDisplayTextType: string,
-        fieldId: string,
         fieldKey: string | Date,
         fieldKeyType: string,
         valueType: any,
@@ -67,7 +66,7 @@ const Condition = ({
     };
 
     const updateSelectedField = (option: OptionType, fieldType?: string) => {
-        const { displayText, id, type, value } = option;
+        const { displayText, type, value } = option;
 
         let displayTextType = '';
         let keyType = '';
@@ -89,15 +88,14 @@ const Condition = ({
                 break;
         }
 
-        onFieldChange(index, condition, displayText, displayTextType, id, value, keyType, type);
+        onFieldChange(index, condition, displayText, displayTextType, value, keyType, type);
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
         return options.map(option => {
-            const { displayName, id, type } = option;
+            const { displayName, type } = option;
             return {
                 displayText: displayName,
-                id,
                 type,
                 value: displayName,
             };
@@ -113,14 +111,13 @@ const Condition = ({
     };
 
     const getColumnOptions = () => {
-        const { fieldId } = condition;
-        const column = columns && columns.find(c => c.id === fieldId);
+        const { columnDisplayText } = condition;
+        const column = columns && columns.find(c => c.displayName === columnDisplayText);
         if (column && column.options) {
             return column.options.map(option => {
                 const { key } = option;
                 return {
                     displayName: key,
-                    id: fieldId,
                     type: 'enum',
                     value: key,
                 };
@@ -130,7 +127,7 @@ const Condition = ({
     };
 
     const updateValueField = (fieldValue: Object) => {
-        const { fieldId, valueType } = condition;
+        const { valueType } = condition;
         let displayText = '';
         const displayTextType = VALUE_DISPLAY_TEXT;
 
@@ -146,7 +143,7 @@ const Condition = ({
             value = target.value;
         }
 
-        onFieldChange(index, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
+        onFieldChange(index, condition, displayText, displayTextType, value, keyType, valueType);
     };
 
     const getErrorMessage = () => {

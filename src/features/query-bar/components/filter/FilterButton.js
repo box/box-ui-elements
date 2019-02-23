@@ -68,18 +68,17 @@ class FilterButton extends React.Component<Props, State> {
         const conditionID = uniqueId();
         const { columns } = this.props;
         if (columns) {
-            const firstField = columns[0];
+            const firstColumn = columns[0];
 
             return {
-                columnDisplayText: firstField.displayName,
+                columnDisplayText: firstColumn.displayName,
                 columnKey: 0,
                 id: conditionID,
-                fieldId: firstField.id,
                 operatorDisplayText: '',
                 operatorKey: 0,
                 valueDisplayText: null,
                 valueKey: null,
-                valueType: firstField.type,
+                valueType: firstColumn.type,
             };
         }
         return {};
@@ -118,7 +117,6 @@ class FilterButton extends React.Component<Props, State> {
         condition: Object,
         fieldDisplayText: string | Date,
         fieldDisplayTextType: string,
-        id: string,
         fieldKey: string | Date,
         fieldKeyType: string,
         valueType: string,
@@ -133,7 +131,6 @@ class FilterButton extends React.Component<Props, State> {
                 [fieldDisplayTextType]: fieldDisplayText,
                 [fieldKeyType]: fieldKey,
                 valueType,
-                fieldId: id,
             };
 
             if (fieldKeyType === 'columnKey') {

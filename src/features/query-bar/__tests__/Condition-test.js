@@ -40,7 +40,6 @@ describe('features/query-bar/components/filter/Condition', () => {
             type: 'string',
             value,
         };
-        const fieldId = initialCondition.fieldId;
         const valueType = 'string';
 
         test.each`
@@ -64,7 +63,6 @@ describe('features/query-bar/components/filter/Condition', () => {
                 condition,
                 displayText,
                 displayTextType,
-                fieldId,
                 value,
                 keyType,
                 valueType,
@@ -81,7 +79,6 @@ describe('features/query-bar/components/filter/Condition', () => {
         const index = 0;
         const condition = initialCondition;
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
-        const fieldId = initialCondition.fieldId;
         const valueType = 'string';
         const keyType = VALUE_KEY;
         const displayTextType = 'valueDisplayText';
@@ -101,7 +98,6 @@ describe('features/query-bar/components/filter/Condition', () => {
                 condition,
                 displayText,
                 displayTextType,
-                fieldId,
                 value,
                 keyType,
                 valueType,
@@ -110,12 +106,11 @@ describe('features/query-bar/components/filter/Condition', () => {
     });
 
     describe('getColumnOptions()', () => {
-        const { fieldId } = initialCondition;
         test.each`
             description                                                  | expectedColumnOptions
             ${'user has opened the value dropdown and sees the options'} | ${columnOptions}
         `('$description', ({ expectedColumnOptions }) => {
-            const wrapper = getWrapper({ fieldId });
+            const wrapper = getWrapper({});
             const ValueField = wrapper.find('ValueField');
             expect(ValueField.props().valueOptions).toEqual(expectedColumnOptions);
         });
