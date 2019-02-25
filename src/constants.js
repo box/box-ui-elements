@@ -123,6 +123,10 @@ export const FIELD_TRASHED_AT = 'trashed_at';
 export const FIELD_ASSIGNED_TO = 'assigned_to';
 export const FIELD_RELEVANCE: '' = '';
 export const FIELD_STATUS = 'status';
+export const FIELD_ACTIVITY_TEMPLATE: 'activity_template' = 'activity_template';
+export const FIELD_APP: 'app' = 'app';
+export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
+export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -217,6 +221,7 @@ export const ERROR_CODE_CREATE_TASK_ASSIGNMENT = 'create_task_assignment_error';
 export const ERROR_CODE_CREATE_TASK_COLLABORATOR = 'create_task_collaborator_error';
 export const ERROR_CODE_CREATE_FOLDER = 'create_folder_error';
 export const ERROR_CODE_CREATE_METADATA = 'create_metadata_error';
+export const ERROR_CODE_DELETE_APP_ACTIVITY = 'delete_app_activity_error';
 export const ERROR_CODE_DELETE_COMMENT = 'delete_comment_error';
 export const ERROR_CODE_DELETE_TASK = 'delete_task_error';
 export const ERROR_CODE_DELETE_TASK_ASSIGNMENT = 'delete_task_assignment_error';

@@ -14,6 +14,7 @@ import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksAPI from './Tasks';
 import TaskAssignmentsAPI from './TaskAssignments';
+import AppActivityAPI from './AppActivity';
 import {
     VERSION_UPLOAD_ACTION,
     VERSION_RESTORE_ACTION,
@@ -55,6 +56,11 @@ class Feed extends Base {
      * @property {TaskAssignmentsAPI}
      */
     taskAssignmentsAPI: Array<TasksAPI | TaskAssignmentsAPI>;
+
+    /**
+     * @property {AppActivityAPI}
+     */
+    appActivityAPI: AppActivity;
 
     /**
      * @property {string}
@@ -944,6 +950,70 @@ class Feed extends Base {
     }
 
     /**
+     * Fetches app activities for a file
+     *
+     * @return {Promise} - the feed items
+     */
+    fetchAppActivity(): Promise<?AppActivityItems> {
+        this.appActivityAPI = new AppActivityAPI(this.options);
+
+        return new Promise(resolve => {
+            this.appActivityAPI.getAppActivity(this.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
+        });
+    }
+
+    /**
+     * Deletes an app activity item.
+     *
+     * @param {BoxItem} file - The file to which the app activity belongs to
+     * @param {AppActivityItem} appActivityItem - The app activity item to delete
+     * @param {BoxItemPermission} permissions - Permissions for the app activity
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    deleteAppActivity = (
+        file: BoxItem,
+        appActivityItem: AppActivityItem,
+        permissions: BoxItemPermission,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        this.appActivityAPI = new AppActivityAPI(this.options);
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        const { id: activityItemId } = appActivityItem.id;
+        this.id = file.id;
+        this.errorCallback = errorCallback;
+        this.updateFeedItem({ isPending: true }, activityItemId);
+
+        this.appActivityAPI.deleteAppActivity({
+            file,
+            appActivityItem,
+            permissions,
+            successCallback: this.deleteFeedItem.bind(this, activityItemId, successCallback),
+            errorCallback: (e: ElementsXhrError, code: string) => {
+                this.deleteAppActivityErrorCallback(e, code, activityItemId);
+            },
+        });
+    };
+
+    /**
+     * Error callback for deleting an app activity item
+     *
+     * @param {ElementsXhrError} e - the error returned by the API
+     * @param {string} code - the error code
+     * @param {string} id - the app activity id
+     * @return {void}
+     */
+    deleteAppActivityErrorCallback = (e: ElementsXhrError, code: string, id: string) => {
+        this.updateFeedItem(this.createFeedError(messages.appActivityDeleteErrorMessage), id);
+        this.feedErrorCallback(true, e, code);
+    };
+
+    /**
      * Destroys all the task feed API's
      *
      * @return {void}
@@ -964,6 +1034,11 @@ class Feed extends Base {
         if (this.tasksAPI) {
             this.tasksAPI.destroy();
             delete this.tasksAPI;
+        }
+
+        if (this.appActivityAPI) {
+            this.appActivityAPI.destroy();
+            delete this.appActivityAPI;
         }
 
         this.destroyTaskAssignments();

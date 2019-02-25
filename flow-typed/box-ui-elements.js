@@ -634,7 +634,30 @@ type Comments = {
     total_count: number,
 };
 
-type FeedItems = Array<Comment | Task | BoxItemVersion>;
+type AppActivityItem = {
+    activity_template: {|
+        id: string,
+        type: 'activity_template',
+    |},
+    app: {|
+        icon_url: string,
+        id: string,
+        name: string,
+        type: 'app',
+    |},
+    created_at: string,
+    created_by: User,
+    id: string,
+    rendered_text: string,
+    type: 'app_activity',
+};
+
+type AppActivityItems = {
+    entries: Array<AppActivityItem>,
+    total_count: number,
+};
+
+type FeedItems = Array<Comment | Task | BoxItemVersion | AppActivityItem>;
 
 type Collaborators = {
     entries: Array<SelectorItem>,
