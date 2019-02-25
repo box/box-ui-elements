@@ -72,7 +72,7 @@ class FilterButton extends React.Component<Props, State> {
 
             return {
                 columnDisplayText: firstColumn.displayName,
-                columnKey: 0,
+                columnKey: firstColumn.displayName,
                 id: conditionID,
                 operatorDisplayText: '',
                 operatorKey: 0,

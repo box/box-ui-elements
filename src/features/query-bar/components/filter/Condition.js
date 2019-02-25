@@ -85,7 +85,7 @@ const Condition = ({
                 keyType = VALUE_KEY;
                 break;
             default:
-                break;
+                throw new Error('invalid input');
         }
 
         onFieldChange(index, condition, displayText, displayTextType, value, keyType, type);
@@ -111,8 +111,8 @@ const Condition = ({
     };
 
     const getColumnOptions = () => {
-        const { columnDisplayText } = condition;
-        const column = columns && columns.find(c => c.displayName === columnDisplayText);
+        const { columnKey } = condition;
+        const column = columns && columns.find(c => c.displayName === columnKey);
         if (column && column.options) {
             return column.options.map(option => {
                 const { key } = option;
