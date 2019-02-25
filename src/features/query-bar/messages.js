@@ -74,22 +74,6 @@ const messages = defineMessages({
         description: 'Text on the filters dropdown that is displayed when no filters have been inserted',
         id: 'boxui.queryBar.noFiltersAppliedText',
     },
-    selectAttributeDropdownText: {
-        defaultMessage: 'Select attribute',
-        description:
-            'Text on the select attribute button, on click opens a menu which allows users to select an attribute',
-        id: 'boxui.queryBar.selectAttributeDropdownText',
-    },
-    operatorDropdownText: {
-        defaultMessage: 'is',
-        description: 'Text on the operator button, on click opens a menu which allows users to select an attribute',
-        id: 'boxui.queryBar.operatorDropdownText',
-    },
-    selectValueDropdownText: {
-        defaultMessage: 'Select value',
-        description: 'Text on the select value button, on click opens a menu which allows users to select a value',
-        id: 'boxui.queryBar.selectValueDropdownText',
-    },
     columnsButtonText: {
         defaultMessage: 'Columns',
         description:
