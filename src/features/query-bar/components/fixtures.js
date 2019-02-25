@@ -18,21 +18,6 @@ const columnOptions = [
         type: 'enum',
         value: '$100',
     },
-    {
-        displayText: '$200',
-        type: 'enum',
-        value: '$200',
-    },
-    {
-        displayText: '$300',
-        type: 'enum',
-        value: '$300',
-    },
-    {
-        displayText: '$400',
-        type: 'enum',
-        value: '$400',
-    },
 ];
 
 const conditions: Array<ConditionType> = [initialCondition];
@@ -67,18 +52,6 @@ const columns: Array<ColumnType> = [
             {
                 id: '',
                 key: '$100',
-            },
-            {
-                id: '',
-                key: '$200',
-            },
-            {
-                id: '',
-                key: '$300',
-            },
-            {
-                id: '',
-                key: '$400',
             },
         ],
     },

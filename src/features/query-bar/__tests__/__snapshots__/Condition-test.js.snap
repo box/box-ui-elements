@@ -102,21 +102,6 @@ exports[`features/query-bar/components/filter/Condition render() should render C
             "type": "enum",
             "value": "$100",
           },
-          Object {
-            "displayText": "$200",
-            "type": "enum",
-            "value": "$200",
-          },
-          Object {
-            "displayText": "$300",
-            "type": "enum",
-            "value": "$300",
-          },
-          Object {
-            "displayText": "$400",
-            "type": "enum",
-            "value": "$400",
-          },
         ]
       }
       valueType="string"
