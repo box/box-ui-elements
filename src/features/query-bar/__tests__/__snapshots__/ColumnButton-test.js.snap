@@ -105,18 +105,6 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
                 "id": "",
                 "key": "$100",
               },
-              Object {
-                "id": "",
-                "key": "$200",
-              },
-              Object {
-                "id": "",
-                "key": "$300",
-              },
-              Object {
-                "id": "",
-                "key": "$400",
-              },
             ],
             "property": "contractValue",
             "source": "metadata",
