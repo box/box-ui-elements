@@ -15,7 +15,7 @@ const Tooltip = ({
 }: {
     children: React.Node,
     isDisabled?: boolean,
-    text?: string | React.Node,
+    text?: ?string | React.Node,
 }) => {
     if (isDisabled || !text) {
         return children;

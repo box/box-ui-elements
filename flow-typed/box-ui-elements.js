@@ -696,6 +696,15 @@ type Integration = {
     type: APP_INTEGRATION,
 };
 
+type AdditionalTab = {
+    callback: typeof Function,
+    element: React.Element<any>,
+    id: number,
+    title: ?string,
+};
+
+type AdditionalTabs = Array<AdditionalTab>;
+
 type Alignment = 'left' | 'right';
 
 type SidebarView =

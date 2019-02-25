@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Sidebar Test Page</title>
+            <style>
+                body,
+                html,
+                .sidebar {
+                    background: #ccc;
+                    border: 0 none;
+                    box-sizing: border-box !important;
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                }
+
+                .sidebar {
+                    display: flex;
+                }
+
+                .inputs {
+                    padding: 15px;
+                }
+
+                .inputs input {
+                    margin-bottom: 10px;
+                }
+            </style>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
+        <script src='https://unpkg.com/react/umd/react.development.js'></script>
+        <script src="../dev/en-US/sidebar.js"></script>
+        </head>
+        <body>
+            <div class="sidebar">
+                <div class="inputs">
+                    <div>
+                        <label>
+                            <div>File Id</div>
+                            <input class="file" type="text" placeholder="Enter file id" />
+                        </label>
+                        <label>
+                            <div>Auth Token</div>
+                            <input class="token" type="text" placeholder="Enter auth token" />
+                        </label>
+                    </div>
+                    <button type="button" onclick="load(true)">Submit</button>
+                </div>
+                <div class="preview sidebar"></div>
+            </div>
+            <script>
+                const Tab = function(contents) {
+                    return React.createElement('div', null, contents);
+                }
+                function load(refreshOnComplete = false) {
+                    const { ContentSidebar } = Box;
+                    const token = document.querySelector('.token').value || localStorage.getItem('token');
+                    const fileId = document.querySelector('.file').value || localStorage.getItem('file');
+
+                    if (!token || !fileId) {
+                        return;
+                    }
+
+                    localStorage.setItem('token', token);
+                    document.querySelector('.token').value = token;
+
+                    localStorage.setItem('file', fileId);
+                    document.querySelector('.file').value = fileId;
+
+                    const placeholder = document.createElement('div');
+                    placeholder.textContent = 'test';
+
+                    const sidebar = new ContentSidebar();
+                    sidebar.show(fileId, token, {
+                        hasAdditionalTabs: true, 
+                        additionalTabs: 
+                            [
+                                {
+                                    id: 200,
+                                    title: 'Open with Gmail', // used as tooltip
+                                    element: Tab('gmail'), //<RecommendedAppTab />,
+                                    callback: () => window.alert('gmail'),
+                                    status: 'ADDED',
+                                },
+                                {
+                                    id: 201,
+                                    title: 'Open with Slack',
+                                    element: Tab('slack'), //<RecommendedAppTab />,
+                                    callback: () => window.alert('slack'),
+                                    status: 'ADDED',
+                                },
+                                {
+                                    id: -1,
+                                    title: 'More Apps',
+                                    element: Tab('more apps'), //<RecommendedAppTab />,
+                                    callback: () => window.alert('more apps'),
+                                    status: 'ADDED',
+                                }
+                            ],
+                        container: '.preview.sidebar',
+                        isLarge: true,
+                        hasActivityFeed: true,
+                        detailsSidebarProps: {
+                            hasProperties: true,
+                            hasNotices: true,
+                            hasAccessStats: true,
+                            hasVersions: true,
+                            hasNotices: true,
+                            onAccessStatsClick: () => {
+                                alert('Hello, world!');
+                            },
+                        },
+                    });
+                }
+                load(false);
+            </script>
+        </body>
+    </html>

@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/AdditionalTabs should render the separator and the correct number of tabs 1`] = `
+<Fragment>
+  <div
+    className="bcs-nav-separator"
+  />
+  <AdditionalTab
+    callback={[MockFunction]}
+    element="FakeComponent"
+    id={200}
+    key="200"
+    status="ADDED"
+    title="Test title"
+  />
+  <AdditionalTab
+    callback={[MockFunction]}
+    element="FakeComponent2"
+    id={1}
+    key="1"
+    status="ADDED"
+    title="Another title"
+  />
+</Fragment>
+`;
