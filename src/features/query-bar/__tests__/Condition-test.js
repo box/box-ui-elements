@@ -42,10 +42,10 @@ describe('features/query-bar/components/filter/Condition', () => {
         const valueType = 'string';
 
         test.each`
-            description                        | fieldType     | displayTextType          | keyType
-            ${'user has selected a column'}    | ${'column'}   | ${'columnDisplayText'}   | ${COLUMN_KEY}
-            ${'user has selected an operator'} | ${'operator'} | ${'operatorDisplayText'} | ${OPERATOR_KEY}
-            ${'user has selected a value'}     | ${'value'}    | ${'valueDisplayText'}    | ${VALUE_KEY}
+            description                    | fieldType     | displayTextType          | keyType
+            ${'should select a column'}    | ${'column'}   | ${'columnDisplayText'}   | ${COLUMN_KEY}
+            ${'should select an operator'} | ${'operator'} | ${'operatorDisplayText'} | ${OPERATOR_KEY}
+            ${'should select a value'}     | ${'value'}    | ${'valueDisplayText'}    | ${VALUE_KEY}
         `('$description', ({ fieldType, displayTextType, keyType }) => {
             const onFieldChange = jest.fn();
             const wrapper = getWrapper({
@@ -83,9 +83,9 @@ describe('features/query-bar/components/filter/Condition', () => {
         const displayTextType = 'valueDisplayText';
 
         test.each`
-            description                                                | fieldValue          | displayText       | value
-            ${'user has entered an empty string into the value field'} | ${stringFieldValue} | ${''}             | ${''}
-            ${'user has selected a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue} | ${dateFieldValue}
+            description                                            | fieldValue          | displayText       | value
+            ${'should enter an empty string into the value field'} | ${stringFieldValue} | ${''}             | ${''}
+            ${'should select a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue} | ${dateFieldValue}
         `('$description', ({ fieldValue, displayText, value }) => {
             const onFieldChange = jest.fn();
             const wrapper = getWrapper({ onFieldChange });
@@ -106,8 +106,8 @@ describe('features/query-bar/components/filter/Condition', () => {
 
     describe('getColumnOptions()', () => {
         test.each`
-            description                                                  | expectedColumnOptions
-            ${'user has opened the value dropdown and sees the options'} | ${columnOptions}
+            description                                             | expectedColumnOptions
+            ${'should open the value dropdown and see the options'} | ${columnOptions}
         `('$description', ({ expectedColumnOptions }) => {
             const wrapper = getWrapper({});
             const ValueField = wrapper.find('ValueField');
