@@ -15,7 +15,7 @@ import Tooltip from '../../../../components/tooltip';
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import UserLink from './UserLink';
-import InlineDelete from './InlineDelete';
+import InlineDelete from '../inline-delete';
 import InlineEdit from './InlineEdit';
 import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
@@ -24,9 +24,7 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
 
 import './Comment.scss';
-import { PLACEHOLDER_USER } from '../../../../constants';
-
-const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
+import { ONE_HOUR_MS, PLACEHOLDER_USER } from '../../../../constants';
 
 type Props = {
     created_at: string | number,

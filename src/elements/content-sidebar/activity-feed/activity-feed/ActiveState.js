@@ -5,6 +5,7 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import { FeatureFlag } from '../../../common/feature-checking';
+import AppActivity from '../app-activity';
 import Comment from '../comment';
 import Task from '../task';
 import TaskNew from '../task-new';
@@ -19,6 +20,7 @@ type Props = {
     getUserProfileUrl?: string => Promise<string>,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems,
+    onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
@@ -30,6 +32,7 @@ type Props = {
 const ActiveState = ({
     currentUser,
     items,
+    onAppActivityDelete,
     onCommentDelete,
     onTaskDelete,
     onTaskEdit,
@@ -127,6 +130,12 @@ const ActiveState = ({
                     return (
                         <li key={type + id} className="bcs-keywords-item" data-testid="keyword">
                             <Keywords {...item} />
+                        </li>
+                    );
+                case 'app_activity':
+                    return (
+                        <li key={type + id} className="bcs-activity-feed-app-activity" data-testid="app-activity">
+                            <AppActivity currentUser={currentUser} onDelete={onAppActivityDelete} {...item} />
                         </li>
                     );
                 default:

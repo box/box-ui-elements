@@ -174,8 +174,9 @@ class Feed extends Base {
         const versionsPromise = this.fetchVersions();
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = shouldShowNewTasks ? this.fetchTasksNew() : this.fetchTasks();
+        const appActivityPromise = this.fetchAppActivity(permissions);
 
-        Promise.all([versionsPromise, commentsPromise, tasksPromise]).then(feedItems => {
+        Promise.all([versionsPromise, commentsPromise, tasksPromise, appActivityPromise]).then(feedItems => {
             const versions: ?FileVersions = feedItems[0];
             const versionsWithRestoredVersion = this.addCurrentVersion(versions, file);
             const unsortedFeedItems = [versionsWithRestoredVersion, ...feedItems.slice(1)];
@@ -1215,8 +1216,9 @@ class Feed extends Base {
                     };
                 }
 
-                return item;
-            });
+                    return item;
+                },
+            );
 
             this.setCachedItems(this.id, updatedFeedItems);
             return updatedFeedItems;

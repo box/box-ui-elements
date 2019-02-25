@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should correctly render an app activity item 1`] = `
+<div
+  className="bcs-app-activity-container"
+  data-resin-feature="app_activity_template_12345_card"
+  data-resin-target="loaded"
+>
+  <div
+    className="bcs-app-activity"
+  >
+    <img
+      alt="{appActivityName} Icon"
+      className="bcs-app-activity-icon"
+      src="foo/bar/baz.jpg"
+    />
+    <div
+      className="bcs-app-activity-content"
+    >
+      <div
+        className="bcs-app-activity-headline"
+      >
+        <span
+          className="bcs-app-activity-app-name"
+        >
+          My Application
+        </span>
+        <InlineDelete
+          id="activity_12345"
+          message={
+            <FormattedMessage
+              defaultMessage="Delete App Activity?"
+              id="be.appActivityDeletePrompt"
+            />
+          }
+          onDelete={[MockFunction]}
+          permissions={
+            Object {
+              "can_delete": true,
+            }
+          }
+        />
+      </div>
+      <div>
+        <Tooltip
+          constrainToScrollParent={false}
+          constrainToWindow={true}
+          position="top-center"
+          text={
+            <FormattedMessage
+              defaultMessage="{time, date, full} at {time, time, short}"
+              id="be.appActivityCreatedAtFullDateTime"
+              values={
+                Object {
+                  "time": 1551989569223,
+                }
+              }
+            />
+          }
+          theme="default"
+        >
+          <small
+            className="bcs-app-activity-created-at"
+          >
+            <ReadableTime
+              relativeThreshold={3600000}
+              timestamp={1551989569223}
+            />
+          </small>
+        </Tooltip>
+      </div>
+      You did something from 
+      <Link
+        className="bcs-app-activity-link"
+        data-resin-action="bar"
+        data-resin-target="foo"
+        href=""
+        rel="roreferrer noopener"
+        target="_blank"
+      >
+        This App
+      </Link>
+    </div>
+  </div>
+</div>
+`;

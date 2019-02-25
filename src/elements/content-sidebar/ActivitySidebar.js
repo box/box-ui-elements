@@ -340,6 +340,21 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Deletes an app activity item via the API.
+     *
+     * @param {Object} args - A subset of the app activity
+     * @return void
+     */
+    deleteAppActivity = ({ id }: { id: string }): void => {
+        const { file, api } = this.props;
+
+        api.getFeedAPI(false).deleteAppActivity(file, id, this.feedSuccessCallback, this.feedErrorCallback);
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
+    /**
      * Fetches the feed items for the sidebar
      *
      * @param {boolean} shouldDestroy true if the api factory should be destroyed
@@ -573,6 +588,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     mentionSelectorContacts={mentionSelectorContacts}
                     currentUser={currentUser}
                     isDisabled={isDisabled}
+                    onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
                     onTaskCreate={this.createTask}

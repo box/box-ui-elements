@@ -55,6 +55,30 @@ const taskWithAssignment = {
     },
 };
 
+const appActivity = {
+    activity_template: {
+        id: 'template_09887654',
+    },
+    app: {
+        id: 'app_123456',
+        icon_url: 'foo.jpg',
+        name: 'My App',
+    },
+    created_at: '2018-07-03T14:43:52-07:00',
+    created_by: {
+        id: 'user_12345567',
+    },
+    id: 'app_activity_12344556',
+    permissions: {
+        can_delete: true,
+    },
+    rendered_text: 'this is text and a <a>link</a>',
+    type: 'app_activity',
+    currentUser: {
+        id: 'user_123445',
+    },
+};
+
 const activityFeedError = { title: 't', content: 'm' };
 
 describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () => {
@@ -64,15 +88,16 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     });
 
     test('should render items', () => {
-        const wrapper = shallow(<ActiveState items={[comment, fileVersion, taskWithAssignment]} />).dive();
+        const wrapper = shallow(<ActiveState items={[comment, fileVersion, taskWithAssignment, appActivity]} />).dive();
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should render card for item type', () => {
-        const wrapper = mount(<ActiveState items={[comment, fileVersion, taskWithAssignment]} />);
+        const wrapper = mount(<ActiveState items={[comment, fileVersion, taskWithAssignment, appActivity]} />);
         expect(wrapper.find('[data-testid="comment"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="version"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="task"]')).toHaveLength(1);
+        expect(wrapper.find('[data-testid="app-activity"]')).toHaveLength(1);
     });
 
     test('should not render task without assignments', () => {

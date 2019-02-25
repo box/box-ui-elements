@@ -26,6 +26,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     getAvatarUrl={[Function]}
     getMentionWithQuery={[Function]}
     isDisabled={false}
+    onAppActivityDelete={[Function]}
     onCommentCreate={[Function]}
     onCommentDelete={[Function]}
     onTaskAssignmentUpdate={[Function]}
