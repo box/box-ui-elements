@@ -20,7 +20,6 @@ describe('features/query-bar/components/filter/ValueField', () => {
                     {
                         displayText: 'Hello',
                         type: 'enum',
-                        fieldId: 'field0',
                         value: 0,
                     },
                 ]}

@@ -29,7 +29,6 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     Array [
       Object {
         "displayText": "Hello",
-        "fieldId": "field0",
         "type": "enum",
         "value": 0,
       },
