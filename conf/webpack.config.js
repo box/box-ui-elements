@@ -16,6 +16,7 @@ const isDev = process.env.NODE_ENV === 'dev';
 const language = process.env.LANGUAGE;
 const react = process.env.REACT === 'true';
 const examples = process.env.EXAMPLES === 'true';
+const shouldIncludeAllSupportedBrowsers = isRelease || process.env.BROWSERSLIST_ENV === 'production';
 const token = process.env.TOKEN; // used for examples only
 const folderId = process.env.FOLDERID; // used for examples only
 const fileId = process.env.FILEID; // used for examples only
@@ -24,7 +25,6 @@ const locale = language ? language.substr(0, language.indexOf('-')) : 'en';
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
 const Translations = new TranslationsPlugin();
-const excludeFromBabel = [/@babel(?:\/|\\{1,2})runtime/];
 const entries = {
     picker: path.resolve('src/elements/wrappers/ContentPickers.js'),
     uploader: path.resolve('src/elements/wrappers/ContentUploader.js'),
@@ -39,6 +39,17 @@ const entriesToBuild =
               [process.env.ENTRY]: entries[process.env.ENTRY],
           }
         : entries;
+
+const stats = {
+    assets: true,
+    colors: true,
+    version: false,
+    hash: false,
+    timings: true,
+    chunks: false,
+    chunkModules: false,
+    children: false,
+};
 
 function getConfig(isReactExternalized) {
     const config = {
@@ -62,6 +73,7 @@ function getConfig(isReactExternalized) {
         },
         devServer: {
             host: '0.0.0.0',
+            stats,
         },
         resolveLoader: {
             modules: [path.resolve('src'), path.resolve('node_modules')],
@@ -69,9 +81,11 @@ function getConfig(isReactExternalized) {
         module: {
             rules: [
                 {
-                    test: /\.js$/,
+                    test: /\.(js|mjs)$/,
                     loader: 'babel-loader',
-                    exclude: /(node_modules)/,
+                    // For webpack dev build perf we want to exlcude node_modules unless we want to support legacy browsers like IE11
+                    // Pikaday complains about moment.js which we don't use, hence excluding it from compilation as its already es5
+                    exclude: shouldIncludeAllSupportedBrowsers ? /node_modules\/pikaday/ : /node_modules/,
                 },
                 {
                     test: /\.s?css$/,
@@ -102,16 +116,7 @@ function getConfig(isReactExternalized) {
             }),
             new BannerPlugin(license),
         ],
-        stats: {
-            assets: true,
-            colors: true,
-            version: false,
-            hash: false,
-            timings: true,
-            chunks: false,
-            chunkModules: false,
-            children: false,
-        },
+        stats,
     };
 
     if (isDev) {
@@ -137,21 +142,6 @@ function getConfig(isReactExternalized) {
                     search: 'webpackMode: "lazy"',
                     replace: 'webpackMode: "eager"',
                     flags: 'g',
-                },
-            },
-            {
-                test: /\.(js|mjs)$/,
-                loader: 'babel-loader',
-                include: /(node_modules)/,
-                exclude: excludeFromBabel,
-                options: {
-                    babelrc: false,
-                    cacheCompression: false,
-                    cacheDirectory: true,
-                    compact: false,
-                    configFile: false,
-                    presets: [[require.resolve('babel-preset-react-app/dependencies'), { helpers: true }]],
-                    sourceMaps: false,
                 },
             },
             ...config.module.rules,
