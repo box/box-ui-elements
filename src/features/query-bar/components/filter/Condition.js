@@ -200,7 +200,7 @@ const Condition = ({
         const { columnDisplayText } = condition;
         const columnOptions = getFormattedOptions(columns || []);
         return (
-            <div className="condition-attribute-dropdown-container">
+            <div className="condition-column-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
                     <SingleSelectField
                         fieldType={COLUMN}

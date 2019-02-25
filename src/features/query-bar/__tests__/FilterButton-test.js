@@ -24,7 +24,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     describe('handleFieldChange()', () => {
         [
             {
-                description: 'should set conditions with an object with attribute',
+                description: 'should set conditions with an object with column',
                 index: 0,
                 condition: {
                     id: '3',
@@ -46,16 +46,15 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         valueKey: null,
                     },
                 ],
-                fieldDisplayText: 'myAttribute',
+                fieldDisplayText: 'myColumn',
                 fieldDisplayTextType: 'columnDisplayText',
-                fieldType: 'attribute',
                 fieldKey: 0,
                 fieldKeyType: 'columnKey',
                 valueType: 'string',
                 updatedCondition: [
                     {
                         id: '3',
-                        columnDisplayText: 'myAttribute',
+                        columnDisplayText: 'myColumn',
                         columnKey: 0,
                         operatorDisplayText: '',
                         operatorKey: 0,
@@ -90,7 +89,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 ],
                 fieldDisplayText: 'myOperator',
                 fieldDisplayTextType: 'operatorDisplayText',
-                fieldType: 'operator',
                 fieldKey: 0,
                 fieldKeyType: 'operatorKey',
                 updatedCondition: [
@@ -130,7 +128,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 ],
                 fieldDisplayText: 'myValue',
                 fieldDisplayTextType: 'valueDisplayText',
-                fieldType: 'value',
                 fieldKey: 0,
                 fieldKeyType: 'valueKey',
                 valueType: 'string',

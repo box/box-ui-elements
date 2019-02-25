@@ -134,7 +134,7 @@ class FilterButton extends React.Component<Props, State> {
             };
 
             if (fieldKeyType === 'columnKey') {
-                // Upon selecting a new attribute, the operator and value fields should be reset.
+                // Upon selecting a new column, the operator and value fields should be reset.
                 updatedCondition.operatorKey = 0;
                 updatedCondition.operatorDisplayText = '';
                 updatedCondition.valueDisplayText = null;

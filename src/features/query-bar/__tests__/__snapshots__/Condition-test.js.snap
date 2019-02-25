@@ -32,7 +32,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     </p>
   </div>
   <div
-    className="condition-attribute-dropdown-container"
+    className="condition-column-dropdown-container"
   >
     <div
       className="filter-dropdown-single-select-field-container"
