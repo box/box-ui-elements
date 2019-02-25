@@ -91,12 +91,12 @@ const messages = defineMessages({
         id: 'boxui.unifiedShare.settingsButtonLabel',
     },
     linkShareOff: {
-        defaultMessage: 'Link sharing is off',
-        description: 'Link sharing is off',
+        defaultMessage: 'Enable shared link',
+        description: 'Enable shared link',
         id: 'boxui.unifiedShare.linkShareOff',
     },
     linkShareOn: {
-        defaultMessage: 'Link sharing is on',
+        defaultMessage: 'Shared link is enabled',
         description: 'Link sharing is on',
         id: 'boxui.unifiedShare.linkShareOn',
     },

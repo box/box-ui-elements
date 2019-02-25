@@ -17,6 +17,7 @@ import commonMessages from '../../common/messages';
 
 import CollaboratorListItem from './CollaboratorListItem';
 import messages from './messages';
+import './CollaboratorList.scss';
 
 const MAX_COLLABORATOR_LIST_SIZE = 90;
 
