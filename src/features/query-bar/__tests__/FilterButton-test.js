@@ -293,7 +293,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const conditionID = '11';
             const expected = {
                 columnDisplayText: 'Hullo Thar',
-                columnKey: 0,
+                columnKey: 'Hullo Thar',
                 id: conditionID,
                 operatorDisplayText: '',
                 operatorKey: 0,

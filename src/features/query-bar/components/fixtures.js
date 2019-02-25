@@ -4,7 +4,7 @@ import type { ColumnType, ConditionType } from '../flowTypes';
 const initialCondition: ConditionType = {
     id: 0,
     columnDisplayText: 'Contract Value',
-    columnKey: null,
+    columnKey: 'Contract Value',
     operatorDisplayText: '',
     operatorKey: null,
     valueDisplayText: '',
