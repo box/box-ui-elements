@@ -109,7 +109,7 @@ describe('features/query-bar/components/filter/Condition', () => {
             description                                             | expectedColumnOptions
             ${'should open the value dropdown and see the options'} | ${columnOptions}
         `('$description', ({ expectedColumnOptions }) => {
-            const wrapper = getWrapper({});
+            const wrapper = getWrapper({ columns });
             const ValueField = wrapper.find('ValueField');
             expect(ValueField.props().valueOptions).toEqual(expectedColumnOptions);
         });
