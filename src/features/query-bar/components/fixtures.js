@@ -3,14 +3,22 @@ import type { ColumnType, ConditionType } from '../flowTypes';
 
 const initialCondition: ConditionType = {
     id: 0,
-    columnDisplayText: '',
-    columnKey: null,
+    columnDisplayText: 'Contract Value',
+    columnKey: 'Contract Value',
     operatorDisplayText: '',
     operatorKey: null,
     valueDisplayText: '',
     valueKey: null,
     valueType: 'string',
 };
+
+const columnOptions = [
+    {
+        displayText: '$100',
+        type: 'enum',
+        value: '$100',
+    },
+];
 
 const conditions: Array<ConditionType> = [initialCondition];
 
@@ -19,7 +27,6 @@ const columns: Array<ColumnType> = [
         displayName: 'Hullo Thar',
         id: '1',
         isShown: true,
-        key: '',
         options: null,
         property: 'name',
         source: 'item',
@@ -29,7 +36,6 @@ const columns: Array<ColumnType> = [
         displayName: 'Last Updated',
         id: '2',
         isShown: true,
-        key: '2',
         options: null,
         property: 'lastUpdatedByName',
         source: 'item',
@@ -40,25 +46,12 @@ const columns: Array<ColumnType> = [
         id: '3',
         isShown: true,
         property: 'contractValue',
-        key: '',
         source: 'metadata',
         type: 'enum',
         options: [
             {
                 id: '',
                 key: '$100',
-            },
-            {
-                id: '',
-                key: '$200',
-            },
-            {
-                id: '',
-                key: '$300',
-            },
-            {
-                id: '',
-                key: '$400',
             },
         ],
     },
@@ -69,7 +62,6 @@ const columnsWithNewOrder: Array<ColumnType> = [
         displayName: 'Last Updated',
         id: '2',
         isShown: true,
-        key: '2',
         options: null,
         property: 'lastUpdatedByName',
         source: 'item',
@@ -79,7 +71,6 @@ const columnsWithNewOrder: Array<ColumnType> = [
         displayName: 'Hullo Thar',
         id: '1',
         isShown: true,
-        key: '',
         options: null,
         property: 'name',
         source: 'item',
@@ -89,8 +80,7 @@ const columnsWithNewOrder: Array<ColumnType> = [
         displayName: 'Contract Value',
         id: '3',
         isShown: true,
-        key: '',
-        options: [{ id: '', key: '$100' }, { id: '', key: '$200' }, { id: '', key: '$300' }, { id: '', key: '$400' }],
+        options: [{ id: '', key: '$100' }],
         property: 'contractValue',
         source: 'metadata',
         type: 'enum',
@@ -102,7 +92,6 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
         displayName: 'Hullo Thar',
         id: '1',
         isShown: false,
-        key: '',
         options: null,
         property: 'name',
         source: 'item',
@@ -112,7 +101,6 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
         displayName: 'Last Updated',
         id: '2',
         isShown: true,
-        key: '2',
         options: null,
         property: 'lastUpdatedByName',
         source: 'item',
@@ -122,8 +110,7 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
         displayName: 'Contract Value',
         id: '3',
         isShown: true,
-        key: '',
-        options: [{ id: '', key: '$100' }, { id: '', key: '$200' }, { id: '', key: '$300' }, { id: '', key: '$400' }],
+        options: [{ id: '', key: '$100' }],
         property: 'contractValue',
         source: 'metadata',
         type: 'enum',
@@ -551,6 +538,7 @@ export {
     initialCondition,
     conditions,
     columns,
+    columnOptions,
     columnsWithNewOrder,
     columnsWithOneColumnNotShown,
     expectedVisibleColumns,

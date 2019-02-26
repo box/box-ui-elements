@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { initialCondition, columns } from '../components/fixtures';
+import { columnOptions, columns, initialCondition } from '../components/fixtures';
 import { COLUMN_KEY, OPERATOR_KEY, VALUE_KEY } from '../constants';
 import Condition from '../components/filter/Condition';
 
@@ -35,22 +35,21 @@ describe('features/query-bar/components/filter/Condition', () => {
         const condition = initialCondition;
         const value = 0;
         const option = {
-            value,
             displayText,
             type: 'string',
+            value,
         };
-        const fieldId = undefined;
         const valueType = 'string';
 
         test.each`
-            description                         | fieldType      | displayTextType          | keyType
-            ${'user has selected an attribute'} | ${'attribute'} | ${'columnDisplayText'}   | ${COLUMN_KEY}
-            ${'user has selected an operator'}  | ${'operator'}  | ${'operatorDisplayText'} | ${OPERATOR_KEY}
-            ${'user has selected a value'}      | ${'value'}     | ${'valueDisplayText'}    | ${VALUE_KEY}
+            description                    | fieldType     | displayTextType          | keyType
+            ${'should select a column'}    | ${'column'}   | ${'columnDisplayText'}   | ${COLUMN_KEY}
+            ${'should select an operator'} | ${'operator'} | ${'operatorDisplayText'} | ${OPERATOR_KEY}
+            ${'should select a value'}     | ${'value'}    | ${'valueDisplayText'}    | ${VALUE_KEY}
         `('$description', ({ fieldType, displayTextType, keyType }) => {
-            const update = jest.fn();
+            const onFieldChange = jest.fn();
             const wrapper = getWrapper({
-                update,
+                onFieldChange,
             });
 
             wrapper
@@ -58,12 +57,11 @@ describe('features/query-bar/components/filter/Condition', () => {
                 .at(1)
                 .simulate('change', option, fieldType);
 
-            expect(update).toHaveBeenCalledWith(
+            expect(onFieldChange).toHaveBeenCalledWith(
                 index,
                 condition,
                 displayText,
                 displayTextType,
-                fieldId,
                 value,
                 keyType,
                 valueType,
@@ -80,31 +78,40 @@ describe('features/query-bar/components/filter/Condition', () => {
         const index = 0;
         const condition = initialCondition;
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
-        const fieldId = undefined;
         const valueType = 'string';
         const keyType = VALUE_KEY;
         const displayTextType = 'valueDisplayText';
 
         test.each`
-            description                                                | fieldValue          | displayText       | value
-            ${'user has entered an empty string into the value field'} | ${stringFieldValue} | ${''}             | ${''}
-            ${'user has selected a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue} | ${dateFieldValue}
+            description                                            | fieldValue          | displayText       | value
+            ${'should enter an empty string into the value field'} | ${stringFieldValue} | ${''}             | ${''}
+            ${'should select a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue} | ${dateFieldValue}
         `('$description', ({ fieldValue, displayText, value }) => {
-            const update = jest.fn();
-            const wrapper = getWrapper({ update });
+            const onFieldChange = jest.fn();
+            const wrapper = getWrapper({ onFieldChange });
 
             wrapper.find('ValueField').prop('updateValueField')(fieldValue);
 
-            expect(update).toHaveBeenCalledWith(
+            expect(onFieldChange).toHaveBeenCalledWith(
                 index,
                 condition,
                 displayText,
                 displayTextType,
-                fieldId,
                 value,
                 keyType,
                 valueType,
             );
+        });
+    });
+
+    describe('getColumnOptions()', () => {
+        test.each`
+            description                                             | expectedColumnOptions
+            ${'should open the value dropdown and see the options'} | ${columnOptions}
+        `('$description', ({ expectedColumnOptions }) => {
+            const wrapper = getWrapper({ columns });
+            const ValueField = wrapper.find('ValueField');
+            expect(ValueField.props().valueOptions).toEqual(expectedColumnOptions);
         });
     });
 });

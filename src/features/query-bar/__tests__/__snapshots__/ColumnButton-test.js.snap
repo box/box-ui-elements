@@ -82,7 +82,6 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "displayName": "Hullo Thar",
             "id": "1",
             "isShown": true,
-            "key": "",
             "options": null,
             "property": "name",
             "source": "item",
@@ -92,7 +91,6 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "displayName": "Last Updated",
             "id": "2",
             "isShown": true,
-            "key": "2",
             "options": null,
             "property": "lastUpdatedByName",
             "source": "item",
@@ -102,23 +100,10 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "displayName": "Contract Value",
             "id": "3",
             "isShown": true,
-            "key": "",
             "options": Array [
               Object {
                 "id": "",
                 "key": "$100",
-              },
-              Object {
-                "id": "",
-                "key": "$200",
-              },
-              Object {
-                "id": "",
-                "key": "$300",
-              },
-              Object {
-                "id": "",
-                "key": "$400",
               },
             ],
             "property": "contractValue",

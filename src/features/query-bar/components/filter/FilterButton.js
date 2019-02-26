@@ -10,11 +10,11 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND } from '../../constants';
+import { AND, OR } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType, SelectOptionType, ConnectorType } from '../../flowTypes';
+import type { ColumnType, OptionType, ConnectorType } from '../../flowTypes';
 
 type State = {
     appliedConditions: Array<Object>,
@@ -68,18 +68,17 @@ class FilterButton extends React.Component<Props, State> {
         const conditionID = uniqueId();
         const { columns } = this.props;
         if (columns) {
-            const firstField = columns[0];
+            const firstColumn = columns[0];
 
             return {
-                columnDisplayText: firstField.displayName,
-                columnKey: 0,
+                columnDisplayText: firstColumn.displayName,
+                columnKey: firstColumn.displayName,
                 id: conditionID,
-                fieldId: firstField.id,
                 operatorDisplayText: '',
                 operatorKey: 0,
                 valueDisplayText: null,
                 valueKey: null,
-                valueType: firstField.type,
+                valueType: firstColumn.type,
             };
         }
         return {};
@@ -113,12 +112,11 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    update = (
+    handleFieldChange = (
         index: number,
         condition: Object,
         fieldDisplayText: string | Date,
         fieldDisplayTextType: string,
-        fieldId: string,
         fieldKey: string | Date,
         fieldKeyType: string,
         valueType: string,
@@ -133,11 +131,10 @@ class FilterButton extends React.Component<Props, State> {
                 [fieldDisplayTextType]: fieldDisplayText,
                 [fieldKeyType]: fieldKey,
                 valueType,
-                fieldId,
             };
 
             if (fieldKeyType === 'columnKey') {
-                // Upon selecting a new attribute, the operator and value fields should be reset.
+                // Upon selecting a new column, the operator and value fields should be reset.
                 updatedCondition.operatorKey = 0;
                 updatedCondition.operatorDisplayText = '';
                 updatedCondition.valueDisplayText = null;
@@ -156,11 +153,20 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleConnectorChange = (option: SelectOptionType) => {
-        const connector = option.value;
+    handleConnectorChange = (option: OptionType) => {
+        const convert = str => {
+            switch (str) {
+                case AND:
+                    return AND;
+                case OR:
+                    return OR;
+                default:
+                    throw new Error('Invalid connector');
+            }
+        };
 
         this.setState({
-            selectedConnector: connector,
+            selectedConnector: convert(option.value),
         });
     };
 
@@ -265,7 +271,7 @@ class FilterButton extends React.Component<Props, State> {
                                             index={index}
                                             columns={columns}
                                             selectedConnector={selectedConnector}
-                                            update={this.update}
+                                            onFieldChange={this.handleFieldChange}
                                             onConnectorChange={this.handleConnectorChange}
                                         />
                                     );

@@ -1,9 +1,11 @@
 // @flow
-import { AND, OR } from './constants';
+import { AND, OR, EMPTY_CONNECTOR } from './constants';
 
-export type SelectOptionType = {
+export type ConnectorType = typeof AND | typeof OR | typeof EMPTY_CONNECTOR;
+
+export type OptionType = {
     displayText: string,
-    fieldId?: string,
+    id: string,
     type?: string,
     value: string,
 };
@@ -29,5 +31,3 @@ export type ConditionType = {
     valueKey: string | null,
     valueType: string,
 };
-
-export type ConnectorType = typeof AND | typeof OR | null;

@@ -21,10 +21,10 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         });
     });
 
-    describe('update()', () => {
+    describe('handleFieldChange()', () => {
         [
             {
-                description: 'should set conditions with an object with attribute',
+                description: 'should set conditions with an object with column',
                 index: 0,
                 condition: {
                     id: '3',
@@ -46,19 +46,16 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         valueKey: null,
                     },
                 ],
-                fieldDisplayText: 'myAttribute',
+                fieldDisplayText: 'myColumn',
                 fieldDisplayTextType: 'columnDisplayText',
-                fieldId: 1,
-                fieldType: 'attribute',
                 fieldKey: 0,
                 fieldKeyType: 'columnKey',
                 valueType: 'string',
                 updatedCondition: [
                     {
                         id: '3',
-                        columnDisplayText: 'myAttribute',
+                        columnDisplayText: 'myColumn',
                         columnKey: 0,
-                        fieldId: 1,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: null,
@@ -92,8 +89,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 ],
                 fieldDisplayText: 'myOperator',
                 fieldDisplayTextType: 'operatorDisplayText',
-                fieldId: 1,
-                fieldType: 'operator',
                 fieldKey: 0,
                 fieldKeyType: 'operatorKey',
                 updatedCondition: [
@@ -101,7 +96,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         id: '4',
                         columnDisplayText: '',
                         columnKey: null,
-                        fieldId: 1,
                         operatorDisplayText: 'myOperator',
                         operatorKey: 0,
                         valueDisplayText: null,
@@ -134,20 +128,19 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 ],
                 fieldDisplayText: 'myValue',
                 fieldDisplayTextType: 'valueDisplayText',
-                fieldId: 1,
-                fieldType: 'value',
                 fieldKey: 0,
                 fieldKeyType: 'valueKey',
+                valueType: 'string',
                 updatedCondition: [
                     {
                         id: '5',
                         columnDisplayText: '',
                         columnKey: null,
-                        fieldId: 1,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: 'myValue',
                         valueKey: 0,
+                        valueType: 'string',
                     },
                 ],
             },
@@ -159,7 +152,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions,
                 fieldDisplayText,
                 fieldDisplayTextType,
-                fieldId,
                 fieldKey,
                 fieldKeyType,
                 updatedCondition,
@@ -172,12 +164,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     });
                     wrapper
                         .instance()
-                        .update(
+                        .handleFieldChange(
                             index,
                             condition,
                             fieldDisplayText,
                             fieldDisplayTextType,
-                            fieldId,
                             fieldKey,
                             fieldKeyType,
                             valueType,
@@ -299,9 +290,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const conditionID = '11';
             const expected = {
                 columnDisplayText: 'Hullo Thar',
-                columnKey: 0,
+                columnKey: 'Hullo Thar',
                 id: conditionID,
-                fieldId: '1',
                 operatorDisplayText: '',
                 operatorKey: 0,
                 valueDisplayText: null,

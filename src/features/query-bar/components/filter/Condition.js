@@ -12,20 +12,20 @@ import ValueField from './ValueField';
 import messages from '../../messages';
 import {
     AND,
-    ATTRIBUTE,
+    COLUMN,
     COLUMN_DISPLAY_TEXT,
     COLUMN_KEY,
+    COLUMN_OPERATORS,
     DATE,
     OPERATOR,
     OPERATOR_DISPLAY_TEXT,
     OPERATOR_KEY,
-    OPERATORS_FOR_ATTRIBUTE,
     OR,
     VALUE,
     VALUE_DISPLAY_TEXT,
     VALUE_KEY,
 } from '../../constants';
-import type { ColumnType, SelectOptionType } from '../../flowTypes';
+import type { ColumnType, ConnectorType, OptionType } from '../../flowTypes';
 
 import '../../styles/Condition.scss';
 
@@ -35,19 +35,17 @@ type Props = {
     condition: Object,
     deleteCondition: (index: number) => void,
     index: number,
-    intl: Object,
-    onConnectorChange: (option: SelectOptionType) => void,
-    selectedConnector: string,
-    update: (
+    onConnectorChange: (option: OptionType) => void,
+    onFieldChange: (
         index: number,
         condition: Object,
         fieldDisplayText: string | Date,
         fieldDisplayTextType: string,
-        fieldId: string,
         fieldKey: string | Date,
         fieldKeyType: string,
         valueType: any,
     ) => void,
+    selectedConnector: ConnectorType,
 };
 
 const deleteButtonIconHeight = 18;
@@ -58,88 +56,84 @@ const Condition = ({
     columns,
     condition,
     deleteCondition,
+    onFieldChange,
     index,
     selectedConnector,
-    update,
     onConnectorChange,
 }: Props) => {
     const onDeleteButtonClick = () => {
         deleteCondition(index);
     };
 
-    const updateSelectedField = (option: SelectOptionType, fieldType?: string) => {
-        const conditionIndex = index;
-        const value = option.value;
-        const valueType = option.type;
-        const fieldId = option.fieldId || condition.fieldId;
+    const updateSelectedField = (option: OptionType, fieldType?: string) => {
+        const { displayText, type, value } = option;
 
-        const displayText = option.displayText;
         let displayTextType = '';
         let keyType = '';
 
-        if (fieldType === ATTRIBUTE) {
-            displayTextType = COLUMN_DISPLAY_TEXT;
-            keyType = COLUMN_KEY;
-        } else if (fieldType === OPERATOR) {
-            displayTextType = OPERATOR_DISPLAY_TEXT;
-            keyType = OPERATOR_KEY;
-        } else if (fieldType === VALUE) {
-            displayTextType = VALUE_DISPLAY_TEXT;
-            keyType = VALUE_KEY;
+        switch (fieldType) {
+            case COLUMN:
+                displayTextType = COLUMN_DISPLAY_TEXT;
+                keyType = COLUMN_KEY;
+                break;
+            case OPERATOR:
+                displayTextType = OPERATOR_DISPLAY_TEXT;
+                keyType = OPERATOR_KEY;
+                break;
+            case VALUE:
+                displayTextType = VALUE_DISPLAY_TEXT;
+                keyType = VALUE_KEY;
+                break;
+            default:
+                throw new Error('invalid input');
         }
 
-        update(conditionIndex, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
+        onFieldChange(index, condition, displayText, displayTextType, value, keyType, type);
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
         return options.map(option => {
+            const { displayName, type } = option;
             return {
-                displayText: option.displayName,
-                fieldId: option.id,
-                type: option.type,
-                value: option.displayName,
+                displayText: displayName,
+                type,
+                value: displayName,
             };
         });
     };
 
-    const getOperatorsForAttribute = () => {
+    const getColumnOperators = () => {
         const { valueType } = condition;
         if (valueType === '') {
             return [];
         }
-        return OPERATORS_FOR_ATTRIBUTE[valueType];
+        return COLUMN_OPERATORS[valueType];
     };
 
-    const getValuesForAttribute = () => {
-        const { fieldId } = condition;
-        const field =
-            columns &&
-            columns.find(column => {
-                return column.id === fieldId;
-            });
-
-        if (field && field.options) {
-            const fieldOptions = field.options.map((option, optionIndex) => {
+    const getColumnOptions = () => {
+        const { columnKey } = condition;
+        const column = columns && columns.find(c => c.displayName === columnKey);
+        if (column && column.options) {
+            return column.options.map(option => {
+                const { key } = option;
                 return {
-                    displayName: option.key,
-                    id: fieldId,
+                    displayName: key,
                     type: 'enum',
-                    value: optionIndex,
+                    value: key,
                 };
             });
-
-            return fieldOptions;
         }
         return [];
     };
 
     const updateValueField = (fieldValue: Object) => {
+        const { valueType } = condition;
         let displayText = '';
         const displayTextType = VALUE_DISPLAY_TEXT;
-        const fieldId = condition.fieldId;
+
         let value = '';
         const keyType = VALUE_KEY;
-        const valueType = condition.valueType;
+
         if (!fieldValue || !fieldValue.target) {
             displayText = fieldValue;
             value = fieldValue;
@@ -149,7 +143,7 @@ const Condition = ({
             value = target.value;
         }
 
-        update(index, condition, displayText, displayTextType, fieldId, value, keyType, valueType);
+        onFieldChange(index, condition, displayText, displayTextType, value, keyType, valueType);
     };
 
     const getErrorMessage = () => {
@@ -177,18 +171,6 @@ const Condition = ({
     };
 
     const renderConnectorField = () => {
-        let message = '';
-        switch (selectedConnector) {
-            case AND:
-                message = <FormattedMessage {...messages.connectorAndText} />;
-                break;
-            case OR:
-                message = <FormattedMessage {...messages.connectorOrText} />;
-                break;
-            default:
-                break;
-        }
-
         const connectorOptions = getFormattedOptions(
             [AND, OR].map(connector => ({
                 displayName: connector,
@@ -207,7 +189,6 @@ const Condition = ({
                         isDisabled={false}
                         onChange={onConnectorChange}
                         options={connectorOptions}
-                        placeholder={message}
                         selectedValue={selectedConnector}
                     />
                 )}
@@ -215,21 +196,17 @@ const Condition = ({
         );
     };
 
-    const renderAttributeField = () => {
+    const renderColumnField = () => {
         const { columnDisplayText } = condition;
-        const columnAttributes = columns || [];
-        const attributeOptions = getFormattedOptions(columnAttributes);
-        const placeholder = <FormattedMessage {...messages.selectAttributePlaceholderText} />;
-
+        const columnOptions = getFormattedOptions(columns || []);
         return (
-            <div className="condition-attribute-dropdown-container">
+            <div className="condition-column-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
                     <SingleSelectField
-                        fieldType={ATTRIBUTE}
+                        fieldType={COLUMN}
                         isDisabled={false}
                         onChange={updateSelectedField}
-                        options={attributeOptions}
-                        placeholder={placeholder}
+                        options={columnOptions}
                         selectedValue={columnDisplayText}
                     />
                 </div>
@@ -239,8 +216,8 @@ const Condition = ({
 
     const renderOperatorField = () => {
         const { operatorDisplayText } = condition;
-        const operatorsForAttribute = getOperatorsForAttribute();
-        const operatorOptions = getFormattedOptions(operatorsForAttribute);
+        const columnOperators = getColumnOperators();
+        const operatorOptions = getFormattedOptions(columnOperators);
 
         return (
             <div className="condition-operator-dropdown-container">
@@ -260,8 +237,8 @@ const Condition = ({
     const renderValueField = () => {
         const { valueKey, valueType, valueDisplayText } = condition;
 
-        const valuesForAttribute = getValuesForAttribute();
-        const valueOptions = getFormattedOptions(valuesForAttribute);
+        const columnOptions = getColumnOptions();
+        const valueOptions = getFormattedOptions(columnOptions);
         const error = getErrorMessage();
 
         const classnames = classNames('condition-value-dropdown-container', {
@@ -301,7 +278,7 @@ const Condition = ({
         <div className="condition-container">
             {renderDeleteButton()}
             {renderConnectorField()}
-            {renderAttributeField()}
+            {renderColumnField()}
             {renderOperatorField()}
             {renderValueField()}
             {renderErrorIcon()}

@@ -32,44 +32,35 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     </p>
   </div>
   <div
-    className="condition-attribute-dropdown-container"
+    className="condition-column-dropdown-container"
   >
     <div
       className="filter-dropdown-single-select-field-container"
     >
       <SingleSelectField
-        fieldType="attribute"
+        fieldType="column"
         isDisabled={false}
         onChange={[Function]}
         options={
           Array [
             Object {
               "displayText": "Hullo Thar",
-              "fieldId": "1",
               "type": "string",
               "value": "Hullo Thar",
             },
             Object {
               "displayText": "Last Updated",
-              "fieldId": "2",
               "type": "string",
               "value": "Last Updated",
             },
             Object {
               "displayText": "Contract Value",
-              "fieldId": "3",
               "type": "enum",
               "value": "Contract Value",
             },
           ]
         }
-        placeholder={
-          <FormattedMessage
-            defaultMessage="Select attribute"
-            id="boxui.queryBar.selectAttributePlaceholderText"
-          />
-        }
-        selectedValue=""
+        selectedValue="Contract Value"
       />
     </div>
   </div>
@@ -87,7 +78,6 @@ exports[`features/query-bar/components/filter/Condition render() should render C
           Array [
             Object {
               "displayText": "is",
-              "fieldId": undefined,
               "type": "string",
               "value": "is",
             },
@@ -105,7 +95,15 @@ exports[`features/query-bar/components/filter/Condition render() should render C
       updateSelectedField={[Function]}
       updateValueField={[Function]}
       valueKey={null}
-      valueOptions={Array []}
+      valueOptions={
+        Array [
+          Object {
+            "displayText": "$100",
+            "type": "enum",
+            "value": "$100",
+          },
+        ]
+      }
       valueType="string"
     />
   </div>

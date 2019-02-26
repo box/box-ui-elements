@@ -17,11 +17,6 @@ const messages = defineMessages({
         description: 'Header text shown in template dropdown',
         id: 'boxui.queryBar.metadataViewTemplateListHeaderTitle',
     },
-    selectAttributePlaceholderText: {
-        defaultMessage: 'Select attribute',
-        description: 'Placeholder text on the attribute button, on click should open a dropdown',
-        id: 'boxui.queryBar.selectAttributePlaceholderText',
-    },
     selectValuePlaceholderText: {
         defaultMessage: 'Select value',
         description: 'Placeholder text on the value button, on click should open a dropdown',
@@ -78,22 +73,6 @@ const messages = defineMessages({
         defaultMessage: 'No Filters Applied',
         description: 'Text on the filters dropdown that is displayed when no filters have been inserted',
         id: 'boxui.queryBar.noFiltersAppliedText',
-    },
-    selectAttributeDropdownText: {
-        defaultMessage: 'Select attribute',
-        description:
-            'Text on the select attribute button, on click opens a menu which allows users to select an attribute',
-        id: 'boxui.queryBar.selectAttributeDropdownText',
-    },
-    operatorDropdownText: {
-        defaultMessage: 'is',
-        description: 'Text on the operator button, on click opens a menu which allows users to select an attribute',
-        id: 'boxui.queryBar.operatorDropdownText',
-    },
-    selectValueDropdownText: {
-        defaultMessage: 'Select value',
-        description: 'Text on the select value button, on click opens a menu which allows users to select a value',
-        id: 'boxui.queryBar.selectValueDropdownText',
     },
     columnsButtonText: {
         defaultMessage: 'Columns',
