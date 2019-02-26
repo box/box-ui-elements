@@ -13,8 +13,6 @@ import messages from '../../messages';
 import {
     AND,
     COLUMN,
-    COLUMN_DISPLAY_TEXT,
-    COLUMN_KEY,
     COLUMN_OPERATORS,
     DATE,
     OPERATOR,
@@ -35,9 +33,9 @@ type Props = {
     condition: Object,
     deleteCondition: (index: number) => void,
     index: number,
+    onColumnChange: (condition: Object, columnId: string, valueType: any) => void,
     onConnectorChange: (option: OptionType) => void,
     onFieldChange: (
-        index: number,
         condition: Object,
         fieldDisplayText: string | Date,
         fieldDisplayTextType: string,
@@ -56,6 +54,7 @@ const Condition = ({
     columns,
     condition,
     deleteCondition,
+    onColumnChange,
     onFieldChange,
     index,
     selectedConnector,
@@ -65,6 +64,12 @@ const Condition = ({
         deleteCondition(index);
     };
 
+    const updateColumnField = (option: OptionType) => {
+        const { type, value: columnId } = option;
+
+        onColumnChange(condition, columnId, type);
+    };
+
     const updateSelectedField = (option: OptionType, fieldType?: string) => {
         const { displayText, type, value } = option;
 
@@ -72,10 +77,6 @@ const Condition = ({
         let keyType = '';
 
         switch (fieldType) {
-            case COLUMN:
-                displayTextType = COLUMN_DISPLAY_TEXT;
-                keyType = COLUMN_KEY;
-                break;
             case OPERATOR:
                 displayTextType = OPERATOR_DISPLAY_TEXT;
                 keyType = OPERATOR_KEY;
@@ -88,7 +89,7 @@ const Condition = ({
                 throw new Error('invalid input');
         }
 
-        onFieldChange(index, condition, displayText, displayTextType, value, keyType, type);
+        onFieldChange(condition, displayText, displayTextType, value, keyType, type);
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
@@ -96,7 +97,7 @@ const Condition = ({
             const { displayName, type } = option;
             return {
                 displayText: displayName,
-                type,
+                type, // TODO: valueType
                 value: displayName,
             };
         });
@@ -111,8 +112,8 @@ const Condition = ({
     };
 
     const getColumnOptions = () => {
-        const { columnKey } = condition;
-        const column = columns && columns.find(c => c.displayName === columnKey);
+        const { columnId } = condition;
+        const column = columns && columns.find(c => c.id === columnId);
         if (column && column.options) {
             return column.options.map(option => {
                 const { key } = option;
@@ -143,7 +144,7 @@ const Condition = ({
             value = target.value;
         }
 
-        onFieldChange(index, condition, displayText, displayTextType, value, keyType, valueType);
+        onFieldChange(condition, displayText, displayTextType, value, keyType, valueType);
     };
 
     const getErrorMessage = () => {
@@ -197,17 +198,28 @@ const Condition = ({
     };
 
     const renderColumnField = () => {
-        const { columnDisplayText } = condition;
-        const columnOptions = getFormattedOptions(columns || []);
+        const { columnId } = condition;
+
+        const columnOptions =
+            columns &&
+            columns.map(column => {
+                const { displayName, id, type } = column;
+                return {
+                    displayText: displayName,
+                    type,
+                    value: id,
+                };
+            });
+
         return (
             <div className="condition-column-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
                     <SingleSelectField
                         fieldType={COLUMN}
                         isDisabled={false}
-                        onChange={updateSelectedField}
+                        onChange={updateColumnField}
                         options={columnOptions}
-                        selectedValue={columnDisplayText}
+                        selectedValue={columnId}
                     />
                 </div>
             </div>

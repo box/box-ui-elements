@@ -71,8 +71,7 @@ class FilterButton extends React.Component<Props, State> {
             const firstColumn = columns[0];
 
             return {
-                columnDisplayText: firstColumn.displayName,
-                columnKey: firstColumn.displayName,
+                columnId: firstColumn.id,
                 id: conditionID,
                 operatorDisplayText: '',
                 operatorKey: 0,
@@ -112,8 +111,33 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
+    handleColumnChange = (condition: Object, columnId: string, valueType: string) => {
+        const { conditions } = this.state;
+        let updatedConditionIndex = 0;
+        const conditionToUpdate = conditions.find((currentCondition, index) => {
+            updatedConditionIndex = index;
+            return currentCondition.id === condition.id;
+        });
+
+        const updatedCondition = {
+            ...conditionToUpdate,
+            columnId,
+            operatorDisplayText: '',
+            operatorKey: 0,
+            valueDisplayText: null,
+            valueKey: null,
+            valueType,
+        };
+
+        const conditionsCopy = conditions.slice(0);
+        conditionsCopy[updatedConditionIndex] = updatedCondition;
+
+        this.setState({
+            conditions: conditionsCopy,
+        });
+    };
+
     handleFieldChange = (
-        index: number,
         condition: Object,
         fieldDisplayText: string | Date,
         fieldDisplayTextType: string,
@@ -122,35 +146,25 @@ class FilterButton extends React.Component<Props, State> {
         valueType: string,
     ) => {
         const { conditions } = this.state;
-        const conditionToUpdate = conditions.find(currentCondition => {
+        let updatedConditionIndex = 0;
+        const conditionToUpdate = conditions.find((currentCondition, index) => {
+            updatedConditionIndex = index;
             return currentCondition.id === condition.id;
         });
-        if (conditionToUpdate) {
-            const updatedCondition = {
-                ...conditionToUpdate,
-                [fieldDisplayTextType]: fieldDisplayText,
-                [fieldKeyType]: fieldKey,
-                valueType,
-            };
 
-            if (fieldKeyType === 'columnKey') {
-                // Upon selecting a new column, the operator and value fields should be reset.
-                updatedCondition.operatorKey = 0;
-                updatedCondition.operatorDisplayText = '';
-                updatedCondition.valueDisplayText = null;
-                updatedCondition.valueKey = null;
-            }
+        const updatedCondition = {
+            ...conditionToUpdate,
+            [fieldDisplayTextType]: fieldDisplayText,
+            [fieldKeyType]: fieldKey,
+            valueType,
+        };
 
-            const updatedConditions = conditions.slice(0);
-            const conditionIndex = conditions.findIndex(
-                currentCondition => currentCondition.id === updatedCondition.id,
-            );
-            updatedConditions[conditionIndex] = updatedCondition;
+        const conditionsCopy = conditions.slice(0);
+        conditionsCopy[updatedConditionIndex] = updatedCondition;
 
-            this.setState({
-                conditions: updatedConditions,
-            });
-        }
+        this.setState({
+            conditions: conditionsCopy,
+        });
     };
 
     handleConnectorChange = (option: OptionType) => {
@@ -272,6 +286,7 @@ class FilterButton extends React.Component<Props, State> {
                                             columns={columns}
                                             selectedConnector={selectedConnector}
                                             onFieldChange={this.handleFieldChange}
+                                            onColumnChange={this.handleColumnChange}
                                             onConnectorChange={this.handleConnectorChange}
                                         />
                                     );
