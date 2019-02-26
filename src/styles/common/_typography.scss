@@ -101,7 +101,6 @@ li {
     line-height: 20px;
 }
 
-input,
 button,
 select,
 div[contentEditable="true"],
@@ -109,39 +108,4 @@ textarea {
     @include font-family;
 
     font-size: 99%;
-}
-
-.txt-small {
-    font-size: 12px;
-}
-
-.txt-medium {
-    font-size: 14px;
-}
-
-.txt-large {
-    font-size: 16px;
-}
-
-.txt-x-large {
-    font-size: 30px;
-}
-
-.txt-normal {
-    font-weight: normal;
-}
-
-.txt-bold {
-    font-weight: bold;
-}
-
-.txt-break-all {
-    word-break: break-all;
-}
-
-.txt-ellipsis {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }

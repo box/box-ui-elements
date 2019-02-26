@@ -3,7 +3,6 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import IconVerified from '../../icons/general/IconVerified';
-
 import Label from '../label';
 import LoadingIndicator from '../loading-indicator';
 import Tooltip from '../tooltip';
@@ -46,29 +45,28 @@ const TextInput = ({
     labelTooltip,
     ...rest
 }: Props) => {
-    const classes = classNames(className, 'text-input-container', {
-        'show-error': !!error,
+    const classes = classNames(className, 'bdl-TextInput-container', {
+        'bdl-hasError': !!error,
     });
 
     return (
         <div className={classes}>
             <Label
+                className="bdl-TextInput-label"
                 hideLabel={hideLabel}
                 showOptionalText={!hideOptionalLabel && !isRequired}
                 text={label}
                 tooltip={labelTooltip}
             >
-                {!!description && <i className="text-input-description">{description}</i>}
+                {!!description && <i className="bdl-TextInput-description">{description}</i>}
                 <Tooltip isShown={!!error} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
-                    <input ref={inputRef} required={isRequired} {...rest} />
+                    <input {...rest} className="bdl-TextInput-input" ref={inputRef} required={isRequired} />
                 </Tooltip>
-                {isLoading && !isValid && <LoadingIndicator className="text-input-loading" />}
-                {isValid && !isLoading && <IconVerified className="text-input-verified" />}
+                {isLoading && !isValid && <LoadingIndicator className="bdl-TextInput-loadingIndicator" />}
+                {isValid && !isLoading && <IconVerified className="bdl-TextInput-iconVerified" />}
             </Label>
         </div>
     );
 };
-
-TextInput.displayName = 'TextInput';
 
 export default TextInput;

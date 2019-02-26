@@ -18,6 +18,8 @@ const OptionalFormattedMessage = () => (
 
 type Props = {
     children: React.Node,
+    /** Add a class to the component */
+    className?: string,
     hideLabel?: boolean,
     infoIconProps?: Object,
     /** The label text */
@@ -30,7 +32,16 @@ type Props = {
     tooltip?: React.Node,
 };
 
-const Label = ({ text, tooltip, infoTooltip, infoIconProps, showOptionalText, hideLabel, children }: Props) => {
+const Label = ({
+    className = '',
+    text,
+    tooltip,
+    infoTooltip,
+    infoIconProps,
+    showOptionalText,
+    hideLabel,
+    children,
+}: Props) => {
     const labelContent = [
         <span key="labelText">{text}</span>,
         showOptionalText ? <OptionalFormattedMessage key="optionalMessage" /> : null,
@@ -51,7 +62,7 @@ const Label = ({ text, tooltip, infoTooltip, infoIconProps, showOptionalText, hi
     }
 
     return (
-        <StandardLabel labelContent={labelContent} tooltip={tooltip}>
+        <StandardLabel className={className} labelContent={labelContent} tooltip={tooltip}>
             {children}
         </StandardLabel>
     );
