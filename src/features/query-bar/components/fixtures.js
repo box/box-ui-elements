@@ -2,9 +2,8 @@
 import type { ColumnType, ConditionType } from '../flowTypes';
 
 const initialCondition: ConditionType = {
+    columnId: '3',
     id: 0,
-    columnDisplayText: 'Contract Value',
-    columnKey: 'Contract Value',
     operatorDisplayText: '',
     operatorKey: null,
     valueDisplayText: '',

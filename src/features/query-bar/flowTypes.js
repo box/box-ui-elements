@@ -22,8 +22,7 @@ export type ColumnType = {
 };
 
 export type ConditionType = {
-    columnDisplayText: string,
-    columnKey: string | null,
+    columnId: string,
     id: number,
     operatorDisplayText: string,
     operatorKey: string | null,
