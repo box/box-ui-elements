@@ -22,26 +22,6 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -202,26 +182,6 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -277,26 +237,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -457,26 +397,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -637,26 +557,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -822,26 +722,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -1002,26 +882,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -1182,26 +1042,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -1336,26 +1176,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -1517,26 +1337,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -1698,26 +1498,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -1879,26 +1659,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -2034,26 +1794,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -2118,26 +1858,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -2302,26 +2022,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -2487,26 +2187,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -2667,26 +2347,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -2846,26 +2506,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >
@@ -3003,26 +2643,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
           }
         />
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="Click to provide feedback on this simplified sharing beta experience."
-              id="boxui.unifiedShare.betaFeedbackCtaCopy"
-            />
-          }
-          theme="default"
-        >
-          <Link
-            className=""
-            href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-            target="blank"
-          >
-            <BetaBadge />
-          </Link>
-        </Tooltip>
       </span>
     }
   >

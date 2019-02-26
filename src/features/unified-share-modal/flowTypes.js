@@ -95,7 +95,6 @@ export type trackingPropsType = {
         upgradeLinkProps?: Object,
     },
     modalTracking: {
-        betaLabelProps?: Object,
         collaboratorAvatarsProps?: Object,
         ftuxConfirmButtonProps?: Object,
         modalProps?: Object,

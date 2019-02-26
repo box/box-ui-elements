@@ -1,11 +1,6 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    betaFeedbackCtaCopy: {
-        defaultMessage: 'Click to provide feedback on this simplified sharing beta experience.',
-        description: 'Copy to describe the entry point into the feedback form (fixed url destination)',
-        id: 'boxui.unifiedShare.betaFeedbackCtaCopy',
-    },
     disabledShareLinkPermission: {
         defaultMessage: 'This option isn’t available for this item due to a security restriction or classification.',
         description:
