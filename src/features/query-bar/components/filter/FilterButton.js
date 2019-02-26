@@ -113,13 +113,13 @@ class FilterButton extends React.Component<Props, State> {
 
     handleColumnChange = (condition: Object, columnId: string, valueType: string) => {
         const { conditions } = this.state;
-        let updatedConditionIndex = 0;
+        let newConditionIndex = 0;
         const conditionToUpdate = conditions.find((currentCondition, index) => {
-            updatedConditionIndex = index;
+            newConditionIndex = index;
             return currentCondition.id === condition.id;
         });
 
-        const updatedCondition = {
+        const newCondition = {
             ...conditionToUpdate,
             columnId,
             operatorDisplayText: '',
@@ -129,11 +129,11 @@ class FilterButton extends React.Component<Props, State> {
             valueType,
         };
 
-        const conditionsCopy = conditions.slice(0);
-        conditionsCopy[updatedConditionIndex] = updatedCondition;
+        const newConditions = conditions.slice(0);
+        newConditions[newConditionIndex] = newCondition;
 
         this.setState({
-            conditions: conditionsCopy,
+            conditions: newConditions,
         });
     };
 
@@ -146,24 +146,24 @@ class FilterButton extends React.Component<Props, State> {
         valueType: string,
     ) => {
         const { conditions } = this.state;
-        let updatedConditionIndex = 0;
+        let newConditionIndex = 0;
         const conditionToUpdate = conditions.find((currentCondition, index) => {
-            updatedConditionIndex = index;
+            newConditionIndex = index;
             return currentCondition.id === condition.id;
         });
 
-        const updatedCondition = {
+        const newCondition = {
             ...conditionToUpdate,
             [fieldDisplayTextType]: fieldDisplayText,
             [fieldKeyType]: fieldKey,
             valueType,
         };
 
-        const conditionsCopy = conditions.slice(0);
-        conditionsCopy[updatedConditionIndex] = updatedCondition;
+        const newConditions = conditions.slice(0);
+        newConditions[newConditionIndex] = newCondition;
 
         this.setState({
-            conditions: conditionsCopy,
+            conditions: newConditions,
         });
     };
 

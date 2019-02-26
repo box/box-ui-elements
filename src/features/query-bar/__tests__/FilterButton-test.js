@@ -47,7 +47,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
                 valueType: 'string',
-                updatedCondition: [
+                newCondition: [
                     {
                         columnId: '2',
                         id: '3',
@@ -59,7 +59,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, columnId, condition, conditions, updatedCondition, valueType }) => {
+        ].forEach(({ description, columnId, condition, conditions, newCondition, valueType }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
@@ -67,7 +67,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 });
                 wrapper.instance().handleColumnChange(condition, columnId, valueType);
 
-                expect(wrapper.state('conditions')).toEqual(updatedCondition);
+                expect(wrapper.state('conditions')).toEqual(newCondition);
             });
         });
     });
@@ -98,7 +98,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 fieldDisplayTextType: 'operatorDisplayText',
                 fieldKey: 0,
                 fieldKeyType: 'operatorKey',
-                updatedCondition: [
+                newCondition: [
                     {
                         columnId: '1',
                         id: '4',
@@ -135,7 +135,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 fieldKey: 0,
                 fieldKeyType: 'valueKey',
                 valueType: 'string',
-                updatedCondition: [
+                newCondition: [
                     {
                         columnId: '1',
                         id: '5',
@@ -156,7 +156,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 fieldDisplayTextType,
                 fieldKey,
                 fieldKeyType,
-                updatedCondition,
+                newCondition,
                 valueType,
             }) => {
                 test(`${description}`, () => {
@@ -175,7 +175,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                             valueType,
                         );
 
-                    expect(wrapper.state('conditions')).toEqual(updatedCondition);
+                    expect(wrapper.state('conditions')).toEqual(newCondition);
                 });
             },
         );
@@ -202,7 +202,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         valueKey: null,
                     },
                 ],
-                updatedConditions: [
+                newConditions: [
                     {
                         id: '3',
                         operatorDisplayText: '',
@@ -212,7 +212,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, index, conditions, updatedConditions }) => {
+        ].forEach(({ description, index, conditions, newConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.instance().setState({
@@ -220,7 +220,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 });
                 wrapper.instance().deleteCondition(index);
 
-                expect(wrapper.state('conditions')).toEqual(updatedConditions);
+                expect(wrapper.state('conditions')).toEqual(newConditions);
             });
         });
     });
