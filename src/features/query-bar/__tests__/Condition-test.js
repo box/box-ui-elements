@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import { columnOptions, columns, initialCondition } from '../components/fixtures';
-import { COLUMN_KEY, OPERATOR_KEY, VALUE_KEY } from '../constants';
+import { OPERATOR_KEY, VALUE_KEY } from '../constants';
 import Condition from '../components/filter/Condition';
 
 describe('features/query-bar/components/filter/Condition', () => {
@@ -29,9 +29,30 @@ describe('features/query-bar/components/filter/Condition', () => {
         });
     });
 
+    describe('updateColumnField()', () => {
+        test('should select a column', () => {
+            const condition = initialCondition;
+            const columnId = '1';
+            const option = {
+                type: 'string',
+                value: columnId,
+            };
+            const onColumnChange = jest.fn();
+            const wrapper = getWrapper({
+                onColumnChange,
+            });
+
+            wrapper
+                .find('SingleSelectField')
+                .at(0)
+                .simulate('change', option);
+
+            expect(onColumnChange).toHaveBeenCalledWith(condition, columnId, option.type);
+        });
+    });
+
     describe('updateSelectedField()', () => {
         const displayText = 'Vendor Name';
-        const index = 0;
         const condition = initialCondition;
         const value = 0;
         const option = {
@@ -43,7 +64,6 @@ describe('features/query-bar/components/filter/Condition', () => {
 
         test.each`
             description                    | fieldType     | displayTextType          | keyType
-            ${'should select a column'}    | ${'column'}   | ${'columnDisplayText'}   | ${COLUMN_KEY}
             ${'should select an operator'} | ${'operator'} | ${'operatorDisplayText'} | ${OPERATOR_KEY}
             ${'should select a value'}     | ${'value'}    | ${'valueDisplayText'}    | ${VALUE_KEY}
         `('$description', ({ fieldType, displayTextType, keyType }) => {
@@ -58,7 +78,6 @@ describe('features/query-bar/components/filter/Condition', () => {
                 .simulate('change', option, fieldType);
 
             expect(onFieldChange).toHaveBeenCalledWith(
-                index,
                 condition,
                 displayText,
                 displayTextType,
@@ -75,7 +94,6 @@ describe('features/query-bar/components/filter/Condition', () => {
                 value: '',
             },
         };
-        const index = 0;
         const condition = initialCondition;
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
         const valueType = 'string';
@@ -93,7 +111,6 @@ describe('features/query-bar/components/filter/Condition', () => {
             wrapper.find('ValueField').prop('updateValueField')(fieldValue);
 
             expect(onFieldChange).toHaveBeenCalledWith(
-                index,
                 condition,
                 displayText,
                 displayTextType,

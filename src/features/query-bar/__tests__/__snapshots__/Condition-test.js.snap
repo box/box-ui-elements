@@ -46,21 +46,21 @@ exports[`features/query-bar/components/filter/Condition render() should render C
             Object {
               "displayText": "Hullo Thar",
               "type": "string",
-              "value": "Hullo Thar",
+              "value": "1",
             },
             Object {
               "displayText": "Last Updated",
               "type": "string",
-              "value": "Last Updated",
+              "value": "2",
             },
             Object {
               "displayText": "Contract Value",
               "type": "enum",
-              "value": "Contract Value",
+              "value": "3",
             },
           ]
         }
-        selectedValue="Contract Value"
+        selectedValue="3"
       />
     </div>
   </div>

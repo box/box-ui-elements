@@ -21,41 +21,36 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         });
     });
 
-    describe('handleFieldChange()', () => {
+    describe('handleColumnChange()', () => {
         [
             {
                 description: 'should set conditions with an object with column',
-                index: 0,
+                columnId: '2',
                 condition: {
+                    columnId: '1',
                     id: '3',
-                    columnDisplayText: '',
-                    columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
                     valueDisplayText: null,
                     valueKey: null,
+                    valueType: null,
                 },
                 conditions: [
                     {
+                        columnId: '1',
                         id: '3',
-                        columnDisplayText: '',
-                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: null,
                         valueKey: null,
+                        valueType: null,
                     },
                 ],
-                fieldDisplayText: 'myColumn',
-                fieldDisplayTextType: 'columnDisplayText',
-                fieldKey: 0,
-                fieldKeyType: 'columnKey',
                 valueType: 'string',
                 updatedCondition: [
                     {
+                        columnId: '2',
                         id: '3',
-                        columnDisplayText: 'myColumn',
-                        columnKey: 0,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: null,
@@ -64,13 +59,26 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
+        ].forEach(({ description, columnId, condition, conditions, updatedCondition, valueType }) => {
+            test(`${description}`, () => {
+                const wrapper = getWrapper();
+                wrapper.setState({
+                    conditions,
+                });
+                wrapper.instance().handleColumnChange(condition, columnId, valueType);
+
+                expect(wrapper.state('conditions')).toEqual(updatedCondition);
+            });
+        });
+    });
+
+    describe('handleFieldChange()', () => {
+        [
             {
                 description: 'should set conditions with an object with operator',
-                index: 0,
                 condition: {
+                    columnId: '1',
                     id: '4',
-                    columnDisplayText: '',
-                    columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
                     valueDisplayText: null,
@@ -78,9 +86,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 },
                 conditions: [
                     {
+                        columnId: '1',
                         id: '4',
-                        columnDisplayText: '',
-                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: null,
@@ -93,9 +100,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 fieldKeyType: 'operatorKey',
                 updatedCondition: [
                     {
+                        columnId: '1',
                         id: '4',
-                        columnDisplayText: '',
-                        columnKey: null,
                         operatorDisplayText: 'myOperator',
                         operatorKey: 0,
                         valueDisplayText: null,
@@ -107,9 +113,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 description: 'should set conditions with an object with value',
                 index: 0,
                 condition: {
+                    columnId: '1',
                     id: '5',
-                    columnDisplayText: '',
-                    columnKey: null,
                     operatorDisplayText: '',
                     operatorKey: 0,
                     valueDisplayText: null,
@@ -117,9 +122,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 },
                 conditions: [
                     {
+                        columnId: '1',
                         id: '5',
-                        columnDisplayText: '',
-                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: null,
@@ -133,9 +137,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 valueType: 'string',
                 updatedCondition: [
                     {
+                        columnId: '1',
                         id: '5',
-                        columnDisplayText: '',
-                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: 0,
                         valueDisplayText: 'myValue',
@@ -147,7 +150,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         ].forEach(
             ({
                 description,
-                index,
                 condition,
                 conditions,
                 fieldDisplayText,
@@ -165,7 +167,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     wrapper
                         .instance()
                         .handleFieldChange(
-                            index,
                             condition,
                             fieldDisplayText,
                             fieldDisplayTextType,
@@ -188,8 +189,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '2',
-                        columnDisplayText: '',
-                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
                         valueDisplayText: null,
@@ -197,8 +196,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                     {
                         id: '3',
-                        columnDisplayText: '',
-                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
                         valueDisplayText: null,
@@ -208,8 +205,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 updatedConditions: [
                     {
                         id: '3',
-                        columnDisplayText: '',
-                        columnKey: null,
                         operatorDisplayText: '',
                         operatorKey: null,
                         valueDisplayText: null,
@@ -289,8 +284,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const wrapper = getWrapper({ columns });
             const conditionID = '11';
             const expected = {
-                columnDisplayText: 'Hullo Thar',
-                columnKey: 'Hullo Thar',
+                columnId: '1',
                 id: conditionID,
                 operatorDisplayText: '',
                 operatorKey: 0,
