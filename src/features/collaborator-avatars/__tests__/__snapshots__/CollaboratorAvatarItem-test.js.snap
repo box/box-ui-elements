@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render avatar if badges are disabled 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render avatar if badges are disabled 1`] = `
 <Badgeable
   bottomLeft={null}
   topLeft={null}
@@ -12,7 +12,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </Badgeable>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render badges with expiration lacking an execution date value 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render badges with expiration lacking an execution date value 1`] = `
 <Badgeable
   bottomLeft={null}
   topLeft={null}
@@ -24,7 +24,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </Badgeable>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render badges with expiration, but badging not allowed 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render badges with expiration, but badging not allowed 1`] = `
 <Badgeable
   bottomLeft={null}
   topLeft={null}
@@ -36,7 +36,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </Badgeable>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render if email is missing 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render if email is missing 1`] = `
 <Badgeable
   bottomLeft={null}
   topLeft={null}
@@ -48,7 +48,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </Badgeable>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should not render if external collab is disabled 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render if external collab is disabled 1`] = `
 <Badgeable
   bottomLeft={null}
   topLeft={null}
@@ -60,7 +60,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </Badgeable>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should render avatar with expiration if we allow badging 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should render avatar with expiration if we allow badging 1`] = `
 <Badgeable
   bottomLeft={null}
   topLeft={
@@ -71,7 +71,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
       text={
         <FormattedMessage
           defaultMessage="Access expires on {date}"
-          id="boxui.unifiedShare.collaborators.expirationTooltipText"
+          id="boxui.collaboratorAvatars.collaborators.expirationTooltipText"
           values={
             Object {
               "date": "January 1, 2009",
@@ -98,7 +98,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </Badgeable>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should render avatar with external collab if all preconditions are met 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should render avatar with external collab if all preconditions are met 1`] = `
 <Badgeable
   bottomLeft={
     <Tooltip
@@ -108,7 +108,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
       text={
         <FormattedMessage
           defaultMessage="{email} is from outside of your company"
-          id="boxui.unifiedShare.collaborators.externalCollabTooltipText"
+          id="boxui.collaboratorAvatars.collaborators.externalCollabTooltipText"
           values={
             Object {
               "email": "test@example.org",
@@ -136,7 +136,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </Badgeable>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should render custom avatar 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should render custom avatar 1`] = `
 <Badgeable
   bottomLeft={null}
   topLeft={null}
@@ -149,7 +149,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </Badgeable>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem render() should render default component 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should render default component 1`] = `
 <Badgeable
   bottomLeft={null}
   topLeft={null}

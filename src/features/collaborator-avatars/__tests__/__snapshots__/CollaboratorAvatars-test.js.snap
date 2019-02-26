@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatars render() should render component if collaborators.length > maxDisplayedUserAvatars 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatars render() should render component if collaborators.length > maxDisplayedUserAvatars 1`] = `
 <a
   aria-hidden="false"
   className="collaborator-avatar-container"
@@ -11,7 +11,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
   >
     <FormattedMessage
       defaultMessage="Shared with"
-      id="boxui.unifiedShare.collaboratorAvatarsLabel"
+      id="boxui.collaboratorAvatars.collaboratorAvatarsLabel"
     />
   </div>
   <div
@@ -43,7 +43,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </a>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatars render() should render component if collaborators.length - maxDisplayedUserAvatars > maxAdditionalCollaboratorsNum 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatars render() should render component if collaborators.length - maxDisplayedUserAvatars > maxAdditionalCollaboratorsNum 1`] = `
 <a
   aria-hidden="false"
   className="collaborator-avatar-container"
@@ -54,7 +54,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
   >
     <FormattedMessage
       defaultMessage="Shared with"
-      id="boxui.unifiedShare.collaboratorAvatarsLabel"
+      id="boxui.collaboratorAvatars.collaboratorAvatarsLabel"
     />
   </div>
   <div
@@ -80,7 +80,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
 </a>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatars render() should render default component 1`] = `
+exports[`features/collaborator-avatars/CollaboratorAvatars render() should render default component 1`] = `
 <a
   aria-hidden="false"
   className="collaborator-avatar-container"
@@ -91,7 +91,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorAvat
   >
     <FormattedMessage
       defaultMessage="Shared with"
-      id="boxui.unifiedShare.collaboratorAvatarsLabel"
+      id="boxui.collaboratorAvatars.collaboratorAvatarsLabel"
     />
   </div>
   <div

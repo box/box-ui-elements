@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorListItem render() should render default component 1`] = `
+exports[`features/collaborator-avatars/CollaboratorListItem render() should render default component 1`] = `
 <li>
   <div
     className="collaborator-list-item"
@@ -56,7 +56,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
 </li>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorListItem render() should render group collaborator 1`] = `
+exports[`features/collaborator-avatars/CollaboratorListItem render() should render group collaborator 1`] = `
 <li>
   <div
     className="collaborator-list-item"
@@ -93,7 +93,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
 </li>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorListItem render() should render pending collaborator 1`] = `
+exports[`features/collaborator-avatars/CollaboratorListItem render() should render pending collaborator 1`] = `
 <li>
   <div
     className="collaborator-list-item"
@@ -147,7 +147,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
     >
       <FormattedMessage
         defaultMessage="Pending"
-        id="boxui.unifiedShare.collaboration.pendingCollabText"
+        id="boxui.collaboratorAvatars.collaboration.pendingCollabText"
       />
     </div>
   </div>

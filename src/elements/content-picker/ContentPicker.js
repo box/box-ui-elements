@@ -49,6 +49,7 @@ import {
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
+import './ContentPicker.scss';
 
 type Props = {
     apiHost: string,

@@ -2,18 +2,22 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { ModalActions } from '../../../components/modal';
-import Button from '../../../components/button';
-import PlainButton from '../../../components/plain-button';
-import { Link } from '../../../components/link';
-import CollaborationBadge from '../../../icons/badges/CollaborationBadge';
+import { ModalActions } from '../../components/modal';
+import Button from '../../components/button';
+import PlainButton from '../../components/plain-button';
+import { Link } from '../../components/link';
+import CollaborationBadge from '../../icons/badges/CollaborationBadge';
+import type {
+    collaboratorListTrackingType,
+    item as ItemType,
+    collaboratorType,
+} from '../unified-share-modal/flowTypes';
 
-import commonMessages from '../../../common/messages';
+import commonMessages from '../../common/messages';
 
 import CollaboratorListItem from './CollaboratorListItem';
-import messages from '../messages';
-
-import type { collaboratorListTrackingType, item as ItemType, collaboratorType } from '../flowTypes';
+import messages from './messages';
+import './CollaboratorList.scss';
 
 const MAX_COLLABORATOR_LIST_SIZE = 90;
 

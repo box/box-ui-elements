@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import CollaboratorAvatarItem from '../CollaboratorAvatarItem';
 
-describe('features/unified-share-modal/collaborator-avatar-group/CollaboratorAvatarItem', () => {
+describe('features/collaborator-avatars/CollaboratorAvatarItem', () => {
     const getWrapper = (props = {}) => shallow(<CollaboratorAvatarItem id={1} name="foo bar" {...props} />);
 
     describe('render()', () => {

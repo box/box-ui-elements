@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList render() should render default component 1`] = `
+exports[`features/collaborator-avatars/CollaboratorList render() should render default component 1`] = `
 <div
   className="usm-collaborator-list"
 >
@@ -19,7 +19,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
       >
         <FormattedMessage
           defaultMessage="Manage All"
-          id="boxui.unifiedShare.manageAllLinkText"
+          id="boxui.collaboratorAvatars.manageAllLinkText"
         />
       </PlainButton>
     </Link>
@@ -102,7 +102,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
 </div>
 `;
 
-exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList render() should render extra row with View additional people if list.size > maxCollaboratorListSize 1`] = `
+exports[`features/collaborator-avatars/CollaboratorList render() should render extra row with View additional people if list.size > maxCollaboratorListSize 1`] = `
 <div
   className="usm-collaborator-list"
 >
@@ -121,7 +121,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
       >
         <FormattedMessage
           defaultMessage="Manage All"
-          id="boxui.unifiedShare.manageAllLinkText"
+          id="boxui.collaboratorAvatars.manageAllLinkText"
         />
       </PlainButton>
     </Link>
@@ -186,7 +186,7 @@ exports[`features/unified-share-modal/collaborator-avatar-group/CollaboratorList
         >
           <FormattedMessage
             defaultMessage="View additional people"
-            id="boxui.unifiedShare.viewAdditionalPeopleText"
+            id="boxui.collaboratorAvatars.viewAdditionalPeopleText"
           />
         </Link>
       </div>
