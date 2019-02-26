@@ -21,7 +21,6 @@ import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureProvider } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
-
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';

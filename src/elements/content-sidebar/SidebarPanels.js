@@ -9,14 +9,16 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import SidebarRoute from './SidebarRoute';
 import SidebarUtils from './SidebarUtils';
 import {
-    SIDEBAR_VIEW_SKILLS,
+    ORIGIN_ACTIVITY_SIDEBAR,
+    ORIGIN_DETAILS_SIDEBAR,
+    ORIGIN_METADATA_SIDEBAR,
+    ORIGIN_SKILLS_SIDEBAR,
+    ORIGIN_VERSIONS_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
-    ORIGIN_DETAILS_SIDEBAR,
-    ORIGIN_ACTIVITY_SIDEBAR,
-    ORIGIN_SKILLS_SIDEBAR,
-    ORIGIN_METADATA_SIDEBAR,
+    SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_VERSIONS,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -46,6 +48,7 @@ const MARK_NAME_JS_LOADING_DETAILS = `${ORIGIN_DETAILS_SIDEBAR}${BASE_EVENT_NAME
 const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
+const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
 const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
 const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
@@ -56,6 +59,10 @@ const LoadableSkillsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_S
 const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA,
     MARK_NAME_JS_LOADING_METADATA,
+);
+const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
+    SIDEBAR_VIEW_VERSIONS,
+    MARK_NAME_JS_LOADING_VERSIONS,
 );
 
 const SidebarPanels = ({
@@ -96,15 +103,22 @@ const SidebarPanels = ({
                 enabled={hasActivityFeed}
                 path={`/${SIDEBAR_VIEW_ACTIVITY}`}
                 pathFallback={`/${SIDEBAR_VIEW_DETAILS}`}
-                render={() =>
+                render={({ match }) =>
                     isOpen && (
-                        <LoadableActivitySidebar
-                            currentUser={currentUser}
-                            file={file}
-                            onVersionHistoryClick={onVersionHistoryClick}
-                            {...activitySidebarProps}
-                            startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-                        />
+                        <Switch>
+                            <Route exact path={match.path}>
+                                <LoadableActivitySidebar
+                                    currentUser={currentUser}
+                                    file={file}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                    startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
+                                    {...activitySidebarProps}
+                                />
+                            </Route>
+                            <Route exact path={`${match.path}/versions`}>
+                                <LoadableVersionsSidebar fileId={fileId} />
+                            </Route>
+                        </Switch>
                     )
                 }
             />
@@ -112,15 +126,22 @@ const SidebarPanels = ({
                 enabled={hasDetails}
                 path={`/${SIDEBAR_VIEW_DETAILS}`}
                 pathFallback={`/${SIDEBAR_VIEW_METADATA}`}
-                render={() =>
+                render={({ match }) =>
                     isOpen && (
-                        <LoadableDetailsSidebar
-                            key={fileId}
-                            fileId={fileId}
-                            onVersionHistoryClick={onVersionHistoryClick}
-                            {...detailsSidebarProps}
-                            startMarkName={MARK_NAME_JS_LOADING_DETAILS}
-                        />
+                        <Switch>
+                            <Route exact path={match.path}>
+                                <LoadableDetailsSidebar
+                                    fileId={fileId}
+                                    key={fileId}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                    startMarkName={MARK_NAME_JS_LOADING_DETAILS}
+                                    {...detailsSidebarProps}
+                                />
+                            </Route>
+                            <Route exact path={`${match.path}/versions`}>
+                                <LoadableVersionsSidebar fileId={fileId} />
+                            </Route>
+                        </Switch>
                     )
                 }
             />
@@ -132,8 +153,8 @@ const SidebarPanels = ({
                     isOpen && (
                         <LoadableMetadataSidebar
                             fileId={fileId}
-                            {...metadataSidebarProps}
                             startMarkName={MARK_NAME_JS_LOADING_METADATA}
+                            {...metadataSidebarProps}
                         />
                     )
                 }

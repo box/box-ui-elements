@@ -1,0 +1,9 @@
+.be-btn-back {
+    &,
+    &:hover,
+    &:focus {
+        margin-right: 5px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}

@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+import flow from 'lodash/flow';
 import uniqueid from 'lodash/uniqueId';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
@@ -13,9 +14,11 @@ import LoadingIndicator from '../../components/loading-indicator/LoadingIndicato
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
+import { withFeatureConsumer } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { FeatureConfig } from '../common/feature-checking';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -23,6 +26,7 @@ type Props = {
     className: string,
     currentUser?: User,
     detailsSidebarProps: DetailsSidebarProps,
+    features: FeatureConfig,
     file: BoxItem,
     fileId: string,
     getPreview: Function,
@@ -96,6 +100,22 @@ class Sidebar extends React.Component<Props, State> {
         this.setState({ isDirty: true, isOpen: isToggle ? !isOpen : true });
     };
 
+    /**
+     * Handle version history click
+     *
+     * @param {SyntheticEvent} event - The event
+     * @return {void}
+     */
+    handleVersionClick = (event: SyntheticEvent<>) => {
+        const { history } = this.props;
+
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+
+        history.push(`${history.location.pathname}/versions`);
+    };
+
     render() {
         const {
             activitySidebarProps,
@@ -103,6 +123,7 @@ class Sidebar extends React.Component<Props, State> {
             className,
             currentUser,
             detailsSidebarProps,
+            features,
             file,
             fileId,
             getPreview,
@@ -116,6 +137,7 @@ class Sidebar extends React.Component<Props, State> {
         }: Props = this.props;
 
         const { isOpen } = this.state;
+        const handleVersionHistoryClick = onVersionHistoryClick || (features.versions && this.handleVersionClick);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
@@ -155,7 +177,7 @@ class Sidebar extends React.Component<Props, State> {
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
-                            onVersionHistoryClick={onVersionHistoryClick}
+                            onVersionHistoryClick={handleVersionHistoryClick}
                         />
                     </React.Fragment>
                 )}
@@ -165,4 +187,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default withRouter(Sidebar);
+export default flow([withFeatureConsumer, withRouter])(Sidebar);

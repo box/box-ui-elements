@@ -16,6 +16,7 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_DETAILS,
+    SIDEBAR_VIEW_VERSIONS,
 } from '../../constants';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 
@@ -101,7 +102,6 @@ class SidebarUtils {
      * @private
      * @param {ContentSidebarProps} props - User passed in props
      * @param {Array<MetadataEditor>} editors - metadata editors
-     * @param {Boolean} isMetadataEnabled - metadata feature
      * @return {Boolean} true if we should render
      */
     static shouldRenderMetadataSidebar(props: ContentSidebarProps, editors?: Array<MetadataEditor>): boolean {
@@ -120,6 +120,7 @@ class SidebarUtils {
      *
      * @param {ContentSidebarProps} props - User passed in props
      * @param {BoxItem} file - box file
+     * @param {Array<MetadataEditor>} editors - metadata editors
      * @return {Boolean} true if we should fetch or render
      */
     static shouldRenderSidebar(props: ContentSidebarProps, file?: BoxItem, editors?: Array<MetadataEditor>): boolean {
@@ -175,6 +176,9 @@ class SidebarUtils {
                 break;
             case SIDEBAR_VIEW_ACTIVITY:
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "activity-sidebar" */ './ActivitySidebar');
+                break;
+            case SIDEBAR_VIEW_VERSIONS:
+                importFn = import(/* webpackMode: "lazy", webpackChunkName: "versions-sidebar" */ './versions');
                 break;
             default:
                 return Promise.resolve(null);
