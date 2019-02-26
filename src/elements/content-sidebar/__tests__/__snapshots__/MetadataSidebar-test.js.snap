@@ -3,6 +3,7 @@
 exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadata sidebar component when instances and templates are available 1`] = `
 <SidebarContent
   actions={null}
+  className="bcs-metadata"
   title={
     <FormattedMessage
       defaultMessage="Metadata"
@@ -31,6 +32,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
 exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadata sidebar component with empty content when instances are empty 1`] = `
 <SidebarContent
   actions={null}
+  className="bcs-metadata"
   title={
     <FormattedMessage
       defaultMessage="Metadata"
@@ -64,6 +66,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
       }
     />
   }
+  className="bcs-metadata"
   title={
     <FormattedMessage
       defaultMessage="Metadata"
@@ -92,6 +95,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
 exports[`elements/content-sidebar/Metadata/MetadataSidebar should render error when there was an error 1`] = `
 <SidebarContent
   actions={null}
+  className="bcs-metadata"
   title={
     <FormattedMessage
       defaultMessage="Metadata"
@@ -115,6 +119,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render error w
 exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading indicator component when file is not available 1`] = `
 <SidebarContent
   actions={null}
+  className="bcs-metadata"
   title={
     <FormattedMessage
       defaultMessage="Metadata"
@@ -129,6 +134,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading
 exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading indicator component when instances are not available 1`] = `
 <SidebarContent
   actions={null}
+  className="bcs-metadata"
   title={
     <FormattedMessage
       defaultMessage="Metadata"
@@ -143,6 +149,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading
 exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading indicator component when templates are not available 1`] = `
 <SidebarContent
   actions={null}
+  className="bcs-metadata"
   title={
     <FormattedMessage
       defaultMessage="Metadata"

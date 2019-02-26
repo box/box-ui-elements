@@ -6,34 +6,48 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import PlainButton from '../../components/plain-button/PlainButton';
+import { Route } from 'react-router-dom';
+import PlainButton from '../../components/plain-button';
 import Tooltip from '../../components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
 
 type Props = {
     children: React.Node,
     interactionTarget: string,
-    isSelected: boolean,
-    onClick: Function,
+    onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
+    sidebarView: string,
     tooltip: React.Node,
 };
 
-const SidebarNavButton = ({ tooltip, isSelected, onClick, interactionTarget, children }: Props) => {
-    const buttonClass = classNames('bcs-nav-btn', {
-        'bcs-nav-btn-is-selected': isSelected,
-    });
+const SidebarNavButton = ({ children, interactionTarget, onNavigate, sidebarView, tooltip }: Props) => {
+    const linkPath = `/${sidebarView}`;
 
     return (
         <Tooltip position="middle-left" text={tooltip}>
-            <PlainButton
-                className={buttonClass}
-                data-resin-target={interactionTarget}
-                data-testid={interactionTarget}
-                onClick={onClick}
-                type="button"
-            >
-                {children}
-            </PlainButton>
+            <Route path={linkPath}>
+                {({ history, location, match }) => (
+                    <PlainButton
+                        className={classNames('bcs-nav-btn', {
+                            'bcs-nav-btn-is-selected': match,
+                        })}
+                        data-resin-target={interactionTarget}
+                        data-testid={interactionTarget}
+                        onClick={event => {
+                            const isToggle = location.pathname === linkPath;
+                            const method = isToggle ? history.replace : history.push;
+
+                            if (onNavigate) {
+                                onNavigate(event, { isToggle });
+                            }
+
+                            method({ pathname: linkPath });
+                        }}
+                        type="button"
+                    >
+                        {children}
+                    </PlainButton>
+                )}
+            </Route>
         </Tooltip>
     );
 };
