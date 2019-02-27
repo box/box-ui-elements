@@ -128,6 +128,7 @@ type State = {
 
 class UnifiedShareModal extends React.Component<Props, State> {
     static defaultProps = {
+        focusSharedLinkOnLoad: false,
         trackingProps: {
             inviteCollabsEmailTracking: {},
             sharedLinkEmailTracking: {},
@@ -366,6 +367,21 @@ class UnifiedShareModal extends React.Component<Props, State> {
 
     updateEmailSharedLinkContacts = (emailSharedLinkContacts: Array<Contact>) => {
         this.setState({ emailSharedLinkContacts });
+    };
+
+    shouldAutoFocusSharedLink = () => {
+        const { focusSharedLinkOnLoad, sharedLink } = this.props;
+        const { sharedLinkLoaded } = this.state;
+        // if not forcing focus (due to USM being opened from shared link UI)
+        // or not a newly added shared link, return false
+        if (!(focusSharedLinkOnLoad || sharedLink.isNewSharedLink)) {
+            return false;
+        }
+        // otherwise wait until the link data is loaded before focusing
+        if (!sharedLinkLoaded) {
+            return false;
+        }
+        return true;
     };
 
     renderInviteSection() {
@@ -625,7 +641,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
             isInviteSectionExpanded,
             isConfirmModalOpen,
             showCollaboratorList,
-            sharedLinkLoaded,
         } = this.state;
 
         // focus logic at modal level
@@ -635,9 +650,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
                 : '.toggle-simple', // focus on shared link toggle
             ...modalProps,
         };
-
-        const shouldAutoFocus =
-            focusSharedLinkOnLoad === undefined ? sharedLinkLoaded : sharedLinkLoaded && focusSharedLinkOnLoad;
 
         return (
             <div>
@@ -669,7 +681,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
 
                         {!isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList && (
                             <SharedLinkSection
-                                autofocusSharedLink={shouldAutoFocus}
+                                autofocusSharedLink={this.shouldAutoFocusSharedLink()}
                                 triggerCopyOnLoad={focusSharedLinkOnLoad}
                                 changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                                 changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
