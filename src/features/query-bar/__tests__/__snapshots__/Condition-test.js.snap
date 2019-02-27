@@ -79,11 +79,26 @@ exports[`features/query-bar/components/filter/Condition render() should render C
             Object {
               "displayText": "is",
               "type": "string",
-              "value": "is",
+              "value": "=",
+            },
+            Object {
+              "displayText": "is greater than",
+              "type": "string",
+              "value": ">",
+            },
+            Object {
+              "displayText": "is less than",
+              "type": "string",
+              "value": "<",
+            },
+            Object {
+              "displayText": "is not",
+              "type": "string",
+              "value": "!=",
             },
           ]
         }
-        selectedValue="is"
+        selectedValue="="
       />
     </div>
   </div>
@@ -91,7 +106,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     className="condition-value-dropdown-container"
   >
     <ValueField
-      selectedValue=""
+      selectedValue={null}
       updateSelectedField={[Function]}
       updateValueField={[Function]}
       valueKey={null}

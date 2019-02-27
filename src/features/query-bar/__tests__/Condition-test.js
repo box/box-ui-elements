@@ -63,10 +63,10 @@ describe('features/query-bar/components/filter/Condition', () => {
         const valueType = 'string';
 
         test.each`
-            description                    | fieldType     | displayTextType          | keyType
-            ${'should select an operator'} | ${'operator'} | ${'operatorDisplayText'} | ${OPERATOR_KEY}
-            ${'should select a value'}     | ${'value'}    | ${'valueDisplayText'}    | ${VALUE_KEY}
-        `('$description', ({ fieldType, displayTextType, keyType }) => {
+            description                    | fieldType     | keyType
+            ${'should select an operator'} | ${'operator'} | ${OPERATOR_KEY}
+            ${'should select a value'}     | ${'value'}    | ${VALUE_KEY}
+        `('$description', ({ fieldType, keyType }) => {
             const onFieldChange = jest.fn();
             const wrapper = getWrapper({
                 onFieldChange,
@@ -77,14 +77,7 @@ describe('features/query-bar/components/filter/Condition', () => {
                 .at(1)
                 .simulate('change', option, fieldType);
 
-            expect(onFieldChange).toHaveBeenCalledWith(
-                condition,
-                displayText,
-                displayTextType,
-                value,
-                keyType,
-                valueType,
-            );
+            expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType, valueType);
         });
     });
 
@@ -98,26 +91,18 @@ describe('features/query-bar/components/filter/Condition', () => {
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
         const valueType = 'string';
         const keyType = VALUE_KEY;
-        const displayTextType = 'valueDisplayText';
 
         test.each`
-            description                                            | fieldValue          | displayText       | value
-            ${'should enter an empty string into the value field'} | ${stringFieldValue} | ${''}             | ${''}
-            ${'should select a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue} | ${dateFieldValue}
-        `('$description', ({ fieldValue, displayText, value }) => {
+            description                                            | fieldValue          | value
+            ${'should enter an empty string into the value field'} | ${stringFieldValue} | ${''}
+            ${'should select a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue}
+        `('$description', ({ fieldValue, value }) => {
             const onFieldChange = jest.fn();
             const wrapper = getWrapper({ onFieldChange });
 
             wrapper.find('ValueField').prop('updateValueField')(fieldValue);
 
-            expect(onFieldChange).toHaveBeenCalledWith(
-                condition,
-                displayText,
-                displayTextType,
-                value,
-                keyType,
-                valueType,
-            );
+            expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType, valueType);
         });
     });
 
