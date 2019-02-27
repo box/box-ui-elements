@@ -258,13 +258,13 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
                     id={11}
                     name="Akon"
                   >
-                    <div
+                    <span
                       className="bcs-comment-user-name"
                       data-resin-target="activityfeed-profilelink"
                       id={11}
                     >
                       Akon
-                    </div>
+                    </span>
                   </UserLink>
                 </div>
                 <div>
@@ -350,13 +350,13 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
                       key="1-123"
                       name="@Jeezy"
                     >
-                      <div
+                      <span
                         className="bcs-comment-mention"
                         data-resin-target="activityfeed-mentionlink"
                         id="123"
                       >
                         @Jeezy
-                      </div>
+                      </span>
                     </UserLink>
                      
                     <UserLink
@@ -366,13 +366,13 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
                       key="3-123"
                       name="@Kanye West"
                     >
-                      <div
+                      <span
                         className="bcs-comment-mention"
                         data-resin-target="activityfeed-mentionlink"
                         id="10"
                       >
                         @Kanye West
-                      </div>
+                      </span>
                     </UserLink>
                   </div>
                 </CommentText>
@@ -514,13 +514,13 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
                             id={11}
                             name="Akon"
                           >
-                            <div
+                            <span
                               className="bcs-comment-user-name"
                               data-resin-target="activityfeed-profilelink"
                               id={11}
                             >
                               Akon
-                            </div>
+                            </span>
                           </UserLink>
                         </div>
                         <div>
