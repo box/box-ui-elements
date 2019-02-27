@@ -10,7 +10,7 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND, OR, IS } from '../../constants';
+import { AND, OR, COLUMN_OPERATORS } from '../../constants';
 
 import messages from '../../messages';
 
@@ -69,11 +69,12 @@ class FilterButton extends React.Component<Props, State> {
         const { columns } = this.props;
         if (columns) {
             const firstColumn = columns[0];
+            const operatorKey = COLUMN_OPERATORS[firstColumn.type][0].key;
 
             return {
                 columnId: firstColumn.id,
                 id: conditionID,
-                operatorKey: IS,
+                operatorKey,
                 valueKey: null,
                 valueType: firstColumn.type,
             };
@@ -119,22 +120,27 @@ class FilterButton extends React.Component<Props, State> {
         });
 
         const column = columns && columns.find(c => c.id === columnId);
-        const valueType = column && column.type;
 
-        const newCondition = {
-            ...conditionToUpdate,
-            columnId,
-            operatorKey: IS,
-            valueKey: null,
-            valueType,
-        };
+        if (column) {
+            const valueType = column && column.type;
 
-        const newConditions = conditions.slice(0);
-        newConditions[newConditionIndex] = newCondition;
+            const operatorKey = COLUMN_OPERATORS[valueType][0].key;
 
-        this.setState({
-            conditions: newConditions,
-        });
+            const newCondition = {
+                ...conditionToUpdate,
+                columnId,
+                operatorKey,
+                valueKey: null,
+                valueType,
+            };
+
+            const newConditions = conditions.slice(0);
+            newConditions[newConditionIndex] = newCondition;
+
+            this.setState({
+                conditions: newConditions,
+            });
+        }
     };
 
     handleFieldChange = (condition: Object, fieldKey: string | Date, fieldKeyType: string, valueType: string) => {
