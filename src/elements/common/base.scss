@@ -8,8 +8,6 @@
 @import '../../components/notification/Notification';
 
 @mixin be-content {
-    @include reset;
-
     color: $twos;
     letter-spacing: .3px;
     line-height: 20px;
@@ -55,11 +53,14 @@
 }
 
 .be {
-    @include be-content;
+    @include reset;
+
     // links have tag styles
     @import '../../styles/common/links';
     // Forms have tag styles
     @import '../../styles/common/forms';
+
+    @include be-content;
 
     background: $white;
     border: 0 none;
@@ -77,6 +78,7 @@
 .be-modal {
     // This class can be used to applu the base content reset to portalled elements are outside of the .be root
     // Also add the .be class to the inner content to get the rest of the styles
+    @include reset;
     @include be-content;
 }
 
