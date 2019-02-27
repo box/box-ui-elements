@@ -1,5 +1,3 @@
-// /2.0/app_activities?item_id=<FILE_ID>&item_type=file&fields=occurred_at,rendered_text,app,created_by,activity_template&marker=<NEXT_MARKER>&limit=<MY_LIMIT>
-
 /**
  * @flow
  * @file Helper for the box App Activity API
@@ -23,21 +21,21 @@ const APP_ACTIVITY_FIELDS: string = [
     FIELD_RENDERED_TEXT,
 ].join(',');
 
-/**
- * Map an entry from the AppActivity API to an AppActivityItem.
- * occurred_at -> created_at
- *
- * @param {Object} item - A single entry in the AppActivity API entiries list
- */
-function mapAppActivityItem(item: Object): AppActivityItem {
-    const { occurred_at, ...wOutOccurredAt } = item;
-    return {
-        created_at: occurred_at,
-        ...wOutOccurredAt,
-    };
-}
-
 class AppActivity extends MarkerBasedAPI {
+    /**
+     * Map an entry from the AppActivity API to an AppActivityItem.
+     * occurred_at -> created_at
+     *
+     * @param {Object} item - A single entry in the AppActivity API entiries list
+     */
+    mapAppActivityItem(item: Object): AppActivityItem {
+        const { occurred_at, ...rest } = item;
+        return {
+            created_at: occurred_at,
+            ...rest,
+        };
+    }
+
     /**
      * Base API URL for App Activity on a file
      *
@@ -78,15 +76,14 @@ class AppActivity extends MarkerBasedAPI {
     /**
      * Generic success handler
      *
-     * @param {Object} data - the response data
+     * @param {AppActivityItems} data - the response data
      */
-    successHandler = (data: Object): void => {
+    successHandler = ({ entries = [] }: AppActivityItems): void => {
         if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }
 
-        const { entries = [] } = data;
-        const activityEntries = entries.map(mapAppActivityItem);
+        const activityEntries = entries.map(this.mapAppActivityItem);
         this.successCallback({ entries: activityEntries, total_count: activityEntries.length });
     };
 
@@ -129,7 +126,7 @@ class AppActivity extends MarkerBasedAPI {
     }): void {
         this.errorCode = ERROR_CODE_DELETE_APP_ACTIVITY;
 
-        const { id = '' } = file;
+        const { id } = file;
         const { id: appActivityId } = appActivityItem;
 
         this.delete({

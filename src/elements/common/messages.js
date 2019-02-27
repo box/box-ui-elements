@@ -791,7 +791,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     appActivityDeleteErrorMessage: {
         id: 'be.appActivityDeleteErrorMessage',
         description: 'Error message when an app activity deletion fails',
-        defaultMessage: 'There was an error deleting this app activity item.',
+        defaultMessage: 'There was an error deleting this item.',
     },
     deleteLabel: {
         id: 'be.deleteLabel',

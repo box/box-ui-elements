@@ -13,6 +13,20 @@ describe('api/AppActivity', () => {
         appActivity = null;
     });
 
+    describe('mapAppActivityItem()', () => {
+        test('should transform app activity entries to contain created_at instead of occurred_at', () => {
+            const createdAtTime = '123456778';
+            const entry = {
+                occurred_at: createdAtTime,
+            };
+
+            const activityItem = appActivity.mapAppActivityItem(entry);
+
+            expect(activityItem.created_at).toBe(createdAtTime);
+            expect(activityItem.occurred_at).toBeUndefined();
+        });
+    });
+
     describe('getAppActivityUrl()', () => {
         test('should return the base app activity url', () => {
             expect(appActivity.getAppActivityUrl()).toBe('https://api.box.com/2.0/app_activities');
@@ -49,7 +63,7 @@ describe('api/AppActivity', () => {
             appActivity.successCallback = jest.fn();
             appActivity.destroy();
 
-            appActivity.successHandler();
+            appActivity.successHandler({});
 
             expect(appActivity.successCallback).not.toBeCalled();
         });
@@ -65,29 +79,6 @@ describe('api/AppActivity', () => {
             expect(appActivity.successCallback).toBeCalledWith({
                 entries: [],
                 total_count: 0,
-            });
-        });
-
-        test('should transform app activity entries to contain created_at instead of occurred_at', () => {
-            const createdAtTime = '123456778';
-            const data = {
-                entries: [
-                    {
-                        occurred_at: createdAtTime,
-                    },
-                ],
-            };
-            appActivity.successCallback = jest.fn();
-
-            appActivity.successHandler(data);
-
-            expect(appActivity.successCallback).toBeCalledWith({
-                entries: [
-                    {
-                        created_at: createdAtTime,
-                    },
-                ],
-                total_count: 1,
             });
         });
     });
