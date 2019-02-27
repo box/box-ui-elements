@@ -24,9 +24,7 @@ export type ColumnType = {
 export type ConditionType = {
     columnId: string,
     id: number,
-    operatorDisplayText: string,
-    operatorKey: string | null,
-    valueDisplayText: string,
+    operatorKey: string,
     valueKey: string | null,
     valueType: string,
 };

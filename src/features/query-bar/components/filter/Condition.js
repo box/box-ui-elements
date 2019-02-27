@@ -94,11 +94,11 @@ const Condition = ({
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
         return options.map(option => {
-            const { displayName, type } = option;
+            const { displayName, key, type } = option;
             return {
                 displayText: displayName,
                 type, // TODO: valueType
-                value: displayName,
+                value: key || displayName, // we want key from COLUMN_OPERATORs when setting the value of the operator that was selected
             };
         });
     };
@@ -227,7 +227,7 @@ const Condition = ({
     };
 
     const renderOperatorField = () => {
-        const { operatorDisplayText } = condition;
+        const { operatorKey } = condition;
         const columnOperators = getColumnOperators();
         const operatorOptions = getFormattedOptions(columnOperators);
 
@@ -239,7 +239,7 @@ const Condition = ({
                         isDisabled={false}
                         onChange={updateSelectedField}
                         options={operatorOptions}
-                        selectedValue={operatorDisplayText || operatorOptions[0].displayText}
+                        selectedValue={operatorKey}
                     />
                 </div>
             </div>
@@ -247,7 +247,7 @@ const Condition = ({
     };
 
     const renderValueField = () => {
-        const { valueKey, valueType, valueDisplayText } = condition;
+        const { valueKey, valueType } = condition;
 
         const columnOptions = getColumnOptions();
         const valueOptions = getFormattedOptions(columnOptions);
@@ -260,7 +260,7 @@ const Condition = ({
         return (
             <div className={classnames}>
                 <ValueField
-                    selectedValue={valueDisplayText}
+                    selectedValue={valueKey}
                     updateValueField={updateValueField}
                     updateSelectedField={updateSelectedField}
                     valueKey={valueKey}

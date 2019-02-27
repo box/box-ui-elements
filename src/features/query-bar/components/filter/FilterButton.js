@@ -10,7 +10,7 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND, OR } from '../../constants';
+import { AND, OR, IS } from '../../constants';
 
 import messages from '../../messages';
 
@@ -73,9 +73,7 @@ class FilterButton extends React.Component<Props, State> {
             return {
                 columnId: firstColumn.id,
                 id: conditionID,
-                operatorDisplayText: '',
-                operatorKey: 0,
-                valueDisplayText: null,
+                operatorKey: IS,
                 valueKey: null,
                 valueType: firstColumn.type,
             };
@@ -126,9 +124,7 @@ class FilterButton extends React.Component<Props, State> {
         const newCondition = {
             ...conditionToUpdate,
             columnId,
-            operatorDisplayText: '',
-            operatorKey: 0,
-            valueDisplayText: null,
+            operatorKey: IS,
             valueKey: null,
             valueType,
         };
@@ -158,7 +154,6 @@ class FilterButton extends React.Component<Props, State> {
 
         const newCondition = {
             ...conditionToUpdate,
-            [fieldDisplayTextType]: fieldDisplayText,
             [fieldKeyType]: fieldKey,
             valueType,
         };
@@ -204,7 +199,7 @@ class FilterButton extends React.Component<Props, State> {
         const { conditions } = this.state;
         let areAllValid = true;
         conditions.forEach(condition => {
-            if (condition.valueDisplayText === null || condition.valueDisplayText === '') {
+            if (condition.valueKey === null || condition.valueKey === '') {
                 areAllValid = false;
             }
         });
