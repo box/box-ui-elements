@@ -10,19 +10,7 @@ import SingleSelectField from '../../../../components/select-field/SingleSelectF
 import ValueField from './ValueField';
 
 import messages from '../../messages';
-import {
-    AND,
-    COLUMN,
-    COLUMN_OPERATORS,
-    DATE,
-    OPERATOR,
-    OPERATOR_DISPLAY_TEXT,
-    OPERATOR_KEY,
-    OR,
-    VALUE,
-    VALUE_DISPLAY_TEXT,
-    VALUE_KEY,
-} from '../../constants';
+import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OPERATOR_KEY, OR, VALUE, VALUE_KEY } from '../../constants';
 import type { ColumnType, ConnectorType, OptionType } from '../../flowTypes';
 
 import '../../styles/Condition.scss';
@@ -35,14 +23,7 @@ type Props = {
     index: number,
     onColumnChange: (condition: Object, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onFieldChange: (
-        condition: Object,
-        fieldDisplayText: string | Date,
-        fieldDisplayTextType: string,
-        fieldKey: string | Date,
-        fieldKeyType: string,
-        valueType: any,
-    ) => void,
+    onFieldChange: (condition: Object, fieldKey: string | Date, fieldKeyType: string, valueType: any) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -71,25 +52,22 @@ const Condition = ({
     };
 
     const updateSelectedField = (option: OptionType, fieldType?: string) => {
-        const { displayText, type, value } = option;
+        const { type, value } = option;
 
-        let displayTextType = '';
         let keyType = '';
 
         switch (fieldType) {
             case OPERATOR:
-                displayTextType = OPERATOR_DISPLAY_TEXT;
                 keyType = OPERATOR_KEY;
                 break;
             case VALUE:
-                displayTextType = VALUE_DISPLAY_TEXT;
                 keyType = VALUE_KEY;
                 break;
             default:
                 throw new Error('invalid input');
         }
 
-        onFieldChange(condition, displayText, displayTextType, value, keyType, type);
+        onFieldChange(condition, value, keyType, type);
     };
 
     const getFormattedOptions = (options: Array<Object>): any[] => {
@@ -129,22 +107,18 @@ const Condition = ({
 
     const updateValueField = (fieldValue: Object) => {
         const { valueType } = condition;
-        let displayText = '';
-        const displayTextType = VALUE_DISPLAY_TEXT;
 
         let value = '';
         const keyType = VALUE_KEY;
 
         if (!fieldValue || !fieldValue.target) {
-            displayText = fieldValue;
             value = fieldValue;
         } else {
             const { target } = fieldValue;
-            displayText = target.value;
             value = target.value;
         }
 
-        onFieldChange(condition, displayText, displayTextType, value, keyType, valueType);
+        onFieldChange(condition, value, keyType, valueType);
     };
 
     const getErrorMessage = () => {

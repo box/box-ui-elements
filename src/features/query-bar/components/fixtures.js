@@ -1,12 +1,11 @@
 // @flow
 import type { ColumnType, ConditionType } from '../flowTypes';
+import { IS } from '../constants';
 
 const initialCondition: ConditionType = {
     columnId: '3',
     id: 0,
-    operatorDisplayText: '',
-    operatorKey: null,
-    valueDisplayText: '',
+    operatorKey: IS,
     valueKey: null,
     valueType: 'string',
 };

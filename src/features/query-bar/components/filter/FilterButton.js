@@ -137,14 +137,7 @@ class FilterButton extends React.Component<Props, State> {
         });
     };
 
-    handleFieldChange = (
-        condition: Object,
-        fieldDisplayText: string | Date,
-        fieldDisplayTextType: string,
-        fieldKey: string | Date,
-        fieldKeyType: string,
-        valueType: string,
-    ) => {
+    handleFieldChange = (condition: Object, fieldKey: string | Date, fieldKeyType: string, valueType: string) => {
         const { conditions } = this.state;
         let newConditionIndex = 0;
         const conditionToUpdate = conditions.find((currentCondition, index) => {
