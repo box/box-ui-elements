@@ -47,7 +47,7 @@ describe('features/query-bar/components/filter/Condition', () => {
                 .at(0)
                 .simulate('change', option);
 
-            expect(onColumnChange).toHaveBeenCalledWith(condition, columnId, option.type);
+            expect(onColumnChange).toHaveBeenCalledWith(condition, columnId);
         });
     });
 
