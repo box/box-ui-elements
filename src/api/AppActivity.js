@@ -4,22 +4,8 @@
  * @author Box
  */
 import MarkerBasedAPI from './MarkerBasedAPI';
-import {
-    ERROR_CODE_DELETE_APP_ACTIVITY,
-    FIELD_ACTIVITY_TEMPLATE,
-    FIELD_APP,
-    FIELD_CREATED_BY,
-    FIELD_OCCURRED_AT,
-    FIELD_RENDERED_TEXT,
-} from '../constants';
-
-const APP_ACTIVITY_FIELDS: string = [
-    FIELD_ACTIVITY_TEMPLATE,
-    FIELD_APP,
-    FIELD_CREATED_BY,
-    FIELD_OCCURRED_AT,
-    FIELD_RENDERED_TEXT,
-].join(',');
+import { ERROR_CODE_DELETE_APP_ACTIVITY } from '../constants';
+import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../utils/fields';
 
 class AppActivity extends MarkerBasedAPI {
     /**
@@ -56,7 +42,9 @@ class AppActivity extends MarkerBasedAPI {
             throw new Error('Missing file id!');
         }
 
-        return `${this.getAppActivityUrl(id)}?item_id=${id}&item_type=file&fields=${APP_ACTIVITY_FIELDS}`;
+        return `${this.getAppActivityUrl(
+            id,
+        )}?item_id=${id}&item_type=file&fields=${APP_ACTIVITY_FIELDS_TO_FETCH.toString()}`;
     }
 
     /**

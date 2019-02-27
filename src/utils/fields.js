@@ -46,6 +46,10 @@ import {
     FIELD_ASSIGNED_TO,
     FIELD_RESTORED_FROM,
     FIELD_STATUS,
+    FIELD_ACTIVITY_TEMPLATE,
+    FIELD_APP,
+    FIELD_OCCURRED_AT,
+    FIELD_RENDERED_TEXT,
     PLACEHOLDER_USER,
 } from '../constants';
 
@@ -144,6 +148,15 @@ const COMMENTS_FIELDS_TO_FETCH = [
 // Fields that represent users
 const USER_FIELDS = [FIELD_CREATED_BY, FIELD_MODIFIED_BY, FIELD_OWNED_BY, FIELD_ASSIGNED_TO];
 
+// Fields required to fetch ap activity
+const APP_ACTIVITY_FIELDS_TO_FETCH = [
+    FIELD_ACTIVITY_TEMPLATE,
+    FIELD_APP,
+    FIELD_CREATED_BY,
+    FIELD_OCCURRED_AT,
+    FIELD_RENDERED_TEXT,
+];
+
 /**
  * Finds properties missing in an object
  *
@@ -202,6 +215,7 @@ function fillUserPlaceholder(obj: Object): Object {
 }
 
 export {
+    APP_ACTIVITY_FIELDS_TO_FETCH,
     FOLDER_FIELDS_TO_FETCH,
     PREVIEW_FIELDS_TO_FETCH,
     SIDEBAR_FIELDS_TO_FETCH,
