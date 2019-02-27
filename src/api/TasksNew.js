@@ -13,6 +13,12 @@ import {
     API_PAGE_LIMIT,
 } from '../constants';
 
+// microservices need different headers than other APIs
+const headers = {
+    Accept: 'application/json;version=1',
+    'Content-Type': 'application/vnd.box+json;version=v2',
+};
+
 class TasksNew extends Base {
     getUrlForFileTasks(id: string): string {
         return `${this.getBaseApiUrl()}/undoc/inbox?task_link_target_type=FILE&task_link_target_id=${id}&limit=${API_PAGE_LIMIT}`;
@@ -42,7 +48,7 @@ class TasksNew extends Base {
         this.post({
             id: file.id,
             url: this.getUrlForTaskCreate(),
-            data: { data: { ...task } },
+            data: { data: { ...task }, headers },
             successCallback,
             errorCallback,
         });
@@ -64,7 +70,7 @@ class TasksNew extends Base {
         this.put({
             id: file.id,
             url: this.getUrlForTask(task.id),
-            data: { data: { ...task } },
+            data: { data: { ...task }, headers },
             successCallback,
             errorCallback,
         });
@@ -104,6 +110,7 @@ class TasksNew extends Base {
         this.get({
             id: file.id,
             url: this.getUrlForFileTasks(file.id),
+            requestData: { headers },
             successCallback,
             errorCallback,
         });
