@@ -984,7 +984,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        const { id: activityItemId } = appActivityItem.id;
+        const { id: activityItemId } = appActivityItem;
         this.id = file.id;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, activityItemId);
