@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import { columns } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
+import { IS, LESS_THAN } from '../constants';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
@@ -29,9 +30,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '3',
-                    operatorDisplayText: '',
-                    operatorKey: 0,
-                    valueDisplayText: null,
+                    operatorKey: IS,
                     valueKey: null,
                     valueType: 'string',
                 },
@@ -39,9 +38,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     {
                         columnId: '1',
                         id: '3',
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: null,
+                        operatorKey: IS,
                         valueKey: null,
                         valueType: 'string',
                     },
@@ -50,9 +47,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     {
                         columnId: '2',
                         id: '3',
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: null,
+                        operatorKey: IS,
                         valueKey: null,
                         valueType: 'string',
                     },
@@ -78,33 +73,29 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '4',
-                    operatorDisplayText: '',
-                    operatorKey: 0,
-                    valueDisplayText: null,
+                    operatorKey: IS,
                     valueKey: null,
+                    valueType: null,
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '4',
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: null,
+                        operatorKey: IS,
                         valueKey: null,
+                        valueType: null,
                     },
                 ],
-                fieldDisplayText: 'myOperator',
-                fieldDisplayTextType: 'operatorDisplayText',
-                fieldKey: 0,
+                fieldKey: LESS_THAN,
                 fieldKeyType: 'operatorKey',
+                valueType: null,
                 newCondition: [
                     {
                         columnId: '1',
                         id: '4',
-                        operatorDisplayText: 'myOperator',
-                        operatorKey: 0,
-                        valueDisplayText: null,
+                        operatorKey: LESS_THAN,
                         valueKey: null,
+                        valueType: null,
                     },
                 ],
             },
@@ -114,23 +105,19 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '5',
-                    operatorDisplayText: '',
-                    operatorKey: 0,
-                    valueDisplayText: null,
+                    operatorKey: IS,
                     valueKey: null,
+                    valueType: null,
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '5',
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: null,
+                        operatorKey: IS,
                         valueKey: null,
+                        valueType: null,
                     },
                 ],
-                fieldDisplayText: 'myValue',
-                fieldDisplayTextType: 'valueDisplayText',
                 fieldKey: 0,
                 fieldKeyType: 'valueKey',
                 valueType: 'string',
@@ -138,46 +125,23 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     {
                         columnId: '1',
                         id: '5',
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: 'myValue',
+                        operatorKey: IS,
                         valueKey: 0,
                         valueType: 'string',
                     },
                 ],
             },
-        ].forEach(
-            ({
-                description,
-                condition,
-                conditions,
-                fieldDisplayText,
-                fieldDisplayTextType,
-                fieldKey,
-                fieldKeyType,
-                newCondition,
-                valueType,
-            }) => {
-                test(`${description}`, () => {
-                    const wrapper = getWrapper();
-                    wrapper.setState({
-                        conditions,
-                    });
-                    wrapper
-                        .instance()
-                        .handleFieldChange(
-                            condition,
-                            fieldDisplayText,
-                            fieldDisplayTextType,
-                            fieldKey,
-                            fieldKeyType,
-                            valueType,
-                        );
-
-                    expect(wrapper.state('conditions')).toEqual(newCondition);
+        ].forEach(({ description, condition, conditions, fieldKey, fieldKeyType, newCondition, valueType }) => {
+            test(`${description}`, () => {
+                const wrapper = getWrapper();
+                wrapper.setState({
+                    conditions,
                 });
-            },
-        );
+                wrapper.instance().handleFieldChange(condition, fieldKey, fieldKeyType, valueType);
+
+                expect(wrapper.state('conditions')).toEqual(newCondition);
+            });
+        });
     });
 
     describe('deleteCondition()', () => {
@@ -285,9 +249,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const expected = {
                 columnId: '1',
                 id: conditionID,
-                operatorDisplayText: '',
-                operatorKey: 0,
-                valueDisplayText: null,
+                operatorKey: IS,
                 valueKey: null,
                 valueType: 'string',
             };
