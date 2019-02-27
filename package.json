@@ -89,7 +89,10 @@
         "linters": {
             "*.js": ["eslint --fix", "git add"],
             "*.md": ["prettier --write --parser=markdown", "git add"],
-            "*.json": ["prettier --write --parser=json", "git add"]
+            "*.json": ["prettier --write --parser=json", "git add"],
+            "*.html": ["prettier --write --parser=html", "git add"],
+            "*.scss": ["prettier --write --parser=scss", "stylelint --syntax scss --fix", "git add"],
+            "*.css": ["prettier --write --parser=css", "stylelint --syntax css --fix", "git add"]
         }
     },
     "husky": {
@@ -137,7 +140,7 @@
         "@babel/preset-react": "^7.0.0",
         "@babel/template": "^7.0.0",
         "@babel/types": "^7.0.0",
-        "@box/frontend": "^1.0.0",
+        "@box/frontend": "^1.1.1",
         "@box/languages": "^1.0.0",
         "@commitlint/cli": "^7.2.1",
         "@commitlint/config-conventional": "^7.1.2",
@@ -167,8 +170,8 @@
         "cypress": "^3.1.5",
         "deepmerge": "^2.1.1",
         "draft-js": "^0.10.1",
-        "enzyme": "^3.6.0",
-        "enzyme-adapter-react-16": "^1.5.0",
+        "enzyme": "3.8.0",
+        "enzyme-adapter-react-16": "^1.10.0",
         "enzyme-to-json": "^3.3.4",
         "eslint": "^4.19.1",
         "eslint-config-airbnb": "^17.1.0",
