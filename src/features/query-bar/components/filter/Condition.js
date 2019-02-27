@@ -33,7 +33,7 @@ type Props = {
     condition: Object,
     deleteCondition: (index: number) => void,
     index: number,
-    onColumnChange: (condition: Object, columnId: string, valueType: any) => void,
+    onColumnChange: (condition: Object, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
     onFieldChange: (
         condition: Object,
@@ -65,9 +65,9 @@ const Condition = ({
     };
 
     const updateColumnField = (option: OptionType) => {
-        const { type, value: columnId } = option;
+        const { value: columnId } = option;
 
-        onColumnChange(condition, columnId, type);
+        onColumnChange(condition, columnId);
     };
 
     const updateSelectedField = (option: OptionType, fieldType?: string) => {

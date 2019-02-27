@@ -33,7 +33,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     operatorKey: 0,
                     valueDisplayText: null,
                     valueKey: null,
-                    valueType: null,
+                    valueType: 'string',
                 },
                 conditions: [
                     {
@@ -43,10 +43,9 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         operatorKey: 0,
                         valueDisplayText: null,
                         valueKey: null,
-                        valueType: null,
+                        valueType: 'string',
                     },
                 ],
-                valueType: 'string',
                 newCondition: [
                     {
                         columnId: '2',
@@ -59,13 +58,13 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, columnId, condition, conditions, newCondition, valueType }) => {
+        ].forEach(({ description, columnId, condition, conditions, newCondition }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleColumnChange(condition, columnId, valueType);
+                wrapper.instance().handleColumnChange(condition, columnId);
 
                 expect(wrapper.state('conditions')).toEqual(newCondition);
             });

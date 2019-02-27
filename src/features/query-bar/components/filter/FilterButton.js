@@ -111,13 +111,17 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleColumnChange = (condition: Object, columnId: string, valueType: string) => {
+    handleColumnChange = (condition: Object, columnId: string) => {
+        const { columns } = this.props;
         const { conditions } = this.state;
         let newConditionIndex = 0;
         const conditionToUpdate = conditions.find((currentCondition, index) => {
             newConditionIndex = index;
             return currentCondition.id === condition.id;
         });
+
+        const column = columns && columns.find(c => c.id === columnId);
+        const valueType = column && column.type;
 
         const newCondition = {
             ...conditionToUpdate,
