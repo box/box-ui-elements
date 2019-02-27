@@ -1,5 +1,8 @@
 @import '../../../common/variables';
 
+$success-color: $shady-acres;
+$error-color: $red;
+
 .be .bcs-task {
     .bcs-task-assignment-container {
         margin-left: 40px;
@@ -12,6 +15,10 @@
 
         span:first-child {
             padding-right: 3px;
+        }
+
+        &.bcs-task-overdue {
+            color: $error-color;
         }
     }
 
@@ -60,18 +67,62 @@
         }
 
         &.completed,
-        &.approved {
-            background: $shady-acres;
+        &.approved,
+        &.COMPLETED,
+        &.APPROVED {
+            background: $success-color;
         }
 
-        &.rejected {
-            background: $red;
+        &.rejected,
+        &.REJECTED {
+            background: $error-color;
+        }
+    }
+
+    .bcs-task-status {
+        align-items: center;
+        display: flex;
+        margin-top: 15px;
+    }
+
+    .bcs-task-status-icon {
+        background: $grey;
+        border: 1px solid $white;
+        border-radius: 100%;
+        bottom: 0;
+        height: 14px;
+        margin-right: 5px;
+        width: 14px;
+
+        .fill-color {
+            fill: $white;
+        }
+
+        &.completed,
+        &.approved,
+        &.COMPLETED,
+        &.APPROVED {
+            background: $success-color;
+        }
+
+        &.rejected,
+        &.REJECTED {
+            background: $error-color;
         }
 
         &.pending,
-        &.incomplete, {
-            background: $grey;
-            border: none; // icon has border
+        &.incomplete,
+        &.not_started,
+        &.PENDING,
+        &.INCOMPLETE,
+        &.NOT_STARTED {
+            align-items: center;
+            background: #bdc3c7;
+            color: white;
+            display: flex;
+            font-size: 80%;
+            font-weight: bold;
+            justify-content: center;
         }
     }
 

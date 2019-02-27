@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import ActiveState from '../ActiveState';
 import Task from '../../task/Task';
@@ -64,7 +64,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     });
 
     test('should correctly render with comments, tasks, versions', () => {
-        const wrapper = shallow(<ActiveState items={items} />).dive();
+        const wrapper = mount(<ActiveState items={items} />);
         expect(wrapper).toMatchSnapshot();
         expect(wrapper.find(Task)).toHaveLength(1);
     });

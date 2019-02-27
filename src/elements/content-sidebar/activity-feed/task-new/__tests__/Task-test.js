@@ -16,78 +16,106 @@ const allHandlers = {
 };
 
 const approverSelectorContacts = [];
-const mentionSelectorContacts = [];
 
-describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
-    const currentUser = { name: 'Jake Thomas', id: 1 };
-    const otherUser = { name: 'Patrick Paul', id: 3 };
+describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
+    const currentUser = { name: 'Jake Thomas', id: '1', type: 'user' };
+    const otherUser = { name: 'Patrick Paul', id: '3', type: 'user' };
 
     const task = {
-        created_at: 12345678,
-        created_by: currentUser,
-        due_at: 87654321,
-        id: '123125',
-        message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-        modified_by: { name: 'Tarrence van As', id: 10 },
-        task_assignment_collection: {
-            total_count: 2,
+        assigned_to: {
             entries: [
                 {
-                    id: 0,
-                    assigned_to: { name: 'Jake Thomas', id: 1 },
-                    status: 'incomplete',
+                    id: 'current-user-assignment-id',
+                    target: currentUser,
+                    status: 'NOT_STARTED',
+                    role: 'ASSIGNEE',
+                    permissions: {
+                        can_update: true,
+                        can_delete: true,
+                    },
+                    type: 'task_collaborator',
                 },
                 {
-                    id: 1,
-                    assigned_to: { name: 'Peter Pan', id: 2 },
-                    status: 'completed',
+                    id: 'other-user-assignment-id',
+                    target: otherUser,
+                    status: 'COMPLETED',
+                    role: 'ASSIGNEE',
+                    permissions: {
+                        can_update: true,
+                        can_delete: true,
+                    },
+                    type: 'task_collaborator',
                 },
             ],
+            limit: 10,
+            next_marker: null,
         },
+        created_at: '2010-01-01',
+        created_by: { id: '0', target: currentUser, role: 'CREATOR', status: 'NOT_STARTED', type: 'task_collaborator' },
+        due_at: null,
+        id: '123125',
+        name: 'This is where we tell each other what we need to do',
+        status: 'NOT_STARTED',
+        permissions: {
+            can_update: true,
+            can_delete: true,
+            can_create_task_collaborator: true,
+            can_create_task_link: true,
+        },
+        task_links: {
+            entries: [],
+            limit: 1000,
+            next_marker: null,
+        },
+        type: 'task',
     };
 
     test('should correctly render task', () => {
         const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
-
-        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_edit).toBe(true);
-        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_delete).toBe(true);
-        expect(wrapper.hasClass('bcs-task')).toBe(true);
-        expect(wrapper.find('mock-comment').length).toEqual(1);
-        expect(
-            wrapper
-                .find('.bcs-task-assignees')
-                .children()
-                .getElements().length,
-        ).toEqual(2);
-        expect(wrapper.find('.bcs-task-due-date').length).toEqual(1);
-
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render a pending task for task creators', () => {
+    test('should show assignment status badges for each assignee', () => {
+        const wrapper = mount(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('[data-testid="task-assignment-status"]')).toHaveLength(2);
+    });
+
+    test('should not show due date container if not set', () => {
+        const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
+        expect(wrapper.find('[data-testid="task-due-date"]')).toHaveLength(0);
+    });
+
+    test('should show due date if set', () => {
+        const wrapper = shallow(
+            <Task
+                currentUser={currentUser}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+                {...task}
+                due_at={new Date() + 1000}
+            />,
+        );
+        expect(wrapper.find('[data-testid="task-due-date"]')).toHaveLength(1);
+    });
+
+    test('due date should have overdue class if task is incomplete and due date is in past', () => {
+        const wrapper = shallow(
+            <Task
+                currentUser={currentUser}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+                {...task}
+                due_at={new Date() - 1000}
+            />,
+        );
+        expect(wrapper.find('.bcs-task-overdue')).toHaveLength(1);
+    });
+
+    test('should add pending class for isPending prop', () => {
+        // this is for optimistic UI updates in the activity feed card list
         const myTask = {
-            created_at: Date.now(),
-            created_by: currentUser,
-            due_at: Date.now(),
-            id: '123125',
-            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            modified_by: { name: 'Tarrence van As', id: 10 },
-            task_assignment_collection: {
-                total_count: 2,
-                entries: [
-                    {
-                        id: 0,
-                        assigned_to: { name: 'Jake Thomas', id: 1 },
-                        status: 'incomplete',
-                    },
-                    {
-                        id: 1,
-                        assigned_to: { name: 'Peter Pan', id: 2 },
-                        status: 'completed',
-                    },
-                    ``,
-                ],
-            },
+            ...task,
             isPending: true,
         };
 
@@ -95,116 +123,64 @@ describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
         expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
     });
 
-    test('should show actions for current user and if onAssignmentUpdate is defined', () => {
-        task.isPending = false;
-        const wrapper = shallow(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
-
-        expect(
-            wrapper
-                .find('.bcs-task-assignees')
-                .children()
-                .getElements()[0].props.shouldShowActions,
-        ).toBe(true);
-        expect(
-            !!wrapper
-                .find('.bcs-task-assignees')
-                .children()
-                .getElements()[1].props.shouldShowActions,
-        ).toBe(false);
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should show tooltips when actions are shown', () => {
-        const wrapper = mount(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
-        const assignment = shallow(
-            wrapper
-                .find('.bcs-task-assignees')
-                .children()
-                .getElements()[0],
+    test('should show actions when current user is assigned and task is incomplete', () => {
+        const wrapper = shallow(
+            <Task currentUser={currentUser} {...task} isPending={false} onAssignmentUpdate={jest.fn()} />,
         );
 
-        expect(assignment).toMatchSnapshot();
+        expect(wrapper.find('TaskActions')).toHaveLength(1);
     });
 
-    test('should not show actions for current user if onAssignmentUpdate is not defined', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} {...task} />);
-
-        expect(
-            !!wrapper
-                .find('.bcs-task-assignees')
-                .children()
-                .getElements()[0].props.shouldShowActions,
-        ).toBe(false);
-    });
-
-    test('should call onAssignmentUpdate with approved status when check is clicked', () => {
-        const onAssignmentUpdateSpy = jest.fn();
-        const wrapper = mount(
+    test('should not show actions when current user is assigned and task is complete', () => {
+        const wrapper = shallow(
             <Task
                 currentUser={currentUser}
                 {...task}
+                isPending={false}
+                onAssignmentUpdate={jest.fn()}
+                status="COMPLETED"
+            />,
+        );
+
+        expect(wrapper.find('TaskActions')).toHaveLength(0);
+    });
+
+    test('should not show actions when current user is not assigned', () => {
+        const wrapper = shallow(
+            <Task
+                currentUser={{ ...currentUser, id: 'something-else-1' }}
+                {...task}
+                isPending={false}
+                onAssignmentUpdate={jest.fn()}
+            />,
+        );
+
+        expect(wrapper.find('TaskActions')).toHaveLength(0);
+    });
+
+    test('should call onAssignmentUpdate with completed status when task action complete is clicked', () => {
+        const onAssignmentUpdateSpy = jest.fn();
+        const wrapper = mount(
+            <Task
+                {...task}
+                currentUser={currentUser}
                 onAssignmentUpdate={onAssignmentUpdateSpy}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
             />,
         );
 
         const checkButton = wrapper.find('.bcs-task-check-btn').hostNodes();
         checkButton.simulate('click');
 
-        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'approved');
-    });
-
-    test('should call onAssignmentUpdate with rejected status when check is clicked', () => {
-        const onAssignmentUpdateSpy = jest.fn();
-        const wrapper = mount(
-            <Task
-                currentUser={currentUser}
-                {...task}
-                onAssignmentUpdate={onAssignmentUpdateSpy}
-                approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
-            />,
-        );
-
-        const checkButton = wrapper.find('.bcs-task-x-btn').hostNodes();
-        checkButton.simulate('click');
-
-        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'rejected');
+        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 'current-user-assignment-id', 'COMPLETED');
     });
 
     test('should not allow user to delete if they are not the task creator', () => {
-        const myTask = {
-            created_at: Date.now(),
-            created_by: otherUser,
-            due_at: Date.now(),
-            id: '123125',
-            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            modified_by: { name: 'Tarrence van As', id: 10 },
-            task_assignment_collection: {
-                total_count: 2,
-                entries: [
-                    {
-                        id: 0,
-                        assigned_to: { name: 'Jake Thomas', id: 1 },
-                        status: 'incomplete',
-                    },
-                    {
-                        id: 1,
-                        assigned_to: { name: 'Peter Pan', id: 2 },
-                        status: 'completed',
-                    },
-                ],
-            },
-        };
-
         const wrapper = shallow(
             <Task
-                {...myTask}
-                currentUser={currentUser}
+                {...task}
+                currentUser={otherUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
             />,
@@ -214,52 +190,16 @@ describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
     });
 
     test('should not allow user to edit if they are not the task creator', () => {
-        const myTask = {
-            created_at: Date.now(),
-            created_by: otherUser,
-            due_at: Date.now(),
-            id: '123125',
-            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            modified_by: { name: 'Tarrence van As', id: 10 },
-            task_assignment_collection: {
-                total_count: 2,
-                entries: [
-                    {
-                        id: 0,
-                        assigned_to: { name: 'Jake Thomas', id: 1 },
-                        status: 'incomplete',
-                    },
-                    {
-                        id: 1,
-                        assigned_to: { name: 'Peter Pan', id: 2 },
-                        status: 'completed',
-                    },
-                ],
-            },
-        };
-
         const wrapper = mount(
             <Task
-                {...myTask}
-                currentUser={currentUser}
+                {...task}
+                currentUser={otherUser}
                 approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
             />,
         );
 
         expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_edit).toBe(false);
-    });
-
-    test('should not render due date when not passed in', () => {
-        const taskWithNoDueDate = {
-            ...task,
-            due_at: null,
-        };
-
-        const wrapper = shallow(<Task currentUser={currentUser} {...taskWithNoDueDate} />);
-
-        expect(wrapper).toMatchSnapshot();
     });
 });

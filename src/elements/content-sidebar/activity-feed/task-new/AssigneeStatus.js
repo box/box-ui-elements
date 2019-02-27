@@ -1,12 +1,8 @@
-/**
- * @flow
- * @file CompletedAssignment component
- */
-
+// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import IconClose from '../../../../icons/general/IconClose';
 import IconCheck from '../../../../icons/general/IconCheck';
+import IconReject from '../../../../icons/general/IconClose';
 import Avatar from '../Avatar';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_INCOMPLETE } from '../../../../constants';
 import messages from '../../../common/messages';
@@ -23,15 +19,15 @@ const StatusIcon = ({ status, ...rest }: { status: TaskStatus }) => {
         case TASK_NEW_COMPLETED:
             return <IconCheck {...rest} />;
         case TASK_NEW_REJECTED:
-            return <IconClose {...rest} />;
+            return <IconReject {...rest} />;
         case TASK_NEW_INCOMPLETE:
         default:
             return null;
     }
 };
 
-const AssignmentStatus = ({ user, status, getAvatarUrl }: Props): React.Node => (
-    <div className="bcs-task-assignment-status">
+const AssignmentStatus = React.memo<Props>(({ user, status, getAvatarUrl, ...rest }: Props) => (
+    <div className="bcs-task-assignment-status" {...rest}>
         <Avatar className="bcs-task-assignment-avatar" user={user} getAvatarUrl={getAvatarUrl} />
         <StatusIcon
             status={status}
@@ -41,6 +37,6 @@ const AssignmentStatus = ({ user, status, getAvatarUrl }: Props): React.Node => 
             title={<FormattedMessage {...messages.completedAssignment} />}
         />
     </div>
-);
+));
 
 export default AssignmentStatus;

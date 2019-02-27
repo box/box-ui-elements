@@ -19,6 +19,7 @@ module.exports = {
         'react/no-access-state-in-setstate': 'off', // fixme
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
+        'valid-jsdoc': 1,
     },
     globals: {
         shallow: true,

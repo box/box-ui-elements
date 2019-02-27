@@ -692,6 +692,8 @@ describe('elements/content-preview/ContentPreview', () => {
             instance.loadPreview = jest.fn();
         });
 
+        // Test fails in enzyme@3.9.0 due to regression
+        // https://github.com/airbnb/enzyme/issues/2020
         test('should destroy preview and load the file if file id changed', () => {
             wrapper.setProps({
                 fileId: 'bar',

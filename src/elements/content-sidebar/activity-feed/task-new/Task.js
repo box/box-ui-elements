@@ -1,8 +1,4 @@
-/**
- * @flow
- * @file Tasks component
- */
-
+// @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { FormattedTime, FormattedMessage } from 'react-intl';
@@ -12,7 +8,8 @@ import messages from '../../../common/messages';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_INCOMPLETE, TASK_NEW_COMPLETED } from '../../../../constants';
 import Comment from '../comment';
 import AssigneeStatus from './AssigneeStatus';
-import PendingAssignment from './PendingAssignment';
+import TaskActions from './TaskActions';
+import Status from './TaskStatus';
 import './Task.scss';
 
 type Props = {
@@ -34,7 +31,7 @@ type Props = {
 
 const MAX_AVATARS = 3;
 
-// eslint-disable-next-line
+// eslint-disable-next-line react/prefer-stateless-function
 class Task extends React.Component<Props> {
     render(): React.Node {
         const {
@@ -50,6 +47,7 @@ class Task extends React.Component<Props> {
             onEdit,
             onAssignmentUpdate = noop,
             name,
+            status,
             translatedTaggedMessage,
             translations,
             getAvatarUrl,
@@ -58,11 +56,10 @@ class Task extends React.Component<Props> {
             mentionSelectorContacts,
         } = this.props;
 
-        const isCommentAuthor = currentUser && created_by && created_by.id === currentUser.id;
-
+        // Enable when edit/delete are implemented for new tasks
         const taskPermissions = {
-            can_edit: isCommentAuthor,
-            can_delete: isCommentAuthor,
+            can_edit: false,
+            can_delete: false,
         };
 
         // // find assignment for current user if permitted
@@ -74,6 +71,7 @@ class Task extends React.Component<Props> {
 
         const assigneeCount = (assigned_to && assigned_to.entries.length) || 0;
         const hiddenAssigneeCount = assigneeCount - MAX_AVATARS;
+        const isOverdue = due_at ? new Date(due_at) < Date.now() : false;
 
         return (
             <div
@@ -103,7 +101,12 @@ class Task extends React.Component<Props> {
                 />
                 <div className="bcs-task-assignment-container">
                     {due_at ? (
-                        <div className="bcs-task-due-date">
+                        <div
+                            className={classNames('bcs-task-due-date', {
+                                'bcs-task-overdue': isOverdue,
+                            })}
+                            data-testid="task-due-date"
+                        >
                             <FormattedMessage {...messages.taskDueDate} />
                             <FormattedTime value={due_at} day="numeric" month="short" year="numeric" />
                         </div>
@@ -113,13 +116,14 @@ class Task extends React.Component<Props> {
                             ? assigned_to.entries
                                   .map(fillUserPlaceholder)
                                   .slice(0, MAX_AVATARS)
-                                  .map(({ id: assignmentId, target, status }) => {
+                                  .map(({ id: assignmentId, target, status: assigneeStatus }) => {
                                       return (
                                           <AssigneeStatus
                                               key={assignmentId}
-                                              status={status}
+                                              status={assigneeStatus}
                                               user={target}
                                               getAvatarUrl={getAvatarUrl}
+                                              data-testid="task-assignment-status"
                                           />
                                       );
                                   })
@@ -130,8 +134,10 @@ class Task extends React.Component<Props> {
                             </span>
                         ) : null}
                     </div>
-                    {currentUserAssignment && currentUserAssignment.status === TASK_NEW_INCOMPLETE ? (
-                        <PendingAssignment
+                    {status === TASK_NEW_INCOMPLETE &&
+                    currentUserAssignment &&
+                    currentUserAssignment.status === TASK_NEW_INCOMPLETE ? (
+                        <TaskActions
                             {...currentUserAssignment}
                             onTaskApproval={
                                 isPending
@@ -149,7 +155,9 @@ class Task extends React.Component<Props> {
                                     : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_COMPLETED)
                             }
                         />
-                    ) : null}
+                    ) : (
+                        <Status status={status} />
+                    )}
                 </div>
             </div>
         );

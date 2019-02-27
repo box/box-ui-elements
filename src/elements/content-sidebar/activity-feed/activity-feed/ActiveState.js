@@ -69,6 +69,7 @@ const ActiveState = ({
                             <FeatureFlag
                                 feature="activityFeed.tasks.newCards"
                                 disabled={() =>
+                                    item.task_assignment_collection &&
                                     item.task_assignment_collection.total_count && (
                                         <li key={type + id} className="bcs-activity-feed-task">
                                             <Task

@@ -26,42 +26,164 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
 `;
 
 exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should correctly render with comments, tasks, versions 1`] = `
-<ul
-  className="bcs-activity-feed-active-state"
+<Component
+  items={
+    Array [
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "id": 123,
+        "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
+        "type": "comment",
+      },
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "dueAt": "2018-07-03T14:43:52-07:00",
+        "id": 234,
+        "modified_at": "2018-07-03T14:43:52-07:00",
+        "modified_by": Object {
+          "id": 10,
+          "name": "Jay-Z",
+        },
+        "tagged_message": "test",
+        "task_assignment_collection": Object {
+          "entries": Array [
+            Object {
+              "assigned_to": Object {
+                "id": 11,
+                "name": "Akon",
+              },
+              "status": "incomplete",
+            },
+          ],
+          "total_count": 1,
+        },
+        "type": "task",
+      },
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "id": 345,
+        "modified_at": "2018-07-03T14:43:52-07:00",
+        "modified_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "trashed_at": "2018-07-03T14:43:52-07:00",
+        "type": "file_version",
+      },
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "dueAt": "2018-07-03T14:43:52-07:00",
+        "id": 234,
+        "modified_at": "2018-07-03T14:43:52-07:00",
+        "modified_by": Object {
+          "id": 10,
+          "name": "Jay-Z",
+        },
+        "tagged_message": "test",
+        "task_assignment_collection": Object {
+          "entries": Array [],
+          "total_count": 0,
+        },
+        "type": "task",
+      },
+    ]
+  }
 >
-  <li
-    className="bcs-activity-feed-comment"
-    key="comment123"
+  <ActiveState
+    items={
+      Array [
+        Object {
+          "created_at": "2018-07-03T14:43:52-07:00",
+          "created_by": Object {
+            "id": 11,
+            "name": "Akon",
+          },
+          "id": 123,
+          "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
+          "type": "comment",
+        },
+        Object {
+          "created_at": "2018-07-03T14:43:52-07:00",
+          "created_by": Object {
+            "id": 11,
+            "name": "Akon",
+          },
+          "dueAt": "2018-07-03T14:43:52-07:00",
+          "id": 234,
+          "modified_at": "2018-07-03T14:43:52-07:00",
+          "modified_by": Object {
+            "id": 10,
+            "name": "Jay-Z",
+          },
+          "tagged_message": "test",
+          "task_assignment_collection": Object {
+            "entries": Array [
+              Object {
+                "assigned_to": Object {
+                  "id": 11,
+                  "name": "Akon",
+                },
+                "status": "incomplete",
+              },
+            ],
+            "total_count": 1,
+          },
+          "type": "task",
+        },
+        Object {
+          "created_at": "2018-07-03T14:43:52-07:00",
+          "id": 345,
+          "modified_at": "2018-07-03T14:43:52-07:00",
+          "modified_by": Object {
+            "id": 11,
+            "name": "Akon",
+          },
+          "trashed_at": "2018-07-03T14:43:52-07:00",
+          "type": "file_version",
+        },
+        Object {
+          "created_at": "2018-07-03T14:43:52-07:00",
+          "created_by": Object {
+            "id": 11,
+            "name": "Akon",
+          },
+          "dueAt": "2018-07-03T14:43:52-07:00",
+          "id": 234,
+          "modified_at": "2018-07-03T14:43:52-07:00",
+          "modified_by": Object {
+            "id": 10,
+            "name": "Jay-Z",
+          },
+          "tagged_message": "test",
+          "task_assignment_collection": Object {
+            "entries": Array [],
+            "total_count": 0,
+          },
+          "type": "task",
+        },
+      ]
+    }
   >
-    <Comment
-      created_at="2018-07-03T14:43:52-07:00"
-      created_by={
-        Object {
-          "id": 11,
-          "name": "Akon",
-        }
-      }
-      id={123}
-      permissions={
-        Object {
-          "can_delete": false,
-          "can_edit": false,
-        }
-      }
-      tagged_message="test @[123:Jeezy] @[10:Kanye West]"
-      type="comment"
-    />
-  </li>
-  <div>
-    <FeatureFlag
-      feature="activityFeed.tasks.newCards"
-      not={true}
+    <ul
+      className="bcs-activity-feed-active-state"
     >
       <li
-        className="bcs-activity-feed-task"
-        key="task234"
+        className="bcs-activity-feed-comment"
+        key="comment123"
       >
-        <Task
+        <Comment
           created_at="2018-07-03T14:43:52-07:00"
           created_by={
             Object {
@@ -69,156 +191,517 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
               "name": "Akon",
             }
           }
-          dueAt="2018-07-03T14:43:52-07:00"
-          id={234}
-          modified_at="2018-07-03T14:43:52-07:00"
-          modified_by={
-            Object {
-              "id": 10,
-              "name": "Jay-Z",
-            }
-          }
+          id={123}
           permissions={
             Object {
-              "can_delete": true,
-              "can_edit": true,
+              "can_delete": false,
+              "can_edit": false,
             }
           }
-          tagged_message="test"
-          task_assignment_collection={
-            Object {
-              "entries": Array [
-                Object {
-                  "assigned_to": Object {
+          tagged_message="test @[123:Jeezy] @[10:Kanye West]"
+          type="comment"
+        >
+          <div
+            className="bcs-comment-container"
+          >
+            <div
+              className="bcs-comment"
+              onBlur={[Function]}
+              onFocus={[Function]}
+            >
+              <Avatar
+                className="bcs-comment-avatar"
+                user={
+                  Object {
                     "id": 11,
                     "name": "Akon",
-                  },
-                  "status": "incomplete",
-                },
-              ],
-              "total_count": 1,
-            }
-          }
-          type="task"
-        />
+                  }
+                }
+              >
+                <Avatar
+                  avatarUrl={null}
+                  className="bcs-comment-avatar"
+                  id={11}
+                  name="Akon"
+                >
+                  <span
+                    className="avatar bcs-comment-avatar"
+                    role="presentation"
+                  >
+                    <AvatarInitials
+                      id={11}
+                      name="Akon"
+                    >
+                      <span
+                        className="avatar-initials "
+                        style={
+                          Object {
+                            "backgroundColor": "#052E5C",
+                          }
+                        }
+                      >
+                        AA
+                      </span>
+                    </AvatarInitials>
+                  </span>
+                </Avatar>
+              </Avatar>
+              <div
+                className="bcs-comment-content"
+              >
+                <div
+                  className="bcs-comment-headline"
+                >
+                  <UserLink
+                    className="bcs-comment-user-name"
+                    data-resin-target="activityfeed-profilelink"
+                    id={11}
+                    name="Akon"
+                  >
+                    <div
+                      className="bcs-comment-user-name"
+                      data-resin-target="activityfeed-profilelink"
+                      id={11}
+                    >
+                      Akon
+                    </div>
+                  </UserLink>
+                </div>
+                <div>
+                  <Tooltip
+                    constrainToScrollParent={false}
+                    constrainToWindow={true}
+                    position="top-center"
+                    text={
+                      <FormattedMessage
+                        defaultMessage="{time, date, full} at {time, time, short}"
+                        id="be.commentPostedFullDateTime"
+                        values={
+                          Object {
+                            "time": 1530654232000,
+                          }
+                        }
+                      />
+                    }
+                    theme="default"
+                  >
+                    <TetherComponent
+                      attachment="bottom center"
+                      bodyElement={<body />}
+                      classPrefix="tooltip"
+                      constraints={
+                        Array [
+                          Object {
+                            "attachment": "together",
+                            "to": "window",
+                          },
+                        ]
+                      }
+                      enabled={false}
+                      renderElementTag="div"
+                      renderElementTo={null}
+                      targetAttachment="top center"
+                    >
+                      <small
+                        className="bcs-comment-created-at"
+                        key=".0"
+                        onBlur={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                        tabIndex="0"
+                      >
+                        <ReadableTime
+                          relativeThreshold={3600000}
+                          timestamp={1530654232000}
+                        >
+                          <FormattedMessage
+                            defaultMessage="{time, date, medium}"
+                            id="boxui.readableTime.eventTime"
+                            values={
+                              Object {
+                                "date": null,
+                                "time": 1530654232000,
+                              }
+                            }
+                          >
+                            <div />
+                          </FormattedMessage>
+                        </ReadableTime>
+                      </small>
+                    </TetherComponent>
+                  </Tooltip>
+                </div>
+                <CommentText
+                  id={123}
+                  tagged_message="test @[123:Jeezy] @[10:Kanye West]"
+                  translationEnabled={false}
+                  translationFailed={null}
+                >
+                  <div
+                    className="bcs-comment-text"
+                  >
+                    test 
+                    <UserLink
+                      className="bcs-comment-mention"
+                      data-resin-target="activityfeed-mentionlink"
+                      id="123"
+                      key="1-123"
+                      name="@Jeezy"
+                    >
+                      <div
+                        className="bcs-comment-mention"
+                        data-resin-target="activityfeed-mentionlink"
+                        id="123"
+                      >
+                        @Jeezy
+                      </div>
+                    </UserLink>
+                     
+                    <UserLink
+                      className="bcs-comment-mention"
+                      data-resin-target="activityfeed-mentionlink"
+                      id="10"
+                      key="3-123"
+                      name="@Kanye West"
+                    >
+                      <div
+                        className="bcs-comment-mention"
+                        data-resin-target="activityfeed-mentionlink"
+                        id="10"
+                      >
+                        @Kanye West
+                      </div>
+                    </UserLink>
+                  </div>
+                </CommentText>
+              </div>
+            </div>
+          </div>
+        </Comment>
       </li>
-    </FeatureFlag>
-    <FeatureFlag
-      feature="activityFeed.tasks.newCards"
-    >
-      <li
-        className="bcs-activity-feed-task-new"
-        key="task234"
-      >
-        <Task
-          created_at="2018-07-03T14:43:52-07:00"
-          created_by={
-            Object {
-              "id": 11,
-              "name": "Akon",
-            }
-          }
-          dueAt="2018-07-03T14:43:52-07:00"
-          id={234}
-          modified_at="2018-07-03T14:43:52-07:00"
-          modified_by={
-            Object {
-              "id": 10,
-              "name": "Jay-Z",
-            }
-          }
-          permissions={
-            Object {
-              "can_delete": true,
-              "can_edit": true,
-            }
-          }
-          tagged_message="test"
-          task_assignment_collection={
-            Object {
-              "entries": Array [
+      <div>
+        <FeatureFlag
+          disabled={[Function]}
+          enabled={[Function]}
+          feature="activityFeed.tasks.newCards"
+        >
+          <li
+            className="bcs-activity-feed-task"
+            key="task234"
+          >
+            <Task
+              created_at="2018-07-03T14:43:52-07:00"
+              created_by={
                 Object {
-                  "assigned_to": Object {
-                    "id": 11,
-                    "name": "Akon",
-                  },
-                  "status": "incomplete",
-                },
-              ],
-              "total_count": 1,
-            }
-          }
-          type="task"
-        />
-      </li>
-    </FeatureFlag>
-  </div>
-  <li
-    className="bcs-version-item"
-    key="file_version345"
-  >
-    <Version
-      created_at="2018-07-03T14:43:52-07:00"
-      id={345}
-      modified_at="2018-07-03T14:43:52-07:00"
-      modified_by={
-        Object {
-          "id": 11,
-          "name": "Akon",
-        }
-      }
-      trashed_at="2018-07-03T14:43:52-07:00"
-      type="file_version"
-    />
-  </li>
-  <div>
-    <FeatureFlag
-      feature="activityFeed.tasks.newCards"
-      not={true}
-    >
-      0
-    </FeatureFlag>
-    <FeatureFlag
-      feature="activityFeed.tasks.newCards"
-    >
+                  "id": 11,
+                  "name": "Akon",
+                }
+              }
+              dueAt="2018-07-03T14:43:52-07:00"
+              id={234}
+              modified_at="2018-07-03T14:43:52-07:00"
+              modified_by={
+                Object {
+                  "id": 10,
+                  "name": "Jay-Z",
+                }
+              }
+              permissions={
+                Object {
+                  "can_delete": true,
+                  "can_edit": true,
+                }
+              }
+              tagged_message="test"
+              task_assignment_collection={
+                Object {
+                  "entries": Array [
+                    Object {
+                      "assigned_to": Object {
+                        "id": 11,
+                        "name": "Akon",
+                      },
+                      "status": "incomplete",
+                    },
+                  ],
+                  "total_count": 1,
+                }
+              }
+              type="task"
+            >
+              <div
+                className="bcs-task"
+                data-testid="task-card"
+              >
+                <Comment
+                  created_at="2018-07-03T14:43:52-07:00"
+                  created_by={
+                    Object {
+                      "id": 11,
+                      "name": "Akon",
+                    }
+                  }
+                  id={234}
+                  inlineDeleteMessage={
+                    Object {
+                      "defaultMessage": "Delete task?",
+                      "id": "be.taskDeletePrompt",
+                    }
+                  }
+                  permissions={
+                    Object {
+                      "can_delete": undefined,
+                      "can_edit": undefined,
+                    }
+                  }
+                >
+                  <div
+                    className="bcs-comment-container"
+                  >
+                    <div
+                      className="bcs-comment"
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                    >
+                      <Avatar
+                        className="bcs-comment-avatar"
+                        user={
+                          Object {
+                            "id": 11,
+                            "name": "Akon",
+                          }
+                        }
+                      >
+                        <Avatar
+                          avatarUrl={null}
+                          className="bcs-comment-avatar"
+                          id={11}
+                          name="Akon"
+                        >
+                          <span
+                            className="avatar bcs-comment-avatar"
+                            role="presentation"
+                          >
+                            <AvatarInitials
+                              id={11}
+                              name="Akon"
+                            >
+                              <span
+                                className="avatar-initials "
+                                style={
+                                  Object {
+                                    "backgroundColor": "#052E5C",
+                                  }
+                                }
+                              >
+                                AA
+                              </span>
+                            </AvatarInitials>
+                          </span>
+                        </Avatar>
+                      </Avatar>
+                      <div
+                        className="bcs-comment-content"
+                      >
+                        <div
+                          className="bcs-comment-headline"
+                        >
+                          <UserLink
+                            className="bcs-comment-user-name"
+                            data-resin-target="activityfeed-profilelink"
+                            id={11}
+                            name="Akon"
+                          >
+                            <div
+                              className="bcs-comment-user-name"
+                              data-resin-target="activityfeed-profilelink"
+                              id={11}
+                            >
+                              Akon
+                            </div>
+                          </UserLink>
+                        </div>
+                        <div>
+                          <Tooltip
+                            constrainToScrollParent={false}
+                            constrainToWindow={true}
+                            position="top-center"
+                            text={
+                              <FormattedMessage
+                                defaultMessage="{time, date, full} at {time, time, short}"
+                                id="be.commentPostedFullDateTime"
+                                values={
+                                  Object {
+                                    "time": 1530654232000,
+                                  }
+                                }
+                              />
+                            }
+                            theme="default"
+                          >
+                            <TetherComponent
+                              attachment="bottom center"
+                              bodyElement={<body />}
+                              classPrefix="tooltip"
+                              constraints={
+                                Array [
+                                  Object {
+                                    "attachment": "together",
+                                    "to": "window",
+                                  },
+                                ]
+                              }
+                              enabled={false}
+                              renderElementTag="div"
+                              renderElementTo={null}
+                              targetAttachment="top center"
+                            >
+                              <small
+                                className="bcs-comment-created-at"
+                                key=".0"
+                                onBlur={[Function]}
+                                onFocus={[Function]}
+                                onKeyDown={[Function]}
+                                onMouseEnter={[Function]}
+                                onMouseLeave={[Function]}
+                                tabIndex="0"
+                              >
+                                <ReadableTime
+                                  relativeThreshold={3600000}
+                                  timestamp={1530654232000}
+                                >
+                                  <FormattedMessage
+                                    defaultMessage="{time, date, medium}"
+                                    id="boxui.readableTime.eventTime"
+                                    values={
+                                      Object {
+                                        "date": null,
+                                        "time": 1530654232000,
+                                      }
+                                    }
+                                  >
+                                    <div />
+                                  </FormattedMessage>
+                                </ReadableTime>
+                              </small>
+                            </TetherComponent>
+                          </Tooltip>
+                        </div>
+                        <CommentText
+                          id={234}
+                          tagged_message=""
+                          translationEnabled={false}
+                          translationFailed={null}
+                        >
+                          <div
+                            className="bcs-comment-text"
+                          />
+                        </CommentText>
+                      </div>
+                    </div>
+                  </div>
+                </Comment>
+                <div
+                  className="bcs-task-approvers-container"
+                >
+                  <div
+                    className="bcs-task-approvers-header"
+                  >
+                    <strong>
+                      <FormattedMessage
+                        defaultMessage="Tasks"
+                        id="be.tasksForApproval"
+                      >
+                        <div />
+                      </FormattedMessage>
+                    </strong>
+                  </div>
+                  <div
+                    className="bcs-task-assignees"
+                  >
+                    <PendingAssignment
+                      id={11}
+                      key="11"
+                      name="Akon"
+                      onTaskApproval={[Function]}
+                      onTaskReject={[Function]}
+                      shouldShowActions={false}
+                    >
+                      <div
+                        className="bcs-task-pending-assignment"
+                      >
+                        <div
+                          className="bcs-task-assignment-name"
+                        >
+                          Akon
+                        </div>
+                      </div>
+                    </PendingAssignment>
+                  </div>
+                </div>
+              </div>
+            </Task>
+          </li>
+        </FeatureFlag>
+      </div>
       <li
-        className="bcs-activity-feed-task-new"
-        key="task234"
+        className="bcs-version-item"
+        key="file_version345"
       >
-        <Task
+        <Version
           created_at="2018-07-03T14:43:52-07:00"
-          created_by={
+          id={345}
+          modified_at="2018-07-03T14:43:52-07:00"
+          modified_by={
             Object {
               "id": 11,
               "name": "Akon",
             }
           }
-          dueAt="2018-07-03T14:43:52-07:00"
-          id={234}
-          modified_at="2018-07-03T14:43:52-07:00"
-          modified_by={
-            Object {
-              "id": 10,
-              "name": "Jay-Z",
+          trashed_at="2018-07-03T14:43:52-07:00"
+          type="file_version"
+        >
+          <Version
+            created_at="2018-07-03T14:43:52-07:00"
+            id={345}
+            intl={
+              Object {
+                "formatDate": [Function],
+                "formatMessage": [Function],
+              }
             }
-          }
-          permissions={
-            Object {
-              "can_delete": true,
-              "can_edit": true,
+            modified_at="2018-07-03T14:43:52-07:00"
+            modified_by={
+              Object {
+                "id": 11,
+                "name": "Akon",
+              }
             }
-          }
-          tagged_message="test"
-          task_assignment_collection={
-            Object {
-              "entries": Array [],
-              "total_count": 0,
-            }
-          }
-          type="task"
-        />
+            trashed_at="2018-07-03T14:43:52-07:00"
+            type="file_version"
+          >
+            <div
+              className="bcs-version"
+            >
+              <span
+                className="bcs-version-message"
+              />
+            </div>
+          </Version>
+        </Version>
       </li>
-    </FeatureFlag>
-  </div>
-</ul>
+      <div>
+        <FeatureFlag
+          disabled={[Function]}
+          enabled={[Function]}
+          feature="activityFeed.tasks.newCards"
+        >
+          0
+        </FeatureFlag>
+      </div>
+    </ul>
+  </ActiveState>
+</Component>
 `;

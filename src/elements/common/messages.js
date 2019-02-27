@@ -890,13 +890,33 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     tasksFeedCompleteAction: {
         id: 'be.tasks.feed.completeAction',
-        defaultMessage: 'Complete',
+        defaultMessage: 'Mark as Complete',
         description: 'Completion option for a general task',
     },
     tasksFeedRejectAction: {
         id: 'be.tasks.feed.rejectAction',
         defaultMessage: 'Reject',
         description: 'Reject option for an approval task',
+    },
+    tasksFeedCompletedLabel: {
+        id: 'be.tasks.feed.completedLabel',
+        defaultMessage: 'Task Complete',
+        description: 'Label for a completed task',
+    },
+    tasksFeedApprovedLabel: {
+        id: 'be.tasks.feed.approvedLabel',
+        defaultMessage: 'Task Approved',
+        description: 'Label for an approved task',
+    },
+    tasksFeedRejectedLabel: {
+        id: 'be.tasks.feed.rejectedLabel',
+        defaultMessage: 'Task Rejected',
+        description: 'Label for a rejected task',
+    },
+    tasksFeedIncompleteLabel: {
+        id: 'be.tasks.feed.incompleteLabel',
+        defaultMessage: 'Awaiting Assignees',
+        description: 'Label for an incomplete task',
     },
     versionDeleted: {
         id: 'be.versionDeleted',

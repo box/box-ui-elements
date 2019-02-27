@@ -1,60 +1,62 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Sidebar Test Page</title>
-        <style>
-            body,
-            html,
-            .sidebar {
-                background: #ccc;
-                border: 0 none;
-                box-sizing: border-box !important;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                width: 100%;
-            }
 
-            .sidebar {
-                display: flex;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sidebar Test Page</title>
+    <style>
+        body,
+        html,
+        .sidebar {
+            background: #ccc;
+            border: 0 none;
+            box-sizing: border-box !important;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
 
-            .inputs {
-                padding: 15px;
-            }
+        .sidebar {
+            display: flex;
+        }
 
-            .inputs input {
-                margin-bottom: 10px;
-            }
-        </style>
-        <div class="sidebar">
-            <div class="sidebar1"></div>
-            <div class="gap">&nbsp;&nbsp;</div>
-            <div class="sidebar2"></div>
-            <div class="gap">&nbsp;&nbsp;</div>
-            <div class="sidebar3"></div>
-            <div class="gap">&nbsp;&nbsp;</div>
-            <div class="sidebar4"></div>
-            <div class="inputs">
-                <div>
-                    <label>
-                        <div>File Id</div>
-                        <input class="file" type="text" placeholder="Enter file id" />
-                    </label>
-                    <label>
-                        <div>Auth Token</div>
-                        <input class="token" type="text" placeholder="Enter auth token" />
-                    </label>
-                </div>
-                <button type="button" onclick="load(true)">Submit</button>
+        .inputs {
+            padding: 15px;
+        }
+
+        .inputs input {
+            margin-bottom: 10px;
+        }
+    </style>
+    <div class="sidebar">
+        <div class="sidebar1"></div>
+        <div class="gap">&nbsp;&nbsp;</div>
+        <div class="sidebar2"></div>
+        <div class="gap">&nbsp;&nbsp;</div>
+        <div class="sidebar3"></div>
+        <div class="gap">&nbsp;&nbsp;</div>
+        <div class="sidebar4"></div>
+        <div class="inputs">
+            <div>
+                <label>
+                    <div>File Id</div>
+                    <input class="file" type="text" placeholder="Enter file id" />
+                </label>
+                <label>
+                    <div>Auth Token</div>
+                    <input class="token" type="text" placeholder="Enter auth token" />
+                </label>
             </div>
+            <button type="button" onclick="load(true)">Submit</button>
         </div>
-        <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
-        <script src="../dev/en-US/sidebar.js"></script>
-    </head>
-    <body>
+    </div>
+    <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
+    <script src="../dev/en-US/sidebar.js"></script>
+</head>
+
+<body>
     <div class="preview sidebar1"></div>
     <script>
         function load(refreshOnComplete = false) {
@@ -155,8 +157,10 @@
                 features: {
                     activityFeed: {
                         tasks: {
-                            createFromComment: true,
                             createButton: true,
+                            createFromComment: true,
+                            newApi: true,
+                            newCards: true,
                         },
                     },
                 }
@@ -166,5 +170,6 @@
 
         load(false);
     </script>
-    </body>
+</body>
+
 </html>

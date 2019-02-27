@@ -181,7 +181,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         updateTaskAssignment: (taskId: string, taskAssignmentId: string, status: TaskAssignmentStatus): void => {
             const { file, api } = this.props;
 
-            api.getFeedAPI(false).updateTaskAssignment(
+            api.getFeedAPI(false).updateTaskCollaborator(
                 file,
                 taskId,
                 taskAssignmentId,
@@ -530,11 +530,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             approverSelectorContacts,
             getAvatarUrl,
         };
-        return <AddTaskButton {...props} />;
+        return (
+            <FeatureFlag feature="activityFeed.tasks.newApi">
+                <AddTaskButton {...props} />
+            </FeatureFlag>
+        );
     };
 
     render() {
-        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
+        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl, features } = this.props;
         const {
             currentUser,
             approverSelectorContacts,
@@ -543,6 +547,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activityFeedError,
             currentUserError,
         } = this.state;
+
+        const updateTaskAssignment = isFeatureEnabled(features, 'activityFeed.tasks.newApi')
+            ? this.tasksApiNew.updateTaskAssignment
+            : this.updateTaskAssignment;
 
         return (
             <SidebarContent
@@ -562,7 +570,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}
                     onTaskUpdate={this.updateTask}
-                    onTaskAssignmentUpdate={this.updateTaskAssignment}
+                    onTaskAssignmentUpdate={updateTaskAssignment}
                     getApproverWithQuery={this.getApproverWithQuery}
                     getMentionWithQuery={this.getMentionWithQuery}
                     onVersionHistoryClick={onVersionHistoryClick}

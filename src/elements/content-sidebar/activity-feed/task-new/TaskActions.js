@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../../../components/button';
-import messages from '../../../common/messages';
+
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import messages from '../../../common/messages';
+import Button from '../../../../components/button';
 import { TASK_TYPE_APPROVAL } from '../../../../constants';
 
 type Props = {
@@ -13,7 +14,7 @@ type Props = {
     taskType?: TaskType,
 };
 
-const PendingAssignment = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }: Props): React.Node => (
+const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }: Props): React.Node => (
     <div className="bcs-task-pending-assignment bcs-task-assignment-actions">
         {taskType === TASK_TYPE_APPROVAL ? (
             <React.Fragment>
@@ -44,4 +45,4 @@ const PendingAssignment = ({ onTaskApproval, onTaskReject, onTaskComplete, taskT
     </div>
 );
 
-export default PendingAssignment;
+export default TaskActions;
