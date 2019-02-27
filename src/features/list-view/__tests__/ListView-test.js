@@ -3,7 +3,7 @@ import * as React from 'react';
 import ListView from '../ListView';
 
 // Global Declarations
-const rowData = [['', 'A', 'B', 'C'], ['', 'D', 'E', 'F']];
+const rowData = [['', { cellData: 'A' }, { cellData: 'B' }, { cellData: 'C' }], ['', 'D', 'E', 'F']];
 
 const getGridHeader = columnIndex => ['h1', 'h2'][columnIndex];
 
@@ -25,15 +25,15 @@ describe('features/list-view/ListView', () => {
     };
     describe('CellRenderer()', () => {
         test.each`
-            columnIndex | rowIndex | cellData | should                                                  | className
-            ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'list-view-column-header'}
-            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'list-view-name-cell'}
-            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'list-view-name-cell'}
-            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'list-view-name-cell'}
-            ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'list-view-column-header'}
-            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'list-view-column-cell'}
-            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'list-view-column-cell'}
-            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'list-view-column-cell'}
+            columnIndex | rowIndex | cellData           | should                                                            | className
+            ${0}        | ${0}     | ${'h1'}            | ${'returns h1 when columnIndex is 0 and rowIndex is 0'}           | ${'list-view-name-column-header'}
+            ${0}        | ${1}     | ${'<ItemIcon />A'} | ${'returns <ItemIcon /> when columnIndex is 0 and rowIndex is 1'} | ${'list-view-name-cell'}
+            ${0}        | ${2}     | ${'<ItemIcon />B'} | ${'returns <ItemIcon /> when columnIndex is 0 and rowIndex is 2'} | ${'list-view-name-cell'}
+            ${0}        | ${3}     | ${'<ItemIcon />C'} | ${'returns <ItemIcon /> when columnIndex is 0 and rowIndex is 3'} | ${'list-view-name-cell'}
+            ${1}        | ${0}     | ${'h2'}            | ${'returns h2 when columnIndex is 1 and rowIndex is 0'}           | ${'list-view-column-header'}
+            ${1}        | ${1}     | ${'D'}             | ${'returns A when columnIndex is 0 and rowIndex is 1'}            | ${'list-view-column-cell'}
+            ${1}        | ${2}     | ${'E'}             | ${'returns B when columnIndex is 0 and rowIndex is 2'}            | ${'list-view-column-cell'}
+            ${1}        | ${3}     | ${'F'}             | ${'returns C when columnIndex is 0 and rowIndex is 3'}            | ${'list-view-column-cell'}
         `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
             const wrapper = getWrapper();
 
@@ -71,8 +71,8 @@ describe('features/list-view/ListView', () => {
 
     describe('render()', () => {
         test('Should render the ListView component ', () => {
-            const columnHeaderClass = '.list-view-column-header';
-            const nameCellClass = '.list-view-name-cell';
+            const columnHeaderClass = '.list-view-name-column-header';
+            const nameCellClass = '.list-view-name';
 
             // ListView uses a React Virtualized MultiGrid, which is a wrapper around 4 grid components, shallow returns nothing useful, which is why we are using mount instead.
             const wrapper = mount(

@@ -8,28 +8,15 @@ describe('Message', () => {
         return shallow(<Message {...props} />);
     };
     describe('render', () => {
-        [
-            {
-                description: 'should correctly render needRefining',
-                message: 'needRefining',
-            },
-            {
-                description: 'should correctly render tooManyResults',
-                message: 'tooManyResults',
-            },
-            {
-                description: 'should correctly render noAccessForQuery',
-                message: 'noAccessForQuery',
-            },
-            {
-                description: 'should correctly render noAccessForTemplate',
-                message: 'noAccessForTemplate',
-            },
-        ].forEach(message => {
-            test(`${message.description}`, () => {
-                const wrapper = getWrapper(message);
-                expect(wrapper).toMatchSnapshot();
-            });
+        test.each`
+            description                                      | message
+            ${'should correctly render needRefining'}        | ${'needRefining'}
+            ${'should correctly render tooManyResults'}      | ${'tooManyResults'}
+            ${'should correctly render noAccessForQuery'}    | ${'noAccessForQuery'}
+            ${'should correctly render noAccessForTemplate'} | ${'noAccessForTemplate'}
+        `('$description', ({ message }) => {
+            const wrapper = getWrapper(message);
+            expect(wrapper).toMatchSnapshot();
         });
     });
 });

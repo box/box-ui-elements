@@ -3,6 +3,8 @@ import * as React from 'react';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
 
+import IconItem from '../../icons/item-icon/ItemIcon';
+
 import './styles/ListView.scss';
 
 type Props = {
@@ -29,6 +31,15 @@ class ListView extends React.PureComponent<Props> {
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
         const { getGridCell, getGridHeader } = this.props;
         const cellData = getGridCell({ columnIndex, rowIndex });
+
+        if (rowIndex === 0 && columnIndex === 0) {
+            const displayName = getGridHeader(columnIndex);
+            return (
+                <div className="list-view-name-column-header" key={key} style={style}>
+                    {displayName}
+                </div>
+            );
+        }
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
             return (
@@ -38,12 +49,17 @@ class ListView extends React.PureComponent<Props> {
             );
         }
         if (columnIndex === 0) {
+            const { cellData: nameCellData, extension } = getGridCell({ columnIndex, rowIndex });
             return (
                 <div className="list-view-name-cell" key={key} style={style}>
-                    {cellData}
+                    <div className="list-view-icon">
+                        <IconItem className="list-view-icon-item" height={25} iconType={extension} width={25} />
+                    </div>
+                    <div className="list-view-name">{nameCellData}</div>
                 </div>
             );
         }
+
         return (
             <div className="list-view-column-cell" key={key} style={style}>
                 {cellData}
@@ -68,7 +84,7 @@ class ListView extends React.PureComponent<Props> {
                     fixedColumnCount={1}
                     fixedRowCount={1}
                     height={height}
-                    rowHeight={40}
+                    rowHeight={50}
                     rowCount={rowCount}
                     scrollToColumn={0}
                     scrollToRow={0}
