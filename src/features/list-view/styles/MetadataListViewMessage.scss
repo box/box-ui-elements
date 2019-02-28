@@ -1,0 +1,26 @@
+.metadata-view-header-text-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+
+    .folder-empty-state-graphic {
+        opacity: .5;
+    }
+
+    .message-header-text {
+        font-weight: bold;
+        font-size: 10px;
+    }
+
+    .message-subtitle-text {
+        font-size: 10px;
+        margin: 0 auto;
+        text-align: center;
+        width: 240px;
+    }
+
+    .metadata-empty-state-graphic {
+        opacity: .5;
+    }
+}
