@@ -16,7 +16,7 @@ const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, title, ...res
             <PlainButton
                 className="bcs-additional-tab-btn bcs-nav-btn"
                 type="button"
-                onClick={() => callbackFn({ id, rest })}
+                onClick={() => callbackFn({ id, callbackData: rest })}
             >
                 <img className="bcs-additional-tab-icon" src={iconUrl} alt={title} />
             </PlainButton>
