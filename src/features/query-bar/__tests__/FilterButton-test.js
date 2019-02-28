@@ -30,23 +30,23 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '3',
-                    operatorKey: IS,
-                    valueKey: null,
+                    operator: IS,
+                    value: null,
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '3',
-                        operatorKey: IS,
-                        valueKey: null,
+                        operator: IS,
+                        value: null,
                     },
                 ],
                 newCondition: [
                     {
                         columnId: '2',
                         id: '3',
-                        operatorKey: IS,
-                        valueKey: null,
+                        operator: IS,
+                        value: null,
                     },
                 ],
             },
@@ -70,25 +70,25 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '4',
-                    operatorKey: IS,
-                    valueKey: null,
+                    operator: IS,
+                    value: null,
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '4',
-                        operatorKey: IS,
-                        valueKey: null,
+                        operator: IS,
+                        value: null,
                     },
                 ],
                 property: LESS_THAN,
-                conditionProperty: 'operatorKey',
+                conditionProperty: 'operator',
                 newCondition: [
                     {
                         columnId: '1',
                         id: '4',
-                        operatorKey: LESS_THAN,
-                        valueKey: null,
+                        operator: LESS_THAN,
+                        value: null,
                     },
                 ],
             },
@@ -98,25 +98,25 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '5',
-                    operatorKey: IS,
-                    valueKey: null,
+                    operator: IS,
+                    value: null,
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '5',
-                        operatorKey: IS,
-                        valueKey: null,
+                        operator: IS,
+                        value: null,
                     },
                 ],
                 property: 0,
-                conditionProperty: 'valueKey',
+                conditionProperty: 'value',
                 newCondition: [
                     {
                         columnId: '1',
                         id: '5',
-                        operatorKey: IS,
-                        valueKey: 0,
+                        operator: IS,
+                        value: 0,
                     },
                 ],
             },
@@ -142,25 +142,25 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     {
                         id: '2',
                         operatorDisplayText: '',
-                        operatorKey: null,
+                        operator: null,
                         valueDisplayText: null,
-                        valueKey: null,
+                        value: null,
                     },
                     {
                         id: '3',
                         operatorDisplayText: '',
-                        operatorKey: null,
+                        operator: null,
                         valueDisplayText: null,
-                        valueKey: null,
+                        value: null,
                     },
                 ],
                 newConditions: [
                     {
                         id: '3',
                         operatorDisplayText: '',
-                        operatorKey: null,
+                        operator: null,
                         valueDisplayText: null,
-                        valueKey: null,
+                        value: null,
                     },
                 ],
             },
@@ -238,8 +238,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const expected = {
                 columnId: '1',
                 id: conditionID,
-                operatorKey: IS,
-                valueKey: null,
+                operator: IS,
+                value: null,
             };
             wrapper.instance().setState({
                 conditions: [],

@@ -13,7 +13,6 @@ const initialCondition: ConditionType = {
 const columnOptions = [
     {
         displayText: '$100',
-        type: 'enum',
         value: '$100',
     },
 ];
