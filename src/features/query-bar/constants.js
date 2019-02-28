@@ -24,115 +24,30 @@ export const IS_NOT: '!=' = '!=';
 export const GREATER_THAN: '>' = '>';
 export const LESS_THAN: '<' = '<';
 
+export const IS_OPERATOR = {
+    displayName: 'is',
+    key: IS,
+};
+
+export const GREATER_THAN_OPERATOR = {
+    displayName: 'is greater than',
+    key: GREATER_THAN,
+};
+
+export const LESS_THAN_OPERATOR = {
+    displayName: 'is less than',
+    key: LESS_THAN,
+};
+
+export const IS_NOT_OPERATOR = {
+    displayName: 'is not',
+    key: IS_NOT,
+};
+
 export const COLUMN_OPERATORS = {
-    string: [
-        {
-            displayName: 'is',
-            key: IS,
-            type: STRING,
-        },
-        {
-            displayName: 'is greater than',
-            key: GREATER_THAN,
-            type: STRING,
-        },
-        {
-            displayName: 'is less than',
-            key: LESS_THAN,
-            type: STRING,
-        },
-        {
-            displayName: 'is not',
-            key: IS_NOT,
-            type: STRING,
-        },
-    ],
-    number: [
-        {
-            displayName: 'is',
-            key: IS,
-            type: NUMBER,
-        },
-        {
-            displayName: 'is greater than',
-            key: GREATER_THAN,
-            type: NUMBER,
-        },
-        {
-            displayName: 'is less than',
-            key: LESS_THAN,
-            type: NUMBER,
-        },
-        {
-            displayName: 'is not',
-            key: IS_NOT,
-            type: NUMBER,
-        },
-    ],
-    float: [
-        {
-            displayName: 'is',
-            key: IS,
-            type: FLOAT,
-        },
-        {
-            displayName: 'is greater than',
-            key: GREATER_THAN,
-            type: FLOAT,
-        },
-        {
-            displayName: 'is less than',
-            key: LESS_THAN,
-            type: FLOAT,
-        },
-        {
-            displayName: 'is not',
-            key: IS_NOT,
-            type: FLOAT,
-        },
-    ],
-    enum: [
-        {
-            displayName: 'is',
-            key: IS,
-            type: ENUM,
-        },
-        {
-            displayName: 'is greater than',
-            key: GREATER_THAN,
-            type: ENUM,
-        },
-        {
-            displayName: 'is less than',
-            key: LESS_THAN,
-            type: ENUM,
-        },
-        {
-            displayName: 'is not',
-            key: IS_NOT,
-            type: ENUM,
-        },
-    ],
-    date: [
-        {
-            displayName: 'is',
-            key: IS,
-            type: DATE,
-        },
-        {
-            displayName: 'is greater than',
-            key: GREATER_THAN,
-            type: DATE,
-        },
-        {
-            displayName: 'is less than',
-            key: LESS_THAN,
-            type: DATE,
-        },
-        {
-            displayName: 'is not',
-            key: IS_NOT,
-            type: DATE,
-        },
-    ],
+    string: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
+    number: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
+    float: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
+    enum: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
+    date: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
 };
