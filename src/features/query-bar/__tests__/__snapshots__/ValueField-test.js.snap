@@ -16,7 +16,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     label="Date"
     name="datepicker"
     placeholder="Date"
-    value={2000-01-01T08:00:00.000Z}
+    value={1995-12-25T17:30:00.000Z}
   />
 </div>
 `;

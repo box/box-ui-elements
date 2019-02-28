@@ -62,7 +62,7 @@ const columnsWithNewOrder: Array<ColumnType> = [
         options: null,
         property: 'lastUpdatedByName',
         source: 'item',
-        type: 'string',
+        type: 'date',
     },
     {
         displayName: 'Hullo Thar',
@@ -101,7 +101,7 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
         options: null,
         property: 'lastUpdatedByName',
         source: 'item',
-        type: 'string',
+        type: 'date',
     },
     {
         displayName: 'Contract Value',

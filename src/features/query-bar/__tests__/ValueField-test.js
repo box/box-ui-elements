@@ -15,6 +15,7 @@ describe('features/query-bar/components/filter/ValueField', () => {
                 updateDateInputValue={jest.fn()}
                 updateSelectedField={jest.fn()}
                 updateTextInputValue={jest.fn()}
+                value={new Date(1995, 11, 25, 9, 30, 0)}
                 valueKey="0"
                 valueOptions={[
                     {
