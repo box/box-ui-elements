@@ -141,7 +141,7 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleFieldChange = (condition: Object, property: string | Date, conditionProperty: string) => {
+    handleFieldChange = (condition: Object, value: string | Date, property: string) => {
         const { conditions } = this.state;
         let newConditionIndex = 0;
         const conditionToUpdate = conditions.find((currentCondition, index) => {
@@ -151,7 +151,7 @@ class FilterButton extends React.Component<Props, State> {
 
         const newCondition = {
             ...conditionToUpdate,
-            [conditionProperty]: property,
+            [property]: value,
         };
 
         const newConditions = conditions.slice(0);

@@ -23,7 +23,7 @@ type Props = {
     index: number,
     onColumnChange: (condition: Object, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onFieldChange: (condition: Object, property: string | Date, conditionProperty: string) => void,
+    onFieldChange: (condition: Object, value: string | Date, property: string) => void,
     selectedConnector: ConnectorType,
 };
 

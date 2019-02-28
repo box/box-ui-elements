@@ -41,7 +41,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         value: null,
                     },
                 ],
-                newCondition: [
+                newConditions: [
                     {
                         columnId: '2',
                         id: '3',
@@ -50,7 +50,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, columnId, condition, conditions, newCondition }) => {
+        ].forEach(({ description, columnId, condition, conditions, newConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper({ columns });
                 wrapper.setState({
@@ -58,7 +58,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 });
                 wrapper.instance().handleColumnChange(condition, columnId);
 
-                expect(wrapper.state('conditions')).toEqual(newCondition);
+                expect(wrapper.state('conditions')).toEqual(newConditions);
             });
         });
     });
