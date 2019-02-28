@@ -23,28 +23,12 @@ class AppActivity extends MarkerBasedAPI {
     }
 
     /**
-     * Base API URL for App Activity on a file
-     *
-     * @return {string} Base API url for app activities
-     */
-    getAppActivityUrl(): string {
-        return `${this.getBaseApiUrl()}/app_activities`;
-    }
-
-    /**
      * API URL for getting App Activity on a file
      *
-     * @param {string} [id] - a box file id
      * @return {string} Url for all app activity on a file
      */
-    getUrl(id: string): string {
-        if (!id) {
-            throw new Error('Missing file id!');
-        }
-
-        return `${this.getAppActivityUrl(
-            id,
-        )}?item_id=${id}&item_type=file&fields=${APP_ACTIVITY_FIELDS_TO_FETCH.toString()}`;
+    getUrl(): string {
+        return `${this.getBaseApiUrl()}/app_activities`;
     }
 
     /**
@@ -58,7 +42,7 @@ class AppActivity extends MarkerBasedAPI {
             throw new Error('Missing file id!');
         }
 
-        return `${this.getAppActivityUrl()}/${id}`;
+        return `${this.getUrl()}/${id}`;
     }
 
     /**
@@ -85,11 +69,18 @@ class AppActivity extends MarkerBasedAPI {
      * @returns {void}
      */
     getAppActivity(id: string, successCallback: Function, errorCallback: ElementsErrorCallback, limit?: number): void {
+        const requestData = {
+            item_id: id,
+            item_type: 'file',
+            fields: APP_ACTIVITY_FIELDS_TO_FETCH.toString(),
+        };
+
         this.markerGet({
             id,
             limit,
             successCallback,
             errorCallback,
+            requestData,
         });
     }
 

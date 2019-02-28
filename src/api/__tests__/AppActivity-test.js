@@ -1,5 +1,6 @@
 import AppActivity from '../AppActivity';
 import { ERROR_CODE_DELETE_APP_ACTIVITY } from '../../constants';
+import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../../utils/fields';
 
 let appActivity;
 
@@ -27,22 +28,9 @@ describe('api/AppActivity', () => {
         });
     });
 
-    describe('getAppActivityUrl()', () => {
-        test('should return the base app activity url', () => {
-            expect(appActivity.getAppActivityUrl()).toBe('https://api.box.com/2.0/app_activities');
-        });
-    });
-
     describe('getUrl()', () => {
-        test('should throw when not provided a file id', () => {
-            expect(() => {
-                appActivity.getUrl();
-            }).toThrow();
-        });
-        test('should return correct aoo activity api url with id and fields', () => {
-            expect(appActivity.getUrl('foo')).toBe(
-                'https://api.box.com/2.0/app_activities?item_id=foo&item_type=file&fields=activity_template,app,created_by,occurred_at,rendered_text',
-            );
+        test('should return correct app activity api url base', () => {
+            expect(appActivity.getUrl()).toBe('https://api.box.com/2.0/app_activities');
         });
     });
 
@@ -90,6 +78,11 @@ describe('api/AppActivity', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             const limit = 900;
+            const requestData = {
+                fields: APP_ACTIVITY_FIELDS_TO_FETCH.toString(),
+                item_id: id,
+                item_type: 'file',
+            };
 
             appActivity.getAppActivity(id, successCallback, errorCallback, limit);
 
@@ -98,6 +91,7 @@ describe('api/AppActivity', () => {
                 limit,
                 successCallback,
                 errorCallback,
+                requestData,
             });
         });
     });
