@@ -220,7 +220,6 @@ const Condition = ({
                     <ValueField
                         onChange={handleValueChange}
                         selectedValue={value}
-                        value={value}
                         valueOptions={valueOptions}
                         valueType={type}
                     />

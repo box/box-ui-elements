@@ -14,12 +14,11 @@ import '../../styles/Condition.scss';
 type Props = {
     onChange: (option: SyntheticEvent<HTMLInputElement> | OptionType | Date) => void,
     selectedValue?: string | number,
-    value?: string | Date | number,
     valueOptions: Array<Object>,
     valueType: string,
 };
 
-const ValueField = ({ onChange, selectedValue, value, valueOptions, valueType }: Props) => {
+const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props) => {
     switch (valueType) {
         case 'string':
             return (
@@ -74,7 +73,7 @@ const ValueField = ({ onChange, selectedValue, value, valueOptions, valueType }:
                         name="datepicker"
                         onChange={onChange}
                         placeholder="Date"
-                        value={value ? new Date(value) : undefined}
+                        value={selectedValue ? new Date(selectedValue) : undefined}
                     />
                 </div>
             );
