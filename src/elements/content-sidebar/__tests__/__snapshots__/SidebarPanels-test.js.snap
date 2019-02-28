@@ -2,15 +2,6 @@
 
 exports[`elements/content-sidebar/SidebarPanels render should render activity sidebar 1`] = `
 <Switch>
-  <Route
-    exact={true}
-    path="/"
-  >
-    <Redirect
-      push={false}
-      to="/skills"
-    />
-  </Route>
   <SidebarRoute
     path="/skills"
     pathFallback="/activity"
@@ -32,20 +23,17 @@ exports[`elements/content-sidebar/SidebarPanels render should render activity si
     pathFallback="/skills"
     render={[Function]}
   />
+  <Route>
+    <Redirect
+      push={false}
+      to="/skills"
+    />
+  </Route>
 </Switch>
 `;
 
 exports[`elements/content-sidebar/SidebarPanels render should render details sidebar 1`] = `
 <Switch>
-  <Route
-    exact={true}
-    path="/"
-  >
-    <Redirect
-      push={false}
-      to="/skills"
-    />
-  </Route>
   <SidebarRoute
     path="/skills"
     pathFallback="/activity"
@@ -67,20 +55,17 @@ exports[`elements/content-sidebar/SidebarPanels render should render details sid
     pathFallback="/skills"
     render={[Function]}
   />
+  <Route>
+    <Redirect
+      push={false}
+      to="/skills"
+    />
+  </Route>
 </Switch>
 `;
 
 exports[`elements/content-sidebar/SidebarPanels render should render metadata sidebar 1`] = `
 <Switch>
-  <Route
-    exact={true}
-    path="/"
-  >
-    <Redirect
-      push={false}
-      to="/skills"
-    />
-  </Route>
   <SidebarRoute
     path="/skills"
     pathFallback="/activity"
@@ -102,54 +87,19 @@ exports[`elements/content-sidebar/SidebarPanels render should render metadata si
     pathFallback="/skills"
     render={[Function]}
   />
-</Switch>
-`;
-
-exports[`elements/content-sidebar/SidebarPanels render should render no sidebar 1`] = `
-<Switch>
-  <Route
-    exact={true}
-    path="/"
-  >
+  <Route>
     <Redirect
       push={false}
       to="/skills"
     />
   </Route>
-  <SidebarRoute
-    path="/skills"
-    pathFallback="/activity"
-    render={[Function]}
-  />
-  <SidebarRoute
-    path="/activity"
-    pathFallback="/details"
-    render={[Function]}
-  />
-  <SidebarRoute
-    path="/details"
-    pathFallback="/metadata"
-    render={[Function]}
-  />
-  <SidebarRoute
-    path="/metadata"
-    pathFallback="/skills"
-    render={[Function]}
-  />
 </Switch>
 `;
+
+exports[`elements/content-sidebar/SidebarPanels render should render no sidebar 1`] = `""`;
 
 exports[`elements/content-sidebar/SidebarPanels render should render skills sidebar 1`] = `
 <Switch>
-  <Route
-    exact={true}
-    path="/"
-  >
-    <Redirect
-      push={false}
-      to="/skills"
-    />
-  </Route>
   <SidebarRoute
     enabled={true}
     path="/skills"
@@ -171,5 +121,11 @@ exports[`elements/content-sidebar/SidebarPanels render should render skills side
     pathFallback="/skills"
     render={[Function]}
   />
+  <Route>
+    <Redirect
+      push={false}
+      to="/skills"
+    />
+  </Route>
 </Switch>
 `;
