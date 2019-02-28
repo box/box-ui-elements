@@ -25,15 +25,15 @@ const SidebarNavButton = ({ children, interactionTarget, onNavigate, sidebarView
     return (
         <Tooltip position="middle-left" text={tooltip}>
             <Route path={linkPath}>
-                {({ history, location, match }) => (
+                {({ history, match }) => (
                     <PlainButton
                         className={classNames('bcs-nav-btn', {
-                            'bcs-nav-btn-is-selected': match,
+                            'bcs-nav-btn-is-selected': !!match,
                         })}
                         data-resin-target={interactionTarget}
                         data-testid={interactionTarget}
                         onClick={event => {
-                            const isToggle = location.pathname === linkPath;
+                            const isToggle = !!match;
                             const method = isToggle ? history.replace : history.push;
 
                             if (onNavigate) {

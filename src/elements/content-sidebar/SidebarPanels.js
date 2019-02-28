@@ -73,74 +73,75 @@ const SidebarPanels = ({
     isOpen,
     metadataSidebarProps,
     onVersionHistoryClick,
-}: Props) => (
-    <Switch>
-        <Route exact path="/">
-            <Redirect to={`/${SIDEBAR_VIEW_SKILLS}`} />
-        </Route>
-        <SidebarRoute
-            enabled={hasSkills}
-            path={`/${SIDEBAR_VIEW_SKILLS}`}
-            pathFallback={`/${SIDEBAR_VIEW_ACTIVITY}`}
-            render={() =>
-                isOpen && (
-                    <LoadableSkillsSidebar
-                        key={file.id}
-                        file={file}
-                        getPreview={getPreview}
-                        getViewer={getViewer}
-                        startMarkName={MARK_NAME_JS_LOADING_SKILLS}
-                    />
-                )
-            }
-        />
-        <SidebarRoute
-            enabled={hasActivityFeed}
-            path={`/${SIDEBAR_VIEW_ACTIVITY}`}
-            pathFallback={`/${SIDEBAR_VIEW_DETAILS}`}
-            render={() =>
-                isOpen && (
-                    <LoadableActivitySidebar
-                        currentUser={currentUser}
-                        file={file}
-                        onVersionHistoryClick={onVersionHistoryClick}
-                        {...activitySidebarProps}
-                        startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-                    />
-                )
-            }
-        />
-        <SidebarRoute
-            enabled={hasDetails}
-            path={`/${SIDEBAR_VIEW_DETAILS}`}
-            pathFallback={`/${SIDEBAR_VIEW_METADATA}`}
-            render={() =>
-                isOpen && (
-                    <LoadableDetailsSidebar
-                        key={fileId}
-                        fileId={fileId}
-                        onVersionHistoryClick={onVersionHistoryClick}
-                        {...detailsSidebarProps}
-                        startMarkName={MARK_NAME_JS_LOADING_DETAILS}
-                    />
-                )
-            }
-        />
-        <SidebarRoute
-            enabled={hasMetadata}
-            path={`/${SIDEBAR_VIEW_METADATA}`}
-            pathFallback={`/${SIDEBAR_VIEW_SKILLS}`}
-            render={() =>
-                isOpen && (
-                    <LoadableMetadataSidebar
-                        fileId={fileId}
-                        {...metadataSidebarProps}
-                        startMarkName={MARK_NAME_JS_LOADING_METADATA}
-                    />
-                )
-            }
-        />
-    </Switch>
-);
+}: Props) =>
+    (hasActivityFeed || hasDetails || hasMetadata || hasSkills) && (
+        <Switch>
+            <SidebarRoute
+                enabled={hasSkills}
+                path={`/${SIDEBAR_VIEW_SKILLS}`}
+                pathFallback={`/${SIDEBAR_VIEW_ACTIVITY}`}
+                render={() =>
+                    isOpen && (
+                        <LoadableSkillsSidebar
+                            key={file.id}
+                            file={file}
+                            getPreview={getPreview}
+                            getViewer={getViewer}
+                            startMarkName={MARK_NAME_JS_LOADING_SKILLS}
+                        />
+                    )
+                }
+            />
+            <SidebarRoute
+                enabled={hasActivityFeed}
+                path={`/${SIDEBAR_VIEW_ACTIVITY}`}
+                pathFallback={`/${SIDEBAR_VIEW_DETAILS}`}
+                render={() =>
+                    isOpen && (
+                        <LoadableActivitySidebar
+                            currentUser={currentUser}
+                            file={file}
+                            onVersionHistoryClick={onVersionHistoryClick}
+                            {...activitySidebarProps}
+                            startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
+                        />
+                    )
+                }
+            />
+            <SidebarRoute
+                enabled={hasDetails}
+                path={`/${SIDEBAR_VIEW_DETAILS}`}
+                pathFallback={`/${SIDEBAR_VIEW_METADATA}`}
+                render={() =>
+                    isOpen && (
+                        <LoadableDetailsSidebar
+                            key={fileId}
+                            fileId={fileId}
+                            onVersionHistoryClick={onVersionHistoryClick}
+                            {...detailsSidebarProps}
+                            startMarkName={MARK_NAME_JS_LOADING_DETAILS}
+                        />
+                    )
+                }
+            />
+            <SidebarRoute
+                enabled={hasMetadata}
+                path={`/${SIDEBAR_VIEW_METADATA}`}
+                pathFallback={`/${SIDEBAR_VIEW_SKILLS}`}
+                render={() =>
+                    isOpen && (
+                        <LoadableMetadataSidebar
+                            fileId={fileId}
+                            {...metadataSidebarProps}
+                            startMarkName={MARK_NAME_JS_LOADING_METADATA}
+                        />
+                    )
+                }
+            />
+            <Route>
+                <Redirect to={`/${SIDEBAR_VIEW_SKILLS}`} />
+            </Route>
+        </Switch>
+    );
 
 export default SidebarPanels;
