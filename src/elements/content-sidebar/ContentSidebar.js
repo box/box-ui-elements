@@ -1,40 +1,30 @@
 /**
  * @flow
- * @file Content Sidebar Component
+ * @file Content Sidebar Container
  * @author Box
  */
 
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
-import classNames from 'classnames';
-import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
-import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+import { MemoryRouter } from 'react-router-dom';
+import API from '../../api';
 import APIContext from '../common/api-context';
 import Internationalize from '../common/Internationalize';
-import { withErrorBoundary } from '../common/error-boundary';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
-import API from '../../api';
-import { withLogger } from '../common/logger';
-import { withFeatureProvider } from '../common/feature-checking';
-import { mark } from '../../utils/performance';
-import { EVENT_JS_READY } from '../common/logger/constants';
-import {
-    DEFAULT_HOSTNAME_API,
-    CLIENT_NAME_CONTENT_SIDEBAR,
-    SIDEBAR_VIEW_SKILLS,
-    SIDEBAR_VIEW_ACTIVITY,
-    SIDEBAR_VIEW_DETAILS,
-    SIDEBAR_VIEW_METADATA,
-    ORIGIN_CONTENT_SIDEBAR,
-} from '../../constants';
+import Sidebar from './Sidebar';
 import SidebarUtils from './SidebarUtils';
+import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEBAR } from '../../constants';
+import { EVENT_JS_READY } from '../common/logger/constants';
+import { mark } from '../../utils/performance';
+import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { withErrorBoundary } from '../common/error-boundary';
+import { withFeatureProvider } from '../common/feature-checking';
+import { withLogger } from '../common/logger';
+
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
-import SidebarNav from './SidebarNav';
-import Sidebar from './Sidebar';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -72,7 +62,6 @@ type Props = {
 type State = {
     file?: BoxItem,
     isLoading: boolean,
-    isOpen: boolean,
     metadataEditors?: Array<MetadataEditor>,
     view?: SidebarView,
 };
@@ -81,12 +70,10 @@ const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-class ContentSidebar extends React.PureComponent<Props, State> {
-    id: string;
-
+class ContentSidebar extends React.Component<Props, State> {
     props: Props;
 
-    state: State;
+    state: State = { isLoading: true };
 
     api: API;
 
@@ -117,7 +104,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             apiHost,
             cache,
             clientName,
-            isLarge,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
@@ -125,7 +111,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             token,
         } = props;
 
-        this.id = uniqueid('bcs_');
         this.api = new API({
             apiHost,
             cache,
@@ -137,7 +122,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             token,
         });
 
-        this.state = { isLoading: true, isOpen: !!isLarge };
         /* eslint-disable react/prop-types */
         const { logger } = props;
         logger.onReadyMetric({
@@ -187,33 +171,13 @@ class ContentSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props): void {
-        const { fileId, isLarge }: Props = this.props;
-        const { fileId: prevFileId, isLarge: prevIsLarge }: Props = prevProps;
-        const { view }: State = this.state;
+        const { fileId }: Props = this.props;
+        const { fileId: prevFileId }: Props = prevProps;
 
         if (fileId !== prevFileId) {
             this.fetchFile();
-        } else if (!view && isLarge !== prevIsLarge) {
-            this.setState({ isOpen: isLarge });
         }
     }
-
-    /**
-     * Toggle the sidebar view state
-     *
-     * @param {string} view - the selected view
-     * @return {void}
-     */
-    onToggle = (view: SidebarView): void => {
-        const { isOpen, view: priorView }: State = this.state;
-        const lastView = priorView || this.getSidebarView();
-        const isClosing = isOpen && view === lastView;
-
-        this.setState({
-            view,
-            isOpen: !isClosing,
-        });
-    };
 
     /**
      * Network error callback
@@ -234,54 +198,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         });
         /* eslint-enable react/prop-types */
     };
-
-    /**
-     * Determines the current sidebar tab view
-     *
-     * @private
-     * @return {string} Sidebar view to use
-     */
-    getSidebarView(): ?SidebarView {
-        const { file, isOpen, metadataEditors, view }: State = this.state;
-        const { defaultView }: Props = this.props;
-
-        if (!isOpen) {
-            return undefined;
-        }
-
-        // If there was a default view provided, force use that
-        // only if the view has not been set
-        if (!view && defaultView) {
-            return defaultView;
-        }
-
-        let newView = view;
-        const canDefaultToSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
-        const canDefaultToDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
-        const canDefaultToActivity = SidebarUtils.canHaveActivitySidebar(this.props);
-        const canDefaultToMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
-
-        // Only reset the view if prior view is no longer applicable
-        if (
-            !view ||
-            (view === SIDEBAR_VIEW_SKILLS && !canDefaultToSkills) ||
-            (view === SIDEBAR_VIEW_ACTIVITY && !canDefaultToActivity) ||
-            (view === SIDEBAR_VIEW_DETAILS && !canDefaultToDetails) ||
-            (view === SIDEBAR_VIEW_METADATA && !canDefaultToMetadata)
-        ) {
-            if (canDefaultToSkills) {
-                newView = SIDEBAR_VIEW_SKILLS;
-            } else if (canDefaultToActivity) {
-                newView = SIDEBAR_VIEW_ACTIVITY;
-            } else if (canDefaultToDetails) {
-                newView = SIDEBAR_VIEW_DETAILS;
-            } else if (canDefaultToMetadata) {
-                newView = SIDEBAR_VIEW_METADATA;
-            }
-        }
-
-        return newView;
-    }
 
     /**
      * File fetch success callback that sets the file and view
@@ -369,71 +285,50 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             activitySidebarProps,
             className,
             currentUser,
+            defaultView,
             detailsSidebarProps,
             fileId,
             getPreview,
             getViewer,
             hasActivityFeed,
+            hasMetadata,
+            hasSkills,
+            isLarge,
             language,
             messages,
             metadataSidebarProps,
             onVersionHistoryClick,
         }: Props = this.props;
-        const { file, isLoading, isOpen, metadataEditors }: State = this.state;
-        const hasSidebar = SidebarUtils.shouldRenderSidebar(this.props, file, metadataEditors);
+        const { file, isLoading, metadataEditors }: State = this.state;
 
-        if (!file || !hasSidebar || !fileId) {
+        if (!file || !fileId || !SidebarUtils.shouldRenderSidebar(this.props, file, metadataEditors)) {
             return null;
         }
 
-        const selectedView = this.getSidebarView();
-        const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
-        const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
-        const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
-        const styleClassName = classNames(
-            'be bcs',
-            {
-                [selectedView ? `bcs-${selectedView}` : '']: isOpen,
-                'bcs-is-open': isOpen,
-            },
-            className,
-        );
-
         return (
             <Internationalize language={language} messages={messages}>
-                <aside id={this.id} className={styleClassName}>
-                    <div className="be-app-element">
-                        {isLoading ? (
-                            <div className="bcs-loading">
-                                <LoadingIndicator />
-                            </div>
-                        ) : (
-                            <APIContext.Provider value={(this.api: any)}>
-                                <SidebarNav
-                                    hasSkills={hasSkills}
-                                    hasMetadata={hasMetadata}
-                                    hasActivityFeed={hasActivityFeed}
-                                    hasDetails={hasDetails}
-                                    onToggle={this.onToggle}
-                                    selectedView={selectedView}
-                                />
-                                <Sidebar
-                                    activitySidebarProps={activitySidebarProps}
-                                    currentUser={currentUser}
-                                    detailsSidebarProps={detailsSidebarProps}
-                                    file={file}
-                                    fileId={fileId}
-                                    getPreview={getPreview}
-                                    getViewer={getViewer}
-                                    key={file.id}
-                                    metadataSidebarProps={metadataSidebarProps}
-                                    onVersionHistoryClick={onVersionHistoryClick}
-                                    selectedView={selectedView}
-                                />
-                            </APIContext.Provider>
-                        )}
-                    </div>
-                </aside>
+                <MemoryRouter initialEntries={[`/${defaultView || ''}`]}>
+                    <APIContext.Provider value={(this.api: any)}>
+                        <Sidebar
+                            activitySidebarProps={activitySidebarProps}
+                            className={className}
+                            currentUser={currentUser}
+                            detailsSidebarProps={detailsSidebarProps}
+                            file={file}
+                            fileId={fileId}
+                            getPreview={getPreview}
+                            getViewer={getViewer}
+                            hasActivityFeed={hasActivityFeed}
+                            hasMetadata={hasMetadata}
+                            hasSkills={hasSkills}
+                            isLarge={isLarge}
+                            isLoading={isLoading}
+                            metadataEditors={metadataEditors}
+                            metadataSidebarProps={metadataSidebarProps}
+                            onVersionHistoryClick={onVersionHistoryClick}
+                        />
+                    </APIContext.Provider>
+                </MemoryRouter>
             </Internationalize>
         );
     }

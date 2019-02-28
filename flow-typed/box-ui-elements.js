@@ -798,3 +798,7 @@ type ActivityFeedFeatures = {
 type ContentSidebarFeatures = {
     activityFeed?: ActivityFeedFeatures,
 } & FeatureConfig;
+
+type NavigateOptions = {
+    isToggle?: boolean,
+};
