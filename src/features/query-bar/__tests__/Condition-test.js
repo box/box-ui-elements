@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import { columnOptions, columns, initialCondition } from '../components/fixtures';
-import { OPERATOR_KEY, VALUE_KEY } from '../constants';
+import { OPERATOR, VALUE } from '../constants';
 import Condition from '../components/filter/Condition';
 
 describe('features/query-bar/components/filter/Condition', () => {
@@ -51,32 +51,47 @@ describe('features/query-bar/components/filter/Condition', () => {
         });
     });
 
-    describe('updateSelectedField()', () => {
+    describe('updateOperatorField()', () => {
         const displayText = 'Vendor Name';
         const condition = initialCondition;
         const value = 0;
         const option = {
             displayText,
-            type: 'string',
             value,
         };
 
-        test.each`
-            description                    | fieldType     | keyType
-            ${'should select an operator'} | ${'operator'} | ${OPERATOR_KEY}
-            ${'should select a value'}     | ${'value'}    | ${VALUE_KEY}
-        `('$description', ({ fieldType, keyType }) => {
+        test('should select an operator', () => {
+            const onColumnChange = jest.fn();
             const onFieldChange = jest.fn();
             const wrapper = getWrapper({
                 onFieldChange,
+                onColumnChange,
             });
 
             wrapper
                 .find('SingleSelectField')
                 .at(1)
-                .simulate('change', option, fieldType);
+                .simulate('change', option);
+            expect(onFieldChange).toHaveBeenCalledWith(condition, value, OPERATOR);
+        });
+    });
 
-            expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType);
+    describe('updateSelectedField()', () => {
+        const condition = initialCondition;
+        const displayText = 'Vendor Name';
+        const value = 0;
+        const option = {
+            displayText,
+            value,
+        };
+
+        test('should update value field', () => {
+            const onFieldChange = jest.fn();
+            const wrapper = getWrapper({ onFieldChange });
+
+            wrapper.find('ValueField').prop('updateSelectedField')(option);
+
+            expect(onFieldChange).toHaveBeenCalledWith(condition, value, VALUE);
         });
     });
 
@@ -88,7 +103,7 @@ describe('features/query-bar/components/filter/Condition', () => {
         };
         const condition = initialCondition;
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
-        const keyType = VALUE_KEY;
+        const keyType = VALUE;
 
         test.each`
             description                                            | fieldValue          | value
