@@ -25,22 +25,22 @@ export const GREATER_THAN: '>' = '>';
 export const LESS_THAN: '<' = '<';
 
 export const IS_OPERATOR = {
-    displayName: 'is',
+    displayText: 'is',
     key: IS,
 };
 
 export const GREATER_THAN_OPERATOR = {
-    displayName: 'is greater than',
+    displayText: 'is greater than',
     key: GREATER_THAN,
 };
 
 export const LESS_THAN_OPERATOR = {
-    displayName: 'is less than',
+    displayText: 'is less than',
     key: LESS_THAN,
 };
 
 export const IS_NOT_OPERATOR = {
-    displayName: 'is not',
+    displayText: 'is not',
     key: IS_NOT,
 };
 

@@ -15,7 +15,7 @@ type Props = {
     selectedValue?: string | number,
     updateSelectedField: Function,
     updateValueField: Function,
-    valueKey?: string | Date | number,
+    value?: string | Date | number,
     valueOptions: Array<Object>,
     valueType: string,
 };
@@ -24,7 +24,7 @@ const ValueField = ({
     selectedValue,
     updateValueField,
     updateSelectedField,
-    valueKey,
+    value,
     valueOptions,
     valueType,
 }: Props) => {
@@ -82,7 +82,7 @@ const ValueField = ({
                         name="datepicker"
                         onChange={updateValueField}
                         placeholder="Date"
-                        value={valueKey ? new Date(valueKey) : undefined}
+                        value={value ? new Date(value) : undefined}
                     />
                 </div>
             );

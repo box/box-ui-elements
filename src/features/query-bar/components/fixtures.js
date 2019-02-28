@@ -37,7 +37,7 @@ const columns: Array<ColumnType> = [
         options: null,
         property: 'lastUpdatedByName',
         source: 'item',
-        type: 'string',
+        type: 'date',
     },
     {
         displayName: 'Contract Value',

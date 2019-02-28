@@ -32,7 +32,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     id: '3',
                     operatorKey: IS,
                     valueKey: null,
-                    valueType: 'string',
                 },
                 conditions: [
                     {
@@ -40,7 +39,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         id: '3',
                         operatorKey: IS,
                         valueKey: null,
-                        valueType: 'string',
                     },
                 ],
                 newCondition: [
@@ -49,7 +47,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         id: '3',
                         operatorKey: IS,
                         valueKey: null,
-                        valueType: 'string',
                     },
                 ],
             },
@@ -75,7 +72,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     id: '4',
                     operatorKey: IS,
                     valueKey: null,
-                    valueType: null,
                 },
                 conditions: [
                     {
@@ -83,19 +79,16 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         id: '4',
                         operatorKey: IS,
                         valueKey: null,
-                        valueType: null,
                     },
                 ],
-                fieldKey: LESS_THAN,
-                fieldKeyType: 'operatorKey',
-                valueType: null,
+                property: LESS_THAN,
+                conditionProperty: 'operatorKey',
                 newCondition: [
                     {
                         columnId: '1',
                         id: '4',
                         operatorKey: LESS_THAN,
                         valueKey: null,
-                        valueType: null,
                     },
                 ],
             },
@@ -107,7 +100,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     id: '5',
                     operatorKey: IS,
                     valueKey: null,
-                    valueType: null,
                 },
                 conditions: [
                     {
@@ -115,29 +107,26 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         id: '5',
                         operatorKey: IS,
                         valueKey: null,
-                        valueType: null,
                     },
                 ],
-                fieldKey: 0,
-                fieldKeyType: 'valueKey',
-                valueType: 'string',
+                property: 0,
+                conditionProperty: 'valueKey',
                 newCondition: [
                     {
                         columnId: '1',
                         id: '5',
                         operatorKey: IS,
                         valueKey: 0,
-                        valueType: 'string',
                     },
                 ],
             },
-        ].forEach(({ description, condition, conditions, fieldKey, fieldKeyType, newCondition, valueType }) => {
+        ].forEach(({ description, condition, conditions, property, conditionProperty, newCondition }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleFieldChange(condition, fieldKey, fieldKeyType, valueType);
+                wrapper.instance().handleFieldChange(condition, property, conditionProperty);
 
                 expect(wrapper.state('conditions')).toEqual(newCondition);
             });
@@ -251,7 +240,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 id: conditionID,
                 operatorKey: IS,
                 valueKey: null,
-                valueType: 'string',
             };
             wrapper.instance().setState({
                 conditions: [],

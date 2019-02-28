@@ -60,7 +60,6 @@ describe('features/query-bar/components/filter/Condition', () => {
             type: 'string',
             value,
         };
-        const valueType = 'string';
 
         test.each`
             description                    | fieldType     | keyType
@@ -77,7 +76,7 @@ describe('features/query-bar/components/filter/Condition', () => {
                 .at(1)
                 .simulate('change', option, fieldType);
 
-            expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType, valueType);
+            expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType);
         });
     });
 
@@ -89,7 +88,6 @@ describe('features/query-bar/components/filter/Condition', () => {
         };
         const condition = initialCondition;
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
-        const valueType = 'string';
         const keyType = VALUE_KEY;
 
         test.each`
@@ -102,7 +100,7 @@ describe('features/query-bar/components/filter/Condition', () => {
 
             wrapper.find('ValueField').prop('updateValueField')(fieldValue);
 
-            expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType, valueType);
+            expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType);
         });
     });
 
