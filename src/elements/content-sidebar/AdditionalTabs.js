@@ -14,12 +14,7 @@ type Props = {
 
 const AdditionalSidebarTabs = ({ tabs }: Props) => {
     const sidebarTabs = tabs.map(tabData => <AdditionalTab key={tabData.id} {...tabData} />);
-    return (
-        <React.Fragment>
-            <div className="bcs-nav-separator" />
-            {sidebarTabs}
-        </React.Fragment>
-    );
+    return <div className="bcs-nav-additional-tabs">{sidebarTabs}</div>;
 };
 
 export default AdditionalSidebarTabs;
