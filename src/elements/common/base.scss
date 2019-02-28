@@ -7,28 +7,10 @@
 @import '../../components/pill-selector-dropdown/PillSelector';
 @import '../../components/notification/Notification';
 
-.be {
-    @include reset;
-
-    // links have tag styles
-    @import '../../styles/common/links';
-    // Forms have tag styles
-    @import '../../styles/common/forms';
-
-    background: $white;
-    border: 0 none;
-    /* stylelint-disable declaration-no-important */
-    box-sizing: border-box !important;
-    /* stylelint-enable declaration-no-important */
+@mixin be-content {
     color: $twos;
-    height: 100%;
     letter-spacing: .3px;
     line-height: 20px;
-    margin: 0;
-    outline: none;
-    overflow: hidden;
-    padding: 0;
-    width: 100%;
 
     .ReactModal__Body--open & {
         position: relative;
@@ -68,6 +50,36 @@
     .select-button {
         font: inherit;
     }
+}
+
+.be {
+    @include reset;
+
+    // links have tag styles
+    @import '../../styles/common/links';
+    // Forms have tag styles
+    @import '../../styles/common/forms';
+
+    @include be-content;
+
+    background: $white;
+    border: 0 none;
+    /* stylelint-disable declaration-no-important */
+    box-sizing: border-box !important;
+    /* stylelint-enable declaration-no-important */
+    height: 100%;
+    margin: 0;
+    outline: none;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+}
+
+.be-modal {
+    // This class can be used to applu the base content reset to portalled elements are outside of the .be root
+    // Also add the .be class to the inner content to get the rest of the styles
+    @include reset;
+    @include be-content;
 }
 
 .be-app-element {
