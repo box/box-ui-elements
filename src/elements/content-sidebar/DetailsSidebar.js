@@ -446,7 +446,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         }
 
         return (
-            <SidebarContent title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_DETAILS)}>
+            <SidebarContent className="bcs-details" title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_DETAILS)}>
                 {hasNotices && (
                     <div className="bcs-details-content">{hasNotices && <SidebarNotices file={file} />}</div>
                 )}
