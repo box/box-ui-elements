@@ -698,7 +698,7 @@ type Integration = {
 
 type AdditionalTab = {
     callback: typeof Function,
-    element: React.Element<any>,
+    iconUrl: string,
     id: number,
     title: ?string,
 };

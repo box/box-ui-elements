@@ -10,9 +10,11 @@ exports[`elements/content-sidebar/AdditionalTab should render the tooltip and bu
     onClick={[Function]}
     type="button"
   >
-    <div>
-      test content
-    </div>
+    <img
+      alt="test title"
+      className="bcs-additional-tab-icon"
+      src="https://foo.com/image"
+    />
   </PlainButton>
 </Tooltip>
 `;

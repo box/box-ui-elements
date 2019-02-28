@@ -8,11 +8,10 @@ describe('elements/content-sidebar/AdditionalTab', () => {
     const getWrapper = props => shallow(<AdditionalTab {...props} />);
 
     test('should render the tooltip and button contents', () => {
-        const testContent = 'test content';
-        const TestComponent = <div>{testContent}</div>;
+        const mockSrc = 'https://foo.com/image';
         const props = {
             title: 'test title',
-            element: TestComponent,
+            iconUrl: mockSrc,
             id: 4,
             callback: () => {},
         };
@@ -23,8 +22,8 @@ describe('elements/content-sidebar/AdditionalTab', () => {
             wrapper
                 .find(PlainButton)
                 .childAt(0)
-                .text(),
-        ).toEqual(testContent);
+                .prop('src'),
+        ).toEqual(mockSrc);
         expect(wrapper.find(Tooltip).prop('text')).toBe('test title');
 
         expect(wrapper).toMatchSnapshot();
