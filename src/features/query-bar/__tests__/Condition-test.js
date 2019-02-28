@@ -76,44 +76,30 @@ describe('features/query-bar/components/filter/Condition', () => {
         });
     });
 
-    describe('updateSelectedField()', () => {
+    describe('handleValueChange()', () => {
         const condition = initialCondition;
-        const displayText = 'Vendor Name';
-        const value = 0;
-        const option = {
-            displayText,
-            value,
-        };
-
-        test('should update value field', () => {
-            const onFieldChange = jest.fn();
-            const wrapper = getWrapper({ onFieldChange });
-
-            wrapper.find('ValueField').prop('updateSelectedField')(option);
-
-            expect(onFieldChange).toHaveBeenCalledWith(condition, value, VALUE);
-        });
-    });
-
-    describe('updateValueField()', () => {
-        const stringFieldValue = {
+        const textInputValue = {
             target: {
-                value: '',
+                value: 'string',
             },
         };
-        const condition = initialCondition;
+        const selectFieldValue = {
+            displayText: 'hello',
+            value: '1',
+        };
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
         const keyType = VALUE;
 
         test.each`
-            description                                            | fieldValue          | value
-            ${'should enter an empty string into the value field'} | ${stringFieldValue} | ${''}
-            ${'should select a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue}
-        `('$description', ({ fieldValue, value }) => {
+            description                                            | option              | value
+            ${'should invoke onFieldChange with "string"'}         | ${textInputValue}   | ${'string'}
+            ${'should invoke onFieldChange with selectFieldValue'} | ${selectFieldValue} | ${selectFieldValue.value}
+            ${'should invoke onFieldChange with Date'}             | ${dateFieldValue}   | ${dateFieldValue}
+        `('$description', ({ option, value }) => {
             const onFieldChange = jest.fn();
             const wrapper = getWrapper({ onFieldChange });
 
-            wrapper.find('ValueField').prop('updateValueField')(fieldValue);
+            wrapper.find('ValueField').prop('onChange')(option);
 
             expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType);
         });

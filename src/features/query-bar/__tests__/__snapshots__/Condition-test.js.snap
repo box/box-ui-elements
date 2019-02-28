@@ -101,8 +101,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     className="condition-value-dropdown-container"
   >
     <ValueField
-      updateSelectedField={[Function]}
-      updateValueField={[Function]}
+      onChange={[Function]}
       valueOptions={
         Array [
           Object {

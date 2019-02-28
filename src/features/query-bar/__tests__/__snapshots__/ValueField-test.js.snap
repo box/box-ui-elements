@@ -15,6 +15,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="Date"
     name="datepicker"
+    onChange={[MockFunction]}
     placeholder="Date"
     value={1995-12-25T17:30:00.000Z}
   />
@@ -52,6 +53,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="Float input"
     name="float field"
+    onChange={[MockFunction]}
     placeholder="Enter a float"
     value=""
   />
@@ -66,6 +68,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="Number input"
     name="number field"
+    onChange={[MockFunction]}
     placeholder="Enter a number"
     value=""
   />
@@ -80,6 +83,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="String input"
     name="string field"
+    onChange={[MockFunction]}
     placeholder="Enter a string"
     value=""
   />

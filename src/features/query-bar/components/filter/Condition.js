@@ -45,18 +45,28 @@ const Condition = ({
         deleteCondition(index);
     };
 
-    const updateColumnField = (option: OptionType) => {
+    const handleColumnChange = (option: OptionType) => {
         const { value: columnId } = option;
         onColumnChange(condition, columnId);
     };
 
-    const updateOperatorField = (option: OptionType) => {
+    const handleOperatorChange = (option: OptionType) => {
         const { value } = option;
         onFieldChange(condition, value, OPERATOR);
     };
 
-    const updateSelectedField = (option: OptionType) => {
-        const { value } = option;
+    const handleValueChange = (option: SyntheticEvent<HTMLInputElement> | OptionType | Date) => {
+        let value = '';
+        if (option && option.target) {
+            // TextInput
+            value = (option.target: window.HTMLInputElement).value;
+        } else if (option && option.value !== undefined && option.value !== null && typeof option.value === 'string') {
+            // SingleSelectField
+            value = option.value;
+        } else if (option instanceof Date) {
+            // DatePicker
+            value = option;
+        }
         onFieldChange(condition, value, VALUE);
     };
 
@@ -84,19 +94,6 @@ const Condition = ({
             });
         }
         return [];
-    };
-
-    const updateValueField = (fieldValue: Object) => {
-        let value = '';
-
-        if (!fieldValue || !fieldValue.target) {
-            value = fieldValue;
-        } else {
-            const { target } = fieldValue;
-            value = target.value;
-        }
-
-        onFieldChange(condition, value, VALUE);
     };
 
     const getErrorMessage = () => {
@@ -169,7 +166,7 @@ const Condition = ({
                     <SingleSelectField
                         fieldType={COLUMN}
                         isDisabled={false}
-                        onChange={updateColumnField}
+                        onChange={handleColumnChange}
                         options={columnOptions}
                         selectedValue={columnId}
                     />
@@ -195,7 +192,7 @@ const Condition = ({
                     <SingleSelectField
                         fieldType={OPERATOR}
                         isDisabled={false}
-                        onChange={updateOperatorField}
+                        onChange={handleOperatorChange}
                         options={operatorOptions}
                         selectedValue={operator}
                     />
@@ -221,9 +218,8 @@ const Condition = ({
             return (
                 <div className={classnames}>
                     <ValueField
+                        onChange={handleValueChange}
                         selectedValue={value}
-                        updateValueField={updateValueField}
-                        updateSelectedField={updateSelectedField}
                         value={value}
                         valueOptions={valueOptions}
                         valueType={type}

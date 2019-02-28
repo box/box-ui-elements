@@ -2,32 +2,24 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import DatePicker from '../../../../components/date-picker';
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
 import TextInput from '../../../../components/text-input';
-import DatePicker from '../../../../components/date-picker';
-
-import messages from '../../messages';
+import type { OptionType } from '../../flowTypes';
 import { VALUE } from '../../constants';
+import messages from '../../messages';
 
 import '../../styles/Condition.scss';
 
 type Props = {
+    onChange: (option: SyntheticEvent<HTMLInputElement> | OptionType | Date) => void,
     selectedValue?: string | number,
-    updateSelectedField: Function,
-    updateValueField: Function,
     value?: string | Date | number,
     valueOptions: Array<Object>,
     valueType: string,
 };
 
-const ValueField = ({
-    selectedValue,
-    updateValueField,
-    updateSelectedField,
-    value,
-    valueOptions,
-    valueType,
-}: Props) => {
+const ValueField = ({ onChange, selectedValue, value, valueOptions, valueType }: Props) => {
     switch (valueType) {
         case 'string':
             return (
@@ -36,7 +28,7 @@ const ValueField = ({
                         hideLabel
                         label="String input"
                         name="string field"
-                        onChange={updateValueField}
+                        onChange={onChange}
                         placeholder="Enter a string"
                         value={selectedValue || ''}
                     />
@@ -49,7 +41,7 @@ const ValueField = ({
                         hideLabel
                         label="Number input"
                         name="number field"
-                        onChange={updateValueField}
+                        onChange={onChange}
                         placeholder="Enter a number"
                         value={selectedValue || ''}
                     />
@@ -62,7 +54,7 @@ const ValueField = ({
                         hideLabel
                         label="Float input"
                         name="float field"
-                        onChange={updateValueField}
+                        onChange={onChange}
                         placeholder="Enter a float"
                         value={selectedValue || ''}
                     />
@@ -80,7 +72,7 @@ const ValueField = ({
                         hideLabel
                         label="Date"
                         name="datepicker"
-                        onChange={updateValueField}
+                        onChange={onChange}
                         placeholder="Date"
                         value={value ? new Date(value) : undefined}
                     />
@@ -90,7 +82,7 @@ const ValueField = ({
             return (
                 <SingleSelectField
                     fieldType={VALUE}
-                    onChange={updateSelectedField}
+                    onChange={onChange}
                     options={valueOptions}
                     placeholder={<FormattedMessage {...messages.selectValuePlaceholderText} />}
                     selectedValue={selectedValue}
