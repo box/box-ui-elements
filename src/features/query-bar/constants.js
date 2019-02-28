@@ -19,35 +19,24 @@ export const FLOAT: 'float' = 'float';
 export const ENUM: 'enum' = 'enum';
 export const DATE: 'date' = 'date';
 
-export const IS: '=' = '=';
-export const IS_NOT: '!=' = '!=';
+export const EQUALS: '=' = '=';
+export const NOT_EQUALS: '!=' = '!=';
 export const GREATER_THAN: '>' = '>';
 export const LESS_THAN: '<' = '<';
 
-export const IS_OPERATOR = {
-    displayText: 'is',
-    key: IS,
+export const OPERATORS = {
+    EQUALS: { displayText: 'is', key: EQUALS },
+    NOT_EQUALS: { displayText: 'is not', key: NOT_EQUALS },
+    GREATER_THAN: { displayText: 'is greater than', key: GREATER_THAN },
+    LESS_THAN: { displayText: 'is less than', key: LESS_THAN },
 };
 
-export const GREATER_THAN_OPERATOR = {
-    displayText: 'is greater than',
-    key: GREATER_THAN,
-};
-
-export const LESS_THAN_OPERATOR = {
-    displayText: 'is less than',
-    key: LESS_THAN,
-};
-
-export const IS_NOT_OPERATOR = {
-    displayText: 'is not',
-    key: IS_NOT,
-};
+export const ALL_OPERATORS = [OPERATORS.EQUALS, OPERATORS.NOT_EQUALS, OPERATORS.GREATER_THAN, OPERATORS.LESS_THAN];
 
 export const COLUMN_OPERATORS = {
-    string: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
-    number: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
-    float: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
-    enum: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
-    date: [IS_OPERATOR, IS_NOT_OPERATOR, GREATER_THAN_OPERATOR, LESS_THAN_OPERATOR],
+    string: ALL_OPERATORS,
+    number: ALL_OPERATORS,
+    float: ALL_OPERATORS,
+    enum: ALL_OPERATORS,
+    date: ALL_OPERATORS,
 };

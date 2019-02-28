@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { columns } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
-import { IS, LESS_THAN } from '../constants';
+import { EQUALS, LESS_THAN } from '../constants';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
@@ -30,14 +30,14 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '3',
-                    operator: IS,
+                    operator: EQUALS,
                     value: null,
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '3',
-                        operator: IS,
+                        operator: EQUALS,
                         value: null,
                     },
                 ],
@@ -45,7 +45,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     {
                         columnId: '2',
                         id: '3',
-                        operator: IS,
+                        operator: EQUALS,
                         value: null,
                     },
                 ],
@@ -70,14 +70,14 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '4',
-                    operator: IS,
+                    operator: EQUALS,
                     value: null,
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '4',
-                        operator: IS,
+                        operator: EQUALS,
                         value: null,
                     },
                 ],
@@ -98,14 +98,14 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '5',
-                    operator: IS,
+                    operator: EQUALS,
                     value: null,
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '5',
-                        operator: IS,
+                        operator: EQUALS,
                         value: null,
                     },
                 ],
@@ -115,7 +115,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     {
                         columnId: '1',
                         id: '5',
-                        operator: IS,
+                        operator: EQUALS,
                         value: 0,
                     },
                 ],
@@ -238,7 +238,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const expected = {
                 columnId: '1',
                 id: conditionID,
-                operator: IS,
+                operator: EQUALS,
                 value: null,
             };
             wrapper.instance().setState({
