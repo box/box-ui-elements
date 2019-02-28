@@ -94,6 +94,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
             },
           ]
         }
+        selectedValue="="
       />
     </div>
   </div>
@@ -102,6 +103,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
   >
     <ValueField
       onChange={[Function]}
+      selectedValue={null}
       valueOptions={
         Array [
           Object {
