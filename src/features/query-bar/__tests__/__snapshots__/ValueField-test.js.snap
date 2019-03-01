@@ -40,11 +40,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
       id="boxui.queryBar.selectValuePlaceholderText"
     />
   }
-  selectedValues={
-    Array [
-      "",
-    ]
-  }
+  selectedValues={Array []}
 />
 `;
 
@@ -67,7 +63,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
       id="boxui.queryBar.selectValuePlaceholderText"
     />
   }
-  selectedValue=""
+  selectedValue={null}
 />
 `;
 
@@ -81,7 +77,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     name="float field"
     onChange={[Function]}
     placeholder="Enter a float"
-    value=""
+    value={null}
   />
 </div>
 `;
@@ -96,7 +92,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     name="number field"
     onChange={[Function]}
     placeholder="Enter a number"
-    value=""
+    value={null}
   />
 </div>
 `;
@@ -111,7 +107,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     name="string field"
     onChange={[Function]}
     placeholder="Enter a string"
-    value=""
+    value={null}
   />
 </div>
 `;

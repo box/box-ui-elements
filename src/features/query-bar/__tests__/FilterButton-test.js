@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { columns } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
-import { EQUALS, LESS_THAN } from '../constants';
+import { EQUALS, LESS_THAN, OPERATOR, VALUE } from '../constants';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
@@ -81,8 +81,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         value: [],
                     },
                 ],
-                property: [LESS_THAN],
-                conditionProperty: 'operator',
+                value: [LESS_THAN],
+                property: OPERATOR,
                 newCondition: [
                     {
                         columnId: '1',
@@ -98,35 +98,35 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '5',
-                    operator: EQUALS,
+                    operator: [EQUALS],
                     value: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '5',
-                        operator: EQUALS,
+                        operator: [EQUALS],
                         value: [],
                     },
                 ],
-                property: ['0'],
-                conditionProperty: 'value',
+                value: ['0'],
+                property: VALUE,
                 newCondition: [
                     {
                         columnId: '1',
                         id: '5',
-                        operator: EQUALS,
+                        operator: [EQUALS],
                         value: ['0'],
                     },
                 ],
             },
-        ].forEach(({ description, condition, conditions, property, conditionProperty, newCondition }) => {
+        ].forEach(({ description, condition, conditions, value, property, newCondition }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleFieldChange(condition, property, conditionProperty);
+                wrapper.instance().handleFieldChange(condition, value, property);
 
                 expect(wrapper.state('conditions')).toEqual(newCondition);
             });
@@ -141,19 +141,19 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '2',
-                        operator: null,
+                        operator: [EQUALS],
                         value: [],
                     },
                     {
                         id: '3',
-                        operator: null,
+                        operator: [EQUALS],
                         value: [],
                     },
                 ],
                 expectedConditions: [
                     {
                         id: '3',
-                        operator: null,
+                        operator: [EQUALS],
                         value: [],
                     },
                 ],
