@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import DatePicker from '../../../../components/date-picker';
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
+import MultiSelectField from '../../../../components/select-field/MultiSelectField';
 import TextInput from '../../../../components/text-input';
 import { VALUE } from '../../constants';
 import messages from '../../messages';
@@ -11,13 +12,15 @@ import messages from '../../messages';
 import '../../styles/Condition.scss';
 
 type Props = {
-    onChange: (value: String) => void,
-    selectedValue?: string | number,
+    onChange: (value: Array<string>) => void,
+    selectedValue: Array<string> | Array<number>,
     valueOptions: Array<Object>,
     valueType: string,
 };
 
 const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props) => {
+    const isValueSet = selectedValue && selectedValue.length > 0;
+
     switch (valueType) {
         case 'string':
             return (
@@ -26,9 +29,9 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                         hideLabel
                         label="String input"
                         name="string field"
-                        onChange={e => onChange(e.target.value)}
+                        onChange={e => onChange([e.target.value])}
                         placeholder="Enter a string"
-                        value={selectedValue || ''}
+                        value={isValueSet ? selectedValue[0] : null}
                     />
                 </div>
             );
@@ -39,9 +42,9 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                         hideLabel
                         label="Number input"
                         name="number field"
-                        onChange={e => onChange(e.target.value)}
+                        onChange={e => onChange([e.target.value])}
                         placeholder="Enter a number"
-                        value={selectedValue || ''}
+                        value={isValueSet ? selectedValue[0] : null}
                     />
                 </div>
             );
@@ -52,9 +55,9 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                         hideLabel
                         label="Float input"
                         name="float field"
-                        onChange={e => onChange(e.target.value)}
+                        onChange={e => onChange([e.target.value])}
                         placeholder="Enter a float"
-                        value={selectedValue || ''}
+                        value={isValueSet ? selectedValue[0] : null}
                     />
                 </div>
             );
@@ -70,9 +73,9 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                         hideLabel
                         label="Date"
                         name="datepicker"
-                        onChange={e => onChange(e.toString())}
+                        onChange={e => onChange([e.toString()])}
                         placeholder="Date"
-                        value={selectedValue ? new Date(selectedValue) : undefined}
+                        value={isValueSet && selectedValue[0] !== '' ? new Date(selectedValue[0]) : undefined}
                     />
                 </div>
             );
@@ -80,10 +83,20 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
             return (
                 <SingleSelectField
                     fieldType={VALUE}
-                    onChange={e => onChange(e.value)}
+                    onChange={e => onChange([e.value])}
                     options={valueOptions}
                     placeholder={<FormattedMessage {...messages.selectValuePlaceholderText} />}
-                    selectedValue={selectedValue}
+                    selectedValue={isValueSet ? selectedValue[0] : null}
+                />
+            );
+        case 'multi-enum':
+            return (
+                <MultiSelectField
+                    fieldType={VALUE}
+                    onChange={e => onChange(e.map(option => option.value))}
+                    options={valueOptions}
+                    placeholder={<FormattedMessage {...messages.selectValuePlaceholderText} />}
+                    selectedValues={selectedValue}
                 />
             );
         default:
