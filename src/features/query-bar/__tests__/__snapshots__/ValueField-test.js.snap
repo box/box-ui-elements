@@ -15,7 +15,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="Date"
     name="datepicker"
-    onChange={[MockFunction]}
+    onChange={[Function]}
     placeholder="Date"
     value={1995-12-25T17:30:00.000Z}
   />
@@ -25,7 +25,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
 exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a SingleSelectField for a valueType of enum" 1`] = `
 <SingleSelectField
   fieldType="value"
-  onChange={[MockFunction]}
+  onChange={[Function]}
   options={
     Array [
       Object {
@@ -53,7 +53,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="Float input"
     name="float field"
-    onChange={[MockFunction]}
+    onChange={[Function]}
     placeholder="Enter a float"
     value=""
   />
@@ -68,7 +68,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="Number input"
     name="number field"
-    onChange={[MockFunction]}
+    onChange={[Function]}
     placeholder="Enter a number"
     value=""
   />
@@ -83,7 +83,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="String input"
     name="string field"
-    onChange={[MockFunction]}
+    onChange={[Function]}
     placeholder="Enter a string"
     value=""
   />

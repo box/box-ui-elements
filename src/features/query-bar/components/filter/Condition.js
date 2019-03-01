@@ -23,7 +23,7 @@ type Props = {
     index: number,
     onColumnChange: (condition: Object, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onFieldChange: (condition: Object, value: string | Date, property: string) => void,
+    onFieldChange: (condition: Object, value: string, property: string) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -55,18 +55,7 @@ const Condition = ({
         onFieldChange(condition, value, OPERATOR);
     };
 
-    const handleValueChange = (option: SyntheticEvent<HTMLInputElement> | OptionType | Date) => {
-        let value = '';
-        if (option && option.target) {
-            // TextInput
-            value = (option.target: window.HTMLInputElement).value;
-        } else if (option && option.value !== undefined && option.value !== null && typeof option.value === 'string') {
-            // SingleSelectField
-            value = option.value;
-        } else if (option instanceof Date) {
-            // DatePicker
-            value = option;
-        }
+    const handleValueChange = (value: string) => {
         onFieldChange(condition, value, VALUE);
     };
 

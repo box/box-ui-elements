@@ -78,22 +78,15 @@ describe('features/query-bar/components/filter/Condition', () => {
 
     describe('handleValueChange()', () => {
         const condition = initialCondition;
-        const textInputValue = {
-            target: {
-                value: 'string',
-            },
-        };
-        const selectFieldValue = {
-            displayText: 'hello',
-            value: '1',
-        };
+        const textInputValue = 'string';
+        const selectFieldValue = '1';
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
         const keyType = VALUE;
 
         test.each`
             description                                            | option              | value
-            ${'should invoke onFieldChange with "string"'}         | ${textInputValue}   | ${'string'}
-            ${'should invoke onFieldChange with selectFieldValue'} | ${selectFieldValue} | ${selectFieldValue.value}
+            ${'should invoke onFieldChange with "string"'}         | ${textInputValue}   | ${textInputValue}
+            ${'should invoke onFieldChange with selectFieldValue'} | ${selectFieldValue} | ${selectFieldValue}
             ${'should invoke onFieldChange with Date'}             | ${dateFieldValue}   | ${dateFieldValue}
         `('$description', ({ option, value }) => {
             const onFieldChange = jest.fn();
