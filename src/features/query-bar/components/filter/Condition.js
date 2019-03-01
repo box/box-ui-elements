@@ -23,7 +23,7 @@ type Props = {
     index: number,
     onColumnChange: (condition: Object, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onFieldChange: (condition: Object, value: string, property: string) => void,
+    onFieldChange: (condition: Object, value: Array<string>, property: string) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -52,10 +52,10 @@ const Condition = ({
 
     const handleOperatorChange = (option: OptionType) => {
         const { value } = option;
-        onFieldChange(condition, value, OPERATOR);
+        onFieldChange(condition, ([value]: Array<string>), OPERATOR);
     };
 
-    const handleValueChange = (value: string) => {
+    const handleValueChange = (value: Array<string>) => {
         onFieldChange(condition, value, VALUE);
     };
 
@@ -90,7 +90,7 @@ const Condition = ({
         const column = columns && columns.find(c => c.id === columnId);
         const type = column && column.type;
 
-        const isValueSet = value !== null && value !== '';
+        const isValueSet = value !== null && value !== '' && value.length !== 0;
         const message = (
             <FormattedMessage
                 {...(type === DATE ? messages.tooltipSelectDateError : messages.tooltipSelectValueError)}
@@ -183,7 +183,7 @@ const Condition = ({
                         isDisabled={false}
                         onChange={handleOperatorChange}
                         options={operatorOptions}
-                        selectedValue={operator}
+                        selectedValue={operator[0]}
                     />
                 </div>
             </div>

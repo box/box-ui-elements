@@ -31,14 +31,14 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnId: '1',
                     id: '3',
                     operator: EQUALS,
-                    value: null,
+                    value: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '3',
                         operator: EQUALS,
-                        value: null,
+                        value: [],
                     },
                 ],
                 expectedConditions: [
@@ -46,7 +46,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnId: '2',
                         id: '3',
                         operator: EQUALS,
-                        value: null,
+                        value: [],
                     },
                 ],
             },
@@ -71,14 +71,14 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnId: '1',
                     id: '4',
                     operator: EQUALS,
-                    value: null,
+                    value: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '4',
                         operator: EQUALS,
-                        value: null,
+                        value: [],
                     },
                 ],
                 property: LESS_THAN,
@@ -88,7 +88,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnId: '1',
                         id: '4',
                         operator: LESS_THAN,
-                        value: null,
+                        value: [],
                     },
                 ],
             },
@@ -99,24 +99,24 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnId: '1',
                     id: '5',
                     operator: EQUALS,
-                    value: null,
+                    value: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '5',
                         operator: EQUALS,
-                        value: null,
+                        value: [],
                     },
                 ],
-                property: 0,
+                property: ['0'],
                 conditionProperty: 'value',
                 newCondition: [
                     {
                         columnId: '1',
                         id: '5',
                         operator: EQUALS,
-                        value: 0,
+                        value: ['0'],
                     },
                 ],
             },
@@ -141,26 +141,20 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '2',
-                        operatorDisplayText: '',
                         operator: null,
-                        valueDisplayText: null,
-                        value: null,
+                        value: [],
                     },
                     {
                         id: '3',
-                        operatorDisplayText: '',
                         operator: null,
-                        valueDisplayText: null,
-                        value: null,
+                        value: [],
                     },
                 ],
                 expectedConditions: [
                     {
                         id: '3',
-                        operatorDisplayText: '',
                         operator: null,
-                        valueDisplayText: null,
-                        value: null,
+                        value: [],
                     },
                 ],
             },
@@ -238,8 +232,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const expected = {
                 columnId: '1',
                 id: conditionID,
-                operator: EQUALS,
-                value: null,
+                operator: [EQUALS],
+                value: [],
             };
             wrapper.instance().setState({
                 conditions: [],
@@ -263,16 +257,50 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('closeOnClickPredicate()', () => {
-        test('Should return true if Apply button was clicked', () => {
+        test('Should return true if Apply button was clicked and value is not empty', () => {
+            const conditions = [
+                {
+                    columnId: '1',
+                    id: '3',
+                    operator: EQUALS,
+                    value: ['1'],
+                },
+            ];
             const wrapper = getWrapper();
             const targetWithClassName = {
                 target: document.createElement('button'),
             };
+            wrapper.instance().setState({
+                conditions,
+            });
             targetWithClassName.target.className = 'apply-filters-button';
             const closeOnClickPredicateResult = wrapper.instance().shouldClose(targetWithClassName);
 
             wrapper.update();
             expect(closeOnClickPredicateResult).toEqual(true);
+        });
+
+        test('Should return false if Apply button was clicked and value is empty', () => {
+            const conditions = [
+                {
+                    columnId: '1',
+                    id: '3',
+                    operator: EQUALS,
+                    value: [],
+                },
+            ];
+            const wrapper = getWrapper();
+            const targetWithClassName = {
+                target: document.createElement('button'),
+            };
+            wrapper.instance().setState({
+                conditions,
+            });
+            targetWithClassName.target.className = 'apply-filters-button';
+            const closeOnClickPredicateResult = wrapper.instance().shouldClose(targetWithClassName);
+
+            wrapper.update();
+            expect(closeOnClickPredicateResult).toEqual(false);
         });
     });
 });

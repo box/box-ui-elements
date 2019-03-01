@@ -5,8 +5,8 @@ import { EQUALS } from '../constants';
 const initialCondition: ConditionType = {
     columnId: '3',
     id: 0,
-    operator: EQUALS,
-    value: null,
+    operator: [EQUALS],
+    value: [],
 };
 
 const columnOptions = [
@@ -51,6 +51,24 @@ const columns: Array<ColumnType> = [
             },
         ],
     },
+    {
+        displayName: 'Offices',
+        id: '4',
+        isShown: true,
+        property: 'offices',
+        source: 'metadata',
+        type: 'multi-enum',
+        options: [
+            {
+                id: '',
+                key: 'Office A',
+            },
+            {
+                id: '1',
+                key: 'Office B',
+            },
+        ],
+    },
 ];
 
 const columnsWithNewOrder: Array<ColumnType> = [
@@ -81,6 +99,24 @@ const columnsWithNewOrder: Array<ColumnType> = [
         source: 'metadata',
         type: 'enum',
     },
+    {
+        displayName: 'Offices',
+        id: '4',
+        isShown: true,
+        property: 'offices',
+        source: 'metadata',
+        type: 'multi-enum',
+        options: [
+            {
+                id: '',
+                key: 'Office A',
+            },
+            {
+                id: '1',
+                key: 'Office B',
+            },
+        ],
+    },
 ];
 
 const columnsWithOneColumnNotShown: Array<ColumnType> = [
@@ -110,6 +146,24 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
         property: 'contractValue',
         source: 'metadata',
         type: 'enum',
+    },
+    {
+        displayName: 'Offices',
+        id: '4',
+        isShown: true,
+        property: 'offices',
+        source: 'metadata',
+        type: 'multi-enum',
+        options: [
+            {
+                id: '',
+                key: 'Office A',
+            },
+            {
+                id: '1',
+                key: 'Office B',
+            },
+        ],
     },
 ];
 

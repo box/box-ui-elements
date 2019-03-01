@@ -54,7 +54,7 @@ describe('features/query-bar/components/filter/Condition', () => {
     describe('handleOperatorChange()', () => {
         const displayText = 'Vendor Name';
         const condition = initialCondition;
-        const value = 0;
+        const value = '0';
         const option = {
             displayText,
             value,
@@ -72,7 +72,7 @@ describe('features/query-bar/components/filter/Condition', () => {
                 .find('SingleSelectField')
                 .at(1)
                 .simulate('change', option);
-            expect(onFieldChange).toHaveBeenCalledWith(condition, value, OPERATOR);
+            expect(onFieldChange).toHaveBeenCalledWith(condition, [value], OPERATOR);
         });
     });
 
