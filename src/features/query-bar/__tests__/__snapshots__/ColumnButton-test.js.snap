@@ -94,7 +94,7 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "options": null,
             "property": "lastUpdatedByName",
             "source": "item",
-            "type": "string",
+            "type": "date",
           },
           Object {
             "displayName": "Contract Value",
