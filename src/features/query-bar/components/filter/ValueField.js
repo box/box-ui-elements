@@ -13,13 +13,13 @@ import '../../styles/Condition.scss';
 
 type Props = {
     onChange: (value: Array<string>) => void,
-    selectedValue: Array<string> | Array<number>,
+    selectedValue: Array<string>,
     valueOptions: Array<Object>,
     valueType: string,
 };
 
 const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props) => {
-    const isValueSet = selectedValue && selectedValue.length > 0;
+    const isValueSet = selectedValue.length > 0;
 
     switch (valueType) {
         case 'string':
@@ -73,7 +73,9 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                         hideLabel
                         label="Date"
                         name="datepicker"
-                        onChange={e => onChange([e.toString()])}
+                        onChange={e => {
+                            return e ? onChange([e.toString()]) : onChange([]);
+                        }}
                         placeholder="Date"
                         value={isValueSet && selectedValue[0] !== '' ? new Date(selectedValue[0]) : undefined}
                     />
