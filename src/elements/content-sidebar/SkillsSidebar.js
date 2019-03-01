@@ -236,7 +236,7 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
         const { cards, errors }: State = this.state;
 
         return (
-            <SidebarContent title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_SKILLS)}>
+            <SidebarContent className="bcs-skills" title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_SKILLS)}>
                 {cards ? (
                     <SidebarSkills
                         cards={cards}

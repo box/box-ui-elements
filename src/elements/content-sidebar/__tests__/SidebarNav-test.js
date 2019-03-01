@@ -1,5 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { MemoryRouter } from 'react-router-dom';
+import { mount } from 'enzyme';
 import IconMagicWand from '../../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../../icons/general/IconMetadataThick';
 import IconDocInfo from '../../../icons/general/IconDocInfo';
@@ -8,7 +9,12 @@ import SidebarNavButton from '../SidebarNavButton';
 import SidebarNav from '../SidebarNav';
 
 describe('elements/content-sidebar/SidebarNav', () => {
-    const getWrapper = props => shallow(<SidebarNav {...props} />);
+    const getWrapper = (props, active = '') =>
+        mount(
+            <MemoryRouter initialEntries={[`/${active}`]}>
+                <SidebarNav {...props} />
+            </MemoryRouter>,
+        ).find('SidebarNav');
 
     test('should render skills tab', () => {
         const props = {
@@ -19,7 +25,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
         expect(wrapper.find(IconChatRound)).toHaveLength(0);
-        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render details tab', () => {
@@ -31,7 +36,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(1);
         expect(wrapper.find(IconChatRound)).toHaveLength(0);
-        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render activity tab', () => {
@@ -43,7 +47,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
         expect(wrapper.find(IconChatRound)).toHaveLength(1);
-        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render metadata tab', () => {
@@ -55,17 +58,15 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(IconMetadataThick)).toHaveLength(1);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
         expect(wrapper.find(IconChatRound)).toHaveLength(0);
-        expect(wrapper).toMatchSnapshot();
     });
 
     test('should select activity tab', () => {
         const props = {
-            hasSkills: true,
             hasActivityFeed: true,
             hasMetadata: true,
-            selectedView: 'activity',
+            hasSkills: true,
         };
-        const wrapper = getWrapper(props);
+        const wrapper = getWrapper(props, 'activity');
         expect(wrapper.find(IconMagicWand)).toHaveLength(1);
         expect(wrapper.find(IconMetadataThick)).toHaveLength(1);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
@@ -73,10 +74,9 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(SidebarNavButton)).toHaveLength(3);
         expect(
             wrapper
-                .find(SidebarNavButton)
-                .at(0)
-                .prop('isSelected'),
-        ).toBeTruthy();
-        expect(wrapper).toMatchSnapshot();
+                .find('[data-testid="sidebaractivity"]')
+                .first()
+                .prop('className'),
+        ).toContain('bcs-nav-btn-is-selected');
     });
 });

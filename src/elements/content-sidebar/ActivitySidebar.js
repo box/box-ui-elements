@@ -478,6 +478,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent
+                className="bcs-activity"
                 title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_ACTIVITY)}
                 actions={<FeatureFlag feature="activityFeed.tasks.createButton" enabled={this.renderAddTaskButton} />}
             >

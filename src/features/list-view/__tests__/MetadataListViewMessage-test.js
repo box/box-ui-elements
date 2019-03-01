@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import Message from '../Message';
+import Message from '../components/MetadataListViewMessage';
 
 describe('Message', () => {
     const getWrapper = (props = {}) => {
