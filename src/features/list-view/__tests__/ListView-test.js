@@ -10,21 +10,16 @@ type Props = {|
     className: string,
     key: string,
     name: string,
-    style: Object,
 |};
 
-const ListViewNameTestCell = ({ name, className, style }: Props) => (
-    <div className={className} style={style}>
-        {name}
-    </div>
-);
+const ListViewNameTestCell = ({ name }: Props) => <div>{name}</div>;
 
 const rowData = [
     [
         '',
-        <ListViewNameTestCell name="A" className="list-view-name-cell" key="A" style={nameCellStyle} />,
-        <ListViewNameTestCell name="B" className="list-view-name-cell" key="B" style={nameCellStyle} />,
-        <ListViewNameTestCell name="C" className="list-view-name-cell" key="C" style={nameCellStyle} />,
+        <ListViewNameTestCell name="A" key="A" style={nameCellStyle} />,
+        <ListViewNameTestCell name="B" key="B" style={nameCellStyle} />,
+        <ListViewNameTestCell name="C" key="C" style={nameCellStyle} />,
     ],
     ['', 'D', 'E', 'F'],
 ];
@@ -49,15 +44,15 @@ describe('features/list-view/ListView', () => {
     };
     describe('CellRenderer()', () => {
         test.each`
-            columnIndex | rowIndex | cellData | should                                                  | className
-            ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'list-view-column-header'}
-            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'list-view-name-cell'}
-            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'list-view-name-cell'}
-            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'list-view-name-cell'}
-            ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'list-view-column-header'}
-            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'list-view-column-cell'}
-            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'list-view-column-cell'}
-            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'list-view-column-cell'}
+            columnIndex | rowIndex | cellData                      | should                                                  | className
+            ${0}        | ${0}     | ${'h1'}                       | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'list-view-column-header'}
+            ${0}        | ${1}     | ${'<ListViewNameTestCell />'} | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'list-view-name-cell'}
+            ${0}        | ${2}     | ${'<ListViewNameTestCell />'} | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'list-view-name-cell'}
+            ${0}        | ${3}     | ${'<ListViewNameTestCell />'} | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'list-view-name-cell'}
+            ${1}        | ${0}     | ${'h2'}                       | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'list-view-column-header'}
+            ${1}        | ${1}     | ${'D'}                        | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'list-view-column-cell'}
+            ${1}        | ${2}     | ${'E'}                        | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'list-view-column-cell'}
+            ${1}        | ${3}     | ${'F'}                        | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'list-view-column-cell'}
         `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
             const wrapper = getWrapper();
 

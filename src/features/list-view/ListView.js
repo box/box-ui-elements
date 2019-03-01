@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
-import { rowHeight } from './constants';
+import { RowHeight } from './constants';
 
 import './styles/ListView.scss';
 
@@ -41,8 +41,12 @@ class ListView extends React.PureComponent<Props> {
             );
         }
         if (columnIndex === 0) {
-            const NameCell = getGridCell({ columnIndex, rowIndex, style });
-            return NameCell;
+            const NameCell = getGridCell({ columnIndex, rowIndex });
+            return (
+                <div className="list-view-name-cell" style={style} key={key}>
+                    {NameCell}
+                </div>
+            );
         }
 
         return (
@@ -69,7 +73,7 @@ class ListView extends React.PureComponent<Props> {
                     fixedColumnCount={1}
                     fixedRowCount={1}
                     height={height}
-                    rowHeight={rowHeight}
+                    rowHeight={RowHeight}
                     rowCount={rowCount}
                     scrollToColumn={0}
                     scrollToRow={0}
