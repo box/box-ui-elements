@@ -115,6 +115,27 @@ class TasksNew extends Base {
             errorCallback,
         });
     }
+
+    getTask({
+        errorCallback,
+        file,
+        id,
+        successCallback,
+    }: {
+        errorCallback: ElementsErrorCallback,
+        file: { id: string },
+        id: string,
+        successCallback: Function,
+    }): void {
+        this.errorCode = ERROR_CODE_FETCH_TASKS;
+        this.get({
+            id: file.id,
+            url: this.getUrlForTask(id),
+            requestData: { headers },
+            successCallback,
+            errorCallback,
+        });
+    }
 }
 
 export default TasksNew;
