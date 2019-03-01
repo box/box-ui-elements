@@ -41,7 +41,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         value: null,
                     },
                 ],
-                newConditions: [
+                expectedConditions: [
                     {
                         columnId: '2',
                         id: '3',
@@ -50,7 +50,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, columnId, condition, conditions, newConditions }) => {
+        ].forEach(({ description, columnId, condition, conditions, expectedConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper({ columns });
                 wrapper.setState({
@@ -58,7 +58,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 });
                 wrapper.instance().handleColumnChange(condition, columnId);
 
-                expect(wrapper.state('conditions')).toEqual(newConditions);
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
             });
         });
     });
@@ -154,7 +154,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         value: null,
                     },
                 ],
-                newConditions: [
+                expectedConditions: [
                     {
                         id: '3',
                         operatorDisplayText: '',
@@ -164,7 +164,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, index, conditions, newConditions }) => {
+        ].forEach(({ description, index, conditions, expectedConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.instance().setState({
@@ -172,7 +172,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 });
                 wrapper.instance().deleteCondition(index);
 
-                expect(wrapper.state('conditions')).toEqual(newConditions);
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
             });
         });
     });
