@@ -30,14 +30,14 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '3',
-                    operator: EQUALS,
+                    operator: [EQUALS],
                     value: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '3',
-                        operator: EQUALS,
+                        operator: [EQUALS],
                         value: [],
                     },
                 ],
@@ -45,7 +45,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     {
                         columnId: '2',
                         id: '3',
-                        operator: EQUALS,
+                        operator: [EQUALS],
                         value: [],
                     },
                 ],
@@ -70,24 +70,24 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '4',
-                    operator: EQUALS,
+                    operator: [EQUALS],
                     value: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '4',
-                        operator: EQUALS,
+                        operator: [EQUALS],
                         value: [],
                     },
                 ],
-                property: LESS_THAN,
+                property: [LESS_THAN],
                 conditionProperty: 'operator',
                 newCondition: [
                     {
                         columnId: '1',
                         id: '4',
-                        operator: LESS_THAN,
+                        operator: [LESS_THAN],
                         value: [],
                     },
                 ],
