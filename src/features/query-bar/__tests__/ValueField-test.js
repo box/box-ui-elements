@@ -11,10 +11,7 @@ describe('features/query-bar/components/filter/ValueField', () => {
         return shallow(
             <ValueField
                 formatMessage={intl.formatMessage}
-                selectedValue=""
-                updateDateInputValue={jest.fn()}
-                updateSelectedField={jest.fn()}
-                updateTextInputValue={jest.fn()}
+                onChange={jest.fn()}
                 valueKey="0"
                 valueOptions={[
                     {
@@ -30,14 +27,14 @@ describe('features/query-bar/components/filter/ValueField', () => {
 
     describe('render value fields', () => {
         test.each`
-            description                                                              | valueType   | renderedComponent
-            ${'should correctly render a SingleSelectField for a valueType of enum'} | ${'enum'}   | ${'SingleSelectField'}
-            ${'should correctly render a DatePicker for a valueType of date'}        | ${'date'}   | ${'DatePicker'}
-            ${'should correctly render a TextInput for a valueType of string'}       | ${'string'} | ${'TextInput'}
-            ${'should correctly render a TextInput for a valueType of float'}        | ${'float'}  | ${'TextInput'}
-            ${'should correctly render a TextInput for a valueType of number'}       | ${'number'} | ${'TextInput'}
-        `('$description', ({ valueType, renderedComponent }) => {
-            const wrapper = getWrapper({ valueType });
+            description                                                              | valueType   | renderedComponent      | selectedValue
+            ${'should correctly render a SingleSelectField for a valueType of enum'} | ${'enum'}   | ${'SingleSelectField'} | ${''}
+            ${'should correctly render a DatePicker for a valueType of date'}        | ${'date'}   | ${'DatePicker'}        | ${new Date(1995, 11, 25, 9, 30, 0)}
+            ${'should correctly render a TextInput for a valueType of string'}       | ${'string'} | ${'TextInput'}         | ${''}
+            ${'should correctly render a TextInput for a valueType of float'}        | ${'float'}  | ${'TextInput'}         | ${''}
+            ${'should correctly render a TextInput for a valueType of number'}       | ${'number'} | ${'TextInput'}         | ${''}
+        `('$description', ({ valueType, renderedComponent, selectedValue }) => {
+            const wrapper = getWrapper({ valueType, selectedValue });
             expect(wrapper).toMatchSnapshot();
             expect(wrapper.find(renderedComponent)).toHaveLength(1);
         });

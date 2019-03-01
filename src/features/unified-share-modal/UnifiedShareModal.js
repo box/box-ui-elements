@@ -46,19 +46,19 @@ type Props = {
     ) => Promise<{ permissionLevel: permissionLevelType }>,
     /** If item is classified this property contains the classification name */
     classificationName?: string,
-    /** List of existing collaborators */
-    collaborationRestrictionWarning: React.Node,
     /** Message warning about restrictions regarding inviting collaborators to the item */
+    collaborationRestrictionWarning: React.Node,
+    /** List of existing collaborators */
     collaboratorsList?: collaboratorsListType,
     /** User ID of currently logged in user */
     currentUserID: string,
-    /** Handler function for when the user types into invite collaborators field to fetch contacts. */
-    focusSharedLinkOnLoad?: boolean,
-    /** Handler function for when the user types into email shared link field to fetch contacts. */
-    getCollaboratorContacts: (query: string) => Promise<Array<Contact>>,
     /** Whether the modal should focus the shared link after the URL is resolved */
-    getInitialData: Function,
+    focusSharedLinkOnLoad?: boolean,
+    /** Handler function for when the user types into invite collaborators field to fetch contacts. */
+    getCollaboratorContacts: (query: string) => Promise<Array<Contact>>,
     /** Handler function for getting intial data for modal */
+    getInitialData: Function,
+    /** Handler function for when the user types into email shared link field to fetch contacts. */
     getSharedLinkContacts: (query: string) => Promise<Array<Contact>>,
     intl: IntlShape,
     /** An array of invitee permissions */
@@ -75,23 +75,23 @@ type Props = {
     onRequestClose?: Function,
     /** Handler function for clicks on the settings icon. If not provided, the settings icon won't be rendered. */
     onSettingsClick?: Function,
-    /** Shared link data */
-    sendInvites: (params: Object) => Promise<Object>,
     /**
      * Function to send collab invitations based on the given parameters object.
      * This function should return a Promise.
      */
-    sendInvitesError: React.Node,
+    sendInvites: (params: Object) => Promise<Object>,
     /** Message indicating an error occurred while sending the invites. */
-    sendSharedLink: (params: Object) => Promise<Object>,
+    sendInvitesError: React.Node,
     /**
      * Function to send shared link email based on the given parameters object.
      * This function should return a Promise.
      */
+    sendSharedLink: (params: Object) => Promise<Object>,
+    /** Message indicating an error occurred while sending the shared link. */
     sendSharedLinkError: React.Node,
     /** Function hoists contact data upon updates to the parent component. Only needed for suggested collabs. */
     setUpdatedContacts?: (inviteCollabsContacts: Array<Contact>) => void,
-    /** Message indicating an error occurred while sending the shared link. */
+    /** Shared link data */
     sharedLink: sharedLinkType,
     /** Determine whether to show the First-time experience tooltip on load */
     showCalloutForUser?: boolean,
@@ -128,6 +128,7 @@ type State = {
 
 class UnifiedShareModal extends React.Component<Props, State> {
     static defaultProps = {
+        focusSharedLinkOnLoad: false,
         trackingProps: {
             inviteCollabsEmailTracking: {},
             sharedLinkEmailTracking: {},
@@ -366,6 +367,21 @@ class UnifiedShareModal extends React.Component<Props, State> {
 
     updateEmailSharedLinkContacts = (emailSharedLinkContacts: Array<Contact>) => {
         this.setState({ emailSharedLinkContacts });
+    };
+
+    shouldAutoFocusSharedLink = () => {
+        const { focusSharedLinkOnLoad, sharedLink } = this.props;
+        const { sharedLinkLoaded } = this.state;
+        // if not forcing focus (due to USM being opened from shared link UI)
+        // or not a newly added shared link, return false
+        if (!(focusSharedLinkOnLoad || sharedLink.isNewSharedLink)) {
+            return false;
+        }
+        // otherwise wait until the link data is loaded before focusing
+        if (!sharedLinkLoaded) {
+            return false;
+        }
+        return true;
     };
 
     renderInviteSection() {
@@ -625,7 +641,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
             isInviteSectionExpanded,
             isConfirmModalOpen,
             showCollaboratorList,
-            sharedLinkLoaded,
         } = this.state;
 
         // focus logic at modal level
@@ -635,9 +650,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
                 : '.toggle-simple', // focus on shared link toggle
             ...modalProps,
         };
-
-        const shouldAutoFocus =
-            focusSharedLinkOnLoad === undefined ? sharedLinkLoaded : sharedLinkLoaded && focusSharedLinkOnLoad;
 
         return (
             <div>
@@ -669,7 +681,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
 
                         {!isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList && (
                             <SharedLinkSection
-                                autofocusSharedLink={shouldAutoFocus}
+                                autofocusSharedLink={this.shouldAutoFocusSharedLink()}
                                 triggerCopyOnLoad={focusSharedLinkOnLoad}
                                 changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                                 changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}

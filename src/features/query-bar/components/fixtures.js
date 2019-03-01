@@ -1,21 +1,17 @@
 // @flow
 import type { ColumnType, ConditionType } from '../flowTypes';
+import { EQUALS } from '../constants';
 
 const initialCondition: ConditionType = {
+    columnId: '3',
     id: 0,
-    columnDisplayText: 'Contract Value',
-    columnKey: 'Contract Value',
-    operatorDisplayText: '',
-    operatorKey: null,
-    valueDisplayText: '',
-    valueKey: null,
-    valueType: 'string',
+    operator: EQUALS,
+    value: null,
 };
 
 const columnOptions = [
     {
         displayText: '$100',
-        type: 'enum',
         value: '$100',
     },
 ];
@@ -39,7 +35,7 @@ const columns: Array<ColumnType> = [
         options: null,
         property: 'lastUpdatedByName',
         source: 'item',
-        type: 'string',
+        type: 'date',
     },
     {
         displayName: 'Contract Value',
@@ -65,7 +61,7 @@ const columnsWithNewOrder: Array<ColumnType> = [
         options: null,
         property: 'lastUpdatedByName',
         source: 'item',
-        type: 'string',
+        type: 'date',
     },
     {
         displayName: 'Hullo Thar',
@@ -104,7 +100,7 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
         options: null,
         property: 'lastUpdatedByName',
         source: 'item',
-        type: 'string',
+        type: 'date',
     },
     {
         displayName: 'Contract Value',

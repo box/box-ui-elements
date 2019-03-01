@@ -16,6 +16,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
     const getWrapper = (props = {}) =>
         shallow(
             <SharedLinkSection
+                autofocusSharedLink={false}
                 changeSharedLinkAccessLevel={sandbox.stub()}
                 changeSharedLinkPermissionLevel={sandbox.stub()}
                 intl={intl}
@@ -181,65 +182,5 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
 
             expect(wrapper).toMatchSnapshot();
         });
-    });
-
-    test('should auto focus input when autofocus shared link on a new shared link', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-                isNewSharedLink: true,
-            },
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(true);
-    });
-
-    test('should auto focus input when autofocus shared link and should trigger animate on load', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-                isNewSharedLink: false,
-            },
-            triggerCopyOnLoad: true,
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(true);
-    });
-
-    test('should not auto focus input when only the autofocusSharedLink prop is specified', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-            },
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(false);
-    });
-
-    test('should not auto focus if autofocusSharedLink is specificed, but the shared link is old', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-            },
-            triggerCopyOnLoad: false,
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(false);
-    });
-
-    test('should not auto focus if autofocusSharedLink is specificed, but the shared link is old', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-                isNewSharedLink: false,
-            },
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(false);
     });
 });

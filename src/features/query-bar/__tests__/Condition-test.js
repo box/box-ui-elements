@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import { columnOptions, columns, initialCondition } from '../components/fixtures';
-import { COLUMN_KEY, OPERATOR_KEY, VALUE_KEY } from '../constants';
+import { OPERATOR, VALUE } from '../constants';
 import Condition from '../components/filter/Condition';
 
 describe('features/query-bar/components/filter/Condition', () => {
@@ -29,78 +29,72 @@ describe('features/query-bar/components/filter/Condition', () => {
         });
     });
 
-    describe('updateSelectedField()', () => {
+    describe('handleColumnChange()', () => {
+        test('should select a column', () => {
+            const condition = initialCondition;
+            const columnId = '1';
+            const option = {
+                type: 'string',
+                value: columnId,
+            };
+            const onColumnChange = jest.fn();
+            const wrapper = getWrapper({
+                onColumnChange,
+            });
+
+            wrapper
+                .find('SingleSelectField')
+                .at(0)
+                .simulate('change', option);
+
+            expect(onColumnChange).toHaveBeenCalledWith(condition, columnId);
+        });
+    });
+
+    describe('handleOperatorChange()', () => {
         const displayText = 'Vendor Name';
-        const index = 0;
         const condition = initialCondition;
         const value = 0;
         const option = {
             displayText,
-            type: 'string',
             value,
         };
-        const valueType = 'string';
 
-        test.each`
-            description                    | fieldType     | displayTextType          | keyType
-            ${'should select a column'}    | ${'column'}   | ${'columnDisplayText'}   | ${COLUMN_KEY}
-            ${'should select an operator'} | ${'operator'} | ${'operatorDisplayText'} | ${OPERATOR_KEY}
-            ${'should select a value'}     | ${'value'}    | ${'valueDisplayText'}    | ${VALUE_KEY}
-        `('$description', ({ fieldType, displayTextType, keyType }) => {
+        test('should select an operator', () => {
+            const onColumnChange = jest.fn();
             const onFieldChange = jest.fn();
             const wrapper = getWrapper({
                 onFieldChange,
+                onColumnChange,
             });
 
             wrapper
                 .find('SingleSelectField')
                 .at(1)
-                .simulate('change', option, fieldType);
-
-            expect(onFieldChange).toHaveBeenCalledWith(
-                index,
-                condition,
-                displayText,
-                displayTextType,
-                value,
-                keyType,
-                valueType,
-            );
+                .simulate('change', option);
+            expect(onFieldChange).toHaveBeenCalledWith(condition, value, OPERATOR);
         });
     });
 
-    describe('updateValueField()', () => {
-        const stringFieldValue = {
-            target: {
-                value: '',
-            },
-        };
-        const index = 0;
+    describe('handleValueChange()', () => {
         const condition = initialCondition;
+        const textInputValue = 'string';
+        const selectFieldValue = '1';
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
-        const valueType = 'string';
-        const keyType = VALUE_KEY;
-        const displayTextType = 'valueDisplayText';
+        const keyType = VALUE;
 
         test.each`
-            description                                            | fieldValue          | displayText       | value
-            ${'should enter an empty string into the value field'} | ${stringFieldValue} | ${''}             | ${''}
-            ${'should select a date in the date picker'}           | ${dateFieldValue}   | ${dateFieldValue} | ${dateFieldValue}
-        `('$description', ({ fieldValue, displayText, value }) => {
+            description                                            | option              | value
+            ${'should invoke onFieldChange with "string"'}         | ${textInputValue}   | ${textInputValue}
+            ${'should invoke onFieldChange with selectFieldValue'} | ${selectFieldValue} | ${selectFieldValue}
+            ${'should invoke onFieldChange with Date'}             | ${dateFieldValue}   | ${dateFieldValue}
+        `('$description', ({ option, value }) => {
             const onFieldChange = jest.fn();
             const wrapper = getWrapper({ onFieldChange });
 
-            wrapper.find('ValueField').prop('updateValueField')(fieldValue);
+            wrapper.find('ValueField').prop('onChange')(option);
 
-            expect(onFieldChange).toHaveBeenCalledWith(
-                index,
-                condition,
-                displayText,
-                displayTextType,
-                value,
-                keyType,
-                valueType,
-            );
+            expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType);
         });
     });
 
