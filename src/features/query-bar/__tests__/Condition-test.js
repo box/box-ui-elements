@@ -29,7 +29,7 @@ describe('features/query-bar/components/filter/Condition', () => {
         });
     });
 
-    describe('updateColumnField()', () => {
+    describe('handleColumnChange()', () => {
         test('should select a column', () => {
             const condition = initialCondition;
             const columnId = '1';
@@ -51,7 +51,7 @@ describe('features/query-bar/components/filter/Condition', () => {
         });
     });
 
-    describe('updateOperatorField()', () => {
+    describe('handleOperatorChange()', () => {
         const displayText = 'Vendor Name';
         const condition = initialCondition;
         const value = 0;
