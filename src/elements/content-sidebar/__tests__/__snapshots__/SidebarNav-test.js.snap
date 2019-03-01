@@ -6,7 +6,7 @@ exports[`elements/content-sidebar/SidebarNav should render additional tabs 1`] =
     Array [
       Object {
         "callback": [MockFunction],
-        "element": "FakeComponent",
+        "iconUrl": "https://foo.com/icon",
         "id": 200,
         "status": "ADDED",
         "title": "Test title",
@@ -21,7 +21,7 @@ exports[`elements/content-sidebar/SidebarNav should render additional tabs 1`] =
         Array [
           Object {
             "callback": [MockFunction],
-            "element": "FakeComponent",
+            "iconUrl": "https://foo.com/icon",
             "id": 200,
             "status": "ADDED",
             "title": "Test title",
@@ -34,7 +34,7 @@ exports[`elements/content-sidebar/SidebarNav should render additional tabs 1`] =
       >
         <AdditionalTab
           callback={[MockFunction]}
-          element="FakeComponent"
+          iconUrl="https://foo.com/icon"
           id={200}
           key="200"
           status="ADDED"
@@ -94,6 +94,7 @@ exports[`elements/content-sidebar/SidebarNav should render additional tabs 1`] =
                     <img
                       alt="Test title"
                       className="bcs-additional-tab-icon"
+                      src="https://foo.com/icon"
                     />
                   </button>
                 </PlainButton>

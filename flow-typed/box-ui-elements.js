@@ -697,8 +697,8 @@ type Integration = {
 };
 
 type AdditionalTab = {
-    callback: (id: string, callbackData: Object) => void,
-    iconUrl: string,
+    callback: (id: number, callbackData: Object) => void,
+    iconUrl?: string,
     id: number,
     title: ?string,
 };

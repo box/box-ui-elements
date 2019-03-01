@@ -1,4 +1,10 @@
+@import '../../styles/variables';
+
 .bcs-additional-tab-icon {
     height: 24px;
     width: 24px;
+}
+
+.bcs-additional-tab-more-icon path {
+    fill: $downtown-grey;
 }

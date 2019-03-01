@@ -8,6 +8,8 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import Tooltip from '../common/Tooltip';
 import PlainButton from '../../components/plain-button/PlainButton';
+import IconEllipsis from '../../icons/general/IconEllipsis';
+
 import './AdditionalTab.scss';
 
 const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, title, ...rest }: AdditionalTab) => {
@@ -18,7 +20,11 @@ const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, title, ...res
                 type="button"
                 onClick={() => callbackFn({ id, callbackData: rest })}
             >
-                <img className="bcs-additional-tab-icon" src={iconUrl} alt={title} />
+                {id > 0 && iconUrl ? (
+                    <img className="bcs-additional-tab-icon" src={iconUrl} alt={title} />
+                ) : (
+                    <IconEllipsis className="bcs-additional-tab-more-icon" />
+                )}
             </PlainButton>
         </Tooltip>
     );

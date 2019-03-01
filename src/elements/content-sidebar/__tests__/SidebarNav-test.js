@@ -88,7 +88,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 {
                     id: 200,
                     title: 'Test title',
-                    element: 'FakeComponent',
+                    iconUrl: 'https://foo.com/icon',
                     callback: jest.fn(),
                     status: 'ADDED',
                 },

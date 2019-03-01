@@ -28,4 +28,15 @@ describe('elements/content-sidebar/AdditionalTab', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render the more icon ellipsis if no valid id and icon URL are provided', () => {
+        const props = {
+            title: 'test title',
+            id: -1,
+            callback: () => {},
+        };
+
+        const wrapper = getWrapper(props);
+        expect(wrapper).toMatchSnapshot();
+    });
 });
