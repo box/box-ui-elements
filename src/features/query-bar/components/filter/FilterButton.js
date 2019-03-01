@@ -14,7 +14,7 @@ import { AND, OR, COLUMN_OPERATORS } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType, OptionType, ConnectorType } from '../../flowTypes';
+import type { ColumnType, ConditionType, ConnectorType, OptionType } from '../../flowTypes';
 
 type State = {
     appliedConditions: Array<Object>,
@@ -109,7 +109,7 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleColumnChange = (condition: Object, columnId: string) => {
+    handleColumnChange = (condition: ConditionType, columnId: string) => {
         const { columns } = this.props;
         const { conditions } = this.state;
         let newConditionIndex = 0;
@@ -141,7 +141,7 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleFieldChange = (condition: Object, value: Array<string>, property: string) => {
+    handleFieldChange = (condition: ConditionType, value: Array<string>, property: string) => {
         const { conditions } = this.state;
         let newConditionIndex = 0;
         const conditionToUpdate = conditions.find((currentCondition, index) => {

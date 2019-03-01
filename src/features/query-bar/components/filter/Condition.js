@@ -11,19 +11,19 @@ import ValueField from './ValueField';
 
 import messages from '../../messages';
 import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OR, VALUE } from '../../constants';
-import type { ColumnType, ConnectorType, OptionType } from '../../flowTypes';
+import type { ColumnType, ConditionType, ConnectorType, OptionType } from '../../flowTypes';
 
 import '../../styles/Condition.scss';
 
 type Props = {
     areErrorsEnabled: boolean,
     columns?: Array<ColumnType>,
-    condition: Object,
+    condition: ConditionType,
     deleteCondition: (index: number) => void,
     index: number,
-    onColumnChange: (condition: Object, columnId: string) => void,
+    onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onFieldChange: (condition: Object, value: Array<string>, property: string) => void,
+    onFieldChange: (condition: ConditionType, value: Array<string>, property: string) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -90,7 +90,7 @@ const Condition = ({
         const column = columns && columns.find(c => c.id === columnId);
         const type = column && column.type;
 
-        const isValueSet = value !== null && value !== '' && value.length !== 0;
+        const isValueSet = value.length !== 0;
         const message = (
             <FormattedMessage
                 {...(type === DATE ? messages.tooltipSelectDateError : messages.tooltipSelectValueError)}
