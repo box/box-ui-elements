@@ -1,105 +1,162 @@
 /**
  * @flow
- * @file Preview sidebar component
+ * @file Content Sidebar Component
  * @author Box
  */
 
 import * as React from 'react';
+import classNames from 'classnames';
+import uniqueid from 'lodash/uniqueId';
+import { withRouter } from 'react-router-dom';
+import type { Location, RouterHistory } from 'react-router-dom';
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+import SidebarNav from './SidebarNav';
+import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
-import {
-    SIDEBAR_VIEW_SKILLS,
-    SIDEBAR_VIEW_ACTIVITY,
-    SIDEBAR_VIEW_DETAILS,
-    SIDEBAR_VIEW_METADATA,
-    ORIGIN_DETAILS_SIDEBAR,
-    ORIGIN_ACTIVITY_SIDEBAR,
-    ORIGIN_SKILLS_SIDEBAR,
-    ORIGIN_METADATA_SIDEBAR,
-} from '../../constants';
-import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
-import './Sidebar.scss';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
+    className: string,
     currentUser?: User,
     detailsSidebarProps: DetailsSidebarProps,
     file: BoxItem,
     fileId: string,
     getPreview: Function,
     getViewer: Function,
+    hasActivityFeed: boolean,
+    hasMetadata: boolean,
+    hasSkills: boolean,
+    history: RouterHistory,
+    isLarge?: boolean,
+    isLoading?: boolean,
+    location: Location,
+    metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
     onVersionHistoryClick?: Function,
-    selectedView?: SidebarView,
 };
 
-// TODO: place into code splitting logic
-const BASE_EVENT_NAME = '_JS_LOADING';
-const MARK_NAME_JS_LOADING_DETAILS = `${ORIGIN_DETAILS_SIDEBAR}${BASE_EVENT_NAME}`;
-const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}${BASE_EVENT_NAME}`;
-const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
-const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
+type State = {
+    isDirty: boolean,
+    isOpen: boolean,
+};
 
-const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
-const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
-    SIDEBAR_VIEW_ACTIVITY,
-    MARK_NAME_JS_LOADING_ACTIVITY,
-);
-const LoadableSkillsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_SKILLS, MARK_NAME_JS_LOADING_SKILLS);
-const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
-    SIDEBAR_VIEW_METADATA,
-    MARK_NAME_JS_LOADING_METADATA,
-);
+class Sidebar extends React.Component<Props, State> {
+    id: string = uniqueid('bcs_');
 
-const Sidebar = ({
-    activitySidebarProps,
-    currentUser,
-    detailsSidebarProps,
-    file,
-    fileId,
-    getPreview,
-    getViewer,
-    metadataSidebarProps,
-    onVersionHistoryClick,
-    selectedView,
-}: Props) => (
-    <React.Fragment>
-        {selectedView === SIDEBAR_VIEW_DETAILS && (
-            <LoadableDetailsSidebar
-                key={fileId}
-                fileId={fileId}
-                onVersionHistoryClick={onVersionHistoryClick}
-                {...detailsSidebarProps}
-                startMarkName={MARK_NAME_JS_LOADING_DETAILS}
-            />
-        )}
-        {selectedView === SIDEBAR_VIEW_SKILLS && (
-            <LoadableSkillsSidebar
-                key={file.id}
-                file={file}
-                getPreview={getPreview}
-                getViewer={getViewer}
-                startMarkName={MARK_NAME_JS_LOADING_SKILLS}
-            />
-        )}
-        {selectedView === SIDEBAR_VIEW_ACTIVITY && (
-            <LoadableActivitySidebar
-                currentUser={currentUser}
-                file={file}
-                onVersionHistoryClick={onVersionHistoryClick}
-                {...activitySidebarProps}
-                startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-            />
-        )}
-        {selectedView === SIDEBAR_VIEW_METADATA && (
-            <LoadableMetadataSidebar
-                fileId={fileId}
-                {...metadataSidebarProps}
-                startMarkName={MARK_NAME_JS_LOADING_METADATA}
-            />
-        )}
-    </React.Fragment>
-);
+    props: Props;
 
-export default Sidebar;
+    state: State;
+
+    static defaultProps = {
+        isLarge: true,
+        isLoading: false,
+    };
+
+    constructor(props: Props) {
+        super(props);
+
+        const { isLarge } = this.props;
+
+        this.state = {
+            isDirty: false,
+            isOpen: !!isLarge,
+        };
+    }
+
+    componentDidUpdate(prevProps: Props): void {
+        const { fileId, history, isLarge, location }: Props = this.props;
+        const { fileId: prevFileId, isLarge: prevIsLarge }: Props = prevProps;
+        const { isDirty, isOpen }: State = this.state;
+
+        // User navigated to a different file without ever navigating to a tab
+        if (!isDirty && fileId !== prevFileId && location.pathname !== '/') {
+            history.replace({ pathname: '/' });
+        }
+
+        // User resized their viewport without ever navigating to a tab
+        if (!isDirty && isLarge !== prevIsLarge && isLarge !== isOpen) {
+            this.setState({ isOpen: isLarge });
+        }
+    }
+
+    /**
+     * Toggle the sidebar open state
+     *
+     * @return {void}
+     */
+    handleNavigation = (event: SyntheticEvent<>, { isToggle }: NavigateOptions): void => {
+        const { isOpen }: State = this.state;
+
+        // User navigated to a tab or toggled an existing tab
+        this.setState({ isDirty: true, isOpen: isToggle ? !isOpen : true });
+    };
+
+    render() {
+        const {
+            activitySidebarProps,
+            className,
+            currentUser,
+            detailsSidebarProps,
+            file,
+            fileId,
+            getPreview,
+            getViewer,
+            hasActivityFeed,
+            isLoading,
+            metadataEditors,
+            metadataSidebarProps,
+            onVersionHistoryClick,
+        }: Props = this.props;
+
+        const { isOpen } = this.state;
+        const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
+        const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
+        const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
+        const styleClassName = classNames('be bcs', className, {
+            'bcs-is-open': isOpen,
+        });
+
+        return (
+            <aside id={this.id} className={styleClassName}>
+                {isLoading ? (
+                    <div className="bcs-loading">
+                        <LoadingIndicator />
+                    </div>
+                ) : (
+                    <React.Fragment>
+                        <SidebarNav
+                            hasSkills={hasSkills}
+                            hasMetadata={hasMetadata}
+                            hasActivityFeed={hasActivityFeed}
+                            hasDetails={hasDetails}
+                            onNavigate={this.handleNavigation}
+                        />
+                        <SidebarPanels
+                            activitySidebarProps={activitySidebarProps}
+                            currentUser={currentUser}
+                            detailsSidebarProps={detailsSidebarProps}
+                            file={file}
+                            fileId={fileId}
+                            getPreview={getPreview}
+                            getViewer={getViewer}
+                            hasActivityFeed={hasActivityFeed}
+                            hasDetails={hasDetails}
+                            hasMetadata={hasMetadata}
+                            hasSkills={hasSkills}
+                            isOpen={isOpen}
+                            key={file.id}
+                            metadataSidebarProps={metadataSidebarProps}
+                            onVersionHistoryClick={onVersionHistoryClick}
+                        />
+                    </React.Fragment>
+                )}
+            </aside>
+        );
+    }
+}
+
+export { Sidebar as SidebarComponent };
+export default withRouter(Sidebar);

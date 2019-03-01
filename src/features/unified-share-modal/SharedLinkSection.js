@@ -108,12 +108,11 @@ class SharedLinkSection extends Component<Props> {
             allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_VIEW_DOWNLOAD);
         }
 
-        const autofocus = !!(autofocusSharedLink && (sharedLink.isNewSharedLink || triggerCopyOnLoad));
         return (
             <React.Fragment>
                 <div className="shared-link-field-row">
                     <TextInputWithCopyButton
-                        autofocus={autofocus}
+                        autofocus={autofocusSharedLink}
                         buttonProps={copyButtonProps}
                         className="shared-link-field-container"
                         disabled={submitting}

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import FolderEmptyState from '../../../icons/states/FolderEmptyState';
 import MetadataEmptyState from '../../../icons/states/MetadataEmptyState';
 
-import '../styles/Message.scss';
+import '../styles/MetadataListViewMessage.scss';
 
 import messages from '../messages';
 
@@ -34,7 +34,7 @@ type Props = {
     message: string,
 };
 
-const Message = ({ message }: Props) => {
+const MetadataListViewMessage = ({ message }: Props) => {
     const emptyStateMessageHeader = emptyStateHeaderMapping[message];
     const emptyStateMessageSubtitle = emptyStateSubtitleMapping[message];
 
@@ -52,4 +52,4 @@ const Message = ({ message }: Props) => {
     );
 };
 
-export default Message;
+export default MetadataListViewMessage;
