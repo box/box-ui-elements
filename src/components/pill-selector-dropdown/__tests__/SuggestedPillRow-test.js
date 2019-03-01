@@ -49,7 +49,7 @@ describe('components/pill-selector-dropdown/SuggestedPillsRow', () => {
 
         test('should not render anything when all suggestedCollabs are selected', () => {
             const wrapper = getWrapper({
-                selectedPillsIDs: [collabID1, collabID2, collabID3],
+                selectedPillsValues: [collabID1, collabID2, collabID3],
                 suggestedPillsData: [collab1, collab2, collab3],
             });
 
@@ -58,7 +58,7 @@ describe('components/pill-selector-dropdown/SuggestedPillsRow', () => {
 
         test('should not render suggesteCollabs that have been filtered', () => {
             const wrapper = getWrapper({
-                selectedPillsIDs: [collabID1],
+                selectedPillsValues: [collabID1],
                 suggestedPillsData: [collab1, collab2, collab3],
             });
 
