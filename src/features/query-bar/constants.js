@@ -39,4 +39,5 @@ export const COLUMN_OPERATORS = {
     float: ALL_OPERATORS,
     enum: ALL_OPERATORS,
     date: ALL_OPERATORS,
+    'multi-enum': ALL_OPERATORS,
 };
