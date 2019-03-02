@@ -295,16 +295,16 @@ class FilterButton extends React.Component<Props, State> {
                                     return (
                                         <Condition
                                             key={`metadata-view-filter-item-${condition.id}`}
+                                            areErrorsEnabled={areErrorsEnabled}
+                                            columns={columns}
                                             condition={condition}
                                             deleteCondition={this.deleteCondition}
-                                            areErrorsEnabled={areErrorsEnabled}
                                             index={index}
-                                            columns={columns}
-                                            selectedConnector={selectedConnector}
-                                            onOperatorChange={this.handleOperatorChange}
-                                            onValueChange={this.handleValueChange}
                                             onColumnChange={this.handleColumnChange}
                                             onConnectorChange={this.handleConnectorChange}
+                                            onOperatorChange={this.handleOperatorChange}
+                                            onValueChange={this.handleValueChange}
+                                            selectedConnector={selectedConnector}
                                         />
                                     );
                                 })}
