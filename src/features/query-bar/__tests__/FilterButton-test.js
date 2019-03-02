@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { columns } from '../components/fixtures';
+import { columns, initialCondition } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
 import { EQUALS, LESS_THAN, OPERATOR, VALUES } from '../constants';
 
@@ -81,7 +81,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         values: [],
                     },
                 ],
-                value: LESS_THAN,
+                values: LESS_THAN,
                 property: OPERATOR,
                 newCondition: [
                     {
@@ -109,7 +109,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         values: [],
                     },
                 ],
-                value: ['0'],
+                values: ['0'],
                 property: VALUES,
                 newCondition: [
                     {
@@ -120,13 +120,13 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, condition, conditions, value, property, newCondition }) => {
+        ].forEach(({ description, condition, conditions, values, property, newCondition }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleFieldChange(condition, value, property);
+                wrapper.instance().handleFieldChange(condition, values, property);
 
                 expect(wrapper.state('conditions')).toEqual(newCondition);
             });
@@ -257,18 +257,13 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('closeOnClickPredicate()', () => {
-        const condition = {
-            columnId: '1',
-            id: '3',
-            operator: EQUALS,
-        };
         const conditionsWithValues = [
             {
-                ...condition,
+                ...initialCondition,
                 values: ['1'],
             },
         ];
-        const conditionsWithEmptyValues = [{ ...condition, values: [] }];
+        const conditionsWithEmptyValues = [{ ...initialCondition, values: [] }];
 
         test.each`
             description                                                                | conditions                   | shouldCloseResult

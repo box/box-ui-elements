@@ -1,13 +1,20 @@
 // @flow
-import { AND, OR, EMPTY_CONNECTOR } from './constants';
+import { AND, EQUALS, GREATER_THAN, LESS_THAN, NOT_EQUALS, OR, EMPTY_CONNECTOR } from './constants';
 
 export type ConnectorType = typeof AND | typeof OR | typeof EMPTY_CONNECTOR;
+
+export type OperatorType = typeof EQUALS | typeof NOT_EQUALS | typeof GREATER_THAN | typeof LESS_THAN;
 
 export type OptionType = {
     displayText: string,
     id: string,
     type?: string,
     value: string,
+};
+
+export type OperatorOptionType = {
+    displayText: string,
+    value: OperatorType,
 };
 
 export type ColumnType = {
@@ -24,6 +31,6 @@ export type ColumnType = {
 export type ConditionType = {
     columnId: string,
     id: number,
-    operator: string,
+    operator: OperatorType,
     values: Array<string>,
 };

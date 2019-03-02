@@ -10,11 +10,11 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND, OR, COLUMN_OPERATORS } from '../../constants';
+import { AND, OR, COLUMN_OPERATORS, OPERATOR, VALUES } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType, ConditionType, ConnectorType, OptionType } from '../../flowTypes';
+import type { ColumnType, ConditionType, ConnectorType, OperatorType, OptionType } from '../../flowTypes';
 
 type State = {
     appliedConditions: Array<Object>,
@@ -141,7 +141,7 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleFieldChange = (condition: ConditionType, value: string | Array<string>, property: string) => {
+    handleOperatorChange = (condition: ConditionType, value: OperatorType) => {
         const { conditions } = this.state;
         let newConditionIndex = 0;
         const conditionToUpdate = conditions.find((currentCondition, index) => {
@@ -151,7 +151,28 @@ class FilterButton extends React.Component<Props, State> {
 
         const newCondition = {
             ...conditionToUpdate,
-            [property]: value,
+            [OPERATOR]: value,
+        };
+
+        const newConditions = conditions.slice(0);
+        newConditions[newConditionIndex] = newCondition;
+
+        this.setState({
+            conditions: newConditions,
+        });
+    };
+
+    handleValueChange = (condition: ConditionType, values: Array<string>) => {
+        const { conditions } = this.state;
+        let newConditionIndex = 0;
+        const conditionToUpdate = conditions.find((currentCondition, index) => {
+            newConditionIndex = index;
+            return currentCondition.id === condition.id;
+        });
+
+        const newCondition = {
+            ...conditionToUpdate,
+            [VALUES]: values,
         };
 
         const newConditions = conditions.slice(0);
@@ -280,7 +301,8 @@ class FilterButton extends React.Component<Props, State> {
                                             index={index}
                                             columns={columns}
                                             selectedConnector={selectedConnector}
-                                            onFieldChange={this.handleFieldChange}
+                                            onOperatorChange={this.handleOperatorChange}
+                                            onValueChange={this.handleValueChange}
                                             onColumnChange={this.handleColumnChange}
                                             onConnectorChange={this.handleConnectorChange}
                                         />

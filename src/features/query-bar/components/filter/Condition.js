@@ -10,8 +10,15 @@ import SingleSelectField from '../../../../components/select-field/SingleSelectF
 import ValueField from './ValueField';
 
 import messages from '../../messages';
-import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OR, VALUES } from '../../constants';
-import type { ColumnType, ConditionType, ConnectorType, OptionType } from '../../flowTypes';
+import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OR } from '../../constants';
+import type {
+    ColumnType,
+    ConditionType,
+    ConnectorType,
+    OperatorOptionType,
+    OperatorType,
+    OptionType,
+} from '../../flowTypes';
 
 import '../../styles/Condition.scss';
 
@@ -23,7 +30,8 @@ type Props = {
     index: number,
     onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onFieldChange: (condition: ConditionType, value: string | Array<string>, property: string) => void,
+    onOperatorChange: (condition: ConditionType, value: OperatorType) => void,
+    onValueChange: (condition: ConditionType, values: Array<string>) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -36,7 +44,8 @@ const Condition = ({
     condition,
     deleteCondition,
     onColumnChange,
-    onFieldChange,
+    onOperatorChange,
+    onValueChange,
     index,
     selectedConnector,
     onConnectorChange,
@@ -50,13 +59,13 @@ const Condition = ({
         onColumnChange(condition, columnId);
     };
 
-    const handleOperatorChange = (option: OptionType) => {
+    const handleOperatorChange = (option: OperatorOptionType) => {
         const { value } = option;
-        onFieldChange(condition, value, OPERATOR);
+        onOperatorChange(condition, value);
     };
 
-    const handleValueChange = (value: Array<string>) => {
-        onFieldChange(condition, value, VALUES);
+    const handleValueChange = (values: Array<string>) => {
+        onValueChange(condition, values);
     };
 
     const getColumnOperators = () => {
