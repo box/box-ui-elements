@@ -63,7 +63,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         });
     });
 
-    describe('handleFieldChange()', () => {
+    describe('handleOperatorChange()', () => {
         [
             {
                 description: 'should set conditions with an object with operator',
@@ -81,9 +81,9 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         values: [],
                     },
                 ],
-                values: LESS_THAN,
+                value: LESS_THAN,
                 property: OPERATOR,
-                newCondition: [
+                expectedConditions: [
                     {
                         columnId: '1',
                         id: '4',
@@ -92,6 +92,21 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
+        ].forEach(({ description, condition, conditions, value, property, expectedConditions }) => {
+            test(`${description}`, () => {
+                const wrapper = getWrapper();
+                wrapper.setState({
+                    conditions,
+                });
+                wrapper.instance().handleOperatorChange(condition, value, property);
+
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
+            });
+        });
+    });
+
+    describe('handleValueChange()', () => {
+        [
             {
                 description: 'should set conditions with an object with value',
                 index: 0,
@@ -111,7 +126,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 ],
                 values: ['0'],
                 property: VALUES,
-                newCondition: [
+                expectedConditions: [
                     {
                         columnId: '1',
                         id: '5',
@@ -120,15 +135,15 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, condition, conditions, values, property, newCondition }) => {
+        ].forEach(({ description, condition, conditions, values, property, expectedConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleFieldChange(condition, values, property);
+                wrapper.instance().handleValueChange(condition, values, property);
 
-                expect(wrapper.state('conditions')).toEqual(newCondition);
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
             });
         });
     });
