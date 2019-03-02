@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import { columnOptions, columns, initialCondition } from '../components/fixtures';
-import { OPERATOR, VALUE } from '../constants';
+import { OPERATOR, VALUES } from '../constants';
 import Condition from '../components/filter/Condition';
 
 describe('features/query-bar/components/filter/Condition', () => {
@@ -72,7 +72,7 @@ describe('features/query-bar/components/filter/Condition', () => {
                 .find('SingleSelectField')
                 .at(1)
                 .simulate('change', option);
-            expect(onFieldChange).toHaveBeenCalledWith(condition, [value], OPERATOR);
+            expect(onFieldChange).toHaveBeenCalledWith(condition, value, OPERATOR);
         });
     });
 
@@ -81,7 +81,7 @@ describe('features/query-bar/components/filter/Condition', () => {
         const textInputValue = 'string';
         const selectFieldValue = '1';
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
-        const keyType = VALUE;
+        const keyType = VALUES;
 
         test.each`
             description                                            | option              | value

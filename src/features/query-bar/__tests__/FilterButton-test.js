@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { columns } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
-import { EQUALS, LESS_THAN, OPERATOR, VALUE } from '../constants';
+import { EQUALS, LESS_THAN, OPERATOR, VALUES } from '../constants';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
@@ -30,23 +30,23 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '3',
-                    operator: [EQUALS],
-                    value: [],
+                    operator: EQUALS,
+                    values: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '3',
-                        operator: [EQUALS],
-                        value: [],
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
                 expectedConditions: [
                     {
                         columnId: '2',
                         id: '3',
-                        operator: [EQUALS],
-                        value: [],
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
             },
@@ -70,25 +70,25 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '4',
-                    operator: [EQUALS],
-                    value: [],
+                    operator: EQUALS,
+                    values: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '4',
-                        operator: [EQUALS],
-                        value: [],
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
-                value: [LESS_THAN],
+                value: LESS_THAN,
                 property: OPERATOR,
                 newCondition: [
                     {
                         columnId: '1',
                         id: '4',
-                        operator: [LESS_THAN],
-                        value: [],
+                        operator: LESS_THAN,
+                        values: [],
                     },
                 ],
             },
@@ -98,25 +98,25 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 condition: {
                     columnId: '1',
                     id: '5',
-                    operator: [EQUALS],
-                    value: [],
+                    operator: EQUALS,
+                    values: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '5',
-                        operator: [EQUALS],
-                        value: [],
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
                 value: ['0'],
-                property: VALUE,
+                property: VALUES,
                 newCondition: [
                     {
                         columnId: '1',
                         id: '5',
-                        operator: [EQUALS],
-                        value: ['0'],
+                        operator: EQUALS,
+                        values: ['0'],
                     },
                 ],
             },
@@ -141,20 +141,20 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '2',
-                        operator: [EQUALS],
-                        value: [],
+                        operator: EQUALS,
+                        values: [],
                     },
                     {
                         id: '3',
-                        operator: [EQUALS],
-                        value: [],
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
                 expectedConditions: [
                     {
                         id: '3',
-                        operator: [EQUALS],
-                        value: [],
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
             },
@@ -232,8 +232,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const expected = {
                 columnId: '1',
                 id: conditionID,
-                operator: [EQUALS],
-                value: [],
+                operator: EQUALS,
+                values: [],
             };
             wrapper.instance().setState({
                 conditions: [],
@@ -263,7 +263,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnId: '1',
                     id: '3',
                     operator: EQUALS,
-                    value: ['1'],
+                    values: ['1'],
                 },
             ];
             const wrapper = getWrapper();
@@ -286,7 +286,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnId: '1',
                     id: '3',
                     operator: EQUALS,
-                    value: [],
+                    values: [],
                 },
             ];
             const wrapper = getWrapper();

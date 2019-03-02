@@ -108,7 +108,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
   >
     <ValueField
       onChange={[Function]}
-      selectedValue={Array []}
+      selectedValues={Array []}
       valueOptions={
         Array [
           Object {
