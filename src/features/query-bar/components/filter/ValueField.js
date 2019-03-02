@@ -20,6 +20,7 @@ type Props = {
 
 const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props) => {
     const isValueSet = selectedValues.length > 0;
+    const value = isValueSet ? selectedValues[0] : null;
 
     switch (valueType) {
         case 'string':
@@ -31,7 +32,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                         name="string field"
                         onChange={e => onChange([e.target.value])}
                         placeholder="Enter a string"
-                        value={isValueSet ? selectedValues[0] : null}
+                        value={value}
                     />
                 </div>
             );
@@ -44,7 +45,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                         name="number field"
                         onChange={e => onChange([e.target.value])}
                         placeholder="Enter a number"
-                        value={isValueSet ? selectedValues[0] : null}
+                        value={value}
                     />
                 </div>
             );
@@ -57,7 +58,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                         name="float field"
                         onChange={e => onChange([e.target.value])}
                         placeholder="Enter a float"
-                        value={isValueSet ? selectedValues[0] : null}
+                        value={value}
                     />
                 </div>
             );
@@ -88,7 +89,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                     onChange={e => onChange([e.value])}
                     options={valueOptions}
                     placeholder={<FormattedMessage {...messages.selectValuePlaceholderText} />}
-                    selectedValue={isValueSet ? selectedValues[0] : null}
+                    selectedValue={value}
                 />
             );
         case 'multi-enum':
