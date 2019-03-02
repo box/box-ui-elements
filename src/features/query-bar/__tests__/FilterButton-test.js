@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { columns, initialCondition } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
-import { EQUALS, LESS_THAN, OPERATOR, VALUES } from '../constants';
+import { EQUALS, LESS_THAN } from '../constants';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
@@ -82,7 +82,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
                 value: LESS_THAN,
-                property: OPERATOR,
                 expectedConditions: [
                     {
                         columnId: '1',
@@ -92,13 +91,13 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, condition, conditions, value, property, expectedConditions }) => {
+        ].forEach(({ description, condition, conditions, value, expectedConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleOperatorChange(condition, value, property);
+                wrapper.instance().handleOperatorChange(condition, value);
 
                 expect(wrapper.state('conditions')).toEqual(expectedConditions);
             });
@@ -125,7 +124,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
                 values: ['0'],
-                property: VALUES,
                 expectedConditions: [
                     {
                         columnId: '1',
@@ -135,13 +133,13 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     },
                 ],
             },
-        ].forEach(({ description, condition, conditions, values, property, expectedConditions }) => {
+        ].forEach(({ description, condition, conditions, values, expectedConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleValueChange(condition, values, property);
+                wrapper.instance().handleValueChange(condition, values);
 
                 expect(wrapper.state('conditions')).toEqual(expectedConditions);
             });
