@@ -13,13 +13,13 @@ import '../../styles/Condition.scss';
 
 type Props = {
     onChange: (value: Array<string>) => void,
-    selectedValue: Array<string>,
+    selectedValues: Array<string>,
     valueOptions: Array<Object>,
     valueType: string,
 };
 
-const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props) => {
-    const isValueSet = selectedValue.length > 0;
+const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props) => {
+    const isValueSet = selectedValues.length > 0;
 
     switch (valueType) {
         case 'string':
@@ -31,7 +31,7 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                         name="string field"
                         onChange={e => onChange([e.target.value])}
                         placeholder="Enter a string"
-                        value={isValueSet ? selectedValue[0] : null}
+                        value={isValueSet ? selectedValues[0] : null}
                     />
                 </div>
             );
@@ -44,7 +44,7 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                         name="number field"
                         onChange={e => onChange([e.target.value])}
                         placeholder="Enter a number"
-                        value={isValueSet ? selectedValue[0] : null}
+                        value={isValueSet ? selectedValues[0] : null}
                     />
                 </div>
             );
@@ -57,7 +57,7 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                         name="float field"
                         onChange={e => onChange([e.target.value])}
                         placeholder="Enter a float"
-                        value={isValueSet ? selectedValue[0] : null}
+                        value={isValueSet ? selectedValues[0] : null}
                     />
                 </div>
             );
@@ -77,7 +77,7 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                             return e ? onChange([e.toString()]) : onChange([]);
                         }}
                         placeholder="Date"
-                        value={isValueSet && selectedValue[0] !== '' ? new Date(selectedValue[0]) : undefined}
+                        value={isValueSet && selectedValues[0] !== '' ? new Date(selectedValues[0]) : undefined}
                     />
                 </div>
             );
@@ -88,7 +88,7 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                     onChange={e => onChange([e.value])}
                     options={valueOptions}
                     placeholder={<FormattedMessage {...messages.selectValuePlaceholderText} />}
-                    selectedValue={isValueSet ? selectedValue[0] : null}
+                    selectedValue={isValueSet ? selectedValues[0] : null}
                 />
             );
         case 'multi-enum':
@@ -98,7 +98,7 @@ const ValueField = ({ onChange, selectedValue, valueOptions, valueType }: Props)
                     onChange={e => onChange(e.map(option => option.value))}
                     options={valueOptions}
                     placeholder={<FormattedMessage {...messages.selectValuePlaceholderText} />}
-                    selectedValues={selectedValue}
+                    selectedValues={selectedValues}
                 />
             );
         default:

@@ -10,7 +10,7 @@ import SingleSelectField from '../../../../components/select-field/SingleSelectF
 import ValueField from './ValueField';
 
 import messages from '../../messages';
-import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OR, VALUE } from '../../constants';
+import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OR, VALUES } from '../../constants';
 import type { ColumnType, ConditionType, ConnectorType, OptionType } from '../../flowTypes';
 
 import '../../styles/Condition.scss';
@@ -23,7 +23,7 @@ type Props = {
     index: number,
     onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onFieldChange: (condition: ConditionType, value: Array<string>, property: string) => void,
+    onFieldChange: (condition: ConditionType, value: string | Array<string>, property: string) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -52,11 +52,11 @@ const Condition = ({
 
     const handleOperatorChange = (option: OptionType) => {
         const { value } = option;
-        onFieldChange(condition, ([value]: Array<string>), OPERATOR);
+        onFieldChange(condition, value, OPERATOR);
     };
 
     const handleValueChange = (value: Array<string>) => {
-        onFieldChange(condition, value, VALUE);
+        onFieldChange(condition, value, VALUES);
     };
 
     const getColumnOperators = () => {
@@ -86,11 +86,11 @@ const Condition = ({
     };
 
     const getErrorMessage = () => {
-        const { value, columnId } = condition;
+        const { values, columnId } = condition;
         const column = columns && columns.find(c => c.id === columnId);
         const type = column && column.type;
 
-        const isValueSet = value.length !== 0;
+        const isValueSet = values.length !== 0;
         const message = (
             <FormattedMessage
                 {...(type === DATE ? messages.tooltipSelectDateError : messages.tooltipSelectValueError)}
@@ -183,7 +183,7 @@ const Condition = ({
                         isDisabled={false}
                         onChange={handleOperatorChange}
                         options={operatorOptions}
-                        selectedValue={operator[0]}
+                        selectedValue={operator}
                     />
                 </div>
             </div>
@@ -191,7 +191,7 @@ const Condition = ({
     };
 
     const renderValueField = () => {
-        const { columnId, value } = condition;
+        const { columnId, values } = condition;
 
         const column = columns && columns.find(c => c.id === columnId);
         const type = column && column.type;
@@ -208,7 +208,7 @@ const Condition = ({
                 <div className={classnames}>
                     <ValueField
                         onChange={handleValueChange}
-                        selectedValue={value}
+                        selectedValues={values}
                         valueOptions={valueOptions}
                         valueType={type}
                     />

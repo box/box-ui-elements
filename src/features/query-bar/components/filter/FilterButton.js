@@ -69,13 +69,13 @@ class FilterButton extends React.Component<Props, State> {
         const { columns } = this.props;
         if (columns) {
             const firstColumn = columns[0];
-            const operator = [COLUMN_OPERATORS[firstColumn.type][0].key];
+            const operator = COLUMN_OPERATORS[firstColumn.type][0].key;
 
             return {
                 columnId: firstColumn.id,
                 id: conditionID,
                 operator,
-                value: [],
+                values: [],
             };
         }
         return {};
@@ -123,13 +123,13 @@ class FilterButton extends React.Component<Props, State> {
         if (column) {
             const type = column && column.type;
 
-            const operator = [COLUMN_OPERATORS[type][0].key];
+            const operator = COLUMN_OPERATORS[type][0].key;
 
             const newCondition = {
                 ...conditionToUpdate,
                 columnId,
                 operator,
-                value: [],
+                values: [],
             };
 
             const newConditions = conditions.slice(0);
@@ -141,7 +141,7 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleFieldChange = (condition: ConditionType, value: Array<string>, property: string) => {
+    handleFieldChange = (condition: ConditionType, value: string | Array<string>, property: string) => {
         const { conditions } = this.state;
         let newConditionIndex = 0;
         const conditionToUpdate = conditions.find((currentCondition, index) => {
@@ -195,7 +195,7 @@ class FilterButton extends React.Component<Props, State> {
         const { conditions } = this.state;
         let areAllValid = true;
         conditions.forEach(condition => {
-            if (condition.value.length === 0) {
+            if (condition.values.length === 0) {
                 areAllValid = false;
             }
         });

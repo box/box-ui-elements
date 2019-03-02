@@ -5,8 +5,8 @@ import { EQUALS } from '../constants';
 const initialCondition: ConditionType = {
     columnId: '3',
     id: 0,
-    operator: [EQUALS],
-    value: [],
+    operator: EQUALS,
+    values: [],
 };
 
 const columnOptions = [
