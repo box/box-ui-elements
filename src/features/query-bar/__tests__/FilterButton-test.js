@@ -257,15 +257,24 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('closeOnClickPredicate()', () => {
-        test('Should return true if Apply button was clicked and value is not empty', () => {
-            const conditions = [
-                {
-                    columnId: '1',
-                    id: '3',
-                    operator: EQUALS,
-                    values: ['1'],
-                },
-            ];
+        const condition = {
+            columnId: '1',
+            id: '3',
+            operator: EQUALS,
+        };
+        const conditionsWithValues = [
+            {
+                ...condition,
+                values: ['1'],
+            },
+        ];
+        const conditionsWithEmptyValues = [{ ...condition, values: [] }];
+
+        test.each`
+            description                                                                | conditions                   | shouldCloseResult
+            ${'Should return true if Apply button was clicked and value is not empty'} | ${conditionsWithValues}      | ${true}
+            ${'Should return false if Apply button was clicked and value is empty'}    | ${conditionsWithEmptyValues} | ${false}
+        `('$description', ({ conditions, shouldCloseResult }) => {
             const wrapper = getWrapper();
             const targetWithClassName = {
                 target: document.createElement('button'),
@@ -277,30 +286,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const closeOnClickPredicateResult = wrapper.instance().shouldClose(targetWithClassName);
 
             wrapper.update();
-            expect(closeOnClickPredicateResult).toEqual(true);
-        });
-
-        test('Should return false if Apply button was clicked and value is empty', () => {
-            const conditions = [
-                {
-                    columnId: '1',
-                    id: '3',
-                    operator: EQUALS,
-                    values: [],
-                },
-            ];
-            const wrapper = getWrapper();
-            const targetWithClassName = {
-                target: document.createElement('button'),
-            };
-            wrapper.instance().setState({
-                conditions,
-            });
-            targetWithClassName.target.className = 'apply-filters-button';
-            const closeOnClickPredicateResult = wrapper.instance().shouldClose(targetWithClassName);
-
-            wrapper.update();
-            expect(closeOnClickPredicateResult).toEqual(false);
+            expect(closeOnClickPredicateResult).toEqual(shouldCloseResult);
         });
     });
 });
