@@ -1,6 +1,8 @@
 @import '../../styles/variables';
 @import '../../styles/inputs';
 
+/** @define TextInput */
+
 .bdl-TextInput-input {
     @include common-typography;
 
@@ -76,7 +78,7 @@
     margin: 0 0 20px;
     position: relative;
 
-    &.bdl-hasError {
+    &.bdl-has-error {
         .bdl-TextInput-input {
             border-color: $amaranth;
         }
