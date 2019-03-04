@@ -71,7 +71,7 @@ class Task extends React.Component<Props> {
 
         const assigneeCount = (assigned_to && assigned_to.entries.length) || 0;
         const hiddenAssigneeCount = assigneeCount - MAX_AVATARS;
-        const isOverdue = due_at ? new Date(due_at) < Date.now() : false;
+        const isOverdue = due_at ? status === TASK_NEW_INCOMPLETE && new Date(due_at) < Date.now() : false;
 
         return (
             <div

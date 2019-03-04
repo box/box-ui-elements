@@ -100,16 +100,29 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('due date should have overdue class if task is incomplete and due date is in past', () => {
-        const wrapper = shallow(
+        const incompleteWrapper = shallow(
             <Task
+                {...task}
                 currentUser={currentUser}
                 onEdit={jest.fn()}
                 onDelete={jest.fn()}
-                {...task}
                 due_at={new Date() - 1000}
+                status="NOT_STARTED"
             />,
         );
-        expect(wrapper.find('.bcs-task-overdue')).toHaveLength(1);
+        expect(incompleteWrapper.find('.bcs-task-overdue')).toHaveLength(1);
+
+        const completeWrapper = shallow(
+            <Task
+                {...task}
+                currentUser={currentUser}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+                due_at={new Date() - 1000}
+                status="COMPLETED"
+            />,
+        );
+        expect(completeWrapper.find('.bcs-task-overdue')).toHaveLength(0);
     });
 
     test('should add pending class for isPending prop', () => {
