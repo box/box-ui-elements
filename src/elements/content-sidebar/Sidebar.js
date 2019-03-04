@@ -19,6 +19,7 @@ import type { MetadataSidebarProps } from './MetadataSidebar';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
+    additionalTabs?: AdditionalTabs,
     className: string,
     currentUser?: User,
     detailsSidebarProps: DetailsSidebarProps,
@@ -27,6 +28,7 @@ type Props = {
     getPreview: Function,
     getViewer: Function,
     hasActivityFeed: boolean,
+    hasAdditionalTabs: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
     history: RouterHistory,
@@ -97,6 +99,7 @@ class Sidebar extends React.Component<Props, State> {
     render() {
         const {
             activitySidebarProps,
+            additionalTabs,
             className,
             currentUser,
             detailsSidebarProps,
@@ -105,6 +108,7 @@ class Sidebar extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasActivityFeed,
+            hasAdditionalTabs,
             isLoading,
             metadataEditors,
             metadataSidebarProps,
@@ -128,6 +132,8 @@ class Sidebar extends React.Component<Props, State> {
                 ) : (
                     <React.Fragment>
                         <SidebarNav
+                            additionalTabs={additionalTabs}
+                            hasAdditionalTabs={hasAdditionalTabs}
                             hasSkills={hasSkills}
                             hasMetadata={hasMetadata}
                             hasActivityFeed={hasActivityFeed}

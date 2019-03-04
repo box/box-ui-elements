@@ -33,7 +33,7 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
       type="text"
     />
     <SuggestedPillsRow
-      selectedPillsIDs={Array []}
+      selectedPillsValues={Array []}
     />
   </span>
 </Tooltip>
