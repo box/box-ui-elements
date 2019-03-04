@@ -5,9 +5,20 @@ let tasks;
 const BASE_URL = 'https://www.foo.com';
 const FILE_ID = 'foo';
 
+const headers = {
+    Accept: 'application/json;version=1',
+    'Content-Type': 'application/vnd.box+json;version=v2',
+};
+
 describe('api/TasksNew', () => {
     beforeEach(() => {
         tasks = new TasksNew({});
+        tasks.get = jest.fn();
+        tasks.post = jest.fn();
+        tasks.put = jest.fn();
+        tasks.delete = jest.fn();
+        tasks.checkApiCallValidity = jest.fn(() => true);
+        tasks.getBaseApiUrl = jest.fn(() => BASE_URL);
     });
 
     describe('CRUD operations', () => {
@@ -27,20 +38,11 @@ describe('api/TasksNew', () => {
         const successCallback = jest.fn();
         const errorCallback = jest.fn();
 
-        beforeEach(() => {
-            tasks.get = jest.fn();
-            tasks.post = jest.fn();
-            tasks.put = jest.fn();
-            tasks.delete = jest.fn();
-            tasks.checkApiCallValidity = jest.fn(() => true);
-
-            tasks.getBaseApiUrl = jest.fn(() => BASE_URL);
-        });
-
         describe('createTask()', () => {
             test('should post a well formed task to the tasks endpoint', () => {
                 const expectedRequestData = {
                     data: task,
+                    headers,
                 };
 
                 tasks.createTask({
@@ -67,6 +69,7 @@ describe('api/TasksNew', () => {
                         id: taskId,
                         name: message,
                     },
+                    headers,
                 };
 
                 tasks.updateTask({
@@ -117,6 +120,27 @@ describe('api/TasksNew', () => {
                     url: `${BASE_URL}/undoc/inbox?task_link_target_type=FILE&task_link_target_id=${FILE_ID}&limit=${API_PAGE_LIMIT}`,
                     successCallback,
                     errorCallback,
+                    requestData: { headers },
+                });
+            });
+        });
+
+        describe('getTask()', () => {
+            test('should get task by id', () => {
+                const taskIdToGet = '12345';
+                tasks.getTask({
+                    file,
+                    id: taskIdToGet,
+                    successCallback,
+                    errorCallback,
+                });
+
+                expect(tasks.get).toBeCalledWith({
+                    id: FILE_ID,
+                    url: `${BASE_URL}/undoc/tasks/${taskIdToGet}`,
+                    successCallback,
+                    errorCallback,
+                    requestData: { headers },
                 });
             });
         });
