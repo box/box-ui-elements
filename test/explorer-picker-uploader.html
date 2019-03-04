@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Box Content Explorer Test Page</title>
         <style>
             body,
@@ -71,14 +71,12 @@
         <script src="../dev/en-US/uploader.js"></script>
         <script>
             function load() {
-                const {ContentExplorer, FolderPicker, FilePicker, ContentUploader } = Box;
+                const { ContentExplorer, FolderPicker, FilePicker, ContentUploader } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
 
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
-
-
 
                 const explorer1 = new ContentExplorer();
                 document.querySelector('.explorer1').innerHTML = '';
@@ -91,14 +89,12 @@
                     canDownload: false,
                     canRename: false,
                     canDelete: false,
-                    canShare: false
+                    canShare: false,
                 });
-
-
 
                 const filePicker1 = new FilePicker();
                 document.querySelector('.filePicker1').innerHTML = '';
-                filePicker1.addListener('choose', (data) => {
+                filePicker1.addListener('choose', data => {
                     alert('Choose pressed on File Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -112,19 +108,15 @@
                     canSetShareAccess: false,
                 });
 
-
-
                 const uploader1 = new ContentUploader();
                 document.querySelector('.uploader1').innerHTML = '';
                 uploader1.show(folderId, token, {
-                    container: '.uploader1'
+                    container: '.uploader1',
                 });
-
-
 
                 const folderPicker1 = new FolderPicker();
                 document.querySelector('.folderPicker1').innerHTML = '';
-                folderPicker1.addListener('choose', (data) => {
+                folderPicker1.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -135,7 +127,7 @@
                 folderPicker1.show(folderId, token, {
                     container: '.folderPicker1',
                     canUpload: false,
-                    canSetShareAccess: false
+                    canSetShareAccess: false,
                 });
             }
             load();

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Box Content Uploader Test Page</title>
         <style>
             body,
@@ -70,18 +70,18 @@
 
             function load() {
                 const { ContentUploader } = Box;
-                const tokenGenerator1 = (id) => {
+                const tokenGenerator1 = id => {
                     if (id === `folder_${folderId}`) {
                         return Promise.resolve(token);
                     } else {
-                        return Promise.reject()
+                        return Promise.reject();
                     }
                 };
-                const tokenGenerator2 = (id) => {
+                const tokenGenerator2 = id => {
                     if (id === `folder_${folderId}`) {
                         return Promise.resolve({ [`folder_${folderId}`]: token });
                     } else {
-                        return Promise.reject()
+                        return Promise.reject();
                     }
                 };
 
@@ -91,13 +91,11 @@
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
 
-
-
                 const uploader1 = new ContentUploader();
                 document.querySelector('.uploader1').innerHTML = '';
                 uploader1.show(folderId, token, {
                     container: '.uploader1',
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                 });
             }
             load();

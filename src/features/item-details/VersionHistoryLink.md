@@ -8,9 +8,9 @@ Example with onClick, has link styling
 
 ```js
 <VersionHistoryLink
-    onClick={function() {
-        alert('hello, world!');
-    }}
-    versionCount={2}
+  onClick={function() {
+    alert('hello, world!');
+  }}
+  versionCount={2}
 />
 ```

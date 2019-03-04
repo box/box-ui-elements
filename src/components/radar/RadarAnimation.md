@@ -2,7 +2,7 @@
 
 ```js
 <RadarAnimation position="bottom-center">
-    <Button>Bottom Center</Button>
+  <Button>Bottom Center</Button>
 </RadarAnimation>
 ```
 
@@ -10,7 +10,7 @@
 
 ```js
 <RadarAnimation position="bottom-left">
-    <Button>Bottom Left</Button>
+  <Button>Bottom Left</Button>
 </RadarAnimation>
 ```
 
@@ -18,7 +18,7 @@
 
 ```js
 <RadarAnimation position="bottom-right">
-    <Button>Bottom Right</Button>
+  <Button>Bottom Right</Button>
 </RadarAnimation>
 ```
 
@@ -26,7 +26,7 @@
 
 ```js
 <RadarAnimation position="middle-center">
-    <Button>Middle Center</Button>
+  <Button>Middle Center</Button>
 </RadarAnimation>
 ```
 
@@ -34,7 +34,7 @@
 
 ```js
 <RadarAnimation position="middle-left">
-    <Button>Middle Left</Button>
+  <Button>Middle Left</Button>
 </RadarAnimation>
 ```
 
@@ -42,7 +42,7 @@
 
 ```js
 <RadarAnimation position="middle-right">
-    <Button>Middle Right</Button>
+  <Button>Middle Right</Button>
 </RadarAnimation>
 ```
 
@@ -50,7 +50,7 @@
 
 ```js
 <RadarAnimation position="top-center">
-    <Button>Top Center</Button>
+  <Button>Top Center</Button>
 </RadarAnimation>
 ```
 
@@ -58,7 +58,7 @@
 
 ```js
 <RadarAnimation position="top-left">
-    <Button>Top Left</Button>
+  <Button>Top Left</Button>
 </RadarAnimation>
 ```
 
@@ -66,6 +66,6 @@
 
 ```js
 <RadarAnimation position="top-right">
-    <Button>Top Right</Button>
+  <Button>Top Right</Button>
 </RadarAnimation>
 ```

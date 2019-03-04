@@ -10,7 +10,7 @@
     position: relative;
     user-select: none;
 
-    > input[type="radio"] {
+    > input[type='radio'] {
         flex: none;
         height: 14px;
         margin: 0;
@@ -22,7 +22,7 @@
             border: 7px solid $white;
             border-radius: 9001px;
             box-shadow: 0 0 0 1px $nines, 0 -1px 1px rgba(0, 0, 0, .4);
-            content: "";
+            content: '';
             height: 14px;
             left: 0;
             position: absolute;

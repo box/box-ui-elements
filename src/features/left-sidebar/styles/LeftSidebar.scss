@@ -6,9 +6,7 @@
     flex-direction: column;
     height: 100vh;
     padding: 0;
-    transition:
-        left .4s cubic-bezier(.215, .61, .355, 1),
-        width .4s cubic-bezier(.215, .61, .355, 1);
+    transition: left .4s cubic-bezier(.215, .61, .355, 1), width .4s cubic-bezier(.215, .61, .355, 1);
     width: $lsb-width;
     z-index: $lsb-z-index;
 
