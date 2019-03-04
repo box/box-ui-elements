@@ -15,3 +15,5 @@ export type SuggestedPill = {
 };
 
 export type SuggestedPills = Array<SuggestedPill>;
+
+export type SuggestedPillsFilter = $Keys<SuggestedPill>;
