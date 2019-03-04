@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { columns } from '../components/fixtures';
+import { columns, initialCondition } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
 import { EQUALS, LESS_THAN } from '../constants';
 
@@ -31,14 +31,14 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                     columnId: '1',
                     id: '3',
                     operator: EQUALS,
-                    value: null,
+                    values: [],
                 },
                 conditions: [
                     {
                         columnId: '1',
                         id: '3',
                         operator: EQUALS,
-                        value: null,
+                        values: [],
                     },
                 ],
                 expectedConditions: [
@@ -46,7 +46,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                         columnId: '2',
                         id: '3',
                         operator: EQUALS,
-                        value: null,
+                        values: [],
                     },
                 ],
             },
@@ -63,72 +63,75 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         });
     });
 
-    describe('handleFieldChange()', () => {
+    describe('handleOperatorChange()', () => {
         [
             {
                 description: 'should set conditions with an object with operator',
-                condition: {
-                    columnId: '1',
-                    id: '4',
-                    operator: EQUALS,
-                    value: null,
-                },
+                conditionId: 4,
                 conditions: [
                     {
                         columnId: '1',
-                        id: '4',
+                        id: 4,
                         operator: EQUALS,
-                        value: null,
+                        values: [],
                     },
                 ],
-                property: LESS_THAN,
-                conditionProperty: 'operator',
-                newCondition: [
+                value: LESS_THAN,
+                expectedConditions: [
                     {
                         columnId: '1',
-                        id: '4',
+                        id: 4,
                         operator: LESS_THAN,
-                        value: null,
+                        values: [],
                     },
                 ],
             },
-            {
-                description: 'should set conditions with an object with value',
-                index: 0,
-                condition: {
-                    columnId: '1',
-                    id: '5',
-                    operator: EQUALS,
-                    value: null,
-                },
-                conditions: [
-                    {
-                        columnId: '1',
-                        id: '5',
-                        operator: EQUALS,
-                        value: null,
-                    },
-                ],
-                property: 0,
-                conditionProperty: 'value',
-                newCondition: [
-                    {
-                        columnId: '1',
-                        id: '5',
-                        operator: EQUALS,
-                        value: 0,
-                    },
-                ],
-            },
-        ].forEach(({ description, condition, conditions, property, conditionProperty, newCondition }) => {
+        ].forEach(({ description, conditionId, conditions, value, expectedConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleFieldChange(condition, property, conditionProperty);
+                wrapper.instance().handleOperatorChange(conditionId, value);
 
-                expect(wrapper.state('conditions')).toEqual(newCondition);
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
+            });
+        });
+    });
+
+    describe('handleValueChange()', () => {
+        [
+            {
+                description: 'should set conditions with an object with value',
+                index: 0,
+                conditionId: 5,
+                conditions: [
+                    {
+                        columnId: '1',
+                        id: 5,
+                        operator: EQUALS,
+                        values: [],
+                    },
+                ],
+                values: ['0'],
+                expectedConditions: [
+                    {
+                        columnId: '1',
+                        id: 5,
+                        operator: EQUALS,
+                        values: ['0'],
+                    },
+                ],
+            },
+        ].forEach(({ description, conditionId, conditions, values, expectedConditions }) => {
+            test(`${description}`, () => {
+                const wrapper = getWrapper();
+                wrapper.setState({
+                    conditions,
+                });
+                wrapper.instance().handleValueChange(conditionId, values);
+
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
             });
         });
     });
@@ -141,26 +144,20 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '2',
-                        operatorDisplayText: '',
-                        operator: null,
-                        valueDisplayText: null,
-                        value: null,
+                        operator: EQUALS,
+                        values: [],
                     },
                     {
                         id: '3',
-                        operatorDisplayText: '',
-                        operator: null,
-                        valueDisplayText: null,
-                        value: null,
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
                 expectedConditions: [
                     {
                         id: '3',
-                        operatorDisplayText: '',
-                        operator: null,
-                        valueDisplayText: null,
-                        value: null,
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
             },
@@ -239,7 +236,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 columnId: '1',
                 id: conditionID,
                 operator: EQUALS,
-                value: null,
+                values: [],
             };
             wrapper.instance().setState({
                 conditions: [],
@@ -263,16 +260,31 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('closeOnClickPredicate()', () => {
-        test('Should return true if Apply button was clicked', () => {
+        const conditionsWithValues = [
+            {
+                ...initialCondition,
+                values: ['1'],
+            },
+        ];
+        const conditionsWithEmptyValues = [{ ...initialCondition, values: [] }];
+
+        test.each`
+            description                                                                | conditions                   | shouldCloseResult
+            ${'Should return true if Apply button was clicked and value is not empty'} | ${conditionsWithValues}      | ${true}
+            ${'Should return false if Apply button was clicked and value is empty'}    | ${conditionsWithEmptyValues} | ${false}
+        `('$description', ({ conditions, shouldCloseResult }) => {
             const wrapper = getWrapper();
             const targetWithClassName = {
                 target: document.createElement('button'),
             };
+            wrapper.instance().setState({
+                conditions,
+            });
             targetWithClassName.target.className = 'apply-filters-button';
             const closeOnClickPredicateResult = wrapper.instance().shouldClose(targetWithClassName);
 
             wrapper.update();
-            expect(closeOnClickPredicateResult).toEqual(true);
+            expect(closeOnClickPredicateResult).toEqual(shouldCloseResult);
         });
     });
 });

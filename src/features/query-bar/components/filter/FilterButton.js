@@ -10,11 +10,11 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND, OR, COLUMN_OPERATORS } from '../../constants';
+import { AND, OR, COLUMN_OPERATORS, OPERATOR, VALUES } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType, OptionType, ConnectorType } from '../../flowTypes';
+import type { ColumnType, ConditionType, ConnectorType, OperatorType, OptionType } from '../../flowTypes';
 
 type State = {
     appliedConditions: Array<Object>,
@@ -75,7 +75,7 @@ class FilterButton extends React.Component<Props, State> {
                 columnId: firstColumn.id,
                 id: conditionID,
                 operator,
-                value: null,
+                values: [],
             };
         }
         return {};
@@ -109,7 +109,26 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleColumnChange = (condition: Object, columnId: string) => {
+    updateConditionState = (conditionId: number, updateCondition: Function) => {
+        const { conditions } = this.state;
+        let newConditionIndex = 0;
+        const conditionToUpdate = conditions.find((currentCondition, index) => {
+            newConditionIndex = index;
+            return currentCondition.id === conditionId;
+        });
+
+        let newCondition = { ...conditionToUpdate };
+        newCondition = updateCondition(newCondition);
+
+        const newConditions = conditions.slice(0);
+        newConditions[newConditionIndex] = newCondition;
+
+        this.setState({
+            conditions: newConditions,
+        });
+    };
+
+    handleColumnChange = (condition: ConditionType, columnId: string) => {
         const { columns } = this.props;
         const { conditions } = this.state;
         let newConditionIndex = 0;
@@ -129,7 +148,7 @@ class FilterButton extends React.Component<Props, State> {
                 ...conditionToUpdate,
                 columnId,
                 operator,
-                value: null,
+                values: [],
             };
 
             const newConditions = conditions.slice(0);
@@ -141,24 +160,17 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleFieldChange = (condition: Object, value: string, property: string) => {
-        const { conditions } = this.state;
-        let newConditionIndex = 0;
-        const conditionToUpdate = conditions.find((currentCondition, index) => {
-            newConditionIndex = index;
-            return currentCondition.id === condition.id;
+    handleOperatorChange = (conditionId: number, value: OperatorType) => {
+        this.updateConditionState(conditionId, condition => {
+            condition[OPERATOR] = value;
+            return condition;
         });
+    };
 
-        const newCondition = {
-            ...conditionToUpdate,
-            [property]: value,
-        };
-
-        const newConditions = conditions.slice(0);
-        newConditions[newConditionIndex] = newCondition;
-
-        this.setState({
-            conditions: newConditions,
+    handleValueChange = (conditionId: number, values: Array<string>) => {
+        this.updateConditionState(conditionId, condition => {
+            condition[VALUES] = values;
+            return condition;
         });
     };
 
@@ -195,7 +207,7 @@ class FilterButton extends React.Component<Props, State> {
         const { conditions } = this.state;
         let areAllValid = true;
         conditions.forEach(condition => {
-            if (condition.value === null || condition.value === '') {
+            if (condition.values.length === 0) {
                 areAllValid = false;
             }
         });
@@ -274,15 +286,16 @@ class FilterButton extends React.Component<Props, State> {
                                     return (
                                         <Condition
                                             key={`metadata-view-filter-item-${condition.id}`}
+                                            areErrorsEnabled={areErrorsEnabled}
+                                            columns={columns}
                                             condition={condition}
                                             deleteCondition={this.deleteCondition}
-                                            areErrorsEnabled={areErrorsEnabled}
                                             index={index}
-                                            columns={columns}
-                                            selectedConnector={selectedConnector}
-                                            onFieldChange={this.handleFieldChange}
                                             onColumnChange={this.handleColumnChange}
                                             onConnectorChange={this.handleConnectorChange}
+                                            onOperatorChange={this.handleOperatorChange}
+                                            onValueChange={this.handleValueChange}
+                                            selectedConnector={selectedConnector}
                                         />
                                     );
                                 })}

@@ -10,20 +10,28 @@ import SingleSelectField from '../../../../components/select-field/SingleSelectF
 import ValueField from './ValueField';
 
 import messages from '../../messages';
-import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OR, VALUE } from '../../constants';
-import type { ColumnType, ConnectorType, OptionType } from '../../flowTypes';
+import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OR } from '../../constants';
+import type {
+    ColumnType,
+    ConditionType,
+    ConnectorType,
+    OperatorOptionType,
+    OperatorType,
+    OptionType,
+} from '../../flowTypes';
 
 import '../../styles/Condition.scss';
 
 type Props = {
     areErrorsEnabled: boolean,
     columns?: Array<ColumnType>,
-    condition: Object,
+    condition: ConditionType,
     deleteCondition: (index: number) => void,
     index: number,
-    onColumnChange: (condition: Object, columnId: string) => void,
+    onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onFieldChange: (condition: Object, value: string, property: string) => void,
+    onOperatorChange: (conditionId: number, value: OperatorType) => void,
+    onValueChange: (conditionId: number, values: Array<string>) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -36,7 +44,8 @@ const Condition = ({
     condition,
     deleteCondition,
     onColumnChange,
-    onFieldChange,
+    onOperatorChange,
+    onValueChange,
     index,
     selectedConnector,
     onConnectorChange,
@@ -50,13 +59,15 @@ const Condition = ({
         onColumnChange(condition, columnId);
     };
 
-    const handleOperatorChange = (option: OptionType) => {
+    const handleOperatorChange = (option: OperatorOptionType) => {
+        const { id } = condition;
         const { value } = option;
-        onFieldChange(condition, value, OPERATOR);
+        onOperatorChange(id, value);
     };
 
-    const handleValueChange = (value: string) => {
-        onFieldChange(condition, value, VALUE);
+    const handleValueChange = (values: Array<string>) => {
+        const { id } = condition;
+        onValueChange(id, values);
     };
 
     const getColumnOperators = () => {
@@ -86,11 +97,11 @@ const Condition = ({
     };
 
     const getErrorMessage = () => {
-        const { value, columnId } = condition;
+        const { values, columnId } = condition;
         const column = columns && columns.find(c => c.id === columnId);
         const type = column && column.type;
 
-        const isValueSet = value !== null && value !== '';
+        const isValueSet = values.length !== 0;
         const message = (
             <FormattedMessage
                 {...(type === DATE ? messages.tooltipSelectDateError : messages.tooltipSelectValueError)}
@@ -191,7 +202,7 @@ const Condition = ({
     };
 
     const renderValueField = () => {
-        const { columnId, value } = condition;
+        const { columnId, values } = condition;
 
         const column = columns && columns.find(c => c.id === columnId);
         const type = column && column.type;
@@ -208,7 +219,7 @@ const Condition = ({
                 <div className={classnames}>
                     <ValueField
                         onChange={handleValueChange}
-                        selectedValue={value}
+                        selectedValues={values}
                         valueOptions={valueOptions}
                         valueType={type}
                     />

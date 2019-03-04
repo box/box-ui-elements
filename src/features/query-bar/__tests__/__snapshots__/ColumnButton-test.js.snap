@@ -110,6 +110,24 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "source": "metadata",
             "type": "enum",
           },
+          Object {
+            "displayName": "Offices",
+            "id": "4",
+            "isShown": true,
+            "options": Array [
+              Object {
+                "id": "",
+                "key": "Office A",
+              },
+              Object {
+                "id": "1",
+                "key": "Office B",
+              },
+            ],
+            "property": "offices",
+            "source": "metadata",
+            "type": "multi-enum",
+          },
         ]
       }
       onColumnChange={[MockFunction]}

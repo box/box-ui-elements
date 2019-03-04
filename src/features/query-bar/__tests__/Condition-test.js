@@ -2,7 +2,6 @@
 import * as React from 'react';
 
 import { columnOptions, columns, initialCondition } from '../components/fixtures';
-import { OPERATOR, VALUE } from '../constants';
 import Condition from '../components/filter/Condition';
 
 describe('features/query-bar/components/filter/Condition', () => {
@@ -54,25 +53,23 @@ describe('features/query-bar/components/filter/Condition', () => {
     describe('handleOperatorChange()', () => {
         const displayText = 'Vendor Name';
         const condition = initialCondition;
-        const value = 0;
+        const value = '0';
         const option = {
             displayText,
             value,
         };
 
         test('should select an operator', () => {
-            const onColumnChange = jest.fn();
-            const onFieldChange = jest.fn();
+            const onOperatorChange = jest.fn();
             const wrapper = getWrapper({
-                onFieldChange,
-                onColumnChange,
+                onOperatorChange,
             });
 
             wrapper
                 .find('SingleSelectField')
                 .at(1)
                 .simulate('change', option);
-            expect(onFieldChange).toHaveBeenCalledWith(condition, value, OPERATOR);
+            expect(onOperatorChange).toHaveBeenCalledWith(condition.id, value);
         });
     });
 
@@ -81,20 +78,19 @@ describe('features/query-bar/components/filter/Condition', () => {
         const textInputValue = 'string';
         const selectFieldValue = '1';
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);
-        const keyType = VALUE;
 
         test.each`
             description                                            | option              | value
-            ${'should invoke onFieldChange with "string"'}         | ${textInputValue}   | ${textInputValue}
-            ${'should invoke onFieldChange with selectFieldValue'} | ${selectFieldValue} | ${selectFieldValue}
-            ${'should invoke onFieldChange with Date'}             | ${dateFieldValue}   | ${dateFieldValue}
+            ${'should invoke onValueChange with "string"'}         | ${textInputValue}   | ${textInputValue}
+            ${'should invoke onValueChange with selectFieldValue'} | ${selectFieldValue} | ${selectFieldValue}
+            ${'should invoke onValueChange with Date'}             | ${dateFieldValue}   | ${dateFieldValue}
         `('$description', ({ option, value }) => {
-            const onFieldChange = jest.fn();
-            const wrapper = getWrapper({ onFieldChange });
+            const onValueChange = jest.fn();
+            const wrapper = getWrapper({ onValueChange });
 
             wrapper.find('ValueField').prop('onChange')(option);
 
-            expect(onFieldChange).toHaveBeenCalledWith(condition, value, keyType);
+            expect(onValueChange).toHaveBeenCalledWith(condition.id, value);
         });
     });
 
