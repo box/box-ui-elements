@@ -65,36 +65,13 @@ const ActiveState = ({
                     );
                 case 'task':
                     return (
-                        <div>
-                            <FeatureFlag
-                                feature="activityFeed.tasks.newCards"
-                                disabled={() =>
-                                    item.task_assignment_collection &&
-                                    item.task_assignment_collection.total_count && (
-                                        <li key={type + id} className="bcs-activity-feed-task">
-                                            <Task
-                                                {...item}
-                                                currentUser={currentUser}
-                                                getAvatarUrl={getAvatarUrl}
-                                                getMentionWithQuery={getMentionWithQuery}
-                                                getUserProfileUrl={getUserProfileUrl}
-                                                mentionSelectorContacts={mentionSelectorContacts}
-                                                onAssignmentUpdate={onTaskAssignmentUpdate}
-                                                onDelete={onTaskDelete}
-                                                onEdit={onTaskEdit}
-                                                // permissions are not part of task API so hard code to true
-                                                permissions={{
-                                                    can_delete: true,
-                                                    can_edit: true,
-                                                }}
-                                                translations={translations}
-                                            />
-                                        </li>
-                                    )
-                                }
-                                enabled={() => (
-                                    <li key={type + id} className="bcs-activity-feed-task-new">
-                                        <TaskNew
+                        <FeatureFlag
+                            feature="activityFeed.tasks.newCards"
+                            disabled={() =>
+                                item.task_assignment_collection &&
+                                item.task_assignment_collection.total_count && (
+                                    <li key={type + id} className="bcs-activity-feed-task">
+                                        <Task
                                             {...item}
                                             currentUser={currentUser}
                                             getAvatarUrl={getAvatarUrl}
@@ -112,9 +89,30 @@ const ActiveState = ({
                                             translations={translations}
                                         />
                                     </li>
-                                )}
-                            />
-                        </div>
+                                )
+                            }
+                            enabled={() => (
+                                <li key={type + id} className="bcs-activity-feed-task-new">
+                                    <TaskNew
+                                        {...item}
+                                        currentUser={currentUser}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        onAssignmentUpdate={onTaskAssignmentUpdate}
+                                        onDelete={onTaskDelete}
+                                        onEdit={onTaskEdit}
+                                        // permissions are not part of task API so hard code to true
+                                        permissions={{
+                                            can_delete: true,
+                                            can_edit: true,
+                                        }}
+                                        translations={translations}
+                                    />
+                                </li>
+                            )}
+                        />
                     );
                 case 'file_version':
                     return (
