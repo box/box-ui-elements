@@ -13,6 +13,7 @@ import IconChatRound from '../../icons/general/IconChatRound';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import SidebarNavButton from './SidebarNavButton';
+import AdditionalTabs from './AdditionalTabs';
 import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
@@ -22,14 +23,24 @@ import {
 import './SidebarNav.scss';
 
 type Props = {
+    additionalTabs?: AdditionalTabs,
     hasActivityFeed: boolean,
+    hasAdditionalTabs: boolean,
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
 };
 
-const SidebarNav = ({ hasSkills, hasMetadata, hasActivityFeed, hasDetails, onNavigate }: Props) => (
+const SidebarNav = ({
+    hasSkills,
+    hasMetadata,
+    hasActivityFeed,
+    hasDetails,
+    hasAdditionalTabs,
+    additionalTabs,
+    onNavigate,
+}: Props) => (
     <nav>
         {hasActivityFeed && (
             <SidebarNavButton
@@ -71,6 +82,7 @@ const SidebarNav = ({ hasSkills, hasMetadata, hasActivityFeed, hasDetails, onNav
                 <IconMetadataThick />
             </SidebarNavButton>
         )}
+        {hasAdditionalTabs && additionalTabs && <AdditionalTabs tabs={additionalTabs} />}
     </nav>
 );
 
