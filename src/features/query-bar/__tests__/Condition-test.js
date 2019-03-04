@@ -69,7 +69,7 @@ describe('features/query-bar/components/filter/Condition', () => {
                 .find('SingleSelectField')
                 .at(1)
                 .simulate('change', option);
-            expect(onOperatorChange).toHaveBeenCalledWith(condition, value);
+            expect(onOperatorChange).toHaveBeenCalledWith(condition.id, value);
         });
     });
 
@@ -90,7 +90,7 @@ describe('features/query-bar/components/filter/Condition', () => {
 
             wrapper.find('ValueField').prop('onChange')(option);
 
-            expect(onValueChange).toHaveBeenCalledWith(condition, value);
+            expect(onValueChange).toHaveBeenCalledWith(condition.id, value);
         });
     });
 
