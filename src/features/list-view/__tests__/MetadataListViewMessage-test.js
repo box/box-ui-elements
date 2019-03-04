@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import Message from '../components/MetadataListViewMessage';
-import { NeedRefining, TooManyResults, NoAccessForQuery, NoAccessForTemplate } from '../constants';
+import { NEED_REFINING, TOO_MANY_RESULTS, NO_ACCESS_FOR_QUERY, NO_ACCESS_FOR_TEMPLATE } from '../constants';
 
 describe('Message', () => {
     const getWrapper = (props = {}) => {
@@ -11,10 +11,10 @@ describe('Message', () => {
     describe('render', () => {
         test.each`
             description                                      | message
-            ${'should correctly render needRefining'}        | ${NeedRefining}
-            ${'should correctly render tooManyResults'}      | ${TooManyResults}
-            ${'should correctly render noAccessForQuery'}    | ${NoAccessForQuery}
-            ${'should correctly render noAccessForTemplate'} | ${NoAccessForTemplate}
+            ${'should correctly render needRefining'}        | ${NEED_REFINING}
+            ${'should correctly render tooManyResults'}      | ${TOO_MANY_RESULTS}
+            ${'should correctly render noAccessForQuery'}    | ${NO_ACCESS_FOR_QUERY}
+            ${'should correctly render noAccessForTemplate'} | ${NO_ACCESS_FOR_TEMPLATE}
         `('$description', ({ message }) => {
             const wrapper = getWrapper(message);
             expect(wrapper).toMatchSnapshot();

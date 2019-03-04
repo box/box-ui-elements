@@ -1,7 +1,7 @@
-const RowHeight = 50;
-const NeedRefining = 'needRefining';
-const TooManyResults = 'tooManyResults';
-const NoAccessForQuery = 'noAccessForQuery';
-const NoAccessForTemplate = 'noAccessForTemplate';
+const ROW_HEIGHT = 50;
+const NEED_REFINING = 'needRefining';
+const TOO_MANY_RESULTS = 'tooManyResults';
+const NO_ACCESS_FOR_QUERY = 'noAccessForQuery';
+const NO_ACCESS_FOR_TEMPLATE = 'noAccessForTemplate';
 
-export { RowHeight, NeedRefining, TooManyResults, NoAccessForQuery, NoAccessForTemplate };
+export { ROW_HEIGHT, NEED_REFINING, TOO_MANY_RESULTS, NO_ACCESS_FOR_QUERY, NO_ACCESS_FOR_TEMPLATE };

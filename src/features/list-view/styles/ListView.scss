@@ -26,32 +26,31 @@
         width: 100%;
     }
 
-    .list-view-name-cell {
-        border-top: 1px solid $off-white;
-        color: $twos;
-        display: flex;
-        justify-content: flex-start;
-        padding-top: 1px;
-
-        .list-view-icon {
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-
-        .list-view-icon-item {
-            height: 100%;
-        }
-
-        .list-view-name {
-            align-self: center;
-        }
-    }
-
     .list-view-column-cell {
         border-top: 1px solid $off-white;
         color: $seventy-sixers;
         display: flex;
         justify-content: flex-start;
         padding-top: 16px;
+
+        .list-view-name-cell {
+            color: $twos;
+            display: flex;
+            justify-content: flex-start;
+            margin-top: -15px;
+
+            .list-view-icon {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .list-view-item-icon {
+                height: 100%;
+            }
+
+            .list-view-name {
+                align-self: center;
+            }
+        }
     }
 }
