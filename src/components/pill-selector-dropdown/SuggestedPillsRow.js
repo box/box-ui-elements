@@ -9,19 +9,21 @@ import './SuggestedPillsRow.scss';
 
 type Props = {
     onSuggestedPillAdd?: SuggestedPillType => void,
-    selectedPillsIDs?: Array<number>,
+    selectedPillsValues?: Array<number>,
     suggestedPillsData?: SuggestedPills,
     title?: string,
 };
 
 const SuggestedPillsRow = ({
     onSuggestedPillAdd = noop,
-    selectedPillsIDs = [],
+    selectedPillsValues = [],
     suggestedPillsData = [],
     title,
 }: Props) => {
-    // Prevents pills from being rendered that are in the form
-    const filteredSuggestedPillData = suggestedPillsData.filter(item => !selectedPillsIDs.includes(item.id));
+    // Prevents pills from being rendered that are in the form by checking for value which is either an ID or email
+    const filteredSuggestedPillData = suggestedPillsData.filter(
+        item => !(selectedPillsValues.includes(item.email) || selectedPillsValues.includes(item.id)),
+    );
 
     if (filteredSuggestedPillData.length === 0) {
         return null;
