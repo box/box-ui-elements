@@ -32,6 +32,7 @@ import './ContentSidebar.scss';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
+    additionalTabs?: AdditionalTabs,
     apiHost: string,
     cache?: APICache,
     className: string,
@@ -44,6 +45,7 @@ type Props = {
     getPreview: Function,
     getViewer: Function,
     hasActivityFeed: boolean,
+    hasAdditionalTabs: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
     isLarge?: boolean,
@@ -86,6 +88,7 @@ class ContentSidebar extends React.Component<Props, State> {
         getPreview: noop,
         getViewer: noop,
         hasActivityFeed: false,
+        hasAdditionalTabs: false,
         hasMetadata: false,
         hasSkills: false,
         isLarge: true,
@@ -283,6 +286,7 @@ class ContentSidebar extends React.Component<Props, State> {
     render() {
         const {
             activitySidebarProps,
+            additionalTabs,
             className,
             currentUser,
             defaultView,
@@ -290,6 +294,7 @@ class ContentSidebar extends React.Component<Props, State> {
             fileId,
             getPreview,
             getViewer,
+            hasAdditionalTabs,
             hasActivityFeed,
             hasMetadata,
             hasSkills,
@@ -311,6 +316,7 @@ class ContentSidebar extends React.Component<Props, State> {
                     <APIContext.Provider value={(this.api: any)}>
                         <Sidebar
                             activitySidebarProps={activitySidebarProps}
+                            additionalTabs={additionalTabs}
                             className={className}
                             currentUser={currentUser}
                             detailsSidebarProps={detailsSidebarProps}
@@ -319,6 +325,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             getPreview={getPreview}
                             getViewer={getViewer}
                             hasActivityFeed={hasActivityFeed}
+                            hasAdditionalTabs={hasAdditionalTabs}
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
                             isLarge={isLarge}
