@@ -109,6 +109,24 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
+    updateConditionState = (conditionId: number, updateCondition: Function) => {
+        const { conditions } = this.state;
+        let newConditionIndex = 0;
+        const conditionToUpdate = conditions.find((currentCondition, index) => {
+            newConditionIndex = index;
+            return currentCondition.id === conditionId;
+        });
+
+        const newCondition = updateCondition(conditionToUpdate);
+
+        const newConditions = conditions.slice(0);
+        newConditions[newConditionIndex] = newCondition;
+
+        this.setState({
+            conditions: newConditions,
+        });
+    };
+
     handleColumnChange = (condition: ConditionType, columnId: string) => {
         const { columns } = this.props;
         const { conditions } = this.state;
@@ -141,45 +159,17 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleOperatorChange = (condition: ConditionType, value: OperatorType) => {
-        const { conditions } = this.state;
-        let newConditionIndex = 0;
-        const conditionToUpdate = conditions.find((currentCondition, index) => {
-            newConditionIndex = index;
-            return currentCondition.id === condition.id;
-        });
-
-        const newCondition = {
-            ...conditionToUpdate,
-            [OPERATOR]: value,
-        };
-
-        const newConditions = conditions.slice(0);
-        newConditions[newConditionIndex] = newCondition;
-
-        this.setState({
-            conditions: newConditions,
+    handleOperatorChange = (conditionId: number, value: OperatorType) => {
+        this.updateConditionState(conditionId, condition => {
+            condition[OPERATOR] = value;
+            return condition;
         });
     };
 
-    handleValueChange = (condition: ConditionType, values: Array<string>) => {
-        const { conditions } = this.state;
-        let newConditionIndex = 0;
-        const conditionToUpdate = conditions.find((currentCondition, index) => {
-            newConditionIndex = index;
-            return currentCondition.id === condition.id;
-        });
-
-        const newCondition = {
-            ...conditionToUpdate,
-            [VALUES]: values,
-        };
-
-        const newConditions = conditions.slice(0);
-        newConditions[newConditionIndex] = newCondition;
-
-        this.setState({
-            conditions: newConditions,
+    handleValueChange = (conditionId: number, values: Array<string>) => {
+        this.updateConditionState(conditionId, condition => {
+            condition[VALUES] = values;
+            return condition;
         });
     };
 

@@ -30,8 +30,8 @@ type Props = {
     index: number,
     onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onOperatorChange: (condition: ConditionType, value: OperatorType) => void,
-    onValueChange: (condition: ConditionType, values: Array<string>) => void,
+    onOperatorChange: (conditionId: number, value: OperatorType) => void,
+    onValueChange: (conditionId: number, values: Array<string>) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -60,12 +60,14 @@ const Condition = ({
     };
 
     const handleOperatorChange = (option: OperatorOptionType) => {
+        const { id } = condition;
         const { value } = option;
-        onOperatorChange(condition, value);
+        onOperatorChange(id, value);
     };
 
     const handleValueChange = (values: Array<string>) => {
-        onValueChange(condition, values);
+        const { id } = condition;
+        onValueChange(id, values);
     };
 
     const getColumnOperators = () => {

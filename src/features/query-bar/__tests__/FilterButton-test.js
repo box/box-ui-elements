@@ -67,16 +67,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         [
             {
                 description: 'should set conditions with an object with operator',
-                condition: {
-                    columnId: '1',
-                    id: '4',
-                    operator: EQUALS,
-                    values: [],
-                },
+                conditionId: 4,
                 conditions: [
                     {
                         columnId: '1',
-                        id: '4',
+                        id: 4,
                         operator: EQUALS,
                         values: [],
                     },
@@ -85,19 +80,19 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 expectedConditions: [
                     {
                         columnId: '1',
-                        id: '4',
+                        id: 4,
                         operator: LESS_THAN,
                         values: [],
                     },
                 ],
             },
-        ].forEach(({ description, condition, conditions, value, expectedConditions }) => {
+        ].forEach(({ description, conditionId, conditions, value, expectedConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleOperatorChange(condition, value);
+                wrapper.instance().handleOperatorChange(conditionId, value);
 
                 expect(wrapper.state('conditions')).toEqual(expectedConditions);
             });
@@ -109,16 +104,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             {
                 description: 'should set conditions with an object with value',
                 index: 0,
-                condition: {
-                    columnId: '1',
-                    id: '5',
-                    operator: EQUALS,
-                    values: [],
-                },
+                conditionId: 5,
                 conditions: [
                     {
                         columnId: '1',
-                        id: '5',
+                        id: 5,
                         operator: EQUALS,
                         values: [],
                     },
@@ -127,19 +117,19 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 expectedConditions: [
                     {
                         columnId: '1',
-                        id: '5',
+                        id: 5,
                         operator: EQUALS,
                         values: ['0'],
                     },
                 ],
             },
-        ].forEach(({ description, condition, conditions, values, expectedConditions }) => {
+        ].forEach(({ description, conditionId, conditions, values, expectedConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.setState({
                     conditions,
                 });
-                wrapper.instance().handleValueChange(condition, values);
+                wrapper.instance().handleValueChange(conditionId, values);
 
                 expect(wrapper.state('conditions')).toEqual(expectedConditions);
             });
