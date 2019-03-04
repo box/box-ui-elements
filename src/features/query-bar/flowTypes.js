@@ -14,7 +14,7 @@ export type ColumnType = {
     displayName: string,
     id: string,
     isShown: boolean,
-    options: Array<Object> | null,
+    options: Array<Object> | null, // TODO: ColumnOptionsType - Array<ColumnOptionType>
     property: string,
     source: string,
     templateKey?: string,
@@ -22,12 +22,8 @@ export type ColumnType = {
 };
 
 export type ConditionType = {
-    columnDisplayText: string,
-    columnKey: string | null,
+    columnId: string,
     id: number,
-    operatorDisplayText: string,
-    operatorKey: string | null,
-    valueDisplayText: string,
-    valueKey: string | null,
-    valueType: string,
+    operator: string,
+    value: string | null,
 };

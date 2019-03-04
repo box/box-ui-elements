@@ -10,21 +10,7 @@ import SingleSelectField from '../../../../components/select-field/SingleSelectF
 import ValueField from './ValueField';
 
 import messages from '../../messages';
-import {
-    AND,
-    COLUMN,
-    COLUMN_DISPLAY_TEXT,
-    COLUMN_KEY,
-    COLUMN_OPERATORS,
-    DATE,
-    OPERATOR,
-    OPERATOR_DISPLAY_TEXT,
-    OPERATOR_KEY,
-    OR,
-    VALUE,
-    VALUE_DISPLAY_TEXT,
-    VALUE_KEY,
-} from '../../constants';
+import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OR, VALUE } from '../../constants';
 import type { ColumnType, ConnectorType, OptionType } from '../../flowTypes';
 
 import '../../styles/Condition.scss';
@@ -35,16 +21,9 @@ type Props = {
     condition: Object,
     deleteCondition: (index: number) => void,
     index: number,
+    onColumnChange: (condition: Object, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onFieldChange: (
-        index: number,
-        condition: Object,
-        fieldDisplayText: string | Date,
-        fieldDisplayTextType: string,
-        fieldKey: string | Date,
-        fieldKeyType: string,
-        valueType: any,
-    ) => void,
+    onFieldChange: (condition: Object, value: string, property: string) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -56,6 +35,7 @@ const Condition = ({
     columns,
     condition,
     deleteCondition,
+    onColumnChange,
     onFieldChange,
     index,
     selectedConnector,
@@ -65,60 +45,39 @@ const Condition = ({
         deleteCondition(index);
     };
 
-    const updateSelectedField = (option: OptionType, fieldType?: string) => {
-        const { displayText, type, value } = option;
-
-        let displayTextType = '';
-        let keyType = '';
-
-        switch (fieldType) {
-            case COLUMN:
-                displayTextType = COLUMN_DISPLAY_TEXT;
-                keyType = COLUMN_KEY;
-                break;
-            case OPERATOR:
-                displayTextType = OPERATOR_DISPLAY_TEXT;
-                keyType = OPERATOR_KEY;
-                break;
-            case VALUE:
-                displayTextType = VALUE_DISPLAY_TEXT;
-                keyType = VALUE_KEY;
-                break;
-            default:
-                throw new Error('invalid input');
-        }
-
-        onFieldChange(index, condition, displayText, displayTextType, value, keyType, type);
+    const handleColumnChange = (option: OptionType) => {
+        const { value: columnId } = option;
+        onColumnChange(condition, columnId);
     };
 
-    const getFormattedOptions = (options: Array<Object>): any[] => {
-        return options.map(option => {
-            const { displayName, type } = option;
-            return {
-                displayText: displayName,
-                type,
-                value: displayName,
-            };
-        });
+    const handleOperatorChange = (option: OptionType) => {
+        const { value } = option;
+        onFieldChange(condition, value, OPERATOR);
+    };
+
+    const handleValueChange = (value: string) => {
+        onFieldChange(condition, value, VALUE);
     };
 
     const getColumnOperators = () => {
-        const { valueType } = condition;
-        if (valueType === '') {
+        const { columnId } = condition;
+        const column = columns && columns.find(c => c.id === columnId);
+        const type = column && column.type;
+
+        if (!type) {
             return [];
         }
-        return COLUMN_OPERATORS[valueType];
+        return COLUMN_OPERATORS[type];
     };
 
     const getColumnOptions = () => {
-        const { columnKey } = condition;
-        const column = columns && columns.find(c => c.displayName === columnKey);
+        const { columnId } = condition;
+        const column = columns && columns.find(c => c.id === columnId);
         if (column && column.options) {
             return column.options.map(option => {
                 const { key } = option;
                 return {
-                    displayName: key,
-                    type: 'enum',
+                    displayText: key,
                     value: key,
                 };
             });
@@ -126,33 +85,15 @@ const Condition = ({
         return [];
     };
 
-    const updateValueField = (fieldValue: Object) => {
-        const { valueType } = condition;
-        let displayText = '';
-        const displayTextType = VALUE_DISPLAY_TEXT;
-
-        let value = '';
-        const keyType = VALUE_KEY;
-
-        if (!fieldValue || !fieldValue.target) {
-            displayText = fieldValue;
-            value = fieldValue;
-        } else {
-            const { target } = fieldValue;
-            displayText = target.value;
-            value = target.value;
-        }
-
-        onFieldChange(index, condition, displayText, displayTextType, value, keyType, valueType);
-    };
-
     const getErrorMessage = () => {
-        const { valueKey, valueType } = condition;
+        const { value, columnId } = condition;
+        const column = columns && columns.find(c => c.id === columnId);
+        const type = column && column.type;
 
-        const isValueSet = valueKey !== null && valueKey !== '';
+        const isValueSet = value !== null && value !== '';
         const message = (
             <FormattedMessage
-                {...(valueType === DATE ? messages.tooltipSelectDateError : messages.tooltipSelectValueError)}
+                {...(type === DATE ? messages.tooltipSelectDateError : messages.tooltipSelectValueError)}
             />
         );
         const error = areErrorsEnabled && !isValueSet ? message : null;
@@ -171,12 +112,10 @@ const Condition = ({
     };
 
     const renderConnectorField = () => {
-        const connectorOptions = getFormattedOptions(
-            [AND, OR].map(connector => ({
-                displayName: connector,
-                value: connector,
-            })),
-        );
+        const connectorOptions = [AND, OR].map(connector => ({
+            displayText: connector,
+            value: connector,
+        }));
 
         return (
             <div className="condition-connector">
@@ -197,17 +136,28 @@ const Condition = ({
     };
 
     const renderColumnField = () => {
-        const { columnDisplayText } = condition;
-        const columnOptions = getFormattedOptions(columns || []);
+        const { columnId } = condition;
+
+        const columnOptions =
+            columns &&
+            columns.map(column => {
+                const { displayName, id, type } = column;
+                return {
+                    displayText: displayName,
+                    type,
+                    value: id,
+                };
+            });
+
         return (
             <div className="condition-column-dropdown-container">
                 <div className="filter-dropdown-single-select-field-container">
                     <SingleSelectField
                         fieldType={COLUMN}
                         isDisabled={false}
-                        onChange={updateSelectedField}
+                        onChange={handleColumnChange}
                         options={columnOptions}
-                        selectedValue={columnDisplayText}
+                        selectedValue={columnId}
                     />
                 </div>
             </div>
@@ -215,9 +165,15 @@ const Condition = ({
     };
 
     const renderOperatorField = () => {
-        const { operatorDisplayText } = condition;
+        const { operator } = condition;
         const columnOperators = getColumnOperators();
-        const operatorOptions = getFormattedOptions(columnOperators);
+        const operatorOptions = columnOperators.map(_operator => {
+            const { displayText, key } = _operator;
+            return {
+                displayText,
+                value: key,
+            };
+        });
 
         return (
             <div className="condition-operator-dropdown-container">
@@ -225,9 +181,9 @@ const Condition = ({
                     <SingleSelectField
                         fieldType={OPERATOR}
                         isDisabled={false}
-                        onChange={updateSelectedField}
+                        onChange={handleOperatorChange}
                         options={operatorOptions}
-                        selectedValue={operatorDisplayText || operatorOptions[0].displayText}
+                        selectedValue={operator}
                     />
                 </div>
             </div>
@@ -235,28 +191,31 @@ const Condition = ({
     };
 
     const renderValueField = () => {
-        const { valueKey, valueType, valueDisplayText } = condition;
+        const { columnId, value } = condition;
 
-        const columnOptions = getColumnOptions();
-        const valueOptions = getFormattedOptions(columnOptions);
-        const error = getErrorMessage();
+        const column = columns && columns.find(c => c.id === columnId);
+        const type = column && column.type;
 
-        const classnames = classNames('condition-value-dropdown-container', {
-            'show-error': error,
-        });
+        if (column && type) {
+            const valueOptions = getColumnOptions();
+            const error = getErrorMessage();
 
-        return (
-            <div className={classnames}>
-                <ValueField
-                    selectedValue={valueDisplayText}
-                    updateValueField={updateValueField}
-                    updateSelectedField={updateSelectedField}
-                    valueKey={valueKey}
-                    valueOptions={valueOptions}
-                    valueType={valueType}
-                />
-            </div>
-        );
+            const classnames = classNames('condition-value-dropdown-container', {
+                'show-error': error,
+            });
+
+            return (
+                <div className={classnames}>
+                    <ValueField
+                        onChange={handleValueChange}
+                        selectedValue={value}
+                        valueOptions={valueOptions}
+                        valueType={type}
+                    />
+                </div>
+            );
+        }
+        return null;
     };
 
     const renderErrorIcon = () => {
