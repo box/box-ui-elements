@@ -568,4 +568,56 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             expect(wrapper.state('sharedLinkLoaded')).toBe(false);
         });
     });
+
+    describe('shouldAutoFocusSharedLink()', () => {
+        test('should return false if not forced focus or a new shared link', () => {
+            const wrapper = getWrapper({
+                focusSharedLinkOnLoad: false,
+                sharedLink: {
+                    isNewSharedLink: false,
+                },
+            });
+
+            expect(wrapper.instance().shouldAutoFocusSharedLink()).toBe(false);
+        });
+
+        test('should return false if shared link is not yet loaded', () => {
+            const wrapper = getWrapper({
+                focusSharedLinkOnLoad: true,
+                sharedLink: {
+                    isNewSharedLink: false,
+                },
+            });
+
+            wrapper.setState({ sharedLinkLoaded: false });
+
+            expect(wrapper.instance().shouldAutoFocusSharedLink()).toBe(false);
+        });
+
+        test('should return true if forced focus and link is loaded', () => {
+            const wrapper = getWrapper({
+                focusSharedLinkOnLoad: true,
+                sharedLink: {
+                    isNewSharedLink: false,
+                },
+            });
+
+            wrapper.setState({ sharedLinkLoaded: true });
+
+            expect(wrapper.instance().shouldAutoFocusSharedLink()).toBe(true);
+        });
+
+        test('should return true if new shared link and link is loaded', () => {
+            const wrapper = getWrapper({
+                focusSharedLinkOnLoad: false,
+                sharedLink: {
+                    isNewSharedLink: true,
+                },
+            });
+
+            wrapper.setState({ sharedLinkLoaded: true });
+
+            expect(wrapper.instance().shouldAutoFocusSharedLink()).toBe(true);
+        });
+    });
 });
