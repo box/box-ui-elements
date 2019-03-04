@@ -117,7 +117,8 @@ class FilterButton extends React.Component<Props, State> {
             return currentCondition.id === conditionId;
         });
 
-        const newCondition = updateCondition(conditionToUpdate);
+        let newCondition = { ...conditionToUpdate };
+        newCondition = updateCondition(newCondition);
 
         const newConditions = conditions.slice(0);
         newConditions[newConditionIndex] = newCondition;
