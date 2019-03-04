@@ -213,7 +213,7 @@ class PillSelector extends React.Component<Props, State> {
                     />
                     <SuggestedPillsRow
                         onSuggestedPillAdd={onSuggestedPillAdd}
-                        selectedPillsIDs={this.getPillsByKey('id')}
+                        selectedPillsValues={this.getPillsByKey('value')}
                         suggestedPillsData={suggestedPillsData}
                         title={suggestedPillsTitle}
                     />
