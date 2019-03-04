@@ -7,7 +7,7 @@ import { KEYS } from '../../constants';
 
 import Pill from './Pill';
 import SuggestedPillsRow from './SuggestedPillsRow';
-import type { SelectedOptions } from './flowTypes';
+import type { SelectedOptions, SuggestedPillsFilter } from './flowTypes';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -25,6 +25,7 @@ type Props = {
     placeholder: string,
     selectedOptions: SelectedOptions,
     suggestedPillsData?: Array<Object>,
+    suggestedPillsFilter?: SuggestedPillsFilter,
     suggestedPillsTitle?: string,
 };
 
@@ -160,6 +161,7 @@ class PillSelector extends React.Component<Props, State> {
             placeholder,
             selectedOptions,
             suggestedPillsData,
+            suggestedPillsFilter,
             suggestedPillsTitle,
             ...rest
         } = this.props;
@@ -214,6 +216,7 @@ class PillSelector extends React.Component<Props, State> {
                     <SuggestedPillsRow
                         onSuggestedPillAdd={onSuggestedPillAdd}
                         selectedPillsValues={this.getPillsByKey('value')}
+                        suggestedPillsFilter={suggestedPillsFilter}
                         suggestedPillsData={suggestedPillsData}
                         title={suggestedPillsTitle}
                     />
