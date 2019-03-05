@@ -560,10 +560,8 @@ describe('api/Feed', () => {
         });
 
         test('should call the app activity api and if successful, the success callback', () => {
-            const activityItem = {
-                id: '12345',
-            };
-            feed.deleteAppActivity(file, activityItem);
+            const activityItemId = '12345';
+            feed.deleteAppActivity(file, activityItemId);
             expect(feed.appActivityAPI.deleteAppActivity).toBeCalled();
             expect(feed.deleteFeedItem).toBeCalled();
         });

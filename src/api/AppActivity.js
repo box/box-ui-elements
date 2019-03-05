@@ -4,23 +4,32 @@
  * @author Box
  */
 import MarkerBasedAPI from './MarkerBasedAPI';
-import { ERROR_CODE_DELETE_APP_ACTIVITY } from '../constants';
+import { ERROR_CODE_DELETE_APP_ACTIVITY, HTTP_STATUS_CODE_NOT_FOUND } from '../constants';
 import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../utils/fields';
 
 class AppActivity extends MarkerBasedAPI {
+    /** @property {TasksAPI} - Placeholder permissions object to determine if app activity can be deleted */
+    permissions: BoxItemPermission = {};
+
     /**
      * Map an entry from the AppActivity API to an AppActivityItem.
      * occurred_at -> created_at
      *
      * @param {Object} item - A single entry in the AppActivity API entiries list
+     *
+     * @return {AppActivityItem}
      */
-    mapAppActivityItem(item: Object): AppActivityItem {
+    mapAppActivityItem = (item: Object): AppActivityItem => {
         const { occurred_at, ...rest } = item;
+        const { can_delete } = this.permissions;
         return {
             created_at: occurred_at,
+            permissions: {
+                can_delete,
+            },
             ...rest,
         };
-    }
+    };
 
     /**
      * API URL for getting App Activity on a file
@@ -60,20 +69,52 @@ class AppActivity extends MarkerBasedAPI {
     };
 
     /**
+     * Generic error handler
+     *
+     * @param {AxiosError} error - the error response
+     */
+    errorHandler = (error: $AxiosError<any>): void => {
+        if (this.isDestroyed() && typeof this.errorCallback !== 'function') {
+            return;
+        }
+
+        this.permissions = {};
+        const { response } = error;
+
+        // In the case of a 404, the enterprise does not have App Activities enabled.
+        // Show no App Activity
+        if (response.status === HTTP_STATUS_CODE_NOT_FOUND) {
+            this.successHandler({});
+        } else {
+            super.errorHandler(error);
+        }
+    };
+
+    /**
      * API for fetching App Activity on a file
      *
      * @param {string} id - the file id
+     * @param {BoxItemPermission} permissions - Permissions to attach to the app activity items. Determines if it can be deleted.
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      * @param {number} [limit] - the max number of app activity items to return.
+     *
      * @returns {void}
      */
-    getAppActivity(id: string, successCallback: Function, errorCallback: ElementsErrorCallback, limit?: number): void {
+    getAppActivity(
+        id: string,
+        permissions: BoxItemPermission,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+        limit?: number,
+    ): void {
         const requestData = {
             item_id: id,
             item_type: 'file',
             fields: APP_ACTIVITY_FIELDS_TO_FETCH.toString(),
         };
+
+        this.permissions = permissions;
 
         this.markerGet({
             id,
@@ -88,17 +129,17 @@ class AppActivity extends MarkerBasedAPI {
      * Delete an app activity item
      *
      * @param {BoxItem} file - The Box file that App Activity is on
-     * @param {AppActivityItem} appActivityItem - An AppActivity item
+     * @param {string} appActivityId - An AppActivity item id
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      */
     deleteAppActivity({
         file,
-        appActivityItem,
+        appActivityId,
         successCallback,
         errorCallback,
     }: {
-        appActivityItem: AppActivityItem,
+        appActivityId: string,
         errorCallback: Function,
         file: BoxItem,
         successCallback: Function,
@@ -106,7 +147,6 @@ class AppActivity extends MarkerBasedAPI {
         this.errorCode = ERROR_CODE_DELETE_APP_ACTIVITY;
 
         const { id } = file;
-        const { id: appActivityId } = appActivityItem;
 
         this.delete({
             id,

@@ -315,6 +315,7 @@ export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
 export const HTTP_STATUS_CODE_FORBIDDEN = 403;
+export const HTTP_STATUS_CODE_NOT_FOUND = 404;
 export const HTTP_STATUS_CODE_CONFLICT = 409;
 export const HTTP_STATUS_CODE_UNAUTHORIZED = 401;
 export const HTTP_STATUS_CODE_RATE_LIMIT = 429;

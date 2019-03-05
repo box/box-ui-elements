@@ -951,14 +951,20 @@ class Feed extends Base {
 
     /**
      * Fetches app activities for a file
+     * @param {BoxItemPermission} permissions - Permissions to attach to the app activity items
      *
      * @return {Promise} - the feed items
      */
-    fetchAppActivity(): Promise<?AppActivityItems> {
+    fetchAppActivity(permissions: BoxItemPermission): Promise<?AppActivityItems> {
         this.appActivityAPI = new AppActivityAPI(this.options);
 
         return new Promise(resolve => {
-            this.appActivityAPI.getAppActivity(this.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
+            this.appActivityAPI.getAppActivity(
+                this.id,
+                permissions,
+                resolve,
+                this.fetchFeedItemErrorCallback.bind(this, resolve),
+            );
         });
     }
 
@@ -966,16 +972,14 @@ class Feed extends Base {
      * Deletes an app activity item.
      *
      * @param {BoxItem} file - The file to which the app activity belongs to
-     * @param {AppActivityItem} appActivityItem - The app activity item to delete
-     * @param {BoxItemPermission} permissions - Permissions for the app activity
+     * @param {string} appActivityId - The app activity item id to delete
      * @param {Function} successCallback - the function which will be called on success
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
     deleteAppActivity = (
         file: BoxItem,
-        appActivityItem: AppActivityItem,
-        permissions: BoxItemPermission,
+        appActivityId: string,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -984,18 +988,16 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        const { id: activityItemId } = appActivityItem;
         this.id = file.id;
         this.errorCallback = errorCallback;
-        this.updateFeedItem({ isPending: true }, activityItemId);
+        this.updateFeedItem({ isPending: true }, appActivityId);
 
         this.appActivityAPI.deleteAppActivity({
             file,
-            appActivityItem,
-            permissions,
-            successCallback: this.deleteFeedItem.bind(this, activityItemId, successCallback),
+            appActivityId,
+            successCallback: this.deleteFeedItem.bind(this, appActivityId, successCallback),
             errorCallback: (e: ElementsXhrError, code: string) => {
-                this.deleteAppActivityErrorCallback(e, code, activityItemId);
+                this.deleteAppActivityErrorCallback(e, code, appActivityId);
             },
         });
     };

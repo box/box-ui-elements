@@ -648,6 +648,7 @@ type AppActivityItem = {
     created_at: string,
     created_by: User,
     id: string,
+    permissions: BoxItemPermission,
     rendered_text: string,
     type: 'app_activity',
 };
