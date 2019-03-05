@@ -2,6 +2,7 @@
 import * as React from 'react';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
+import { ROW_HEIGHT } from './constants';
 
 import './styles/ListView.scss';
 
@@ -11,24 +12,25 @@ type Props = {
     getGridCell: ({|
         columnIndex: number,
         rowIndex: number,
-    |}) => any,
+    |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
     height: number,
     rowCount: number,
     width: number,
 };
 
-type CellRendererArgs = {
+type CellRendererArgs = {|
     columnIndex: number,
     key: string,
     rowIndex: number,
     style: Object,
-};
+|};
 
 class ListView extends React.PureComponent<Props> {
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
         const { getGridCell, getGridHeader } = this.props;
         const cellData = getGridCell({ columnIndex, rowIndex });
+
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
             return (
@@ -37,13 +39,7 @@ class ListView extends React.PureComponent<Props> {
                 </div>
             );
         }
-        if (columnIndex === 0) {
-            return (
-                <div className="list-view-name-cell" key={key} style={style}>
-                    {cellData}
-                </div>
-            );
-        }
+
         return (
             <div className="list-view-column-cell" key={key} style={style}>
                 {cellData}
@@ -68,7 +64,7 @@ class ListView extends React.PureComponent<Props> {
                     fixedColumnCount={1}
                     fixedRowCount={1}
                     height={height}
-                    rowHeight={40}
+                    rowHeight={ROW_HEIGHT}
                     rowCount={rowCount}
                     scrollToColumn={0}
                     scrollToRow={0}

@@ -2,34 +2,22 @@
 import * as React from 'react';
 
 import Message from '../components/MetadataListViewMessage';
+import { NEED_REFINING, TOO_MANY_RESULTS, NO_ACCESS_FOR_QUERY, NO_ACCESS_FOR_TEMPLATE } from '../constants';
 
 describe('Message', () => {
     const getWrapper = (props = {}) => {
         return shallow(<Message {...props} />);
     };
     describe('render', () => {
-        [
-            {
-                description: 'should correctly render needRefining',
-                message: 'needRefining',
-            },
-            {
-                description: 'should correctly render tooManyResults',
-                message: 'tooManyResults',
-            },
-            {
-                description: 'should correctly render noAccessForQuery',
-                message: 'noAccessForQuery',
-            },
-            {
-                description: 'should correctly render noAccessForTemplate',
-                message: 'noAccessForTemplate',
-            },
-        ].forEach(message => {
-            test(`${message.description}`, () => {
-                const wrapper = getWrapper(message);
-                expect(wrapper).toMatchSnapshot();
-            });
+        test.each`
+            description                                      | message
+            ${'should correctly render needRefining'}        | ${NEED_REFINING}
+            ${'should correctly render tooManyResults'}      | ${TOO_MANY_RESULTS}
+            ${'should correctly render noAccessForQuery'}    | ${NO_ACCESS_FOR_QUERY}
+            ${'should correctly render noAccessForTemplate'} | ${NO_ACCESS_FOR_TEMPLATE}
+        `('$description', ({ message }) => {
+            const wrapper = getWrapper({ message });
+            expect(wrapper).toMatchSnapshot();
         });
     });
 });
