@@ -883,6 +883,41 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: 'Cancel',
         description: 'label for cancel button in create task popup',
     },
+    tasksFeedApproveAction: {
+        id: 'be.tasks.feed.approveAction',
+        defaultMessage: 'Approve',
+        description: 'Approve option for an approval task',
+    },
+    tasksFeedCompleteAction: {
+        id: 'be.tasks.feed.completeAction',
+        defaultMessage: 'Mark as Complete',
+        description: 'Completion option for a general task',
+    },
+    tasksFeedRejectAction: {
+        id: 'be.tasks.feed.rejectAction',
+        defaultMessage: 'Reject',
+        description: 'Reject option for an approval task',
+    },
+    tasksFeedCompletedLabel: {
+        id: 'be.tasks.feed.completedLabel',
+        defaultMessage: 'Task Complete',
+        description: 'Label for a completed task',
+    },
+    tasksFeedApprovedLabel: {
+        id: 'be.tasks.feed.approvedLabel',
+        defaultMessage: 'Task Approved',
+        description: 'Label for an approved task',
+    },
+    tasksFeedRejectedLabel: {
+        id: 'be.tasks.feed.rejectedLabel',
+        defaultMessage: 'Task Rejected',
+        description: 'Label for a rejected task',
+    },
+    tasksFeedIncompleteLabel: {
+        id: 'be.tasks.feed.incompleteLabel',
+        defaultMessage: 'Awaiting Assignees',
+        description: 'Label for an incomplete task',
+    },
     versionDeleted: {
         id: 'be.versionDeleted',
         defaultMessage: '{ name } deleted version { version_number }',
