@@ -1,72 +1,83 @@
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import ActiveState from '../ActiveState';
-import Task from '../../task/Task';
 
-const items = [
-    {
-        type: 'comment',
-        id: 123,
-        created_at: '2018-07-03T14:43:52-07:00',
-        tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
-        created_by: { name: 'Akon', id: 11 },
+const comment = {
+    type: 'comment',
+    id: 'c_123',
+    created_at: '2018-07-03T14:43:52-07:00',
+    tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
+    created_by: { name: 'Akon', id: 11 },
+};
+
+const fileVersion = {
+    type: 'file_version',
+    id: 'f_123',
+    created_at: '2018-07-03T14:43:52-07:00',
+    trashed_at: '2018-07-03T14:43:52-07:00',
+    modified_at: '2018-07-03T14:43:52-07:00',
+    modified_by: { name: 'Akon', id: 11 },
+};
+
+const taskWithoutAssignment = {
+    type: 'task',
+    id: 't_123',
+    created_at: '2018-07-03T14:43:52-07:00',
+    created_by: { name: 'Akon', id: 11 },
+    modified_at: '2018-07-03T14:43:52-07:00',
+    tagged_message: 'test',
+    modified_by: { name: 'Jay-Z', id: 10 },
+    dueAt: '2018-07-03T14:43:52-07:00',
+    task_assignment_collection: {
+        entries: [],
+        total_count: 0,
     },
-    {
-        type: 'task',
-        id: 234,
-        created_at: '2018-07-03T14:43:52-07:00',
-        created_by: { name: 'Akon', id: 11 },
-        modified_at: '2018-07-03T14:43:52-07:00',
-        tagged_message: 'test',
-        modified_by: { name: 'Jay-Z', id: 10 },
-        dueAt: '2018-07-03T14:43:52-07:00',
-        task_assignment_collection: {
-            entries: [
-                {
-                    assigned_to: { name: 'Akon', id: 11 },
-                    status: 'incomplete',
-                },
-            ],
-            total_count: 1,
-        },
+};
+
+const taskWithAssignment = {
+    type: 'task',
+    id: 't_345',
+    created_at: '2018-07-03T14:43:52-07:00',
+    created_by: { name: 'Akon', id: 11 },
+    modified_at: '2018-07-03T14:43:52-07:00',
+    tagged_message: 'test',
+    modified_by: { name: 'Jay-Z', id: 10 },
+    dueAt: '2018-07-03T14:43:52-07:00',
+    task_assignment_collection: {
+        entries: [
+            {
+                assigned_to: { name: 'Akon', id: 11 },
+                status: 'incomplete',
+            },
+        ],
+        total_count: 1,
     },
-    {
-        type: 'file_version',
-        id: 345,
-        created_at: '2018-07-03T14:43:52-07:00',
-        trashed_at: '2018-07-03T14:43:52-07:00',
-        modified_at: '2018-07-03T14:43:52-07:00',
-        modified_by: { name: 'Akon', id: 11 },
-    },
-    {
-        type: 'task',
-        id: 234,
-        created_at: '2018-07-03T14:43:52-07:00',
-        created_by: { name: 'Akon', id: 11 },
-        modified_at: '2018-07-03T14:43:52-07:00',
-        tagged_message: 'test',
-        modified_by: { name: 'Jay-Z', id: 10 },
-        dueAt: '2018-07-03T14:43:52-07:00',
-        task_assignment_collection: {
-            entries: [],
-            total_count: 0,
-        },
-    },
-];
+};
 
 const activityFeedError = { title: 't', content: 'm' };
 
 describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () => {
-    test('should correctly render empty state', () => {
+    test('should render empty state', () => {
         const wrapper = shallow(<ActiveState items={[]} />);
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render with comments, tasks, versions', () => {
-        const wrapper = mount(<ActiveState items={items} />);
+    test('should render items', () => {
+        const wrapper = shallow(<ActiveState items={[comment, fileVersion, taskWithAssignment]} />).dive();
         expect(wrapper).toMatchSnapshot();
-        expect(wrapper.find(Task)).toHaveLength(1);
+    });
+
+    test('should render card for item type', () => {
+        const wrapper = mount(<ActiveState items={[comment, fileVersion, taskWithAssignment]} />);
+        expect(wrapper.find('[data-testid="comment"]')).toHaveLength(1);
+        expect(wrapper.find('[data-testid="version"]')).toHaveLength(1);
+        expect(wrapper.find('[data-testid="task"]')).toHaveLength(1);
+    });
+
+    test('should not render task without assignments', () => {
+        const wrapper = mount(<ActiveState items={[taskWithoutAssignment]} />);
+        expect(wrapper.find('[data-testid="task"]')).toHaveLength(0);
     });
 
     test('should correctly render with an inline error if some feed items fail to fetch', () => {

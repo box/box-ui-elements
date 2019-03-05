@@ -48,7 +48,7 @@ const ActiveState = ({
             switch (type) {
                 case 'comment':
                     return (
-                        <li key={type + id} className="bcs-activity-feed-comment">
+                        <li key={type + id} className="bcs-activity-feed-comment" data-testid="comment">
                             <Comment
                                 {...item}
                                 currentUser={currentUser}
@@ -66,33 +66,37 @@ const ActiveState = ({
                 case 'task':
                     return (
                         <FeatureFlag
+                            key={type + id}
                             feature="activityFeed.tasks.newCards"
-                            disabled={() =>
-                                item.task_assignment_collection &&
-                                item.task_assignment_collection.total_count && (
-                                    <li key={type + id} className="bcs-activity-feed-task">
-                                        <Task
-                                            {...item}
-                                            currentUser={currentUser}
-                                            getAvatarUrl={getAvatarUrl}
-                                            getMentionWithQuery={getMentionWithQuery}
-                                            getUserProfileUrl={getUserProfileUrl}
-                                            mentionSelectorContacts={mentionSelectorContacts}
-                                            onAssignmentUpdate={onTaskAssignmentUpdate}
-                                            onDelete={onTaskDelete}
-                                            onEdit={onTaskEdit}
-                                            // permissions are not part of task API so hard code to true
-                                            permissions={{
-                                                can_delete: true,
-                                                can_edit: true,
-                                            }}
-                                            translations={translations}
-                                        />
-                                    </li>
-                                )
-                            }
+                            disabled={() => {
+                                const hasAssignments =
+                                    item.task_assignment_collection && item.task_assignment_collection.total_count;
+                                return (
+                                    hasAssignments && (
+                                        <li className="bcs-activity-feed-task" data-testid="task">
+                                            <Task
+                                                {...item}
+                                                currentUser={currentUser}
+                                                getAvatarUrl={getAvatarUrl}
+                                                getMentionWithQuery={getMentionWithQuery}
+                                                getUserProfileUrl={getUserProfileUrl}
+                                                mentionSelectorContacts={mentionSelectorContacts}
+                                                onAssignmentUpdate={onTaskAssignmentUpdate}
+                                                onDelete={onTaskDelete}
+                                                onEdit={onTaskEdit}
+                                                // permissions are not part of task API so hard code to true
+                                                permissions={{
+                                                    can_delete: true,
+                                                    can_edit: true,
+                                                }}
+                                                translations={translations}
+                                            />
+                                        </li>
+                                    )
+                                );
+                            }}
                             enabled={() => (
-                                <li key={type + id} className="bcs-activity-feed-task-new">
+                                <li className="bcs-activity-feed-task-new" data-testid="task">
                                     <TaskNew
                                         {...item}
                                         currentUser={currentUser}
@@ -103,11 +107,6 @@ const ActiveState = ({
                                         onAssignmentUpdate={onTaskAssignmentUpdate}
                                         onDelete={onTaskDelete}
                                         onEdit={onTaskEdit}
-                                        // permissions are not part of task API so hard code to true
-                                        permissions={{
-                                            can_delete: true,
-                                            can_edit: true,
-                                        }}
                                         translations={translations}
                                     />
                                 </li>
@@ -116,7 +115,7 @@ const ActiveState = ({
                     );
                 case 'file_version':
                     return (
-                        <li key={type + id} className="bcs-version-item">
+                        <li key={type + id} className="bcs-version-item" data-testid="version">
                             {versions ? (
                                 <CollapsedVersion {...item} onInfo={onVersionInfo} />
                             ) : (
@@ -126,7 +125,7 @@ const ActiveState = ({
                     );
                 case 'keywords':
                     return (
-                        <li key={type + id} className="bcs-keywords-item">
+                        <li key={type + id} className="bcs-keywords-item" data-testid="keyword">
                             <Keywords {...item} />
                         </li>
                     );
