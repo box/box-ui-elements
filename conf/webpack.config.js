@@ -72,6 +72,7 @@ function getConfig(isReactExternalized) {
             },
         },
         devServer: {
+            historyApiFallback: true,
             host: '0.0.0.0',
             stats,
         },
@@ -122,6 +123,7 @@ function getConfig(isReactExternalized) {
     if (isDev) {
         config.devtool = 'source-map';
         config.plugins.push(Translations);
+
         if (!examples) {
             config.plugins.push(
                 new CircularDependencyPlugin({

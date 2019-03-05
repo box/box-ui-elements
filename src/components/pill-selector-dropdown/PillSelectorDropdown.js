@@ -9,7 +9,7 @@ import Label from '../label';
 import SelectorDropdown from '../selector-dropdown';
 
 import PillSelector from './PillSelector';
-import { type SelectedOptions } from './flowTypes';
+import type { SelectedOptions, SuggestedPillsFilter } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
 
@@ -46,6 +46,8 @@ type Props = {
     selectorOptions: Array<Object> | List<Object>,
     /** Array of suggested collaborators */
     suggestedPillsData?: Array<Object>,
+    /** String decribes the datapoint to filter by so that items in the form are not shown in suggestions. */
+    suggestedPillsFilter?: SuggestedPillsFilter,
     /** String describes the suggested pills */
     suggestedPillsTitle?: string,
     /** Validate the given input value, and update `error` prop if necessary */
@@ -170,6 +172,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             placeholder,
             selectedOptions,
             suggestedPillsData,
+            suggestedPillsFilter,
             suggestedPillsTitle,
         } = this.props;
 
@@ -193,6 +196,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             placeholder={placeholder}
                             selectedOptions={selectedOptions}
                             suggestedPillsData={suggestedPillsData}
+                            suggestedPillsFilter={suggestedPillsFilter}
                             suggestedPillsTitle={suggestedPillsTitle}
                             value={this.state.inputValue}
                         />

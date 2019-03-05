@@ -45,6 +45,8 @@ export type inviteePermissionType = {
 };
 
 export type item = {
+    description: string,
+    extension: string,
     grantedPermissions: {
         itemShare: boolean,
     },
@@ -118,8 +120,11 @@ export type sharedLinkType = {
     canChangeAccessLevel: boolean,
     enterpriseName: string,
     expirationTimestamp: ?number,
+    isDownloadAllowed: boolean,
     isDownloadSettingAvailable: boolean,
+    isEditAllowed: boolean,
     isNewSharedLink: boolean,
+    isPreviewAllowed: boolean,
     permissionLevel: permissionLevelType,
     url: string,
 };

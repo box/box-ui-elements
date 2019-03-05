@@ -1,35 +1,21 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Sidebar from '../Sidebar';
+import { SidebarComponent as Sidebar } from '../Sidebar';
 
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 
 describe('elements/content-sidebar/Sidebar', () => {
-    const file = { id: 'id' };
-    const getWrapper = props => shallow(<Sidebar file={file} {...props} />);
+    const getWrapper = props => shallow(<Sidebar file={{ id: 'id' }} {...props} />);
 
-    test('should render no sidebar', () => {
-        const wrapper = getWrapper();
-        expect(wrapper).toMatchSnapshot();
-    });
+    describe('componentDidUpdate', () => {
+        test('should set isOpen if isLarge prop has changed', () => {
+            const wrapper = getWrapper({ isLarge: true });
 
-    test('should render skills sidebar', () => {
-        const wrapper = getWrapper({ hasSkills: true, selectedView: 'skills' });
-        expect(wrapper).toMatchSnapshot();
-    });
+            expect(wrapper.state('isOpen')).toEqual(true);
 
-    test('should render activity sidebar', () => {
-        const wrapper = getWrapper({ hasActivityFeed: true, selectedView: 'activity' });
-        expect(wrapper).toMatchSnapshot();
-    });
+            wrapper.setProps({ isLarge: false });
 
-    test('should render details sidebar', () => {
-        const wrapper = getWrapper({ hasDetails: true, selectedView: 'details' });
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render metadata sidebar', () => {
-        const wrapper = getWrapper({ hasMetadata: true, selectedView: 'metadata' });
-        expect(wrapper).toMatchSnapshot();
+            expect(wrapper.state('isOpen')).toEqual(false);
+        });
     });
 });

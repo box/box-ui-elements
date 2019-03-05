@@ -1,8 +1,9 @@
 // @flow
 import * as React from 'react';
 
-import { columns } from '../components/fixtures';
+import { columns, initialCondition } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
+import { EQUALS, LESS_THAN } from '../constants';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
@@ -21,163 +22,118 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         });
     });
 
-    describe('handleFieldChange()', () => {
+    describe('handleColumnChange()', () => {
         [
             {
                 description: 'should set conditions with an object with column',
-                index: 0,
+                columnId: '2',
                 condition: {
+                    columnId: '1',
                     id: '3',
-                    columnDisplayText: '',
-                    columnKey: null,
-                    operatorDisplayText: '',
-                    operatorKey: 0,
-                    valueDisplayText: null,
-                    valueKey: null,
+                    operator: EQUALS,
+                    values: [],
                 },
                 conditions: [
                     {
+                        columnId: '1',
                         id: '3',
-                        columnDisplayText: '',
-                        columnKey: null,
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: null,
-                        valueKey: null,
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
-                fieldDisplayText: 'myColumn',
-                fieldDisplayTextType: 'columnDisplayText',
-                fieldKey: 0,
-                fieldKeyType: 'columnKey',
-                valueType: 'string',
-                updatedCondition: [
+                expectedConditions: [
                     {
+                        columnId: '2',
                         id: '3',
-                        columnDisplayText: 'myColumn',
-                        columnKey: 0,
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: null,
-                        valueKey: null,
-                        valueType: 'string',
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
             },
+        ].forEach(({ description, columnId, condition, conditions, expectedConditions }) => {
+            test(`${description}`, () => {
+                const wrapper = getWrapper({ columns });
+                wrapper.setState({
+                    conditions,
+                });
+                wrapper.instance().handleColumnChange(condition, columnId);
+
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
+            });
+        });
+    });
+
+    describe('handleOperatorChange()', () => {
+        [
             {
                 description: 'should set conditions with an object with operator',
-                index: 0,
-                condition: {
-                    id: '4',
-                    columnDisplayText: '',
-                    columnKey: null,
-                    operatorDisplayText: '',
-                    operatorKey: 0,
-                    valueDisplayText: null,
-                    valueKey: null,
-                },
+                conditionId: 4,
                 conditions: [
                     {
-                        id: '4',
-                        columnDisplayText: '',
-                        columnKey: null,
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: null,
-                        valueKey: null,
+                        columnId: '1',
+                        id: 4,
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
-                fieldDisplayText: 'myOperator',
-                fieldDisplayTextType: 'operatorDisplayText',
-                fieldKey: 0,
-                fieldKeyType: 'operatorKey',
-                updatedCondition: [
+                value: LESS_THAN,
+                expectedConditions: [
                     {
-                        id: '4',
-                        columnDisplayText: '',
-                        columnKey: null,
-                        operatorDisplayText: 'myOperator',
-                        operatorKey: 0,
-                        valueDisplayText: null,
-                        valueKey: null,
+                        columnId: '1',
+                        id: 4,
+                        operator: LESS_THAN,
+                        values: [],
                     },
                 ],
             },
+        ].forEach(({ description, conditionId, conditions, value, expectedConditions }) => {
+            test(`${description}`, () => {
+                const wrapper = getWrapper();
+                wrapper.setState({
+                    conditions,
+                });
+                wrapper.instance().handleOperatorChange(conditionId, value);
+
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
+            });
+        });
+    });
+
+    describe('handleValueChange()', () => {
+        [
             {
                 description: 'should set conditions with an object with value',
                 index: 0,
-                condition: {
-                    id: '5',
-                    columnDisplayText: '',
-                    columnKey: null,
-                    operatorDisplayText: '',
-                    operatorKey: 0,
-                    valueDisplayText: null,
-                    valueKey: null,
-                },
+                conditionId: 5,
                 conditions: [
                     {
-                        id: '5',
-                        columnDisplayText: '',
-                        columnKey: null,
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: null,
-                        valueKey: null,
+                        columnId: '1',
+                        id: 5,
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
-                fieldDisplayText: 'myValue',
-                fieldDisplayTextType: 'valueDisplayText',
-                fieldKey: 0,
-                fieldKeyType: 'valueKey',
-                valueType: 'string',
-                updatedCondition: [
+                values: ['0'],
+                expectedConditions: [
                     {
-                        id: '5',
-                        columnDisplayText: '',
-                        columnKey: null,
-                        operatorDisplayText: '',
-                        operatorKey: 0,
-                        valueDisplayText: 'myValue',
-                        valueKey: 0,
-                        valueType: 'string',
+                        columnId: '1',
+                        id: 5,
+                        operator: EQUALS,
+                        values: ['0'],
                     },
                 ],
             },
-        ].forEach(
-            ({
-                description,
-                index,
-                condition,
-                conditions,
-                fieldDisplayText,
-                fieldDisplayTextType,
-                fieldKey,
-                fieldKeyType,
-                updatedCondition,
-                valueType,
-            }) => {
-                test(`${description}`, () => {
-                    const wrapper = getWrapper();
-                    wrapper.setState({
-                        conditions,
-                    });
-                    wrapper
-                        .instance()
-                        .handleFieldChange(
-                            index,
-                            condition,
-                            fieldDisplayText,
-                            fieldDisplayTextType,
-                            fieldKey,
-                            fieldKeyType,
-                            valueType,
-                        );
-
-                    expect(wrapper.state('conditions')).toEqual(updatedCondition);
+        ].forEach(({ description, conditionId, conditions, values, expectedConditions }) => {
+            test(`${description}`, () => {
+                const wrapper = getWrapper();
+                wrapper.setState({
+                    conditions,
                 });
-            },
-        );
+                wrapper.instance().handleValueChange(conditionId, values);
+
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
+            });
+        });
     });
 
     describe('deleteCondition()', () => {
@@ -188,36 +144,24 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 conditions: [
                     {
                         id: '2',
-                        columnDisplayText: '',
-                        columnKey: null,
-                        operatorDisplayText: '',
-                        operatorKey: null,
-                        valueDisplayText: null,
-                        valueKey: null,
+                        operator: EQUALS,
+                        values: [],
                     },
                     {
                         id: '3',
-                        columnDisplayText: '',
-                        columnKey: null,
-                        operatorDisplayText: '',
-                        operatorKey: null,
-                        valueDisplayText: null,
-                        valueKey: null,
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
-                updatedConditions: [
+                expectedConditions: [
                     {
                         id: '3',
-                        columnDisplayText: '',
-                        columnKey: null,
-                        operatorDisplayText: '',
-                        operatorKey: null,
-                        valueDisplayText: null,
-                        valueKey: null,
+                        operator: EQUALS,
+                        values: [],
                     },
                 ],
             },
-        ].forEach(({ description, index, conditions, updatedConditions }) => {
+        ].forEach(({ description, index, conditions, expectedConditions }) => {
             test(`${description}`, () => {
                 const wrapper = getWrapper();
                 wrapper.instance().setState({
@@ -225,7 +169,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 });
                 wrapper.instance().deleteCondition(index);
 
-                expect(wrapper.state('conditions')).toEqual(updatedConditions);
+                expect(wrapper.state('conditions')).toEqual(expectedConditions);
             });
         });
     });
@@ -289,14 +233,10 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const wrapper = getWrapper({ columns });
             const conditionID = '11';
             const expected = {
-                columnDisplayText: 'Hullo Thar',
-                columnKey: 'Hullo Thar',
+                columnId: '1',
                 id: conditionID,
-                operatorDisplayText: '',
-                operatorKey: 0,
-                valueDisplayText: null,
-                valueKey: null,
-                valueType: 'string',
+                operator: EQUALS,
+                values: [],
             };
             wrapper.instance().setState({
                 conditions: [],
@@ -320,16 +260,31 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('closeOnClickPredicate()', () => {
-        test('Should return true if Apply button was clicked', () => {
+        const conditionsWithValues = [
+            {
+                ...initialCondition,
+                values: ['1'],
+            },
+        ];
+        const conditionsWithEmptyValues = [{ ...initialCondition, values: [] }];
+
+        test.each`
+            description                                                                | conditions                   | shouldCloseResult
+            ${'Should return true if Apply button was clicked and value is not empty'} | ${conditionsWithValues}      | ${true}
+            ${'Should return false if Apply button was clicked and value is empty'}    | ${conditionsWithEmptyValues} | ${false}
+        `('$description', ({ conditions, shouldCloseResult }) => {
             const wrapper = getWrapper();
             const targetWithClassName = {
                 target: document.createElement('button'),
             };
+            wrapper.instance().setState({
+                conditions,
+            });
             targetWithClassName.target.className = 'apply-filters-button';
             const closeOnClickPredicateResult = wrapper.instance().shouldClose(targetWithClassName);
 
             wrapper.update();
-            expect(closeOnClickPredicateResult).toEqual(true);
+            expect(closeOnClickPredicateResult).toEqual(shouldCloseResult);
         });
     });
 });

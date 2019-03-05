@@ -330,11 +330,21 @@ export const BOX_EDIT_SFC_INTEGRATION_ID = '13418';
 export const OPEN_WITH_BUTTON_ICON_SIZE = 26;
 export const OPEN_WITH_MENU_ITEM_ICON_SIZE = 30;
 
-/* ------------------ Task Assignment Statuses ----------------- */
+/* ------------------ Legacy Task Assignment Statuses ----------------- */
 export const TASK_APPROVED: 'approved' = 'approved';
 export const TASK_COMPLETED: 'completed' = 'completed';
 export const TASK_INCOMPLETE: 'incomplete' = 'incomplete';
 export const TASK_REJECTED: 'rejected' = 'rejected';
+
+/* ------------------ New Task Statuses ----------------- */
+export const TASK_NEW_APPROVED = 'APPROVED';
+export const TASK_NEW_COMPLETED = 'COMPLETED';
+export const TASK_NEW_INCOMPLETE = 'NOT_STARTED';
+export const TASK_NEW_REJECTED = 'REJECTED';
+
+/* ------------------ New Task types ----------------- */
+export const TASK_TYPE_GENERAL = 'general';
+export const TASK_TYPE_APPROVAL = 'approval';
 
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {

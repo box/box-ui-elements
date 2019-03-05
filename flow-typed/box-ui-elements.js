@@ -75,6 +75,12 @@ import {
     TASK_APPROVED,
     TASK_COMPLETED,
     TASK_INCOMPLETE,
+    TASK_TYPE_GENERAL,
+    TASK_TYPE_APPROVAL,
+    TASK_NEW_APPROVED,
+    TASK_NEW_COMPLETED,
+    TASK_NEW_INCOMPLETE,
+    TASK_NEW_REJECTED,
     TASK_REJECTED,
     METRIC_TYPE_PREVIEW,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
@@ -618,6 +624,108 @@ type Tasks = {
     total_count: number,
 };
 
+/* New Task Types START */
+
+type ID = string;
+type ISODate = string;
+
+type UserMini = User;
+
+type FileMini = {
+    id: ID,
+    name: string,
+    type: 'file',
+};
+
+type FolderMini = {
+    id: ID,
+    name: string,
+    type: 'folder',
+};
+
+type TaskStatus =
+    | typeof TASK_NEW_INCOMPLETE
+    | typeof TASK_NEW_COMPLETED
+    | typeof TASK_NEW_APPROVED
+    | typeof TASK_NEW_REJECTED;
+
+type TaskCollabStatus = typeof TASK_NEW_INCOMPLETE | typeof TASK_NEW_COMPLETED;
+
+type TaskMini = {|
+    created_at: ISODate,
+    id: ID,
+    modified_at: ISODate,
+    status: TaskStatus,
+    type: 'task',
+|};
+
+type TaskCollabRole = 'CREATOR' | 'ASSIGNEE';
+
+type TaskCollab<R> = {|
+    id: ID,
+    role: R,
+    status: TaskCollabStatus,
+    target: UserMini,
+    task?: TaskMini,
+    type: 'task_collaborator',
+|};
+
+type TaskCollabCreator = TaskCollab<'CREATOR'>;
+
+type TaskCollabAssignee = {|
+    ...TaskCollab<'ASSIGNEE'>,
+    permissions: {|
+        can_delete: boolean,
+        can_update: boolean,
+    |},
+|};
+
+type TaskLink = {|
+    description?: string,
+    id: ID,
+    permissions: {|
+        can_delete: boolean,
+        can_update: boolean,
+    |},
+    target?: ?FileMini | ?FolderMini | ?UserMini,
+    task?: TaskMini,
+    type: 'task_link',
+|};
+
+type MarkerPaginatedCollection<T> = {
+    entries: T[],
+    limit: number,
+    next_marker: ?string,
+};
+
+type TaskType = typeof TASK_TYPE_GENERAL | typeof TASK_TYPE_APPROVAL | null;
+
+type TaskNew = {|
+    assigned_to: MarkerPaginatedCollection<TaskCollabAssignee>,
+    completed_at?: ?ISODate,
+    completion_rule?: 'ANY_ASSIGNEE' | 'ALL_ASSIGNEES',
+    created_at: ISODate,
+    created_by: TaskCollabCreator,
+    description?: ?string,
+    due_at?: ?ISODate,
+    id: ID,
+    modified_at?: ISODate,
+    name: string,
+    permissions: {|
+        can_create_task_collaborator: boolean,
+        can_create_task_link: boolean,
+        can_delete: boolean,
+        can_update: boolean,
+    |},
+    progress_at?: ?ISODate,
+    status: TaskStatus,
+    task_links: MarkerPaginatedCollection<TaskLink>,
+    task_type?: TaskType,
+    type: 'task',
+|};
+
+/* New Task Types END */
+
 type Comment = {
     created_at: string,
     created_by: User,
@@ -634,7 +742,7 @@ type Comments = {
     total_count: number,
 };
 
-type FeedItems = Array<Comment | Task | BoxItemVersion>;
+type FeedItems = Array<Comment | Task | TaskNew | BoxItemVersion>;
 
 type Collaborators = {
     entries: Array<SelectorItem>,
@@ -695,6 +803,15 @@ type Integration = {
     requiresConsent: boolean,
     type: APP_INTEGRATION,
 };
+
+type AdditionalTab = {
+    callback: (id: number, callbackData: Object) => void,
+    iconUrl?: string,
+    id: number,
+    title: ?string,
+};
+
+type AdditionalTabs = Array<AdditionalTab>;
 
 type Alignment = 'left' | 'right';
 
@@ -788,13 +905,18 @@ type WithLoggerProps = {
 };
 
 type ActivityFeedFeatures = {
-    avatars?: boolean, // Show avatars
     tasks?: {|
-        createButton?: boolean, // Show the Create Task button
+        createButton?: boolean, // Show the Create Task button (requires newApi)
         createFromComment?: boolean, // Show the Add Task checkbox
+        newApi?: boolean, // Use new service
+        newCards?: boolean, // Show new task card layout (requires on newApi)
     |},
 };
 
 type ContentSidebarFeatures = {
     activityFeed?: ActivityFeedFeatures,
 } & FeatureConfig;
+
+type NavigateOptions = {
+    isToggle?: boolean,
+};
