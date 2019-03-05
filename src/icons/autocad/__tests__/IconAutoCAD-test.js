@@ -41,4 +41,16 @@ describe('icons/autocad/IconAutoCAD', () => {
 
         expect(wrapper.prop('width')).toEqual(width);
     });
+
+    test('should render default 32 icon when no props are defined', () => {
+        const wrapper = getWrapper();
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render title when title is defined', () => {
+        const wrapper = getWrapper({ title: 'title' });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });
