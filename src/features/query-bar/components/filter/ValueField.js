@@ -21,6 +21,9 @@ type Props = {
 const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props) => {
     const isValueSet = selectedValues.length > 0;
     const value = isValueSet ? selectedValues[0] : null;
+    const onInputChange = e => {
+        return e.target.value !== '' ? onChange([e.target.value]) : onChange([]);
+    };
 
     switch (valueType) {
         case 'string':
@@ -30,7 +33,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                         hideLabel
                         label="String input"
                         name="string field"
-                        onChange={e => onChange([e.target.value])}
+                        onChange={onInputChange}
                         placeholder="Enter a string"
                         value={value}
                     />
@@ -43,7 +46,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                         hideLabel
                         label="Number input"
                         name="number field"
-                        onChange={e => onChange([e.target.value])}
+                        onChange={onInputChange}
                         placeholder="Enter a number"
                         value={value}
                     />
@@ -56,7 +59,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                         hideLabel
                         label="Float input"
                         name="float field"
-                        onChange={e => onChange([e.target.value])}
+                        onChange={onInputChange}
                         placeholder="Enter a float"
                         value={value}
                     />
