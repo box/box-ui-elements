@@ -186,6 +186,7 @@ const onSuggestedCollabAdd = (contact) => {
     selectedOptions={state.selectedOptions}
     selectorOptions={state.selectorOptions}
     suggestedPillsData={suggestedCollabs}
+    suggestedPillsFilter="email"
     suggestedPillsTitle="Suggested:"
     validateForError={validateForError}
     validator={validator}

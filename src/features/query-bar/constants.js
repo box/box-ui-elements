@@ -9,6 +9,7 @@ export const OPERATOR: 'operator' = 'operator';
 export const OPERATOR_DISPLAY_TEXT: 'operatorDisplayText' = 'operatorDisplayText';
 export const OPERATOR_KEY: 'operatorKey' = 'operatorKey';
 export const VALUE: 'value' = 'value';
+export const VALUES: 'values' = 'values';
 export const VALUE_DISPLAY_TEXT: 'valueDisplayText' = 'valueDisplayText';
 export const VALUE_KEY: 'valueKey' = 'valueKey';
 export const WHERE: 'WHERE' = 'WHERE';
@@ -39,4 +40,5 @@ export const COLUMN_OPERATORS = {
     float: ALL_OPERATORS,
     enum: ALL_OPERATORS,
     date: ALL_OPERATORS,
+    'multi-enum': ALL_OPERATORS,
 };

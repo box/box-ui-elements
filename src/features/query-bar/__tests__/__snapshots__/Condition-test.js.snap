@@ -58,6 +58,11 @@ exports[`features/query-bar/components/filter/Condition render() should render C
               "type": "enum",
               "value": "3",
             },
+            Object {
+              "displayText": "Offices",
+              "type": "multi-enum",
+              "value": "4",
+            },
           ]
         }
         selectedValue="3"
@@ -103,7 +108,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
   >
     <ValueField
       onChange={[Function]}
-      selectedValue={null}
+      selectedValues={Array []}
       valueOptions={
         Array [
           Object {
