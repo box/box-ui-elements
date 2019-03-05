@@ -47,8 +47,9 @@ $error-color: $red;
         position: relative;
         width: 32px;
 
-        &:not(:last-child) {
-            margin-right: 3px;
+        // select all but first instance
+        & + & {
+            margin-left: 3px;
         }
     }
 
@@ -67,14 +68,11 @@ $error-color: $red;
         }
 
         &.completed,
-        &.approved,
-        &.COMPLETED,
-        &.APPROVED {
+        &.approved {
             background: $success-color;
         }
 
-        &.rejected,
-        &.REJECTED {
+        &.rejected {
             background: $error-color;
         }
     }
@@ -99,23 +97,17 @@ $error-color: $red;
         }
 
         &.completed,
-        &.approved,
-        &.COMPLETED,
-        &.APPROVED {
+        &.approved {
             background: $success-color;
         }
 
-        &.rejected,
-        &.REJECTED {
+        &.rejected {
             background: $error-color;
         }
 
         &.pending,
         &.incomplete,
-        &.not_started,
-        &.PENDING,
-        &.INCOMPLETE,
-        &.NOT_STARTED {
+        &.notStarted {
             align-items: center;
             background: #bdc3c7;
             color: white;
@@ -130,7 +122,7 @@ $error-color: $red;
         margin-top: 5px;
     }
 
-    .bcs-task-action-button:first-of-type {
+    button:first-of-type.bcs-task-action-button {
         margin-left: 0;
     }
 }

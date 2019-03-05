@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import camelCase from 'lodash/camelCase';
 import IconCheck from '../../../../icons/general/IconCheck';
 import IconReject from '../../../../icons/general/IconClose';
 import Avatar from '../Avatar';
@@ -31,7 +32,7 @@ const AssignmentStatus = React.memo<Props>(({ user, status, getAvatarUrl, ...res
         <Avatar className="bcs-task-assignment-avatar" user={user} getAvatarUrl={getAvatarUrl} />
         <StatusIcon
             status={status}
-            className={`bcs-task-assignment-status-icon ${status}`}
+            className={`bcs-task-assignment-status-icon ${camelCase(status)}`}
             height={12}
             width={12}
             title={<FormattedMessage {...messages.completedAssignment} />}

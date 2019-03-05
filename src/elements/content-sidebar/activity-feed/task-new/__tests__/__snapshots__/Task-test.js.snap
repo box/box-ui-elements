@@ -273,7 +273,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
             </Avatar>
           </Avatar>
           <StatusIcon
-            className="bcs-task-assignment-status-icon NOT_STARTED"
+            className="bcs-task-assignment-status-icon notStarted"
             height={12}
             status="NOT_STARTED"
             title={
@@ -336,7 +336,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
             </Avatar>
           </Avatar>
           <StatusIcon
-            className="bcs-task-assignment-status-icon COMPLETED"
+            className="bcs-task-assignment-status-icon completed"
             height={12}
             status="COMPLETED"
             title={
@@ -348,7 +348,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
             width={12}
           >
             <IconCheck
-              className="bcs-task-assignment-status-icon COMPLETED"
+              className="bcs-task-assignment-status-icon completed"
               height={12}
               title={
                 <FormattedMessage
@@ -359,7 +359,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
               width={12}
             >
               <AccessibleSVG
-                className="icon-check bcs-task-assignment-status-icon COMPLETED"
+                className="icon-check bcs-task-assignment-status-icon completed"
                 height={12}
                 title={
                   <FormattedMessage
@@ -372,7 +372,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
               >
                 <svg
                   aria-labelledby="icon1-title"
-                  className="icon-check bcs-task-assignment-status-icon COMPLETED"
+                  className="icon-check bcs-task-assignment-status-icon completed"
                   focusable="false"
                   height={12}
                   role="img"
