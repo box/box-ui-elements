@@ -14,7 +14,7 @@ import LoadingIndicator from '../../components/loading-indicator/LoadingIndicato
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
-import { withFeatureConsumer } from '../common/feature-checking';
+import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
@@ -137,7 +137,7 @@ class Sidebar extends React.Component<Props, State> {
         }: Props = this.props;
 
         const { isOpen } = this.state;
-        const handleVersionHistoryClick = onVersionHistoryClick || (features.versions && this.handleVersionClick);
+        const handleVersionHistoryClick = isFeatureEnabled(features, 'versions') && this.handleVersionClick;
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
@@ -177,7 +177,7 @@ class Sidebar extends React.Component<Props, State> {
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
-                            onVersionHistoryClick={handleVersionHistoryClick}
+                            onVersionHistoryClick={onVersionHistoryClick || handleVersionHistoryClick}
                         />
                     </React.Fragment>
                 )}

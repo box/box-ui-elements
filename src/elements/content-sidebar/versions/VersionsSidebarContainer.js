@@ -1,11 +1,10 @@
 /**
  * @flow
- * @file Versions Sidebar component
+ * @file Versions Sidebar container
  * @author Box
  */
 
 import React from 'react';
-import noop from 'lodash/noop';
 import API from '../../../api';
 import VersionsSidebar from './VersionsSidebar';
 import { withAPIContext } from '../../common/api-context';
@@ -16,6 +15,7 @@ type Props = {
 };
 
 type State = {
+    error?: string,
     versions: Array<any>,
 };
 
@@ -29,13 +29,15 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     componentDidMount() {
         const { api, fileId } = this.props;
 
-        api.getVersionsAPI(false).getVersions(fileId, this.handleVersionsSuccess, noop);
+        api.getVersionsAPI(false).getVersions(fileId, this.handleFetchVersionsSuccess, this.handleFetchVersionsError);
     }
 
-    handleVersionsSuccess = versions => {
-        this.setState({
-            versions: versions.entries,
-        });
+    handleFetchVersionsError = ({ message }) => {
+        this.setState({ error: message, versions: [] });
+    };
+
+    handleFetchVersionsSuccess = ({ entries: versions }) => {
+        this.setState({ versions });
     };
 
     render() {

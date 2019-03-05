@@ -12,29 +12,22 @@ import SidebarContent from '../SidebarContent';
 import './VersionsSidebar.scss';
 
 type Props = {
+    error?: string,
     versions: Array<any>,
 };
 
-class VersionsSidebar extends React.Component<Props> {
-    props: Props;
-
-    title = 'test';
-
-    render() {
-        return (
-            <SidebarContent
-                className="bcs-versions"
-                title={
-                    <React.Fragment>
-                        <BackButton />
-                        <FormattedMessage {...messages.sidebarVersionsTitle} />
-                    </React.Fragment>
-                }
-            >
-                {this.props.versions.map(version => version.id)}
-            </SidebarContent>
-        );
-    }
-}
+const VersionsSidebar = ({ error, versions }: Props) => (
+    <SidebarContent
+        className="bcs-versions"
+        title={
+            <React.Fragment>
+                <BackButton />
+                <FormattedMessage {...messages.sidebarVersionsTitle} />
+            </React.Fragment>
+        }
+    >
+        {error || versions.map(version => version.id)}
+    </SidebarContent>
+);
 
 export default VersionsSidebar;
