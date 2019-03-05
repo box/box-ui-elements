@@ -5,14 +5,7 @@
     flex-direction: row;
 
     .list-view-top-left-grid .list-view-column-header {
-        display: flex;
-        font-weight: 400;
-        justify-content: flex-start;
-        letter-spacing: .035em;
         padding-left: 53px;
-        padding-top: 24px;
-        text-transform: none;
-        width: 100%;
     }
 
     .list-view-column-header {
@@ -32,25 +25,5 @@
         display: flex;
         justify-content: flex-start;
         padding-top: 16px;
-
-        .list-view-name-cell {
-            color: $twos;
-            display: flex;
-            justify-content: flex-start;
-            margin-top: -15px;
-
-            .list-view-icon {
-                margin-left: 10px;
-                margin-right: 10px;
-            }
-
-            .list-view-item-icon {
-                height: 100%;
-            }
-
-            .list-view-name {
-                align-self: center;
-            }
-        }
     }
 }

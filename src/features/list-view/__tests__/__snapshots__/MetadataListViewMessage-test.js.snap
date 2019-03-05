@@ -6,11 +6,17 @@ exports[`Message render "should correctly render needRefining" 1`] = `
 >
   <div
     className="message-graphic"
-  />
+  >
+    <MetadataEmptyState
+      className="metadata-empty-state-graphic"
+    />
+  </div>
   <div
     className="message-header-text"
   >
     <FormattedMessage
+      defaultMessage="Too many results"
+      id="boxui.metadataView.needRefiningHeaderText"
       values={
         Object {
           "upperFileLimit": "100,000",
@@ -21,7 +27,10 @@ exports[`Message render "should correctly render needRefining" 1`] = `
   <div
     className="message-subtitle-text"
   >
-    <FormattedMessage />
+    <FormattedMessage
+      defaultMessage="Please use filters to refine your results."
+      id="boxui.metadataView.needRefiningSubtitleText"
+    />
   </div>
 </div>
 `;
@@ -32,11 +41,17 @@ exports[`Message render "should correctly render noAccessForQuery" 1`] = `
 >
   <div
     className="message-graphic"
-  />
+  >
+    <FolderEmptyState
+      className="folder-empty-state-graphic"
+    />
+  </div>
   <div
     className="message-header-text"
   >
     <FormattedMessage
+      defaultMessage="No results"
+      id="boxui.metadataView.noResultsForQueryHeaderText"
       values={
         Object {
           "upperFileLimit": "100,000",
@@ -47,7 +62,10 @@ exports[`Message render "should correctly render noAccessForQuery" 1`] = `
   <div
     className="message-subtitle-text"
   >
-    <FormattedMessage />
+    <FormattedMessage
+      defaultMessage="You do not have access to any files that match your query. Please use filters to modify your query."
+      id="boxui.metadataView.noResultsForQuerySubtitleText"
+    />
   </div>
 </div>
 `;
@@ -58,11 +76,17 @@ exports[`Message render "should correctly render noAccessForTemplate" 1`] = `
 >
   <div
     className="message-graphic"
-  />
+  >
+    <FolderEmptyState
+      className="folder-empty-state-graphic"
+    />
+  </div>
   <div
     className="message-header-text"
   >
     <FormattedMessage
+      defaultMessage="No results"
+      id="boxui.metadataView.noResultsForTemplateHeaderText"
       values={
         Object {
           "upperFileLimit": "100,000",
@@ -73,7 +97,10 @@ exports[`Message render "should correctly render noAccessForTemplate" 1`] = `
   <div
     className="message-subtitle-text"
   >
-    <FormattedMessage />
+    <FormattedMessage
+      defaultMessage="You do not have access to any files that match this template."
+      id="boxui.metadataView.noResultsForTemplateSubtitleText"
+    />
   </div>
 </div>
 `;
@@ -84,11 +111,17 @@ exports[`Message render "should correctly render tooManyResults" 1`] = `
 >
   <div
     className="message-graphic"
-  />
+  >
+    <MetadataEmptyState
+      className="metadata-empty-state-graphic"
+    />
+  </div>
   <div
     className="message-header-text"
   >
     <FormattedMessage
+      defaultMessage="Over {upperFileLimit} files match this template"
+      id="boxui.metadataView.tooManyResultsHeaderText"
       values={
         Object {
           "upperFileLimit": "100,000",
@@ -99,7 +132,10 @@ exports[`Message render "should correctly render tooManyResults" 1`] = `
   <div
     className="message-subtitle-text"
   >
-    <FormattedMessage />
+    <FormattedMessage
+      defaultMessage="Result sets of this size are not currently supported in Box."
+      id="boxui.metadataView.tooManyResultsSubtitleText"
+    />
   </div>
 </div>
 `;

@@ -16,7 +16,7 @@ describe('Message', () => {
             ${'should correctly render noAccessForQuery'}    | ${NO_ACCESS_FOR_QUERY}
             ${'should correctly render noAccessForTemplate'} | ${NO_ACCESS_FOR_TEMPLATE}
         `('$description', ({ message }) => {
-            const wrapper = getWrapper(message);
+            const wrapper = getWrapper({ message });
             expect(wrapper).toMatchSnapshot();
         });
     });
