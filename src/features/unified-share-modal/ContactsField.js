@@ -164,7 +164,7 @@ class ContactsField extends React.Component<Props, State> {
                 selectedOptions={selectedContacts}
                 selectorOptions={contacts}
                 suggestedPillsData={suggestedCollaborators}
-                suggestedPillsTitle={intl.formatMessage(messages.suggestedCollabsTitle)}
+                suggestedPillsTitle={intl.formatMessage(messages.suggestedCollabsInlineTitle)}
                 validateForError={validateForError}
                 validator={validator}
             >
