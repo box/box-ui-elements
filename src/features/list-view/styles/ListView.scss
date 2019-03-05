@@ -4,29 +4,26 @@
     display: flex;
     flex-direction: row;
 
+    .list-view-top-left-grid .list-view-column-header {
+        padding-left: 53px;
+    }
+
     .list-view-column-header {
         color: $seventy-sixers;
         display: flex;
         font-weight: 400;
-        justify-content: center;
+        justify-content: flex-start;
         letter-spacing: .035em;
+        padding-top: 24px;
         text-transform: none;
         width: 100%;
-    }
-
-    .list-view-name-cell {
-        border-top: 1px solid $off-white;
-        color: $twos;
-        display: flex;
-        justify-content: center;
-        padding-top: 8px;
     }
 
     .list-view-column-cell {
         border-top: 1px solid $off-white;
         color: $seventy-sixers;
         display: flex;
-        justify-content: center;
-        padding-top: 8px;
+        justify-content: flex-start;
+        padding-top: 16px;
     }
 }
