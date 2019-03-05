@@ -11,8 +11,8 @@ import IconGoogleSlides from '../../icons/google-docs/IconGoogleSlides';
 import FileIcon from '../../icons/file-icon/FileIcon';
 
 const ICON_FILE_MAP = {
-    AutoCAD: IconAutoCAD,
     'Adobe Sign': IconAdobeSign,
+    'AutoCAD Web App': IconAutoCAD,
     'Google Docs': IconGoogleDocs,
     'Google Docs (beta)': IconGoogleDocs,
     'Google Sheets': IconGoogleSheets,
