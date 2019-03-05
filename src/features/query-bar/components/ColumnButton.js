@@ -18,7 +18,7 @@ type State = {
 };
 
 type Props = {
-    columns?: Array<ColumnType>,
+    columns: Array<ColumnType>,
     onColumnChange?: (columnTypes: Array<ColumnType>) => void,
     template?: MetadataTemplate,
 };

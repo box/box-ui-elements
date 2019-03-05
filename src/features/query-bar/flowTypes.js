@@ -30,7 +30,7 @@ export type ColumnType = {
 
 export type ConditionType = {
     columnId: string,
-    id: number,
+    id: string,
     operator: OperatorType,
     values: Array<string>,
 };

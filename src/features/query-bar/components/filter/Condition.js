@@ -30,8 +30,8 @@ type Props = {
     index: number,
     onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
-    onOperatorChange: (conditionId: number, value: OperatorType) => void,
-    onValueChange: (conditionId: number, values: Array<string>) => void,
+    onOperatorChange: (conditionId: string, value: OperatorType) => void,
+    onValueChange: (conditionId: string, values: Array<string>) => void,
     selectedConnector: ConnectorType,
 };
 
