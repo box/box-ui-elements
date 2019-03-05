@@ -4,6 +4,8 @@ export default {
         tasks: {
             createFromComment: true,
             createButton: true,
+            newApi: true,
+            newCards: true,
         },
     },
 };
