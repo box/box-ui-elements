@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Box Content Picker Test Page</title>
         <style>
             body,
@@ -54,8 +54,10 @@
             <button type="button" onclick="load()">Submit</button>
         </div>
         <div class="container">
-            <h1>Content Explorer With request and response intercepting.
-                Only showing PNG files and navigating to another folder on load and token generator</h1>
+            <h1>
+                Content Explorer With request and response intercepting. Only showing PNG files and navigating to
+                another folder on load and token generator
+            </h1>
             <div class="explorer1"></div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.1/umd/react.development.js"></script>
@@ -66,12 +68,13 @@
                 const { ContentExplorer } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
-                const currentFolderId = document.querySelector('.currentFolder').value || localStorage.getItem('currentFolder');
+                const currentFolderId =
+                    document.querySelector('.currentFolder').value || localStorage.getItem('currentFolder');
 
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
 
-                const tokenGenerator = (id) => {
+                const tokenGenerator = id => {
                     return Promise.resolve(token);
                 };
 
@@ -83,7 +86,7 @@
                     canShare: false,
                     autoFocus: true,
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
-                    requestInterceptor: (config) => {
+                    requestInterceptor: config => {
                         // Add some custom header if needed
                         config.headers['X-MY-CUSTOM-HEADER'] = 'FuBar';
                         // Add some custom query param if needed
@@ -92,7 +95,7 @@
                         console.log(config);
                         return config;
                     },
-                    responseInterceptor: (response) => {
+                    responseInterceptor: response => {
                         const { method, parsedUrl } = response.config;
                         const { api } = parsedUrl;
                         const { item_collection } = response.data;
@@ -102,14 +105,14 @@
                         // The data integreity of the response data must be maintained
                         if (method === 'GET' && /^\/folders/.test(api) && !!item_collection) {
                             const originalLength = item_collection.entries.length; // Keep track of items originally sent
-                            item_collection.entries = item_collection.entries.filter((item) => item.extension === 'png'); // Filter out unwanted items
+                            item_collection.entries = item_collection.entries.filter(item => item.extension === 'png'); // Filter out unwanted items
                             const newLength = item_collection.entries.length; // Calculate the new item list length
-                            item_collection.total_count -= (originalLength - newLength); // Update the total_count value based on the difference
+                            item_collection.total_count -= originalLength - newLength; // Update the total_count value based on the difference
                         }
 
                         console.log(response);
                         return response;
-                    }
+                    },
                 });
             }
             load();
