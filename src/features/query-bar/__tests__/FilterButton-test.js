@@ -11,12 +11,12 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     };
 
     describe('render', () => {
-        test('should render FilterButton default state', () => {
-            const wrapper = getWrapper();
+        test('should render FilterButton when columns is empty', () => {
+            const wrapper = getWrapper({ columns: [] });
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render FilterButton with columns passed in', () => {
+        test('should render FilterButton when columns is not empty', () => {
             const wrapper = getWrapper({ columns });
             expect(wrapper).toMatchSnapshot();
         });
@@ -67,11 +67,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         [
             {
                 description: 'should set conditions with an object with operator',
-                conditionId: 4,
+                conditionId: '4',
                 conditions: [
                     {
                         columnId: '1',
-                        id: 4,
+                        id: '4',
                         operator: EQUALS,
                         values: [],
                     },
@@ -80,7 +80,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 expectedConditions: [
                     {
                         columnId: '1',
-                        id: 4,
+                        id: '4',
                         operator: LESS_THAN,
                         values: [],
                     },
@@ -88,7 +88,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             },
         ].forEach(({ description, conditionId, conditions, value, expectedConditions }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.setState({
                     conditions,
                 });
@@ -104,11 +104,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             {
                 description: 'should set conditions with an object with value',
                 index: 0,
-                conditionId: 5,
+                conditionId: '5',
                 conditions: [
                     {
                         columnId: '1',
-                        id: 5,
+                        id: '5',
                         operator: EQUALS,
                         values: [],
                     },
@@ -117,7 +117,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 expectedConditions: [
                     {
                         columnId: '1',
-                        id: 5,
+                        id: '5',
                         operator: EQUALS,
                         values: ['0'],
                     },
@@ -125,7 +125,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             },
         ].forEach(({ description, conditionId, conditions, values, expectedConditions }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.setState({
                     conditions,
                 });
@@ -163,7 +163,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             },
         ].forEach(({ description, index, conditions, expectedConditions }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.instance().setState({
                     conditions,
                 });
@@ -184,7 +184,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             },
         ].forEach(({ description, updatedState }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.instance().onClose();
 
                 expect(wrapper.state('isMenuOpen')).toEqual(updatedState.isMenuOpen);
@@ -202,7 +202,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             },
         ].forEach(({ description, updatedState }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.instance().onOpen();
 
                 expect(wrapper.state('isMenuOpen')).toEqual(updatedState.isMenuOpen);
@@ -220,7 +220,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             },
         ].forEach(({ description, updatedState }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.instance().toggleButton();
 
                 expect(wrapper.state('isMenuOpen')).toEqual(updatedState.isMenuOpen);
@@ -229,7 +229,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('createCondition()', () => {
-        test('Should return a condition object if columns is defined', () => {
+        test('Should return a condition object if columns has elements', () => {
             const wrapper = getWrapper({ columns });
             const conditionID = '11';
             const expected = {
@@ -247,10 +247,10 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             expect(condition).toEqual(expected);
         });
 
-        test('Should return an empty object if columns is not defined', () => {
-            const wrapper = getWrapper();
+        test('Should return an empty object if columns is empty', () => {
+            const wrapper = getWrapper({ columns: [] });
             const props = {};
-            const conditionID = 123;
+            const conditionID = '123';
             const expected = {};
 
             const condition = wrapper.instance().createCondition(props, conditionID);
@@ -273,7 +273,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             ${'Should return true if Apply button was clicked and value is not empty'} | ${conditionsWithValues}      | ${true}
             ${'Should return false if Apply button was clicked and value is empty'}    | ${conditionsWithEmptyValues} | ${false}
         `('$description', ({ conditions, shouldCloseResult }) => {
-            const wrapper = getWrapper();
+            const wrapper = getWrapper({ columns });
             const targetWithClassName = {
                 target: document.createElement('button'),
             };
