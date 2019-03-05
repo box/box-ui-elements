@@ -458,6 +458,137 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
 </div>
 `;
 
+exports[`features/unified-share-modal/SharedLinkSection should render proper dropdown override when viewing an editable box note 1`] = `
+<div>
+  <hr />
+  <label>
+    <span
+      className="label"
+    >
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
+    </span>
+  </label>
+  <div
+    className="shared-link-toggle-row"
+  >
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="top-right"
+      text={
+        <FormattedMessage
+          defaultMessage="You do not have permission to remove the link."
+          id="boxui.unifiedShare.removeLinkTooltip"
+        />
+      }
+      theme="default"
+    >
+      <div
+        className="share-toggle-container"
+      >
+        <Toggle
+          isDisabled={true}
+          isOn={true}
+          label={
+            <FormattedMessage
+              defaultMessage="Shared link is enabled"
+              id="boxui.unifiedShare.linkShareOn"
+            />
+          }
+          name="toggle"
+        />
+      </div>
+    </Tooltip>
+  </div>
+  <div
+    className="shared-link-field-row"
+  >
+    <TextInputWithCopyButton
+      autofocus={false}
+      buttonDefaultText={
+        <FormattedMessage
+          defaultMessage="Copy"
+          id="boxui.core.copy"
+        />
+      }
+      buttonProps={Object {}}
+      buttonSuccessText={
+        <FormattedMessage
+          defaultMessage="Copied"
+          id="boxui.core.copied"
+        />
+      }
+      className="shared-link-field-container"
+      hideOptionalLabel={true}
+      label=""
+      readOnly={true}
+      successStateDuration={3000}
+      type="url"
+      value="http://example.com/s/abc"
+    />
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="top-left"
+      text={
+        <FormattedMessage
+          defaultMessage="Send Shared Link"
+          id="boxui.unifiedShare.sendSharedLink"
+        />
+      }
+      theme="default"
+    >
+      <Button
+        className="email-shared-link-btn"
+        type="button"
+      >
+        <IconMail />
+      </Button>
+    </Tooltip>
+  </div>
+  <div
+    className="shared-link-access-row"
+  >
+    <SharedLinkAccessMenu
+      allowedAccessLevels={Object {}}
+      changeAccessLevel={[Function]}
+      itemType="file"
+      trackingProps={
+        Object {
+          "onChangeSharedLinkAccessLevel": undefined,
+          "sharedLinkAccessMenuButtonProps": undefined,
+        }
+      }
+    />
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="top-center"
+      text={
+        <FormattedMessage
+          defaultMessage="This permission can only be changed in Box Notes"
+          id="boxui.unifiedShare.sharedLinkPermissionsEditTooltip"
+        />
+      }
+      theme="default"
+    >
+      <PlainButton
+        className="can-edit-btn"
+        isDisabled={true}
+      >
+        <FormattedMessage
+          defaultMessage="Can edit"
+          id="boxui.unifiedShare.sharedLinkPermissionsEdit"
+        />
+      </PlainButton>
+    </Tooltip>
+  </div>
+</div>
+`;
+
 exports[`features/unified-share-modal/SharedLinkSection should render proper list of permission options based on the the download setting availability 1`] = `
 <div>
   <hr />

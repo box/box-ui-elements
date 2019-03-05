@@ -126,6 +126,27 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
         expect(wrapper.find('.shared-link-settings-btn').length).toBe(0);
     });
 
+    test('should render proper dropdown override when viewing an editable box note', () => {
+        const wrapper = getWrapper({
+            item: {
+                accessLevel: 'peopleInYourCompany',
+                description: 'some description',
+                extension: 'boxnote',
+                id: 12345,
+                name: 'text.boxnote',
+                type: 'file',
+                ...defaultItem,
+            },
+            sharedLink: {
+                isEditAllowed: true,
+                url: 'http://example.com/s/abc',
+                isNewSharedLink: false,
+            },
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should render without SharedLinkPermissionMenu if access level is "people in item"', () => {
         const wrapper = getWrapper({
             sharedLink: {

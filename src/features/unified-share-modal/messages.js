@@ -187,6 +187,16 @@ const messages = defineMessages({
         description: 'Label for a Shared Link permission level',
         id: 'boxui.unifiedShare.sharedLinkPermissionsViewOnly',
     },
+    sharedLinkPermissionsEdit: {
+        defaultMessage: 'Can edit',
+        description: 'Label for a Shared Link permission to show for editable box notes',
+        id: 'boxui.unifiedShare.sharedLinkPermissionsEdit',
+    },
+    sharedLinkPermissionsEditTooltip: {
+        defaultMessage: 'This permission can only be changed in Box Notes',
+        description: 'Text to use in the tooltip when presenting an editable Box Note (DO NOT TRANSLATE "Box Notes")',
+        id: 'boxui.unifiedShare.sharedLinkPermissionsEditTooltip',
+    },
     sharedLinkPermissionsViewOnlyDescription: {
         defaultMessage: 'Users can view only',
         description: 'Description for Can view only option',
