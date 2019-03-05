@@ -107,7 +107,6 @@
         "restoreMocks": true,
         "moduleNameMapper": {
             "react-intl": "<rootDir>/conf/jest/mocks/react-intl-mocks.js",
-            "intl": "<rootDir>/conf/jest/mocks/lib-intl-mock.js",
             "react-intl-locale-data": "<rootDir>/node_modules/react-intl/locale-data/en.js",
             "box-ui-elements-locale-data": "<rootDir>/i18n/en-US.js",
             "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/conf/jest/fileMock.js",
