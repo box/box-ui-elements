@@ -546,7 +546,7 @@ describe('api/Feed', () => {
         beforeEach(() => {
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
-      
+
         test('should return a promise and call the app activity api', () => {
             const activityItems = feed.fetchAppActivity();
             expect(activityItems instanceof Promise).toBeTruthy();
