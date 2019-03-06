@@ -55,7 +55,7 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 7`] = `
-<IconFileExcelSpreadsheet
+<IconFileDwg
   className="test"
   height={10}
   title="title"
@@ -64,7 +64,7 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 8`] = `
-<IconFolderCollab
+<IconFileExcelSpreadsheet
   className="test"
   height={10}
   title="title"
@@ -73,7 +73,7 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 9`] = `
-<IconFolderExternal
+<IconFolderCollab
   className="test"
   height={10}
   title="title"
@@ -82,7 +82,7 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 10`] = `
-<IconFolderPersonal
+<IconFolderExternal
   className="test"
   height={10}
   title="title"
@@ -91,150 +91,6 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 11`] = `
-<IconFileGoogleDocs
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 12`] = `
-<IconFileGoogleSheets
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 13`] = `
-<IconFileGoogleSlides
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 14`] = `
-<IconFileIllustrator
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 15`] = `
-<IconFileImage
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 16`] = `
-<IconFileIndesign
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 17`] = `
-<IconFileKeynote
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 18`] = `
-<IconFileNumbers
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 19`] = `
-<IconFilePages
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 20`] = `
-<IconFilePDF
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 21`] = `
-<IconFilePhotoshop
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 22`] = `
-<IconFilePowerpointPresentation
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 23`] = `
-<IconFilePresentation
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 24`] = `
-<IconFileSpreadsheet
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 25`] = `
-<IconFileText
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 26`] = `
-<IconFileThreeD
-  className="test"
-  height={10}
-  title="title"
-  width={10}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render component with additional props 27`] = `
 <IconFolderPersonal
   className="test"
   height={10}
@@ -243,8 +99,152 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 />
 `;
 
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 12`] = `
+<IconFileGoogleDocs
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 13`] = `
+<IconFileGoogleSheets
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 14`] = `
+<IconFileGoogleSlides
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 15`] = `
+<IconFileIllustrator
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 16`] = `
+<IconFileImage
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 17`] = `
+<IconFileIndesign
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 18`] = `
+<IconFileKeynote
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 19`] = `
+<IconFileNumbers
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 20`] = `
+<IconFilePages
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 21`] = `
+<IconFilePDF
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 22`] = `
+<IconFilePhotoshop
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 23`] = `
+<IconFilePowerpointPresentation
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 24`] = `
+<IconFilePresentation
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 25`] = `
+<IconFileSpreadsheet
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 26`] = `
+<IconFileText
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 27`] = `
+<IconFileThreeD
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 28`] = `
-<IconFileVector
+<IconFolderPersonal
   className="test"
   height={10}
   title="title"
@@ -253,7 +253,7 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 29`] = `
-<IconFileVideo
+<IconFileVector
   className="test"
   height={10}
   title="title"
@@ -262,7 +262,7 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 30`] = `
-<IconFileWordDocument
+<IconFileVideo
   className="test"
   height={10}
   title="title"
@@ -271,7 +271,7 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 31`] = `
-<IconFileZip
+<IconFileWordDocument
   className="test"
   height={10}
   title="title"
@@ -280,6 +280,15 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 32`] = `
+<IconFileZip
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 33`] = `
 <IconFileDefault
   className="test"
   height={10}
@@ -331,181 +340,188 @@ exports[`icons/item-icon/ItemIcon render() should render default component 6`] =
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 7`] = `
-<IconFileExcelSpreadsheet
+<IconFileDwg
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 8`] = `
-<IconFolderCollab
+<IconFileExcelSpreadsheet
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 9`] = `
-<IconFolderExternal
+<IconFolderCollab
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 10`] = `
-<IconFolderPersonal
+<IconFolderExternal
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 11`] = `
-<IconFileGoogleDocs
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 12`] = `
-<IconFileGoogleSheets
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 13`] = `
-<IconFileGoogleSlides
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 14`] = `
-<IconFileIllustrator
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 15`] = `
-<IconFileImage
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 16`] = `
-<IconFileIndesign
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 17`] = `
-<IconFileKeynote
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 18`] = `
-<IconFileNumbers
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 19`] = `
-<IconFilePages
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 20`] = `
-<IconFilePDF
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 21`] = `
-<IconFilePhotoshop
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 22`] = `
-<IconFilePowerpointPresentation
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 23`] = `
-<IconFilePresentation
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 24`] = `
-<IconFileSpreadsheet
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 25`] = `
-<IconFileText
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 26`] = `
-<IconFileThreeD
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 27`] = `
 <IconFolderPersonal
   height={32}
   width={32}
 />
 `;
 
+exports[`icons/item-icon/ItemIcon render() should render default component 12`] = `
+<IconFileGoogleDocs
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 13`] = `
+<IconFileGoogleSheets
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 14`] = `
+<IconFileGoogleSlides
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 15`] = `
+<IconFileIllustrator
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 16`] = `
+<IconFileImage
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 17`] = `
+<IconFileIndesign
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 18`] = `
+<IconFileKeynote
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 19`] = `
+<IconFileNumbers
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 20`] = `
+<IconFilePages
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 21`] = `
+<IconFilePDF
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 22`] = `
+<IconFilePhotoshop
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 23`] = `
+<IconFilePowerpointPresentation
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 24`] = `
+<IconFilePresentation
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 25`] = `
+<IconFileSpreadsheet
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 26`] = `
+<IconFileText
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 27`] = `
+<IconFileThreeD
+  height={32}
+  width={32}
+/>
+`;
+
 exports[`icons/item-icon/ItemIcon render() should render default component 28`] = `
-<IconFileVector
+<IconFolderPersonal
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 29`] = `
-<IconFileVideo
+<IconFileVector
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 30`] = `
-<IconFileWordDocument
+<IconFileVideo
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 31`] = `
-<IconFileZip
+<IconFileWordDocument
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 32`] = `
+<IconFileZip
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render default component 33`] = `
 <IconFileDefault
   height={32}
   width={32}
