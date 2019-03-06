@@ -67,7 +67,7 @@ class FilterButton extends React.Component<Props, State> {
     createCondition = () => {
         const conditionID = uniqueId();
         const { columns } = this.props;
-        if (columns) {
+        if (columns && columns.length > 0) {
             const firstColumn = columns[0];
             const operator = COLUMN_OPERATORS[firstColumn.type][0].key;
 
@@ -101,6 +101,7 @@ class FilterButton extends React.Component<Props, State> {
             }
             this.setState({
                 appliedConditions: conditions,
+                isMenuOpen: false,
             });
         } else {
             this.setState({
@@ -109,7 +110,7 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    updateConditionState = (conditionId: number, updateCondition: Function) => {
+    updateConditionState = (conditionId: string, updateCondition: Function) => {
         const { conditions } = this.state;
         let newConditionIndex = 0;
         const conditionToUpdate = conditions.find((currentCondition, index) => {
@@ -160,14 +161,14 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleOperatorChange = (conditionId: number, value: OperatorType) => {
+    handleOperatorChange = (conditionId: string, value: OperatorType) => {
         this.updateConditionState(conditionId, condition => {
             condition[OPERATOR] = value;
             return condition;
         });
     };
 
-    handleValueChange = (conditionId: number, values: Array<string>) => {
+    handleValueChange = (conditionId: string, values: Array<string>) => {
         this.updateConditionState(conditionId, condition => {
             condition[VALUES] = values;
             return condition;
@@ -238,7 +239,7 @@ class FilterButton extends React.Component<Props, State> {
 
         const buttonClasses = classNames('query-bar-button', numberOfAppliedConditions !== 0 ? 'is-active' : '');
 
-        const isFilterDisabled = columns === undefined;
+        const isFilterDisabled = !columns || columns.length === 0;
 
         return (
             <Flyout
