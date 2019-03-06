@@ -28,6 +28,7 @@ const allSections = [
     {
         name: 'Components',
         components: () => [
+            '../src/components/heading/Heading.js',
             '../src/components/avatar/Avatar.js',
             '../src/components/badge/Badge.js',
             '../src/components/badgeable/Badgeable.js',
