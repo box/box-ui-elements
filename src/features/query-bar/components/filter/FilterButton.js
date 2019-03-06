@@ -239,7 +239,7 @@ class FilterButton extends React.Component<Props, State> {
 
         const buttonClasses = classNames('query-bar-button', numberOfAppliedConditions !== 0 ? 'is-active' : '');
 
-        const isFilterDisabled = columns === undefined || columns.length === 0;
+        const isFilterDisabled = !columns || columns.length === 0;
 
         return (
             <Flyout
