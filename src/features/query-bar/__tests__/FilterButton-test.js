@@ -11,12 +11,12 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     };
 
     describe('render', () => {
-        test('should render FilterButton when columns is undefined', () => {
+        test('should disable FilterButton when columns is undefined', () => {
             const wrapper = getWrapper({ columns: undefined });
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render FilterButton when columns is non-empty', () => {
+        test('should enable FilterButton when columns is non-empty', () => {
             const wrapper = getWrapper({ columns });
             expect(wrapper).toMatchSnapshot();
         });
@@ -33,7 +33,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         test.each`
             columnId | conditions
             ${'2'}   | ${[condition]}
-        `('should set conditions with an object with column', ({ columnId, conditions }) => {
+        `('should update condition.columnId', ({ columnId, conditions }) => {
             const wrapper = getWrapper({ columns });
             wrapper.setState({
                 conditions,
@@ -57,7 +57,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         test.each`
             conditionId | value
             ${'4'}      | ${LESS_THAN}
-        `('should set conditions with an object with operator', ({ conditionId, value }) => {
+        `('should update condition.operator', ({ conditionId, value }) => {
             const wrapper = getWrapper({ columns });
             wrapper.setState({
                 conditions,
@@ -81,7 +81,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         test.each`
             conditionId | values
             ${'5'}      | ${['0']}
-        `('should set conditions with an object with value', ({ conditionId, values }) => {
+        `('should update condition.values', ({ conditionId, values }) => {
             const wrapper = getWrapper({ columns });
             wrapper.setState({
                 conditions,
