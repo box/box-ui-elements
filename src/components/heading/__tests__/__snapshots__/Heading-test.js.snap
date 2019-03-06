@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/heading/Heading should correctly render h1 1`] = `
+<h1
+  className="bdl-h1"
+>
+  B
+  D
+  L
+</h1>
+`;
+
+exports[`components/heading/Heading should correctly render h2 1`] = `
+<h2
+  className="bdl-h2"
+>
+  B
+  D
+  L
+</h2>
+`;
+
+exports[`components/heading/Heading should correctly render h3 1`] = `
+<h3
+  className="bdl-h3"
+>
+  B
+  D
+  L
+</h3>
+`;
+
+exports[`components/heading/Heading should correctly render h4 1`] = `
+<h4
+  className="bdl-h4"
+>
+  B
+  D
+  L
+</h4>
+`;
+
+exports[`components/heading/Heading should correctly render h5 1`] = `
+<h5
+  className="bdl-h5"
+>
+  B
+  D
+  L
+</h5>
+`;
+
+exports[`components/heading/Heading should correctly render h6 1`] = `
+<h6
+  className="bdl-h6"
+>
+  B
+  D
+  L
+</h6>
+`;

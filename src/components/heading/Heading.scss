@@ -1,0 +1,44 @@
+@import '../../styles/variables';
+
+.bdl-Heading--h1,
+.bdl-Heading--h2,
+.bdl-Heading--h3,
+.bdl-Heading--h4,
+.bdl-Heading--h5,
+.bdl-Heading--h6 {
+    color: inherit;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 8px 0;
+    padding: 0;
+    text-rendering: optimizeLegibility;
+}
+
+.bdl-Heading--h1 {
+    font-size: 30px;
+    line-height: 36px;
+}
+
+.bdl-Heading--h2 {
+    font-size: 24px;
+    line-height: 30px;
+}
+
+.bdl-Heading--h3 {
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.bdl-Heading--h4 {
+    font-size: 16px;
+}
+
+.bdl-Heading--h5 {
+    font-size: 14px;
+}
+
+.bdl-Heading--h6 {
+    font-size: 12px;
+}
