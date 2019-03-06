@@ -121,6 +121,7 @@
     .pill-selector-input-wrapper {
         border: 1px solid $seesee;
         margin-top: 10px;
+        min-height: 75px;
 
         .pill-selector-input::placeholder {
             color: $nines;
