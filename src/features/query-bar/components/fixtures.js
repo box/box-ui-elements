@@ -4,7 +4,7 @@ import { EQUALS } from '../constants';
 
 const initialCondition: ConditionType = {
     columnId: '3',
-    id: 0,
+    id: '0',
     operator: EQUALS,
     values: [],
 };

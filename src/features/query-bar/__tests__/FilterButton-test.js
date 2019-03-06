@@ -11,166 +11,119 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     };
 
     describe('render', () => {
-        test('should render FilterButton default state', () => {
-            const wrapper = getWrapper();
+        test('should disable FilterButton when columns is undefined', () => {
+            const wrapper = getWrapper({ columns: undefined });
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render FilterButton with columns passed in', () => {
+        test('should enable FilterButton when columns is non-empty', () => {
             const wrapper = getWrapper({ columns });
             expect(wrapper).toMatchSnapshot();
         });
     });
 
     describe('handleColumnChange()', () => {
-        [
-            {
-                description: 'should set conditions with an object with column',
-                columnId: '2',
-                condition: {
-                    columnId: '1',
-                    id: '3',
-                    operator: EQUALS,
-                    values: [],
-                },
-                conditions: [
-                    {
-                        columnId: '1',
-                        id: '3',
-                        operator: EQUALS,
-                        values: [],
-                    },
-                ],
-                expectedConditions: [
-                    {
-                        columnId: '2',
-                        id: '3',
-                        operator: EQUALS,
-                        values: [],
-                    },
-                ],
-            },
-        ].forEach(({ description, columnId, condition, conditions, expectedConditions }) => {
-            test(`${description}`, () => {
-                const wrapper = getWrapper({ columns });
-                wrapper.setState({
-                    conditions,
-                });
-                wrapper.instance().handleColumnChange(condition, columnId);
-
-                expect(wrapper.state('conditions')).toEqual(expectedConditions);
+        const condition = {
+            columnId: '1',
+            id: '3',
+            operator: EQUALS,
+            values: [],
+        };
+        const expectedConditions = [{ columnId: '2', id: '3', operator: EQUALS, values: [] }];
+        test.each`
+            columnId | conditions
+            ${'2'}   | ${[condition]}
+        `('should update condition.columnId', ({ columnId, conditions }) => {
+            const wrapper = getWrapper({ columns });
+            wrapper.setState({
+                conditions,
             });
+            wrapper.instance().handleColumnChange(condition, columnId);
+
+            expect(wrapper.state('conditions')).toEqual(expectedConditions);
         });
     });
 
     describe('handleOperatorChange()', () => {
-        [
+        const conditions = [
             {
-                description: 'should set conditions with an object with operator',
-                conditionId: 4,
-                conditions: [
-                    {
-                        columnId: '1',
-                        id: 4,
-                        operator: EQUALS,
-                        values: [],
-                    },
-                ],
-                value: LESS_THAN,
-                expectedConditions: [
-                    {
-                        columnId: '1',
-                        id: 4,
-                        operator: LESS_THAN,
-                        values: [],
-                    },
-                ],
+                columnId: '1',
+                id: '4',
+                operator: EQUALS,
+                values: [],
             },
-        ].forEach(({ description, conditionId, conditions, value, expectedConditions }) => {
-            test(`${description}`, () => {
-                const wrapper = getWrapper();
-                wrapper.setState({
-                    conditions,
-                });
-                wrapper.instance().handleOperatorChange(conditionId, value);
-
-                expect(wrapper.state('conditions')).toEqual(expectedConditions);
+        ];
+        const expectedConditions = [{ columnId: '1', id: '4', operator: LESS_THAN, values: [] }];
+        test.each`
+            conditionId | value
+            ${'4'}      | ${LESS_THAN}
+        `('should update condition.operator', ({ conditionId, value }) => {
+            const wrapper = getWrapper({ columns });
+            wrapper.setState({
+                conditions,
             });
+            wrapper.instance().handleOperatorChange(conditionId, value);
+
+            expect(wrapper.state('conditions')).toEqual(expectedConditions);
         });
     });
 
     describe('handleValueChange()', () => {
-        [
+        const conditions = [
             {
-                description: 'should set conditions with an object with value',
-                index: 0,
-                conditionId: 5,
-                conditions: [
-                    {
-                        columnId: '1',
-                        id: 5,
-                        operator: EQUALS,
-                        values: [],
-                    },
-                ],
-                values: ['0'],
-                expectedConditions: [
-                    {
-                        columnId: '1',
-                        id: 5,
-                        operator: EQUALS,
-                        values: ['0'],
-                    },
-                ],
+                columnId: '1',
+                id: '5',
+                operator: EQUALS,
+                values: [],
             },
-        ].forEach(({ description, conditionId, conditions, values, expectedConditions }) => {
-            test(`${description}`, () => {
-                const wrapper = getWrapper();
-                wrapper.setState({
-                    conditions,
-                });
-                wrapper.instance().handleValueChange(conditionId, values);
-
-                expect(wrapper.state('conditions')).toEqual(expectedConditions);
+        ];
+        const expectedConditions = [{ columnId: '1', id: '5', operator: EQUALS, values: ['0'] }];
+        test.each`
+            conditionId | values
+            ${'5'}      | ${['0']}
+        `('should update condition.values', ({ conditionId, values }) => {
+            const wrapper = getWrapper({ columns });
+            wrapper.setState({
+                conditions,
             });
+            wrapper.instance().handleValueChange(conditionId, values);
+
+            expect(wrapper.state('conditions')).toEqual(expectedConditions);
         });
     });
 
     describe('deleteCondition()', () => {
-        [
+        const conditions = [
             {
-                description: 'should delete condition at index 0',
-                index: 0,
-                conditions: [
-                    {
-                        id: '2',
-                        operator: EQUALS,
-                        values: [],
-                    },
-                    {
-                        id: '3',
-                        operator: EQUALS,
-                        values: [],
-                    },
-                ],
-                expectedConditions: [
-                    {
-                        id: '3',
-                        operator: EQUALS,
-                        values: [],
-                    },
-                ],
+                id: '2',
+                operator: EQUALS,
+                values: [],
             },
-        ].forEach(({ description, index, conditions, expectedConditions }) => {
-            test(`${description}`, () => {
-                const wrapper = getWrapper();
-                wrapper.instance().setState({
-                    conditions,
-                });
-                wrapper.instance().deleteCondition(index);
+            {
+                id: '3',
+                operator: EQUALS,
+                values: [],
+            },
+        ];
+        const expectedConditions = [
+            {
+                id: '3',
+                operator: EQUALS,
+                values: [],
+            },
+        ];
 
-                expect(wrapper.state('conditions')).toEqual(expectedConditions);
+        test.each`
+            index
+            ${0}
+        `('should delete condition at index 0', ({ index }) => {
+            const wrapper = getWrapper({ columns });
+            wrapper.instance().setState({
+                conditions,
             });
+            wrapper.instance().deleteCondition(index);
+
+            expect(wrapper.state('conditions')).toEqual(expectedConditions);
         });
     });
 
@@ -184,7 +137,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             },
         ].forEach(({ description, updatedState }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.instance().onClose();
 
                 expect(wrapper.state('isMenuOpen')).toEqual(updatedState.isMenuOpen);
@@ -202,7 +155,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             },
         ].forEach(({ description, updatedState }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.instance().onOpen();
 
                 expect(wrapper.state('isMenuOpen')).toEqual(updatedState.isMenuOpen);
@@ -220,7 +173,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             },
         ].forEach(({ description, updatedState }) => {
             test(`${description}`, () => {
-                const wrapper = getWrapper();
+                const wrapper = getWrapper({ columns });
                 wrapper.instance().toggleButton();
 
                 expect(wrapper.state('isMenuOpen')).toEqual(updatedState.isMenuOpen);
@@ -229,7 +182,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('createCondition()', () => {
-        test('Should return a condition object if columns is defined', () => {
+        test('Should return a condition object if columns is non-empty', () => {
             const wrapper = getWrapper({ columns });
             const conditionID = '11';
             const expected = {
@@ -247,10 +200,10 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             expect(condition).toEqual(expected);
         });
 
-        test('Should return an empty object if columns is not defined', () => {
-            const wrapper = getWrapper();
+        test('Should return an empty object if columns is empty', () => {
+            const wrapper = getWrapper({ columns: [] });
             const props = {};
-            const conditionID = 123;
+            const conditionID = '123';
             const expected = {};
 
             const condition = wrapper.instance().createCondition(props, conditionID);
@@ -273,7 +226,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             ${'Should return true if Apply button was clicked and value is not empty'} | ${conditionsWithValues}      | ${true}
             ${'Should return false if Apply button was clicked and value is empty'}    | ${conditionsWithEmptyValues} | ${false}
         `('$description', ({ conditions, shouldCloseResult }) => {
-            const wrapper = getWrapper();
+            const wrapper = getWrapper({ columns });
             const targetWithClassName = {
                 target: document.createElement('button'),
             };
