@@ -50,14 +50,12 @@ class ColumnButton extends React.Component<Props, State> {
     getNumberOfHiddenColumns = () => {
         const { columns } = this.props;
 
-        return columns
-            ? columns.reduce((total, column) => {
-                  if (!column.isShown) {
-                      return total + 1;
-                  }
-                  return total;
-              }, 0)
-            : 0;
+        return columns.reduce((total, column) => {
+            if (!column.isShown) {
+                return total + 1;
+            }
+            return total;
+        }, 0);
     };
 
     render() {

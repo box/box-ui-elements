@@ -19,7 +19,7 @@ type State = {
 };
 
 type Props = {
-    columns?: Array<ColumnType>,
+    columns: Array<ColumnType>,
     onColumnChange?: (columnTypes: Array<ColumnType>) => void,
 };
 
@@ -28,7 +28,7 @@ class ColumnButtonOverlay extends React.Component<Props, State> {
         super(props);
         this.state = {
             listId: uniqueId(),
-            pendingColumns: props.columns ? props.columns.slice(0) : [],
+            pendingColumns: props.columns.slice(0),
         };
     }
 
@@ -66,14 +66,12 @@ class ColumnButtonOverlay extends React.Component<Props, State> {
     getNumberOfHiddenColumns = () => {
         const { columns } = this.props;
 
-        return columns
-            ? columns.reduce((total, column) => {
-                  if (!column.isShown) {
-                      return total + 1;
-                  }
-                  return total;
-              }, 0)
-            : 0;
+        return columns.reduce((total, column) => {
+            if (!column.isShown) {
+                return total + 1;
+            }
+            return total;
+        }, 0);
     };
 
     render() {
