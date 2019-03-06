@@ -5,7 +5,7 @@ import IconMagicWand from '../../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../../icons/general/IconMetadataThick';
 import IconDocInfo from '../../../icons/general/IconDocInfo';
 import IconChatRound from '../../../icons/general/IconChatRound';
-import AdditionalTabs from '../AdditionalTabs';
+import AdditionalTabs from '../additional-tabs/AdditionalTabs';
 import SidebarNavButton from '../SidebarNavButton';
 import SidebarNav from '../SidebarNav';
 

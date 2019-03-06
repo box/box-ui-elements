@@ -1,0 +1,27 @@
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@mixin fade-in($fade-in-time) {
+    animation: fade-in $fade-in-time ease-in;
+}
+
+@mixin loading-pulse($start-color, $end-color, $fade-in-time) {
+    @keyframes loading-pulse {
+        0% {
+            background-color: $start-color;
+        }
+
+        100% {
+            background-color: $end-color;
+        }
+    }
+
+    animation: loading-pulse .5s infinite ease-in-out .2s alternate, fade-in $fade-in-time ease-in;
+}

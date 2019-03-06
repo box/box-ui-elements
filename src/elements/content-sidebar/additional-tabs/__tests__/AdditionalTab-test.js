@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Tooltip from '../../common/Tooltip';
-import PlainButton from '../../../components/plain-button/PlainButton';
+import Tooltip from '../../../common/Tooltip';
+import PlainButton from '../../../../components/plain-button/PlainButton';
 import AdditionalTab from '../AdditionalTab';
 
 describe('elements/content-sidebar/AdditionalTab', () => {

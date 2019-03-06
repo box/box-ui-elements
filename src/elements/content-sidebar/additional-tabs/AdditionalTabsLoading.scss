@@ -1,0 +1,26 @@
+@import '../../common/_animations.scss';
+
+.bcs-additional-tab-loading-btn {
+    align-items: center;
+    background-color: transparent;
+    display: flex;
+    height: 60px;
+    justify-content: center;
+    pointer-events: none;
+    position: relative;
+    width: 59px; // 1px for left border
+}
+
+$fade-in-time: .5s;
+
+.bcs-additional-tab-loading-content {
+    @include loading-pulse(#f4f4f4, #f1f1f1, $fade-in-time);
+
+    border-radius: 5px;
+}
+
+.bcs-additional-tab-more-icon .fill-color {
+    @include fade-in($fade-in-time);
+
+    background-color: #f1f1f1;
+}

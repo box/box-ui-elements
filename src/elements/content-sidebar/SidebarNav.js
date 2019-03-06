@@ -13,7 +13,7 @@ import IconChatRound from '../../icons/general/IconChatRound';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import SidebarNavButton from './SidebarNavButton';
-import AdditionalTabs from './AdditionalTabs';
+import AdditionalTabs from './additional-tabs/AdditionalTabs';
 import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
@@ -82,7 +82,7 @@ const SidebarNav = ({
                 <IconMetadataThick />
             </SidebarNavButton>
         )}
-        {hasAdditionalTabs && additionalTabs && <AdditionalTabs tabs={additionalTabs} />}
+        {hasAdditionalTabs && <AdditionalTabs tabs={additionalTabs} />}
     </nav>
 );
 
