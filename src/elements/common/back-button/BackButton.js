@@ -8,10 +8,9 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import type { RouterHistory } from 'react-router-dom';
-import IconPageBack from '../../../icons/general/IconPageBack';
+import IconNavigateLeft from '../../../icons/general/IconNavigateLeft';
 import messages from '../messages';
 import PlainButton from '../../../components/plain-button';
-import Tooltip from '../Tooltip';
 import './BackButton.scss';
 
 type Props = {
@@ -19,11 +18,12 @@ type Props = {
 };
 
 const BackButton = ({ history }: Props) => (
-    <Tooltip title={<FormattedMessage {...messages.back} />}>
-        <PlainButton className="be-btn-back" onClick={() => history.goBack()} type="button">
-            <IconPageBack />
-        </PlainButton>
-    </Tooltip>
+    <PlainButton className="be-btn-back" onClick={() => history.goBack()} type="button">
+        <IconNavigateLeft height={24} width={24} />
+        <FormattedMessage {...messages.back}>
+            {content => <span className="accessibility-hidden">{content}</span>}
+        </FormattedMessage>
+    </PlainButton>
 );
 
 export default withRouter(BackButton);

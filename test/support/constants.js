@@ -1,0 +1,4 @@
+Cypress.env({
+    FILE_ID_DOC: '308339768087',
+    FILE_ID_VIDEO: '308566420378',
+});

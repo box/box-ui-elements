@@ -13,10 +13,10 @@ import './VersionsSidebar.scss';
 
 type Props = {
     error?: string,
-    versions: Array<any>,
+    versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, versions }: Props) => (
+const VersionsSidebar = ({ error, versions = [] }: Props) => (
     <SidebarContent
         className="bcs-versions"
         title={

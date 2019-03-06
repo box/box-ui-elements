@@ -37,7 +37,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     handleFetchVersionsSuccess = ({ entries: versions }) => {
-        this.setState({ versions });
+        this.setState({ error: undefined, versions });
     };
 
     render() {

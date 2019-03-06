@@ -116,7 +116,7 @@ const SidebarPanels = ({
                                 />
                             </Route>
                             <Route exact path={`${match.path}/versions`}>
-                                <LoadableVersionsSidebar fileId={fileId} />
+                                <LoadableVersionsSidebar fileId={fileId} key={fileId} />
                             </Route>
                         </Switch>
                     )
@@ -139,7 +139,7 @@ const SidebarPanels = ({
                                 />
                             </Route>
                             <Route exact path={`${match.path}/versions`}>
-                                <LoadableVersionsSidebar fileId={fileId} />
+                                <LoadableVersionsSidebar fileId={fileId} key={fileId} />
                             </Route>
                         </Switch>
                     )
