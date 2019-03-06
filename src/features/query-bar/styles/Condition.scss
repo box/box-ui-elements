@@ -94,22 +94,6 @@
         }
     }
 
-    .condition-value-dropdown-container.show-error {
-        .filter-dropdown-text-field-container {
-            .text-input-container input {
-                @include error-border();
-            }
-        }
-
-        .date-picker-wrapper input {
-            @include error-border();
-        }
-
-        .select-button.placeholder {
-            @include error-border();
-        }
-    }
-
     .condition-value-dropdown-container {
         align-items: center;
         height: 100%;
@@ -162,6 +146,28 @@
             .select-button.placeholder {
                 color: $seventy-sixers;
             }
+        }
+    }
+
+    .condition-value-dropdown-container.show-error {
+        .select-container {
+            button.select-button {
+                @include error-border();
+            }
+        }
+
+        .filter-dropdown-text-field-container {
+            .text-input-container input {
+                @include error-border();
+            }
+        }
+
+        .date-picker-wrapper input {
+            @include error-border();
+        }
+
+        .select-button.placeholder {
+            @include error-border();
         }
     }
 

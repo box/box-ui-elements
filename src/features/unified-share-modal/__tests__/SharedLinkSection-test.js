@@ -16,6 +16,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
     const getWrapper = (props = {}) =>
         shallow(
             <SharedLinkSection
+                autofocusSharedLink={false}
                 changeSharedLinkAccessLevel={sandbox.stub()}
                 changeSharedLinkPermissionLevel={sandbox.stub()}
                 intl={intl}
@@ -125,6 +126,27 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
         expect(wrapper.find('.shared-link-settings-btn').length).toBe(0);
     });
 
+    test('should render proper dropdown override when viewing an editable box note', () => {
+        const wrapper = getWrapper({
+            item: {
+                accessLevel: 'peopleInYourCompany',
+                description: 'some description',
+                extension: 'boxnote',
+                id: 12345,
+                name: 'text.boxnote',
+                type: 'file',
+                ...defaultItem,
+            },
+            sharedLink: {
+                isEditAllowed: true,
+                url: 'http://example.com/s/abc',
+                isNewSharedLink: false,
+            },
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should render without SharedLinkPermissionMenu if access level is "people in item"', () => {
         const wrapper = getWrapper({
             sharedLink: {
@@ -160,65 +182,5 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
 
             expect(wrapper).toMatchSnapshot();
         });
-    });
-
-    test('should auto focus input when autofocus shared link on a new shared link', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-                isNewSharedLink: true,
-            },
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(true);
-    });
-
-    test('should auto focus input when autofocus shared link and should trigger animate on load', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-                isNewSharedLink: false,
-            },
-            triggerCopyOnLoad: true,
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(true);
-    });
-
-    test('should not auto focus input when only the autofocusSharedLink prop is specified', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-            },
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(false);
-    });
-
-    test('should not auto focus if autofocusSharedLink is specificed, but the shared link is old', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-            },
-            triggerCopyOnLoad: false,
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(false);
-    });
-
-    test('should not auto focus if autofocusSharedLink is specificed, but the shared link is old', () => {
-        const wrapper = getWrapper({
-            autofocusSharedLink: true,
-            sharedLink: {
-                url: 'http://example.org/abc',
-                isNewSharedLink: false,
-            },
-        });
-
-        expect(wrapper.find('TextInputWithCopyButton').prop('autofocus')).toBe(false);
     });
 });

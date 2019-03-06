@@ -30,9 +30,10 @@
         position: absolute; // Prevents non-sidebar parts from re-painting
         right: 0;
         top: 60px; // Same as title above
+    }
 
-        .bcs-scroll-content { // Styles can be overriden by each sidebar
-            width: 323px; // 17px less than the total width for scroll bar
-        }
+    .bcs-scroll-content {
+        // Styles can be overriden by each sidebar
+        width: 323px; // 17px less than the total width for scroll bar
     }
 }

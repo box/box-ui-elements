@@ -152,6 +152,7 @@ push_to_gh_pages() {
     rm -rf build
     cp -R styleguide/. ./ || return 1
     cp examples/gitignore .gitignore || return 1
+    git rm -rf --cached . || return 1
     git add -A || return 1
     git commit --no-verify -am "build(examples): v$VERSION" || return 1
     git push release gh-pages --force --no-verify || return 1

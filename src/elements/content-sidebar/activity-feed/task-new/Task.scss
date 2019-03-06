@@ -1,0 +1,128 @@
+@import '../../../common/variables';
+
+$success-color: $shady-acres;
+$error-color: $red;
+
+.be .bcs-task {
+    .bcs-task-assignment-container {
+        margin-left: 40px;
+    }
+
+    .bcs-task-due-date {
+        color: $threes;
+        font-weight: bold;
+        margin: 5px 0;
+
+        span:first-child {
+            padding-right: 3px;
+        }
+
+        &.bcs-task-overdue {
+            color: $error-color;
+        }
+    }
+
+    .bcs-task-assignments {
+        display: flex;
+        margin: 8px 0;
+    }
+
+    .bcs-task-assignment-avatar {
+        height: 32px;
+        width: 32px;
+    }
+
+    .bcs-task-assignment-count {
+        align-items: center;
+        background: $grey;
+        border-radius: 100%;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+    }
+
+    .bcs-task-assignment-status {
+        display: inline-block;
+        height: 32px;
+        position: relative;
+        width: 32px;
+
+        // select all but first instance
+        & + & {
+            margin-left: 3px;
+        }
+    }
+
+    .bcs-task-assignment-status-icon {
+        background: $grey;
+        border: 1px solid $white;
+        border-radius: 50%;
+        bottom: 0;
+        height: 12px;
+        position: absolute;
+        right: 0;
+        width: 12px;
+
+        .fill-color {
+            fill: $white;
+        }
+
+        &.completed,
+        &.approved {
+            background: $success-color;
+        }
+
+        &.rejected {
+            background: $error-color;
+        }
+    }
+
+    .bcs-task-status {
+        align-items: center;
+        display: flex;
+        margin-top: 15px;
+    }
+
+    .bcs-task-status-icon {
+        background: $grey;
+        border: 1px solid $white;
+        border-radius: 100%;
+        bottom: 0;
+        height: 14px;
+        margin-right: 5px;
+        width: 14px;
+
+        .fill-color {
+            fill: $white;
+        }
+
+        &.completed,
+        &.approved {
+            background: $success-color;
+        }
+
+        &.rejected {
+            background: $error-color;
+        }
+
+        &.pending,
+        &.incomplete,
+        &.notStarted {
+            align-items: center;
+            background: #bdc3c7;
+            color: white;
+            display: flex;
+            font-size: 80%;
+            font-weight: bold;
+            justify-content: center;
+        }
+    }
+
+    .bcs-task-pending-assignment {
+        margin-top: 5px;
+    }
+
+    button:first-of-type.bcs-task-action-button {
+        margin-left: 0;
+    }
+}

@@ -13,6 +13,9 @@ import Base from './Base';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksAPI from './Tasks';
+import TasksNewAPI from './TasksNew';
+import TaskCollaboratorsAPI from './TaskCollaborators';
+import TaskLinksAPI from './TaskLinks';
 import TaskAssignmentsAPI from './TaskAssignments';
 import AppActivityAPI from './AppActivity';
 import {
@@ -22,9 +25,11 @@ import {
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     ERROR_CODE_CREATE_TASK_ASSIGNMENT,
+    TASK_NEW_INCOMPLETE,
+    TASK_INCOMPLETE,
 } from '../constants';
 
-const TASK_INCOMPLETE = 'incomplete';
+const TASK_NEW_INITIAL_STATUS = TASK_NEW_INCOMPLETE;
 const TASK = 'task';
 const TASK_ASSIGNMENT = 'task_assignment';
 const TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
@@ -63,6 +68,21 @@ class Feed extends Base {
     appActivityAPI: AppActivity;
 
     /**
+     * @property {TasksNewAPI}
+     */
+    tasksNewAPI: TasksNewAPI;
+
+    /**
+     * @property {TaskCollaboratorsAPI}
+     */
+    taskCollaboratorsAPI: TaskCollaboratorsAPI[];
+
+    /**
+     * @property {TaskLinksAPI}
+     */
+    taskLinksAPI: TaskLinksAPI[];
+
+    /**
      * @property {string}
      */
     id: string;
@@ -75,6 +95,8 @@ class Feed extends Base {
     constructor(options: Options) {
         super(options);
         this.taskAssignmentsAPI = [];
+        this.taskCollaboratorsAPI = [];
+        this.taskLinksAPI = [];
     }
 
     /**
@@ -121,6 +143,7 @@ class Feed extends Base {
      * @param {Function} successCallback - the success callback  which is called after data fetching is complete
      * @param {Function} errorCallback - the error callback which is called after data fetching is complete if there was an error
      * @param {Function} onError - the function to be called immediately after an error occurs
+     * @param {boolean} shouldShowNewTasks - feature flip the new tasks api
      */
     feedItems(
         file: BoxItem,
@@ -128,6 +151,7 @@ class Feed extends Base {
         successCallback: Function,
         errorCallback: (feedItems: FeedItems) => void,
         onError: ErrorCallback,
+        shouldShowNewTasks?: boolean = false, // TODO: could the class understand feature flips natively instead?
     ): void {
         const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
@@ -149,7 +173,7 @@ class Feed extends Base {
         this.errorCallback = onError;
         const versionsPromise = this.fetchVersions();
         const commentsPromise = this.fetchComments(permissions);
-        const tasksPromise = this.fetchTasks();
+        const tasksPromise = shouldShowNewTasks ? this.fetchTasksNew() : this.fetchTasks();
 
         Promise.all([versionsPromise, commentsPromise, tasksPromise]).then(feedItems => {
             const versions: ?FileVersions = feedItems[0];
@@ -213,6 +237,23 @@ class Feed extends Base {
                 },
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
             );
+        });
+    }
+
+    /**
+     * Fetches the tasks for a file
+     *
+     * @return {Promise} - the feed items
+     */
+    fetchTasksNew(): Promise<?Tasks> {
+        this.tasksNewAPI = new TasksNewAPI(this.options);
+
+        return new Promise(resolve => {
+            this.tasksNewAPI.getTasksForFile({
+                file: { id: this.id },
+                successCallback: resolve,
+                errorCallback: (err, code) => this.fetchFeedItemErrorCallback(resolve, err, code),
+            });
         });
     }
 
@@ -314,6 +355,94 @@ class Feed extends Base {
                     taskId,
                 );
                 successCallback(updatedAssignment);
+            }
+        }
+    };
+
+    /**
+     * Updates a task assignment
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {string} taskId - ID of task to be updated
+     * @param {string} taskCollaboratorId - Task assignment ID
+     * @param {TaskCollabStatus} taskCollaboratorStatus - New task assignment status
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    updateTaskCollaborator = (
+        file: BoxItem,
+        taskId: string,
+        taskCollaboratorId: string,
+        taskCollaboratorStatus: TaskCollabStatus,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.id = file.id;
+        this.errorCallback = errorCallback;
+        this.updateFeedItem({ isPending: true }, taskId);
+        const collaboratorsApi = new TaskCollaboratorsAPI(this.options);
+        this.taskCollaboratorsAPI.push(collaboratorsApi);
+        const taskCollaboratorPayload = {
+            id: taskCollaboratorId,
+            status: taskCollaboratorStatus,
+        };
+        collaboratorsApi.updateTaskCollaborator({
+            file,
+            taskCollaborator: taskCollaboratorPayload,
+            successCallback: (taskCollab: TaskCollabAssignee) => {
+                this.updateTaskCollaboratorSuccessCallback(taskId, taskCollab, successCallback);
+            },
+            errorCallback: (e: ElementsXhrError, code: string) => {
+                this.feedErrorCallback(true, e, code);
+            },
+        });
+    };
+
+    /**
+     * Updates the task assignment state of the updated task
+     *
+     * @param {string} taskId - Box task id
+     * @param {TaskAssignment} updatedCollaborator - New task assignment from API
+     * @param {Function} successCallback - the function which will be called on success
+     * @return {void}
+     */
+    updateTaskCollaboratorSuccessCallback = (
+        taskId: string,
+        updatedCollaborator: TaskCollabAssignee,
+        successCallback: Function,
+    ): void => {
+        const cachedItems = this.getCachedItems(this.id);
+        if (cachedItems) {
+            // $FlowFixMe
+            const task: ?TaskNew = cachedItems.items.find(item => item.type === TASK && item.id === taskId);
+            if (task) {
+                const { entries } = task.assigned_to;
+                const assignments = entries.map((item: TaskCollabAssignee) => {
+                    if (item.id === updatedCollaborator.id) {
+                        return {
+                            ...item,
+                            ...updatedCollaborator,
+                        };
+                    }
+
+                    return item;
+                });
+
+                this.updateFeedItem(
+                    {
+                        assigned_to: {
+                            entries: assignments,
+                        },
+                        isPending: false,
+                    },
+                    taskId,
+                );
+                successCallback(updatedCollaborator);
             }
         }
     };
@@ -546,6 +675,171 @@ class Feed extends Base {
     };
 
     /**
+     * Creates a task.
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Object} currentUser - the user who performed the action
+     * @param {string} message - Task text
+     * @param {Array} assignees - List of assignees
+     * @param {number} dueAt - Task's due date
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    createTaskNew = (
+        file: BoxItem,
+        currentUser: User,
+        message: string,
+        assignees: SelectorItems,
+        dueAt: ?string,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.id = file.id;
+        this.errorCallback = errorCallback;
+        const uuid = uniqueId('task_');
+        let dueAtString;
+        if (dueAt) {
+            const dueAtDate: Date = new Date(dueAt);
+            dueAtString = dueAtDate.toISOString();
+        }
+
+        // TODO: make pending task generator a function
+        const pendingTask: TaskNew = {
+            created_by: {
+                type: 'task_collaborator',
+                target: currentUser,
+                id: uniqueId(),
+                role: 'CREATOR',
+                status: TASK_NEW_INITIAL_STATUS,
+            },
+            created_at: new Date().toISOString(),
+            due_at: dueAtString,
+            id: uuid,
+            name: message,
+            type: TASK,
+            assigned_to: {
+                entries: assignees.map((assignee: SelectorItem) => ({
+                    id: uniqueId(),
+                    target: { ...assignee, avatar_url: '', type: 'user' },
+                    status: TASK_NEW_INITIAL_STATUS,
+                    permissions: {
+                        can_delete: false,
+                        can_update: false,
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                })),
+                limit: 10,
+                next_marker: null,
+            },
+            permissions: {
+                can_update: false,
+                can_delete: false,
+                can_create_task_collaborator: false,
+                can_create_task_link: false,
+            },
+            task_links: {
+                entries: [
+                    {
+                        id: uniqueId(),
+                        type: 'task_link',
+                        target: {
+                            type: 'file',
+                            ...file,
+                        },
+                        permissions: {
+                            can_delete: false,
+                            can_update: false,
+                        },
+                    },
+                ],
+                limit: 1,
+                next_marker: null,
+            },
+            status: TASK_NEW_INCOMPLETE,
+        };
+
+        this.addPendingItem(this.id, currentUser, pendingTask);
+
+        const taskPayload = { name: message, due_at: dueAtString };
+
+        this.tasksNewAPI = new TasksNewAPI(this.options);
+        this.tasksNewAPI.createTask({
+            file,
+            task: taskPayload,
+            successCallback: (taskData: Task) => {
+                this.createTaskNewSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
+            },
+            errorCallback: (e: ElementsXhrError, code: string) => {
+                this.updateFeedItem(this.createFeedError(messages.taskCreateErrorMessage), uuid);
+                this.feedErrorCallback(false, e, code);
+            },
+        });
+    };
+
+    /**
+     * Callback for successful creation of a Task. Creates a task assignment
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {string} id - ID of the feed item to update with the new task data
+     * @param {Task} task - API returned task
+     * @param {Array} assignees - List of assignees
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error     *
+     * @return {void}
+     */
+    async createTaskNewSuccessCallback(
+        file: BoxItem,
+        id: string,
+        task: Task,
+        assignees: SelectorItems,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ) {
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.errorCallback = errorCallback;
+        const collaboratorPromises = assignees.map((assignee: SelectorItem) => {
+            return this.createTaskCollaborator(file, task, assignee);
+        });
+
+        const taskLink = await this.createTaskLink(file, task);
+
+        Promise.all(collaboratorPromises).then(
+            (taskAssignments: Array<TaskCollabAssignee>) => {
+                this.updateFeedItem(
+                    {
+                        ...task,
+                        task_links: {
+                            entries: [taskLink],
+                            next_marker: null,
+                            limit: 1,
+                        },
+                        assigned_to: {
+                            entries: taskAssignments,
+                            next_marker: null,
+                            limit: taskAssignments.length,
+                        },
+                        isPending: false,
+                    },
+                    id,
+                );
+                successCallback(task);
+            },
+            (e: ElementsXhrError) => {
+                this.feedErrorCallback(false, e, ERROR_CODE_CREATE_TASK_ASSIGNMENT);
+            },
+        );
+    }
+
+    /**
      * Creates a task assignment via the API.
      *
      * @param {BoxItem} file - The file to which the task is assigned
@@ -576,6 +870,64 @@ class Feed extends Base {
                     this.deleteTask(file, task.id);
                     reject(e);
                 },
+            });
+        });
+    }
+
+    /**
+     * Creates a task collaborator via the API.
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Task} task - The newly created task from the API
+     * @param {SelectorItem} assignee - The user assigned to this task
+     * @param {Function} errorCallback - Task create error callback
+     * @return {Promise<TaskAssignment}
+     */
+    createTaskCollaborator(file: BoxItem, task: Task, assignee: SelectorItem): Promise<TaskCollabAssignee> {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.id = file.id;
+        return new Promise((resolve, reject) => {
+            const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
+            this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
+
+            taskCollaboratorsAPI.createTaskCollaborator({
+                file,
+                task,
+                user: assignee,
+                successCallback: resolve,
+                errorCallback: (e: ElementsXhrError) => {
+                    reject(e);
+                },
+            });
+        });
+    }
+
+    /**
+     * Creates a task link via the API.
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Task} task - The newly created task from the API
+     * @param {Function} errorCallback - Task create error callback
+     * @return {Promise<TaskAssignment}
+     */
+    createTaskLink(file: BoxItem, task: Task): Promise<TaskLink> {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.id = file.id;
+        return new Promise((resolve, reject) => {
+            const taskLinksAPI = new TaskLinksAPI(this.options);
+            this.taskLinksAPI.push(taskLinksAPI);
+
+            taskLinksAPI.createTaskLink({
+                file,
+                task,
+                successCallback: resolve,
+                errorCallback: reject,
             });
         });
     }
@@ -730,7 +1082,7 @@ class Feed extends Base {
      * @param {Object} itemBase - Base properties for item to be added to the feed as pending.
      * @return {void}
      */
-    addPendingItem = (id: string, currentUser: User, itemBase: Object): Comment | Task | BoxItemVersion => {
+    addPendingItem = (id: string, currentUser: User, itemBase: Object): Comment | Task | TaskNew | BoxItemVersion => {
         if (!currentUser) {
             throw getBadUserError();
         }
@@ -820,7 +1172,7 @@ class Feed extends Base {
 
         const cachedItems = this.getCachedItems(this.id);
         if (cachedItems) {
-            const updatedFeedItems = cachedItems.items.map((item: Comment | Task | BoxItemVersion) => {
+            const updatedFeedItems = cachedItems.items.map((item: Comment | Task | TaskNew | BoxItemVersion) => {
                 if (item.id === id) {
                     return {
                         ...item,
@@ -949,6 +1301,20 @@ class Feed extends Base {
         }
     }
 
+    destroyTaskCollaborators() {
+        if (Array.isArray(this.taskCollaboratorsAPI)) {
+            this.taskCollaboratorsAPI.forEach(api => api.destroy());
+            this.taskCollaboratorsAPI = [];
+        }
+    }
+
+    destroyTaskLinks() {
+        if (Array.isArray(this.taskLinksAPI)) {
+            this.taskLinksAPI.forEach(api => api.destroy());
+            this.taskLinksAPI = [];
+        }
+    }
+
     /**
      * Fetches app activities for a file
      * @param {BoxItemPermission} permissions - Permissions to attach to the app activity items
@@ -1043,7 +1409,14 @@ class Feed extends Base {
             delete this.appActivityAPI;
         }
 
+        if (this.tasksNewAPI) {
+            this.tasksNewAPI.destroy();
+            delete this.tasksNewAPI;
+        }
+
         this.destroyTaskAssignments();
+        this.destroyTaskCollaborators();
+        this.destroyTaskLinks();
     }
 }
 

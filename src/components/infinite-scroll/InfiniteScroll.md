@@ -15,19 +15,24 @@ const InfiniteScroll = require('./InfiniteScroll').default;
 
 let items = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
 const onLoadMore = () => {
-    // add more "things" to items
+  // add more "things" to items
 };
 const isLoading = false;
 const hasMore = true;
 
-<InfiniteScroll hasMore={hasMore} isLoading={isLoading} onLoadMore={onLoadMore} useWindow={true}>
-    <React.Fragment>
-        {items.map((item, i) => (
-            <div key={i}>{item}</div>
-        ))}
-    </React.Fragment>
-    {isLoading && <div>Loading Indicator...</div>}
-    {!hasMore && <div>End of items message...</div>}
+<InfiniteScroll
+  hasMore={hasMore}
+  isLoading={isLoading}
+  onLoadMore={onLoadMore}
+  useWindow={true}
+>
+  <React.Fragment>
+    {items.map((item, i) => (
+      <div key={i}>{item}</div>
+    ))}
+  </React.Fragment>
+  {isLoading && <div>Loading Indicator...</div>}
+  {!hasMore && <div>End of items message...</div>}
 </InfiniteScroll>;
 ```
 
@@ -39,7 +44,7 @@ const InfiniteScroll = require('./InfiniteScroll').default;
 
 let items = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
 const onLoadMore = () => {
-    // add more "things" to items
+  // add more "things" to items
 };
 let scrollRef = null;
 const isLoading = false;
@@ -47,22 +52,22 @@ const hasMore = true;
 
 // Parent div should have set height and overflow: scroll
 <div style={{ height: '200px', overflow: 'scroll' }}>
-    <ScrollWrapper scrollRefFn={el => (scrollRef = el)}>
-        <InfiniteScroll
-            hasMore={hasMore}
-            isLoading={isLoading}
-            onLoadMore={onLoadMore}
-            useWindow={false}
-            scrollContainerRef={scrollRef}
-        >
-            <React.Fragment>
-                {items.map((item, i) => (
-                    <div key={i}>{item}</div>
-                ))}
-            </React.Fragment>
-            {isLoading && <div>Loading Indicator...</div>}
-            {!hasMore && <div>End of items message...</div>}
-        </InfiniteScroll>
-    </ScrollWrapper>
+  <ScrollWrapper scrollRefFn={el => (scrollRef = el)}>
+    <InfiniteScroll
+      hasMore={hasMore}
+      isLoading={isLoading}
+      onLoadMore={onLoadMore}
+      useWindow={false}
+      scrollContainerRef={scrollRef}
+    >
+      <React.Fragment>
+        {items.map((item, i) => (
+          <div key={i}>{item}</div>
+        ))}
+      </React.Fragment>
+      {isLoading && <div>Loading Indicator...</div>}
+      {!hasMore && <div>End of items message...</div>}
+    </InfiniteScroll>
+  </ScrollWrapper>
 </div>;
 ```

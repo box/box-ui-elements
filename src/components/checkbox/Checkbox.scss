@@ -9,7 +9,7 @@
     position: relative;
     user-select: none;
 
-    > input[type="checkbox"] {
+    > input[type='checkbox'] {
         flex: none;
         height: 14px;
         margin: 3px 0 0;
@@ -21,7 +21,7 @@
                 background: $white;
                 border: 1px solid $downtown-grey;
                 border-radius: 2px;
-                content: "";
+                content: '';
                 height: 14px;
                 left: 0;
                 position: absolute;
@@ -33,7 +33,7 @@
                 backface-visibility: hidden;
                 border-bottom: 2px solid $primary-color;
                 border-right: 2px solid $primary-color;
-                content: "";
+                content: '';
                 height: 7px;
                 left: 5px;
                 position: absolute;

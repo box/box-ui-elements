@@ -10,11 +10,11 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND, OR } from '../../constants';
+import { AND, OR, COLUMN_OPERATORS, OPERATOR, VALUES } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType, OptionType, ConnectorType } from '../../flowTypes';
+import type { ColumnType, ConditionType, ConnectorType, OperatorType, OptionType } from '../../flowTypes';
 
 type State = {
     appliedConditions: Array<Object>,
@@ -67,18 +67,15 @@ class FilterButton extends React.Component<Props, State> {
     createCondition = () => {
         const conditionID = uniqueId();
         const { columns } = this.props;
-        if (columns) {
+        if (columns && columns.length > 0) {
             const firstColumn = columns[0];
+            const operator = COLUMN_OPERATORS[firstColumn.type][0].key;
 
             return {
-                columnDisplayText: firstColumn.displayName,
-                columnKey: firstColumn.displayName,
+                columnId: firstColumn.id,
                 id: conditionID,
-                operatorDisplayText: '',
-                operatorKey: 0,
-                valueDisplayText: null,
-                valueKey: null,
-                valueType: firstColumn.type,
+                operator,
+                values: [],
             };
         }
         return {};
@@ -104,6 +101,7 @@ class FilterButton extends React.Component<Props, State> {
             }
             this.setState({
                 appliedConditions: conditions,
+                isMenuOpen: false,
             });
         } else {
             this.setState({
@@ -112,45 +110,69 @@ class FilterButton extends React.Component<Props, State> {
         }
     };
 
-    handleFieldChange = (
-        index: number,
-        condition: Object,
-        fieldDisplayText: string | Date,
-        fieldDisplayTextType: string,
-        fieldKey: string | Date,
-        fieldKeyType: string,
-        valueType: string,
-    ) => {
+    updateConditionState = (conditionId: string, updateCondition: Function) => {
         const { conditions } = this.state;
-        const conditionToUpdate = conditions.find(currentCondition => {
+        let newConditionIndex = 0;
+        const conditionToUpdate = conditions.find((currentCondition, index) => {
+            newConditionIndex = index;
+            return currentCondition.id === conditionId;
+        });
+
+        let newCondition = { ...conditionToUpdate };
+        newCondition = updateCondition(newCondition);
+
+        const newConditions = conditions.slice(0);
+        newConditions[newConditionIndex] = newCondition;
+
+        this.setState({
+            conditions: newConditions,
+        });
+    };
+
+    handleColumnChange = (condition: ConditionType, columnId: string) => {
+        const { columns } = this.props;
+        const { conditions } = this.state;
+        let newConditionIndex = 0;
+        const conditionToUpdate = conditions.find((currentCondition, index) => {
+            newConditionIndex = index;
             return currentCondition.id === condition.id;
         });
-        if (conditionToUpdate) {
-            const updatedCondition = {
+
+        const column = columns && columns.find(c => c.id === columnId);
+
+        if (column) {
+            const type = column && column.type;
+
+            const operator = COLUMN_OPERATORS[type][0].key;
+
+            const newCondition = {
                 ...conditionToUpdate,
-                [fieldDisplayTextType]: fieldDisplayText,
-                [fieldKeyType]: fieldKey,
-                valueType,
+                columnId,
+                operator,
+                values: [],
             };
 
-            if (fieldKeyType === 'columnKey') {
-                // Upon selecting a new column, the operator and value fields should be reset.
-                updatedCondition.operatorKey = 0;
-                updatedCondition.operatorDisplayText = '';
-                updatedCondition.valueDisplayText = null;
-                updatedCondition.valueKey = null;
-            }
-
-            const updatedConditions = conditions.slice(0);
-            const conditionIndex = conditions.findIndex(
-                currentCondition => currentCondition.id === updatedCondition.id,
-            );
-            updatedConditions[conditionIndex] = updatedCondition;
+            const newConditions = conditions.slice(0);
+            newConditions[newConditionIndex] = newCondition;
 
             this.setState({
-                conditions: updatedConditions,
+                conditions: newConditions,
             });
         }
+    };
+
+    handleOperatorChange = (conditionId: string, value: OperatorType) => {
+        this.updateConditionState(conditionId, condition => {
+            condition[OPERATOR] = value;
+            return condition;
+        });
+    };
+
+    handleValueChange = (conditionId: string, values: Array<string>) => {
+        this.updateConditionState(conditionId, condition => {
+            condition[VALUES] = values;
+            return condition;
+        });
     };
 
     handleConnectorChange = (option: OptionType) => {
@@ -186,7 +208,7 @@ class FilterButton extends React.Component<Props, State> {
         const { conditions } = this.state;
         let areAllValid = true;
         conditions.forEach(condition => {
-            if (condition.valueDisplayText === null || condition.valueDisplayText === '') {
+            if (condition.values.length === 0) {
                 areAllValid = false;
             }
         });
@@ -217,7 +239,7 @@ class FilterButton extends React.Component<Props, State> {
 
         const buttonClasses = classNames('query-bar-button', numberOfAppliedConditions !== 0 ? 'is-active' : '');
 
-        const isFilterDisabled = columns === undefined;
+        const isFilterDisabled = !columns || columns.length === 0;
 
         return (
             <Flyout
@@ -265,14 +287,16 @@ class FilterButton extends React.Component<Props, State> {
                                     return (
                                         <Condition
                                             key={`metadata-view-filter-item-${condition.id}`}
+                                            areErrorsEnabled={areErrorsEnabled}
+                                            columns={columns}
                                             condition={condition}
                                             deleteCondition={this.deleteCondition}
-                                            areErrorsEnabled={areErrorsEnabled}
                                             index={index}
-                                            columns={columns}
-                                            selectedConnector={selectedConnector}
-                                            onFieldChange={this.handleFieldChange}
+                                            onColumnChange={this.handleColumnChange}
                                             onConnectorChange={this.handleConnectorChange}
+                                            onOperatorChange={this.handleOperatorChange}
+                                            onValueChange={this.handleValueChange}
+                                            selectedConnector={selectedConnector}
                                         />
                                     );
                                 })}

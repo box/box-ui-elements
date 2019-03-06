@@ -33,7 +33,7 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: rgba(0, 0, 0, .5);
+                background: rgba(0, 0, 0, 0.5);
             }
 
             .contentPicker1-modal-class {
@@ -90,7 +90,10 @@
             <div class="folderPicker1"></div>
         </div>
         <div class="container">
-            <h1>File Picker (max 3 items / token generator / no share access / only 'png', pdf', 'doc', 'docx', 'ppt', 'pptx')</h1>
+            <h1>
+                File Picker (max 3 items / token generator / no share access / only 'png', pdf', 'doc', 'docx', 'ppt',
+                'pptx')
+            </h1>
             <div class="filePicker2"></div>
         </div>
         <div class="container">
@@ -102,18 +105,18 @@
         <script>
             function load() {
                 const { FilePicker, FolderPicker, ContentPicker, ContentUploader } = Box;
-                const tokenGenerator1 = (id) => {
+                const tokenGenerator1 = id => {
                     if (id === `folder_${folderId}`) {
                         return Promise.resolve(token);
                     } else {
-                        return Promise.reject()
+                        return Promise.reject();
                     }
                 };
-                const tokenGenerator2 = (id) => {
+                const tokenGenerator2 = id => {
                     if (id === `folder_${folderId}`) {
                         return Promise.resolve({ [`folder_${folderId}`]: token });
                     } else {
-                        return Promise.reject()
+                        return Promise.reject();
                     }
                 };
 
@@ -123,11 +126,9 @@
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
 
-
-
                 const filePicker1 = new FilePicker();
                 document.querySelector('.filePicker1').innerHTML = '';
-                filePicker1.addListener('choose', (data) => {
+                filePicker1.addListener('choose', data => {
                     alert('Choose pressed on File Picker, popup will close');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -138,17 +139,14 @@
                     container: '.filePicker1',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                     modal: {
-                        buttonLabel: 'launch file picker with default styles'
-                    }
+                        buttonLabel: 'launch file picker with default styles',
+                    },
                 });
                 window.fp = filePicker1;
 
-
-
-
                 const filePicker2 = new FilePicker();
                 document.querySelector('.filePicker2').innerHTML = '';
-                filePicker2.addListener('choose', (data) => {
+                filePicker2.addListener('choose', data => {
                     alert('Choose pressed on File Picker, popup will close');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -165,16 +163,13 @@
                         buttonLabel: 'launch file picker with custom styles',
                         buttonClassName: 'contentPicker1-modal-button-class',
                         modalClassName: 'contentPicker1-modal-class',
-                        overlayClassName: 'contentPicker1-overlay-class'
-                    }
+                        overlayClassName: 'contentPicker1-overlay-class',
+                    },
                 });
-
-
-
 
                 const folderPicker1 = new FolderPicker();
                 document.querySelector('.folderPicker1').innerHTML = '';
-                folderPicker1.addListener('choose', (data) => {
+                folderPicker1.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker, popup will close');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -184,16 +179,13 @@
                 folderPicker1.show(folderId, token, {
                     container: '.folderPicker1',
                     modal: {
-                        buttonLabel: 'launch folder picker with default styles'
-                    }
+                        buttonLabel: 'launch folder picker with default styles',
+                    },
                 });
-
-
-
 
                 const folderPicker2 = new FolderPicker();
                 document.querySelector('.folderPicker2').innerHTML = '';
-                folderPicker2.addListener('choose', (data) => {
+                folderPicker2.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker, popup will close');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -209,16 +201,13 @@
                         buttonLabel: 'launch folder picker with custom styles',
                         buttonClassName: 'contentPicker1-modal-button-class',
                         modalClassName: 'contentPicker1-modal-class',
-                        overlayClassName: 'contentPicker1-overlay-class'
-                    }
+                        overlayClassName: 'contentPicker1-overlay-class',
+                    },
                 });
-
-
-
 
                 const contentPicker1 = new ContentPicker();
                 document.querySelector('.contentPicker1').innerHTML = '';
-                contentPicker1.addListener('choose', (data) => {
+                contentPicker1.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker, will close popup');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -233,16 +222,13 @@
                         buttonLabel: 'launch content picker with custom styles',
                         buttonClassName: 'contentPicker1-modal-button-class',
                         modalClassName: 'contentPicker1-modal-class',
-                        overlayClassName: 'contentPicker1-overlay-class'
-                    }
+                        overlayClassName: 'contentPicker1-overlay-class',
+                    },
                 });
-
-
-
 
                 const contentPicker2 = new ContentPicker();
                 document.querySelector('.contentPicker2').innerHTML = '';
-                contentPicker2.addListener('choose', (data) => {
+                contentPicker2.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker, will close popup');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -254,10 +240,9 @@
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                     maxSelectable: 3,
                     modal: {
-                        buttonLabel: 'launch content picker with default styles'
-                    }
+                        buttonLabel: 'launch content picker with default styles',
+                    },
                 });
-
 
                 const uploader1 = new ContentUploader();
                 document.querySelector('.uploader1').innerHTML = '';
@@ -267,18 +252,17 @@
                         buttonLabel: 'launch content uploader with custom styles',
                         buttonClassName: 'contentPicker1-modal-button-class',
                         modalClassName: 'contentPicker1-modal-class',
-                        overlayClassName: 'contentPicker1-overlay-class'
-                    }
+                        overlayClassName: 'contentPicker1-overlay-class',
+                    },
                 });
-
 
                 const uploader2 = new ContentUploader();
                 document.querySelector('.uploader2').innerHTML = '';
                 uploader2.show(folderId, token, {
                     container: '.uploader2',
                     modal: {
-                        buttonLabel: 'launch content uploader with default styles'
-                    }
+                        buttonLabel: 'launch content uploader with default styles',
+                    },
                 });
             }
             load();

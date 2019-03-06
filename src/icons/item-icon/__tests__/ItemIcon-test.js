@@ -26,6 +26,9 @@ describe('icons/item-icon/ItemIcon', () => {
                 iconType: 'document',
             },
             {
+                iconType: 'dwg',
+            },
+            {
                 iconType: 'excel-spreadsheet',
             },
             {

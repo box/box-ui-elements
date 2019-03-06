@@ -15,16 +15,39 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="Date"
     name="datepicker"
+    onChange={[Function]}
     placeholder="Date"
-    value={2000-01-01T08:00:00.000Z}
   />
 </div>
+`;
+
+exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a MultiSelectField for a valueType of multi-enum" 1`] = `
+<MultiSelectField
+  fieldType="value"
+  onChange={[Function]}
+  options={
+    Array [
+      Object {
+        "displayText": "Hello",
+        "type": "enum",
+        "value": 0,
+      },
+    ]
+  }
+  placeholder={
+    <FormattedMessage
+      defaultMessage="Select value"
+      id="boxui.queryBar.selectValuePlaceholderText"
+    />
+  }
+  selectedValues={Array []}
+/>
 `;
 
 exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a SingleSelectField for a valueType of enum" 1`] = `
 <SingleSelectField
   fieldType="value"
-  onChange={[MockFunction]}
+  onChange={[Function]}
   options={
     Array [
       Object {
@@ -52,6 +75,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="Float input"
     name="float field"
+    onChange={[Function]}
     placeholder="Enter a float"
     value=""
   />
@@ -66,6 +90,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="Number input"
     name="number field"
+    onChange={[Function]}
     placeholder="Enter a number"
     value=""
   />
@@ -80,6 +105,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
     hideLabel={true}
     label="String input"
     name="string field"
+    onChange={[Function]}
     placeholder="Enter a string"
     value=""
   />

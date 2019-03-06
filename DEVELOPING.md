@@ -21,8 +21,8 @@ A published version of the style guide can be seen at https://opensource.box.com
 
 **_NOTE:_** _This note applies to testing top level UI Elements only and not the lower level components. If you want to use your own live data for the style guide, then start the style guide server using [your own developer auth token](https://developer.box.com/docs/authenticate-with-developer-token) and a file or folder ID via_
 
--   `TOKEN=<YOUR_TOKEN> FILEID=<YOUR_FILE_ID> yarn start` or
--   `TOKEN=<YOUR_TOKEN> FOLDERID=<YOUR_FOLDER_ID> yarn start`
+- `TOKEN=<YOUR_TOKEN> FILEID=<YOUR_FILE_ID> yarn start` or
+- `TOKEN=<YOUR_TOKEN> FOLDERID=<YOUR_FOLDER_ID> yarn start`
 
 ## Testing UI Elements in a Parent Project
 
@@ -35,17 +35,17 @@ To test the Box UI Elements with your own project use local Yarn linking.
 
 ## Common Script Commands
 
--   `yarn start` to launch a local style guide examples server. Uses demo live data for Elements.
--   `yarn start:examples:legacy` same as above, but with IE 11 support.
--   `yarn start:npm` to symlink Elements via `yarn link` to a parent project.
--   `yarn start:dev` to launch a local webpack dev server. Uses your own data for Elements.
--   `yarn lint` to lint js and css.
--   `yarn lint:js --fix` to lint js and fix issues.
--   `yarn lint:css --fix` to lint styles and fix issues.
--   `yarn test` to launch tests with jest.
--   `yarn test --watch` to launch tests with jest in watch mode.
--   `yarn test --coverage` to launch tests with jest with coverage.
--   `yarn release` to run a release.
+- `yarn start` to launch a local style guide examples server. Uses demo live data for Elements.
+- `yarn start:examples:legacy` same as above, but with IE 11 support.
+- `yarn start:npm` to symlink Elements via `yarn link` to a parent project.
+- `yarn start:dev` to launch a local webpack dev server. Uses your own data for Elements.
+- `yarn lint` to lint js and css.
+- `yarn lint:js --fix` to lint js and fix issues.
+- `yarn lint:css --fix` to lint styles and fix issues.
+- `yarn test` to launch tests with jest.
+- `yarn test --watch` to launch tests with jest in watch mode.
+- `yarn test --coverage` to launch tests with jest with coverage.
+- `yarn release` to run a release.
 
 For more script commands see `package.json`. Test coverage reports are available under reports/coverage.
 
@@ -53,12 +53,12 @@ For more script commands see `package.json`. Test coverage reports are available
 
 Install the following plugins in your preferred editor
 
--   Editor Config (standardizes basic editor configuration)
--   ESLint (Javascript linting)
--   Stylelint (CSS linting)
--   Prettier (Javscript formatting)
--   Sass (Stylesheets)
--   Babel (Transpiler)
+- Editor Config (standardizes basic editor configuration)
+- ESLint (Javascript linting)
+- Stylelint (CSS linting)
+- Prettier (Javscript formatting)
+- Sass (Stylesheets)
+- Babel (Transpiler)
 
 ## Testing Embedded UI Elements With Your Data
 
@@ -66,11 +66,11 @@ Under most circumstances you should be using the style guide as mentioned earlie
 
 1. Open a test file, such as http://localhost:8080/test/sidebar.html
 2. When prompted, enter a file id and developer token.
-    1. Developer tokens can be created at https://app.box.com/developers/console.
-    2. Select `Custom App` and choose `Oauth 2.0 with JWT (Server Authentication)`.
-    3. Select `View Your App` > `Configuration` > `CORS Domains` and add `http://localhost:8080` to the domain whitelist. Save the configuration.
-    4. The developer token will be regenerated once the configuration is saved. Copy the token and paste into the prompt in the localhost test page. The token will be valid for an hour; return to the app configuration page to generate a new token.
-    5. For additional information about developing on the Box Platform, see the [Platform docs](https://developer.box.com/docs/box-ui-elements#section-using-the-box-ui-elements).
+   1. Developer tokens can be created at https://app.box.com/developers/console.
+   2. Select `Custom App` and choose `Oauth 2.0 with JWT (Server Authentication)`.
+   3. Select `View Your App` > `Configuration` > `CORS Domains` and add `http://localhost:8080` to the domain whitelist. Save the configuration.
+   4. The developer token will be regenerated once the configuration is saved. Copy the token and paste into the prompt in the localhost test page. The token will be valid for an hour; return to the app configuration page to generate a new token.
+   5. For additional information about developing on the Box Platform, see the [Platform docs](https://developer.box.com/docs/box-ui-elements#section-using-the-box-ui-elements).
 
 ## Unit Testing
 

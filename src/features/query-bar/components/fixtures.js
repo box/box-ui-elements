@@ -1,120 +1,96 @@
 // @flow
 import type { ColumnType, ConditionType } from '../flowTypes';
+import { EQUALS } from '../constants';
 
 const initialCondition: ConditionType = {
-    id: 0,
-    columnDisplayText: 'Contract Value',
-    columnKey: 'Contract Value',
-    operatorDisplayText: '',
-    operatorKey: null,
-    valueDisplayText: '',
-    valueKey: null,
-    valueType: 'string',
+    columnId: '3',
+    id: '0',
+    operator: EQUALS,
+    values: [],
 };
 
 const columnOptions = [
     {
         displayText: '$100',
-        type: 'enum',
         value: '$100',
     },
 ];
 
 const conditions: Array<ConditionType> = [initialCondition];
 
+const columnWithStringType = {
+    displayName: 'Hullo Thar',
+    id: '1',
+    isShown: true,
+    options: null,
+    property: 'name',
+    source: 'item',
+    type: 'string',
+};
+
+const columnWithDateType = {
+    displayName: 'Last Updated',
+    id: '2',
+    isShown: true,
+    options: null,
+    property: 'lastUpdatedByName',
+    source: 'item',
+    type: 'date',
+};
+
+const columnWithEnumType = {
+    displayName: 'Contract Value',
+    id: '3',
+    isShown: true,
+    property: 'contractValue',
+    source: 'metadata',
+    type: 'enum',
+    options: [
+        {
+            id: '',
+            key: '$100',
+        },
+    ],
+};
+
+const columnWithMultiEnumType = {
+    displayName: 'Offices',
+    id: '4',
+    isShown: true,
+    property: 'offices',
+    source: 'metadata',
+    type: 'multi-enum',
+    options: [
+        {
+            id: '',
+            key: 'Office A',
+        },
+        {
+            id: '1',
+            key: 'Office B',
+        },
+    ],
+};
+
 const columns: Array<ColumnType> = [
-    {
-        displayName: 'Hullo Thar',
-        id: '1',
-        isShown: true,
-        options: null,
-        property: 'name',
-        source: 'item',
-        type: 'string',
-    },
-    {
-        displayName: 'Last Updated',
-        id: '2',
-        isShown: true,
-        options: null,
-        property: 'lastUpdatedByName',
-        source: 'item',
-        type: 'string',
-    },
-    {
-        displayName: 'Contract Value',
-        id: '3',
-        isShown: true,
-        property: 'contractValue',
-        source: 'metadata',
-        type: 'enum',
-        options: [
-            {
-                id: '',
-                key: '$100',
-            },
-        ],
-    },
+    columnWithStringType,
+    columnWithDateType,
+    columnWithEnumType,
+    columnWithMultiEnumType,
 ];
 
 const columnsWithNewOrder: Array<ColumnType> = [
-    {
-        displayName: 'Last Updated',
-        id: '2',
-        isShown: true,
-        options: null,
-        property: 'lastUpdatedByName',
-        source: 'item',
-        type: 'string',
-    },
-    {
-        displayName: 'Hullo Thar',
-        id: '1',
-        isShown: true,
-        options: null,
-        property: 'name',
-        source: 'item',
-        type: 'string',
-    },
-    {
-        displayName: 'Contract Value',
-        id: '3',
-        isShown: true,
-        options: [{ id: '', key: '$100' }],
-        property: 'contractValue',
-        source: 'metadata',
-        type: 'enum',
-    },
+    columnWithDateType,
+    columnWithStringType,
+    columnWithEnumType,
+    columnWithMultiEnumType,
 ];
 
 const columnsWithOneColumnNotShown: Array<ColumnType> = [
-    {
-        displayName: 'Hullo Thar',
-        id: '1',
-        isShown: false,
-        options: null,
-        property: 'name',
-        source: 'item',
-        type: 'string',
-    },
-    {
-        displayName: 'Last Updated',
-        id: '2',
-        isShown: true,
-        options: null,
-        property: 'lastUpdatedByName',
-        source: 'item',
-        type: 'string',
-    },
-    {
-        displayName: 'Contract Value',
-        id: '3',
-        isShown: true,
-        options: [{ id: '', key: '$100' }],
-        property: 'contractValue',
-        source: 'metadata',
-        type: 'enum',
-    },
+    { ...columnWithStringType, isShown: false },
+    columnWithDateType,
+    columnWithEnumType,
+    columnWithMultiEnumType,
 ];
 
 const expectedVisibleColumns = {

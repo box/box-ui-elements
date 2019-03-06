@@ -5,16 +5,18 @@
  */
 
 import * as React from 'react';
+import classNames from 'classnames';
 import './SidebarContent.scss';
 
 type Props = {
     actions?: React.Node,
     children: any,
+    className?: string,
     title: React.Node,
 };
 
-const SidebarContent = ({ actions, title, children }: Props) => (
-    <div className="bcs-content" data-testid="bcs-content">
+const SidebarContent = ({ actions, children, className, title }: Props) => (
+    <div className={classNames('bcs-content', className)} data-testid="bcs-content">
         <div className="bcs-content-header">
             <h3 className="bcs-title">{title}</h3>
             {actions}

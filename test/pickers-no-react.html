@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Box Content Picker Test Page</title>
         <style>
             body,
@@ -66,7 +66,10 @@
             <div class="folderPicker1"></div>
         </div>
         <div class="container">
-            <h1>File Picker (max 3 items / token generator / only 'pdf', 'doc', 'docx', 'ppt', 'pptx') Cannot upload or create</h1>
+            <h1>
+                File Picker (max 3 items / token generator / only 'pdf', 'doc', 'docx', 'ppt', 'pptx') Cannot upload or
+                create
+            </h1>
             <div class="filePicker2"></div>
         </div>
         <div class="container">
@@ -81,23 +84,23 @@
                 const { FilePicker, FolderPicker } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
-                const currentFolderId = document.querySelector('.currentFolder').value || localStorage.getItem('currentFolder');
+                const currentFolderId =
+                    document.querySelector('.currentFolder').value || localStorage.getItem('currentFolder');
 
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
 
-
-                const tokenGenerator1 = (id) => {
+                const tokenGenerator1 = id => {
                     if (id === `folder_${folderId}`) {
                         return Promise.resolve(token);
                     } else {
-                        return Promise.reject()
+                        return Promise.reject();
                     }
                 };
 
                 const filePicker1 = new FilePicker();
                 document.querySelector('.filePicker1').innerHTML = '';
-                filePicker1.addListener('choose', (data) => {
+                filePicker1.addListener('choose', data => {
                     alert('Choose pressed on File Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -113,16 +116,13 @@
                     sortDirection: 'DESC',
                     chooseButtonLabel: 'add',
                     cancelButtonLabel: 'X',
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                 });
                 window.fp = filePicker1;
 
-
-
-
                 const filePicker2 = new FilePicker();
                 document.querySelector('.filePicker2').innerHTML = '';
-                filePicker2.addListener('choose', (data) => {
+                filePicker2.addListener('choose', data => {
                     alert('Choose pressed on File Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -137,15 +137,12 @@
                     maxSelectable: 3,
                     defaultView: 'recents',
                     canUpload: false,
-                    canCreateNewFolder: false
+                    canCreateNewFolder: false,
                 });
-
-
-
 
                 const folderPicker1 = new FolderPicker();
                 document.querySelector('.folderPicker1').innerHTML = '';
-                folderPicker1.addListener('choose', (data) => {
+                folderPicker1.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -155,15 +152,12 @@
                 });
                 folderPicker1.show(folderId, token, {
                     container: '.folderPicker1',
-                    canCreateNewFolder: false
+                    canCreateNewFolder: false,
                 });
-
-
-
 
                 const folderPicker2 = new FolderPicker();
                 document.querySelector('.folderPicker2').innerHTML = '';
-                folderPicker2.addListener('choose', (data) => {
+                folderPicker2.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -175,7 +169,7 @@
                     container: '.folderPicker2',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                     maxSelectable: 3,
-                    canUpload: false
+                    canUpload: false,
                 });
             }
             load();

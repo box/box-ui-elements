@@ -16,18 +16,20 @@ Following the following standards: [WAI-ARIA Menu](https://www.w3.org/TR/wai-ari
 ```js
 const Menu = require('box-ui-elements/es/components/menu').Menu;
 const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
-const MenuSeparator = require('box-ui-elements/es/components/menu').MenuSeparator;
+const MenuSeparator = require('box-ui-elements/es/components/menu')
+  .MenuSeparator;
 const MenuLinkItem = require('box-ui-elements/es/components/menu').MenuLinkItem;
-const MenuSectionHeader = require('box-ui-elements/es/components/menu').MenuSectionHeader;
+const MenuSectionHeader = require('box-ui-elements/es/components/menu')
+  .MenuSectionHeader;
 
 <Menu>
-    <MenuItem>View Profile</MenuItem>
-    <MenuItem showRadar>Help</MenuItem>
-    <MenuSeparator />
-    <MenuSectionHeader>Menu Section</MenuSectionHeader>
-    <MenuLinkItem>
-        <Link href="/#">Awesome Link</Link>
-    </MenuLinkItem>
+  <MenuItem>View Profile</MenuItem>
+  <MenuItem showRadar>Help</MenuItem>
+  <MenuSeparator />
+  <MenuSectionHeader>Menu Section</MenuSectionHeader>
+  <MenuLinkItem>
+    <Link href="/#">Awesome Link</Link>
+  </MenuLinkItem>
 </Menu>;
 ```
 
@@ -38,17 +40,17 @@ const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
 const SubmenuItem = require('box-ui-elements/es/components/menu').SubmenuItem;
 
 <div style={{ maxWidth: '220px' }}>
-    <Menu>
+  <Menu>
+    <MenuItem>View Profile</MenuItem>
+    <SubmenuItem>
+      Submenu
+      <Menu>
         <MenuItem>View Profile</MenuItem>
-        <SubmenuItem>
-            Submenu
-            <Menu>
-                <MenuItem>View Profile</MenuItem>
-                <MenuItem>Help</MenuItem>
-            </Menu>
-        </SubmenuItem>
         <MenuItem>Help</MenuItem>
-    </Menu>
+      </Menu>
+    </SubmenuItem>
+    <MenuItem>Help</MenuItem>
+  </Menu>
 </div>;
 ```
 
@@ -59,25 +61,26 @@ const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
 const SubmenuItem = require('box-ui-elements/es/components/menu').SubmenuItem;
 
 <div style={{ maxWidth: '220px' }}>
-    <Menu>
+  <Menu>
+    <MenuItem>View Profile</MenuItem>
+    <SubmenuItem>
+      Submenu
+      <Menu>
         <MenuItem>View Profile</MenuItem>
-        <SubmenuItem>
-            Submenu
-            <Menu>
-                <MenuItem>View Profile</MenuItem>
-                <MenuItem>Help</MenuItem>
-                <MenuItem>Help</MenuItem>
-            </Menu>
-        </SubmenuItem>
         <MenuItem>Help</MenuItem>
-    </Menu>
+        <MenuItem>Help</MenuItem>
+      </Menu>
+    </SubmenuItem>
+    <MenuItem>Help</MenuItem>
+  </Menu>
 </div>;
 ```
 
 **Submenu with rightBoundaryElement**
 
 ```js
-const SubmenuWithBoundariesElementExample = require('examples').SubmenuWithBoundariesElementExample;
+const SubmenuWithBoundariesElementExample = require('examples')
+  .SubmenuWithBoundariesElementExample;
 
 <SubmenuWithBoundariesElementExample />;
 ```
@@ -107,43 +110,43 @@ const Menu = require('box-ui-elements/es/components/menu').Menu;
 const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
 
 class MenuWithChildOnResize extends React.Component {
-    constructor() {
-        super();
-        this.state = { isLargeMenu: false };
-        this.setVisibility = this.setVisibility.bind(this);
-    }
+  constructor() {
+    super();
+    this.state = { isLargeMenu: false };
+    this.setVisibility = this.setVisibility.bind(this);
+  }
 
-    componentDidMount() {
-        window.addEventListener('resize', this.setVisibility);
-    }
+  componentDidMount() {
+    window.addEventListener('resize', this.setVisibility);
+  }
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.setVisibility);
-    }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.setVisibility);
+  }
 
-    setVisibility() {
-        if (window.innerWidth < 700 && !this.state.isLargeMenu) {
-            this.setState({ isLargeMenu: true });
-        }
+  setVisibility() {
+    if (window.innerWidth < 700 && !this.state.isLargeMenu) {
+      this.setState({ isLargeMenu: true });
     }
+  }
 
-    render() {
-        return (
-            <Menu>
-                <MenuItem>View Profile</MenuItem>
-                <MenuItem>Help</MenuItem>
-                {this.state.isLargeMenu && <MenuItem>Visible on Resize</MenuItem>}
-                <MenuItem>Last Item</MenuItem>
-            </Menu>
-        );
-    }
+  render() {
+    return (
+      <Menu>
+        <MenuItem>View Profile</MenuItem>
+        <MenuItem>Help</MenuItem>
+        {this.state.isLargeMenu && <MenuItem>Visible on Resize</MenuItem>}
+        <MenuItem>Last Item</MenuItem>
+      </Menu>
+    );
+  }
 }
 <MenuWithChildOnResize />;
 ```
 
 ### Possible Enhancements (not planned yet)
 
--   Jump to option via keyboard (i.e. 'a' jumps to first option that starts with 'a')
--   Menu with checkbox - role="menuitemcheckbox"
--   Menu with radio buttons - role="menuitemradio"
--   Menu Navigation Bars (we don't have any instances of this though) - role="menubar"
+- Jump to option via keyboard (i.e. 'a' jumps to first option that starts with 'a')
+- Menu with checkbox - role="menuitemcheckbox"
+- Menu with radio buttons - role="menuitemradio"
+- Menu Navigation Bars (we don't have any instances of this though) - role="menubar"

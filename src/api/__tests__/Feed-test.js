@@ -1,8 +1,65 @@
 import messages from '../../elements/common/messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
-import { IS_ERROR_DISPLAYED } from '../../constants';
+import { IS_ERROR_DISPLAYED, TASK_NEW_INCOMPLETE } from '../../constants';
 import Feed from '../Feed';
+
+const mockTaskNew = {
+    created_by: {
+        type: 'task_collaborator',
+        target: { name: 'Jay-Z', id: '100' },
+        id: '000',
+        role: 'CREATOR',
+        status: TASK_NEW_INCOMPLETE,
+    },
+    created_at: '2019-01-01',
+    due_at: '2019-02-02',
+    id: '0',
+    name: 'task message',
+    type: 'task',
+    assigned_to: {
+        entries: [
+            {
+                id: '1',
+                target: { name: 'Beyonce', id: '2', avatar_url: '', type: 'user' },
+                status: 'NOT_STARTED',
+                permissions: {
+                    can_delete: false,
+                    can_update: false,
+                },
+                role: 'ASSIGNEE',
+                type: 'task_collaborator',
+            },
+        ],
+        limit: 10,
+        next_marker: null,
+    },
+    permissions: {
+        can_update: false,
+        can_delete: false,
+        can_create_task_collaborator: false,
+        can_create_task_link: false,
+    },
+    task_links: {
+        entries: [
+            {
+                id: '03',
+                type: 'task_link',
+                target: {
+                    type: 'file',
+                    id: '4',
+                },
+                permissions: {
+                    can_delete: false,
+                    can_update: false,
+                },
+            },
+        ],
+        limit: 1,
+        next_marker: null,
+    },
+    status: TASK_NEW_INCOMPLETE,
+};
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
@@ -52,6 +109,62 @@ jest.mock('../Tasks', () => {
         }),
     }));
 });
+
+jest.mock('../TasksNew', () => {
+    const task = mockTaskNew;
+    return jest.fn().mockImplementation(() => ({
+        createTask: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+        updateTask: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+        deleteTask: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+        getTasksForFile: jest.fn().mockReturnValue({ entries: [task], next_marker: null, limit: 1000 }),
+        getTask: jest.fn().mockReturnValue(task),
+    }));
+});
+
+jest.mock('../TaskCollaborators', () =>
+    jest.fn().mockImplementation(() => ({
+        createTaskCollaborator: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+        updateTaskCollaborator: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+        deleteTaskCollaborator: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+        getTaskCollaborators: jest.fn().mockReturnValue({
+            entries: [
+                {
+                    id: '1',
+                    target: { name: 'Beyonce', id: '2', avatar_url: '', type: 'user' },
+                    status: 'NOT_STARTED',
+                    permissions: {
+                        can_delete: false,
+                        can_update: false,
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                },
+            ],
+            next_marker: null,
+            limit: 1000,
+        }),
+    })),
+);
+
+jest.mock('../TaskLinks', () =>
+    jest.fn().mockImplementation(() => ({
+        createTaskLink: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+    })),
+);
 
 jest.mock('../TaskAssignments', () =>
     jest.fn().mockImplementation(() => ({
@@ -189,6 +302,11 @@ describe('api/Feed', () => {
             },
         ],
     };
+    const tasksNew = {
+        entries: [mockTaskNew],
+        limit: 1000,
+        next_marker: null,
+    };
     const first_version = {
         action: 'upload',
         type: 'file_version',
@@ -219,7 +337,8 @@ describe('api/Feed', () => {
         entries: [MOCK_APP_ACTIVITY_ITEM],
     };
 
-    const feedItems = [...comments.entries, ...tasks.entries, ...versions.entries, appActivities.entries];
+    const feedItems = [...comments.entries, ...tasks.entries, ...versions.entries, ...appActivities.entries];
+    const feedItemsNew = [...comments.entries, ...tasksNew.entries, ...versions.entries, ...appActivities.entries];
 
     const file = {
         id: '12345',
@@ -303,6 +422,7 @@ describe('api/Feed', () => {
         beforeEach(() => {
             feed.fetchVersions = jest.fn().mockResolvedValue(versions);
             feed.fetchTasks = jest.fn().mockResolvedValue(tasks);
+            feed.fetchTasksNew = jest.fn().mockResolvedValue(tasksNew);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
             feed.addCurrentVersion = jest.fn().mockReturnValue(versions);
             feed.setCachedItems = jest.fn();
@@ -335,6 +455,15 @@ describe('api/Feed', () => {
             feed.feedItems(file, false, successCb, errorCb);
             setImmediate(() => {
                 expect(errorCb).toHaveBeenCalledWith(sortedItems);
+                done();
+            });
+        });
+
+        test('should use the new task api if 6th arg is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, true);
+            setImmediate(() => {
+                expect(feed.fetchTasksNew).toHaveBeenCalled();
+                expect(feed.fetchTasks).not.toHaveBeenCalled();
                 done();
             });
         });
@@ -417,11 +546,23 @@ describe('api/Feed', () => {
         beforeEach(() => {
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
-
+      
         test('should return a promise and call the app activity api', () => {
             const activityItems = feed.fetchAppActivity();
             expect(activityItems instanceof Promise).toBeTruthy();
             expect(feed.appActivityAPI.getAppActivity).toBeCalled();
+        });
+    });
+
+    describe('fetchTasksNew()', () => {
+        beforeEach(() => {
+            feed.fetchFeedItemErrorCallback = jest.fn();
+        });
+
+        test('should return a promise and call the tasks api', () => {
+            const taskItems = feed.fetchTasksNew();
+            expect(taskItems instanceof Promise).toBeTruthy();
+            expect(feed.tasksNewAPI.getTasksForFile).toBeCalled();
         });
     });
 
@@ -466,6 +607,49 @@ describe('api/Feed', () => {
             expect(feed.updateFeedItem.mock.calls[0][0].task_assignment_collection.entries[0].status).toBe(
                 updatedState,
             );
+            expect(successCb).toBeCalled();
+        });
+    });
+
+    describe('updateTaskCollaborator()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+            feed.updateTaskCollaboratorSuccessCallback = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.updateTaskCollaborator({})).toThrow(fileError);
+        });
+        test('should call the tasks collaborators api and if successful, the success callback', () => {
+            feed.updateTaskCollaborator(file);
+            expect(feed.taskCollaboratorsAPI.length).toBe(1);
+            expect(feed.taskCollaboratorsAPI.pop().updateTaskCollaborator).toBeCalled();
+            expect(feed.updateTaskCollaboratorSuccessCallback).toBeCalled();
+        });
+    });
+
+    describe('updateTaskCollaboratorSuccessCallback()', () => {
+        beforeEach(() => {
+            feed.getCachedItems = jest.fn().mockReturnValue({
+                hasError: false,
+                items: feedItemsNew,
+            });
+            feed.updateFeedItem = jest.fn();
+        });
+
+        test('should update the resolution state and call the success callback', () => {
+            const updatedStatus = 'COMPLETED';
+            const successCb = jest.fn();
+            const taskId = mockTaskNew.id;
+            feed.updateTaskCollaboratorSuccessCallback(
+                taskId,
+                {
+                    ...tasksNew.entries[0].assigned_to.entries[0],
+                    status: updatedStatus,
+                },
+                successCb,
+            );
+            expect(feed.updateFeedItem.mock.calls[0][0].assigned_to.entries[0].status).toBe(updatedStatus);
             expect(successCb).toBeCalled();
         });
     });

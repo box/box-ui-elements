@@ -104,7 +104,7 @@ li {
 input,
 button,
 select,
-div[contentEditable="true"],
+div[contentEditable='true'],
 textarea {
     @include font-family;
 
