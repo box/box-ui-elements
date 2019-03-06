@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`feature/query-bar/components/filter/FilterButton render should render FilterButton when columns is empty 1`] = `
+exports[`feature/query-bar/components/filter/FilterButton render should render FilterButton when columns is non-empty 1`] = `
 <Flyout
   className="query-bar-filter-dropdown-flyout"
   closeOnClick={true}
@@ -21,7 +21,7 @@ exports[`feature/query-bar/components/filter/FilterButton render should render F
 >
   <Button
     className="query-bar-button"
-    isDisabled={true}
+    isDisabled={false}
     onClick={[Function]}
     type="button"
   >
@@ -45,7 +45,7 @@ exports[`feature/query-bar/components/filter/FilterButton render should render F
 </Flyout>
 `;
 
-exports[`feature/query-bar/components/filter/FilterButton render should render FilterButton when columns is not empty 1`] = `
+exports[`feature/query-bar/components/filter/FilterButton render should render FilterButton when columns is undefined 1`] = `
 <Flyout
   className="query-bar-filter-dropdown-flyout"
   closeOnClick={true}
@@ -66,7 +66,7 @@ exports[`feature/query-bar/components/filter/FilterButton render should render F
 >
   <Button
     className="query-bar-button"
-    isDisabled={false}
+    isDisabled={true}
     onClick={[Function]}
     type="button"
   >

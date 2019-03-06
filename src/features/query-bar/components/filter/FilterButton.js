@@ -25,7 +25,7 @@ type State = {
 };
 
 type Props = {
-    columns: Array<ColumnType>,
+    columns?: Array<ColumnType>,
     onFilterChange?: Function,
 };
 
@@ -67,7 +67,7 @@ class FilterButton extends React.Component<Props, State> {
     createCondition = () => {
         const conditionID = uniqueId();
         const { columns } = this.props;
-        if (columns.length > 0) {
+        if (columns && columns.length > 0) {
             const firstColumn = columns[0];
             const operator = COLUMN_OPERATORS[firstColumn.type][0].key;
 
@@ -239,7 +239,7 @@ class FilterButton extends React.Component<Props, State> {
 
         const buttonClasses = classNames('query-bar-button', numberOfAppliedConditions !== 0 ? 'is-active' : '');
 
-        const isFilterDisabled = columns.length === 0;
+        const isFilterDisabled = columns === undefined || columns.length === 0;
 
         return (
             <Flyout

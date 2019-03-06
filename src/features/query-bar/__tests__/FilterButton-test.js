@@ -11,12 +11,12 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     };
 
     describe('render', () => {
-        test('should render FilterButton when columns is empty', () => {
-            const wrapper = getWrapper({ columns: [] });
+        test('should render FilterButton when columns is undefined', () => {
+            const wrapper = getWrapper({ columns: undefined });
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render FilterButton when columns is not empty', () => {
+        test('should render FilterButton when columns is non-empty', () => {
             const wrapper = getWrapper({ columns });
             expect(wrapper).toMatchSnapshot();
         });
@@ -229,7 +229,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('createCondition()', () => {
-        test('Should return a condition object if columns has elements', () => {
+        test('Should return a condition object if columns is non-empty', () => {
             const wrapper = getWrapper({ columns });
             const conditionID = '11';
             const expected = {
