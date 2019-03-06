@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Open With Test Page</title>
         <style>
             .openwith {
@@ -30,7 +30,7 @@
         <script src="../dev/en-US/openwith.js"></script>
     </head>
     <body>
-        <div class='container'>
+        <div class="container">
             <div class="id-token-container-1">
                 <div>
                     <label>
@@ -46,40 +46,40 @@
                 <div class="openwith openwith1"></div>
             </div>
             <div class="id-token-container-2">
-                    <div>
-                        <label>
-                            <div>File Id</div>
-                            <input class="file" type="text" placeholder="Enter file id" />
-                        </label>
-                        <label>
-                            <div>Auth Token</div>
-                            <input class="token" type="text" placeholder="Enter auth token" />
-                        </label>
-                    </div>
-                    <button type="button" onclick="load(2)">Submit</button>
-                    <div class="openwith openwith2"></div>
+                <div>
+                    <label>
+                        <div>File Id</div>
+                        <input class="file" type="text" placeholder="Enter file id" />
+                    </label>
+                    <label>
+                        <div>Auth Token</div>
+                        <input class="token" type="text" placeholder="Enter auth token" />
+                    </label>
+                </div>
+                <button type="button" onclick="load(2)">Submit</button>
+                <div class="openwith openwith2"></div>
             </div>
             <div class="id-token-container-3">
-                    <div>
-                        <label>
-                            <div>File Id</div>
-                            <input class="file" type="text" placeholder="Enter file id" />
-                        </label>
-                        <label>
-                            <div>Auth Token</div>
-                            <input class="token" type="text" placeholder="Enter auth token" />
-                        </label>
-                    </div>
-                    <button type="button" onclick="load(3)">Submit</button>
-                    <div class="openwith openwith3"></div>
+                <div>
+                    <label>
+                        <div>File Id</div>
+                        <input class="file" type="text" placeholder="Enter file id" />
+                    </label>
+                    <label>
+                        <div>Auth Token</div>
+                        <input class="token" type="text" placeholder="Enter auth token" />
+                    </label>
+                </div>
+                <button type="button" onclick="load(3)">Submit</button>
+                <div class="openwith openwith3"></div>
             </div>
         </div>
         <script>
             function load(buttonNum) {
                 var ContentOpenWith = Box.ContentOpenWith;
                 var tokenNum = 'token' + buttonNum;
-                var fileNum = 'file' + buttonNum
-                var container = document.querySelector('.id-token-container-' + buttonNum); 
+                var fileNum = 'file' + buttonNum;
+                var container = document.querySelector('.id-token-container-' + buttonNum);
                 var token = container.querySelector('.token').value || localStorage.getItem(tokenNum);
                 var fileId = container.querySelector('.file').value || localStorage.getItem(fileNum);
                 if (!token || !fileId) {
@@ -95,7 +95,7 @@
                     console.log('executing app integration: ' + id);
                 });
 
-                openwith.addListener('error', function(error)  {
+                openwith.addListener('error', function(error) {
                     console.log(error);
                 });
 

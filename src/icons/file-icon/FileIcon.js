@@ -6,6 +6,7 @@ import IconFileBoxNote from '../file/IconFileBoxNote';
 import IconFileCode from '../file/IconFileCode';
 import IconFileDefault from '../file/IconFileDefault';
 import IconFileDocument from '../file/IconFileDocument';
+import IconFileDwg from '../file/IconFileDwg';
 import IconFileExcelSpreadsheet from '../file/IconFileExcelSpreadsheet';
 import IconFileGoogleDocs from '../file/IconFileGoogleDocs';
 import IconFileGoogleSheets from '../file/IconFileGoogleSheets';
@@ -34,6 +35,7 @@ const Components = {
     IconFileCode,
     IconFileDefault,
     IconFileDocument,
+    IconFileDwg,
     IconFileExcelSpreadsheet,
     IconFileGoogleDocs,
     IconFileGoogleSheets,
@@ -130,6 +132,7 @@ const EXTENSIONS = {
         'yaml',
     ]),
     IconFileDocument: mirror(['csv', 'dot', 'dotx', 'msg', 'odt', 'rtf', 'tsv', 'wpd', 'xhtml', 'xml', 'xsd', 'xsl']),
+    IconFileDwg: mirror(['dwg']),
     IconFileExcelSpreadsheet: mirror(['xls', 'xlsx', 'xlsm']),
     IconFileGoogleDocs: mirror(['gdoc']),
     IconFileGoogleSheets: mirror(['gsheet']),

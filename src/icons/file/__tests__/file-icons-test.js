@@ -4,6 +4,7 @@ import IconFileAudio from '../IconFileAudio';
 import IconFileBoxNote from '../IconFileBoxNote';
 import IconFileCode from '../IconFileCode';
 import IconFileDefault from '../IconFileDefault';
+import IconFileDwg from '../IconFileDwg';
 import IconFileDocument from '../IconFileDocument';
 import IconFileExcelSpreadsheet from '../IconFileExcelSpreadsheet';
 import IconFileGoogleDocs from '../IconFileGoogleDocs';
@@ -43,6 +44,9 @@ describe('icons/file/*', () => {
         },
         {
             IconComponent: IconFileDocument,
+        },
+        {
+            IconComponent: IconFileDwg,
         },
         {
             IconComponent: IconFileExcelSpreadsheet,
@@ -131,6 +135,9 @@ describe('icons/file/*', () => {
         },
         {
             IconComponent: IconFileDocument,
+        },
+        {
+            IconComponent: IconFileDwg,
         },
         {
             IconComponent: IconFileExcelSpreadsheet,
@@ -222,6 +229,9 @@ describe('icons/file/*', () => {
         },
         {
             IconComponent: IconFileDocument,
+        },
+        {
+            IconComponent: IconFileDwg,
         },
         {
             IconComponent: IconFileExcelSpreadsheet,

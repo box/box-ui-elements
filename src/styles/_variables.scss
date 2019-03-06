@@ -86,7 +86,7 @@ $tooltip-z-index: 190 !default;
 
 // Fonts
 @mixin font-family {
-    font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 @mixin font-aliasing {

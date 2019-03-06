@@ -6,6 +6,7 @@ import IconFileBoxNote from '../file/IconFileBoxNote';
 import IconFileCode from '../file/IconFileCode';
 import IconFileDefault from '../file/IconFileDefault';
 import IconFileDocument from '../file/IconFileDocument';
+import IconFileDwg from '../file/IconFileDwg';
 import IconFileExcelSpreadsheet from '../file/IconFileExcelSpreadsheet';
 import IconFileGoogleDocs from '../file/IconFileGoogleDocs';
 import IconFileGoogleSheets from '../file/IconFileGoogleSheets';
@@ -41,6 +42,7 @@ const itemIconTable = {
     code: IconFileCode,
     default: IconFileDefault,
     document: IconFileDocument,
+    dwg: IconFileDwg,
     'excel-spreadsheet': IconFileExcelSpreadsheet,
     'folder-collab': IconFolderCollab,
     'folder-external': IconFolderExternal,

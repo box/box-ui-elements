@@ -120,6 +120,24 @@ exports[`icons/file/* should correctly render icon 5`] = `
 
 exports[`icons/file/* should correctly render icon 6`] = `
 <AccessibleSVG
+  className="icon-file-dwg "
+  height={32}
+  viewBox="0 0 32 32"
+  width={32}
+>
+  <path
+    d="M20 4H7a1 1 0 0 0-1 1v22a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V9.89zm5 23H7V5h13v4a1 1 0 0 0 1 1h4z"
+    fill="#0696d7"
+  />
+  <path
+    d="M18 17v-2h-2v-4h-1v4h-2v2H9v1h4v2h2v4h1v-4h2v-2h4v-1zm-1 2h-3v-3h3z"
+    fill="#0696d7"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/file/* should correctly render icon 7`] = `
+<AccessibleSVG
   className="icon-file-excel-spreadsheet "
   height={32}
   viewBox="0 0 32 32"
@@ -140,7 +158,7 @@ exports[`icons/file/* should correctly render icon 6`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 7`] = `
+exports[`icons/file/* should correctly render icon 8`] = `
 <AccessibleSVG
   className="icon-file-google-docs "
   height={32}
@@ -162,7 +180,7 @@ exports[`icons/file/* should correctly render icon 7`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 8`] = `
+exports[`icons/file/* should correctly render icon 9`] = `
 <AccessibleSVG
   className="icon-file-google-sheets "
   height={32}
@@ -184,7 +202,7 @@ exports[`icons/file/* should correctly render icon 8`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 9`] = `
+exports[`icons/file/* should correctly render icon 10`] = `
 <AccessibleSVG
   className="icon-file-google-slides "
   height={32}
@@ -206,7 +224,7 @@ exports[`icons/file/* should correctly render icon 9`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 10`] = `
+exports[`icons/file/* should correctly render icon 11`] = `
 <AccessibleSVG
   className="icon-file-illustrator "
   height={32}
@@ -228,7 +246,7 @@ exports[`icons/file/* should correctly render icon 10`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 11`] = `
+exports[`icons/file/* should correctly render icon 12`] = `
 <AccessibleSVG
   className="icon-file-image "
   height={32}
@@ -250,7 +268,7 @@ exports[`icons/file/* should correctly render icon 11`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 12`] = `
+exports[`icons/file/* should correctly render icon 13`] = `
 <AccessibleSVG
   className="icon-file-indesign "
   height={32}
@@ -272,7 +290,7 @@ exports[`icons/file/* should correctly render icon 12`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 13`] = `
+exports[`icons/file/* should correctly render icon 14`] = `
 <AccessibleSVG
   className="icon-file-keynote "
   height={32}
@@ -294,7 +312,7 @@ exports[`icons/file/* should correctly render icon 13`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 14`] = `
+exports[`icons/file/* should correctly render icon 15`] = `
 <AccessibleSVG
   className="icon-file-numbers "
   height={32}
@@ -316,7 +334,7 @@ exports[`icons/file/* should correctly render icon 14`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 15`] = `
+exports[`icons/file/* should correctly render icon 16`] = `
 <AccessibleSVG
   className="icon-file-pages "
   height={32}
@@ -338,7 +356,7 @@ exports[`icons/file/* should correctly render icon 15`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 16`] = `
+exports[`icons/file/* should correctly render icon 17`] = `
 <AccessibleSVG
   className="icon-file-pdf "
   height={32}
@@ -360,7 +378,7 @@ exports[`icons/file/* should correctly render icon 16`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 17`] = `
+exports[`icons/file/* should correctly render icon 18`] = `
 <AccessibleSVG
   className="icon-file-photoshop "
   height={32}
@@ -382,7 +400,7 @@ exports[`icons/file/* should correctly render icon 17`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 18`] = `
+exports[`icons/file/* should correctly render icon 19`] = `
 <AccessibleSVG
   className="icon-file-powerpoint-presentation "
   height={32}
@@ -408,7 +426,7 @@ exports[`icons/file/* should correctly render icon 18`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 19`] = `
+exports[`icons/file/* should correctly render icon 20`] = `
 <AccessibleSVG
   className="icon-file-presentation "
   height={32}
@@ -430,7 +448,7 @@ exports[`icons/file/* should correctly render icon 19`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 20`] = `
+exports[`icons/file/* should correctly render icon 21`] = `
 <AccessibleSVG
   className="icon-file-spreadsheet "
   height={32}
@@ -452,7 +470,7 @@ exports[`icons/file/* should correctly render icon 20`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 21`] = `
+exports[`icons/file/* should correctly render icon 22`] = `
 <AccessibleSVG
   className="icon-file-text "
   height={32}
@@ -507,7 +525,7 @@ exports[`icons/file/* should correctly render icon 21`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 22`] = `
+exports[`icons/file/* should correctly render icon 23`] = `
 <AccessibleSVG
   className="icon-file-three-d "
   height={32}
@@ -539,7 +557,7 @@ exports[`icons/file/* should correctly render icon 22`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 23`] = `
+exports[`icons/file/* should correctly render icon 24`] = `
 <AccessibleSVG
   className="icon-file-vector "
   height={32}
@@ -575,7 +593,7 @@ exports[`icons/file/* should correctly render icon 23`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 24`] = `
+exports[`icons/file/* should correctly render icon 25`] = `
 <AccessibleSVG
   className="icon-file-video "
   height={32}
@@ -597,7 +615,7 @@ exports[`icons/file/* should correctly render icon 24`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 25`] = `
+exports[`icons/file/* should correctly render icon 26`] = `
 <AccessibleSVG
   className="icon-file-word-document "
   height={32}
@@ -619,7 +637,7 @@ exports[`icons/file/* should correctly render icon 25`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/file/* should correctly render icon 26`] = `
+exports[`icons/file/* should correctly render icon 27`] = `
 <AccessibleSVG
   className="icon-file-zip "
   height={32}

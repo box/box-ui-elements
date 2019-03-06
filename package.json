@@ -208,7 +208,7 @@
         "pikaday": "^1.7.0",
         "postcss-loader": "^3.0.0",
         "postcss-safe-parser": "^4.0.1",
-        "prettier": "^1.15.2",
+        "prettier": "^1.16.4",
         "prettier-eslint-cli": "^4.7.1",
         "prop-types": "^15.6.2",
         "properties-parser": "^0.3.1",

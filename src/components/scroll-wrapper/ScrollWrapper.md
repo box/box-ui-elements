@@ -10,30 +10,33 @@ There are two shadow styles: one that runs edge-to-edge (i.e., `cover`), and one
 
 ```js
 <div style={{ height: '500px' }}>
-    <ScrollWrapper>
-        <div
-            style={{
-                height: '600px',
-                backgroundColor: '#f0f0f0',
-            }}
-        >
-            <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime accusamus dolorum nostrum itaque ullam
-                tempora quam dolore adipisci atque velit, excepturi veniam? Nesciunt non facilis, quos odit aliquam
-                alias unde hic quidem exercitationem perspiciatis!
-            </p>
-            <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet sapiente ipsam, ipsum similique ea
-                nemo doloremque. Corporis excepturi eos impedit dicta quidem soluta culpa at delectus est, provident
-                vitae sed commodi inventore quaerat non labore consequatur nisi quisquam obcaecati, reprehenderit quas
-                dolore ipsa. Totam dolorem suscipit amet optio.
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo dicta cupiditate officiis temporibus
-                explicabo!
-            </p>
-        </div>
-    </ScrollWrapper>
+  <ScrollWrapper>
+    <div
+      style={{
+        height: '600px',
+        backgroundColor: '#f0f0f0',
+      }}
+    >
+      <p>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime
+        accusamus dolorum nostrum itaque ullam tempora quam dolore adipisci
+        atque velit, excepturi veniam? Nesciunt non facilis, quos odit aliquam
+        alias unde hic quidem exercitationem perspiciatis!
+      </p>
+      <p>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet
+        sapiente ipsam, ipsum similique ea nemo doloremque. Corporis excepturi
+        eos impedit dicta quidem soluta culpa at delectus est, provident vitae
+        sed commodi inventore quaerat non labore consequatur nisi quisquam
+        obcaecati, reprehenderit quas dolore ipsa. Totam dolorem suscipit amet
+        optio.
+      </p>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo dicta
+        cupiditate officiis temporibus explicabo!
+      </p>
+    </div>
+  </ScrollWrapper>
 </div>
 ```
 
@@ -41,26 +44,28 @@ There are two shadow styles: one that runs edge-to-edge (i.e., `cover`), and one
 
 ```js
 <ScrollWrapper>
-    <div
-        style={{
-            backgroundColor: '#f0f0f0',
-        }}
-    >
-        <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime accusamus dolorum nostrum itaque ullam
-            tempora quam dolore adipisci atque velit, excepturi veniam? Nesciunt non facilis, quos odit aliquam alias
-            unde hic quidem exercitationem perspiciatis!
-        </p>
-        <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet sapiente ipsam, ipsum similique ea nemo
-            doloremque. Corporis excepturi eos impedit dicta quidem soluta culpa at delectus est, provident vitae sed
-            commodi inventore quaerat non labore consequatur nisi quisquam obcaecati, reprehenderit quas dolore ipsa.
-            Totam dolorem suscipit amet optio.
-        </p>
-        <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo dicta cupiditate officiis temporibus
-            explicabo!
-        </p>
-    </div>
+  <div
+    style={{
+      backgroundColor: '#f0f0f0',
+    }}
+  >
+    <p>
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime accusamus
+      dolorum nostrum itaque ullam tempora quam dolore adipisci atque velit,
+      excepturi veniam? Nesciunt non facilis, quos odit aliquam alias unde hic
+      quidem exercitationem perspiciatis!
+    </p>
+    <p>
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet sapiente
+      ipsam, ipsum similique ea nemo doloremque. Corporis excepturi eos impedit
+      dicta quidem soluta culpa at delectus est, provident vitae sed commodi
+      inventore quaerat non labore consequatur nisi quisquam obcaecati,
+      reprehenderit quas dolore ipsa. Totam dolorem suscipit amet optio.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo dicta
+      cupiditate officiis temporibus explicabo!
+    </p>
+  </div>
 </ScrollWrapper>
 ```

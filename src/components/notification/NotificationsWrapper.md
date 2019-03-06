@@ -4,10 +4,10 @@
 
 For example, an application can use redux to implement notifications:
 
--   Notifications are stored in the redux store
--   To add a new notification, dispatch an action
--   The reducer would create a new notification and add that to its store
--   To remove a notification, dispatch an action
+- Notifications are stored in the redux store
+- To add a new notification, dispatch an action
+- The reducer would create a new notification and add that to its store
+- To remove a notification, dispatch an action
 
 ### Examples
 
