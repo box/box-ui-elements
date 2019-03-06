@@ -20,7 +20,7 @@ type Props = {
 
 const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props) => {
     const isValueSet = selectedValues.length > 0;
-    const value = isValueSet ? selectedValues[0] : null;
+    const value = isValueSet ? selectedValues[0] : '';
     const onInputChange = e => {
         return e.target.value !== '' ? onChange([e.target.value]) : onChange([]);
     };
