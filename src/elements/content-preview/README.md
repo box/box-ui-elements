@@ -1,7 +1,3 @@
-### Screenshot
-<img src="https://user-images.githubusercontent.com/1075325/27419184-596b485c-56d4-11e7-8d42-c65328089c95.png" style="border: 1px solid #e8e8e8" width="600" />
----
-
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-preview))
 ***IMPORTANT:*** The Content Preview UI Element works differently from the other UI Elements above. The React component is a wrapper for the [Preview library](https://developer.box.com/docs/box-content-preview). It also requires a langauge (defaults to en-US) to be passed in since the preview library bundles are localized. Providing a language will automatically pull in the corresponding preview.js bundle and dynamically load it by adding a script tag. It will also dynamically load the additional required preview.css file by adding a link tag.
 
@@ -10,12 +6,29 @@ var ContentPreview = require('./ContentPreview').default;
 
 <IntlProvider locale="en" textComponent={React.Fragment}>
     <ContentPreview
+        contentSidebarProps={{
+            hasActivityFeed: true,
+            hasSkills: true,
+            hasMetadata: true,
+            detailsSidebarProps: {
+                hasAccessStats: true,
+                hasClassification: true,
+                hasNotices: true,
+                hasProperties: true,
+                hasRetentionPolicy: true,
+                hasVersions: true,
+            },
+        }}
         features={FEATURES}
         fileId={FILE_ID}
         token={TOKEN}
     />
 </IntlProvider>
 ```
+
+### Screenshot
+<img src="https://user-images.githubusercontent.com/1075325/27419184-596b485c-56d4-11e7-8d42-c65328089c95.png" style="border: 1px solid #e8e8e8" width="600" />
+---
 
 ### Props
 | Prop | Type | Default | Description |

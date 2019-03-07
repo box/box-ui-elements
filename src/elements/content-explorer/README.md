@@ -1,7 +1,3 @@
-### Screenshot
-<img src="https://user-images.githubusercontent.com/1075325/27887154-092a232a-6194-11e7-82f4-697331ac5cbe.png" style="border: 1px solid #e8e8e8" style="border: 1px solid #e8e8e8" width="600" />
----
-
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-explorer))
 ```jsx
 var ContentExplorer = require('./ContentExplorer').default;
@@ -29,6 +25,10 @@ var ContentExplorer = require('./ContentExplorer').default;
     />
 </IntlProvider>
 ```
+
+### Screenshot
+<img src="https://user-images.githubusercontent.com/1075325/27887154-092a232a-6194-11e7-82f4-697331ac5cbe.png" style="border: 1px solid #e8e8e8" style="border: 1px solid #e8e8e8" width="600" />
+---
 
 ### Props
 | Prop | Type | Default | Description |
