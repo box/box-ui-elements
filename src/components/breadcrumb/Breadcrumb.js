@@ -1,9 +1,11 @@
 // @flow
 import * as React from 'react';
+import { injectIntl } from 'react-intl';
 
 import { MenuLinkItem } from '../menu';
 import EllipsisCrumb from './EllipsisCrumb';
 import Crumb from './Crumb';
+import messages from './messages';
 
 import './Breadcrumb.scss';
 
@@ -45,16 +47,15 @@ type Props = {
     children: React.Node,
     /** Breadcrumb contents */
     className?: string,
-    /** Aria label (should be a translation of "Breadcrumb") */
-    label: string,
     /** Number of crumbs to show before they collapse into an ellipsis */
     threshold?: number,
-};
+} & InjectIntlProvidedProps;
 
-const Breadcrumb = ({ className = '', label, threshold = 4, children }: Props) => (
-    <nav aria-label={label} className={`breadcrumbs ${className}`}>
+const Breadcrumb = ({ className = '', intl, threshold = 4, children }: Props) => (
+    <nav aria-label={intl.formatMessage(messages.breadcrumbLabel)} className={`breadcrumbs ${className}`}>
         <ol>{renderBreadcrumbs(React.Children.toArray(children), threshold)}</ol>
     </nav>
 );
 
-export default Breadcrumb;
+export { Breadcrumb as BreadcrumbCore };
+export default injectIntl(Breadcrumb);
