@@ -4,11 +4,14 @@ exports[`elements/content-sidebar/AdditionalTabs should render the correct numbe
 <div
   className="bcs-nav-additional-tabs"
 >
+  <AdditionalTabsLoading />
   <AdditionalTab
     callback={[MockFunction]}
     iconUrl="https://foo.com/icon"
     id={200}
+    isLoading={true}
     key="200"
+    onImageLoad={[Function]}
     status="ADDED"
     title="Test title"
   />
@@ -16,7 +19,9 @@ exports[`elements/content-sidebar/AdditionalTabs should render the correct numbe
     callback={[MockFunction]}
     iconUrl="https://foo.com/icon"
     id={1}
+    isLoading={true}
     key="1"
+    onImageLoad={[Function]}
     status="ADDED"
     title="Another title"
   />

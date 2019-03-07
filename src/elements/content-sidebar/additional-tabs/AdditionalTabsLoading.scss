@@ -11,16 +11,18 @@
     width: 59px; // 1px for left border
 }
 
-$fade-in-time: .5s;
+$fade-in-time: 0s;
 
 .bcs-additional-tab-loading-content {
-    @include loading-pulse(#f4f4f4, #f1f1f1, $fade-in-time);
+    @include loading-pulse(#f4f4f4, #eee, $fade-in-time);
 
     border-radius: 5px;
 }
 
-.bcs-additional-tab-more-icon .fill-color {
+.bcs-additional-tab-more-loading-icon {
     @include fade-in($fade-in-time);
 
-    background-color: #f1f1f1;
+    .fill-color {
+        fill: #eee;
+    }
 }

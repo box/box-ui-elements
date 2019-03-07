@@ -6,7 +6,7 @@ exports[`elements/content-sidebar/AdditionalTab should render the more icon elli
   text="test title"
 >
   <PlainButton
-    className="bcs-additional-tab-btn bcs-nav-btn"
+    className="bcs-nav-btn"
     onClick={[Function]}
     type="button"
   >
@@ -23,7 +23,7 @@ exports[`elements/content-sidebar/AdditionalTab should render the tooltip and bu
   text="test title"
 >
   <PlainButton
-    className="bcs-additional-tab-btn bcs-nav-btn"
+    className="bcs-nav-btn"
     onClick={[Function]}
     type="button"
   >

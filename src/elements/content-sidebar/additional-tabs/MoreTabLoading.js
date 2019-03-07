@@ -6,7 +6,7 @@ import IconEllipsis from '../../../icons/general/IconEllipsis';
 const MoreTabLoading = () => {
     return (
         <PlainButton className="bcs-additional-tab-loading-btn" type="button" isDisabled>
-            <IconEllipsis className="bcs-additional-tab-more-icon" />
+            <IconEllipsis className="bcs-additional-tab-more-loading-icon" />
         </PlainButton>
     );
 };

@@ -9,7 +9,7 @@
 }
 
 @mixin fade-in($fade-in-time) {
-    animation: fade-in $fade-in-time ease-in;
+    animation: fade-in ease-in $fade-in-time;
 }
 
 @mixin loading-pulse($start-color, $end-color, $fade-in-time) {
@@ -23,5 +23,5 @@
         }
     }
 
-    animation: loading-pulse .5s infinite ease-in-out .2s alternate, fade-in $fade-in-time ease-in;
+    animation: loading-pulse .5s ease-in-out infinite alternate, fade-in $fade-in-time ease-in;
 }
