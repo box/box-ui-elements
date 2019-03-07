@@ -206,14 +206,13 @@ class Feed extends Base {
     /**
      * Fetches the versions for a file
      *
-     * @param {string} fileId - the file id
      * @return {Promise} - the file versions
      */
-    fetchVersions(fileId: string = this.id): Promise<?FileVersions> {
+    fetchVersions(): Promise<?FileVersions> {
         this.versionsAPI = new VersionsAPI(this.options);
 
         return new Promise(resolve => {
-            this.versionsAPI.getVersions(fileId, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
+            this.versionsAPI.getVersions(this.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
         });
     }
 
