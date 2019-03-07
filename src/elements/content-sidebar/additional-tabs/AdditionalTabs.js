@@ -1,16 +1,17 @@
 /**
  * @flow
- * @file Preview sidebar additional tabs components
+ * @file Preview sidebar additional tabs component
  * @author Box
  */
 
 import React, { PureComponent } from 'react';
 import AdditionalTab from './AdditionalTab';
 import AdditionalTabsLoading from './AdditionalTabsLoading';
+
 import './AdditionalTabs.scss';
 
 type Props = {
-    tabs: ?AdditionalSidebarTabs,
+    tabs: ?Array<AdditionalSidebarTab>,
 };
 
 type State = {
@@ -18,28 +19,42 @@ type State = {
 };
 
 class AdditionalTabs extends PureComponent<Props, State> {
+    numLoadedTabs: number = 0;
+
     initialState: State = {
         isLoading: true,
     };
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
-
-        this.numLoadedTabs = 0;
 
         this.state = { ...this.initialState };
     }
 
+    componentDidUpdate() {
+        const { tabs } = this.props;
+
+        if (tabs) {
+            // If we're displaying the more options tab, consider it loaded since it doesn't use an image.
+            const hasMoreTab = tabs.find(tab => tab.id < 0 && !tab.iconUrl);
+            const moreTabCount = hasMoreTab ? 1 : 0;
+
+            this.numLoadedTabs += moreTabCount;
+        }
+    }
+
+    /**
+     * Handles individual icon image load
+     *
+     * @return {void}
+     */
     onImageLoad = () => {
         const { tabs } = this.props;
 
+        const numTabs = tabs ? tabs.length : 0;
         this.numLoadedTabs += 1;
 
-        // If we're displaying the more tab, consider it loaded.
-        const hasMoreTab = tabs.find(tab => tab.id < 0 && !tab.iconUrl);
-        const moreTabCount = hasMoreTab ? 1 : 0;
-
-        if (this.numLoadedTabs === tabs.length - moreTabCount) {
+        if (this.numLoadedTabs === numTabs) {
             this.setState({
                 isLoading: false,
             });

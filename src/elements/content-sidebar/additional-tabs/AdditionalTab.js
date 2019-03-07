@@ -13,21 +13,19 @@ import IconEllipsis from '../../../icons/general/IconEllipsis';
 
 import './AdditionalTab.scss';
 
-const AdditionalTab = ({
-    callback: callbackFn = noop,
-    iconUrl,
-    id,
-    isLoading,
-    onImageLoad,
-    title,
-    ...rest
-}: AdditionalSidebarTab) => {
-    const className = classNames('bcs-nav-btn', isLoading ? 'is-hidden' : '');
+type Props = {
+    isLoading: boolean,
+    onImageLoad: () => void,
+    ...AdditionalSidebarTab,
+};
+
+const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, isLoading, onImageLoad, title, ...rest }: Props) => {
+    const className = classNames('bcs-nav-btn', { 'is-hidden': isLoading });
 
     return (
         <Tooltip position="middle-left" text={title}>
             <PlainButton className={className} type="button" onClick={() => callbackFn({ id, callbackData: rest })}>
-                {id > 0 && iconUrl ? (
+                {id && id > 0 && iconUrl ? (
                     <img className="bcs-additional-tab-icon" src={iconUrl} onLoad={onImageLoad} alt={title} />
                 ) : (
                     <IconEllipsis className="bcs-additional-tab-more-icon" />

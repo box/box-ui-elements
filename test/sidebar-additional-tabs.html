@@ -58,7 +58,7 @@
 
             const blob = new Blob([svg], { type: 'image/svg+xml' });
             // Used to simulate an icon URL coming back from the server
-            const url = 'https://foo.com'; //URL.createObjectURL(blob);
+            const url = URL.createObjectURL(blob);
 
             const tabData = [
                 {

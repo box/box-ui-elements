@@ -1,11 +1,16 @@
+/**
+ * @flow
+ * @file Preview sidebar additional tab loading component
+ * @author Box
+ */
+
 import * as React from 'react';
-import PlainButton from '../../../components/plain-button/PlainButton';
 
 const AdditionalTabLoading = () => {
     return (
-        <PlainButton className="bcs-additional-tab-loading-btn" type="button" isDisabled>
+        <div className="bcs-additional-tab-loading-item">
             <div className="bcs-additional-tab-icon bcs-additional-tab-loading-content" />
-        </PlainButton>
+        </div>
     );
 };
 

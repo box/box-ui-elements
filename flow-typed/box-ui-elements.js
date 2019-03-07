@@ -805,21 +805,12 @@ type Integration = {
 };
 
 type AdditionalSidebarTab = {
-<<<<<<< HEAD
     callback: (callbackData: Object) => void,
-=======
-    callback: (id: number, callbackData: Object) => void,
->>>>>>> feat(content-sidebar): Loading state for additional sidebar tabs
     iconUrl?: string,
     id: number,
     title: ?string,
 };
 
-<<<<<<< HEAD
-=======
-type AdditionalSidebarTabs = Array<AdditionalSidebarTab>;
-
->>>>>>> feat(content-sidebar): Loading state for additional sidebar tabs
 type Alignment = 'left' | 'right';
 
 type SidebarView =

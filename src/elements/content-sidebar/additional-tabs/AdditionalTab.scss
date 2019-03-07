@@ -1,9 +1,9 @@
 @import '../../../styles/variables';
-@import '../../common/_animations';
+@import '../../../styles/common/_animations';
 
 .bcs-additional-tab-icon,
 .bcs-additional-tab-more-icon {
-    @include fade-in(.5s);
+    @include bdl-fadeIn(.5s);
 
     height: 24px;
     width: 24px;

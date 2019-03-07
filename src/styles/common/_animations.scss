@@ -8,11 +8,11 @@
     }
 }
 
-@mixin fade-in($fade-in-time) {
+@mixin bdl-fadeIn($fade-in-time) {
     animation: fade-in ease-in $fade-in-time;
 }
 
-@mixin loading-pulse($start-color, $end-color, $fade-in-time) {
+@mixin bdl-loadingPulse($start-color, $end-color, $fade-in-time) {
     @keyframes loading-pulse {
         0% {
             background-color: $start-color;

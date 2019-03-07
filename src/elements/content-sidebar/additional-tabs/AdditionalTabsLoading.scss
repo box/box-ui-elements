@@ -1,6 +1,7 @@
-@import '../../common/_animations.scss';
+@import '../../../styles/variables';
+@import '../../../styles/common/animations.scss';
 
-.bcs-additional-tab-loading-btn {
+.bcs-additional-tab-loading-item {
     align-items: center;
     background-color: transparent;
     display: flex;
@@ -11,16 +12,16 @@
     width: 59px; // 1px for left border
 }
 
-$fade-in-time: 0s;
+$additional-tabs-fade-in-time: 0s;
 
 .bcs-additional-tab-loading-content {
-    @include loading-pulse(#f4f4f4, #eee, $fade-in-time);
+    @include bdl-loadingPulse(#f4f4f4, $eees, $additional-tabs-fade-in-time);
 
     border-radius: 5px;
 }
 
 .bcs-additional-tab-more-loading-icon {
-    @include fade-in($fade-in-time);
+    @include bdl-fadeIn($additional-tabs-fade-in-time);
 
     .fill-color {
         fill: #eee;

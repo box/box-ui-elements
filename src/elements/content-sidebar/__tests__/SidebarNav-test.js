@@ -5,7 +5,6 @@ import IconMagicWand from '../../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../../icons/general/IconMetadataThick';
 import IconDocInfo from '../../../icons/general/IconDocInfo';
 import IconChatRound from '../../../icons/general/IconChatRound';
-import AdditionalTabs from '../additional-tabs/AdditionalTabs';
 import SidebarNavButton from '../SidebarNavButton';
 import SidebarNav from '../SidebarNav';
 
@@ -87,7 +86,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
             additionalTabs: [],
         };
         const wrapper = getWrapper(props);
-        expect(wrapper.find(AdditionalTabs)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 });
