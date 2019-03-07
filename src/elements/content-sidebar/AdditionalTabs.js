@@ -12,7 +12,7 @@ type Props = {
     tabs: AdditionalTabs,
 };
 
-const AdditionalSidebarTabs = ({ tabs }: Props) => {
+const AdditionalSidebarTabs: React.StatelessFunctionalComponent<Props> = ({ tabs }: Props) => {
     const sidebarTabs = tabs.map(tabData => <AdditionalTab key={tabData.id} {...tabData} />);
     return <div className="bcs-nav-additional-tabs">{sidebarTabs}</div>;
 };

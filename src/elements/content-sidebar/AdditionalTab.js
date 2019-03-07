@@ -12,13 +12,13 @@ import IconEllipsis from '../../icons/general/IconEllipsis';
 
 import './AdditionalTab.scss';
 
-const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, title, ...rest }: AdditionalTab) => {
+const AdditionalTabComponent = ({ callback: callbackFn = noop, iconUrl, id, title, ...rest }: AdditionalTab) => {
     return (
         <Tooltip position="middle-left" text={title}>
             <PlainButton
                 className="bcs-additional-tab-btn bcs-nav-btn"
                 type="button"
-                onClick={() => callbackFn({ id, callbackData: rest })}
+                onClick={() => callbackFn(id, { callbackData: rest })}
             >
                 {id > 0 && iconUrl ? (
                     <img className="bcs-additional-tab-icon" src={iconUrl} alt={title} />
@@ -30,4 +30,4 @@ const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, title, ...res
     );
 };
 
-export default AdditionalTab;
+export default AdditionalTabComponent;
