@@ -115,12 +115,14 @@ $tooltip-z-index: 190 !default;
 }
 
 // Common typography
+$bdl-line-height: 20px;
+
 @mixin common-typography {
     @include fonts;
 
     color: $better-black;
     letter-spacing: .01em;
-    line-height: 20px;
+    line-height: $bdl-line-height;
 }
 
 // Borders
