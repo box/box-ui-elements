@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Box File Picker Test Page</title>
         <style>
             body,
@@ -72,7 +72,10 @@
             <div class="folderPicker1"></div>
         </div>
         <div class="container">
-            <h1>File Picker (max 1 items / token generator / no share access / only 'png', pdf', 'doc', 'docx', 'ppt', 'pptx')</h1>
+            <h1>
+                File Picker (max 1 items / token generator / no share access / only 'png', pdf', 'doc', 'docx', 'ppt',
+                'pptx')
+            </h1>
             <div class="filePicker2"></div>
         </div>
         <div class="container">
@@ -89,13 +92,13 @@
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
 
-                const tokenGenerator1 = (id) => {
+                const tokenGenerator1 = id => {
                     return Promise.resolve(token);
                 };
 
                 const filePicker1 = new FilePicker();
                 document.querySelector('.filePicker1').innerHTML = '';
-                filePicker1.addListener('choose', (data) => {
+                filePicker1.addListener('choose', data => {
                     alert('Choose pressed on File Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -106,15 +109,12 @@
                 filePicker1.show(folderId, token, {
                     container: '.filePicker1',
                     autoFocus: true,
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                 });
-
-
-
 
                 const filePicker2 = new FilePicker();
                 document.querySelector('.filePicker2').innerHTML = '';
-                filePicker2.addListener('choose', (data) => {
+                filePicker2.addListener('choose', data => {
                     alert('Choose pressed on File Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -127,15 +127,12 @@
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                     extensions: ['png', 'pdf', 'doc', 'docx', 'ppt', 'pptx'],
                     maxSelectable: 1,
-                    canSetShareAccess: false
+                    canSetShareAccess: false,
                 });
-
-
-
 
                 const folderPicker1 = new FolderPicker();
                 document.querySelector('.folderPicker1').innerHTML = '';
-                folderPicker1.addListener('choose', (data) => {
+                folderPicker1.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -144,15 +141,12 @@
                     document.querySelector('.folderPicker1').innerHTML = '';
                 });
                 folderPicker1.show(folderId, token, {
-                    container: '.folderPicker1'
+                    container: '.folderPicker1',
                 });
-
-
-
 
                 const folderPicker2 = new FolderPicker();
                 document.querySelector('.folderPicker2').innerHTML = '';
-                folderPicker2.addListener('choose', (data) => {
+                folderPicker2.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -164,15 +158,12 @@
                     container: '.folderPicker2',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                     maxSelectable: 3,
-                    canUpload: false
+                    canUpload: false,
                 });
-
-
-
 
                 const contentPicker1 = new ContentPicker();
                 document.querySelector('.contentPicker1').innerHTML = '';
-                contentPicker1.addListener('choose', (data) => {
+                contentPicker1.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker, will close popup');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -182,15 +173,12 @@
                 contentPicker1.show(folderId, tokenGenerator1, {
                     currentFolderId: '4125389473',
                     container: '.contentPicker1',
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                 });
-
-
-
 
                 const contentPicker2 = new ContentPicker();
                 document.querySelector('.contentPicker2').innerHTML = '';
-                contentPicker2.addListener('choose', (data) => {
+                contentPicker2.addListener('choose', data => {
                     alert('Choose pressed on Folder Picker, will close popup');
                     console.log(JSON.stringify(data, null, 2));
                 });
@@ -200,7 +188,7 @@
                 contentPicker2.show(folderId, tokenGenerator1, {
                     container: '.contentPicker2',
                     logoUrl: 'box',
-                    maxSelectable: 1
+                    maxSelectable: 1,
                 });
             }
             load();

@@ -199,6 +199,10 @@
     .shared-link-access-row {
         .btn-plain {
             margin-right: 10px;
+
+            &.can-edit-btn {
+                color: $seventy-sixers;
+            }
         }
     }
 

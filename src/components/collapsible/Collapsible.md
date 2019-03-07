@@ -4,13 +4,19 @@
 
 ```js
 const onOpen = arg => {
-    console.log('opened', arg);
+  console.log('opened', arg);
 };
 const onClose = arg => {
-    console.log('closed', arg);
+  console.log('closed', arg);
 };
-<Collapsible isOpen onOpen={onOpen} onClose={onClose} isBordered title="Collapsible card title">
-    <div>This is content of a collapsible component</div>
+<Collapsible
+  isOpen
+  onOpen={onOpen}
+  onClose={onClose}
+  isBordered
+  title="Collapsible card title"
+>
+  <div>This is content of a collapsible component</div>
 </Collapsible>;
 ```
 
@@ -18,7 +24,7 @@ const onClose = arg => {
 
 ```js
 <Collapsible isOpen title="Collapsible card title">
-    <div>This is content of a collapsible component</div>
+  <div>This is content of a collapsible component</div>
 </Collapsible>
 ```
 
@@ -26,11 +32,13 @@ const onClose = arg => {
 
 ```js
 <Collapsible
-    headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
-    isBordered
-    isOpen
-    title="Collapsible card title"
+  headerActionItems={
+    <Button className="collapsible-card-action-items">Click Here</Button>
+  }
+  isBordered
+  isOpen
+  title="Collapsible card title"
 >
-    <div>This is content of a collapsible component</div>
+  <div>This is content of a collapsible component</div>
 </Collapsible>
 ```

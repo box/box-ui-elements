@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Box Content Explorer/Preview Test Page</title>
         <style>
             body,
@@ -33,15 +33,16 @@
                             hasSkills: true,
                             hasMetadata: true,
                             detailsSidebarProps: {
-                                hasProperties: true
+                                hasProperties: true,
                             },
                             hasActivityFeed: true,
-                            getUserProfileUrl: function (id) { return Promise.resolve('#'); }
+                            getUserProfileUrl: function(id) {
+                                return Promise.resolve('#');
+                            },
                         },
-
-                    }
+                    },
                 });
-            }
+            };
         </script>
     </head>
     <body></body>

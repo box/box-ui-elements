@@ -1,0 +1,460 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly render task 1`] = `
+<div
+  className="bcs-task"
+  data-testid="task-card"
+>
+  <mock-comment
+    created_at="2010-01-01"
+    created_by={
+      Object {
+        "id": "1",
+        "name": "Jake Thomas",
+        "type": "user",
+      }
+    }
+    currentUser={
+      Object {
+        "id": "1",
+        "name": "Jake Thomas",
+        "type": "user",
+      }
+    }
+    id="123125"
+    inlineDeleteMessage={
+      Object {
+        "defaultMessage": "Delete task?",
+        "id": "be.taskDeletePrompt",
+      }
+    }
+    onDelete={[MockFunction]}
+    onEdit={[MockFunction]}
+    permissions={
+      Object {
+        "can_delete": false,
+        "can_edit": false,
+      }
+    }
+    tagged_message="This is where we tell each other what we need to do"
+  />
+  <div
+    className="bcs-task-assignment-container"
+  >
+    <div
+      className="bcs-task-assignments"
+    >
+      <Component
+        data-testid="task-assignment-status"
+        key="current-user-assignment-id"
+        status="NOT_STARTED"
+        user={
+          Object {
+            "id": "1",
+            "name": "Jake Thomas",
+            "type": "user",
+          }
+        }
+      />
+      <Component
+        data-testid="task-assignment-status"
+        key="other-user-assignment-id"
+        status="COMPLETED"
+        user={
+          Object {
+            "id": "3",
+            "name": "Patrick Paul",
+            "type": "user",
+          }
+        }
+      />
+    </div>
+    <TaskActions
+      id="current-user-assignment-id"
+      onTaskApproval={[Function]}
+      onTaskComplete={[Function]}
+      onTaskReject={[Function]}
+      permissions={
+        Object {
+          "can_delete": true,
+          "can_update": true,
+        }
+      }
+      role="ASSIGNEE"
+      status="NOT_STARTED"
+      target={
+        Object {
+          "id": "1",
+          "name": "Jake Thomas",
+          "type": "user",
+        }
+      }
+      type="task_collaborator"
+    />
+  </div>
+</div>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignment status badges for each assignee 1`] = `
+<Task
+  assigned_to={
+    Object {
+      "entries": Array [
+        Object {
+          "id": "current-user-assignment-id",
+          "permissions": Object {
+            "can_delete": true,
+            "can_update": true,
+          },
+          "role": "ASSIGNEE",
+          "status": "NOT_STARTED",
+          "target": Object {
+            "id": "1",
+            "name": "Jake Thomas",
+            "type": "user",
+          },
+          "type": "task_collaborator",
+        },
+        Object {
+          "id": "other-user-assignment-id",
+          "permissions": Object {
+            "can_delete": true,
+            "can_update": true,
+          },
+          "role": "ASSIGNEE",
+          "status": "COMPLETED",
+          "target": Object {
+            "id": "3",
+            "name": "Patrick Paul",
+            "type": "user",
+          },
+          "type": "task_collaborator",
+        },
+      ],
+      "limit": 10,
+      "next_marker": null,
+    }
+  }
+  created_at="2010-01-01"
+  created_by={
+    Object {
+      "id": "0",
+      "role": "CREATOR",
+      "status": "NOT_STARTED",
+      "target": Object {
+        "id": "1",
+        "name": "Jake Thomas",
+        "type": "user",
+      },
+      "type": "task_collaborator",
+    }
+  }
+  currentUser={
+    Object {
+      "id": "1",
+      "name": "Jake Thomas",
+      "type": "user",
+    }
+  }
+  due_at={null}
+  id="123125"
+  name="This is where we tell each other what we need to do"
+  onDelete={[MockFunction]}
+  onEdit={[MockFunction]}
+  permissions={
+    Object {
+      "can_create_task_collaborator": true,
+      "can_create_task_link": true,
+      "can_delete": true,
+      "can_update": true,
+    }
+  }
+  status="NOT_STARTED"
+  task_links={
+    Object {
+      "entries": Array [],
+      "limit": 1000,
+      "next_marker": null,
+    }
+  }
+  type="task"
+>
+  <div
+    className="bcs-task"
+    data-testid="task-card"
+  >
+    <mock-comment
+      created_at="2010-01-01"
+      created_by={
+        Object {
+          "id": "1",
+          "name": "Jake Thomas",
+          "type": "user",
+        }
+      }
+      currentUser={
+        Object {
+          "id": "1",
+          "name": "Jake Thomas",
+          "type": "user",
+        }
+      }
+      id="123125"
+      inlineDeleteMessage={
+        Object {
+          "defaultMessage": "Delete task?",
+          "id": "be.taskDeletePrompt",
+        }
+      }
+      onDelete={[MockFunction]}
+      onEdit={[MockFunction]}
+      permissions={
+        Object {
+          "can_delete": false,
+          "can_edit": false,
+        }
+      }
+      tagged_message="This is where we tell each other what we need to do"
+    />
+    <div
+      className="bcs-task-assignment-container"
+    >
+      <div
+        className="bcs-task-assignments"
+      >
+        <Component
+          data-testid="task-assignment-status"
+          key="current-user-assignment-id"
+          status="NOT_STARTED"
+          user={
+            Object {
+              "id": "1",
+              "name": "Jake Thomas",
+              "type": "user",
+            }
+          }
+        >
+          <Avatar
+            className="bcs-task-assignment-avatar"
+            user={
+              Object {
+                "id": "1",
+                "name": "Jake Thomas",
+                "type": "user",
+              }
+            }
+          >
+            <Avatar
+              avatarUrl={null}
+              className="bcs-task-assignment-avatar"
+              id="1"
+              name="Jake Thomas"
+            >
+              <span
+                className="avatar bcs-task-assignment-avatar"
+                role="presentation"
+              >
+                <AvatarInitials
+                  id="1"
+                  name="Jake Thomas"
+                >
+                  <span
+                    className="avatar-initials "
+                    style={
+                      Object {
+                        "backgroundColor": "#0D67C7",
+                      }
+                    }
+                  >
+                    JT
+                  </span>
+                </AvatarInitials>
+              </span>
+            </Avatar>
+          </Avatar>
+          <StatusIcon
+            className="bcs-task-assignment-status-icon notStarted"
+            height={12}
+            status="NOT_STARTED"
+            title={
+              <FormattedMessage
+                defaultMessage="Completed"
+                id="be.completedAssignment"
+              />
+            }
+            width={12}
+          />
+        </Component>
+        <Component
+          data-testid="task-assignment-status"
+          key="other-user-assignment-id"
+          status="COMPLETED"
+          user={
+            Object {
+              "id": "3",
+              "name": "Patrick Paul",
+              "type": "user",
+            }
+          }
+        >
+          <Avatar
+            className="bcs-task-assignment-avatar"
+            user={
+              Object {
+                "id": "3",
+                "name": "Patrick Paul",
+                "type": "user",
+              }
+            }
+          >
+            <Avatar
+              avatarUrl={null}
+              className="bcs-task-assignment-avatar"
+              id="3"
+              name="Patrick Paul"
+            >
+              <span
+                className="avatar bcs-task-assignment-avatar"
+                role="presentation"
+              >
+                <AvatarInitials
+                  id="3"
+                  name="Patrick Paul"
+                >
+                  <span
+                    className="avatar-initials "
+                    style={
+                      Object {
+                        "backgroundColor": "#747679",
+                      }
+                    }
+                  >
+                    PP
+                  </span>
+                </AvatarInitials>
+              </span>
+            </Avatar>
+          </Avatar>
+          <StatusIcon
+            className="bcs-task-assignment-status-icon completed"
+            height={12}
+            status="COMPLETED"
+            title={
+              <FormattedMessage
+                defaultMessage="Completed"
+                id="be.completedAssignment"
+              />
+            }
+            width={12}
+          >
+            <IconCheck
+              className="bcs-task-assignment-status-icon completed"
+              height={12}
+              title={
+                <FormattedMessage
+                  defaultMessage="Completed"
+                  id="be.completedAssignment"
+                />
+              }
+              width={12}
+            >
+              <AccessibleSVG
+                className="icon-check bcs-task-assignment-status-icon completed"
+                height={12}
+                title={
+                  <FormattedMessage
+                    defaultMessage="Completed"
+                    id="be.completedAssignment"
+                  />
+                }
+                viewBox="0 0 24 24"
+                width={12}
+              >
+                <svg
+                  aria-labelledby="icon1-title"
+                  className="icon-check bcs-task-assignment-status-icon completed"
+                  focusable="false"
+                  height={12}
+                  role="img"
+                  viewBox="0 0 24 24"
+                  width={12}
+                >
+                  <title
+                    id="icon1-title"
+                  >
+                    <FormattedMessage
+                      defaultMessage="Completed"
+                      id="be.completedAssignment"
+                    >
+                      <div />
+                    </FormattedMessage>
+                  </title>
+                  <path
+                    d="M0 0h24v24H0z"
+                    fill="none"
+                  />
+                  <path
+                    className="fill-color"
+                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                    fill="#000000"
+                  />
+                </svg>
+              </AccessibleSVG>
+            </IconCheck>
+          </StatusIcon>
+        </Component>
+      </div>
+      <TaskActions
+        id="current-user-assignment-id"
+        onTaskApproval={[Function]}
+        onTaskComplete={[Function]}
+        onTaskReject={[Function]}
+        permissions={
+          Object {
+            "can_delete": true,
+            "can_update": true,
+          }
+        }
+        role="ASSIGNEE"
+        status="NOT_STARTED"
+        target={
+          Object {
+            "id": "1",
+            "name": "Jake Thomas",
+            "type": "user",
+          }
+        }
+        type="task_collaborator"
+      >
+        <div
+          className="bcs-task-pending-assignment bcs-task-assignment-actions"
+        >
+          <Button
+            className="bcs-task-action-button bcs-task-check-btn"
+            data-resin-target="activityfeed-taskcomplete"
+            onClick={[Function]}
+          >
+            <button
+              className="btn bcs-task-action-button bcs-task-check-btn"
+              data-resin-target="activityfeed-taskcomplete"
+              onClick={[Function]}
+              type="submit"
+            >
+              <span
+                className="btn-content"
+              >
+                <FormattedMessage
+                  defaultMessage="Mark as Complete"
+                  id="be.tasks.feed.completeAction"
+                >
+                  <div />
+                </FormattedMessage>
+              </span>
+            </button>
+          </Button>
+        </div>
+      </TaskActions>
+    </div>
+  </div>
+</Task>
+`;

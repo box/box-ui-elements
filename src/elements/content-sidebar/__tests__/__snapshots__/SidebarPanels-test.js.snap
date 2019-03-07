@@ -1,0 +1,131 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/SidebarPanels render should render activity sidebar 1`] = `
+<Switch>
+  <SidebarRoute
+    path="/skills"
+    pathFallback="/activity"
+    render={[Function]}
+  />
+  <SidebarRoute
+    enabled={true}
+    path="/activity"
+    pathFallback="/details"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/details"
+    pathFallback="/metadata"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/metadata"
+    pathFallback="/skills"
+    render={[Function]}
+  />
+  <Route>
+    <Redirect
+      push={false}
+      to="/skills"
+    />
+  </Route>
+</Switch>
+`;
+
+exports[`elements/content-sidebar/SidebarPanels render should render details sidebar 1`] = `
+<Switch>
+  <SidebarRoute
+    path="/skills"
+    pathFallback="/activity"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/activity"
+    pathFallback="/details"
+    render={[Function]}
+  />
+  <SidebarRoute
+    enabled={true}
+    path="/details"
+    pathFallback="/metadata"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/metadata"
+    pathFallback="/skills"
+    render={[Function]}
+  />
+  <Route>
+    <Redirect
+      push={false}
+      to="/skills"
+    />
+  </Route>
+</Switch>
+`;
+
+exports[`elements/content-sidebar/SidebarPanels render should render metadata sidebar 1`] = `
+<Switch>
+  <SidebarRoute
+    path="/skills"
+    pathFallback="/activity"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/activity"
+    pathFallback="/details"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/details"
+    pathFallback="/metadata"
+    render={[Function]}
+  />
+  <SidebarRoute
+    enabled={true}
+    path="/metadata"
+    pathFallback="/skills"
+    render={[Function]}
+  />
+  <Route>
+    <Redirect
+      push={false}
+      to="/skills"
+    />
+  </Route>
+</Switch>
+`;
+
+exports[`elements/content-sidebar/SidebarPanels render should render no sidebar 1`] = `""`;
+
+exports[`elements/content-sidebar/SidebarPanels render should render skills sidebar 1`] = `
+<Switch>
+  <SidebarRoute
+    enabled={true}
+    path="/skills"
+    pathFallback="/activity"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/activity"
+    pathFallback="/details"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/details"
+    pathFallback="/metadata"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/metadata"
+    pathFallback="/skills"
+    render={[Function]}
+  />
+  <Route>
+    <Redirect
+      push={false}
+      to="/skills"
+    />
+  </Route>
+</Switch>
+`;

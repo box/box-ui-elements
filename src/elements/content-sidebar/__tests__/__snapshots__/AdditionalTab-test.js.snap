@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/AdditionalTab should render the more icon ellipsis if no valid id and icon URL are provided 1`] = `
+<Tooltip
+  position="middle-left"
+  text="test title"
+>
+  <PlainButton
+    className="bcs-additional-tab-btn bcs-nav-btn"
+    onClick={[Function]}
+    type="button"
+  >
+    <IconEllipsis
+      className="bcs-additional-tab-more-icon"
+    />
+  </PlainButton>
+</Tooltip>
+`;
+
+exports[`elements/content-sidebar/AdditionalTab should render the tooltip and button contents 1`] = `
+<Tooltip
+  position="middle-left"
+  text="test title"
+>
+  <PlainButton
+    className="bcs-additional-tab-btn bcs-nav-btn"
+    onClick={[Function]}
+    type="button"
+  >
+    <img
+      alt="test title"
+      className="bcs-additional-tab-icon"
+      src="https://foo.com/image"
+    />
+  </PlainButton>
+</Tooltip>
+`;

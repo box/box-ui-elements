@@ -1,10 +1,16 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { MemoryRouter } from 'react-router-dom';
+import { mount } from 'enzyme';
 import Tooltip from '../../../components/tooltip/Tooltip';
 import SidebarNavButton from '../SidebarNavButton';
 
 describe('elements/content-sidebar/SidebarNavButton', () => {
-    const getWrapper = props => shallow(<SidebarNavButton {...props} />);
+    const getWrapper = ({ children, ...props }, active = '') =>
+        mount(
+            <MemoryRouter initialEntries={[`/${active}`]}>
+                <SidebarNavButton {...props}>{children}</SidebarNavButton>
+            </MemoryRouter>,
+        ).find('SidebarNavButton');
 
     test('should render nav button properly', () => {
         const props = {
@@ -12,16 +18,19 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(Tooltip).prop('text')).toBe('foo');
-        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render nav button properly when selected', () => {
         const props = {
+            sidebarView: 'activity',
             tooltip: 'foo',
-            isSelected: true,
         };
-        const wrapper = getWrapper(props);
-        expect(wrapper.childAt(0).prop('className')).toBe('bcs-nav-btn bcs-nav-btn-is-selected');
-        expect(wrapper).toMatchSnapshot();
+        const wrapper = getWrapper(props, 'activity');
+        expect(
+            wrapper
+                .find('.bcs-nav-btn')
+                .first()
+                .prop('className'),
+        ).toContain('bcs-nav-btn-is-selected');
     });
 });

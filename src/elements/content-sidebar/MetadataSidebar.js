@@ -395,6 +395,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                         />
                     ) : null
                 }
+                className="bcs-metadata"
                 title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_METADATA)}
             >
                 {error && (

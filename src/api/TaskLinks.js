@@ -7,6 +7,12 @@
 import Base from './Base';
 import { ERROR_CODE_CREATE_TASK_LINK } from '../constants';
 
+// microservices need different headers than other APIs
+const headers = {
+    Accept: 'application/json;version=1',
+    'Content-Type': 'application/vnd.box+json;version=v2',
+};
+
 class TaskLinks extends Base {
     getUrlForTaskLinkCreate(): string {
         return `${this.getBaseApiUrl()}/undoc/task_links`;
@@ -41,7 +47,7 @@ class TaskLinks extends Base {
         this.post({
             id: file.id,
             url: this.getUrlForTaskLinkCreate(),
-            data: requestData,
+            data: { ...requestData, headers },
             successCallback,
             errorCallback,
         });

@@ -17,7 +17,9 @@ import IconMail from '../../icons/general/IconMail';
 import IconClock from '../../icons/general/IconClock';
 import { amaranth } from '../../styles/variables';
 import type { itemType as ItemType } from '../../common/box-types';
+import { isBoxNote } from '../../utils/file';
 
+import convertToBoxItem from './utils/item';
 import SharedLinkAccessMenu from './SharedLinkAccessMenu';
 import SharedLinkPermissionMenu from './SharedLinkPermissionMenu';
 import messages from './messages';
@@ -69,6 +71,7 @@ class SharedLinkSection extends Component<Props> {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
             classificationName,
+            item,
             itemType,
             onEmailSharedLinkClick,
             sharedLink,
@@ -81,6 +84,7 @@ class SharedLinkSection extends Component<Props> {
             allowedAccessLevels,
             canChangeAccessLevel,
             enterpriseName,
+            isEditAllowed,
             isDownloadSettingAvailable,
             permissionLevel,
             url,
@@ -96,6 +100,7 @@ class SharedLinkSection extends Component<Props> {
             sharedLinkPermissionsMenuButtonProps,
         } = trackingProps;
 
+        const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
         let allowedPermissionLevels = [CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
         if (!canChangeAccessLevel) {
@@ -108,12 +113,11 @@ class SharedLinkSection extends Component<Props> {
             allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_VIEW_DOWNLOAD);
         }
 
-        const autofocus = !!(autofocusSharedLink && (sharedLink.isNewSharedLink || triggerCopyOnLoad));
         return (
             <React.Fragment>
                 <div className="shared-link-field-row">
                     <TextInputWithCopyButton
-                        autofocus={autofocus}
+                        autofocus={autofocusSharedLink}
                         buttonProps={copyButtonProps}
                         className="shared-link-field-container"
                         disabled={submitting}
@@ -150,7 +154,7 @@ class SharedLinkSection extends Component<Props> {
                             sharedLinkAccessMenuButtonProps,
                         }}
                     />
-                    {accessLevel !== PEOPLE_IN_ITEM && (
+                    {!isEditableBoxNote && accessLevel !== PEOPLE_IN_ITEM && (
                         <SharedLinkPermissionMenu
                             allowedPermissionLevels={allowedPermissionLevels}
                             canChangePermissionLevel={canChangeAccessLevel}
@@ -162,6 +166,13 @@ class SharedLinkSection extends Component<Props> {
                                 sharedLinkPermissionsMenuButtonProps,
                             }}
                         />
+                    )}
+                    {isEditableBoxNote && (
+                        <Tooltip text={<FormattedMessage {...messages.sharedLinkPermissionsEditTooltip} />}>
+                            <PlainButton isDisabled className="can-edit-btn">
+                                <FormattedMessage {...messages.sharedLinkPermissionsEdit} />
+                            </PlainButton>
+                        </Tooltip>
                     )}
                 </div>
             </React.Fragment>

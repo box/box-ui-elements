@@ -154,6 +154,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
         showSharedLinkSettingsCallout={false}
         submitting={false}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -369,6 +370,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         showSharedLinkSettingsCallout={false}
         submitting={true}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -529,6 +531,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         showSharedLinkSettingsCallout={false}
         submitting={true}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -854,6 +857,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showSharedLinkSettingsCallout={false}
         submitting={true}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -1014,6 +1018,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showSharedLinkSettingsCallout={false}
         submitting={true}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -1309,6 +1314,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showSharedLinkSettingsCallout={false}
         submitting={false}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -1470,6 +1476,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showSharedLinkSettingsCallout={false}
         submitting={true}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -1631,6 +1638,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showSharedLinkSettingsCallout={false}
         submitting={false}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -1990,6 +1998,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showSharedLinkSettingsCallout={false}
         submitting={false}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -2319,6 +2328,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showSharedLinkSettingsCallout={false}
         submitting={false}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -2478,6 +2488,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showSharedLinkSettingsCallout={false}
         submitting={false}
         trackingProps={Object {}}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>

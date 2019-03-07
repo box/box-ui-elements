@@ -27,7 +27,7 @@
 
     .flyout-list-container-body {
         $title-height: $flyout-title-line-height + $flyout-header-spacer;
-        $footer-height: $flyout-title-line-height +  2 * $flyout-footer-spacer;
+        $footer-height: $flyout-title-line-height + 2 * $flyout-footer-spacer;
 
         // the overall height, minus the top and bottom padding
         height: $flyout-list-height - 2 * $flyout-list-padding;

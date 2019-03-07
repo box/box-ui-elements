@@ -51,6 +51,19 @@ exports[`features/query-bar/components/ColumnButtonOverlay render should render 
           onChange={[Function]}
         />
       </PortaledDraggableListItem>
+      <PortaledDraggableListItem
+        id="4"
+        index={3}
+        isDraggableViaHandle={true}
+        key="3"
+      >
+        <Checkbox
+          isChecked={true}
+          label="Offices"
+          name="Offices"
+          onChange={[Function]}
+        />
+      </PortaledDraggableListItem>
     </DraggableList>
   </div>
   <div

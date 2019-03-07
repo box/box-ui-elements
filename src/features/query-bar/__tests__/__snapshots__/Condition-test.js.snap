@@ -46,21 +46,26 @@ exports[`features/query-bar/components/filter/Condition render() should render C
             Object {
               "displayText": "Hullo Thar",
               "type": "string",
-              "value": "Hullo Thar",
+              "value": "1",
             },
             Object {
               "displayText": "Last Updated",
-              "type": "string",
-              "value": "Last Updated",
+              "type": "date",
+              "value": "2",
             },
             Object {
               "displayText": "Contract Value",
               "type": "enum",
-              "value": "Contract Value",
+              "value": "3",
+            },
+            Object {
+              "displayText": "Offices",
+              "type": "multi-enum",
+              "value": "4",
             },
           ]
         }
-        selectedValue="Contract Value"
+        selectedValue="3"
       />
     </div>
   </div>
@@ -78,12 +83,23 @@ exports[`features/query-bar/components/filter/Condition render() should render C
           Array [
             Object {
               "displayText": "is",
-              "type": "string",
-              "value": "is",
+              "value": "=",
+            },
+            Object {
+              "displayText": "is not",
+              "value": "!=",
+            },
+            Object {
+              "displayText": "is greater than",
+              "value": ">",
+            },
+            Object {
+              "displayText": "is less than",
+              "value": "<",
             },
           ]
         }
-        selectedValue="is"
+        selectedValue="="
       />
     </div>
   </div>
@@ -91,20 +107,17 @@ exports[`features/query-bar/components/filter/Condition render() should render C
     className="condition-value-dropdown-container"
   >
     <ValueField
-      selectedValue=""
-      updateSelectedField={[Function]}
-      updateValueField={[Function]}
-      valueKey={null}
+      onChange={[Function]}
+      selectedValues={Array []}
       valueOptions={
         Array [
           Object {
             "displayText": "$100",
-            "type": "enum",
             "value": "$100",
           },
         ]
       }
-      valueType="string"
+      valueType="enum"
     />
   </div>
 </div>

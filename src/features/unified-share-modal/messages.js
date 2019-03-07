@@ -100,10 +100,10 @@ const messages = defineMessages({
         description: 'Label for "Message" text box to email the Shared Link',
         id: 'boxui.unifiedShare.message',
     },
-    suggestedCollabsTitle: {
-        defaultMessage: 'Suggested:',
-        description: 'Title for suggested collaborators that can be added to the input box',
-        id: 'boxui.unifiedShare.suggestedCollabsTitle',
+    suggestedCollabsInlineTitle: {
+        defaultMessage: 'Add:',
+        description: 'Title for suggested collaborators that can be added to the input box from an inline list',
+        id: 'boxui.unifiedShare.suggestedCollabsInlineTitle',
     },
 
     // shared link access labels
@@ -181,6 +181,16 @@ const messages = defineMessages({
         defaultMessage: 'Can view only',
         description: 'Label for a Shared Link permission level',
         id: 'boxui.unifiedShare.sharedLinkPermissionsViewOnly',
+    },
+    sharedLinkPermissionsEdit: {
+        defaultMessage: 'Can edit',
+        description: 'Label for a Shared Link permission to show for editable box notes',
+        id: 'boxui.unifiedShare.sharedLinkPermissionsEdit',
+    },
+    sharedLinkPermissionsEditTooltip: {
+        defaultMessage: 'This permission can only be changed in Box Notes',
+        description: 'Text to use in the tooltip when presenting an editable Box Note (DO NOT TRANSLATE "Box Notes")',
+        id: 'boxui.unifiedShare.sharedLinkPermissionsEditTooltip',
     },
     sharedLinkPermissionsViewOnlyDescription: {
         defaultMessage: 'Users can view only',

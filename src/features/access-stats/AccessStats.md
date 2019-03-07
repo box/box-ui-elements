@@ -2,7 +2,12 @@
 
 ```js
 <div style={{ maxWidth: 220 }}>
-    <AccessStats commentCount={10000} downloadCount={10000} editCount={10000} previewCount={10000} />
+  <AccessStats
+    commentCount={10000}
+    downloadCount={10000}
+    editCount={10000}
+    previewCount={10000}
+  />
 </div>
 ```
 
@@ -10,15 +15,15 @@
 
 ```js
 <div style={{ maxWidth: 220 }}>
-    <AccessStats
-        commentCount={10000}
-        downloadCount={10000}
-        editCount={10000}
-        previewCount={10000}
-        openAccessStatsModal={() => {
-            alert('Access Stats Modal');
-        }}
-    />
+  <AccessStats
+    commentCount={10000}
+    downloadCount={10000}
+    editCount={10000}
+    previewCount={10000}
+    openAccessStatsModal={() => {
+      alert('Access Stats Modal');
+    }}
+  />
 </div>
 ```
 
@@ -26,16 +31,16 @@
 
 ```js
 <div style={{ maxWidth: 220 }}>
-    <AccessStats
-        commentCount={10000}
-        downloadCount={10000}
-        editCount={10000}
-        hasCountOverflowed
-        previewCount={10000}
-        openAccessStatsModal={() => {
-            alert('Access Stats Modal');
-        }}
-    />
+  <AccessStats
+    commentCount={10000}
+    downloadCount={10000}
+    editCount={10000}
+    hasCountOverflowed
+    previewCount={10000}
+    openAccessStatsModal={() => {
+      alert('Access Stats Modal');
+    }}
+  />
 </div>
 ```
 
@@ -43,12 +48,12 @@
 
 ```js
 <div style={{ maxWidth: 220 }}>
-    <AccessStats
-        errorMessage="Sorry, access stats could not be retrieved for this file. Contact support or try again in a few minutes."
-        downloadCount={10000}
-        editCount={10000}
-        previewCount={10000}
-    />
+  <AccessStats
+    errorMessage="Sorry, access stats could not be retrieved for this file. Contact support or try again in a few minutes."
+    downloadCount={10000}
+    editCount={10000}
+    previewCount={10000}
+  />
 </div>
 ```
 
@@ -56,6 +61,6 @@
 
 ```js
 <div style={{ maxWidth: 220 }}>
-    <AccessStats />
+  <AccessStats />
 </div>
 ```

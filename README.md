@@ -51,6 +51,9 @@ Box UI Elements use [SCSS stylesheets](https://sass-lang.com/guide). Each of the
 * Limited support for Internet Explorer 11 (requires ES2015 polyfill)
 * Mobile Chrome and Safari
 
+# Contributing
+Our contributing guidelines can be found in [CONTRIBUTING.md](CONTRIBUTING.md). The development setup instructions can be found in [DEVELOPING.md](DEVELOPING.md).
+
 # Questions
 If you have any questions, please visit our [developer forum](https://community.box.com/t5/Box-Developer-Forum/bd-p/DeveloperForum) or contact us via one of our [available support channels](https://community.box.com/t5/Community/ct-p/English).
 

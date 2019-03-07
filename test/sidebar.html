@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Sidebar Test Page</title>
         <style>
             body,
@@ -50,10 +50,11 @@
                 </div>
                 <button type="button" onclick="load(true)">Submit</button>
             </div>
-            </div>
+        </div>
         <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
         <script src="../dev/en-US/sidebar.js"></script>
     </head>
+
     <body>
         <div class="preview sidebar1"></div>
         <script>
@@ -90,13 +91,13 @@
                         retentionPolicy: {
                             dispositionTime: 1556317461,
                             policyType: 'finite',
-                            retentionPolicyDescription: 'test policy (1 year retention & auto-deletion'
+                            retentionPolicyDescription: 'test policy (1 year retention & auto-deletion',
                         },
-                        onRetentionPolicyExtendClick: () => alert('hello world!')
+                        onRetentionPolicyExtendClick: () => alert('hello world!'),
                     },
-                    onVersionHistoryClick : function(){
+                    onVersionHistoryClick: function() {
                         alert('hello, world!');
-                    }
+                    },
                 });
 
                 const sidebar2 = new ContentSidebar();
@@ -108,7 +109,7 @@
                         hasNotices: true,
                         hasVersions: true,
                         hasAccessStats: true,
-                        hasClassification: true
+                        hasClassification: true,
                     },
                     hasActivityFeed: true,
                     hasSkills: true,
@@ -123,18 +124,20 @@
                         hasVersions: true,
                         hasClassification: true,
                         bannerPolicy: {
-                            body: 'classification tooltip'
+                            body: 'classification tooltip',
                         },
-                        onClassificationClick: (refreshFn) => {
+                        onClassificationClick: refreshFn => {
                             console.log('refreshing');
                             refreshFn();
-                        }
+                        },
                     },
                     hasSkills: true,
-                    hasActivityFeed:true,
+                    hasActivityFeed: true,
                     activitySidebarProps: {
-                        getUserProfileUrl: (id) => { return Promise.resolve('#'); }
-                    }
+                        getUserProfileUrl: id => {
+                            return Promise.resolve('#');
+                        },
+                    },
                 });
 
                 const sidebar4 = new ContentSidebar();
@@ -146,21 +149,24 @@
                         hasNotices: true,
                         hasVersions: true,
                         hasAccessStats: true,
-                        hasClassification: true
+                        hasClassification: true,
                     },
                     hasActivityFeed: true,
                     hasSkills: true,
                     features: {
                         activityFeed: {
                             tasks: {
-                                createFromComment: true,
                                 createButton: true,
+                                createFromComment: true,
+                                newApi: true,
+                                newCards: true,
                             },
                         },
-                    }
+                    },
                 });
                 if (refreshOnComplete) window.location.reload();
             }
+
             load(false);
         </script>
     </body>

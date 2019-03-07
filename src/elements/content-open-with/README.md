@@ -1,7 +1,3 @@
-### Screenshot
-<img src="https://cdn-images-1.medium.com/max/1600/1*dd2YfUFtbt9z6Lrv6hNF_g.gif" style="border: 1px solid #e8e8e8" width="600" />
----
-
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-open-with))
 **Note:** The Open With UI Element works only with server generated [app user tokens](https://developer.box.com/docs/work-with-users#section-creating-a-new-app-user-jwt-applications-only-).
 For more information on this element, see this [documentation](https://developer.box.com/docs/box-content-open-with).
@@ -17,6 +13,10 @@ var ContentOpenWith = require('./ContentOpenWith').default;
     />
 </IntlProvider>
 ```
+
+### Screenshot
+<img src="https://cdn-images-1.medium.com/max/1600/1*dd2YfUFtbt9z6Lrv6hNF_g.gif" style="border: 1px solid #e8e8e8" width="600" />
+---
 
 ### Props
 | Prop | Type | Default | Description |

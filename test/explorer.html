@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Box Content Explorer Test Page</title>
         <style>
             body,
@@ -128,31 +128,29 @@
                         contentSidebarProps: {
                             hasActivityFeed: true,
                             hasProperties: true,
-                            hasSkills: true
+                            hasSkills: true,
                         },
                         contentOpenWithProps: {
                             show: true,
-                            onError: (error) => console.log(error),
-                        }
-                    }
+                            onError: error => console.log(error),
+                        },
+                    },
                 });
-
 
                 const explorer2 = new ContentExplorer();
                 document.querySelector('.explorer2').innerHTML = '';
                 explorer2.show(folderId, token, {
                     container: '.explorer2',
                     canCreateNewFolder: false,
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                 });
-
 
                 const explorer3 = new ContentExplorer();
                 document.querySelector('.explorer3').innerHTML = '';
                 explorer2.show(folderId, token, {
                     container: '.explorer3',
                     canUpload: false,
-                    logoUrl: 'box'
+                    logoUrl: 'box',
                 });
             }
             load();

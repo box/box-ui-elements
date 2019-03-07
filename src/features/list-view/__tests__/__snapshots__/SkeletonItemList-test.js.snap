@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/metadata-view/components/SkeletonItemList should render 1`] = `
+exports[`features/list-view/components/SkeletonItemList should render 1`] = `
 <div
   className="metadata-view-skeleton-table"
 >

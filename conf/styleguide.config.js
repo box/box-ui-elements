@@ -105,6 +105,7 @@ const allSections = [
             '../src/icons/bookmark-icon/BookmarkIcon.js',
             '../src/icons/adobe-sign/IconAdobeSign.js',
             '../src/icons/google-docs/GoogleDocsIcon.js',
+            '../src/icons/autocad/IconAutoCAD.js',
         ],
         sections: [
             {
