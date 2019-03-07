@@ -75,5 +75,5 @@ export const menuZIndex = '170'; // menu-z-index
 export const notificationsWrapperZIndex = '180'; // notifications-wrapper-z-index
 export const overlayZIndex = '190'; // overlay-z-index
 export const tooltipZIndex = '190'; // tooltip-z-index
-export const defaultLineHeight = '20px'; // default-line-height
+export const bdlLineHeight = '20px'; // bdl-line-height
 export const bdlBorderRadiusSize = '4px'; // bdl-border-radius-size
