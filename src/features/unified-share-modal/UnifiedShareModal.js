@@ -11,7 +11,7 @@ import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingI
 import { Modal } from '../../components/modal';
 import { Link } from '../../components/link';
 import Button from '../../components/button';
-import { UpgradeBadge, BetaBadge } from '../../components/badge';
+import { UpgradeBadge } from '../../components/badge';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
@@ -657,23 +657,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     className="unified-share-modal"
                     isOpen={isConfirmModalOpen ? false : isOpen}
                     onRequestClose={submitting ? undefined : onRequestClose}
-                    title={
-                        <span>
-                            {this.renderModalTitle()}
-                            <Tooltip
-                                position="top-center"
-                                text={<FormattedMessage {...messages.betaFeedbackCtaCopy} />}
-                            >
-                                <Link
-                                    href="https://goo.gl/forms/B4n3aKozjGiejyMX2"
-                                    target="blank"
-                                    {...modalTracking.betaLabelProps}
-                                >
-                                    <BetaBadge />
-                                </Link>
-                            </Tooltip>
-                        </span>
-                    }
+                    title={<span>{this.renderModalTitle()}</span>}
                     {...extendedModalProps}
                 >
                     <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
