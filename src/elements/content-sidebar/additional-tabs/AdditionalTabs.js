@@ -18,8 +18,6 @@ type State = {
 };
 
 class AdditionalTabs extends PureComponent<Props, State> {
-    loadedTabs: boolean;
-
     initialState: State = {
         isLoading: true,
     };
