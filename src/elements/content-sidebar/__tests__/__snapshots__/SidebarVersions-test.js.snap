@@ -12,6 +12,7 @@ exports[`elements/content-sidebar/SidebarVersions should render the versions whe
 <VersionHistoryLink
   className=""
   data-resin-target="versionhistory"
+  data-testid="versionhistory"
   versionCount={2}
 />
 `;

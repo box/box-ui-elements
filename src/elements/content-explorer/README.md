@@ -6,9 +6,6 @@ var ContentExplorer = require('./ContentExplorer').default;
     <ContentExplorer
         contentPreviewProps={{
             contentSidebarProps: {
-                hasActivityFeed: true,
-                hasSkills: true,
-                hasMetadata: true,
                 detailsSidebarProps: {
                     hasProperties: true,
                     hasNotices: true,
@@ -17,6 +14,10 @@ var ContentExplorer = require('./ContentExplorer').default;
                     hasRetentionPolicy: true,
                     hasVersions: true,
                 },
+                features: FEATURES,
+                hasActivityFeed: true,
+                hasMetadata: true,
+                hasSkills: true,
             },
         }}
         features={FEATURES}

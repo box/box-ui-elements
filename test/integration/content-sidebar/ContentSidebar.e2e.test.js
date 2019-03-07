@@ -1,11 +1,20 @@
 // <reference types="Cypress" />
 
 describe('ContentSidebar', () => {
-    beforeEach(() => {
-        cy.visit('/Elements/ContentSidebar');
-    });
+    const helpers = {
+        load({ features, fileId } = {}) {
+            cy.visit('/Elements/ContentSidebar', {
+                onBeforeLoad: contentWindow => {
+                    contentWindow.FEATURES = features;
+                    contentWindow.FILE_ID = fileId;
+                },
+            });
+        },
+    };
 
-    it('Toggling the skills button should hide the sidebar', () => {
+    it('should toggle its content when a user toggles a sidebar tab', () => {
+        helpers.load();
+
         // Sidebar should be open by default
         cy.getByTestId('bcs-content').should('exist');
         cy.getByTestId('sidebarskills').should('have.class', 'bcs-nav-btn-is-selected');
@@ -17,7 +26,9 @@ describe('ContentSidebar', () => {
         cy.getByTestId('bcs-content').should('exist');
     });
 
-    it('Clicking other tabs should switch the sidebar tab', () => {
+    it('should switch the sidebar panel when a user navigates between tabs', () => {
+        helpers.load();
+
         // Sidebar should be open by default
         cy.getByTestId('bcs-content').should('exist');
         cy.getByTestId('sidebarskills').should('have.class', 'bcs-nav-btn-is-selected');
@@ -26,5 +37,20 @@ describe('ContentSidebar', () => {
         cy.getByTestId('sidebaractivity').should('have.class', 'bcs-nav-btn-is-selected');
 
         cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-nav-btn-is-selected');
+    });
+
+    it('should show and hide the version history panel when a user navigates to and from it', () => {
+        helpers.load({
+            features: { versions: true },
+            fileId: Cypress.env('FILE_ID_DOC'),
+        });
+
+        cy.getByTestId('sidebardetails').click();
+        cy.getByTestId('versionhistory').click();
+        cy.contains('[data-testid="bcs-content"]', 'Version History')
+            .as('versionHistory')
+            .contains('Back')
+            .click();
+        cy.get('@versionHistory').should('not.exist');
     });
 });
