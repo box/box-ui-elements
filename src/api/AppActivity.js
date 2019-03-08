@@ -18,7 +18,7 @@ class AppActivity extends MarkerBasedAPI {
 
     /**
      * Map an entry from the AppActivity API to an AppActivityItem.
-     * occurred_at -> created_at timestamp
+     * occurred_at -> created_at
      * Adds permissions to item
      *
      * @param {Object} item - A single entry in the AppActivity API entiries list
@@ -29,7 +29,7 @@ class AppActivity extends MarkerBasedAPI {
         const { occurred_at, ...rest } = item;
         const { can_delete } = this.permissions;
         return {
-            created_at: new Date(occurred_at).getTime(),
+            created_at: occurred_at,
             permissions: {
                 can_delete,
             },
