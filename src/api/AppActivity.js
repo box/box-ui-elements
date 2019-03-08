@@ -18,7 +18,8 @@ class AppActivity extends MarkerBasedAPI {
 
     /**
      * Map an entry from the AppActivity API to an AppActivityItem.
-     * occurred_at -> created_at
+     * occurred_at -> created_at timestamp
+     * Adds permissions to item
      *
      * @param {Object} item - A single entry in the AppActivity API entiries list
      *
@@ -28,7 +29,7 @@ class AppActivity extends MarkerBasedAPI {
         const { occurred_at, ...rest } = item;
         const { can_delete } = this.permissions;
         return {
-            created_at: occurred_at,
+            created_at: new Date(occurred_at).getTime(),
             permissions: {
                 can_delete,
             },
@@ -83,13 +84,15 @@ class AppActivity extends MarkerBasedAPI {
             return;
         }
 
-        this.permissions = {};
         const { response } = error;
 
         // In the case of a 404, the enterprise does not have App Activities enabled.
         // Show no App Activity
         if (response.status === HTTP_STATUS_CODE_NOT_FOUND) {
-            this.successHandler({});
+            this.successHandler({
+                entries: [],
+                total: 0,
+            });
         } else {
             super.errorHandler(error);
         }

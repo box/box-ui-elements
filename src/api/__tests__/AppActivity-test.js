@@ -16,9 +16,10 @@ describe('api/AppActivity', () => {
 
     describe('mapAppActivityItem()', () => {
         test('should transform app activity entries to contain created_at instead of occurred_at', () => {
-            const createdAtTime = '123456778';
+            const occurred_at = '2019-03-08T17:32:46.422Z';
+            const createdAtTime = new Date(occurred_at).getTime();
             const entry = {
-                occurred_at: createdAtTime,
+                occurred_at,
             };
 
             const activityItem = appActivity.mapAppActivityItem(entry);

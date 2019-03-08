@@ -148,7 +148,7 @@ const COMMENTS_FIELDS_TO_FETCH = [
 // Fields that represent users
 const USER_FIELDS = [FIELD_CREATED_BY, FIELD_MODIFIED_BY, FIELD_OWNED_BY, FIELD_ASSIGNED_TO];
 
-// Fields required to fetch ap activity
+// Fields required to fetch app activity
 const APP_ACTIVITY_FIELDS_TO_FETCH = [
     FIELD_ACTIVITY_TEMPLATE,
     FIELD_APP,
