@@ -1,5 +1,4 @@
 @import '../../styles/variables';
-@import '../../styles/common/forms';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
@@ -113,7 +112,7 @@
     .pill-selector-input-wrapper {
         border: 1px solid $seesee;
         margin-top: 10px;
-        min-height: $bdl-pill-selector-min-height-large;
+        min-height: $bdl-line-height * 4;
 
         .pill-selector-input::placeholder {
             color: $nines;

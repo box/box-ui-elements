@@ -1,5 +1,4 @@
 @import '../../styles/variables';
-@import '../../styles/common/forms';
 
 /**************************************
  * Pill Selector
@@ -57,7 +56,7 @@
         }
 
         &.pill-selector-suggestions-enabled {
-            min-height: $bdl-pill-selector-min-height-large;
+            min-height: $bdl-line-height * 4;
         }
 
         &:not(.show-error) {
