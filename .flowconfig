@@ -16,19 +16,10 @@
 .*/node_modules/config-chain*
 .*/__tests__/.*
 
-[untyped]
-
-[include]
-./src
-
-[libs]
-
 [options]
 esproposal.export_star_as=enable
 module.file_ext=.js
 module.file_ext=.scss
-module.system.node.resolve_dirname=node_modules
-module.system.node.resolve_dirname=src
 module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/SCSSFlowStub.js.flow'
 module.name_mapper.extension='css' -> '<PROJECT_ROOT>/flow/SCSSFlowStub.js.flow'
 module.name_mapper='react-intl-locale-data' -> '<PROJECT_ROOT>/flow/WebpackI18N.js.flow'
