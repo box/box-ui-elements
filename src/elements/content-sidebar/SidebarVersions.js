@@ -27,6 +27,7 @@ const SidebarVersions = ({ onVersionHistoryClick, file }: Props) => {
     return (
         <VersionHistoryLink
             data-resin-target={DETAILS_TARGETS.VERSION_HISTORY}
+            data-testid={DETAILS_TARGETS.VERSION_HISTORY}
             onClick={onVersionHistoryClick}
             versionCount={versionNumber}
         />

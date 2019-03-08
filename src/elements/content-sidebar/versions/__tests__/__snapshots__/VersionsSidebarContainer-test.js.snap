@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/versions/VersionsSidebarContainer render should match its snapshot 1`] = `
+<VersionsSidebar
+  versions={Array []}
+/>
+`;

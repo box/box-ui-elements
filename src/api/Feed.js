@@ -217,6 +217,7 @@ class Feed extends Base {
      */
     fetchVersions(): Promise<?FileVersions> {
         this.versionsAPI = new VersionsAPI(this.options);
+
         return new Promise(resolve => {
             this.versionsAPI.getVersions(this.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
         });

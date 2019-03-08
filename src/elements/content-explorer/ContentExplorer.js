@@ -7,10 +7,11 @@
 import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
+import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
-import cloneDeep from 'lodash/cloneDeep';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -18,7 +19,6 @@ import Pagination from '../common/pagination';
 import SubHeader from '../common/sub-header/SubHeader';
 import makeResponsive from '../common/makeResponsive';
 import openUrlInsideIframe from '../../utils/iframe';
-import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import Internationalize from '../common/Internationalize';
 import API from '../../api';
 import Footer from './Footer';
@@ -27,6 +27,8 @@ import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
+import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import { withFeatureProvider } from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -1419,4 +1421,4 @@ class ContentExplorer extends Component<Props, State> {
 }
 
 export { ContentExplorer as ContentExplorerComponent };
-export default makeResponsive(ContentExplorer);
+export default flow([makeResponsive, withFeatureProvider])(ContentExplorer);

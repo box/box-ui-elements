@@ -194,7 +194,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       />
     }
     onChange={[Function]}
-    rows={3}
+    rows={4}
     value=""
   />
   <ModalActions>
@@ -271,7 +271,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       />
     }
     onChange={[Function]}
-    rows={3}
+    rows={4}
     value=""
   />
   <ModalActions>
@@ -397,7 +397,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       />
     }
     onChange={[Function]}
-    rows={3}
+    rows={4}
     value=""
   />
   <ModalActions>
@@ -479,7 +479,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       />
     }
     onChange={[Function]}
-    rows={3}
+    rows={4}
     value=""
   />
   <ModalActions>

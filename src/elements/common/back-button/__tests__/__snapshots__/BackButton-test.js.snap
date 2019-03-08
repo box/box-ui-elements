@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/common/back-button should match its snapshot 1`] = `
+<PlainButton
+  className="be-btn-back"
+  onClick={[Function]}
+  type="button"
+>
+  <IconNavigateLeft
+    height={24}
+    width={24}
+  />
+  <FormattedMessage
+    defaultMessage="Back"
+    id="be.back"
+  >
+    <Component />
+  </FormattedMessage>
+</PlainButton>
+`;

@@ -73,5 +73,6 @@
     "notifications-wrapper-z-index": "180",
     "overlay-z-index": "190",
     "tooltip-z-index": "190",
+    "bdl-line-height": "20px",
     "bdl-border-radius-size": "4px"
 }

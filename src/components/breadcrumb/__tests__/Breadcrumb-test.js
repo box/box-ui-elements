@@ -3,14 +3,17 @@ import React from 'react';
 
 import { Link } from '../../link';
 
-import Breadcrumb from '..';
+import { BreadcrumbCore as Breadcrumb } from '../Breadcrumb';
 
 let wrapper;
+const intl = {
+    formatMessage: jest.fn().mockReturnValue('breadcrumb'),
+};
 
 describe('components/breadcrumb/Breadcrumb', () => {
     test('should render correct breadcrumbs', () => {
         wrapper = shallow(
-            <Breadcrumb className="my-breadcrumbs" label="Breadcrumb">
+            <Breadcrumb className="my-breadcrumbs" intl={intl}>
                 <Link>Home</Link>
                 <Link>Box Engineering</Link>
                 <Link>Frameworks</Link>
@@ -18,7 +21,7 @@ describe('components/breadcrumb/Breadcrumb', () => {
         );
 
         expect(wrapper.is('nav')).toBe(true);
-        expect(wrapper.prop('aria-label')).toEqual('Breadcrumb');
+        expect(wrapper.prop('aria-label')).toEqual('breadcrumb');
         expect(wrapper.hasClass('my-breadcrumbs')).toBe(true);
         expect(wrapper.find('ol').length).toBe(1);
         expect(wrapper.find('Crumb').length).toBe(3);
@@ -26,7 +29,7 @@ describe('components/breadcrumb/Breadcrumb', () => {
 
     test('should render dotdotdot crumbs if number of children exceeds threshold', () => {
         wrapper = shallow(
-            <Breadcrumb label="Breadcrumb" threshold={4}>
+            <Breadcrumb threshold={4} intl={intl}>
                 <Link>Home</Link>
                 <Link>Box Engineering</Link>
                 <Link>Frameworks</Link>

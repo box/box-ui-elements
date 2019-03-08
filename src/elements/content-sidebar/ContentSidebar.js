@@ -32,7 +32,7 @@ import './ContentSidebar.scss';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
-    additionalTabs?: AdditionalTabs,
+    additionalTabs?: Array<AdditionalSidebarTab>,
     apiHost: string,
     cache?: APICache,
     className: string,

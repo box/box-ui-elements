@@ -1,7 +1,3 @@
-### Screenshot
-<img src="https://user-images.githubusercontent.com/1075325/27887153-09243762-6194-11e7-8d2d-cf654d9364bc.png" style="border: 1px solid #e8e8e8" width="600" />
----
-
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-uploader))
 ```jsx
 var ContentUploader = require('./ContentUploader').default;
@@ -14,6 +10,10 @@ var ContentUploader = require('./ContentUploader').default;
     />
 </IntlProvider>
 ```
+
+### Screenshot
+<img src="https://user-images.githubusercontent.com/1075325/27887153-09243762-6194-11e7-8d2d-cf654d9364bc.png" style="border: 1px solid #e8e8e8" width="600" />
+---
 
 ### Props
 | Prop | Type | Default | Description |
