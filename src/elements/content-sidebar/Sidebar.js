@@ -22,7 +22,7 @@ import type { FeatureConfig } from '../common/feature-checking';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
-    additionalTabs?: AdditionalTabs,
+    additionalTabs?: Array<AdditionalSidebarTab>,
     className: string,
     currentUser?: User,
     detailsSidebarProps: DetailsSidebarProps,
