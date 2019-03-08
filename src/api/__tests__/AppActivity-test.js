@@ -145,7 +145,7 @@ describe('api/AppActivity', () => {
 
         test('should set error code to delete app activity error', () => {
             appActivity.deleteAppActivity({
-                file: {},
+                fileId: '321',
                 appActivityId: '123',
                 successCallback: jest.fn(),
                 errorCallback: jest.fn(),
@@ -156,7 +156,7 @@ describe('api/AppActivity', () => {
 
         test('should invoke delete', () => {
             appActivity.deleteAppActivity({
-                file: {},
+                fileId: '321',
                 appActivityId: '123',
                 successCallback: jest.fn(),
                 errorCallback: jest.fn(),
@@ -168,7 +168,7 @@ describe('api/AppActivity', () => {
         test('should invoke getDeleteUrl() to create the correct URL to delete app activity', () => {
             appActivity.getDeleteUrl = jest.fn();
             appActivity.deleteAppActivity({
-                file: {},
+                fileId: '321',
                 appActivityId: '123',
                 successCallback: jest.fn(),
                 errorCallback: jest.fn(),
@@ -184,7 +184,7 @@ describe('api/AppActivity', () => {
             const deleteUrl = 'https://delete.my/app_activity/09876';
             appActivity.getDeleteUrl = jest.fn().mockReturnValue(deleteUrl);
             appActivity.deleteAppActivity({
-                file: { id: fileId },
+                fileId,
                 appActivityId: '123',
                 successCallback,
                 errorCallback,

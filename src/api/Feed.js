@@ -1357,12 +1357,14 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        const { id } = file;
+
+        this.id = id;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, appActivityId);
 
         this.appActivityAPI.deleteAppActivity({
-            file,
+            id,
             appActivityId,
             successCallback: this.deleteFeedItem.bind(this, appActivityId, successCallback),
             errorCallback: (e: ElementsXhrError, code: string) => {

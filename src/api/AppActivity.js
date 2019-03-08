@@ -13,7 +13,7 @@ import {
 import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../utils/fields';
 
 class AppActivity extends MarkerBasedAPI {
-    /** @property {TasksAPI} - Placeholder permissions object to determine if app activity can be deleted */
+    /** @property {BoxItemPermission} - Placeholder permissions object to determine if app activity can be deleted */
     permissions: BoxItemPermission = {};
 
     /**
@@ -21,7 +21,7 @@ class AppActivity extends MarkerBasedAPI {
      * occurred_at -> created_at
      * Adds permissions to item
      *
-     * @param {Object} item - A single entry in the AppActivity API entiries list
+     * @param {Object} item - A single entry in the AppActivity API entries list
      *
      * @return {AppActivityItem}
      */
@@ -140,28 +140,26 @@ class AppActivity extends MarkerBasedAPI {
     /**
      * Delete an app activity item
      *
-     * @param {BoxItem} file - The Box file that App Activity is on
+     * @param {string} fileId - The ID of the Box file that App Activity is on
      * @param {string} appActivityId - An AppActivity item id
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      */
     deleteAppActivity({
-        file,
+        fileId,
         appActivityId,
         successCallback,
         errorCallback,
     }: {
         appActivityId: string,
         errorCallback: Function,
-        file: BoxItem,
+        fileId: string,
         successCallback: Function,
     }): void {
         this.errorCode = ERROR_CODE_DELETE_APP_ACTIVITY;
 
-        const { id } = file;
-
         this.delete({
-            id,
+            id: fileId,
             url: this.getDeleteUrl(appActivityId),
             successCallback,
             errorCallback,
