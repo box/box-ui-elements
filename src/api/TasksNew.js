@@ -94,6 +94,7 @@ class TasksNew extends Base {
             url: this.getUrlForTask(task.id),
             successCallback,
             errorCallback,
+            data: { headers },
         });
     }
 

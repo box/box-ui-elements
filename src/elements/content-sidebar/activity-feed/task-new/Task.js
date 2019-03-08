@@ -41,25 +41,26 @@ class Task extends React.Component<Props> {
             currentUser,
             due_at,
             error,
+            getAvatarUrl,
+            getMentionWithQuery,
+            getUserProfileUrl,
             id,
             isPending,
+            mentionSelectorContacts,
+            name,
+            onAssignmentUpdate = noop,
             onDelete,
             onEdit,
-            onAssignmentUpdate = noop,
-            name,
+            permissions,
             status,
             translatedTaggedMessage,
             translations,
-            getAvatarUrl,
-            getUserProfileUrl,
-            getMentionWithQuery,
-            mentionSelectorContacts,
         } = this.props;
 
-        // Enable when edit/delete are implemented for new tasks
         const taskPermissions = {
+            ...permissions,
+            // can_edit: permissions.can_update,
             can_edit: false,
-            can_delete: false,
         };
 
         // // find assignment for current user if permitted

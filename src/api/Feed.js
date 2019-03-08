@@ -962,6 +962,40 @@ class Feed extends Base {
     };
 
     /**
+     * Deletes a task in the new API
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {string} taskId - The task's id
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    deleteTaskNew = (
+        file: BoxItem,
+        task: TaskNew,
+        successCallback: (taskId: string) => void = noop,
+        errorCallback: ErrorCallback = noop,
+    ) => {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.id = file.id;
+        this.errorCallback = errorCallback;
+        this.tasksNewAPI = new TasksNewAPI(this.options);
+        this.updateFeedItem({ isPending: true }, task.id);
+
+        this.tasksNewAPI.deleteTask({
+            file,
+            task,
+            successCallback: this.deleteFeedItem.bind(this, task.id, successCallback),
+            errorCallback: (e: ElementsXhrError, code: string) => {
+                this.feedErrorCallback(true, e, code);
+            },
+        });
+    };
+
+    /**
      * Deletes a feed item from the cache
      *
      * @param {string} id - The id of the feed item to be deleted

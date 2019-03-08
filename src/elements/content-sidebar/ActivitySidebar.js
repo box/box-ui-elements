@@ -156,11 +156,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             // need to load the pending item
             this.fetchFeedItems();
         },
-        deleteTask: ({ id }: { id: string }): void => {
+        deleteTask: (task: TaskNew): void => {
             const { file, api, onTaskDelete = noop } = this.props;
-            api.getFeedAPI(false).deleteTask(
+            api.getFeedAPI(false).deleteTaskNew(
                 file,
-                id,
+                task,
                 (taskId: string) => {
                     this.feedSuccessCallback();
                     onTaskDelete(taskId);
@@ -552,6 +552,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             ? this.tasksApiNew.updateTaskAssignment
             : this.updateTaskAssignment;
 
+        const updateTask = isFeatureEnabled(features, 'activityFeed.tasks.newApi')
+            ? this.tasksApiNew.updateTask
+            : this.updateTask;
+
+        const deleteTask = isFeatureEnabled(features, 'activityFeed.tasks.newApi')
+            ? this.tasksApiNew.deleteTask
+            : this.deleteTask;
+
         return (
             <SidebarContent
                 className="bcs-activity"
@@ -568,8 +576,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
                     onTaskCreate={this.createTask}
-                    onTaskDelete={this.deleteTask}
-                    onTaskUpdate={this.updateTask}
+                    onTaskDelete={deleteTask}
+                    onTaskUpdate={updateTask}
                     onTaskAssignmentUpdate={updateTaskAssignment}
                     getApproverWithQuery={this.getApproverWithQuery}
                     getMentionWithQuery={this.getMentionWithQuery}
