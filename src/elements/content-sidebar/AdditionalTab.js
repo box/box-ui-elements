@@ -12,7 +12,7 @@ import IconEllipsis from '../../icons/general/IconEllipsis';
 
 import './AdditionalTab.scss';
 
-const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, title, ...rest }: AdditionalTab) => {
+const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, title, ...rest }: AdditionalSidebarTab) => {
     return (
         <Tooltip position="middle-left" text={title}>
             <PlainButton

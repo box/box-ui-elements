@@ -23,7 +23,7 @@ import {
 import './SidebarNav.scss';
 
 type Props = {
-    additionalTabs?: AdditionalTabs,
+    additionalTabs?: Array<AdditionalSidebarTab>,
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasDetails: boolean,
