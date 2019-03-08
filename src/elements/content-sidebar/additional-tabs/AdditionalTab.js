@@ -20,15 +20,15 @@ type Props = {
 };
 
 const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, isLoading, onImageLoad, title, ...rest }: Props) => {
-    const className = classNames('bcs-nav-btn', { 'is-hidden': isLoading });
+    const className = classNames('bcs-nav-btn', { 'bdl-AdditionalTab--is-hidden': isLoading });
 
     return (
         <Tooltip position="middle-left" text={title}>
             <PlainButton className={className} type="button" onClick={() => callbackFn({ id, callbackData: rest })}>
                 {id && id > 0 && iconUrl ? (
-                    <img className="bcs-additional-tab-icon" src={iconUrl} onLoad={onImageLoad} alt={title} />
+                    <img className="bdl-AdditionalTab-icon" src={iconUrl} onLoad={onImageLoad} alt={title} />
                 ) : (
-                    <IconEllipsis className="bcs-additional-tab-more-icon" />
+                    <IconEllipsis className="bdl-AdditionalTab-moreIcon" />
                 )}
             </PlainButton>
         </Tooltip>

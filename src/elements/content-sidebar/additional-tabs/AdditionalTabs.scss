@@ -1,16 +1,10 @@
 @import '../../../styles/variables';
 
-.bcs-nav-additional-tabs::before {
+.bdl-AdditionalTabs::before {
     background: $efive;
     content: '';
     display: block;
     height: 1px;
     margin: 16px auto;
     width: 44px;
-}
-
-.bcs-nav-additional-tabs {
-    .is-hidden {
-        display: none;
-    }
 }

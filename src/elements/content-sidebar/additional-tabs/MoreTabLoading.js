@@ -10,8 +10,8 @@ import IconEllipsis from '../../../icons/general/IconEllipsis';
 
 const MoreTabLoading = () => {
     return (
-        <div className="bcs-additional-tab-loading-item">
-            <IconEllipsis className="bcs-additional-tab-more-loading-icon" />
+        <div className="bdl-AdditionalTabLoading-item">
+            <IconEllipsis className="bdl-AdditionalTabLoading-moreIcon" />
         </div>
     );
 };

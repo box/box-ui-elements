@@ -2,7 +2,7 @@
 
 exports[`elements/content-sidebar/AdditionalTabs should not render the loading state after the image URLs have loaded 1`] = `
 <div
-  className="bcs-nav-additional-tabs"
+  className="bdl-AdditionalTabs"
 >
   <AdditionalTab
     callback={[MockFunction]}
@@ -19,7 +19,7 @@ exports[`elements/content-sidebar/AdditionalTabs should not render the loading s
 
 exports[`elements/content-sidebar/AdditionalTabs should render the correct number of tabs and the loading state 1`] = `
 <div
-  className="bcs-nav-additional-tabs"
+  className="bdl-AdditionalTabs"
 >
   <AdditionalTabsLoading />
   <AdditionalTab

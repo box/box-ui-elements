@@ -66,7 +66,7 @@ class AdditionalTabs extends PureComponent<Props, State> {
         const { isLoading } = this.state;
 
         return (
-            <div className="bcs-nav-additional-tabs">
+            <div className="bdl-AdditionalTabs">
                 {isLoading && <AdditionalTabsLoading />}
                 {tabs &&
                     tabs.map(tabData => (

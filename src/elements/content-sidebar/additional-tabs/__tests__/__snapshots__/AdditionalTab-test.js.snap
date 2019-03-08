@@ -11,7 +11,7 @@ exports[`elements/content-sidebar/AdditionalTab should render the more icon elli
     type="button"
   >
     <IconEllipsis
-      className="bcs-additional-tab-more-icon"
+      className="bdl-AdditionalTab-moreIcon"
     />
   </PlainButton>
 </Tooltip>
@@ -29,7 +29,7 @@ exports[`elements/content-sidebar/AdditionalTab should render the tooltip and bu
   >
     <img
       alt="test title"
-      className="bcs-additional-tab-icon"
+      className="bdl-AdditionalTab-icon"
       src="https://foo.com/image"
     />
   </PlainButton>

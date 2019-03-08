@@ -10,17 +10,17 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
       tabs={Array []}
     >
       <div
-        className="bcs-nav-additional-tabs"
+        className="bdl-AdditionalTabs"
       >
         <AdditionalTabsLoading>
           <AdditionalTabLoading
             key="0"
           >
             <div
-              className="bcs-additional-tab-loading-item"
+              className="bdl-AdditionalTabLoading-item"
             >
               <div
-                className="bcs-additional-tab-icon bcs-additional-tab-loading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
               />
             </div>
           </AdditionalTabLoading>
@@ -28,10 +28,10 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
             key="1"
           >
             <div
-              className="bcs-additional-tab-loading-item"
+              className="bdl-AdditionalTabLoading-item"
             >
               <div
-                className="bcs-additional-tab-icon bcs-additional-tab-loading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
               />
             </div>
           </AdditionalTabLoading>
@@ -39,10 +39,10 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
             key="2"
           >
             <div
-              className="bcs-additional-tab-loading-item"
+              className="bdl-AdditionalTabLoading-item"
             >
               <div
-                className="bcs-additional-tab-icon bcs-additional-tab-loading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
               />
             </div>
           </AdditionalTabLoading>
@@ -50,10 +50,10 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
             key="3"
           >
             <div
-              className="bcs-additional-tab-loading-item"
+              className="bdl-AdditionalTabLoading-item"
             >
               <div
-                className="bcs-additional-tab-icon bcs-additional-tab-loading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
               />
             </div>
           </AdditionalTabLoading>
@@ -61,10 +61,10 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
             key="4"
           >
             <div
-              className="bcs-additional-tab-loading-item"
+              className="bdl-AdditionalTabLoading-item"
             >
               <div
-                className="bcs-additional-tab-icon bcs-additional-tab-loading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
               />
             </div>
           </AdditionalTabLoading>
@@ -72,19 +72,19 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
             key="5"
           >
             <div
-              className="bcs-additional-tab-loading-item"
+              className="bdl-AdditionalTabLoading-item"
             >
               <IconEllipsis
-                className="bcs-additional-tab-more-loading-icon"
+                className="bdl-AdditionalTabLoading-moreIcon"
               >
                 <AccessibleSVG
-                  className="icon-ellipsis bcs-additional-tab-more-loading-icon"
+                  className="icon-ellipsis bdl-AdditionalTabLoading-moreIcon"
                   height={20}
                   viewBox="0 0 10 2"
                   width={20}
                 >
                   <svg
-                    className="icon-ellipsis bcs-additional-tab-more-loading-icon"
+                    className="icon-ellipsis bdl-AdditionalTabLoading-moreIcon"
                     focusable="false"
                     height={20}
                     role="presentation"

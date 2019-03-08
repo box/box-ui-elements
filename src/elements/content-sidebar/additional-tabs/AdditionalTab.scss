@@ -1,14 +1,18 @@
 @import '../../../styles/variables';
 @import '../../../styles/common/_animations';
 
-.bcs-additional-tab-icon,
-.bcs-additional-tab-more-icon {
+.bdl-AdditionalTab-icon,
+.bdl-AdditionalTab-moreIcon {
     @include bdl-fadeIn(.5s);
 
     height: 24px;
     width: 24px;
 }
 
-.bcs-additional-tab-more-icon .fill-color {
+.bdl-AdditionalTab-moreIcon .fill-color {
     fill: $downtown-grey;
+}
+
+.bdl-AdditionalTab--is-hidden {
+    display: none;
 }
