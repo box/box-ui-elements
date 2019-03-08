@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 1`] = `
+<SidebarContent
+  className="bcs-versions"
+  title={
+    <React.Fragment>
+      <withRouter(BackButton) />
+      <FormattedMessage
+        defaultMessage="Version History"
+        id="be.sidebarVersionsTitle"
+      />
+    </React.Fragment>
+  }
+/>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 2`] = `
+<SidebarContent
+  className="bcs-versions"
+  title={
+    <React.Fragment>
+      <withRouter(BackButton) />
+      <FormattedMessage
+        defaultMessage="Version History"
+        id="be.sidebarVersionsTitle"
+      />
+    </React.Fragment>
+  }
+/>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 3`] = `
+<SidebarContent
+  className="bcs-versions"
+  title={
+    <React.Fragment>
+      <withRouter(BackButton) />
+      <FormattedMessage
+        defaultMessage="Version History"
+        id="be.sidebarVersionsTitle"
+      />
+    </React.Fragment>
+  }
+>
+  12345
+</SidebarContent>
+`;

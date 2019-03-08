@@ -804,14 +804,12 @@ type Integration = {
     type: APP_INTEGRATION,
 };
 
-type AdditionalTab = {
-    callback: (id: number, callbackData: Object) => void,
+type AdditionalSidebarTab = {
+    callback: (callbackData: Object) => void,
     iconUrl?: string,
     id: number,
     title: ?string,
 };
-
-type AdditionalTabs = Array<AdditionalTab>;
 
 type Alignment = 'left' | 'right';
 

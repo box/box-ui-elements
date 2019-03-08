@@ -7,9 +7,6 @@ var ContentPreview = require('./ContentPreview').default;
 <IntlProvider locale="en" textComponent={React.Fragment}>
     <ContentPreview
         contentSidebarProps={{
-            hasActivityFeed: true,
-            hasSkills: true,
-            hasMetadata: true,
             detailsSidebarProps: {
                 hasAccessStats: true,
                 hasClassification: true,
@@ -18,6 +15,10 @@ var ContentPreview = require('./ContentPreview').default;
                 hasRetentionPolicy: true,
                 hasVersions: true,
             },
+            features: FEATURES,            
+            hasActivityFeed: true,
+            hasMetadata: true,
+            hasSkills: true,
         }}
         features={FEATURES}
         fileId={FILE_ID}

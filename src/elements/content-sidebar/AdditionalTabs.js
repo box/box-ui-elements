@@ -9,7 +9,7 @@ import AdditionalTab from './AdditionalTab';
 import './AdditionalTabs.scss';
 
 type Props = {
-    tabs: AdditionalTabs,
+    tabs: Array<AdditionalSidebarTab>,
 };
 
 const AdditionalSidebarTabs = ({ tabs }: Props) => {
