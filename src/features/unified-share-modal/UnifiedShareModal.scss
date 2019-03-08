@@ -107,15 +107,12 @@
         .text-area-container textarea::placeholder {
             color: $nines;
         }
-
-        .pill-selector-input-wrapper {
-            min-height: 68px;
-        }
     }
 
     .pill-selector-input-wrapper {
         border: 1px solid $seesee;
         margin-top: 10px;
+        min-height: $bdl-line-height * 4;
 
         .pill-selector-input::placeholder {
             color: $nines;

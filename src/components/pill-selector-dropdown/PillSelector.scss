@@ -56,7 +56,7 @@
         }
 
         &.pill-selector-suggestions-enabled {
-            min-height: 80px;
+            min-height: $bdl-line-height * 4;
         }
 
         &:not(.show-error) {
