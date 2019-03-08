@@ -41,6 +41,7 @@ class MarkerBasedApi extends Base {
      * @param {number} limit the number of items to fetch
      * @param {Object} requestData the request query params
      * @param {boolean} shouldFetchAll true if should get all the pages before calling
+     * @param {StringMap} [headers] - Key-value map of headers
      * @private
      */
     async markerGetRequest(
@@ -49,6 +50,7 @@ class MarkerBasedApi extends Base {
         limit: number,
         shouldFetchAll: boolean,
         requestData: Object = {},
+        headers?: StringMap = {},
     ): Promise<void> {
         if (this.isDestroyed()) {
             return;
@@ -67,6 +69,7 @@ class MarkerBasedApi extends Base {
                 url,
                 id: getTypedFileId(id),
                 params: queryParams,
+                headers,
             });
 
             const entries = this.data ? this.data.entries : [];
@@ -76,7 +79,7 @@ class MarkerBasedApi extends Base {
             };
             const nextMarker = data.next_marker;
             if (shouldFetchAll && this.hasMoreItems(nextMarker)) {
-                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, requestData);
+                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, requestData, headers);
                 return;
             }
 
@@ -96,6 +99,7 @@ class MarkerBasedApi extends Base {
      * @param {number} limit the number of items to fetch
      * @param {Object} params the request query params
      * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
+     * @param {StringMap} [headers] - Key-value map of headers
      */
     async markerGet({
         id,
@@ -105,8 +109,10 @@ class MarkerBasedApi extends Base {
         limit = 1000,
         requestData,
         shouldFetchAll = true,
+        headers,
     }: {
         errorCallback: ElementsErrorCallback,
+        headers?: StringMap,
         id: string,
         limit?: number,
         marker?: string,
@@ -117,7 +123,7 @@ class MarkerBasedApi extends Base {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        return this.markerGetRequest(id, marker, limit, shouldFetchAll, requestData);
+        return this.markerGetRequest(id, marker, limit, shouldFetchAll, requestData, headers);
     }
 }
 

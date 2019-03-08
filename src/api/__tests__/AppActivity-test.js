@@ -1,5 +1,5 @@
 import AppActivity from '../AppActivity';
-import { ERROR_CODE_DELETE_APP_ACTIVITY } from '../../constants';
+import { ERROR_CODE_DELETE_APP_ACTIVITY, DEFAULT_LOCALE, HEADER_ACCEPT_LANGUAGE } from '../../constants';
 import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../../utils/fields';
 
 let appActivity;
@@ -89,21 +89,51 @@ describe('api/AppActivity', () => {
             const id = '987654321';
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            const limit = 900;
+            const language = 'ja-JP';
             const requestData = {
                 fields: APP_ACTIVITY_FIELDS_TO_FETCH.toString(),
                 item_id: id,
                 item_type: 'file',
             };
 
-            appActivity.getAppActivity(id, {}, successCallback, errorCallback, limit);
+            const headers = {
+                [HEADER_ACCEPT_LANGUAGE]: language,
+            };
+
+            appActivity.getAppActivity(id, {}, successCallback, errorCallback, language);
 
             expect(appActivity.markerGet).toBeCalledWith({
                 id,
-                limit,
                 successCallback,
                 errorCallback,
                 requestData,
+                headers,
+            });
+        });
+
+        test('should default to DEFAULT_LOCALE locale if none provided', () => {
+            appActivity.markerGet = jest.fn();
+            const id = '987654321';
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            const requestData = {
+                fields: APP_ACTIVITY_FIELDS_TO_FETCH.toString(),
+                item_id: id,
+                item_type: 'file',
+            };
+
+            const headers = {
+                [HEADER_ACCEPT_LANGUAGE]: DEFAULT_LOCALE,
+            };
+
+            appActivity.getAppActivity(id, {}, successCallback, errorCallback);
+
+            expect(appActivity.markerGet).toBeCalledWith({
+                id,
+                successCallback,
+                errorCallback,
+                requestData,
+                headers,
             });
         });
     });

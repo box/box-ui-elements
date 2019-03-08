@@ -4,7 +4,12 @@
  * @author Box
  */
 import MarkerBasedAPI from './MarkerBasedAPI';
-import { ERROR_CODE_DELETE_APP_ACTIVITY, HTTP_STATUS_CODE_NOT_FOUND } from '../constants';
+import {
+    ERROR_CODE_DELETE_APP_ACTIVITY,
+    HTTP_STATUS_CODE_NOT_FOUND,
+    HEADER_ACCEPT_LANGUAGE,
+    DEFAULT_LOCALE,
+} from '../constants';
 import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../utils/fields';
 
 class AppActivity extends MarkerBasedAPI {
@@ -106,7 +111,7 @@ class AppActivity extends MarkerBasedAPI {
         permissions: BoxItemPermission,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
-        limit?: number,
+        language?: string = DEFAULT_LOCALE,
     ): void {
         const requestData = {
             item_id: id,
@@ -114,14 +119,18 @@ class AppActivity extends MarkerBasedAPI {
             fields: APP_ACTIVITY_FIELDS_TO_FETCH.toString(),
         };
 
+        const headers = {
+            [HEADER_ACCEPT_LANGUAGE]: language,
+        };
+
         this.permissions = permissions;
 
         this.markerGet({
             id,
-            limit,
             successCallback,
             errorCallback,
             requestData,
+            headers,
         });
     }
 
