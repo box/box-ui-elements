@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react';
 
-import { columns, initialCondition } from '../components/fixtures';
+import { columns, initialCondition, conditions } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
 import { EQUALS, LESS_THAN } from '../constants';
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
-        return shallow(<FilterButton {...props} />);
+        return shallow(<FilterButton conditions={conditions} {...props} />);
     };
 
     describe('render', () => {
@@ -22,6 +22,18 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         });
     });
 
+    describe('componentDidUpdate()', () => {
+        const transientConditions = [];
+        const wrapper = getWrapper({
+            conditions,
+        });
+        wrapper.setState({
+            transientConditions,
+        });
+        wrapper.instance().componentDidUpdate();
+        expect(wrapper.state('transientConditions')).toEqual(conditions);
+    });
+
     describe('handleColumnChange()', () => {
         const condition = {
             columnId: '1',
@@ -31,21 +43,21 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         };
         const expectedConditions = [{ columnId: '2', id: '3', operator: EQUALS, values: [] }];
         test.each`
-            columnId | conditions
+            columnId | transientConditions
             ${'2'}   | ${[condition]}
-        `('should update condition.columnId', ({ columnId, conditions }) => {
+        `('should update condition.columnId', ({ columnId, transientConditions }) => {
             const wrapper = getWrapper({ columns });
             wrapper.setState({
-                conditions,
+                transientConditions,
             });
             wrapper.instance().handleColumnChange(condition, columnId);
 
-            expect(wrapper.state('conditions')).toEqual(expectedConditions);
+            expect(wrapper.state('transientConditions')).toEqual(expectedConditions);
         });
     });
 
     describe('handleOperatorChange()', () => {
-        const conditions = [
+        const transientConditions = [
             {
                 columnId: '1',
                 id: '4',
@@ -60,16 +72,16 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         `('should update condition.operator', ({ conditionId, value }) => {
             const wrapper = getWrapper({ columns });
             wrapper.setState({
-                conditions,
+                transientConditions,
             });
             wrapper.instance().handleOperatorChange(conditionId, value);
 
-            expect(wrapper.state('conditions')).toEqual(expectedConditions);
+            expect(wrapper.state('transientConditions')).toEqual(expectedConditions);
         });
     });
 
     describe('handleValueChange()', () => {
-        const conditions = [
+        const transientConditions = [
             {
                 columnId: '1',
                 id: '5',
@@ -84,16 +96,16 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         `('should update condition.values', ({ conditionId, values }) => {
             const wrapper = getWrapper({ columns });
             wrapper.setState({
-                conditions,
+                transientConditions,
             });
             wrapper.instance().handleValueChange(conditionId, values);
 
-            expect(wrapper.state('conditions')).toEqual(expectedConditions);
+            expect(wrapper.state('transientConditions')).toEqual(expectedConditions);
         });
     });
 
     describe('deleteCondition()', () => {
-        const conditions = [
+        const transientConditions = [
             {
                 id: '2',
                 operator: EQUALS,
@@ -119,11 +131,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         `('should delete condition at index 0', ({ index }) => {
             const wrapper = getWrapper({ columns });
             wrapper.instance().setState({
-                conditions,
+                transientConditions,
             });
             wrapper.instance().deleteCondition(index);
 
-            expect(wrapper.state('conditions')).toEqual(expectedConditions);
+            expect(wrapper.state('transientConditions')).toEqual(expectedConditions);
         });
     });
 
@@ -184,29 +196,22 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     describe('createCondition()', () => {
         test('Should return a condition object if columns is non-empty', () => {
             const wrapper = getWrapper({ columns });
-            const conditionID = '11';
-            const expected = {
-                columnId: '1',
-                id: conditionID,
-                operator: EQUALS,
-                values: [],
-            };
             wrapper.instance().setState({
-                conditions: [],
+                transientConditions: [],
             });
 
-            const condition = wrapper.instance().createCondition(conditionID);
-
-            expect(condition).toEqual(expected);
+            const condition = wrapper.instance().createCondition();
+            expect(condition.columnId).toEqual('1');
+            expect(condition.id).toBeDefined();
+            expect(condition.operator).toEqual(EQUALS);
+            expect(condition.values).toEqual([]);
         });
 
         test('Should return an empty object if columns is empty', () => {
             const wrapper = getWrapper({ columns: [] });
-            const props = {};
-            const conditionID = '123';
             const expected = {};
 
-            const condition = wrapper.instance().createCondition(props, conditionID);
+            const condition = wrapper.instance().createCondition();
 
             expect(condition).toEqual(expected);
         });
@@ -222,16 +227,16 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         const conditionsWithEmptyValues = [{ ...initialCondition, values: [] }];
 
         test.each`
-            description                                                                | conditions                   | shouldCloseResult
+            description                                                                | transientConditions          | shouldCloseResult
             ${'Should return true if Apply button was clicked and value is not empty'} | ${conditionsWithValues}      | ${true}
             ${'Should return false if Apply button was clicked and value is empty'}    | ${conditionsWithEmptyValues} | ${false}
-        `('$description', ({ conditions, shouldCloseResult }) => {
+        `('$description', ({ transientConditions, shouldCloseResult }) => {
             const wrapper = getWrapper({ columns });
             const targetWithClassName = {
                 target: document.createElement('button'),
             };
             wrapper.instance().setState({
-                conditions,
+                transientConditions,
             });
             targetWithClassName.target.className = 'apply-filters-button';
             const closeOnClickPredicateResult = wrapper.instance().shouldClose(targetWithClassName);
