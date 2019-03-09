@@ -188,10 +188,11 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 'current-user-assignment-id', 'COMPLETED');
     });
 
-    test('should not allow user to delete if they are not the task creator', () => {
+    test('should not allow user to delete if the task permissions do not allow it', () => {
         const wrapper = shallow(
             <Task
                 {...task}
+                permissions={{ can_delete: false, can_update: false }}
                 currentUser={otherUser}
                 approverSelectorContacts={approverSelectorContacts}
                 handlers={allHandlers}
