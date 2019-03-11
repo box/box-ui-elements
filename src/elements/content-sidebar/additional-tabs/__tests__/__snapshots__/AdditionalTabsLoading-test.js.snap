@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/additional-tabs/AdditionalTabs should render the correct loading state 1`] = `
+Array [
+  <AdditionalTabLoading
+    key="0"
+  />,
+  <AdditionalTabLoading
+    key="1"
+  />,
+  <AdditionalTabLoading
+    key="2"
+  />,
+  <AdditionalTabLoading
+    key="3"
+  />,
+  <AdditionalTabLoading
+    key="4"
+  />,
+  <MoreTabLoading
+    key="5"
+  />,
+]
+`;

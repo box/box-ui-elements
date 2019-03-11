@@ -5,7 +5,6 @@ import IconMagicWand from '../../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../../icons/general/IconMetadataThick';
 import IconDocInfo from '../../../icons/general/IconDocInfo';
 import IconChatRound from '../../../icons/general/IconChatRound';
-import AdditionalTabs from '../AdditionalTabs';
 import SidebarNavButton from '../SidebarNavButton';
 import SidebarNav from '../SidebarNav';
 
@@ -81,21 +80,12 @@ describe('elements/content-sidebar/SidebarNav', () => {
         ).toContain('bcs-nav-btn-is-selected');
     });
 
-    test('should render additional tabs', () => {
+    test('should render the additional tabs loading state', () => {
         const props = {
             hasAdditionalTabs: true,
-            additionalTabs: [
-                {
-                    id: 200,
-                    title: 'Test title',
-                    iconUrl: 'https://foo.com/icon',
-                    callback: jest.fn(),
-                    status: 'ADDED',
-                },
-            ],
+            additionalTabs: [],
         };
         const wrapper = getWrapper(props);
-        expect(wrapper.find(AdditionalTabs)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 });

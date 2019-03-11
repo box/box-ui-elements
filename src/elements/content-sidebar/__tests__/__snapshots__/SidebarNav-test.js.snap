@@ -1,109 +1,111 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/SidebarNav should render additional tabs 1`] = `
+exports[`elements/content-sidebar/SidebarNav should render the additional tabs loading state 1`] = `
 <SidebarNav
-  additionalTabs={
-    Array [
-      Object {
-        "callback": [MockFunction],
-        "iconUrl": "https://foo.com/icon",
-        "id": 200,
-        "status": "ADDED",
-        "title": "Test title",
-      },
-    ]
-  }
+  additionalTabs={Array []}
   hasAdditionalTabs={true}
 >
   <nav>
-    <AdditionalSidebarTabs
-      tabs={
-        Array [
-          Object {
-            "callback": [MockFunction],
-            "iconUrl": "https://foo.com/icon",
-            "id": 200,
-            "status": "ADDED",
-            "title": "Test title",
-          },
-        ]
-      }
+    <AdditionalTabs
+      tabs={Array []}
     >
       <div
-        className="bcs-nav-additional-tabs"
+        className="bdl-AdditionalTabs"
       >
-        <AdditionalTab
-          callback={[MockFunction]}
-          iconUrl="https://foo.com/icon"
-          id={200}
-          key="200"
-          status="ADDED"
-          title="Test title"
-        >
-          <Tooltip
-            position="middle-left"
-            text="Test title"
+        <AdditionalTabsLoading>
+          <AdditionalTabLoading
+            key="0"
           >
-            <Tooltip
-              constrainToScrollParent={false}
-              constrainToWindow={true}
-              position="middle-left"
-              text="Test title"
-              theme="default"
+            <div
+              className="bdl-AdditionalTabLoading"
             >
-              <TetherComponent
-                attachment="middle right"
-                bodyElement={<body />}
-                classPrefix="tooltip"
-                constraints={
-                  Array [
-                    Object {
-                      "attachment": "together",
-                      "to": "window",
-                    },
-                  ]
-                }
-                enabled={false}
-                renderElementTag="div"
-                renderElementTo={null}
-                targetAttachment="middle left"
+              <div
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+              />
+            </div>
+          </AdditionalTabLoading>
+          <AdditionalTabLoading
+            key="1"
+          >
+            <div
+              className="bdl-AdditionalTabLoading"
+            >
+              <div
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+              />
+            </div>
+          </AdditionalTabLoading>
+          <AdditionalTabLoading
+            key="2"
+          >
+            <div
+              className="bdl-AdditionalTabLoading"
+            >
+              <div
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+              />
+            </div>
+          </AdditionalTabLoading>
+          <AdditionalTabLoading
+            key="3"
+          >
+            <div
+              className="bdl-AdditionalTabLoading"
+            >
+              <div
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+              />
+            </div>
+          </AdditionalTabLoading>
+          <AdditionalTabLoading
+            key="4"
+          >
+            <div
+              className="bdl-AdditionalTabLoading"
+            >
+              <div
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+              />
+            </div>
+          </AdditionalTabLoading>
+          <MoreTabLoading
+            key="5"
+          >
+            <div
+              className="bdl-AdditionalTabLoading"
+            >
+              <IconEllipsis
+                className="bdl-AdditionalTabLoading-icon"
+                color="#eee"
               >
-                <PlainButton
-                  className="bcs-additional-tab-btn bcs-nav-btn"
-                  key=".0"
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  tabIndex="0"
-                  type="button"
+                <AccessibleSVG
+                  className="icon-ellipsis bdl-AdditionalTabLoading-icon"
+                  height={20}
+                  viewBox="0 0 10 2"
+                  width={20}
                 >
-                  <button
-                    className="btn-plain bcs-additional-tab-btn bcs-nav-btn"
-                    onBlur={[Function]}
-                    onClick={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    tabIndex="0"
-                    type="button"
+                  <svg
+                    className="icon-ellipsis bdl-AdditionalTabLoading-icon"
+                    focusable="false"
+                    height={20}
+                    role="presentation"
+                    viewBox="0 0 10 2"
+                    width={20}
                   >
-                    <img
-                      alt="Test title"
-                      className="bcs-additional-tab-icon"
-                      src="https://foo.com/icon"
+                    <path
+                      className="fill-color"
+                      d="M1 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zm8 0c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zM5 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1z"
+                      fill="#eee"
+                      fillRule="evenodd"
                     />
-                  </button>
-                </PlainButton>
-              </TetherComponent>
-            </Tooltip>
-          </Tooltip>
-        </AdditionalTab>
+                  </svg>
+                </AccessibleSVG>
+              </IconEllipsis>
+            </div>
+          </MoreTabLoading>
+        </AdditionalTabsLoading>
       </div>
-    </AdditionalSidebarTabs>
+    </AdditionalTabs>
   </nav>
 </SidebarNav>
 `;

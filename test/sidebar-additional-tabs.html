@@ -51,16 +51,46 @@
             <div class="preview sidebar"></div>
         </div>
         <script>
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="#000" height="24" viewBox="0 0 24 24" width="24" focusable="false">
-                                                                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                                                                            <path d="M0 0h24v24H0z" fill="none"/>
-                                                                        </svg>`;
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="#555" height="24" viewBox="0 0 24 24" width="24" focusable="false">
+                                                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                                                                <path d="M0 0h24v24H0z" fill="none"/>
+                                                            </svg>`;
 
             const blob = new Blob([svg], { type: 'image/svg+xml' });
             // Used to simulate an icon URL coming back from the server
             const url = URL.createObjectURL(blob);
 
-            function load(refreshOnComplete = false) {
+            const tabData = [
+                {
+                    id: 200,
+                    title: 'Open with Gmail', // used as tooltip
+                    iconUrl: url,
+                    callback: data => window.alert(JSON.stringify(data)),
+                    status: 'ADDED',
+                },
+                {
+                    id: 201,
+                    title: 'Open with Slack',
+                    iconUrl: url,
+                    callback: () => window.alert('slack'),
+                    status: 'ADDED',
+                },
+                {
+                    id: 201,
+                    title: 'Open with Slack',
+                    iconUrl: url,
+                    callback: () => window.alert('slack'),
+                    status: 'ADDED',
+                },
+                {
+                    id: -1,
+                    title: 'More Apps',
+                    callback: () => window.alert('more apps'),
+                    status: 'ADDED',
+                },
+            ];
+
+            function load(tabData) {
                 const { ContentSidebar } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const fileId = document.querySelector('.file').value || localStorage.getItem('file');
@@ -81,28 +111,7 @@
                 const sidebar = new ContentSidebar();
                 sidebar.show(fileId, token, {
                     hasAdditionalTabs: true,
-                    additionalTabs: [
-                        {
-                            id: 200,
-                            title: 'Open with Gmail', // used as tooltip
-                            iconUrl: url,
-                            callback: data => window.alert(JSON.stringify(data)),
-                            status: 'ADDED',
-                        },
-                        {
-                            id: 201,
-                            title: 'Open with Slack',
-                            iconUrl: url,
-                            callback: () => window.alert('slack'),
-                            status: 'ADDED',
-                        },
-                        {
-                            id: -1,
-                            title: 'More Apps',
-                            callback: () => window.alert('more apps'),
-                            status: 'ADDED',
-                        },
-                    ],
+                    additionalTabs: tabData,
                     container: '.preview.sidebar',
                     isLarge: true,
                     hasActivityFeed: true,
@@ -118,7 +127,8 @@
                     },
                 });
             }
-            load(false);
+            load();
+            setTimeout(() => load(tabData), 1500);
         </script>
     </body>
 </html>

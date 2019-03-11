@@ -1,0 +1,27 @@
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@mixin bdl-fadeIn($fade-in-time) {
+    animation: fade-in ease-in $fade-in-time;
+}
+
+@mixin bdl-loadingPulse($start-color, $end-color, $fade-in-time) {
+    @keyframes loading-pulse {
+        0% {
+            background-color: $start-color;
+        }
+
+        100% {
+            background-color: $end-color;
+        }
+    }
+
+    animation: loading-pulse .5s ease-in-out infinite alternate, fade-in $fade-in-time ease-in;
+}
