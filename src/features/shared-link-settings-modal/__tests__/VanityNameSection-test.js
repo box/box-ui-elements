@@ -10,13 +10,15 @@ describe('features/shared-link-settings-modla/VanityNameSection', () => {
     const serverURL = 'url/';
 
     const getWrapper = (props = {}) =>
-        shallow(
+        mount(
             <VanityNameSection
                 canChangeVanityName
                 intl={{ formatMessage: sandbox.stub() }}
                 onChange={sandbox.stub()}
+                onCheckboxChange={sandbox.stub()}
                 serverURL={serverURL}
                 vanityName={vanityName}
+                isVanityEnabled
                 {...props}
             />,
         );

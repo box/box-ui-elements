@@ -17,8 +17,13 @@
             margin-bottom: 10px;
         }
 
-        input {
-            width: 100%;
+        .checkbox-subsection {
+            margin-left: 0;
+        }
+
+        .quarantine-badge {
+            margin-right: 4px;
+            transform: translateY(3px);
         }
     }
 
