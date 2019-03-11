@@ -891,6 +891,24 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('deleteTaskNew()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+            feed.deleteFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.deleteTaskNew({})).toThrow(fileError);
+        });
+
+        test('should call the new task api and if successful, the success callback', () => {
+            feed.deleteTaskNew(file, { id: '1' });
+            expect(feed.id).toBe(file.id);
+            expect(feed.tasksNewAPI.deleteTask).toBeCalled();
+            expect(feed.deleteFeedItem).toBeCalled();
+        });
+    });
+
     describe('deleteFeedItem()', () => {
         let successCb;
         const feedItemId = feedItems[0].id;

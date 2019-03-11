@@ -103,6 +103,7 @@ describe('api/TasksNew', () => {
                     url: `${BASE_URL}/undoc/tasks/${task.id}`,
                     successCallback,
                     errorCallback,
+                    data: { headers },
                 });
             });
         });

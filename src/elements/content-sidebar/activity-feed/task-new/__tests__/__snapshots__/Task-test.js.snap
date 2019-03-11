@@ -32,8 +32,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     onEdit={[MockFunction]}
     permissions={
       Object {
-        "can_delete": false,
+        "can_create_task_collaborator": true,
+        "can_create_task_link": true,
+        "can_delete": true,
         "can_edit": false,
+        "can_update": true,
       }
     }
     tagged_message="This is where we tell each other what we need to do"
@@ -210,8 +213,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
       onEdit={[MockFunction]}
       permissions={
         Object {
-          "can_delete": false,
+          "can_create_task_collaborator": true,
+          "can_create_task_link": true,
+          "can_delete": true,
           "can_edit": false,
+          "can_update": true,
         }
       }
       tagged_message="This is where we tell each other what we need to do"
