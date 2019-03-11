@@ -41,6 +41,8 @@ class SharedLinkSettingsModal extends Component {
         /** Server URL prefix for vanity URL preview; should be something like http://company.box.com/v/ */
         serverURL: PropTypes.string.isRequired,
         vanityNameError: PropTypes.string,
+        /** Add warning about public nature of vanity URLs */
+        warnOnPublic: PropTypes.bool,
 
         // Password props
         /** Whether or not user has permission to enable/disable/change password */
@@ -99,6 +101,7 @@ class SharedLinkSettingsModal extends Component {
         this.state = {
             expirationDate: props.expirationTimestamp ? new Date(props.expirationTimestamp) : null,
             expirationError: props.expirationError,
+            isVanityEnabled: !!props.vanityName,
             isDownloadEnabled: props.isDownloadEnabled,
             isExpirationEnabled: !!props.expirationTimestamp,
             isPasswordEnabled: props.isPasswordEnabled,
@@ -177,18 +180,28 @@ class SharedLinkSettingsModal extends Component {
         this.setState({ isDownloadEnabled: event.target.checked });
     };
 
+    onVanityCheckboxChange = event => {
+        this.setState({
+            isVanityEnabled: event.target.checked,
+            vanityName: !event.target.checked ? '' : this.props.vanityName,
+        });
+    };
+
     renderVanityNameSection() {
-        const { canChangeVanityName, serverURL, vanityNameInputProps } = this.props;
-        const { vanityNameError } = this.state;
+        const { canChangeVanityName, serverURL, vanityNameInputProps, warnOnPublic = false } = this.props;
+        const { vanityNameError, isVanityEnabled } = this.state;
 
         return (
             <VanityNameSection
                 canChangeVanityName={canChangeVanityName}
+                isVanityEnabled={isVanityEnabled}
                 error={vanityNameError}
                 onChange={this.onVanityNameChange}
+                onCheckboxChange={this.onVanityCheckboxChange}
                 serverURL={serverURL}
                 vanityName={this.state.vanityName}
                 vanityNameInputProps={vanityNameInputProps}
+                warnOnPublic={warnOnPublic}
             />
         );
     }
