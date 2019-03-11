@@ -742,7 +742,44 @@ type Comments = {
     total_count: number,
 };
 
-type FeedItems = Array<Comment | Task | TaskNew | BoxItemVersion>;
+type BaseAppActivityItem = {
+    activity_template: {|
+        id: string,
+        type: 'activity_template',
+    |},
+    app: {|
+        icon_url: string,
+        id: string,
+        name: string,
+        type: 'app',
+    |},
+    created_by: User,
+    id: string,
+    rendered_text: string,
+    type: 'app_activity',
+};
+
+type AppActivityAPIItem = {
+    occurred_at: string,
+} & BaseAppActivityItem;
+
+type AppActivityAPIItems = {
+    entries: Array<AppActivityAPIItem>,
+    total_count: number,
+};
+
+type AppActivityItem = {
+    created_at: string,
+    permissions: BoxItemPermission,
+} & BaseAppActivityItem;
+
+type AppActivityItems = {
+    entries: Array<AppActivityItem>,
+    total_count: number,
+};
+
+type FeedItem = Comment | Task | TaskNew | BoxItemVersion | AppActivityItem;
+type FeedItems = Array<FeedItem>;
 
 type Collaborators = {
     entries: Array<SelectorItem>,

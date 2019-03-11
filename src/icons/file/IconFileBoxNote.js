@@ -1,24 +1,11 @@
 // @flow
 import * as React from 'react';
 
-import AccessibleSVG from '../accessible-svg';
+import IconFileBase from './IconFileBase';
+import type { Icon } from '../flowTypes';
 
-type Props = {
-    className?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
-
-const IconFileBoxNote = ({ className = '', height = 32, title, width = 32 }: Props) => (
-    <AccessibleSVG
-        className={`icon-file-box-note ${className}`}
-        height={height}
-        title={title}
-        viewBox="0 0 32 32"
-        width={width}
-    >
+const IconFileBoxNote = (props: Icon) => (
+    <IconFileBase {...props} baseClassName="icon-file-box-note">
         <path d="M25 27H7V5h13l5 5v17z" fill="#fff" />
         <path
             d="M20 4H7a1 1 0 0 0-1 1v22a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V9.89zm5 23H7V5h13v4a1 1 0 0 0 1 1h4z"
@@ -31,7 +18,7 @@ const IconFileBoxNote = ({ className = '', height = 32, title, width = 32 }: Pro
             d="M19.7 14.95a2.57 2.57 0 0 0 .6.6 2.17 2.17 0 0 0 .75.35l-4.6 6.45-.3.3-1.55 1.15c-.1.1-.2 0-.15-.1l.45-1.9a1.5 1.5 0 0 1 .2-.4zm1-1.5a1 1 0 0 1 1.25.9 6.38 6.38 0 0 1-.5.85 4.86 4.86 0 0 1-.75-.3 1.7 1.7 0 0 1-.65-.65z"
             fill="#000123"
         />
-    </AccessibleSVG>
+    </IconFileBase>
 );
 
 export default IconFileBoxNote;

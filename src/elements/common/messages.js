@@ -793,10 +793,15 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: 'Completed',
         description: 'Title for checkmark icon indicating someone completed a task',
     },
+    appActivityDeleteErrorMessage: {
+        id: 'be.appActivityDeleteErrorMessage',
+        description: 'Error message when an app activity deletion fails',
+        defaultMessage: 'There was an error deleting this item.',
+    },
     deleteLabel: {
         id: 'be.deleteLabel',
         defaultMessage: 'Delete',
-        description: 'Aria label for button to delete a comment or task',
+        description: 'Aria label for button to delete a comment, task, or app activity',
     },
     editLabel: {
         id: 'be.editLabel',

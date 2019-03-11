@@ -1,24 +1,11 @@
 // @flow
 import * as React from 'react';
 
-import AccessibleSVG from '../accessible-svg';
+import IconFileBase from './IconFileBase';
+import type { Icon } from '../flowTypes';
 
-type Props = {
-    className?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
-
-const IconFilePages = ({ className = '', height = 32, title, width = 32 }: Props) => (
-    <AccessibleSVG
-        className={`icon-file-pages ${className}`}
-        height={height}
-        title={title}
-        viewBox="0 0 32 32"
-        width={width}
-    >
+const IconFilePages = (props: Icon) => (
+    <IconFileBase {...props} baseClassName="icon-file-pages">
         <path
             d="M7 26.5v-21a.47.47 0 0 1 .5-.5H20v4a.94.94 0 0 0 1 1h4v12H10.5a.5.5 0 0 0 0 1H25v3.5a.47.47 0 0 1-.5.5h-17a.47.47 0 0 1-.5-.5z"
             fill="#fff"
@@ -31,7 +18,7 @@ const IconFilePages = ({ className = '', height = 32, title, width = 32 }: Props
             d="M20.3 11l-1 1 .8.8 1-1a.57.57 0 0 0-.8-.8zm-9.7 10.3c-.1.1.1.3.2.2l.8-.5-.5-.5zm8.5-9.1L12 19.3a3.85 3.85 0 0 0-.8 1.1l.5.5a4.44 4.44 0 0 0 1.1-.8l7.1-7.1z"
             fill="#f49d31"
         />
-    </AccessibleSVG>
+    </IconFileBase>
 );
 
 export default IconFilePages;

@@ -130,11 +130,11 @@ const allSections = [
             },
             {
                 name: 'File',
-                components: '../src/icons/file/[A-Z]*.js',
+                content: '../src/icons/file/index.md',
             },
             {
                 name: 'Folder',
-                components: '../src/icons/folder/[A-Z]*.js',
+                content: '../src/icons/folder/index.md',
             },
             {
                 name: 'Illustrations',
@@ -163,6 +163,10 @@ const allSections = [
             {
                 name: 'States',
                 components: '../src/icons/states/[A-Z]*.js',
+            },
+            {
+                name: 'Two-Toned',
+                components: '../src/icons/two-toned/[A-Z]*.js',
             },
             {
                 name: 'Metadata View',
