@@ -21,7 +21,7 @@ const LOADING_TABS = [
     MoreTabLoading,
 ];
 
-const AdditionalTabsLoading = (): any => {
+const AdditionalTabsLoading = (): Array<React.Element<any>> => {
     return LOADING_TABS.map((LoadingComponent, idx) => <LoadingComponent key={idx} />);
 };
 

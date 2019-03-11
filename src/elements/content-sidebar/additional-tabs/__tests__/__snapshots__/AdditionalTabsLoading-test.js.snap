@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/AdditionalTabs should render the correct loading state 1`] = `
+exports[`elements/content-sidebar/additional-tabs/AdditionalTabs should render the correct loading state 1`] = `
 Array [
   <AdditionalTabLoading
     key="0"

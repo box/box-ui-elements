@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/AdditionalTab should render the more icon ellipsis if no valid id and icon URL are provided 1`] = `
+exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the more icon ellipsis if no valid id and icon URL are provided 1`] = `
 <Tooltip
   position="middle-left"
   text="test title"
@@ -17,7 +17,7 @@ exports[`elements/content-sidebar/AdditionalTab should render the more icon elli
 </Tooltip>
 `;
 
-exports[`elements/content-sidebar/AdditionalTab should render the tooltip and button contents 1`] = `
+exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the tooltip and button contents 1`] = `
 <Tooltip
   position="middle-left"
   text="test title"

@@ -1,8 +1,7 @@
 @import '../../../styles/variables';
 @import '../../../styles/common/_animations';
 
-.bdl-AdditionalTab-icon,
-.bdl-AdditionalTab-moreIcon {
+.bdl-AdditionalTab-icon {
     @include bdl-fadeIn(.5s);
 
     height: 24px;
@@ -13,6 +12,6 @@
     fill: $downtown-grey;
 }
 
-.bdl-AdditionalTab--is-hidden {
+.bdl-AdditionalTab--hidden {
     display: none;
 }

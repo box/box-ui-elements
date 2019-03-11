@@ -8,7 +8,7 @@ import * as React from 'react';
 
 const AdditionalTabLoading = () => {
     return (
-        <div className="bdl-AdditionalTabLoading-item">
+        <div className="bdl-AdditionalTabLoading">
             <div className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content" />
         </div>
     );

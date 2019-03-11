@@ -155,6 +155,7 @@ class Sidebar extends React.Component<Props, State> {
                     <React.Fragment>
                         <SidebarNav
                             additionalTabs={additionalTabs}
+                            fileId={fileId}
                             hasAdditionalTabs={hasAdditionalTabs}
                             hasSkills={hasSkills}
                             hasMetadata={hasMetadata}

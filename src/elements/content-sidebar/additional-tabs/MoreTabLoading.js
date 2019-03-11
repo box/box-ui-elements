@@ -5,13 +5,14 @@
  */
 
 import * as React from 'react';
-import './AdditionalTabs.scss';
+import { eees } from '../../../styles/variables';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
+import './AdditionalTabs.scss';
 
 const MoreTabLoading = () => {
     return (
-        <div className="bdl-AdditionalTabLoading-item">
-            <IconEllipsis className="bdl-AdditionalTabLoading-moreIcon" />
+        <div className="bdl-AdditionalTabLoading">
+            <IconEllipsis color={eees} className="bdl-AdditionalTabLoading-icon" />
         </div>
     );
 };

@@ -24,6 +24,7 @@ import './SidebarNav.scss';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
+    fileId: string,
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasDetails: boolean,
@@ -33,6 +34,7 @@ type Props = {
 };
 
 const SidebarNav = ({
+    fileId,
     hasSkills,
     hasMetadata,
     hasActivityFeed,
@@ -82,7 +84,7 @@ const SidebarNav = ({
                 <IconMetadataThick />
             </SidebarNavButton>
         )}
-        {hasAdditionalTabs && <AdditionalTabs tabs={additionalTabs} />}
+        {hasAdditionalTabs && <AdditionalTabs key={fileId} tabs={additionalTabs} />}
     </nav>
 );
 

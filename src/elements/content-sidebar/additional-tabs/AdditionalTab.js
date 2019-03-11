@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Preview sidebar additional tab component
+ * @file Sidebar Additional Tab component
  * @author Box
  */
 
@@ -16,11 +16,10 @@ import './AdditionalTab.scss';
 type Props = {
     isLoading: boolean,
     onImageLoad: () => void,
-    ...AdditionalSidebarTab,
-};
+} & AdditionalSidebarTab;
 
 const AdditionalTab = ({ callback: callbackFn = noop, iconUrl, id, isLoading, onImageLoad, title, ...rest }: Props) => {
-    const className = classNames('bcs-nav-btn', { 'bdl-AdditionalTab--is-hidden': isLoading });
+    const className = classNames('bcs-nav-btn', { 'bdl-AdditionalTab--hidden': isLoading });
 
     return (
         <Tooltip position="middle-left" text={title}>

@@ -11,7 +11,7 @@ import AdditionalTabsLoading from './AdditionalTabsLoading';
 import './AdditionalTabs.scss';
 
 type Props = {
-    tabs: ?Array<AdditionalSidebarTab>,
+    tabs?: Array<AdditionalSidebarTab>,
 };
 
 type State = {
@@ -21,17 +21,26 @@ type State = {
 class AdditionalTabs extends PureComponent<Props, State> {
     numLoadedTabs: number = 0;
 
-    initialState: State = {
-        isLoading: true,
-    };
-
     constructor(props: Props) {
         super(props);
 
-        this.state = { ...this.initialState };
+        this.state = { isLoading: true };
+    }
+
+    componentDidMount() {
+        this.calculateNumberOfLoadableTabs();
     }
 
     componentDidUpdate() {
+        this.calculateNumberOfLoadableTabs();
+    }
+
+    /**
+     * Determines if we need to account for a "more" tab when loading icon images.
+     *
+     * @return {void}
+     */
+    calculateNumberOfLoadableTabs() {
         const { tabs } = this.props;
 
         if (tabs) {
@@ -39,7 +48,7 @@ class AdditionalTabs extends PureComponent<Props, State> {
             const hasMoreTab = tabs.find(tab => tab.id < 0 && !tab.iconUrl);
             const moreTabCount = hasMoreTab ? 1 : 0;
 
-            this.numLoadedTabs += moreTabCount;
+            this.numLoadedTabs = moreTabCount;
         }
     }
 

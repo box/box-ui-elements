@@ -4,7 +4,7 @@ import Tooltip from '../../../common/Tooltip';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import AdditionalTab from '../AdditionalTab';
 
-describe('elements/content-sidebar/AdditionalTab', () => {
+describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
     const getWrapper = props => shallow(<AdditionalTab {...props} />);
 
     test('should render the tooltip and button contents', () => {
