@@ -219,6 +219,41 @@ jest.mock('../Versions', () =>
     })),
 );
 
+const MOCK_APP_ACTIVITY_ITEM = {
+    activity_template: {
+        id: '1',
+        type: 'activity_template',
+    },
+    app: {
+        icon_url: 'https://some.cdn.com/12345.png',
+        id: '123456',
+        name: 'App activities test',
+        type: 'app',
+    },
+    created_by: {
+        id: '1234556789876',
+        login: 'some-account@box.com',
+        name: 'John Doe',
+        type: 'user',
+    },
+    id: '3782',
+    occurred_at: '2019-02-21T04:00:00Z',
+    rendered_text: 'You shared this file in <a href="https://some-app.com" rel="noreferrer noopener">Some App</a>',
+    type: 'app_activity',
+};
+
+jest.mock('../AppActivity', () =>
+    jest.fn().mockImplementation(() => ({
+        getAppActivity: jest.fn().mockReturnValue({
+            total_count: 1,
+            entries: [MOCK_APP_ACTIVITY_ITEM],
+        }),
+        deleteAppActivity: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+    })),
+);
+
 describe('api/Feed', () => {
     let feed;
     const comments = {
@@ -297,8 +332,13 @@ describe('api/Feed', () => {
         entries: [first_version, deleted_version],
     };
 
-    const feedItems = [...comments.entries, ...tasks.entries, ...versions.entries];
-    const feedItemsNew = [...comments.entries, ...tasksNew.entries, ...versions.entries];
+    const appActivities = {
+        total_count: 1,
+        entries: [MOCK_APP_ACTIVITY_ITEM],
+    };
+
+    const feedItems = [...comments.entries, ...tasks.entries, ...versions.entries, ...appActivities.entries];
+    const feedItemsNew = [...comments.entries, ...tasksNew.entries, ...versions.entries, ...appActivities.entries];
 
     const file = {
         id: '12345',
@@ -502,6 +542,18 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('fetchAppActivity()', () => {
+        beforeEach(() => {
+            feed.fetchFeedItemErrorCallback = jest.fn();
+        });
+
+        test('should return a promise and call the app activity api', () => {
+            const activityItems = feed.fetchAppActivity();
+            expect(activityItems instanceof Promise).toBeTruthy();
+            expect(feed.appActivityAPI.getAppActivity).toBeCalled();
+        });
+    });
+
     describe('fetchTasksNew()', () => {
         beforeEach(() => {
             feed.fetchFeedItemErrorCallback = jest.fn();
@@ -681,6 +733,24 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('deleteAppActivity()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+            feed.deleteFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.deleteAppActivity({})).toThrow(fileError);
+        });
+
+        test('should call the app activity api and if successful, the success callback', () => {
+            const activityItemId = '12345';
+            feed.deleteAppActivity(file, activityItemId);
+            expect(feed.appActivityAPI.deleteAppActivity).toBeCalled();
+            expect(feed.deleteFeedItem).toBeCalled();
+        });
+    });
+
     describe('createTaskSuccessCallback()', () => {
         let successCb;
         let errorCb;
@@ -817,6 +887,24 @@ describe('api/Feed', () => {
             feed.deleteTask(file, '1');
             expect(feed.id).toBe(file.id);
             expect(feed.tasksAPI.deleteTask).toBeCalled();
+            expect(feed.deleteFeedItem).toBeCalled();
+        });
+    });
+
+    describe('deleteTaskNew()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+            feed.deleteFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.deleteTaskNew({})).toThrow(fileError);
+        });
+
+        test('should call the new task api and if successful, the success callback', () => {
+            feed.deleteTaskNew(file, { id: '1' });
+            expect(feed.id).toBe(file.id);
+            expect(feed.tasksNewAPI.deleteTask).toBeCalled();
             expect(feed.deleteFeedItem).toBeCalled();
         });
     });
