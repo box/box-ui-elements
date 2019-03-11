@@ -759,24 +759,24 @@ type BaseAppActivityItem = {
     type: 'app_activity',
 };
 
-type AppActivityAPIItem = {|
+type AppActivityAPIItem = {
     occurred_at: string,
-|} & BaseAppActivityItem;
+} & BaseAppActivityItem;
 
-type AppActivityAPIItems = {|
+type AppActivityAPIItems = {
     entries: Array<AppActivityAPIItem>,
     total_count: number,
-|};
+};
 
-type AppActivityItem = {|
+type AppActivityItem = {
     created_at: string,
     permissions: BoxItemPermission,
-|} & BaseAppActivityItem;
+} & BaseAppActivityItem;
 
-type AppActivityItems = {|
+type AppActivityItems = {
     entries: Array<AppActivityItem>,
     total_count: number,
-|};
+};
 
 type FeedItems = Array<Comment | Task | TaskNew | BoxItemVersion | AppActivityItem>;
 

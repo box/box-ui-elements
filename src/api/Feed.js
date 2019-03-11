@@ -65,7 +65,7 @@ class Feed extends Base {
     /**
      * @property {AppActivityAPI}
      */
-    appActivityAPI: AppActivity;
+    appActivityAPI: AppActivityAPI;
 
     /**
      * @property {TasksNewAPI}
@@ -144,7 +144,6 @@ class Feed extends Base {
      * @param {Function} errorCallback - the error callback which is called after data fetching is complete if there was an error
      * @param {Function} onError - the function to be called immediately after an error occurs
      * @param {boolean} shouldShowNewTasks - feature flip the new tasks api
-     * @param {string} [language] - Langauge of the current session
      */
     feedItems(
         file: BoxItem,
@@ -1174,16 +1173,18 @@ class Feed extends Base {
 
         const cachedItems = this.getCachedItems(this.id);
         if (cachedItems) {
-            const updatedFeedItems = cachedItems.items.map((item: Comment | Task | TaskNew | BoxItemVersion) => {
-                if (item.id === id) {
-                    return {
-                        ...item,
-                        ...updates,
-                    };
-                }
+            const updatedFeedItems = cachedItems.items.map(
+                (item: Comment | Task | TaskNew | BoxItemVersion | AppActivityItem) => {
+                    if (item.id === id) {
+                        return {
+                            ...item,
+                            ...updates,
+                        };
+                    }
 
-                return item;
-            });
+                    return item;
+                },
+            );
 
             this.setCachedItems(this.id, updatedFeedItems);
             return updatedFeedItems;
@@ -1320,11 +1321,10 @@ class Feed extends Base {
     /**
      * Fetches app activities for a file
      * @param {BoxItemPermission} permissions - Permissions to attach to the app activity items
-     * @param {string} [language] - Locale to request app activity translation to.
      *
      * @return {Promise} - the feed items
      */
-    fetchAppActivity(permissions: BoxItemPermission, language?: string): Promise<?AppActivityItems> {
+    fetchAppActivity(permissions: BoxItemPermission): Promise<?AppActivityItems> {
         this.appActivityAPI = new AppActivityAPI(this.options);
 
         return new Promise(resolve => {
@@ -1333,7 +1333,6 @@ class Feed extends Base {
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
-                language,
             );
         });
     }

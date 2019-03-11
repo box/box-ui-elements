@@ -21,14 +21,20 @@ class AppActivity extends MarkerBasedAPI {
      * @return {AppActivityItem}
      */
     mapAppActivityItem = (item: AppActivityAPIItem): AppActivityItem => {
-        const { occurred_at, ...rest } = item;
+        const { activity_template, app, created_by, id, occurred_at, rendered_text, type } = item;
         const { can_delete } = this.permissions;
+
         return {
+            activity_template,
+            app,
             created_at: occurred_at,
+            created_by,
+            id,
             permissions: {
                 can_delete,
             },
-            ...rest,
+            rendered_text,
+            type,
         };
     };
 
@@ -86,7 +92,7 @@ class AppActivity extends MarkerBasedAPI {
         if (response.status === HTTP_STATUS_CODE_NOT_FOUND) {
             this.successHandler({
                 entries: [],
-                total: 0,
+                total_count: 0,
             });
         } else {
             super.errorHandler(error);
@@ -129,26 +135,26 @@ class AppActivity extends MarkerBasedAPI {
     /**
      * Delete an app activity item
      *
-     * @param {string} fileId - The ID of the Box file that App Activity is on
+     * @param {string} id - The ID of the Box file that App Activity is on
      * @param {string} appActivityId - An AppActivity item id
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      */
     deleteAppActivity({
-        fileId,
+        id,
         appActivityId,
         successCallback,
         errorCallback,
     }: {
         appActivityId: string,
         errorCallback: Function,
-        fileId: string,
+        id: string,
         successCallback: Function,
     }): void {
         this.errorCode = ERROR_CODE_DELETE_APP_ACTIVITY;
 
         this.delete({
-            id: fileId,
+            id,
             url: this.getDeleteUrl(appActivityId),
             successCallback,
             errorCallback,
