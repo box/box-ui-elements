@@ -742,7 +742,7 @@ type Comments = {
     total_count: number,
 };
 
-type AppActivityItem = {
+type BaseAppActivityItem = {
     activity_template: {|
         id: string,
         type: 'activity_template',
@@ -753,18 +753,30 @@ type AppActivityItem = {
         name: string,
         type: 'app',
     |},
-    created_at: string,
     created_by: User,
     id: string,
-    permissions: BoxItemPermission,
     rendered_text: string,
     type: 'app_activity',
 };
 
-type AppActivityItems = {
+type AppActivityAPIItem = {|
+    occurred_at: string,
+|} & BaseAppActivityItem;
+
+type AppActivityAPIItems = {|
+    entries: Array<AppActivityAPIItem>,
+    total_count: number,
+|};
+
+type AppActivityItem = {|
+    created_at: string,
+    permissions: BoxItemPermission,
+|} & BaseAppActivityItem;
+
+type AppActivityItems = {|
     entries: Array<AppActivityItem>,
     total_count: number,
-};
+|};
 
 type FeedItems = Array<Comment | Task | TaskNew | BoxItemVersion | AppActivityItem>;
 

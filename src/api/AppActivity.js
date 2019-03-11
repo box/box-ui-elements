@@ -12,15 +12,15 @@ class AppActivity extends MarkerBasedAPI {
     permissions: BoxItemPermission = {};
 
     /**
-     * Map an entry from the AppActivity API to an AppActivityItem.
+     * Map an entry from the AppActivityAPIItem to an AppActivityItem.
      * occurred_at -> created_at
      * Adds permissions to item
      *
-     * @param {Object} item - A single entry in the AppActivity API entries list
+     * @param {AppActivityAPIItem} item - A single entry in the AppActivity API entries list
      *
      * @return {AppActivityItem}
      */
-    mapAppActivityItem = (item: Object): AppActivityItem => {
+    mapAppActivityItem = (item: AppActivityAPIItem): AppActivityItem => {
         const { occurred_at, ...rest } = item;
         const { can_delete } = this.permissions;
         return {
@@ -58,9 +58,9 @@ class AppActivity extends MarkerBasedAPI {
     /**
      * Generic success handler
      *
-     * @param {AppActivityItems} data - the response data
+     * @param {AppActivityAPIItems} data - the response data
      */
-    successHandler = ({ entries = [] }: AppActivityItems): void => {
+    successHandler = ({ entries = [] }: AppActivityAPIItems): void => {
         if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }

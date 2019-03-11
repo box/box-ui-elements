@@ -107,9 +107,6 @@ describe('api/MarkerBasedAPI', () => {
             const requestData = {
                 foo: 'bar',
             };
-            const headers = {
-                'accept-encoding': 'gzip',
-            };
             markerBasedAPI.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: markerBasedAPIResponse })),
             };
@@ -124,7 +121,6 @@ describe('api/MarkerBasedAPI', () => {
                     limit: LIMIT,
                     shouldFetchAll: true,
                     requestData,
-                    headers,
                 })
                 .then(() => {
                     expect(successCallback).toHaveBeenCalledWith(markerBasedAPIResponse);
@@ -138,7 +134,6 @@ describe('api/MarkerBasedAPI', () => {
                             limit: LIMIT,
                             ...requestData,
                         },
-                        headers,
                     });
                 });
         });
@@ -169,7 +164,6 @@ describe('api/MarkerBasedAPI', () => {
                             marker: '',
                             limit: LIMIT,
                         },
-                        headers: {},
                     });
                 });
         });
