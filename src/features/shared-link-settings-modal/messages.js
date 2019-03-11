@@ -67,6 +67,26 @@ const messages = defineMessages({
         description: 'Text to show when a custom URL has not been set',
         id: 'boxui.share.sharedLinkSettings.vanityNameNotSet',
     },
+    vanityURLWarning: {
+        defaultMessage: 'Custom URLs should not be used when sharing sensitive content.',
+        description: 'Text field for implications of using the custom (vanity) URL as a notice',
+        id: 'boxui.share.sharedLinkSettings.vanityURLWarning',
+    },
+    vanityURLEnableText: {
+        defaultMessage: 'Enable custom URL',
+        description: 'Text label for custom URL section',
+        id: 'boxui.share.vanityURLEnableText',
+    },
+    sharedLinkWarningText: {
+        defaultMessage: 'This content is publicly available to anyone with the link.',
+        description: 'Text displayed stating that content shared openly may be exposed to the public',
+        id: 'boxui.share.sharedLinkSettings.sharedLinkWarningText',
+    },
+    sharedLinkWarningLinkText: {
+        defaultMessage: 'Learn more about shared link settings.',
+        description: 'Text for the link used to navigate users to the relevant community article',
+        id: 'boxui.share.sharedLinkSettings.sharedLinkWarningLinkText',
+    },
 });
 
 export default messages;
