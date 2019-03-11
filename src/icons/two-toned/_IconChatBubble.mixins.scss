@@ -1,0 +1,9 @@
+@mixin icon-chat-bubble-style-override($foregroundColor, $backgroundColor) {
+    .foreground-color {
+        fill: $foregroundColor;
+    }
+
+    .background-color {
+        fill: $backgroundColor;
+    }
+}

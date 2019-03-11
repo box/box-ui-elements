@@ -2,16 +2,9 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
+import type { Icon } from '../flowTypes';
 
-type Props = {
-    className?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
-
-const IconFolderCollab = ({ className = '', height = 32, title, width = 32 }: Props) => (
+const IconFolderCollab = ({ className = '', height = 32, title, width = 32 }: Icon) => (
     <AccessibleSVG
         className={`icon-folder-collab ${className}`}
         height={height}

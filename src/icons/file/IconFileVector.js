@@ -1,24 +1,11 @@
 // @flow
 import * as React from 'react';
 
-import AccessibleSVG from '../accessible-svg';
+import IconFileBase from './IconFileBase';
+import type { Icon } from '../flowTypes';
 
-type Props = {
-    className?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
-
-const IconFileVector = ({ className = '', height = 32, title, width = 32 }: Props) => (
-    <AccessibleSVG
-        className={`icon-file-vector ${className}`}
-        height={height}
-        title={title}
-        viewBox="0 0 32 32"
-        width={width}
-    >
+const IconFileVector = (props: Icon) => (
+    <IconFileBase {...props} baseClassName="icon-file-vector">
         <path d="M25 27H7V5h13l5 5v17z" fill="#fff" />
         <path
             d="M20 4H7a1 1 0 0 0-1 1v22a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V9.89zm5 23H7V5h13v4a1 1 0 0 0 1 1h4z"
@@ -28,7 +15,7 @@ const IconFileVector = ({ className = '', height = 32, title, width = 32 }: Prop
         <circle cx="15.5" cy="15.5" fill="#fff" r="2.79" />
         <path d="M15.5 16.5a1 1 0 1 0-1-1 1 1 0 0 0 1 1zm0 1a2 2 0 1 1 2-2 2 2 0 0 1-2 2z" fill="#f8931d" />
         <path d="M17 15h5v1h-5zM9 15h5v1H9z" fill="#f8931d" />
-    </AccessibleSVG>
+    </IconFileBase>
 );
 
 export default IconFileVector;
