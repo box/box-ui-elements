@@ -778,7 +778,8 @@ type AppActivityItems = {
     total_count: number,
 };
 
-type FeedItems = Array<Comment | Task | TaskNew | BoxItemVersion | AppActivityItem>;
+type FeedItem = Comment | Task | TaskNew | BoxItemVersion | AppActivityItem;
+type FeedItems = Array<FeedItem>;
 
 type Collaborators = {
     entries: Array<SelectorItem>,

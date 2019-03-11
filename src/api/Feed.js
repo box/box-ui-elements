@@ -1207,18 +1207,16 @@ class Feed extends Base {
 
         const cachedItems = this.getCachedItems(this.id);
         if (cachedItems) {
-            const updatedFeedItems = cachedItems.items.map(
-                (item: Comment | Task | TaskNew | BoxItemVersion | AppActivityItem) => {
-                    if (item.id === id) {
-                        return {
-                            ...item,
-                            ...updates,
-                        };
-                    }
+            const updatedFeedItems = cachedItems.items.map((item: FeedItem) => {
+                if (item.id === id) {
+                    return {
+                        ...item,
+                        ...updates,
+                    };
+                }
 
-                    return item;
-                },
-            );
+                return item;
+            });
 
             this.setCachedItems(this.id, updatedFeedItems);
             return updatedFeedItems;
@@ -1386,12 +1384,12 @@ class Feed extends Base {
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
-        this.appActivityAPI = new AppActivityAPI(this.options);
-        if (!file.id) {
+        const { id } = file;
+        if (!id) {
             throw getBadItemError();
         }
 
-        const { id } = file;
+        this.appActivityAPI = new AppActivityAPI(this.options);
 
         this.id = id;
         this.errorCallback = errorCallback;

@@ -89,14 +89,13 @@ describe('api/AppActivity', () => {
             const id = '987654321';
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            const language = 'ja-JP';
             const requestData = {
                 fields: APP_ACTIVITY_FIELDS_TO_FETCH.toString(),
                 item_id: id,
                 item_type: 'file',
             };
 
-            appActivity.getAppActivity(id, {}, successCallback, errorCallback, language);
+            appActivity.getAppActivity(id, {}, successCallback, errorCallback);
 
             expect(appActivity.markerGet).toBeCalledWith({
                 id,
