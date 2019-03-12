@@ -652,6 +652,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Error message shown when pending app folder size exceeds the limit',
         defaultMessage: 'Pending app folder size limit exceeded',
     },
+    uploadsItemNameInUseErrorMessage: {
+        id: 'be.uploadsItemNameInUseErrorMessage',
+        description: 'Error message shown when attempting to upload a file which name already exists',
+        defaultMessage: 'A file with this name already exists.',
+    },
     uploadsProvidedFolderNameInvalidMessage: {
         id: 'be.uploadsProvidedFolderNameInvalidMessage',
         description: 'Error message shown when pending folder upload contains invalid characters',
