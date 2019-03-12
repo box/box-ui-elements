@@ -9,6 +9,7 @@ import messages from '../common/messages';
 import ItemProgress from './ItemProgress';
 import {
     ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
+    ERROR_CODE_ITEM_NAME_IN_USE,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
@@ -34,6 +35,8 @@ const getErrorMessage = (errorCode: ?string, itemName: ?string) => {
             return <FormattedMessage {...messages.uploadsOneOrMoreChildFoldersFailedToUploadMessage} />;
         case ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED:
             return <FormattedMessage {...messages.uploadsFileSizeLimitExceededErrorMessage} />;
+        case ERROR_CODE_ITEM_NAME_IN_USE:
+            return <FormattedMessage {...messages.uploadsItemNameInUseErrorMessage} />;
         case ERROR_CODE_ITEM_NAME_INVALID:
             return (
                 <FormattedMessage {...messages.uploadsProvidedFolderNameInvalidMessage} values={{ name: itemName }} />
