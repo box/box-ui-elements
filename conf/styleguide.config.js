@@ -110,15 +110,15 @@ const allSections = [
         sections: [
             {
                 name: 'Annotations',
-                components: '../src/icons/annotations/[A-Z]*.js',
+                content: '../src/icons/annotations/index.md',
             },
             {
-                name: 'Avatar',
-                components: '../src/icons/avatars/[A-Z]*.js',
+                name: 'Avatars',
+                content: '../src/icons/avatars/index.md',
             },
             {
                 name: 'Badges',
-                components: '../src/icons/badges/[A-Z]*.js',
+                content: '../src/icons/badges/index.md',
             },
             {
                 name: 'Box Tools',
@@ -166,11 +166,11 @@ const allSections = [
             },
             {
                 name: 'Two-Toned',
-                components: '../src/icons/two-toned/[A-Z]*.js',
+                content: '../src/icons/two-toned/index.md',
             },
             {
                 name: 'Metadata View',
-                components: '../src/icons/metadata-view/[A-Z]*.js',
+                content: '../src/icons/metadata-view/index.md',
             },
         ],
     },
