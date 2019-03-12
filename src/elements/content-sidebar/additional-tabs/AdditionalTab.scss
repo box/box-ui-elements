@@ -1,5 +1,18 @@
 @import '../../../styles/variables';
 @import '../../../styles/common/_animations';
+@import '../mixins';
+
+.bdl-AdditionalTab {
+    @include bdl-SidebarNavButton;
+
+    &:hover {
+        background-color: $ffive;
+
+        svg path {
+            fill: $fours;
+        }
+    }
+}
 
 .bdl-AdditionalTab-icon {
     @include bdl-fadeIn(.5s);

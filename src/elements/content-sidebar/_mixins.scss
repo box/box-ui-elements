@@ -1,0 +1,9 @@
+@mixin bdl-SidebarNavButton {
+    align-items: center;
+    background-color: transparent;
+    display: flex;
+    height: 60px;
+    justify-content: center;
+    position: relative;
+    width: 59px; // 1px for left border
+}
