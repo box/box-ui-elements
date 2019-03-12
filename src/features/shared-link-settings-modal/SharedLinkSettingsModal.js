@@ -6,6 +6,7 @@ import Button from '../../components/button';
 import PrimaryButton from '../../components/primary-button';
 import { Modal, ModalActions } from '../../components/modal';
 import InlineNotice from '../../components/inline-notice';
+import Link from '../../components/link/LinkBase';
 import commonMessages from '../../common/messages';
 
 import VanityNameSection from './VanityNameSection';
@@ -283,6 +284,7 @@ class SharedLinkSettingsModal extends Component {
             onRequestClose,
             saveButtonProps,
             submitting,
+            warnOnPublic = false,
         } = this.props;
 
         const showInaccessibleSettingsNotice = !(
@@ -308,9 +310,20 @@ class SharedLinkSettingsModal extends Component {
                             <FormattedMessage {...messages.inaccessibleSettingsNotice} />
                         </InlineNotice>
                     )}
-                    {this.renderVanityNameSection()}
-                    {this.renderPasswordSection()}
+                    {warnOnPublic && (
+                        <InlineNotice type="warning">
+                            <FormattedMessage {...messages.sharedLinkWarningText} />{' '}
+                            <Link
+                                href="https://community.box.com/t5/Using-Shared-Links/Shared-Link-Settings/ta-p/50250"
+                                target="_blank"
+                            >
+                                <FormattedMessage {...messages.sharedLinkWarningLinkText} />
+                            </Link>
+                        </InlineNotice>
+                    )}
                     {this.renderExpirationSection()}
+                    {this.renderPasswordSection()}
+                    {this.renderVanityNameSection()}
                     {this.renderAllowDownloadSection()}
                     <ModalActions>
                         <Button isDisabled={submitting} onClick={onRequestClose} type="button" {...cancelButtonProps}>

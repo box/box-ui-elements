@@ -8,6 +8,7 @@ const Button = require('box-ui-elements/es/components/button').default;
 initialState = {
     isOpen: false,
     submitting: false,
+    isPublic: false,
 };
 
 const fakeRequest = val => {
@@ -51,7 +52,9 @@ const fakeRequest = val => {
             saveButtonProps={ { 'data-resin-target': 'test' } }
             cancelButtonProps={ { 'data-resin-target': 'test' } }
             modalProps={ { 'data-resin-feature': 'test' } }
+            warnOnPublic={state.isPublic}
         />}
+    <Checkbox isChecked={state.isPublic} onChange={() => setState({ isPublic: !state.isPublic})} label="Toggle Public Link Warning State" />
     <Button
         onClick={ () => setState({ isOpen: true })}
     >
