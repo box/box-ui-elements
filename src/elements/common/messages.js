@@ -655,7 +655,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     uploadsItemNameInUseErrorMessage: {
         id: 'be.uploadsItemNameInUseErrorMessage',
         description: 'Error message shown when attempting to upload a file which name already exists',
-        defaultMessage: 'File name already exists for the attempted upload.',
+        defaultMessage: 'A file with this name already exists.',
     },
     uploadsProvidedFolderNameInvalidMessage: {
         id: 'be.uploadsProvidedFolderNameInvalidMessage',
