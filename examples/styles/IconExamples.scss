@@ -4,6 +4,7 @@
     }
 
     .icon-set {
+        align-items: flex-end;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -19,8 +20,9 @@
 
         .icon {
             margin: 30px 20px;
+            min-width: 200px;
             text-align: center;
-            width: 150px;
+            width: 20%;
         }
 
         .icon-label {

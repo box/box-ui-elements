@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import uniqueId from 'lodash/uniqueId';
 
 type Props = {
     icons: Array<Object>,
@@ -17,17 +18,19 @@ class IconsExample extends React.Component<Props, State> {
         };
     }
 
+    darkToggleId = uniqueId('dark-toggle-');
+
     render() {
         const { icons } = this.props;
         const classes = `icon-set ${this.state.darkBackgroundEnabled ? 'dark' : ''}`;
 
         return (
             <div className="icons-example">
-                <label htmlFor="dark-toggle">
+                <label htmlFor={this.darkToggleId}>
                     <input
                         className="dark-toggle"
                         type="checkbox"
-                        id="dark-toggle"
+                        id={this.darkToggleId}
                         value={this.state.darkBackgroundEnabled}
                         onChange={() => {
                             this.setState(state => {
@@ -42,7 +45,7 @@ class IconsExample extends React.Component<Props, State> {
                         const Component = icon.component;
                         return (
                             <div className="icon" key={icon.name}>
-                                <Component />
+                                {icon.content ? icon.content() : <Component />}
                                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                                 <label className="icon-label">{icon.name}</label>
                             </div>

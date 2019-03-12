@@ -110,15 +110,15 @@ const allSections = [
         sections: [
             {
                 name: 'Annotations',
-                components: '../src/icons/annotations/[A-Z]*.js',
+                content: '../src/icons/annotations/README.md',
             },
             {
-                name: 'Avatar',
-                components: '../src/icons/avatars/[A-Z]*.js',
+                name: 'Avatars',
+                content: '../src/icons/avatars/README.md',
             },
             {
                 name: 'Badges',
-                components: '../src/icons/badges/[A-Z]*.js',
+                content: '../src/icons/badges/README.md',
             },
             {
                 name: 'Box Tools',
@@ -130,11 +130,11 @@ const allSections = [
             },
             {
                 name: 'File',
-                content: '../src/icons/file/index.md',
+                content: '../src/icons/file/README.md',
             },
             {
                 name: 'Folder',
-                content: '../src/icons/folder/index.md',
+                content: '../src/icons/folder/README.md',
             },
             {
                 name: 'Illustrations',
@@ -166,11 +166,11 @@ const allSections = [
             },
             {
                 name: 'Two-Toned',
-                components: '../src/icons/two-toned/[A-Z]*.js',
+                content: '../src/icons/two-toned/README.md',
             },
             {
                 name: 'Metadata View',
-                components: '../src/icons/metadata-view/[A-Z]*.js',
+                content: '../src/icons/metadata-view/README.md',
             },
         ],
     },
