@@ -1,13 +1,8 @@
 @import '../common/variables';
+@import './mixins';
 
 .bcs .bcs-nav-btn {
-    align-items: center;
-    background-color: transparent;
-    display: flex;
-    height: 60px;
-    justify-content: center;
-    position: relative;
-    width: 59px; // 1px for left border
+    @include bdl-SidebarNavButton;
 
     &::before {
         bottom: 0;

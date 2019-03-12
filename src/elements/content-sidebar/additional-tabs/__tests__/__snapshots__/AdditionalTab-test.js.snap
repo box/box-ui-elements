@@ -6,7 +6,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
   text="test title"
 >
   <PlainButton
-    className="bcs-nav-btn"
+    className="bdl-AdditionalTab"
     onClick={[Function]}
     type="button"
   >
@@ -23,7 +23,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
   text="test title"
 >
   <PlainButton
-    className="bcs-nav-btn"
+    className="bdl-AdditionalTab"
     onClick={[Function]}
     type="button"
   >

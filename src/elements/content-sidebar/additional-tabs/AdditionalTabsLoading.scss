@@ -1,15 +1,9 @@
 @import '../../../styles/variables';
 @import '../../../styles/common/animations.scss';
+@import '../mixins';
 
 .bdl-AdditionalTabLoading {
-    align-items: center;
-    background-color: transparent;
-    display: flex;
-    height: 60px;
-    justify-content: center;
-    pointer-events: none;
-    position: relative;
-    width: 59px; // 1px for left border
+    @include bdl-SidebarNavButton;
 }
 
 $bdl-AdditionalTabs-fade-in-time: 0s;
