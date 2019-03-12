@@ -110,15 +110,15 @@ const allSections = [
         sections: [
             {
                 name: 'Annotations',
-                content: '../src/icons/annotations/index.md',
+                content: '../src/icons/annotations/README.md',
             },
             {
                 name: 'Avatars',
-                content: '../src/icons/avatars/index.md',
+                content: '../src/icons/avatars/README.md',
             },
             {
                 name: 'Badges',
-                content: '../src/icons/badges/index.md',
+                content: '../src/icons/badges/README.md',
             },
             {
                 name: 'Box Tools',
@@ -130,11 +130,11 @@ const allSections = [
             },
             {
                 name: 'File',
-                content: '../src/icons/file/index.md',
+                content: '../src/icons/file/README.md',
             },
             {
                 name: 'Folder',
-                content: '../src/icons/folder/index.md',
+                content: '../src/icons/folder/README.md',
             },
             {
                 name: 'Illustrations',
@@ -166,11 +166,11 @@ const allSections = [
             },
             {
                 name: 'Two-Toned',
-                content: '../src/icons/two-toned/index.md',
+                content: '../src/icons/two-toned/README.md',
             },
             {
                 name: 'Metadata View',
-                content: '../src/icons/metadata-view/index.md',
+                content: '../src/icons/metadata-view/README.md',
             },
         ],
     },
