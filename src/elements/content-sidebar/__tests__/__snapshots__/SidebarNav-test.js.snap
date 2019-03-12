@@ -13,62 +13,68 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
         className="bdl-AdditionalTabs"
       >
         <AdditionalTabsLoading>
-          <AdditionalTabLoading
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="0"
           >
             <div
               className="bdl-AdditionalTabLoading"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-placeholder bdl-AdditionalTabLoading-placeholder--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <AdditionalTabLoading
+          </AdditionalTabPlaceholder>
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="1"
           >
             <div
               className="bdl-AdditionalTabLoading"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-placeholder bdl-AdditionalTabLoading-placeholder--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <AdditionalTabLoading
+          </AdditionalTabPlaceholder>
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="2"
           >
             <div
               className="bdl-AdditionalTabLoading"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-placeholder bdl-AdditionalTabLoading-placeholder--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <AdditionalTabLoading
+          </AdditionalTabPlaceholder>
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="3"
           >
             <div
               className="bdl-AdditionalTabLoading"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-placeholder bdl-AdditionalTabLoading-placeholder--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <AdditionalTabLoading
+          </AdditionalTabPlaceholder>
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="4"
           >
             <div
               className="bdl-AdditionalTabLoading"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-placeholder bdl-AdditionalTabLoading-placeholder--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <MoreTabLoading
+          </AdditionalTabPlaceholder>
+          <MoreTabPlaceholder
+            isLoading={true}
             key="5"
           >
             <div
@@ -102,7 +108,7 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
                 </AccessibleSVG>
               </IconEllipsis>
             </div>
-          </MoreTabLoading>
+          </MoreTabPlaceholder>
         </AdditionalTabsLoading>
       </div>
     </AdditionalTabs>

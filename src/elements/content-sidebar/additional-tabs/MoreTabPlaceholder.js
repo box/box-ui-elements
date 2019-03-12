@@ -9,7 +9,7 @@ import { eees } from '../../../styles/variables';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
 import './AdditionalTabs.scss';
 
-const MoreTabLoading = () => {
+const MoreTabPlaceholder = () => {
     return (
         <div className="bdl-AdditionalTabLoading">
             <IconEllipsis color={eees} className="bdl-AdditionalTabLoading-icon" />
@@ -17,4 +17,4 @@ const MoreTabLoading = () => {
     );
 };
 
-export default MoreTabLoading;
+export default MoreTabPlaceholder;

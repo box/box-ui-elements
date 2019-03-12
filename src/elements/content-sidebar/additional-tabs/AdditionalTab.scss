@@ -14,7 +14,8 @@
     }
 }
 
-.bdl-AdditionalTab-icon {
+.bdl-AdditionalTab-icon,
+.bdl-AdditionalTab-placeholderIcon {
     @include bdl-fadeIn(.5s);
 
     height: 24px;

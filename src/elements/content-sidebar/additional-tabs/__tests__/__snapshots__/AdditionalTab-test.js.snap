@@ -30,6 +30,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
     <img
       alt="test title"
       className="bdl-AdditionalTab-icon"
+      onError={[Function]}
       src="https://foo.com/image"
     />
   </PlainButton>
