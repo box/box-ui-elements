@@ -24,6 +24,7 @@ import {
     TYPED_ID_FEED_PREFIX,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
+    ERROR_CODE_CREATE_TASK,
     ERROR_CODE_CREATE_TASK_ASSIGNMENT,
     TASK_NEW_INCOMPLETE,
     TASK_INCOMPLETE,
@@ -392,15 +393,16 @@ class Feed extends Base {
             id: taskCollaboratorId,
             status: taskCollaboratorStatus,
         };
+        const handleError = (e: ElementsXhrError, code: string) => {
+            this.feedErrorCallback(true, e, code);
+        };
         collaboratorsApi.updateTaskCollaborator({
             file,
             taskCollaborator: taskCollaboratorPayload,
             successCallback: (taskCollab: TaskCollabAssignee) => {
-                this.updateTaskCollaboratorSuccessCallback(taskId, taskCollab, successCallback);
+                this.updateTaskCollaboratorSuccessCallback(taskId, file, taskCollab, successCallback, handleError);
             },
-            errorCallback: (e: ElementsXhrError, code: string) => {
-                this.feedErrorCallback(true, e, code);
-            },
+            errorCallback: handleError,
         });
     };
 
@@ -414,38 +416,21 @@ class Feed extends Base {
      */
     updateTaskCollaboratorSuccessCallback = (
         taskId: string,
+        file: { id: string },
         updatedCollaborator: TaskCollabAssignee,
         successCallback: Function,
+        errorCallback: Function,
     ): void => {
-        const cachedItems = this.getCachedItems(this.id);
-        if (cachedItems) {
-            // $FlowFixMe
-            const task: ?TaskNew = cachedItems.items.find(item => item.type === TASK && item.id === taskId);
-            if (task) {
-                const { entries } = task.assigned_to;
-                const assignments = entries.map((item: TaskCollabAssignee) => {
-                    if (item.id === updatedCollaborator.id) {
-                        return {
-                            ...item,
-                            ...updatedCollaborator,
-                        };
-                    }
-
-                    return item;
-                });
-
-                this.updateFeedItem(
-                    {
-                        assigned_to: {
-                            entries: assignments,
-                        },
-                        isPending: false,
-                    },
-                    taskId,
-                );
+        this.tasksNewAPI = new TasksNewAPI(this.options);
+        this.tasksNewAPI.getTask({
+            id: taskId,
+            file,
+            successCallback: task => {
+                this.updateFeedItem({ ...task, isPending: false }, taskId);
                 successCallback(updatedCollaborator);
-            }
-        }
+            },
+            errorCallback,
+        });
     };
 
     /**
@@ -805,39 +790,37 @@ class Feed extends Base {
         if (!file) {
             throw getBadItemError();
         }
-
         this.errorCallback = errorCallback;
-        const collaboratorPromises = assignees.map((assignee: SelectorItem) => {
-            return this.createTaskCollaborator(file, task, assignee);
-        });
 
-        const taskLink = await this.createTaskLink(file, task);
+        try {
+            const taskLink = await this.createTaskLink(file, task);
+            const taskAssignments: Array<TaskCollabAssignee> = await Promise.all(
+                assignees.map((assignee: SelectorItem) => {
+                    return this.createTaskCollaborator(file, task, assignee);
+                }),
+            );
 
-        Promise.all(collaboratorPromises).then(
-            (taskAssignments: Array<TaskCollabAssignee>) => {
-                this.updateFeedItem(
-                    {
-                        ...task,
-                        task_links: {
-                            entries: [taskLink],
-                            next_marker: null,
-                            limit: 1,
-                        },
-                        assigned_to: {
-                            entries: taskAssignments,
-                            next_marker: null,
-                            limit: taskAssignments.length,
-                        },
-                        isPending: false,
+            this.updateFeedItem(
+                {
+                    ...task,
+                    task_links: {
+                        entries: [taskLink],
+                        next_marker: null,
+                        limit: 1,
                     },
-                    id,
-                );
-                successCallback(task);
-            },
-            (e: ElementsXhrError) => {
-                this.feedErrorCallback(false, e, ERROR_CODE_CREATE_TASK_ASSIGNMENT);
-            },
-        );
+                    assigned_to: {
+                        entries: taskAssignments,
+                        next_marker: null,
+                        limit: taskAssignments.length,
+                    },
+                    isPending: false,
+                },
+                id,
+            );
+            successCallback(task);
+        } catch (err) {
+            this.feedErrorCallback(false, err, ERROR_CODE_CREATE_TASK);
+        }
     }
 
     /**

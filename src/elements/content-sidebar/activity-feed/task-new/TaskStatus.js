@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import camelCase from 'lodash/camelCase';
 import IconCheck from '../../../../icons/general/IconCheck';
 import IconReject from '../../../../icons/general/IconClose';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_INCOMPLETE } from '../../../../constants';
@@ -45,7 +46,7 @@ const StatusMessage = ({ status }: { status: TaskStatus }) => {
 
 const Status = React.memo<Props>(({ status }: Props) => (
     <div className="bcs-task-status">
-        <StatusIcon status={status} className={`bcs-task-status-icon ${status}`} aria-hidden />
+        <StatusIcon status={status} className={`bcs-task-status-icon ${camelCase(status)}`} aria-hidden />
         <StatusMessage status={status} />
     </div>
 ));

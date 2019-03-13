@@ -4,6 +4,13 @@ $success-color: $shady-acres;
 $error-color: $red;
 
 .be .bcs-task {
+    opacity: 1;
+    transition: opacity .33s;
+
+    &.bcs-is-pending {
+        opacity: .4;
+    }
+
     .bcs-task-assignment-container {
         margin-left: 40px;
     }
