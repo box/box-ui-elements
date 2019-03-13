@@ -8,7 +8,6 @@ const Button = require('box-ui-elements/es/components/button').default;
 initialState = {
     isOpen: false,
     submitting: false,
-    isPublic: false,
 };
 
 const fakeRequest = val => {
@@ -25,6 +24,7 @@ const fakeRequest = val => {
 <div>
     { state.isOpen &&
         <SharedLinkSettingsModal
+            accessLevel="peopleWithTheLink"
             canChangeVanityName
             isOpen
             onRequestClose={ () => setState({ isOpen: false })}
@@ -54,7 +54,6 @@ const fakeRequest = val => {
             modalProps={ { 'data-resin-feature': 'test' } }
             warnOnPublic={state.isPublic}
         />}
-    <Checkbox isChecked={state.isPublic} onChange={() => setState({ isPublic: !state.isPublic})} label="Toggle Public Link Warning State" />
     <Button
         onClick={ () => setState({ isOpen: true })}
     >

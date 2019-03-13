@@ -15,7 +15,36 @@ import ExpirationSection from './ExpirationSection';
 import AllowDownloadSection from './AllowDownloadSection';
 import messages from './messages';
 
+import { PEOPLE_WITH_LINK, PEOPLE_IN_COMPANY, PEOPLE_IN_ITEM } from '../shared-link-modal/constants';
+
 import './SharedLinkSettingsModal.scss';
+
+/**
+ * Return the translation key based on the access level and whether the user can download
+ * @param {string} accessLevel one of 'peopleWithTheLink', 'peopleInYourCompany', or 'peopleInThisItem'
+ * @param {boolean} canDownload prop value for whether the user can currently download
+ *
+ * @return {string} message ID for the proper transloation (or empty string when nothing matches)
+ */
+function getAccessNoticeMessageId(accessLevel, canDownload) {
+    let message;
+
+    switch (accessLevel) {
+        case PEOPLE_WITH_LINK:
+            message = canDownload ? messages.withLinkViewDownload : messages.withLinkView;
+            break;
+        case PEOPLE_IN_COMPANY:
+            message = canDownload ? messages.inCompanyViewDownload : messages.inCompanyView;
+            break;
+        case PEOPLE_IN_ITEM:
+            message = messages.inItem;
+            break;
+        default:
+            break;
+    }
+
+    return message;
+}
 
 class SharedLinkSettingsModal extends Component {
     static propTypes = {
@@ -34,6 +63,10 @@ class SharedLinkSettingsModal extends Component {
          */
         onSubmit: PropTypes.func.isRequired,
 
+        // access level props
+        /** the access level used for the item being shared */
+        accessLevel: PropTypes.string,
+
         // Custom URL props
         /** Whether or not user has permission to change/set vanity URL for this item */
         canChangeVanityName: PropTypes.bool.isRequired,
@@ -42,8 +75,6 @@ class SharedLinkSettingsModal extends Component {
         /** Server URL prefix for vanity URL preview; should be something like http://company.box.com/v/ */
         serverURL: PropTypes.string.isRequired,
         vanityNameError: PropTypes.string,
-        /** Add warning about public nature of vanity URLs */
-        warnOnPublic: PropTypes.bool,
 
         // Password props
         /** Whether or not user has permission to enable/disable/change password */
@@ -245,6 +276,26 @@ class SharedLinkSettingsModal extends Component {
         );
     }
 
+    renderAccessLevelNotice() {
+        const { accessLevel } = this.props;
+        const { isDownloadEnabled } = this.state;
+        const message = getAccessNoticeMessageId(accessLevel, isDownloadEnabled);
+
+        return (
+            message && (
+                <p className="link-settings-modal-notice">
+                    <FormattedMessage {...message} />{' '}
+                    <Link
+                        href="https://community.box.com/t5/Using-Shared-Links/Shared-Link-Settings/ta-p/50250"
+                        target="_blank"
+                    >
+                        <FormattedMessage {...messages.sharedLinkSettingWarningLinkText} />
+                    </Link>
+                </p>
+            )
+        );
+    }
+
     renderAllowDownloadSection() {
         const {
             canChangeDownload,
@@ -284,7 +335,6 @@ class SharedLinkSettingsModal extends Component {
             onRequestClose,
             saveButtonProps,
             submitting,
-            warnOnPublic = false,
         } = this.props;
 
         const showInaccessibleSettingsNotice = !(
@@ -310,17 +360,7 @@ class SharedLinkSettingsModal extends Component {
                             <FormattedMessage {...messages.inaccessibleSettingsNotice} />
                         </InlineNotice>
                     )}
-                    {warnOnPublic && (
-                        <InlineNotice type="warning">
-                            <FormattedMessage {...messages.sharedLinkWarningText} />{' '}
-                            <Link
-                                href="https://community.box.com/t5/Using-Shared-Links/Shared-Link-Settings/ta-p/50250"
-                                target="_blank"
-                            >
-                                <FormattedMessage {...messages.sharedLinkWarningLinkText} />
-                            </Link>
-                        </InlineNotice>
-                    )}
+                    {this.renderAccessLevelNotice()}
                     {this.renderExpirationSection()}
                     {this.renderPasswordSection()}
                     {this.renderVanityNameSection()}
