@@ -227,7 +227,7 @@ const messages = defineMessages({
 
     // shared link access descriptions
     peopleWithLinkDescription: {
-        defaultMessage: 'Anyone with the link can access; no sign-in required',
+        defaultMessage: 'Publicly accessible and no sign-in required',
         description: 'Description of an open shared link',
         id: 'boxui.unifiedShare.peopleWithLinkDescription',
     },
