@@ -50,23 +50,20 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -280,23 +277,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -455,23 +449,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -630,23 +621,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -809,23 +797,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -984,23 +969,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -1159,23 +1141,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -1307,23 +1286,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -1483,23 +1459,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -1659,23 +1632,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -1835,23 +1805,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -2048,23 +2015,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -2227,23 +2191,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -2406,23 +2367,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -2581,23 +2539,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -2755,23 +2710,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
@@ -2906,23 +2858,20 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               className="ftux-tooltip-body"
             >
               <FormattedMessage
-                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}."
+                defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
                 id="boxui.unifiedShare.ftuxNewUSMUserBody"
-                values={
-                  Object {
-                    "hereText": <Link
-                      className="ftux-tooltip-link"
-                      href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
-                      target="_blank"
-                    >
-                      <FormattedMessage
-                        defaultMessage="here"
-                        id="boxui.unifiedShare.ftuxLinkText"
-                      />
-                    </Link>,
-                  }
-                }
               />
+               
+              <Link
+                className="ftux-tooltip-link"
+                href="https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="Read more about shared link security here."
+                  id="boxui.unifiedShare.ftuxLinkText"
+                />
+              </Link>
             </p>
             <div
               className="ftux-tooltip-controls"
