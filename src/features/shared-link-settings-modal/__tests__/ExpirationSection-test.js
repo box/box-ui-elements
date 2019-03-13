@@ -42,8 +42,6 @@ describe('features/shared-link-settings-modal/ExpirationSection', () => {
         const fieldset = wrapper.find('Fieldset');
         expect(fieldset.length).toBe(1);
         expect(fieldset.prop('title')).toBeTruthy();
-
-        expect(wrapper.find('hr').length).toBe(1);
     });
 
     test('should render a Checkbox with no subsection when expiration not enabled', () => {
