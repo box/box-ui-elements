@@ -123,7 +123,9 @@ jest.mock('../TasksNew', () => {
             successCallback();
         }),
         getTasksForFile: jest.fn().mockReturnValue({ entries: [task], next_marker: null, limit: 1000 }),
-        getTask: jest.fn().mockReturnValue(task),
+        getTask: jest.fn(({ successCallback }) => {
+            successCallback(task);
+        }),
     }));
 });
 
@@ -638,19 +640,21 @@ describe('api/Feed', () => {
             feed.updateFeedItem = jest.fn();
         });
 
-        test('should update the resolution state and call the success callback', () => {
+        test('should refresh the task from the server and call the success callback', () => {
             const updatedStatus = 'COMPLETED';
             const successCb = jest.fn();
             const taskId = mockTaskNew.id;
             feed.updateTaskCollaboratorSuccessCallback(
                 taskId,
+                file,
                 {
                     ...tasksNew.entries[0].assigned_to.entries[0],
                     status: updatedStatus,
                 },
                 successCb,
             );
-            expect(feed.updateFeedItem.mock.calls[0][0].assigned_to.entries[0].status).toBe(updatedStatus);
+            expect(feed.tasksNewAPI.getTask).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalledWith({ isPending: false }, taskId);
             expect(successCb).toBeCalled();
         });
     });

@@ -1,3 +1,5 @@
+@import '../../styles/variables';
+
 .shared-link-settings-modal {
     hr {
         /* We have to get rid of top margin because fieldsets do not support margin collapsing */
@@ -12,19 +14,26 @@
         margin: 0 0 20px;
     }
 
+    .checkbox-subsection {
+        margin-left: 0;
+    }
+
     .vanity-name-section {
         .text-input-container {
             margin-bottom: 10px;
-        }
-
-        .checkbox-subsection {
-            margin-left: 0;
         }
 
         .quarantine-badge {
             margin-right: 4px;
             transform: translateY(3px);
         }
+    }
+
+    .text-input-container input[type='text'],
+    .date-picker-icon-holder,
+    .date-picker-icon-holder input[type='text'],
+    .text-input-container input[type='password'] {
+        width: 100%;
     }
 
     .direct-link-input .text-input-container {
@@ -34,5 +43,9 @@
     /* Since margin collapsing doesn't work for fieldsets, adjust modal-actions top margin */
     .modal-actions {
         margin-top: 10px;
+    }
+
+    .link-settings-modal-notice {
+        color: $sevens;
     }
 }

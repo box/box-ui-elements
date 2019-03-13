@@ -21,7 +21,7 @@ const headers = {
 
 class TasksNew extends Base {
     getUrlForFileTasks(id: string): string {
-        return `${this.getBaseApiUrl()}/undoc/inbox?task_link_target_type=FILE&task_link_target_id=${id}&limit=${API_PAGE_LIMIT}`;
+        return `${this.getBaseApiUrl()}/undoc/files/${id}/linked_tasks?limit=${API_PAGE_LIMIT}`;
     }
 
     getUrlForTaskCreate(): string {
