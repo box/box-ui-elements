@@ -37,6 +37,9 @@ class Param extends React.Component<Props> {
             case 'function':
                 return this.props.value();
 
+            case 'string':
+                return this.props.value;
+
             case 'object':
                 if (this.props.value === null) {
                     return '';
