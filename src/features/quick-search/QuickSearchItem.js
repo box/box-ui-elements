@@ -16,7 +16,15 @@ import './QuickSearchItem.scss';
 
 const QUERY_SEPARATOR = '<mark>';
 
-const QuickSearchItem = ({ className, closeDropdown, intl, itemData, parentFolderRenderer, ...rest }) => {
+const QuickSearchItem = ({
+    className,
+    closeDropdown,
+    intl,
+    itemData,
+    parentFolderRenderer,
+    shouldNavigateOnItemClick,
+    ...rest
+}) => {
     const { formatMessage } = intl;
     const {
         extension,
@@ -106,15 +114,16 @@ const QuickSearchItem = ({ className, closeDropdown, intl, itemData, parentFolde
         default:
     }
 
-    const itemName = href ? (
-        <Link onClick={e => e.stopPropagation()} className="item-name" href={href} title={name} {...targetProps}>
-            {markedQueryMatches}
-        </Link>
-    ) : (
-        <span className="item-name" title={name}>
-            {markedQueryMatches}
-        </span>
-    );
+    const itemName =
+        href && shouldNavigateOnItemClick ? (
+            <Link onClick={e => e.stopPropagation()} className="item-name" href={href} title={name} {...targetProps}>
+                {markedQueryMatches}
+            </Link>
+        ) : (
+            <span className="item-name" title={name}>
+                {markedQueryMatches}
+            </span>
+        );
 
     return (
         <DatalistItem className={classNames('quick-search-item', className)} {...rest}>
