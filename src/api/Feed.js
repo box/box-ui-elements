@@ -1216,9 +1216,8 @@ class Feed extends Base {
                     };
                 }
 
-                    return item;
-                },
-            );
+                return item;
+            });
 
             this.setCachedItems(this.id, updatedFeedItems);
             return updatedFeedItems;
