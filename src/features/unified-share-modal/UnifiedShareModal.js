@@ -35,6 +35,8 @@ import { EDITOR } from './constants';
 
 import './UnifiedShareModal.scss';
 
+const SHARED_LINKS_COMMUNITY_URL = 'https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523';
+
 type Props = {
     /** Flag to determine whether to enable invite collaborators section */
     canInvite: boolean,
@@ -424,7 +426,16 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     <FormattedMessage {...messages.ftuxNewUSMUserTitle} />
                 </h4>
                 <p className="ftux-tooltip-body">
-                    <FormattedMessage {...messages.ftuxNewUSMUserBody} />
+                    <FormattedMessage
+                        {...messages.ftuxNewUSMUserBody}
+                        values={{
+                            hereText: (
+                                <Link className="ftux-tooltip-link" href={SHARED_LINKS_COMMUNITY_URL} target="_blank">
+                                    <FormattedMessage {...messages.ftuxLinkText} />
+                                </Link>
+                            ),
+                        }}
+                    />
                 </p>
                 <div className="ftux-tooltip-controls">
                     <Button

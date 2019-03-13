@@ -25,9 +25,14 @@ const messages = defineMessages({
     },
     ftuxNewUSMUserBody: {
         defaultMessage:
-            "We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing.",
+            "We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing. Read more about shared link security {hereText}.",
         description: 'This text describes the purpose of the new UI, using the button label to open the modal',
         id: 'boxui.unifiedShare.ftuxNewUSMUserBody',
+    },
+    ftuxLinkText: {
+        defaultMessage: 'here',
+        description: 'Text on the link which allows the user to click on',
+        id: 'boxui.unifiedShare.ftuxLinkText',
     },
     ftuxConfirmLabel: {
         defaultMessage: 'Got it',
