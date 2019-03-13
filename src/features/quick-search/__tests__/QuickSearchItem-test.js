@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
+import { Link } from '../../../components/link';
 import QuickSearchItem from '../QuickSearchItem';
 
 describe('features/quick-search/QuickSearchItem', () => {
@@ -78,15 +79,16 @@ describe('features/quick-search/QuickSearchItem', () => {
     test('should render Link for item info when shouldNavigateOnItemClick is passed in', () => {
         const wrapper = mount(<QuickSearchItem itemData={itemData} shouldNavigateOnItemClick />);
         const itemName = wrapper.find('a.item-name');
-        expect(itemName.prop('href')).toEqual('/file/321');
-        expect(wrapper).toMatchSnapshot();
+        const href = '/file/321';
+        expect(itemName.prop('href')).toEqual(href);
+        expect(wrapper.find('.item-name').contains(<Link href={href} />));
     });
 
     test('should render span for item info when shouldNavigateOnItemClick is not passed in', () => {
         const wrapper = mount(<QuickSearchItem itemData={itemData} />);
         const itemName = wrapper.find('.item-name');
         expect(itemName.prop('href')).toEqual(undefined);
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('.item-name').contains(<span />));
     });
 
     test('should render search matches with spaces properly', () => {
