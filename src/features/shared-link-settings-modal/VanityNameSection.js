@@ -7,8 +7,6 @@ import { sevens } from '../../styles/variables';
 import Checkbox from '../../components/checkbox';
 import TextInput from '../../components/text-input';
 import Fieldset from '../../components/fieldset';
-import InlineNotice from '../../components/inline-notice';
-import Link from '../../components/link/LinkBase';
 import QuarantineBadge from '../../icons/badges/QuarantineBadge';
 
 import messages from './messages';
@@ -23,7 +21,6 @@ const VanityNameSection = ({
     serverURL,
     onChange,
     onCheckboxChange,
-    warnOnPublic = false,
 }) => {
     const inputValue = canChangeVanityName ? vanityName : vanityName || formatMessage(messages.vanityNameNotSet);
 
@@ -54,17 +51,7 @@ const VanityNameSection = ({
 
     return (
         <div>
-            {warnOnPublic && (
-                <InlineNotice type="warning">
-                    <FormattedMessage {...messages.sharedLinkWarningText} />{' '}
-                    <Link
-                        href="https://community.box.com/t5/Using-Shared-Links/Shared-Link-Settings/ta-p/50250"
-                        target="_blank"
-                    >
-                        <FormattedMessage {...messages.sharedLinkWarningLinkText} />
-                    </Link>
-                </InlineNotice>
-            )}
+            <hr />
             <Fieldset className="vanity-name-section" title={<FormattedMessage {...messages.customURLLabel} />}>
                 <Checkbox
                     label={<FormattedMessage {...messages.vanityURLEnableText} />}
