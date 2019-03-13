@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
+import { Link } from '../../../components/link';
 import QuickSearchItem from '../QuickSearchItem';
 
 describe('features/quick-search/QuickSearchItem', () => {
@@ -40,7 +41,7 @@ describe('features/quick-search/QuickSearchItem', () => {
                 type,
                 sharedLink,
             };
-            const wrapper = mount(<QuickSearchItem itemData={itemDataType} />);
+            const wrapper = mount(<QuickSearchItem itemData={itemDataType} shouldNavigateOnItemClick />);
             const itemName = wrapper.find('a.item-name');
             expect(itemName.length).toEqual(expectedHrefLength);
 
@@ -65,7 +66,7 @@ describe('features/quick-search/QuickSearchItem', () => {
     });
 
     test('should render item name', () => {
-        const wrapper = mount(<QuickSearchItem itemData={itemData} />);
+        const wrapper = mount(<QuickSearchItem itemData={itemData} shouldNavigateOnItemClick />);
         const itemName = wrapper.find('a.item-name');
         const searchTerm = itemName.children();
 
@@ -75,12 +76,27 @@ describe('features/quick-search/QuickSearchItem', () => {
         expect(searchTerm.text()).toEqual('test');
     });
 
+    test('should render Link for item info when shouldNavigateOnItemClick is passed in', () => {
+        const wrapper = mount(<QuickSearchItem itemData={itemData} shouldNavigateOnItemClick />);
+        const itemName = wrapper.find('a.item-name');
+        const href = '/file/321';
+        expect(itemName.prop('href')).toEqual(href);
+        expect(wrapper.find('.item-name').contains(<Link href={href} />));
+    });
+
+    test('should render span for item info when shouldNavigateOnItemClick is not passed in', () => {
+        const wrapper = mount(<QuickSearchItem itemData={itemData} />);
+        const itemName = wrapper.find('.item-name');
+        expect(itemName.prop('href')).toEqual(undefined);
+        expect(wrapper.find('.item-name').contains(<span />));
+    });
+
     test('should render search matches with spaces properly', () => {
         const multiMarkItemData = {
             ...itemData,
             nameWithMarkedQuery: 'hi<mark>test<mark>in<mark>g<mark>.boxnote',
         };
-        const wrapper = mount(<QuickSearchItem itemData={multiMarkItemData} />);
+        const wrapper = mount(<QuickSearchItem itemData={multiMarkItemData} shouldNavigateOnItemClick />);
         const itemName = wrapper.find('a.item-name');
         const searchTerm = itemName.children();
 
