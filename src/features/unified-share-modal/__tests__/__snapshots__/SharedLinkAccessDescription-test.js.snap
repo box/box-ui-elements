@@ -101,7 +101,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
   className="usm-menu-description"
 >
   <FormattedMessage
-    defaultMessage="Anyone with the link can access; no sign-in required"
+    defaultMessage="Publicly accessible and no sign-in required"
     id="boxui.unifiedShare.peopleWithLinkDescription"
     values={
       Object {
@@ -117,7 +117,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
   className="usm-menu-description"
 >
   <FormattedMessage
-    defaultMessage="Anyone with the link can access; no sign-in required"
+    defaultMessage="Publicly accessible and no sign-in required"
     id="boxui.unifiedShare.peopleWithLinkDescription"
     values={
       Object {
