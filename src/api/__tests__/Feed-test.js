@@ -415,7 +415,7 @@ describe('api/Feed', () => {
     });
 
     describe('feedItems()', () => {
-        const sortedItems = [...versions.entries, ...tasks.entries, ...comments.entries];
+        const sortedItems = [...versions.entries, ...tasks.entries, ...comments.entries, ...appActivities.entries];
         let successCb;
         let errorCb;
 
@@ -425,6 +425,7 @@ describe('api/Feed', () => {
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasksNew);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
             feed.addCurrentVersion = jest.fn().mockReturnValue(versions);
+            feed.fetchAppActivity = jest.fn().mockReturnValue(appActivities);
             feed.setCachedItems = jest.fn();
             successCb = jest.fn();
             errorCb = jest.fn();
@@ -439,7 +440,7 @@ describe('api/Feed', () => {
         test('should get feed items, sort, save to cache, and call the success callback', done => {
             feed.feedItems(file, false, successCb, errorCb);
             setImmediate(() => {
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versions, comments, tasks);
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versions, comments, tasks, appActivities);
                 expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
                 expect(successCb).toHaveBeenCalledWith(sortedItems);
                 done();

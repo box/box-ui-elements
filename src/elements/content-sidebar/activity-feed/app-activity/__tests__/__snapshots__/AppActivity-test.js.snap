@@ -75,6 +75,7 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
         data-resin-action="bar"
         data-resin-target="foo"
         href=""
+        key="app_actvity_link_"
         rel="roreferrer noopener"
         target="_blank"
       >
