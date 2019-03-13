@@ -58,7 +58,7 @@ const messages = defineMessages({
         id: 'boxui.share.sharedLinkSettings.passwordTitle',
     },
     vanityNamePlaceholder: {
-        defaultMessage: 'Enter a custom path',
+        defaultMessage: 'Enter a custom path (12 or more characters)',
         description: 'Placeholder for Custom URL text input field',
         id: 'boxui.share.sharedLinkSettings.vanityNamePlaceholder',
     },
@@ -82,10 +82,36 @@ const messages = defineMessages({
         description: 'Text displayed stating that content shared openly may be exposed to the public',
         id: 'boxui.share.sharedLinkSettings.sharedLinkWarningText',
     },
-    sharedLinkWarningLinkText: {
+    withLinkViewDownload: {
+        defaultMessage: 'This content is publicly available to anyone with the link, and can be viewed or downloaded.',
+        description: 'Text to show when the access level of people with link and user can view and download',
+        id: 'boxui.share.sharedLinkSettings.accessLevel.withLinkViewDownload',
+    },
+    withLinkView: {
+        defaultMessage: 'This content is publicly available to anyone with the link, and can be viewed.',
+        description: 'Text to show when the access level of people with link and user can view only',
+        id: 'boxui.share.sharedLinkSettings.accessLevel.withLinkView',
+    },
+    inCompanyViewDownload: {
+        defaultMessage:
+            'This content is available to anyone within your company with the link, and can be viewed or downloaded.',
+        description: 'Text to show when the access level of people in company and user can view and download',
+        id: 'boxui.share.sharedLinkSettings.accessLevel.inCompanyViewDownload',
+    },
+    inCompanyView: {
+        defaultMessage: 'This content is available to anyone within your company with the link, and can be viewed.',
+        description: 'Text to show when the access level of people in company and user can view only',
+        id: 'boxui.share.sharedLinkSettings.accessLevel.inCompanyView',
+    },
+    inItem: {
+        defaultMessage: 'This content is available to invited collaborators with the link.',
+        description: 'Text to show when the access level of people collaborate on the item',
+        id: 'boxui.share.sharedLinkSettings.accessLevel.inItem',
+    },
+    sharedLinkSettingWarningLinkText: {
         defaultMessage: 'Learn more about shared link settings.',
         description: 'Text for the link used to navigate users to the relevant community article',
-        id: 'boxui.share.sharedLinkSettings.sharedLinkWarningLinkText',
+        id: 'boxui.share.sharedLinkSettings.sharedLinkSettingWarningLinkText',
     },
 });
 
