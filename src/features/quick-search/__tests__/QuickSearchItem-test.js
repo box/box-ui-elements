@@ -79,12 +79,14 @@ describe('features/quick-search/QuickSearchItem', () => {
         const wrapper = mount(<QuickSearchItem itemData={itemData} shouldNavigateOnItemClick />);
         const itemName = wrapper.find('a.item-name');
         expect(itemName.prop('href')).toEqual('/file/321');
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render span for item info when shouldNavigateOnItemClick is not passed in', () => {
         const wrapper = mount(<QuickSearchItem itemData={itemData} />);
         const itemName = wrapper.find('.item-name');
         expect(itemName.prop('href')).toEqual(undefined);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render search matches with spaces properly', () => {
