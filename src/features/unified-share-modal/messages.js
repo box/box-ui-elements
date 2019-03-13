@@ -213,6 +213,11 @@ const messages = defineMessages({
             'Tooltip text shown in the share modal, next to the settings gear, describing what settings can be changed',
         id: 'boxui.unifiedShare.sharedLinkSettingsCalloutText',
     },
+    sharedLinkPubliclyAvailable: {
+        defaultMessage: 'This content is publicly available to anyone with the link.',
+        description: 'Text shown in share modal when shared link is open to public access',
+        id: 'boxui.unifiedShare.sharedLinkPubliclyAvailable',
+    },
     upgradeGetMoreAccessControlsDescription: {
         defaultMessage:
             '62% of customers on your plan {upgradeGetMoreAccessControlsLink} to manage collaborators’ access and permission settings',

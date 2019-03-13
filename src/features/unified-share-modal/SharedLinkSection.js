@@ -15,6 +15,7 @@ import Tooltip from '../../components/tooltip';
 import { convertToMs } from '../../utils/datetime';
 import IconMail from '../../icons/general/IconMail';
 import IconClock from '../../icons/general/IconClock';
+import IconGlobe from '../../icons/general/IconGlobe';
 import { amaranth } from '../../styles/variables';
 import type { itemType as ItemType } from '../../common/box-types';
 import { isBoxNote } from '../../utils/file';
@@ -30,7 +31,7 @@ import type {
     sharedLinkType,
     sharedLinkTrackingType,
 } from './flowTypes';
-import { PEOPLE_IN_ITEM, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
+import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 
 type Props = {
     autofocusSharedLink?: boolean,
@@ -175,6 +176,14 @@ class SharedLinkSection extends Component<Props> {
                         </Tooltip>
                     )}
                 </div>
+                {accessLevel === ANYONE_WITH_LINK && (
+                    <div className="shared-link-access-note">
+                        <span className="shared-link-icon-globe">
+                            <IconGlobe height={12} width={12} />
+                        </span>
+                        <FormattedMessage {...messages.sharedLinkPubliclyAvailable} />
+                    </div>
+                )}
             </React.Fragment>
         );
     }
