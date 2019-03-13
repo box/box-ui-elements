@@ -426,16 +426,10 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     <FormattedMessage {...messages.ftuxNewUSMUserTitle} />
                 </h4>
                 <p className="ftux-tooltip-body">
-                    <FormattedMessage
-                        {...messages.ftuxNewUSMUserBody}
-                        values={{
-                            hereText: (
-                                <Link className="ftux-tooltip-link" href={SHARED_LINKS_COMMUNITY_URL} target="_blank">
-                                    <FormattedMessage {...messages.ftuxLinkText} />
-                                </Link>
-                            ),
-                        }}
-                    />
+                    <FormattedMessage {...messages.ftuxNewUSMUserBody} />{' '}
+                    <Link className="ftux-tooltip-link" href={SHARED_LINKS_COMMUNITY_URL} target="_blank">
+                        <FormattedMessage {...messages.ftuxLinkText} />
+                    </Link>
                 </p>
                 <div className="ftux-tooltip-controls">
                     <Button
