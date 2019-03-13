@@ -84,7 +84,6 @@ describe('api/TaskCollaborators', () => {
             test('should put a well formed payload to the taskCollaborators endpoint', () => {
                 const expectedRequestData = {
                     data: {
-                        id: taskCollaborator.id,
                         status: 'COMPLETED',
                     },
                     headers,

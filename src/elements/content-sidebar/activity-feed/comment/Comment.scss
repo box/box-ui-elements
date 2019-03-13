@@ -20,7 +20,8 @@
     .bcs-comment {
         display: flex;
         margin-top: 23px;
-        opacity: .9999;
+        opacity: 1;
+        transition: opacity .33s;
         width: 100%;
 
         .bcs-comment-edit-container {

@@ -118,7 +118,7 @@ describe('api/TasksNew', () => {
 
                 expect(tasks.get).toBeCalledWith({
                     id: FILE_ID,
-                    url: `${BASE_URL}/undoc/inbox?task_link_target_type=FILE&task_link_target_id=${FILE_ID}&limit=${API_PAGE_LIMIT}`,
+                    url: `${BASE_URL}/undoc/files/${FILE_ID}/linked_tasks?limit=${API_PAGE_LIMIT}`,
                     successCallback,
                     errorCallback,
                     requestData: { headers },
