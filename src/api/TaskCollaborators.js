@@ -3,6 +3,7 @@
  * @file Helper for the box Task Assignments API
  * @author Box
  */
+import omit from 'lodash/omit';
 
 import Base from './Base';
 import {
@@ -99,7 +100,7 @@ class TaskCollaborators extends Base {
         this.errorCode = ERROR_CODE_UPDATE_TASK_COLLABORATOR;
 
         const requestData = {
-            data: { ...taskCollaborator },
+            data: omit(taskCollaborator, 'id'),
         };
 
         this.put({
