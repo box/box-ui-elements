@@ -29,7 +29,7 @@ class Composition {
                 this.index += 1;
                 let { children } = element.props;
                 if (children) {
-                    children = typeof children === 'string' ? [children] : children;
+                    children = !Array.isArray(children) ? [children] : children;
                     children = children.map(child => this.recompose(child));
                 } else {
                     children = '';

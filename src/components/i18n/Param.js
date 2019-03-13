@@ -25,7 +25,27 @@ type Props = {
  */
 class Param extends React.Component<Props> {
     getValue() {
-        return String(this.props.value || '');
+        switch (typeof this.props.value) {
+            default:
+            case 'undefined':
+                return '';
+
+            case 'boolean':
+            case 'number':
+                return String(this.props.value);
+
+            case 'function':
+                return this.props.value();
+
+            case 'object':
+                if (this.props.value === null) {
+                    return '';
+                }
+                if (React.isValidElement(this.props.value)) {
+                    return this.props.value;
+                }
+                return this.props.value.toString();
+        }
     }
 
     render() {
