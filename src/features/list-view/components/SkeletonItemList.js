@@ -5,7 +5,7 @@ import '../styles/SkeletonItemList.scss';
 
 const HARDCODED_LEFT_POSITIONS = ['10px', '290px', '570px', '850px', '1130px'];
 
-const DEFAULT_NUMBER_OF_ROWS = 10;
+const DEFAULT_NUMBER_OF_ROWS = 50;
 
 type Props = {
     numberOfRows?: number,

@@ -36,30 +36,7 @@
             }
         }
 
-        .bcs-comment-delete-container {
-            margin-top: 3px;
-            opacity: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            z-index: 1;
-
-            &.bcs-is-confirming {
-                opacity: 1;
-            }
-
-            .bcs-comment-delete {
-                vertical-align: top;
-            }
-
-            .bcs-comment-delete-no,
-            .bcs-comment-delete-yes {
-                margin: 0 3px;
-            }
-        }
-
-        .bcs-comment-edit-container,
-        .bcs-comment-delete-container {
+        .bcs-comment-edit-container {
             .flyout-wrapper .overlay-wrapper .overlay {
                 min-width: 120px;
 
@@ -82,7 +59,7 @@
 
         &:hover,
         &.bcs-is-focused {
-            .bcs-comment-delete-container {
+            .bcs-inline-delete-container {
                 opacity: 1;
             }
 

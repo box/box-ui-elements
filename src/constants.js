@@ -363,3 +363,6 @@ export const KEYS = {
     backspace: 'Backspace',
     enter: 'Enter',
 };
+
+/* ----------------- Other ----------------------- */
+export const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000

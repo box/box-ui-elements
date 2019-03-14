@@ -742,17 +742,21 @@ type Comments = {
     total_count: number,
 };
 
+type ActivityTemplateItem = {|
+    id: string,
+    type: 'activity_template',
+|};
+
+type AppItem = {|
+    icon_url: string,
+    id: string,
+    name: string,
+    type: 'app',
+|};
+
 type BaseAppActivityItem = {
-    activity_template: {|
-        id: string,
-        type: 'activity_template',
-    |},
-    app: {|
-        icon_url: string,
-        id: string,
-        name: string,
-        type: 'app',
-    |},
+    activity_template: ActivityTemplateItem,
+    app: AppItem,
     created_by: User,
     id: string,
     rendered_text: string,

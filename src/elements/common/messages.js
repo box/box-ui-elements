@@ -718,16 +718,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: 'Cancel',
         description: 'Text for cancel button',
     },
-    commentDeleteCancel: {
-        id: 'be.commentDeleteCancel',
-        defaultMessage: 'No',
-        description: 'Button text to cancel comment deletion',
-    },
-    commentDeleteConfirm: {
-        id: 'be.commentDeleteConfirm',
-        defaultMessage: 'Yes',
-        description: 'Button text to confirm comment deletion',
-    },
     commentDeletePrompt: {
         id: 'be.commentDeletePrompt',
         defaultMessage: 'Delete comment?',
@@ -803,10 +793,20 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Error message when an app activity deletion fails',
         defaultMessage: 'There was an error deleting this item.',
     },
-    deleteLabel: {
-        id: 'be.deleteLabel',
-        defaultMessage: 'Delete',
-        description: 'Aria label for button to delete a comment, task, or app activity',
+    appActivityCreatedAtFullDateTime: {
+        id: 'be.appActivityCreatedAtFullDateTime',
+        defaultMessage: '{time, date, full} at {time, time, short}',
+        description: 'App Activity created at full date time for title',
+    },
+    appActivityDeletePrompt: {
+        id: 'be.appActivityDeletePrompt',
+        defaultMessage: 'Delete App Activity?',
+        description: 'Confirmation prompt text to delete app activity',
+    },
+    appActivityAltIcon: {
+        id: 'be.appActivityAltIcon',
+        defaultMessage: '{appActivityName} Icon',
+        description: 'Alt message if app activity icon is missing or cannot load',
     },
     editLabel: {
         id: 'be.editLabel',
