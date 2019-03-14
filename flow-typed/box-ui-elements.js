@@ -528,6 +528,7 @@ type Options = {
     consoleError?: boolean,
     consoleLog?: boolean,
     id?: string,
+    language?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     sharedLink?: string,

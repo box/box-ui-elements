@@ -229,7 +229,7 @@ class Xhr {
      *
      * @param {string} id - Box item id
      * @param {string} url - The URL to fetch
-     * @param {Object} [headers] - Key-value map of headers
+     * @param {StringMap} [headers] - Key-value map of headers
      * @param {Object} [params] - Key-value map of querystring params
      * @return {Promise} - HTTP response
      */
@@ -261,7 +261,7 @@ class Xhr {
      * @param {string} url - The URL to fetch
      * @param {Object} data - JS Object representation of JSON data to send
      * @param {Object} params - Optional query params for the request
-     * @param {Object} [headers] - Key-value map of headers
+     * @param {StringMap} [headers] - Key-value map of headers
      * @param {string} [method] - xhr type
      * @return {Promise} - HTTP response
      */
