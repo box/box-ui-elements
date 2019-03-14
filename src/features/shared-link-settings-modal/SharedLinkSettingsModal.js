@@ -20,11 +20,11 @@ import { PEOPLE_WITH_LINK, PEOPLE_IN_COMPANY, PEOPLE_IN_ITEM } from '../shared-l
 import './SharedLinkSettingsModal.scss';
 
 /**
- * Return the translation key based on the access level and whether the user can download
+ * Return the translation message based on the access level and whether the user can download or not
  * @param {string} accessLevel one of 'peopleWithTheLink', 'peopleInYourCompany', or 'peopleInThisItem'
  * @param {boolean} canDownload prop value for whether the user can currently download
  *
- * @return {string} message ID for the proper transloation (or empty string when nothing matches)
+ * @return {object|undefined} message for the proper translation (or undefined if nothing matches)
  */
 function getAccessNoticeMessageId(accessLevel, canDownload) {
     let message;
