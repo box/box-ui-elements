@@ -1,8 +1,9 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
-import Tooltip from '../../../components/tooltip/Tooltip';
+import PlainButton from '../../../components/plain-button';
 import SidebarNavButton from '../SidebarNavButton';
+import Tooltip from '../../../components/tooltip/Tooltip';
 
 describe('elements/content-sidebar/SidebarNavButton', () => {
     const getWrapper = ({ children, ...props }, active = '') =>
@@ -28,9 +29,9 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         const wrapper = getWrapper(props, 'activity');
         expect(
             wrapper
-                .find('.bcs-nav-btn')
+                .find(PlainButton)
                 .first()
                 .prop('className'),
-        ).toContain('bcs-nav-btn-is-selected');
+        ).toContain('bcs-is-selected');
     });
 });

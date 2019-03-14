@@ -1,0 +1,39 @@
+@import '../../../styles/variables';
+
+.bcs-VersionsList {
+    &.bcs-is-empty {
+        padding-top: 10px;
+        text-align: center;
+    }
+}
+
+.bcs-VersionsList-item {
+    .bcs-VersionsItem {
+        &.bcs-is-selected {
+            z-index: 1;
+        }
+    }
+}
+
+.bcs-VersionsList-item + .bcs-VersionsList-item {
+    .bcs-VersionsItem {
+        margin-top: -1px;
+
+        &::before {
+            background-color: $off-white;
+            content: '';
+            display: block;
+            height: 1px;
+            left: 0;
+            margin-left: 10px;
+            margin-right: 10px;
+            position: absolute;
+            right: 0;
+            top: -1px;
+        }
+
+        &.bcs-is-selected::before {
+            background-color: transparent;
+        }
+    }
+}

@@ -2,47 +2,82 @@
 
 exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 1`] = `
 <SidebarContent
-  className="bcs-versions"
+  className="bcs-Versions"
   title={
     <React.Fragment>
-      <withRouter(BackButton) />
-      <FormattedMessage
-        defaultMessage="Version History"
-        id="be.sidebarVersionsTitle"
+      <withRouter(BackButton)
+        path="/undefined"
       />
-    </React.Fragment>
-  }
-/>
-`;
-
-exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 2`] = `
-<SidebarContent
-  className="bcs-versions"
-  title={
-    <React.Fragment>
-      <withRouter(BackButton) />
       <FormattedMessage
         defaultMessage="Version History"
-        id="be.sidebarVersionsTitle"
-      />
-    </React.Fragment>
-  }
-/>
-`;
-
-exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 3`] = `
-<SidebarContent
-  className="bcs-versions"
-  title={
-    <React.Fragment>
-      <withRouter(BackButton) />
-      <FormattedMessage
-        defaultMessage="Version History"
-        id="be.sidebarVersionsTitle"
+        id="be.sidebarVersions.title"
       />
     </React.Fragment>
   }
 >
-  12345
+  <LoadingIndicatorWrapper
+    className="bcs-Versions-content"
+    hideContent={true}
+  >
+    <VersionsList />
+  </LoadingIndicatorWrapper>
+</SidebarContent>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 2`] = `
+<SidebarContent
+  className="bcs-Versions"
+  title={
+    <React.Fragment>
+      <withRouter(BackButton)
+        path="/undefined"
+      />
+      <FormattedMessage
+        defaultMessage="Version History"
+        id="be.sidebarVersions.title"
+      />
+    </React.Fragment>
+  }
+>
+  <LoadingIndicatorWrapper
+    className="bcs-Versions-content"
+    hideContent={true}
+  >
+    <VersionsList
+      versions={Array []}
+    />
+  </LoadingIndicatorWrapper>
+</SidebarContent>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 3`] = `
+<SidebarContent
+  className="bcs-Versions"
+  title={
+    <React.Fragment>
+      <withRouter(BackButton)
+        path="/undefined"
+      />
+      <FormattedMessage
+        defaultMessage="Version History"
+        id="be.sidebarVersions.title"
+      />
+    </React.Fragment>
+  }
+>
+  <LoadingIndicatorWrapper
+    className="bcs-Versions-content"
+    hideContent={false}
+  >
+    <VersionsList
+      versions={
+        Array [
+          Object {
+            "id": 12345,
+          },
+        ]
+      }
+    />
+  </LoadingIndicatorWrapper>
 </SidebarContent>
 `;

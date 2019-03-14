@@ -2,6 +2,7 @@
 
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer render should match its snapshot 1`] = `
 <VersionsSidebar
+  isLoading={true}
   versions={Array []}
 />
 `;

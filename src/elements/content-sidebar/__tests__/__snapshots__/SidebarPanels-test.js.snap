@@ -9,11 +9,13 @@ exports[`elements/content-sidebar/SidebarPanels render should render activity si
   />
   <SidebarRoute
     enabled={true}
+    exact={true}
     path="/activity"
     pathFallback="/details"
     render={[Function]}
   />
   <SidebarRoute
+    exact={true}
     path="/details"
     pathFallback="/metadata"
     render={[Function]}
@@ -21,6 +23,11 @@ exports[`elements/content-sidebar/SidebarPanels render should render activity si
   <SidebarRoute
     path="/metadata"
     pathFallback="/skills"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/:sidebar/versions/:versionId?"
+    pathFallback="/"
     render={[Function]}
   />
   <Route
@@ -37,12 +44,14 @@ exports[`elements/content-sidebar/SidebarPanels render should render details sid
     render={[Function]}
   />
   <SidebarRoute
+    exact={true}
     path="/activity"
     pathFallback="/details"
     render={[Function]}
   />
   <SidebarRoute
     enabled={true}
+    exact={true}
     path="/details"
     pathFallback="/metadata"
     render={[Function]}
@@ -50,6 +59,11 @@ exports[`elements/content-sidebar/SidebarPanels render should render details sid
   <SidebarRoute
     path="/metadata"
     pathFallback="/skills"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/:sidebar/versions/:versionId?"
+    pathFallback="/"
     render={[Function]}
   />
   <Route
@@ -66,11 +80,13 @@ exports[`elements/content-sidebar/SidebarPanels render should render metadata si
     render={[Function]}
   />
   <SidebarRoute
+    exact={true}
     path="/activity"
     pathFallback="/details"
     render={[Function]}
   />
   <SidebarRoute
+    exact={true}
     path="/details"
     pathFallback="/metadata"
     render={[Function]}
@@ -79,6 +95,11 @@ exports[`elements/content-sidebar/SidebarPanels render should render metadata si
     enabled={true}
     path="/metadata"
     pathFallback="/skills"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/:sidebar/versions/:versionId?"
+    pathFallback="/"
     render={[Function]}
   />
   <Route
@@ -98,11 +119,13 @@ exports[`elements/content-sidebar/SidebarPanels render should render skills side
     render={[Function]}
   />
   <SidebarRoute
+    exact={true}
     path="/activity"
     pathFallback="/details"
     render={[Function]}
   />
   <SidebarRoute
+    exact={true}
     path="/details"
     pathFallback="/metadata"
     render={[Function]}
@@ -110,6 +133,11 @@ exports[`elements/content-sidebar/SidebarPanels render should render skills side
   <SidebarRoute
     path="/metadata"
     pathFallback="/skills"
+    render={[Function]}
+  />
+  <SidebarRoute
+    path="/:sidebar/versions/:versionId?"
+    pathFallback="/"
     render={[Function]}
   />
   <Route

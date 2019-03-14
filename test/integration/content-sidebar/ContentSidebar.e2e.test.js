@@ -17,7 +17,7 @@ describe('ContentSidebar', () => {
 
         // Sidebar should be open by default
         cy.getByTestId('bcs-content').should('exist');
-        cy.getByTestId('sidebarskills').should('have.class', 'bcs-nav-btn-is-selected');
+        cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
 
         cy.getByTestId('sidebarskills').click();
         cy.getByTestId('bcs-content').should('not.exist');
@@ -31,12 +31,12 @@ describe('ContentSidebar', () => {
 
         // Sidebar should be open by default
         cy.getByTestId('bcs-content').should('exist');
-        cy.getByTestId('sidebarskills').should('have.class', 'bcs-nav-btn-is-selected');
+        cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
 
         cy.getByTestId('sidebaractivity').click();
-        cy.getByTestId('sidebaractivity').should('have.class', 'bcs-nav-btn-is-selected');
+        cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
 
-        cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-nav-btn-is-selected');
+        cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
     });
 
     it('should show and hide the version history panel when a user navigates to and from it', () => {
