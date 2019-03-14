@@ -4,7 +4,7 @@ import * as React from 'react';
 import ListView from '../ListView';
 // Global Declarations
 
-const rowData = [['', 'A', 'B', 'C'], ['', 'D', 'E', 'F']];
+const rowData = [['A', 'B', 'C'], ['D', 'E', 'F']];
 
 const getGridHeader = columnIndex => ['h1', 'h2'][columnIndex];
 
