@@ -1,5 +1,5 @@
 import AppActivity from '../AppActivity';
-import { ERROR_CODE_DELETE_APP_ACTIVITY } from '../../constants';
+import { DEFAULT_LOCALE, ERROR_CODE_DELETE_APP_ACTIVITY, HEADER_ACCEPT_LANGUAGE } from '../../constants';
 import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../../utils/fields';
 
 let appActivity;
@@ -94,6 +94,9 @@ describe('api/AppActivity', () => {
                 item_id: id,
                 item_type: 'file',
             };
+            const headers = {
+                [HEADER_ACCEPT_LANGUAGE]: DEFAULT_LOCALE,
+            };
 
             appActivity.getAppActivity(id, {}, successCallback, errorCallback);
 
@@ -102,6 +105,7 @@ describe('api/AppActivity', () => {
                 successCallback,
                 errorCallback,
                 requestData,
+                headers,
             });
         });
     });
