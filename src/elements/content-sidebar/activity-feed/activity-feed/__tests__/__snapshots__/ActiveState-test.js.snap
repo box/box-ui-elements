@@ -78,5 +78,44 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     feature="activityFeed.tasks.newCards"
     key="taskt_345"
   />
+  <li
+    className="bcs-activity-feed-app-activity"
+    data-testid="app-activity"
+    key="app_activityapp_activity_12344556"
+  >
+    <AppActivity
+      activity_template={
+        Object {
+          "id": "template_09887654",
+        }
+      }
+      app={
+        Object {
+          "icon_url": "foo.jpg",
+          "id": "app_123456",
+          "name": "My App",
+        }
+      }
+      created_at="2018-07-03T14:43:52-07:00"
+      created_by={
+        Object {
+          "id": "user_12345567",
+        }
+      }
+      currentUser={
+        Object {
+          "id": "user_123445",
+        }
+      }
+      id="app_activity_12344556"
+      permissions={
+        Object {
+          "can_delete": true,
+        }
+      }
+      rendered_text="this is text and a <a>link</a>"
+      type="app_activity"
+    />
+  </li>
 </ul>
 `;

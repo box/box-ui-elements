@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/ActivityFeed/comment/InlineDelete should correctly render comment 1`] = `
+exports[`elements/content-sidebar/ActivityFeed/inline-delete/InlineDelete should correctly render inline delete 1`] = `
 <div
-  className="bcs-comment-delete-container"
+  className="bcs-inline-delete-container"
 >
   <Flyout
     className=""
@@ -20,7 +20,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/InlineDelete should corre
     position="middle-left"
   >
     <PlainButton
-      className="bcs-comment-delete"
+      className="bcs-inline-delete"
       data-resin-target="activityfeed-inlinedelete"
     >
       <IconTrash />
@@ -31,23 +31,23 @@ exports[`elements/content-sidebar/ActivityFeed/comment/InlineDelete should corre
       </b>
       <div>
         <PlainButton
-          className="lnk bcs-comment-delete-yes"
+          className="lnk bcs-inline-delete-yes"
           onClick={[Function]}
           type="button"
         >
           <FormattedMessage
             defaultMessage="Yes"
-            id="be.commentDeleteConfirm"
+            id="be.inlineDeleteConfirm"
           />
         </PlainButton>
          / 
         <PlainButton
-          className="lnk bcs-comment-delete-no"
+          className="lnk bcs-inline-delete-no"
           type="button"
         >
           <FormattedMessage
             defaultMessage="No"
-            id="be.commentDeleteCancel"
+            id="be.inlineDeleteCancel"
           />
         </PlainButton>
       </div>

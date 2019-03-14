@@ -8,12 +8,12 @@ const translationProps = {
     intl,
 };
 
-describe('elements/content-sidebar/ActivityFeed/comment/InlineDelete', () => {
+describe('elements/content-sidebar/ActivityFeed/inline-delete/InlineDelete', () => {
     const id = '123';
     const render = (props = {}) =>
         shallow(<InlineDelete {...translationProps} id={id} message="test" onDelete={() => {}} {...props} />);
 
-    test('should correctly render comment', () => {
+    test('should correctly render inline delete', () => {
         const wrapper = render();
         expect(wrapper).toMatchSnapshot();
     });
@@ -30,7 +30,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/InlineDelete', () => {
         expect(wrapper.hasClass('bcs-is-confirming')).toBe(false);
     });
 
-    test('should call onDelete handler when comment deletion is confirmed', () => {
+    test('should call onDelete handler when deletion is confirmed', () => {
         const onDeleteSpy = jest.fn();
         const permissions = {
             can_edit: true,
@@ -38,7 +38,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/InlineDelete', () => {
         };
         const wrapper = render({ onDelete: onDeleteSpy, permissions });
 
-        const yesBtn = wrapper.find('.bcs-comment-delete-yes');
+        const yesBtn = wrapper.find('.bcs-inline-delete-yes');
         yesBtn.simulate('click');
 
         expect(onDeleteSpy).toHaveBeenCalledWith({ id, permissions });

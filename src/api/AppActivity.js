@@ -95,7 +95,7 @@ class AppActivity extends MarkerBasedAPI {
                 total_count: 0,
             });
         } else {
-            super.errorHandler(error);
+            this.errorCallback(error, response.status);
         }
     };
 

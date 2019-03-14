@@ -56,7 +56,7 @@ export default function(
  * type that is allowed in the feed.
  * @return {Array<?Comments | ?Tasks | ?FileVersions>} the sorted feed items
  */
-export function sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions>): FeedItems {
+export function sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions | ?AppActivityItems>): FeedItems {
     const feedItems: FeedItems = args
         .reduce((items, itemContainer) => {
             if (itemContainer) {
