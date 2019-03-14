@@ -23,6 +23,11 @@
             min-width: 200px;
             text-align: center;
             width: 20%;
+
+            svg {
+                max-height: 250px;
+                max-width: 100%;
+            }
         }
 
         .icon-label {
