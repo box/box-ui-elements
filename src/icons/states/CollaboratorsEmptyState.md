@@ -1,3 +1,0 @@
-```
-<CollaboratorsEmptyState />
-```

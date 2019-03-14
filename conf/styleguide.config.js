@@ -99,13 +99,10 @@ const allSections = [
     {
         name: 'Icons',
         components: () => [
-            '../src/icons/item-icon/ItemIcon.js',
-            '../src/icons/folder-icon/FolderIcon.js',
-            '../src/icons/file-icon/FileIcon.js',
-            '../src/icons/bookmark-icon/BookmarkIcon.js',
             '../src/icons/adobe-sign/IconAdobeSign.js',
-            '../src/icons/google-docs/GoogleDocsIcon.js',
             '../src/icons/autocad/IconAutoCAD.js',
+            // try not to add to this list but instead add new icons into the
+            // families of icons below (or create new families where appropriate)
         ],
         sections: [
             {
@@ -122,23 +119,31 @@ const allSections = [
             },
             {
                 name: 'Box Tools',
-                components: '../src/icons/box-tools/[A-Z]*.js',
+                content: '../src/icons/box-tools/README.md',
+            },
+            {
+                name: 'Files',
+                content: '../src/icons/file/README.md',
+            },
+            {
+                name: 'Folders',
+                content: '../src/icons/folder/README.md',
             },
             {
                 name: 'General',
                 components: '../src/icons/general/[A-Z]*.js',
             },
             {
-                name: 'File',
-                content: '../src/icons/file/README.md',
-            },
-            {
-                name: 'Folder',
-                content: '../src/icons/folder/README.md',
+                name: 'Google Docs',
+                components: '../src/icons/google-docs/GoogleDocsIcon.js',
             },
             {
                 name: 'Illustrations',
-                components: '../src/icons/illustrations/[A-Z]*.js',
+                content: '../src/icons/illustrations/README.md',
+            },
+            {
+                name: 'Items',
+                components: ['../src/icons/bookmark-icon/BookmarkIcon.js', '../src/icons/item-icon/ItemIcon.js'],
             },
             {
                 name: 'iWork',
@@ -147,6 +152,10 @@ const allSections = [
                     '../src/icons/iwork/IWorkIcon.js',
                     '../src/icons/iwork/IWorkDesktopIcon.js',
                 ],
+            },
+            {
+                name: 'Metadata View',
+                content: '../src/icons/metadata-view/README.md',
             },
             {
                 name: 'Microsoft Office',
@@ -158,19 +167,15 @@ const allSections = [
             },
             {
                 name: 'Placeholders',
-                components: '../src/icons/placeholders/[A-Z]*.js',
+                content: '../src/icons/placeholders/README.md',
             },
             {
                 name: 'States',
-                components: '../src/icons/states/[A-Z]*.js',
+                content: '../src/icons/states/README.md',
             },
             {
                 name: 'Two-Toned',
                 content: '../src/icons/two-toned/README.md',
-            },
-            {
-                name: 'Metadata View',
-                content: '../src/icons/metadata-view/README.md',
             },
         ],
     },
