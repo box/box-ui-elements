@@ -562,7 +562,7 @@ describe('elements/content-preview/ContentPreview', () => {
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
-            instance.focusPreview = jest.fn();
+            instance.focus = jest.fn();
             instance.prefetch = jest.fn();
             instance.getFileIndex = jest.fn().mockReturnValue(0);
             instance.addFetchFileTimeToPreviewMetrics = jest.fn().mockReturnValue(totalTimeMetrics);
