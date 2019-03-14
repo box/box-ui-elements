@@ -159,9 +159,7 @@ const SidebarPanels = ({
                     )
                 }
             />
-            <Route>
-                <Redirect to={`/${SIDEBAR_VIEW_SKILLS}`} />
-            </Route>
+            <Route render={() => <Redirect to={`/${SIDEBAR_VIEW_SKILLS}`} />} />
         </Switch>
     );
 

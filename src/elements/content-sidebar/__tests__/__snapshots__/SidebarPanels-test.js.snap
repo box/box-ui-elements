@@ -23,12 +23,9 @@ exports[`elements/content-sidebar/SidebarPanels render should render activity si
     pathFallback="/skills"
     render={[Function]}
   />
-  <Route>
-    <Redirect
-      push={false}
-      to="/skills"
-    />
-  </Route>
+  <Route
+    render={[Function]}
+  />
 </Switch>
 `;
 
@@ -55,12 +52,9 @@ exports[`elements/content-sidebar/SidebarPanels render should render details sid
     pathFallback="/skills"
     render={[Function]}
   />
-  <Route>
-    <Redirect
-      push={false}
-      to="/skills"
-    />
-  </Route>
+  <Route
+    render={[Function]}
+  />
 </Switch>
 `;
 
@@ -87,12 +81,9 @@ exports[`elements/content-sidebar/SidebarPanels render should render metadata si
     pathFallback="/skills"
     render={[Function]}
   />
-  <Route>
-    <Redirect
-      push={false}
-      to="/skills"
-    />
-  </Route>
+  <Route
+    render={[Function]}
+  />
 </Switch>
 `;
 
@@ -121,11 +112,8 @@ exports[`elements/content-sidebar/SidebarPanels render should render skills side
     pathFallback="/skills"
     render={[Function]}
   />
-  <Route>
-    <Redirect
-      push={false}
-      to="/skills"
-    />
-  </Route>
+  <Route
+    render={[Function]}
+  />
 </Switch>
 `;
