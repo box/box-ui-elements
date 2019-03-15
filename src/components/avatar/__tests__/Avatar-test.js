@@ -12,12 +12,12 @@ describe('components/avatar/Avatar', () => {
 
     test('should add size class based on prop', () => {
         const wrapper = shallow(<Avatar name="hello" size="large" />);
-        expect(wrapper.is('span.avatar.large')).toBe(true);
+        expect(wrapper.is('span.avatar.avatar--large')).toBe(true);
     });
 
     test('should not allow unknown sizes', () => {
         const wrapper = shallow(<Avatar name="hello" size="WRONG" />);
-        expect(wrapper.is('span.avatar.WRONG')).toBe(false);
+        expect(wrapper.is('span.avatar.avatar--WRONG')).toBe(false);
     });
 
     test('should render an AvatarImage when avatarUrl is passed in', () => {
