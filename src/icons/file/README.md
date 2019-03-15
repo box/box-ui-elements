@@ -1,5 +1,20 @@
 **File icons**
 
+You can use a file icon directly, or use the higher level FileIcon component to dynamically choose which file icon is displayed based on file extension.
+
+***FileIcon with extension="png"***
+```jsx
+const FileIcon = require('../file-icon/FileIcon').default;
+<FileIcon extension="png" />
+```
+
+***FileIcon with extension="pdf"***
+```jsx
+const FileIcon = require('../file-icon/FileIcon').default;
+<FileIcon extension="pdf" />
+```
+
+***All available file icons***
 ```jsx
 const IconsExample = require('../../../examples/src/IconsExample').default;
 
