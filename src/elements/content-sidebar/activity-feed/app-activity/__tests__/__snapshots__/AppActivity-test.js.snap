@@ -10,7 +10,7 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
     className="bcs-app-activity"
   >
     <img
-      alt="{appActivityName} Icon"
+      alt="My Application Icon"
       className="bcs-app-activity-icon"
       src="foo/bar/baz.jpg"
     />
