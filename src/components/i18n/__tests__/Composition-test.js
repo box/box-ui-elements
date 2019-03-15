@@ -23,24 +23,30 @@ describe('components/i18n/Composition', () => {
         expect(c.compose()).toEqual('false');
     });
 
+    test('ComposeNumeric', () => {
+        const c = new Composition(5.4);
+        expect(c.compose()).toEqual('5.4');
+    });
+
     test('ComposeElementNoChildren', () => {
         const el = React.createElement('span', { key: 'a' });
         const c = new Composition(el);
 
-        expect(c.compose()).toEqual('<c0></c0>');
+        // nothing to translate, so no composed string
+        expect(c.compose()).toEqual('');
     });
 
     test('ComposeElementOneChild', () => {
         const el = React.createElement('span', { key: 'a' }, 'foo');
         const c = new Composition(el);
-        expect(c.compose()).toEqual('<c0>foo</c0>');
+        expect(c.compose()).toEqual('foo');
     });
 
     test('ComposeElementTwoChildren', () => {
         const el = React.createElement('span', { key: 'a' }, ['foo', ' bar']);
         const c = new Composition(el);
 
-        expect(c.compose()).toEqual('<c0>foo bar</c0>');
+        expect(c.compose()).toEqual('foo bar');
     });
 
     test('ComposeElementSubchildrenSimple', () => {
@@ -50,9 +56,19 @@ describe('components/i18n/Composition', () => {
             '. This is only a test.',
         ]);
         const c = new Composition(el);
-        expect(c.compose()).toEqual(
-            '<c0>This is a test of the <c1>emergency broadcast system</c1>. This is only a test.</c0>',
-        );
+        expect(c.compose()).toEqual('This is a test of the <c0>emergency broadcast system</c0>. This is only a test.');
+    });
+
+    test('ComposeElementComposeTwice', () => {
+        const el = React.createElement('span', { key: 'a' }, [
+            'This is a test of the ',
+            React.createElement('b', { key: 'b' }, 'emergency broadcast system'),
+            '. This is only a test.',
+        ]);
+        const c = new Composition(el);
+        const expected = 'This is a test of the <c0>emergency broadcast system</c0>. This is only a test.';
+        expect(c.compose()).toEqual(expected);
+        expect(c.compose()).toEqual(expected); // should be the same the second time around too
     });
 
     test('ComposeElementMultipleSubchildren', () => {
@@ -64,9 +80,9 @@ describe('components/i18n/Composition', () => {
             ' a test.',
         ]);
         const c = new Composition(el);
-        expect(c.compose()).toEqual(
-            '<c0>This is a test of the <c1>emergency broadcast system</c1>. This is <c2>only</c2> a test.</c0>',
-        );
+        const expected = 'This is a test of the <c0>emergency broadcast system</c0>. This is <c1>only</c1> a test.';
+        const actual = c.compose();
+        expect(actual).toEqual(expected);
     });
 
     test('ComposeElementSubchildrenComplex', () => {
@@ -81,9 +97,9 @@ describe('components/i18n/Composition', () => {
         ]);
 
         const c = new Composition(el);
-        expect(c.compose()).toEqual(
-            '<c0>This is a test of the <c1>emergency <c2>broadcast</c2> system</c1>. This is only a test.</c0>',
-        );
+        const expected = 'This is a test of the <c0>emergency <c1>broadcast</c1> system</c0>. This is only a test.';
+        const actual = c.compose();
+        expect(actual).toEqual(expected);
     });
 
     test('DecomposeElementString', () => {
@@ -97,7 +113,7 @@ describe('components/i18n/Composition', () => {
         const expected = React.createElement('span', { key: 'a' }, 'einfache Zeichenfolge');
 
         const c = new Composition(el);
-        expect(c.decompose('<c0>einfache Zeichenfolge</c0>')).toEqual(expected);
+        expect(c.decompose('einfache Zeichenfolge')).toEqual(expected);
     });
 
     test('DecomposeSubchildren', () => {
@@ -114,9 +130,9 @@ describe('components/i18n/Composition', () => {
         ]);
 
         const c = new Composition(el);
-        expect(
-            c.decompose('<c0>Dies ist ein Test des <c1>Notfall-Broadcast-Systems</c1>. Dies ist nur ein Test.</c0>'),
-        ).toEqual(expected);
+        expect(c.decompose('Dies ist ein Test des <c0>Notfall-Broadcast-Systems</c0>. Dies ist nur ein Test.')).toEqual(
+            expected,
+        );
     });
 
     test('DecomposeComplex', () => {
@@ -142,9 +158,7 @@ describe('components/i18n/Composition', () => {
 
         const c = new Composition(el);
         expect(
-            c.decompose(
-                '<c0>Dies ist ein Test des <c1>Notfall-<c2>Broadcast</c2>-Systems</c1>. Dies ist nur ein Test.</c0>',
-            ),
+            c.decompose('Dies ist ein Test des <c0>Notfall-<c1>Broadcast</c1>-Systems</c0>. Dies ist nur ein Test.'),
         ).toEqual(expected);
     });
 
@@ -171,9 +185,7 @@ describe('components/i18n/Composition', () => {
 
         const c = new Composition(el);
         expect(
-            c.decompose(
-                '<c0>Dies ist ein Test des <c1>Notfall-<c2>Broadcast</c2>-Systems</c1>. Dies ist nur ein Test.</c0>',
-            ),
+            c.decompose('Dies ist ein Test des <c0>Notfall-<c1>Broadcast</c1>-Systems</c0>. Dies ist nur ein Test.'),
         ).toEqual(expected);
     });
 
@@ -195,15 +207,17 @@ describe('components/i18n/Composition', () => {
         ]);
 
         const c = new Composition(el);
-        expect(c.decompose('<c0>Dieser Text ist <c2>kursiv</c2> und dieser Text ist <c1>fett</c1>.</c0>')).toEqual(
-            expected,
-        );
+        expect(c.decompose('Dieser Text ist <c1>kursiv</c1> und dieser Text ist <c0>fett</c0>.')).toEqual(expected);
     });
 
-    test('Decompose with added named f elements', () => {
+    test('Decompose with added parameter elements', () => {
         const el = React.createElement('span', { key: 'a' }, [
             'This is a test of the ',
-            React.createElement('b', { key: 'b' }, ['emergency [[type]] system']),
+            React.createElement('b', { key: 'b' }, [
+                'emergency ',
+                React.createElement('Param', { value: 'broadcast', description: 'test', key: 'c' }),
+                ' system',
+            ]),
             '. This is only a test.',
         ]);
 
@@ -211,40 +225,46 @@ describe('components/i18n/Composition', () => {
             'Dies ist ein Test des ',
             React.createElement('b', { key: 'b' }, [
                 'Notfall-',
-                React.createElement('i', { key: 'c' }, 'Broadcast'),
+                React.createElement('Param', { value: 'broadcast', description: 'test', key: 'c' }),
                 '-Systems',
             ]),
             '. Dies ist nur ein Test.',
         ]);
 
         const c = new Composition(el);
-        c.addElement('f0', React.createElement('i', { key: 'c' }, 'Broadcast'));
-        expect(
-            c.decompose('<c0>Dies ist ein Test des <c1>Notfall-<f0></f0>-Systems</c1>. Dies ist nur ein Test.</c0>'),
-        ).toEqual(expected);
+        const actual = c.decompose('Dies ist ein Test des <c0>Notfall-<p0/>-Systems</c0>. Dies ist nur ein Test.');
+        expect(actual).toEqual(expected);
     });
 
-    test('Decompose with added named e elements', () => {
+    test('Decompose while ensuring that only a minimal string is used', () => {
         const el = React.createElement('span', { key: 'a' }, [
+            React.createElement('div', { key: 'x', className: 'asdf' }, [
+                React.createElement('div', { key: 'y', className: 'asdfasdfasdf' }),
+            ]),
             'This is a test of the ',
-            React.createElement('b', { key: 'b' }, ['emergency [[type]] system']),
+            React.createElement('b', { key: 'b' }, [
+                'emergency ',
+                React.createElement('Param', { value: 'broadcast', description: 'test', key: 'c' }),
+                ' system',
+            ]),
             '. This is only a test.',
         ]);
 
         const expected = React.createElement('span', { key: 'a' }, [
+            React.createElement('div', { key: 'x', className: 'asdf' }, [
+                React.createElement('div', { key: 'y', className: 'asdfasdfasdf' }),
+            ]),
             'Dies ist ein Test des ',
             React.createElement('b', { key: 'b' }, [
                 'Notfall-',
-                React.createElement('i', { key: 'c' }, 'Broadcast'),
+                React.createElement('Param', { value: 'broadcast', description: 'test', key: 'c' }),
                 '-Systems',
             ]),
             '. Dies ist nur ein Test.',
         ]);
 
         const c = new Composition(el);
-        c.addElement('e0', React.createElement('i', { key: 'c' }, 'Broadcast'));
-        expect(
-            c.decompose('<c0>Dies ist ein Test des <c1>Notfall-<e0></e0>-Systems</c1>. Dies ist nur ein Test.</c0>'),
-        ).toEqual(expected);
+        const actual = c.decompose('Dies ist ein Test des <c0>Notfall-<p0/>-Systems</c0>. Dies ist nur ein Test.');
+        expect(actual).toEqual(expected);
     });
 });

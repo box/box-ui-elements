@@ -42,7 +42,6 @@ type Props = {
      * after the translation is done.
      */
     tagName?: string,
-    values?: Object,
 };
 
 type State = {
@@ -152,73 +151,17 @@ class FormattedCompMessage extends React.Component<Props, State> {
         return `{count, plural,${categoriesString}}`;
     }
 
-    emptyTag(name) {
-        return `<${name}></${name}>`;
-    }
-
-    /**
-     * Substitute the values into a composed translation.
-     * @param {string} translation the string to substitute values into
-     * @param {Object} values an object containing values to substitute
-     * into the string
-     * @return {string} the updated string
-     */
-    substitute(translation, values) {
-        // now do the substitutions in the post-translated string
-        let functionIndex = 0;
-        let elementIndex = 0;
-        let name;
-        let value;
-
-        if (values) {
-            Object.keys(values).forEach(property => {
-                const re = new RegExp(`\\[\\[${property}\\]\\]`, 'g');
-                switch (typeof values[property]) {
-                    case 'function':
-                        value = values[property]();
-                        // "f" for "function" result
-                        name = `f${functionIndex}`;
-                        functionIndex += 1;
-                        this.state.composition.addElement(name, value);
-                        translation = translation.replace(re, this.emptyTag(name));
-                        break;
-                    case 'object':
-                        if (values[property] === null) {
-                            translation = translation.replace(re, '');
-                        } else if (React.isValidElement(values[property])) {
-                            // "e" for react "element"
-                            name = `e${elementIndex}`;
-                            elementIndex += 1;
-                            this.state.composition.addElement(name, values[property]);
-                            translation = translation.replace(re, this.emptyTag(name));
-                        } else {
-                            translation = translation.replace(re, values[property].toString());
-                        }
-                        break;
-                    default:
-                        translation = translation.replace(
-                            re,
-                            typeof values[property] !== 'undefined' ? values[property].toString() : '',
-                        );
-                        break;
-                }
-            });
-        }
-
-        return translation;
-    }
-
     render() {
         const { count, tagName, intl, description } = this.props;
         const { composition, id, source } = this.state;
-        let { values } = this.props;
+        const values = {};
         if (typeof count === 'number') {
-            // make sure we can format in the count as well
-            values = { count, ...values };
+            // make sure intl.formatMessage switches properly on the count
+            values.count = count;
         }
 
         // react-intl will do the correct plurals if necessary
-        let translation = intl.formatMessage(
+        const translation = intl.formatMessage(
             {
                 id,
                 defaultMessage: source,
@@ -226,12 +169,6 @@ class FormattedCompMessage extends React.Component<Props, State> {
             },
             values,
         );
-
-        // finally, do the substitution of the values into the translated
-        // and post-pluralized string
-        if (values) {
-            translation = this.substitute(translation, values);
-        }
 
         // always wrap the translated string in a tag to contain everything
         // and to give us a spot to record the id

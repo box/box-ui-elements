@@ -39,7 +39,7 @@ describe('components/i18n/Plural', () => {
         );
 
         const plural = wrapper.instance();
-        expect(plural.getSourceString()).toEqual('<c0>This is the singular</c0>');
+        expect(plural.getSourceString()).toEqual('This is the singular');
     });
 
     test('should correctly compose much more complex contents', () => {
@@ -52,6 +52,6 @@ describe('components/i18n/Plural', () => {
         );
 
         const plural = wrapper.instance();
-        expect(plural.getSourceString()).toEqual('<c0>This <c1>is</c1> the <c2>singular</c2>.</c0>');
+        expect(plural.getSourceString()).toEqual('This <c0>is</c0> the <c1>singular</c1>.');
     });
 });

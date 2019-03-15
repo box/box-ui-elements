@@ -288,5 +288,9 @@
         "scroll-into-view-if-needed": "^1.5.0",
         "tabbable": "^1.1.2",
         "uuid": "^3.3.2"
+    },
+    "dependencies": {
+        "ilib-tree-node": "^1.2.0",
+        "message-accumulator": "^2.1.1"
     }
 }
