@@ -6,6 +6,8 @@ import UnknownUserAvatar from '../../icons/avatars/UnknownUserAvatar';
 
 import './Avatar.scss';
 
+const SIZES = { large: true };
+
 type Props = {
     /**
      * Url to avatar image.  If passed in, component will render the avatar image instead of the initials
@@ -23,6 +25,8 @@ type Props = {
      * Required if "avatarUrl" is not specified.
      */
     name?: string,
+    /* avatar size (enum) */
+    size?: $Keys<typeof SIZES>,
 };
 
 type State = {
@@ -50,8 +54,10 @@ class Avatar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { avatarUrl, className = '', name, id }: Props = this.props;
+        const { avatarUrl, className = '', name, id, size }: Props = this.props;
         const { hasImageErrored }: State = this.state;
+        // restrict CSS classnames to known sizes
+        const sizeClass = SIZES[size] ? size : '';
 
         let avatar;
         if (avatarUrl && !hasImageErrored) {
@@ -63,7 +69,7 @@ class Avatar extends React.PureComponent<Props, State> {
         }
 
         return (
-            <span className={`avatar ${className}`} role="presentation">
+            <span className={`avatar ${className} ${sizeClass}`} role="presentation">
                 {avatar}
             </span>
         );

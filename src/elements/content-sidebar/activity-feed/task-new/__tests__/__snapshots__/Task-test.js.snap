@@ -257,7 +257,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
               name="Jake Thomas"
             >
               <span
-                className="avatar bcs-task-assignment-avatar"
+                className="avatar bcs-task-assignment-avatar "
                 role="presentation"
               >
                 <AvatarInitials
@@ -320,7 +320,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
               name="Patrick Paul"
             >
               <span
-                className="avatar bcs-task-assignment-avatar"
+                className="avatar bcs-task-assignment-avatar "
                 role="presentation"
               >
                 <AvatarInitials
