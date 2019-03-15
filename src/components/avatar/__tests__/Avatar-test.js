@@ -7,7 +7,17 @@ const testDataURI = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAAL
 describe('components/avatar/Avatar', () => {
     test('should render an avatar container', () => {
         const wrapper = shallow(<Avatar className="test-avatar" name="hello" />);
-        expect(wrapper.is('span.avatar.test-avatar')).toBeTruthy();
+        expect(wrapper.is('span.avatar.test-avatar')).toBe(true);
+    });
+
+    test('should add size class based on prop', () => {
+        const wrapper = shallow(<Avatar name="hello" size="large" />);
+        expect(wrapper.is('span.avatar.avatar--large')).toBe(true);
+    });
+
+    test('should not allow unknown sizes', () => {
+        const wrapper = shallow(<Avatar name="hello" size="WRONG" />);
+        expect(wrapper.is('span.avatar.avatar--WRONG')).toBe(false);
     });
 
     test('should render an AvatarImage when avatarUrl is passed in', () => {

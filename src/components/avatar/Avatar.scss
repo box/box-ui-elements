@@ -35,4 +35,14 @@
         display: flex;
         justify-content: center;
     }
+
+    &.avatar--large {
+        height: 44px;
+        width: 44px;
+
+        .avatar-initials {
+            font-size: 14px;
+            font-weight: bold;
+        }
+    }
 }

@@ -1,10 +1,13 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
 import UnknownUserAvatar from '../../icons/avatars/UnknownUserAvatar';
 
 import './Avatar.scss';
+
+const SIZES = { large: true };
 
 type Props = {
     /**
@@ -23,6 +26,8 @@ type Props = {
      * Required if "avatarUrl" is not specified.
      */
     name?: string,
+    /* avatar size (enum) */
+    size?: $Keys<typeof SIZES>,
 };
 
 type State = {
@@ -50,8 +55,9 @@ class Avatar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { avatarUrl, className = '', name, id }: Props = this.props;
+        const { avatarUrl, className, name, id, size }: Props = this.props;
         const { hasImageErrored }: State = this.state;
+        const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
         let avatar;
         if (avatarUrl && !hasImageErrored) {
@@ -63,7 +69,7 @@ class Avatar extends React.PureComponent<Props, State> {
         }
 
         return (
-            <span className={`avatar ${className}`} role="presentation">
+            <span className={classes} role="presentation">
                 {avatar}
             </span>
         );
