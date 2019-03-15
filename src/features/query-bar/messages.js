@@ -2,6 +2,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    tooltipEnterValueError: {
+        defaultMessage: 'Please Enter a Value',
+        description: 'Text displayed on the Tooltip for an input field',
+        id: 'boxui.queryBar.tooltipEnterValueError',
+    },
     tooltipSelectValueError: {
         defaultMessage: 'Please Select a Value',
         description: 'Text displayed on the Tooltip for a value field',

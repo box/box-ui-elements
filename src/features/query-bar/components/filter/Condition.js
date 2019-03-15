@@ -10,7 +10,19 @@ import SingleSelectField from '../../../../components/select-field/SingleSelectF
 import ValueField from './ValueField';
 
 import messages from '../../messages';
-import { AND, COLUMN, COLUMN_OPERATORS, DATE, OPERATOR, OR } from '../../constants';
+import {
+    AND,
+    COLUMN,
+    COLUMN_OPERATORS,
+    DATE,
+    ENUM,
+    FLOAT,
+    MULTI_ENUM,
+    NUMBER,
+    OPERATOR,
+    OR,
+    STRING,
+} from '../../constants';
 import type {
     ColumnType,
     ConditionType,
@@ -102,11 +114,30 @@ const Condition = ({
         const type = column && column.type;
 
         const isValueSet = values.length !== 0;
-        const message = (
-            <FormattedMessage
-                {...(type === DATE ? messages.tooltipSelectDateError : messages.tooltipSelectValueError)}
-            />
-        );
+        let message;
+        switch (type) {
+            case STRING:
+                message = <FormattedMessage {...messages.tooltipEnterValueError} />;
+                break;
+            case NUMBER:
+                message = <FormattedMessage {...messages.tooltipEnterValueError} />;
+                break;
+            case FLOAT:
+                message = <FormattedMessage {...messages.tooltipEnterValueError} />;
+                break;
+            case DATE:
+                message = <FormattedMessage {...messages.tooltipSelectDateError} />;
+                break;
+            case ENUM:
+                message = <FormattedMessage {...messages.tooltipSelectValueError} />;
+                break;
+            case MULTI_ENUM:
+                message = <FormattedMessage {...messages.tooltipSelectValueError} />;
+                break;
+            default:
+                break;
+        }
+
         const error = areErrorsEnabled && !isValueSet ? message : null;
 
         return error;

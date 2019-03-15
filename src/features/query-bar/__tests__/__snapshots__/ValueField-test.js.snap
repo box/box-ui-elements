@@ -63,7 +63,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
       id="boxui.queryBar.selectValuePlaceholderText"
     />
   }
-  selectedValue=""
+  selectedValue={null}
 />
 `;
 
