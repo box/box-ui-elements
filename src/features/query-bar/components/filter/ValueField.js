@@ -6,7 +6,7 @@ import DatePicker from '../../../../components/date-picker';
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
 import MultiSelectField from '../../../../components/select-field/MultiSelectField';
 import TextInput from '../../../../components/text-input';
-import { VALUE } from '../../constants';
+import { DATE, ENUM, FLOAT, MULTI_ENUM, NUMBER, STRING, VALUE } from '../../constants';
 import messages from '../../messages';
 
 import '../../styles/Condition.scss';
@@ -26,7 +26,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
     };
 
     switch (valueType) {
-        case 'string':
+        case STRING:
             return (
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
@@ -39,7 +39,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                     />
                 </div>
             );
-        case 'number':
+        case NUMBER:
             return (
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
@@ -52,7 +52,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                     />
                 </div>
             );
-        case 'float':
+        case FLOAT:
             return (
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
@@ -65,7 +65,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                     />
                 </div>
             );
-        case 'date':
+        case DATE:
             return (
                 <div className="filter-dropdown-date-field-container">
                     <DatePicker
@@ -85,17 +85,17 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                     />
                 </div>
             );
-        case 'enum':
+        case ENUM:
             return (
                 <SingleSelectField
                     fieldType={VALUE}
                     onChange={e => onChange([e.value])}
                     options={valueOptions}
                     placeholder={<FormattedMessage {...messages.selectValuePlaceholderText} />}
-                    selectedValue={value}
+                    selectedValue={value === '' ? null : value}
                 />
             );
-        case 'multi-enum':
+        case MULTI_ENUM:
             return (
                 <MultiSelectField
                     fieldType={VALUE}
