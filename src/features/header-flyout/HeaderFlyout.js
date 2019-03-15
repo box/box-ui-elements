@@ -23,17 +23,22 @@ type Props = FlyoutProps & {
 };
 
 class HeaderFlyout extends React.Component<Props> {
-    static panelOffset = '-4px -1px';
+    static panelOffset = '-4px 0px';
 
     static defaultProps = {
         position: 'bottom-left',
     };
 
     render() {
-        const { header, footer, flyoutButton, children, scrollRefFn, ...rest } = this.props;
+        const { header, footer, flyoutButton, children, scrollRefFn, className, ...rest } = this.props;
 
         return (
-            <Flyout closeOnClick={false} offset={HeaderFlyout.panelOffset} {...rest}>
+            <Flyout
+                closeOnClick={false}
+                offset={HeaderFlyout.panelOffset}
+                className={classNames('header-flyout', className)}
+                {...rest}
+            >
                 {flyoutButton}
                 <Overlay className="header-flyout-overlay">
                     <div className="header-flyout-list-container">
