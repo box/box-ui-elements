@@ -46,7 +46,7 @@ describe('components/i18n/Param', () => {
     });
 
     test('should correctly render a functional argument', () => {
-        const f = function() {
+        const f = function f() {
             return 'asdf';
         };
         const wrapper = mount(<Param value={f} description="foo" />);

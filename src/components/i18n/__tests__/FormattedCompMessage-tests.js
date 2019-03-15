@@ -262,7 +262,7 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with functional Param value', () => {
-            const str = function() {
+            const str = function str() {
                 return 'Hello!';
             };
             const wrapper = mount(
