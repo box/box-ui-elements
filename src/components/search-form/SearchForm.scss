@@ -17,11 +17,6 @@
         padding: 0;
         width: 30px;
 
-        &:hover,
-        &:focus {
-            outline: none;
-        }
-
         path {
             transition: fill linear .1s;
         }
