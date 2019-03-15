@@ -1,6 +1,12 @@
 @import '../../../styles/variables';
 @import './variables';
 
+.header-flyout {
+    &::before {
+        display: none;
+    }
+}
+
 .header-flyout-overlay {
     height: $flyout-list-height;
     width: $flyout-list-width;
