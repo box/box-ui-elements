@@ -2,14 +2,14 @@
 
 exports[`components/core/header/components/HeaderFlyout render() should include the header and footer 1`] = `
 <Flyout
-  className="foo"
+  className="header-flyout foo"
   closeOnClick={false}
   closeOnClickOutside={true}
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
   isVisibleByDefault={false}
-  offset="-4px -1px"
+  offset="-4px 0px"
   onClose={[Function]}
   onOpen={[Function]}
   openOnHover={false}
@@ -60,14 +60,14 @@ exports[`components/core/header/components/HeaderFlyout render() should include 
 
 exports[`components/core/header/components/HeaderFlyout render() should render default component 1`] = `
 <Flyout
-  className=""
+  className="header-flyout"
   closeOnClick={false}
   closeOnClickOutside={true}
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
   isVisibleByDefault={false}
-  offset="-4px -1px"
+  offset="-4px 0px"
   onClose={[Function]}
   onOpen={[Function]}
   openOnHover={false}
@@ -100,14 +100,14 @@ exports[`components/core/header/components/HeaderFlyout render() should render d
 
 exports[`components/core/header/components/HeaderFlyout render() should render the flyout button in the appropriate order 1`] = `
 <Flyout
-  className=""
+  className="header-flyout"
   closeOnClick={false}
   closeOnClickOutside={true}
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
   isVisibleByDefault={false}
-  offset="-4px -1px"
+  offset="-4px 0px"
   openOnHover={false}
   openOnHoverDelayTimeout={300}
   portaledClasses={Array []}
