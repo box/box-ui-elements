@@ -201,6 +201,20 @@ exports[`feature/left-sidebar/LeftSidebar should pass in custom sidebar properti
 </NavSidebar>
 `;
 
+exports[`feature/left-sidebar/LeftSidebar should render FooterIndicator if indicatorText is set 1`] = `
+<NavSidebar
+  className="left-sidebar "
+>
+  <div
+    className="left-sidebar-container"
+  />
+  <CopyrightLink />
+  <FooterIndicator
+    indicatorText="abcde"
+  />
+</NavSidebar>
+`;
+
 exports[`feature/left-sidebar/LeftSidebar should render collapsible nested menu items with appropriate properties passed 1`] = `
 <NavSidebar
   className="left-sidebar "

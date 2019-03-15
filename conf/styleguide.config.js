@@ -192,6 +192,7 @@ const allSections = [
         name: 'Features',
         components: () => [
             '../src/features/activity-feed/activity-feed/ActivityFeed.js',
+            '../src/features/footer-indicator/FooterIndicator.js',
             '../src/features/in-app-message/create-message-form/CreateMessageForm.js',
             '../src/features/in-app-message/targeting-expression-editor/TargetingExpressionEditor.js',
             '../src/features/invite-collaborators-modal/InviteCollaboratorsModal.js',

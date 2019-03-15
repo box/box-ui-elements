@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`feature/footer-indicator/FooterIndicator should not render a tooltip if isTextOverflowed is false 1`] = `
+<div
+  className="bdl-FooterIndicator"
+>
+  <Tooltip
+    className="bdl-FooterIndicator-tooltip"
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    position="middle-right"
+    text="abcdefghijklmnopqrstuvwxyz"
+    theme="default"
+  >
+    <div
+      className="bdl-FooterIndicator-content"
+    >
+      <IconPuzzlePiece
+        className="bdl-FooterIndicator-icon"
+      />
+      <span
+        className="bdl-FooterIndicator-text"
+      >
+        abcdefghijklmnopqrstuvwxyz
+      </span>
+    </div>
+  </Tooltip>
+</div>
+`;
+
+exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicator 1`] = `
+<div
+  className="bdl-FooterIndicator"
+>
+  <Tooltip
+    className="bdl-FooterIndicator-tooltip"
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    position="middle-right"
+    text="abcdefghijklmnopqrstuvwxyz"
+    theme="default"
+  >
+    <div
+      className="bdl-FooterIndicator-content"
+    >
+      <IconPuzzlePiece
+        className="bdl-FooterIndicator-icon"
+      />
+      <span
+        className="bdl-FooterIndicator-text"
+      >
+        abcdefghijklmnopqrstuvwxyz
+      </span>
+    </div>
+  </Tooltip>
+</div>
+`;
+
+exports[`feature/footer-indicator/FooterIndicator should render a tooltip if isTextOverflowed is true 1`] = `
+<div
+  className="bdl-FooterIndicator"
+>
+  <Tooltip
+    className="bdl-FooterIndicator-tooltip bdl-is-visible"
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    position="middle-right"
+    text="abcdefghijklmnopqrstuvwxyz"
+    theme="default"
+  >
+    <div
+      className="bdl-FooterIndicator-content"
+    >
+      <IconPuzzlePiece
+        className="bdl-FooterIndicator-icon"
+      />
+      <span
+        className="bdl-FooterIndicator-text"
+      >
+        abcdefghijklmnopqrstuvwxyz
+      </span>
+    </div>
+  </Tooltip>
+</div>
+`;

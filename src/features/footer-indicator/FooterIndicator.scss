@@ -1,0 +1,49 @@
+@import '../../styles/variables';
+@import '../left-sidebar/styles/_sizes.media';
+
+.bdl-FooterIndicator {
+    background: $fours;
+    border-radius: 4px 4px 0 0;
+    bottom: 0;
+    height: 32px;
+    margin: 0 15px;
+    position: fixed;
+    width: 170px;
+    z-index: 10;
+}
+
+.bdl-FooterIndicator-content {
+    display: flex;
+    justify-content: flex-start;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.bdl-FooterIndicator-icon {
+    margin: 8px 10px;
+}
+
+.bdl-FooterIndicator-text {
+    color: $white;
+    font-size: 11px;
+    margin: 6px 10px 6px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &::after {
+        content: '';
+        display: block;
+    }
+}
+
+// Override default tooltip visibility
+.bdl-FooterIndicator-tooltip {
+    display: none;
+
+    &.bdl-is-visible {
+        display: block;
+    }
+}
