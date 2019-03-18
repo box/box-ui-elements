@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/versions/VersionsItem render should match its snapshot 1`] = `
+<NavButton
+  activeClassName="bcs-is-selected"
+  className="bcs-VersionsItem"
+  component="button"
+  disabled={false}
+  to="/12345"
+  type="button"
+>
+  <div
+    className="bcs-VersionsItem-badge"
+  >
+    Vundefined
+  </div>
+  <div
+    className="bcs-VersionsItem-details"
+  >
+    <div
+      className="bcs-VersionsItem-title"
+    >
+      <FormattedMessage
+        defaultMessage="Uploaded by {name}"
+        id="be.sidebarVersions.uploadedBy"
+        values={
+          Object {
+            "name": <FormattedMessage
+              defaultMessage="Unknown"
+              id="be.sidebarVersions.versionUserUnknown"
+            />,
+          }
+        }
+      />
+    </div>
+    <div
+      className="bcs-VersionsItem-info"
+    />
+  </div>
+</NavButton>
+`;

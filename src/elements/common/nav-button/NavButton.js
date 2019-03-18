@@ -22,7 +22,7 @@ type Props = {
 };
 
 const NavButton = ({
-    activeClassName = 'bdl-is-selected',
+    activeClassName = 'bdl-is-active',
     children,
     className = 'bdl-NavButton',
     component: Component = PlainButton,

@@ -53,8 +53,8 @@ const VersionsItem = ({
     const className = classNames('bcs-VersionsItem', {
         'bcs-is-disabled': isDeleted,
     });
-    const versionName = modifiedBy.name || 'Unknown';
     const versionPath = generatePath(match.path, { ...match.params, versionId });
+    const versionUser = modifiedBy.name || <FormattedMessage {...messages.versionUserUnknown} />;
 
     return (
         <NavButton
@@ -68,12 +68,12 @@ const VersionsItem = ({
             <div className="bcs-VersionsItem-badge">{`V${versionNumber}`}</div>
             <div className="bcs-VersionsItem-details">
                 <div className="bcs-VersionsItem-title">
-                    <FormattedMessage {...getActionMessage(action)} values={{ name: versionName }} />
+                    <FormattedMessage {...getActionMessage(action)} values={{ name: versionUser }} />
                 </div>
                 <div className="bcs-VersionsItem-info">
                     {modifiedAt && (
                         <time className="bcs-VersionsItem-date" dateTime={modifiedAt}>
-                            <DateField date={modifiedAt} dateFormat={DATE_FORMAT} />
+                            <DateField capitalize date={modifiedAt} dateFormat={DATE_FORMAT} relative />
                         </time>
                     )}
                     {size && <span className="bcs-VersionsItem-size">{sizeUtil(size)}</span>}

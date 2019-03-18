@@ -160,7 +160,7 @@ const SidebarPanels = ({
                         fileId={fileId}
                         key={fileId}
                         onVersionChange={onVersionChange}
-                        parentPath={match.params.sidebar}
+                        parentName={match.params.sidebar}
                         versionId={match.params.versionId}
                     />
                 )}

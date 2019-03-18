@@ -14,7 +14,7 @@ type Props = {
     api: API,
     fileId: string,
     onVersionChange: (versionId?: string) => void,
-    parentPath: string,
+    parentName: string,
     versionId?: string,
 };
 
@@ -52,6 +52,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     }
 
     componentWillUnmount() {
+        // Reset the current version id since the wrapping route is no longer active
         this.props.onVersionChange();
     }
 
@@ -72,8 +73,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { parentPath, versionId } = this.props;
-        return <VersionsSidebar parentPath={parentPath} versionId={versionId} {...this.state} />;
+        const { parentName } = this.props;
+        return <VersionsSidebar parentName={parentName} {...this.state} />;
     }
 }
 

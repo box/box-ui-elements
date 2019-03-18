@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 1`] = `
+exports[`elements/content-sidebar/versions/VersionsSidebar render should show an inline error if the prop is provided 1`] = `
 <SidebarContent
   className="bcs-Versions"
   title={
     <React.Fragment>
-      <withRouter(BackButton)
+      <BackButton
         path="/undefined"
       />
       <FormattedMessage
@@ -17,19 +17,28 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should match i
 >
   <LoadingIndicatorWrapper
     className="bcs-Versions-content"
-    hideContent={true}
+    hideContent={false}
   >
-    <VersionsList />
+    <InlineError
+      title={
+        <FormattedMessage
+          defaultMessage="Error"
+          id="be.error"
+        />
+      }
+    >
+      This is an error
+    </InlineError>
   </LoadingIndicatorWrapper>
 </SidebarContent>
 `;
 
-exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 2`] = `
+exports[`elements/content-sidebar/versions/VersionsSidebar render should show the versions list if no error prop is provided 1`] = `
 <SidebarContent
   className="bcs-Versions"
   title={
     <React.Fragment>
-      <withRouter(BackButton)
+      <BackButton
         path="/undefined"
       />
       <FormattedMessage
@@ -45,38 +54,6 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should match i
   >
     <VersionsList
       versions={Array []}
-    />
-  </LoadingIndicatorWrapper>
-</SidebarContent>
-`;
-
-exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 3`] = `
-<SidebarContent
-  className="bcs-Versions"
-  title={
-    <React.Fragment>
-      <withRouter(BackButton)
-        path="/undefined"
-      />
-      <FormattedMessage
-        defaultMessage="Version History"
-        id="be.sidebarVersions.title"
-      />
-    </React.Fragment>
-  }
->
-  <LoadingIndicatorWrapper
-    className="bcs-Versions-content"
-    hideContent={false}
-  >
-    <VersionsList
-      versions={
-        Array [
-          Object {
-            "id": 12345,
-          },
-        ]
-      }
     />
   </LoadingIndicatorWrapper>
 </SidebarContent>

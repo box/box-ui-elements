@@ -26,6 +26,11 @@ const messages = defineMessages({
         defaultMessage: 'Uploaded by { name }',
         description: 'Message displayed for an uploaded version. {name} is the user who performed the action.',
     },
+    versionUserUnknown: {
+        id: 'be.sidebarVersions.versionUserUnknown',
+        defaultMessage: 'Unknown',
+        description: 'Name displayed for unknown or deleted users.',
+    },
 });
 
 export default messages;

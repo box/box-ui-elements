@@ -1038,7 +1038,12 @@ class ContentPreview extends PureComponent<Props, State> {
         }
     };
 
-    onVersionChange = (versionId: string) => {
+    /**
+     * Handles version change events
+     *
+     * @param {string} versionId - The version id to set as current
+     */
+    onVersionChange = (versionId?: string) => {
         this.setState({ fileVersionId: versionId });
     };
 

@@ -18,22 +18,20 @@ import './VersionsSidebar.scss';
 type Props = {
     error?: string,
     isLoading: boolean,
-    parentPath: string,
-    versionId?: string,
+    parentName: string,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, isLoading, parentPath, versions }: Props) => {
-    const hasError = !!error;
+const VersionsSidebar = ({ error, isLoading, parentName, versions }: Props) => {
     const hasVersions = !!versions && !!versions.length;
-    const hideContent = !hasError && !hasVersions;
+    const hideContent = !error && !hasVersions;
 
     return (
         <SidebarContent
             className="bcs-Versions"
             title={
                 <React.Fragment>
-                    <BackButton path={`/${parentPath}`} />
+                    <BackButton path={`/${parentName}`} />
                     <FormattedMessage {...messages.versionsTitle} />
                 </React.Fragment>
             }
