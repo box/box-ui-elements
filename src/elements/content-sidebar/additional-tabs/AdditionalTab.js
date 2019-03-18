@@ -41,7 +41,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
 
         if (isErrored) {
             TabIcon = <AdditionalTabPlaceholder isLoading={false} />;
-        } else if (id && id > 0 && iconUrl) {
+        } else if (id && id > 0) {
             TabIcon = (
                 <img
                     className="bdl-AdditionalTab-icon"
