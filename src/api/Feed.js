@@ -155,7 +155,6 @@ class Feed extends Base {
         shouldShowNewTasks?: boolean = false, // TODO: could the class understand feature flips natively instead?
     ): void {
         const { id, permissions = {} } = file;
-        const { language } = this.options;
         const cachedItems = this.getCachedItems(id);
         if (cachedItems) {
             const { hasError, items } = cachedItems;
@@ -176,7 +175,7 @@ class Feed extends Base {
         const versionsPromise = this.fetchVersions();
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = shouldShowNewTasks ? this.fetchTasksNew() : this.fetchTasks();
-        const appActivityPromise = this.fetchAppActivity(permissions, language);
+        const appActivityPromise = this.fetchAppActivity(permissions);
 
         Promise.all([versionsPromise, commentsPromise, tasksPromise, appActivityPromise]).then(feedItems => {
             const versions: ?FileVersions = feedItems[0];
@@ -1338,11 +1337,10 @@ class Feed extends Base {
     /**
      * Fetches app activities for a file
      * @param {BoxItemPermission} permissions - Permissions to attach to the app activity items
-     * @param {string} [language] - Language to request app activity to be translated to
      *
      * @return {Promise} - the feed items
      */
-    fetchAppActivity(permissions: BoxItemPermission, language?: string): Promise<?AppActivityItems> {
+    fetchAppActivity(permissions: BoxItemPermission): Promise<?AppActivityItems> {
         this.appActivityAPI = new AppActivityAPI(this.options);
 
         return new Promise(resolve => {
@@ -1351,7 +1349,6 @@ class Feed extends Base {
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
-                language,
             );
         });
     }
