@@ -10,6 +10,7 @@ export const CATEGORY_MANY: 'many' = 'many';
 export const CATEGORY_OTHER: 'other' = 'other';
 
 type Props = {
+    /** The plural category this string. (required) */
     category:
         | typeof CATEGORY_ZERO
         | typeof CATEGORY_ONE
@@ -18,7 +19,6 @@ type Props = {
         | typeof CATEGORY_MANY
         | typeof CATEGORY_OTHER,
 
-    /** The plural category this string. (required) */
     children: React.Node,
 };
 

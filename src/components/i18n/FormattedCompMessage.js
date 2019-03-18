@@ -5,28 +5,11 @@ import { injectIntl } from 'react-intl';
 import Composition from './Composition';
 
 type Props = {
-    children: React.Node,
-    /** The unique id of this string. (required) */
-    count?: number,
-
     /**
-     * A description to send to the translators to explain the context of
-     * this string and to describe the type of any replacement parameters.
-     * (required)
-     */
-    defaultMessage?: React.ElementType | string,
-
-    /**
-     * The text to translate. This may be a string or JSX. This prop may be
+     * The text to translate. This may be a string or JSX. The defaultMessage prop may be
      * given or the component may have children, but not both.
      */
-    description: string,
-
-    /**
-     * Specify the name of the HTML tag you would like to use to wrap the
-     * translations. Default: "span"
-     */
-    id: string,
+    children?: React.Node,
 
     /**
      * Specify the pivot count to choose which plural form to use.
@@ -35,11 +18,32 @@ type Props = {
      * and the linguistic rules of the locale which determine which numbers
      * belong to which plural class.
      */
+    count?: number,
+
+    /**
+     * The text to translate. This may be a string or JSX. This prop may be
+     * given or the component may have children, but not both.
+     */
+    defaultMessage?: React.ElementType | string,
+
+    /**
+     * A description to send to the translators to explain the context of
+     * this string.
+     */
+    description: string,
+
+    /** The unique id of this string. */
+    id: string,
+
+    /**
+     * The intl provider. This is injected into this component
+     * via the injectIntl function from react-intl.
+     */
     intl: Object,
 
     /**
-     * An object which maps names to values to replace into the text
-     * after the translation is done.
+     * Specify the name of the HTML tag you would like to use to wrap the
+     * translations.
      */
     tagName?: string,
 };
@@ -66,7 +70,6 @@ class FormattedCompMessage extends React.Component<Props, State> {
 
     static defaultProps = {
         tagName: 'span',
-        values: {},
     };
 
     constructor(props: Props) {

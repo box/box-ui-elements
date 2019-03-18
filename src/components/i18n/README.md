@@ -48,38 +48,38 @@ and the translator does not have the ability to change the tag or introduce an i
 Use the Param component to indicate where in the string to substitute a value:
 
 ```jsx
+// @NOTE: You can only use require instead of import in markdown.
+const Param = require('./Param').default;
+
 <FormattedCompMessage
     id="unique.id"
     description="description for translators to explain the context of this string"
-    values={{
-        type: 'text',
-    }}
 >
     <span>
-        English <b><Param name="type"/></b> with <Link to="some://url">subcomponents</Link> in the middle of it.
+        English <b><Param value="text" description="item to describe"/></b> with <Link to="some://url">subcomponents</Link> in the middle of it.
     </span>
 </FormattedCompMessage>
 ```
 
-Various types of values are allowed, including JSX and even functions! Example:
+The Param must have both a value and a description prop. The description describes for the translators what is substituted into the string.
+
+Various types of values are allowed in Param component values, including JSX and even functions! Example:
 
 ```jsx
+// @NOTE: You can only use require instead of import in markdown.
+const Param = require('./Param').default;
+
 <FormattedCompMessage
     id="unique.id"
     description="description for translators to explain the context of this string"
-    values={{
-        type: 'text',
-        num: 2.334,
-        bool: true,
-        jsx: <span class="kotter">Any arbitrary <Link to="x">jsx</Link> can go here!</span>,
-        funky: function() {
-            return return.a.value.from.this.function;
-        }
-    }}
 >
     <span>
-        The type is <b><Param name="type"/></b> which contains <span class="pretty-numbers"><Param name="num"/></span> items.
-        These items are <Param name="bool"/>. They contain <Param name="jsx"/>. They are somewhat <Param name="funky"/>.
+        The type is <b><Param value="text" description="a textual parameter"/></b> which contains <span class="pretty-numbers"><Param value="2.334" description="number of items"/></span> items.
+        These items are <Param value={true} description="a boolean value"/>.
+        They contain <Param value={<span class="kotter">Any arbitrary <Link to="x">jsx</Link> can go here!</span>} description="arbitrary jsx"/>.
+        A function can return <Param description="the result of a call to a function" value={function() {
+            return "a value";
+        }}/>.
     </span>
 </FormattedCompMessage>
 ```
@@ -94,13 +94,18 @@ a value to substitute in for the parameter.
 **Avoid This**
 
 Do not put brace expressions in the text to translate. They will get replaced before the FormattedCompMessage component
-is called, and therefore mess up the translation. Strings with brace expressions in them will be rejected by the babel plugin.
-Use replacement parameters instead (the Param component in the section above), as they get replaced after the translation
-instead of before.
+is called, and therefore the source string will contain the value of the expression. When the component attempts to
+load the translation, that source string will not be found, and therefore the translation will also not be found.
+Strings with brace expressions in them will be rejected by the babel plugin when they are extracted.
 
-Bad:
+Use replacement parameters instead (see the Param component in the section above), as they get replaced after
+the string is translated instead of before.
+
+Do not do this:
 
 ```jsx
+const user = {name: "Fred"};
+
 <FormattedCompMessage
     id="unique.id"
     description="description for translators to explain the context of this string"
@@ -109,15 +114,19 @@ Bad:
 </FormattedCompMessage>
 ```
 
-Good:
+Do this instead:
 
 ```jsx
+// @NOTE: You can only use require instead of import in markdown.
+const Param = require('./Param').default;
+
+const user = {name: "Fred"};
+
 <FormattedCompMessage
     id="unique.id"
     description="description for translators to explain the context of this string"
-    values={{name: user.name}}
 >
-    English text to translate here for user <Param name="name"/>
+    English text to translate here for user <Param value={user.name} description="The user's name"/>
 </FormattedCompMessage>
 ```
 
@@ -127,20 +136,27 @@ To do locale-sensitive plurals, give a numeric count prop and embed some Plural 
 in the body of the component.
 
 ```jsx
+// @NOTE: You can only use require instead of import in markdown.
+const Plural = require('./Plural').default;
+const Param = require('./Param').default;
+
+const somenumber = 5;
+
 <FormattedCompMessage
     id="unique.id"
     description="description for translators to explain the context of this string"
     count={somenumber}
-    values={{user: user.id}}
 >
     <Plural category="one">
         <span>
-            User <Param name="user"/> shared the file with <b><Param name="count"/></b> other user.
+            User <Param value="user" description="Name of the user that shared the file"/> shared the file
+            with <b><Param value={somenumber} description="Number of other users that the file was shared with"/></b> other user.
         </span>
     </Plural>
     <Plural category="other">
         <span>
-            User <Param name="user"/> shared the file with <b><Param name="count"/></b> other users.
+            User <Param value="user" description="Name of the user that shared the file"/> shared the file
+            with <b><Param value={somenumber} description="Number of other users that the file was shared with"/></b> other users.
         </span>
     </Plural>
 </FormattedCompMessage>
