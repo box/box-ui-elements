@@ -17,6 +17,23 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
 </Tooltip>
 `;
 
+exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the placeholder when an error occurs 1`] = `
+<Tooltip
+  position="middle-left"
+  text="test title"
+>
+  <PlainButton
+    className="bdl-AdditionalTab"
+    onClick={[Function]}
+    type="button"
+  >
+    <AdditionalTabPlaceholder
+      isLoading={false}
+    />
+  </PlainButton>
+</Tooltip>
+`;
+
 exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the tooltip and button contents 1`] = `
 <Tooltip
   position="middle-left"
