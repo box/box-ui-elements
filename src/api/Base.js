@@ -83,6 +83,7 @@ class Base {
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.apiHost] - Api host
      * @param {string} [options.uploadHost] - Upload host name
+     * @param {StringMap} [options.commonHeaders] - Common headers applied to all requests
      * @return {Base} Base instance
      */
     constructor(options: Options) {

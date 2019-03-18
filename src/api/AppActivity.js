@@ -4,12 +4,7 @@
  * @author Box
  */
 import MarkerBasedAPI from './MarkerBasedAPI';
-import {
-    DEFAULT_LOCALE,
-    ERROR_CODE_DELETE_APP_ACTIVITY,
-    HEADER_ACCEPT_LANGUAGE,
-    HTTP_STATUS_CODE_NOT_FOUND,
-} from '../constants';
+import { ERROR_CODE_DELETE_APP_ACTIVITY, HTTP_STATUS_CODE_NOT_FOUND } from '../constants';
 import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../utils/fields';
 
 class AppActivity extends MarkerBasedAPI {
@@ -111,7 +106,6 @@ class AppActivity extends MarkerBasedAPI {
      * @param {BoxItemPermission} permissions - Permissions to attach to the app activity items. Determines if it can be deleted.
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
-     * @param {string} [language] - The language to translate app activity to
      *
      * @returns {void}
      */
@@ -120,16 +114,11 @@ class AppActivity extends MarkerBasedAPI {
         permissions: BoxItemPermission,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
-        language?: string = DEFAULT_LOCALE,
     ): void {
         const requestData = {
             item_id: id,
             item_type: 'file',
             fields: APP_ACTIVITY_FIELDS_TO_FETCH.toString(),
-        };
-
-        const headers = {
-            [HEADER_ACCEPT_LANGUAGE]: language,
         };
 
         this.permissions = permissions;
@@ -139,7 +128,6 @@ class AppActivity extends MarkerBasedAPI {
             successCallback,
             errorCallback,
             requestData,
-            headers,
         });
     }
 

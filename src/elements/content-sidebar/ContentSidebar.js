@@ -14,7 +14,13 @@ import APIContext from '../common/api-context';
 import Internationalize from '../common/Internationalize';
 import Sidebar from './Sidebar';
 import SidebarUtils from './SidebarUtils';
-import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEBAR } from '../../constants';
+import {
+    DEFAULT_HOSTNAME_API,
+    DEFAULT_LOCALE,
+    CLIENT_NAME_CONTENT_SIDEBAR,
+    HEADER_ACCEPT_LANGUAGE,
+    ORIGIN_CONTENT_SIDEBAR,
+} from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
@@ -115,11 +121,15 @@ class ContentSidebar extends React.Component<Props, State> {
             token,
         } = props;
 
+        const commonHeaders = {
+            [HEADER_ACCEPT_LANGUAGE]: language || DEFAULT_LOCALE,
+        };
+
         this.api = new API({
             apiHost,
             cache,
             clientName,
-            language,
+            commonHeaders,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
