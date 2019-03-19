@@ -2,11 +2,12 @@
 import * as React from 'react';
 
 import QueryBar from '../../src/features/query-bar/QueryBar';
-import type { ColumnType } from '../../src/features/query-bar/flowTypes';
-import { columns } from '../../src/features/query-bar/components/fixtures';
+import type { ColumnType, ConditionType } from '../../src/features/query-bar/flowTypes';
+import { columns, conditions } from '../../src/features/query-bar/components/fixtures';
 
 type Props = {
     activeTemplate?: MetadataTemplate,
+    conditions: Array<ConditionType>,
     onTemplateChange?: Function,
     templates?: Array<MetadataTemplate>,
     visibleColumns?: Array<ColumnType>,
@@ -16,6 +17,7 @@ const MetadataViewQueryBarExamples = ({ activeTemplate, onTemplateChange, templa
     <QueryBar
         activeTemplate={activeTemplate}
         columns={columns}
+        conditions={conditions}
         onColumnChange={() => {}}
         onTemplateChange={onTemplateChange}
         templates={templates}
