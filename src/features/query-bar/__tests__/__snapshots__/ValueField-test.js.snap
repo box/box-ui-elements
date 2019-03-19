@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a DatePicker for a valueType of date" 1`] = `
+exports[`features/query-bar/components/filter/ValueField render value fields should correctly render a DatePicker for a valueType of date 1`] = `
 <div
   className="filter-dropdown-date-field-container"
 >
@@ -21,7 +21,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
 </div>
 `;
 
-exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a MultiSelectField for a valueType of multi-enum" 1`] = `
+exports[`features/query-bar/components/filter/ValueField render value fields should correctly render a MultiSelectField for a valueType of multi-enum 1`] = `
 <MultiSelectField
   fieldType="value"
   onChange={[Function]}
@@ -44,7 +44,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
 />
 `;
 
-exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a SingleSelectField for a valueType of enum" 1`] = `
+exports[`features/query-bar/components/filter/ValueField render value fields should correctly render a SingleSelectField for a valueType of enum 1`] = `
 <SingleSelectField
   fieldType="value"
   onChange={[Function]}
@@ -67,7 +67,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
 />
 `;
 
-exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a TextInput for a valueType of float" 1`] = `
+exports[`features/query-bar/components/filter/ValueField render value fields should correctly render a TextInput for a valueType of float 1`] = `
 <div
   className="filter-dropdown-text-field-container"
 >
@@ -82,7 +82,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
 </div>
 `;
 
-exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a TextInput for a valueType of number" 1`] = `
+exports[`features/query-bar/components/filter/ValueField render value fields should correctly render a TextInput for a valueType of number 1`] = `
 <div
   className="filter-dropdown-text-field-container"
 >
@@ -97,7 +97,7 @@ exports[`features/query-bar/components/filter/ValueField render value fields "sh
 </div>
 `;
 
-exports[`features/query-bar/components/filter/ValueField render value fields "should correctly render a TextInput for a valueType of string" 1`] = `
+exports[`features/query-bar/components/filter/ValueField render value fields should correctly render a TextInput for a valueType of string 1`] = `
 <div
   className="filter-dropdown-text-field-container"
 >

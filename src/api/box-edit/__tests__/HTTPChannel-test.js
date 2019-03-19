@@ -47,7 +47,7 @@ describe('api/box-edit/HTTPChannel', () => {
             const channel = new HTTPChannel(APP_NAME, URL);
             const result = channel.createCORSRequest('GET', URL);
 
-            expect(fakeXHR.open.mock.results[0].isThrow).toEqual(true);
+            expect(fakeXHR.open.mock.results[0].type).toEqual('throw');
             expect(result).toEqual(fakeXHR);
         });
 
