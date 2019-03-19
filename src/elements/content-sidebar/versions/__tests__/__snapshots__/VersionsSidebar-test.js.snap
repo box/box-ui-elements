@@ -17,18 +17,22 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
 >
   <LoadingIndicatorWrapper
     className="bcs-Versions-content"
-    hideContent={false}
   >
-    <InlineError
-      title={
-        <FormattedMessage
-          defaultMessage="Error"
-          id="be.error"
-        />
-      }
+    <SidebarSection
+      className=""
+      isOpen={true}
     >
-      This is an error
-    </InlineError>
+      <InlineError
+        title={
+          <FormattedMessage
+            defaultMessage="Error"
+            id="be.error"
+          />
+        }
+      >
+        This is an error
+      </InlineError>
+    </SidebarSection>
   </LoadingIndicatorWrapper>
 </SidebarContent>
 `;
@@ -50,11 +54,15 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show th
 >
   <LoadingIndicatorWrapper
     className="bcs-Versions-content"
-    hideContent={true}
   >
-    <VersionsList
-      versions={Array []}
-    />
+    <SidebarSection
+      className=""
+      isOpen={true}
+    >
+      <VersionsList
+        versions={Array []}
+      />
+    </SidebarSection>
   </LoadingIndicatorWrapper>
 </SidebarContent>
 `;

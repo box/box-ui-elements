@@ -10,6 +10,7 @@ import InlineError from '../../../components/inline-error';
 import messages from './messages';
 import messagesCommon from '../../common/messages';
 import SidebarContent from '../SidebarContent';
+import SidebarSection from '../SidebarSection';
 import VersionsList from './VersionsList';
 import { BackButton } from '../../common/nav-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
@@ -23,9 +24,6 @@ type Props = {
 };
 
 const VersionsSidebar = ({ error, isLoading, parentName, versions }: Props) => {
-    const hasVersions = !!versions && !!versions.length;
-    const hideContent = !error && !hasVersions;
-
     return (
         <SidebarContent
             className="bcs-Versions"
@@ -36,11 +34,15 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions }: Props) => {
                 </React.Fragment>
             }
         >
-            <LoadingIndicatorWrapper className="bcs-Versions-content" isLoading={isLoading} hideContent={hideContent}>
-                {error ? (
-                    <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
-                ) : (
-                    <VersionsList versions={versions} />
+            <LoadingIndicatorWrapper className="bcs-Versions-content" isLoading={isLoading}>
+                {!isLoading && (
+                    <SidebarSection isOpen>
+                        {error ? (
+                            <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
+                        ) : (
+                            <VersionsList versions={versions} />
+                        )}
+                    </SidebarSection>
                 )}
             </LoadingIndicatorWrapper>
         </SidebarContent>

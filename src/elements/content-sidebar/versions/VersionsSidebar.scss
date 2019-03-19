@@ -1,4 +1,8 @@
 .bcs-Versions {
+    .bcs-section-content:first-child {
+        padding-top: 0;
+    }
+
     .bdl-BackButton {
         margin-right: 5px;
     }
@@ -8,6 +12,4 @@
     height: 100%;
     min-height: 50px;
     padding-bottom: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
 }

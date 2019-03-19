@@ -8,32 +8,30 @@
 }
 
 .bcs-VersionsList-item {
+    $border-height: 1px;
+    $border-padding: 10px;
+
     .bcs-VersionsItem {
+        margin-bottom: -$border-height;
+        margin-left: -$border-padding;
+        margin-right: -$border-padding;
+        width: calc(100% + #{$border-padding * 2});
+
+        &:focus,
+        &:hover {
+            z-index: 2;
+        }
+
         &.bcs-is-selected {
             z-index: 1;
         }
     }
-}
 
-.bcs-VersionsList-item + .bcs-VersionsList-item {
-    .bcs-VersionsItem {
-        margin-top: -1px;
+    & + & {
+        border-top: $border-height solid $off-white;
 
-        &::before {
-            background-color: $off-white;
-            content: '';
-            display: block;
-            height: 1px;
-            left: 0;
-            margin-left: 10px;
-            margin-right: 10px;
-            position: absolute;
-            right: 0;
-            top: -1px;
-        }
-
-        &.bcs-is-selected::before {
-            background-color: transparent;
+        .bcs-VersionsItem {
+            margin-top: -$border-height;
         }
     }
 }
