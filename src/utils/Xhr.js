@@ -60,7 +60,7 @@ class Xhr {
 
     shouldRetry: boolean;
 
-    headers: StringMap;
+    headers: StringMap = {};
 
     /**
      * [constructor]
