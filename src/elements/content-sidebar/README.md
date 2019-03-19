@@ -18,6 +18,7 @@ var ContentSidebar = require('./ContentSidebar').default;
         hasMetadata
         hasSkills
         token={TOKEN}
+        {...window.ADDITIONAL_PROPS}
     />
 </IntlProvider>
 ```
