@@ -827,7 +827,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render settings l
       ],
       "results": Array [
         Object {
-          "isThrow": false,
+          "type": "return",
           "value": undefined,
         },
       ],

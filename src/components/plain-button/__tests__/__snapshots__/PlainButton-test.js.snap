@@ -19,7 +19,7 @@ exports[`components/plain-button/PlainButton should render component correctly a
       ],
       "results": Array [
         Object {
-          "isThrow": false,
+          "type": "return",
           "value": undefined,
         },
       ],
