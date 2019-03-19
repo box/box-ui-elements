@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import camelCase from 'lodash/camelCase';
-import IconCheck from '../../../../icons/general/IconCheck';
-import IconReject from '../../../../icons/general/IconClose';
+import IconComplete from '../../../../icons/general/IconVerified';
+import IconReject from '../../../../icons/general/IconRejected';
 import Avatar from '../Avatar';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_INCOMPLETE } from '../../../../constants';
 import messages from '../../../common/messages';
@@ -18,7 +18,7 @@ const StatusIcon = ({ status, ...rest }: { status: TaskStatus }) => {
     switch (status) {
         case TASK_NEW_APPROVED:
         case TASK_NEW_COMPLETED:
-            return <IconCheck {...rest} />;
+            return <IconComplete {...rest} />;
         case TASK_NEW_REJECTED:
             return <IconReject {...rest} />;
         case TASK_NEW_INCOMPLETE:

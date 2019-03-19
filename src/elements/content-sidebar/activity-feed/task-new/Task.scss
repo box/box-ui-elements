@@ -61,7 +61,6 @@ $error-color: $red;
     }
 
     .bcs-task-assignment-status-icon {
-        background: $grey;
         border: 1px solid $white;
         border-radius: 50%;
         bottom: 0;
@@ -70,17 +69,10 @@ $error-color: $red;
         right: 0;
         width: 12px;
 
-        .fill-color {
-            fill: $white;
-        }
-
         &.completed,
-        &.approved {
-            background: $success-color;
-        }
-
+        &.approved,
         &.rejected {
-            background: $error-color;
+            background: $white;
         }
     }
 
@@ -91,7 +83,6 @@ $error-color: $red;
     }
 
     .bcs-task-status-icon {
-        background: $grey;
         border: 1px solid $white;
         border-radius: 100%;
         bottom: 0;
@@ -99,29 +90,25 @@ $error-color: $red;
         margin-right: 5px;
         width: 14px;
 
-        .fill-color {
-            fill: $white;
-        }
-
         &.completed,
-        &.approved {
-            background: $success-color;
-        }
-
+        &.approved,
         &.rejected {
-            background: $error-color;
+            background: $white;
         }
 
         &.pending,
         &.incomplete,
         &.notStarted {
             align-items: center;
-            background: #bdc3c7;
             color: white;
             display: flex;
             font-size: 80%;
             font-weight: bold;
             justify-content: center;
+
+            .fill-color {
+                fill: $grey;
+            }
         }
     }
 
