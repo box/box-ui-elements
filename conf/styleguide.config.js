@@ -46,6 +46,7 @@ const allSections = [
             '../src/components/flyout/Flyout.js',
             '../src/components/flyout/Overlay.js',
             '../src/components/focus-trap/FocusTrap.js',
+            '../src/components/footer-indicator/FooterIndicator.js',
             '../src/components/header/Header.js',
             '../src/components/hotkeys/HotkeyFriendlyModal.js',
             '../src/components/hotkeys/HotkeyLayer.js',
@@ -192,7 +193,6 @@ const allSections = [
         name: 'Features',
         components: () => [
             '../src/features/activity-feed/activity-feed/ActivityFeed.js',
-            '../src/features/footer-indicator/FooterIndicator.js',
             '../src/features/in-app-message/create-message-form/CreateMessageForm.js',
             '../src/features/in-app-message/targeting-expression-editor/TargetingExpressionEditor.js',
             '../src/features/invite-collaborators-modal/InviteCollaboratorsModal.js',

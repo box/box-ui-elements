@@ -16,12 +16,13 @@ describe('icons/general/IconPuzzlePiece', () => {
         expect(wrapper.find('path').prop('fill')).toEqual(color);
     });
 
-    test('should correctly render icon with specified width and height', () => {
+    test('should correctly render icon with specified width, height, and viewBox value', () => {
         const dimension = 16;
         const wrapper = shallow(<IconPuzzlePiece dimension={dimension} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(dimension);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(dimension);
+        expect(wrapper.find('AccessibleSVG').prop('viewBox')).toEqual(`0 0 ${dimension} ${dimension}`);
     });
 
     test('should correctly render icon with title', () => {

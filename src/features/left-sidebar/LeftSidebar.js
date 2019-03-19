@@ -18,7 +18,7 @@ import NewItemsIndicator from './NewItemsIndicator';
 import type { Callout } from './Callout';
 
 import './styles/LeftSidebar.scss';
-import FooterIndicator from '../footer-indicator/FooterIndicator';
+import FooterIndicator from '../../components/footer-indicator/FooterIndicator';
 
 type SubMenuItem = {
     /** Sidebar Link Callout */

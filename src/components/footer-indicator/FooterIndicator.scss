@@ -1,5 +1,4 @@
 @import '../../styles/variables';
-@import '../left-sidebar/styles/_sizes.media';
 
 .bdl-FooterIndicator {
     background: $fours;
@@ -21,8 +20,8 @@
     }
 }
 
-.bdl-FooterIndicator-icon {
-    margin: 8px 10px;
+.bdl-FooterIndicator-iconWrapper {
+    margin: 8px 9px 8px 10px;
 }
 
 .bdl-FooterIndicator-text {

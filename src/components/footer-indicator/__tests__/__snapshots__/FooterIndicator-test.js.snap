@@ -15,9 +15,11 @@ exports[`feature/footer-indicator/FooterIndicator should not render a tooltip if
     <div
       className="bdl-FooterIndicator-content"
     >
-      <IconPuzzlePiece
-        className="bdl-FooterIndicator-icon"
-      />
+      <span
+        className="bdl-FooterIndicator-iconWrapper"
+      >
+        <IconPuzzlePiece />
+      </span>
       <span
         className="bdl-FooterIndicator-text"
       >
@@ -43,9 +45,11 @@ exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicato
     <div
       className="bdl-FooterIndicator-content"
     >
-      <IconPuzzlePiece
-        className="bdl-FooterIndicator-icon"
-      />
+      <span
+        className="bdl-FooterIndicator-iconWrapper"
+      >
+        <IconPuzzlePiece />
+      </span>
       <span
         className="bdl-FooterIndicator-text"
       >
@@ -71,9 +75,11 @@ exports[`feature/footer-indicator/FooterIndicator should render a tooltip if isT
     <div
       className="bdl-FooterIndicator-content"
     >
-      <IconPuzzlePiece
-        className="bdl-FooterIndicator-icon"
-      />
+      <span
+        className="bdl-FooterIndicator-iconWrapper"
+      >
+        <IconPuzzlePiece />
+      </span>
       <span
         className="bdl-FooterIndicator-text"
       >

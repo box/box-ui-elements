@@ -2,7 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-import Tooltip from '../../components/tooltip';
+import Tooltip from '../tooltip';
 
 import IconPuzzlePiece from '../../icons/general/IconPuzzlePiece';
 
@@ -55,7 +55,9 @@ class FooterIndicator extends React.Component<Props, State> {
                     text={indicatorText}
                 >
                     <div className="bdl-FooterIndicator-content">
-                        <IconPuzzlePiece className="bdl-FooterIndicator-icon" />
+                        <span className="bdl-FooterIndicator-iconWrapper">
+                            <IconPuzzlePiece />
+                        </span>
                         <span
                             ref={textElement => {
                                 this.indicatorTextElement = textElement;

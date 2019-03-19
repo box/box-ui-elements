@@ -1,44 +1,70 @@
 ### Description
 
-Customizable menu that provides for implementing interactive items, subitems, and icons pulled from `box-ui-elements`. Icons take the form of those in `/icons` for this feature.
+Renders a small tab with text in the bottom-left corner of a page.
 
-Responsive states exist for large, medium and small. To override the medium state, add an `is-forced-open` class to the container element.
+### Examples
 
-Remove the menu item from favorites to see the placeholder text.
+#### Default
 
-## Examples
+```
+<div style={{
+    height: '250px',
+    position: 'relative',
+    transform: 'translate3d(0,0,0)',
+}}>
+    <FooterIndicator
+        indicatorText="FooterIndicator"
+    />
+</div>
+```
 
-### Standard
+#### With text overflow
+
+```
+<div style={{
+    height: '250px',
+    position: 'relative',
+    transform: 'translate3d(0,0,0)',
+}}>
+    <FooterIndicator
+        indicatorText="FooterIndicatorWithExtremelyLongName"
+    />
+</div>
+```
+
+#### In a `NavSidebar`
 
 ```js
-const IconAdminConsole = require('./icons/IconAdminConsole').default;
-const IconAllFiles = require('./icons/IconAllFiles').default;
-const IconAutomations = require('./icons/IconAutomations').default;
-const IconReturnToAdminConsole = require('./icons/IconReturnToAdminConsole').default;
-const IconDevConsole = require('./icons/IconDevConsole').default;
-const IconRecents = require('./icons/IconRecents').default;
-const IconSynced = require('./icons/IconSynced').default;
-const IconTrash = require('./icons/IconTrash').default;
-const IconFeed = require('./icons/IconFeed').default;
-const IconNotifications = require('./icons/IconNotifications').default;
-const IconNotes = require('./icons/IconNotes').default;
-const IconRelay = require('./icons/IconRelay').default;
-const IconFavorites = require('./icons/IconFavorites').default;
+const NavSidebar = require('box-ui-elements/es/components/nav-sidebar/NavSidebar').default;
+const NavList = require('box-ui-elements/es/components/nav-sidebar/NavList').default;
+
+<div
+    style={{
+        transform: 'translate3d(0,0,0)',
+    }}
+>
+    <NavSidebar style={{ padding: 0 }}>
+        <div style={{ padding: '20px' }}>
+            <NavList>
+                <Link>Item A</Link>
+                <Link>Item B</Link>
+                <Link>Item C</Link>
+                <Link>Item D</Link>
+                <Link>Item E</Link>
+            </NavList>
+        </div>
+        <FooterIndicator indicatorText="FooterIndicatorInANavSidebar" />
+    </NavSidebar>
+</div>;
+```
+
+#### In a `LeftSidebar`
+
+```js
+const LeftSidebar = require('box-ui-elements/es/features/left-sidebar/LeftSidebar').default;
+const IconReturnToAdminConsole = require('box-ui-elements/es/features/left-sidebar/icons/IconReturnToAdminConsole')
+    .default;
 const IconFilePDF = require('../../icons/file/IconFilePDF').default;
-
-const onToggleCollapse = () => {
-    setState(prevState => {
-        const prevCollapsed = prevState.collapsed;
-        return {
-            collapsed: {
-                ...prevCollapsed,
-                favorites: !prevCollapsed.favorites,
-            },
-        };
-    });
-};
-
-const onClickRemove = () => console.log('hello world!');
 
 const leftSidebarProps = {
     customTheme: {
@@ -57,6 +83,7 @@ const leftSidebarProps = {
         'data-resin-target': 'copyright',
         href: '/about-us',
     },
+    indicatorText: 'FooterIndicatorInALeftSidebar',
     instantLoginProps: {
         htmlAttributes: {
             href: '/logout',
@@ -72,163 +99,7 @@ const leftSidebarProps = {
     isDragging: true,
 };
 
-initialState = {
-    collapsed: {},
-};
-
 const menuItems = [
-    {
-        id: 'all-files',
-        className: 'nav-all-files-class',
-        message: 'All Files',
-        htmlAttributes: {
-            href: '/folder/0',
-            rel: 'some-rel',
-            target: '_blank',
-            'data-resin-target': 'allfiles',
-        },
-        routerLink: undefined,
-        routerProps: undefined,
-        selected: true,
-        showTooltip: true,
-        iconComponent: IconAllFiles,
-        menuItems: [
-            {
-                id: 'recents',
-                message: 'Recents',
-                htmlAttributes: {
-                    href: '/recents',
-                    rel: 'some-rel',
-                    target: '_blank',
-                    'data-resin-target': 'recents',
-                },
-                selected: false,
-                showTooltip: true,
-                iconComponent: IconRecents,
-            },
-            {
-                id: 'synced',
-                message: 'Synced',
-                htmlAttributes: {
-                    href: '/synced',
-                    rel: 'some-rel',
-                    'data-resin-target': 'syncedtodesktop',
-                    target: '_blank',
-                },
-                selected: false,
-                showTooltip: true,
-                iconComponent: IconSynced,
-            },
-            {
-                id: 'trash',
-                canReceiveDrop: true,
-                message: 'Trash',
-                htmlAttributes: {
-                    href: '/trash',
-                    rel: 'some-rel',
-                    'data-resin-target': 'trash',
-                    target: '_blank',
-                },
-                selected: false,
-                showTooltip: true,
-                iconComponent: IconTrash,
-            },
-        ],
-    },
-    {
-        id: 'feed',
-        message: 'Feed',
-        htmlAttributes: {
-            href: '/feed',
-            rel: 'some-rel',
-            target: '_blank',
-            'data-resin-target': 'feed',
-        },
-        selected: false,
-        showTooltip: true,
-        iconComponent: IconFeed,
-        newItemBadge: true,
-    },
-    {
-        id: 'notifications',
-        message: 'Notifications',
-        htmlAttributes: {
-            href: '/notifications',
-            rel: 'some-rel',
-            target: '_blank',
-            'data-resin-target': 'notifications',
-        },
-        selected: false,
-        showTooltip: true,
-        iconComponent: IconNotifications,
-        newItemBadge: true,
-    },
-    {
-        id: 'automations',
-        message: 'Automations',
-        htmlAttributes: {
-            href: '/automations',
-            rel: 'some-rel',
-            target: '_blank',
-            'data-resin-target': 'automations',
-        },
-        selected: false,
-        showTooltip: true,
-        iconComponent: IconAutomations,
-        newItemBade: false,
-    },
-    {
-        id: 'notes',
-        message: 'Notes',
-        htmlAttributes: {
-            href: '/notes',
-            rel: 'some-rel',
-            target: '_blank',
-            'data-resin-target': 'boxnotes',
-        },
-        selected: false,
-        showTooltip: true,
-        iconComponent: IconNotes,
-    },
-    {
-        id: 'relay',
-        message: 'Relay',
-        htmlAttributes: {
-            href: '/relay',
-            rel: 'some-rel',
-            target: '_blank',
-            'data-resin-target': 'ibm_orion_app_launcher',
-        },
-        selected: false,
-        showTooltip: true,
-        iconComponent: IconRelay,
-    },
-    {
-        htmlAttributes: {
-            href: '/master',
-            rel: 'external',
-            'data-resin-target': 'adminconsole',
-        },
-        iconComponent: IconAdminConsole,
-        id: 'admin-console',
-        className: 'nav-admin-console-class',
-        message: 'Admin Console',
-        selected: false,
-        showTooltip: true,
-    },
-    {
-        htmlAttributes: {
-            href: '/developers/services',
-            rel: 'external',
-            'data-resin-target': 'devconsole',
-        },
-        iconComponent: IconDevConsole,
-        id: 'developer-console',
-        className: 'nav-dev-console-class',
-        message: 'Dev Console',
-        selected: false,
-        showTooltip: true,
-    },
     {
         id: 'favorites',
         canReceiveDrop: false,
@@ -241,10 +112,7 @@ const menuItems = [
         },
         selected: false,
         showTooltip: true,
-        iconComponent: IconFavorites,
-        showLoadingIndicator: true,
-        onToggleCollapse: onToggleCollapse,
-        collapsed: state.collapsed.favorites,
+        showLoadingIndicator: false,
         placeholder: 'Drag items here for quick access',
         menuItems: [
             {
@@ -256,7 +124,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -269,7 +136,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -282,7 +148,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -295,7 +160,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -308,7 +172,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -321,7 +184,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -334,7 +196,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -347,7 +208,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -360,7 +220,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -373,7 +232,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -386,7 +244,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -399,7 +256,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -412,7 +268,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -425,7 +280,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -438,7 +292,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -451,7 +304,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -464,7 +316,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -477,7 +328,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -490,7 +340,6 @@ const menuItems = [
                     'data-resin-feature': 'favorites',
                     'data-resin-target': 'itemname',
                 },
-                onClickRemove,
                 scaleIcon: true,
                 showTooltip: true,
             },
@@ -498,5 +347,11 @@ const menuItems = [
     },
 ];
 
-<LeftSidebar menuItems={menuItems} leftSidebarProps={leftSidebarProps} />;
+<div
+    style={{
+        transform: 'translate3d(0,0,0)',
+    }}
+>
+    <LeftSidebar menuItems={menuItems} leftSidebarProps={leftSidebarProps} />
+</div>;
 ```
