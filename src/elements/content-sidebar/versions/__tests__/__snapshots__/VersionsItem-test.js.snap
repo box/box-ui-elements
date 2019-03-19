@@ -1,10 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsItem render should match its snapshot 1`] = `
+exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if none is provided 1`] = `
 <NavButton
   activeClassName="bcs-is-selected"
   className="bcs-VersionsItem"
   component="button"
+  data-resin-target="versions-item"
+  data-testid="versions-item"
   disabled={false}
   to="/12345"
   type="button"
@@ -12,7 +14,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should match its 
   <div
     className="bcs-VersionsItem-badge"
   >
-    Vundefined
+    V1
   </div>
   <div
     className="bcs-VersionsItem-details"
@@ -35,7 +37,157 @@ exports[`elements/content-sidebar/versions/VersionsItem render should match its 
     </div>
     <div
       className="bcs-VersionsItem-info"
-    />
+    >
+      <time
+        className="bcs-VersionsItem-date"
+        dateTime={2019-03-01T08:00:00.000Z}
+      >
+        <DateField
+          capitalize={true}
+          date={2019-03-01T08:00:00.000Z}
+          dateFormat={
+            Object {
+              "day": "numeric",
+              "hour": "numeric",
+              "minute": "numeric",
+              "month": "short",
+            }
+          }
+          relative={true}
+        />
+      </time>
+      <span
+        className="bcs-VersionsItem-size"
+      >
+        10 KB
+      </span>
+    </div>
+  </div>
+</NavButton>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItem render should render a deleted version correctly 1`] = `
+<NavButton
+  activeClassName="bcs-is-selected"
+  className="bcs-VersionsItem bcs-is-disabled"
+  component="button"
+  data-resin-target="versions-item"
+  data-testid="versions-item"
+  disabled={true}
+  to="/12345"
+  type="button"
+>
+  <div
+    className="bcs-VersionsItem-badge"
+  >
+    V1
+  </div>
+  <div
+    className="bcs-VersionsItem-details"
+  >
+    <div
+      className="bcs-VersionsItem-title"
+    >
+      <FormattedMessage
+        defaultMessage="Removed by {name}"
+        id="be.sidebarVersions.removedBy"
+        values={
+          Object {
+            "name": "Test User",
+          }
+        }
+      />
+    </div>
+    <div
+      className="bcs-VersionsItem-info"
+    >
+      <time
+        className="bcs-VersionsItem-date"
+        dateTime={2019-03-01T08:00:00.000Z}
+      >
+        <DateField
+          capitalize={true}
+          date={2019-03-01T08:00:00.000Z}
+          dateFormat={
+            Object {
+              "day": "numeric",
+              "hour": "numeric",
+              "minute": "numeric",
+              "month": "short",
+            }
+          }
+          relative={true}
+        />
+      </time>
+      <span
+        className="bcs-VersionsItem-size"
+      >
+        10 KB
+      </span>
+    </div>
+  </div>
+</NavButton>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItem render should render an uploaded version correctly 1`] = `
+<NavButton
+  activeClassName="bcs-is-selected"
+  className="bcs-VersionsItem"
+  component="button"
+  data-resin-target="versions-item"
+  data-testid="versions-item"
+  disabled={false}
+  to="/12345"
+  type="button"
+>
+  <div
+    className="bcs-VersionsItem-badge"
+  >
+    V1
+  </div>
+  <div
+    className="bcs-VersionsItem-details"
+  >
+    <div
+      className="bcs-VersionsItem-title"
+    >
+      <FormattedMessage
+        defaultMessage="Uploaded by {name}"
+        id="be.sidebarVersions.uploadedBy"
+        values={
+          Object {
+            "name": "Test User",
+          }
+        }
+      />
+    </div>
+    <div
+      className="bcs-VersionsItem-info"
+    >
+      <time
+        className="bcs-VersionsItem-date"
+        dateTime={2019-03-01T08:00:00.000Z}
+      >
+        <DateField
+          capitalize={true}
+          date={2019-03-01T08:00:00.000Z}
+          dateFormat={
+            Object {
+              "day": "numeric",
+              "hour": "numeric",
+              "minute": "numeric",
+              "month": "short",
+            }
+          }
+          relative={true}
+        />
+      </time>
+      <span
+        className="bcs-VersionsItem-size"
+      >
+        10 KB
+      </span>
+    </div>
   </div>
 </NavButton>
 `;

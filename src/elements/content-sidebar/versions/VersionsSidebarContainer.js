@@ -34,6 +34,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     static defaultProps = {
         onVersionChange: noop,
+        parentName: '',
     };
 
     componentDidMount() {

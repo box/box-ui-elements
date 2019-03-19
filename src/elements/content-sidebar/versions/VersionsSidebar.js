@@ -23,30 +23,28 @@ type Props = {
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, isLoading, parentName, versions }: Props) => {
-    return (
-        <SidebarContent
-            className="bcs-Versions"
-            title={
-                <React.Fragment>
-                    <BackButton path={`/${parentName}`} />
-                    <FormattedMessage {...messages.versionsTitle} />
-                </React.Fragment>
-            }
-        >
-            <LoadingIndicatorWrapper className="bcs-Versions-content" isLoading={isLoading}>
-                {!isLoading && (
-                    <SidebarSection isOpen>
-                        {error ? (
-                            <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
-                        ) : (
-                            <VersionsList versions={versions} />
-                        )}
-                    </SidebarSection>
-                )}
-            </LoadingIndicatorWrapper>
-        </SidebarContent>
-    );
-};
+const VersionsSidebar = ({ error, isLoading, parentName, versions }: Props) => (
+    <SidebarContent
+        className="bcs-Versions"
+        title={
+            <React.Fragment>
+                <BackButton path={`/${parentName}`} />
+                <FormattedMessage {...messages.versionsTitle} />
+            </React.Fragment>
+        }
+    >
+        <LoadingIndicatorWrapper className="bcs-Versions-content" isLoading={isLoading}>
+            {!isLoading && (
+                <SidebarSection isOpen>
+                    {error ? (
+                        <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
+                    ) : (
+                        <VersionsList versions={versions} />
+                    )}
+                </SidebarSection>
+            )}
+        </LoadingIndicatorWrapper>
+    </SidebarContent>
+);
 
 export default VersionsSidebar;
