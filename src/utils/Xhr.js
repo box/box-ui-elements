@@ -8,9 +8,7 @@ import axios from 'axios';
 import getProp from 'lodash/get';
 import TokenService from './TokenService';
 import {
-    DEFAULT_LOCALE,
     HEADER_ACCEPT,
-    HEADER_ACCEPT_LANGUAGE,
     HEADER_CLIENT_NAME,
     HEADER_CLIENT_VERSION,
     HEADER_CONTENT_TYPE,
@@ -27,7 +25,6 @@ const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const MAX_NUM_RETRIES = 3;
 const DEFAULT_HEADERS = {
     Accept: 'application/json',
-    [HEADER_ACCEPT_LANGUAGE]: DEFAULT_LOCALE,
     [HEADER_CONTENT_TYPE]: 'application/json',
 };
 
