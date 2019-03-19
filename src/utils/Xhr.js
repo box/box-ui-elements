@@ -9,6 +9,7 @@ import getProp from 'lodash/get';
 import TokenService from './TokenService';
 import {
     HEADER_ACCEPT,
+    HEADER_ACCEPT_LANGUAGE,
     HEADER_CLIENT_NAME,
     HEADER_CLIENT_VERSION,
     HEADER_CONTENT_TYPE,
@@ -72,7 +73,7 @@ class Xhr {
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.requestInterceptor] - Request interceptor
      * @param {string} [options.responseInterceptor] - Response interceptor
-     * @param {StringMap} [options.headers] - Headers to append to all requests
+     * @param {string} [options.language] - Locale to append as accept-language header to requests
      * @return {Xhr} Cache instance
      */
     constructor({
@@ -85,12 +86,11 @@ class Xhr {
         responseInterceptor,
         requestInterceptor,
         shouldRetry = true,
-        headers = {},
+        language,
     }: Options = {}) {
         this.id = id;
         this.token = token;
         this.clientName = clientName;
-        this.headers = headers;
         this.version = version;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
@@ -100,6 +100,12 @@ class Xhr {
         this.shouldRetry = shouldRetry;
 
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
+
+        if (language) {
+            this.headers = {
+                [HEADER_ACCEPT_LANGUAGE]: language,
+            };
+        }
 
         if (typeof requestInterceptor === 'function') {
             this.axios.interceptors.request.use(requestInterceptor);
