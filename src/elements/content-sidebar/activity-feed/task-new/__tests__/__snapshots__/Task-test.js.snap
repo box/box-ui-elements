@@ -353,7 +353,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
             }
             width={12}
           >
-            <IconCheck
+            <IconVerified
               className="bcs-task-assignment-status-icon completed"
               height={12}
               title={
@@ -365,24 +365,26 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
               width={12}
             >
               <AccessibleSVG
-                className="icon-check bcs-task-assignment-status-icon completed"
+                className="icon-verified bcs-task-assignment-status-icon completed"
                 height={12}
+                opacity={1}
                 title={
                   <FormattedMessage
                     defaultMessage="Completed"
                     id="be.completedAssignment"
                   />
                 }
-                viewBox="0 0 24 24"
+                viewBox="0 0 14 14"
                 width={12}
               >
                 <svg
                   aria-labelledby="icon1-title"
-                  className="icon-check bcs-task-assignment-status-icon completed"
+                  className="icon-verified bcs-task-assignment-status-icon completed"
                   focusable="false"
                   height={12}
+                  opacity={1}
                   role="img"
-                  viewBox="0 0 24 24"
+                  viewBox="0 0 14 14"
                   width={12}
                 >
                   <title
@@ -396,17 +398,13 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
                     </FormattedMessage>
                   </title>
                   <path
-                    d="M0 0h24v24H0z"
-                    fill="none"
-                  />
-                  <path
-                    className="fill-color"
-                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
-                    fill="#000000"
+                    d="M7 14c-3.865993 0-7-3.134007-7-7s3.134007-7 7-7 7 3.134007 7 7-3.134007 7-7 7zM5.31288 9.303048l1.44555 1.21296 4.499514-5.36231-1.44555-1.21296-4.499514 5.36231zM3 7.36231L5.31288 9.30305l1.21296-1.44555L4.21296 5.91676 3 7.36231z"
+                    fill="#00E287"
+                    fillRule="evenodd"
                   />
                 </svg>
               </AccessibleSVG>
-            </IconCheck>
+            </IconVerified>
           </StatusIcon>
         </Component>
       </div>
