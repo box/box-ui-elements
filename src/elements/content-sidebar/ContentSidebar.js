@@ -121,7 +121,7 @@ class ContentSidebar extends React.Component<Props, State> {
             token,
         } = props;
 
-        const commonHeaders = {
+        const headers = {
             [HEADER_ACCEPT_LANGUAGE]: language || DEFAULT_LOCALE,
         };
 
@@ -129,7 +129,7 @@ class ContentSidebar extends React.Component<Props, State> {
             apiHost,
             cache,
             clientName,
-            commonHeaders,
+            headers,
             requestInterceptor,
             responseInterceptor,
             sharedLink,

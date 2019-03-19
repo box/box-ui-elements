@@ -25,7 +25,7 @@ type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const MAX_NUM_RETRIES = 3;
-const DEFAULT_COMMON_HEADERS = {
+const DEFAULT_HEADERS = {
     Accept: 'application/json',
     [HEADER_ACCEPT_LANGUAGE]: DEFAULT_LOCALE,
     [HEADER_CONTENT_TYPE]: 'application/json',
@@ -62,7 +62,7 @@ class Xhr {
 
     shouldRetry: boolean;
 
-    commonHeaders: StringMap;
+    headers: StringMap;
 
     /**
      * [constructor]
@@ -75,7 +75,7 @@ class Xhr {
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.requestInterceptor] - Request interceptor
      * @param {string} [options.responseInterceptor] - Response interceptor
-     * @param {StringMap} [options.commonHeaders] - Headers to append to all requests
+     * @param {StringMap} [options.headers] - Headers to append to all requests
      * @return {Xhr} Cache instance
      */
     constructor({
@@ -88,12 +88,12 @@ class Xhr {
         responseInterceptor,
         requestInterceptor,
         shouldRetry = true,
-        commonHeaders = {},
+        headers = {},
     }: Options = {}) {
         this.id = id;
         this.token = token;
         this.clientName = clientName;
-        this.commonHeaders = commonHeaders;
+        this.headers = headers;
         this.version = version;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
@@ -203,8 +203,8 @@ class Xhr {
     async getHeaders(id?: string, args: StringMap = {}) {
         const headers: StringMap = Object.assign(
             {
-                ...DEFAULT_COMMON_HEADERS,
-                ...this.commonHeaders,
+                ...DEFAULT_HEADERS,
+                ...this.headers,
             },
             args,
         );

@@ -80,13 +80,12 @@ describe('elements/content-open-with/ContentOpenWith', () => {
         test('should should fetch Open With integrations', () => {
             instance = getWrapper({
                 fileId: '1234',
-                language: 'en-US',
             }).instance();
             instance.setState = jest.fn();
             instance.api = api;
 
             instance.fetchOpenWithData();
-            expect(openWithStub).toHaveBeenCalledWith('1234', expect.any(Function), expect.any(Function), 'en-US');
+            expect(openWithStub).toHaveBeenCalledWith('1234', expect.any(Function), expect.any(Function));
         });
     });
 

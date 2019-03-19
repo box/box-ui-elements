@@ -5,13 +5,7 @@
  */
 
 import Base from './Base';
-import {
-    HEADER_ACCEPT_LANGUAGE,
-    DEFAULT_LOCALE,
-    ERROR_CODE_FETCH_INTEGRATIONS,
-    BOX_EDIT_INTEGRATION_ID,
-    BOX_EDIT_SFC_INTEGRATION_ID,
-} from '../constants';
+import { ERROR_CODE_FETCH_INTEGRATIONS, BOX_EDIT_INTEGRATION_ID, BOX_EDIT_SFC_INTEGRATION_ID } from '../constants';
 
 class OpenWith extends Base {
     /**
@@ -34,25 +28,13 @@ class OpenWith extends Base {
      * @param {string} fileId - Box file ID
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
-     * @param {string} locale - locale to receive translated strings from the API
      * @return {void}
      */
-    getOpenWithIntegrations(
-        fileId: string,
-        successCallback: Function,
-        errorCallback: ElementsErrorCallback,
-        locale: ?string = DEFAULT_LOCALE,
-    ) {
+    getOpenWithIntegrations(fileId: string, successCallback: Function, errorCallback: ElementsErrorCallback) {
         this.errorCode = ERROR_CODE_FETCH_INTEGRATIONS;
-        const params = {
-            headers: {
-                [HEADER_ACCEPT_LANGUAGE]: locale,
-            },
-        };
 
         this.get({
             id: fileId,
-            requestData: params,
             successCallback: openWithIntegrations => {
                 const formattedOpenWithData = this.formatOpenWithData(openWithIntegrations);
                 const consolidatedOpenWithIntegrations = this.consolidateBoxEditIntegrations(formattedOpenWithData);
