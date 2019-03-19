@@ -3,10 +3,6 @@ import TaskLinks from '../TaskLinks';
 let taskLinks;
 const BASE_URL = 'https://www.foo.com';
 const FILE_ID = 'foo';
-const headers = {
-    Accept: 'application/json;version=1',
-    'Content-Type': 'application/vnd.box+json;version=v2',
-};
 
 describe('api/TaskLinks', () => {
     beforeEach(() => {
@@ -54,7 +50,6 @@ describe('api/TaskLinks', () => {
                             type: 'file',
                         },
                     },
-                    headers,
                 };
 
                 taskLinks.createTaskLink({
