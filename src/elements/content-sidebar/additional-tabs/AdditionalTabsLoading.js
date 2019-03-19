@@ -5,24 +5,24 @@
  */
 
 import * as React from 'react';
-import AdditionalTabLoading from './AdditionalTabLoading';
-import MoreTabLoading from './MoreTabLoading';
+import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
+import MoreTabPlaceholder from './MoreTabPlaceholder';
 
 import './AdditionalTabs.scss';
 import './AdditionalTabsLoading.scss';
 
 // Loading layout for the sidebar's additional tabs
 const LOADING_TABS = [
-    AdditionalTabLoading,
-    AdditionalTabLoading,
-    AdditionalTabLoading,
-    AdditionalTabLoading,
-    AdditionalTabLoading,
-    MoreTabLoading,
+    AdditionalTabPlaceholder,
+    AdditionalTabPlaceholder,
+    AdditionalTabPlaceholder,
+    AdditionalTabPlaceholder,
+    AdditionalTabPlaceholder,
+    MoreTabPlaceholder,
 ];
 
 const AdditionalTabsLoading = (): Array<React.Element<any>> => {
-    return LOADING_TABS.map((LoadingComponent, idx) => <LoadingComponent key={idx} />);
+    return LOADING_TABS.map((LoadingComponent, idx) => <LoadingComponent isLoading key={idx} />);
 };
 
 export default AdditionalTabsLoading;

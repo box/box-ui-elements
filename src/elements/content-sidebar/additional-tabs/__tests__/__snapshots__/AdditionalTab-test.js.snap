@@ -11,7 +11,24 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
     type="button"
   >
     <IconEllipsis
-      className="bdl-AdditionalTab-moreIcon"
+      color="#999ea4"
+    />
+  </PlainButton>
+</Tooltip>
+`;
+
+exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the placeholder when an error occurs 1`] = `
+<Tooltip
+  position="middle-left"
+  text="test title"
+>
+  <PlainButton
+    className="bdl-AdditionalTab"
+    onClick={[Function]}
+    type="button"
+  >
+    <AdditionalTabPlaceholder
+      isLoading={false}
     />
   </PlainButton>
 </Tooltip>
@@ -30,6 +47,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
     <img
       alt="test title"
       className="bdl-AdditionalTab-icon"
+      onError={[Function]}
       src="https://foo.com/image"
     />
   </PlainButton>

@@ -2,22 +2,28 @@
 
 exports[`elements/content-sidebar/additional-tabs/AdditionalTabs should render the correct loading state 1`] = `
 Array [
-  <AdditionalTabLoading
+  <AdditionalTabPlaceholder
+    isLoading={true}
     key="0"
   />,
-  <AdditionalTabLoading
+  <AdditionalTabPlaceholder
+    isLoading={true}
     key="1"
   />,
-  <AdditionalTabLoading
+  <AdditionalTabPlaceholder
+    isLoading={true}
     key="2"
   />,
-  <AdditionalTabLoading
+  <AdditionalTabPlaceholder
+    isLoading={true}
     key="3"
   />,
-  <AdditionalTabLoading
+  <AdditionalTabPlaceholder
+    isLoading={true}
     key="4"
   />,
-  <MoreTabLoading
+  <MoreTabPlaceholder
+    isLoading={true}
     key="5"
   />,
 ]

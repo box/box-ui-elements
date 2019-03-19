@@ -9,12 +9,12 @@ import { eees } from '../../../styles/variables';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
 import './AdditionalTabs.scss';
 
-const MoreTabLoading = () => {
+const MoreTabPlaceholder = () => {
     return (
-        <div className="bdl-AdditionalTabLoading">
-            <IconEllipsis color={eees} className="bdl-AdditionalTabLoading-icon" />
+        <div className="bdl-AdditionalTabPlaceholder">
+            <IconEllipsis color={eees} className="bdl-AdditionalTabPlaceholder-moreIcon" />
         </div>
     );
 };
 
-export default MoreTabLoading;
+export default MoreTabPlaceholder;
