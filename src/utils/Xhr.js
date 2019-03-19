@@ -21,6 +21,9 @@ import {
 } from '../constants';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
+type DefaultHeaderOptions = {
+    language?: string,
+};
 
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const MAX_NUM_RETRIES = 3;
@@ -101,11 +104,7 @@ class Xhr {
 
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
 
-        if (language) {
-            this.headers = {
-                [HEADER_ACCEPT_LANGUAGE]: language,
-            };
-        }
+        this.headers = this.getDefaultHeaders({ language });
 
         if (typeof requestInterceptor === 'function') {
             this.axios.interceptors.request.use(requestInterceptor);
@@ -194,6 +193,21 @@ class Xhr {
             hash: a.hash,
             port: a.port,
         };
+    }
+
+    /**
+     * Create a default headers object
+     *
+     * @param {DefaultHeaderOptions} options - Used to create default headers
+     */
+    getDefaultHeaders({ language }: DefaultHeaderOptions): StringMap {
+        const headers = {};
+
+        if (language) {
+            headers[HEADER_ACCEPT_LANGUAGE] = language;
+        }
+
+        return headers;
     }
 
     /**
