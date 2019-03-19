@@ -55,7 +55,7 @@ class Avatar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { avatarUrl, className, name, id, size }: Props = this.props;
+        const { avatarUrl, className, name, id, size = '' }: Props = this.props;
         const { hasImageErrored }: State = this.state;
         const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
