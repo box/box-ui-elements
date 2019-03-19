@@ -5,10 +5,6 @@ let taskCollaborators;
 const BASE_URL = 'https://www.foo.com';
 const FILE_ID = 'foo';
 const USER_ID = 'userone';
-const headers = {
-    Accept: 'application/json;version=1',
-    'Content-Type': 'application/vnd.box+json;version=v2',
-};
 
 describe('api/TaskCollaborators', () => {
     beforeEach(() => {
@@ -59,7 +55,6 @@ describe('api/TaskCollaborators', () => {
                         },
                         target: user,
                     },
-                    headers,
                 };
 
                 taskCollaborators.createTaskCollaborator({
@@ -86,7 +81,6 @@ describe('api/TaskCollaborators', () => {
                     data: {
                         status: 'COMPLETED',
                     },
-                    headers,
                 };
 
                 taskCollaborators.updateTaskCollaborator({
@@ -138,7 +132,6 @@ describe('api/TaskCollaborators', () => {
                     url: `${BASE_URL}/undoc/tasks/${taskId}/task_collaborators?limit=${API_PAGE_LIMIT}`,
                     successCallback,
                     errorCallback,
-                    requestData: { headers },
                 });
             });
         });

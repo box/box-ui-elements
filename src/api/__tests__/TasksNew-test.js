@@ -5,11 +5,6 @@ let tasks;
 const BASE_URL = 'https://www.foo.com';
 const FILE_ID = 'foo';
 
-const headers = {
-    Accept: 'application/json;version=1',
-    'Content-Type': 'application/vnd.box+json;version=v2',
-};
-
 describe('api/TasksNew', () => {
     beforeEach(() => {
         tasks = new TasksNew({});
@@ -42,7 +37,6 @@ describe('api/TasksNew', () => {
             test('should post a well formed task to the tasks endpoint', () => {
                 const expectedRequestData = {
                     data: task,
-                    headers,
                 };
 
                 tasks.createTask({
@@ -69,7 +63,6 @@ describe('api/TasksNew', () => {
                         id: taskId,
                         name: message,
                     },
-                    headers,
                 };
 
                 tasks.updateTask({
@@ -103,7 +96,6 @@ describe('api/TasksNew', () => {
                     url: `${BASE_URL}/undoc/tasks/${task.id}`,
                     successCallback,
                     errorCallback,
-                    data: { headers },
                 });
             });
         });
@@ -121,7 +113,6 @@ describe('api/TasksNew', () => {
                     url: `${BASE_URL}/undoc/files/${FILE_ID}/linked_tasks?limit=${API_PAGE_LIMIT}`,
                     successCallback,
                     errorCallback,
-                    requestData: { headers },
                 });
             });
         });
@@ -141,7 +132,6 @@ describe('api/TasksNew', () => {
                     url: `${BASE_URL}/undoc/tasks/${taskIdToGet}`,
                     successCallback,
                     errorCallback,
-                    requestData: { headers },
                 });
             });
         });
