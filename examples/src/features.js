@@ -8,5 +8,4 @@ export default {
             newCards: true,
         },
     },
-    versions: true,
 };

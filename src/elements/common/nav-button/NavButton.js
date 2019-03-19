@@ -13,7 +13,7 @@ type Props = {
     activeClassName?: string,
     children: React.Node,
     className?: string,
-    component?: any,
+    component?: React.ComponentType<any>,
     exact?: boolean,
     onClick?: (event: SyntheticEvent<>) => void,
     replace?: boolean,

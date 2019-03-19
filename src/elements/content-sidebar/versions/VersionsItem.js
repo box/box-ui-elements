@@ -38,7 +38,7 @@ const DATE_FORMAT = {
     month: 'short',
 };
 
-const getActionMessage = action => (ACTION_MAP[action] ? ACTION_MAP[action] : ACTION_MAP[VERSION_UPLOAD_ACTION]);
+const getActionMessage = action => ACTION_MAP[action] || ACTION_MAP[VERSION_UPLOAD_ACTION];
 
 const VersionsItem = ({
     action = VERSION_UPLOAD_ACTION,

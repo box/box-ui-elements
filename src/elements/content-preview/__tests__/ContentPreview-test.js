@@ -85,10 +85,6 @@ describe('elements/content-preview/ContentPreview', () => {
             instance.preview = new global.Box.Preview();
         });
 
-        test('should return true if the currently-selected version ID has changed', () => {
-            expect(instance.shouldLoadPreview({ fileVersionId: '12345' })).toBe(true);
-        });
-
         test('should return true if file version ID has changed', () => {
             const oldFile = { id: '123', file_version: { id: '1234' } };
             expect(instance.shouldLoadPreview({ file: oldFile })).toBe(true);
@@ -101,6 +97,10 @@ describe('elements/content-preview/ContentPreview', () => {
 
         test('should return false if file has not changed', () => {
             expect(instance.shouldLoadPreview({ file })).toBe(false);
+        });
+
+        test('should return true if the currently-selected version ID has changed', () => {
+            expect(instance.shouldLoadPreview({ selectedVersionId: '12345' })).toBe(true);
         });
     });
 
@@ -255,7 +255,7 @@ describe('elements/content-preview/ContentPreview', () => {
             };
             TokenService.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
             const wrapper = getWrapper(props);
-            wrapper.setState({ file, fileVersionId: '12345' });
+            wrapper.setState({ file, selectedVersionId: '12345' });
             const instance = wrapper.instance();
             await instance.loadPreview();
             expect(instance.preview.show).toHaveBeenCalledWith(

@@ -52,11 +52,11 @@ describe('ContentSidebar', () => {
         it('should show and hide when a user navigates to and from it', () => {
             cy.getByTestId('sidebardetails').click();
             cy.getByTestId('versionhistory').click();
+            cy.contains('[data-testid="bcs-content"]', 'Version History').as('versionHistory');
             cy.getByTestId('versions-item')
                 .click()
                 .should('have.class', 'bcs-is-selected');
-            cy.contains('[data-testid="bcs-content"]', 'Version History')
-                .as('versionHistory')
+            cy.get('@versionHistory')
                 .contains('Back')
                 .click();
             cy.get('@versionHistory').should('not.exist');
