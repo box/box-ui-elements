@@ -16,7 +16,7 @@ const AdditionalTabPlaceholder = ({ isLoading = false }: Props) => {
         'bdl-AdditionalTabPlaceholder-icon--loading': isLoading,
     });
     return (
-        <div className="bdl-AdditionalTabPlaceholder">
+        <div className="bdl-AdditionalTabPlaceholder" data-testid="additionaltabplaceholder">
             <div className={classes} />
         </div>
     );
