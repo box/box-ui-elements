@@ -11,7 +11,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
     type="button"
   >
     <IconEllipsis
-      className="bdl-AdditionalTab-moreIcon"
+      color="#999ea4"
     />
   </PlainButton>
 </Tooltip>

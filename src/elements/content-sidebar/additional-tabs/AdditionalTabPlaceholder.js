@@ -1,22 +1,22 @@
 /**
  * @flow
- * @file Preview sidebar additional tab loading component
+ * @file Preview sidebar additional tab placeholder component
  * @author Box
  */
 
-import classNames from 'classnames';
 import * as React from 'react';
+import classNames from 'classnames';
 
 type Props = {
     isLoading: boolean,
 };
 
 const AdditionalTabPlaceholder = ({ isLoading = false }: Props) => {
-    const classes = classNames('bdl-AdditionalTab-icon', 'bdl-AdditionalTabLoading-placeholder', {
-        'bdl-AdditionalTabLoading-placeholder--loading': isLoading,
+    const classes = classNames('bdl-AdditionalTabPlaceholder-icon', {
+        'bdl-AdditionalTabPlaceholder-icon--loading': isLoading,
     });
     return (
-        <div className="bdl-AdditionalTabLoading">
+        <div className="bdl-AdditionalTabPlaceholder">
             <div className={classes} />
         </div>
     );

@@ -11,8 +11,8 @@ import './AdditionalTabs.scss';
 
 const MoreTabPlaceholder = () => {
     return (
-        <div className="bdl-AdditionalTabLoading">
-            <IconEllipsis color={eees} className="bdl-AdditionalTabLoading-icon" />
+        <div className="bdl-AdditionalTabPlaceholder">
+            <IconEllipsis color={eees} className="bdl-AdditionalTabPlaceholder-moreIcon" />
         </div>
     );
 };

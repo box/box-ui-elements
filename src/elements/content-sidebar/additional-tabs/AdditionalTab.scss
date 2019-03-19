@@ -14,16 +14,11 @@
     }
 }
 
-.bdl-AdditionalTab-icon,
-.bdl-AdditionalTab-placeholderIcon {
+.bdl-AdditionalTab-icon {
     @include bdl-fadeIn(.5s);
 
     height: 24px;
     width: 24px;
-}
-
-.bdl-AdditionalTab-moreIcon .fill-color {
-    fill: $downtown-grey;
 }
 
 .bdl-AdditionalTab--hidden {

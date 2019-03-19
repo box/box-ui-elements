@@ -2,25 +2,25 @@
 @import '../../../styles/common/animations.scss';
 @import '../mixins';
 
-.bdl-AdditionalTabLoading {
+$bdl-AdditionalTabs-fade-in-time: .5s;
+
+.bdl-AdditionalTabPlaceholder {
     @include bdl-SidebarNavButton;
 }
 
-$bdl-AdditionalTabs-fade-in-time: 0s;
+.bdl-AdditionalTabPlaceholder-icon {
+    @include bdl-fadeIn($bdl-AdditionalTabs-fade-in-time);
 
-.bdl-AdditionalTabLoading-placeholder {
     background-color: $nines;
     border-radius: 5px;
+    height: 24px;
+    width: 24px;
 }
 
-.bdl-AdditionalTabLoading-placeholder--loading {
+.bdl-AdditionalTabPlaceholder-icon--loading {
     @include bdl-loadingPulse(#f4f4f4, $eees, $bdl-AdditionalTabs-fade-in-time);
 }
 
-.bdl-AdditionalTabLoading-moreIcon {
+.bdl-AdditionalTabPlaceholder-moreIcon {
     @include bdl-fadeIn($bdl-AdditionalTabs-fade-in-time);
-
-    .fill-color {
-        fill: #eee;
-    }
 }
