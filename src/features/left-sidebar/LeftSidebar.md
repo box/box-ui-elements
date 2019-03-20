@@ -8,8 +8,6 @@ Remove the menu item from favorites to see the placeholder text.
 
 ## Examples
 
-### Standard
-
 ```js
 const IconAdminConsole = require('./icons/IconAdminConsole').default;
 const IconAllFiles = require('./icons/IconAllFiles').default;
