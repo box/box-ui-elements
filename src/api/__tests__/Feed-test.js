@@ -440,7 +440,7 @@ describe('api/Feed', () => {
         });
 
         test('should get feed items, sort, save to cache, and call the success callback', done => {
-            feed.feedItems(file, false, successCb, errorCb);
+            feed.feedItems(file, false, successCb, errorCb, jest.fn(), false, true);
             setImmediate(() => {
                 expect(sorter.sortFeedItems).toHaveBeenCalledWith(versions, comments, tasks, appActivities);
                 expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
@@ -471,6 +471,22 @@ describe('api/Feed', () => {
             });
         });
 
+        test('should use the app activity api if the seventh arg is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, false, true);
+            setImmediate(() => {
+                expect(feed.fetchAppActivity).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        test('should note use the app activity api if the seventh arg is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, false, false);
+            setImmediate(() => {
+                expect(feed.fetchAppActivity).not.toHaveBeenCalled();
+                done();
+            });
+        });
+
         test('should not call success or error callback if it is destroyed', done => {
             feed.isDestroyed = jest.fn().mockReturnValue(true);
             feed.feedItems(file, false, successCb, errorCb);
@@ -491,7 +507,7 @@ describe('api/Feed', () => {
             expect(successCb).toHaveBeenCalledWith(feedItems);
         });
 
-        test('should refersh the cache after returning the cached items', done => {
+        test('should refresh the cache after returning the cached items', done => {
             feed.getCachedItems = jest.fn().mockReturnValue({
                 hasError: false,
                 items: feedItems,
