@@ -58,7 +58,12 @@ class AdditionalTab extends React.PureComponent<Props, State> {
 
         return (
             <Tooltip position="middle-left" text={title}>
-                <PlainButton className={className} type="button" onClick={() => callbackFn({ id, callbackData: rest })}>
+                <PlainButton
+                    className={className}
+                    data-testid="additionaltab"
+                    type="button"
+                    onClick={() => callbackFn({ id, callbackData: rest })}
+                >
                     {TabIcon}
                 </PlainButton>
             </Tooltip>
