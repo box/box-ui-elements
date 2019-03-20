@@ -19,6 +19,7 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
           >
             <div
               className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
                 className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"
@@ -31,6 +32,7 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
           >
             <div
               className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
                 className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"
@@ -43,6 +45,7 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
           >
             <div
               className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
                 className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"
@@ -55,6 +58,7 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
           >
             <div
               className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
                 className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"
@@ -67,6 +71,7 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
           >
             <div
               className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
                 className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"

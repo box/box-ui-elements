@@ -3,7 +3,6 @@ import l from '../../support/i18n';
 
 const getSingleButton = () => cy.getByTestId('singleintegrationbutton');
 const getOpenWithContent = () => cy.getByTestId('bcow-content');
-const getTooltip = () => cy.get('[role="tooltip"]');
 
 describe('OpenWith', () => {
     beforeEach(() => {
@@ -21,7 +20,7 @@ describe('OpenWith', () => {
         // Hover over the Open With button
         getOpenWithContent().trigger('mouseover');
         // Tooltip should render on mouseover
-        getTooltip().contains('Send this document for signature');
+        cy.getTooltip().contains('Send this document for signature');
     });
 
     it('A custom integration', () => {
@@ -34,7 +33,7 @@ describe('OpenWith', () => {
         // Hover over the Open With button
         getOpenWithContent().trigger('mouseover');
         // Tooltip should render on mouseover
-        getTooltip().contains('This is a custom integration');
+        cy.getTooltip().contains('This is a custom integration');
     });
 
     it('Multiple integrations', () => {
@@ -69,7 +68,7 @@ describe('OpenWith', () => {
             getSingleButton().should('have.attr', 'aria-disabled', 'true');
 
             // Tooltip should render automatically
-            getTooltip()
+            cy.getTooltip()
                 .as('tooltip')
                 .contains(l('be.boxToolsInstallMessage', { boxTools: 'Box Tools' }));
 
@@ -116,7 +115,7 @@ describe('OpenWith', () => {
                 getOpenWithContent().trigger('mouseover');
 
                 // Tooltip should render on mouseover
-                getTooltip().contains('Open this file on your computer');
+                cy.getTooltip().contains('Open this file on your computer');
             });
         });
 
@@ -140,7 +139,7 @@ describe('OpenWith', () => {
             getOpenWithContent().trigger('mouseover');
 
             // Tooltip should render on mouseover
-            getTooltip().contains(l('be.boxEditBlacklistedError'));
+            cy.getTooltip().contains(l('be.boxEditBlacklistedError'));
         });
 
         it('the box edit integration cannot be executed', () => {
@@ -173,7 +172,7 @@ describe('OpenWith', () => {
             getOpenWithContent().trigger('mouseover');
 
             // The button should still display the normal tooltip
-            getTooltip().contains('Open this file on your computer');
+            cy.getTooltip().contains('Open this file on your computer');
         });
     });
 });

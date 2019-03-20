@@ -7,6 +7,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
 >
   <PlainButton
     className="bdl-AdditionalTab"
+    data-testid="additionaltab"
     onClick={[Function]}
     type="button"
   >
@@ -24,6 +25,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
 >
   <PlainButton
     className="bdl-AdditionalTab"
+    data-testid="additionaltab"
     onClick={[Function]}
     type="button"
   >
@@ -41,6 +43,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
 >
   <PlainButton
     className="bdl-AdditionalTab"
+    data-testid="additionaltab"
     onClick={[Function]}
     type="button"
   >
