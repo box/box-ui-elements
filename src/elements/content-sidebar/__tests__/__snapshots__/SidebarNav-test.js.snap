@@ -13,79 +13,90 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
         className="bdl-AdditionalTabs"
       >
         <AdditionalTabsLoading>
-          <AdditionalTabLoading
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="0"
           >
             <div
-              className="bdl-AdditionalTabLoading"
+              className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <AdditionalTabLoading
+          </AdditionalTabPlaceholder>
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="1"
           >
             <div
-              className="bdl-AdditionalTabLoading"
+              className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <AdditionalTabLoading
+          </AdditionalTabPlaceholder>
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="2"
           >
             <div
-              className="bdl-AdditionalTabLoading"
+              className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <AdditionalTabLoading
+          </AdditionalTabPlaceholder>
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="3"
           >
             <div
-              className="bdl-AdditionalTabLoading"
+              className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <AdditionalTabLoading
+          </AdditionalTabPlaceholder>
+          <AdditionalTabPlaceholder
+            isLoading={true}
             key="4"
           >
             <div
-              className="bdl-AdditionalTabLoading"
+              className="bdl-AdditionalTabPlaceholder"
+              data-testid="additionaltabplaceholder"
             >
               <div
-                className="bdl-AdditionalTab-icon bdl-AdditionalTabLoading-content"
+                className="bdl-AdditionalTabPlaceholder-icon bdl-AdditionalTabPlaceholder-icon--loading"
               />
             </div>
-          </AdditionalTabLoading>
-          <MoreTabLoading
+          </AdditionalTabPlaceholder>
+          <MoreTabPlaceholder
+            isLoading={true}
             key="5"
           >
             <div
-              className="bdl-AdditionalTabLoading"
+              className="bdl-AdditionalTabPlaceholder"
             >
               <IconEllipsis
-                className="bdl-AdditionalTabLoading-icon"
+                className="bdl-AdditionalTabPlaceholder-moreIcon"
                 color="#eee"
               >
                 <AccessibleSVG
-                  className="icon-ellipsis bdl-AdditionalTabLoading-icon"
+                  className="icon-ellipsis bdl-AdditionalTabPlaceholder-moreIcon"
                   height={20}
                   viewBox="0 0 10 2"
                   width={20}
                 >
                   <svg
-                    className="icon-ellipsis bdl-AdditionalTabLoading-icon"
+                    className="icon-ellipsis bdl-AdditionalTabPlaceholder-moreIcon"
                     focusable="false"
                     height={20}
                     role="presentation"
@@ -102,7 +113,7 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
                 </AccessibleSVG>
               </IconEllipsis>
             </div>
-          </MoreTabLoading>
+          </MoreTabPlaceholder>
         </AdditionalTabsLoading>
       </div>
     </AdditionalTabs>

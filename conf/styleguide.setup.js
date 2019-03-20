@@ -5,6 +5,7 @@ global.FEATURES = global.FEATURES || features;
 global.FILE_ID = global.FILE_ID || __FILEID__ || '308566420378'; // eslint-disable-line
 global.FOLDER_ID = global.FOLDER_ID || __FOLDERID__ || '51964781421'; // eslint-disable-line
 global.TOKEN = global.TOKEN || __TOKEN__ || 'aiMADZorjZDCJEfi7zREbvHBo2K70MXf'; // eslint-disable-line
+global.PROPS = global.PROPS || {}; // eslint-disable-line
 
 // Components
 global.IntlProvider = IntlProvider;
