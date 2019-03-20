@@ -5,6 +5,7 @@ import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 
 import { NavSidebar, NavList, NavListCollapseHeader } from '../../components/nav-sidebar';
+import FooterIndicator from '../../components/footer-indicator/FooterIndicator';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import { BOX_BLUE } from '../../common/variables';
 
@@ -18,7 +19,6 @@ import NewItemsIndicator from './NewItemsIndicator';
 import type { Callout } from './Callout';
 
 import './styles/LeftSidebar.scss';
-import FooterIndicator from '../../components/footer-indicator/FooterIndicator';
 
 type SubMenuItem = {
     /** Sidebar Link Callout */
