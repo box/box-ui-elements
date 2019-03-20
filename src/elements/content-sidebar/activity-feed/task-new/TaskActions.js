@@ -7,12 +7,12 @@ import messages from '../../../common/messages';
 import Button from '../../../../components/button';
 import { TASK_TYPE_APPROVAL } from '../../../../constants';
 
-type Props = {
+type Props = {|
     onTaskApproval: Function,
     onTaskComplete: Function,
     onTaskReject: Function,
     taskType?: TaskType,
-};
+|};
 
 const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }: Props): React.Node => (
     <div className="bcs-task-pending-assignment bcs-task-assignment-actions">

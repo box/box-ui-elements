@@ -73,26 +73,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       />
     </div>
     <TaskActions
-      id="current-user-assignment-id"
       onTaskApproval={[Function]}
       onTaskComplete={[Function]}
       onTaskReject={[Function]}
-      permissions={
-        Object {
-          "can_delete": true,
-          "can_update": true,
-        }
-      }
-      role="ASSIGNEE"
-      status="NOT_STARTED"
-      target={
-        Object {
-          "id": "1",
-          "name": "Jake Thomas",
-          "type": "user",
-        }
-      }
-      type="task_collaborator"
     />
   </div>
 </div>
@@ -409,26 +392,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
         </Component>
       </div>
       <TaskActions
-        id="current-user-assignment-id"
         onTaskApproval={[Function]}
         onTaskComplete={[Function]}
         onTaskReject={[Function]}
-        permissions={
-          Object {
-            "can_delete": true,
-            "can_update": true,
-          }
-        }
-        role="ASSIGNEE"
-        status="NOT_STARTED"
-        target={
-          Object {
-            "id": "1",
-            "name": "Jake Thomas",
-            "type": "user",
-          }
-        }
-        type="task_collaborator"
       >
         <div
           className="bcs-task-pending-assignment bcs-task-assignment-actions"
