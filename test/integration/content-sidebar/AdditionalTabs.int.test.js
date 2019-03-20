@@ -8,44 +8,51 @@ const blob = new Blob([svg], { type: 'image/svg+xml' });
 // Used to simulate an icon URL coming back from the server
 const url = URL.createObjectURL(blob);
 
-const tabData = [
-    {
-        id: 200,
-        title: '1', // used as tooltip
-        iconUrl: url,
-        callback: () => {},
-        status: 'ADDED',
-    },
-    {
-        id: 201,
-        title: '2',
-        iconUrl: url,
-        callback: () => {},
-        status: 'ADDED',
-    },
-    {
-        id: 202,
-        title: '3',
-        iconUrl: url,
-        callback: () => {},
-        status: 'ADDED',
-    },
-    {
-        id: -1,
-        title: 'More Apps',
-        callback: () => {},
-        status: 'ADDED',
-    },
-];
+let callbackStub;
+let tabData;
 
 const getTabs = () => cy.getByTestId('additionaltab');
 
 describe('additional-tabs', () => {
+    beforeEach(() => {
+        callbackStub = cy.stub();
+
+        tabData = [
+            {
+                id: 200,
+                title: '1', // used as tooltip
+                iconUrl: url,
+                callback: callbackStub,
+                status: 'ADDED',
+            },
+            {
+                id: 201,
+                title: '2',
+                iconUrl: url,
+                callback: () => {},
+                status: 'ADDED',
+            },
+            {
+                id: 202,
+                title: '3',
+                iconUrl: url,
+                callback: () => {},
+                status: 'ADDED',
+            },
+            {
+                id: -1,
+                title: 'More Apps',
+                callback: () => {},
+                status: 'ADDED',
+            },
+        ];
+    });
+
     const helpers = {
         load(additionalProps = {}) {
             cy.visit('/Elements/ContentSidebar', {
                 onBeforeLoad: contentWindow => {
-                    contentWindow.ADDITIONAL_PROPS = additionalProps;
+                    contentWindow.PROPS = additionalProps;
                 },
             });
         },
@@ -89,14 +96,12 @@ describe('additional-tabs', () => {
     });
 
     it('should execute the given callback on click', () => {
-        const stub = cy.stub(); // eslint-disable-line cypress/no-assigning-return-values
-        tabData[0].callback = stub;
         helpers.load({ hasAdditionalTabs: true, additionalTabs: tabData });
 
         getTabs()
             .eq(0)
             .click()
-            .then(() => expect(stub).to.be.calledWith({ id: 200, callbackData: { status: 'ADDED' } }));
+            .then(() => expect(callbackStub).to.be.calledWith({ id: 200, callbackData: { status: 'ADDED' } }));
     });
 
     it('should properly handle a failed icon load', () => {
