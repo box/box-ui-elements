@@ -1,6 +1,5 @@
 import noop from 'lodash/noop';
 import Xhr from '../Xhr';
-import { HEADER_ACCEPT_LANGUAGE } from '../../constants';
 
 describe('util/Xhr', () => {
     let xhrInstance;
@@ -8,16 +7,6 @@ describe('util/Xhr', () => {
     beforeEach(() => {
         xhrInstance = new Xhr({
             token: '123',
-        });
-    });
-
-    describe('constructor()', () => {
-        test('should extract default headers', () => {
-            const language = 'en-CA';
-            const xhr = new Xhr({ language });
-            const headerKeys = Object.keys(xhr.headers);
-
-            expect(headerKeys.length > 0).toBe(true);
         });
     });
 
@@ -493,25 +482,6 @@ describe('util/Xhr', () => {
             expect(xhrInstance.getExponentialRetryTimeoutInMs).not.toHaveBeenCalled();
             expect(xhrInstance.axios).not.toHaveBeenCalled();
             expect(xhrInstance.responseInterceptor).toHaveBeenCalledWith(response.data);
-        });
-    });
-
-    describe('getDefaultHeaders()', () => {
-        test('should return an empty object if missing required default headers', () => {
-            const headers = xhrInstance.getDefaultHeaders({});
-            expect(Object.keys(headers).length > 0).toBe(false);
-        });
-
-        test('should extract valid headers from params', () => {
-            const language = 'en-CA';
-            const headers = xhrInstance.getDefaultHeaders({
-                language,
-                foo: {},
-                bar: 'bar',
-                baz: 987978978,
-            });
-
-            expect(headers).toHaveProperty(HEADER_ACCEPT_LANGUAGE, language);
         });
     });
 });

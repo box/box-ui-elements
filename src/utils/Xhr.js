@@ -21,9 +21,6 @@ import {
 } from '../constants';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
-type DefaultHeaderOptions = {
-    language?: string,
-};
 
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const MAX_NUM_RETRIES = 3;
@@ -63,7 +60,7 @@ class Xhr {
 
     shouldRetry: boolean;
 
-    headers: StringMap = {};
+    language: ?string;
 
     /**
      * [constructor]
@@ -104,7 +101,7 @@ class Xhr {
 
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
 
-        this.headers = this.getDefaultHeaders({ language });
+        this.language = language;
 
         if (typeof requestInterceptor === 'function') {
             this.axios.interceptors.request.use(requestInterceptor);
@@ -196,21 +193,6 @@ class Xhr {
     }
 
     /**
-     * Create a default headers object
-     *
-     * @param {DefaultHeaderOptions} options - Used to create default headers
-     */
-    getDefaultHeaders({ language }: DefaultHeaderOptions): StringMap {
-        const headers = {};
-
-        if (language) {
-            headers[HEADER_ACCEPT_LANGUAGE] = language;
-        }
-
-        return headers;
-    }
-
-    /**
      * Builds a list of required XHR headers.
      *
      * @param {string} [id] - Optional box item id
@@ -221,7 +203,6 @@ class Xhr {
         const headers: StringMap = Object.assign(
             {
                 ...DEFAULT_HEADERS,
-                ...this.headers,
             },
             args,
         );
@@ -240,6 +221,10 @@ class Xhr {
 
         if (this.version) {
             headers[HEADER_CLIENT_VERSION] = this.version;
+        }
+
+        if (this.language) {
+            headers[HEADER_ACCEPT_LANGUAGE] = this.language;
         }
 
         // If id is passed in, use that, otherwise default to this.id
