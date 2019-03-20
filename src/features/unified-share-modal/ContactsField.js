@@ -161,6 +161,7 @@ class ContactsField extends React.Component<Props, State> {
                 parseItems={parseEmails}
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
                 ref={fieldRef}
+                // $FlowFixMe immutable
                 selectedOptions={selectedContacts}
                 selectorOptions={contacts}
                 suggestedPillsData={suggestedCollaborators}

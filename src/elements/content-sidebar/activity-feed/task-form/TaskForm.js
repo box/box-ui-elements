@@ -182,6 +182,7 @@ class TaskForm extends React.Component<Props, State> {
                             onRemove={this.handleApproverSelectorRemove}
                             onSelect={this.handleApproverSelectorSelect}
                             placeholder={intl.formatMessage(messages.approvalAddAssignee)}
+                            // $FlowFixMe immutable
                             selectedOptions={approvers}
                             selectorOptions={approverOptions}
                             validateForError={() => this.validateForm('taskAssignees')}

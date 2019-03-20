@@ -51,12 +51,14 @@ class PillSelector extends React.Component<Props, State> {
     getNumSelected = (): number => {
         const { selectedOptions } = this.props;
 
+        // $FlowFixMe immutable
         return typeof selectedOptions.size === 'number' ? selectedOptions.size : selectedOptions.length;
     };
 
     getPillsByKey = (key: string): Array<any> => {
         const { selectedOptions } = this.props;
 
+        // $FlowFixMe immutable
         return selectedOptions.map(option => option[key]);
     };
 

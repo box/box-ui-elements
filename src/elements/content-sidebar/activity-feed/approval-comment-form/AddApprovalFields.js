@@ -54,6 +54,7 @@ const AddApprovalFields = ({
                 onRemove={onApproverSelectorRemove}
                 onSelect={onApproverSelectorSelect}
                 placeholder={intl.formatMessage(messages.approvalAddAssignee)}
+                // $FlowFixMe immutable
                 selectedOptions={approvers}
                 selectorOptions={approverOptions}
             >
