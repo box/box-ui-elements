@@ -2,6 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
+import { silverChalice } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -10,7 +11,7 @@ type Props = {
     title?: string,
 };
 
-const IconPuzzlePiece = ({ className = '', color = '#AFAFAF', dimension = 14, title }: Props) => (
+const IconPuzzlePiece = ({ className = '', color = silverChalice, dimension = 14, title }: Props) => (
     <AccessibleSVG
         className={`bdl-IconPuzzlePiece ${className}`}
         height={dimension}

@@ -1,39 +1,37 @@
 import * as React from 'react';
 
-import IconPuzzlePiece from '../IconPuzzlePiece';
+import IconSearch from '../IconSearch';
 import { silverChalice } from '../../../styles/variables';
 
-describe('icons/general/IconPuzzlePiece', () => {
+describe('icons/general/IconSearch', () => {
     test('should correctly render default icon with default color', () => {
         const dimension = 14;
-        const wrapper = shallow(<IconPuzzlePiece />);
+        const wrapper = shallow(<IconSearch />);
 
-        expect(wrapper.hasClass('bdl-IconPuzzlePiece')).toEqual(true);
+        expect(wrapper.hasClass('icon-search')).toEqual(true);
         expect(wrapper.find('path').prop('fill')).toEqual(silverChalice);
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(dimension);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(dimension);
-        expect(wrapper.find('AccessibleSVG').prop('viewBox')).toEqual(`0 0 ${dimension} ${dimension}`);
     });
 
     test('should correctly render icon with specified color', () => {
         const color = '#fcfcfc';
-        const wrapper = shallow(<IconPuzzlePiece color={color} />);
+        const wrapper = shallow(<IconSearch color={color} />);
 
         expect(wrapper.find('path').prop('fill')).toEqual(color);
     });
 
-    test('should correctly render icon with specified width, height, and viewBox value', () => {
+    test('should correctly render icon with specified width and height', () => {
         const dimension = 16;
-        const wrapper = shallow(<IconPuzzlePiece dimension={dimension} />);
+        const wrapper = shallow(<IconSearch height={dimension} width={dimension} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(dimension);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(dimension);
-        expect(wrapper.find('AccessibleSVG').prop('viewBox')).toEqual(`0 0 ${dimension} ${dimension}`);
     });
 
     test('should correctly render icon with title', () => {
         const title = 'abcde';
-        const wrapper = shallow(<IconPuzzlePiece title={title} />);
+        const wrapper = shallow(<IconSearch title={title} />);
 
         expect(wrapper.find('AccessibleSVG').prop('title')).toEqual(title);
     });

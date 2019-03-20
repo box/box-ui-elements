@@ -12,8 +12,11 @@
 }
 
 .bdl-FooterIndicator-content {
+    align-items: center;
     display: flex;
+    height: 100%;
     justify-content: flex-start;
+    padding: 10px;
 
     &:focus {
         outline: none;
@@ -21,28 +24,14 @@
 }
 
 .bdl-FooterIndicator-iconWrapper {
-    margin: 8px 9px 8px 10px;
+    display: flex;
+    margin-right: 9px;
 }
 
 .bdl-FooterIndicator-text {
     color: $white;
     font-size: 11px;
-    margin: 6px 10px 6px 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
-    &::after {
-        content: '';
-        display: block;
-    }
-}
-
-// Override default tooltip visibility
-.bdl-FooterIndicator-tooltip {
-    display: none;
-
-    &.bdl-is-visible {
-        display: block;
-    }
 }

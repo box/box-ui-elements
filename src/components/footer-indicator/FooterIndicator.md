@@ -18,7 +18,7 @@ Renders a small tab with text in the bottom-left corner of a page.
 </div>
 ```
 
-#### With text overflow
+#### With truncated text
 
 ```
 <div style={{
