@@ -11,7 +11,16 @@ const url = URL.createObjectURL(blob);
 let callbackStub;
 let tabData;
 
-const getTabs = () => cy.getByTestId('additionaltab');
+const helpers = {
+    load(additionalProps = {}) {
+        cy.visit('/Elements/ContentSidebar', {
+            onBeforeLoad: contentWindow => {
+                contentWindow.PROPS = additionalProps;
+            },
+        });
+    },
+    getTabs: () => cy.getByTestId('additionaltab'),
+};
 
 describe('additional-tabs', () => {
     beforeEach(() => {
@@ -48,16 +57,6 @@ describe('additional-tabs', () => {
         ];
     });
 
-    const helpers = {
-        load(additionalProps = {}) {
-            cy.visit('/Elements/ContentSidebar', {
-                onBeforeLoad: contentWindow => {
-                    contentWindow.PROPS = additionalProps;
-                },
-            });
-        },
-    };
-
     it('should display nothing when additional tabs are disabled', () => {
         helpers.load({ hasAdditionalTabs: false });
 
@@ -74,20 +73,23 @@ describe('additional-tabs', () => {
 
         cy.getByTestId('additionaltabplaceholder').should('not.be.visible');
 
-        getTabs()
+        helpers
+            .getTabs()
             .eq(0)
             .trigger('mouseover');
 
         cy.getTooltip().contains('1');
 
-        getTabs()
+        helpers
+            .getTabs()
             .eq(2)
             .trigger('mouseover');
 
         // The tabs should be rendering in order
         cy.getTooltip().contains('3');
 
-        getTabs()
+        helpers
+            .getTabs()
             .eq(3)
             .trigger('mouseover');
 
@@ -98,7 +100,8 @@ describe('additional-tabs', () => {
     it('should execute the given callback on click', () => {
         helpers.load({ hasAdditionalTabs: true, additionalTabs: tabData });
 
-        getTabs()
+        helpers
+            .getTabs()
             .eq(0)
             .click()
             .then(() => expect(callbackStub).to.be.calledWith({ id: 200, callbackData: { status: 'ADDED' } }));
