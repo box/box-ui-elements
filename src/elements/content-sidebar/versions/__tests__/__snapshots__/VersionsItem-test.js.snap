@@ -42,18 +42,10 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
         className="bcs-VersionsItem-date"
         dateTime={2019-03-01T08:00:00.000Z}
       >
-        <DateField
-          capitalize={true}
-          date={2019-03-01T08:00:00.000Z}
-          dateFormat={
-            Object {
-              "day": "numeric",
-              "hour": "numeric",
-              "minute": "numeric",
-              "month": "short",
-            }
-          }
-          relative={true}
+        <ReadableTime
+          alwaysShowTime={true}
+          relativeThreshold={300000}
+          timestamp={1551427200000}
         />
       </time>
       <span
@@ -105,18 +97,10 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
         className="bcs-VersionsItem-date"
         dateTime={2019-03-01T08:00:00.000Z}
       >
-        <DateField
-          capitalize={true}
-          date={2019-03-01T08:00:00.000Z}
-          dateFormat={
-            Object {
-              "day": "numeric",
-              "hour": "numeric",
-              "minute": "numeric",
-              "month": "short",
-            }
-          }
-          relative={true}
+        <ReadableTime
+          alwaysShowTime={true}
+          relativeThreshold={300000}
+          timestamp={1551427200000}
         />
       </time>
       <span
@@ -168,18 +152,10 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
         className="bcs-VersionsItem-date"
         dateTime={2019-03-01T08:00:00.000Z}
       >
-        <DateField
-          capitalize={true}
-          date={2019-03-01T08:00:00.000Z}
-          dateFormat={
-            Object {
-              "day": "numeric",
-              "hour": "numeric",
-              "minute": "numeric",
-              "month": "short",
-            }
-          }
-          relative={true}
+        <ReadableTime
+          alwaysShowTime={true}
+          relativeThreshold={300000}
+          timestamp={1551427200000}
         />
       </time>
       <span

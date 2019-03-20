@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { shallow } from 'enzyme/build';
-import DateField from '../../../common/date';
 import NavButton from '../../../common/nav-button';
 import VersionsItem from '../VersionsItem';
+import { ReadableTime } from '../../../../components/time';
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -32,7 +32,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             expect(navButton.prop('disabled')).toBe(false);
             expect(navButton.prop('className')).not.toContain('bcs-is-disabled');
             expect(navButton.prop('to')).toBe('/12345');
-            expect(wrapper.closest(DateField)).toBeTruthy();
+            expect(wrapper.closest(ReadableTime)).toBeTruthy();
             expect(wrapper).toMatchSnapshot();
         });
 
@@ -42,7 +42,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
 
             expect(navButton.prop('disabled')).toBe(true);
             expect(navButton.prop('className')).toContain('bcs-is-disabled');
-            expect(wrapper.closest(DateField)).toBeTruthy();
+            expect(wrapper.closest(ReadableTime)).toBeTruthy();
             expect(wrapper).toMatchSnapshot();
         });
 
