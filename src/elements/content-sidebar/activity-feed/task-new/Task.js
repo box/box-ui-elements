@@ -53,6 +53,7 @@ class Task extends React.Component<Props> {
             onEdit,
             permissions,
             status,
+            task_type,
             translatedTaggedMessage,
             translations,
         } = this.props;
@@ -73,6 +74,13 @@ class Task extends React.Component<Props> {
         const assigneeCount = (assigned_to && assigned_to.entries.length) || 0;
         const hiddenAssigneeCount = assigneeCount - MAX_AVATARS;
         const isOverdue = due_at ? status === TASK_NEW_INCOMPLETE && new Date(due_at) < Date.now() : false;
+
+        const shouldShowActions =
+            currentUserAssignment &&
+            currentUserAssignment.permissions &&
+            currentUserAssignment.permissions.can_update &&
+            currentUserAssignment.status === TASK_NEW_INCOMPLETE &&
+            status === TASK_NEW_INCOMPLETE;
 
         return (
             <div
@@ -135,11 +143,9 @@ class Task extends React.Component<Props> {
                             </span>
                         ) : null}
                     </div>
-                    {status === TASK_NEW_INCOMPLETE &&
-                    currentUserAssignment &&
-                    currentUserAssignment.status === TASK_NEW_INCOMPLETE ? (
+                    {currentUserAssignment && shouldShowActions ? (
                         <TaskActions
-                            {...currentUserAssignment}
+                            taskType={task_type}
                             onTaskApproval={
                                 isPending
                                     ? noop
