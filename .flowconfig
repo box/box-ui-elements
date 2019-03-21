@@ -16,6 +16,9 @@
 .*/node_modules/config-chain*
 .*/__tests__/.*
 
+[include]
+./src
+
 [options]
 esproposal.export_star_as=enable
 module.file_ext=.js
