@@ -143,7 +143,7 @@ class Task extends React.Component<Props> {
                             </span>
                         ) : null}
                     </div>
-                    {shouldShowActions ? (
+                    {currentUserAssignment && shouldShowActions ? (
                         <TaskActions
                             taskType={task_type}
                             onTaskApproval={
