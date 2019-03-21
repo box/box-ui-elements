@@ -28,6 +28,7 @@ import type {
     inviteePermissionType as InviteePermissions,
     item as ItemType,
     contactType as Contact,
+    tooltipComponentIdentifierType,
     trackingPropsType,
     sharedLinkType,
 } from './flowTypes';
@@ -71,6 +72,8 @@ type Props = {
     item: ItemType,
     /** Handler function that adds the shared link */
     onAddLink: () => void,
+    /** Handler function that gets called whenever the user dismisses a tooltip on the given component identifier */
+    onDismissTooltip?: (componentIdentifier: tooltipComponentIdentifierType) => void,
     /** Handler function that removes the shared link */
     onRemoveLink: () => void,
     /** Handler function for when modal is closed */
@@ -110,6 +113,8 @@ type Props = {
     submitting: boolean,
     /** Data for suggested collaborators shown at bottom of input box. UI doesn't render when this has length of 0. */
     suggestedCollaborators?: Array<Object>,
+    /** Mapping of components to the content that should be rendered in their tooltips */
+    tooltips?: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
     /** Object with props and handlers for tracking interactions in unified share modal */
     trackingProps: trackingPropsType,
 };
@@ -619,9 +624,11 @@ class UnifiedShareModal extends React.Component<Props, State> {
             onSettingsClick,
             sharedLink,
             intl,
+            onDismissTooltip = () => {},
             showEnterEmailsCallout = false,
             showSharedLinkSettingsCallout = false,
             submitting,
+            tooltips = {},
             ...rest
         } = this.props;
         const {
@@ -678,6 +685,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 intl={intl}
                                 item={item}
                                 itemType={item.type}
+                                onDismissTooltip={onDismissTooltip}
                                 onEmailSharedLinkClick={this.openEmailSharedLinkForm}
                                 onSettingsClick={onSettingsClick}
                                 onToggleSharedLink={this.onToggleSharedLink}
@@ -685,6 +693,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 showSharedLinkSettingsCallout={showSharedLinkSettingsCallout}
                                 submitting={submitting || isFetching}
                                 trackingProps={sharedLinkTracking}
+                                tooltips={tooltips}
                             />
                         )}
 

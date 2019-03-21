@@ -1,8 +1,19 @@
-.bcs-versions {
-    .bcs-scroll-content {
-        padding-left: 25px;
-        padding-right: 25px;
-        padding-top: 10px;
-        width: 100%;
+.bcs-Versions {
+    .bcs-section-content:first-child {
+        padding-top: 0;
     }
+
+    .bdl-BackButton {
+        margin-right: 5px;
+    }
+
+    .crawler {
+        line-height: 1;
+    }
+}
+
+.bcs-Versions-content {
+    height: 100%;
+    min-height: 50px;
+    padding-bottom: 10px;
 }

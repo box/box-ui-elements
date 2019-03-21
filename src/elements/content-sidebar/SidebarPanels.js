@@ -36,8 +36,10 @@ type Props = {
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
+    hasVersions: boolean,
     isOpen: boolean,
     metadataSidebarProps: MetadataSidebarProps,
+    onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     selectedView?: SidebarView,
 };
@@ -77,8 +79,10 @@ const SidebarPanels = ({
     hasDetails,
     hasMetadata,
     hasSkills,
+    hasVersions,
     isOpen,
     metadataSidebarProps,
+    onVersionChange,
     onVersionHistoryClick,
 }: Props) =>
     (hasActivityFeed || hasDetails || hasMetadata || hasSkills) && (
@@ -101,47 +105,35 @@ const SidebarPanels = ({
             />
             <SidebarRoute
                 enabled={hasActivityFeed}
+                exact
                 path={`/${SIDEBAR_VIEW_ACTIVITY}`}
                 pathFallback={`/${SIDEBAR_VIEW_DETAILS}`}
-                render={({ match }) =>
+                render={() =>
                     isOpen && (
-                        <Switch>
-                            <Route exact path={match.path}>
-                                <LoadableActivitySidebar
-                                    currentUser={currentUser}
-                                    file={file}
-                                    onVersionHistoryClick={onVersionHistoryClick}
-                                    startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-                                    {...activitySidebarProps}
-                                />
-                            </Route>
-                            <Route exact path={`${match.path}/versions`}>
-                                <LoadableVersionsSidebar fileId={fileId} key={fileId} />
-                            </Route>
-                        </Switch>
+                        <LoadableActivitySidebar
+                            currentUser={currentUser}
+                            file={file}
+                            onVersionHistoryClick={onVersionHistoryClick}
+                            startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
+                            {...activitySidebarProps}
+                        />
                     )
                 }
             />
             <SidebarRoute
                 enabled={hasDetails}
+                exact
                 path={`/${SIDEBAR_VIEW_DETAILS}`}
                 pathFallback={`/${SIDEBAR_VIEW_METADATA}`}
-                render={({ match }) =>
+                render={() =>
                     isOpen && (
-                        <Switch>
-                            <Route exact path={match.path}>
-                                <LoadableDetailsSidebar
-                                    fileId={fileId}
-                                    key={fileId}
-                                    onVersionHistoryClick={onVersionHistoryClick}
-                                    startMarkName={MARK_NAME_JS_LOADING_DETAILS}
-                                    {...detailsSidebarProps}
-                                />
-                            </Route>
-                            <Route exact path={`${match.path}/versions`}>
-                                <LoadableVersionsSidebar fileId={fileId} key={fileId} />
-                            </Route>
-                        </Switch>
+                        <LoadableDetailsSidebar
+                            fileId={fileId}
+                            key={fileId}
+                            onVersionHistoryClick={onVersionHistoryClick}
+                            startMarkName={MARK_NAME_JS_LOADING_DETAILS}
+                            {...detailsSidebarProps}
+                        />
                     )
                 }
             />
@@ -158,6 +150,20 @@ const SidebarPanels = ({
                         />
                     )
                 }
+            />
+            <SidebarRoute
+                enabled={hasVersions}
+                path="/:sidebar/versions/:versionId?"
+                pathFallback="/"
+                render={({ match }) => (
+                    <LoadableVersionsSidebar
+                        fileId={fileId}
+                        key={fileId}
+                        onVersionChange={onVersionChange}
+                        parentName={match.params.sidebar}
+                        versionId={match.params.versionId}
+                    />
+                )}
             />
             <Route render={() => <Redirect to={`/${SIDEBAR_VIEW_SKILLS}`} />} />
         </Switch>

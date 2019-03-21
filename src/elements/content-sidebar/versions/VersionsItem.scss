@@ -1,0 +1,80 @@
+@import '../../common/variables';
+
+.bcs-VersionsItem {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: $twos;
+    cursor: pointer;
+    display: flex;
+    font-size: 100%;
+    line-height: 20px;
+    outline: none;
+    padding: 15px 10px;
+    position: relative;
+    text-align: left;
+    transition: background-color 50ms ease-in, border 50ms ease-in;
+    width: 100%;
+
+    &:hover,
+    &:focus {
+        border-color: $nines;
+    }
+
+    &.bcs-is-disabled {
+        border-color: transparent;
+        cursor: default;
+        pointer-events: none;
+
+        .bcs-VersionsItem-badge {
+            background-color: $ffive;
+            color: inherit;
+        }
+    }
+
+    &.bcs-is-selected {
+        background-color: $hover-blue-background;
+        border-color: $primary-color;
+    }
+}
+
+.bcs-VersionsItem-badge {
+    background-color: $selected-blue-background;
+    border-radius: 4px;
+    color: $primary-color;
+    flex: 1 0 auto;
+    font-size: 18px;
+    margin-right: 10px;
+    padding: 10px 8px;
+    text-align: center;
+}
+
+.bcs-VersionsItem-details {
+    flex: 1 1 100%;
+    overflow: hidden;
+}
+
+.bcs-VersionsItem-info {
+    align-items: center;
+    color: $seventy-sixers;
+    display: flex;
+}
+
+.bcs-VersionsItem-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bcs-VersionsItem-size {
+    align-items: center;
+    display: flex;
+
+    &::before {
+        content: '•';
+        display: inline-block;
+        font-size: 8px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}

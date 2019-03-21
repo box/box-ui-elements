@@ -38,40 +38,40 @@ describe('ContentExplorer', () => {
             // Sidebar should be open by default
             cy.getByTestId('bcs-content').should('exist');
             // Skills tab should be selected
-            cy.getByTestId('sidebarskills').should('have.class', 'bcs-nav-btn-is-selected');
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
 
             // Navigate to previous file (Sample 3D.box3d) should default to activity feed
             cy.getByTitle('Previous File').click();
             cy.contains('Sample 3D.box3d').should('exist');
             cy.getByTestId('bcs-content').should('exist');
-            cy.getByTestId('sidebaractivity').should('have.class', 'bcs-nav-btn-is-selected');
+            cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
         });
 
         it('Navigating from file to file, tab should stick to prior chosen tab if it exists', () => {
             // Sidebar should be open by default
             cy.getByTestId('bcs-content').should('exist');
             // Skills tab should be selected
-            cy.getByTestId('sidebarskills').should('have.class', 'bcs-nav-btn-is-selected');
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
             // Select the details tab
             cy.getByTestId('sidebardetails').click();
 
             // Navigate to previous file should keep details tab selected
             cy.getByTitle('Previous File').click();
             cy.getByTestId('bcs-content').should('exist');
-            cy.getByTestId('sidebaractivity').should('not.have.class', 'bcs-nav-btn-is-selected');
-            cy.getByTestId('sidebardetails').should('have.class', 'bcs-nav-btn-is-selected');
+            cy.getByTestId('sidebaractivity').should('not.have.class', 'bcs-is-selected');
+            cy.getByTestId('sidebardetails').should('have.class', 'bcs-is-selected');
         });
 
         it('Navigating from file to file, should be able to toggle tab after tab switch based on order of preference', () => {
             // Sidebar should be open by default
             cy.getByTestId('bcs-content').should('exist');
             // Skills tab should be selected
-            cy.getByTestId('sidebarskills').should('have.class', 'bcs-nav-btn-is-selected');
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
 
             // Navigate to previous file should default to activity feed
             cy.getByTitle('Previous File').click();
             cy.getByTestId('bcs-content').should('exist');
-            cy.getByTestId('sidebaractivity').should('have.class', 'bcs-nav-btn-is-selected');
+            cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
 
             // Click the activity tab to toggle it closed
             cy.getByTestId('sidebaractivity').click();

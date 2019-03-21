@@ -22,7 +22,9 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
                 intl={intl}
                 item={defaultItem}
                 itemType="file"
+                onDismissTooltip={() => {}}
                 showSharedLinkSettingsCallout
+                tooltips={{}}
                 {...props}
             />,
         );

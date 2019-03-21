@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicator and a tooltip 1`] = `
+<div
+  className="bdl-FooterIndicator"
+>
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    position="middle-right"
+    text="abcdefghijklmnopqrstuvwxyz"
+    theme="default"
+  >
+    <div
+      className="bdl-FooterIndicator-content"
+    >
+      <span
+        className="bdl-FooterIndicator-iconWrapper"
+      >
+        <IconPuzzlePiece />
+      </span>
+      <span
+        className="bdl-FooterIndicator-text"
+      >
+        abcdefghijklmnopqrstuvwxyz
+      </span>
+    </div>
+  </Tooltip>
+</div>
+`;

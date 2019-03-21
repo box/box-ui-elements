@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import noop from 'lodash/noop';
 import API from '../../../api';
 import VersionsSidebar from './VersionsSidebar';
 import { withAPIContext } from '../../common/api-context';
@@ -12,18 +13,28 @@ import { withAPIContext } from '../../common/api-context';
 type Props = {
     api: API,
     fileId: string,
+    onVersionChange: (versionId?: string) => void,
+    parentName: string,
+    versionId?: string,
 };
 
 type State = {
     error?: string,
-    versions: Array<any>,
+    isLoading: boolean,
+    versions: Array<BoxItemVersion>,
 };
 
 class VersionsSidebarContainer extends React.Component<Props, State> {
     props: Props;
 
     state: State = {
+        isLoading: true,
         versions: [],
+    };
+
+    static defaultProps = {
+        onVersionChange: noop,
+        parentName: '',
     };
 
     componentDidMount() {
@@ -32,16 +43,39 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         api.getVersionsAPI(false).getVersions(fileId, this.handleFetchVersionsSuccess, this.handleFetchVersionsError);
     }
 
+    componentDidUpdate({ versionId: prevVersionId }: Props) {
+        const { onVersionChange, versionId } = this.props;
+
+        // Forward the current version id that is passed in via the wrapping route
+        if (prevVersionId !== versionId) {
+            onVersionChange(versionId);
+        }
+    }
+
+    componentWillUnmount() {
+        // Reset the current version id since the wrapping route is no longer active
+        this.props.onVersionChange();
+    }
+
     handleFetchVersionsError = ({ message }) => {
-        this.setState({ error: message, versions: [] });
+        this.setState({
+            error: message,
+            isLoading: false,
+            versions: [],
+        });
     };
 
     handleFetchVersionsSuccess = ({ entries: versions }) => {
-        this.setState({ error: undefined, versions });
+        this.setState({
+            error: undefined,
+            isLoading: false,
+            versions,
+        });
     };
 
     render() {
-        return <VersionsSidebar {...this.state} />;
+        const { parentName } = this.props;
+        return <VersionsSidebar parentName={parentName} {...this.state} />;
     }
 }
 
