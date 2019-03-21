@@ -795,6 +795,12 @@ class ContentPicker extends Component<Props, State> {
             // item selection mode, we should also unselect any
             // prior item that was item that was selected.
 
+            // Check if we hit the selection limit
+            // Ignore when in single file selection mode.
+            if (hasHitSelectionLimit && !isSingleFileSelection && !selectedKeys.indexOf(cacheKey)) {
+                return;
+            }
+
             // Clear out the prior item for single file selection mode
             if (selectedCount > 0 && isSingleFileSelection) {
                 const prior = selectedKeys[0]; // only one item
@@ -809,12 +815,6 @@ class ContentPicker extends Component<Props, State> {
             // If can set share access, fetch the shared link properties of the item
             if (canSetShareAccess && forceSharedLink) {
                 this.showSharedLinkDropdown(item);
-            }
-
-            // Check if we hit the selection limit
-            // Ignore when in single file selection mode.
-            if (hasHitSelectionLimit && !isSingleFileSelection) {
-                return;
             }
         }
 
