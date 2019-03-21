@@ -16,9 +16,9 @@ This project adheres to the [Box Open Code of Conduct](http://opensource.box.com
 
 ## How to contribute
 
-- **File an issue** - if you found a bug, want to request an enhancement, or want to implement something (bug fix or feature).
-- **Make changes** - See the [developing guide](DEVELOPING.md).
-- **Send a pull request** - if you want to contribute code. Please be sure to file an issue first.
+-   **File an issue** - if you found a bug, want to request an enhancement, or want to implement something (bug fix or feature).
+-   **Make changes** - See the [developing guide](DEVELOPING.md).
+-   **Send a pull request** - if you want to contribute code. Please be sure to file an issue first.
 
 ## Pull request best practices
 
@@ -76,3 +76,7 @@ Make sure that all tests are passing before submitting a pull request. See the [
 Send the pull request from your feature branch to us. Be sure to include a description (as mentioned above in step 4) that lets us know what work you did.
 
 Keep in mind that we like to see one issue addressed per pull request, as this helps keep our git history clean and we can more easily track down issues.
+
+### Step 8: Add a comment to the PR
+
+Once your PR has been reviewed, and tests have passed, add a comment `bors r+` to indicate it is ready for merging.

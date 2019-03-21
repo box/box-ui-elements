@@ -1,0 +1,4 @@
+status = [ "Travis CI - Branch" ]
+block_labels = [ "don't-merge" ]
+timeout_sec = 1200
+required_approvals = 1

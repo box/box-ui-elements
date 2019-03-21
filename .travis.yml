@@ -6,6 +6,12 @@ cache:
   directories:
     - node_modules
     - ~/.cache/Cypress
+branches:
+    only:
+      - release
+      - master
+      - staging
+      - trying
 before_install:
     - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
     - export PATH=$HOME/.yarn/bin:$PATH
