@@ -145,6 +145,7 @@ class Feed extends Base {
      * @param {Function} errorCallback - the error callback which is called after data fetching is complete if there was an error
      * @param {Function} onError - the function to be called immediately after an error occurs
      * @param {boolean} shouldShowNewTasks - feature flip the new tasks api
+     * @param {boolean} shouldShowAppActivity - feature flip the new app activity api
      */
     feedItems(
         file: BoxItem,
@@ -153,6 +154,7 @@ class Feed extends Base {
         errorCallback: (feedItems: FeedItems) => void,
         onError: ErrorCallback,
         shouldShowNewTasks?: boolean = false, // TODO: could the class understand feature flips natively instead?
+        shouldShowAppActivity?: boolean = false,
     ): void {
         const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
@@ -175,7 +177,7 @@ class Feed extends Base {
         const versionsPromise = this.fetchVersions();
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = shouldShowNewTasks ? this.fetchTasksNew() : this.fetchTasks();
-        const appActivityPromise = this.fetchAppActivity(permissions);
+        const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
         Promise.all([versionsPromise, commentsPromise, tasksPromise, appActivityPromise]).then(feedItems => {
             const versions: ?FileVersions = feedItems[0];
