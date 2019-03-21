@@ -98,6 +98,10 @@ describe('elements/content-preview/ContentPreview', () => {
         test('should return false if file has not changed', () => {
             expect(instance.shouldLoadPreview({ file })).toBe(false);
         });
+
+        test('should return true if the currently-selected version ID has changed', () => {
+            expect(instance.shouldLoadPreview({ selectedVersionId: '12345' })).toBe(true);
+        });
     });
 
     describe('canDownload()', () => {
@@ -239,6 +243,35 @@ describe('elements/content-preview/ContentPreview', () => {
                     header: 'none',
                     useHotkeys: false,
                     container: expect.stringContaining('.bcpr-content'),
+                }),
+            );
+        });
+
+        test('should call preview show with file version params if provided', async () => {
+            props = {
+                onMetric: jest.fn(),
+                token: 'token',
+                fileId: file.id,
+            };
+            TokenService.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file, selectedVersionId: '12345' });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                props.token,
+                expect.objectContaining({
+                    container: expect.stringContaining('.bcpr-content'),
+                    header: 'none',
+                    showDownload: false,
+                    skipServerUpdate: true,
+                    useHotkeys: false,
+                    fileOptions: {
+                        [file.id]: {
+                            fileVersionId: '12345',
+                        },
+                    },
                 }),
             );
         });

@@ -15,10 +15,15 @@ import './BackButton.scss';
 
 type Props = {
     history: RouterHistory,
+    path?: string,
 };
 
-const BackButton = ({ history }: Props) => (
-    <PlainButton className="be-btn-back" onClick={() => history.goBack()} type="button">
+const BackButton = ({ history, path }: Props) => (
+    <PlainButton
+        className="bdl-BackButton"
+        onClick={() => (path ? history.push(path) : history.goBack())}
+        type="button"
+    >
         <IconNavigateLeft height={24} width={24} />
         <FormattedMessage {...messages.back}>
             {content => <span className="accessibility-hidden">{content}</span>}

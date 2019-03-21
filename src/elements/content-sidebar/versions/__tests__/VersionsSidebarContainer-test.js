@@ -25,9 +25,20 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
+    describe('componentDidUpdate', () => {
+        test('should forward version id changes to the parent component', () => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ onVersionChange });
+
+            wrapper.setProps({ versionId: '12345' });
+
+            expect(onVersionChange).toHaveBeenCalledWith('12345');
+        });
+    });
+
     describe('render', () => {
         test('should match its snapshot', () => {
-            const wrapper = getWrapper();
+            const wrapper = getWrapper({ parentName: 'activity' });
             expect(wrapper).toMatchSnapshot();
         });
     });

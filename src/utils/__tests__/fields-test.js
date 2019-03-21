@@ -130,10 +130,11 @@ describe('util/fields', () => {
 
     test('should fetch correct version fields', () => {
         expect(VERSIONS_FIELDS_TO_FETCH).toEqual([
-            FIELD_TRASHED_AT,
             FIELD_CREATED_AT,
             FIELD_MODIFIED_AT,
             FIELD_MODIFIED_BY,
+            FIELD_SIZE,
+            FIELD_TRASHED_AT,
             FIELD_VERSION_NUMBER,
         ]);
     });

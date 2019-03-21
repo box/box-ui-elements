@@ -1,12 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import BackButton from '..';
+import { BackButton } from '..';
 
 jest.mock('react-router-dom', () => ({
     withRouter: Component => Component,
 }));
 
-describe('elements/common/back-button', () => {
+describe('elements/common/nav-button/BackButton', () => {
     const history = { goBack: jest.fn() };
     const getWrapper = () => shallow(<BackButton history={history} />);
 

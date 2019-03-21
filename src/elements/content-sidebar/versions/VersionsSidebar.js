@@ -6,27 +6,44 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import BackButton from '../../common/back-button';
-import messages from '../../common/messages';
+import InlineError from '../../../components/inline-error';
+import messages from './messages';
+import messagesCommon from '../../common/messages';
 import SidebarContent from '../SidebarContent';
+import SidebarSection from '../SidebarSection';
+import VersionsList from './VersionsList';
+import { BackButton } from '../../common/nav-button';
+import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import './VersionsSidebar.scss';
 
 type Props = {
     error?: string,
+    isLoading: boolean,
+    parentName: string,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, versions = [] }: Props) => (
+const VersionsSidebar = ({ error, isLoading, parentName, versions }: Props) => (
     <SidebarContent
-        className="bcs-versions"
+        className="bcs-Versions"
         title={
             <React.Fragment>
-                <BackButton />
-                <FormattedMessage {...messages.sidebarVersionsTitle} />
+                <BackButton path={`/${parentName}`} />
+                <FormattedMessage {...messages.versionsTitle} />
             </React.Fragment>
         }
     >
-        {error || versions.map(version => version.id)}
+        <LoadingIndicatorWrapper className="bcs-Versions-content" isLoading={isLoading}>
+            {!isLoading && (
+                <SidebarSection isOpen>
+                    {error ? (
+                        <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
+                    ) : (
+                        <VersionsList versions={versions} />
+                    )}
+                </SidebarSection>
+            )}
+        </LoadingIndicatorWrapper>
     </SidebarContent>
 );
 

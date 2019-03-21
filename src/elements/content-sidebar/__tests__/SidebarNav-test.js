@@ -60,7 +60,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(IconChatRound)).toHaveLength(0);
     });
 
-    test('should select activity tab', () => {
+    test('should have multiple tabs', () => {
         const props = {
             hasActivityFeed: true,
             hasMetadata: true,
@@ -72,12 +72,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
         expect(wrapper.find(IconChatRound)).toHaveLength(1);
         expect(wrapper.find(SidebarNavButton)).toHaveLength(3);
-        expect(
-            wrapper
-                .find('[data-testid="sidebaractivity"]')
-                .first()
-                .prop('className'),
-        ).toContain('bcs-nav-btn-is-selected');
     });
 
     test('should render the additional tabs loading state', () => {

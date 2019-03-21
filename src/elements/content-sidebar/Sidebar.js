@@ -41,6 +41,7 @@ type Props = {
     location: Location,
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
+    onVersionChange?: Function,
     onVersionHistoryClick?: Function,
 };
 
@@ -106,7 +107,7 @@ class Sidebar extends React.Component<Props, State> {
      * @param {SyntheticEvent} event - The event
      * @return {void}
      */
-    handleVersionClick = (event: SyntheticEvent<>) => {
+    handleVersionHistoryClick = (event: SyntheticEvent<>) => {
         const { history } = this.props;
 
         if (event.preventDefault) {
@@ -133,14 +134,16 @@ class Sidebar extends React.Component<Props, State> {
             isLoading,
             metadataEditors,
             metadataSidebarProps,
+            onVersionChange,
             onVersionHistoryClick,
         }: Props = this.props;
 
         const { isOpen } = this.state;
-        const handleVersionHistoryClick = isFeatureEnabled(features, 'versions') && this.handleVersionClick;
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
+        const hasVersions = isFeatureEnabled(features, 'versions');
+        const handleVersionHistoryClick = hasVersions && this.handleVersionHistoryClick;
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
         });
@@ -175,9 +178,11 @@ class Sidebar extends React.Component<Props, State> {
                             hasDetails={hasDetails}
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
+                            hasVersions={hasVersions}
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
+                            onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick || handleVersionHistoryClick}
                         />
                     </React.Fragment>
