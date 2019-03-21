@@ -48,6 +48,7 @@ function getAccessNoticeMessageId(accessLevel, canDownload) {
 
 class SharedLinkSettingsModal extends Component {
     static propTypes = {
+        hideVanityNameSection: PropTypes.bool,
         isOpen: PropTypes.bool,
         onRequestClose: PropTypes.func,
         submitting: PropTypes.bool,
@@ -220,8 +221,18 @@ class SharedLinkSettingsModal extends Component {
     };
 
     renderVanityNameSection() {
-        const { canChangeVanityName, serverURL, vanityNameInputProps, warnOnPublic = false } = this.props;
+        const {
+            canChangeVanityName,
+            hideVanityNameSection,
+            serverURL,
+            vanityNameInputProps,
+            warnOnPublic = false,
+        } = this.props;
         const { vanityNameError, isVanityEnabled } = this.state;
+
+        if (hideVanityNameSection) {
+            return null;
+        }
 
         return (
             <VanityNameSection
