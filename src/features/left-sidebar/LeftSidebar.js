@@ -5,6 +5,7 @@ import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 
 import { NavSidebar, NavList, NavListCollapseHeader } from '../../components/nav-sidebar';
+import FooterIndicator from '../../components/footer-indicator/FooterIndicator';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import { BOX_BLUE } from '../../common/variables';
 
@@ -109,6 +110,8 @@ type LeftSidebarProps = {
     customTheme?: Object,
     /** HTML attributes associated with this container */
     htmlAttributes?: Object,
+    /** Text for the footer indicator */
+    indicatorText?: string,
     /** Properties associated with InstantLogin component */
     instantLoginProps?: Object,
     /** Set the drag mode of the sidebar? */
@@ -395,6 +398,9 @@ class LeftSidebar extends React.Component<Props, State> {
                 {leftSidebarProps.isInstantLoggedIn ? <InstantLogin {...instantLoginProps} /> : null}
                 <div className="left-sidebar-container">{preparedMenu}</div>
                 <CopyrightFooter linkProps={leftSidebarProps.copyrightFooterProps} />
+                {leftSidebarProps.indicatorText ? (
+                    <FooterIndicator indicatorText={leftSidebarProps.indicatorText} />
+                ) : null}
             </NavSidebar>
         );
     }
