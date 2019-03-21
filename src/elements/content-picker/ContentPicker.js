@@ -1072,7 +1072,7 @@ class ContentPicker extends Component<Props, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={styleClassName} ref={measureRef}>
+                <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-picker">
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
