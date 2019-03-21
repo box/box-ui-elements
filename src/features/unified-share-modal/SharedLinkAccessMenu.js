@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
@@ -23,14 +23,16 @@ type Props = {
     classificationName?: string,
     enterpriseName?: string,
     itemType: ItemType,
+    onDismissTooltip: () => void,
     submitting: boolean,
+    tooltipContent: React.Node,
     trackingProps: {
         onChangeSharedLinkAccessLevel?: Function,
         sharedLinkAccessMenuButtonProps?: Object,
     },
 };
 
-class SharedLinkAccessMenu extends Component<Props> {
+class SharedLinkAccessMenu extends React.Component<Props> {
     static defaultProps = {
         allowedAccessLevels: {},
         trackingProps: {},
@@ -100,27 +102,45 @@ class SharedLinkAccessMenu extends Component<Props> {
     }
 
     render() {
-        const { accessLevel, enterpriseName, itemType, submitting, trackingProps } = this.props;
+        const {
+            accessLevel,
+            enterpriseName,
+            itemType,
+            onDismissTooltip,
+            submitting,
+            tooltipContent,
+            trackingProps,
+        } = this.props;
         const { sharedLinkAccessMenuButtonProps } = trackingProps;
 
         return (
             <DropdownMenu>
-                <PlainButton
-                    className={classNames('lnk', {
-                        'is-disabled': submitting,
-                    })}
-                    disabled={submitting}
-                    {...sharedLinkAccessMenuButtonProps}
+                <Tooltip
+                    className="usm-ftux-tooltip"
+                    isShown={!!tooltipContent}
+                    onDismiss={onDismissTooltip}
+                    position="bottom-center"
+                    showCloseButton
+                    text={tooltipContent}
+                    theme="callout"
                 >
-                    <MenuToggle>
-                        <SharedLinkAccessLabel
-                            accessLevel={accessLevel}
-                            enterpriseName={enterpriseName}
-                            hasDescription={false}
-                            itemType={itemType}
-                        />
-                    </MenuToggle>
-                </PlainButton>
+                    <PlainButton
+                        className={classNames('lnk', {
+                            'is-disabled': submitting,
+                        })}
+                        disabled={submitting}
+                        {...sharedLinkAccessMenuButtonProps}
+                    >
+                        <MenuToggle>
+                            <SharedLinkAccessLabel
+                                accessLevel={accessLevel}
+                                enterpriseName={enterpriseName}
+                                hasDescription={false}
+                                itemType={itemType}
+                            />
+                        </MenuToggle>
+                    </PlainButton>
+                </Tooltip>
                 {this.renderMenu()}
             </DropdownMenu>
         );

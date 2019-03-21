@@ -3,7 +3,7 @@
 'no babel-plugin-flow-react-proptypes';
 
 // turn off this plugin because it breaks the IntlShape flow type
-import React, { Component } from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
@@ -30,6 +30,7 @@ import type {
     permissionLevelType,
     sharedLinkType,
     sharedLinkTrackingType,
+    tooltipComponentIdentifierType,
 } from './flowTypes';
 import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 
@@ -43,17 +44,19 @@ type Props = {
     intl: IntlShape,
     item: itemtype,
     itemType: ItemType,
+    onDismissTooltip: (componentIdentifier: tooltipComponentIdentifierType) => void,
     onEmailSharedLinkClick: Function,
     onSettingsClick?: Function,
     onToggleSharedLink: Function,
     sharedLink: sharedLinkType,
     showSharedLinkSettingsCallout: boolean,
     submitting: boolean,
+    tooltips: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
     trackingProps: sharedLinkTrackingType,
     triggerCopyOnLoad?: boolean,
 };
 
-class SharedLinkSection extends Component<Props> {
+class SharedLinkSection extends React.Component<Props> {
     static defaultProps = {
         trackingProps: {},
     };
@@ -74,11 +77,13 @@ class SharedLinkSection extends Component<Props> {
             classificationName,
             item,
             itemType,
+            onDismissTooltip,
             onEmailSharedLinkClick,
             sharedLink,
             submitting,
             trackingProps,
             triggerCopyOnLoad,
+            tooltips,
         } = this.props;
         const {
             accessLevel,
@@ -117,17 +122,27 @@ class SharedLinkSection extends Component<Props> {
         return (
             <React.Fragment>
                 <div className="shared-link-field-row">
-                    <TextInputWithCopyButton
-                        autofocus={autofocusSharedLink}
-                        buttonProps={copyButtonProps}
-                        className="shared-link-field-container"
-                        disabled={submitting}
-                        label=""
-                        onCopySuccess={onSharedLinkCopy}
-                        triggerCopyOnLoad={triggerCopyOnLoad}
-                        type="url"
-                        value={url}
-                    />
+                    <Tooltip
+                        className="usm-ftux-tooltip"
+                        isShown={!!tooltips['shared-link-copy-button']}
+                        onDismiss={() => onDismissTooltip('shared-link-copy-button')}
+                        position="middle-right"
+                        showCloseButton
+                        text={tooltips['shared-link-copy-button']}
+                        theme="callout"
+                    >
+                        <TextInputWithCopyButton
+                            autofocus={autofocusSharedLink}
+                            buttonProps={copyButtonProps}
+                            className="shared-link-field-container"
+                            disabled={submitting}
+                            label=""
+                            onCopySuccess={onSharedLinkCopy}
+                            triggerCopyOnLoad={triggerCopyOnLoad}
+                            type="url"
+                            value={url}
+                        />
+                    </Tooltip>
                     <Tooltip position="top-left" text={<FormattedMessage {...messages.sendSharedLink} />}>
                         <Button
                             className="email-shared-link-btn"
@@ -149,6 +164,8 @@ class SharedLinkSection extends Component<Props> {
                         classificationName={classificationName}
                         enterpriseName={enterpriseName}
                         itemType={itemType}
+                        onDismissTooltip={() => onDismissTooltip('shared-link-access-menu')}
+                        tooltipContent={tooltips['shared-link-access-menu'] || null}
                         submitting={submitting}
                         trackingProps={{
                             onChangeSharedLinkAccessLevel,
@@ -189,16 +206,29 @@ class SharedLinkSection extends Component<Props> {
     }
 
     renderSharedLinkSettingsLink() {
-        const { intl, onSettingsClick, showSharedLinkSettingsCallout, trackingProps } = this.props;
+        const {
+            intl,
+            onDismissTooltip,
+            onSettingsClick,
+            showSharedLinkSettingsCallout,
+            trackingProps,
+            tooltips,
+        } = this.props;
         const { sharedLinkSettingsButtonProps } = trackingProps;
 
         return (
             <div className="shared-link-settings-btn-container">
                 <Tooltip
-                    isShown={showSharedLinkSettingsCallout}
+                    className="usm-ftux-tooltip"
+                    isShown={!!tooltips['shared-link-settings'] || showSharedLinkSettingsCallout}
+                    onDismiss={() => onDismissTooltip('shared-link-settings')}
                     position="middle-right"
                     showCloseButton
-                    text={<FormattedMessage {...messages.sharedLinkSettingsCalloutText} />}
+                    text={
+                        tooltips['shared-link-settings'] || (
+                            <FormattedMessage {...messages.sharedLinkSettingsCalloutText} />
+                        )
+                    }
                     theme="callout"
                 >
                     <PlainButton
@@ -216,7 +246,7 @@ class SharedLinkSection extends Component<Props> {
     }
 
     renderToggle() {
-        const { item, onToggleSharedLink, sharedLink, submitting } = this.props;
+        const { item, onDismissTooltip, onToggleSharedLink, sharedLink, submitting, tooltips } = this.props;
 
         const { canChangeAccessLevel, expirationTimestamp } = sharedLink;
 
@@ -270,6 +300,22 @@ class SharedLinkSection extends Component<Props> {
 
         if (!submitting) {
             if (this.canAddSharedLink(isSharedLinkEnabled, item.grantedPermissions.itemShare)) {
+                const sharedLinkToggleTooltip = tooltips['shared-link-toggle'];
+                if (sharedLinkToggleTooltip) {
+                    return (
+                        <Tooltip
+                            className="usm-ftux-tooltip"
+                            isShown
+                            onDismiss={() => onDismissTooltip('shared-link-toggle')}
+                            position="top-right"
+                            showCloseButton
+                            text={sharedLinkToggleTooltip}
+                            theme="callout"
+                        >
+                            {toggleComponent}
+                        </Tooltip>
+                    );
+                }
                 return (
                     <Tooltip
                         position="top-right"

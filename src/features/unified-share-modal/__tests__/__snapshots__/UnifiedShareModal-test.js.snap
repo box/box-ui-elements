@@ -159,11 +159,13 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={false}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -386,11 +388,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={true}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -558,11 +562,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={true}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -730,6 +736,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={
@@ -739,6 +746,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
         showSharedLinkSettingsCallout={false}
         submitting={true}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={true}
       />
@@ -906,11 +914,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={true}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -1078,11 +1088,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={true}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -1396,11 +1408,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="web_link"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={false}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -1569,11 +1583,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="folder"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={true}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -1742,11 +1758,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={false}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -2124,11 +2142,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={false}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -2300,6 +2320,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={
@@ -2309,6 +2330,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
         showSharedLinkSettingsCallout={false}
         submitting={true}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={true}
       />
@@ -2476,11 +2498,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={false}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />
@@ -2647,11 +2671,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           }
         }
         itemType="file"
+        onDismissTooltip={[Function]}
         onEmailSharedLinkClick={[Function]}
         onToggleSharedLink={[Function]}
         sharedLink={Object {}}
         showSharedLinkSettingsCallout={false}
         submitting={false}
+        tooltips={Object {}}
         trackingProps={Object {}}
         triggerCopyOnLoad={false}
       />

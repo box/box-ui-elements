@@ -140,3 +140,9 @@ export type collaboratorType = {
 export type collaboratorsListType = {
     collaborators: Array<collaboratorType>,
 };
+
+export type tooltipComponentIdentifierType =
+    | 'shared-link-access-menu'
+    | 'shared-link-copy-button'
+    | 'shared-link-settings'
+    | 'shared-link-toggle';
