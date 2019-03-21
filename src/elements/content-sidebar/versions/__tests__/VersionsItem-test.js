@@ -27,7 +27,9 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
 
     describe('render', () => {
         test('should render an uploaded version correctly', () => {
-            const wrapper = getWrapper(getVersion({ action: 'upload' }));
+            const wrapper = getWrapper({
+                version: getVersion({ action: 'upload' }),
+            });
             const navButton = wrapper.closest(NavButton);
 
             expect(navButton.prop('disabled')).toBe(false);
@@ -38,7 +40,9 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         });
 
         test('should render a deleted version correctly', () => {
-            const wrapper = getWrapper(getVersion({ action: 'delete' }));
+            const wrapper = getWrapper({
+                version: getVersion({ action: 'delete' }),
+            });
             const navButton = wrapper.closest(NavButton);
 
             expect(navButton.prop('disabled')).toBe(true);
@@ -48,7 +52,9 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         });
 
         test('should default to an unknown user if none is provided', () => {
-            const wrapper = getWrapper(getVersion({ modified_by: undefined }));
+            const wrapper = getWrapper({
+                version: getVersion({ modified_by: undefined }),
+            });
             expect(wrapper).toMatchSnapshot();
         });
     });

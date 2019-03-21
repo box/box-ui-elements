@@ -31,8 +31,12 @@ exports[`elements/content-sidebar/versions/VersionsList render should match its 
     key="12345"
   >
     <withRouter(VersionsItem)
-      id="12345"
       isCurrent={true}
+      version={
+        Object {
+          "id": "12345",
+        }
+      }
     />
   </li>
 </ul>
@@ -47,8 +51,12 @@ exports[`elements/content-sidebar/versions/VersionsList render should match its 
     key="12345"
   >
     <withRouter(VersionsItem)
-      id="12345"
       isCurrent={true}
+      version={
+        Object {
+          "id": "12345",
+        }
+      }
     />
   </li>
   <li
@@ -56,8 +64,12 @@ exports[`elements/content-sidebar/versions/VersionsList render should match its 
     key="45678"
   >
     <withRouter(VersionsItem)
-      id="45678"
       isCurrent={false}
+      version={
+        Object {
+          "id": "45678",
+        }
+      }
     />
   </li>
 </ul>

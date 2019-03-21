@@ -39,7 +39,14 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions }: Props) => (
                     {error ? (
                         <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
                     ) : (
-                        <VersionsList versions={versions} />
+                        <VersionsList
+                            permissions={{
+                                can_delete: true,
+                                can_download: true,
+                                can_preview: true,
+                            }}
+                            versions={versions}
+                        />
                     )}
                 </SidebarSection>
             )}
