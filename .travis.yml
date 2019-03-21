@@ -16,6 +16,8 @@ jobs:
       script: commitlint-travis
     - name: "Code Lint"
       script: yarn lint
+    - name: "DEBUG"
+      script: uname -a && yarn run flow ls
     - name: "Flow Types"
       script: yarn run flow
     - name: "Unit Tests"
