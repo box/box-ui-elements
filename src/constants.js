@@ -316,12 +316,12 @@ export const HTTP_OPTIONS: 'OPTIONS' = 'OPTIONS';
 export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
-export const HTTP_STATUS_CODE_FORBIDDEN = 403;
-export const HTTP_STATUS_CODE_NOT_FOUND = 404;
-export const HTTP_STATUS_CODE_CONFLICT = 409;
-export const HTTP_STATUS_CODE_UNAUTHORIZED = 401;
-export const HTTP_STATUS_CODE_RATE_LIMIT = 429;
-export const HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR = 500;
+export const HTTP_STATUS_CODE_FORBIDDEN: 403 = 403;
+export const HTTP_STATUS_CODE_NOT_FOUND: 404 = 404;
+export const HTTP_STATUS_CODE_CONFLICT: 409 = 409;
+export const HTTP_STATUS_CODE_UNAUTHORIZED: 401 = 401;
+export const HTTP_STATUS_CODE_RATE_LIMIT: 429 = 429;
+export const HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR: 500 = 500;
 
 /* ------------------ Version Action Types  ---------------------- */
 export const VERSION_RESTORE_ACTION = 'restore';
@@ -345,14 +345,14 @@ export const TASK_INCOMPLETE: 'incomplete' = 'incomplete';
 export const TASK_REJECTED: 'rejected' = 'rejected';
 
 /* ------------------ New Task Statuses ----------------- */
-export const TASK_NEW_APPROVED = 'APPROVED';
-export const TASK_NEW_COMPLETED = 'COMPLETED';
-export const TASK_NEW_INCOMPLETE = 'NOT_STARTED';
-export const TASK_NEW_REJECTED = 'REJECTED';
+export const TASK_NEW_APPROVED: 'APPROVED' = 'APPROVED';
+export const TASK_NEW_COMPLETED: 'COMPLETED' = 'COMPLETED';
+export const TASK_NEW_INCOMPLETE: 'NOT_STARTED' = 'NOT_STARTED';
+export const TASK_NEW_REJECTED: 'REJECTED' = 'REJECTED';
 
 /* ------------------ New Task types ----------------- */
-export const TASK_TYPE_GENERAL = 'general';
-export const TASK_TYPE_APPROVAL = 'approval';
+export const TASK_TYPE_GENERAL: 'general' = 'general';
+export const TASK_TYPE_APPROVAL: 'approval' = 'approval';
 
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {

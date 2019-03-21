@@ -2,6 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
+import { silverChalice } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -12,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconSearch = ({ className = 'icon-search', color = '#AFAFAF', height = 14, title, width = 14 }: Props) => (
+const IconSearch = ({ className = 'icon-search', color = silverChalice, height = 14, title, width = 14 }: Props) => (
     <AccessibleSVG
         className={`icon-search ${className}`}
         height={height}

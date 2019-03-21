@@ -275,6 +275,16 @@ describe('feature/left-sidebar/LeftSidebar', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render FooterIndicator if indicatorText is set', () => {
+        const leftSidebarProps = {
+            indicatorText: 'abcde',
+        };
+
+        const wrapper = shallow(<LeftSidebar leftSidebarProps={leftSidebarProps} />);
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
     describe('checkAndChangeScrollShadows()', () => {
         [
             // isn't scrollable

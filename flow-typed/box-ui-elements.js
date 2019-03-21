@@ -699,7 +699,10 @@ type MarkerPaginatedCollection<T> = {
     next_marker: ?string,
 };
 
-type TaskType = typeof TASK_TYPE_GENERAL | typeof TASK_TYPE_APPROVAL | null;
+// See https://github.com/facebook/flow/issues/7574
+// This is currently *not* enforcing the constant types
+// type TaskType = typeof TASK_TYPE_GENERAL | typeof TASK_TYPE_APPROVAL;
+type TaskType = 'general' | 'approval';
 
 type TaskNew = {|
     assigned_to: MarkerPaginatedCollection<TaskCollabAssignee>,
