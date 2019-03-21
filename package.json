@@ -264,9 +264,11 @@
         "filesize": "^4.1.2",
         "form-serialize": "^0.7.2",
         "formik": "^1.5.4",
+        "ilib-tree-node": "^1.2.0",
         "immutable": "^3.7.4",
         "jsuri": "^1.3.1",
         "lodash": "^4.17.5",
+        "message-accumulator": "^2.1.1",
         "mousetrap": "^1.6.3",
         "pikaday": "^1.8.0",
         "query-string": "5.1.1",
@@ -288,9 +290,5 @@
         "scroll-into-view-if-needed": "^1.5.0",
         "tabbable": "^1.1.2",
         "uuid": "^3.3.2"
-    },
-    "dependencies": {
-        "ilib-tree-node": "^1.2.0",
-        "message-accumulator": "^2.1.1"
     }
 }

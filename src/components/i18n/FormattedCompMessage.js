@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
+import isDevEnvironment from '../../utils/env';
 import Composition from './Composition';
 
 type Props = {
@@ -87,7 +88,7 @@ class FormattedCompMessage extends React.Component<Props, State> {
 
         const sourceElements = defaultMessage || children;
 
-        if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'dev') {
+        if (isDevEnvironment()) {
             if (!id) {
                 throw new Error('The id property is required on a FormattedCompMessage component.');
             }
@@ -105,7 +106,7 @@ class FormattedCompMessage extends React.Component<Props, State> {
             if (!isNaN(Number(count))) {
                 if (children) {
                     source = this.composePluralString(children);
-                } else if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'dev') {
+                } else if (isDevEnvironment()) {
                     throw new Error('Cannot use count prop on a FormattedCompMessage component that has no children.');
                 }
             } else {
@@ -136,7 +137,7 @@ class FormattedCompMessage extends React.Component<Props, State> {
             }
         });
         if (!categories.one || !categories.other) {
-            if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'dev') {
+            if (isDevEnvironment()) {
                 throw new Error(
                     'Cannot use count prop on a FormattedCompMessage component without giving both a "one" and "other" Plural component in the children.',
                 );

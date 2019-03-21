@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
 
+import isDevEnvironment from '../../utils/env';
+
 type Props = {
     /** The value of this parameter */
     description: string,
@@ -25,34 +27,35 @@ type Props = {
  */
 class Param extends React.Component<Props> {
     getValue() {
-        switch (typeof this.props.value) {
+        const { value } = this.props;
+        switch (typeof value) {
             default:
             case 'undefined':
                 return '';
 
             case 'boolean':
             case 'number':
-                return String(this.props.value);
+                return String(value);
 
             case 'function':
-                return this.props.value();
+                return value();
 
             case 'string':
-                return this.props.value;
+                return value;
 
             case 'object':
-                if (this.props.value === null) {
+                if (value === null) {
                     return '';
                 }
-                if (React.isValidElement(this.props.value)) {
-                    return this.props.value;
+                if (React.isValidElement(value)) {
+                    return value;
                 }
-                return this.props.value.toString();
+                return value.toString();
         }
     }
 
     render() {
-        if ((process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'dev') && !this.props.description) {
+        if (isDevEnvironment() && !this.props.description) {
             throw new Error('The description property is required on a Param component.');
         }
         return this.getValue();
