@@ -62,29 +62,40 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
   <div
     className="shared-link-field-row"
   >
-    <TextInputWithCopyButton
-      autofocus={false}
-      buttonDefaultText={
-        <FormattedMessage
-          defaultMessage="Copy"
-          id="boxui.core.copy"
-        />
-      }
-      buttonProps={Object {}}
-      buttonSuccessText={
-        <FormattedMessage
-          defaultMessage="Copied"
-          id="boxui.core.copied"
-        />
-      }
-      className="shared-link-field-container"
-      hideOptionalLabel={true}
-      label=""
-      readOnly={true}
-      successStateDuration={3000}
-      type="url"
-      value="https://example.com/shared-link"
-    />
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isShown={false}
+      onDismiss={[Function]}
+      position="middle-right"
+      showCloseButton={true}
+      theme="callout"
+    >
+      <TextInputWithCopyButton
+        autofocus={false}
+        buttonDefaultText={
+          <FormattedMessage
+            defaultMessage="Copy"
+            id="boxui.core.copy"
+          />
+        }
+        buttonProps={Object {}}
+        buttonSuccessText={
+          <FormattedMessage
+            defaultMessage="Copied"
+            id="boxui.core.copied"
+          />
+        }
+        className="shared-link-field-container"
+        hideOptionalLabel={true}
+        label=""
+        readOnly={true}
+        successStateDuration={3000}
+        type="url"
+        value="https://example.com/shared-link"
+      />
+    </Tooltip>
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
@@ -114,6 +125,8 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
+      onDismissTooltip={[Function]}
+      tooltipContent={null}
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
@@ -188,29 +201,40 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
   <div
     className="shared-link-field-row"
   >
-    <TextInputWithCopyButton
-      autofocus={false}
-      buttonDefaultText={
-        <FormattedMessage
-          defaultMessage="Copy"
-          id="boxui.core.copy"
-        />
-      }
-      buttonProps={Object {}}
-      buttonSuccessText={
-        <FormattedMessage
-          defaultMessage="Copied"
-          id="boxui.core.copied"
-        />
-      }
-      className="shared-link-field-container"
-      hideOptionalLabel={true}
-      label=""
-      readOnly={true}
-      successStateDuration={3000}
-      type="url"
-      value="https://example.com/shared-link"
-    />
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isShown={false}
+      onDismiss={[Function]}
+      position="middle-right"
+      showCloseButton={true}
+      theme="callout"
+    >
+      <TextInputWithCopyButton
+        autofocus={false}
+        buttonDefaultText={
+          <FormattedMessage
+            defaultMessage="Copy"
+            id="boxui.core.copy"
+          />
+        }
+        buttonProps={Object {}}
+        buttonSuccessText={
+          <FormattedMessage
+            defaultMessage="Copied"
+            id="boxui.core.copied"
+          />
+        }
+        className="shared-link-field-container"
+        hideOptionalLabel={true}
+        label=""
+        readOnly={true}
+        successStateDuration={3000}
+        type="url"
+        value="https://example.com/shared-link"
+      />
+    </Tooltip>
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
@@ -240,6 +264,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
+      onDismissTooltip={[Function]}
+      tooltipContent={null}
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
@@ -345,29 +371,40 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   <div
     className="shared-link-field-row"
   >
-    <TextInputWithCopyButton
-      autofocus={false}
-      buttonDefaultText={
-        <FormattedMessage
-          defaultMessage="Copy"
-          id="boxui.core.copy"
-        />
-      }
-      buttonProps={Object {}}
-      buttonSuccessText={
-        <FormattedMessage
-          defaultMessage="Copied"
-          id="boxui.core.copied"
-        />
-      }
-      className="shared-link-field-container"
-      hideOptionalLabel={true}
-      label=""
-      readOnly={true}
-      successStateDuration={3000}
-      type="url"
-      value="https://example.com/shared-link"
-    />
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isShown={false}
+      onDismiss={[Function]}
+      position="middle-right"
+      showCloseButton={true}
+      theme="callout"
+    >
+      <TextInputWithCopyButton
+        autofocus={false}
+        buttonDefaultText={
+          <FormattedMessage
+            defaultMessage="Copy"
+            id="boxui.core.copy"
+          />
+        }
+        buttonProps={Object {}}
+        buttonSuccessText={
+          <FormattedMessage
+            defaultMessage="Copied"
+            id="boxui.core.copied"
+          />
+        }
+        className="shared-link-field-container"
+        hideOptionalLabel={true}
+        label=""
+        readOnly={true}
+        successStateDuration={3000}
+        type="url"
+        value="https://example.com/shared-link"
+      />
+    </Tooltip>
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
@@ -397,6 +434,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
+      onDismissTooltip={[Function]}
+      tooltipContent={null}
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
@@ -506,29 +545,40 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
   <div
     className="shared-link-field-row"
   >
-    <TextInputWithCopyButton
-      autofocus={false}
-      buttonDefaultText={
-        <FormattedMessage
-          defaultMessage="Copy"
-          id="boxui.core.copy"
-        />
-      }
-      buttonProps={Object {}}
-      buttonSuccessText={
-        <FormattedMessage
-          defaultMessage="Copied"
-          id="boxui.core.copied"
-        />
-      }
-      className="shared-link-field-container"
-      hideOptionalLabel={true}
-      label=""
-      readOnly={true}
-      successStateDuration={3000}
-      type="url"
-      value="http://example.com/s/abc"
-    />
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isShown={false}
+      onDismiss={[Function]}
+      position="middle-right"
+      showCloseButton={true}
+      theme="callout"
+    >
+      <TextInputWithCopyButton
+        autofocus={false}
+        buttonDefaultText={
+          <FormattedMessage
+            defaultMessage="Copy"
+            id="boxui.core.copy"
+          />
+        }
+        buttonProps={Object {}}
+        buttonSuccessText={
+          <FormattedMessage
+            defaultMessage="Copied"
+            id="boxui.core.copied"
+          />
+        }
+        className="shared-link-field-container"
+        hideOptionalLabel={true}
+        label=""
+        readOnly={true}
+        successStateDuration={3000}
+        type="url"
+        value="http://example.com/s/abc"
+      />
+    </Tooltip>
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
@@ -556,6 +606,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       itemType="file"
+      onDismissTooltip={[Function]}
+      tooltipContent={null}
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
@@ -624,29 +676,40 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <div
     className="shared-link-field-row"
   >
-    <TextInputWithCopyButton
-      autofocus={false}
-      buttonDefaultText={
-        <FormattedMessage
-          defaultMessage="Copy"
-          id="boxui.core.copy"
-        />
-      }
-      buttonProps={Object {}}
-      buttonSuccessText={
-        <FormattedMessage
-          defaultMessage="Copied"
-          id="boxui.core.copied"
-        />
-      }
-      className="shared-link-field-container"
-      hideOptionalLabel={true}
-      label=""
-      readOnly={true}
-      successStateDuration={3000}
-      type="url"
-      value="https://example.com/shared-link"
-    />
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isShown={false}
+      onDismiss={[Function]}
+      position="middle-right"
+      showCloseButton={true}
+      theme="callout"
+    >
+      <TextInputWithCopyButton
+        autofocus={false}
+        buttonDefaultText={
+          <FormattedMessage
+            defaultMessage="Copy"
+            id="boxui.core.copy"
+          />
+        }
+        buttonProps={Object {}}
+        buttonSuccessText={
+          <FormattedMessage
+            defaultMessage="Copied"
+            id="boxui.core.copied"
+          />
+        }
+        className="shared-link-field-container"
+        hideOptionalLabel={true}
+        label=""
+        readOnly={true}
+        successStateDuration={3000}
+        type="url"
+        value="https://example.com/shared-link"
+      />
+    </Tooltip>
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
@@ -676,6 +739,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
+      onDismissTooltip={[Function]}
+      tooltipContent={null}
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
@@ -738,29 +803,40 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <div
     className="shared-link-field-row"
   >
-    <TextInputWithCopyButton
-      autofocus={false}
-      buttonDefaultText={
-        <FormattedMessage
-          defaultMessage="Copy"
-          id="boxui.core.copy"
-        />
-      }
-      buttonProps={Object {}}
-      buttonSuccessText={
-        <FormattedMessage
-          defaultMessage="Copied"
-          id="boxui.core.copied"
-        />
-      }
-      className="shared-link-field-container"
-      hideOptionalLabel={true}
-      label=""
-      readOnly={true}
-      successStateDuration={3000}
-      type="url"
-      value="https://example.com/shared-link"
-    />
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isShown={false}
+      onDismiss={[Function]}
+      position="middle-right"
+      showCloseButton={true}
+      theme="callout"
+    >
+      <TextInputWithCopyButton
+        autofocus={false}
+        buttonDefaultText={
+          <FormattedMessage
+            defaultMessage="Copy"
+            id="boxui.core.copy"
+          />
+        }
+        buttonProps={Object {}}
+        buttonSuccessText={
+          <FormattedMessage
+            defaultMessage="Copied"
+            id="boxui.core.copied"
+          />
+        }
+        className="shared-link-field-container"
+        hideOptionalLabel={true}
+        label=""
+        readOnly={true}
+        successStateDuration={3000}
+        type="url"
+        value="https://example.com/shared-link"
+      />
+    </Tooltip>
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
@@ -790,6 +866,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
+      onDismissTooltip={[Function]}
+      tooltipContent={null}
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
@@ -877,29 +955,40 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
   <div
     className="shared-link-field-row"
   >
-    <TextInputWithCopyButton
-      autofocus={false}
-      buttonDefaultText={
-        <FormattedMessage
-          defaultMessage="Copy"
-          id="boxui.core.copy"
-        />
-      }
-      buttonProps={Object {}}
-      buttonSuccessText={
-        <FormattedMessage
-          defaultMessage="Copied"
-          id="boxui.core.copied"
-        />
-      }
-      className="shared-link-field-container"
-      hideOptionalLabel={true}
-      label=""
-      readOnly={true}
-      successStateDuration={3000}
-      type="url"
-      value="https://example.com/shared-link"
-    />
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isShown={false}
+      onDismiss={[Function]}
+      position="middle-right"
+      showCloseButton={true}
+      theme="callout"
+    >
+      <TextInputWithCopyButton
+        autofocus={false}
+        buttonDefaultText={
+          <FormattedMessage
+            defaultMessage="Copy"
+            id="boxui.core.copy"
+          />
+        }
+        buttonProps={Object {}}
+        buttonSuccessText={
+          <FormattedMessage
+            defaultMessage="Copied"
+            id="boxui.core.copied"
+          />
+        }
+        className="shared-link-field-container"
+        hideOptionalLabel={true}
+        label=""
+        readOnly={true}
+        successStateDuration={3000}
+        type="url"
+        value="https://example.com/shared-link"
+      />
+    </Tooltip>
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
@@ -929,6 +1018,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
+      onDismissTooltip={[Function]}
+      tooltipContent={null}
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,

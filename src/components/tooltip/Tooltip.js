@@ -79,6 +79,8 @@ type Props = {
     constrainToWindow: boolean,
     /** Forces the tooltip to be shown or hidden (useful for errors) */
     isShown?: boolean,
+    /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
+    onDismiss?: () => void,
     /** Where to position the tooltip relative to the wrapped component */
     position: Position,
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
@@ -110,7 +112,11 @@ class Tooltip extends React.Component<Props, State> {
     tooltipID = uniqueId('tooltip');
 
     closeTooltip = () => {
+        const { onDismiss } = this.props;
         this.setState({ wasClosedByUser: true });
+        if (onDismiss) {
+            onDismiss();
+        }
     };
 
     fireChildEvent = (type: string, event: SyntheticEvent<>) => {

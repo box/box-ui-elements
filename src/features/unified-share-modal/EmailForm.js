@@ -235,6 +235,7 @@ class EmailForm extends React.Component<Props, State> {
         const contactsField = (
             <div className="tooltip-target">
                 <Tooltip
+                    className="usm-ftux-tooltip"
                     isShown={showEnterEmailsCallout}
                     position="middle-right"
                     showCloseButton

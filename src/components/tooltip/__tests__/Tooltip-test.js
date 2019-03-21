@@ -205,6 +205,32 @@ describe('components/tooltip/Tooltip', () => {
         });
     });
 
+    describe('closeTooltip()', () => {
+        test('should update the wasClosedByUser state', () => {
+            const wrapper = shallow(
+                <Tooltip text="hi">
+                    <button />
+                </Tooltip>,
+            );
+
+            expect(wrapper.state('wasClosedByUser')).toBe(false);
+            wrapper.instance().closeTooltip();
+            expect(wrapper.state('wasClosedByUser')).toBe(true);
+        });
+
+        test('should call onDismiss if provided', () => {
+            const onDismissMock = jest.fn();
+            const wrapper = shallow(
+                <Tooltip text="hi" onDismiss={onDismissMock}>
+                    <button />
+                </Tooltip>,
+            );
+
+            wrapper.instance().closeTooltip();
+            expect(onDismissMock).toHaveBeenCalled();
+        });
+    });
+
     describe('handleMouseEnter()', () => {
         test('should correctly handle mouseenter events', () => {
             const onMouseEnter = sinon.spy();

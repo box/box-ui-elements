@@ -4,6 +4,24 @@ import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY } from '../constants';
 import SharedLinkAccessMenu from '../SharedLinkAccessMenu';
 
 describe('features/unified-share-modal/SharedLinkAccessMenu', () => {
+    const getWrapper = props =>
+        shallow(
+            <SharedLinkAccessMenu
+                accessLevel={ANYONE_IN_COMPANY}
+                changeAccessLevel={() => {}}
+                classificationName="Internal"
+                enterpriseName="Box"
+                isDownloadAllowed
+                isEditAllowed
+                isPreviewAllowed
+                itemType="folder"
+                onDismissTooltip={() => {}}
+                submitting={false}
+                tooltipContent={null}
+                {...props}
+            />,
+        );
+
     describe('render()', () => {
         [
             {
@@ -14,22 +32,14 @@ describe('features/unified-share-modal/SharedLinkAccessMenu', () => {
             },
         ].forEach(({ submitting }) => {
             test('should render correct menu', () => {
-                const sharedLinkAccessMenu = shallow(
-                    <SharedLinkAccessMenu
-                        accessLevel={ANYONE_WITH_LINK}
-                        changeAccessLevel={() => {}}
-                        classificationName="Internal"
-                        enterpriseName="Box"
-                        isDownloadAllowed
-                        isEditAllowed
-                        isPreviewAllowed
-                        itemType="folder"
-                        submitting={submitting}
-                    />,
-                );
-
+                const sharedLinkAccessMenu = getWrapper({ submitting });
                 expect(sharedLinkAccessMenu).toMatchSnapshot();
             });
+        });
+
+        test('should render tooltipContent if provided', () => {
+            const sharedLinkAccessMenu = getWrapper({ tooltipContent: 'Hello, world!' });
+            expect(sharedLinkAccessMenu).toMatchSnapshot();
         });
     });
 
@@ -37,22 +47,12 @@ describe('features/unified-share-modal/SharedLinkAccessMenu', () => {
         test('should call tracking function on menu change if it is set', () => {
             const changeMenuMock = jest.fn();
             const accessLevelSpy = jest.fn();
-            const sharedLinkPermissionMenu = shallow(
-                <SharedLinkAccessMenu
-                    accessLevel={ANYONE_IN_COMPANY}
-                    changeAccessLevel={accessLevelSpy}
-                    classificationName="Internal"
-                    enterpriseName="Box"
-                    isDownloadAllowed
-                    isEditAllowed
-                    isPreviewAllowed
-                    itemType="folder"
-                    submitting={false}
-                    trackingProps={{
-                        onChangeSharedLinkAccessLevel: changeMenuMock,
-                    }}
-                />,
-            );
+            const sharedLinkPermissionMenu = getWrapper({
+                changeAccessLevel: accessLevelSpy,
+                trackingProps: {
+                    onChangeSharedLinkAccessLevel: changeMenuMock,
+                },
+            });
             sharedLinkPermissionMenu.instance().onChangeAccessLevel(ANYONE_WITH_LINK);
 
             expect(changeMenuMock).toBeCalled();
@@ -62,22 +62,12 @@ describe('features/unified-share-modal/SharedLinkAccessMenu', () => {
         test('should not call tracking function on menu change if it is set (when accessLevel is the same value)', () => {
             const changeMenuMock = jest.fn();
             const accessLevelSpy = jest.fn();
-            const sharedLinkPermissionMenu = shallow(
-                <SharedLinkAccessMenu
-                    accessLevel={ANYONE_IN_COMPANY}
-                    changeAccessLevel={accessLevelSpy}
-                    classificationName="Internal"
-                    enterpriseName="Box"
-                    isDownloadAllowed
-                    isEditAllowed
-                    isPreviewAllowed
-                    itemType="folder"
-                    submitting={false}
-                    trackingProps={{
-                        onChangeSharedLinkAccessLevel: changeMenuMock,
-                    }}
-                />,
-            );
+            const sharedLinkPermissionMenu = getWrapper({
+                changeAccessLevel: accessLevelSpy,
+                trackingProps: {
+                    onChangeSharedLinkAccessLevel: changeMenuMock,
+                },
+            });
             sharedLinkPermissionMenu.instance().onChangeAccessLevel(ANYONE_IN_COMPANY);
 
             expect(changeMenuMock).not.toBeCalled();
