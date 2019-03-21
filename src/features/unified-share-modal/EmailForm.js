@@ -289,7 +289,7 @@ class EmailForm extends React.Component<Props, State> {
                         label={<FormattedMessage {...messages.messageTitle} />}
                         onChange={this.handleMessageChange}
                         placeholder={intl.formatMessage(commonMessages.messageSelectorPlaceholder)}
-                        rows={4}
+                        rows={3}
                         value={message}
                         {...messageProps}
                     />
