@@ -22,30 +22,32 @@ import API from '../../api';
 import Content from './Content';
 import Footer from './Footer';
 import {
-    DEFAULT_HOSTNAME_UPLOAD,
+    CLIENT_NAME_CONTENT_PICKER,
     DEFAULT_HOSTNAME_API,
-    DEFAULT_SEARCH_DEBOUNCE,
-    SORT_ASC,
-    FIELD_NAME,
+    DEFAULT_HOSTNAME_UPLOAD,
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_SIZE,
     DEFAULT_ROOT,
-    VIEW_SEARCH,
-    VIEW_FOLDER,
-    VIEW_SELECTED,
-    VIEW_ERROR,
-    VIEW_RECENTS,
+    DEFAULT_SEARCH_DEBOUNCE,
+    DEFAULT_VIEW_FILES,
+    DEFAULT_VIEW_RECENTS,
+    ERROR_CODE_ITEM_NAME_IN_USE,
+    ERROR_CODE_ITEM_NAME_INVALID,
+    ERROR_CODE_ITEM_NAME_TOO_LONG,
+    FIELD_NAME,
+    FIELD_SHARED_LINK,
+    SORT_ASC,
     TYPE_FILE,
     TYPE_FOLDER,
     TYPE_WEBLINK,
-    CLIENT_NAME_CONTENT_PICKER,
-    DEFAULT_PAGE_NUMBER,
-    DEFAULT_PAGE_SIZE,
-    DEFAULT_VIEW_FILES,
-    DEFAULT_VIEW_RECENTS,
-    ERROR_CODE_ITEM_NAME_INVALID,
-    ERROR_CODE_ITEM_NAME_TOO_LONG,
-    ERROR_CODE_ITEM_NAME_IN_USE,
     TYPED_ID_FOLDER_PREFIX,
+    VIEW_ERROR,
+    VIEW_FOLDER,
+    VIEW_RECENTS,
+    VIEW_SEARCH,
+    VIEW_SELECTED,
 } from '../../constants';
+import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -759,8 +761,8 @@ class ContentPicker extends Component<Props, State> {
      * @param {Object} item file or folder object
      * @return {void}
      */
-    select = (item: BoxItem): void => {
-        const { type: selectableType, maxSelectable }: Props = this.props;
+    select = (item: BoxItem, forceSharedLink: boolean = true): void => {
+        const { canSetShareAccess, type: selectableType, maxSelectable }: Props = this.props;
         const {
             view,
             selected,
@@ -793,12 +795,6 @@ class ContentPicker extends Component<Props, State> {
             // item selection mode, we should also unselect any
             // prior item that was item that was selected.
 
-            // Check if we hit the selection limit
-            // Ignore when in single file selection mode.
-            if (hasHitSelectionLimit && !isSingleFileSelection) {
-                return;
-            }
-
             // Clear out the prior item for single file selection mode
             if (selectedCount > 0 && isSingleFileSelection) {
                 const prior = selectedKeys[0]; // only one item
@@ -809,6 +805,17 @@ class ContentPicker extends Component<Props, State> {
             // Select the new item
             item.selected = true;
             selected[cacheKey] = item;
+
+            // If can set share access, fetch the shared link properties of the item
+            if (canSetShareAccess && forceSharedLink) {
+                this.showSharedLinkDropdown(item);
+            }
+
+            // Check if we hit the selection limit
+            // Ignore when in single file selection mode.
+            if (hasHitSelectionLimit && !isSingleFileSelection) {
+                return;
+            }
         }
 
         const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
@@ -818,6 +825,55 @@ class ContentPicker extends Component<Props, State> {
                 this.showSelected();
             }
         });
+    };
+
+    /**
+     * Show the inline shared link dropdown
+     * @param {BoxItem} item - The item (folder, file, weblink)
+     * @returns {Promise}
+     */
+    showSharedLinkDropdown = (item: BoxItem): void => {
+        const { id, type }: BoxItem = item;
+
+        switch (type) {
+            case TYPE_FOLDER:
+                this.api.getFolderAPI().getFolderFields(id, this.handleSharedLinkResponse, () => {}, {
+                    fields: FILE_SHARED_LINK_FIELDS_TO_FETCH,
+                });
+                break;
+            case TYPE_FILE:
+                this.api
+                    .getFileAPI()
+                    .getFile(id, this.handleSharedLinkResponse, () => {}, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
+                break;
+            case TYPE_WEBLINK:
+                break;
+            default:
+                throw new Error('Unknown Type');
+        }
+    };
+
+    /**
+     * Handles the shared link info by either creating a share link using enterprise defaults if
+     * it does not already exist, otherwise update the item in the state currentCollection.
+     *
+     * @param {Object} item file or folder
+     * @returns {void}
+     */
+    handleSharedLinkResponse = (item: BoxItem) => {
+        // if no shared link currently exists, create a shared link with enterprise default
+        if (!item[FIELD_SHARED_LINK]) {
+            this.changeShareAccess(null, item);
+        } else {
+            const { selected } = this.state;
+            const { id, type } = item;
+            const cacheKey = this.api.getAPI(type).getCacheKey(id);
+            // if shared link already exists, update the collection in state
+            this.updateItemInCollection(item);
+            if (item.selected && item !== selected[cacheKey]) {
+                this.select(item, false);
+            }
+        }
     };
 
     /**
@@ -845,11 +901,29 @@ class ContentPicker extends Component<Props, State> {
         }
 
         this.api.getAPI(type).share(item, access, (updatedItem: BoxItem) => {
-            this.refreshCollection();
+            this.updateItemInCollection(updatedItem);
             if (item.selected) {
-                this.select(updatedItem);
+                this.select(updatedItem, false);
             }
         });
+    };
+
+    /**
+     * Updates the BoxItem in the state's currentCollection
+     *
+     * @param {Object} item file or folder object
+     * @returns {void}
+     */
+    updateItemInCollection = (item: BoxItem) => {
+        const { currentCollection } = this.state;
+        const { items = [] } = currentCollection;
+        const newState = {
+            currentCollection: {
+                ...currentCollection,
+                items: items.map(collectionItem => (collectionItem.id === item.id ? item : collectionItem)),
+            },
+        };
+        this.setState(newState);
     };
 
     /**

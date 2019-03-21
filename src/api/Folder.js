@@ -5,6 +5,7 @@
  */
 
 import noop from 'lodash/noop';
+import union from 'lodash/union';
 import flatten from '../utils/flatten';
 import { FOLDER_FIELDS_TO_FETCH } from '../utils/fields';
 import { getBadItemError } from '../utils/error';
@@ -160,7 +161,7 @@ class Folder extends Item {
             new FileAPI(this.options),
             new WebLinkAPI(this.options),
         );
-        this.itemCache = (this.itemCache || []).concat(flattened);
+        this.itemCache = union(this.itemCache, flattened);
 
         this.getCache().set(
             this.key,
@@ -175,30 +176,83 @@ class Folder extends Item {
     };
 
     /**
+     * Handles a request for folder details
+     *
+     * @param {Object} data - XHR response data
+     * @returns {void}
+     */
+    folderDetailsSuccessHandler = ({ data }: { data: BoxItem }): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        const cachedEntry = this.getCache().get(this.key);
+        const updatedCacheEntry = { ...cachedEntry, ...data };
+
+        this.getCache().set(this.key, updatedCacheEntry);
+        this.successCallback(updatedCacheEntry);
+    };
+
+    /**
      * Does the network request for fetching a folder
      *
-     * @return {void}
+     * @param {Array<String>} fields Array of field strings
+     * @return {Promise}
      */
-    folderRequest(): Promise<void> {
+    folderRequest(options: FetchOptions = {}, successHandler?: Function = this.folderSuccessHandler): Promise<any> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
 
+        const { fields, noPagination } = options;
+
+        const requestFields = fields || FOLDER_FIELDS_TO_FETCH;
+
         this.errorCode = ERROR_CODE_FETCH_FOLDER;
+
+        let params;
+        if (noPagination) {
+            params = { fields: requestFields.toString() };
+        } else {
+            params = {
+                direction: this.sortDirection.toLowerCase(),
+                limit: this.limit,
+                offset: this.offset,
+                fields: requestFields.toString(),
+                sort: this.sortBy.toLowerCase(),
+            };
+        }
 
         return this.xhr
             .get({
                 url: this.getUrl(this.id),
-                params: {
-                    direction: this.sortDirection.toLowerCase(),
-                    limit: this.limit,
-                    offset: this.offset,
-                    fields: FOLDER_FIELDS_TO_FETCH.toString(),
-                    sort: this.sortBy.toLowerCase(),
-                },
+                params,
             })
-            .then(this.folderSuccessHandler)
+            .then(successHandler)
             .catch(this.errorHandler);
+    }
+
+    /**
+     * Gets a box folder properties. If you want to get the items, you should use `getFolder`
+     *
+     * @param {string} id - Folder id
+     * @param {Function} successCallback - Function to call with results
+     * @param {Function} errorCallback - Function to call with errors
+     * @param {Object} options - Options
+     * @returns {void}
+     */
+    getFolderFields(id: string, successCallback: Function, errorCallback: Function, options: FetchOptions = {}): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        // Save references
+        this.id = id;
+        this.key = this.getCacheKey(id);
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        this.folderRequest({ ...options, noPagination: true }, this.folderDetailsSuccessHandler);
     }
 
     /**
