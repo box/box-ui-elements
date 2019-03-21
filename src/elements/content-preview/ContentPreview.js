@@ -349,7 +349,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const fileVersionId = getProp(file, versionPath);
         let loadPreview = false;
 
-        if (prevSelectedVersionId !== selectedVersionId) {
+        if (selectedVersionId !== prevSelectedVersionId) {
             // Load preview if the user has selected a non-current version of the file
             loadPreview = true;
         } else if (fileVersionId && prevFileVersionId) {
