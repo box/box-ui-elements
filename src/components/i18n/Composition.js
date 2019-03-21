@@ -4,6 +4,7 @@
 import React from 'react';
 import * as MA from 'message-accumulator';
 import * as N from 'ilib-tree-node';
+import { JSTYPE_BOOLEAN, JSTYPE_NUMBER, JSTYPE_OBJECT, JSTYPE_STRING } from '../../constants';
 
 const MessageAccumulator = MA.default;
 const Node = N.default;
@@ -23,7 +24,7 @@ class Composition {
 
     recompose(element) {
         switch (typeof element) {
-            case 'object':
+            case JSTYPE_OBJECT:
                 if (Array.isArray(element)) {
                     element.forEach(subelement => this.recompose(subelement));
                 } else if (element) {
@@ -42,12 +43,12 @@ class Composition {
                 }
                 break;
 
-            case 'number':
-            case 'boolean':
+            case JSTYPE_NUMBER:
+            case JSTYPE_BOOLEAN:
                 this.ma.addText(String(element));
                 break;
 
-            case 'string':
+            case JSTYPE_STRING:
                 this.ma.addText(element);
                 break;
 

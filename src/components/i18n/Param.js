@@ -2,6 +2,14 @@
 import * as React from 'react';
 
 import isDevEnvironment from '../../utils/env';
+import {
+    JSTYPE_BOOLEAN,
+    JSTYPE_FUNCTION,
+    JSTYPE_NUMBER,
+    JSTYPE_OBJECT,
+    JSTYPE_STRING,
+    JSTYPE_UNDEFINED,
+} from '../../constants';
 
 type Props = {
     /** The value of this parameter */
@@ -30,20 +38,20 @@ class Param extends React.Component<Props> {
         const { value } = this.props;
         switch (typeof value) {
             default:
-            case 'undefined':
+            case JSTYPE_UNDEFINED:
                 return '';
 
-            case 'boolean':
-            case 'number':
+            case JSTYPE_BOOLEAN:
+            case JSTYPE_NUMBER:
                 return String(value);
 
-            case 'function':
+            case JSTYPE_FUNCTION:
                 return value();
 
-            case 'string':
+            case JSTYPE_STRING:
                 return value;
 
-            case 'object':
+            case JSTYPE_OBJECT:
                 if (value === null) {
                     return '';
                 }
