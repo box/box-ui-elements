@@ -3,6 +3,14 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
 import isDevEnvironment from '../../utils/env';
+import {
+    CATEGORY_ZERO,
+    CATEGORY_ONE,
+    CATEGORY_TWO,
+    CATEGORY_FEW,
+    CATEGORY_MANY,
+    CATEGORY_OTHER,
+} from '../../constants';
 import Composition from './Composition';
 
 type Props = {
@@ -147,7 +155,14 @@ class FormattedCompMessage extends React.Component<Props, State> {
         // we always end up with the same string regardless of
         // the order that the Plural elements were specified in
         // the source code
-        const categoriesString = ['zero', 'one', 'two', 'few', 'many', 'other']
+        const categoriesString = [
+            CATEGORY_ZERO,
+            CATEGORY_ONE,
+            CATEGORY_TWO,
+            CATEGORY_FEW,
+            CATEGORY_MANY,
+            CATEGORY_OTHER,
+        ]
             .map(category => (categories[category] ? ` ${category} {${categories[category]}}` : ''))
             .join('');
 

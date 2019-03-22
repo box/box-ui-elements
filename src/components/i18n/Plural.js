@@ -1,13 +1,14 @@
 // @flow
 import * as React from 'react';
 import Composition from './Composition';
-
-export const CATEGORY_ZERO: 'zero' = 'zero';
-export const CATEGORY_ONE: 'one' = 'one';
-export const CATEGORY_TWO: 'two' = 'two';
-export const CATEGORY_FEW: 'few' = 'few';
-export const CATEGORY_MANY: 'many' = 'many';
-export const CATEGORY_OTHER: 'other' = 'other';
+import {
+    CATEGORY_ZERO,
+    CATEGORY_ONE,
+    CATEGORY_TWO,
+    CATEGORY_FEW,
+    CATEGORY_MANY,
+    CATEGORY_OTHER,
+} from '../../constants';
 
 type Props = {
     /** The plural category this string. (required) */
