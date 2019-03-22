@@ -24,9 +24,6 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
     const isDirectLinkAvailable = true;
     const isDirectLinkUnavailableDueToDownloadSettings = true;
 
-    const VanityNameSectionMock = () => <div />;
-    const PasswordSectionMock = () => <div />;
-
     const getWrapper = (props = {}) =>
         shallow(
             <SharedLinkSettingsModal
@@ -47,17 +44,6 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
                 {...props}
             />,
         );
-
-    beforeEach(() => {
-        SharedLinkSettingsModal.__Rewire__('VanityNameSection', VanityNameSectionMock);
-        SharedLinkSettingsModal.__Rewire__('PasswordSection', PasswordSectionMock);
-    });
-
-    afterEach(() => {
-        SharedLinkSettingsModal.__ResetDependency__('VanityNameSection');
-        SharedLinkSettingsModal.__ResetDependency__('PasswordSection');
-        sandbox.verifyAndRestore();
-    });
 
     describe('componentWillReceiveProps()', () => {
         test('should update errors in state when error props change', () => {
@@ -188,13 +174,23 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
                 vanityNameError: 'error',
             });
 
-            const vanitySection = wrapper.find(VanityNameSectionMock);
-            expect(vanitySection.length).toBe(1);
-            expect(vanitySection.prop('canChangeVanityName')).toEqual(canChangeVanityName);
-            expect(vanitySection.prop('vanityName')).toEqual('another vanity name');
-            expect(vanitySection.prop('serverURL')).toEqual(serverURL);
-            expect(vanitySection.prop('onChange')).toEqual(wrapper.instance().onVanityNameChange);
-            expect(vanitySection.prop('error')).toEqual('error');
+            const VanitySection = shallow(wrapper.instance().renderVanityNameSection());
+            expect(VanitySection.length).toBe(1);
+            expect(VanitySection.prop('canChangeVanityName')).toEqual(canChangeVanityName);
+            expect(VanitySection.prop('vanityName')).toEqual('another vanity name');
+            expect(VanitySection.prop('serverURL')).toEqual(serverURL);
+            expect(VanitySection.prop('onChange')).toEqual(wrapper.instance().onVanityNameChange);
+            expect(VanitySection.prop('error')).toEqual('error');
+        });
+
+        test('should not render VanityNameSection when hideVanityNameSection is true', () => {
+            const wrapper = getWrapper({
+                hideVanityNameSection: true,
+            });
+
+            const VanityNameSection = wrapper.instance().renderVanityNameSection();
+
+            expect(VanityNameSection).toBe(null);
         });
     });
 
@@ -210,16 +206,17 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
                 isPasswordEnabled: true,
             });
 
-            const passwordSection = wrapper.find(PasswordSectionMock);
-            expect(passwordSection.length).toBe(1);
-            expect(passwordSection.prop('canChangePassword')).toEqual(canChangePassword);
-            expect(passwordSection.prop('isPasswordAvailable')).toEqual(isPasswordAvailable);
-            expect(passwordSection.prop('isPasswordEnabled')).toBe(true);
-            expect(passwordSection.prop('isPasswordInitiallyEnabled')).toBe(false);
-            expect(passwordSection.prop('onPasswordChange')).toEqual(wrapper.instance().onPasswordChange);
-            expect(passwordSection.prop('onCheckboxChange')).toEqual(wrapper.instance().onPasswordCheckboxChange);
-            expect(passwordSection.prop('password')).toEqual('another password');
-            expect(passwordSection.prop('error')).toEqual('error');
+            const PasswordSection = shallow(wrapper.instance().renderPasswordSection());
+
+            expect(PasswordSection.length).toBe(1);
+            expect(PasswordSection.prop('canChangePassword')).toEqual(canChangePassword);
+            expect(PasswordSection.prop('isPasswordAvailable')).toEqual(isPasswordAvailable);
+            expect(PasswordSection.prop('isPasswordEnabled')).toBe(true);
+            expect(PasswordSection.prop('isPasswordInitiallyEnabled')).toBe(false);
+            expect(PasswordSection.prop('onPasswordChange')).toEqual(wrapper.instance().onPasswordChange);
+            expect(PasswordSection.prop('onCheckboxChange')).toEqual(wrapper.instance().onPasswordCheckboxChange);
+            expect(PasswordSection.prop('password')).toEqual('another password');
+            expect(PasswordSection.prop('error')).toEqual('error');
         });
     });
 
