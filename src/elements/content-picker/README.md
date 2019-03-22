@@ -7,6 +7,7 @@ var ContentPicker = require('./ContentPicker').default;
         features={FEATURES}
         rootFolderId={FOLDER_ID}
         token={TOKEN}
+        {...PROPS}
     />
 </IntlProvider>
 ```
