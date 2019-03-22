@@ -10,7 +10,7 @@ const helpers = {
 
         cy.getByTestId('be-sub-header').contains('Codepen');
     },
-    getContentRow: rowNum => cy.getByTestId('content-picker').find(`.bcp-item-row-${rowNum}`),
+    getRow: rowNum => cy.getByTestId('content-picker').find(`.bcp-item-row-${rowNum}`),
     selectRow: row =>
         row
             .click()
@@ -30,7 +30,7 @@ describe('ContentPicker', () => {
 
             // Select row 2
             helpers
-                .getContentRow(2)
+                .getRow(2)
                 .as('rowTwo')
                 .find('input[type="checkbox"]')
                 .should('not.be.checked');
@@ -38,7 +38,7 @@ describe('ContentPicker', () => {
 
             // Select row 3
             helpers
-                .getContentRow(3)
+                .getRow(3)
                 .as('rowThree')
                 .find('input[type="checkbox"]')
                 .should('not.be.checked');
@@ -55,27 +55,25 @@ describe('ContentPicker', () => {
             helpers.load();
 
             // Select row 2
-            helpers.selectRow(helpers.getContentRow(2));
+            helpers.selectRow(helpers.getRow(2));
 
             // Explore folder (row 1)
             helpers
-                .getContentRow(1)
+                .getRow(1)
                 .find('button.be-item-label')
                 .click();
 
             cy.getByTestId('be-sub-header').contains('Sample Folder');
 
-            helpers.selectRow(helpers.getContentRow(1));
+            helpers.selectRow(helpers.getRow(1));
 
             // Click the Selected button in the footer
-            cy.getByTestId('bcp-selected').click();
-
+            cy.contains('2 Selected').click();
             cy.getByTestId('be-sub-header').contains('Selected Items');
-            cy.getByTestId('bcp-selected').contains('2 Selected');
 
             // Unselect the rows
-            helpers.getContentRow(1).click();
-            helpers.getContentRow(0).click();
+            helpers.getRow(1).click();
+            helpers.getRow(0).click();
             cy.contains('You haven’t selected any items yet.');
         });
 
@@ -84,7 +82,7 @@ describe('ContentPicker', () => {
 
             // Select row 2
             helpers
-                .getContentRow(2)
+                .getRow(2)
                 .as('rowTwo')
                 .find('input[type="checkbox"]')
                 .should('not.be.checked');
@@ -92,13 +90,13 @@ describe('ContentPicker', () => {
 
             // Select row 3
             helpers
-                .getContentRow(3)
+                .getRow(3)
                 .as('rowThree')
                 .find('input[type="checkbox"]')
                 .should('not.be.checked');
             helpers.selectRow(cy.get('@rowThree'));
 
-            cy.getByTestId('bcp-selected').find('.bcp-selected-max');
+            cy.contains('2 Selected').find('.bcp-selected-max');
 
             // Unselect row 2
             helpers.unselectRow(cy.get('@rowTwo'));
@@ -112,7 +110,7 @@ describe('ContentPicker', () => {
 
             // Select row 2
             helpers
-                .getContentRow(2)
+                .getRow(2)
                 .as('rowTwo')
                 .find('input[type="checkbox"]')
                 .should('not.be.checked');
@@ -120,7 +118,7 @@ describe('ContentPicker', () => {
 
             // Select row 3
             helpers
-                .getContentRow(3)
+                .getRow(3)
                 .as('rowThree')
                 .find('input[type="checkbox"]')
                 .should('not.be.checked');
@@ -131,12 +129,12 @@ describe('ContentPicker', () => {
                 .find('input[type="checkbox"]')
                 .should('not.be.checked');
 
-            cy.getByTestId('bcp-selected').contains('1 Selected');
+            cy.contains('1 Selected');
 
             // Unselect row 3
             helpers.unselectRow(cy.get('@rowThree'));
 
-            cy.getByTestId('bcp-selected').contains('0 Selected');
+            cy.contains('0 Selected');
         });
     });
 });

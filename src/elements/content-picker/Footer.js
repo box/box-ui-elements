@@ -38,7 +38,7 @@ const Footer = ({
 }: Props) => (
     <footer className="bcp-footer">
         <div className="bcp-footer-left">
-            <Button className="bcp-selected" onClick={onSelectedClick} type="button" data-testid="bcp-selected">
+            <Button className="bcp-selected" onClick={onSelectedClick} type="button">
                 <FormattedMessage
                     className="bcp-selected-count"
                     {...messages.selected}
