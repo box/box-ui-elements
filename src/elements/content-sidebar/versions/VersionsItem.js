@@ -22,6 +22,7 @@ import {
 import './VersionsItem.scss';
 
 type Props = {
+    isCurrent: boolean,
     match: Match,
 } & BoxItemVersion;
 
@@ -36,9 +37,10 @@ const getActionMessage = action => ACTION_MAP[action] || ACTION_MAP[VERSION_UPLO
 
 const VersionsItem = ({
     action = VERSION_UPLOAD_ACTION,
+    created_at: createdAt,
     id: versionId,
+    isCurrent,
     match,
-    modified_at: modifiedAt,
     modified_by: modifiedBy = PLACEHOLDER_USER,
     size,
     version_number: versionNumber,
@@ -49,7 +51,7 @@ const VersionsItem = ({
     });
     const versionPath = generatePath(match.path, { ...match.params, versionId });
     const versionUser = modifiedBy.name || <FormattedMessage {...messages.versionUserUnknown} />;
-    const versionTimestamp = modifiedAt && new Date(modifiedAt).getTime();
+    const versionTimestamp = createdAt && new Date(createdAt).getTime();
 
     return (
         <NavButton
@@ -64,12 +66,17 @@ const VersionsItem = ({
         >
             <div className="bcs-VersionsItem-badge">{`V${versionNumber}`}</div>
             <div className="bcs-VersionsItem-details">
-                <div className="bcs-VersionsItem-title">
+                {isCurrent && (
+                    <div className="bcs-VersionsItem-current">
+                        <FormattedMessage {...messages.versionCurrent} />
+                    </div>
+                )}
+                <div className="bcs-VersionsItem-log">
                     <FormattedMessage {...getActionMessage(action)} values={{ name: versionUser }} />
                 </div>
                 <div className="bcs-VersionsItem-info">
                     {versionTimestamp && (
-                        <time className="bcs-VersionsItem-date" dateTime={modifiedAt}>
+                        <time className="bcs-VersionsItem-date" dateTime={createdAt}>
                             <ReadableTime
                                 alwaysShowTime
                                 relativeThreshold={FIVE_MINUTES_MS}

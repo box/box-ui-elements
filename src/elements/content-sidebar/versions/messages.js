@@ -11,6 +11,11 @@ const messages = defineMessages({
         description: 'Title for the preview versions sidebar',
         defaultMessage: 'Version History',
     },
+    versionCurrent: {
+        id: 'be.sidebarVersions.current',
+        defaultMessage: 'Current Version',
+        description: 'Label for the current version item in the version history list.',
+    },
     versionRemovedBy: {
         id: 'be.sidebarVersions.removedBy',
         defaultMessage: 'Removed by { name }',

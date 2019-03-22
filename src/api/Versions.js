@@ -6,13 +6,14 @@
 
 import { VERSIONS_FIELDS_TO_FETCH } from '../utils/fields';
 import OffsetBasedAPI from './OffsetBasedAPI';
-import { ERROR_CODE_FETCH_VERSIONS, DEFAULT_FETCH_START, DEFAULT_FETCH_END } from '../constants';
-
-const ACTION = {
-    upload: 'upload',
-    delete: 'delete',
-    restore: 'restore',
-};
+import {
+    DEFAULT_FETCH_START,
+    DEFAULT_FETCH_END,
+    ERROR_CODE_FETCH_VERSIONS,
+    VERSION_UPLOAD_ACTION,
+    VERSION_DELETE_ACTION,
+    VERSION_RESTORE_ACTION,
+} from '../constants';
 
 class Versions extends OffsetBasedAPI {
     /**
@@ -42,12 +43,59 @@ class Versions extends OffsetBasedAPI {
         const versions = entries.map((version: BoxItemVersion) => {
             return {
                 ...version,
-                action: version.trashed_at ? ACTION.delete : ACTION.upload,
+                action: version.trashed_at ? VERSION_DELETE_ACTION : VERSION_UPLOAD_ACTION,
             };
         });
 
         this.successCallback({ ...data, entries: versions });
     };
+
+    /**
+     * Adds the current version from the file object, which may be a restore
+     *
+     * @param {FileVersions} versions - API returned file versions for this file
+     * @param {BoxItem} file - The parent file object
+     * @return {FileVersions} modified versions array including the current/restored version
+     */
+    addCurrentVersion(versions: ?FileVersions, file: BoxItem): ?FileVersions {
+        const { restored_from, file_version } = file;
+
+        if (!file_version || !versions) {
+            return versions;
+        }
+
+        const { modified_at, modified_by, size, version_number } = file;
+        const action = restored_from ? VERSION_RESTORE_ACTION : VERSION_UPLOAD_ACTION;
+        let currentVersion = { ...file_version };
+        let versionNumber = version_number;
+
+        if (restored_from) {
+            const { id: restoredFromId } = restored_from;
+            const restoredVersion = versions.entries.find((version: BoxItemVersion) => version.id === restoredFromId);
+
+            if (restoredVersion) {
+                versionNumber = restoredVersion.version_number;
+                currentVersion = {
+                    ...restoredVersion,
+                    ...currentVersion,
+                };
+            }
+        }
+
+        const currentFileVersion: BoxItemVersion = {
+            ...currentVersion,
+            action,
+            created_at: modified_at,
+            modified_by,
+            size,
+            version_number: versionNumber,
+        };
+
+        return {
+            entries: [...versions.entries, currentFileVersion],
+            total_count: versions.total_count + 1,
+        };
+    }
 
     /**
      * API for fetching versions on a file
