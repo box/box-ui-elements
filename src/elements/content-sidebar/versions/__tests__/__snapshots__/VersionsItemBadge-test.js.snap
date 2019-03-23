@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/versions/VersionsItemBadge render should match its snapshot 1`] = `
+<div
+  aria-label="Version number {versionNumber}"
+  class="bcs-VersionsItemBadge"
+>
+  <div />
+</div>
+`;
