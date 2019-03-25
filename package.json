@@ -188,7 +188,7 @@
         "eslint-plugin-prettier": "^2.6.2",
         "eslint-plugin-react": "^7.8.2",
         "filesize": "^3.6.1",
-        "flow-bin": "^0.95.1",
+        "flow-bin": "0.94.0",
         "flow-copy-source": "^2.0.2",
         "flow-typed": "^2.5.1",
         "form-serialize": "^0.7.2",
