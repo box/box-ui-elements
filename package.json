@@ -53,7 +53,7 @@
         "copy:styles": "copyfiles './src/**/*.scss' es --up 1",
         "copy:flow": "flow-copy-source --ignore \"**/__tests__/**\" ./src ./es",
         "cy:open": "yarn cy:wait; yarn cypress open",
-        "cy:run": "yarn cy:wait; yarn cypress run --spec test/integration/**/*.test.js",
+        "cy:run": "yarn cy:wait; yarn cypress run --spec \"test/integration/**/*.test.js\"",
         "cy:wait": "wait-on http-get://localhost:6060/#",
         "lint": "npm-run-all lint:*",
         "lint:js": "eslint --max-warnings=0 .",

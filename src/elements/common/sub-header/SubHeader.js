@@ -37,7 +37,7 @@ const SubHeader = ({
     view,
     isSmall,
 }: Props) => (
-    <div className="be-sub-header">
+    <div className="be-sub-header" data-testid="be-sub-header">
         <SubHeaderLeft
             currentCollection={currentCollection}
             isSmall={isSmall}
