@@ -1,6 +1,7 @@
 @import '../../common/variables';
 
 .bcs-VersionsItem {
+    align-items: flex-start;
     background: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -49,6 +50,11 @@
     text-align: center;
 }
 
+.bcs-VersionsItem-current {
+    color: $primary-color;
+    font-weight: bold;
+}
+
 .bcs-VersionsItem-details {
     flex: 1 1 100%;
     overflow: hidden;
@@ -60,7 +66,7 @@
     display: flex;
 }
 
-.bcs-VersionsItem-title {
+.bcs-VersionsItem-log {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

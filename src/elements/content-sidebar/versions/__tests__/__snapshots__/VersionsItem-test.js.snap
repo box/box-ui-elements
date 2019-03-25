@@ -20,7 +20,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
     className="bcs-VersionsItem-details"
   >
     <div
-      className="bcs-VersionsItem-title"
+      className="bcs-VersionsItem-log"
     >
       <FormattedMessage
         defaultMessage="Uploaded by {name}"
@@ -78,7 +78,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
     className="bcs-VersionsItem-details"
   >
     <div
-      className="bcs-VersionsItem-title"
+      className="bcs-VersionsItem-log"
     >
       <FormattedMessage
         defaultMessage="Removed by {name}"
@@ -133,7 +133,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
     className="bcs-VersionsItem-details"
   >
     <div
-      className="bcs-VersionsItem-title"
+      className="bcs-VersionsItem-log"
     >
       <FormattedMessage
         defaultMessage="Uploaded by {name}"

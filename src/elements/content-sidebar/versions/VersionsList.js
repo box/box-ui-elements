@@ -25,9 +25,9 @@ const VersionsList = ({ versions = [] }: Props) => {
 
     return (
         <ul className="bcs-VersionsList">
-            {versions.map(version => (
+            {versions.map((version, index) => (
                 <li className="bcs-VersionsList-item" key={version.id}>
-                    <VersionsItem {...version} />
+                    <VersionsItem isCurrent={index === 0} {...version} />
                 </li>
             ))}
         </ul>

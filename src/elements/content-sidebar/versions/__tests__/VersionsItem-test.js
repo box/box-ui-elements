@@ -12,6 +12,7 @@ jest.mock('react-router-dom', () => ({
 describe('elements/content-sidebar/versions/VersionsItem', () => {
     const defaults = {
         id: '12345',
+        created_at: new Date('2019-03-01T00:00:00'),
         modified_at: new Date('2019-03-01T00:00:00'),
         modified_by: { name: 'Test User', id: 10 },
         size: 10240,

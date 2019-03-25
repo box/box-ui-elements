@@ -31,7 +31,33 @@ exports[`elements/content-sidebar/versions/VersionsList render should match its 
     key="12345"
   >
     <withRouter(VersionsItem)
-      id={12345}
+      id="12345"
+      isCurrent={true}
+    />
+  </li>
+</ul>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsList render should match its snapshot 4`] = `
+<ul
+  className="bcs-VersionsList"
+>
+  <li
+    className="bcs-VersionsList-item"
+    key="12345"
+  >
+    <withRouter(VersionsItem)
+      id="12345"
+      isCurrent={true}
+    />
+  </li>
+  <li
+    className="bcs-VersionsList-item"
+    key="45678"
+  >
+    <withRouter(VersionsItem)
+      id="45678"
+      isCurrent={false}
     />
   </li>
 </ul>
