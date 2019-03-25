@@ -5,7 +5,6 @@
  */
 
 import noop from 'lodash/noop';
-import union from 'lodash/union';
 import flatten from '../utils/flatten';
 import { FOLDER_FIELDS_TO_FETCH } from '../utils/fields';
 import { getBadItemError } from '../utils/error';
@@ -161,7 +160,7 @@ class Folder extends Item {
             new FileAPI(this.options),
             new WebLinkAPI(this.options),
         );
-        this.itemCache = union(this.itemCache, flattened);
+        this.itemCache = (this.itemCache || []).concat(flattened);
 
         this.getCache().set(
             this.key,
@@ -210,17 +209,16 @@ class Folder extends Item {
 
         this.errorCode = ERROR_CODE_FETCH_FOLDER;
 
-        let params;
-        if (noPagination) {
-            params = { fields: requestFields.toString() };
-        } else {
-            params = {
+        let params = { fields: requestFields.toString() };
+
+        if (!noPagination) {
+            params = Object.assign({}, params, {
                 direction: this.sortDirection.toLowerCase(),
                 limit: this.limit,
                 offset: this.offset,
                 fields: requestFields.toString(),
                 sort: this.sortBy.toLowerCase(),
-            };
+            });
         }
 
         return this.xhr

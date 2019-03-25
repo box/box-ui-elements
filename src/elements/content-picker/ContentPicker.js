@@ -759,9 +759,10 @@ class ContentPicker extends Component<Props, State> {
      *
      * @private
      * @param {Object} item file or folder object
+     * @param {boolean} options.forceSharedLink Force a shared link if no link exists
      * @return {void}
      */
-    select = (item: BoxItem, forceSharedLink: boolean = true): void => {
+    select = (item: BoxItem, options: Object = {}): void => {
         const { canSetShareAccess, type: selectableType, maxSelectable }: Props = this.props;
         const {
             view,
@@ -781,6 +782,10 @@ class ContentPicker extends Component<Props, State> {
         const cacheKey: string = this.api.getAPI(type).getCacheKey(id);
         const existing: BoxItem = selected[cacheKey];
         const existingFromCache: BoxItem = this.api.getCache().get(cacheKey);
+        const { forceSharedLink = true } = options;
+        const existInSelected = selectedKeys.indexOf(cacheKey) !== -1;
+        const { permissions = {} }: BoxItem = existingFromCache;
+        const { can_set_share_access: itemCanSetShareAccess }: BoxItemPermission = permissions;
 
         // Existing object could have mutated and we just need to update the
         // reference in the selected map. In that case treat it like a new selection.
@@ -795,9 +800,10 @@ class ContentPicker extends Component<Props, State> {
             // item selection mode, we should also unselect any
             // prior item that was item that was selected.
 
-            // Check if we hit the selection limit
+            // Check if we hit the selection limit and if selection
+            // is not already currently in the selected data structure.
             // Ignore when in single file selection mode.
-            if (hasHitSelectionLimit && !isSingleFileSelection && !selectedKeys.indexOf(cacheKey)) {
+            if (hasHitSelectionLimit && !isSingleFileSelection && !existInSelected) {
                 return;
             }
 
@@ -813,8 +819,10 @@ class ContentPicker extends Component<Props, State> {
             selected[cacheKey] = item;
 
             // If can set share access, fetch the shared link properties of the item
-            if (canSetShareAccess && forceSharedLink) {
-                this.showSharedLinkDropdown(item);
+            // In the case where another item is selected, any in flight XHR will get
+            // cancelled
+            if (canSetShareAccess && itemCanSetShareAccess && forceSharedLink) {
+                this.fetchSharedLinkInfo(item);
             }
         }
 
@@ -828,23 +836,23 @@ class ContentPicker extends Component<Props, State> {
     };
 
     /**
-     * Show the inline shared link dropdown
+     * Fetch the shared link info
      * @param {BoxItem} item - The item (folder, file, weblink)
-     * @returns {Promise}
+     * @returns {void}
      */
-    showSharedLinkDropdown = (item: BoxItem): void => {
+    fetchSharedLinkInfo = (item: BoxItem): void => {
         const { id, type }: BoxItem = item;
 
         switch (type) {
             case TYPE_FOLDER:
-                this.api.getFolderAPI().getFolderFields(id, this.handleSharedLinkResponse, () => {}, {
+                this.api.getFolderAPI().getFolderFields(id, this.handleSharedLinkSuccess, noop, {
                     fields: FILE_SHARED_LINK_FIELDS_TO_FETCH,
                 });
                 break;
             case TYPE_FILE:
                 this.api
                     .getFileAPI()
-                    .getFile(id, this.handleSharedLinkResponse, () => {}, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
+                    .getFile(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             case TYPE_WEBLINK:
                 break;
@@ -860,7 +868,7 @@ class ContentPicker extends Component<Props, State> {
      * @param {Object} item file or folder
      * @returns {void}
      */
-    handleSharedLinkResponse = (item: BoxItem) => {
+    handleSharedLinkSuccess = (item: BoxItem) => {
         // if no shared link currently exists, create a shared link with enterprise default
         if (!item[FIELD_SHARED_LINK]) {
             this.changeShareAccess(null, item);
@@ -871,7 +879,7 @@ class ContentPicker extends Component<Props, State> {
             // if shared link already exists, update the collection in state
             this.updateItemInCollection(item);
             if (item.selected && item !== selected[cacheKey]) {
-                this.select(item, false);
+                this.select(item, { forceSharedLink: false });
             }
         }
     };
@@ -903,7 +911,7 @@ class ContentPicker extends Component<Props, State> {
         this.api.getAPI(type).share(item, access, (updatedItem: BoxItem) => {
             this.updateItemInCollection(updatedItem);
             if (item.selected) {
-                this.select(updatedItem, false);
+                this.select(updatedItem, { forceSharedLink: false });
             }
         });
     };

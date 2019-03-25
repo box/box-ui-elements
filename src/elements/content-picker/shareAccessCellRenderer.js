@@ -16,7 +16,15 @@ export default (
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
 ) => ({ rowData }: { rowData: BoxItem }) => {
-    if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) || !rowData.selected) {
+    const { permissions = {} }: BoxItem = rowData;
+    const { can_set_share_access: rowCanSetShareAccess }: BoxItemPermission = permissions;
+
+    if (
+        !canSetShareAccess ||
+        !rowCanSetShareAccess ||
+        !isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) ||
+        !rowData.selected
+    ) {
         return <span />;
     }
 
@@ -24,7 +32,7 @@ export default (
     const isLoading = !allowed_shared_link_access_levels;
 
     return isLoading ? (
-        <LoadingIndicator className="bcp-ShareAccessSelect--loading" />
+        <LoadingIndicator className="bcp-share-access-loading" />
     ) : (
         <ShareAccessSelect
             canSetShareAccess={canSetShareAccess}
