@@ -65,34 +65,28 @@ class Versions extends OffsetBasedAPI {
         }
 
         const { modified_at, modified_by, size, version_number } = file;
-        const action = restored_from ? VERSION_RESTORE_ACTION : VERSION_UPLOAD_ACTION;
-        let currentVersion = { ...file_version };
-        let versionNumber = version_number;
+        const currentVersion: BoxItemVersion = {
+            ...file_version,
+            action: VERSION_UPLOAD_ACTION,
+            created_at: modified_at,
+            modified_at,
+            modified_by,
+            size,
+            version_number,
+        };
 
         if (restored_from) {
             const { id: restoredFromId } = restored_from;
             const restoredVersion = versions.entries.find((version: BoxItemVersion) => version.id === restoredFromId);
 
             if (restoredVersion) {
-                versionNumber = restoredVersion.version_number;
-                currentVersion = {
-                    ...restoredVersion,
-                    ...currentVersion,
-                };
+                currentVersion.action = VERSION_RESTORE_ACTION;
+                currentVersion.version_restored = restoredVersion.version_number;
             }
         }
 
-        const currentFileVersion: BoxItemVersion = {
-            ...currentVersion,
-            action,
-            created_at: modified_at,
-            modified_by,
-            size,
-            version_number: versionNumber,
-        };
-
         return {
-            entries: [...versions.entries, currentFileVersion],
+            entries: [...versions.entries, currentVersion],
             total_count: versions.total_count + 1,
         };
     }

@@ -63,14 +63,15 @@ type Props = {
     modified_by: User,
     onInfo?: Function,
     version_number: string,
+    version_restored?: string,
 } & InjectIntlProvidedProps;
 
-const Version = ({ action, modified_by, id, intl, onInfo, version_number }: Props): React.Node => {
+const Version = ({ action, modified_by, id, intl, onInfo, version_number, version_restored }: Props): React.Node => {
     const modifiedByUser = modified_by || PLACEHOLDER_USER;
     return (
         <div className="bcs-version">
             <span className="bcs-version-message">
-                {getMessageForAction(modifiedByUser.name, action, version_number)}
+                {getMessageForAction(modifiedByUser.name, action, version_restored || version_number)}
             </span>
             {onInfo ? (
                 <span className="bcs-version-actions">
