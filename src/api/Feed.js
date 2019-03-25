@@ -152,7 +152,7 @@ class Feed extends Base {
         shouldRefreshCache: boolean,
         successCallback: Function,
         errorCallback: (feedItems: FeedItems) => void,
-        onError: ErrorCallback,
+        onError: string,
         shouldShowNewTasks?: boolean = false, // TODO: could the class understand feature flips natively instead?
         shouldShowAppActivity?: boolean = false,
     ): void {
