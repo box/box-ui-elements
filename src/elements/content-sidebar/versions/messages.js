@@ -21,6 +21,16 @@ const messages = defineMessages({
         defaultMessage: 'Removed by { name }',
         description: 'Message displayed for a deleted version. {name} is the user who performed the action.',
     },
+    versionNumberBadge: {
+        defaultMessage: 'V{versionNumber}',
+        description: 'Text to display in the version badge.',
+        id: 'be.sidebarVersions.versionNumberBadge',
+    },
+    versionNumberLabel: {
+        defaultMessage: 'Version number {versionNumber}',
+        description: 'Label given to the version badge for screen readers.',
+        id: 'be.sidebarVersions.versionNumberLabel',
+    },
     versionRestoredBy: {
         id: 'be.sidebarVersions.restoredBy',
         defaultMessage: 'Restored by { name }',

@@ -14,7 +14,9 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
   <div
     className="bcs-VersionsItem-badge"
   >
-    V1
+    <VersionsItemBadge
+      versionNumber={1}
+    />
   </div>
   <div
     className="bcs-VersionsItem-details"
@@ -72,7 +74,9 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
   <div
     className="bcs-VersionsItem-badge"
   >
-    V1
+    <VersionsItemBadge
+      versionNumber={1}
+    />
   </div>
   <div
     className="bcs-VersionsItem-details"
@@ -127,7 +131,9 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
   <div
     className="bcs-VersionsItem-badge"
   >
-    V1
+    <VersionsItemBadge
+      versionNumber={1}
+    />
   </div>
   <div
     className="bcs-VersionsItem-details"

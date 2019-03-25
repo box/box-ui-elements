@@ -12,6 +12,7 @@ import type { Match } from 'react-router-dom';
 import messages from './messages';
 import NavButton from '../../common/nav-button';
 import sizeUtil from '../../../utils/size';
+import VersionsItemBadge from './VersionsItemBadge';
 import { ReadableTime } from '../../../components/time';
 import {
     PLACEHOLDER_USER,
@@ -64,7 +65,10 @@ const VersionsItem = ({
             to={versionPath}
             type="button"
         >
-            <div className="bcs-VersionsItem-badge">{`V${versionNumber}`}</div>
+            <div className="bcs-VersionsItem-badge">
+                <VersionsItemBadge versionNumber={versionNumber} />
+            </div>
+
             <div className="bcs-VersionsItem-details">
                 {isCurrent && (
                     <div className="bcs-VersionsItem-current">
