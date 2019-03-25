@@ -444,6 +444,12 @@ type FlattenedBoxItemCollection = {
     total_count?: number,
 };
 
+type MetadataBoxItemCollection = {
+    entries?: Array<BoxItem>,
+    next_marker?: string,
+    prev_marker?: string,
+};
+
 type BoxPathCollection = {
     entries: Array<Crumb>,
     total_count: number,
