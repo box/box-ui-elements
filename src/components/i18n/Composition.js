@@ -92,9 +92,9 @@ class Composition {
         }
 
         if (el) {
-            return children && children.length ?
-                React.cloneElement(el, { key: el.key }, children) :
-                React.cloneElement(el, { key: el.key });
+            return children && children.length
+                ? React.cloneElement(el, { key: el.key }, children)
+                : React.cloneElement(el, { key: el.key });
         }
         if (children.length) {
             return children;
