@@ -20,10 +20,11 @@ type Props = {
     error?: string,
     isLoading: boolean,
     parentName: string,
+    permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, isLoading, parentName, versions }: Props) => (
+const VersionsSidebar = ({ error, isLoading, parentName, permissions, versions }: Props) => (
     <SidebarContent
         className="bcs-Versions"
         title={
@@ -39,7 +40,7 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions }: Props) => (
                     {error ? (
                         <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
                     ) : (
-                        <VersionsList versions={versions} />
+                        <VersionsList permissions={permissions} versions={versions} />
                     )}
                 </SidebarSection>
             )}
