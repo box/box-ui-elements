@@ -14,7 +14,9 @@ type Props = {
         rowIndex: number,
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
+    getGridHeaderSort?: (columnIndex: number) => React.Node | null,
     height: number,
+    onSortChange?: (columnIndex: number) => any,
     rowCount: number,
     width: number,
 };
@@ -28,14 +30,22 @@ type CellRendererArgs = {|
 
 class ListView extends React.PureComponent<Props> {
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
-        const { getGridCell, getGridHeader } = this.props;
+        const { getGridCell, getGridHeader, getGridHeaderSort, onSortChange } = this.props;
 
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
+            const sortIcon = getGridHeaderSort && getGridHeaderSort(columnIndex);
             return (
-                <div className="list-view-column-header" key={key} style={style}>
+                <button
+                    className="list-view-column-header"
+                    key={key}
+                    style={style}
+                    type="button"
+                    onClick={() => onSortChange && onSortChange(columnIndex)}
+                >
                     {displayName}
-                </div>
+                    {sortIcon}
+                </button>
             );
         }
 
