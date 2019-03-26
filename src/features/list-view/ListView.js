@@ -1,8 +1,11 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
 import { FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
+import { SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING } from '../query-bar/constants';
+import IconSortChevron from '../../icons/general/IconSortChevron';
 
 import './styles/ListView.scss';
 
@@ -14,7 +17,7 @@ type Props = {
         rowIndex: number,
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
-    getGridHeaderSort?: (columnIndex: number) => React.Node | null,
+    getGridHeaderSort?: (columnIndex: number) => SORT_ORDER_ASCENDING | SORT_ORDER_DESCENDING | null,
     height: number,
     onSortChange?: (columnIndex: number) => any,
     rowCount: number,
@@ -34,7 +37,12 @@ class ListView extends React.PureComponent<Props> {
 
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
-            const sortIcon = getGridHeaderSort && getGridHeaderSort(columnIndex);
+            const sortDirection = getGridHeaderSort && getGridHeaderSort(columnIndex);
+            const isSortAsc = sortDirection === SORT_ORDER_ASCENDING;
+            const className = classNames({
+                'is-sort-asc': isSortAsc,
+            });
+
             return (
                 <button
                     className="list-view-column-header"
@@ -44,7 +52,7 @@ class ListView extends React.PureComponent<Props> {
                     onClick={() => onSortChange && onSortChange(columnIndex)}
                 >
                     {displayName}
-                    {sortIcon}
+                    {sortDirection && <IconSortChevron className={className} />}
                 </button>
             );
         }
