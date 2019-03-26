@@ -3,18 +3,19 @@
 exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if none is provided 1`] = `
 <NavButton
   activeClassName="bcs-is-selected"
+  aria-disabled={false}
   className="bcs-VersionsItem"
-  component="button"
+  component="div"
   data-resin-target="versions-item"
   data-testid="versions-item"
-  disabled={false}
+  tabIndex="0"
   to="/12345"
-  type="button"
 >
   <div
     className="bcs-VersionsItem-badge"
   >
     <VersionsItemBadge
+      isDisabled={false}
       versionNumber={1}
     />
   </div>
@@ -57,24 +58,33 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
       </span>
     </div>
   </div>
+  <VersionsItemActions
+    isDeleted={false}
+    onDelete={[Function]}
+    onDownload={[Function]}
+    onPreview={[Function]}
+    onPromote={[Function]}
+    onRestore={[Function]}
+  />
 </NavButton>
 `;
 
 exports[`elements/content-sidebar/versions/VersionsItem render should render a deleted version correctly 1`] = `
 <NavButton
   activeClassName="bcs-is-selected"
+  aria-disabled={true}
   className="bcs-VersionsItem bcs-is-disabled"
-  component="button"
+  component="div"
   data-resin-target="versions-item"
   data-testid="versions-item"
-  disabled={true}
+  tabIndex="0"
   to="/12345"
-  type="button"
 >
   <div
     className="bcs-VersionsItem-badge"
   >
     <VersionsItemBadge
+      isDisabled={true}
       versionNumber={1}
     />
   </div>
@@ -85,8 +95,8 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
       className="bcs-VersionsItem-log"
     >
       <FormattedMessage
-        defaultMessage="Removed by {name}"
-        id="be.sidebarVersions.removedBy"
+        defaultMessage="Deleted by {name}"
+        id="be.sidebarVersions.deletedBy"
         values={
           Object {
             "name": "Test User",
@@ -114,24 +124,33 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
       </span>
     </div>
   </div>
+  <VersionsItemActions
+    isDeleted={true}
+    onDelete={[Function]}
+    onDownload={[Function]}
+    onPreview={[Function]}
+    onPromote={[Function]}
+    onRestore={[Function]}
+  />
 </NavButton>
 `;
 
 exports[`elements/content-sidebar/versions/VersionsItem render should render an uploaded version correctly 1`] = `
 <NavButton
   activeClassName="bcs-is-selected"
+  aria-disabled={false}
   className="bcs-VersionsItem"
-  component="button"
+  component="div"
   data-resin-target="versions-item"
   data-testid="versions-item"
-  disabled={false}
+  tabIndex="0"
   to="/12345"
-  type="button"
 >
   <div
     className="bcs-VersionsItem-badge"
   >
     <VersionsItemBadge
+      isDisabled={false}
       versionNumber={1}
     />
   </div>
@@ -171,5 +190,13 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
       </span>
     </div>
   </div>
+  <VersionsItemActions
+    isDeleted={false}
+    onDelete={[Function]}
+    onDownload={[Function]}
+    onPreview={[Function]}
+    onPromote={[Function]}
+    onRestore={[Function]}
+  />
 </NavButton>
 `;

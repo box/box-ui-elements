@@ -26,11 +26,6 @@
         border-color: transparent;
         cursor: default;
         pointer-events: none;
-
-        .bcs-VersionsItem-badge {
-            background-color: $ffive;
-            color: inherit;
-        }
     }
 
     &.bcs-is-selected {

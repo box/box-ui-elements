@@ -7,4 +7,9 @@
     font-size: 18px;
     padding: 10px 8px;
     text-align: center;
+
+    &.bcs-is-disabled {
+        background-color: $ffive;
+        color: inherit;
+    }
 }
