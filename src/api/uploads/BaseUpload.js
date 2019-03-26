@@ -28,6 +28,8 @@ class BaseUpload extends Base {
 
     retryTimeout: TimeoutID;
 
+    concurrency: number = 1;
+
     /**
      * Sends an upload pre-flight request. If a file ID is available,
      * send a pre-flight request to that file version.

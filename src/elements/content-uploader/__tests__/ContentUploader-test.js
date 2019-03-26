@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
 import { ContentUploaderComponent } from '../ContentUploader';
-import { STATUS_PENDING, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../../constants';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 
@@ -71,6 +71,42 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('removeFileFromUploadQueue', () => {
+        let wrapper;
+        let instance;
+        let item;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.upload = jest.fn();
+            item = {
+                api: {
+                    concurrency: 2,
+                    cancel: jest.fn(),
+                },
+                status: STATUS_IN_PROGRESS,
+            };
+        });
+
+        test('should cancel and update concurrency for in-progress item', () => {
+            instance.uploadConcurrency = 2;
+            instance.removeFileFromUploadQueue(item);
+
+            expect(item.api.cancel).toBeCalled();
+            expect(instance.uploadConcurrency).toBe(0);
+            expect(instance.upload).toBeCalled();
+        });
+
+        test('should not update concurrency for item in state other than in-progress', () => {
+            instance.uploadConcurrency = 2;
+            item.status = STATUS_PENDING;
+            instance.removeFileFromUploadQueue(item);
+
+            expect(instance.uploadConcurrency).toBe(2);
+        });
+    });
+
     describe('getUploadAPI()', () => {
         const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
         let wrapper;
@@ -131,6 +167,37 @@ describe('elements/content-uploader/ContentUploader', () => {
             jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             instance.getUploadAPI(file);
             expect(getPlainUploadAPI).toBeCalled();
+        });
+    });
+
+    describe('uploadFile', () => {
+        let wrapper;
+        let instance;
+        let item;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            item = {
+                api: {
+                    concurrency: 2,
+                    upload: jest.fn(),
+                },
+            };
+        });
+
+        test('should not start upload if concurrency exceeds max allowed', () => {
+            instance.uploadConcurrency = 5;
+            instance.uploadFile(item);
+            expect(item.api.upload).toHaveBeenCalledTimes(0);
+        });
+
+        test('should start upload and update concurrency', () => {
+            instance.uploadConcurrency = 4;
+            instance.uploadFile(item);
+            expect(instance.uploadConcurrency).toBe(6);
+            expect(item.status).toBe(STATUS_IN_PROGRESS);
+            expect(item.api.upload).toBeCalled();
         });
     });
 

@@ -35,6 +35,7 @@ class BaseMultiput extends BaseUpload {
 
         this.config = config || DEFAULT_MULTIPUT_CONFIG;
         this.sessionEndpoints = sessionEndpoints;
+        this.concurrency = this.config.parallelism;
     }
 
     /**

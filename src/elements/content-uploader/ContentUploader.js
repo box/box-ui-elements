@@ -93,7 +93,7 @@ const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
-const UPLOAD_CONCURRENCY = 6;
+const MAX_UPLOAD_CONCURRENCY = 6;
 
 class ContentUploader extends Component<Props, State> {
     id: string;
@@ -108,7 +108,7 @@ class ContentUploader extends Component<Props, State> {
 
     resetItemsTimeout: TimeoutID;
 
-    numItemsUploading: number = 0;
+    uploadConcurrency: number = 0;
 
     isAutoExpanded: boolean = false;
 
@@ -627,8 +627,11 @@ class ContentUploader extends Component<Props, State> {
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
 
-        const { api } = item;
+        const { api, status } = item;
         api.cancel();
+        if (status === STATUS_IN_PROGRESS) {
+            this.uploadConcurrency -= api.concurrency;
+        }
 
         const { items } = this.state;
         items.splice(items.indexOf(item), 1);
@@ -638,6 +641,7 @@ class ContentUploader extends Component<Props, State> {
 
         onCancel([item]);
         this.updateViewAndCollection(items, callback);
+        this.upload();
     }
 
     /**
@@ -683,12 +687,13 @@ class ContentUploader extends Component<Props, State> {
     uploadFile(item: UploadItem) {
         const { overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
+        const { concurrency } = api;
 
-        if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
+        if (this.uploadConcurrency + concurrency > MAX_UPLOAD_CONCURRENCY) {
             return;
         }
 
-        this.numItemsUploading += 1;
+        this.uploadConcurrency += concurrency;
 
         const uploadOptions: Object = {
             file,
@@ -747,7 +752,7 @@ class ContentUploader extends Component<Props, State> {
         if (!item.error) {
             item.status = STATUS_COMPLETE;
         }
-        this.numItemsUploading -= 1;
+        this.uploadConcurrency -= item.api.concurrency;
 
         // Cache Box File object of successfully uploaded item
         if (entries && entries.length === 1) {
@@ -846,7 +851,7 @@ class ContentUploader extends Component<Props, State> {
 
         item.status = STATUS_ERROR;
         item.error = error;
-        this.numItemsUploading -= 1;
+        this.uploadConcurrency -= item.api.concurrency;
 
         const newItems = [...items];
         const index = newItems.findIndex(singleItem => singleItem === item);
