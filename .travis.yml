@@ -18,8 +18,10 @@ jobs:
       script: commitlint-travis
     - name: "Code Lint"
       script: npm-run-all clean build:i18n lint
+    - name: "Flow Debug"
+      script: uname -a && yarn flow ls
     - name: "Flow Types"
-      script: yarn flow ls
+      script: yarn flow check
     - name: "Unit Tests"
       script: yarn test
     - name: "E2E Tests"
