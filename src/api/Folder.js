@@ -198,12 +198,13 @@ class Folder extends Item {
      * @param {Array<String>} fields Array of field strings
      * @return {Promise}
      */
-    folderRequest(options: FetchOptions = {}, successHandler?: Function = this.folderSuccessHandler): Promise<any> {
+    folderRequest(
+        { fields, noPagination }: FetchOptions = {},
+        successHandler?: Function = this.folderSuccessHandler,
+    ): Promise<any> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
-
-        const { fields, noPagination } = options;
 
         const requestFields = fields || FOLDER_FIELDS_TO_FETCH;
 

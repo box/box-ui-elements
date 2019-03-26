@@ -8,6 +8,7 @@ import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
+import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import Header from '../common/header';
@@ -762,7 +763,7 @@ class ContentPicker extends Component<Props, State> {
      * @param {boolean} options.forceSharedLink Force a shared link if no link exists
      * @return {void}
      */
-    select = (item: BoxItem, options: Object = {}): void => {
+    select = (item: BoxItem, { forceSharedLink = true }: StringAnyMap = {}): void => {
         const { canSetShareAccess, type: selectableType, maxSelectable }: Props = this.props;
         const {
             view,
@@ -782,10 +783,8 @@ class ContentPicker extends Component<Props, State> {
         const cacheKey: string = this.api.getAPI(type).getCacheKey(id);
         const existing: BoxItem = selected[cacheKey];
         const existingFromCache: BoxItem = this.api.getCache().get(cacheKey);
-        const { forceSharedLink = true } = options;
         const existInSelected = selectedKeys.indexOf(cacheKey) !== -1;
-        const { permissions = {} }: BoxItem = existingFromCache;
-        const { can_set_share_access: itemCanSetShareAccess }: BoxItemPermission = permissions;
+        const itemCanSetShareAccess = getProp(item, 'permissions.can_set_share_access', false);
 
         // Existing object could have mutated and we just need to update the
         // reference in the selected map. In that case treat it like a new selection.

@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import getProp from 'lodash/get';
 import ShareAccessSelect from '../common/share-access-select';
 import isRowSelectable from './cellRendererHelper';
 import LoadingIndicator from '../../components/loading-indicator';
@@ -16,12 +17,11 @@ export default (
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
 ) => ({ rowData }: { rowData: BoxItem }) => {
-    const { permissions = {} }: BoxItem = rowData;
-    const { can_set_share_access: rowCanSetShareAccess }: BoxItemPermission = permissions;
+    const itemCanSetShareAccess = getProp(rowData, 'permissions.can_set_share_access', false);
 
     if (
         !canSetShareAccess ||
-        !rowCanSetShareAccess ||
+        !itemCanSetShareAccess ||
         !isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) ||
         !rowData.selected
     ) {

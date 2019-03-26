@@ -1,7 +1,4 @@
 // <reference types="Cypress" />
-import createSharedLinkRsp from '../../fixtures/content-picker/create-sharedlink.json';
-import getSharedLinkRsp from '../../fixtures/content-picker/get-sharedlink.json';
-
 const helpers = {
     load(additionalProps = {}) {
         cy.visit('/Elements/ContentPicker', {
@@ -34,6 +31,8 @@ const helpers = {
         cy.get('@row')
             .find('.bcp-shared-access-select')
             .should('not.exist');
+
+        return cy.get('@row');
     },
 };
 
@@ -41,27 +40,21 @@ describe('ContentPicker', () => {
     beforeEach(() => {
         cy.server();
 
-        cy.route(
-            'GET',
-            '**/folders/51964781421?fields=id,name,type,size,parent,extension,permissions,path_collection,modified_at,created_at,modified_by,has_collaborations,is_externally_owned,item_collection&direction=asc&limit=50&offset=0&sort=name',
-            'fixture:content-picker/root-folder.json',
-        );
-
-        cy.route(
-            'GET',
-            '**/folders/51965506671?fields=id,name,type,size,parent,extension,permissions,path_collection,modified_at,created_at,modified_by,has_collaborations,is_externally_owned,item_collection&direction=asc&limit=50&offset=0&sort=name',
-            'fixture:content-picker/sample-folder.json',
-        );
+        cy.route('GET', '**/folders/*', 'fixture:content-picker/root-folder.json');
 
         ['319004423111', '308566419514', '308409990441'].forEach(fileId => {
-            cy.route('GET', `**/files/${fileId}?fields=allowed_shared_link_access_levels,shared_link`, {
-                ...getSharedLinkRsp,
-                id: fileId,
+            cy.fixture('content-picker/get-sharedlink.json').then(getSharedLinkJson => {
+                cy.route('GET', `**/files/${fileId}?fields=allowed_shared_link_access_levels,shared_link`, {
+                    ...getSharedLinkJson,
+                    id: fileId,
+                });
             });
 
-            cy.route('PUT', `**/files/${fileId}`, {
-                ...createSharedLinkRsp,
-                id: fileId,
+            cy.fixture('content-picker/create-sharedlink.json').then(createSharedLinkJson => {
+                cy.route('PUT', `**/files/${fileId}`, {
+                    ...createSharedLinkJson,
+                    id: fileId,
+                });
             });
         });
     });
@@ -96,6 +89,9 @@ describe('ContentPicker', () => {
 
             // Select row 2
             helpers.selectRow(2);
+
+            // Override the route stubbing for a sub folder
+            cy.route('GET', '**/folders/*', 'fixture:content-picker/sample-folder.json');
 
             // Explore folder (row 1)
             helpers
