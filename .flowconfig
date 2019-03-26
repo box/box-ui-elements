@@ -1,6 +1,6 @@
 [ignore]
 .*/conf/.*
-.*/build/.*
+<PROJECT_ROOT>/build/.*
 .*/es/.*
 .*/dist/.*
 .*/reports/.*
