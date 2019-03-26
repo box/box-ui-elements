@@ -16,10 +16,50 @@ const messages = defineMessages({
         defaultMessage: 'Current Version',
         description: 'Label for the current version item in the version history list.',
     },
-    versionRemovedBy: {
-        id: 'be.sidebarVersions.removedBy',
-        defaultMessage: 'Removed by { name }',
+    versionActionDelete: {
+        id: 'be.sidebarVersions.delete',
+        defaultMessage: 'Delete',
+        description: 'Label for the version delete action.',
+    },
+    versionActionDownload: {
+        id: 'be.sidebarVersions.download',
+        defaultMessage: 'Download',
+        description: 'Label for the version download action.',
+    },
+    versionActionPreview: {
+        id: 'be.sidebarVersions.preview',
+        defaultMessage: 'Preview',
+        description: 'Label for the version preview action.',
+    },
+    versionActionPromote: {
+        id: 'be.sidebarVersions.promote',
+        defaultMessage: 'Make Current',
+        description: 'Label for the version promote action.',
+    },
+    versionActionRestore: {
+        id: 'be.sidebarVersions.restore',
+        defaultMessage: 'Restore',
+        description: 'Label for the version restore action.',
+    },
+    versionActionToggle: {
+        id: 'be.sidebarVersions.toggle',
+        defaultMessage: 'Toggle',
+        description: 'Label for the version actions dropdown menu toggle button.',
+    },
+    versionDeletedBy: {
+        id: 'be.sidebarVersions.deletedBy',
+        defaultMessage: 'Deleted by { name }',
         description: 'Message displayed for a deleted version. {name} is the user who performed the action.',
+    },
+    versionNumberBadge: {
+        defaultMessage: 'V{versionNumber}',
+        description: 'Text to display in the version badge.',
+        id: 'be.sidebarVersions.versionNumberBadge',
+    },
+    versionNumberLabel: {
+        defaultMessage: 'Version number {versionNumber}',
+        description: 'Label given to the version badge for screen readers.',
+        id: 'be.sidebarVersions.versionNumberLabel',
     },
     versionRestoredBy: {
         id: 'be.sidebarVersions.restoredBy',
