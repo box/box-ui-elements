@@ -39,11 +39,11 @@ const messages = defineMessages({
     versionActionRestore: {
         id: 'be.sidebarVersions.restore',
         defaultMessage: 'Restore',
-        description: 'Label for the version delete action.',
+        description: 'Label for the version restore action.',
     },
     versionActionToggle: {
         id: 'be.sidebarVersions.toggle',
-        defaultMessage: 'Restore',
+        defaultMessage: 'Toggle',
         description: 'Label for the version actions dropdown menu toggle button.',
     },
     versionDeletedBy: {

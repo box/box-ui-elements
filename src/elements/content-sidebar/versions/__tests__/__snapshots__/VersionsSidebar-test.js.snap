@@ -60,13 +60,6 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show th
       isOpen={true}
     >
       <VersionsList
-        permissions={
-          Object {
-            "can_delete": true,
-            "can_download": true,
-            "can_preview": true,
-          }
-        }
         versions={Array []}
       />
     </SidebarSection>

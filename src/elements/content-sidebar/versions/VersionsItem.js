@@ -60,16 +60,16 @@ const VersionsItem = ({ isCurrent, match, permissions, version }: Props) => {
     return (
         <NavButton
             activeClassName="bcs-is-selected"
+            aria-disabled={isDeleted}
             className={className}
             component="div"
             data-resin-target="versions-item"
             data-testid="versions-item"
-            disabled={isDeleted}
             tabIndex="0"
             to={versionPath}
         >
             <div className="bcs-VersionsItem-badge">
-                <VersionsItemBadge versionNumber={versionNumber} />
+                <VersionsItemBadge isDisabled={isDeleted} versionNumber={versionNumber} />
             </div>
 
             <div className="bcs-VersionsItem-details">

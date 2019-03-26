@@ -32,7 +32,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             });
             const navButton = wrapper.closest(NavButton);
 
-            expect(navButton.prop('disabled')).toBe(false);
+            expect(navButton.prop('aria-disabled')).toBe(false);
             expect(navButton.prop('className')).not.toContain('bcs-is-disabled');
             expect(navButton.prop('to')).toBe('/12345');
             expect(wrapper.closest(ReadableTime)).toBeTruthy();
@@ -45,7 +45,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             });
             const navButton = wrapper.closest(NavButton);
 
-            expect(navButton.prop('disabled')).toBe(true);
+            expect(navButton.prop('aria-disabled')).toBe(true);
             expect(navButton.prop('className')).toContain('bcs-is-disabled');
             expect(wrapper.closest(ReadableTime)).toBeTruthy();
             expect(wrapper).toMatchSnapshot();

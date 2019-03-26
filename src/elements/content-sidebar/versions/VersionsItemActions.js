@@ -21,11 +21,11 @@ import './VersionsItemActions.scss';
 type Props = {
     isCurrent: boolean,
     isDeleted: boolean,
-    onDelete: () => void,
-    onDownload: () => void,
-    onPreview: () => void,
-    onPromote: () => void,
-    onRestore: () => void,
+    onDelete?: () => void,
+    onDownload?: () => void,
+    onPreview?: () => void,
+    onPromote?: () => void,
+    onRestore?: () => void,
     permissions: BoxItemPermission,
 };
 
@@ -40,8 +40,8 @@ const handleToggleClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
 };
 
 const VersionsItemActions = ({
-    isCurrent,
-    isDeleted,
+    isCurrent = false,
+    isDeleted = false,
     onDelete,
     onDownload,
     onPreview,
@@ -49,11 +49,11 @@ const VersionsItemActions = ({
     onRestore,
     permissions,
 }: Props) => {
-    const { can_delete, can_download, can_preview } = permissions;
+    const { can_delete, can_download, can_preview, can_upload } = permissions;
     const showDelete = can_delete && !isDeleted && !isCurrent;
     const showDownload = can_download && !isDeleted;
     const showPreview = can_preview && !isDeleted;
-    const showPromote = !isDeleted && !isCurrent;
+    const showPromote = can_upload && !isDeleted && !isCurrent;
     const showRestore = can_delete && isDeleted;
 
     if (!showDelete && !showDownload && !showPreview && !showPromote && !showRestore) {
@@ -67,7 +67,7 @@ const VersionsItemActions = ({
             isRightAligned
             onMenuClose={handleMenuClose}
         >
-            <PlainButton className="bcs-VersionsItemsActions-toggle" onClick={handleToggleClick}>
+            <PlainButton className="bcs-VersionsItemActions-toggle" onClick={handleToggleClick}>
                 <IconEllipsis height={4} width={14} title={<FormattedMessage {...messages.versionActionToggle} />} />
             </PlainButton>
             <Menu>

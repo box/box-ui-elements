@@ -3,11 +3,11 @@
 exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if none is provided 1`] = `
 <NavButton
   activeClassName="bcs-is-selected"
+  aria-disabled={false}
   className="bcs-VersionsItem"
   component="div"
   data-resin-target="versions-item"
   data-testid="versions-item"
-  disabled={false}
   tabIndex="0"
   to="/12345"
 >
@@ -15,6 +15,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
     className="bcs-VersionsItem-badge"
   >
     <VersionsItemBadge
+      isDisabled={false}
       versionNumber={1}
     />
   </div>
@@ -71,11 +72,11 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
 exports[`elements/content-sidebar/versions/VersionsItem render should render a deleted version correctly 1`] = `
 <NavButton
   activeClassName="bcs-is-selected"
+  aria-disabled={true}
   className="bcs-VersionsItem bcs-is-disabled"
   component="div"
   data-resin-target="versions-item"
   data-testid="versions-item"
-  disabled={true}
   tabIndex="0"
   to="/12345"
 >
@@ -83,6 +84,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
     className="bcs-VersionsItem-badge"
   >
     <VersionsItemBadge
+      isDisabled={true}
       versionNumber={1}
     />
   </div>
@@ -136,11 +138,11 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
 exports[`elements/content-sidebar/versions/VersionsItem render should render an uploaded version correctly 1`] = `
 <NavButton
   activeClassName="bcs-is-selected"
+  aria-disabled={false}
   className="bcs-VersionsItem"
   component="div"
   data-resin-target="versions-item"
   data-testid="versions-item"
-  disabled={false}
   tabIndex="0"
   to="/12345"
 >
@@ -148,6 +150,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
     className="bcs-VersionsItem-badge"
   >
     <VersionsItemBadge
+      isDisabled={false}
       versionNumber={1}
     />
   </div>
