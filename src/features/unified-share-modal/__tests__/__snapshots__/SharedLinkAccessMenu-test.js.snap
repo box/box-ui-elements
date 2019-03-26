@@ -1,21 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/unified-share-modal/SharedLinkAccessMenu render() should render correct menu 1`] = `
-<DropdownMenu
+<Tooltip
+  className="usm-ftux-tooltip"
   constrainToScrollParent={false}
-  constrainToWindow={false}
-  isRightAligned={false}
+  constrainToWindow={true}
+  isShown={false}
+  onDismiss={[Function]}
+  position="middle-left"
+  showCloseButton={true}
+  text={null}
+  theme="callout"
 >
-  <Tooltip
-    className="usm-ftux-tooltip"
+  <DropdownMenu
     constrainToScrollParent={false}
-    constrainToWindow={true}
-    isShown={false}
-    onDismiss={[Function]}
-    position="bottom-center"
-    showCloseButton={true}
-    text={null}
-    theme="callout"
+    constrainToWindow={false}
+    isRightAligned={false}
   >
     <PlainButton
       className="lnk is-disabled"
@@ -30,128 +30,128 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         />
       </MenuToggle>
     </PlainButton>
-  </Tooltip>
-  <Menu
-    className="usm-share-access-menu"
-    isHidden={false}
-    isSubmenu={false}
-  >
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      key="tooltip-peopleWithTheLink"
-      position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This option isn’t available for this item due to a security restriction or classification."
-          id="boxui.unifiedShare.disabledShareLinkPermission"
-          values={
-            Object {
-              "classification": "Internal",
-            }
-          }
-        />
-      }
-      theme="default"
+    <Menu
+      className="usm-share-access-menu"
+      isHidden={false}
+      isSubmenu={false}
     >
-      <SelectMenuItem
-        isDisabled={true}
-        isSelected={false}
-        key="peopleWithTheLink"
-        onClick={[Function]}
-      >
-        <SharedLinkAccessLabel
-          accessLevel="peopleWithTheLink"
-          enterpriseName="Box"
-          hasDescription={true}
-          itemType="folder"
-        />
-      </SelectMenuItem>
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      key="tooltip-peopleInYourCompany"
-      position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This option isn’t available for this item due to a security restriction or classification."
-          id="boxui.unifiedShare.disabledShareLinkPermission"
-          values={
-            Object {
-              "classification": "Internal",
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        key="tooltip-peopleWithTheLink"
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            id="boxui.unifiedShare.disabledShareLinkPermission"
+            values={
+              Object {
+                "classification": "Internal",
+              }
             }
-          }
-        />
-      }
-      theme="default"
-    >
-      <SelectMenuItem
-        isDisabled={true}
-        isSelected={true}
-        key="peopleInYourCompany"
-        onClick={[Function]}
+          />
+        }
+        theme="default"
       >
-        <SharedLinkAccessLabel
-          accessLevel="peopleInYourCompany"
-          enterpriseName="Box"
-          hasDescription={true}
-          itemType="folder"
-        />
-      </SelectMenuItem>
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      key="tooltip-peopleInThisItem"
-      position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This option isn’t available for this item due to a security restriction or classification."
-          id="boxui.unifiedShare.disabledShareLinkPermission"
-          values={
-            Object {
-              "classification": "Internal",
+        <SelectMenuItem
+          isDisabled={true}
+          isSelected={false}
+          key="peopleWithTheLink"
+          onClick={[Function]}
+        >
+          <SharedLinkAccessLabel
+            accessLevel="peopleWithTheLink"
+            enterpriseName="Box"
+            hasDescription={true}
+            itemType="folder"
+          />
+        </SelectMenuItem>
+      </Tooltip>
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        key="tooltip-peopleInYourCompany"
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            id="boxui.unifiedShare.disabledShareLinkPermission"
+            values={
+              Object {
+                "classification": "Internal",
+              }
             }
-          }
-        />
-      }
-      theme="default"
-    >
-      <SelectMenuItem
-        isDisabled={true}
-        isSelected={false}
-        key="peopleInThisItem"
-        onClick={[Function]}
+          />
+        }
+        theme="default"
       >
-        <SharedLinkAccessLabel
-          accessLevel="peopleInThisItem"
-          enterpriseName="Box"
-          hasDescription={true}
-          itemType="folder"
-        />
-      </SelectMenuItem>
-    </Tooltip>
-  </Menu>
-</DropdownMenu>
+        <SelectMenuItem
+          isDisabled={true}
+          isSelected={true}
+          key="peopleInYourCompany"
+          onClick={[Function]}
+        >
+          <SharedLinkAccessLabel
+            accessLevel="peopleInYourCompany"
+            enterpriseName="Box"
+            hasDescription={true}
+            itemType="folder"
+          />
+        </SelectMenuItem>
+      </Tooltip>
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        key="tooltip-peopleInThisItem"
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            id="boxui.unifiedShare.disabledShareLinkPermission"
+            values={
+              Object {
+                "classification": "Internal",
+              }
+            }
+          />
+        }
+        theme="default"
+      >
+        <SelectMenuItem
+          isDisabled={true}
+          isSelected={false}
+          key="peopleInThisItem"
+          onClick={[Function]}
+        >
+          <SharedLinkAccessLabel
+            accessLevel="peopleInThisItem"
+            enterpriseName="Box"
+            hasDescription={true}
+            itemType="folder"
+          />
+        </SelectMenuItem>
+      </Tooltip>
+    </Menu>
+  </DropdownMenu>
+</Tooltip>
 `;
 
 exports[`features/unified-share-modal/SharedLinkAccessMenu render() should render correct menu 2`] = `
-<DropdownMenu
+<Tooltip
+  className="usm-ftux-tooltip"
   constrainToScrollParent={false}
-  constrainToWindow={false}
-  isRightAligned={false}
+  constrainToWindow={true}
+  isShown={false}
+  onDismiss={[Function]}
+  position="middle-left"
+  showCloseButton={true}
+  text={null}
+  theme="callout"
 >
-  <Tooltip
-    className="usm-ftux-tooltip"
+  <DropdownMenu
     constrainToScrollParent={false}
-    constrainToWindow={true}
-    isShown={false}
-    onDismiss={[Function]}
-    position="bottom-center"
-    showCloseButton={true}
-    text={null}
-    theme="callout"
+    constrainToWindow={false}
+    isRightAligned={false}
   >
     <PlainButton
       className="lnk"
@@ -166,128 +166,128 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         />
       </MenuToggle>
     </PlainButton>
-  </Tooltip>
-  <Menu
-    className="usm-share-access-menu"
-    isHidden={false}
-    isSubmenu={false}
-  >
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      key="tooltip-peopleWithTheLink"
-      position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This option isn’t available for this item due to a security restriction or classification."
-          id="boxui.unifiedShare.disabledShareLinkPermission"
-          values={
-            Object {
-              "classification": "Internal",
-            }
-          }
-        />
-      }
-      theme="default"
+    <Menu
+      className="usm-share-access-menu"
+      isHidden={false}
+      isSubmenu={false}
     >
-      <SelectMenuItem
-        isDisabled={true}
-        isSelected={false}
-        key="peopleWithTheLink"
-        onClick={[Function]}
-      >
-        <SharedLinkAccessLabel
-          accessLevel="peopleWithTheLink"
-          enterpriseName="Box"
-          hasDescription={true}
-          itemType="folder"
-        />
-      </SelectMenuItem>
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      key="tooltip-peopleInYourCompany"
-      position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This option isn’t available for this item due to a security restriction or classification."
-          id="boxui.unifiedShare.disabledShareLinkPermission"
-          values={
-            Object {
-              "classification": "Internal",
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        key="tooltip-peopleWithTheLink"
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            id="boxui.unifiedShare.disabledShareLinkPermission"
+            values={
+              Object {
+                "classification": "Internal",
+              }
             }
-          }
-        />
-      }
-      theme="default"
-    >
-      <SelectMenuItem
-        isDisabled={true}
-        isSelected={true}
-        key="peopleInYourCompany"
-        onClick={[Function]}
+          />
+        }
+        theme="default"
       >
-        <SharedLinkAccessLabel
-          accessLevel="peopleInYourCompany"
-          enterpriseName="Box"
-          hasDescription={true}
-          itemType="folder"
-        />
-      </SelectMenuItem>
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      key="tooltip-peopleInThisItem"
-      position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This option isn’t available for this item due to a security restriction or classification."
-          id="boxui.unifiedShare.disabledShareLinkPermission"
-          values={
-            Object {
-              "classification": "Internal",
+        <SelectMenuItem
+          isDisabled={true}
+          isSelected={false}
+          key="peopleWithTheLink"
+          onClick={[Function]}
+        >
+          <SharedLinkAccessLabel
+            accessLevel="peopleWithTheLink"
+            enterpriseName="Box"
+            hasDescription={true}
+            itemType="folder"
+          />
+        </SelectMenuItem>
+      </Tooltip>
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        key="tooltip-peopleInYourCompany"
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            id="boxui.unifiedShare.disabledShareLinkPermission"
+            values={
+              Object {
+                "classification": "Internal",
+              }
             }
-          }
-        />
-      }
-      theme="default"
-    >
-      <SelectMenuItem
-        isDisabled={true}
-        isSelected={false}
-        key="peopleInThisItem"
-        onClick={[Function]}
+          />
+        }
+        theme="default"
       >
-        <SharedLinkAccessLabel
-          accessLevel="peopleInThisItem"
-          enterpriseName="Box"
-          hasDescription={true}
-          itemType="folder"
-        />
-      </SelectMenuItem>
-    </Tooltip>
-  </Menu>
-</DropdownMenu>
+        <SelectMenuItem
+          isDisabled={true}
+          isSelected={true}
+          key="peopleInYourCompany"
+          onClick={[Function]}
+        >
+          <SharedLinkAccessLabel
+            accessLevel="peopleInYourCompany"
+            enterpriseName="Box"
+            hasDescription={true}
+            itemType="folder"
+          />
+        </SelectMenuItem>
+      </Tooltip>
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        key="tooltip-peopleInThisItem"
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            id="boxui.unifiedShare.disabledShareLinkPermission"
+            values={
+              Object {
+                "classification": "Internal",
+              }
+            }
+          />
+        }
+        theme="default"
+      >
+        <SelectMenuItem
+          isDisabled={true}
+          isSelected={false}
+          key="peopleInThisItem"
+          onClick={[Function]}
+        >
+          <SharedLinkAccessLabel
+            accessLevel="peopleInThisItem"
+            enterpriseName="Box"
+            hasDescription={true}
+            itemType="folder"
+          />
+        </SelectMenuItem>
+      </Tooltip>
+    </Menu>
+  </DropdownMenu>
+</Tooltip>
 `;
 
 exports[`features/unified-share-modal/SharedLinkAccessMenu render() should render tooltipContent if provided 1`] = `
-<DropdownMenu
+<Tooltip
+  className="usm-ftux-tooltip"
   constrainToScrollParent={false}
-  constrainToWindow={false}
-  isRightAligned={false}
+  constrainToWindow={true}
+  isShown={true}
+  onDismiss={[Function]}
+  position="middle-left"
+  showCloseButton={true}
+  text="Hello, world!"
+  theme="callout"
 >
-  <Tooltip
-    className="usm-ftux-tooltip"
+  <DropdownMenu
     constrainToScrollParent={false}
-    constrainToWindow={true}
-    isShown={true}
-    onDismiss={[Function]}
-    position="bottom-center"
-    showCloseButton={true}
-    text="Hello, world!"
-    theme="callout"
+    constrainToWindow={false}
+    isRightAligned={false}
   >
     <PlainButton
       className="lnk"
@@ -302,108 +302,108 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         />
       </MenuToggle>
     </PlainButton>
-  </Tooltip>
-  <Menu
-    className="usm-share-access-menu"
-    isHidden={false}
-    isSubmenu={false}
-  >
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      key="tooltip-peopleWithTheLink"
-      position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This option isn’t available for this item due to a security restriction or classification."
-          id="boxui.unifiedShare.disabledShareLinkPermission"
-          values={
-            Object {
-              "classification": "Internal",
-            }
-          }
-        />
-      }
-      theme="default"
+    <Menu
+      className="usm-share-access-menu"
+      isHidden={false}
+      isSubmenu={false}
     >
-      <SelectMenuItem
-        isDisabled={true}
-        isSelected={false}
-        key="peopleWithTheLink"
-        onClick={[Function]}
-      >
-        <SharedLinkAccessLabel
-          accessLevel="peopleWithTheLink"
-          enterpriseName="Box"
-          hasDescription={true}
-          itemType="folder"
-        />
-      </SelectMenuItem>
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      key="tooltip-peopleInYourCompany"
-      position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This option isn’t available for this item due to a security restriction or classification."
-          id="boxui.unifiedShare.disabledShareLinkPermission"
-          values={
-            Object {
-              "classification": "Internal",
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        key="tooltip-peopleWithTheLink"
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            id="boxui.unifiedShare.disabledShareLinkPermission"
+            values={
+              Object {
+                "classification": "Internal",
+              }
             }
-          }
-        />
-      }
-      theme="default"
-    >
-      <SelectMenuItem
-        isDisabled={true}
-        isSelected={true}
-        key="peopleInYourCompany"
-        onClick={[Function]}
+          />
+        }
+        theme="default"
       >
-        <SharedLinkAccessLabel
-          accessLevel="peopleInYourCompany"
-          enterpriseName="Box"
-          hasDescription={true}
-          itemType="folder"
-        />
-      </SelectMenuItem>
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      key="tooltip-peopleInThisItem"
-      position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This option isn’t available for this item due to a security restriction or classification."
-          id="boxui.unifiedShare.disabledShareLinkPermission"
-          values={
-            Object {
-              "classification": "Internal",
+        <SelectMenuItem
+          isDisabled={true}
+          isSelected={false}
+          key="peopleWithTheLink"
+          onClick={[Function]}
+        >
+          <SharedLinkAccessLabel
+            accessLevel="peopleWithTheLink"
+            enterpriseName="Box"
+            hasDescription={true}
+            itemType="folder"
+          />
+        </SelectMenuItem>
+      </Tooltip>
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        key="tooltip-peopleInYourCompany"
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            id="boxui.unifiedShare.disabledShareLinkPermission"
+            values={
+              Object {
+                "classification": "Internal",
+              }
             }
-          }
-        />
-      }
-      theme="default"
-    >
-      <SelectMenuItem
-        isDisabled={true}
-        isSelected={false}
-        key="peopleInThisItem"
-        onClick={[Function]}
+          />
+        }
+        theme="default"
       >
-        <SharedLinkAccessLabel
-          accessLevel="peopleInThisItem"
-          enterpriseName="Box"
-          hasDescription={true}
-          itemType="folder"
-        />
-      </SelectMenuItem>
-    </Tooltip>
-  </Menu>
-</DropdownMenu>
+        <SelectMenuItem
+          isDisabled={true}
+          isSelected={true}
+          key="peopleInYourCompany"
+          onClick={[Function]}
+        >
+          <SharedLinkAccessLabel
+            accessLevel="peopleInYourCompany"
+            enterpriseName="Box"
+            hasDescription={true}
+            itemType="folder"
+          />
+        </SelectMenuItem>
+      </Tooltip>
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        key="tooltip-peopleInThisItem"
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            id="boxui.unifiedShare.disabledShareLinkPermission"
+            values={
+              Object {
+                "classification": "Internal",
+              }
+            }
+          />
+        }
+        theme="default"
+      >
+        <SelectMenuItem
+          isDisabled={true}
+          isSelected={false}
+          key="peopleInThisItem"
+          onClick={[Function]}
+        >
+          <SharedLinkAccessLabel
+            accessLevel="peopleInThisItem"
+            enterpriseName="Box"
+            hasDescription={true}
+            itemType="folder"
+          />
+        </SelectMenuItem>
+      </Tooltip>
+    </Menu>
+  </DropdownMenu>
+</Tooltip>
 `;
