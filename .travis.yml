@@ -16,6 +16,8 @@ jobs:
       script: commitlint-travis
     - name: "Code Lint"
       script: npm-run-all clean build:i18n lint
+    - name: "Flow Debug"
+      script: yarn flow ls | wc -l
     - name: "Flow Types"
       script: npm-run-all clean build:i18n && yarn flow
     - name: "Unit Tests"
