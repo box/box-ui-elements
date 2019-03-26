@@ -11,7 +11,7 @@ exports[`elements/content-sidebar/versions/VersionsItemBadge render should add a
 
 exports[`elements/content-sidebar/versions/VersionsItemBadge render should match its snapshot 1`] = `
 <div
-  aria-label="Version number {versionNumber}"
+  aria-label="Version number 1"
   class="bcs-VersionsItemBadge"
 >
   <div />
