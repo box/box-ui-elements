@@ -17,7 +17,7 @@ type Props = {
         rowIndex: number,
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
-    getGridHeaderSort?: (columnIndex: number) => SORT_ORDER_ASCENDING | SORT_ORDER_DESCENDING | null,
+    getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
     height: number,
     onSortChange?: (columnIndex: number) => any,
     rowCount: number,
