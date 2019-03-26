@@ -19,7 +19,7 @@ jobs:
     - name: "Code Lint"
       script: npm-run-all clean build:i18n lint
     - name: "Flow Types"
-      script: npm-run-all clean build:i18n && yarn flow
+      script: npm-run-all clean build:i18n && yarn flow ls && yarn flow
     - name: "Unit Tests"
       script: yarn test
     - name: "E2E Tests"
