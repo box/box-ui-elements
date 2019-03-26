@@ -31,8 +31,8 @@
     "modified_by": {
         "type": "user",
         "id": "769826773",
-        "name": "Box Platform Demo Account",
-        "login": "box-platform-demos@box.com"
+        "name": "Demo Account",
+        "login": "foo@bar.com"
     },
     "has_collaborations": true,
     "is_externally_owned": false,
@@ -85,8 +85,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -137,8 +137,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -195,8 +195,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -253,8 +253,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -311,8 +311,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -369,8 +369,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -427,8 +427,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -485,8 +485,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -543,8 +543,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -601,8 +601,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false
@@ -659,8 +659,8 @@
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
-                    "name": "Box Platform Demo Account",
-                    "login": "box-platform-demos@box.com"
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
                 },
                 "has_collaborations": true,
                 "is_externally_owned": false

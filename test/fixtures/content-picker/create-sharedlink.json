@@ -50,15 +50,15 @@
     "modified_by": {
         "type": "user",
         "id": "769826773",
-        "name": "Box Platform Demo Account",
-        "login": "box-platform-demos@box.com"
+        "name": "Demo Account",
+        "login": "foo@bar.com"
     },
     "has_collaborations": true,
     "is_externally_owned": false,
     "shared_link": {
         "access": "company",
         "download_count": 0,
-        "download_url": "https://cloud.box.com/shared/static/0s51spttxxw2zetw58hswo13d9vojghqfoo.jpg",
+        "download_url": "https://foobar.com/shared/static/foo.jpg",
         "effective_access": "company",
         "effective_permission": "can_download",
         "is_password_enabled": false,
@@ -68,7 +68,7 @@
         },
         "preview_count": 0,
         "unshared_at": null,
-        "url": "https://cloud.box.com/s/0s51spttxxw2zetw58hswo13d9vojghqfoo",
+        "url": "https://foobar.com/s/foo",
         "vanity_url": null
     }
 }
