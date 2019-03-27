@@ -60,8 +60,6 @@ class ListView extends React.PureComponent<Props> {
                     classNameTopRightGrid="list-view-top-right-grid"
                     columnWidth={({ index: columnIndex }) => (getColumnWidth ? getColumnWidth(columnIndex) : 300)}
                     columnCount={columnCount}
-                    enableFixedColumnScroll
-                    enableFixedRowScroll
                     fixedColumnCount={1}
                     fixedRowCount={FIXED_ROW_COUNT}
                     height={height}
@@ -70,8 +68,6 @@ class ListView extends React.PureComponent<Props> {
                     scrollToColumn={0}
                     scrollToRow={0}
                     width={width}
-                    hideTopRightGridScrollbar
-                    hideBottomLeftGridScrollbar
                 />
             </div>
         );
