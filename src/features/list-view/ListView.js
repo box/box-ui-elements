@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import noop from 'lodash/noop';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
 import { FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
@@ -33,11 +34,11 @@ type CellRendererArgs = {|
 
 class ListView extends React.PureComponent<Props> {
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
-        const { getGridCell, getGridHeader, getGridHeaderSort, onSortChange } = this.props;
+        const { getGridCell, getGridHeader, getGridHeaderSort = noop, onSortChange = noop } = this.props;
 
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
-            const sortDirection = getGridHeaderSort && getGridHeaderSort(columnIndex);
+            const sortDirection = getGridHeaderSort(columnIndex);
             const isSortAsc = sortDirection === SORT_ORDER_ASCENDING;
             const className = classNames({
                 'bdl-ListView-isSortAsc': isSortAsc,
@@ -49,7 +50,7 @@ class ListView extends React.PureComponent<Props> {
                     key={key}
                     style={style}
                     type="button"
-                    onClick={() => onSortChange && onSortChange(columnIndex)}
+                    onClick={() => onSortChange(columnIndex)}
                 >
                     {displayName}
                     {sortDirection && <IconSortChevron className={className} />}
