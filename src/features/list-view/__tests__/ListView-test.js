@@ -57,7 +57,7 @@ describe('features/list-view/ListView', () => {
         test.each`
             columnIndex | rowIndex | cellData                   | should                                                                                                        | className
             ${0}        | ${0}     | ${'h1<IconSortChevron />'} | ${'returns h1<IconSortChevron /> when columnIndex is 0 and rowIndex is 0 and getGridHeaderSort is passed in'} | ${'.icon-sort-chevron.is-sort-asc'}
-            ${1}        | ${0}     | ${'h2'}                    | ${'returns h2 when columnIndex is 0 and rowIndex is 0 and getGridHeaderSort is passed in'}                    | ${'.icon-short-chevron'}
+            ${1}        | ${0}     | ${'h2'}                    | ${'returns h2 when columnIndex is 1 and rowIndex is 0 and getGridHeaderSort is passed in'}                    | ${'.icon-short-chevron'}
         `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
             const wrapper = getWrapper({
                 getGridHeaderSort,
