@@ -8,7 +8,7 @@
         padding-left: 53px;
     }
 
-    button.list-view-column-header {
+    button.bdl-ListView-list-view-column-header {
         border: none;
         color: $seventy-sixers;
         display: flex;
@@ -20,17 +20,17 @@
         text-transform: none;
         width: 100%;
 
-        .icon-sort-chevron {
+        .bdl-icon-sort-chevron {
             height: 17px;
             width: 17px;
         }
 
-        .icon-sort-chevron.is-sort-asc {
+        .bdl-icon-sort-chevron.bdl-ListView-is-sort-asc {
             transform: rotate(180deg);
         }
     }
 
-    .list-view-column-cell {
+    .bdl-ListView-list-view-column-cell {
         border-top: 1px solid $off-white;
         color: $seventy-sixers;
         display: flex;

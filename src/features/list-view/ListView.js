@@ -19,7 +19,7 @@ type Props = {
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
     height: number,
-    onSortChange?: (columnIndex: number) => any,
+    onSortChange?: (columnIndex: number) => void,
     rowCount: number,
     width: number,
 };
@@ -40,12 +40,12 @@ class ListView extends React.PureComponent<Props> {
             const sortDirection = getGridHeaderSort && getGridHeaderSort(columnIndex);
             const isSortAsc = sortDirection === SORT_ORDER_ASCENDING;
             const className = classNames({
-                'is-sort-asc': isSortAsc,
+                'bdl-ListView-is-sort-asc': isSortAsc,
             });
 
             return (
                 <button
-                    className="list-view-column-header"
+                    className="bdl-ListView-list-view-column-header"
                     key={key}
                     style={style}
                     type="button"
@@ -60,7 +60,7 @@ class ListView extends React.PureComponent<Props> {
         const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
 
         return (
-            <div className="list-view-column-cell" key={key} style={style}>
+            <div className="bdl-ListView-list-view-column-cell" key={key} style={style}>
                 {cellData}
             </div>
         );
