@@ -8,6 +8,7 @@ import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
+import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import Header from '../common/header';
@@ -22,30 +23,32 @@ import API from '../../api';
 import Content from './Content';
 import Footer from './Footer';
 import {
-    DEFAULT_HOSTNAME_UPLOAD,
+    CLIENT_NAME_CONTENT_PICKER,
     DEFAULT_HOSTNAME_API,
-    DEFAULT_SEARCH_DEBOUNCE,
-    SORT_ASC,
-    FIELD_NAME,
+    DEFAULT_HOSTNAME_UPLOAD,
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_SIZE,
     DEFAULT_ROOT,
-    VIEW_SEARCH,
-    VIEW_FOLDER,
-    VIEW_SELECTED,
-    VIEW_ERROR,
-    VIEW_RECENTS,
+    DEFAULT_SEARCH_DEBOUNCE,
+    DEFAULT_VIEW_FILES,
+    DEFAULT_VIEW_RECENTS,
+    ERROR_CODE_ITEM_NAME_IN_USE,
+    ERROR_CODE_ITEM_NAME_INVALID,
+    ERROR_CODE_ITEM_NAME_TOO_LONG,
+    FIELD_NAME,
+    FIELD_SHARED_LINK,
+    SORT_ASC,
     TYPE_FILE,
     TYPE_FOLDER,
     TYPE_WEBLINK,
-    CLIENT_NAME_CONTENT_PICKER,
-    DEFAULT_PAGE_NUMBER,
-    DEFAULT_PAGE_SIZE,
-    DEFAULT_VIEW_FILES,
-    DEFAULT_VIEW_RECENTS,
-    ERROR_CODE_ITEM_NAME_INVALID,
-    ERROR_CODE_ITEM_NAME_TOO_LONG,
-    ERROR_CODE_ITEM_NAME_IN_USE,
     TYPED_ID_FOLDER_PREFIX,
+    VIEW_ERROR,
+    VIEW_FOLDER,
+    VIEW_RECENTS,
+    VIEW_SEARCH,
+    VIEW_SELECTED,
 } from '../../constants';
+import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -757,10 +760,11 @@ class ContentPicker extends Component<Props, State> {
      *
      * @private
      * @param {Object} item file or folder object
+     * @param {boolean} options.forceSharedLink Force a shared link if no link exists
      * @return {void}
      */
-    select = (item: BoxItem): void => {
-        const { type: selectableType, maxSelectable }: Props = this.props;
+    select = (item: BoxItem, { forceSharedLink = true }: StringAnyMap = {}): void => {
+        const { canSetShareAccess, type: selectableType, maxSelectable }: Props = this.props;
         const {
             view,
             selected,
@@ -779,6 +783,8 @@ class ContentPicker extends Component<Props, State> {
         const cacheKey: string = this.api.getAPI(type).getCacheKey(id);
         const existing: BoxItem = selected[cacheKey];
         const existingFromCache: BoxItem = this.api.getCache().get(cacheKey);
+        const existInSelected = selectedKeys.indexOf(cacheKey) !== -1;
+        const itemCanSetShareAccess = getProp(item, 'permissions.can_set_share_access', false);
 
         // Existing object could have mutated and we just need to update the
         // reference in the selected map. In that case treat it like a new selection.
@@ -793,9 +799,10 @@ class ContentPicker extends Component<Props, State> {
             // item selection mode, we should also unselect any
             // prior item that was item that was selected.
 
-            // Check if we hit the selection limit
+            // Check if we hit the selection limit and if selection
+            // is not already currently in the selected data structure.
             // Ignore when in single file selection mode.
-            if (hasHitSelectionLimit && !isSingleFileSelection) {
+            if (hasHitSelectionLimit && !isSingleFileSelection && !existInSelected) {
                 return;
             }
 
@@ -809,6 +816,13 @@ class ContentPicker extends Component<Props, State> {
             // Select the new item
             item.selected = true;
             selected[cacheKey] = item;
+
+            // If can set share access, fetch the shared link properties of the item
+            // In the case where another item is selected, any in flight XHR will get
+            // cancelled
+            if (canSetShareAccess && itemCanSetShareAccess && forceSharedLink) {
+                this.fetchSharedLinkInfo(item);
+            }
         }
 
         const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
@@ -818,6 +832,55 @@ class ContentPicker extends Component<Props, State> {
                 this.showSelected();
             }
         });
+    };
+
+    /**
+     * Fetch the shared link info
+     * @param {BoxItem} item - The item (folder, file, weblink)
+     * @returns {void}
+     */
+    fetchSharedLinkInfo = (item: BoxItem): void => {
+        const { id, type }: BoxItem = item;
+
+        switch (type) {
+            case TYPE_FOLDER:
+                this.api.getFolderAPI().getFolderFields(id, this.handleSharedLinkSuccess, noop, {
+                    fields: FILE_SHARED_LINK_FIELDS_TO_FETCH,
+                });
+                break;
+            case TYPE_FILE:
+                this.api
+                    .getFileAPI()
+                    .getFile(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
+                break;
+            case TYPE_WEBLINK:
+                break;
+            default:
+                throw new Error('Unknown Type');
+        }
+    };
+
+    /**
+     * Handles the shared link info by either creating a share link using enterprise defaults if
+     * it does not already exist, otherwise update the item in the state currentCollection.
+     *
+     * @param {Object} item file or folder
+     * @returns {void}
+     */
+    handleSharedLinkSuccess = (item: BoxItem) => {
+        // if no shared link currently exists, create a shared link with enterprise default
+        if (!item[FIELD_SHARED_LINK]) {
+            this.changeShareAccess(null, item);
+        } else {
+            const { selected } = this.state;
+            const { id, type } = item;
+            const cacheKey = this.api.getAPI(type).getCacheKey(id);
+            // if shared link already exists, update the collection in state
+            this.updateItemInCollection(item);
+            if (item.selected && item !== selected[cacheKey]) {
+                this.select(item, { forceSharedLink: false });
+            }
+        }
     };
 
     /**
@@ -845,11 +908,29 @@ class ContentPicker extends Component<Props, State> {
         }
 
         this.api.getAPI(type).share(item, access, (updatedItem: BoxItem) => {
-            this.refreshCollection();
+            this.updateItemInCollection(updatedItem);
             if (item.selected) {
-                this.select(updatedItem);
+                this.select(updatedItem, { forceSharedLink: false });
             }
         });
+    };
+
+    /**
+     * Updates the BoxItem in the state's currentCollection
+     *
+     * @param {Object} item file or folder object
+     * @returns {void}
+     */
+    updateItemInCollection = (item: BoxItem) => {
+        const { currentCollection } = this.state;
+        const { items = [] } = currentCollection;
+        const newState = {
+            currentCollection: {
+                ...currentCollection,
+                items: items.map(collectionItem => (collectionItem.id === item.id ? item : collectionItem)),
+            },
+        };
+        this.setState(newState);
     };
 
     /**
