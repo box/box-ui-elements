@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
 import { FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
-import { CLASS_NAME, SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING } from '../query-bar/constants';
+import { SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING } from '../query-bar/constants';
 import IconSortChevron from '../../icons/general/IconSortChevron';
 
 import './styles/ListView.scss';
@@ -40,12 +40,12 @@ class ListView extends React.PureComponent<Props> {
             const sortDirection = getGridHeaderSort && getGridHeaderSort(columnIndex);
             const isSortAsc = sortDirection === SORT_ORDER_ASCENDING;
             const className = classNames({
-                [`${CLASS_NAME}-isSortAsc`]: isSortAsc,
+                'bdl-ListView-isSortAsc': isSortAsc,
             });
 
             return (
                 <button
-                    className={`${CLASS_NAME}-columnHeader`}
+                    className="bdl-ListView-columnHeader"
                     key={key}
                     style={style}
                     type="button"
@@ -60,7 +60,7 @@ class ListView extends React.PureComponent<Props> {
         const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
 
         return (
-            <div className={`${CLASS_NAME}-columnCell`} key={key} style={style}>
+            <div className="bdl-ListView-columnCell" key={key} style={style}>
                 {cellData}
             </div>
         );
