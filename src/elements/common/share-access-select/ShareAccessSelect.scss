@@ -1,11 +1,15 @@
 @import '../variables';
 
+@function sas-background-image-function($color) {
+    @return linear-gradient(45deg, transparent 50%, $color 50%), linear-gradient(135deg, $color 50%, transparent 50%);
+}
+
 .be {
     select.be-share-access-select {
         appearance: none;
         background: none;
-        background-image: linear-gradient(45deg, transparent 50%, $sevens 50%), linear-gradient(135deg, $sevens 50%, transparent 50%);
-        background-position: calc(100% - 14px) 10px, calc(100% - 10px) 10px;
+        background-image: sas-background-image-function($sevens);
+        background-position: right 14px center, right 10px center;
         background-repeat: no-repeat;
         background-size: 4px 4px, 4px 4px;
         border: 1px solid $grey;
@@ -20,14 +24,14 @@
 
         &:focus,
         &:active {
-            background-image: linear-gradient(45deg, transparent 50%, $blue 50%), linear-gradient(135deg, $blue 50%, transparent 50%);
+            background-image: sas-background-image-function($blue);
             border-color: $blue;
             color: $blue;
             outline: none;
         }
 
         &:disabled {
-            background-image: linear-gradient(45deg, transparent 50%, $off-white 50%), linear-gradient(135deg, $off-white 50%, transparent 50%);
+            background-image: sas-background-image-function($off-white);
             border-color: $off-white;
             color: $off-white;
         }
