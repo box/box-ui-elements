@@ -2,6 +2,8 @@ import React, { Children } from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
+import * as domUtils from '../../../utils/dom';
+
 import SelectorDropdown from '..';
 
 const sandbox = sinon.sandbox.create();
@@ -16,7 +18,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
     const renderEmptyDropdown = props => shallow(<SelectorDropdown selector={<Selector />} {...props} />);
 
     const renderDropdownWithChildren = (children, props) =>
-        shallow(
+        mount(
             <SelectorDropdown selector={<Selector />} {...props}>
                 {Children.map(children, item => (
                     <li key={item}>{item}</li>
@@ -38,7 +40,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const className = 'test';
             const wrapper = renderEmptyDropdown({ className });
 
-            expect(wrapper.hasClass('selector-dropdown-wrapper')).toBe(true);
+            expect(wrapper.hasClass('SelectorDropdown')).toBe(true);
             expect(wrapper.hasClass(className)).toBe(true);
         });
 
@@ -91,6 +93,21 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             });
 
             expect(wrapper.find('.title')).toHaveLength(1);
+        });
+
+        test('should render overlayTitle when passed', () => {
+            const wrapper = renderDropdownWithChildren(['Testing', 'Hello'], {
+                isAlwaysOpen: true,
+                overlayTitle: 'Some Title',
+            });
+
+            expect(wrapper.find('.SelectorDropdown-title')).toHaveLength(1);
+        });
+
+        test('should render divider when passed dividerIndex', () => {
+            const wrapper = renderDropdownWithChildren(['Testing', 'Hello'], { dividerIndex: 1, isAlwaysOpen: true });
+
+            expect(wrapper.find('.SelectorDropdown-divider')).toHaveLength(1);
         });
     });
 
@@ -423,26 +440,6 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
         });
     });
 
-    describe('onItemClick', () => {
-        test('should select item and close dropdown when item is clicked', () => {
-            const onSelectSpy = sandbox.spy();
-            const wrapper = renderDropdownWithChildren(['test'], {
-                onSelect: onSelectSpy,
-            });
-            const instance = wrapper.instance();
-            const event = { type: 'click' };
-            wrapper.setState({
-                shouldOpen: true,
-            });
-
-            sandbox.mock(instance).expects('closeDropdown');
-
-            wrapper.find('li').simulate('click', event);
-
-            expect(onSelectSpy.calledWith(0, event)).toBe(true);
-        });
-    });
-
     describe('onItemMouseDown', () => {
         test('should prevent default when mousedown on item occurs to prevent blur', () => {
             const wrapper = renderDropdownWithChildren(['test']);
@@ -550,56 +547,11 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             expect(wrapper.state('activeItemID')).toEqual(id);
         });
 
-        test('should call scrollItemIntoView', () => {
-            sandbox
-                .mock(instance)
-                .expects('scrollItemIntoView')
-                .once()
-                .withExactArgs(id);
+        test('should call scrollIntoView', () => {
+            const scrollIntoView = jest.spyOn(domUtils, 'scrollIntoView');
             instance.setActiveItemID(id);
-        });
-    });
 
-    describe('scrollItemIntoView()', () => {
-        afterEach(() => {
-            SelectorDropdown.__ResetDependency__('scrollIntoViewIfNeeded');
-        });
-
-        test('should not call scrollIntoViewIfNeeded() when item cannot be found', () => {
-            const wrapper = renderEmptyDropdown();
-            SelectorDropdown.__Rewire__('scrollIntoViewIfNeeded', sandbox.mock().never());
-            wrapper.instance().scrollItemIntoView('blfasdfasdfah');
-        });
-
-        test('should call scrollIntoViewIfNeeded() with parentEl as modal when hierarchy has modal', () => {
-            const id = 'testing-selector-dropdown';
-            const Child = () => <li id={id} />;
-            const wrapper = mount(
-                <SelectorDropdown className="modal" selector={<Selector />}>
-                    <Child />
-                </SelectorDropdown>,
-            );
-            wrapper.setState({ shouldOpen: true });
-            const itemEl = wrapper.find('li').getDOMNode();
-            sandbox
-                .stub(document, 'getElementById')
-                .withArgs(id)
-                .returns(itemEl);
-
-            SelectorDropdown.__Rewire__(
-                'scrollIntoViewIfNeeded',
-                sandbox.mock().withExactArgs(
-                    itemEl,
-                    false,
-                    undefined,
-                    wrapper
-                        .find('.modal')
-                        .hostNodes()
-                        .getDOMNode(),
-                ),
-            );
-
-            wrapper.instance().scrollItemIntoView(id);
+            expect(scrollIntoView).toHaveBeenCalled();
         });
     });
 

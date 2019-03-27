@@ -178,6 +178,8 @@ const onSuggestedCollabAdd = (contact) => {
 <PillSelectorDropdown
     allowCustomPills
     error={state.error}
+    dividerIndex={3}
+    overlayTitle="Overlay Title"
     onInput={handleInput}
     onRemove={handleRemove}
     onSelect={handleSelect}
@@ -185,9 +187,6 @@ const onSuggestedCollabAdd = (contact) => {
     placeholder="Try these suggestions"
     selectedOptions={state.selectedOptions}
     selectorOptions={state.selectorOptions}
-    suggestedPillsData={suggestedCollabs}
-    suggestedPillsFilter="email"
-    suggestedPillsTitle="Suggested:"
     validateForError={validateForError}
     validator={validator}
 >

@@ -4,7 +4,7 @@
  * Selector Dropdown
  **************************************/
 
-.selector-dropdown-wrapper {
+.SelectorDropdown {
     position: relative;
     z-index: 3; /* increase z-index based on max-height of dropdown wrapper */
 
@@ -12,6 +12,26 @@
     .overlay {
         display: block;
         width: 100%;
+
+        .SelectorDropdown-divider {
+            border: 0;
+            border-bottom: 1px solid $bfive;
+            display: block;
+            height: 1px;
+            margin: 5px 5%;
+            pointer-events: none;
+            width: 90%;
+        }
+
+        .SelectorDropdown-title {
+            color: $bfive;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1;
+            margin: 5px 15px;
+            pointer-events: none;
+            text-transform: uppercase;
+        }
     }
 
     .text-input-container {
