@@ -2,11 +2,14 @@
 import * as React from 'react';
 
 import ListView from '../ListView';
+import { SORT_ORDER_ASCENDING } from '../../query-bar/constants';
 // Global Declarations
 
 const rowData = [['A', 'B', 'C'], ['D', 'E', 'F']];
 
 const getGridHeader = columnIndex => ['h1', 'h2'][columnIndex];
+
+const getGridHeaderSort = columnIndex => [SORT_ORDER_ASCENDING, null][columnIndex];
 
 const getGridCell = ({ columnIndex, rowIndex }) => rowData[columnIndex][rowIndex];
 
@@ -49,6 +52,26 @@ describe('features/list-view/ListView', () => {
             expect(testCell.text()).toEqual(cellData);
 
             expect(testCell.hasClass(className)).toBeTruthy();
+        });
+
+        test.each`
+            columnIndex | rowIndex | cellData                   | should                                                                                                        | className
+            ${0}        | ${0}     | ${'h1<IconSortChevron />'} | ${'returns h1<IconSortChevron /> when columnIndex is 0 and rowIndex is 0 and getGridHeaderSort is passed in'} | ${'.icon-sort-chevron.is-sort-asc'}
+            ${1}        | ${0}     | ${'h2'}                    | ${'returns h2 when columnIndex is 0 and rowIndex is 0 and getGridHeaderSort is passed in'}                    | ${'.icon-short-chevron'}
+        `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
+            const wrapper = getWrapper({
+                getGridHeaderSort,
+            });
+
+            const cell = wrapper.instance().cellRenderer({
+                columnIndex,
+                key: 'heh',
+                rowIndex,
+            });
+
+            const testCell = shallow(cell);
+            expect(testCell.text()).toEqual(cellData);
+            expect(testCell.find(className)).toBeTruthy();
         });
     });
 
