@@ -40,12 +40,12 @@ class ListView extends React.PureComponent<Props> {
             const sortDirection = getGridHeaderSort && getGridHeaderSort(columnIndex);
             const isSortAsc = sortDirection === SORT_ORDER_ASCENDING;
             const className = classNames({
-                'bdl-ListView-is-sort-asc': isSortAsc,
+                'bdl-ListView-isSortAsc': isSortAsc,
             });
 
             return (
                 <button
-                    className="bdl-ListView-list-view-column-header"
+                    className="bdl-ListView-columnHeader"
                     key={key}
                     style={style}
                     type="button"
@@ -60,7 +60,7 @@ class ListView extends React.PureComponent<Props> {
         const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
 
         return (
-            <div className="bdl-ListView-list-view-column-cell" key={key} style={style}>
+            <div className="bdl-ListView-columnCell" key={key} style={style}>
                 {cellData}
             </div>
         );
