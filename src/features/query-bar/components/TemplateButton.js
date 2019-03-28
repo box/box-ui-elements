@@ -55,6 +55,8 @@ class TemplateButton extends React.Component<Props, State> {
         if (!templates) {
             icon = <LoadingIndicator className="loading-indicator" />;
             text = <FormattedMessage {...messages.templatesLoadingButtonText} />;
+        } else if (templates.length === 0) {
+            text = <FormattedMessage {...messages.noTemplatesText} />;
         } else if (activeTemplate) {
             icon = <MetadataActiveBadge />;
             text = activeTemplate.displayName;
@@ -70,7 +72,7 @@ class TemplateButton extends React.Component<Props, State> {
         return (
             <Button
                 className={buttonClasses}
-                isDisabled={!templates}
+                isDisabled={!templates || templates.length === 0}
                 type="button"
                 onClick={this.toggleTemplateDropdownButton}
             >
