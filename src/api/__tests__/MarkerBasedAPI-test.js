@@ -77,38 +77,6 @@ describe('api/MarkerBasedAPI', () => {
                 expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
             });
         });
-
-        test('should pass through proper arguments to xhr.get()', () => {
-            const get = jest.fn();
-            const id = '12345';
-            const marker = 'next_marker';
-            const limit = 100;
-            const shouldFetchAll = true;
-            const requestData = {
-                foo: 'bar',
-            };
-            const headers = {
-                test: 'header',
-            };
-            markerBasedAPI.xhr = {
-                get,
-            };
-
-            markerBasedAPI.getUrl = jest.fn().mockReturnValue(url);
-
-            markerBasedAPI.markerGetRequest(id, marker, limit, shouldFetchAll, requestData, headers);
-
-            expect(get).toBeCalledWith({
-                url,
-                id: `file_${id}`,
-                params: {
-                    ...requestData,
-                    marker,
-                    limit,
-                },
-                headers,
-            });
-        });
     });
 
     describe('markerGet()', () => {

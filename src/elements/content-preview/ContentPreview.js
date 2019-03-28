@@ -217,6 +217,7 @@ class ContentPreview extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor,
             fileId,
+            language,
         } = props;
 
         this.id = uniqueid('bcpr_');
@@ -229,6 +230,7 @@ class ContentPreview extends PureComponent<Props, State> {
             clientName: CLIENT_NAME_CONTENT_PREVIEW,
             requestInterceptor,
             responseInterceptor,
+            language,
         });
         this.state = {
             ...this.initialState,

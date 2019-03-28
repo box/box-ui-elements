@@ -126,12 +126,13 @@ class ContentOpenWith extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        const { token, apiHost, clientName, requestInterceptor, responseInterceptor } = props;
+        const { token, apiHost, clientName, language, requestInterceptor, responseInterceptor } = props;
         this.id = uniqueid('bcow_');
         this.api = new API({
             token,
             apiHost,
             clientName,
+            language,
             requestInterceptor,
             responseInterceptor,
         });
