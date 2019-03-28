@@ -1,5 +1,5 @@
 import React, { Children } from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
 import * as domUtils from '../../../utils/dom';
@@ -18,7 +18,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
     const renderEmptyDropdown = props => shallow(<SelectorDropdown selector={<Selector />} {...props} />);
 
     const renderDropdownWithChildren = (children, props) =>
-        mount(
+        shallow(
             <SelectorDropdown selector={<Selector />} {...props}>
                 {Children.map(children, item => (
                     <li key={item}>{item}</li>
@@ -95,7 +95,15 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             expect(wrapper.find('.title')).toHaveLength(1);
         });
 
-        test('should render overlayTitle when passed', () => {
+        test('should render title when passed overlayTitle', () => {
+            const wrapper = renderDropdownWithChildren(['Testing', 'Hello'], {
+                isAlwaysOpen: true,
+            });
+
+            expect(wrapper.find('.SelectorDropdown-title')).toHaveLength(0);
+        });
+
+        test('should not render titie when not passed overlayTitle', () => {
             const wrapper = renderDropdownWithChildren(['Testing', 'Hello'], {
                 isAlwaysOpen: true,
                 overlayTitle: 'Some Title',
@@ -108,6 +116,12 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const wrapper = renderDropdownWithChildren(['Testing', 'Hello'], { dividerIndex: 1, isAlwaysOpen: true });
 
             expect(wrapper.find('.SelectorDropdown-divider')).toHaveLength(1);
+        });
+
+        test('should not render divider when not passed dividerIndex', () => {
+            const wrapper = renderDropdownWithChildren(['Testing', 'Hello'], { isAlwaysOpen: true });
+
+            expect(wrapper.find('.SelectorDropdown-divider')).toHaveLength(0);
         });
     });
 
