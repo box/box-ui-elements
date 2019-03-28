@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { columns, columnsWithoutItemColumn, template } from '../components/fixtures';
+import { columns, columnsWithoutItems, columnsWithoutName, template } from '../components/fixtures';
 import QueryBar from '../QueryBar';
 
 describe('features/query-bar/components/QueryBar', () => {
@@ -24,8 +24,10 @@ describe('features/query-bar/components/QueryBar', () => {
         const wrapper = getWrapper({
             columns,
         });
+        const FilterButton = wrapper.find('FilterButton');
+        expect(FilterButton.props().columns).toEqual(columnsWithoutItems);
         const ColumnButton = wrapper.find('ColumnButton');
-        expect(ColumnButton.props().columns).toEqual(columnsWithoutItemColumn);
+        expect(ColumnButton.props().columns).toEqual(columnsWithoutName);
         expect(wrapper).toMatchSnapshot();
     });
 });

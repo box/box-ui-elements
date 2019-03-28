@@ -29,12 +29,13 @@ const QueryBar = ({
     onTemplateChange,
     templates,
 }: Props) => {
-    const nonItemColumns = columns && columns.filter(column => !ITEM_PROPERTIES.includes(column.property));
+    const columnsWithoutItems = columns && columns.filter(column => !ITEM_PROPERTIES.includes(column.property));
+    const columnsWithoutName = columns && columns.filter(column => column.property !== 'name');
     return (
         <section className="metadata-view-query-bar">
             <TemplateButton activeTemplate={activeTemplate} onTemplateChange={onTemplateChange} templates={templates} />
-            <FilterButton columns={columns} conditions={conditions} onFilterChange={onFilterChange} />
-            <ColumnButton columns={nonItemColumns} onColumnChange={onColumnChange} template={activeTemplate} />
+            <FilterButton columns={columnsWithoutItems} conditions={conditions} onFilterChange={onFilterChange} />
+            <ColumnButton columns={columnsWithoutName} onColumnChange={onColumnChange} template={activeTemplate} />
         </section>
     );
 };
