@@ -1,5 +1,118 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`features/query-bar/components/QueryBar should only have non item columns for ColumnButton 1`] = `
+<section
+  className="metadata-view-query-bar"
+>
+  <TemplateButton
+    usedTemplates={Array []}
+  />
+  <FilterButton
+    columns={
+      Array [
+        Object {
+          "displayName": "Hullo Thar",
+          "id": "1",
+          "isShown": true,
+          "options": null,
+          "property": "name",
+          "source": "item",
+          "type": "string",
+        },
+        Object {
+          "displayName": "Last Updated",
+          "id": "2",
+          "isShown": true,
+          "options": null,
+          "property": "lastUpdatedByName",
+          "source": "item",
+          "type": "date",
+        },
+        Object {
+          "displayName": "Contract Value",
+          "id": "3",
+          "isShown": true,
+          "options": Array [
+            Object {
+              "id": "",
+              "key": "$100",
+            },
+          ],
+          "property": "contractValue",
+          "source": "metadata",
+          "type": "enum",
+        },
+        Object {
+          "displayName": "Offices",
+          "id": "4",
+          "isShown": true,
+          "options": Array [
+            Object {
+              "id": "",
+              "key": "Office A",
+            },
+            Object {
+              "id": "1",
+              "key": "Office B",
+            },
+          ],
+          "property": "offices",
+          "source": "metadata",
+          "type": "multi-enum",
+        },
+      ]
+    }
+  />
+  <ColumnButton
+    columns={
+      Array [
+        Object {
+          "displayName": "Last Updated",
+          "id": "2",
+          "isShown": true,
+          "options": null,
+          "property": "lastUpdatedByName",
+          "source": "item",
+          "type": "date",
+        },
+        Object {
+          "displayName": "Contract Value",
+          "id": "3",
+          "isShown": true,
+          "options": Array [
+            Object {
+              "id": "",
+              "key": "$100",
+            },
+          ],
+          "property": "contractValue",
+          "source": "metadata",
+          "type": "enum",
+        },
+        Object {
+          "displayName": "Offices",
+          "id": "4",
+          "isShown": true,
+          "options": Array [
+            Object {
+              "id": "",
+              "key": "Office A",
+            },
+            Object {
+              "id": "1",
+              "key": "Office B",
+            },
+          ],
+          "property": "offices",
+          "source": "metadata",
+          "type": "multi-enum",
+        },
+      ]
+    }
+  />
+</section>
+`;
+
 exports[`features/query-bar/components/QueryBar should render 1`] = `
 <section
   className="metadata-view-query-bar"

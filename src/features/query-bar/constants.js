@@ -46,3 +46,5 @@ export const COLUMN_OPERATORS = {
     date: ALL_OPERATORS,
     'multi-enum': ALL_OPERATORS,
 };
+
+export const ITEM_PROPERTIES = ['name', 'itemSize', 'contentUpdated'];

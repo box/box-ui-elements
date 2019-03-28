@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { template } from '../components/fixtures';
+import { columns, columnsWithoutItemColumn, template } from '../components/fixtures';
 import QueryBar from '../QueryBar';
 
 describe('features/query-bar/components/QueryBar', () => {
@@ -17,6 +17,15 @@ describe('features/query-bar/components/QueryBar', () => {
         const wrapper = getWrapper({
             templates: [template],
         });
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render ColumnButton with columns that do not include item properties', () => {
+        const wrapper = getWrapper({
+            columns,
+        });
+        const ColumnButton = wrapper.find('ColumnButton');
+        expect(ColumnButton.props().columns).toEqual(columnsWithoutItemColumn);
         expect(wrapper).toMatchSnapshot();
     });
 });
