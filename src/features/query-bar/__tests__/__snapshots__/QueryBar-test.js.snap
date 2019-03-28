@@ -1,6 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/query-bar/components/QueryBar should only have non item columns for ColumnButton 1`] = `
+exports[`features/query-bar/components/QueryBar should render 1`] = `
+<section
+  className="metadata-view-query-bar"
+>
+  <TemplateButton
+    usedTemplates={Array []}
+  />
+  <FilterButton />
+  <ColumnButton />
+</section>
+`;
+
+exports[`features/query-bar/components/QueryBar should render ColumnButton with columns that do not include item properties 1`] = `
 <section
   className="metadata-view-query-bar"
 >
@@ -110,18 +122,6 @@ exports[`features/query-bar/components/QueryBar should only have non item column
       ]
     }
   />
-</section>
-`;
-
-exports[`features/query-bar/components/QueryBar should render 1`] = `
-<section
-  className="metadata-view-query-bar"
->
-  <TemplateButton
-    usedTemplates={Array []}
-  />
-  <FilterButton />
-  <ColumnButton />
 </section>
 `;
 
