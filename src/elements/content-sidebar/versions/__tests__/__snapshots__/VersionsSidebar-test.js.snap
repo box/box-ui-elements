@@ -1,48 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 1`] = `
+exports[`elements/content-sidebar/versions/VersionsSidebar render should show an inline error if the prop is provided 1`] = `
 <SidebarContent
-  className="bcs-versions"
+  className="bcs-Versions"
   title={
     <React.Fragment>
-      <withRouter(BackButton) />
-      <FormattedMessage
-        defaultMessage="Version History"
-        id="be.sidebarVersionsTitle"
+      <BackButton
+        path="/undefined"
       />
-    </React.Fragment>
-  }
-/>
-`;
-
-exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 2`] = `
-<SidebarContent
-  className="bcs-versions"
-  title={
-    <React.Fragment>
-      <withRouter(BackButton) />
       <FormattedMessage
         defaultMessage="Version History"
-        id="be.sidebarVersionsTitle"
-      />
-    </React.Fragment>
-  }
-/>
-`;
-
-exports[`elements/content-sidebar/versions/VersionsSidebar render should match its snapshot 3`] = `
-<SidebarContent
-  className="bcs-versions"
-  title={
-    <React.Fragment>
-      <withRouter(BackButton) />
-      <FormattedMessage
-        defaultMessage="Version History"
-        id="be.sidebarVersionsTitle"
+        id="be.sidebarVersions.title"
       />
     </React.Fragment>
   }
 >
-  12345
+  <LoadingIndicatorWrapper
+    className="bcs-Versions-content"
+  >
+    <SidebarSection
+      className=""
+      isOpen={true}
+    >
+      <InlineError
+        title={
+          <FormattedMessage
+            defaultMessage="Error"
+            id="be.error"
+          />
+        }
+      >
+        This is an error
+      </InlineError>
+    </SidebarSection>
+  </LoadingIndicatorWrapper>
+</SidebarContent>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsSidebar render should show the versions list if no error prop is provided 1`] = `
+<SidebarContent
+  className="bcs-Versions"
+  title={
+    <React.Fragment>
+      <BackButton
+        path="/undefined"
+      />
+      <FormattedMessage
+        defaultMessage="Version History"
+        id="be.sidebarVersions.title"
+      />
+    </React.Fragment>
+  }
+>
+  <LoadingIndicatorWrapper
+    className="bcs-Versions-content"
+  >
+    <SidebarSection
+      className=""
+      isOpen={true}
+    >
+      <VersionsList
+        versions={Array []}
+      />
+    </SidebarSection>
+  </LoadingIndicatorWrapper>
 </SidebarContent>
 `;

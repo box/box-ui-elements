@@ -151,12 +151,12 @@ class Menu extends React.Component<Props> {
         this.setFocus(this.focusIndex - 1);
     };
 
-    fireOnCloseHandler = (isKeyboardEvent: ?boolean) => {
+    fireOnCloseHandler = (isKeyboardEvent: ?boolean, event: SyntheticEvent<>) => {
         const { onClose } = this.props;
 
         if (onClose) {
             // We need to pass the event type so we know which item to focus.
-            onClose(isKeyboardEvent);
+            onClose(isKeyboardEvent, event);
         }
     };
 
@@ -167,7 +167,7 @@ class Menu extends React.Component<Props> {
             return;
         }
 
-        this.fireOnCloseHandler(false);
+        this.fireOnCloseHandler(false, event);
     };
 
     handleKeyDown = (event: SyntheticKeyboardEvent<>) => {
@@ -198,7 +198,7 @@ class Menu extends React.Component<Props> {
                     return;
                 }
                 stopPropagationAndPreventDefault(event);
-                this.fireOnCloseHandler(true);
+                this.fireOnCloseHandler(true, event);
                 break;
 
             case 'Home':
@@ -218,12 +218,12 @@ class Menu extends React.Component<Props> {
             case 'Escape':
                 stopPropagationAndPreventDefault(event);
 
-                this.fireOnCloseHandler(true);
+                this.fireOnCloseHandler(true, event);
                 break;
 
             case 'Tab':
                 // DO NOT PREVENT DEFAULT OR STOP PROPAGATION - This should move focus natively
-                this.fireOnCloseHandler(true);
+                this.fireOnCloseHandler(true, event);
                 break;
 
             case ' ': // Spacebar

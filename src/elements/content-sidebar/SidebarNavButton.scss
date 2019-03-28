@@ -1,7 +1,7 @@
 @import '../common/variables';
 @import './mixins';
 
-.bcs .bcs-nav-btn {
+.bcs .bcs-NavButton {
     @include bdl-SidebarNavButton;
 
     &::before {
@@ -15,7 +15,7 @@
         width: 3px;
     }
 
-    &.bcs-nav-btn-is-selected {
+    &.bcs-is-selected {
         &::before {
             background-color: $blue;
         }
@@ -28,7 +28,7 @@
     &:hover {
         background-color: $ffive;
 
-        &:not(.bcs-nav-btn-is-selected) svg .fill-color {
+        &:not(.bcs-is-selected) svg .fill-color {
             fill: $fours;
         }
     }

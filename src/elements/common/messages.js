@@ -392,11 +392,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Label for file properties section in the preview sidebar',
         defaultMessage: 'File Properties',
     },
-    sidebarVersionsTitle: {
-        id: 'be.sidebarVersionsTitle',
-        description: 'Title for the preview versions sidebar',
-        defaultMessage: 'Version History',
-    },
     defaultSkill: {
         id: 'be.defaultSkill',
         description: 'Label for default skill section in the preview sidebar',

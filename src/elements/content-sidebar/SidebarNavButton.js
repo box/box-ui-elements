@@ -5,9 +5,8 @@
  */
 
 import * as React from 'react';
-import classNames from 'classnames';
 import { Route } from 'react-router-dom';
-import PlainButton from '../../components/plain-button';
+import NavButton from '../common/nav-button';
 import Tooltip from '../../components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
 
@@ -20,33 +19,33 @@ type Props = {
 };
 
 const SidebarNavButton = ({ children, interactionTarget, onNavigate, sidebarView, tooltip }: Props) => {
-    const linkPath = `/${sidebarView}`;
+    const sidebarPath = `/${sidebarView}`;
 
     return (
         <Tooltip position="middle-left" text={tooltip}>
-            <Route path={linkPath}>
-                {({ history, match }) => (
-                    <PlainButton
-                        className={classNames('bcs-nav-btn', {
-                            'bcs-nav-btn-is-selected': !!match,
-                        })}
-                        data-resin-target={interactionTarget}
-                        data-testid={interactionTarget}
-                        onClick={event => {
-                            const isToggle = !!match;
-                            const method = isToggle ? history.replace : history.push;
+            <Route path={sidebarPath}>
+                {({ match }) => {
+                    const isToggle = !!match && match.isExact;
 
-                            if (onNavigate) {
-                                onNavigate(event, { isToggle });
-                            }
-
-                            method({ pathname: linkPath });
-                        }}
-                        type="button"
-                    >
-                        {children}
-                    </PlainButton>
-                )}
+                    return (
+                        <NavButton
+                            activeClassName="bcs-is-selected"
+                            className="bcs-NavButton"
+                            data-resin-target={interactionTarget}
+                            data-testid={interactionTarget}
+                            onClick={event => {
+                                if (onNavigate) {
+                                    onNavigate(event, { isToggle });
+                                }
+                            }}
+                            replace={isToggle}
+                            to={sidebarPath}
+                            type="button"
+                        >
+                            {children}
+                        </NavButton>
+                    );
+                }}
             </Route>
         </Tooltip>
     );

@@ -62,6 +62,7 @@ type Props = {
     enableThumbnailsSidebar: boolean,
     features?: FeatureConfig,
     fileId?: string,
+    fileOptions?: Object,
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
     isLarge: boolean,
@@ -93,6 +94,7 @@ type State = {
     isReloadNotificationVisible: boolean, // the currently displayed file id in the collection
     isThumbnailSidebarOpen: boolean, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
     prevFileIdProp?: string,
+    selectedVersionId?: string,
 };
 
 // Emitted by preview's 'load' event
@@ -264,6 +266,8 @@ class ContentPreview extends PureComponent<Props, State> {
             this.preview.removeAllListeners();
             this.preview = undefined;
         }
+
+        this.setState({ selectedVersionId: undefined });
     }
 
     /**
@@ -291,6 +295,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
     static getDerivedStateFromProps(props: Props, state: State) {
         const { fileId } = props;
+
         if (fileId !== state.prevFileIdProp) {
             return {
                 currentFileId: fileId,
@@ -335,21 +340,23 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Returns whether or not preview should be loaded.
      *
-     * @param {Props} prevProps - Previous props
      * @param {State} prevState - Previous state
      * @return {boolean}
      */
     shouldLoadPreview(prevState: State): boolean {
-        const { file }: State = this.state;
-        const { file: prevFile }: State = prevState;
+        const { file, selectedVersionId }: State = this.state;
+        const { file: prevFile, selectedVersionId: prevSelectedVersionId }: State = prevState;
         const versionPath = 'file_version.id';
-        const previousVersionId = getProp(prevFile, versionPath);
-        const currentVersionId = getProp(file, versionPath);
+        const prevFileVersionId = getProp(prevFile, versionPath);
+        const fileVersionId = getProp(file, versionPath);
         let loadPreview = false;
 
-        if (previousVersionId && currentVersionId) {
-            // Load preview if file version ID has changed
-            loadPreview = currentVersionId !== previousVersionId;
+        if (selectedVersionId !== prevSelectedVersionId) {
+            // Load preview if the user has selected a non-current version of the file
+            loadPreview = true;
+        } else if (fileVersionId && prevFileVersionId) {
+            // Load preview if the file's current version ID has changed
+            loadPreview = fileVersionId !== prevFileVersionId;
         } else {
             // Load preview if file object has newly been populated in state
             loadPreview = !prevFile && !!file;
@@ -496,8 +503,7 @@ class ContentPreview extends PureComponent<Props, State> {
             return 0;
         }
 
-        const totalFetchFileTime = Math.round(this.fetchFileEndTime - this.fetchFileStartTime);
-        return totalFetchFileTime;
+        return Math.round(this.fetchFileEndTime - this.fetchFileStartTime);
     }
 
     /**
@@ -664,34 +670,38 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = async (): Promise<void> => {
-        const {
-            token: tokenOrTokenFunction,
-            collection,
-            onError,
-            enableThumbnailsSidebar,
-            ...rest
-        }: Props = this.props;
-        const { file }: State = this.state;
+        const { enableThumbnailsSidebar, fileOptions, token: tokenOrTokenFunction, ...rest }: Props = this.props;
+        const { file, selectedVersionId }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
             return;
         }
+
         const fileId = this.getFileId(file);
-        const typedId: string = getTypedFileId(fileId);
-        const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
+
         if (fileId !== this.state.currentFileId) {
             return;
         }
 
+        const fileOpts = { ...fileOptions };
+        const typedId: string = getTypedFileId(fileId);
+        const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
+
+        if (selectedVersionId) {
+            fileOpts[fileId] = fileOpts[fileId] || {};
+            fileOpts[fileId].fileVersionId = selectedVersionId;
+        }
+
         const previewOptions = {
             container: `#${this.id} .bcpr-content`,
+            enableThumbnailsSidebar,
+            fileOptions: fileOpts,
             header: 'none',
             headerElement: `#${this.id} .bcpr-header`,
             showAnnotations: this.canViewAnnotations(),
             showDownload: this.canDownload(),
             skipServerUpdate: true,
             useHotkeys: false,
-            enableThumbnailsSidebar,
         };
         const { Preview } = global.Box;
         this.preview = new Preview();
@@ -1029,6 +1039,15 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
+     * Handles version change events
+     *
+     * @param {string} versionId - The version id to set as current
+     */
+    onVersionChange = (versionId?: string) => {
+        this.setState({ selectedVersionId: versionId });
+    };
+
+    /**
      * Holds the reference the preview container
      *
      * @return {void}
@@ -1135,6 +1154,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}
                                 responseInterceptor={responseInterceptor}
+                                onVersionChange={this.onVersionChange}
                             />
                         )}
                     </div>

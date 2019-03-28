@@ -1,0 +1,75 @@
+@import '../../common/variables';
+
+.bcs-VersionsItem {
+    align-items: flex-start;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: $twos;
+    cursor: pointer;
+    display: flex;
+    font-size: 100%;
+    line-height: 20px;
+    outline: none;
+    padding: 15px 10px;
+    position: relative;
+    text-align: left;
+    transition: background-color 50ms ease-in, border 50ms ease-in;
+    width: 100%;
+
+    &:hover,
+    &:focus {
+        border-color: $nines;
+    }
+
+    &.bcs-is-disabled {
+        border-color: transparent;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    &.bcs-is-selected {
+        background-color: $hover-blue-background;
+        border-color: $primary-color;
+    }
+}
+
+.bcs-VersionsItem-badge {
+    flex: 1 0 auto;
+    margin-right: 10px;
+}
+
+.bcs-VersionsItem-current {
+    color: $primary-color;
+    font-weight: bold;
+}
+
+.bcs-VersionsItem-details {
+    flex: 1 1 100%;
+    overflow: hidden;
+}
+
+.bcs-VersionsItem-info {
+    align-items: center;
+    color: $seventy-sixers;
+    display: flex;
+}
+
+.bcs-VersionsItem-log {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bcs-VersionsItem-size {
+    align-items: center;
+    display: flex;
+
+    &::before {
+        content: '•';
+        display: inline-block;
+        font-size: 8px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}

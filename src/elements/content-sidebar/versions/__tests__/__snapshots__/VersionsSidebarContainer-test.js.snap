@@ -2,6 +2,9 @@
 
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer render should match its snapshot 1`] = `
 <VersionsSidebar
+  isLoading={true}
+  parentName="activity"
+  permissions={Object {}}
   versions={Array []}
 />
 `;

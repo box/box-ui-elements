@@ -9,6 +9,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
     className="tooltip-target"
   >
     <Tooltip
+      className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isShown={true}
@@ -53,6 +54,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
     className="tooltip-target"
   >
     <Tooltip
+      className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isShown={true}
@@ -102,6 +104,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     className="tooltip-target"
   >
     <Tooltip
+      className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isShown={true}
@@ -153,6 +156,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className="tooltip-target"
     >
       <Tooltip
+        className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
         isShown={true}
@@ -231,6 +235,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     className="tooltip-target"
   >
     <Tooltip
+      className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isShown={true}
@@ -308,6 +313,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     className="tooltip-target"
   >
     <Tooltip
+      className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isShown={true}
@@ -357,6 +363,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     className="tooltip-target"
   >
     <Tooltip
+      className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isShown={true}
@@ -439,6 +446,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     className="tooltip-target"
   >
     <Tooltip
+      className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isShown={true}

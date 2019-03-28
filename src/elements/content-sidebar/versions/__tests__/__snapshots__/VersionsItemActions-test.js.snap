@@ -1,0 +1,381 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/versions/VersionsItemActions render should return the correct menu items based on permissions 1`] = `
+<DropdownMenu
+  className="bcs-VersionsItemActions"
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isRightAligned={true}
+  onMenuClose={[Function]}
+>
+  <PlainButton
+    className="bcs-VersionsItemActions-toggle"
+    onClick={[Function]}
+  >
+    <IconEllipsis
+      height={4}
+      title={
+        <FormattedMessage
+          defaultMessage="Toggle"
+          id="be.sidebarVersions.toggle"
+        />
+      }
+      width={14}
+    />
+  </PlainButton>
+  <Menu
+    className=""
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconOpenWith
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Preview"
+        id="be.sidebarVersions.preview"
+      />
+    </MenuItem>
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconDownload
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Download"
+        id="be.sidebarVersions.download"
+      />
+    </MenuItem>
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconUpload
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Make Current"
+        id="be.sidebarVersions.promote"
+      />
+    </MenuItem>
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconTrash
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Delete"
+        id="be.sidebarVersions.delete"
+      />
+    </MenuItem>
+  </Menu>
+</DropdownMenu>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItemActions render should return the correct menu items based on permissions 2`] = `
+<DropdownMenu
+  className="bcs-VersionsItemActions"
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isRightAligned={true}
+  onMenuClose={[Function]}
+>
+  <PlainButton
+    className="bcs-VersionsItemActions-toggle"
+    onClick={[Function]}
+  >
+    <IconEllipsis
+      height={4}
+      title={
+        <FormattedMessage
+          defaultMessage="Toggle"
+          id="be.sidebarVersions.toggle"
+        />
+      }
+      width={14}
+    />
+  </PlainButton>
+  <Menu
+    className=""
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconOpenWith
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Preview"
+        id="be.sidebarVersions.preview"
+      />
+    </MenuItem>
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconDownload
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Download"
+        id="be.sidebarVersions.download"
+      />
+    </MenuItem>
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconTrash
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Delete"
+        id="be.sidebarVersions.delete"
+      />
+    </MenuItem>
+  </Menu>
+</DropdownMenu>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItemActions render should return the correct menu items based on permissions 3`] = `
+<DropdownMenu
+  className="bcs-VersionsItemActions"
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isRightAligned={true}
+  onMenuClose={[Function]}
+>
+  <PlainButton
+    className="bcs-VersionsItemActions-toggle"
+    onClick={[Function]}
+  >
+    <IconEllipsis
+      height={4}
+      title={
+        <FormattedMessage
+          defaultMessage="Toggle"
+          id="be.sidebarVersions.toggle"
+        />
+      }
+      width={14}
+    />
+  </PlainButton>
+  <Menu
+    className=""
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconDownload
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Download"
+        id="be.sidebarVersions.download"
+      />
+    </MenuItem>
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconTrash
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Delete"
+        id="be.sidebarVersions.delete"
+      />
+    </MenuItem>
+  </Menu>
+</DropdownMenu>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItemActions render should return the correct menu items based on permissions 4`] = `
+<DropdownMenu
+  className="bcs-VersionsItemActions"
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isRightAligned={true}
+  onMenuClose={[Function]}
+>
+  <PlainButton
+    className="bcs-VersionsItemActions-toggle"
+    onClick={[Function]}
+  >
+    <IconEllipsis
+      height={4}
+      title={
+        <FormattedMessage
+          defaultMessage="Toggle"
+          id="be.sidebarVersions.toggle"
+        />
+      }
+      width={14}
+    />
+  </PlainButton>
+  <Menu
+    className=""
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconTrash
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Delete"
+        id="be.sidebarVersions.delete"
+      />
+    </MenuItem>
+  </Menu>
+</DropdownMenu>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItemActions render should return the correct menu items based on permissions 5`] = `
+<DropdownMenu
+  className="bcs-VersionsItemActions"
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isRightAligned={true}
+  onMenuClose={[Function]}
+>
+  <PlainButton
+    className="bcs-VersionsItemActions-toggle"
+    onClick={[Function]}
+  >
+    <IconEllipsis
+      height={4}
+      title={
+        <FormattedMessage
+          defaultMessage="Toggle"
+          id="be.sidebarVersions.toggle"
+        />
+      }
+      width={14}
+    />
+  </PlainButton>
+  <Menu
+    className=""
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconDownload
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Download"
+        id="be.sidebarVersions.download"
+      />
+    </MenuItem>
+  </Menu>
+</DropdownMenu>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItemActions render should return the correct menu items based on permissions 6`] = `
+<DropdownMenu
+  className="bcs-VersionsItemActions"
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isRightAligned={true}
+  onMenuClose={[Function]}
+>
+  <PlainButton
+    className="bcs-VersionsItemActions-toggle"
+    onClick={[Function]}
+  >
+    <IconEllipsis
+      height={4}
+      title={
+        <FormattedMessage
+          defaultMessage="Toggle"
+          id="be.sidebarVersions.toggle"
+        />
+      }
+      width={14}
+    />
+  </PlainButton>
+  <Menu
+    className=""
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconOpenWith
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Preview"
+        id="be.sidebarVersions.preview"
+      />
+    </MenuItem>
+  </Menu>
+</DropdownMenu>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItemActions render should return the correct menu items based on permissions 7`] = `
+<DropdownMenu
+  className="bcs-VersionsItemActions"
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isRightAligned={true}
+  onMenuClose={[Function]}
+>
+  <PlainButton
+    className="bcs-VersionsItemActions-toggle"
+    onClick={[Function]}
+  >
+    <IconEllipsis
+      height={4}
+      title={
+        <FormattedMessage
+          defaultMessage="Toggle"
+          id="be.sidebarVersions.toggle"
+        />
+      }
+      width={14}
+    />
+  </PlainButton>
+  <Menu
+    className=""
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <MenuItem
+      className="bcs-VersionsItemActions-item"
+    >
+      <IconUpload
+        height={12}
+        width={12}
+      />
+      <FormattedMessage
+        defaultMessage="Make Current"
+        id="be.sidebarVersions.promote"
+      />
+    </MenuItem>
+  </Menu>
+</DropdownMenu>
+`;

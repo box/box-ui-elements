@@ -26,7 +26,6 @@ import {
     FIELD_MODIFIED_AT,
     FIELD_CREATED_AT,
     FIELD_SHARED_LINK,
-    FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
     FIELD_HAS_COLLABORATIONS,
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_CREATED_BY,
@@ -67,8 +66,6 @@ describe('util/fields', () => {
             FIELD_MODIFIED_AT,
             FIELD_CREATED_AT,
             FIELD_MODIFIED_BY,
-            FIELD_SHARED_LINK,
-            FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
             FIELD_HAS_COLLABORATIONS,
             FIELD_IS_EXTERNALLY_OWNED,
             FIELD_ITEM_COLLECTION,
@@ -130,10 +127,11 @@ describe('util/fields', () => {
 
     test('should fetch correct version fields', () => {
         expect(VERSIONS_FIELDS_TO_FETCH).toEqual([
-            FIELD_TRASHED_AT,
             FIELD_CREATED_AT,
             FIELD_MODIFIED_AT,
             FIELD_MODIFIED_BY,
+            FIELD_SIZE,
+            FIELD_TRASHED_AT,
             FIELD_VERSION_NUMBER,
         ]);
     });

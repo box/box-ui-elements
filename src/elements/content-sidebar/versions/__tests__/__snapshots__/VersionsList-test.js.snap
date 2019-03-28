@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/versions/VersionsList render should match its snapshot 1`] = `
+<div
+  className="bcs-VersionsList bcs-is-empty"
+>
+  <FormattedMessage
+    defaultMessage="No prior versions are available for this file."
+    id="be.sidebarVersions.empty"
+  />
+</div>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsList render should match its snapshot 2`] = `
+<div
+  className="bcs-VersionsList bcs-is-empty"
+>
+  <FormattedMessage
+    defaultMessage="No prior versions are available for this file."
+    id="be.sidebarVersions.empty"
+  />
+</div>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsList render should match its snapshot 3`] = `
+<ul
+  className="bcs-VersionsList"
+>
+  <li
+    className="bcs-VersionsList-item"
+    key="12345"
+  >
+    <withRouter(VersionsItem)
+      isCurrent={true}
+      version={
+        Object {
+          "id": "12345",
+        }
+      }
+    />
+  </li>
+</ul>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsList render should match its snapshot 4`] = `
+<ul
+  className="bcs-VersionsList"
+>
+  <li
+    className="bcs-VersionsList-item"
+    key="12345"
+  >
+    <withRouter(VersionsItem)
+      isCurrent={true}
+      version={
+        Object {
+          "id": "12345",
+        }
+      }
+    />
+  </li>
+  <li
+    className="bcs-VersionsList-item"
+    key="45678"
+  >
+    <withRouter(VersionsItem)
+      isCurrent={false}
+      version={
+        Object {
+          "id": "45678",
+        }
+      }
+    />
+  </li>
+</ul>
+`;

@@ -1,0 +1,37 @@
+@import '../../../styles/variables';
+
+.bcs-VersionsList {
+    &.bcs-is-empty {
+        padding-top: 10px;
+        text-align: center;
+    }
+}
+
+.bcs-VersionsList-item {
+    $border-height: 1px;
+    $border-padding: 10px;
+
+    .bcs-VersionsItem {
+        margin-bottom: -$border-height;
+        margin-left: -$border-padding;
+        margin-right: -$border-padding;
+        width: calc(100% + #{$border-padding * 2});
+
+        &:focus,
+        &:hover {
+            z-index: 2;
+        }
+
+        &.bcs-is-selected {
+            z-index: 1;
+        }
+    }
+
+    & + & {
+        border-top: $border-height solid $off-white;
+
+        .bcs-VersionsItem {
+            margin-top: -$border-height;
+        }
+    }
+}

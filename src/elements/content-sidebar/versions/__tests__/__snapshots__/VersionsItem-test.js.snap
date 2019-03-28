@@ -1,0 +1,202 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if none is provided 1`] = `
+<NavButton
+  activeClassName="bcs-is-selected"
+  aria-disabled={false}
+  className="bcs-VersionsItem"
+  component="div"
+  data-resin-target="versions-item"
+  data-testid="versions-item"
+  tabIndex="0"
+  to="/12345"
+>
+  <div
+    className="bcs-VersionsItem-badge"
+  >
+    <VersionsItemBadge
+      isDisabled={false}
+      versionNumber={1}
+    />
+  </div>
+  <div
+    className="bcs-VersionsItem-details"
+  >
+    <div
+      className="bcs-VersionsItem-log"
+    >
+      <FormattedMessage
+        defaultMessage="Uploaded by {name}"
+        id="be.sidebarVersions.uploadedBy"
+        values={
+          Object {
+            "name": <FormattedMessage
+              defaultMessage="Unknown"
+              id="be.sidebarVersions.versionUserUnknown"
+            />,
+          }
+        }
+      />
+    </div>
+    <div
+      className="bcs-VersionsItem-info"
+    >
+      <time
+        className="bcs-VersionsItem-date"
+        dateTime={2019-03-01T08:00:00.000Z}
+      >
+        <ReadableTime
+          alwaysShowTime={true}
+          relativeThreshold={300000}
+          timestamp={1551427200000}
+        />
+      </time>
+      <span
+        className="bcs-VersionsItem-size"
+      >
+        10 KB
+      </span>
+    </div>
+  </div>
+  <VersionsItemActions
+    isDeleted={false}
+    onDelete={[Function]}
+    onDownload={[Function]}
+    onPreview={[Function]}
+    onPromote={[Function]}
+    onRestore={[Function]}
+  />
+</NavButton>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItem render should render a deleted version correctly 1`] = `
+<NavButton
+  activeClassName="bcs-is-selected"
+  aria-disabled={true}
+  className="bcs-VersionsItem bcs-is-disabled"
+  component="div"
+  data-resin-target="versions-item"
+  data-testid="versions-item"
+  tabIndex="0"
+  to="/12345"
+>
+  <div
+    className="bcs-VersionsItem-badge"
+  >
+    <VersionsItemBadge
+      isDisabled={true}
+      versionNumber={1}
+    />
+  </div>
+  <div
+    className="bcs-VersionsItem-details"
+  >
+    <div
+      className="bcs-VersionsItem-log"
+    >
+      <FormattedMessage
+        defaultMessage="Deleted by {name}"
+        id="be.sidebarVersions.deletedBy"
+        values={
+          Object {
+            "name": "Test User",
+          }
+        }
+      />
+    </div>
+    <div
+      className="bcs-VersionsItem-info"
+    >
+      <time
+        className="bcs-VersionsItem-date"
+        dateTime={2019-03-01T08:00:00.000Z}
+      >
+        <ReadableTime
+          alwaysShowTime={true}
+          relativeThreshold={300000}
+          timestamp={1551427200000}
+        />
+      </time>
+      <span
+        className="bcs-VersionsItem-size"
+      >
+        10 KB
+      </span>
+    </div>
+  </div>
+  <VersionsItemActions
+    isDeleted={true}
+    onDelete={[Function]}
+    onDownload={[Function]}
+    onPreview={[Function]}
+    onPromote={[Function]}
+    onRestore={[Function]}
+  />
+</NavButton>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItem render should render an uploaded version correctly 1`] = `
+<NavButton
+  activeClassName="bcs-is-selected"
+  aria-disabled={false}
+  className="bcs-VersionsItem"
+  component="div"
+  data-resin-target="versions-item"
+  data-testid="versions-item"
+  tabIndex="0"
+  to="/12345"
+>
+  <div
+    className="bcs-VersionsItem-badge"
+  >
+    <VersionsItemBadge
+      isDisabled={false}
+      versionNumber={1}
+    />
+  </div>
+  <div
+    className="bcs-VersionsItem-details"
+  >
+    <div
+      className="bcs-VersionsItem-log"
+    >
+      <FormattedMessage
+        defaultMessage="Uploaded by {name}"
+        id="be.sidebarVersions.uploadedBy"
+        values={
+          Object {
+            "name": "Test User",
+          }
+        }
+      />
+    </div>
+    <div
+      className="bcs-VersionsItem-info"
+    >
+      <time
+        className="bcs-VersionsItem-date"
+        dateTime={2019-03-01T08:00:00.000Z}
+      >
+        <ReadableTime
+          alwaysShowTime={true}
+          relativeThreshold={300000}
+          timestamp={1551427200000}
+        />
+      </time>
+      <span
+        className="bcs-VersionsItem-size"
+      >
+        10 KB
+      </span>
+    </div>
+  </div>
+  <VersionsItemActions
+    isDeleted={false}
+    onDelete={[Function]}
+    onDownload={[Function]}
+    onPreview={[Function]}
+    onPromote={[Function]}
+    onRestore={[Function]}
+  />
+</NavButton>
+`;

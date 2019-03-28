@@ -14,7 +14,7 @@ type Props = {
 
 const IconSortChevron = ({ className = '', color = '#aeaeae', height = 11, title, width = 11 }: Props) => (
     <AccessibleSVG
-        className={`icon-sort-chevron ${className}`}
+        className={`bdl-icon-sort-chevron ${className}`}
         height={height}
         title={title}
         viewBox="0 0 9.8 9.7"

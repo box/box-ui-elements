@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/common/back-button should match its snapshot 1`] = `
+exports[`elements/common/nav-button/BackButton should match its snapshot 1`] = `
 <PlainButton
-  className="be-btn-back"
+  className="bdl-BackButton"
   onClick={[Function]}
   type="button"
 >
