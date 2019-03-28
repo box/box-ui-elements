@@ -1,6 +1,12 @@
 import * as React from 'react';
 
-import { columns, columnsWithoutItems, columnsWithoutName, template } from '../components/fixtures';
+import {
+    columnForTemplateFieldName,
+    columns,
+    columnsWithoutItems,
+    columnsWithPropertyName,
+    template,
+} from '../components/fixtures';
 import QueryBar from '../QueryBar';
 
 describe('features/query-bar/components/QueryBar', () => {
@@ -20,14 +26,19 @@ describe('features/query-bar/components/QueryBar', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render ColumnButton with columns that do not include item properties', () => {
+    test('should render ColumnButton with columns that does not include property: "name" and source: "metadata"', () => {
+        const wrapper = getWrapper({
+            columns: columnsWithPropertyName,
+        });
+        const ColumnButton = wrapper.find('ColumnButton');
+        expect(ColumnButton.props().columns).toEqual([columnForTemplateFieldName]);
+    });
+
+    test('should render FilterButton with columns without items', () => {
         const wrapper = getWrapper({
             columns,
         });
         const FilterButton = wrapper.find('FilterButton');
         expect(FilterButton.props().columns).toEqual(columnsWithoutItems);
-        const ColumnButton = wrapper.find('ColumnButton');
-        expect(ColumnButton.props().columns).toEqual(columnsWithoutName);
-        expect(wrapper).toMatchSnapshot();
     });
 });
