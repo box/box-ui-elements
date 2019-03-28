@@ -23,15 +23,6 @@ exports[`features/query-bar/components/QueryBar should render ColumnButton with 
     columns={
       Array [
         Object {
-          "displayName": "Last Updated",
-          "id": "2",
-          "isShown": true,
-          "options": null,
-          "property": "lastUpdatedByName",
-          "source": "item",
-          "type": "date",
-        },
-        Object {
           "displayName": "Contract Value",
           "id": "3",
           "isShown": true,

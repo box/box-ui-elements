@@ -93,7 +93,7 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
     columnWithMultiEnumType,
 ];
 
-const columnsWithoutItems: Array<ColumnType> = [columnWithDateType, columnWithEnumType, columnWithMultiEnumType];
+const columnsWithoutItems: Array<ColumnType> = [columnWithEnumType, columnWithMultiEnumType];
 const columnsWithoutName: Array<ColumnType> = [columnWithDateType, columnWithEnumType, columnWithMultiEnumType];
 
 const expectedVisibleColumns = {
