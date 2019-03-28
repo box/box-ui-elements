@@ -26,6 +26,9 @@ export const NOT_EQUALS: '!=' = '!=';
 export const GREATER_THAN: '>' = '>';
 export const LESS_THAN: '<' = '<';
 
+export const SORT_ORDER_ASCENDING: 'ASC' = 'ASC';
+export const SORT_ORDER_DESCENDING: 'DESC' = 'DESC';
+
 export const OPERATORS = {
     EQUALS: { displayText: 'is', key: EQUALS },
     NOT_EQUALS: { displayText: 'is not', key: NOT_EQUALS },
@@ -41,5 +44,5 @@ export const COLUMN_OPERATORS = {
     float: ALL_OPERATORS,
     enum: ALL_OPERATORS,
     date: ALL_OPERATORS,
-    MULTI_ENUM: ALL_OPERATORS,
+    'multi-enum': ALL_OPERATORS,
 };
