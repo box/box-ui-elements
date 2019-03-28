@@ -8,18 +8,29 @@
         padding-left: 53px;
     }
 
-    .list-view-column-header {
+    button.bdl-ListView-columnHeader {
+        border: none;
         color: $seventy-sixers;
         display: flex;
         font-weight: 400;
         justify-content: flex-start;
         letter-spacing: .035em;
+        padding-left: 0;
         padding-top: 24px;
         text-transform: none;
         width: 100%;
+
+        .bdl-icon-sort-chevron {
+            height: 17px;
+            width: 17px;
+        }
+
+        .bdl-icon-sort-chevron.bdl-ListView-isSortAsc {
+            transform: rotate(180deg);
+        }
     }
 
-    .list-view-column-cell {
+    .bdl-ListView-columnCell {
         border-top: 1px solid $off-white;
         color: $seventy-sixers;
         display: flex;
