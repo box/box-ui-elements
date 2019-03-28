@@ -7,5 +7,8 @@ export default {
             newApi: true,
             newCards: true,
         },
+        appActivity: {
+            enabled: false,
+        },
     },
 };

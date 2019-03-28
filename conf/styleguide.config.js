@@ -46,6 +46,7 @@ const allSections = [
             '../src/components/flyout/Flyout.js',
             '../src/components/flyout/Overlay.js',
             '../src/components/focus-trap/FocusTrap.js',
+            '../src/components/footer-indicator/FooterIndicator.js',
             '../src/components/header/Header.js',
             '../src/components/hotkeys/HotkeyFriendlyModal.js',
             '../src/components/hotkeys/HotkeyLayer.js',
