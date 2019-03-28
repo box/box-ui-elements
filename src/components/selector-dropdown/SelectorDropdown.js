@@ -251,16 +251,14 @@ class SelectorDropdown extends React.Component<Props, State> {
                         itemProps.isActive = true;
                     }
 
-                    if (index === dividerIndex) {
-                        return (
-                            <React.Fragment>
-                                <hr className="SelectorDropdown-divider" />
-                                {React.cloneElement(item, itemProps)}
-                            </React.Fragment>
-                        );
-                    }
+                    const hasDivider = index === dividerIndex;
 
-                    return React.cloneElement(item, itemProps);
+                    return (
+                        <React.Fragment>
+                            {hasDivider && <hr className="SelectorDropdown-divider" />}
+                            {React.cloneElement(item, itemProps)}
+                        </React.Fragment>
+                    );
                 })}
             </ul>
         );

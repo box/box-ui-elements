@@ -18,9 +18,9 @@
             border-bottom: 1px solid $bfive;
             display: block;
             height: 1px;
-            margin: 5px 5%;
+            margin: 5px 15px;
             pointer-events: none;
-            width: 90%;
+            width: calc(100% - 30px);
         }
 
         .SelectorDropdown-title {
