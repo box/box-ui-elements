@@ -4,7 +4,6 @@ import * as React from 'react';
 import TemplateButton from './components/TemplateButton';
 import FilterButton from './components/filter/FilterButton';
 import ColumnButton from './components/ColumnButton';
-import { ITEM_PROPERTIES } from './constants';
 
 import type { ColumnType, ConditionType } from './flowTypes';
 
@@ -29,8 +28,9 @@ const QueryBar = ({
     onTemplateChange,
     templates,
 }: Props) => {
-    const columnsWithoutItems = columns && columns.filter(column => !ITEM_PROPERTIES.includes(column.property));
-    const columnsWithoutName = columns && columns.filter(column => column.property !== 'name');
+    const columnsWithoutItems = columns && columns.filter(column => column.source !== 'item');
+    const columnsWithoutName =
+        columns && columns.filter(column => column.property !== 'name' || column.source === 'metadata');
     return (
         <section className="metadata-view-query-bar">
             <TemplateButton activeTemplate={activeTemplate} onTemplateChange={onTemplateChange} templates={templates} />
