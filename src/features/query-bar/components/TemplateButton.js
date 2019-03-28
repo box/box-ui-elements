@@ -52,7 +52,7 @@ class TemplateButton extends React.Component<Props, State> {
         let icon;
         let text;
 
-        const isLoadingTemplates = templates === null;
+        const isLoadingTemplates = !templates;
         const noTemplatesInEnterprise = templates && templates.length === 0;
 
         if (isLoadingTemplates) {
