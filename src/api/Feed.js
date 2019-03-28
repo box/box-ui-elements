@@ -19,15 +19,13 @@ import TaskLinksAPI from './TaskLinks';
 import TaskAssignmentsAPI from './TaskAssignments';
 import AppActivityAPI from './AppActivity';
 import {
-    VERSION_UPLOAD_ACTION,
-    VERSION_RESTORE_ACTION,
-    TYPED_ID_FEED_PREFIX,
-    HTTP_STATUS_CODE_CONFLICT,
-    IS_ERROR_DISPLAYED,
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_CREATE_TASK_ASSIGNMENT,
-    TASK_NEW_INCOMPLETE,
+    HTTP_STATUS_CODE_CONFLICT,
+    IS_ERROR_DISPLAYED,
     TASK_INCOMPLETE,
+    TASK_NEW_INCOMPLETE,
+    TYPED_ID_FEED_PREFIX,
 } from '../constants';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_INCOMPLETE;
@@ -181,7 +179,7 @@ class Feed extends Base {
 
         Promise.all([versionsPromise, commentsPromise, tasksPromise, appActivityPromise]).then(feedItems => {
             const versions: ?FileVersions = feedItems[0];
-            const versionsWithRestoredVersion = this.addCurrentVersion(versions, file);
+            const versionsWithRestoredVersion = this.versionsAPI.addCurrentVersion(versions, file);
             const unsortedFeedItems = [versionsWithRestoredVersion, ...feedItems.slice(1)];
             const sortedFeedItems = sortFeedItems(...unsortedFeedItems);
             if (!this.isDestroyed()) {
@@ -1265,50 +1263,6 @@ class Feed extends Base {
             },
         });
     };
-
-    /**
-     * Adds the current version from the file object, which may be a restore
-     *
-     * @param {FileVersions} versions - API returned file versions for this file
-     * @return {FileVersions} modified versions array including the current/restored version
-     */
-    addCurrentVersion(versions: ?FileVersions, file: BoxItem): ?FileVersions {
-        const { restored_from, modified_at, file_version } = file;
-
-        if (!file_version || !versions) {
-            return versions;
-        }
-
-        const { modified_by, version_number } = file;
-        let currentVersion = file_version;
-        let action = VERSION_UPLOAD_ACTION;
-        let versionNumber = version_number;
-
-        if (restored_from) {
-            const { id: restoredFromId } = restored_from;
-            const restoredVersion = versions.entries.find((version: BoxItemVersion) => version.id === restoredFromId);
-            if (restoredVersion) {
-                versionNumber = restoredVersion.version_number;
-                action = VERSION_RESTORE_ACTION;
-                currentVersion = {
-                    ...restoredVersion,
-                    ...currentVersion,
-                };
-            }
-        }
-
-        const currentFileVersion: BoxItemVersion = {
-            ...currentVersion,
-            action,
-            modified_by,
-            created_at: modified_at,
-            version_number: versionNumber,
-        };
-        return {
-            total_count: versions.total_count + 1,
-            entries: [...versions.entries, currentFileVersion],
-        };
-    }
 
     /**
      * Destroys all the task assignment API's

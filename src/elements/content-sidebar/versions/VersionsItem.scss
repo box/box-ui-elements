@@ -1,6 +1,7 @@
 @import '../../common/variables';
 
 .bcs-VersionsItem {
+    align-items: flex-start;
     background: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -25,11 +26,6 @@
         border-color: transparent;
         cursor: default;
         pointer-events: none;
-
-        .bcs-VersionsItem-badge {
-            background-color: $ffive;
-            color: inherit;
-        }
     }
 
     &.bcs-is-selected {
@@ -39,14 +35,13 @@
 }
 
 .bcs-VersionsItem-badge {
-    background-color: $selected-blue-background;
-    border-radius: 4px;
-    color: $primary-color;
     flex: 1 0 auto;
-    font-size: 18px;
     margin-right: 10px;
-    padding: 10px 8px;
-    text-align: center;
+}
+
+.bcs-VersionsItem-current {
+    color: $primary-color;
+    font-weight: bold;
 }
 
 .bcs-VersionsItem-details {
@@ -60,7 +55,7 @@
     display: flex;
 }
 
-.bcs-VersionsItem-title {
+.bcs-VersionsItem-log {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -2,7 +2,7 @@
 
 exports[`icons/general/IconSortChevron should correctly render default icon 1`] = `
 <AccessibleSVG
-  className="icon-sort-chevron "
+  className="bdl-icon-sort-chevron "
   height={11}
   viewBox="0 0 9.8 9.7"
   width={11}
@@ -17,7 +17,7 @@ exports[`icons/general/IconSortChevron should correctly render default icon 1`] 
 
 exports[`icons/general/IconSortChevron should correctly render icon with specified props 1`] = `
 <AccessibleSVG
-  className="icon-sort-chevron test"
+  className="bdl-icon-sort-chevron test"
   height={100}
   title="title"
   viewBox="0 0 9.8 9.7"

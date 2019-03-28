@@ -10,7 +10,8 @@ describe('elements/content-sidebar/versions/VersionsList', () => {
             versions
             ${undefined}
             ${[]}
-            ${[{ id: 12345 }]}
+            ${[{ id: '12345' }]}
+            ${[{ id: '12345' }, { id: '45678' }]}
         `('should match its snapshot', ({ versions }) => {
             const wrapper = getWrapper({ versions });
             expect(wrapper).toMatchSnapshot();

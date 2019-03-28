@@ -21,6 +21,7 @@ type Props = {
 type State = {
     error?: string,
     isLoading: boolean,
+    permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
@@ -29,6 +30,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     state: State = {
         isLoading: true,
+        permissions: {},
         versions: [],
     };
 
@@ -38,9 +40,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     componentDidMount() {
-        const { api, fileId } = this.props;
-
-        api.getVersionsAPI(false).getVersions(fileId, this.handleFetchVersionsSuccess, this.handleFetchVersionsError);
+        this.fetchFile();
     }
 
     componentDidUpdate({ versionId: prevVersionId }: Props) {
@@ -57,19 +57,40 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.props.onVersionChange();
     }
 
-    handleFetchVersionsError = ({ message }) => {
+    fetchFile = () => {
+        const { api, fileId } = this.props;
+
+        api.getFileAPI().getFile(fileId, this.fetchVersions, this.handleFetchError);
+    };
+
+    fetchVersions = (file: BoxItem) => {
+        const { api, fileId } = this.props;
+
+        api.getVersionsAPI(false).getVersions(
+            fileId,
+            responseData => this.handleFetchSuccess(responseData, file),
+            this.handleFetchError,
+        );
+    };
+
+    handleFetchError = ({ message }: ElementsXhrError) => {
         this.setState({
             error: message,
             isLoading: false,
+            permissions: {},
             versions: [],
         });
     };
 
-    handleFetchVersionsSuccess = ({ entries: versions }) => {
+    handleFetchSuccess = (responseData: FileVersions, file: BoxItem) => {
+        const { api } = this.props;
+        const { entries: versions } = api.getVersionsAPI(false).addCurrentVersion(responseData, file) || {};
+
         this.setState({
             error: undefined,
             isLoading: false,
-            versions,
+            permissions: file.permissions || {},
+            versions: versions.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
         });
     };
 

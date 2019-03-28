@@ -114,16 +114,16 @@ class SharedLinkAccessMenu extends React.Component<Props> {
         const { sharedLinkAccessMenuButtonProps } = trackingProps;
 
         return (
-            <DropdownMenu>
-                <Tooltip
-                    className="usm-ftux-tooltip"
-                    isShown={!!tooltipContent}
-                    onDismiss={onDismissTooltip}
-                    position="bottom-center"
-                    showCloseButton
-                    text={tooltipContent}
-                    theme="callout"
-                >
+            <Tooltip
+                className="usm-ftux-tooltip"
+                isShown={!!tooltipContent}
+                onDismiss={onDismissTooltip}
+                position="middle-left"
+                showCloseButton
+                text={tooltipContent}
+                theme="callout"
+            >
+                <DropdownMenu>
                     <PlainButton
                         className={classNames('lnk', {
                             'is-disabled': submitting,
@@ -140,9 +140,9 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                             />
                         </MenuToggle>
                     </PlainButton>
-                </Tooltip>
-                {this.renderMenu()}
-            </DropdownMenu>
+                    {this.renderMenu()}
+                </DropdownMenu>
+            </Tooltip>
         );
     }
 }

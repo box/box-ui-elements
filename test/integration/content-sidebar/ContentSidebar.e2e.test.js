@@ -53,9 +53,14 @@ describe('ContentSidebar', () => {
             cy.getByTestId('sidebardetails').click();
             cy.getByTestId('versionhistory').click();
             cy.contains('[data-testid="bcs-content"]', 'Version History').as('versionHistory');
-            cy.getByTestId('versions-item')
-                .click()
-                .should('have.class', 'bcs-is-selected');
+
+            cy.getByTestId('versions-item').within($versionsItem => {
+                cy.wrap($versionsItem)
+                    .contains('V2')
+                    .click();
+                cy.wrap($versionsItem).should('have.class', 'bcs-is-selected');
+            });
+
             cy.get('@versionHistory')
                 .contains('Back')
                 .click();
