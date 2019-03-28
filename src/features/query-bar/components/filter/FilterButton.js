@@ -264,6 +264,7 @@ class FilterButton extends React.Component<Props, State> {
                 onClose={this.onClose}
                 onOpen={this.onOpen}
                 overlayIsVisible={isMenuOpen}
+                portaledClasses={['pika-single']} /* Element in DatePicker package  */
                 position="bottom-right"
                 shouldDefaultFocus
             >
