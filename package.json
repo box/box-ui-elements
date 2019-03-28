@@ -118,6 +118,7 @@
         "collectCoverage": false,
         "coverageDirectory": "<rootDir>/reports",
         "collectCoverageFrom": ["src/**/*.js", "!**/node_modules/**", "!**/__tests__/**"],
+        "globalSetup": "<rootDir>/test-utils/env-setup.js",
         "roots": ["src"],
         "setupFilesAfterEnv": [
             "<rootDir>/node_modules/regenerator-runtime/runtime.js",
