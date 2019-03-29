@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
 
-import ListView, { DEFAULT_COLUMN_WIDTH } from '../ListView';
+import ListView from '../ListView';
+import { DEFAULT_COLUMN_WIDTH } from '../constants';
 import { SORT_ORDER_ASCENDING } from '../../query-bar/constants';
 // Global Declarations
 

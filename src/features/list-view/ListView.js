@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import noop from 'lodash/noop';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
-import { FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
 import { SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING } from '../query-bar/constants';
 import IconSortChevron from '../../icons/general/IconSortChevron';
 
+import { DEFAULT_COLUMN_WIDTH, FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
 import type { CellRendererArgs, ComputeColumnWidthArgs } from './flowTypes';
 
 import './styles/ListView.scss';
@@ -26,8 +26,6 @@ type Props = {
     rowCount: number,
     width: number,
 };
-
-export const DEFAULT_COLUMN_WIDTH = 300;
 
 class ListView extends React.PureComponent<Props> {
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
