@@ -72,7 +72,7 @@ class ModalDialog extends React.Component<Props> {
                 className="modal-close-button"
                 onClick={this.onCloseButtonClick}
             >
-                <IconClose color="#999EA4" height={18} width={18} />
+                <IconClose color="#909090" height={18} width={18} />
             </button>
         );
     }
