@@ -8,6 +8,8 @@ import { FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
 import { SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING } from '../query-bar/constants';
 import IconSortChevron from '../../icons/general/IconSortChevron';
 
+import type { CellRendererArgs, ComputeColumnWidthArgs } from './flowTypes';
+
 import './styles/ListView.scss';
 
 type Props = {
@@ -24,17 +26,6 @@ type Props = {
     rowCount: number,
     width: number,
 };
-
-type CellRendererArgs = {|
-    columnIndex: number,
-    key: string,
-    rowIndex: number,
-    style: Object,
-|};
-
-type ComputeColumnWidthArgs = {|
-    index: number,
-|};
 
 export const DEFAULT_COLUMN_WIDTH = 300;
 
