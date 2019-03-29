@@ -12,13 +12,15 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
 
     describe('render', () => {
         test('should disable FilterButton when columns is undefined', () => {
-            const wrapper = getWrapper({ columns: undefined, conditions: [] });
-            expect(wrapper).toMatchSnapshot();
+            const wrapper = getWrapper({ columns: undefined });
+            const Button = wrapper.find('Button');
+            expect(Button.props().isDisabled).toEqual(true);
         });
 
         test('should enable FilterButton when columns is non-empty', () => {
-            const wrapper = getWrapper({ columns, conditions: [] });
-            expect(wrapper).toMatchSnapshot();
+            const wrapper = getWrapper({ columns });
+            const Button = wrapper.find('Button');
+            expect(Button.props().isDisabled).toEqual(false);
         });
     });
 
@@ -221,20 +223,41 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         const validConditions = [{ values: [1] }];
         const incompleteConditions = [{ values: [] }];
 
-        test.each`
-            description                                                            | transientConditions     | stateProperty            | expectedState
-            ${'Should empty out transientConditions when Apply button is clicked'} | ${validConditions}      | ${'transientConditions'} | ${[]}
-            ${'Should close the menu when Apply Button is clicked'}                | ${validConditions}      | ${'isMenuOpen'}          | ${false}
-            ${'Should show error message if not all conditions are valid'}         | ${incompleteConditions} | ${'areErrorsEnabled'}    | ${true}
-        `('$description', ({ transientConditions, stateProperty, expectedState }) => {
+        test('Should empty out transientConditions when Apply button is clicked', () => {
             const wrapper = getWrapper({ conditions: [] });
             wrapper.instance().setState({
-                transientConditions,
+                transientConditions: validConditions,
+                isMenuOpen: true,
             });
 
-            wrapper.instance().applyFilters();
+            wrapper.find('PrimaryButton').simulate('click');
 
-            expect(wrapper.state(stateProperty)).toEqual(expectedState);
+            expect(wrapper.state('transientConditions')).toEqual([]);
+        });
+
+        test('Should close the menu when Apply Button is clicked', () => {
+            const wrapper = getWrapper({ conditions: [] });
+            wrapper.instance().setState({
+                transientConditions: validConditions,
+                isMenuOpen: true,
+            });
+
+            wrapper.find('PrimaryButton').simulate('click');
+
+            const Flyout = wrapper.find('Flyout');
+            expect(Flyout.props().overlayIsVisible).toBe(false);
+        });
+
+        test('Should show error message if not all conditions are valid', () => {
+            const wrapper = getWrapper({ conditions: [] });
+            wrapper.instance().setState({
+                transientConditions: incompleteConditions,
+                isMenuOpen: true,
+            });
+
+            wrapper.find('PrimaryButton').simulate('click');
+
+            expect(wrapper.state('areErrorsEnabled')).toEqual(true);
         });
     });
 
