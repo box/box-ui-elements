@@ -103,7 +103,7 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
     columnWithMultiEnumType,
 ];
 
-const columnsWithPropertyName: Array<ColumnType> = [columnWithStringType, columnForTemplateFieldName];
+const columnsWithTemplateFieldName: Array<ColumnType> = [columnWithStringType, columnForTemplateFieldName];
 const columnsWithoutItems: Array<ColumnType> = [columnWithEnumType, columnWithMultiEnumType];
 
 const expectedVisibleColumns = {
@@ -531,8 +531,8 @@ export {
     columnOptions,
     columnsWithNewOrder,
     columnsWithOneColumnNotShown,
+    columnsWithTemplateFieldName,
     columnsWithoutItems,
-    columnsWithPropertyName,
     expectedVisibleColumns,
     visibleColumnsOneHidden,
     expectedVisibleColumnsOneHidden,
