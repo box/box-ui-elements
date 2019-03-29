@@ -79,7 +79,6 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
       columns={
         Array [
           Object {
-            "direction": null,
             "displayName": "Hullo Thar",
             "id": "1",
             "isShown": true,
@@ -89,7 +88,6 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "type": "string",
           },
           Object {
-            "direction": null,
             "displayName": "Last Updated",
             "id": "2",
             "isShown": true,
@@ -99,7 +97,6 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "type": "date",
           },
           Object {
-            "direction": null,
             "displayName": "Contract Value",
             "id": "3",
             "isShown": true,
@@ -114,7 +111,6 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "type": "enum",
           },
           Object {
-            "direction": null,
             "displayName": "Offices",
             "id": "4",
             "isShown": true,

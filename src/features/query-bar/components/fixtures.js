@@ -19,7 +19,6 @@ const columnOptions = [
 const conditions: Array<ConditionType> = [initialCondition];
 
 const columnWithStringType = {
-    direction: null,
     displayName: 'Hullo Thar',
     id: '1',
     isShown: true,
@@ -30,7 +29,6 @@ const columnWithStringType = {
 };
 
 const columnWithDateType = {
-    direction: null,
     displayName: 'Last Updated',
     id: '2',
     isShown: true,
@@ -41,7 +39,6 @@ const columnWithDateType = {
 };
 
 const columnWithEnumType = {
-    direction: null,
     displayName: 'Contract Value',
     id: '3',
     isShown: true,
@@ -57,7 +54,6 @@ const columnWithEnumType = {
 };
 
 const columnWithMultiEnumType = {
-    direction: null,
     displayName: 'Offices',
     id: '4',
     isShown: true,
