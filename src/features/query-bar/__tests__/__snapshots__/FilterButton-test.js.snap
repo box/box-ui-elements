@@ -15,7 +15,11 @@ exports[`feature/query-bar/components/filter/FilterButton render should disable 
   openOnHover={false}
   openOnHoverDelayTimeout={300}
   overlayIsVisible={false}
-  portaledClasses={Array []}
+  portaledClasses={
+    Array [
+      "pika-single",
+    ]
+  }
   position="bottom-right"
   shouldDefaultFocus={true}
 >
@@ -60,7 +64,11 @@ exports[`feature/query-bar/components/filter/FilterButton render should enable F
   openOnHover={false}
   openOnHoverDelayTimeout={300}
   overlayIsVisible={false}
-  portaledClasses={Array []}
+  portaledClasses={
+    Array [
+      "pika-single",
+    ]
+  }
   position="bottom-right"
   shouldDefaultFocus={true}
 >
