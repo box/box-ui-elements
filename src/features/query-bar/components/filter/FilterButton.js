@@ -66,7 +66,6 @@ class FilterButton extends React.Component<Props, State> {
     onClose = () => {
         this.setState({
             isMenuOpen: false,
-            transientConditions: [],
         });
     };
 
