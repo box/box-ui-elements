@@ -12,12 +12,12 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
 
     describe('render', () => {
         test('should disable FilterButton when columns is undefined', () => {
-            const wrapper = getWrapper({ columns: undefined });
+            const wrapper = getWrapper({ columns: undefined, conditions: [] });
             expect(wrapper).toMatchSnapshot();
         });
 
         test('should enable FilterButton when columns is non-empty', () => {
-            const wrapper = getWrapper({ columns });
+            const wrapper = getWrapper({ columns, conditions: [] });
             expect(wrapper).toMatchSnapshot();
         });
     });
