@@ -27,17 +27,6 @@ type Props = {
     width: number,
 };
 
-type CellRendererArgs = {|
-    columnIndex: number,
-    key: string,
-    rowIndex: number,
-    style: Object,
-|};
-
-type ComputeColumnWidthArgs = {|
-    index: number,
-|};
-
 export const DEFAULT_COLUMN_WIDTH = 300;
 
 class ListView extends React.PureComponent<Props> {
