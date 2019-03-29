@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 
-import isDevEnvironment from '../../utils/env';
 import {
     JSTYPE_BOOLEAN,
     JSTYPE_FUNCTION,
@@ -9,7 +8,7 @@ import {
     JSTYPE_OBJECT,
     JSTYPE_STRING,
     JSTYPE_UNDEFINED,
-} from '../../constants';
+} from './constants';
 
 type Props = {
     /** The value of this parameter */
@@ -24,7 +23,8 @@ type Props = {
  * component.
  *
  * This component renders into the value of the named parameter to the FormattedCompMessage
- * component. Typically, this component is self-closing.
+ * component. Children are not allowed in this component and typically, it is used with
+ * the self-closing syntax.
  *
  * @example
  * <pre>
@@ -33,41 +33,30 @@ type Props = {
  *   </FormattedCompMessage>
  * </pre>
  */
-class Param extends React.Component<Props> {
-    getValue() {
-        const { value } = this.props;
-        switch (typeof value) {
-            default:
-            case JSTYPE_UNDEFINED:
+export default function Param(props: Props) {
+    const { value } = props;
+    switch (typeof value) {
+        default:
+        case JSTYPE_UNDEFINED:
+            return '';
+
+        case JSTYPE_BOOLEAN:
+        case JSTYPE_NUMBER:
+            return String(value);
+
+        case JSTYPE_FUNCTION:
+            return value();
+
+        case JSTYPE_STRING:
+            return value;
+
+        case JSTYPE_OBJECT:
+            if (value === null) {
                 return '';
-
-            case JSTYPE_BOOLEAN:
-            case JSTYPE_NUMBER:
-                return String(value);
-
-            case JSTYPE_FUNCTION:
-                return value();
-
-            case JSTYPE_STRING:
+            }
+            if (React.isValidElement(value)) {
                 return value;
-
-            case JSTYPE_OBJECT:
-                if (value === null) {
-                    return '';
-                }
-                if (React.isValidElement(value)) {
-                    return value;
-                }
-                return value.toString();
-        }
-    }
-
-    render() {
-        if (isDevEnvironment() && !this.props.description) {
-            throw new Error('The description property is required on a Param component.');
-        }
-        return this.getValue();
+            }
+            return value.toString();
     }
 }
-
-export default Param;

@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import PropTypes from 'prop-types';
 
 import Plural from '../Plural';
+import Composition from '../Composition';
 
 function Link(props) {
     return <a href={props.to}>{props.children}</a>;
@@ -22,13 +23,15 @@ describe('components/i18n/Plural', () => {
         );
 
         const span = wrapper.find('span');
-        expect(span.prop('children')).toEqual('This is the singular');
+        const composition = new Composition(span.prop('children'));
+
+        expect(composition.compose()).toEqual('This is the singular');
     });
 
     test('should correctly compose simple contents', () => {
         const wrapper = mount(<Plural category="one">This is the singular</Plural>);
-        const plural = wrapper.instance();
-        expect(plural.getSourceString()).toEqual('This is the singular');
+        const composition = new Composition(wrapper.get(0));
+        expect(composition.compose()).toEqual('This is the singular');
     });
 
     test('should correctly compose slightly more complex contents', () => {
@@ -38,8 +41,8 @@ describe('components/i18n/Plural', () => {
             </Plural>,
         );
 
-        const plural = wrapper.instance();
-        expect(plural.getSourceString()).toEqual('This is the singular');
+        const composition = new Composition(wrapper.get(0));
+        expect(composition.compose()).toEqual('This is the singular');
     });
 
     test('should correctly compose much more complex contents', () => {
@@ -51,7 +54,7 @@ describe('components/i18n/Plural', () => {
             </Plural>,
         );
 
-        const plural = wrapper.instance();
-        expect(plural.getSourceString()).toEqual('This <c0>is</c0> the <c1>singular</c1>.');
+        const composition = new Composition(wrapper.get(0));
+        expect(composition.compose()).toEqual('This <c0>is</c0> the <c1>singular</c1>.');
     });
 });

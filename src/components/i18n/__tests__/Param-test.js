@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render } from 'enzyme';
 
 import Param from '../Param';
 
@@ -8,39 +8,63 @@ import Param from '../Param';
 // outside of it.
 describe('components/i18n/Param', () => {
     test('should correctly render its string argument', () => {
-        const wrapper = mount(<Param value="asdf" description="foo" />);
+        const wrapper = render(
+            <span>
+                <Param value="asdf" description="foo" />
+            </span>,
+        );
 
         expect(wrapper.text()).toEqual('asdf');
     });
 
     test('should correctly render its string argument with variables', () => {
         const name = 'asdf';
-        const wrapper = mount(<Param value={name} description="foo" />);
+        const wrapper = render(
+            <span>
+                <Param value={name} description="foo" />
+            </span>,
+        );
 
         expect(wrapper.text()).toEqual('asdf');
     });
 
     test('should correctly render its numeric argument', () => {
-        const wrapper = mount(<Param value={3} description="foo" />);
+        const wrapper = render(
+            <span>
+                <Param value={3} description="foo" />
+            </span>,
+        );
 
         expect(wrapper.text()).toEqual('3');
     });
 
     test('should correctly render an undefined argument', () => {
-        const wrapper = mount(<Param value={undefined} description="foo" />);
+        const wrapper = render(
+            <span>
+                <Param value={undefined} description="foo" />
+            </span>,
+        );
 
         expect(wrapper.text()).toEqual('');
     });
 
     test('should correctly render a null argument', () => {
-        const wrapper = mount(<Param value={null} description="foo" />);
+        const wrapper = render(
+            <span>
+                <Param value={null} description="foo" />
+            </span>,
+        );
 
         expect(wrapper.text()).toEqual('');
     });
 
     test('should correctly render a jsx argument', () => {
         const tmp = <b>foo!</b>;
-        const wrapper = mount(<Param value={tmp} description="foo" />);
+        const wrapper = render(
+            <span>
+                <Param value={tmp} description="foo" />
+            </span>,
+        );
 
         expect(wrapper.html()).toEqual('<b>foo!</b>');
     });
@@ -49,20 +73,12 @@ describe('components/i18n/Param', () => {
         const f = function f() {
             return 'asdf';
         };
-        const wrapper = mount(<Param value={f} description="foo" />);
+        const wrapper = render(
+            <span>
+                <Param value={f} description="foo" />
+            </span>,
+        );
 
         expect(wrapper.text()).toEqual('asdf');
-    });
-
-    test('should throw when missing the description', () => {
-        expect(() => {
-            mount(<Param value="asdf" />);
-        }).toThrow();
-    });
-
-    test('should render nothing if there is no value', () => {
-        const wrapper = mount(<Param description="foo" />);
-
-        expect(wrapper.text()).toEqual('');
     });
 });

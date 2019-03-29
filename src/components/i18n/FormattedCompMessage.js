@@ -1,16 +1,10 @@
 // @flow
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
+import _ from 'lodash';
 
 import isDevEnvironment from '../../utils/env';
-import {
-    CATEGORY_ZERO,
-    CATEGORY_ONE,
-    CATEGORY_TWO,
-    CATEGORY_FEW,
-    CATEGORY_MANY,
-    CATEGORY_OTHER,
-} from '../../constants';
+import { CATEGORY_ZERO, CATEGORY_ONE, CATEGORY_TWO, CATEGORY_FEW, CATEGORY_MANY, CATEGORY_OTHER } from './constants';
 import Composition from './Composition';
 
 type Props = {
@@ -89,29 +83,17 @@ class FormattedCompMessage extends React.Component<Props, State> {
         const {
             id, // the unique id of the string
             defaultMessage, // The English string + HTML + components that you want translated
-            description, // An explanation of the message for the translators
             count, // the pivot count to choose a plural form
             children, // the components within the body
         } = this.props;
 
         const sourceElements = defaultMessage || children;
 
-        if (isDevEnvironment()) {
-            if (!id) {
-                throw new Error('The id property is required on a FormattedCompMessage component.');
-            }
-
-            if (!description) {
-                throw new Error('The description property is required on a FormattedCompMessage component.');
-            }
-        }
-
         if (sourceElements) {
             const composition = new Composition(sourceElements);
             let source = '';
 
-            // eslint-disable-next-line no-restricted-globals
-            if (!isNaN(Number(count))) {
+            if (!_.isNaN(Number(count))) {
                 if (children) {
                     source = this.composePluralString(children);
                 } else if (isDevEnvironment()) {
@@ -192,7 +174,7 @@ class FormattedCompMessage extends React.Component<Props, State> {
         // always wrap the translated string in a tag to contain everything
         // and to give us a spot to record the id
         return React.createElement(
-            tagName || 'span',
+            tagName,
             {
                 key: id,
                 'x-resource-id': id,

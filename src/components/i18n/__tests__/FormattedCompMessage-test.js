@@ -41,6 +41,16 @@ describe('components/i18n', () => {
             expect(span.prop('children')).toEqual('some text');
         });
 
+        test('should correctly render FormattedCompMessage with children snapshot', () => {
+            const wrapper = mount(
+                <FormattedCompMessage id="test" description="asdf">
+                    some text
+                </FormattedCompMessage>,
+            );
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
         test('should correctly render FormattedCompMessage with HTML', () => {
             const wrapper = mount(
                 <FormattedCompMessage id="test" description="asdf">
@@ -51,6 +61,16 @@ describe('components/i18n', () => {
             const span = wrapper.find('span');
             expect(span.prop('x-resource-id')).toEqual('test');
             expect(span.prop('children')).toContain('some ');
+        });
+
+        test('should correctly render FormattedCompMessage with HTML snapshot', () => {
+            const wrapper = mount(
+                <FormattedCompMessage id="test" description="asdf">
+                    some <b>bold</b> text
+                </FormattedCompMessage>,
+            );
+
+            expect(wrapper).toMatchSnapshot();
         });
 
         test('should correctly render FormattedCompMessage with subcomponents', () => {
@@ -68,6 +88,16 @@ describe('components/i18n', () => {
             expect(wrapper.find('a').hasClass('btn')).toBe(true);
             expect(wrapper.find('a').prop('children')).toEqual('link');
             expect(wrapper.find('a').prop('href')).toEqual('foo');
+        });
+
+        test('should correctly render FormattedCompMessage with subcomponents snapshot', () => {
+            const wrapper = mount(
+                <FormattedCompMessage id="test" description="asdf">
+                    some <LinkButton to="foo">link</LinkButton> text
+                </FormattedCompMessage>,
+            );
+
+            expect(wrapper).toMatchSnapshot();
         });
 
         test('should correctly render FormattedCompMessage with simple plurals in English (singular)', () => {
@@ -377,31 +407,6 @@ describe('components/i18n', () => {
         expect(span.prop('children')).toContain(' Texte');
     });
     */
-
-        test('should throw when missing the id', () => {
-            try {
-                expect(() => {
-                    mount(
-                        <FormattedCompMessage description="asdf">
-                            some <b>bold</b> text
-                        </FormattedCompMessage>,
-                    );
-                }).toThrow();
-            } catch (e) {
-                // ignore
-            }
-        });
-
-        test('should throw when missing the description', () => {
-            function testDescription() {
-                mount(
-                    <FormattedCompMessage id="asdf">
-                        some <b>bold</b> text
-                    </FormattedCompMessage>,
-                );
-            }
-            expect(testDescription).toThrow();
-        });
 
         test('should throw when specifying a count but no nested plurals', () => {
             function testCount() {
