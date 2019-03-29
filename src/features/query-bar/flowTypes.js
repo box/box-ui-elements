@@ -30,7 +30,7 @@ export type OperatorOptionType = {
 };
 
 export type ColumnType = {
-    direction?: SortOrderType,
+    direction: ?SortOrderType,
     displayName: string,
     id: string,
     isShown: boolean,
