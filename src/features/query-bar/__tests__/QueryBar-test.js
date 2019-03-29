@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     columnForTemplateFieldName,
     columns,
-    columnsWithoutItems,
+    metadataColumns,
     columnsWithTemplateFieldName,
     template,
 } from '../components/fixtures';
@@ -34,11 +34,11 @@ describe('features/query-bar/components/QueryBar', () => {
         expect(ColumnButton.props().columns).toEqual([columnForTemplateFieldName]);
     });
 
-    test('should render FilterButton with columns without items', () => {
+    test('should render FilterButton with metadata columns', () => {
         const wrapper = getWrapper({
             columns,
         });
         const FilterButton = wrapper.find('FilterButton');
-        expect(FilterButton.props().columns).toEqual(columnsWithoutItems);
+        expect(FilterButton.props().columns).toEqual(metadataColumns);
     });
 });
