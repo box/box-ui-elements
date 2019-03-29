@@ -217,6 +217,27 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         });
     });
 
+    describe('applyFilters', () => {
+        const validConditions = [{ values: [1] }];
+        const incompleteConditions = [{ values: [] }];
+
+        test.each`
+            description                                                            | transientConditions     | stateProperty            | expectedState
+            ${'Should empty out transientConditions when Apply button is clicked'} | ${validConditions}      | ${'transientConditions'} | ${[]}
+            ${'Should close the menu when Apply Button is clicked'}                | ${validConditions}      | ${'isMenuOpen'}          | ${false}
+            ${'Should show error message if not all conditions are valid'}         | ${incompleteConditions} | ${'areErrorsEnabled'}    | ${true}
+        `('$description', ({ transientConditions, stateProperty, expectedState }) => {
+            const wrapper = getWrapper({ conditions: [] });
+            wrapper.instance().setState({
+                transientConditions,
+            });
+
+            wrapper.instance().applyFilters();
+
+            expect(wrapper.state(stateProperty)).toEqual(expectedState);
+        });
+    });
+
     describe('closeOnClickPredicate()', () => {
         const conditionsWithValues = [
             {
