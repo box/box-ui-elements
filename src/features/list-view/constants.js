@@ -1,9 +1,8 @@
-const ROW_HEIGHT = 50;
-const FIXED_ROW_COUNT = 1;
+export const ROW_HEIGHT = 50;
+export const FIXED_ROW_COUNT = 1;
+export const DEFAULT_COLUMN_WIDTH = 300;
 
-const NEED_REFINING = 'needRefining';
-const TOO_MANY_RESULTS = 'tooManyResults';
-const NO_ACCESS_FOR_QUERY = 'noAccessForQuery';
-const NO_ACCESS_FOR_TEMPLATE = 'noAccessForTemplate';
-
-export { FIXED_ROW_COUNT, ROW_HEIGHT, NEED_REFINING, TOO_MANY_RESULTS, NO_ACCESS_FOR_QUERY, NO_ACCESS_FOR_TEMPLATE };
+export const NEED_REFINING = 'needRefining';
+export const TOO_MANY_RESULTS = 'tooManyResults';
+export const NO_ACCESS_FOR_QUERY = 'noAccessForQuery';
+export const NO_ACCESS_FOR_TEMPLATE = 'noAccessForTemplate';

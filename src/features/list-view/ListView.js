@@ -4,9 +4,11 @@ import classNames from 'classnames';
 import noop from 'lodash/noop';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
-import { FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
 import { SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING } from '../query-bar/constants';
 import IconSortChevron from '../../icons/general/IconSortChevron';
+
+import { DEFAULT_COLUMN_WIDTH, FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
+import type { CellRendererArgs, ComputeColumnWidthArgs } from './flowTypes';
 
 import './styles/ListView.scss';
 
@@ -24,13 +26,6 @@ type Props = {
     rowCount: number,
     width: number,
 };
-
-type CellRendererArgs = {|
-    columnIndex: number,
-    key: string,
-    rowIndex: number,
-    style: Object,
-|};
 
 class ListView extends React.PureComponent<Props> {
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
@@ -67,8 +62,51 @@ class ListView extends React.PureComponent<Props> {
         );
     };
 
+    /**
+     * Returns the width of the target column using one of three possible scenarios:
+     * 1. Delegate to props.getColumnWidth
+     * 2. Default to DEFAULT_COLUMN_WIDTH
+     * 3. Stretch to fit the browser viewport
+     *
+     * Column-stretching occurs when the total columns combined is shorter than width of MultiGrid.
+     * The left-most column is excluded from stretching.
+     *
+     * TODO: Force widths to be recomputed when container width changes.
+     */
+    computeColumnWidth = ({ index }: ComputeColumnWidthArgs) => {
+        const columnIndex = index;
+        const { columnCount, getColumnWidth, width } = this.props;
+
+        // Returns the client-defined width or a default value.
+        const getClientDefinedColumnWidth = columnIndex_ =>
+            getColumnWidth ? getColumnWidth(columnIndex_) : DEFAULT_COLUMN_WIDTH;
+
+        if (columnCount === 0) {
+            return 0;
+        }
+
+        const firstColumnWidth = getClientDefinedColumnWidth(0);
+        if (columnIndex === 0) {
+            return firstColumnWidth;
+        }
+
+        // Determine if columns fill width of
+        // MultiGrid or stretching is needed.
+        let canFillWidth = false;
+        let sumColumnWidths = 0;
+        for (let c = 0; c < columnCount; c += 1) {
+            sumColumnWidths += getClientDefinedColumnWidth(c);
+            if (sumColumnWidths > width) {
+                canFillWidth = true;
+                break; // Exit early rather than iterating over unbounded number of columns.
+            }
+        }
+
+        return canFillWidth ? getClientDefinedColumnWidth(columnIndex) : (width - firstColumnWidth) / (columnCount - 1);
+    };
+
     render() {
-        const { columnCount, height, rowCount, getColumnWidth, width } = this.props;
+        const { columnCount, height, rowCount, width } = this.props;
 
         return (
             <div className="metadata-views-list-view">
@@ -77,7 +115,7 @@ class ListView extends React.PureComponent<Props> {
                     classNameBottomLeftGrid="list-view-bottom-left-grid"
                     classNameTopLeftGrid="list-view-top-left-grid"
                     classNameTopRightGrid="list-view-top-right-grid"
-                    columnWidth={({ index: columnIndex }) => (getColumnWidth ? getColumnWidth(columnIndex) : 300)}
+                    columnWidth={this.computeColumnWidth}
                     columnCount={columnCount}
                     fixedColumnCount={1}
                     fixedRowCount={FIXED_ROW_COUNT}
