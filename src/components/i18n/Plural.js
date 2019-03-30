@@ -1,10 +1,9 @@
 // @flow
 import * as React from 'react';
-import { CATEGORY_ZERO, CATEGORY_ONE, CATEGORY_TWO, CATEGORY_FEW, CATEGORY_MANY, CATEGORY_OTHER } from './constants';
 
 type Props = {
     /** The plural category this string. (required) */
-    category: CATEGORY_ZERO | CATEGORY_ONE | CATEGORY_TWO | CATEGORY_FEW | CATEGORY_MANY | CATEGORY_OTHER,
+    category: 'zero' | 'one' | 'two' | 'few' | 'many' | 'other',
 
     children: React.Node,
 };

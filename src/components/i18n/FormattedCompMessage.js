@@ -48,7 +48,7 @@ type Props = {
      * Specify the name of the HTML tag you would like to use to wrap the
      * translations.
      */
-    tagName?: string,
+    tagName: string,
 };
 
 type State = {

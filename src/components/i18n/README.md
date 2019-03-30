@@ -80,7 +80,7 @@ The FormattedCompMessage component will decompose the German translation by firs
 syntax tree. From there, the c0 and c1 nodes are then replaced with React elements from the source tree. FormattedCompMessage
 then clones the source React elements that c0 and c1 represent to create a React element tree for the translation:
 
-```
+```json
 {
     type: "span",
     attributes: {
@@ -186,7 +186,7 @@ component changes.
 
 For example, the string to translate for the above example would be:
 
-```
+```json
 "The type is <c0><p0/></c0> which contains <c1><p1/></c1> items. These items are <p2/>. They contain <p3/>. A function can return <p4/>."
 ```
 
