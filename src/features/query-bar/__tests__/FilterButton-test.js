@@ -40,7 +40,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             expect(wrapper.state('transientConditions')).toEqual([]);
         });
 
-        test('Should set areErrorsEnabled to true if not all conditions are valid', () => {
+        test('Should set areErrorsEnabled to true for Condition if not all conditions are valid', () => {
             const wrapper = getWrapper({ conditions: [] });
             wrapper.instance().setState({
                 transientConditions: incompleteConditions,
@@ -50,8 +50,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             wrapper.find('PrimaryButton').simulate('click');
 
             const Condition = wrapper.find('Condition');
-
-            expect(wrapper.state('areErrorsEnabled')).toEqual(true);
             expect(Condition.props().areErrorsEnabled).toEqual(true);
         });
     });
