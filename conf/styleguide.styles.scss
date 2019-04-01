@@ -1,6 +1,4 @@
 .be {
-    box-shadow: 0 0 20px 0 rgba(85, 85, 85, .42);
-
     &.bcow {
         width: 100px;
     }
@@ -17,6 +15,15 @@
 
     &.bcu {
         height: 400px;
+    }
+
+    &.bce,
+    &.bcow,
+    &.bcp,
+    &.bcpr,
+    &.bcs,
+    &.bcu {
+        box-shadow: 0 0 20px 0 rgba(85, 85, 85, .42);
     }
 }
 
