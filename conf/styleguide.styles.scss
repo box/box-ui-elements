@@ -1,4 +1,6 @@
 .be {
+    box-shadow: 0 0 20px 0 rgba(85, 85, 85, .42);
+
     &.bcow {
         width: 100px;
     }
@@ -26,8 +28,4 @@
     .bcs {
         height: 1000px;
     }
-}
-
-.example {
-    box-shadow: 0 0 20px 0 rgba(85, 85, 85, .42);
 }
