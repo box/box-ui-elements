@@ -11,8 +11,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     };
 
     describe('render', () => {
+        const validConditions = [{ values: [1] }];
+        const incompleteConditions = [{ values: [] }];
+
         test('should disable FilterButton when columns is undefined', () => {
-            const wrapper = getWrapper({ columns: undefined });
+            const wrapper = getWrapper({ columns: null });
             const Button = wrapper.find('Button');
             expect(Button.props().isDisabled).toEqual(true);
         });
@@ -21,6 +24,35 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const wrapper = getWrapper({ columns });
             const Button = wrapper.find('Button');
             expect(Button.props().isDisabled).toEqual(false);
+        });
+
+        test('Should close the menu and empty out transientConditions when Apply button is clicked', () => {
+            const wrapper = getWrapper({ conditions: [] });
+            wrapper.instance().setState({
+                transientConditions: validConditions,
+                isMenuOpen: true,
+            });
+
+            wrapper.find('PrimaryButton').simulate('click');
+
+            const Flyout = wrapper.find('Flyout');
+            expect(Flyout.props().overlayIsVisible).toBe(false);
+            expect(wrapper.state('transientConditions')).toEqual([]);
+        });
+
+        test('Should set areErrorsEnabled to true if not all conditions are valid', () => {
+            const wrapper = getWrapper({ conditions: [] });
+            wrapper.instance().setState({
+                transientConditions: incompleteConditions,
+                isMenuOpen: true,
+            });
+
+            wrapper.find('PrimaryButton').simulate('click');
+
+            const Condition = wrapper.find('Condition');
+
+            expect(wrapper.state('areErrorsEnabled')).toEqual(true);
+            expect(Condition.props().areErrorsEnabled).toEqual(true);
         });
     });
 
@@ -216,48 +248,6 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             const condition = wrapper.instance().createCondition();
 
             expect(condition).toEqual(expected);
-        });
-    });
-
-    describe('applyFilters', () => {
-        const validConditions = [{ values: [1] }];
-        const incompleteConditions = [{ values: [] }];
-
-        test('Should empty out transientConditions when Apply button is clicked', () => {
-            const wrapper = getWrapper({ conditions: [] });
-            wrapper.instance().setState({
-                transientConditions: validConditions,
-                isMenuOpen: true,
-            });
-
-            wrapper.find('PrimaryButton').simulate('click');
-
-            expect(wrapper.state('transientConditions')).toEqual([]);
-        });
-
-        test('Should close the menu when Apply Button is clicked', () => {
-            const wrapper = getWrapper({ conditions: [] });
-            wrapper.instance().setState({
-                transientConditions: validConditions,
-                isMenuOpen: true,
-            });
-
-            wrapper.find('PrimaryButton').simulate('click');
-
-            const Flyout = wrapper.find('Flyout');
-            expect(Flyout.props().overlayIsVisible).toBe(false);
-        });
-
-        test('Should show error message if not all conditions are valid', () => {
-            const wrapper = getWrapper({ conditions: [] });
-            wrapper.instance().setState({
-                transientConditions: incompleteConditions,
-                isMenuOpen: true,
-            });
-
-            wrapper.find('PrimaryButton').simulate('click');
-
-            expect(wrapper.state('areErrorsEnabled')).toEqual(true);
         });
     });
 
