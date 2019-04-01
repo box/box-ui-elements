@@ -886,6 +886,7 @@ type DirectoryReader = {
 type FetchOptions = {
     fields?: Array<string>,
     forceFetch?: boolean,
+    noPagination?: boolean,
     refreshCache?: boolean,
 };
 

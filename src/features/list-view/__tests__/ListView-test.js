@@ -2,13 +2,18 @@
 import * as React from 'react';
 
 import ListView from '../ListView';
+import { DEFAULT_COLUMN_WIDTH } from '../constants';
+import { SORT_ORDER_ASCENDING } from '../../query-bar/constants';
 // Global Declarations
 
-const rowData = [['A', 'B', 'C'], ['D', 'E', 'F']];
+// Define a matrix with 2 columns and 3 rows.
+const gridData = [['A', 'B', 'C'], ['D', 'E', 'F']];
 
 const getGridHeader = columnIndex => ['h1', 'h2'][columnIndex];
 
-const getGridCell = ({ columnIndex, rowIndex }) => rowData[columnIndex][rowIndex];
+const getGridHeaderSort = columnIndex => [SORT_ORDER_ASCENDING, null][columnIndex];
+
+const getGridCell = ({ columnIndex, rowIndex }) => gridData[columnIndex][rowIndex];
 
 describe('features/list-view/ListView', () => {
     const getWrapper = props => {
@@ -27,14 +32,14 @@ describe('features/list-view/ListView', () => {
     describe('CellRenderer()', () => {
         test.each`
             columnIndex | rowIndex | cellData | should                                                  | className
-            ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'list-view-column-header'}
-            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'list-view-column-cell'}
-            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'list-view-column-cell'}
-            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'list-view-column-cell'}
-            ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'list-view-column-header'}
-            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'list-view-column-cell'}
-            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'list-view-column-cell'}
-            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'list-view-column-cell'}
+            ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
+            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
+            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
+            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
+            ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
+            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
+            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
+            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
         `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
             const wrapper = getWrapper();
 
@@ -50,9 +55,77 @@ describe('features/list-view/ListView', () => {
 
             expect(testCell.hasClass(className)).toBeTruthy();
         });
+
+        test.each`
+            columnIndex | rowIndex | cellData                   | should                                                                                                        | className
+            ${0}        | ${0}     | ${'h1<IconSortChevron />'} | ${'returns h1<IconSortChevron /> when columnIndex is 0 and rowIndex is 0 and getGridHeaderSort is passed in'} | ${'.bdl-icon-sort-chevron.bdl-ListView-isSortAsc'}
+            ${1}        | ${0}     | ${'h2'}                    | ${'returns h2 when columnIndex is 1 and rowIndex is 0 and getGridHeaderSort is passed in'}                    | ${'.bdl-icon-short-chevron'}
+        `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
+            const wrapper = getWrapper({
+                getGridHeaderSort,
+            });
+
+            const cell = wrapper.instance().cellRenderer({
+                columnIndex,
+                key: 'heh',
+                rowIndex,
+            });
+
+            const testCell = shallow(cell);
+            expect(testCell.text()).toEqual(cellData);
+            expect(testCell.find(className)).toBeTruthy();
+        });
     });
 
-    describe('getColumnWidth()', () => {
+    describe('computeColumnWidth()', () => {
+        describe('when props.getColumnWidth is included', () => {
+            test('should delegate to props.getColumnWidth', () => {
+                const getColumnWidth = columnIndex => [150, 250][columnIndex];
+
+                const wrapper = getWrapper({
+                    getColumnWidth,
+                    width: 100,
+                });
+
+                expect(wrapper.instance().computeColumnWidth({ index: 0 })).toBe(150);
+                expect(wrapper.instance().computeColumnWidth({ index: 1 })).toBe(250);
+            });
+
+            test('should ignore props.getColumnWidth and stretch column widths', () => {
+                const getColumnWidth = columnIndex => [150, 250][columnIndex];
+
+                const wrapper = getWrapper({
+                    getColumnWidth,
+                    width: 1000,
+                });
+
+                expect(wrapper.instance().computeColumnWidth({ index: 0 })).toBe(150);
+                expect(wrapper.instance().computeColumnWidth({ index: 1 })).toBe(1000 - 150);
+            });
+        });
+
+        describe('when props.getColumnWidth is excluded', () => {
+            test('should return default column width', () => {
+                const wrapper = getWrapper({
+                    width: 100,
+                });
+
+                expect(wrapper.instance().computeColumnWidth({ index: 0 })).toBe(DEFAULT_COLUMN_WIDTH);
+                expect(wrapper.instance().computeColumnWidth({ index: 1 })).toBe(DEFAULT_COLUMN_WIDTH);
+            });
+
+            test('should stretch column widths', () => {
+                const wrapper = getWrapper({
+                    width: 1000,
+                });
+
+                expect(wrapper.instance().computeColumnWidth({ index: 0 })).toBe(DEFAULT_COLUMN_WIDTH);
+                expect(wrapper.instance().computeColumnWidth({ index: 1 })).toBe(1000 - DEFAULT_COLUMN_WIDTH);
+            });
+        });
+    });
+
+    describe('props.getColumnWidth()', () => {
         const getColumnWidth = columnIndex => [100, 500][columnIndex];
 
         const wrapper = getWrapper({ getColumnWidth });

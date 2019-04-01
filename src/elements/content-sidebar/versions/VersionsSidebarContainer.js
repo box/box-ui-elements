@@ -21,6 +21,7 @@ type Props = {
 type State = {
     error?: string,
     isLoading: boolean,
+    permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
@@ -29,6 +30,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     state: State = {
         isLoading: true,
+        permissions: {},
         versions: [],
     };
 
@@ -75,6 +77,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState({
             error: message,
             isLoading: false,
+            permissions: {},
             versions: [],
         });
     };
@@ -86,6 +89,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState({
             error: undefined,
             isLoading: false,
+            permissions: file.permissions || {},
             versions: versions.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
         });
     };

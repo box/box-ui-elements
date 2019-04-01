@@ -19,12 +19,16 @@ type Props = {
     children?: React.Node,
     /** Options to render in the dropdown filtered based on the input text */
     className?: string,
+    /** Index at which to insert the divider */
+    dividerIndex?: number,
     /** CSS class for the wrapper div */
     isAlwaysOpen?: boolean,
     /** Optional title text that will be rendered above the list */
     onEnter?: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void,
     /** Function called on keyboard "Enter" event only if enter does not trigger selection */
     onSelect?: Function,
+    /** Optional title of the overlay */
+    overlayTitle?: string,
     /** Function called with the index of the selected option and the event (selected by keyboard or click) */
     selector: React.Element<any>,
     /** Component containing an input text field and takes `inputProps` to spread onto the input element */
@@ -209,7 +213,7 @@ class SelectorDropdown extends React.Component<Props, State> {
 
     render() {
         const { listboxID, selectItem, setActiveItem, setActiveItemID, closeDropdown } = this;
-        const { children, className, title, selector, shouldScroll } = this.props;
+        const { dividerIndex, overlayTitle, children, className, title, selector, shouldScroll } = this.props;
         const { activeItemID, activeItemIndex } = this.state;
         const isOpen = this.isDropdownOpen();
         const inputProps: Object = {
@@ -224,6 +228,7 @@ class SelectorDropdown extends React.Component<Props, State> {
 
         const list = (
             <ul className="overlay" id={listboxID} role="listbox">
+                {overlayTitle && <h5 className="SelectorDropdown-title">{overlayTitle}</h5>}
                 {React.Children.map(children, (item, index) => {
                     const itemProps: Object = {
                         onClick: event => {
@@ -241,10 +246,19 @@ class SelectorDropdown extends React.Component<Props, State> {
                         },
                         setActiveItemID,
                     };
+
                     if (index === activeItemIndex) {
                         itemProps.isActive = true;
                     }
-                    return React.cloneElement(item, itemProps);
+
+                    const hasDivider = index === dividerIndex;
+
+                    return (
+                        <React.Fragment>
+                            {hasDivider && <hr className="SelectorDropdown-divider" />}
+                            {React.cloneElement(item, itemProps)}
+                        </React.Fragment>
+                    );
                 })}
             </ul>
         );
@@ -257,7 +271,7 @@ class SelectorDropdown extends React.Component<Props, State> {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                className={classNames('selector-dropdown-wrapper', className)}
+                className={classNames('SelectorDropdown', className)}
                 onFocus={this.handleFocus}
                 onKeyDown={this.handleKeyDown}
                 onKeyPress={this.handleInput}

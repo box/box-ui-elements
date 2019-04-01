@@ -66,8 +66,6 @@ const FOLDER_FIELDS_TO_FETCH = [
     FIELD_MODIFIED_AT,
     FIELD_CREATED_AT,
     FIELD_MODIFIED_BY,
-    FIELD_SHARED_LINK,
-    FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
     FIELD_HAS_COLLABORATIONS,
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_ITEM_COLLECTION,
@@ -112,6 +110,9 @@ const PREVIEW_FIELDS_TO_FETCH = [
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_IS_DOWNLOAD_AVAILABLE,
 ];
+
+// Fields needed for Content Picker to show shared link permissions
+const FILE_SHARED_LINK_FIELDS_TO_FETCH = [FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS, FIELD_SHARED_LINK];
 
 // Fields needed to get tasks data
 const TASKS_FIELDS_TO_FETCH = [
@@ -217,15 +218,16 @@ function fillUserPlaceholder(obj: Object): Object {
 
 export {
     APP_ACTIVITY_FIELDS_TO_FETCH,
+    COMMENTS_FIELDS_TO_FETCH,
+    FILE_SHARED_LINK_FIELDS_TO_FETCH,
+    fillMissingProperties,
+    fillUserPlaceholder,
+    findMissingProperties,
     FOLDER_FIELDS_TO_FETCH,
     PREVIEW_FIELDS_TO_FETCH,
     SIDEBAR_FIELDS_TO_FETCH,
-    TASKS_FIELDS_TO_FETCH,
-    VERSIONS_FIELDS_TO_FETCH,
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
-    COMMENTS_FIELDS_TO_FETCH,
+    TASKS_FIELDS_TO_FETCH,
     USER_FIELDS,
-    findMissingProperties,
-    fillMissingProperties,
-    fillUserPlaceholder,
+    VERSIONS_FIELDS_TO_FETCH,
 };

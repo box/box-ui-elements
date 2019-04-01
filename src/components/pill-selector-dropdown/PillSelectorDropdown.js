@@ -22,6 +22,8 @@ type Props = {
     className?: string,
     /** If true, the input control is disabled so no more input can be made */
     disabled?: boolean,
+    /** Index at which to insert a divider */
+    dividerIndex?: number,
     /** Error message */
     error?: React.Node,
     /** Passed in by `SelectorDropdown` for accessibility */
@@ -36,6 +38,8 @@ type Props = {
     onSelect: Function,
     /** Function adds a collaborator from suggested collabs to form */
     onSuggestedPillAdd?: Function,
+    /** Optional title of the overlay */
+    overlayTitle?: string,
     /** function to parse user input into an array of items to be validated and then added to pill selector. If this function is not passed, a default CSV parser is used. */
     parseItems?: Function,
     /** A placeholder to show in the input when there are no pills */
@@ -164,11 +168,13 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             children,
             className,
             disabled,
+            dividerIndex,
             error,
             inputProps,
             label,
             onRemove,
             onSuggestedPillAdd,
+            overlayTitle,
             placeholder,
             selectedOptions,
             suggestedPillsData,
@@ -179,8 +185,10 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         return (
             <SelectorDropdown
                 className={classNames('pill-selector-wrapper', className)}
+                dividerIndex={dividerIndex}
                 onEnter={this.handleEnter}
                 onSelect={this.handleSelect}
+                overlayTitle={overlayTitle}
                 selector={
                     <Label text={label}>
                         <PillSelector

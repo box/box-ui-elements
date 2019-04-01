@@ -11,10 +11,11 @@ import VersionsItem from './VersionsItem';
 import './VersionsList.scss';
 
 type Props = {
+    permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsList = ({ versions = [] }: Props) => {
+const VersionsList = ({ permissions, versions = [] }: Props) => {
     if (!versions.length) {
         return (
             <div className="bcs-VersionsList bcs-is-empty">
@@ -27,7 +28,7 @@ const VersionsList = ({ versions = [] }: Props) => {
         <ul className="bcs-VersionsList">
             {versions.map((version, index) => (
                 <li className="bcs-VersionsList-item" key={version.id}>
-                    <VersionsItem isCurrent={index === 0} {...version} />
+                    <VersionsItem isCurrent={index === 0} permissions={permissions} version={version} />
                 </li>
             ))}
         </ul>

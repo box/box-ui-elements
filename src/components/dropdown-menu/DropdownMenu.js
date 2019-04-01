@@ -16,7 +16,9 @@ type Props = {
     constrainToWindow: boolean,
     /** Function called when menu is opened */
     isRightAligned: boolean,
-    /** Class name to apply to the dropdown menu */
+    /** Handler for dropdown menu close events */
+    onMenuClose?: (event: SyntheticEvent<>) => void,
+    /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
 };
 
@@ -134,9 +136,15 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleMenuClose = () => {
+    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<>) => {
+        const { onMenuClose } = this.props;
+
         this.closeMenu();
         this.focusButton();
+
+        if (onMenuClose) {
+            onMenuClose(event);
+        }
     };
 
     handleDocumentClick = (event: MouseEvent) => {
