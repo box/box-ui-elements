@@ -1,5 +1,5 @@
 
-**Skeleton Item List**
+**Skeleton List View**
 ```js
 const SkeletonItemListExample = require('./examples').SkeletonItemListExample;
 
@@ -8,12 +8,20 @@ const SkeletonItemListExample = require('./examples').SkeletonItemListExample;
 </div>
 ```
 
-**Metadata Item List**
+**Metadata List View**
 ```js
 const ListViewExamples = require('./examples').ListViewExamples;
 
 <div>
-    <ListViewExamples />
+    <ListViewExamples columnCount={1000} />
 </div>
 ```
 
+**Metadata List View (stretched columns)**
+```js
+const ListViewExamples = require('./examples').ListViewExamples;
+
+<div>
+    <ListViewExamples columnCount={3} />
+</div>
+```

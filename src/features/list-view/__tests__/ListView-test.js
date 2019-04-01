@@ -2,16 +2,18 @@
 import * as React from 'react';
 
 import ListView from '../ListView';
+import { DEFAULT_COLUMN_WIDTH } from '../constants';
 import { SORT_ORDER_ASCENDING } from '../../query-bar/constants';
 // Global Declarations
 
-const rowData = [['A', 'B', 'C'], ['D', 'E', 'F']];
+// Define a matrix with 2 columns and 3 rows.
+const gridData = [['A', 'B', 'C'], ['D', 'E', 'F']];
 
 const getGridHeader = columnIndex => ['h1', 'h2'][columnIndex];
 
 const getGridHeaderSort = columnIndex => [SORT_ORDER_ASCENDING, null][columnIndex];
 
-const getGridCell = ({ columnIndex, rowIndex }) => rowData[columnIndex][rowIndex];
+const getGridCell = ({ columnIndex, rowIndex }) => gridData[columnIndex][rowIndex];
 
 describe('features/list-view/ListView', () => {
     const getWrapper = props => {
@@ -75,7 +77,55 @@ describe('features/list-view/ListView', () => {
         });
     });
 
-    describe('getColumnWidth()', () => {
+    describe('computeColumnWidth()', () => {
+        describe('when props.getColumnWidth is included', () => {
+            test('should delegate to props.getColumnWidth', () => {
+                const getColumnWidth = columnIndex => [150, 250][columnIndex];
+
+                const wrapper = getWrapper({
+                    getColumnWidth,
+                    width: 100,
+                });
+
+                expect(wrapper.instance().computeColumnWidth({ index: 0 })).toBe(150);
+                expect(wrapper.instance().computeColumnWidth({ index: 1 })).toBe(250);
+            });
+
+            test('should ignore props.getColumnWidth and stretch column widths', () => {
+                const getColumnWidth = columnIndex => [150, 250][columnIndex];
+
+                const wrapper = getWrapper({
+                    getColumnWidth,
+                    width: 1000,
+                });
+
+                expect(wrapper.instance().computeColumnWidth({ index: 0 })).toBe(150);
+                expect(wrapper.instance().computeColumnWidth({ index: 1 })).toBe(1000 - 150);
+            });
+        });
+
+        describe('when props.getColumnWidth is excluded', () => {
+            test('should return default column width', () => {
+                const wrapper = getWrapper({
+                    width: 100,
+                });
+
+                expect(wrapper.instance().computeColumnWidth({ index: 0 })).toBe(DEFAULT_COLUMN_WIDTH);
+                expect(wrapper.instance().computeColumnWidth({ index: 1 })).toBe(DEFAULT_COLUMN_WIDTH);
+            });
+
+            test('should stretch column widths', () => {
+                const wrapper = getWrapper({
+                    width: 1000,
+                });
+
+                expect(wrapper.instance().computeColumnWidth({ index: 0 })).toBe(DEFAULT_COLUMN_WIDTH);
+                expect(wrapper.instance().computeColumnWidth({ index: 1 })).toBe(1000 - DEFAULT_COLUMN_WIDTH);
+            });
+        });
+    });
+
+    describe('props.getColumnWidth()', () => {
         const getColumnWidth = columnIndex => [100, 500][columnIndex];
 
         const wrapper = getWrapper({ getColumnWidth });
