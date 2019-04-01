@@ -17,13 +17,13 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         test('should disable FilterButton when columns is undefined', () => {
             const wrapper = getWrapper({ columns: null });
             const Button = wrapper.find('Button');
-            expect(Button.props().isDisabled).toEqual(true);
+            expect(Button.props().isDisabled).toBeTruthy();
         });
 
         test('should enable FilterButton when columns is non-empty', () => {
             const wrapper = getWrapper({ columns });
             const Button = wrapper.find('Button');
-            expect(Button.props().isDisabled).toEqual(false);
+            expect(Button.props().isDisabled).toBeFalsy();
         });
 
         test('Should close the menu and empty out transientConditions when Apply button is clicked', () => {
@@ -33,11 +33,11 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 isMenuOpen: true,
             });
 
-            wrapper.find('PrimaryButton').simulate('click');
+            wrapper.find('.apply-filters-button').simulate('click');
 
             const Flyout = wrapper.find('Flyout');
-            expect(Flyout.props().overlayIsVisible).toBe(false);
-            expect(wrapper.state('transientConditions')).toEqual([]);
+            expect(Flyout.props().overlayIsVisible).toBeFalsy();
+            expect(wrapper.state('transientConditions')).toHaveLength(0);
         });
 
         test('Should set areErrorsEnabled to true for Condition if not all conditions are valid', () => {
@@ -47,10 +47,10 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
                 isMenuOpen: true,
             });
 
-            wrapper.find('PrimaryButton').simulate('click');
+            wrapper.find('.apply-filters-button').simulate('click');
 
             const Condition = wrapper.find('Condition');
-            expect(Condition.props().areErrorsEnabled).toEqual(true);
+            expect(Condition.props().areErrorsEnabled).toBeTruthy();
         });
     });
 
