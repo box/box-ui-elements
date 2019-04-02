@@ -130,6 +130,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
+          "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
         }
       }
@@ -269,6 +270,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
+          "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
         }
       }
@@ -439,6 +441,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
+          "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
         }
       }
@@ -611,6 +614,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
+          "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
         }
       }
@@ -744,6 +748,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
+          "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
         }
       }
@@ -871,6 +876,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
+          "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
         }
       }
@@ -1023,6 +1029,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       trackingProps={
         Object {
           "onChangeSharedLinkAccessLevel": undefined,
+          "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
         }
       }
