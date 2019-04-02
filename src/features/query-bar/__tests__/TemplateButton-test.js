@@ -81,5 +81,16 @@ describe('feature/query-bar/components/TemplateButton', () => {
             const entryButtonWrapper = shallow(wrapper.instance().renderEntryButton());
             expect(entryButtonWrapper.props().className.includes(activeTemplateClassName)).toEqual(expectedReturn);
         });
+
+        test.each`
+            templates | expectedMessage             | description
+            ${null}   | ${'Template Name'}          | ${'Should render templates loading message'}
+            ${[]}     | ${'No Templates Available'} | ${'Should render no templates message'}
+        `('$description', ({ templates, expectedMessage }) => {
+            const wrapper = getWrapper({ templates });
+
+            const entryButtonWrapper = shallow(wrapper.instance().renderEntryButton());
+            expect(entryButtonWrapper.find('FormattedMessage').props().defaultMessage).toEqual(expectedMessage);
+        });
     });
 });
