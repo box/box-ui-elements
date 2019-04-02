@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/SidebarFileProperties render() should not render a tooltip if no banner policy body is provided 1`] = `
+exports[`elements/content-sidebar/SidebarFileProperties render() should not render a tooltip if no classification description is provided 1`] = `
 <SidebarFileProperties
   classification={
     Object {
-      "Box__Security__Classification__Key": "Public",
+      "type": "Public",
     }
   }
   file={
@@ -358,14 +358,10 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render a
 
 exports[`elements/content-sidebar/SidebarFileProperties render() should render classification information and not link when given proper metadata 1`] = `
 <SidebarFileProperties
-  bannerPolicy={
-    Object {
-      "body": "tooltip value",
-    }
-  }
   classification={
     Object {
-      "Box__Security__Classification__Key": "Public",
+      "description": "tooltip value",
+      "type": "Public",
     }
   }
   file={
@@ -509,14 +505,10 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render c
 
 exports[`elements/content-sidebar/SidebarFileProperties render() should render classification link only when given callback and has_upload permission is true 1`] = `
 <SidebarFileProperties
-  bannerPolicy={
-    Object {
-      "body": "tooltip value",
-    }
-  }
   classification={
     Object {
-      "Box__Security__Classification__Key": "Public",
+      "description": "tooltip value",
+      "type": "Public",
     }
   }
   file={
