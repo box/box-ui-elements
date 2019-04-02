@@ -57,6 +57,12 @@ const messages = defineMessages({
         description: 'Text on the templates button when templates are still being loaded',
         id: 'boxui.queryBar.templatesLoadingButtonText',
     },
+    noTemplatesText: {
+        defaultMessage: 'No Templates Available',
+        description:
+            'Text on the templates button when templates have been loaded and there are no templates in the enterprise',
+        id: 'boxui.queryBar.noTemplatesText',
+    },
     templatesButtonText: {
         defaultMessage: 'Select Metadata',
         description:
