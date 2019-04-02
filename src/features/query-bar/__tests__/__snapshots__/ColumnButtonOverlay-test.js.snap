@@ -13,62 +13,23 @@ exports[`features/query-bar/components/ColumnButtonOverlay render should render 
       onDragEnd={[Function]}
     >
       <PortaledDraggableListItem
-        id="1"
+        id="4"
         index={0}
         isDraggableViaHandle={true}
         key="0"
       >
         <Checkbox
           isChecked={true}
-          label="Name"
-          name="Name"
+          label="Expire Date"
+          name="Expire Date"
           onChange={[Function]}
         />
       </PortaledDraggableListItem>
       <PortaledDraggableListItem
-        id="2"
+        id="6"
         index={1}
         isDraggableViaHandle={true}
         key="1"
-      >
-        <Checkbox
-          isChecked={true}
-          label="Last Updated"
-          name="Last Updated"
-          onChange={[Function]}
-        />
-      </PortaledDraggableListItem>
-      <PortaledDraggableListItem
-        id="3"
-        index={2}
-        isDraggableViaHandle={true}
-        key="2"
-      >
-        <Checkbox
-          isChecked={true}
-          label="Contract Value"
-          name="Contract Value"
-          onChange={[Function]}
-        />
-      </PortaledDraggableListItem>
-      <PortaledDraggableListItem
-        id="4"
-        index={3}
-        isDraggableViaHandle={true}
-        key="3"
-      >
-        <Checkbox
-          isChecked={true}
-          label="Offices"
-          name="Offices"
-          onChange={[Function]}
-        />
-      </PortaledDraggableListItem>
-      <PortaledDraggableListItem
-        id="5"
-        index={4}
-        isDraggableViaHandle={true}
-        key="4"
       >
         <Checkbox
           isChecked={true}

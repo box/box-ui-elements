@@ -157,26 +157,27 @@ class FilterButton extends React.Component<Props, State> {
         });
 
         const column = columns && columns.find(c => c.id === columnId);
-
-        if (column) {
-            const type = column && column.type;
-
-            const operator = COLUMN_OPERATORS[type][0].key;
-
-            const newCondition = {
-                ...conditionToUpdate,
-                columnId,
-                operator,
-                values: [],
-            };
-
-            const newConditions = transientConditions.slice(0);
-            newConditions[newConditionIndex] = newCondition;
-
-            this.setState({
-                transientConditions: newConditions,
-            });
+        if (!column) {
+            throw new Error('Invalid Column.id');
         }
+
+        const type = column && column.type;
+
+        const operator = COLUMN_OPERATORS[type][0].key;
+
+        const newCondition = {
+            ...conditionToUpdate,
+            columnId,
+            operator,
+            values: [],
+        };
+
+        const newConditions = transientConditions.slice(0);
+        newConditions[newConditionIndex] = newCondition;
+
+        this.setState({
+            transientConditions: newConditions,
+        });
     };
 
     handleOperatorChange = (conditionId: string, value: OperatorType) => {

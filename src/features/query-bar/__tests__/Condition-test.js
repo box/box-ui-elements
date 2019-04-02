@@ -1,8 +1,10 @@
 // @flow
 import * as React from 'react';
 
-import { columnOptions, columns, initialCondition } from '../components/fixtures';
+import { columnWithEnumType, initialCondition } from '../components/fixtures';
 import Condition from '../components/filter/Condition';
+
+const columns = [columnWithEnumType];
 
 describe('features/query-bar/components/filter/Condition', () => {
     const getWrapper = (props = {}) => {
@@ -95,13 +97,15 @@ describe('features/query-bar/components/filter/Condition', () => {
     });
 
     describe('getColumnOptions()', () => {
-        test.each`
-            description                                             | expectedColumnOptions
-            ${'should open the value dropdown and see the options'} | ${columnOptions}
-        `('$description', ({ expectedColumnOptions }) => {
-            const wrapper = getWrapper({ columns });
+        test('should open the value dropdown and see the options', () => {
+            const wrapper = getWrapper();
             const ValueField = wrapper.find('ValueField');
-            expect(ValueField.props().valueOptions).toEqual(expectedColumnOptions);
+            expect(ValueField.props().valueOptions).toEqual([
+                {
+                    displayText: '$100',
+                    value: '$100',
+                },
+            ]);
         });
     });
 });

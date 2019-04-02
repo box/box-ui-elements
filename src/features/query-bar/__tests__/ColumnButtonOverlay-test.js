@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import { columns, columnsWithNewOrder, columnsWithOneColumnNotShown } from '../components/fixtures';
+import { columnForDateType, columnWithFloatType } from '../components/fixtures';
 import ColumnButtonOverlay from '../components/ColumnButtonOverlay';
+
+const columns = [columnForDateType, columnWithFloatType];
 
 describe('features/query-bar/components/ColumnButtonOverlay', () => {
     const getWrapper = (props = {}) => {
@@ -21,7 +23,7 @@ describe('features/query-bar/components/ColumnButtonOverlay', () => {
                 description: 'Should update state with new ordering',
                 sourceIndex: 0,
                 destinationIndex: 1,
-                updatedColumns: columnsWithNewOrder,
+                updatedColumns: [columnWithFloatType, columnForDateType],
             },
             {
                 description: 'Should not update state due to no destinationIndex',
@@ -57,32 +59,18 @@ describe('features/query-bar/components/ColumnButtonOverlay', () => {
     });
 
     describe('updatePendingColumns()', () => {
-        [
-            {
-                description: 'Should update state with pendingColumns',
-                numberOfHiddenColumns: 0,
-                column: {
-                    displayName: 'Name',
-                    id: '1',
-                    isShown: true,
-                    property: 'name',
-                    source: 'metadata',
-                    type: 'string',
-                },
-                pendingColumns: columns,
-                updatedPendingColumns: columnsWithOneColumnNotShown,
-            },
-        ].forEach(({ description, column, pendingColumns, updatedPendingColumns }) => {
-            test(`${description}`, () => {
-                const wrapper = getWrapper();
-                wrapper.setState({
-                    pendingColumns,
-                });
+        test('Should update state with pendingColumns', () => {
+            const pendingColumns = columns;
 
-                wrapper.instance().updatePendingColumns(column);
-
-                expect(wrapper.state('pendingColumns')).toEqual(updatedPendingColumns);
+            const wrapper = getWrapper();
+            wrapper.setState({
+                pendingColumns,
             });
+
+            wrapper.instance().updatePendingColumns(columnForDateType);
+
+            expect(wrapper.state('pendingColumns')[0].isShown).toBeFalsy();
+            expect(wrapper.state('pendingColumns')[1].isShown).toBeTruthy();
         });
     });
 });

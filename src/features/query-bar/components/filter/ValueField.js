@@ -59,8 +59,8 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
                         hideLabel
-                        label="Number input"
-                        name="number field"
+                        label="Text Input"
+                        name="text"
                         onChange={onInputChange}
                         placeholder={`Enter ${valueType === STRING ? 'value' : 'a number'}`}
                         value={value}

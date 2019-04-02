@@ -1,9 +1,11 @@
 // @flow
 import * as React from 'react';
 
-import { columns, initialCondition, conditions } from '../components/fixtures';
+import { columnForTemplateFieldName, columnForDateType, conditions, initialCondition } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
 import { EQUALS, LESS_THAN } from '../constants';
+
+const columns = [columnForTemplateFieldName, columnForDateType];
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
@@ -67,24 +69,19 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('handleColumnChange()', () => {
-        const condition = {
-            columnId: '1',
-            id: '3',
-            operator: EQUALS,
-            values: [],
-        };
-        const expectedConditions = [{ columnId: '2', id: '3', operator: EQUALS, values: [] }];
-        test.each`
-            columnId | transientConditions
-            ${'2'}   | ${[condition]}
-        `('should update condition.columnId', ({ columnId, transientConditions }) => {
+        test('should update condition to the selected column', () => {
+            const conditions2 = {
+                ...conditions,
+                columnId: columnForTemplateFieldName.id,
+            };
+
             const wrapper = getWrapper({ columns });
             wrapper.setState({
-                transientConditions,
+                conditions: conditions2,
             });
-            wrapper.instance().handleColumnChange(condition, columnId);
+            wrapper.instance().handleColumnChange(conditions2[0], columnForDateType.id);
 
-            expect(wrapper.state('transientConditions')).toEqual(expectedConditions);
+            expect(wrapper.state('transientConditions')[0].columnId).toEqual(columnForDateType.id);
         });
     });
 
@@ -233,7 +230,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             });
 
             const condition = wrapper.instance().createCondition();
-            expect(condition.columnId).toEqual('1');
+            expect(condition.columnId).toEqual(columnForTemplateFieldName.id);
             expect(condition.id).toBeDefined();
             expect(condition.operator).toEqual(EQUALS);
             expect(condition.values).toEqual([]);
