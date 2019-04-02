@@ -20,8 +20,8 @@ exports[`features/query-bar/components/ColumnButtonOverlay render should render 
       >
         <Checkbox
           isChecked={true}
-          label="Hullo Thar"
-          name="Hullo Thar"
+          label="Name"
+          name="Name"
           onChange={[Function]}
         />
       </PortaledDraggableListItem>
@@ -61,6 +61,19 @@ exports[`features/query-bar/components/ColumnButtonOverlay render should render 
           isChecked={true}
           label="Offices"
           name="Offices"
+          onChange={[Function]}
+        />
+      </PortaledDraggableListItem>
+      <PortaledDraggableListItem
+        id="5"
+        index={4}
+        isDraggableViaHandle={true}
+        key="4"
+      >
+        <Checkbox
+          isChecked={true}
+          label="Count"
+          name="Count"
           onChange={[Function]}
         />
       </PortaledDraggableListItem>

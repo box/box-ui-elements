@@ -62,11 +62,11 @@ describe('features/query-bar/components/ColumnButtonOverlay', () => {
                 description: 'Should update state with pendingColumns',
                 numberOfHiddenColumns: 0,
                 column: {
-                    displayName: 'Hullo Thar',
+                    displayName: 'Name',
                     id: '1',
                     isShown: true,
                     property: 'name',
-                    source: 'item',
+                    source: 'metadata',
                     type: 'string',
                 },
                 pendingColumns: columns,

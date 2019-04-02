@@ -13,12 +13,14 @@ type Props = {
     visibleColumns?: Array<ColumnType>,
 };
 
+/* eslint-disable no-console */
 const MetadataViewQueryBarExamples = ({ activeTemplate, onTemplateChange, templates, visibleColumns }: Props) => (
     <QueryBar
         activeTemplate={activeTemplate}
         columns={columns}
         conditions={conditions}
         onColumnChange={() => {}}
+        onFilterChange={newConditions => console.log({ newConditions })}
         onTemplateChange={onTemplateChange}
         templates={templates}
         visibleColumns={visibleColumns || []}

@@ -44,7 +44,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
         options={
           Array [
             Object {
-              "displayText": "Hullo Thar",
+              "displayText": "Name",
               "type": "string",
               "value": "1",
             },
@@ -62,6 +62,11 @@ exports[`features/query-bar/components/filter/Condition render() should render C
               "displayText": "Offices",
               "type": "multi-enum",
               "value": "4",
+            },
+            Object {
+              "displayText": "Count",
+              "type": "float",
+              "value": "5",
             },
           ]
         }

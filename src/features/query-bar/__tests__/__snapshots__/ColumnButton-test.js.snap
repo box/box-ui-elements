@@ -79,11 +79,11 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
       columns={
         Array [
           Object {
-            "displayName": "Hullo Thar",
+            "displayName": "Name",
             "id": "1",
             "isShown": true,
             "property": "name",
-            "source": "item",
+            "source": "metadata",
             "type": "string",
           },
           Object {
@@ -91,7 +91,7 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "id": "2",
             "isShown": true,
             "property": "lastUpdatedByName",
-            "source": "item",
+            "source": "metadata",
             "type": "date",
           },
           Object {
@@ -125,6 +125,14 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "property": "offices",
             "source": "metadata",
             "type": "multi-enum",
+          },
+          Object {
+            "displayName": "Count",
+            "id": "5",
+            "isShown": true,
+            "property": "count",
+            "source": "metadata",
+            "type": "float",
           },
         ]
       }

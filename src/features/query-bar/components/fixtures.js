@@ -19,11 +19,11 @@ const columnOptions = [
 const conditions: Array<ConditionType> = [initialCondition];
 
 const columnWithStringType: ColumnType = {
-    displayName: 'Hullo Thar',
+    displayName: 'Name',
     id: '1',
     isShown: true,
     property: 'name',
-    source: 'item',
+    source: 'metadata',
     type: 'string',
 };
 
@@ -41,7 +41,7 @@ const columnWithDateType: ColumnType = {
     id: '2',
     isShown: true,
     property: 'lastUpdatedByName',
-    source: 'item',
+    source: 'metadata',
     type: 'date',
 };
 
@@ -79,11 +79,21 @@ const columnWithMultiEnumType: ColumnType = {
     ],
 };
 
+const columnWithFloatType: ColumnType = {
+    displayName: 'Count',
+    id: '5',
+    isShown: true,
+    property: 'count',
+    source: 'metadata',
+    type: 'float',
+};
+
 const columns: Array<ColumnType> = [
     columnWithStringType,
     columnWithDateType,
     columnWithEnumType,
     columnWithMultiEnumType,
+    columnWithFloatType,
 ];
 
 const columnsWithNewOrder: Array<ColumnType> = [
@@ -91,6 +101,7 @@ const columnsWithNewOrder: Array<ColumnType> = [
     columnWithStringType,
     columnWithEnumType,
     columnWithMultiEnumType,
+    columnWithFloatType,
 ];
 
 const columnsWithOneColumnNotShown: Array<ColumnType> = [
@@ -98,6 +109,7 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
     columnWithDateType,
     columnWithEnumType,
     columnWithMultiEnumType,
+    columnWithFloatType,
 ];
 
 const columnsWithTemplateFieldName: Array<ColumnType> = [columnWithStringType, columnForTemplateFieldName];

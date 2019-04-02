@@ -26,6 +26,7 @@ import {
 import type {
     ColumnType,
     ConditionType,
+    ConditionValueType,
     ConnectorType,
     OperatorOptionType,
     OperatorType,
@@ -43,7 +44,7 @@ type Props = {
     onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
     onOperatorChange: (conditionId: string, value: OperatorType) => void,
-    onValueChange: (conditionId: string, values: Array<string>) => void,
+    onValueChange: (conditionId: string, values: Array<ConditionValueType>) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -77,7 +78,7 @@ const Condition = ({
         onOperatorChange(id, value);
     };
 
-    const handleValueChange = (values: Array<string>) => {
+    const handleValueChange = (values: Array<ConditionValueType>) => {
         const { id } = condition;
         onValueChange(id, values);
     };
