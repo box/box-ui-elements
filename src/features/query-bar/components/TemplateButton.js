@@ -53,12 +53,12 @@ class TemplateButton extends React.Component<Props, State> {
         let text;
 
         const isLoadingTemplates = !templates;
-        const hasNoTemplates = templates && templates.length === 0;
+        const hasTemplates = templates && templates.length > 0;
 
         if (isLoadingTemplates) {
             icon = <LoadingIndicator className="loading-indicator" />;
             text = <FormattedMessage {...messages.templatesLoadingButtonText} />;
-        } else if (hasNoTemplates) {
+        } else if (!hasTemplates) {
             text = <FormattedMessage {...messages.noTemplatesText} />;
         } else if (activeTemplate) {
             icon = <MetadataActiveBadge />;
