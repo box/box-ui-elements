@@ -22,9 +22,17 @@ const columnWithStringType: ColumnType = {
     displayName: 'Hullo Thar',
     id: '1',
     isShown: true,
-    options: null,
     property: 'name',
     source: 'item',
+    type: 'string',
+};
+
+const columnForTemplateFieldName = {
+    displayName: 'Name',
+    id: '1',
+    isShown: true,
+    property: 'name',
+    source: 'metadata',
     type: 'string',
 };
 
@@ -32,7 +40,6 @@ const columnWithDateType: ColumnType = {
     displayName: 'Last Updated',
     id: '2',
     isShown: true,
-    options: null,
     property: 'lastUpdatedByName',
     source: 'item',
     type: 'date',
@@ -92,6 +99,9 @@ const columnsWithOneColumnNotShown: Array<ColumnType> = [
     columnWithEnumType,
     columnWithMultiEnumType,
 ];
+
+const columnsWithTemplateFieldName: Array<ColumnType> = [columnWithStringType, columnForTemplateFieldName];
+const metadataColumns: Array<ColumnType> = [columnWithEnumType, columnWithMultiEnumType];
 
 const expectedVisibleColumns = {
     visibleColumns: [
@@ -513,10 +523,13 @@ const metadataTableStateAfterMount = {
 export {
     initialCondition,
     conditions,
+    columnForTemplateFieldName,
     columns,
     columnOptions,
     columnsWithNewOrder,
     columnsWithOneColumnNotShown,
+    columnsWithTemplateFieldName,
+    metadataColumns,
     expectedVisibleColumns,
     visibleColumnsOneHidden,
     expectedVisibleColumnsOneHidden,

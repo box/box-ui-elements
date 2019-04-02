@@ -34,7 +34,7 @@ export type ColumnType = {
     displayName: string,
     id: string,
     isShown: boolean,
-    options: Array<Object> | null, // TODO: ColumnOptionsType - Array<ColumnOptionType>
+    options?: Array<Object> | null, // TODO: ColumnOptionsType - Array<ColumnOptionType>
     property: string,
     source: string,
     templateKey?: string,
