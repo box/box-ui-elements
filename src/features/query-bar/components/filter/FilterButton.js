@@ -17,7 +17,6 @@ import messages from '../../messages';
 import type { ColumnType, ConditionType, ConnectorType, OperatorType, OptionType } from '../../flowTypes';
 
 type State = {
-    appliedConditions: Array<Object>,
     areErrorsEnabled: boolean,
     isMenuOpen: boolean,
     selectedConnector: ConnectorType,
@@ -35,7 +34,6 @@ class FilterButton extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            appliedConditions: [],
             transientConditions: this.props.conditions.slice(0),
             selectedConnector: AND,
             areErrorsEnabled: false,
@@ -66,7 +64,6 @@ class FilterButton extends React.Component<Props, State> {
     onClose = () => {
         this.setState({
             isMenuOpen: false,
-            transientConditions: [],
         });
     };
 
@@ -114,8 +111,8 @@ class FilterButton extends React.Component<Props, State> {
                 onFilterChange(transientConditions);
             }
             this.setState({
-                appliedConditions: transientConditions,
                 isMenuOpen: false,
+                transientConditions: [],
             });
         } else {
             this.setState({
@@ -246,12 +243,12 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     render() {
-        const { columns } = this.props;
-        const { appliedConditions, transientConditions, areErrorsEnabled, isMenuOpen, selectedConnector } = this.state;
+        const { columns, conditions } = this.props;
+        const { transientConditions, areErrorsEnabled, isMenuOpen, selectedConnector } = this.state;
 
-        const numberOfAppliedConditions = appliedConditions.length;
+        const numberOfConditions = conditions.length;
 
-        const buttonClasses = classNames('query-bar-button', numberOfAppliedConditions !== 0 ? 'is-active' : '');
+        const buttonClasses = classNames('query-bar-button', numberOfConditions !== 0 ? 'is-active' : '');
 
         const isFilterDisabled = !columns || columns.length === 0;
 
@@ -277,13 +274,13 @@ class FilterButton extends React.Component<Props, State> {
                     <MenuToggle>
                         <IconMetadataFilter className="button-icon" />
                         <span className="button-label">
-                            {numberOfAppliedConditions === 0 ? (
+                            {numberOfConditions === 0 ? (
                                 <FormattedMessage {...messages.filtersButtonText} />
                             ) : (
                                 <FormattedMessage
                                     {...messages.multipleFiltersButtonText}
                                     values={{
-                                        number: numberOfAppliedConditions,
+                                        number: numberOfConditions,
                                     }}
                                 />
                             )}

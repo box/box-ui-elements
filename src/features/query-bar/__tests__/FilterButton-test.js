@@ -11,14 +11,46 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     };
 
     describe('render', () => {
+        const validConditions = [{ values: [1] }];
+        const incompleteConditions = [{ values: [] }];
+
         test('should disable FilterButton when columns is undefined', () => {
-            const wrapper = getWrapper({ columns: undefined });
-            expect(wrapper).toMatchSnapshot();
+            const wrapper = getWrapper({ columns: null });
+            const Button = wrapper.find('Button');
+            expect(Button.props().isDisabled).toBeTruthy();
         });
 
         test('should enable FilterButton when columns is non-empty', () => {
             const wrapper = getWrapper({ columns });
-            expect(wrapper).toMatchSnapshot();
+            const Button = wrapper.find('Button');
+            expect(Button.props().isDisabled).toBeFalsy();
+        });
+
+        test('Should close the menu and empty out transientConditions when Apply button is clicked', () => {
+            const wrapper = getWrapper({ conditions: [] });
+            wrapper.instance().setState({
+                transientConditions: validConditions,
+                isMenuOpen: true,
+            });
+
+            wrapper.find('.apply-filters-button').simulate('click');
+
+            const Flyout = wrapper.find('Flyout');
+            expect(Flyout.props().overlayIsVisible).toBeFalsy();
+            expect(wrapper.state('transientConditions')).toHaveLength(0);
+        });
+
+        test('Should set areErrorsEnabled to true for Condition if not all conditions are valid', () => {
+            const wrapper = getWrapper({ conditions: [] });
+            wrapper.instance().setState({
+                transientConditions: incompleteConditions,
+                isMenuOpen: true,
+            });
+
+            wrapper.find('.apply-filters-button').simulate('click');
+
+            const Condition = wrapper.find('Condition');
+            expect(Condition.props().areErrorsEnabled).toBeTruthy();
         });
     });
 
