@@ -13,4 +13,6 @@ global.shallow = shallow;
 global.mount = mount;
 
 // testing utility functions
-global.queryAllByTestId = (wrapper, testid) => wrapper.find(`[data-testid="${testid}"]`).hostNodes();
+
+// accepts a Cheerio jQuery-style wrapper or Enzyme mount wrapper
+global.queryAllByTestId = (wrapper, testid) => wrapper.find(`[data-testid="${testid}"]`);

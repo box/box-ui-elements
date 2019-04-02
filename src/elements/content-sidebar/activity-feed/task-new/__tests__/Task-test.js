@@ -173,13 +173,13 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should show actions for task type', () => {
-        const approvalTask = mount(<Task {...task} task_type="APPROVAL" currentUser={currentUser} />);
+        const approvalTask = mount(<Task {...task} task_type="APPROVAL" currentUser={currentUser} />).render();
         const approvalBtns = global.queryAllByTestId(approvalTask, 'approve-task');
         const rejectBtns = global.queryAllByTestId(approvalTask, 'reject-task');
         expect(approvalBtns).toHaveLength(1);
         expect(rejectBtns).toHaveLength(1);
 
-        const generalTask = mount(<Task {...task} task_type="GENERAL" currentUser={currentUser} />);
+        const generalTask = mount(<Task {...task} task_type="GENERAL" currentUser={currentUser} />).render();
         const completeBtns = global.queryAllByTestId(generalTask, 'complete-task');
         expect(completeBtns).toHaveLength(1);
     });
