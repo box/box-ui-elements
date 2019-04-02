@@ -19,6 +19,10 @@ type Props = {
     templates?: Array<MetadataTemplate>,
 };
 
+const isItemName = (column: ColumnType) => {
+    return column.source === 'item' && column.property === 'name';
+};
+
 const QueryBar = ({
     activeTemplate,
     columns,
@@ -29,8 +33,7 @@ const QueryBar = ({
     templates,
 }: Props) => {
     const metadataColumns = columns && columns.filter(column => column.source !== 'item');
-    const columnsWithoutItemName =
-        columns && columns.filter(column => column.property !== 'name' || column.source === 'metadata');
+    const columnsWithoutItemName = columns && columns.filter(column => !isItemName(column));
     return (
         <section className="metadata-view-query-bar">
             <TemplateButton activeTemplate={activeTemplate} onTemplateChange={onTemplateChange} templates={templates} />
