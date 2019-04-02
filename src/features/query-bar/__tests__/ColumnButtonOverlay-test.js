@@ -65,7 +65,6 @@ describe('features/query-bar/components/ColumnButtonOverlay', () => {
                     displayName: 'Hullo Thar',
                     id: '1',
                     isShown: true,
-                    options: null,
                     property: 'name',
                     source: 'item',
                     type: 'string',
