@@ -5,21 +5,23 @@ import { FormattedMessage } from 'react-intl';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import messages from '../../../common/messages';
 import Button from '../../../../components/button';
-import { TASK_TYPE_APPROVAL } from '../../../../constants';
+import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../../../constants';
 
 type Props = {|
     onTaskApproval: Function,
     onTaskComplete: Function,
     onTaskReject: Function,
-    taskType?: TaskType,
+    taskType: TaskType,
 |};
 
-const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }: Props): React.Node => (
-    <div className="bcs-task-pending-assignment bcs-task-assignment-actions">
-        {taskType === TASK_TYPE_APPROVAL ? (
+const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }: Props): React.Node => {
+    let action = null;
+    if (taskType === TASK_TYPE_APPROVAL) {
+        action = (
             <React.Fragment>
                 <Button
                     className="bcs-task-action-button bcs-task-check-btn"
+                    data-testid="approve-task"
                     onClick={onTaskApproval}
                     data-resin-target={ACTIVITY_TARGETS.TASK_APPROVE}
                 >
@@ -27,22 +29,27 @@ const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }:
                 </Button>
                 <Button
                     className="bcs-task-action-button bcs-task-x-btn"
+                    data-testid="reject-task"
                     onClick={onTaskReject}
                     data-resin-target={ACTIVITY_TARGETS.TASK_REJECT}
                 >
                     <FormattedMessage {...messages.tasksFeedRejectAction} />
                 </Button>
             </React.Fragment>
-        ) : (
+        );
+    } else if (taskType === TASK_TYPE_GENERAL) {
+        action = (
             <Button
                 className="bcs-task-action-button bcs-task-check-btn"
+                data-testid="complete-task"
                 onClick={onTaskComplete}
                 data-resin-target={ACTIVITY_TARGETS.TASK_COMPLETE}
             >
                 <FormattedMessage {...messages.tasksFeedCompleteAction} />
             </Button>
-        )}
-    </div>
-);
+        );
+    }
+    return <div className="bcs-task-pending-assignment bcs-task-assignment-actions">{action}</div>;
+};
 
 export default TaskActions;

@@ -76,6 +76,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       onTaskApproval={[Function]}
       onTaskComplete={[Function]}
       onTaskReject={[Function]}
+      taskType="GENERAL"
     />
   </div>
 </div>
@@ -163,6 +164,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
       "next_marker": null,
     }
   }
+  task_type="GENERAL"
   type="task"
 >
   <div
@@ -395,6 +397,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
         onTaskApproval={[Function]}
         onTaskComplete={[Function]}
         onTaskReject={[Function]}
+        taskType="GENERAL"
       >
         <div
           className="bcs-task-pending-assignment bcs-task-assignment-actions"
@@ -402,11 +405,13 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
           <Button
             className="bcs-task-action-button bcs-task-check-btn"
             data-resin-target="activityfeed-taskcomplete"
+            data-testid="complete-task"
             onClick={[Function]}
           >
             <button
               className="btn bcs-task-action-button bcs-task-check-btn"
               data-resin-target="activityfeed-taskcomplete"
+              data-testid="complete-task"
               onClick={[Function]}
               type="submit"
             >

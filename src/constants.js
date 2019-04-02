@@ -351,8 +351,8 @@ export const TASK_NEW_INCOMPLETE: 'NOT_STARTED' = 'NOT_STARTED';
 export const TASK_NEW_REJECTED: 'REJECTED' = 'REJECTED';
 
 /* ------------------ New Task types ----------------- */
-export const TASK_TYPE_GENERAL: 'general' = 'general';
-export const TASK_TYPE_APPROVAL: 'approval' = 'approval';
+export const TASK_TYPE_GENERAL: 'GENERAL' = 'GENERAL';
+export const TASK_TYPE_APPROVAL: 'APPROVAL' = 'APPROVAL';
 
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {
