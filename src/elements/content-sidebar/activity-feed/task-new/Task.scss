@@ -18,7 +18,7 @@ $error-color: $red;
     .bcs-task-due-date {
         color: $threes;
         font-weight: bold;
-        margin: 5px 0;
+        margin-top: 8px;
 
         span:first-child {
             padding-right: 3px;
@@ -31,7 +31,7 @@ $error-color: $red;
 
     .bcs-task-assignments {
         display: flex;
-        margin: 8px 0;
+        margin: 10px 0;
     }
 
     .bcs-task-assignment-avatar {
@@ -55,8 +55,8 @@ $error-color: $red;
         width: 32px;
 
         // select all but first instance
-        & + & {
-            margin-left: 3px;
+        & + .bcs-task-assignment-status {
+            margin-left: 6px;
         }
     }
 
@@ -79,7 +79,7 @@ $error-color: $red;
     .bcs-task-status {
         align-items: center;
         display: flex;
-        margin-top: 15px;
+        margin-top: 18px;
     }
 
     .bcs-task-status-icon {
@@ -114,6 +114,10 @@ $error-color: $red;
 
     .bcs-task-pending-assignment {
         margin-top: 5px;
+    }
+
+    .bcs-comment-user-name {
+        margin-right: 0;
     }
 
     button:first-of-type.bcs-task-action-button {

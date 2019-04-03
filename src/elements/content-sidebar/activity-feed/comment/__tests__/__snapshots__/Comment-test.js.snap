@@ -284,3 +284,150 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
   </div>
 </div>
 `;
+
+exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render messageHeader if prop is passed in 1`] = `
+<div
+  className="bcs-comment-container"
+>
+  <div
+    className="bcs-comment"
+    onBlur={[Function]}
+    onFocus={[Function]}
+  >
+    <Component
+      className="bcs-comment-avatar"
+      user={
+        Object {
+          "id": 10,
+          "name": "50 Cent",
+        }
+      }
+    />
+    <div
+      className="bcs-comment-content"
+    >
+      <div
+        className="bcs-comment-headline"
+      >
+        <UserLink
+          className="bcs-comment-user-name"
+          data-resin-target="activityfeed-profilelink"
+          id={10}
+          name="50 Cent"
+        />
+      </div>
+      <div>
+        <Tooltip
+          constrainToScrollParent={false}
+          constrainToWindow={true}
+          position="top-center"
+          text={
+            <FormattedMessage
+              defaultMessage="{time, date, full} at {time, time, short}"
+              id="be.commentPostedFullDateTime"
+              values={
+                Object {
+                  "time": 1506534041000,
+                }
+              }
+            />
+          }
+          theme="default"
+        >
+          <small
+            className="bcs-comment-created-at"
+          >
+            <ReadableTime
+              relativeThreshold={3600000}
+              timestamp={1506534041000}
+            />
+          </small>
+        </Tooltip>
+      </div>
+      <div>
+        message header
+      </div>
+      <CommentText
+        id="123"
+        tagged_message="test"
+        translationEnabled={false}
+        translationFailed={null}
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/comment/Comment should use userHeadlineRenderer if prop is passed in 1`] = `
+<div
+  className="bcs-comment-container"
+>
+  <div
+    className="bcs-comment"
+    onBlur={[Function]}
+    onFocus={[Function]}
+  >
+    <Component
+      className="bcs-comment-avatar"
+      user={
+        Object {
+          "id": 10,
+          "name": "50 Cent",
+        }
+      }
+    />
+    <div
+      className="bcs-comment-content"
+    >
+      <div
+        className="bcs-comment-headline"
+      >
+        <div
+          className="userHeadlineRenderer"
+        >
+          <UserLink
+            className="bcs-comment-user-name"
+            data-resin-target="activityfeed-profilelink"
+            id={10}
+            name="50 Cent"
+          />
+        </div>
+      </div>
+      <div>
+        <Tooltip
+          constrainToScrollParent={false}
+          constrainToWindow={true}
+          position="top-center"
+          text={
+            <FormattedMessage
+              defaultMessage="{time, date, full} at {time, time, short}"
+              id="be.commentPostedFullDateTime"
+              values={
+                Object {
+                  "time": 1506534041000,
+                }
+              }
+            />
+          }
+          theme="default"
+        >
+          <small
+            className="bcs-comment-created-at"
+          >
+            <ReadableTime
+              relativeThreshold={3600000}
+              timestamp={1506534041000}
+            />
+          </small>
+        </Tooltip>
+      </div>
+      <CommentText
+        id="123"
+        tagged_message="test"
+        translationEnabled={false}
+        translationFailed={null}
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -1,5 +1,202 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`elements/content-sidebar/ActivityFeed/task-new/Task due date should have overdue class if task is incomplete and due date is in past 1`] = `
+<div
+  className="bcs-task"
+  data-testid="task-card"
+>
+  <mock-comment
+    created_at="2010-01-01"
+    created_by={
+      Object {
+        "id": "1",
+        "name": "Jake Thomas",
+        "type": "user",
+      }
+    }
+    currentUser={
+      Object {
+        "id": "1",
+        "name": "Jake Thomas",
+        "type": "user",
+      }
+    }
+    id="123125"
+    inlineDeleteMessage={
+      Object {
+        "defaultMessage": "Delete task?",
+        "id": "be.taskDeletePrompt",
+      }
+    }
+    messageHeader={
+      <div
+        className="bcs-task-due-date bcs-task-overdue"
+        data-testid="task-due-date"
+      >
+        <FormattedMessage
+          defaultMessage="Due"
+          id="be.taskDueDate"
+        />
+        <FormattedTime
+          day="numeric"
+          month="short"
+          value={775090439000}
+          year="numeric"
+        />
+      </div>
+    }
+    onDelete={[MockFunction]}
+    onEdit={[MockFunction]}
+    permissions={
+      Object {
+        "can_create_task_collaborator": true,
+        "can_create_task_link": true,
+        "can_delete": true,
+        "can_edit": false,
+        "can_update": true,
+      }
+    }
+    tagged_message="This is where we tell each other what we need to do"
+    userHeadlineRenderer={[Function]}
+  />
+  <div
+    className="bcs-task-assignment-container"
+  >
+    <div
+      className="bcs-task-assignments"
+    >
+      <Component
+        data-testid="task-assignment-status"
+        key="current-user-assignment-id"
+        status="NOT_STARTED"
+        user={
+          Object {
+            "id": "1",
+            "name": "Jake Thomas",
+            "type": "user",
+          }
+        }
+      />
+      <Component
+        data-testid="task-assignment-status"
+        key="other-user-assignment-id"
+        status="COMPLETED"
+        user={
+          Object {
+            "id": "3",
+            "name": "Patrick Paul",
+            "type": "user",
+          }
+        }
+      />
+    </div>
+    <TaskActions
+      onTaskApproval={[Function]}
+      onTaskComplete={[Function]}
+      onTaskReject={[Function]}
+      taskType="GENERAL"
+    />
+  </div>
+</div>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/Task due date should have overdue class if task is incomplete and due date is in past 2`] = `
+<div
+  className="bcs-task"
+  data-testid="task-card"
+>
+  <mock-comment
+    created_at="2010-01-01"
+    created_by={
+      Object {
+        "id": "1",
+        "name": "Jake Thomas",
+        "type": "user",
+      }
+    }
+    currentUser={
+      Object {
+        "id": "1",
+        "name": "Jake Thomas",
+        "type": "user",
+      }
+    }
+    id="123125"
+    inlineDeleteMessage={
+      Object {
+        "defaultMessage": "Delete task?",
+        "id": "be.taskDeletePrompt",
+      }
+    }
+    messageHeader={
+      <div
+        className="bcs-task-due-date"
+        data-testid="task-due-date"
+      >
+        <FormattedMessage
+          defaultMessage="Due"
+          id="be.taskDueDate"
+        />
+        <FormattedTime
+          day="numeric"
+          month="short"
+          value={775090439000}
+          year="numeric"
+        />
+      </div>
+    }
+    onDelete={[MockFunction]}
+    onEdit={[MockFunction]}
+    permissions={
+      Object {
+        "can_create_task_collaborator": true,
+        "can_create_task_link": true,
+        "can_delete": true,
+        "can_edit": false,
+        "can_update": true,
+      }
+    }
+    tagged_message="This is where we tell each other what we need to do"
+    userHeadlineRenderer={[Function]}
+  />
+  <div
+    className="bcs-task-assignment-container"
+  >
+    <div
+      className="bcs-task-assignments"
+    >
+      <Component
+        data-testid="task-assignment-status"
+        key="current-user-assignment-id"
+        status="NOT_STARTED"
+        user={
+          Object {
+            "id": "1",
+            "name": "Jake Thomas",
+            "type": "user",
+          }
+        }
+      />
+      <Component
+        data-testid="task-assignment-status"
+        key="other-user-assignment-id"
+        status="COMPLETED"
+        user={
+          Object {
+            "id": "3",
+            "name": "Patrick Paul",
+            "type": "user",
+          }
+        }
+      />
+    </div>
+    <Component
+      status="COMPLETED"
+    />
+  </div>
+</div>
+`;
+
 exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly render task 1`] = `
 <div
   className="bcs-task"
@@ -28,6 +225,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         "id": "be.taskDeletePrompt",
       }
     }
+    messageHeader={null}
     onDelete={[MockFunction]}
     onEdit={[MockFunction]}
     permissions={
@@ -40,6 +238,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       }
     }
     tagged_message="This is where we tell each other what we need to do"
+    userHeadlineRenderer={[Function]}
   />
   <div
     className="bcs-task-assignment-container"
@@ -194,6 +393,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
           "id": "be.taskDeletePrompt",
         }
       }
+      messageHeader={null}
       onDelete={[MockFunction]}
       onEdit={[MockFunction]}
       permissions={
@@ -206,6 +406,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
         }
       }
       tagged_message="This is where we tell each other what we need to do"
+      userHeadlineRenderer={[Function]}
     />
     <div
       className="bcs-task-assignment-container"
@@ -432,4 +633,104 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show assignm
     </div>
   </div>
 </Task>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/Task should show due date if set 1`] = `
+<div
+  className="bcs-task"
+  data-testid="task-card"
+>
+  <mock-comment
+    created_at="2010-01-01"
+    created_by={
+      Object {
+        "id": "1",
+        "name": "Jake Thomas",
+        "type": "user",
+      }
+    }
+    currentUser={
+      Object {
+        "id": "1",
+        "name": "Jake Thomas",
+        "type": "user",
+      }
+    }
+    id="123125"
+    inlineDeleteMessage={
+      Object {
+        "defaultMessage": "Delete task?",
+        "id": "be.taskDeletePrompt",
+      }
+    }
+    messageHeader={
+      <div
+        className="bcs-task-due-date"
+        data-testid="task-due-date"
+      >
+        <FormattedMessage
+          defaultMessage="Due"
+          id="be.taskDueDate"
+        />
+        <FormattedTime
+          day="numeric"
+          month="short"
+          value={32521388039000}
+          year="numeric"
+        />
+      </div>
+    }
+    onDelete={[MockFunction]}
+    onEdit={[MockFunction]}
+    permissions={
+      Object {
+        "can_create_task_collaborator": true,
+        "can_create_task_link": true,
+        "can_delete": true,
+        "can_edit": false,
+        "can_update": true,
+      }
+    }
+    tagged_message="This is where we tell each other what we need to do"
+    userHeadlineRenderer={[Function]}
+  />
+  <div
+    className="bcs-task-assignment-container"
+  >
+    <div
+      className="bcs-task-assignments"
+    >
+      <Component
+        data-testid="task-assignment-status"
+        key="current-user-assignment-id"
+        status="NOT_STARTED"
+        user={
+          Object {
+            "id": "1",
+            "name": "Jake Thomas",
+            "type": "user",
+          }
+        }
+      />
+      <Component
+        data-testid="task-assignment-status"
+        key="other-user-assignment-id"
+        status="COMPLETED"
+        user={
+          Object {
+            "id": "3",
+            "name": "Patrick Paul",
+            "type": "user",
+          }
+        }
+      />
+    </div>
+    <TaskActions
+      onTaskApproval={[Function]}
+      onTaskComplete={[Function]}
+      onTaskReject={[Function]}
+      taskType="GENERAL"
+    />
+  </div>
+</div>
 `;

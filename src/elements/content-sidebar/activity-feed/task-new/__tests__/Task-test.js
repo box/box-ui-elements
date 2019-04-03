@@ -94,10 +94,10 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 onEdit={jest.fn()}
                 onDelete={jest.fn()}
                 {...task}
-                due_at={new Date() + 1000}
+                due_at={32521388039000}
             />,
         );
-        expect(wrapper.find('[data-testid="task-due-date"]')).toHaveLength(1);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('due date should have overdue class if task is incomplete and due date is in past', () => {
@@ -107,11 +107,11 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 currentUser={currentUser}
                 onEdit={jest.fn()}
                 onDelete={jest.fn()}
-                due_at={new Date() - 1000}
+                due_at={775090439000}
                 status="NOT_STARTED"
             />,
         );
-        expect(incompleteWrapper.find('.bcs-task-overdue')).toHaveLength(1);
+        expect(incompleteWrapper).toMatchSnapshot();
 
         const completeWrapper = shallow(
             <Task
@@ -119,11 +119,11 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 currentUser={currentUser}
                 onEdit={jest.fn()}
                 onDelete={jest.fn()}
-                due_at={new Date() - 1000}
+                due_at={775090439000}
                 status="COMPLETED"
             />,
         );
-        expect(completeWrapper.find('.bcs-task-overdue')).toHaveLength(0);
+        expect(completeWrapper).toMatchSnapshot();
     });
 
     test('should add pending class for isPending prop', () => {
