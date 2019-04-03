@@ -19,6 +19,7 @@ import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
 import Pagination from '../common/pagination/Pagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import setElementsVersion from '../../utils/globals';
 import API from '../../api';
 import Content from './Content';
 import Footer from './Footer';
@@ -109,6 +110,8 @@ type State = {
 };
 
 const defaultType = `${TYPE_FILE},${TYPE_WEBLINK}`;
+
+setElementsVersion();
 
 class ContentPicker extends Component<Props, State> {
     id: string;

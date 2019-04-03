@@ -26,6 +26,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
+import setElementsVersion from '../../utils/globals';
 import { withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
@@ -144,6 +145,8 @@ mark(MARK_NAME_JS_READY);
 const LoadableSidebar = AsyncLoad({
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-sidebar" */ '../content-sidebar'),
 });
+
+setElementsVersion();
 
 class ContentPreview extends PureComponent<Props, State> {
     id: string;

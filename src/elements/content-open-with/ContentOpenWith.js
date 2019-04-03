@@ -34,6 +34,7 @@ import {
     TYPE_FILE,
     TYPE_FOLDER,
 } from '../../constants';
+import setElementsVersion from '../../utils/globals';
 
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
@@ -85,6 +86,8 @@ type State = {
     shouldRenderErrorIntegrationPortal: boolean,
     shouldRenderLoadingIntegrationPortal: boolean,
 };
+
+setElementsVersion();
 
 class ContentOpenWith extends PureComponent<Props, State> {
     api: API;

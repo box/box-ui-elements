@@ -18,6 +18,7 @@ import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEB
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import setElementsVersion from '../../utils/globals';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureProvider } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
@@ -72,6 +73,8 @@ type State = {
 const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
+
+setElementsVersion();
 
 class ContentSidebar extends React.Component<Props, State> {
     props: Props;

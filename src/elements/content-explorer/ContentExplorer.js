@@ -28,6 +28,7 @@ import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import setElementsVersion from '../../utils/globals';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
@@ -125,6 +126,8 @@ type State = {
     sortDirection: SortDirection,
     view: View,
 };
+
+setElementsVersion();
 
 class ContentExplorer extends Component<Props, State> {
     id: string;
