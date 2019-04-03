@@ -40,6 +40,7 @@ type Props = {
     isPending?: boolean,
     is_reply_comment?: boolean,
     mentionSelectorContacts?: SelectorItems,
+    messageHeader?: React.Node,
     modified_at?: string | number,
     onDelete?: Function,
     onEdit?: Function,
@@ -47,6 +48,7 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
+    userHeadlineRenderer?: any => React.Element<typeof FormattedMessage>,
 };
 
 type State = {
@@ -100,7 +102,9 @@ class Comment extends React.Component<Props, State> {
             error,
             onDelete,
             onEdit,
+            messageHeader,
             tagged_message = '',
+            userHeadlineRenderer,
             translatedTaggedMessage,
             translations,
             currentUser,
@@ -116,6 +120,15 @@ class Comment extends React.Component<Props, State> {
         const canDelete = getProp(permissions, 'can_delete', false);
         const canEdit = getProp(permissions, 'can_edit', false);
         const createdByUser = created_by || PLACEHOLDER_USER;
+        const userLink = (
+            <UserLink
+                className="bcs-comment-user-name"
+                data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                id={createdByUser.id}
+                name={createdByUser.name}
+                getUserProfileUrl={getUserProfileUrl}
+            />
+        );
 
         return (
             <div className="bcs-comment-container">
@@ -130,13 +143,7 @@ class Comment extends React.Component<Props, State> {
                     <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />
                     <div className="bcs-comment-content">
                         <div className="bcs-comment-headline">
-                            <UserLink
-                                className="bcs-comment-user-name"
-                                data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                                id={createdByUser.id}
-                                name={createdByUser.name}
-                                getUserProfileUrl={getUserProfileUrl}
-                            />
+                            {userHeadlineRenderer ? userHeadlineRenderer(userLink) : userLink}
                             {!!onEdit && !!canEdit && !isPending && <InlineEdit id={id} toEdit={toEdit} />}
                             {!!onDelete && !!canDelete && !isPending && (
                                 <InlineDelete
@@ -161,6 +168,7 @@ class Comment extends React.Component<Props, State> {
                                 </small>
                             </Tooltip>
                         </div>
+                        {messageHeader}
                         {isEditing ? (
                             <ApprovalCommentForm
                                 onSubmit={() => {}}

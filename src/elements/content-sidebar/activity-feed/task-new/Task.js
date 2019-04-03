@@ -5,7 +5,13 @@ import { FormattedTime, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { fillUserPlaceholder } from '../../../../utils/fields';
 import messages from '../../../common/messages';
-import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_INCOMPLETE, TASK_NEW_COMPLETED } from '../../../../constants';
+import {
+    TASK_NEW_APPROVED,
+    TASK_NEW_REJECTED,
+    TASK_NEW_INCOMPLETE,
+    TASK_NEW_COMPLETED,
+    TASK_TYPE_APPROVAL,
+} from '../../../../constants';
 import Comment from '../comment';
 import AssigneeStatus from './AssigneeStatus';
 import TaskActions from './TaskActions';
@@ -33,6 +39,25 @@ const MAX_AVATARS = 3;
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Task extends React.Component<Props> {
+    renderUserHeadline(isCurrentUser: boolean, taskType: string, userLink: any): React.Node {
+        if (isCurrentUser) {
+            if (taskType === TASK_TYPE_APPROVAL) {
+                // Assigned you an approval task
+                return (
+                    <FormattedMessage {...messages.tasksFeedHeadlineApprovalCurrentUser} values={{ user: userLink }} />
+                );
+            }
+            // Assign you a task
+            return <FormattedMessage {...messages.tasksFeedHeadlineGeneralCurrentUser} values={{ user: userLink }} />;
+        }
+        if (taskType === TASK_TYPE_APPROVAL) {
+            // Assigned an approval task
+            return <FormattedMessage {...messages.tasksFeedHeadlineApproval} values={{ user: userLink }} />;
+        }
+        // Assigned a task
+        return <FormattedMessage {...messages.tasksFeedHeadlineGeneral} values={{ user: userLink }} />;
+    }
+
     render(): React.Node {
         const {
             assigned_to,
@@ -82,6 +107,17 @@ class Task extends React.Component<Props> {
             currentUserAssignment.status === TASK_NEW_INCOMPLETE &&
             status === TASK_NEW_INCOMPLETE;
 
+        const dueDateMessage = due_at ? (
+            <div
+                className={classNames('bcs-task-due-date', {
+                    'bcs-task-overdue': isOverdue,
+                })}
+                data-testid="task-due-date"
+            >
+                <FormattedMessage {...messages.taskDueDate} />
+                <FormattedTime value={due_at} day="numeric" month="short" year="numeric" />
+            </div>
+        ) : null;
         return (
             <div
                 className={classNames('bcs-task', {
@@ -100,6 +136,7 @@ class Task extends React.Component<Props> {
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={taskPermissions}
+                    messageHeader={dueDateMessage}
                     tagged_message={name}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
@@ -107,19 +144,9 @@ class Task extends React.Component<Props> {
                     getUserProfileUrl={getUserProfileUrl}
                     mentionSelectorContacts={mentionSelectorContacts}
                     getMentionWithQuery={getMentionWithQuery}
+                    userHeadlineRenderer={this.renderUserHeadline.bind(this, currentUserAssignment, task_type)}
                 />
                 <div className="bcs-task-assignment-container">
-                    {due_at ? (
-                        <div
-                            className={classNames('bcs-task-due-date', {
-                                'bcs-task-overdue': isOverdue,
-                            })}
-                            data-testid="task-due-date"
-                        >
-                            <FormattedMessage {...messages.taskDueDate} />
-                            <FormattedTime value={due_at} day="numeric" month="short" year="numeric" />
-                        </div>
-                    ) : null}
                     <div className="bcs-task-assignments">
                         {assigned_to && assigned_to.entries
                             ? assigned_to.entries
