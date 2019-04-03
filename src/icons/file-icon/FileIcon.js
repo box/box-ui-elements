@@ -132,7 +132,7 @@ const EXTENSIONS = {
         'yaml',
     ]),
     IconFileDocument: mirror(['csv', 'dot', 'dotx', 'msg', 'odt', 'rtf', 'tsv', 'wpd', 'xhtml', 'xml', 'xsd', 'xsl']),
-    IconFileDwg: mirror(['dwg']),
+    IconFileDwg: mirror(['dwg', 'dwgzip']),
     IconFileExcelSpreadsheet: mirror(['xls', 'xlsx', 'xlsm']),
     IconFileGoogleDocs: mirror(['gdoc']),
     IconFileGoogleSheets: mirror(['gsheet']),
