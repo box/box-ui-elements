@@ -41,9 +41,11 @@ export type ColumnType = {
     type: string,
 };
 
+export type ConditionValueType = string | number | Date;
+
 export type ConditionType = {
     columnId: string,
     id: string,
     operator: OperatorType,
-    values: Array<string>,
+    values: Array<ConditionValueType>,
 };

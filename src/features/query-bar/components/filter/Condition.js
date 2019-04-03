@@ -26,6 +26,7 @@ import {
 import type {
     ColumnType,
     ConditionType,
+    ConditionValueType,
     ConnectorType,
     OperatorOptionType,
     OperatorType,
@@ -43,7 +44,7 @@ type Props = {
     onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
     onOperatorChange: (conditionId: string, value: OperatorType) => void,
-    onValueChange: (conditionId: string, values: Array<string>) => void,
+    onValueChange: (conditionId: string, values: Array<ConditionValueType>) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -77,7 +78,7 @@ const Condition = ({
         onOperatorChange(id, value);
     };
 
-    const handleValueChange = (values: Array<string>) => {
+    const handleValueChange = (values: Array<ConditionValueType>) => {
         const { id } = condition;
         onValueChange(id, values);
     };
@@ -233,31 +234,29 @@ const Condition = ({
     };
 
     const renderValueField = () => {
-        const { columnId, values } = condition;
+        const column = columns && columns.find(c => c.id === condition.columnId);
 
-        const column = columns && columns.find(c => c.id === columnId);
-        const type = column && column.type;
-
-        if (column && type) {
-            const valueOptions = getColumnOptions();
-            const error = getErrorMessage();
-
-            const classnames = classNames('condition-value-dropdown-container', {
-                'show-error': error,
-            });
-
-            return (
-                <div className={classnames}>
-                    <ValueField
-                        onChange={handleValueChange}
-                        selectedValues={values}
-                        valueOptions={valueOptions}
-                        valueType={type}
-                    />
-                </div>
-            );
+        if (!column) {
+            throw new Error('Expected Column');
         }
-        return null;
+
+        const valueOptions = getColumnOptions();
+        const error = getErrorMessage();
+
+        const classnames = classNames('condition-value-dropdown-container', {
+            'show-error': error,
+        });
+
+        return (
+            <div className={classnames}>
+                <ValueField
+                    onChange={handleValueChange}
+                    selectedValues={condition.values}
+                    valueOptions={valueOptions}
+                    valueType={column.type}
+                />
+            </div>
+        );
     };
 
     const renderErrorIcon = () => {

@@ -1,12 +1,14 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import BetaFeedbackBadge from '../../features/beta-feedback';
 import Button from '../../components/button';
 import Modal from '../../components/modal/Modal';
 import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
 
 type AddTaskButtonProps = {|
+    feedbackUrl: string,
     isDisabled: boolean,
 |};
 
@@ -41,7 +43,7 @@ class AddTaskButton extends React.Component<Props, State> {
     handleSubmit = () => this.setState({ isTaskFormOpen: false });
 
     render() {
-        const { isDisabled, ...passThrough } = this.props;
+        const { isDisabled, feedbackUrl, ...passThrough } = this.props;
         const { isTaskFormOpen } = this.state;
 
         return (
@@ -54,7 +56,12 @@ class AddTaskButton extends React.Component<Props, State> {
                     data-testid="create-task-modal"
                     isOpen={isTaskFormOpen}
                     onRequestClose={this.handleClose}
-                    title={<FormattedMessage {...messages.tasksAddTaskFormTitle} />}
+                    title={
+                        <React.Fragment>
+                            <FormattedMessage {...messages.tasksAddTaskFormTitle} />
+                            <BetaFeedbackBadge tooltip formUrl={feedbackUrl} />
+                        </React.Fragment>
+                    }
                 >
                     <div className="be">
                         <TaskForm {...passThrough} onCancel={this.handleClose} onSubmit={this.handleSubmit} />

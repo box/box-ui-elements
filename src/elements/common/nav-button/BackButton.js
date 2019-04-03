@@ -25,9 +25,9 @@ const BackButton = ({ history, path }: Props) => (
         type="button"
     >
         <IconNavigateLeft height={24} width={24} />
-        <FormattedMessage {...messages.back}>
-            {content => <span className="accessibility-hidden">{content}</span>}
-        </FormattedMessage>
+        <span className="accessibility-hidden">
+            <FormattedMessage {...messages.back} />
+        </span>
     </PlainButton>
 );
 

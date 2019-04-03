@@ -702,7 +702,7 @@ type MarkerPaginatedCollection<T> = {
 // See https://github.com/facebook/flow/issues/7574
 // This is currently *not* enforcing the constant types
 // type TaskType = typeof TASK_TYPE_GENERAL | typeof TASK_TYPE_APPROVAL;
-type TaskType = 'general' | 'approval';
+type TaskType = 'GENERAL' | 'APPROVAL';
 
 type TaskNew = {|
     assigned_to: MarkerPaginatedCollection<TaskCollabAssignee>,
@@ -724,7 +724,7 @@ type TaskNew = {|
     progress_at?: ?ISODate,
     status: TaskStatus,
     task_links: MarkerPaginatedCollection<TaskLink>,
-    task_type?: TaskType,
+    task_type: TaskType,
     type: 'task',
 |};
 
@@ -952,6 +952,7 @@ type ActivityFeedFeatures = {
     tasks?: {|
         createButton?: boolean, // Show the Create Task button (requires newApi)
         createFromComment?: boolean, // Show the Add Task checkbox
+        feedbackUrl?: string, // URL used for feedback form for tasks
         newApi?: boolean, // Use new service
         newCards?: boolean, // Show new task card layout (requires on newApi)
     |},

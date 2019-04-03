@@ -6,6 +6,7 @@
 import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import omit from 'lodash/omit';
+import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
 import messages from '../elements/common/messages';
 import { sortFeedItems } from '../utils/sorter';
@@ -748,6 +749,7 @@ class Feed extends Base {
                 limit: 1,
                 next_marker: null,
             },
+            task_type: 'GENERAL',
             status: TASK_NEW_INCOMPLETE,
         };
 
@@ -1171,7 +1173,7 @@ class Feed extends Base {
      * @param {string} title - The error message title.
      * @return {Object} An error message object
      */
-    createFeedError(message: string, title: string = messages.errorOccured) {
+    createFeedError(message: MessageDescriptor, title: MessageDescriptor = messages.errorOccured) {
         return {
             error: { message, title },
         };
