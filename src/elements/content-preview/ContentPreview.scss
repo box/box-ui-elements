@@ -25,14 +25,6 @@
         /* stylelint-enable declaration-no-important */
     }
 
-    .bcpr-navigate-right {
-        right: 0;
-    }
-
-    .bcpr-navigate-left {
-        left: 0;
-    }
-
     .bcpr-navigate-left,
     .bcpr-navigate-right {
         display: block;
@@ -41,12 +33,21 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        transition: opacity .5s, left .3s cubic-bezier(.4, 0, .2, 1);
+        transition: opacity .5s ease;
         width: 50px;
 
         &:hover {
             opacity: 1;
         }
+    }
+
+    .bcpr-navigate-right {
+        right: 0;
+    }
+
+    .bcpr-navigate-left {
+        left: 0;
+        transition: opacity .5s ease, left .3s cubic-bezier(.4, 0, .2, 1);
     }
 
     .bcpr-nav-is-visible {
