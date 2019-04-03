@@ -1,9 +1,26 @@
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
-import { scrollIntoView } from '../dom';
+import { isLeftClick, scrollIntoView } from '../dom';
 
 jest.mock('scroll-into-view-if-needed');
 
 describe('util/dom', () => {
+    describe('isLeftClick', () => {
+        test('should return true for unmodified left click events', () => {
+            expect(isLeftClick({ button: 0 })).toBe(true);
+        });
+
+        test('should return false for modified left click events', () => {
+            expect(isLeftClick({ button: 0, altKey: true })).toBe(false);
+            expect(isLeftClick({ button: 0, ctrlKey: true })).toBe(false);
+            expect(isLeftClick({ button: 0, metaKey: true })).toBe(false);
+            expect(isLeftClick({ button: 0, shiftKey: true })).toBe(false);
+        });
+
+        test('should return false for unmodified right click events', () => {
+            expect(isLeftClick({ button: 1 })).toBe(false);
+        });
+    });
+
     describe('scrollIntoView()', () => {
         beforeEach(() => {
             // Set up a place to mount
