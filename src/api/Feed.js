@@ -748,6 +748,7 @@ class Feed extends Base {
                 limit: 1,
                 next_marker: null,
             },
+            task_type: 'GENERAL',
             status: TASK_NEW_INCOMPLETE,
         };
 
