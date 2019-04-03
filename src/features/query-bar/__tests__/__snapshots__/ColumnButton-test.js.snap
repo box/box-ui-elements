@@ -79,52 +79,20 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
       columns={
         Array [
           Object {
-            "displayName": "Hullo Thar",
-            "id": "1",
+            "displayName": "Expire Date",
+            "id": "4",
             "isShown": true,
-            "property": "name",
-            "source": "item",
-            "type": "string",
-          },
-          Object {
-            "displayName": "Last Updated",
-            "id": "2",
-            "isShown": true,
-            "property": "lastUpdatedByName",
-            "source": "item",
+            "property": "expireDate",
+            "source": "metadata",
             "type": "date",
           },
           Object {
-            "displayName": "Contract Value",
-            "id": "3",
+            "displayName": "Count",
+            "id": "6",
             "isShown": true,
-            "options": Array [
-              Object {
-                "id": "",
-                "key": "$100",
-              },
-            ],
-            "property": "contractValue",
+            "property": "count",
             "source": "metadata",
-            "type": "enum",
-          },
-          Object {
-            "displayName": "Offices",
-            "id": "4",
-            "isShown": true,
-            "options": Array [
-              Object {
-                "id": "",
-                "key": "Office A",
-              },
-              Object {
-                "id": "1",
-                "key": "Office B",
-              },
-            ],
-            "property": "offices",
-            "source": "metadata",
-            "type": "multi-enum",
+            "type": "float",
           },
         ]
       }
