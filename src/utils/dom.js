@@ -57,6 +57,16 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
 }
 
 /**
+ * Checks if a mouse event is an unmodified left click.
+ *
+ * @param {SyntheticMouseEvent<HTMLElement>} event - The mouse event
+ * @returns {boolean} true if the event is an unmodified left click
+ */
+export function isLeftClick(event: SyntheticMouseEvent<HTMLElement>) {
+    return event.button === 0 && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey;
+}
+
+/**
  * Focuses a DOM element if it exists.
  *
  * @param {HTMLElement} root - the root dom element to search
