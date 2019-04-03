@@ -27,40 +27,22 @@ class AdditionalTabs extends PureComponent<Props, State> {
         this.state = { isLoading: true };
     }
 
-    componentDidMount() {
-        this.calculateNumberOfLoadableTabs();
-    }
-
-    componentDidUpdate() {
-        this.calculateNumberOfLoadableTabs();
-    }
-
     /**
-     * Determines if we need to account for a "more" tab when loading icon images.
-     *
-     * @return {void}
-     */
-    calculateNumberOfLoadableTabs() {
-        const { tabs } = this.props;
-
-        if (tabs) {
-            // If we're displaying the more options tab, consider it loaded since it doesn't use an image.
-            const hasMoreTab = tabs.find(tab => tab.id < 0 && !tab.iconUrl);
-            const moreTabCount = hasMoreTab ? 1 : 0;
-
-            this.numLoadedTabs = moreTabCount;
-        }
-    }
-
-    /**
-     * Handles individual icon image load
+     * Handles an individual icon image load
      *
      * @return {void}
      */
     onImageLoad = () => {
         const { tabs } = this.props;
 
-        const numTabs = tabs ? tabs.length : 0;
+        if (!tabs) {
+            return;
+        }
+
+        let numTabs = tabs.length;
+        const hasMoreTab = tabs.find(tab => tab.id < 0 && !tab.iconUrl);
+        numTabs -= hasMoreTab ? 1 : 0;
+
         this.numLoadedTabs += 1;
 
         if (this.numLoadedTabs === numTabs) {
