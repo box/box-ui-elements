@@ -69,6 +69,7 @@ export type sharedLinkTrackingType = {
     copyButtonProps?: Object,
     onChangeSharedLinkAccessLevel?: Function,
     onChangeSharedLinkPermissionLevel?: Function,
+    onSharedLinkAccessMenuOpen?: Function,
     onSharedLinkCopy?: Function,
     onToggleLink?: Function,
     sendSharedLinkButtonProps?: Object,
