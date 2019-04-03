@@ -105,10 +105,10 @@ const messages = defineMessages({
         description: 'Label for "Message" text box to email the Shared Link',
         id: 'boxui.unifiedShare.message',
     },
-    suggestedCollabsInlineTitle: {
-        defaultMessage: 'Add:',
-        description: 'Title for suggested collaborators that can be added to the input box from an inline list',
-        id: 'boxui.unifiedShare.suggestedCollabsInlineTitle',
+    suggestedCollabsTitle: {
+        defaultMessage: 'Suggested',
+        description: 'Title for suggested collaborators that can be added to the form',
+        id: 'boxui.unifiedShare.suggestedCollabsTitle',
     },
 
     // shared link access labels
