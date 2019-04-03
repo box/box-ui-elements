@@ -44,24 +44,9 @@ exports[`features/query-bar/components/filter/Condition render() should render C
         options={
           Array [
             Object {
-              "displayText": "Hullo Thar",
-              "type": "string",
-              "value": "1",
-            },
-            Object {
-              "displayText": "Last Updated",
-              "type": "date",
-              "value": "2",
-            },
-            Object {
               "displayText": "Contract Value",
               "type": "enum",
               "value": "3",
-            },
-            Object {
-              "displayText": "Offices",
-              "type": "multi-enum",
-              "value": "4",
             },
           ]
         }

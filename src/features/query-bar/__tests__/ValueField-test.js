@@ -27,18 +27,49 @@ describe('features/query-bar/components/filter/ValueField', () => {
 
     describe('render value fields', () => {
         const emptyArray = [];
-        test.each`
-            description                                                                   | valueType       | renderedComponent      | selectedValues
-            ${'should correctly render a MultiSelectField for a valueType of multi-enum'} | ${'multi-enum'} | ${'MultiSelectField'}  | ${emptyArray}
-            ${'should correctly render a SingleSelectField for a valueType of enum'}      | ${'enum'}       | ${'SingleSelectField'} | ${emptyArray}
-            ${'should correctly render a DatePicker for a valueType of date'}             | ${'date'}       | ${'DatePicker'}        | ${new Date(1995, 11, 25, 9, 30, 0)}
-            ${'should correctly render a TextInput for a valueType of string'}            | ${'string'}     | ${'TextInput'}         | ${emptyArray}
-            ${'should correctly render a TextInput for a valueType of float'}             | ${'float'}      | ${'TextInput'}         | ${emptyArray}
-            ${'should correctly render a TextInput for a valueType of number'}            | ${'number'}     | ${'TextInput'}         | ${emptyArray}
-        `('$description', ({ valueType, renderedComponent, selectedValues }) => {
-            const wrapper = getWrapper({ valueType, selectedValues });
-            expect(wrapper).toMatchSnapshot();
-            expect(wrapper.find(renderedComponent)).toHaveLength(1);
+        const valuePropNames = {
+            MultiSelectField: 'selectedValues',
+            SingleSelectField: 'selectedValue',
+            DatePicker: 'value',
+            TextInput: 'value',
+        };
+
+        describe('when selected values are empty', () => {
+            test.each`
+                description                                                | valueType   | componentName          | selectedValues
+                ${'should render SingleSelectField for valueType of enum'} | ${'enum'}   | ${'SingleSelectField'} | ${emptyArray}
+                ${'should render DatePicker for valueType of date'}        | ${'date'}   | ${'DatePicker'}        | ${emptyArray}
+                ${'should render TextInput for valueType of string'}       | ${'string'} | ${'TextInput'}         | ${emptyArray}
+                ${'should render TextInput for valueType of float'}        | ${'float'}  | ${'TextInput'}         | ${emptyArray}
+                ${'should render TextInput for valueType of number'}       | ${'number'} | ${'TextInput'}         | ${emptyArray}
+            `('$description', ({ componentName, selectedValues, valueType }) => {
+                const wrapper = getWrapper({ valueType, selectedValues });
+
+                const component = wrapper.find(componentName);
+                expect(component).toHaveLength(1);
+                expect(component.prop(valuePropNames[componentName])).toBeFalsy();
+            });
+        });
+
+        describe('when selected values are non-empty', () => {
+            const stringValue = 'r';
+            const dateValue = new Date(1995, 11, 25, 9, 30, 0);
+
+            test.each`
+                description                                                     | valueType       | componentName          | selectedValues     | expectedValue
+                ${'should render MultiSelectField for valueType of multi-enum'} | ${'multi-enum'} | ${'MultiSelectField'}  | ${['r', 'g', 'b']} | ${['r', 'g', 'b']}
+                ${'should render SingleSelectField for valueType of enum'}      | ${'enum'}       | ${'SingleSelectField'} | ${[stringValue]}   | ${stringValue}
+                ${'should render DatePicker for valueType of date'}             | ${'date'}       | ${'DatePicker'}        | ${[dateValue]}     | ${dateValue}
+                ${'should render TextInput for valueType of string'}            | ${'string'}     | ${'TextInput'}         | ${[stringValue]}   | ${stringValue}
+                ${'should render TextInput for valueType of float'}             | ${'float'}      | ${'TextInput'}         | ${[stringValue]}   | ${stringValue}
+                ${'should render TextInput for valueType of number'}            | ${'number'}     | ${'TextInput'}         | ${[stringValue]}   | ${stringValue}
+            `('$description', ({ componentName, expectedValue, selectedValues, valueType }) => {
+                const wrapper = getWrapper({ valueType, selectedValues });
+
+                const component = wrapper.find(componentName);
+                expect(component).toHaveLength(1);
+                expect(component.prop(valuePropNames[componentName])).toEqual(expectedValue);
+            });
         });
     });
 });

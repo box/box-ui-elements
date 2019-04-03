@@ -6,7 +6,7 @@
 
 import { defineMessages } from 'react-intl';
 
-const messages: { [string]: MessageDescriptor } = defineMessages({
+const messages = defineMessages({
     deleteLabel: {
         id: 'be.deleteLabel',
         defaultMessage: 'Delete',

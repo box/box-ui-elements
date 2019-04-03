@@ -10,11 +10,13 @@ exports[`elements/common/nav-button/BackButton should match its snapshot 1`] = `
     height={24}
     width={24}
   />
-  <FormattedMessage
-    defaultMessage="Back"
-    id="be.back"
+  <span
+    className="accessibility-hidden"
   >
-    <Component />
-  </FormattedMessage>
+    <FormattedMessage
+      defaultMessage="Back"
+      id="be.back"
+    />
+  </span>
 </PlainButton>
 `;

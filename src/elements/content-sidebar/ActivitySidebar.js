@@ -11,7 +11,7 @@ import flow from 'lodash/flow';
 import messages from '../common/messages';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
-import { FeatureFlag, withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
+import { FeatureFlag, withFeatureConsumer, isFeatureEnabled, getFeatureConfig } from '../common/feature-checking';
 import { getBadUserError, getBadItemError } from '../../utils/error';
 import API from '../../api';
 import { withLogger } from '../common/logger';
@@ -533,7 +533,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     renderAddTaskButton = () => {
-        const { isDisabled } = this.props;
+        const { isDisabled, features } = this.props;
         const { approverSelectorContacts } = this.state;
         const {
             getApproverWithQuery,
@@ -546,6 +546,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getApproverWithQuery,
             approverSelectorContacts,
             getAvatarUrl,
+            feedbackUrl: getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || '',
         };
         return (
             <FeatureFlag feature="activityFeed.tasks.newApi">
