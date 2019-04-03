@@ -8,6 +8,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { Route } from 'react-router-dom';
 import PlainButton from '../../../components/plain-button';
+import { isLeftClick } from '../../../utils/dom';
 
 type Props = {
     activeClassName?: string,
@@ -19,10 +20,6 @@ type Props = {
     replace?: boolean,
     strict?: boolean,
     to: string | Location,
-};
-
-const isClickEvent = event => {
-    return event.button === 0 && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey;
 };
 
 const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
@@ -50,7 +47,7 @@ const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: Re
                             onClick(event);
                         }
 
-                        if (!event.defaultPrevented && isClickEvent(event)) {
+                        if (!event.defaultPrevented && isLeftClick(event)) {
                             const method = replace ? history.replace : history.push;
                             method(path);
                         }
