@@ -7,7 +7,7 @@ import AdditionalTabsLoading from '../AdditionalTabsLoading';
 describe('elements/content-sidebar/AdditionalTabs', () => {
     const getWrapper = props => shallow(<AdditionalTabs {...props} />);
 
-    it('should render the correct number of tabs and the loading state', () => {
+    test('should render the correct number of tabs and the loading state', () => {
         const props = {
             tabs: [
                 {
@@ -33,7 +33,7 @@ describe('elements/content-sidebar/AdditionalTabs', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    it('should not render the loading state after the image URLs have loaded', () => {
+    test('should not render the loading state after the image URLs have loaded', () => {
         const props = {
             tabs: [
                 {
@@ -55,7 +55,7 @@ describe('elements/content-sidebar/AdditionalTabs', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    it('should only remove the loading state if the correct number of images have loaded', () => {
+    test('should only remove the loading state if the correct number of images have loaded', () => {
         const props = {
             tabs: [
                 {
@@ -86,7 +86,7 @@ describe('elements/content-sidebar/AdditionalTabs', () => {
         expect(instance.setState).toBeCalled();
     });
 
-    it('should only remove the loading state if the correct number of images have loaded and the more tabs entry is present', () => {
+    test('should only remove the loading state if the correct number of images have loaded and the more tabs entry is present', () => {
         const props = {
             tabs: [
                 {

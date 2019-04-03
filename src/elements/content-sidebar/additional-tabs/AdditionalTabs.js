@@ -39,9 +39,8 @@ class AdditionalTabs extends PureComponent<Props, State> {
             return;
         }
 
-        let numTabs = tabs.length;
         const hasMoreTab = tabs.find(tab => tab.id < 0 && !tab.iconUrl);
-        numTabs -= hasMoreTab ? 1 : 0;
+        const numTabs = tabs.length - (hasMoreTab ? 1 : 0);
 
         this.numLoadedTabs += 1;
 
