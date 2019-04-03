@@ -47,7 +47,7 @@ type Props = {
     sendButtonProps?: Object,
     showEnterEmailsCallout: boolean,
     submitting: boolean,
-    suggestedCollaborators?: Array<Object>,
+    suggestedCollaborators?: Object,
     updateSelectedContacts: Function,
 };
 

@@ -29,7 +29,7 @@ type Props = {
     onContactRemove: Function,
     onInput?: Function,
     selectedContacts: Array<Contact>,
-    suggestedCollaborators?: Array<Contact>,
+    suggestedCollaborators?: Object,
     validateForError: Function,
     validator: Function,
 };
@@ -56,12 +56,12 @@ class ContactsField extends React.Component<Props, State> {
     }
 
     addSuggestedContacts = (contacts: Array<Contact>) => {
-        const { suggestedCollaborators } = this.props;
+        const { suggestedCollaborators = {} } = this.props;
 
         const suggestedSelectorOptions = contacts
             .filter(option => {
                 const id = option.id;
-                return id && suggestedCollaborators[id.toString()];
+                return id && suggestedCollaborators[id];
             })
             .sort((optionA, optionB) => {
                 const currentSuggestedItemA = suggestedCollaborators[optionA.id];
@@ -86,14 +86,14 @@ class ContactsField extends React.Component<Props, State> {
             const fullContacts = contacts
                 .filter(
                     // filter contacts whose name or email don't match input value
-                    ({ name, email }: Contact) =>
+                    ({ name, email }) =>
                         isSubstring(name, pillSelectorInputValue) || isSubstring(email, pillSelectorInputValue),
                 )
                 .filter(
                     // filter contacts who have already been selected
-                    ({ email, id }: Contact) => !selectedContacts.find(({ value }) => value === email || value === id),
+                    ({ email, id }) => !selectedContacts.find(({ value }) => value === email || value === id),
                 )
-                .map(({ email, id, name, type }: Contact) => ({
+                .map<Object>(({ email, id, name, type }) => ({
                     // map to standardized DatalistItem format
                     email,
                     id,
@@ -176,7 +176,7 @@ class ContactsField extends React.Component<Props, State> {
             <PillSelectorDropdown
                 allowCustomPills
                 className={pillSelectorOverlayClasses}
-                dividerIndex={shouldShowSuggested && numSuggestedShowing}
+                dividerIndex={shouldShowSuggested ? numSuggestedShowing : undefined}
                 disabled={disabled}
                 error={error}
                 inputProps={{
@@ -187,7 +187,7 @@ class ContactsField extends React.Component<Props, State> {
                 onInput={this.handlePillSelectorInput}
                 onRemove={onContactRemove}
                 onSelect={onContactAdd}
-                overlayTitle={shouldShowSuggested && intl.formatMessage(messages.suggestedCollabsTitle)}
+                overlayTitle={shouldShowSuggested ? intl.formatMessage(messages.suggestedCollabsTitle) : undefined}
                 parseItems={parseEmails}
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
                 ref={fieldRef}

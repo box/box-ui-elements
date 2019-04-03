@@ -5,7 +5,6 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   allowCustomPills={true}
   className="scrollable"
   disabled={false}
-  dividerIndex={false}
   error=""
   inputProps={
     Object {
@@ -22,7 +21,6 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   onInput={[Function]}
   onRemove={[MockFunction]}
   onSelect={[MockFunction]}
-  overlayTitle={false}
   parseItems={[Function]}
   placeholder=""
   selectedOptions={Array []}
@@ -137,7 +135,6 @@ exports[`features/unified-share-modal/ContactsField render should render default
   allowCustomPills={true}
   className=""
   disabled={false}
-  dividerIndex={false}
   error=""
   inputProps={
     Object {
@@ -154,7 +151,6 @@ exports[`features/unified-share-modal/ContactsField render should render default
   onInput={[Function]}
   onRemove={[MockFunction]}
   onSelect={[MockFunction]}
-  overlayTitle={false}
   parseItems={[Function]}
   placeholder=""
   selectedOptions={
