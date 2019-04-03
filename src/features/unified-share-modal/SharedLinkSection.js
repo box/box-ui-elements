@@ -100,6 +100,7 @@ class SharedLinkSection extends React.Component<Props> {
             copyButtonProps,
             onChangeSharedLinkAccessLevel,
             onChangeSharedLinkPermissionLevel,
+            onSharedLinkAccessMenuOpen,
             onSharedLinkCopy,
             sendSharedLinkButtonProps,
             sharedLinkAccessMenuButtonProps,
@@ -169,6 +170,7 @@ class SharedLinkSection extends React.Component<Props> {
                         submitting={submitting}
                         trackingProps={{
                             onChangeSharedLinkAccessLevel,
+                            onSharedLinkAccessMenuOpen,
                             sharedLinkAccessMenuButtonProps,
                         }}
                     />
