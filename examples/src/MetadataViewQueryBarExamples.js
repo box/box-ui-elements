@@ -3,7 +3,15 @@ import * as React from 'react';
 
 import QueryBar from '../../src/features/query-bar/QueryBar';
 import type { ColumnType, ConditionType } from '../../src/features/query-bar/flowTypes';
-import { columns, conditions } from '../../src/features/query-bar/components/fixtures';
+import {
+    columnForItemName,
+    columnForItemLastUpdated,
+    columnWithEnumType,
+    columnForDateType,
+    columnWithMultiEnumType,
+    columnWithFloatType,
+    columnForTemplateFieldName,
+} from '../../src/features/query-bar/components/fixtures';
 
 type Props = {
     activeTemplate?: MetadataTemplate,
@@ -13,12 +21,24 @@ type Props = {
     visibleColumns?: Array<ColumnType>,
 };
 
+const columns = [
+    columnForItemName,
+    columnForItemLastUpdated,
+    columnWithEnumType,
+    columnForDateType,
+    columnWithMultiEnumType,
+    columnWithFloatType,
+    columnForTemplateFieldName,
+];
+
+/* eslint-disable no-console */
 const MetadataViewQueryBarExamples = ({ activeTemplate, onTemplateChange, templates, visibleColumns }: Props) => (
     <QueryBar
         activeTemplate={activeTemplate}
         columns={columns}
-        conditions={conditions}
+        conditions={[]}
         onColumnChange={() => {}}
+        onFilterChange={newConditions => console.log({ newConditions })}
         onTemplateChange={onTemplateChange}
         templates={templates}
         visibleColumns={visibleColumns || []}
