@@ -7,6 +7,8 @@ import { BetaBadge } from '../../components/badge';
 import { Link } from '../../components/link';
 import Tooltip from '../../components/tooltip/Tooltip';
 
+import messages from './messages';
+
 import './styles/BetaFeedbackBadge.scss';
 
 type Props = {
@@ -19,16 +21,7 @@ const BetaFeedbackBadge = ({ className = '', tooltip = false, ...rest }: Props) 
     const classes = classNames('bdl-HeaderFeedbackBadge', className);
     const { formUrl } = rest;
     const badge = tooltip ? (
-        <Tooltip
-            text={
-                <FormattedMessage
-                    id="be.feedbackCtaText"
-                    defaultMessage="Click to provide feedback"
-                    description="Call-to-action text describing what to do to navigate to specified feedback form"
-                />
-            }
-            position="middle-right"
-        >
+        <Tooltip text={<FormattedMessage {...messages.feedbackCtaText} />} position="middle-right">
             <BetaBadge aria-hidden className="bdl-HeaderFeedbackBadge-betaBadge" />
         </Tooltip>
     ) : (
@@ -39,11 +32,7 @@ const BetaFeedbackBadge = ({ className = '', tooltip = false, ...rest }: Props) 
     return (
         <span className={classes}>
             <span id="bdl-HeaderFeedbackBadge-ariaLabel" aria-hidden="true" hidden>
-                <FormattedMessage
-                    id="be.feedbackFormDescription"
-                    defaultMessage="Beta Feedback Form"
-                    description="Accessible text used to describe the form used for feedback"
-                />
+                <FormattedMessage {...messages.feedbackFormDescription} />
             </span>
             <Link href={formUrl} target="_blank" aria-labelledBy="bdl-HeaderFeedbackBadge-ariaLabel">
                 {badge}
