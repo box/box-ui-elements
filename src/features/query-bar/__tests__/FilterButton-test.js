@@ -57,15 +57,18 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('componentDidUpdate()', () => {
-        const transientConditions = [];
-        const wrapper = getWrapper({
-            conditions,
+        test('should reinitialize conditions from props.conditions when the flyout is opened after clicking the Apply Button', () => {
+            const transientConditions = [];
+            const wrapper = getWrapper({
+                conditions,
+            });
+            wrapper.setState({
+                isMenuOpen: true,
+                transientConditions,
+            });
+            wrapper.instance().componentDidUpdate({}, { isMenuOpen: false });
+            expect(wrapper.state('transientConditions')).toEqual(conditions);
         });
-        wrapper.setState({
-            transientConditions,
-        });
-        wrapper.instance().componentDidUpdate();
-        expect(wrapper.state('transientConditions')).toEqual(conditions);
     });
 
     describe('handleColumnChange()', () => {

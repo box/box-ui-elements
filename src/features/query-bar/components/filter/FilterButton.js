@@ -56,12 +56,11 @@ class FilterButton extends React.Component<Props, State> {
         });
     }
 
-    componentDidUpdate() {
-        const { conditions } = this.props;
-        const { transientConditions } = this.state;
-        const wasFlyoutClosed = transientConditions.length === 0;
-        const shouldHydrateConditions = transientConditions.length !== conditions.length;
-        if (wasFlyoutClosed && shouldHydrateConditions) {
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        const { isMenuOpen, transientConditions } = this.state;
+        const { isMenuOpen: prevIsMenuOpen } = prevState;
+        const wasApplyClicked = transientConditions.length === 0 && isMenuOpen && !prevIsMenuOpen;
+        if (wasApplyClicked) {
             this.setState({
                 transientConditions: this.props.conditions.slice(0),
             });
