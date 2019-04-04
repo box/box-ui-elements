@@ -29,7 +29,7 @@ describe('features/query-bar/components/ColumnButton', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render ColumnButton with correct message when no columns are hidden', () => {
+        test('should render ColumnButton with correct message when all columns are visible', () => {
             const wrapper = getWrapper({ columns });
             const FormattedMessage = wrapper.find('FormattedMessage');
             expect(FormattedMessage.props().defaultMessage).toBe('Columns');
