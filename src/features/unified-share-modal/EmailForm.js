@@ -20,7 +20,7 @@ import type { inlineNoticeType } from '../../common/box-types';
 
 import ContactsField from './ContactsField';
 import messages from './messages';
-import type { contactType as Contact } from './flowTypes';
+import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
 
 type Props = {
     cancelButtonProps?: Object,
@@ -47,7 +47,7 @@ type Props = {
     sendButtonProps?: Object,
     showEnterEmailsCallout: boolean,
     submitting: boolean,
-    suggestedCollaborators?: Object,
+    suggestedCollaborators?: suggestedCollaboratorsType,
     updateSelectedContacts: Function,
 };
 

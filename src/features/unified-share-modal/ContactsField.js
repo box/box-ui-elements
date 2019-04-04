@@ -16,7 +16,7 @@ import parseEmails from '../../utils/parseEmails';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';
-import type { contactType as Contact } from './flowTypes';
+import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
 
 type Props = {
     disabled: boolean,
@@ -29,7 +29,7 @@ type Props = {
     onContactRemove: Function,
     onInput?: Function,
     selectedContacts: Array<Contact>,
-    suggestedCollaborators?: Object,
+    suggestedCollaborators?: suggestedCollaboratorsType,
     validateForError: Function,
     validator: Function,
 };
@@ -61,11 +61,11 @@ class ContactsField extends React.Component<Props, State> {
         const suggestedSelectorOptions = contacts
             .filter(option => {
                 const id = option.id;
-                return id && suggestedCollaborators[id];
+                return id && suggestedCollaborators[id.toString()];
             })
             .sort((optionA, optionB) => {
-                const currentSuggestedItemA = suggestedCollaborators[optionA.id];
-                const currentSuggestedItemB = suggestedCollaborators[optionB.id];
+                const currentSuggestedItemA = suggestedCollaborators[optionA.id.toString()];
+                const currentSuggestedItemB = suggestedCollaborators[optionB.id.toString()];
                 return currentSuggestedItemB.userScore - currentSuggestedItemA.userScore;
             })
             .slice(0, 3);
