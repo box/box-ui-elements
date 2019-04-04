@@ -8,59 +8,61 @@ import MultiSelectField from '../../../../components/select-field/MultiSelectFie
 import TextInput from '../../../../components/text-input';
 import { DATE, ENUM, FLOAT, MULTI_ENUM, NUMBER, STRING, VALUE } from '../../constants';
 import messages from '../../messages';
+import type { ConditionValueType } from '../../flowTypes';
 
 import '../../styles/Condition.scss';
 
 type Props = {
-    onChange: (value: Array<string>) => void,
-    selectedValues: Array<string>,
+    onChange: (value: Array<ConditionValueType>) => void,
+    selectedValues: Array<ConditionValueType>,
     valueOptions: Array<Object>,
     valueType: string,
 };
 
+const getDateValue = selectedValues => {
+    if (selectedValues.length === 0) {
+        return undefined;
+    }
+
+    const value = selectedValues[0];
+    if (value instanceof Date) {
+        return value;
+    }
+
+    throw new Error('Expected Date');
+};
+
+const getStringValue = selectedValues => {
+    if (selectedValues.length === 0) {
+        return undefined;
+    }
+
+    const value = selectedValues[0];
+    if (typeof value === 'string') {
+        return value !== '' ? value : null;
+    }
+
+    throw new Error('Expected string');
+};
+
 const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props) => {
-    const isValueSet = selectedValues.length > 0;
-    const value = isValueSet ? selectedValues[0] : '';
+    const value = selectedValues.length > 0 ? selectedValues[0] : '';
     const onInputChange = e => {
         return e.target.value !== '' ? onChange([e.target.value]) : onChange([]);
     };
 
     switch (valueType) {
         case STRING:
-            return (
-                <div className="filter-dropdown-text-field-container">
-                    <TextInput
-                        hideLabel
-                        label="String input"
-                        name="string field"
-                        onChange={onInputChange}
-                        placeholder="Enter a string"
-                        value={value}
-                    />
-                </div>
-            );
         case NUMBER:
-            return (
-                <div className="filter-dropdown-text-field-container">
-                    <TextInput
-                        hideLabel
-                        label="Number input"
-                        name="number field"
-                        onChange={onInputChange}
-                        placeholder="Enter a number"
-                        value={value}
-                    />
-                </div>
-            );
         case FLOAT:
             return (
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
                         hideLabel
-                        label="Float input"
-                        name="float field"
+                        label="Text Input"
+                        name="text"
                         onChange={onInputChange}
-                        placeholder="Enter a float"
+                        placeholder={`Enter ${valueType === STRING ? 'value' : 'a number'}`}
                         value={value}
                     />
                 </div>
@@ -77,11 +79,9 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                         hideLabel
                         label="Date"
                         name="datepicker"
-                        onChange={e => {
-                            return e ? onChange([e.toString()]) : onChange([]);
-                        }}
+                        onChange={date => onChange([date])}
                         placeholder="Date"
-                        value={isValueSet && selectedValues[0] !== '' ? new Date(selectedValues[0]) : undefined}
+                        value={getDateValue(selectedValues)}
                     />
                 </div>
             );
@@ -92,7 +92,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                     onChange={e => onChange([e.value])}
                     options={valueOptions}
                     placeholder={<FormattedMessage {...messages.selectValuePlaceholderText} />}
-                    selectedValue={value === '' ? null : value}
+                    selectedValue={getStringValue(selectedValues)}
                 />
             );
         case MULTI_ENUM:

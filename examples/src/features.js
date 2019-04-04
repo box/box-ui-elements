@@ -4,6 +4,7 @@ export default {
         tasks: {
             createFromComment: true,
             createButton: true,
+            feedbackUrl: 'http://example.org/',
             newApi: true,
             newCards: true,
         },

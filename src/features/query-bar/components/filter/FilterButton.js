@@ -10,11 +10,18 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND, OR, COLUMN_OPERATORS, OPERATOR, VALUES } from '../../constants';
+import { AND, OR, COLUMN_OPERATORS } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType, ConditionType, ConnectorType, OperatorType, OptionType } from '../../flowTypes';
+import type {
+    ColumnType,
+    ConditionType,
+    ConditionValueType,
+    ConnectorType,
+    OperatorType,
+    OptionType,
+} from '../../flowTypes';
 
 type State = {
     areErrorsEnabled: boolean,
@@ -150,38 +157,39 @@ class FilterButton extends React.Component<Props, State> {
         });
 
         const column = columns && columns.find(c => c.id === columnId);
-
-        if (column) {
-            const type = column && column.type;
-
-            const operator = COLUMN_OPERATORS[type][0].key;
-
-            const newCondition = {
-                ...conditionToUpdate,
-                columnId,
-                operator,
-                values: [],
-            };
-
-            const newConditions = transientConditions.slice(0);
-            newConditions[newConditionIndex] = newCondition;
-
-            this.setState({
-                transientConditions: newConditions,
-            });
+        if (!column) {
+            throw new Error('Invalid Column.id');
         }
+
+        const type = column && column.type;
+
+        const operator = COLUMN_OPERATORS[type][0].key;
+
+        const newCondition = {
+            ...conditionToUpdate,
+            columnId,
+            operator,
+            values: [],
+        };
+
+        const newConditions = transientConditions.slice(0);
+        newConditions[newConditionIndex] = newCondition;
+
+        this.setState({
+            transientConditions: newConditions,
+        });
     };
 
     handleOperatorChange = (conditionId: string, value: OperatorType) => {
         this.updateConditionState(conditionId, condition => {
-            condition[OPERATOR] = value;
+            condition.operator = value;
             return condition;
         });
     };
 
-    handleValueChange = (conditionId: string, values: Array<string>) => {
+    handleValueChange = (conditionId: string, values: Array<ConditionValueType>) => {
         this.updateConditionState(conditionId, condition => {
-            condition[VALUES] = values;
+            condition.values = values;
             return condition;
         });
     };

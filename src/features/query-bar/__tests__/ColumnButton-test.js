@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import { columns, template } from '../components/fixtures';
+import { columnForDateType, columnWithFloatType, template } from '../components/fixtures';
 import ColumnButton from '../components/ColumnButton';
+
+const columns = [columnForDateType, columnWithFloatType];
 
 describe('features/query-bar/components/ColumnButton', () => {
     const getWrapper = (props = {}) => {

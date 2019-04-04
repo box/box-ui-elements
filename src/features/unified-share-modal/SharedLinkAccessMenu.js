@@ -28,6 +28,7 @@ type Props = {
     tooltipContent: React.Node,
     trackingProps: {
         onChangeSharedLinkAccessLevel?: Function,
+        onSharedLinkAccessMenuOpen?: Function,
         sharedLinkAccessMenuButtonProps?: Object,
     },
 };
@@ -111,7 +112,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
             tooltipContent,
             trackingProps,
         } = this.props;
-        const { sharedLinkAccessMenuButtonProps } = trackingProps;
+        const { onSharedLinkAccessMenuOpen, sharedLinkAccessMenuButtonProps } = trackingProps;
 
         return (
             <Tooltip
@@ -123,7 +124,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                 text={tooltipContent}
                 theme="callout"
             >
-                <DropdownMenu>
+                <DropdownMenu onMenuOpen={onSharedLinkAccessMenuOpen}>
                     <PlainButton
                         className={classNames('lnk', {
                             'is-disabled': submitting,

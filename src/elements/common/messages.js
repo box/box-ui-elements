@@ -6,7 +6,7 @@
 
 import { defineMessages } from 'react-intl';
 
-const messages: { [string]: MessageDescriptor } = defineMessages({
+const messages = defineMessages({
     today: {
         id: 'be.today',
         description: 'Shown instead of todays date.',
