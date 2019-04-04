@@ -91,6 +91,11 @@ const messages = defineMessages({
             'Text on the columns button, on click opens a menu which allows users to choose which columns to render',
         id: 'boxui.queryBar.columnsButtonText',
     },
+    columnHiddenButtonText: {
+        defaultMessage: '{number} Column Hidden',
+        description: 'Text on the columns button, if one column has been hidden then it will display this text',
+        id: 'boxui.queryBar.columnHiddenButtonText',
+    },
     columnsHiddenButtonText: {
         defaultMessage: '{number} Columns Hidden',
         description: 'Text on the columns button, if columns have been hidden then it will display this text',

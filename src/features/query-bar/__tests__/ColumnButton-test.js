@@ -28,6 +28,26 @@ describe('features/query-bar/components/ColumnButton', () => {
             const wrapper = getWrapper({ template });
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should render ColumnButton with correct message when no columns are hidden', () => {
+            const wrapper = getWrapper({ columns });
+            const FormattedMessage = wrapper.find('FormattedMessage');
+            expect(FormattedMessage.props().defaultMessage).toBe('Columns');
+        });
+
+        test('should render ColumnButton with correct message when one column is hidden', () => {
+            const wrapper = getWrapper({ columns: [{ ...columnForDateType, isShown: false }] });
+            const FormattedMessage = wrapper.find('FormattedMessage');
+            expect(FormattedMessage.props().defaultMessage).toBe('{number} Column Hidden');
+        });
+
+        test('should render ColumnButton with correct message when one column is hidden', () => {
+            const wrapper = getWrapper({
+                columns: [{ ...columnForDateType, isShown: false }, { ...columnWithFloatType, isShown: false }],
+            });
+            const FormattedMessage = wrapper.find('FormattedMessage');
+            expect(FormattedMessage.props().defaultMessage).toBe('{number} Columns Hidden');
+        });
     });
 
     describe('onClose()', () => {

@@ -67,6 +67,28 @@ class ColumnButton extends React.Component<Props, State> {
 
         const buttonClasses = classNames('query-bar-button', numberOfHiddenColumns !== 0 ? 'is-active' : '');
 
+        let columnsButtonText;
+        let message;
+        switch (true) {
+            case numberOfHiddenColumns === 0:
+                columnsButtonText = <FormattedMessage {...messages.columnsButtonText} />;
+                break;
+            case numberOfHiddenColumns > 0:
+                message =
+                    numberOfHiddenColumns === 1 ? messages.columnHiddenButtonText : messages.columnsHiddenButtonText;
+                columnsButtonText = (
+                    <FormattedMessage
+                        {...message}
+                        values={{
+                            number: numberOfHiddenColumns,
+                        }}
+                    />
+                );
+                break;
+            default:
+                break;
+        }
+
         return (
             <Flyout
                 className="query-bar-column-dropdown-flyout"
@@ -84,18 +106,7 @@ class ColumnButton extends React.Component<Props, State> {
                 >
                     <MenuToggle>
                         <IconMetadataColumns />
-                        <span className="button-label">
-                            {numberOfHiddenColumns === 0 ? (
-                                <FormattedMessage {...messages.columnsButtonText} />
-                            ) : (
-                                <FormattedMessage
-                                    {...messages.columnsHiddenButtonText}
-                                    values={{
-                                        number: numberOfHiddenColumns,
-                                    }}
-                                />
-                            )}
-                        </span>
+                        <span className="button-label">{columnsButtonText}</span>
                     </MenuToggle>
                 </Button>
 
