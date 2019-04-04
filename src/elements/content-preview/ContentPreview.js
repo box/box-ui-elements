@@ -512,6 +512,10 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     onPreviewError = ({ error, ...rest }: PreviewError): void => {
         const { code = ERROR_CODE_UNKNOWN } = error;
+
+        // In case of error, there should be no thumbnail sidebar to account for
+        this.setState({ isThumbnailSidebarOpen: false });
+
         this.props.onError(
             error,
             code,
