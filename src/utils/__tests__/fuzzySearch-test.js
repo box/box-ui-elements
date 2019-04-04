@@ -20,9 +20,4 @@ describe('util/fuzzySearch', () => {
     test('should return false when seach is empty', () => {
         expect(fuzzySearch('', 'foo bar')).toBe(false);
     });
-
-    test('should only do exact matching when search length equals content length', () => {
-        expect(fuzzySearch('foo bat', 'foo bar')).toBe(false);
-        expect(fuzzySearch('foo bar', 'foo bar')).toBe(true);
-    });
 });
