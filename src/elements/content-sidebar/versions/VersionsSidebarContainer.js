@@ -73,7 +73,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     handleActionError = ({ message }: ElementsXhrError): void => {
-        this.setState({ error: message });
+        this.setState({
+            error: message,
+            isLoading: false,
+        });
     };
 
     handleActionPreview = (versionId: string): void => {

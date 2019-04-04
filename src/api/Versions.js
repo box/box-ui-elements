@@ -140,11 +140,12 @@ class Versions extends OffsetBasedAPI {
     /**
      * API for deleting a version of a file
      *
-     * @param {string} fileId - a box file id
-     * @param {string} versionId - a box file version id
-     * @param {BoxItemPermission} permissions - the permissions for the file
-     * @param {Function} successCallback - the success callback
-     * @param {Function} errorCallback - the error callback
+     * @param {Object} options - the request options
+     * @param {string} options.fileId - a box file id
+     * @param {string} options.versionId - a box file version id
+     * @param {BoxItemPermission} options.permissions - the permissions for the file
+     * @param {Function} options.successCallback - the success callback
+     * @param {Function} options.errorCallback - the error callback
      * @returns {void}
      */
     deleteVersion({
@@ -205,11 +206,12 @@ class Versions extends OffsetBasedAPI {
     /**
      * API for promoting a version of a file to current
      *
-     * @param {string} fileId - a box file id
-     * @param {string} versionId - a box file version id
-     * @param {BoxItemPermission} permissions - the permissions for the file
-     * @param {Function} successCallback - the success callback
-     * @param {Function} errorCallback - the error callback
+     * @param {Object} options - the request options
+     * @param {string} options.fileId - a box file id
+     * @param {string} options.versionId - a box file version id
+     * @param {BoxItemPermission} options.permissions - the permissions for the file
+     * @param {Function} options.successCallback - the success callback
+     * @param {Function} options.errorCallback - the error callback
      * @returns {void}
      */
     promoteVersion({
