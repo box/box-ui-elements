@@ -712,12 +712,6 @@ class ContentPreview extends PureComponent<Props, State> {
         this.preview.addListener('preview_metric', this.onPreviewMetric);
         this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailSidebarOpen: true }));
         this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailSidebarOpen: false }));
-        this.preview.addListener('viewer', viewer => {
-            // If viewer is a document viewer, see if the thumbnails sidebar should be opened
-            if (typeof viewer.shouldThumbnailsBeToggled === 'function') {
-                this.setState({ isThumbnailSidebarOpen: viewer.shouldThumbnailsBeToggled() });
-            }
-        });
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
