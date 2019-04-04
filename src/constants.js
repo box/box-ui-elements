@@ -362,6 +362,7 @@ export const KEYS = {
     arrowUp: 'ArrowUp',
     backspace: 'Backspace',
     enter: 'Enter',
+    space: ' ',
 };
 
 /* ----------------- Other ----------------------- */
