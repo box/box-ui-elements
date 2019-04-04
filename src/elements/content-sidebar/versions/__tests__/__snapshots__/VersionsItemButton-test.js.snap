@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/versions/VersionsItemButton render should render in disabled state correctly 1`] = `
+<div
+  aria-disabled={true}
+  className="bcs-is-disabled"
+  data-resin-target="versions-item-button"
+  data-testid="versions-item-button"
+  onClick={[Function]}
+  onKeyPress={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  Test
+</div>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItemButton render should render in enabled state correctly 1`] = `
+<div
+  aria-disabled={false}
+  className=""
+  data-resin-target="versions-item-button"
+  data-testid="versions-item-button"
+  onClick={[Function]}
+  onKeyPress={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  Test
+</div>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItemButton render should render in enabled state correctly 2`] = `
+<div
+  aria-disabled={false}
+  className="bcs-is-selected"
+  data-resin-target="versions-item-button"
+  data-testid="versions-item-button"
+  onClick={[Function]}
+  onKeyPress={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  Test
+</div>
+`;
