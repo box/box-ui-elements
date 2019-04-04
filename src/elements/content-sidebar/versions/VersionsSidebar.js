@@ -10,23 +10,33 @@ import InlineError from '../../../components/inline-error';
 import messages from './messages';
 import messagesCommon from '../../common/messages';
 import SidebarContent from '../SidebarContent';
-import SidebarSection from '../SidebarSection';
-import type { VersionActionCallback } from './Versions';
 import VersionsList from './VersionsList';
 import { BackButton } from '../../common/nav-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
+import type { VersionActionCallback } from './Versions';
 import './VersionsSidebar.scss';
 
 type Props = {
     error?: string,
     isLoading: boolean,
+    onDelete: VersionActionCallback,
     onPreview: VersionActionCallback,
+    onPromote: VersionActionCallback,
     parentName: string,
     permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, isLoading, onPreview, parentName, permissions, versions }: Props) => (
+const VersionsSidebar = ({
+    error,
+    isLoading,
+    onDelete,
+    onPreview,
+    onPromote,
+    parentName,
+    permissions,
+    versions,
+}: Props) => (
     <SidebarContent
         className="bcs-Versions"
         title={
@@ -36,20 +46,18 @@ const VersionsSidebar = ({ error, isLoading, onPreview, parentName, permissions,
             </React.Fragment>
         }
     >
-        <LoadingIndicatorWrapper className="bcs-Versions-content" isLoading={isLoading}>
-            {!isLoading && (
-                <SidebarSection isOpen>
-                    {error ? (
-                        <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
-                    ) : (
-                        <VersionsList
-                            isLoading={isLoading}
-                            onPreview={onPreview}
-                            permissions={permissions}
-                            versions={versions}
-                        />
-                    )}
-                </SidebarSection>
+        <LoadingIndicatorWrapper className="bcs-Versions-content" crawlerPosition="top" isLoading={isLoading}>
+            {error ? (
+                <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
+            ) : (
+                <VersionsList
+                    isLoading={isLoading}
+                    onDelete={onDelete}
+                    onPreview={onPreview}
+                    onPromote={onPromote}
+                    permissions={permissions}
+                    versions={versions}
+                />
             )}
         </LoadingIndicatorWrapper>
     </SidebarContent>
