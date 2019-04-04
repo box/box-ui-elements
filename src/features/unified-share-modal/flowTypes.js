@@ -39,6 +39,7 @@ export type contactType = {
 };
 
 export type inviteePermissionType = {
+    default: boolean,
     disabled?: boolean,
     text: string,
     value: string,
