@@ -39,7 +39,7 @@ const MAX_AVATARS = 3;
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Task extends React.Component<Props> {
-    renderUserHeadline(isCurrentUser: boolean, taskType: string, userLink: any): React.Node {
+    renderUserHeadline(isCurrentUser: boolean, taskType: TaskType, userLink: any): React.Node {
         if (isCurrentUser) {
             if (taskType === TASK_TYPE_APPROVAL) {
                 // Assigned you an approval task
