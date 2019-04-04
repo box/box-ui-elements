@@ -4,7 +4,7 @@
  * @author Box
  */
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
-import { OVERLAY_WRAPPER_CLASS } from '../constants';
+import { KEYS, OVERLAY_WRAPPER_CLASS } from '../constants';
 import './domPolyfill';
 
 /**
@@ -54,6 +54,16 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
         (element.parentElement instanceof HTMLElement ? element.parentElement.classList.contains('btn') : false);
 
     return isInputElement(element) || tag === 'button' || tag === 'a' || tag === 'option' || isCheckbox || isButton;
+}
+
+/**
+ * Checks if a keyboard event is intended to activate an element.
+ *
+ * @param {SyntheticKeyboardEvent<HTMLElement>} event - The keyboard event
+ * @returns {boolean} true if the event is intended to activate the element
+ */
+export function isActivateKey(event: SyntheticKeyboardEvent<HTMLElement>) {
+    return event.key === KEYS.enter || event.key === KEYS.space;
 }
 
 /**

@@ -54,7 +54,7 @@ describe('ContentSidebar', () => {
             cy.getByTestId('versionhistory').click();
             cy.contains('[data-testid="bcs-content"]', 'Version History').as('versionHistory');
 
-            cy.getByTestId('versions-item').within($versionsItem => {
+            cy.getByTestId('versions-item-button').within($versionsItem => {
                 cy.wrap($versionsItem)
                     .contains('V2')
                     .click();
