@@ -10,6 +10,7 @@ import Tooltip from '../../components/tooltip';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import type { itemType as ItemType } from '../../common/box-types';
 
+import getDefaultPermissionLevel from './utils/defaultPermissionLevel';
 import InviteePermissionsLabel from './InviteePermissionsLabel';
 import messages from './messages';
 
@@ -66,8 +67,15 @@ class InviteePermissionsMenu extends Component<Props> {
     }
 
     render() {
-        const { inviteePermissionsButtonProps, inviteePermissionLevel, disabled, itemType } = this.props;
-
+        const {
+            inviteePermissions,
+            inviteePermissionsButtonProps,
+            inviteePermissionLevel,
+            disabled,
+            itemType,
+        } = this.props;
+        const defaultPermissionLevel = getDefaultPermissionLevel(inviteePermissions);
+        const selectedPermissionLevel = inviteePermissionLevel || defaultPermissionLevel;
         const disabledTooltip =
             itemType === ITEM_TYPE_WEBLINK ? (
                 <FormattedMessage {...messages.inviteDisabledWeblinkTooltip} />
@@ -84,11 +92,13 @@ class InviteePermissionsMenu extends Component<Props> {
                 {...inviteePermissionsButtonProps}
             >
                 <MenuToggle>
-                    <InviteePermissionsLabel
-                        hasDescription={false}
-                        inviteePermissionLevel={inviteePermissionLevel}
-                        itemType={itemType}
-                    />
+                    {selectedPermissionLevel && (
+                        <InviteePermissionsLabel
+                            hasDescription={false}
+                            inviteePermissionLevel={selectedPermissionLevel}
+                            itemType={itemType}
+                        />
+                    )}
                 </MenuToggle>
             </PlainButton>
         );

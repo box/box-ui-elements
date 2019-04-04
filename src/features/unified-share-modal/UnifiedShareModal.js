@@ -21,6 +21,7 @@ import messages from './messages';
 import RemoveLinkConfirmModal from './RemoveLinkConfirmModal';
 import SharedLinkSection from './SharedLinkSection';
 import EmailForm from './EmailForm';
+import getDefaultPermissionLevel from './utils/defaultPermissionLevel';
 import type {
     accessLevelType,
     collaboratorsListType,
@@ -32,7 +33,6 @@ import type {
     trackingPropsType,
     sharedLinkType,
 } from './flowTypes';
-import { EDITOR } from './constants';
 
 import './UnifiedShareModal.scss';
 
@@ -153,7 +153,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
         this.state = {
             emailSharedLinkContacts: [],
             inviteCollabsContacts: [],
-            inviteePermissionLevel: EDITOR,
+            inviteePermissionLevel: '',
             isConfirmModalOpen: false,
             isEmailLinkSectionExpanded: false,
             isFetching: true,
@@ -254,16 +254,18 @@ class UnifiedShareModal extends React.Component<Props, State> {
     };
 
     handleSendInvites = (data: Object) => {
-        const { sendInvites, trackingProps } = this.props;
+        const { inviteePermissions, sendInvites, trackingProps } = this.props;
         const { inviteCollabsEmailTracking } = trackingProps;
         const { onSendClick } = inviteCollabsEmailTracking;
         const { inviteePermissionLevel } = this.state;
+        const defaultPermissionLevel = getDefaultPermissionLevel(inviteePermissions);
+        const selectedPermissionLevel = inviteePermissionLevel || defaultPermissionLevel;
         const { emails, groupIDs, message } = data;
         const params = {
             emails: emails.join(','),
             groupIDs: groupIDs.join(','),
             emailMessage: message,
-            permission: inviteePermissionLevel,
+            permission: selectedPermissionLevel,
             numsOfInvitees: emails.length,
             numOfInviteeGroups: groupIDs.length,
         };
