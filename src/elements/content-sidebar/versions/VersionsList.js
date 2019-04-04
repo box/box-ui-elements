@@ -13,13 +13,16 @@ import type { VersionActionCallback } from './Versions';
 import './VersionsList.scss';
 
 type Props = {
+    isLoading: boolean,
+    onDelete: VersionActionCallback,
     onPreview: VersionActionCallback,
+    onPromote: VersionActionCallback,
     permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsList = ({ onPreview, permissions, versions }: Props) => {
-    if (!versions.length) {
+const VersionsList = ({ isLoading, onDelete, onPreview, onPromote, permissions, versions }: Props) => {
+    if (!isLoading && !versions.length) {
         return (
             <div className="bcs-VersionsList bcs-is-empty">
                 <FormattedMessage {...messages.versionsEmpty} />
@@ -36,7 +39,9 @@ const VersionsList = ({ onPreview, permissions, versions }: Props) => {
                             <VersionsItem
                                 isCurrent={index === 0}
                                 isSelected={match.params.versionId === version.id}
+                                onDelete={onDelete}
                                 onPreview={onPreview}
+                                onPromote={onPromote}
                                 permissions={permissions}
                                 version={version}
                             />

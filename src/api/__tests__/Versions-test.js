@@ -1,4 +1,6 @@
 import Versions from '../Versions';
+import { PERMISSION_CAN_DELETE, PERMISSION_CAN_UPLOAD } from '../../constants';
+import { VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
 
 let versions;
 
@@ -31,6 +33,7 @@ describe('api/Versions', () => {
             type: uploadVersion.type,
         },
     };
+    const { id: fileId } = file;
     const response = {
         entries: [uploadVersion, deleteVersion],
         total_count: 2,
@@ -41,13 +44,27 @@ describe('api/Versions', () => {
     });
 
     describe('getUrl()', () => {
-        test('should throw when version api url without id', () => {
+        test('should throw when called without a file id', () => {
             expect(() => {
                 versions.getUrl();
             }).toThrow();
         });
-        test('should return correct version api url with id', () => {
+        test('should return correct versions base endpoint url', () => {
             expect(versions.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/versions');
+        });
+    });
+
+    describe('getVersionUrl()', () => {
+        test('should throw when called without a file id and version id', () => {
+            expect(() => {
+                versions.getVersionUrl();
+            }).toThrow();
+            expect(() => {
+                versions.getVersionUrl('foo');
+            }).toThrow();
+        });
+        test('should return correct version info endpoint url', () => {
+            expect(versions.getVersionUrl('foo', '123')).toBe('https://api.box.com/2.0/files/foo/versions/123');
         });
     });
 
@@ -93,6 +110,115 @@ describe('api/Versions', () => {
             const restoredVersion = versionsWithRestore.entries.pop();
             expect(restoredVersion.action).toBe('restore');
             expect(restoredVersion.created_at).toBe(file.modified_at);
+        });
+    });
+
+    describe('CRUD operations', () => {
+        const successCallback = jest.fn();
+        const errorCallback = jest.fn();
+        const versionId = '123';
+
+        beforeEach(() => {
+            versions.checkApiCallValidity = jest.fn(() => true);
+            versions.delete = jest.fn();
+            versions.get = jest.fn();
+            versions.getUrl = jest.fn(() => 'https://www.foo.com/versions');
+            versions.offsetGet = jest.fn();
+            versions.post = jest.fn();
+        });
+
+        describe('promoteVersion()', () => {
+            const permissions = {
+                [PERMISSION_CAN_UPLOAD]: true,
+            };
+
+            test('should check for valid version promote permissions', () => {
+                versions.promoteVersion({
+                    fileId,
+                    versionId,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                });
+
+                expect(versions.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_UPLOAD, permissions, fileId);
+            });
+
+            test('should post a well formed version promote request to the versions endpoint', () => {
+                const requestData = {
+                    data: {
+                        id: versionId,
+                        type: 'file_version',
+                    },
+                };
+
+                versions.promoteVersion({
+                    fileId,
+                    versionId,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                });
+
+                expect(versions.post).toBeCalledWith({
+                    id: fileId,
+                    url: versions.getVersionUrl(versionId, 'current'),
+                    data: requestData,
+                    successCallback,
+                    errorCallback,
+                });
+            });
+        });
+
+        describe('deleteVersion()', () => {
+            const permissions = {
+                [PERMISSION_CAN_DELETE]: true,
+            };
+
+            test('should check for valid version delete permissions', () => {
+                versions.deleteVersion({
+                    fileId,
+                    versionId,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                });
+
+                expect(versions.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_DELETE, permissions, fileId);
+            });
+
+            test('should delete a version from the versions endpoint', () => {
+                versions.deleteVersion({
+                    fileId,
+                    versionId,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                });
+
+                expect(versions.delete).toBeCalledWith({
+                    id: fileId,
+                    url: versions.getVersionUrl(fileId, versionId),
+                    successCallback,
+                    errorCallback,
+                });
+            });
+        });
+
+        describe('getVersions()', () => {
+            test('should return a list of versions from the versions endpoint', () => {
+                versions.getVersions(fileId, successCallback, errorCallback);
+
+                expect(versions.offsetGet).toBeCalledWith(
+                    fileId,
+                    successCallback,
+                    errorCallback,
+                    0,
+                    1000,
+                    VERSIONS_FIELDS_TO_FETCH,
+                    true,
+                );
+            });
         });
     });
 });
