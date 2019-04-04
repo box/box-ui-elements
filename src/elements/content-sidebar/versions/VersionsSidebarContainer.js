@@ -5,7 +5,10 @@
  */
 
 import React from 'react';
+import flow from 'lodash/flow';
 import noop from 'lodash/noop';
+import { generatePath, withRouter } from 'react-router-dom';
+import type { Match, RouterHistory } from 'react-router-dom';
 import API from '../../../api';
 import VersionsSidebar from './VersionsSidebar';
 import { withAPIContext } from '../../common/api-context';
@@ -13,6 +16,8 @@ import { withAPIContext } from '../../common/api-context';
 type Props = {
     api: API,
     fileId: string,
+    history: RouterHistory,
+    match: Match,
     onVersionChange: (versionId?: string) => void,
     parentName: string,
     versionId?: string,
@@ -73,6 +78,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         );
     };
 
+    handleActionPreview = (versionId: string): void => {
+        this.updateVersion(versionId);
+    };
+
     handleFetchError = ({ message }: ElementsXhrError) => {
         this.setState({
             error: message,
@@ -94,10 +103,15 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         });
     };
 
+    updateVersion = (versionId?: string): void => {
+        const { history, match } = this.props;
+        return history.push(generatePath(match.path, { ...match.params, versionId }));
+    };
+
     render() {
         const { parentName } = this.props;
-        return <VersionsSidebar parentName={parentName} {...this.state} />;
+        return <VersionsSidebar onPreview={this.handleActionPreview} parentName={parentName} {...this.state} />;
     }
 }
 
-export default withAPIContext(VersionsSidebarContainer);
+export default flow([withRouter, withAPIContext])(VersionsSidebarContainer);

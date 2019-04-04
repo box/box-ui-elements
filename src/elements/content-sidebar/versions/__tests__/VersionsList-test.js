@@ -8,12 +8,15 @@ describe('elements/content-sidebar/versions/VersionsList', () => {
     describe('render', () => {
         test.each`
             versions
-            ${undefined}
             ${[]}
             ${[{ id: '12345' }]}
             ${[{ id: '12345' }, { id: '45678' }]}
         `('should match its snapshot', ({ versions }) => {
-            const wrapper = getWrapper({ versions });
+            const match = {
+                params: { versionId: '12345' },
+                path: '/versions/:versionId',
+            };
+            const wrapper = getWrapper({ match, versions });
             expect(wrapper).toMatchSnapshot();
         });
     });

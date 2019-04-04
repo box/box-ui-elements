@@ -11,6 +11,7 @@ import messages from './messages';
 import messagesCommon from '../../common/messages';
 import SidebarContent from '../SidebarContent';
 import SidebarSection from '../SidebarSection';
+import type { VersionActionCallback } from './Versions';
 import VersionsList from './VersionsList';
 import { BackButton } from '../../common/nav-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
@@ -19,12 +20,13 @@ import './VersionsSidebar.scss';
 type Props = {
     error?: string,
     isLoading: boolean,
+    onPreview: VersionActionCallback,
     parentName: string,
     permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, isLoading, parentName, permissions, versions }: Props) => (
+const VersionsSidebar = ({ error, isLoading, onPreview, parentName, permissions, versions }: Props) => (
     <SidebarContent
         className="bcs-Versions"
         title={
@@ -40,7 +42,12 @@ const VersionsSidebar = ({ error, isLoading, parentName, permissions, versions }
                     {error ? (
                         <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
                     ) : (
-                        <VersionsList permissions={permissions} versions={versions} />
+                        <VersionsList
+                            isLoading={isLoading}
+                            onPreview={onPreview}
+                            permissions={permissions}
+                            versions={versions}
+                        />
                     )}
                 </SidebarSection>
             )}

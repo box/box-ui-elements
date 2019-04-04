@@ -5,16 +5,14 @@
  */
 
 import React from 'react';
-import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { generatePath, withRouter } from 'react-router-dom';
-import type { Match } from 'react-router-dom';
 import messages from './messages';
-import NavButton from '../../common/nav-button';
 import sizeUtil from '../../../utils/size';
 import VersionsItemActions from './VersionsItemActions';
+import VersionsItemButton from './VersionsItemButton';
 import VersionsItemBadge from './VersionsItemBadge';
 import { ReadableTime } from '../../../components/time';
+import type { VersionActionCallback } from './Versions';
 import {
     PLACEHOLDER_USER,
     VERSION_DELETE_ACTION,
@@ -25,7 +23,12 @@ import './VersionsItem.scss';
 
 type Props = {
     isCurrent: boolean,
-    match: Match,
+    isSelected: boolean,
+    onDelete?: VersionActionCallback,
+    onDownload?: VersionActionCallback,
+    onPreview?: VersionActionCallback,
+    onPromote?: VersionActionCallback,
+    onRestore?: VersionActionCallback,
     permissions: BoxItemPermission,
     version: BoxItemVersion,
 };
@@ -39,7 +42,17 @@ const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 const getActionMessage = action => ACTION_MAP[action] || ACTION_MAP[VERSION_UPLOAD_ACTION];
 
-const VersionsItem = ({ isCurrent, match, permissions, version }: Props) => {
+const VersionsItem = ({
+    isCurrent,
+    isSelected,
+    onDelete,
+    onDownload,
+    onPreview,
+    onPromote,
+    onRestore,
+    permissions,
+    version,
+}: Props) => {
     const {
         action = VERSION_UPLOAD_ACTION,
         created_at: createdAt,
@@ -49,24 +62,26 @@ const VersionsItem = ({ isCurrent, match, permissions, version }: Props) => {
         version_number: versionNumber,
     } = version;
     const isDeleted = action === VERSION_DELETE_ACTION;
-    const className = classNames('bcs-VersionsItem', {
-        'bcs-is-disabled': isDeleted,
-    });
-    const handler = () => {}; // TODO: Add actual event handling logic
-    const versionPath = generatePath(match.path, { ...match.params, versionId });
-    const versionUser = modifiedBy.name || <FormattedMessage {...messages.versionUserUnknown} />;
+    const isDisabled = isDeleted || !permissions.can_preview;
+
+    // Version info helpers
+    const versionSize = sizeUtil(size);
     const versionTimestamp = createdAt && new Date(createdAt).getTime();
+    const versionUser = modifiedBy.name || <FormattedMessage {...messages.versionUserUnknown} />;
+
+    // Version action helper
+    const handleAction = (handler?: VersionActionCallback) => (): void => {
+        if (handler) {
+            handler(versionId);
+        }
+    };
 
     return (
-        <NavButton
-            activeClassName="bcs-is-selected"
-            aria-disabled={isDeleted}
-            className={className}
-            component="div"
-            data-resin-target="versions-item"
-            data-testid="versions-item"
-            tabIndex="0"
-            to={versionPath}
+        <VersionsItemButton
+            className="bcs-VersionsItem"
+            isDisabled={isDisabled}
+            isSelected={isSelected}
+            onActivate={handleAction(onPreview)}
         >
             <div className="bcs-VersionsItem-badge">
                 <VersionsItemBadge isDisabled={isDeleted} versionNumber={versionNumber} />
@@ -91,22 +106,26 @@ const VersionsItem = ({ isCurrent, match, permissions, version }: Props) => {
                             />
                         </time>
                     )}
-                    {size && <span className="bcs-VersionsItem-size">{sizeUtil(size)}</span>}
+                    {!!size && (
+                        <span className="bcs-VersionsItem-size" title={versionSize}>
+                            {versionSize}
+                        </span>
+                    )}
                 </div>
             </div>
 
             <VersionsItemActions
                 isCurrent={isCurrent}
                 isDeleted={isDeleted}
-                onDelete={handler}
-                onDownload={handler}
-                onPreview={handler}
-                onPromote={handler}
-                onRestore={handler}
+                onDelete={handleAction(onDelete)}
+                onDownload={handleAction(onDownload)}
+                onPreview={handleAction(onPreview)}
+                onPromote={handleAction(onPromote)}
+                onRestore={handleAction(onRestore)}
                 permissions={permissions}
             />
-        </NavButton>
+        </VersionsItemButton>
     );
 };
 
-export default withRouter(VersionsItem);
+export default VersionsItem;
