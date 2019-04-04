@@ -81,7 +81,7 @@ const VersionsItem = ({
             className="bcs-VersionsItem"
             isDisabled={isDisabled}
             isSelected={isSelected}
-            onClick={handleAction(onPreview)}
+            onActivate={handleAction(onPreview)}
         >
             <div className="bcs-VersionsItem-badge">
                 <VersionsItemBadge isDisabled={isDeleted} versionNumber={versionNumber} />

@@ -47,6 +47,16 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
+        test('should render a selected version correctly', () => {
+            const wrapper = getWrapper({
+                isSelected: true,
+                version: getVersion({ action: 'upload' }),
+            });
+            const button = wrapper.closest(VersionsItemButton);
+
+            expect(button.prop('isSelected')).toBe(true);
+        });
+
         test('should default to an unknown user if none is provided', () => {
             const wrapper = getWrapper({
                 version: getVersion({ modified_by: undefined }),

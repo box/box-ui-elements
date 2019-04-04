@@ -41,10 +41,10 @@ describe('elements/content-sidebar/versions/VersionsItemButton', () => {
     });
 
     describe('onKeyPress', () => {
-        test('calls onClick event handler', () => {
-            const clickHandler = jest.fn();
+        test('calls onActivate event handler', () => {
+            const activateHandler = jest.fn();
             const preventDefault = jest.fn();
-            const button = getMount({ onClick: clickHandler });
+            const button = getMount({ onActivate: activateHandler });
 
             button.simulate('keyPress', {
                 key: 'Enter',
@@ -55,19 +55,19 @@ describe('elements/content-sidebar/versions/VersionsItemButton', () => {
                 preventDefault,
             });
 
-            expect(clickHandler).toBeCalledTimes(2);
+            expect(activateHandler).toBeCalledTimes(2);
             expect(preventDefault).toBeCalledTimes(1);
         });
 
-        test('does not call onClick event handler on invalid keypress', () => {
-            const clickHandler = jest.fn();
-            const button = getMount({ onClick: clickHandler });
+        test('does not call onActivate event handler on invalid keypress', () => {
+            const activateHandler = jest.fn();
+            const button = getMount({ onActivate: activateHandler });
 
             button.simulate('keyPress', {
                 key: 'Ctrl',
             });
 
-            expect(clickHandler).not.toBeCalled();
+            expect(activateHandler).not.toBeCalled();
         });
     });
 });
