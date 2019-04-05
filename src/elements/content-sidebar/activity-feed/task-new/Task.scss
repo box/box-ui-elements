@@ -2,6 +2,8 @@
 
 $success-color: $shady-acres;
 $error-color: $red;
+$gray: $nines;
+$assignment-avatar-spacing: 4px;
 
 .be .bcs-task {
     opacity: 1;
@@ -41,7 +43,7 @@ $error-color: $red;
 
     .bcs-task-assignment-count {
         align-items: center;
-        background: $grey;
+        background: $gray;
         border-radius: 100%;
         color: #fff;
         display: flex;
@@ -54,9 +56,9 @@ $error-color: $red;
         position: relative;
         width: 32px;
 
-        // select all but first instance
-        & + .bcs-task-assignment-status {
-            margin-left: 6px;
+        + .bcs-task-assignment-status,
+        + .bcs-task-assignment-count {
+            margin-left: $assignment-avatar-spacing;
         }
     }
 
@@ -107,7 +109,7 @@ $error-color: $red;
             justify-content: center;
 
             .fill-color {
-                fill: $grey;
+                fill: $gray;
             }
         }
     }
