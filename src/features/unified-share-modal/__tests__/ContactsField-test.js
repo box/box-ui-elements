@@ -153,15 +153,20 @@ describe('features/unified-share-modal/ContactsField', () => {
         test('should only call addSuggestedContacts() when has suggestedCollaborators', () => {
             const wrapper = getWrapper({
                 selectedContacts: [],
-                suggestedCollaborators: { '12345': { id: '12345' }, '23456': { id: '23456' } },
             });
             const addSuggestedContactsMock = jest.fn();
 
             wrapper.setState({ pillSelectorInputValue: 'x@' });
-
             wrapper.instance().addSuggestedContacts = addSuggestedContactsMock;
-            wrapper.instance().filterContacts(contactsFromServer);
 
+            wrapper.instance().filterContacts(contactsFromServer);
+            expect(addSuggestedContactsMock).not.toHaveBeenCalled();
+
+            wrapper.setProps({
+                suggestedCollaborators: { '12345': { id: 12345 }, '23456': { id: 23456 } },
+            });
+
+            wrapper.instance().filterContacts(contactsFromServer);
             expect(addSuggestedContactsMock).toHaveBeenCalledWith([expectedContacts[0]]);
         });
     });
@@ -251,42 +256,42 @@ describe('features/unified-share-modal/ContactsField', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should have scrollable dropdown if contacts > 5', async () => {
-            const contactsFromServerLarge = [
-                ...contactsFromServer,
-                {
-                    email: 'a@example.com',
-                    id: '12',
-                    name: 'a b',
-                    type: 'user',
-                },
-                {
-                    email: 'b@example.com',
-                    id: '13',
-                    name: 'a b',
-                    type: 'user',
-                },
-                {
-                    email: 'c@example.com',
-                    id: '14',
-                    name: 'a c',
-                    type: 'user',
-                },
-                {
-                    email: 'd@example.com',
-                    id: '14',
-                    name: 'a d',
-                    type: 'user',
-                },
-                {
-                    email: 'e@example.com',
-                    id: '14',
-                    name: 'a e',
-                    type: 'user',
-                },
-            ];
-            const getContacts = jest.fn().mockReturnValue(Promise.resolve(contactsFromServerLarge));
+        const contactsFromServerLarge = [
+            ...contactsFromServer,
+            {
+                email: 'a@example.com',
+                id: '12',
+                name: 'a b',
+                type: 'user',
+            },
+            {
+                email: 'b@example.com',
+                id: '13',
+                name: 'a b',
+                type: 'user',
+            },
+            {
+                email: 'c@example.com',
+                id: '14',
+                name: 'a c',
+                type: 'user',
+            },
+            {
+                email: 'd@example.com',
+                id: '14',
+                name: 'a d',
+                type: 'user',
+            },
+            {
+                email: 'e@example.com',
+                id: '14',
+                name: 'a e',
+                type: 'user',
+            },
+        ];
+        const getContacts = jest.fn().mockReturnValue(Promise.resolve(contactsFromServerLarge));
 
+        test('should have scrollable dropdown if contacts > 5', async () => {
             const wrapper = getWrapper({
                 getContacts,
                 selectedContacts: [],
@@ -297,10 +302,28 @@ describe('features/unified-share-modal/ContactsField', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render suggested text when there are suggested collabs', () => {});
+        test('should pass overlayTitle when there are suggested collabs', async () => {
+            const wrapper = getWrapper({
+                getContacts,
+                suggestedCollaborators: { '12': { id: 12, userScore: 1 } },
+            });
 
-        test('should render divider at the correct index when there are suggested collabs', () => {});
+            wrapper.setState({ pillSelectorInputValue: 'a' });
+            await wrapper.instance().getContactsPromise('a');
 
-        test('should render suggested text when there are suggested items', () => {});
+            expect(wrapper.find('PillSelectorDropdown').props()).toBeDefined();
+        });
+
+        test('should render divider at the correct index when there are suggested collabs', async () => {
+            const wrapper = getWrapper({
+                getContacts,
+                suggestedCollaborators: { '12': { id: 12, userScore: 1 } },
+            });
+
+            wrapper.setState({ pillSelectorInputValue: 'a' });
+            await wrapper.instance().getContactsPromise('a');
+
+            expect(wrapper.find('PillSelectorDropdown').props().dividerIndex).toBe(1);
+        });
     });
 });
