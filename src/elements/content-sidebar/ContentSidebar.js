@@ -74,8 +74,6 @@ const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-setElementsVersion();
-
 class ContentSidebar extends React.Component<Props, State> {
     props: Props;
 
@@ -135,6 +133,8 @@ class ContentSidebar extends React.Component<Props, State> {
             endMarkName: MARK_NAME_JS_READY,
         });
         /* eslint-enable react/prop-types */
+
+        setElementsVersion();
     }
 
     /**

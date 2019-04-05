@@ -87,8 +87,6 @@ type State = {
     shouldRenderLoadingIntegrationPortal: boolean,
 };
 
-setElementsVersion();
-
 class ContentOpenWith extends PureComponent<Props, State> {
     api: API;
 
@@ -141,6 +139,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
         // Clone initial state to allow for state reset on new files
         this.state = { ...this.initialState };
+
+        setElementsVersion();
     }
 
     /**

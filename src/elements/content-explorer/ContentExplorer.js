@@ -127,8 +127,6 @@ type State = {
     view: View,
 };
 
-setElementsVersion();
-
 class ContentExplorer extends Component<Props, State> {
     id: string;
 
@@ -239,6 +237,8 @@ class ContentExplorer extends Component<Props, State> {
             errorCode: '',
             focusedRow: 0,
         };
+
+        setElementsVersion();
     }
 
     /**

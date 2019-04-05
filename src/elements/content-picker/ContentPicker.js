@@ -111,8 +111,6 @@ type State = {
 
 const defaultType = `${TYPE_FILE},${TYPE_WEBLINK}`;
 
-setElementsVersion();
-
 class ContentPicker extends Component<Props, State> {
     id: string;
 
@@ -209,6 +207,8 @@ class ContentPicker extends Component<Props, State> {
             isLoading: false,
             errorCode: '',
         };
+
+        setElementsVersion();
     }
 
     /**

@@ -146,8 +146,6 @@ const LoadableSidebar = AsyncLoad({
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-sidebar" */ '../content-sidebar'),
 });
 
-setElementsVersion();
-
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
 
@@ -245,6 +243,8 @@ class ContentPreview extends PureComponent<Props, State> {
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
+
+        setElementsVersion();
     }
 
     /**
