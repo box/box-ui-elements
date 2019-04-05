@@ -8,6 +8,7 @@ import * as React from 'react';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
+import memoize from 'lodash/memoize';
 import messages from '../common/messages';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
@@ -526,11 +527,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} fileId the file id
      * @return the user avatar URL string for a given user with access token attached
      */
-    getAvatarUrl = async (userId: string): Promise<?string> => {
-        const { file, api } = this.props;
+    getAvatarUrl = memoize<[string], Promise<?string>>(
+        async (userId: string): Promise<?string> => {
+            const { file, api } = this.props;
 
-        return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, file.id);
-    };
+            return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, file.id);
+        },
+    );
 
     renderAddTaskButton = () => {
         const { isDisabled, features } = this.props;
