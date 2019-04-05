@@ -3,10 +3,9 @@ import * as React from 'react';
 import { columnForDateType, columnWithFloatType, template } from '../components/fixtures';
 import ColumnButton from '../components/ColumnButton';
 
-const columns = [columnForDateType, columnWithFloatType];
-
 describe('features/query-bar/components/ColumnButton', () => {
     const getWrapper = (props = {}) => {
+        const columns = [columnForDateType, columnWithFloatType];
         return shallow(<ColumnButton onColumnChange={jest.fn()} columns={columns} {...props} />);
     };
 
@@ -29,24 +28,19 @@ describe('features/query-bar/components/ColumnButton', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render ColumnButton with correct message when all columns are visible', () => {
+        const allVisibleColumns = [columnForDateType, columnWithFloatType];
+        const oneHiddenColumn = [{ ...columnForDateType, isShown: false }];
+        const twoHiddenColumns = [{ ...columnForDateType, isShown: false }, { ...columnWithFloatType, isShown: false }];
+
+        test.each`
+            columns              | should                                                                        | message
+            ${allVisibleColumns} | ${'should render ColumnButton with message when all columns are visible'}     | ${'Columns'}
+            ${oneHiddenColumn}   | ${'should render ColumnButton with message when one column is hidden'}        | ${'1 Column Hidden'}
+            ${twoHiddenColumns}  | ${'should render ColumnButton with message when multiple columns are hidden'} | ${'{number} Columns Hidden'}
+        `('$should', ({ columns, message }) => {
             const wrapper = getWrapper({ columns });
             const FormattedMessage = wrapper.find('FormattedMessage');
-            expect(FormattedMessage.props().defaultMessage).toBe('Columns');
-        });
-
-        test('should render ColumnButton with correct message when one column is hidden', () => {
-            const wrapper = getWrapper({ columns: [{ ...columnForDateType, isShown: false }] });
-            const FormattedMessage = wrapper.find('FormattedMessage');
-            expect(FormattedMessage.props().defaultMessage).toBe('{number} Column Hidden');
-        });
-
-        test('should render ColumnButton with correct message when one column is hidden', () => {
-            const wrapper = getWrapper({
-                columns: [{ ...columnForDateType, isShown: false }, { ...columnWithFloatType, isShown: false }],
-            });
-            const FormattedMessage = wrapper.find('FormattedMessage');
-            expect(FormattedMessage.props().defaultMessage).toBe('{number} Columns Hidden');
+            expect(FormattedMessage.props().defaultMessage).toBe(message);
         });
     });
 

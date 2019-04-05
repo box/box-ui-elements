@@ -92,7 +92,7 @@ const messages = defineMessages({
         id: 'boxui.queryBar.columnsButtonText',
     },
     columnHiddenButtonText: {
-        defaultMessage: '{number} Column Hidden',
+        defaultMessage: '1 Column Hidden',
         description: 'Text on the columns button, if one column has been hidden then it will display this text',
         id: 'boxui.queryBar.columnHiddenButtonText',
     },
