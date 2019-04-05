@@ -1,13 +1,8 @@
 import * as React from 'react';
 import { shallow } from 'enzyme/build';
-import NavButton from '../../../common/nav-button';
 import VersionsItem from '../VersionsItem';
+import VersionsItemButton from '../VersionsItemButton';
 import { ReadableTime } from '../../../../components/time';
-
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    withRouter: Component => Component,
-}));
 
 describe('elements/content-sidebar/versions/VersionsItem', () => {
     const defaults = {
@@ -18,23 +13,25 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         size: 10240,
         version_number: 1,
     };
-    const getMatch = () => ({ path: '/:versionId', params: {} });
-    const getWrapper = (props = {}) => shallow(<VersionsItem match={getMatch()} {...props} />);
+    const defaultPermissions = {
+        can_delete: true,
+        can_preview: true,
+    };
     const getVersion = (overrides = {}) => ({
         ...defaults,
         ...overrides,
     });
+    const getWrapper = ({ permissions = defaultPermissions, ...props } = {}) =>
+        shallow(<VersionsItem permissions={permissions} {...props} />);
 
     describe('render', () => {
         test('should render an uploaded version correctly', () => {
             const wrapper = getWrapper({
                 version: getVersion({ action: 'upload' }),
             });
-            const navButton = wrapper.closest(NavButton);
+            const button = wrapper.closest(VersionsItemButton);
 
-            expect(navButton.prop('aria-disabled')).toBe(false);
-            expect(navButton.prop('className')).not.toContain('bcs-is-disabled');
-            expect(navButton.prop('to')).toBe('/12345');
+            expect(button.prop('isDisabled')).toBe(false);
             expect(wrapper.closest(ReadableTime)).toBeTruthy();
             expect(wrapper).toMatchSnapshot();
         });
@@ -43,12 +40,21 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             const wrapper = getWrapper({
                 version: getVersion({ action: 'delete' }),
             });
-            const navButton = wrapper.closest(NavButton);
+            const button = wrapper.closest(VersionsItemButton);
 
-            expect(navButton.prop('aria-disabled')).toBe(true);
-            expect(navButton.prop('className')).toContain('bcs-is-disabled');
+            expect(button.prop('isDisabled')).toBe(true);
             expect(wrapper.closest(ReadableTime)).toBeTruthy();
             expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render a selected version correctly', () => {
+            const wrapper = getWrapper({
+                isSelected: true,
+                version: getVersion({ action: 'upload' }),
+            });
+            const button = wrapper.closest(VersionsItemButton);
+
+            expect(button.prop('isSelected')).toBe(true);
         });
 
         test('should default to an unknown user if none is provided', () => {
