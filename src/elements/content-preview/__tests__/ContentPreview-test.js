@@ -6,6 +6,7 @@ import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import PreviewLoading from '../PreviewLoading';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
+import * as globalUtils from '../../../utils/globals';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
 
@@ -28,6 +29,8 @@ describe('elements/content-preview/ContentPreview', () => {
         global.performance = {
             now: jest.fn().mockReturnValue(PERFORMANCE_TIME),
         };
+
+        globalUtils.setElementsDebugInfo = jest.fn().mockReturnValue('TEST');
     });
 
     afterEach(() => {

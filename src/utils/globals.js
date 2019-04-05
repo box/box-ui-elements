@@ -1,9 +1,9 @@
 // @flow
-export default function setElementsVersion() {
+// eslint-disable-next-line import/prefer-default-export
+export function setElementsDebugInfo() {
     if (window.Box) {
-        window.Box.Elements = {
-            // $FlowFixMe infer undefined
-            version: __VERSION__, // eslint-disable-line no-undef
-        };
+        window.Box.Elements = window.Box.Elements || {};
+        // $FlowFixMe
+        window.Box.Elements.version = __VERSION__ || ''; // eslint-disable-line no-undef
     }
 }

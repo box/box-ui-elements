@@ -34,7 +34,7 @@ import {
     TYPE_FILE,
     TYPE_FOLDER,
 } from '../../constants';
-import setElementsVersion from '../../utils/globals';
+import { setElementsDebugInfo } from '../../utils/globals';
 
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
@@ -140,7 +140,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         // Clone initial state to allow for state reset on new files
         this.state = { ...this.initialState };
 
-        setElementsVersion();
+        setElementsDebugInfo();
     }
 
     /**
