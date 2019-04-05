@@ -35,7 +35,6 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -80,7 +79,6 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -130,7 +128,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -182,7 +179,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           onContactAdd={[Function]}
           onContactRemove={[Function]}
           onInput={[Function]}
-          onSuggestedCollaboratorAdd={[Function]}
           selectedContacts={Array []}
           validateForError={[Function]}
           validator={[Function]}
@@ -261,7 +257,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -339,7 +334,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -389,7 +383,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -472,7 +465,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}

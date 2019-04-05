@@ -148,3 +148,5 @@ export type tooltipComponentIdentifierType =
     | 'shared-link-copy-button'
     | 'shared-link-settings'
     | 'shared-link-toggle';
+
+export type suggestedCollaboratorsType = { [id: string]: { id: string, userScore: number } };
