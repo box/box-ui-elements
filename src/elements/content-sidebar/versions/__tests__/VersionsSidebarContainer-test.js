@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { shallow } from 'enzyme/build';
 import VersionsSidebar from '../VersionsSidebarContainer';
+import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../../utils/fields';
+
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    withRouter: Component => Component,
+}));
 
 jest.mock('../../../common/api-context', () => ({
     withAPIContext: Component => Component,
@@ -13,7 +19,9 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     };
     const versionsAPI = {
         addCurrentVersion: jest.fn(),
+        deleteVersion: jest.fn(),
         getVersions: jest.fn(),
+        promoteVersion: jest.fn(),
     };
     const api = {
         getFileAPI: () => fileAPI,
@@ -53,33 +61,145 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
+    describe('handleActionDelete', () => {
+        test('should set state and call api endpoint helpers', () => {
+            const wrapper = getWrapper({ versionId: '123' });
+            const instance = wrapper.instance();
+            const versionId = '456';
+
+            instance.deleteVersion = jest.fn().mockResolvedValueOnce();
+            instance.fetchData = jest.fn().mockResolvedValueOnce();
+            instance.updateVersion = jest.fn();
+
+            instance.handleActionDelete(versionId);
+
+            expect(wrapper.state('isLoading')).toBe(true);
+            expect(instance.deleteVersion).toHaveBeenCalledWith(versionId);
+        });
+    });
+
+    describe('handleActionPRomote', () => {
+        test('should set state and call api endpoint helpers', () => {
+            const wrapper = getWrapper({ versionId: '123' });
+            const instance = wrapper.instance();
+            const versionId = '456';
+
+            instance.promoteVersion = jest.fn().mockResolvedValueOnce();
+            instance.fetchData = jest.fn().mockResolvedValueOnce();
+            instance.updateVersion = jest.fn();
+
+            instance.handleActionPromote(versionId);
+
+            expect(wrapper.state('isLoading')).toBe(true);
+            expect(instance.promoteVersion).toHaveBeenCalledWith(versionId);
+        });
+    });
+
+    describe('handleFetchError', () => {
+        test('should set state to default values with error message', () => {
+            const wrapper = getWrapper();
+            const message = 'This is an error!';
+
+            wrapper.instance().handleFetchError({ message });
+
+            expect(wrapper.state()).toEqual({
+                error: message,
+                isLoading: false,
+                permissions: {},
+                versions: [],
+            });
+        });
+    });
+
+    describe('handleFetchSuccess', () => {
+        test('should set state with the updated versions', () => {
+            const wrapper = getWrapper();
+            const file = { id: '12345', permissions: {} };
+            const versions = { entries: [], total_count: 0 };
+
+            versionsAPI.addCurrentVersion.mockReturnValueOnce({ entries: [file], total_count: 1 });
+
+            wrapper.instance().handleFetchSuccess([file, versions]);
+
+            expect(versionsAPI.addCurrentVersion).toBeCalledWith(versions, file);
+            expect(wrapper.state('error')).toBeUndefined();
+            expect(wrapper.state('isLoading')).toBe(false);
+            expect(wrapper.state('permissions')).toBe(file.permissions);
+            expect(wrapper.state('versions')).toBeInstanceOf(Array);
+        });
+    });
+
+    describe('fetchData', () => {
+        test('should call getFile and getVersions', () => {
+            const wrapper = getWrapper();
+            const dataPromise = wrapper.instance().fetchData();
+
+            expect(dataPromise).toBeInstanceOf(Promise);
+            expect(fileAPI.getFile).toBeCalled();
+            expect(versionsAPI.getVersions).toBeCalled();
+        });
+    });
+
     describe('fetchFile', () => {
         test('should call getFile', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const filePromise = wrapper.instance().fetchFile();
 
-            instance.fetchVersions = jest.fn();
-            instance.handleFetchError = jest.fn();
-            instance.fetchFile();
-
-            expect(fileAPI.getFile).toHaveBeenCalledWith(defaultId, instance.fetchVersions, instance.handleFetchError);
+            expect(filePromise).toBeInstanceOf(Promise);
+            expect(fileAPI.getFile).toBeCalledWith(defaultId, expect.any(Function), expect.any(Function), {
+                fields: FILE_VERSION_FIELDS_TO_FETCH,
+                forceFetch: true,
+            });
         });
     });
 
     describe('fetchVersion', () => {
         test('should call getVersions', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const versionsPromise = wrapper.instance().fetchVersions();
 
-            instance.handleFetchError = jest.fn();
-            instance.handleFetchSuccess = jest.fn();
-            instance.fetchVersions();
+            expect(versionsPromise).toBeInstanceOf(Promise);
+            expect(versionsAPI.getVersions).toBeCalledWith(defaultId, expect.any(Function), expect.any(Function));
+        });
+    });
 
-            expect(versionsAPI.getVersions).toHaveBeenCalledWith(
-                defaultId,
-                expect.any(Function),
-                instance.handleFetchError,
-            );
+    describe('deleteVersion', () => {
+        test('should call deleteVersion', () => {
+            const wrapper = getWrapper();
+            const permissions = { can_delete: true };
+
+            wrapper.setState({ permissions });
+
+            const deletePromise = wrapper.instance().deleteVersion('123');
+
+            expect(deletePromise).toBeInstanceOf(Promise);
+            expect(versionsAPI.deleteVersion).toBeCalledWith({
+                fileId: defaultId,
+                permissions,
+                errorCallback: expect.any(Function),
+                successCallback: expect.any(Function),
+                versionId: '123',
+            });
+        });
+    });
+
+    describe('promoteVersion', () => {
+        test('should call promoteVersion', () => {
+            const wrapper = getWrapper();
+            const permissions = { can_upload: true };
+
+            wrapper.setState({ permissions });
+
+            const promotePromise = wrapper.instance().promoteVersion('123');
+
+            expect(promotePromise).toBeInstanceOf(Promise);
+            expect(versionsAPI.promoteVersion).toBeCalledWith({
+                fileId: defaultId,
+                permissions,
+                errorCallback: expect.any(Function),
+                successCallback: expect.any(Function),
+                versionId: '123',
+            });
         });
     });
 

@@ -1,15 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if none is provided 1`] = `
-<ForwardRef
-  activeClassName="bcs-is-selected"
-  aria-disabled={false}
+<VersionsItemButton
   className="bcs-VersionsItem"
-  component="div"
-  data-resin-target="versions-item"
-  data-testid="versions-item"
-  tabIndex="0"
-  to="/12345"
+  isDisabled={false}
+  onActivate={[Function]}
 >
   <div
     className="bcs-VersionsItem-badge"
@@ -53,6 +48,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
       </time>
       <span
         className="bcs-VersionsItem-size"
+        title="10 KB"
       >
         10 KB
       </span>
@@ -65,20 +61,21 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
     onPreview={[Function]}
     onPromote={[Function]}
     onRestore={[Function]}
+    permissions={
+      Object {
+        "can_delete": true,
+        "can_preview": true,
+      }
+    }
   />
-</ForwardRef>
+</VersionsItemButton>
 `;
 
 exports[`elements/content-sidebar/versions/VersionsItem render should render a deleted version correctly 1`] = `
-<ForwardRef
-  activeClassName="bcs-is-selected"
-  aria-disabled={true}
-  className="bcs-VersionsItem bcs-is-disabled"
-  component="div"
-  data-resin-target="versions-item"
-  data-testid="versions-item"
-  tabIndex="0"
-  to="/12345"
+<VersionsItemButton
+  className="bcs-VersionsItem"
+  isDisabled={true}
+  onActivate={[Function]}
 >
   <div
     className="bcs-VersionsItem-badge"
@@ -119,6 +116,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
       </time>
       <span
         className="bcs-VersionsItem-size"
+        title="10 KB"
       >
         10 KB
       </span>
@@ -131,20 +129,21 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
     onPreview={[Function]}
     onPromote={[Function]}
     onRestore={[Function]}
+    permissions={
+      Object {
+        "can_delete": true,
+        "can_preview": true,
+      }
+    }
   />
-</ForwardRef>
+</VersionsItemButton>
 `;
 
 exports[`elements/content-sidebar/versions/VersionsItem render should render an uploaded version correctly 1`] = `
-<ForwardRef
-  activeClassName="bcs-is-selected"
-  aria-disabled={false}
+<VersionsItemButton
   className="bcs-VersionsItem"
-  component="div"
-  data-resin-target="versions-item"
-  data-testid="versions-item"
-  tabIndex="0"
-  to="/12345"
+  isDisabled={false}
+  onActivate={[Function]}
 >
   <div
     className="bcs-VersionsItem-badge"
@@ -185,6 +184,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
       </time>
       <span
         className="bcs-VersionsItem-size"
+        title="10 KB"
       >
         10 KB
       </span>
@@ -197,6 +197,12 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
     onPreview={[Function]}
     onPromote={[Function]}
     onRestore={[Function]}
+    permissions={
+      Object {
+        "can_delete": true,
+        "can_preview": true,
+      }
+    }
   />
-</ForwardRef>
+</VersionsItemButton>
 `;

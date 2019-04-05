@@ -125,7 +125,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -354,7 +354,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -528,7 +528,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -702,7 +702,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -880,7 +880,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1054,7 +1054,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1228,7 +1228,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1374,7 +1374,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1549,7 +1549,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1724,7 +1724,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1899,7 +1899,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2108,7 +2108,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2286,7 +2286,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2464,7 +2464,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2640,7 +2640,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   "Editor",
@@ -2814,7 +2814,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2960,7 +2960,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {

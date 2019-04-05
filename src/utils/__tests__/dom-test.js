@@ -1,9 +1,21 @@
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
-import { isLeftClick, scrollIntoView } from '../dom';
+import { isActivateKey, isLeftClick, scrollIntoView } from '../dom';
 
 jest.mock('scroll-into-view-if-needed');
 
 describe('util/dom', () => {
+    describe('isActivateKey', () => {
+        test('should return true for enter and space keys', () => {
+            expect(isActivateKey({ key: 'Enter' })).toBe(true);
+            expect(isActivateKey({ key: ' ' })).toBe(true);
+        });
+
+        test('should return false for all other keys', () => {
+            expect(isActivateKey({ key: 'Ctrl' })).toBe(false);
+            expect(isActivateKey({ key: 'Tab' })).toBe(false);
+        });
+    });
+
     describe('isLeftClick', () => {
         test('should return true for unmodified left click events', () => {
             expect(isLeftClick({ button: 0 })).toBe(true);
