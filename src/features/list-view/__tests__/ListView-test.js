@@ -32,14 +32,14 @@ describe('features/list-view/ListView', () => {
     describe('CellRenderer()', () => {
         test.each`
             columnIndex | rowIndex | cellData | should                                                  | className
-            ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
-            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
-            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
-            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
-            ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
-            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
-            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
-            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
+            ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'.bdl-ListView-columnHeader'}
+            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'.bdl-ListView-columnCell'}
+            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'.bdl-ListView-columnCell'}
+            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'.bdl-ListView-columnCell'}
+            ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'.bdl-ListView-columnHeader'}
+            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'.bdl-ListView-columnCell'}
+            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'.bdl-ListView-columnCell'}
+            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'.bdl-ListView-columnCell'}
         `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
             const wrapper = getWrapper();
 
@@ -49,11 +49,9 @@ describe('features/list-view/ListView', () => {
                 rowIndex,
             });
 
-            const testCell = shallow(cell);
-
-            expect(testCell.text()).toEqual(cellData);
-
-            expect(testCell.hasClass(className)).toBeTruthy();
+            const testCell = mount(cell);
+            const cellButton = testCell.find(className);
+            expect(cellButton.props().children[0]).toBe(cellData);
         });
 
         test.each`
