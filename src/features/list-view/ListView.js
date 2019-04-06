@@ -69,7 +69,6 @@ class ListView extends React.PureComponent<Props> {
 
         return (
             <Tooltip
-                className="date-picker-error-tooltip"
                 isShown={shouldShowTooltip(columnIndex, rowIndex)}
                 position="top-center"
                 text={<FormattedMessage {...messages.cannotEditItemCellText} />}
