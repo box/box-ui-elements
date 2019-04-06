@@ -3,17 +3,16 @@ import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
 import uniqueId from 'lodash/uniqueId';
-import { FormattedMessage } from 'react-intl';
+// import { FormattedMessage } from 'react-intl';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
 import { SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING } from '../query-bar/constants';
 import IconSortChevron from '../../icons/general/IconSortChevron';
-import Tooltip from '../../elements/common/Tooltip';
+// import Tooltip from '../../elements/common/Tooltip';
 
 import { DEFAULT_COLUMN_WIDTH, FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
 import type { CellRendererArgs, ComputeColumnWidthArgs } from './flowTypes';
 
-import messages from './messages';
 import './styles/ListView.scss';
 
 type Props = {
@@ -21,7 +20,9 @@ type Props = {
     getColumnWidth?: (columnIndex: number) => number,
     getGridCell: ({|
         columnIndex: number,
+        key: string,
         rowIndex: number,
+        style: Object,
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
@@ -39,8 +40,8 @@ class ListView extends React.PureComponent<Props> {
             getGridCell,
             getGridHeader,
             getGridHeaderSort = noop,
-            onCellClick = noop,
-            shouldShowTooltip = noop,
+            // onCellClick = noop,
+            // shouldShowTooltip = noop,
             onSortChange = noop,
         } = this.props;
         if (rowIndex === 0) {
@@ -65,26 +66,8 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
-        const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
-
-        return (
-            <Tooltip
-                isShown={shouldShowTooltip(columnIndex, rowIndex)}
-                position="top-center"
-                text={<FormattedMessage {...messages.cannotEditItemCellText} />}
-                theme="error"
-            >
-                <button
-                    className="bdl-ListView-columnCell"
-                    key={key}
-                    style={style}
-                    type="button"
-                    onClick={() => onCellClick(columnIndex, rowIndex)}
-                >
-                    {cellData}
-                </button>
-            </Tooltip>
-        );
+        const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1, key, style });
+        return cellData;
     };
 
     /**

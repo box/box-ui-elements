@@ -43,11 +43,6 @@ const messages = defineMessages({
         description: 'Subtitle text shown in metadata view for when there are no results for the current template',
         id: 'boxui.metadataView.noResultsForTemplateSubtitleText',
     },
-    cannotEditItemCellText: {
-        defaultMessage: 'You cannot edit item properties',
-        description: 'Text shown in tooltip when a user clicks on an item cell',
-        id: 'boxui.metadataView.cannotEditItemCellText',
-    },
 });
 
 export default messages;
