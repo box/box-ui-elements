@@ -2,14 +2,18 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
+import uniqueId from 'lodash/uniqueId';
+import { FormattedMessage } from 'react-intl';
 
 import { MultiGrid } from 'react-virtualized/dist/commonjs/MultiGrid/index';
 import { SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING } from '../query-bar/constants';
 import IconSortChevron from '../../icons/general/IconSortChevron';
+import Tooltip from '../../elements/common/Tooltip';
 
 import { DEFAULT_COLUMN_WIDTH, FIXED_ROW_COUNT, ROW_HEIGHT } from './constants';
 import type { CellRendererArgs, ComputeColumnWidthArgs } from './flowTypes';
 
+import messages from './messages';
 import './styles/ListView.scss';
 
 type Props = {
@@ -22,15 +26,23 @@ type Props = {
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
     height: number,
+    onCellClick?: (columnIndex: number, rowIndex: number) => void,
     onSortChange?: (columnIndex: number) => void,
     rowCount: number,
+    shouldShowTooltip?: (columnIndex: number, rowIndex: number) => boolean,
     width: number,
 };
 
 class ListView extends React.PureComponent<Props> {
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
-        const { getGridCell, getGridHeader, getGridHeaderSort = noop, onSortChange = noop } = this.props;
-
+        const {
+            getGridCell,
+            getGridHeader,
+            getGridHeaderSort = noop,
+            onCellClick = noop,
+            shouldShowTooltip = noop,
+            onSortChange = noop,
+        } = this.props;
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
             const sortDirection = getGridHeaderSort(columnIndex);
@@ -56,9 +68,23 @@ class ListView extends React.PureComponent<Props> {
         const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
 
         return (
-            <div className="bdl-ListView-columnCell" key={key} style={style}>
-                {cellData}
-            </div>
+            <Tooltip
+                className="date-picker-error-tooltip"
+                isShown={shouldShowTooltip(columnIndex, rowIndex)}
+                position="top-center"
+                text={<FormattedMessage {...messages.cannotEditItemCellText} />}
+                theme="error"
+            >
+                <button
+                    className="bdl-ListView-columnCell"
+                    key={key}
+                    style={style}
+                    type="button"
+                    onClick={() => onCellClick(columnIndex, rowIndex)}
+                >
+                    {cellData}
+                </button>
+            </Tooltip>
         );
     };
 
@@ -124,6 +150,7 @@ class ListView extends React.PureComponent<Props> {
                     rowCount={rowCount + FIXED_ROW_COUNT}
                     scrollToColumn={0}
                     scrollToRow={0}
+                    uniqueId={uniqueId()} // Force rerender
                     width={width}
                 />
             </div>

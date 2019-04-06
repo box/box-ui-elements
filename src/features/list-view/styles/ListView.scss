@@ -31,10 +31,13 @@
     }
 
     .bdl-ListView-columnCell {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
         border-top: 1px solid $off-white;
         color: $seventy-sixers;
         display: flex;
         justify-content: flex-start;
-        padding-top: 16px;
+        padding: 0;
     }
 }
