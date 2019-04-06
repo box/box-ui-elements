@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
-import { FormattedTime, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { fillUserPlaceholder } from '../../../../utils/fields';
 import messages from '../../../common/messages';
@@ -15,6 +15,7 @@ import {
 import Comment from '../comment';
 import AssigneeStatus from './AssigneeStatus';
 import TaskActions from './TaskActions';
+import TaskDueDate from './TaskDueDate';
 import Status from './TaskStatus';
 import './Task.scss';
 
@@ -39,23 +40,18 @@ const MAX_AVATARS = 3;
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Task extends React.Component<Props> {
-    renderUserHeadline(isCurrentUser: boolean, taskType: TaskType, userLink: any): React.Node {
+    getMessageForTask(isCurrentUser: boolean, taskType: TaskType): Object {
         if (isCurrentUser) {
             if (taskType === TASK_TYPE_APPROVAL) {
-                // Assigned you an approval task
-                return (
-                    <FormattedMessage {...messages.tasksFeedHeadlineApprovalCurrentUser} values={{ user: userLink }} />
-                );
+                return messages.tasksFeedHeadlineApprovalCurrentUser;
             }
-            // Assign you a task
-            return <FormattedMessage {...messages.tasksFeedHeadlineGeneralCurrentUser} values={{ user: userLink }} />;
+            return messages.tasksFeedHeadlineGeneralCurrentUser;
         }
+
         if (taskType === TASK_TYPE_APPROVAL) {
-            // Assigned an approval task
-            return <FormattedMessage {...messages.tasksFeedHeadlineApproval} values={{ user: userLink }} />;
+            return messages.tasksFeedHeadlineApproval;
         }
-        // Assigned a task
-        return <FormattedMessage {...messages.tasksFeedHeadlineGeneral} values={{ user: userLink }} />;
+        return messages.tasksFeedHeadlineGeneral;
     }
 
     render(): React.Node {
@@ -98,8 +94,6 @@ class Task extends React.Component<Props> {
 
         const assigneeCount = (assigned_to && assigned_to.entries.length) || 0;
         const hiddenAssigneeCount = assigneeCount - MAX_AVATARS;
-        const isOverdue = due_at ? status === TASK_NEW_INCOMPLETE && new Date(due_at) < Date.now() : false;
-
         const shouldShowActions =
             currentUserAssignment &&
             currentUserAssignment.permissions &&
@@ -107,17 +101,6 @@ class Task extends React.Component<Props> {
             currentUserAssignment.status === TASK_NEW_INCOMPLETE &&
             status === TASK_NEW_INCOMPLETE;
 
-        const dueDateMessage = due_at ? (
-            <div
-                className={classNames('bcs-task-due-date', {
-                    'bcs-task-overdue': isOverdue,
-                })}
-                data-testid="task-due-date"
-            >
-                <FormattedMessage {...messages.taskDueDate} />
-                <FormattedTime value={due_at} day="numeric" month="short" year="numeric" />
-            </div>
-        ) : null;
         return (
             <div
                 className={classNames('bcs-task', {
@@ -136,7 +119,7 @@ class Task extends React.Component<Props> {
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={taskPermissions}
-                    messageHeader={dueDateMessage}
+                    messageHeader={<TaskDueDate dueDate={due_at} status={status} />}
                     tagged_message={name}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
@@ -144,7 +127,14 @@ class Task extends React.Component<Props> {
                     getUserProfileUrl={getUserProfileUrl}
                     mentionSelectorContacts={mentionSelectorContacts}
                     getMentionWithQuery={getMentionWithQuery}
-                    userHeadlineRenderer={this.renderUserHeadline.bind(this, currentUserAssignment, task_type)}
+                    userHeadlineRenderer={userLinkInstance => {
+                        return (
+                            <FormattedMessage
+                                {...this.getMessageForTask(!!currentUserAssignment, task_type)}
+                                values={{ user: userLinkInstance }}
+                            />
+                        );
+                    }}
                 />
                 <div className="bcs-task-assignment-container">
                     <div className="bcs-task-assignments">

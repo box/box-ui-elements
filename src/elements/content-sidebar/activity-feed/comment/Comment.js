@@ -8,6 +8,7 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
+import identity from 'lodash/identity';
 
 import { ReadableTime } from '../../../../components/time';
 import Tooltip from '../../../../components/tooltip';
@@ -48,7 +49,7 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
-    userHeadlineRenderer?: any => React.Element<typeof FormattedMessage>,
+    userHeadlineRenderer?: React.Node => React.Element<typeof FormattedMessage>,
 };
 
 type State = {
@@ -104,7 +105,7 @@ class Comment extends React.Component<Props, State> {
             onEdit,
             messageHeader,
             tagged_message = '',
-            userHeadlineRenderer,
+            userHeadlineRenderer = identity,
             translatedTaggedMessage,
             translations,
             currentUser,
@@ -120,15 +121,6 @@ class Comment extends React.Component<Props, State> {
         const canDelete = getProp(permissions, 'can_delete', false);
         const canEdit = getProp(permissions, 'can_edit', false);
         const createdByUser = created_by || PLACEHOLDER_USER;
-        const userLink = (
-            <UserLink
-                className="bcs-comment-user-name"
-                data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                id={createdByUser.id}
-                name={createdByUser.name}
-                getUserProfileUrl={getUserProfileUrl}
-            />
-        );
 
         return (
             <div className="bcs-comment-container">
@@ -143,7 +135,15 @@ class Comment extends React.Component<Props, State> {
                     <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />
                     <div className="bcs-comment-content">
                         <div className="bcs-comment-headline">
-                            {userHeadlineRenderer ? userHeadlineRenderer(userLink) : userLink}
+                            {userHeadlineRenderer(
+                                <UserLink
+                                    className="bcs-comment-user-name"
+                                    data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                                    id={createdByUser.id}
+                                    name={createdByUser.name}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                />,
+                            )}
                             {!!onEdit && !!canEdit && !isPending && <InlineEdit id={id} toEdit={toEdit} />}
                             {!!onDelete && !!canDelete && !isPending && (
                                 <InlineDelete
