@@ -463,6 +463,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             />,
         );
 
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('.userHeadlineRenderer')).toHaveLength(1);
     });
 });

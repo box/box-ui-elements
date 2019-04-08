@@ -14,17 +14,19 @@ type Props = {
 const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
     const isOverdue = dueDate ? status === TASK_NEW_INCOMPLETE && new Date(dueDate) < Date.now() : false;
 
-    return dueDate ? (
-        <div
-            className={classNames('bcs-task-due-date', {
-                'bcs-task-overdue': isOverdue,
-            })}
-            data-testid="task-due-date"
-        >
-            <FormattedMessage {...messages.taskDueDate} />
-            <FormattedTime value={dueDate} day="numeric" month="short" year="numeric" />
-        </div>
-    ) : null;
+    return (
+        !!dueDate && (
+            <div
+                className={classNames('bcs-task-due-date', {
+                    'bcs-task-overdue': isOverdue,
+                })}
+                data-testid="task-due-date"
+            >
+                <FormattedMessage {...messages.taskDueDate} />
+                <FormattedTime value={dueDate} day="numeric" month="short" year="numeric" />
+            </div>
+        )
+    );
 };
 
 export default TaskDueDate;
