@@ -175,14 +175,6 @@ const allSections = [
                 content: '../src/icons/states/README.md',
             },
             {
-                name: 'Tasks',
-                components: () => [
-                    '../src/icons/general/IconTask.js',
-                    '../src/icons/tasks/IconTaskApproval.js',
-                    '../src/icons/tasks/IconTaskGeneral.js',
-                ],
-            },
-            {
                 name: 'Two-Toned',
                 content: '../src/icons/two-toned/README.md',
             },

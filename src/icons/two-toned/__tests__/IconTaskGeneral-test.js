@@ -25,11 +25,4 @@ describe('icons/general/IconTaskGeneral', () => {
 
         expect(wrapper.find('AccessibleSVG').prop('title')).toEqual(title);
     });
-
-    test('should correctly render icon with specified color', () => {
-        const color = '#fff';
-        const wrapper = shallow(<IconTaskGeneral color={color} />);
-
-        expect(wrapper.find('circle').prop('fill')).toEqual(color);
-    });
 });
