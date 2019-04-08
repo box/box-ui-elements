@@ -36,6 +36,7 @@
         transition: opacity .5s ease;
         width: 50px;
 
+        &:focus,
         &:hover {
             opacity: 1;
         }
