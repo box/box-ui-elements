@@ -426,7 +426,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
         };
-        const messageHeader = <div>message header</div>;
+        const messageHeader = <div className="custom-message-header">message header</div>;
 
         const wrapper = shallow(
             <Comment
@@ -440,7 +440,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             />,
         );
 
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('.custom-message-header')).toHaveLength(1);
     });
 
     test('should use userHeadlineRenderer if prop is passed in', () => {
