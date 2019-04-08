@@ -57,15 +57,20 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('componentDidUpdate()', () => {
-        test('should reinitialize conditions from props.conditions whenever the flyout is opened', () => {
+        test.each`
+            isMenuOpen | hasAppliedFilters | expected      | should
+            ${true}    | ${true}           | ${conditions} | ${'should reinitialize conditions from props.conditions when flyout is opened and apply button pressed'}
+            ${true}    | ${false}          | ${[{}]}       | ${'should not reinitialize conditions from props.conditions when flyout is opened and apply button has not been pressed'}
+        `('$should', ({ isMenuOpen, hasAppliedFilters, expected }) => {
             const wrapper = getWrapper({
                 conditions,
             });
             wrapper.setState({
-                isMenuOpen: true,
+                isMenuOpen,
+                hasAppliedFilters,
             });
             wrapper.instance().componentDidUpdate({}, { isMenuOpen: false });
-            expect(wrapper.state('transientConditions')).toEqual(conditions);
+            expect(wrapper.state('transientConditions')).toEqual(expected);
         });
     });
 

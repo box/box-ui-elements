@@ -25,6 +25,7 @@ import type {
 
 type State = {
     areErrorsEnabled: boolean,
+    hasAppliedFilters: boolean,
     isMenuOpen: boolean,
     selectedConnector: ConnectorType,
     transientConditions: Array<Object>,
@@ -41,10 +42,11 @@ class FilterButton extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            transientConditions: this.props.conditions.slice(0),
-            selectedConnector: AND,
             areErrorsEnabled: false,
+            hasAppliedFilters: false,
             isMenuOpen: false,
+            selectedConnector: AND,
+            transientConditions: this.props.conditions.slice(0),
         };
     }
 
@@ -57,10 +59,10 @@ class FilterButton extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { isMenuOpen } = this.state;
+        const { hasAppliedFilters, isMenuOpen } = this.state;
         const { isMenuOpen: prevIsMenuOpen } = prevState;
         const wasFlyoutOpened = isMenuOpen && !prevIsMenuOpen;
-        if (wasFlyoutOpened) {
+        if (wasFlyoutOpened && hasAppliedFilters) {
             this.setState({
                 transientConditions: this.props.conditions.slice(0),
             });
@@ -117,6 +119,7 @@ class FilterButton extends React.Component<Props, State> {
                 onFilterChange(transientConditions);
             }
             this.setState({
+                hasAppliedFilters: true,
                 isMenuOpen: false,
                 transientConditions: [],
             });
