@@ -28,19 +28,19 @@ describe('features/query-bar/components/ColumnButton', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        const allVisibleColumns = [columnForDateType, columnWithFloatType];
+        const visibleColumns = [columnForDateType, columnWithFloatType];
         const oneHiddenColumn = [{ ...columnForDateType, isShown: false }];
         const twoHiddenColumns = [{ ...columnForDateType, isShown: false }, { ...columnWithFloatType, isShown: false }];
 
         test.each`
-            columns              | should                                                                        | message
-            ${allVisibleColumns} | ${'should render ColumnButton with message when all columns are visible'}     | ${'Columns'}
-            ${oneHiddenColumn}   | ${'should render ColumnButton with message when one column is hidden'}        | ${'1 Column Hidden'}
-            ${twoHiddenColumns}  | ${'should render ColumnButton with message when multiple columns are hidden'} | ${'{number} Columns Hidden'}
-        `('$should', ({ columns, message }) => {
+            columns             | values          | should
+            ${visibleColumns}   | ${undefined}    | ${'should render ColumnButton with no column count when all columns are visible'}
+            ${oneHiddenColumn}  | ${{ count: 1 }} | ${'should render ColumnButton with a column count of 1 when one column is hidden'}
+            ${twoHiddenColumns} | ${{ count: 2 }} | ${'should render ColumnButton with a column count of 2 when multiple columns are hidden'}
+        `('$should', ({ columns, values }) => {
             const wrapper = getWrapper({ columns });
             const FormattedMessage = wrapper.find('FormattedMessage');
-            expect(FormattedMessage.props().defaultMessage).toBe(message);
+            expect(FormattedMessage.props().values).toEqual(values);
         });
     });
 

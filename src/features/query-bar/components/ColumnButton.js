@@ -70,15 +70,13 @@ class ColumnButton extends React.Component<Props, State> {
         let columnsButtonText;
         if (numberOfHiddenColumns === 0) {
             columnsButtonText = <FormattedMessage {...messages.columnsButtonText} />;
-        } else if (numberOfHiddenColumns === 1) {
-            columnsButtonText = <FormattedMessage {...messages.columnHiddenButtonText} />;
         } else {
             columnsButtonText = (
                 <FormattedMessage
-                    {...messages.columnsHiddenButtonText}
                     values={{
-                        number: numberOfHiddenColumns,
+                        count: numberOfHiddenColumns,
                     }}
+                    {...messages.columnsHiddenButtonText}
                 />
             );
         }
