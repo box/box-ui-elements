@@ -43,7 +43,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         });
 
         test('Should set areErrorsEnabled to true for Condition if not all conditions are valid', () => {
-            const wrapper = getWrapper({ conditions: [] });
+            const wrapper = getWrapper({ conditions: [{ values: [] }] });
             wrapper.instance().setState({
                 transientConditions: incompleteConditions,
                 isMenuOpen: true,
@@ -57,14 +57,12 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('componentDidUpdate()', () => {
-        test('should reinitialize conditions from props.conditions when the flyout is opened after clicking the Apply Button', () => {
-            const transientConditions = [];
+        test('should reinitialize conditions from props.conditions whenever the flyout is opened', () => {
             const wrapper = getWrapper({
                 conditions,
             });
             wrapper.setState({
                 isMenuOpen: true,
-                transientConditions,
             });
             wrapper.instance().componentDidUpdate({}, { isMenuOpen: false });
             expect(wrapper.state('transientConditions')).toEqual(conditions);
