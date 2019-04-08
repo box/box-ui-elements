@@ -18,7 +18,7 @@ import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEB
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
-import { setElementsDebugInfo } from '../../utils/globals';
+import globalUtils from '../../utils/globals';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureProvider } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
@@ -134,7 +134,7 @@ class ContentSidebar extends React.Component<Props, State> {
         });
         /* eslint-enable react/prop-types */
 
-        setElementsDebugInfo();
+        globalUtils.setElementsDebugInfo();
     }
 
     /**

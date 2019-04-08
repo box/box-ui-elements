@@ -26,7 +26,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
-import { setElementsDebugInfo } from '../../utils/globals';
+import globalUtils from '../../utils/globals';
 import { withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
@@ -244,7 +244,7 @@ class ContentPreview extends PureComponent<Props, State> {
             endMarkName: MARK_NAME_JS_READY,
         });
 
-        setElementsDebugInfo();
+        globalUtils.setElementsDebugInfo();
     }
 
     /**

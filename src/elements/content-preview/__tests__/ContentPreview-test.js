@@ -6,7 +6,7 @@ import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import PreviewLoading from '../PreviewLoading';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
-import * as globalUtils from '../../../utils/globals';
+import globalUtils from '../../../utils/globals';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
 

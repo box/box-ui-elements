@@ -28,7 +28,7 @@ import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
-import { setElementsDebugInfo } from '../../utils/globals';
+import globalUtils from '../../utils/globals';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
@@ -238,7 +238,7 @@ class ContentExplorer extends Component<Props, State> {
             focusedRow: 0,
         };
 
-        setElementsDebugInfo();
+        globalUtils.setElementsDebugInfo();
     }
 
     /**
