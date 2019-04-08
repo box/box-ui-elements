@@ -11,6 +11,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of pre
   >
     <IconEye
       color="#2a62b9"
+      height={10}
       width={14}
     />
     <span
@@ -37,6 +38,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
   >
     <IconEye
       color="#2a62b9"
+      height={10}
       width={14}
     />
     <span
@@ -63,6 +65,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
   >
     <IconEye
       color="#2a62b9"
+      height={10}
       width={14}
     />
     <span
@@ -89,6 +92,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
   >
     <IconDownloadSolid
       color="#2a62b9"
+      height={10}
       width={14}
     />
     <span
@@ -115,6 +119,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
   >
     <IconComment
       color="#2a62b9"
+      height={10}
       width={14}
     />
     <span
@@ -141,6 +146,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
   >
     <IconPencilSolid
       color="#2a62b9"
+      height={10}
       width={14}
     />
     <span
@@ -169,6 +175,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats with a
   >
     <IconEye
       color="#2a62b9"
+      height={10}
       width={14}
     />
     <span
@@ -196,6 +203,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats with a
   >
     <IconEye
       color="#2a62b9"
+      height={10}
       width={14}
     />
     <span

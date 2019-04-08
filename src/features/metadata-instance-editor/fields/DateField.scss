@@ -1,8 +1,11 @@
 @import '../../../styles/variables';
 
 .metadata-instance-editor-field-date {
-    .date-picker-icon-holder,
-    .date-picker-input {
+    .date-picker-icon-holder {
         width: 100%;
+
+        .date-picker-input {
+            width: 100%;
+        }
     }
 }
