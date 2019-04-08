@@ -28,7 +28,7 @@ const messages = defineMessages({
         id: 'boxui.share.sharedLinkSettings.modalTitle',
     },
     customURLLabel: {
-        defaultMessage: 'Custom URL',
+        defaultMessage: 'Non-private custom URL',
         description: 'Label for Custom URL text input field',
         id: 'boxui.share.sharedLinkSettings.customURLLabel',
     },
@@ -73,7 +73,7 @@ const messages = defineMessages({
         id: 'boxui.share.sharedLinkSettings.vanityURLWarning',
     },
     vanityURLEnableText: {
-        defaultMessage: 'Enable custom URL',
+        defaultMessage: 'Publish content broadly with a custom, non-private URL',
         description: 'Text label for custom URL section',
         id: 'boxui.share.vanityURLEnableText',
     },
