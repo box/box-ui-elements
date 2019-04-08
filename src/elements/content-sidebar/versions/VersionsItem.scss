@@ -53,6 +53,7 @@
     align-items: center;
     color: $seventy-sixers;
     display: flex;
+    white-space: nowrap;
 }
 
 .bcs-VersionsItem-log {
@@ -62,14 +63,14 @@
 }
 
 .bcs-VersionsItem-size {
-    align-items: center;
-    display: flex;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &::before {
         content: '•';
-        display: inline-block;
         font-size: 8px;
         padding-left: 5px;
         padding-right: 5px;
+        vertical-align: top;
     }
 }

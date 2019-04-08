@@ -8,6 +8,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { Route } from 'react-router-dom';
 import PlainButton from '../../../components/plain-button';
+import { isLeftClick } from '../../../utils/dom';
 
 type Props = {
     activeClassName?: string,
@@ -21,18 +22,19 @@ type Props = {
     to: string | Location,
 };
 
-const NavButton = ({
-    activeClassName = 'bdl-is-active',
-    children,
-    className = 'bdl-NavButton',
-    component: Component = PlainButton,
-    exact,
-    onClick,
-    replace,
-    strict,
-    to,
-    ...rest
-}: Props) => {
+const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
+    const {
+        activeClassName = 'bdl-is-active',
+        children,
+        className = 'bdl-NavButton',
+        component: Component = PlainButton,
+        exact,
+        onClick,
+        replace,
+        strict,
+        to,
+        ...rest
+    } = props;
     const path = typeof to === 'object' ? to.pathname : to;
 
     return (
@@ -41,14 +43,16 @@ const NavButton = ({
                 <Component
                     className={classNames(className, { [activeClassName]: !!match })}
                     onClick={event => {
-                        const method = replace ? history.replace : history.push;
-
                         if (onClick) {
                             onClick(event);
                         }
 
-                        method(path);
+                        if (!event.defaultPrevented && isLeftClick(event)) {
+                            const method = replace ? history.replace : history.push;
+                            method(path);
+                        }
                     }}
+                    ref={ref}
                     {...rest}
                 >
                     {children}
@@ -56,6 +60,6 @@ const NavButton = ({
             )}
         </Route>
     );
-};
+});
 
 export default NavButton;

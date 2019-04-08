@@ -309,7 +309,7 @@ class SharedLinkSection extends React.Component<Props> {
                             className="usm-ftux-tooltip"
                             isShown
                             onDismiss={() => onDismissTooltip('shared-link-toggle')}
-                            position="top-right"
+                            position="middle-left"
                             showCloseButton
                             text={sharedLinkToggleTooltip}
                             theme="callout"
