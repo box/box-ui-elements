@@ -5,7 +5,7 @@
     display: flex;
     min-width: 20px;
 
-    &:first-child {
+    &:only-child {
         min-width: 64px;
     }
 

@@ -58,7 +58,7 @@ const AccessStatsItem = ({
 
     const itemContent = (
         <React.Fragment>
-            <IconComponent color={ICON_COLOR} width={14} />
+            <IconComponent color={ICON_COLOR} height={10} width={14} />
             <span className="access-stats-label">
                 <FormattedMessage {...labelMessage} />
             </span>

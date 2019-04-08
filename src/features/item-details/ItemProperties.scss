@@ -24,6 +24,10 @@
         transition: background-color .2s, border-color .2s, margin-left .2s, padding .2s;
         width: 100%;
 
+        &:hover {
+            box-shadow: none;
+        }
+
         &:focus {
             background-color: $karl-fog;
             border-color: $off-white;

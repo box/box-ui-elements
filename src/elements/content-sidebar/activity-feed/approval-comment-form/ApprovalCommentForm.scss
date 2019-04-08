@@ -6,6 +6,7 @@
 
     .bcs-comment-input {
         div[contentEditable='true'].public-DraftEditor-content {
+            cursor: text;
             width: auto;
         }
 
