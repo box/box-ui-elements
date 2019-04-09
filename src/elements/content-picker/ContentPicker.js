@@ -19,6 +19,7 @@ import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
 import Pagination from '../common/pagination/Pagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import globalUtils from '../../utils/globals';
 import API from '../../api';
 import Content from './Content';
 import Footer from './Footer';
@@ -206,6 +207,8 @@ class ContentPicker extends Component<Props, State> {
             isLoading: false,
             errorCode: '',
         };
+
+        globalUtils.setElementsDebugInfo();
     }
 
     /**
