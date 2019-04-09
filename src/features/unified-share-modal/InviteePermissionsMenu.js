@@ -43,6 +43,9 @@ class InviteePermissionsMenu extends Component<Props> {
     renderMenu() {
         const { inviteePermissionLevel, inviteePermissions, itemType } = this.props;
 
+        const defaultPermissionLevel = getDefaultPermissionLevel(inviteePermissions);
+        const selectedPermissionLevel = inviteePermissionLevel || defaultPermissionLevel;
+
         return (
             <Menu className="usm-share-access-menu">
                 {inviteePermissions.map(level =>
@@ -50,7 +53,7 @@ class InviteePermissionsMenu extends Component<Props> {
                         <SelectMenuItem
                             key={level.value}
                             isDisabled={level.disabled}
-                            isSelected={level.value === inviteePermissionLevel}
+                            isSelected={level.value === selectedPermissionLevel}
                             onClick={() => this.onChangeInviteePermissionsLevel(level.value)}
                         >
                             <InviteePermissionsLabel
