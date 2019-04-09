@@ -43,14 +43,15 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should forward version id changes to the parent component', () => {
             const onVersionChange = jest.fn();
             const wrapper = getWrapper({ onVersionChange });
+            const version = { id: '12345' };
 
             wrapper.setState({
-                versions: [{ id: '54321' }],
+                versions: [{ id: '54321' }, version],
             });
 
             wrapper.setProps({ versionId: '12345' });
 
-            expect(onVersionChange).toHaveBeenCalledWith('12345', false);
+            expect(onVersionChange).toHaveBeenCalledWith(version, { isCurrentVersion: false });
         });
     });
 
