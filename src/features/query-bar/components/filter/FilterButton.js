@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
+import cloneDeep from 'lodash/cloneDeep';
 
 import IconMetadataFilter from '../../../../icons/metadata-view/IconMetadataFilter';
 import Condition from './Condition';
@@ -25,7 +26,6 @@ import type {
 
 type State = {
     areErrorsEnabled: boolean,
-    hasAppliedFilters: boolean,
     isMenuOpen: boolean,
     selectedConnector: ConnectorType,
     transientConditions: Array<Object>,
@@ -43,28 +43,19 @@ class FilterButton extends React.Component<Props, State> {
 
         this.state = {
             areErrorsEnabled: false,
-            hasAppliedFilters: false,
             isMenuOpen: false,
             selectedConnector: AND,
-            transientConditions: this.props.conditions.slice(0),
+            transientConditions: cloneDeep(this.props.conditions),
         };
     }
 
-    componentDidMount() {
-        const initialCondition = this.createCondition();
-
-        this.setState({
-            transientConditions: [initialCondition],
-        });
-    }
-
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { hasAppliedFilters, isMenuOpen } = this.state;
+        const { isMenuOpen } = this.state;
         const { isMenuOpen: prevIsMenuOpen } = prevState;
         const wasFlyoutOpened = isMenuOpen && !prevIsMenuOpen;
-        if (wasFlyoutOpened && hasAppliedFilters) {
+        if (wasFlyoutOpened) {
             this.setState({
-                transientConditions: this.props.conditions.slice(0),
+                transientConditions: cloneDeep(this.props.conditions),
             });
         }
     }
@@ -112,14 +103,13 @@ class FilterButton extends React.Component<Props, State> {
         const { onFilterChange } = this.props;
         const { transientConditions } = this.state;
 
-        const areAllValid = this.areAllValid();
+        const areAllValid = this.areAllValid(transientConditions);
 
         if (areAllValid) {
             if (onFilterChange) {
                 onFilterChange(transientConditions);
             }
             this.setState({
-                hasAppliedFilters: true,
                 isMenuOpen: false,
                 transientConditions: [],
             });
@@ -141,7 +131,7 @@ class FilterButton extends React.Component<Props, State> {
         let newCondition = { ...conditionToUpdate };
         newCondition = updateCondition(newCondition);
 
-        const newConditions = transientConditions.slice(0);
+        const newConditions = cloneDeep(transientConditions);
         newConditions[newConditionIndex] = newCondition;
 
         this.setState({
@@ -174,7 +164,7 @@ class FilterButton extends React.Component<Props, State> {
             values: [],
         };
 
-        const newConditions = transientConditions.slice(0);
+        const newConditions = cloneDeep(transientConditions);
         newConditions[newConditionIndex] = newCondition;
 
         this.setState({
@@ -225,10 +215,9 @@ class FilterButton extends React.Component<Props, State> {
         });
     };
 
-    areAllValid = () => {
-        const { transientConditions } = this.state;
+    areAllValid = (conditions: Array<ConditionType>) => {
         let areAllValid = true;
-        transientConditions.forEach(condition => {
+        conditions.forEach(condition => {
             if (condition.values.length === 0) {
                 areAllValid = false;
             }
@@ -238,8 +227,9 @@ class FilterButton extends React.Component<Props, State> {
 
     // Should close when all the conditions have a value set and the apply button is pressed.
     shouldClose = (event?: SyntheticEvent<>) => {
+        const { transientConditions } = this.state;
         // The current approach assumes that the Apply button contains at most one child element.
-        const areAllValid = this.areAllValid();
+        const areAllValid = this.areAllValid(transientConditions);
 
         if (event && event.target && areAllValid) {
             if (
@@ -257,8 +247,13 @@ class FilterButton extends React.Component<Props, State> {
         const { transientConditions, areErrorsEnabled, isMenuOpen, selectedConnector } = this.state;
 
         const numberOfConditions = conditions.length;
+        const areAllValid = this.areAllValid(conditions);
+        const shouldShowDefaultText = !areAllValid || numberOfConditions === 0;
 
-        const buttonClasses = classNames('query-bar-button', numberOfConditions !== 0 ? 'is-active' : '');
+        const buttonClasses = classNames(
+            'query-bar-button',
+            numberOfConditions !== 0 && areAllValid ? 'is-active' : '',
+        );
 
         const isFilterDisabled = !columns || columns.length === 0;
 
@@ -284,7 +279,7 @@ class FilterButton extends React.Component<Props, State> {
                     <MenuToggle>
                         <IconMetadataFilter className="button-icon" />
                         <span className="button-label">
-                            {numberOfConditions === 0 ? (
+                            {shouldShowDefaultText ? (
                                 <FormattedMessage {...messages.filtersButtonText} />
                             ) : (
                                 <FormattedMessage
