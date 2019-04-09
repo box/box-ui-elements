@@ -8,6 +8,7 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
+import identity from 'lodash/identity';
 
 import { ReadableTime } from '../../../../components/time';
 import Tooltip from '../../../../components/tooltip';
@@ -40,6 +41,7 @@ type Props = {
     isPending?: boolean,
     is_reply_comment?: boolean,
     mentionSelectorContacts?: SelectorItems,
+    messageHeader?: React.Node,
     modified_at?: string | number,
     onDelete?: Function,
     onEdit?: Function,
@@ -47,6 +49,7 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
+    userHeadlineRenderer?: React.Node => React.Element<typeof FormattedMessage>,
 };
 
 type State = {
@@ -100,7 +103,9 @@ class Comment extends React.Component<Props, State> {
             error,
             onDelete,
             onEdit,
+            messageHeader,
             tagged_message = '',
+            userHeadlineRenderer = identity,
             translatedTaggedMessage,
             translations,
             currentUser,
@@ -130,13 +135,15 @@ class Comment extends React.Component<Props, State> {
                     <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />
                     <div className="bcs-comment-content">
                         <div className="bcs-comment-headline">
-                            <UserLink
-                                className="bcs-comment-user-name"
-                                data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                                id={createdByUser.id}
-                                name={createdByUser.name}
-                                getUserProfileUrl={getUserProfileUrl}
-                            />
+                            {userHeadlineRenderer(
+                                <UserLink
+                                    className="bcs-comment-user-name"
+                                    data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                                    id={createdByUser.id}
+                                    name={createdByUser.name}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                />,
+                            )}
                             {!!onEdit && !!canEdit && !isPending && <InlineEdit id={id} toEdit={toEdit} />}
                             {!!onDelete && !!canDelete && !isPending && (
                                 <InlineDelete
@@ -161,6 +168,7 @@ class Comment extends React.Component<Props, State> {
                                 </small>
                             </Tooltip>
                         </div>
+                        {messageHeader}
                         {isEditing ? (
                             <ApprovalCommentForm
                                 onSubmit={() => {}}

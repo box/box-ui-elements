@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should render the proper DOM structure 1`] = `
+<TaskDueDate
+  dueDate={2001-04-19T04:25:21.000Z}
+  status="NOT_STARTED"
+>
+  <div
+    className="bcs-task-due-date bcs-task-overdue"
+    data-testid="task-due-date"
+  >
+    <FormattedMessage
+      defaultMessage="Due"
+      id="be.taskDueDate"
+    >
+      <div />
+    </FormattedMessage>
+    <FormattedTime
+      day="numeric"
+      month="short"
+      value={2001-04-19T04:25:21.000Z}
+      year="numeric"
+    >
+      <div />
+    </FormattedTime>
+  </div>
+</TaskDueDate>
+`;

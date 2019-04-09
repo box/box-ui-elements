@@ -3,8 +3,6 @@ import { mount, shallow } from 'enzyme';
 
 import Task from '..';
 
-jest.mock('../../comment/Comment', () => 'mock-comment');
-
 const allHandlers = {
     tasks: {
         edit: jest.fn(),
@@ -78,7 +76,6 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
 
     test('should show assignment status badges for each assignee', () => {
         const wrapper = mount(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
-        expect(wrapper).toMatchSnapshot();
         expect(wrapper.find('[data-testid="task-assignment-status"]')).toHaveLength(2);
     });
 
@@ -88,7 +85,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should show due date if set', () => {
-        const wrapper = shallow(
+        const wrapper = mount(
             <Task
                 currentUser={currentUser}
                 onEdit={jest.fn()}
@@ -101,7 +98,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('due date should have overdue class if task is incomplete and due date is in past', () => {
-        const incompleteWrapper = shallow(
+        const incompleteWrapper = mount(
             <Task
                 {...task}
                 currentUser={currentUser}
@@ -112,8 +109,10 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
         expect(incompleteWrapper.find('.bcs-task-overdue')).toHaveLength(1);
+    });
 
-        const completeWrapper = shallow(
+    test('due date should not have overdue class if task is complete and due date is in past', () => {
+        const completeWrapper = mount(
             <Task
                 {...task}
                 currentUser={currentUser}
@@ -213,7 +212,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
 
-        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_delete).toBe(false);
+        expect(wrapper.find('Comment').getElements()[0].props.permissions.can_delete).toBe(false);
     });
 
     test('should not allow user to edit if they are not the task creator', () => {
@@ -227,6 +226,6 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
 
-        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_edit).toBe(false);
+        expect(wrapper.find('Comment').getElements()[0].props.permissions.can_edit).toBe(false);
     });
 });
