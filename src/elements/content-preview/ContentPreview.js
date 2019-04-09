@@ -75,6 +75,7 @@ type Props = {
     onDownload: Function,
     onLoad: Function,
     onNavigate: Function,
+    onVersionChange: (versionId?: string, isCurrentVersion?: boolean) => void,
     previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
@@ -187,6 +188,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onError: noop,
         onLoad: noop,
         onNavigate: noop,
+        onVersionChange: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         showAnnotations: false,
         staticHost: DEFAULT_HOSTNAME_STATIC,
@@ -1048,7 +1050,9 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @param {string} versionId - The version id to set as current
      */
-    onVersionChange = (versionId?: string) => {
+    onVersionChange = (versionId?: string, isCurrentVersion?: boolean) => {
+        const { onVersionChange }: Props = this.props;
+        onVersionChange(versionId, isCurrentVersion);
         this.setState({ selectedVersionId: versionId });
     };
 

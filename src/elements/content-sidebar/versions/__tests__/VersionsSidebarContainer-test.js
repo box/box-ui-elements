@@ -44,9 +44,13 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             const onVersionChange = jest.fn();
             const wrapper = getWrapper({ onVersionChange });
 
+            wrapper.setState({
+                versions: [{ id: '54321' }],
+            });
+
             wrapper.setProps({ versionId: '12345' });
 
-            expect(onVersionChange).toHaveBeenCalledWith('12345');
+            expect(onVersionChange).toHaveBeenCalledWith('12345', false);
         });
     });
 

@@ -19,7 +19,7 @@ type Props = {
     fileId: string,
     history: RouterHistory,
     match: Match,
-    onVersionChange: (versionId?: string) => void,
+    onVersionChange: (versionId?: string, isCurrentVersion?: boolean) => void,
     parentName: string,
     versionId?: string,
 };
@@ -54,7 +54,9 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         // Forward the current version id that is passed in via the wrapping route
         if (prevVersionId !== versionId) {
-            onVersionChange(versionId);
+            const { versions } = this.state;
+            const isCurrentVersion = versionId === versions[0].id;
+            onVersionChange(versionId, isCurrentVersion);
         }
     }
 
