@@ -1,0 +1,7 @@
+$small-width: 580px;
+
+@mixin small-size {
+    @media (max-width: #{$small-width}) {
+        @content;
+    }
+}

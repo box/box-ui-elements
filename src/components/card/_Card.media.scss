@@ -1,0 +1,7 @@
+@import './sizes.media';
+
+@include small-size {
+    .bdl-Card--padded {
+        padding: 40px 25px 45px;
+    }
+}

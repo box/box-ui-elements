@@ -1,0 +1,22 @@
+@import '../../styles/variables';
+
+.bdl-Card {
+    background-color: $white;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    margin: 0 auto;
+    max-width: 900px;
+
+    .bdl-Card-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+}
+
+.bdl-Card--padded {
+    padding: 40px 60px 45px;
+}
+
+@import './Card.media';

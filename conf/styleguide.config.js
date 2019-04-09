@@ -34,6 +34,7 @@ const allSections = [
             '../src/components/breadcrumb/Breadcrumb.js',
             '../src/components/button/Button.js',
             '../src/components/button-group/ButtonGroup.js',
+            '../src/components/card/Card.js',
             '../src/components/checkbox/Checkbox.js',
             '../src/components/collapsible/Collapsible.js',
             '../src/components/context-menu/ContextMenu.js',

@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/card/Card should render correctly 1`] = `
+<div
+  className="bdl-Card my-class bdl-Card--padded"
+>
+  <div
+    className="bdl-Card-title"
+  >
+    <div>
+      Hello World!
+    </div>
+  </div>
+  Hello, world!
+</div>
+`;
+
+exports[`components/card/Card should render correctly without a title 1`] = `
+<div
+  className="bdl-Card my-class bdl-Card--padded"
+>
+  Hello, world!
+</div>
+`;
