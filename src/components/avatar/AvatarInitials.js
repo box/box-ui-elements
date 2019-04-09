@@ -16,7 +16,7 @@ const AVATAR_COLORS = [
 const getInitials = name => {
     const firstInitial = name.slice(0, 1);
     const lastInitial = name.slice(name.lastIndexOf(' ') + 1, name.lastIndexOf(' ') + 2);
-    return firstInitial + lastInitial;
+    return `${firstInitial}${lastInitial}`.toUpperCase();
 };
 
 type Props = {
