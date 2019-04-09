@@ -18,6 +18,10 @@ $card-left-offset: 40px;
         margin-left: $card-left-offset;
     }
 
+    .bcs-task-assignment-container {
+        margin-left: 40px;
+    }
+
     .bcs-task-due-date {
         color: $bdl-neutral-02;
         font-weight: bold;
@@ -64,14 +68,6 @@ $card-left-offset: 40px;
     }
 
     .bcs-task-assignment-status-icon {
-        border: 1px solid $white;
-        border-radius: 50%;
-        bottom: 0;
-        height: 12px;
-        position: absolute;
-        right: 0;
-        width: 12px;
-
         &.completed,
         &.approved,
         &.rejected {
