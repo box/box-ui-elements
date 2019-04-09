@@ -60,13 +60,12 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         test.each`
             isMenuOpen | expected      | should
             ${true}    | ${conditions} | ${'should reinitialize conditions from props.conditions when flyout is opened'}
-        `('$should', ({ isMenuOpen, hasAppliedFilters, expected }) => {
+        `('$should', ({ isMenuOpen, expected }) => {
             const wrapper = getWrapper({
                 conditions,
             });
             wrapper.setState({
                 isMenuOpen,
-                hasAppliedFilters,
             });
             wrapper.instance().componentDidUpdate({}, { isMenuOpen: false });
             expect(wrapper.state('transientConditions')).toEqual(expected);
