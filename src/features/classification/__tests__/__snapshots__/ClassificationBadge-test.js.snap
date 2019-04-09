@@ -13,6 +13,7 @@ exports[`features/classification/ClassificationBadge should render tooltip when 
 <Tooltip
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="top-center"
   text="Sensitive"
   theme="default"
@@ -30,6 +31,7 @@ exports[`features/classification/ClassificationBadge should render tooltip with 
 <Tooltip
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-left"
   text="Sensitive"
   theme="default"
