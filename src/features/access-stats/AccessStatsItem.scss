@@ -4,28 +4,35 @@
     list-style: none;
 
     .access-stats-item-content {
-        background: $selected-blue-background;
-        border-radius: 2px;
-        color: $koray-ing;
-        display: flex;
-        line-height: 10px;
-        margin: 0 0 5px;
-        padding: 9px;
-        text-align: left;
-        width: 100%;
-    }
+        &,
+        &.btn-plain,
+        &.btn-plain:focus,
+        &.btn-plain:hover {
+            align-items: center;
+            background: $selected-blue-background;
+            border-radius: 2px;
+            color: $koray-ing;
+            display: flex;
+            line-height: 10px;
+            margin: 0 0 5px;
+            padding: 9px;
+            text-align: left;
+            width: 100%;
+        }
 
-    svg {
-        margin-right: 8px;
+        &.btn-plain:focus,
+        &.btn-plain:hover {
+            .access-stats-label {
+                text-decoration: underline;
+            }
+        }
     }
 
     .access-stats-label {
         flex-grow: 1;
     }
 
-    .btn-plain {
-        .access-stats-label:hover {
-            text-decoration: underline;
-        }
+    svg {
+        margin-right: 8px;
     }
 }
