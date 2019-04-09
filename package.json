@@ -104,6 +104,9 @@
     },
     "jest": {
         "clearMocks": true,
+        "globals": {
+            "__VERSION__": "test"
+        },
         "restoreMocks": true,
         "moduleNameMapper": {
             "react-intl": "<rootDir>/conf/jest/mocks/react-intl-mocks.js",
