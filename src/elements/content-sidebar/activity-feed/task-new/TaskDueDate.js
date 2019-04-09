@@ -22,8 +22,12 @@ const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
                 })}
                 data-testid="task-due-date"
             >
-                <FormattedMessage {...messages.taskDueDateLabel} />
-                <FormattedTime value={dueDate} day="numeric" month="short" year="numeric" />
+                <FormattedMessage
+                    {...messages.taskDueDateLabel}
+                    values={{
+                        date: <FormattedTime value={dueDate} day="numeric" month="short" year="numeric" />,
+                    }}
+                />
             </div>
         )
     );

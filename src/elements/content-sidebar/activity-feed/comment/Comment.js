@@ -41,7 +41,6 @@ type Props = {
     isPending?: boolean,
     is_reply_comment?: boolean,
     mentionSelectorContacts?: SelectorItems,
-    messageHeader?: React.Node,
     modified_at?: string | number,
     onDelete?: Function,
     onEdit?: Function,
@@ -103,7 +102,6 @@ class Comment extends React.Component<Props, State> {
             error,
             onDelete,
             onEdit,
-            messageHeader,
             tagged_message = '',
             userHeadlineRenderer = identity,
             translatedTaggedMessage,
@@ -168,7 +166,6 @@ class Comment extends React.Component<Props, State> {
                                 </small>
                             </Tooltip>
                         </div>
-                        {messageHeader}
                         {isEditing ? (
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
