@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import getProp from 'lodash/get';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import sizeUtil from '../../../utils/size';
@@ -13,12 +14,7 @@ import VersionsItemButton from './VersionsItemButton';
 import VersionsItemBadge from './VersionsItemBadge';
 import { ReadableTime } from '../../../components/time';
 import type { VersionActionCallback } from './Versions';
-import {
-    PLACEHOLDER_USER,
-    VERSION_DELETE_ACTION,
-    VERSION_RESTORE_ACTION,
-    VERSION_UPLOAD_ACTION,
-} from '../../../constants';
+import { VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION, VERSION_UPLOAD_ACTION } from '../../../constants';
 import './VersionsItem.scss';
 
 type Props = {
@@ -57,7 +53,7 @@ const VersionsItem = ({
         action = VERSION_UPLOAD_ACTION,
         created_at: createdAt,
         id: versionId,
-        modified_by: modifiedBy = PLACEHOLDER_USER,
+        modified_by: modifiedBy,
         size,
         version_number: versionNumber,
     } = version;
@@ -67,7 +63,7 @@ const VersionsItem = ({
     // Version info helpers
     const versionSize = sizeUtil(size);
     const versionTimestamp = createdAt && new Date(createdAt).getTime();
-    const versionUser = modifiedBy.name || <FormattedMessage {...messages.versionUserUnknown} />;
+    const versionUserName = getProp(modifiedBy, 'name', <FormattedMessage {...messages.versionUserUnknown} />);
 
     // Version action helper
     const handleAction = (handler?: VersionActionCallback) => (): void => {
@@ -94,7 +90,7 @@ const VersionsItem = ({
                     </div>
                 )}
                 <div className="bcs-VersionsItem-log">
-                    <FormattedMessage {...getActionMessage(action)} values={{ name: versionUser }} />
+                    <FormattedMessage {...getActionMessage(action)} values={{ name: versionUserName }} />
                 </div>
                 <div className="bcs-VersionsItem-info">
                     {versionTimestamp && (
