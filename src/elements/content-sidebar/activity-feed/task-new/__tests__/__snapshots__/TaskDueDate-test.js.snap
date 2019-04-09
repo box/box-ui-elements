@@ -10,8 +10,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
     data-testid="task-due-date"
   >
     <FormattedMessage
-      defaultMessage="Due"
-      id="be.taskDueDate"
+      defaultMessage="Due:"
+      id="be.tasks.taskDueDate"
     >
       <div />
     </FormattedMessage>
