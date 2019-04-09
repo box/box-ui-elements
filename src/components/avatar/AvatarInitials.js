@@ -2,15 +2,15 @@
 import React from 'react';
 
 const AVATAR_COLORS = [
-    '#18BBF7',
-    '#0D67C7',
-    '#052E5C',
-    '#747679',
-    '#FDA308',
-    '#98C332',
-    '#159F45',
-    '#B800B2',
-    '#F22C44',
+    '#2486FC',
+    '#0061D5',
+    '#003C84',
+    '#767676',
+    '#F5B31B',
+    '#26C281',
+    '#4826C2',
+    '#9F3FED',
+    '#ED3757',
 ];
 
 const getInitials = name => {
