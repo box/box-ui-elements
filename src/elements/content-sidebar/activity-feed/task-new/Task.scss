@@ -11,6 +11,16 @@ $error-color: $red;
         opacity: .4;
     }
 
+    .bcs-task-avatar-badge {
+        border: 1px solid $white;
+        border-radius: 50%;
+        bottom: 0;
+        height: 12px;
+        position: absolute;
+        right: 0;
+        width: 12px;
+    }
+
     .bcs-task-assignment-container {
         margin-left: 40px;
     }
@@ -61,14 +71,6 @@ $error-color: $red;
     }
 
     .bcs-task-assignment-status-icon {
-        border: 1px solid $white;
-        border-radius: 50%;
-        bottom: 0;
-        height: 12px;
-        position: absolute;
-        right: 0;
-        width: 12px;
-
         &.completed,
         &.approved,
         &.rejected {

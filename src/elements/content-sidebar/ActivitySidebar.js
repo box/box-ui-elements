@@ -527,7 +527,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} fileId the file id
      * @return the user avatar URL string for a given user with access token attached
      */
-    getAvatarUrl = memoize<string, Promise<?string>>(
+    getAvatarUrl = memoize<[string], Promise<?string>>(
         async (userId: string): Promise<?string> => {
             const { file, api } = this.props;
 

@@ -32,7 +32,7 @@ const AssignmentStatus = React.memo<Props>(({ user, status, getAvatarUrl, ...res
         <Avatar className="bcs-task-assignment-avatar" user={user} getAvatarUrl={getAvatarUrl} />
         <StatusIcon
             status={status}
-            className={`bcs-task-assignment-status-icon ${camelCase(status)}`}
+            className={`bcs-task-assignment-status-icon bcs-task-avatar-badge ${camelCase(status)}`}
             height={12}
             width={12}
             title={<FormattedMessage {...messages.completedAssignment} />}

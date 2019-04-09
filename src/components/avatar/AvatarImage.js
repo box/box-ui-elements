@@ -1,14 +1,16 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 type Props = {
     className?: string,
+    id?: string | number,
     onError?: Function,
     url: string,
 };
 
-const AvatarImage = ({ className = '', url, onError }: Props) => (
+const AvatarImage = React.memo<Props>(({ className = '', url, onError, ...rest }: Props) => (
     <img
+        {...rest}
         alt=""
         className={`avatar-image ${className}`}
         onError={event => {
@@ -18,6 +20,6 @@ const AvatarImage = ({ className = '', url, onError }: Props) => (
         }}
         src={url}
     />
-);
+));
 
 export default AvatarImage;

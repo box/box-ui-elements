@@ -14,11 +14,13 @@ type Props = {
 
 type State = {
     avatarUrl?: ?string,
+    isPending: boolean,
 };
 
 class Avatar extends React.PureComponent<Props, State> {
     state = {
         avatarUrl: null,
+        isPending: true,
     };
 
     /**
@@ -29,6 +31,7 @@ class Avatar extends React.PureComponent<Props, State> {
     getAvatarUrlHandler = (avatarUrl: ?string) => {
         this.setState({
             avatarUrl,
+            isPending: false,
         });
     };
 
@@ -50,10 +53,12 @@ class Avatar extends React.PureComponent<Props, State> {
 
     render() {
         const { user, className }: Props = this.props;
-        const { avatarUrl }: State = this.state;
+        const { avatarUrl, isPending }: State = this.state;
         const { id, name } = user;
 
-        return <AvatarComponent avatarUrl={avatarUrl} className={className} id={id} name={name} />;
+        return (
+            <AvatarComponent isPending={isPending} avatarUrl={avatarUrl} className={className} id={id} name={name} />
+        );
     }
 }
 
