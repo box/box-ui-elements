@@ -45,6 +45,18 @@ const icons = [
         component: require('./FolderEmptyState').default,
     },
     {
+        name: 'LocationErrorState',
+        content: () => {
+            const LocationErrorState = require('./LocationErrorState').default;
+            return (
+                <div>
+                    <LocationErrorState/>
+                    <LocationErrorState color="black"/>
+                </div>
+            )
+        },
+    },
+    {
         name: 'MetadataEmptyState',
         component: require('./MetadataEmptyState').default,
     },
