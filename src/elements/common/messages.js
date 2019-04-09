@@ -928,6 +928,26 @@ const messages = defineMessages({
         defaultMessage: 'Awaiting Assignees',
         description: 'Label for an incomplete task',
     },
+    tasksFeedHeadlineApprovalCurrentUser: {
+        id: 'be.tasks.feed.headline.approval.currentUser',
+        defaultMessage: '{ user } assigned you an Approval Task',
+        description: 'Comment headline for an approval task assigned to the current user',
+    },
+    tasksFeedHeadlineApproval: {
+        id: 'be.tasks.feed.headline.approval',
+        defaultMessage: '{ user } assigned an Approval Task',
+        description: 'Comment headline for an approval task',
+    },
+    tasksFeedHeadlineGeneralCurrentUser: {
+        id: 'be.tasks.feed.headline.general.currentUser',
+        defaultMessage: '{ user } assigned you a Task',
+        description: 'Comment headline for a general task assigned to the current user',
+    },
+    tasksFeedHeadlineGeneral: {
+        id: 'be.tasks.feed.headline.general',
+        defaultMessage: '{ user } assigned a Task',
+        description: 'Comment headline for a general task',
+    },
     versionDeleted: {
         id: 'be.versionDeleted',
         defaultMessage: '{ name } deleted version { version_number }',

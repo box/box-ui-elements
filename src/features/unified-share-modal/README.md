@@ -217,6 +217,12 @@ class USMExample extends React.Component {
                     showCalloutForUser={true}
                     showUpgradeOptions
                     submitting={ this.state.submitting }
+                    suggestedCollaborators={{
+                        '2': { id: 2, userScore: '.1' },
+                        '5': { id: 5, userScore: '0.2' },
+                        '1': { id: 1, userScore: '0.5' },
+                        '3': { id: 3, userScore: '2' }
+                    }}
                     trackingProps={ {
                         inviteCollabsEmailTracking: {},
                         sharedLinkEmailTracking: {},

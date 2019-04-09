@@ -1,13 +1,10 @@
 .be {
-    &.bcow {
-        width: 100px;
+    &.bce,
+    &.bcp {
+        height: 600px;
     }
 
-    &.bce,
-    &.bcp,
     &.bcpr {
-        height: 600px;
-
         .bcs {
             box-shadow: initial;
         }
@@ -17,8 +14,11 @@
         height: 400px;
     }
 
+    &.bcow {
+        width: 100px;
+    }
+
     &.bce,
-    &.bcow,
     &.bcp,
     &.bcpr,
     &.bcs,
@@ -34,5 +34,11 @@
 
     .bcs {
         height: 1000px;
+    }
+}
+
+[data-preview='ContentPreview'] {
+    .bcpr {
+        height: 600px;
     }
 }

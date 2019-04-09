@@ -32,6 +32,7 @@ import type {
     tooltipComponentIdentifierType,
     trackingPropsType,
     sharedLinkType,
+    suggestedCollaboratorsType,
 } from './flowTypes';
 
 import './UnifiedShareModal.scss';
@@ -112,7 +113,7 @@ type Props = {
     /** Whether or not a request is in progress */
     submitting: boolean,
     /** Data for suggested collaborators shown at bottom of input box. UI doesn't render when this has length of 0. */
-    suggestedCollaborators?: Array<Object>,
+    suggestedCollaborators?: suggestedCollaboratorsType,
     /** Mapping of components to the content that should be rendered in their tooltips */
     tooltips?: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
     /** Object with props and handlers for tracking interactions in unified share modal */

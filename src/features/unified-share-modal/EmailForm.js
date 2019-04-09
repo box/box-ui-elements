@@ -20,7 +20,7 @@ import type { inlineNoticeType } from '../../common/box-types';
 
 import ContactsField from './ContactsField';
 import messages from './messages';
-import type { contactType as Contact } from './flowTypes';
+import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
 
 type Props = {
     cancelButtonProps?: Object,
@@ -47,7 +47,7 @@ type Props = {
     sendButtonProps?: Object,
     showEnterEmailsCallout: boolean,
     submitting: boolean,
-    suggestedCollaborators?: Array<Object>,
+    suggestedCollaborators?: suggestedCollaboratorsType,
     updateSelectedContacts: Function,
 };
 
@@ -178,16 +178,6 @@ class EmailForm extends React.Component<Props, State> {
         });
     };
 
-    handleSuggestedCollaboratorAdd = (contact: Contact) => {
-        const { openInviteCollaboratorsSection } = this.props;
-
-        this.handleContactAdd([contact]);
-
-        if (openInviteCollaboratorsSection) {
-            openInviteCollaboratorsSection();
-        }
-    };
-
     filterSentEmails = (sentEmails: Array<string>) => {
         this.props.updateSelectedContacts(
             this.props.selectedContacts.filter(({ value }) => !sentEmails.includes(value)),
@@ -251,7 +241,6 @@ class EmailForm extends React.Component<Props, State> {
                         onContactAdd={this.handleContactAdd}
                         onContactRemove={this.handleContactRemove}
                         onInput={this.handleContactInput}
-                        onSuggestedCollaboratorAdd={this.handleSuggestedCollaboratorAdd}
                         selectedContacts={selectedContacts}
                         suggestedCollaborators={suggestedCollaborators}
                         validateForError={this.validateContactField}
