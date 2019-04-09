@@ -5,7 +5,7 @@ import LocationErrorState from '../LocationErrorState';
 describe('icons/states/LocationErrorState', () => {
     test('should correctly render default icon', () => {
         const wrapper = shallow(<LocationErrorState />);
-        expect(wrapper.hasClass('LocationErrorState')).toBeTruthy();
+        expect(wrapper.hasClass('bdl-LocationErrorState')).toBeTruthy();
     });
 
     test('should correctly render the icon with specified class', () => {

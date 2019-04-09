@@ -2,7 +2,7 @@
 
 exports[`icons/states/LocationErrorState should override color in svg when specified 1`] = `
 <AccessibleSVG
-  className="LocationErrorState "
+  className="bdl-LocationErrorState "
   height={111}
   viewBox="0 0 140 111"
   width={130}

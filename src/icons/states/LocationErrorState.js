@@ -23,7 +23,7 @@ const LocationErrorState = ({
     width = 130,
 }: Props) => (
     <AccessibleSVG
-        className={`LocationErrorState ${className}`}
+        className={`bdl-LocationErrorState ${className}`}
         height={height}
         title={title}
         viewBox="0 0 140 111"
