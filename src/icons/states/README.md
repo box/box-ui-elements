@@ -51,7 +51,7 @@ const icons = [
             return (
                 <div>
                     <LocationErrorState/>
-                    <LocationErrorState color="black"/>
+                    <LocationErrorState color="#222" />
                 </div>
             )
         },
@@ -71,7 +71,7 @@ const icons = [
             return (
                 <div>
                     <NoNotificationState/>
-                    <NoNotificationState color="black"/>
+                    <NoNotificationState color="#222" />
                 </div>
             )
         },
@@ -87,7 +87,7 @@ const icons = [
             return (
                 <div>
                     <NotificationErrorState/>
-                    <NotificationErrorState color="black"/>
+                    <NotificationErrorState color="#222" />
                 </div>
             )
         },

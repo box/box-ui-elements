@@ -17,7 +17,7 @@ exports[`icons/states/LocationErrorState should override color in svg when speci
       fill="#bdf"
     />
     <path
-      className="fill-color"
+      className="stroke-color"
       d="M66.5 109.884c17.95 0 32.5-14.613 32.5-32.64 0-18.026-14.55-32.639-32.5-32.639S34 59.218 34 77.245c0 18.026 14.55 32.64 32.5 32.64z"
       fill="#fff"
       stroke="#bdf"
@@ -38,7 +38,7 @@ exports[`icons/states/LocationErrorState should override color in svg when speci
       strokeWidth="2"
     />
     <ellipse
-      className="fill-color stroke-color"
+      className="stroke-color"
       cx="50.5"
       cy="60.674"
       fill="#fff"
@@ -49,7 +49,7 @@ exports[`icons/states/LocationErrorState should override color in svg when speci
       transform="rotate(37 50.5 60.674)"
     />
     <ellipse
-      className="fill-color stroke-color"
+      className="stroke-color"
       cx="42.805"
       cy="82.968"
       fill="#fff"
@@ -60,7 +60,7 @@ exports[`icons/states/LocationErrorState should override color in svg when speci
       transform="scale(1 -1) rotate(11 904.463 0)"
     />
     <rect
-      className="fill-color stroke-color"
+      className="stroke-color"
       fill="#fff"
       height="30"
       rx="1.5"
@@ -71,21 +71,21 @@ exports[`icons/states/LocationErrorState should override color in svg when speci
       y="20"
     />
     <path
-      className="fill-color stroke-color"
+      className="stroke-color"
       d="M77.5 26.517c0-.826.664-1.496 1.504-1.496h11.555c.83 0 1.176.587.775 1.302l-2.632 4.698 2.632 4.699c.403.719.065 1.301-.775 1.301H79.004c-.83 0-1.504-.68-1.504-1.495v-9.009z"
       fill="#fff"
       stroke="#bdf"
       strokeWidth="2"
     />
     <path
-      className="fill-color stroke-color"
+      className="stroke-color"
       d="M77.5 23.004c0-.827.668-1.498 1.505-1.498h4.99a1.5 1.5 0 0 1 1.505 1.502v9.048c0 .83-.601 1.804-1.339 2.174l-5.322 2.673c-.74.371-1.339.002-1.339-.825V23.004z"
       fill="#fff"
       stroke="#bdf"
       strokeWidth="2"
     />
     <rect
-      className="fill-color stroke-color"
+      className="stroke-color"
       fill="#fff"
       height="12"
       rx="1.5"
