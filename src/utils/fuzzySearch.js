@@ -1,7 +1,16 @@
 /**
  * @flow
- * @file Basic fuzzy search algorithm. Matches all characters in search string to content in the order they appear.
+ * @file Fuzzy search utility
  * @author Box
+ *
+
+/**
+ * Fuzzy search helper to match a term against a piece of content.
+ * Matches all characters in search string to content in the order they appear.
+ * Requires all characters to be matched in order to return true.
+ * Internal scoring rewards sequences of characters found in the content very highly.
+ * Also has a minimum scoring check the uses the passed maxGaps to approximate how many breaks in the
+ * search string are allowed to be present in the content while still considering it to be a match.
  *
  * @param {string} search User input search string
  * @param {string} content Content to search over for matches
@@ -10,13 +19,14 @@
  * @returns {boolean} If a match is found
  */
 const fuzzySearch = (search: string, content: string, minCharacters: number = 3, maxGaps: number = 2) => {
-    content = content.toLowerCase().replace(/\s/g, '');
-    search = search.toLowerCase().replace(/\s/g, '');
-    const contentLength = content.length;
-    const searchLength = search.length;
+    const uniformContent = content.toLowerCase().replace(/\s/g, '');
+    const uniformSearch = search.toLowerCase().replace(/\s/g, '');
+    const contentLength = uniformContent.length;
+    const searchLength = uniformSearch.length;
     if (searchLength < minCharacters || searchLength > contentLength) {
         return false;
     }
+    let matched = false;
     let totalScore = 0;
     for (let i = 0; i < contentLength; i += 1) {
         if (contentLength - i < searchLength) {
@@ -26,8 +36,9 @@ const fuzzySearch = (search: string, content: string, minCharacters: number = 3,
         let currentScore = 0;
         let subScore = 0;
         for (let j = i; j < contentLength; j += 1) {
-            if (content[j] === search[searchIndex]) {
+            if (uniformContent[j] === uniformSearch[searchIndex]) {
                 searchIndex += 1;
+                // For streaks of matched characters score should increase exponentially
                 currentScore += 1 + currentScore;
             } else {
                 currentScore = 0;
@@ -47,9 +58,9 @@ const fuzzySearch = (search: string, content: string, minCharacters: number = 3,
         // since the algorithm rewards streak of characters breaking them up evenly is the worst case
         // minimum score should also be better than just each character individually
         const minScore = Math.max(maxGroups * 2 ** Math.floor(searchLength / maxGroups - 1), searchLength + 1);
-        return totalScore >= minScore;
+        matched = totalScore >= minScore;
     }
-    return false;
+    return matched;
 };
 
 export default fuzzySearch;

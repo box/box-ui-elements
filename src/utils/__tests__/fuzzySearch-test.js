@@ -71,18 +71,4 @@ describe('util/fuzzySearch', () => {
     test('should return false when search is empty', () => {
         expect(fuzzySearch('', 'foo bar')).toBe(false);
     });
-
-    test('should run in a reasonable amount of time', () => {
-        const testSet = [];
-        for (let i = 0; i < 1000; i += 1) {
-            testSet.push('alskdgjd;fjgenrtgushdfg;sadfjgsdfadslkfhagbsdfgsdfgsdfgsdfgsdgasdfa');
-        }
-        const startTime = new Date();
-        const result = testSet.every(content => {
-            return fuzzySearch('adslkfhagbsdfgsdfgsdfgsdfgsdgasdfa', content);
-        });
-        const endTime = new Date();
-        expect(endTime - startTime).toBeLessThan(250);
-        expect(result).toBe(true);
-    });
 });
