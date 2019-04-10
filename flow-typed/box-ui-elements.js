@@ -966,4 +966,9 @@ type NavigateOptions = {
     isToggle?: boolean,
 };
 
-type OnVersionChange = (version: ?BoxItemVersion, additionalVersionInfo: ?Object) => void;
+type AdditionalVersionInfo = {
+    isCurrentVersion: boolean,
+    updateVersionToCurrent: () => void,
+};
+
+type OnVersionChange = (version: ?BoxItemVersion, additionalVersionInfo: ?AdditionalVersionInfo) => void;
