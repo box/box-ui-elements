@@ -119,7 +119,6 @@ class Task extends React.Component<Props> {
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={taskPermissions}
-                    messageHeader={<TaskDueDate dueDate={due_at} status={status} />}
                     tagged_message={name}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
@@ -137,6 +136,7 @@ class Task extends React.Component<Props> {
                     }}
                 />
                 <div className="bcs-task-assignment-container">
+                    {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
                     <div className="bcs-task-assignments">
                         {assigned_to && assigned_to.entries
                             ? assigned_to.entries
