@@ -9,6 +9,9 @@ FormattedDate.displayName = 'FormattedDate';
 export const FormattedTime = () => <div />;
 FormattedTime.displayName = 'FormattedTime';
 
+export const FormattedRelative = () => <div />;
+FormattedRelative.displayName = 'FormattedRelative';
+
 export const FormattedMessage = () => <div />;
 FormattedMessage.displayName = 'FormattedMessage';
 

@@ -136,7 +136,7 @@ class Task extends React.Component<Props> {
                     }}
                 />
                 <div className="bcs-task-assignment-container">
-                    <TaskDueDate dueDate={due_at} status={status} />
+                    {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
                     <div className="bcs-task-assignments">
                         {assigned_to && assigned_to.entries
                             ? assigned_to.entries

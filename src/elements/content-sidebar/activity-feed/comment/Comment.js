@@ -25,7 +25,7 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
 
 import './Comment.scss';
-import { ONE_HOUR_MS, PLACEHOLDER_USER } from '../../../../constants';
+import { PLACEHOLDER_USER } from '../../../../constants';
 
 type Props = {
     created_at: string | number,
@@ -162,7 +162,7 @@ class Comment extends React.Component<Props, State> {
                                 }
                             >
                                 <small className="bcs-comment-created-at">
-                                    <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
+                                    <ReadableTime alwaysShowTime timestamp={createdAtTimestamp} />
                                 </small>
                             </Tooltip>
                         </div>

@@ -14,11 +14,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
       id="be.tasks.taskDueDate"
       values={
         Object {
-          "date": <FormattedTime
-            day="numeric"
-            month="short"
-            value={2001-04-19T04:25:21.000Z}
-            year="numeric"
+          "date": <ReadableTime
+            alwaysShowTime={true}
+            timestamp={987654321000}
           />,
         }
       }
