@@ -51,7 +51,10 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             wrapper.setProps({ versionId: '12345' });
 
-            expect(onVersionChange).toHaveBeenCalledWith(version, { isCurrentVersion: false });
+            expect(onVersionChange).toHaveBeenCalledWith(version, {
+                isCurrentVersion: false,
+                updateVersionToCurrent: expect.any(Function),
+            });
         });
     });
 
