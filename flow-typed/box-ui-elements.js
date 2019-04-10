@@ -644,9 +644,9 @@ type FolderMini = {
     type: 'folder',
 };
 
-type TaskStatus = 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'IN_PROGRESS' | 'NOT_STARTED';
-
 type TaskCollabStatus = 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'NOT_STARTED';
+type TaskStatus = TaskCollabStatus | 'IN_PROGRESS';
+
 
 type TaskMini = {|
     created_at: ISODate,
