@@ -57,18 +57,15 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('componentDidUpdate()', () => {
-        test.each`
-            isMenuOpen | expected      | should
-            ${true}    | ${conditions} | ${'should reinitialize conditions from props.conditions when flyout is opened'}
-        `('$should', ({ isMenuOpen, expected }) => {
+        test('should reinitialize conditions from props.conditions when flyout is opened', () => {
             const wrapper = getWrapper({
                 conditions,
             });
             wrapper.setState({
-                isMenuOpen,
+                isMenuOpen: true,
             });
             wrapper.instance().componentDidUpdate({}, { isMenuOpen: false });
-            expect(wrapper.state('transientConditions')).toEqual(expected);
+            expect(wrapper.state('transientConditions')).toEqual(conditions);
         });
     });
 
