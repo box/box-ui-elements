@@ -1,74 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if none is provided 1`] = `
-<VersionsItemButton
-  className="bcs-VersionsItem"
-  isDisabled={false}
-  onActivate={[Function]}
+exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if null is provided for modified_by 1`] = `
+<div
+  className="bcs-VersionsItem-log"
+  data-testid="bcs-VersionsItem-log"
 >
-  <div
-    className="bcs-VersionsItem-badge"
-  >
-    <VersionsItemBadge
-      isDisabled={false}
-      versionNumber={1}
-    />
-  </div>
-  <div
-    className="bcs-VersionsItem-details"
-  >
-    <div
-      className="bcs-VersionsItem-log"
-    >
-      <FormattedMessage
-        defaultMessage="Uploaded by {name}"
-        id="be.sidebarVersions.uploadedBy"
-        values={
-          Object {
-            "name": <FormattedMessage
-              defaultMessage="Unknown"
-              id="be.sidebarVersions.versionUserUnknown"
-            />,
-          }
-        }
-      />
-    </div>
-    <div
-      className="bcs-VersionsItem-info"
-    >
-      <time
-        className="bcs-VersionsItem-date"
-        dateTime={2019-03-01T08:00:00.000Z}
-      >
-        <ReadableTime
-          alwaysShowTime={true}
-          relativeThreshold={300000}
-          timestamp={1551427200000}
-        />
-      </time>
-      <span
-        className="bcs-VersionsItem-size"
-        title="10 KB"
-      >
-        10 KB
-      </span>
-    </div>
-  </div>
-  <VersionsItemActions
-    isDeleted={false}
-    onDelete={[Function]}
-    onDownload={[Function]}
-    onPreview={[Function]}
-    onPromote={[Function]}
-    onRestore={[Function]}
-    permissions={
+  <FormattedMessage
+    defaultMessage="Uploaded by {name}"
+    id="be.sidebarVersions.uploadedBy"
+    values={
       Object {
-        "can_delete": true,
-        "can_preview": true,
+        "name": <FormattedMessage
+          defaultMessage="Unknown"
+          id="be.sidebarVersions.versionUserUnknown"
+        />,
       }
     }
   />
-</VersionsItemButton>
+</div>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if undefined is provided for modified_by 1`] = `
+<div
+  className="bcs-VersionsItem-log"
+  data-testid="bcs-VersionsItem-log"
+>
+  <FormattedMessage
+    defaultMessage="Uploaded by {name}"
+    id="be.sidebarVersions.uploadedBy"
+    values={
+      Object {
+        "name": <FormattedMessage
+          defaultMessage="Unknown"
+          id="be.sidebarVersions.versionUserUnknown"
+        />,
+      }
+    }
+  />
+</div>
 `;
 
 exports[`elements/content-sidebar/versions/VersionsItem render should render a deleted version correctly 1`] = `
@@ -90,6 +59,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
   >
     <div
       className="bcs-VersionsItem-log"
+      data-testid="bcs-VersionsItem-log"
     >
       <FormattedMessage
         defaultMessage="Deleted by {name}"
@@ -158,6 +128,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
   >
     <div
       className="bcs-VersionsItem-log"
+      data-testid="bcs-VersionsItem-log"
     >
       <FormattedMessage
         defaultMessage="Uploaded by {name}"

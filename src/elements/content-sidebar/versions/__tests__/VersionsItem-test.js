@@ -57,11 +57,16 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             expect(button.prop('isSelected')).toBe(true);
         });
 
-        test('should default to an unknown user if none is provided', () => {
+        test.each`
+            modified_by
+            ${null}
+            ${undefined}
+        `('should default to an unknown user if $modified_by is provided for modified_by', ({ modified_by }) => {
             const wrapper = getWrapper({
-                version: getVersion({ modified_by: undefined }),
+                version: getVersion({ modified_by }),
             });
-            expect(wrapper).toMatchSnapshot();
+            const wrapperInfo = wrapper.find('[data-testid="bcs-VersionsItem-log"]');
+            expect(wrapperInfo).toMatchSnapshot();
         });
     });
 });
