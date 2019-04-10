@@ -89,7 +89,7 @@ const VersionsItem = ({
                         <FormattedMessage {...messages.versionCurrent} />
                     </div>
                 )}
-                <div className="bcs-VersionsItem-log">
+                <div className="bcs-VersionsItem-log" data-testid="bcs-VersionsItem-log">
                     <FormattedMessage {...getActionMessage(action)} values={{ name: versionUserName }} />
                 </div>
                 <div className="bcs-VersionsItem-info">
