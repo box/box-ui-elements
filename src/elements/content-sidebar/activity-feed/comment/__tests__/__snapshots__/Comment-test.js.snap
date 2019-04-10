@@ -53,7 +53,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
             className="bcs-comment-created-at"
           >
             <ReadableTime
-              relativeThreshold={3600000}
+              alwaysShowTime={true}
               timestamp={1506534041000}
             />
           </small>
@@ -123,7 +123,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
             className="bcs-comment-created-at"
           >
             <ReadableTime
-              relativeThreshold={3600000}
+              alwaysShowTime={true}
               timestamp={1506534041000}
             />
           </small>
@@ -194,7 +194,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
             className="bcs-comment-created-at"
           >
             <ReadableTime
-              relativeThreshold={3600000}
+              alwaysShowTime={true}
               timestamp={1506534041000}
             />
           </small>
@@ -268,7 +268,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
             className="bcs-comment-created-at"
           >
             <ReadableTime
-              relativeThreshold={3600000}
+              alwaysShowTime={true}
               timestamp={1506534041000}
             />
           </small>

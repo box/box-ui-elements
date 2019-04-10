@@ -858,6 +858,11 @@ const messages = defineMessages({
         defaultMessage: 'Decline',
         description: 'Reject option for a task',
     },
+    taskDueDateLabel: {
+        id: 'be.tasks.taskDueDate',
+        defaultMessage: 'Due: {date}',
+        description: 'Label and date for task due date',
+    },
     tasksAddTask: {
         id: 'be.tasks.addTask',
         defaultMessage: 'Add Task',
