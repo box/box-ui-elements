@@ -350,6 +350,7 @@ export const TASK_REJECTED: 'rejected' = 'rejected';
 export const TASK_NEW_APPROVED: 'APPROVED' = 'APPROVED';
 export const TASK_NEW_COMPLETED: 'COMPLETED' = 'COMPLETED';
 export const TASK_NEW_INCOMPLETE: 'NOT_STARTED' = 'NOT_STARTED';
+export const TASK_NEW_IN_PROGRESS: 'IN_PROGRESS' = 'IN_PROGRESS';
 export const TASK_NEW_REJECTED: 'REJECTED' = 'REJECTED';
 
 /* ------------------ New Task types ----------------- */

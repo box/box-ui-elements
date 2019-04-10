@@ -644,13 +644,9 @@ type FolderMini = {
     type: 'folder',
 };
 
-type TaskStatus =
-    | typeof TASK_NEW_INCOMPLETE
-    | typeof TASK_NEW_COMPLETED
-    | typeof TASK_NEW_APPROVED
-    | typeof TASK_NEW_REJECTED;
+type TaskStatus = 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'IN_PROGRESS' | 'NOT_STARTED';
 
-type TaskCollabStatus = typeof TASK_NEW_INCOMPLETE | typeof TASK_NEW_COMPLETED;
+type TaskCollabStatus = 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'NOT_STARTED';
 
 type TaskMini = {|
     created_at: ISODate,
@@ -699,13 +695,17 @@ type MarkerPaginatedCollection<T> = {
     next_marker: ?string,
 };
 
+type TaskAssigneeCollection = MarkerPaginatedCollection<TaskCollabAssignee>;
+
+type TaskLinkCollection = MarkerPaginatedCollection<TaskLink>;
+
 // See https://github.com/facebook/flow/issues/7574
 // This is currently *not* enforcing the constant types
 // type TaskType = typeof TASK_TYPE_GENERAL | typeof TASK_TYPE_APPROVAL;
 type TaskType = 'GENERAL' | 'APPROVAL';
 
 type TaskNew = {|
-    assigned_to: MarkerPaginatedCollection<TaskCollabAssignee>,
+    assigned_to: TaskAssigneeCollection,
     completed_at?: ?ISODate,
     completion_rule?: 'ANY_ASSIGNEE' | 'ALL_ASSIGNEES',
     created_at: ISODate,
@@ -723,7 +723,7 @@ type TaskNew = {|
     |},
     progress_at?: ?ISODate,
     status: TaskStatus,
-    task_links: MarkerPaginatedCollection<TaskLink>,
+    task_links: TaskLinkCollection,
     task_type: TaskType,
     type: 'task',
 |};

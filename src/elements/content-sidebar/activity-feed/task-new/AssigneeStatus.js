@@ -10,11 +10,11 @@ import messages from '../../../common/messages';
 
 type Props = {
     getAvatarUrl?: string => Promise<?string>,
-    status: TaskStatus,
+    status: TaskCollabStatus,
     user: UserMini,
 };
 
-const StatusIcon = ({ status, ...rest }: { status: TaskStatus }) => {
+const StatusIcon = ({ status, ...rest }: { status: TaskCollabStatus }) => {
     switch (status) {
         case TASK_NEW_APPROVED:
         case TASK_NEW_COMPLETED:
