@@ -28,12 +28,6 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         "id": "be.taskDeletePrompt",
       }
     }
-    messageHeader={
-      <TaskDueDate
-        dueDate={null}
-        status="NOT_STARTED"
-      />
-    }
     onDelete={[MockFunction]}
     onEdit={[MockFunction]}
     permissions={

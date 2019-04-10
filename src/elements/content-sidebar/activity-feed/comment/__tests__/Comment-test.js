@@ -420,29 +420,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.find('UserLink').length).toEqual(1);
     });
 
-    test('should render messageHeader if prop is passed in', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-        };
-        const messageHeader = <div className="custom-message-header">message header</div>;
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                messageHeader={messageHeader}
-            />,
-        );
-
-        expect(wrapper.find('.custom-message-header')).toHaveLength(1);
-    });
-
     test('should use userHeadlineRenderer if prop is passed in', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,

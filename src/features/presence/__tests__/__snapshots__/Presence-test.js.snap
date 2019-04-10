@@ -47,7 +47,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastPreviewed"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -97,7 +97,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastModified"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -147,7 +147,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastCommented"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -280,7 +280,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastPreviewed"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -330,7 +330,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastModified"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -380,7 +380,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastCommented"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -555,7 +555,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastPreviewed"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -605,7 +605,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastModified"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -655,7 +655,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastCommented"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -797,7 +797,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastPreviewed"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -847,7 +847,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastModified"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
@@ -897,7 +897,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastCommented"
                 values={
                   Object {
-                    "timeAgo": <UNDEFINED
+                    "timeAgo": <FormattedRelative
                       value={999}
                     />,
                   }
