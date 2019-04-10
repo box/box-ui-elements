@@ -12,6 +12,9 @@ module.exports = {
         '@semantic-release/github',
         {
             failComment: false,
+            failTitle: false,
+            labels: false,
+            releasedLabels: false,
             successComment: false,
         },
     ],
