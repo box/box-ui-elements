@@ -19,7 +19,7 @@ type Props = {
     fileId: string,
     history: RouterHistory,
     match: Match,
-    onVersionChange: (versionId?: string) => void,
+    onVersionChange: OnVersionChange,
     parentName: string,
     versionId?: string,
 };
@@ -54,7 +54,13 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         // Forward the current version id that is passed in via the wrapping route
         if (prevVersionId !== versionId) {
-            onVersionChange(versionId);
+            const { versions } = this.state;
+            const previewedVersion = versions.find(version => version.id === versionId);
+            const isCurrentVersion = previewedVersion === versions[0];
+            onVersionChange(previewedVersion, {
+                isCurrentVersion,
+                updateVersionToCurrent: this.updateVersionToCurrent,
+            });
         }
     }
 
@@ -97,9 +103,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         // Bump the user to the current version if they deleted their selected version
         if (versionId === selectedVersionId) {
-            const { versions } = this.state;
-            const { id: currentVersionId } = versions[0] || {};
-            this.updateVersion(currentVersionId);
+            this.updateVersionToCurrent();
         }
     };
 
@@ -188,14 +192,15 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         );
     };
 
-    updateVersion = (versionId?: string): void => {
+    updateVersion = (versionId?: ?string): void => {
         const { history, match } = this.props;
         return history.push(generatePath(match.path, { ...match.params, versionId }));
     };
 
-    updateVersion = (versionId?: string): void => {
-        const { history, match } = this.props;
-        return history.push(generatePath(match.path, { ...match.params, versionId }));
+    updateVersionToCurrent = (): void => {
+        const { versions } = this.state;
+        const versionId = versions[0] ? versions[0].id : null;
+        this.updateVersion(versionId);
     };
 
     render() {

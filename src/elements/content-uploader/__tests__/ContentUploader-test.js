@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
-import { ContentUploaderComponent } from '../ContentUploader';
+import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import { STATUS_PENDING, VIEW_UPLOAD_SUCCESS } from '../../../constants';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
@@ -72,7 +72,6 @@ describe('elements/content-uploader/ContentUploader', () => {
     });
 
     describe('getUploadAPI()', () => {
-        const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
         let wrapper;
         let instance;
         let getPlainUploadAPI;
@@ -106,7 +105,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(getChunkedUploadAPI).toBeCalled();
         });
 
-        test('should use the regular upload api if the file <= 50MB', () => {
+        test('should use the regular upload api if the file <= CHUNKED_UPLOAD_MIN_SIZE_BYTES', () => {
             jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             instance.getUploadAPI({
                 ...file,
