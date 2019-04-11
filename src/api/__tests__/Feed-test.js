@@ -1,7 +1,7 @@
 import messages from '../../elements/common/messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
-import { IS_ERROR_DISPLAYED, TASK_NEW_INCOMPLETE } from '../../constants';
+import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED } from '../../constants';
 import Feed from '../Feed';
 
 const mockTaskNew = {
@@ -10,7 +10,7 @@ const mockTaskNew = {
         target: { name: 'Jay-Z', id: '100' },
         id: '000',
         role: 'CREATOR',
-        status: TASK_NEW_INCOMPLETE,
+        status: TASK_NEW_NOT_STARTED,
     },
     created_at: '2019-01-01',
     due_at: '2019-02-02',
@@ -22,7 +22,7 @@ const mockTaskNew = {
             {
                 id: '1',
                 target: { name: 'Beyonce', id: '2', avatar_url: '', type: 'user' },
-                status: 'NOT_STARTED',
+                status: TASK_NEW_NOT_STARTED,
                 permissions: {
                     can_delete: false,
                     can_update: false,
@@ -58,7 +58,7 @@ const mockTaskNew = {
         limit: 1,
         next_marker: null,
     },
-    status: TASK_NEW_INCOMPLETE,
+    status: TASK_NEW_NOT_STARTED,
 };
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');

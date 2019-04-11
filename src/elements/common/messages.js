@@ -868,6 +868,26 @@ const messages = defineMessages({
         defaultMessage: 'Add Task',
         description: 'label for button that opens task popup',
     },
+    taskAddTaskGeneral: {
+        id: 'be.tasks.addTask.general',
+        defaultMessage: 'Task',
+        description: 'label for menu item that opens general task popup',
+    },
+    taskAddTaskGeneralDescription: {
+        id: 'be.tasks.addTask.general.description',
+        defaultMessage: 'Add Task',
+        description: 'description for menu item that opens general task popup',
+    },
+    taskAddTaskApproval: {
+        id: 'be.tasks.addTask.approval',
+        defaultMessage: 'Approval',
+        description: 'label for menu item that opens approval task popup',
+    },
+    taskAddTaskApprovalDescription: {
+        id: 'be.tasks.addTask.approval.description',
+        defaultMessage: 'Request an approval to move work forward',
+        description: 'description for menu item that opens approval task popup',
+    },
     tasksAddTaskFormTitle: {
         id: 'be.tasks.addTaskForm.title',
         defaultMessage: 'Add Task',

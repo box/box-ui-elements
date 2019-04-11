@@ -15,6 +15,9 @@ FormattedRelative.displayName = 'FormattedRelative';
 export const FormattedMessage = () => <div />;
 FormattedMessage.displayName = 'FormattedMessage';
 
+export const FormattedNumber = () => <div />;
+FormattedNumber.displayName = 'FormattedNumber';
+
 export const IntlProvider = () => <div />;
 IntlProvider.displayName = 'IntlProvider';
 

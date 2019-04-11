@@ -18,7 +18,7 @@ export const STRING: 'string' = 'string';
 export const NUMBER: 'number' = 'number';
 export const FLOAT: 'float' = 'float';
 export const ENUM: 'enum' = 'enum';
-export const MULTI_ENUM: 'multi-enum' = 'multi-enum';
+export const MULTI_SELECT: 'multiSelect' = 'multiSelect';
 export const DATE: 'date' = 'date';
 
 export const EQUALS: '=' = '=';
@@ -44,5 +44,5 @@ export const COLUMN_OPERATORS = {
     float: ALL_OPERATORS,
     enum: ALL_OPERATORS,
     date: ALL_OPERATORS,
-    'multi-enum': ALL_OPERATORS,
+    multiSelect: ALL_OPERATORS,
 };
