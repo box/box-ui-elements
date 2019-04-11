@@ -26,6 +26,7 @@ import {
     IS_ERROR_DISPLAYED,
     TASK_INCOMPLETE,
     TASK_NEW_NOT_STARTED,
+    TASK_TYPE_APPROVAL,
     TYPED_ID_FEED_PREFIX,
 } from '../constants';
 
@@ -679,7 +680,7 @@ class Feed extends Base {
         currentUser: User,
         message: string,
         assignees: SelectorItems,
-        taskType: TaskType,
+        taskType: ?TaskType,
         dueAt: ?string,
         successCallback: Function,
         errorCallback: ErrorCallback,
@@ -691,6 +692,7 @@ class Feed extends Base {
         this.id = file.id;
         this.errorCallback = errorCallback;
         const uuid = uniqueId('task_');
+        const pendingTaskType = taskType || TASK_TYPE_APPROVAL;
         let dueAtString;
         if (dueAt) {
             const dueAtDate: Date = new Date(dueAt);
@@ -750,7 +752,7 @@ class Feed extends Base {
                 limit: 1,
                 next_marker: null,
             },
-            task_type: taskType,
+            task_type: pendingTaskType,
             status: TASK_NEW_NOT_STARTED,
         };
 
