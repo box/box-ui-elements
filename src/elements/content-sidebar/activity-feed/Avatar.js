@@ -8,7 +8,7 @@ import AvatarComponent from '../../../components/avatar';
 
 type Props = {
     className?: string,
-    getAvatarUrl?: string => Promise<?string>,
+    getAvatarUrl?: GetAvatarUrlCallback,
     user: User,
 };
 

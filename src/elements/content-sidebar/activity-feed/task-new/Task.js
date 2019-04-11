@@ -8,7 +8,7 @@ import messages from '../../../common/messages';
 import {
     TASK_NEW_APPROVED,
     TASK_NEW_REJECTED,
-    TASK_NEW_INCOMPLETE,
+    TASK_NEW_NOT_STARTED,
     TASK_NEW_IN_PROGRESS,
     TASK_NEW_COMPLETED,
     TASK_TYPE_APPROVAL,
@@ -20,15 +20,15 @@ import TaskDueDate from './TaskDueDate';
 import Status from './TaskStatus';
 import './Task.scss';
 
-type getAvatarUrlCb = string => Promise<?string>;
+const MAX_AVATARS = 3;
 
 type Props = {|
     ...TaskNew,
     currentUser: User,
     error?: ActionItemError,
-    getAvatarUrl: getAvatarUrlCb,
+    getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
-    getUserProfileUrl?: string => Promise<string>,
+    getUserProfileUrl?: GetProfileUrlCallback,
     isDisabled?: boolean,
     isPending?: boolean,
     mentionSelectorContacts?: SelectorItems,
@@ -39,11 +39,9 @@ type Props = {|
     translations?: Translations,
 |};
 
-const MAX_AVATARS = 3;
-
 type AssigneeProps = {|
     assignees: TaskAssigneeCollection,
-    getAvatarUrl: getAvatarUrlCb,
+    getAvatarUrl: GetAvatarUrlCallback,
     maxAvatars?: number,
 |};
 
@@ -128,8 +126,8 @@ const Task = ({
         currentUserAssignment &&
         currentUserAssignment.permissions &&
         currentUserAssignment.permissions.can_update &&
-        currentUserAssignment.status === TASK_NEW_INCOMPLETE &&
-        (status === TASK_NEW_INCOMPLETE || status === TASK_NEW_IN_PROGRESS);
+        currentUserAssignment.status === TASK_NEW_NOT_STARTED &&
+        (status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
 
     return (
         <div

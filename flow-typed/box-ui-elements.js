@@ -75,12 +75,6 @@ import {
     TASK_APPROVED,
     TASK_COMPLETED,
     TASK_INCOMPLETE,
-    TASK_TYPE_GENERAL,
-    TASK_TYPE_APPROVAL,
-    TASK_NEW_APPROVED,
-    TASK_NEW_COMPLETED,
-    TASK_NEW_INCOMPLETE,
-    TASK_NEW_REJECTED,
     TASK_REJECTED,
     METRIC_TYPE_PREVIEW,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
@@ -645,8 +639,8 @@ type FolderMini = {
 };
 
 type TaskCollabStatus = 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'NOT_STARTED';
-type TaskStatus = TaskCollabStatus | 'IN_PROGRESS';
 
+type TaskStatus = TaskCollabStatus | 'IN_PROGRESS';
 
 type TaskMini = {|
     created_at: ISODate,
@@ -943,6 +937,10 @@ type LoggerProps = {
     onPreviewMetric: (data: Object) => void,
     onReadyMetric: (data: ElementsLoadMetricData) => void,
 };
+
+type GetAvatarUrlCallback = string => Promise<?string>;
+
+type GetProfileUrlCallback = string => Promise<string>;
 
 type WithLoggerProps = {
     logger: LoggerProps,

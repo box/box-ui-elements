@@ -57,8 +57,8 @@ $card-left-offset: 40px;
         position: relative;
         width: 32px;
 
-        + .bcs-task-assignment-status,
-        + .bcs-task-assignment-count {
+        & + .bcs-task-assignment-status,
+        & + .bcs-task-assignment-count {
             margin-left: $assignment-avatar-spacing;
         }
     }
@@ -100,7 +100,6 @@ $card-left-offset: 40px;
         }
 
         &.pending,
-        &.incomplete,
         &.inProgress,
         &.notStarted {
             align-items: center;

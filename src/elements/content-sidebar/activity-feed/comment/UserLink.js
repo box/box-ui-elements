@@ -8,7 +8,7 @@ import * as React from 'react';
 import { Link } from '../../../../components/link';
 
 type Props = {
-    getUserProfileUrl?: string => Promise<string>,
+    getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
     mentionTrigger?: any,
     name: string,

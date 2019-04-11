@@ -26,7 +26,7 @@ type TaskFormProps = {|
     className?: string,
     createTask: (text: string, approvers: SelectorItems, dueDate: ?Date) => any,
     getApproverWithQuery?: Function,
-    getAvatarUrl: string => Promise<?string>,
+    getAvatarUrl: GetAvatarUrlCallback,
     isDisabled?: boolean,
     onCancel: () => any,
     onSubmit: () => any,
