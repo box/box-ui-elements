@@ -1,7 +1,12 @@
 // @flow
 import * as React from 'react';
 
-import { columnForTemplateFieldName, columnForDateType, conditions, initialCondition } from '../components/fixtures';
+import {
+    columnForTemplateFieldName,
+    columnForDateType,
+    conditions as fixtureConditions,
+    initialCondition,
+} from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
 import { EQUALS, LESS_THAN } from '../constants';
 
@@ -9,7 +14,7 @@ const columns = [columnForTemplateFieldName, columnForDateType];
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
-        return shallow(<FilterButton conditions={conditions} {...props} />);
+        return shallow(<FilterButton conditions={fixtureConditions} {...props} />);
     };
 
     describe('render', () => {
@@ -28,8 +33,8 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             expect(Button.props().isDisabled).toBeFalsy();
         });
 
-        test('Should close the menu and empty out transientConditions when Apply button is clicked', () => {
-            const wrapper = getWrapper({ conditions: [] });
+        test('Should close the menu and clear out transientConditions when Apply button is clicked', () => {
+            const wrapper = getWrapper({ conditions: validConditions });
             wrapper.instance().setState({
                 transientConditions: validConditions,
                 isMenuOpen: true,
@@ -57,22 +62,25 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('componentDidUpdate()', () => {
-        test('should reinitialize conditions from props.conditions when flyout is opened', () => {
-            const wrapper = getWrapper({
-                conditions,
-            });
+        test.each`
+            conditions           | expectedConditions   | should
+            ${fixtureConditions} | ${fixtureConditions} | ${'should reinitialize conditions from props.conditions when flyout is opened and props.conditions is not empty'}
+            ${[]}                | ${[{}]}              | ${'should not reinitialize conditions from props.conditions when flyout is opened and props.conditions is empty'}
+        `('$should', ({ conditions, expectedConditions }) => {
+            const wrapper = getWrapper({ conditions });
             wrapper.setState({
                 isMenuOpen: true,
             });
             wrapper.instance().componentDidUpdate({}, { isMenuOpen: false });
-            expect(wrapper.state('transientConditions')).toEqual(conditions);
+
+            expect(wrapper.state('transientConditions')).toEqual(expectedConditions);
         });
     });
 
     describe('handleColumnChange()', () => {
         test('should update condition to the selected column', () => {
             const conditions2 = {
-                ...conditions,
+                ...fixtureConditions,
                 columnId: columnForTemplateFieldName.id,
             };
 

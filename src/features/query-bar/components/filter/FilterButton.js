@@ -54,9 +54,15 @@ class FilterButton extends React.Component<Props, State> {
         const { isMenuOpen: prevIsMenuOpen } = prevState;
         const wasFlyoutOpened = isMenuOpen && !prevIsMenuOpen;
         if (wasFlyoutOpened) {
-            this.setState({
-                transientConditions: cloneDeep(this.props.conditions),
-            });
+            if (this.props.conditions.length === 0) {
+                this.setState({
+                    transientConditions: [this.createCondition()],
+                });
+            } else {
+                this.setState({
+                    transientConditions: cloneDeep(this.props.conditions),
+                });
+            }
         }
     }
 
