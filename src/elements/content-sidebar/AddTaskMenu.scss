@@ -1,29 +1,29 @@
 @import '../common/variables';
 
-$bsc-AddTaskMenu-width: 256px;
+$bcs-AddTaskMenu-width: 256px;
 
-.bsc-AddTaskMenu {
+.bcs-AddTaskMenu {
     padding: 0;
 }
 
-.bsc-AddTaskMenu-menuItem {
+.bcs-AddTaskMenu-menuItem {
     display: flex;
-    max-width: $bsc-AddTaskMenu-width;
+    max-width: $bcs-AddTaskMenu-width;
     min-height: 80px;
     padding: 20px;
     white-space: normal;
 }
 
-.bsc-AddTaskMenu-avatar {
+.bcs-AddTaskMenu-avatar {
     margin-right: 4px;
 }
 
-.bsc-AddTaskMenu-title {
-    color: $threes;
+.bcs-AddTaskMenu-title {
+    color: $bdl-neutral-01;
     font-size: 13px;
 }
 
-.bsc-AddTaskMenu-description {
+.bcs-AddTaskMenu-description {
     color: $bdl-neutral-02;
     font-size: 12px;
 }

@@ -8,14 +8,13 @@ import MenuToggle from '../../components/dropdown-menu/MenuToggle';
 import { Menu, MenuItem } from '../../components/menu';
 import IconTaskApproval from '../../icons/two-toned/IconTaskApproval';
 import messages from '../common/messages';
+import { TASK_TYPE_APPROVAL } from '../../constants';
 
 import './AddTaskMenu.scss';
 
-const TASK_TYPE_APPROVAL = 'approval';
-
 type Props = {
     isDisabled: boolean,
-    onMenuItemClick: (taskType: string) => void,
+    onMenuItemClick: (taskType: TaskType) => void,
 };
 
 const AddTaskMenu = (props: Props) => (
@@ -25,16 +24,16 @@ const AddTaskMenu = (props: Props) => (
                 <FormattedMessage {...messages.tasksAddTask} />
             </MenuToggle>
         </Button>
-        <Menu className="bsc-AddTaskMenu">
-            <MenuItem className="bsc-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}>
-                <div className="bsc-AddTaskMenu-avatar">
+        <Menu className="bcs-AddTaskMenu">
+            <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}>
+                <div className="bcs-AddTaskMenu-avatar">
                     <IconTaskApproval />
                 </div>
                 <div>
-                    <div className="bsc-AddTaskMenu-title">
+                    <div className="bcs-AddTaskMenu-title">
                         <FormattedMessage {...messages.taskAddTaskApproval} />
                     </div>
-                    <div className="bsc-AddTaskMenu-description">
+                    <div className="bcs-AddTaskMenu-description">
                         <FormattedMessage {...messages.taskAddTaskApprovalDescription} />
                     </div>
                 </div>
