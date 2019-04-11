@@ -10,6 +10,11 @@ green=$"\n\e[1;32m(✔) "
 blue=$"\n\e[1;34m(ℹ) "
 end=$"\e[0m\n"
 
+# While running yarn, the registry changes to registry.yarnpkg.com which is a mirror to the public NPM registry
+YARN_PUBLIC_REGISTRY_REGEX="^https://registry\.yarnpkg\.com/$"
+NPM_PUBLIC_REGISTRY_REGEX="^https://registry\.npmjs\.org/$"
+NPM_PUBLIC_REGISTRY="https://registry.npmjs.org"
+
 check_release_scripts_changed() {
     if [[ $(git diff --shortstat HEAD..release/master conf  2> /dev/null | tail -n1) != "" ]] ; then
         printf "${red}Build scripts have changed, aborting! Run release command from master.${end}"
@@ -187,6 +192,20 @@ check_branch_dirty() {
     fi
 }
 
+check_npm_registry() {
+    if [[ ! $(npm config get registry) =~ (${YARN_PUBLIC_REGISTRY_REGEX}|${NPM_PUBLIC_REGISTRY_REGEX}) ]] ; then
+        printf "${red}Not pointing at the right npm registry!${end}"
+        return 1
+    fi
+}
+
+check_npm_login() {
+    if [[ ! $(npm whoami --registry ${NPM_PUBLIC_REGISTRY} 2>/dev/null) ]] ; then
+        printf "${red}Not logged into npm!${end}"
+        return 1
+    fi
+}
+
 push_new_release() {
     # Check branch being dirty
     check_branch_dirty || return 1
@@ -196,6 +215,12 @@ push_new_release() {
 
     # Check untracked files
     check_untracked_files || return 1
+
+    # Check npm registry is correct
+    check_npm_registry || return 1
+
+    # Check npm login
+    check_npm_login || return 1
 
     # Setup
     if ! setup; then
