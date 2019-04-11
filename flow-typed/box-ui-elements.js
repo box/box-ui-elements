@@ -725,7 +725,7 @@ type TaskNew = {|
 type TaskPayload = {
     due_at?: ?string,
     name: string,
-    task_type?: ?TaskType,
+    task_type: TaskType,
 };
 
 /* New Task Types END */
