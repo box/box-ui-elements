@@ -6,7 +6,12 @@ import FilterButton from '../components/filter/FilterButton';
 import type { ConditionType } from '../flowTypes';
 import { EQUALS, LESS_THAN } from '../constants';
 
-const validCondition: ConditionType = { columnId: '3', id: '0', operator: EQUALS, values: [1] };
+const validCondition: ConditionType = {
+    columnId: columnForTemplateFieldName.id,
+    id: '0',
+    operator: EQUALS,
+    values: [1],
+};
 const invalidCondition: ConditionType = {
     ...validCondition,
     values: [],
@@ -63,7 +68,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
 
     describe('componentDidUpdate()', () => {
         const initialCondition = {
-            columnId: '7',
+            columnId: columnForTemplateFieldName.id,
             id: '2',
             operator: '=',
             values: [],
@@ -252,7 +257,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             expect(condition.values).toEqual([]);
         });
 
-        test('Should return an empty object if columns is empty', () => {
+        test('Should throw an error if columns is empty', () => {
             const wrapper = getWrapper({ columns: [] });
 
             expect(() => {
