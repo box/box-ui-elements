@@ -27,7 +27,7 @@ import './ActivitySidebar.scss';
 
 type ExternalProps = {
     currentUser?: User,
-    getUserProfileUrl?: string => Promise<string>,
+    getUserProfileUrl?: GetProfileUrlCallback,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskAssignmentUpdate?: Function,
