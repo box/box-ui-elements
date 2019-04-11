@@ -183,6 +183,14 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         expect(completeBtns).toHaveLength(1);
     });
 
+    test('should show proper icons for task avatar based on task type', () => {
+        const approvalTask = mount(<Task {...task} task_type="APPROVAL" currentUser={currentUser} />);
+        expect(approvalTask.find('IconTaskApproval')).toHaveLength(1);
+
+        const generalTask = mount(<Task {...task} task_type="GENERAL" currentUser={currentUser} />);
+        expect(generalTask.find('IconTaskGeneral')).toHaveLength(1);
+    });
+
     test('should call onAssignmentUpdate with completed status when task action complete is clicked', () => {
         const onAssignmentUpdateSpy = jest.fn();
         const wrapper = mount(
