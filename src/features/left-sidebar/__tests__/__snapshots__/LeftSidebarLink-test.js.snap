@@ -5,6 +5,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render BadgeCountElement 1`
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -27,6 +28,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render BadgeElement 1`] = `
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -55,6 +57,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render RemoveButton 1`] = `
     className="nav-link-tooltip"
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="middle-right"
     text="Feed"
     theme="default"
@@ -82,6 +85,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render a LinkComponent comp
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -104,6 +108,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the IconComponent 1`
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -129,6 +134,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the router link 1`] 
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -165,6 +171,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use a custom className 1`] 
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -187,6 +194,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -213,6 +221,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -235,6 +244,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -261,6 +271,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   className="nav-link-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -283,6 +294,7 @@ exports[`feature/left-sidebar/LeftSidebarLink tooltip should take class from sta
   className="nav-link-tooltip is-visible"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="middle-right"
   text="Feed"
   theme="default"

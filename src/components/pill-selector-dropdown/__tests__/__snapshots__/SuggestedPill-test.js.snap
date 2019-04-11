@@ -4,6 +4,7 @@ exports[`components/pill-selector-dropdown/SuggestedPill render() should render 
 <Tooltip
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="bottom-center"
   text="foo@bar.com"
   theme="default"
