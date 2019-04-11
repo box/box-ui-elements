@@ -17,22 +17,22 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
     </MenuToggle>
   </Button>
   <Menu
-    className="bsc-AddTaskMenu"
+    className="bcs-AddTaskMenu"
     isHidden={false}
     isSubmenu={false}
   >
     <MenuItem
-      className="bsc-AddTaskMenu-menuItem"
+      className="bcs-AddTaskMenu-menuItem"
       onClick={[Function]}
     >
       <div
-        className="bsc-AddTaskMenu-avatar"
+        className="bcs-AddTaskMenu-avatar"
       >
         <IconTaskApproval />
       </div>
       <div>
         <div
-          className="bsc-AddTaskMenu-title"
+          className="bcs-AddTaskMenu-title"
         >
           <FormattedMessage
             defaultMessage="Approval"
@@ -40,7 +40,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
           />
         </div>
         <div
-          className="bsc-AddTaskMenu-description"
+          className="bcs-AddTaskMenu-description"
         >
           <FormattedMessage
             defaultMessage="Request an approval to move work forward"
