@@ -5,7 +5,7 @@ import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
 import UnknownUserAvatar from '../../icons/avatars/UnknownUserAvatar';
 import { getColor } from './helpers';
-import { eees as lightGray } from '../../styles/variables';
+import { bdlNeutral04 as lightGray } from '../../styles/variables';
 
 import './Avatar.scss';
 
