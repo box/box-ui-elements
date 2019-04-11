@@ -5,7 +5,7 @@ import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
 import UnknownUserAvatar from '../../icons/avatars/UnknownUserAvatar';
 import { getColor } from './helpers';
-import { eees } from '../../styles/variables';
+import { eees as lightGray } from '../../styles/variables';
 
 import './Avatar.scss';
 
@@ -66,7 +66,7 @@ class Avatar extends React.PureComponent<Props, State> {
         const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
         const hasNoAvatar = !avatarUrl && !isPending;
-        const loadingBackgroundColor = eees;
+        const loadingBackgroundColor = lightGray;
         const initialsBackgroundColor = `${getColor(id)}`;
         const backgroundColor = hasNoAvatar || hasImageErrored ? initialsBackgroundColor : loadingBackgroundColor;
 

@@ -1,20 +1,32 @@
 // @flow strict
+import {
+    bdlBlue01,
+    bdlBlue02,
+    bdlBlue03,
+    bdlNeutral02,
+    bdlYellorange,
+    bdlGreenLight,
+    bdlGrimace,
+    bdlPurpleRain,
+    bdlWatermelonRed,
+} from '../../styles/variables';
+
 const AVATAR_COLORS = [
-    '#18BBF7',
-    '#0D67C7',
-    '#052E5C',
-    '#747679',
-    '#FDA308',
-    '#98C332',
-    '#159F45',
-    '#B800B2',
-    '#F22C44',
+    bdlBlue01,
+    bdlBlue02,
+    bdlBlue03,
+    bdlNeutral02,
+    bdlYellorange,
+    bdlGreenLight,
+    bdlGrimace,
+    bdlPurpleRain,
+    bdlWatermelonRed,
 ];
 
 const getInitials = (name: string) => {
     const firstInitial = name.slice(0, 1);
     const lastInitial = name.slice(name.lastIndexOf(' ') + 1, name.lastIndexOf(' ') + 2);
-    return firstInitial + lastInitial;
+    return (firstInitial + lastInitial).toUpperCase();
 };
 
 const getColor = (id?: number | string) => {

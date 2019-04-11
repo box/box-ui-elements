@@ -9,66 +9,57 @@ describe('elements/content-sidebar/ActivityFeed/Avatar', () => {
         name: 'foo bar',
         type: 'user',
     };
-    const getAvatarUrl = jest.fn().mockReturnValue(Promise.resolve('foo'));
 
     const getWrapper = props => shallow(<Avatar {...props} />);
 
-    test('should render nothing if no avatarUrl in state and getAvatarUrl method was passed', () => {
-        expect(
-            getWrapper({ user, getAvatarUrl })
-                .dive()
-                .find('Avatar')
-                .exists(),
-        ).toBe(false);
+    test('should pass isPending prop to wrapped Avatar getAvatarUrl prop is passed', () => {
+        const getAvatarUrl = jest.fn().mockResolvedValue('avatar.jpg');
+        const wrapper = getWrapper({ user, getAvatarUrl });
+        const wrappedAvatar = wrapper.find('Avatar').first();
+        expect(wrappedAvatar.props()).toEqual(expect.objectContaining({ isPending: true }));
+        expect(wrapper).toMatchInlineSnapshot(`
+<Avatar
+  avatarUrl={null}
+  id="foo"
+  isPending={true}
+  name="foo bar"
+/>
+`);
+    });
+
+    test('should call getAvatarUrl prop with user id and pass result to child', async () => {
+        const getAvatarUrl = jest.fn().mockResolvedValue('avatar.jpg');
+        const wrapper = getWrapper({ user, getAvatarUrl });
         expect(getAvatarUrl).toBeCalledWith(user.id);
+        // wait a tick for async, use react-dom/test-utils/act in future versions
+        await new Promise(r => setImmediate(r));
+        const wrappedAvatar = wrapper.find('Avatar').first();
+        expect(wrappedAvatar.props()).toEqual(expect.objectContaining({ isPending: false, avatarUrl: 'avatar.jpg' }));
+        expect(wrapper).toMatchInlineSnapshot(`
+<Avatar
+  avatarUrl="avatar.jpg"
+  id="foo"
+  isPending={false}
+  name="foo bar"
+/>
+`);
     });
 
-    test('should render avatar with initials if getAvatarUrl is not passed in and no avatarUrl is in state', () => {
-        expect(
-            getWrapper({ user })
-                .find('AvatarInitials')
-                .exists(),
-        ).toBe(false);
-        expect(getAvatarUrl).not.toBeCalledWith(user.id);
-    });
-
-    test('should render the avatar with an avatarUrl', () => {
-        const wrapper = getWrapper({ user, getAvatarUrl });
-        wrapper.instance().getAvatarUrlHandler('foo');
-        wrapper.update();
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should set the avatarUrl state by calling getAvatarUrl function prop', () => {
-        const wrapper = getWrapper({ user, getAvatarUrl });
-        expect(wrapper.state('avatarUrl')).toBe(null);
-        wrapper
-            .instance()
-            .getAvatarUrl()
-            .then(() => {
-                expect(wrapper.state('avatarUrl')).toBe('foo');
-            });
-    });
-
-    test('should set the avatarUrl state from user prop', () => {
-        const completeUser = { ...user, avatar_url: 'bar' };
-        const wrapper = getWrapper({ user: completeUser });
-        expect(wrapper.state('avatarUrl')).toBe(null);
-        wrapper
-            .instance()
-            .getAvatarUrl()
-            .then(() => {
-                expect(wrapper.state('avatarUrl')).toBe('bar');
-            });
-        expect(getAvatarUrl).not.toBeCalledWith(user.id);
-    });
-
-    test('should set the avatarUrl state from user prop', () => {
+    test('should render avatar with initials if getAvatarUrl is not passed in and user prop does not have avatar_url', () => {
         const wrapper = getWrapper({ user });
-        expect(wrapper.state('avatarUrl')).toBe(null);
-        wrapper.instance().getAvatarUrl();
-        wrapper.update();
-        expect(getAvatarUrl).not.toBeCalledWith(user.id);
-        expect(wrapper.dive()).toMatchSnapshot();
+        expect(wrapper.dive().find('AvatarInitials')).toHaveLength(1);
+    });
+
+    test('should use the avatar_url from user prop if set', async () => {
+        const getAvatarUrl = jest.fn().mockResolvedValue('avatar.jpg');
+        const completeUser = { ...user, avatar_url: 'preset.jpg' };
+        const wrapper = getWrapper({ user: completeUser });
+        expect(wrapper.state('avatarUrl')).toBe('preset.jpg');
+        expect(wrapper.dive().find('AvatarImage')).toHaveLength(1);
+
+        // in this case the component has all the data it needs and
+        // should avoid doing anything async on mount, but wait a tick to confirm
+        await new Promise(r => setImmediate(r));
+        expect(getAvatarUrl).not.toHaveBeenCalled();
     });
 });
