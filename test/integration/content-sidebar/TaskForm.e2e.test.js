@@ -28,6 +28,7 @@ describe('Create Task', () => {
     context('Task Form', () => {
         beforeEach(() => {
             cy.contains(l('be.tasks.addTask')).click();
+            cy.contains(l('be.tasks.addTask.approval')).click();
         });
         it('does not allow submitting form without input', () => {
             getMessageField()
