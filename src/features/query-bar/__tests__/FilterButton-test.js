@@ -69,11 +69,12 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             values: [],
         };
         test.each`
-            conditions         | expectedConditions    | should
-            ${validConditions} | ${validConditions}    | ${'should reinitialize conditions from props.conditions when flyout is opened and props.conditions is not empty'}
-            ${[]}              | ${[initialCondition]} | ${'should set to initial condition when flyout is opened and props.conditions is empty'}
-        `('$should', ({ conditions, expectedConditions }) => {
-            const wrapper = getWrapper({ columns, conditions });
+            innerColumns | conditions         | expectedConditions    | should
+            ${columns}   | ${validConditions} | ${validConditions}    | ${'should reinitialize conditions from props.conditions when flyout is opened and props.conditions is not empty'}
+            ${columns}   | ${[]}              | ${[initialCondition]} | ${'should set to initial condition when flyout is opened and props.conditions is empty'}
+            ${[]}        | ${[]}              | ${[]}                 | ${'should set to empty array when flyout is opened and both props.columns and props.conditions is empty'}
+        `('$should', ({ innerColumns, conditions, expectedConditions }) => {
+            const wrapper = getWrapper({ columns: innerColumns, conditions });
             wrapper.setState({
                 isMenuOpen: true,
             });

@@ -57,7 +57,7 @@ class FilterButton extends React.Component<Props, State> {
         if (wasFlyoutOpened) {
             const areConditionsEmpty = this.props.conditions.length === 0;
             if (areConditionsEmpty) {
-                const transientConditions = columns && columns.size === 0 ? [] : [this.createCondition()];
+                const transientConditions = columns && columns.length === 0 ? [] : [this.createCondition()];
                 this.setState({
                     transientConditions,
                 });
