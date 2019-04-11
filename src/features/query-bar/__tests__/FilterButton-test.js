@@ -1,26 +1,26 @@
 // @flow
 import * as React from 'react';
 
-import {
-    columnForTemplateFieldName,
-    columnForDateType,
-    conditions as fixtureConditions,
-    initialCondition,
-} from '../components/fixtures';
+import { columnForTemplateFieldName, columnForDateType } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
+import type { ConditionType } from '../flowTypes';
 import { EQUALS, LESS_THAN } from '../constants';
 
+const validCondition: ConditionType = { columnId: '3', id: '0', operator: EQUALS, values: [1] };
+const invalidCondition: ConditionType = {
+    ...validCondition,
+    values: [],
+};
 const columns = [columnForTemplateFieldName, columnForDateType];
+const validConditions = [validCondition];
+const invalidConditions = [invalidCondition];
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
-        return shallow(<FilterButton conditions={fixtureConditions} {...props} />);
+        return shallow(<FilterButton conditions={validConditions} {...props} />);
     };
 
     describe('render', () => {
-        const validConditions = [{ values: [1] }];
-        const incompleteConditions = [{ values: [] }];
-
         test('should disable FilterButton when columns is undefined', () => {
             const wrapper = getWrapper({ columns: null });
             const Button = wrapper.find('Button');
@@ -50,7 +50,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
         test('Should set areErrorsEnabled to true for Condition if any condition is invalid', () => {
             const wrapper = getWrapper({ conditions: [{ values: [] }] });
             wrapper.instance().setState({
-                transientConditions: incompleteConditions,
+                transientConditions: invalidConditions,
                 isMenuOpen: true,
             });
 
@@ -62,12 +62,18 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     });
 
     describe('componentDidUpdate()', () => {
+        const initialCondition = {
+            columnId: '7',
+            id: '2',
+            operator: '=',
+            values: [],
+        };
         test.each`
-            conditions           | expectedConditions   | should
-            ${fixtureConditions} | ${fixtureConditions} | ${'should reinitialize conditions from props.conditions when flyout is opened and props.conditions is not empty'}
-            ${[]}                | ${[{}]}              | ${'should not reinitialize conditions from props.conditions when flyout is opened and props.conditions is empty'}
+            conditions         | expectedConditions    | should
+            ${validConditions} | ${validConditions}    | ${'should reinitialize conditions from props.conditions when flyout is opened and props.conditions is not empty'}
+            ${[]}              | ${[initialCondition]} | ${'should set to initial condition when flyout is opened and props.conditions is empty'}
         `('$should', ({ conditions, expectedConditions }) => {
-            const wrapper = getWrapper({ conditions });
+            const wrapper = getWrapper({ columns, conditions });
             wrapper.setState({
                 isMenuOpen: true,
             });
@@ -80,7 +86,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     describe('handleColumnChange()', () => {
         test('should update condition to the selected column', () => {
             const conditions2 = {
-                ...fixtureConditions,
+                ...validConditions,
                 columnId: columnForTemplateFieldName.id,
             };
 
@@ -247,27 +253,18 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
 
         test('Should return an empty object if columns is empty', () => {
             const wrapper = getWrapper({ columns: [] });
-            const expected = {};
 
-            const condition = wrapper.instance().createCondition();
-
-            expect(condition).toEqual(expected);
+            expect(() => {
+                wrapper.instance().createCondition();
+            }).toThrow('Columns Required');
         });
     });
 
     describe('closeOnClickPredicate()', () => {
-        const conditionsWithValues = [
-            {
-                ...initialCondition,
-                values: ['1'],
-            },
-        ];
-        const conditionsWithEmptyValues = [{ ...initialCondition, values: [] }];
-
         test.each`
-            description                                                                | transientConditions          | shouldCloseResult
-            ${'Should return true if Apply button was clicked and value is not empty'} | ${conditionsWithValues}      | ${true}
-            ${'Should return false if Apply button was clicked and value is empty'}    | ${conditionsWithEmptyValues} | ${false}
+            description                                                                | transientConditions  | shouldCloseResult
+            ${'Should return true if Apply button was clicked and value is not empty'} | ${validConditions}   | ${true}
+            ${'Should return false if Apply button was clicked and value is empty'}    | ${invalidConditions} | ${false}
         `('$description', ({ transientConditions, shouldCloseResult }) => {
             const wrapper = getWrapper({ columns });
             const targetWithClassName = {
