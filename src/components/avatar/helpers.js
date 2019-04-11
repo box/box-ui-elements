@@ -1,8 +1,8 @@
 // @flow strict
 import {
-    bdlBlue01,
-    bdlBlue02,
-    bdlBlue03,
+    bdlBlueDark,
+    bdlBoxBlue,
+    bdlBlueLight,
     bdlNeutral02,
     bdlYellorange,
     bdlGreenLight,
@@ -12,9 +12,9 @@ import {
 } from '../../styles/variables';
 
 const AVATAR_COLORS = [
-    bdlBlue01,
-    bdlBlue02,
-    bdlBlue03,
+    bdlBlueDark,
+    bdlBoxBlue,
+    bdlBlueLight,
     bdlNeutral02,
     bdlYellorange,
     bdlGreenLight,
