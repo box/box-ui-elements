@@ -1,0 +1,29 @@
+@import '../common/variables';
+
+$bsc-AddTaskMenu-width: 256px;
+
+.bsc-AddTaskMenu {
+    padding: 0;
+}
+
+.bsc-AddTaskMenu-menuItem {
+    display: flex;
+    max-width: $bsc-AddTaskMenu-width;
+    min-height: 80px;
+    padding: 20px;
+    white-space: normal;
+}
+
+.bsc-AddTaskMenu-avatar {
+    margin-right: 4px;
+}
+
+.bsc-AddTaskMenu-title {
+    color: $threes;
+    font-size: 13px;
+}
+
+.bsc-AddTaskMenu-description {
+    color: $bdl-neutral-02;
+    font-size: 12px;
+}
