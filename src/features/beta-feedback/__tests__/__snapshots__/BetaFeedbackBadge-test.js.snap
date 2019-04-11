@@ -22,6 +22,7 @@ exports[`features/beta-feedback/BetaFeedbackBadge should render component with t
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="middle-right"
       text={
         <FormattedMessage

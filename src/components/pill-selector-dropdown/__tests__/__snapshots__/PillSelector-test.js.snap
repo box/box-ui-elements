@@ -4,6 +4,7 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
 <Tooltip
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   isShown={false}
   position="middle-right"
   text=""

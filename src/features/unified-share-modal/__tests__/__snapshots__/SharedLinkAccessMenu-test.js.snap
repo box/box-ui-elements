@@ -5,6 +5,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   className="usm-ftux-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   isShown={false}
   onDismiss={[Function]}
   position="middle-left"
@@ -38,6 +39,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         key="tooltip-peopleWithTheLink"
         position="top-center"
         text={
@@ -70,6 +72,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         key="tooltip-peopleInYourCompany"
         position="top-center"
         text={
@@ -102,6 +105,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         key="tooltip-peopleInThisItem"
         position="top-center"
         text={
@@ -141,6 +145,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   className="usm-ftux-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   isShown={false}
   onDismiss={[Function]}
   position="middle-left"
@@ -174,6 +179,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         key="tooltip-peopleWithTheLink"
         position="top-center"
         text={
@@ -206,6 +212,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         key="tooltip-peopleInYourCompany"
         position="top-center"
         text={
@@ -238,6 +245,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         key="tooltip-peopleInThisItem"
         position="top-center"
         text={
@@ -277,6 +285,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   className="usm-ftux-tooltip"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   isShown={true}
   onDismiss={[Function]}
   position="middle-left"
@@ -310,6 +319,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         key="tooltip-peopleWithTheLink"
         position="top-center"
         text={
@@ -342,6 +352,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         key="tooltip-peopleInYourCompany"
         position="top-center"
         text={
@@ -374,6 +385,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         key="tooltip-peopleInThisItem"
         position="top-center"
         text={

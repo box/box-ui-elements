@@ -31,6 +31,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
             <Tooltip
               constrainToScrollParent={false}
               constrainToWindow={true}
+              isDisabled={false}
               position="top-center"
               text={
                 <FormattedMessage
@@ -66,6 +67,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -99,6 +101,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -173,6 +176,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-right"
       text={
         <FormattedMessage
@@ -206,6 +210,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -239,6 +244,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -309,6 +315,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-right"
       text={
         <FormattedMessage
@@ -377,6 +384,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -410,6 +418,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -519,6 +528,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-right"
       text={
         <FormattedMessage
@@ -552,6 +562,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -585,6 +596,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -622,6 +634,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-center"
       text={
         <FormattedMessage
@@ -684,6 +697,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -717,6 +731,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -812,6 +827,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -845,6 +861,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -965,6 +982,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -998,6 +1016,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
