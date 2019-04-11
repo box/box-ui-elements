@@ -18,17 +18,17 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
   </Button>
   <Menu
     className="bsc-AddTaskMenu"
-    isHidden={true}
+    isHidden={false}
     isSubmenu={false}
   >
     <MenuItem
       className="bsc-AddTaskMenu-menuItem"
       onClick={[Function]}
     >
-      <div>
-        <IconTaskApproval
-          className="bsc-AddTaskMenu-avatar"
-        />
+      <div
+        className="bsc-AddTaskMenu-avatar"
+      >
+        <IconTaskApproval />
       </div>
       <div>
         <div
