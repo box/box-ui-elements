@@ -194,14 +194,14 @@ check_branch_dirty() {
 
 check_npm_registry() {
     if [[ ! $(npm config get registry) =~ (${YARN_PUBLIC_REGISTRY_REGEX}|${NPM_PUBLIC_REGISTRY_REGEX}) ]] ; then
-        printf "${red}Not pointing at the right npm registry!${end}"
+        printf "${red}Not pointing at the right npm registry! Make sure .npmrc points to ${NPM_PUBLIC_REGISTRY}${end}"
         return 1
     fi
 }
 
 check_npm_login() {
     if [[ ! $(npm whoami --registry ${NPM_PUBLIC_REGISTRY} 2>/dev/null) ]] ; then
-        printf "${red}Not logged into npm!${end}"
+        printf "${red}Not logged into npm! Try running npm login${end}"
         return 1
     fi
 }
