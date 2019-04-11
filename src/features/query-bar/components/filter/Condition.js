@@ -17,7 +17,7 @@ import {
     DATE,
     ENUM,
     FLOAT,
-    MULTI_ENUM,
+    MULTI_SELECT,
     NUMBER,
     OPERATOR,
     OR,
@@ -132,7 +132,7 @@ const Condition = ({
             case ENUM:
                 message = <FormattedMessage {...messages.tooltipSelectValueError} />;
                 break;
-            case MULTI_ENUM:
+            case MULTI_SELECT:
                 message = <FormattedMessage {...messages.tooltipSelectValueError} />;
                 break;
             default:

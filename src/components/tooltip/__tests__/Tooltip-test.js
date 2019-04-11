@@ -203,6 +203,22 @@ describe('components/tooltip/Tooltip', () => {
 
             expect(wrapper.find('[role="tooltip"]').hasClass('is-error')).toBe(true);
         });
+
+        test('should render children only when tooltip is disabled', () => {
+            expect(
+                getWrapper({
+                    isDisabled: true,
+                }),
+            ).toMatchSnapshot();
+        });
+
+        test('should render children only when tooltip text is missing', () => {
+            expect(
+                getWrapper({
+                    text: null,
+                }),
+            ).toMatchSnapshot();
+        });
     });
 
     describe('closeTooltip()', () => {

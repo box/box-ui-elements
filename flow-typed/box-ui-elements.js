@@ -75,12 +75,6 @@ import {
     TASK_APPROVED,
     TASK_COMPLETED,
     TASK_INCOMPLETE,
-    TASK_TYPE_GENERAL,
-    TASK_TYPE_APPROVAL,
-    TASK_NEW_APPROVED,
-    TASK_NEW_COMPLETED,
-    TASK_NEW_INCOMPLETE,
-    TASK_NEW_REJECTED,
     TASK_REJECTED,
     METRIC_TYPE_PREVIEW,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
@@ -644,13 +638,9 @@ type FolderMini = {
     type: 'folder',
 };
 
-type TaskStatus =
-    | typeof TASK_NEW_INCOMPLETE
-    | typeof TASK_NEW_COMPLETED
-    | typeof TASK_NEW_APPROVED
-    | typeof TASK_NEW_REJECTED;
+type TaskCollabStatus = 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'NOT_STARTED';
 
-type TaskCollabStatus = typeof TASK_NEW_INCOMPLETE | typeof TASK_NEW_COMPLETED;
+type TaskStatus = TaskCollabStatus | 'IN_PROGRESS';
 
 type TaskMini = {|
     created_at: ISODate,
@@ -699,13 +689,17 @@ type MarkerPaginatedCollection<T> = {
     next_marker: ?string,
 };
 
+type TaskAssigneeCollection = MarkerPaginatedCollection<TaskCollabAssignee>;
+
+type TaskLinkCollection = MarkerPaginatedCollection<TaskLink>;
+
 // See https://github.com/facebook/flow/issues/7574
 // This is currently *not* enforcing the constant types
 // type TaskType = typeof TASK_TYPE_GENERAL | typeof TASK_TYPE_APPROVAL;
 type TaskType = 'GENERAL' | 'APPROVAL';
 
 type TaskNew = {|
-    assigned_to: MarkerPaginatedCollection<TaskCollabAssignee>,
+    assigned_to: TaskAssigneeCollection,
     completed_at?: ?ISODate,
     completion_rule?: 'ANY_ASSIGNEE' | 'ALL_ASSIGNEES',
     created_at: ISODate,
@@ -723,7 +717,7 @@ type TaskNew = {|
     |},
     progress_at?: ?ISODate,
     status: TaskStatus,
-    task_links: MarkerPaginatedCollection<TaskLink>,
+    task_links: TaskLinkCollection,
     task_type: TaskType,
     type: 'task',
 |};
@@ -944,6 +938,10 @@ type LoggerProps = {
     onReadyMetric: (data: ElementsLoadMetricData) => void,
 };
 
+type GetAvatarUrlCallback = string => Promise<?string>;
+
+type GetProfileUrlCallback = string => Promise<string>;
+
 type WithLoggerProps = {
     logger: LoggerProps,
 };
@@ -965,3 +963,10 @@ type ContentSidebarFeatures = {
 type NavigateOptions = {
     isToggle?: boolean,
 };
+
+type AdditionalVersionInfo = {
+    isCurrentVersion: boolean,
+    updateVersionToCurrent: () => void,
+};
+
+type OnVersionChange = (version: ?BoxItemVersion, additionalVersionInfo: ?AdditionalVersionInfo) => void;

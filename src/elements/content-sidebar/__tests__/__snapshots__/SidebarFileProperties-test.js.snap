@@ -443,6 +443,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render c
                   <Tooltip
                     constrainToScrollParent={false}
                     constrainToWindow={true}
+                    isDisabled={false}
                     position="middle-left"
                     text="tooltip value"
                     theme="default"
@@ -595,6 +596,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render c
                   <Tooltip
                     constrainToScrollParent={false}
                     constrainToWindow={true}
+                    isDisabled={false}
                     position="middle-left"
                     text="tooltip value"
                     theme="default"
