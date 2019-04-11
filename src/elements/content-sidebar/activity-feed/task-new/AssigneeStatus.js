@@ -5,23 +5,23 @@ import camelCase from 'lodash/camelCase';
 import IconComplete from '../../../../icons/general/IconVerified';
 import IconReject from '../../../../icons/general/IconRejected';
 import Avatar from '../Avatar';
-import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_INCOMPLETE } from '../../../../constants';
+import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
 import messages from '../../../common/messages';
 
 type Props = {
-    getAvatarUrl?: string => Promise<?string>,
-    status: TaskStatus,
+    getAvatarUrl?: GetAvatarUrlCallback,
+    status: TaskCollabStatus,
     user: UserMini,
 };
 
-const StatusIcon = ({ status, ...rest }: { status: TaskStatus }) => {
+const StatusIcon = ({ status, ...rest }: { status: TaskCollabStatus }) => {
     switch (status) {
         case TASK_NEW_APPROVED:
         case TASK_NEW_COMPLETED:
             return <IconComplete {...rest} />;
         case TASK_NEW_REJECTED:
             return <IconReject {...rest} />;
-        case TASK_NEW_INCOMPLETE:
+        case TASK_NEW_NOT_STARTED:
         default:
             return null;
     }
