@@ -9,8 +9,8 @@ import { injectIntl } from 'react-intl';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import IconClose from '../../../icons/general/IconClose';
 import messages from '../../../common/messages';
-import { getIcon } from '../../common/item/iconCellRenderer';
 import { haze } from '../../../styles/variables';
+import FileInfo from './FileInfo';
 import './Header.scss';
 
 type Props = {
@@ -19,15 +19,11 @@ type Props = {
 } & InjectIntlProvidedProps;
 
 const VersionsHeader = ({ file, intl, onClose }: Props) => {
-    const name = file ? file.name : '';
     const closeMsg = intl.formatMessage(messages.close);
 
     return (
         <React.Fragment>
-            <div className="bcpr-name">
-                {file ? getIcon(24, file) : null}
-                <span>{name}</span>
-            </div>
+            {file && <FileInfo file={file} />}
             <div className="bcpr-btns">
                 {onClose && (
                     <PlainButton

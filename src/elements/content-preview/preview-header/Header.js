@@ -14,8 +14,8 @@ import IconPrint from '../../../icons/general/IconPrint';
 import IconDownload from '../../../icons/general/IconDownloadSolid';
 import AsyncLoad from '../../common/async-load';
 import messages from '../../common/messages';
-import { getIcon } from '../../common/item/iconCellRenderer';
 import { nines } from '../../../styles/variables';
+import FileInfo from './FileInfo';
 import './Header.scss';
 
 type Props = {
@@ -44,7 +44,6 @@ const Header = ({
     onPrint,
     token,
 }: Props) => {
-    const name = file ? file.name : '';
     const id = file && file.id;
     const closeMsg = intl.formatMessage(messages.close);
     const printMsg = intl.formatMessage(messages.print);
@@ -55,10 +54,7 @@ const Header = ({
 
     return (
         <React.Fragment>
-            <div className="bcpr-name">
-                {file ? getIcon(24, file) : null}
-                <span>{name}</span>
-            </div>
+            {file && <FileInfo file={file} />}
             <div className="bcpr-btns">
                 {shouldRenderOpenWith && (
                     <LoadableContentOpenWith

@@ -93,10 +93,10 @@ type State = {
     currentFileId?: string,
     file?: BoxItem,
     isFileError: boolean,
-    isPreviewingCurrentVersion?: boolean, // the currently displayed file id in the collection
-    isReloadNotificationVisible: boolean, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
+    isPreviewingCurrentVersion?: boolean, // Determines if we are previewing the current version
+    isReloadNotificationVisible: boolean,
     isThumbnailSidebarOpen: boolean,
-    prevFileIdProp?: string,
+    prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
     selectedVersionId?: string,
 };
 
@@ -171,9 +171,9 @@ class ContentPreview extends PureComponent<Props, State> {
 
     initialState: State = {
         isFileError: false,
+        isPreviewingCurrentVersion: true,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
-        isPreviewingCurrentVersion: true,
     };
 
     static defaultProps = {
@@ -1055,7 +1055,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {string} [version] - The version that is now previewed
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: Object): void => {
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: AdditionalVersionInfo): void => {
         const { onVersionChange, hasHeader }: Props = this.props;
         const isCurrentVersion = getProp(additionalVersionInfo, 'isCurrentVersion', true);
         this.updateVersionToCurrent = getProp(additionalVersionInfo, 'updateVersionToCurrent');

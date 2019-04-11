@@ -23,7 +23,6 @@ var ContentPreview = require('./ContentPreview').default;
         features={FEATURES}
         fileId={FILE_ID}
         token={TOKEN}
-        hasHeader={true}
     />
 </IntlProvider>
 ```
