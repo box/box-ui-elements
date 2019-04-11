@@ -8,7 +8,7 @@ type Props = {
     url: string,
 };
 
-const AvatarImage = React.memo<Props>(({ className = '', url, onError, ...rest }: Props) => (
+const AvatarImage = ({ className = '', url, onError, ...rest }: Props) => (
     <img
         {...rest}
         alt=""
@@ -20,6 +20,6 @@ const AvatarImage = React.memo<Props>(({ className = '', url, onError, ...rest }
         }}
         src={url}
     />
-));
+);
 
 export default AvatarImage;

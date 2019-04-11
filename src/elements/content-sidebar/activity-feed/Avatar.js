@@ -17,38 +17,30 @@ type State = {
     isPending: boolean,
 };
 
+// Note: setting a key is required, re-render with a new user is not implemented
+
 class Avatar extends React.PureComponent<Props, State> {
-    state = {
-        avatarUrl: null,
-        isPending: true,
-    };
-
-    /**
-     * Success handler for getting avatar url
-     *
-     * @param {string} avatarUrl the user avatar url
-     */
-    getAvatarUrlHandler = (avatarUrl: ?string) => {
-        this.setState({
+    constructor(props: Props) {
+        super(props);
+        // short-circuit promises by checking if we already have a url
+        // or if we don't have a method to get one
+        const avatarUrl = props.user.avatar_url || null;
+        this.state = {
             avatarUrl,
-            isPending: false,
-        });
-    };
-
-    /**
-     * Gets the avatar URL for the user from the getAvatarUrl prop
-     *
-     * @return {Promise<?string>} Promise which resolve with the avatar url string
-     */
-    getAvatarUrl(): Promise<?string> {
-        const { user, getAvatarUrl }: Props = this.props;
-
-        const avatarPromise = getAvatarUrl ? getAvatarUrl(user.id) : Promise.resolve(user.avatar_url);
-        return avatarPromise.then(this.getAvatarUrlHandler);
+            // pending state means we are using getAvatarUrl to get a url asynchronously
+            isPending: !!props.getAvatarUrl && !avatarUrl,
+        };
     }
 
     componentDidMount() {
-        this.getAvatarUrl();
+        if (this.state.isPending) this.getAvatarUrl();
+    }
+
+    async getAvatarUrl() {
+        const { user, getAvatarUrl }: Props = this.props;
+        if (!getAvatarUrl) return;
+        const avatarUrl = await getAvatarUrl(user.id).catch(() => null);
+        this.setState({ avatarUrl, isPending: false });
     }
 
     render() {

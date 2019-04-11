@@ -32,7 +32,6 @@ describe('components/avatar/Avatar', () => {
         const avatarInitials = wrapper.find('AvatarInitials');
         expect(avatarInitials.length).toEqual(1);
         expect(avatarInitials.prop('name')).toEqual('hello world');
-        expect(avatarInitials.prop('id')).toEqual('1');
     });
 
     test('should render an UnknownUserAvatar when no params are passed', () => {
@@ -78,6 +77,17 @@ describe('components/avatar/Avatar', () => {
         wrapper.update();
 
         expect(wrapper.state('hasImageErrored')).toEqual(false);
+        wrapper.update();
         expect(wrapper.find('AvatarImage').length).toEqual(1);
+    });
+
+    test('should set a backgroundColor based on id', () => {
+        const wrapper = shallow(<Avatar id="19" name="hello world" />);
+        expect(wrapper.prop('style').backgroundColor).toEqual('#0061d5');
+    });
+
+    test('should set a default backgroundColor if no id is passed in', () => {
+        const wrapper = shallow(<Avatar name="hello world" />);
+        expect(wrapper.prop('style').backgroundColor).toEqual('#003c84');
     });
 });
