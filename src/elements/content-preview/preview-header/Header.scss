@@ -1,4 +1,4 @@
-@import '../common/variables';
+@import '../../common/variables';
 
 .bcpr-btns {
     display: flex;
@@ -33,6 +33,17 @@
 
     .bp-base-header {
         padding: 0 0 0 15px;
+    }
+}
+
+.bcpr-header--dark {
+    .bp-header {
+        background: $threes;
+        border-bottom: 0;
+    }
+
+    .bcpr-name {
+        color: $haze;
     }
 }
 

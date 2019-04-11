@@ -31,7 +31,7 @@ import { withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
-import Header from './Header';
+import PreviewHeader from './preview-header';
 import PreviewNavigation from './PreviewNavigation';
 import PreviewLoading from './PreviewLoading';
 import {
@@ -93,8 +93,9 @@ type State = {
     currentFileId?: string,
     file?: BoxItem,
     isFileError: boolean,
-    isReloadNotificationVisible: boolean, // the currently displayed file id in the collection
-    isThumbnailSidebarOpen: boolean, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
+    isPreviewingCurrentVersion?: boolean, // the currently displayed file id in the collection
+    isReloadNotificationVisible: boolean, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
+    isThumbnailSidebarOpen: boolean,
     prevFileIdProp?: string,
     selectedVersionId?: string,
 };
@@ -166,10 +167,13 @@ class ContentPreview extends PureComponent<Props, State> {
 
     stagedFile: ?BoxItem;
 
+    updateVersionToCurrent: ?Function;
+
     initialState: State = {
         isFileError: false,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
+        isPreviewingCurrentVersion: true,
     };
 
     static defaultProps = {
@@ -1052,9 +1056,16 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
     onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: Object): void => {
-        const { onVersionChange }: Props = this.props;
+        const { onVersionChange, hasHeader }: Props = this.props;
+        const isCurrentVersion = getProp(additionalVersionInfo, 'isCurrentVersion', true);
+        this.updateVersionToCurrent = getProp(additionalVersionInfo, 'updateVersionToCurrent');
+        const isPreviewingCurrentVersion = hasHeader ? { isPreviewingCurrentVersion: isCurrentVersion } : {};
+
         onVersionChange(version, additionalVersionInfo);
-        this.setState({ selectedVersionId: getProp(version, 'id') });
+        this.setState({
+            selectedVersionId: getProp(version, 'id'),
+            ...isPreviewingCurrentVersion,
+        });
     };
 
     /**
@@ -1097,6 +1108,7 @@ class ContentPreview extends PureComponent<Props, State> {
             isReloadNotificationVisible,
             currentFileId,
             isThumbnailSidebarOpen,
+            isPreviewingCurrentVersion,
         }: State = this.state;
         const { collection }: Props = this.props;
         const styleClassName = classNames(
@@ -1110,21 +1122,25 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!currentFileId) {
             return null;
         }
+
+        const onHeaderClose = isPreviewingCurrentVersion ? onClose : this.updateVersionToCurrent;
+
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
                     {hasHeader && (
-                        <Header
+                        <PreviewHeader
                             file={file}
                             token={token}
-                            onClose={onClose}
+                            onClose={onHeaderClose}
                             onPrint={this.print}
                             canDownload={this.canDownload()}
                             onDownload={this.download}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}
+                            isPreviewingCurrentVersion={isPreviewingCurrentVersion}
                         />
                     )}
                     <div className="bcpr-body">
