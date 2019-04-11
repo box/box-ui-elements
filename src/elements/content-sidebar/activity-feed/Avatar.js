@@ -33,12 +33,15 @@ class Avatar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        if (this.state.isPending) this.getAvatarUrl();
+        this.getAvatarUrl();
     }
 
     async getAvatarUrl() {
-        const { user, getAvatarUrl }: Props = this.props;
-        if (!getAvatarUrl) return;
+        const { user, getAvatarUrl } = this.props;
+        const { isPending } = this.state;
+        // don't fetch if url exists or no handler was passed
+        if (!isPending || !getAvatarUrl) return;
+
         const avatarUrl = await getAvatarUrl(user.id).catch(() => null);
         this.setState({ avatarUrl, isPending: false });
     }
