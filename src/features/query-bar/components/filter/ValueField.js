@@ -6,7 +6,7 @@ import DatePicker from '../../../../components/date-picker';
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
 import MultiSelectField from '../../../../components/select-field/MultiSelectField';
 import TextInput from '../../../../components/text-input';
-import { DATE, ENUM, FLOAT, MULTI_ENUM, NUMBER, STRING, VALUE } from '../../constants';
+import { DATE, ENUM, FLOAT, MULTI_SELECT, NUMBER, STRING, VALUE } from '../../constants';
 import messages from '../../messages';
 import type { ConditionValueType } from '../../flowTypes';
 
@@ -95,7 +95,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
                     selectedValue={getStringValue(selectedValues)}
                 />
             );
-        case MULTI_ENUM:
+        case MULTI_SELECT:
             return (
                 <MultiSelectField
                     fieldType={VALUE}

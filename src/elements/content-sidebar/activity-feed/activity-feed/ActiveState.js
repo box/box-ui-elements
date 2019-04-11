@@ -15,9 +15,9 @@ import withErrorHandling from '../../withErrorHandling';
 
 type Props = {
     currentUser?: User,
-    getAvatarUrl: string => Promise<?string>,
+    getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
-    getUserProfileUrl?: string => Promise<string>,
+    getUserProfileUrl?: GetProfileUrlCallback,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems,
     onAppActivityDelete?: Function,

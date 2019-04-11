@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from '../../../common/messages';
 import { ReadableTime } from '../../../../components/time';
 
-import { TASK_NEW_INCOMPLETE } from '../../../../constants';
+import { TASK_NEW_NOT_STARTED } from '../../../../constants';
 
 type Props = {
     dueDate: ISODate,
@@ -14,7 +14,7 @@ type Props = {
 };
 
 const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
-    const isOverdue = dueDate ? status === TASK_NEW_INCOMPLETE && new Date(dueDate) < Date.now() : false;
+    const isOverdue = dueDate ? status === TASK_NEW_NOT_STARTED && new Date(dueDate) < Date.now() : false;
     const fullDueDate = new Date(dueDate);
 
     return (
