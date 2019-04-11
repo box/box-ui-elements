@@ -965,3 +965,10 @@ type ContentSidebarFeatures = {
 type NavigateOptions = {
     isToggle?: boolean,
 };
+
+type AdditionalVersionInfo = {
+    isCurrentVersion: boolean,
+    updateVersionToCurrent: () => void,
+};
+
+type OnVersionChange = (version: ?BoxItemVersion, additionalVersionInfo: ?AdditionalVersionInfo) => void;
