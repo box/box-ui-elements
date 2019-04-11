@@ -35,6 +35,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="top-center"
           text={
             <FormattedMessage
@@ -105,6 +106,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="top-center"
           text={
             <FormattedMessage
@@ -176,6 +178,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="top-center"
           text={
             <FormattedMessage
@@ -250,6 +253,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="top-center"
           text={
             <FormattedMessage

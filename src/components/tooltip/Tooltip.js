@@ -77,6 +77,8 @@ type Props = {
     constrainToScrollParent: boolean,
     /** Whether to constrain the tooltip to window. Defaults to `true` */
     constrainToWindow: boolean,
+    /** Forces the tooltip to be disabled irrespecitve of it's shown state. Defaults to `false` */
+    isDisabled: boolean,
     /** Forces the tooltip to be shown or hidden (useful for errors) */
     isShown?: boolean,
     /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
@@ -85,8 +87,9 @@ type Props = {
     position: Position,
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
     showCloseButton?: boolean,
-    text: React.Node,
     /** Text to show in the tooltip */
+    text?: React.Node,
+    /** Tooltip theme */
     theme: 'callout' | 'default' | 'error',
 };
 
@@ -99,6 +102,7 @@ class Tooltip extends React.Component<Props, State> {
     static defaultProps = {
         constrainToScrollParent: false,
         constrainToWindow: true,
+        isDisabled: false,
         position: TOP_CENTER,
         theme: DEFAULT_THEME,
     };
@@ -161,12 +165,19 @@ class Tooltip extends React.Component<Props, State> {
             className,
             constrainToScrollParent,
             constrainToWindow,
+            isDisabled,
             isShown: isShownProp,
             position,
             showCloseButton,
             text,
             theme,
         } = this.props;
+
+        // If the tooltip is disabled or if the text is missing, just render the children
+        if (isDisabled || !text) {
+            return React.Children.only(children);
+        }
+
         const isControlled = typeof isShownProp !== 'undefined';
         const isShown = isControlled ? isShownProp : this.state.isShown;
         const showTooltip = isShown && !this.state.wasClosedByUser;
@@ -207,6 +218,7 @@ class Tooltip extends React.Component<Props, State> {
             'is-error': theme === ERROR_THEME,
             'with-close-button': withCloseButton,
         });
+
         return (
             <TetherComponent
                 attachment={tetherPosition.attachment}
