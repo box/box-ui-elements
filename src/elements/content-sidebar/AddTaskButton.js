@@ -26,20 +26,20 @@ type Props = {| ...AddTaskButtonProps, ...PassThroughProps |};
 
 type State = {
     isTaskFormOpen: boolean,
-    taskType: ?TaskType,
+    taskType: TaskType,
 };
 
 class AddTaskButton extends React.Component<Props, State> {
     state = {
         isTaskFormOpen: false,
-        taskType: null,
+        taskType: TASK_TYPE_APPROVAL,
     };
 
     static defaultProps = {
         isDisabled: false,
     };
 
-    getMessageForModalTitle(taskType: ?TaskType): Object {
+    getMessageForModalTitle(taskType: TaskType): Object {
         switch (taskType) {
             case TASK_TYPE_GENERAL:
                 return messages.tasksCreateGeneralTaskFormTitle;
