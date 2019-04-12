@@ -3,7 +3,6 @@ import * as React from 'react';
 
 type Props = {
     className?: string,
-    id?: string | number,
     onError?: Function,
     url: string,
 };
