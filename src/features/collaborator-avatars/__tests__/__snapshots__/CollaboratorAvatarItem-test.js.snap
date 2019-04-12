@@ -67,6 +67,7 @@ exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should re
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="middle-right"
       text={
         <FormattedMessage
@@ -104,6 +105,7 @@ exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should re
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="middle-right"
       text={
         <FormattedMessage

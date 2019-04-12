@@ -144,7 +144,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '2.4.0';
+export const DEFAULT_PREVIEW_VERSION = '2.5.1';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -228,6 +228,8 @@ export const ERROR_CODE_DELETE_TASK_ASSIGNMENT = 'delete_task_assignment_error';
 export const ERROR_CODE_DELETE_TASK_COLLABORATOR = 'delete_task_collaborator_error';
 export const ERROR_CODE_DELETE_ITEM = 'delete_item_error';
 export const ERROR_CODE_DELETE_METADATA = 'delete_metadata_error';
+export const ERROR_CODE_DELETE_VERSION = 'delete_version_error';
+export const ERROR_CODE_PROMOTE_VERSION = 'promote_version_error';
 export const ERROR_CODE_UPDATE_TASK = 'update_task_error';
 export const ERROR_CODE_UPDATE_TASK_ASSIGNMENT = 'update_task_assignment_error';
 export const ERROR_CODE_UPDATE_TASK_COLLABORATOR = 'update_task_collaborator_error';
@@ -347,7 +349,8 @@ export const TASK_REJECTED: 'rejected' = 'rejected';
 /* ------------------ New Task Statuses ----------------- */
 export const TASK_NEW_APPROVED: 'APPROVED' = 'APPROVED';
 export const TASK_NEW_COMPLETED: 'COMPLETED' = 'COMPLETED';
-export const TASK_NEW_INCOMPLETE: 'NOT_STARTED' = 'NOT_STARTED';
+export const TASK_NEW_NOT_STARTED: 'NOT_STARTED' = 'NOT_STARTED';
+export const TASK_NEW_IN_PROGRESS: 'IN_PROGRESS' = 'IN_PROGRESS';
 export const TASK_NEW_REJECTED: 'REJECTED' = 'REJECTED';
 
 /* ------------------ New Task types ----------------- */

@@ -11,6 +11,7 @@ exports[`components/select/Select should not show Tooltip when no error exists 1
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       position="middle-right"
       text=""
@@ -44,6 +45,7 @@ exports[`components/select/Select should not show error outline if not specified
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       position="middle-right"
       text=""
@@ -77,6 +79,7 @@ exports[`components/select/Select should render infoTooltip when specified 1`] =
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       position="middle-right"
       text=""
@@ -98,6 +101,7 @@ exports[`components/select/Select should render infoTooltip when specified 1`] =
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="middle-right"
           text="hello!!!"
           theme="default"
@@ -129,6 +133,7 @@ exports[`components/select/Select should show Tooltip when error exists 1`] = `
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={true}
       position="middle-right"
       text="error"
@@ -162,6 +167,7 @@ exports[`components/select/Select should show error outline if specified 1`] = `
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       position="middle-right"
       text=""

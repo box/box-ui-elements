@@ -16,8 +16,9 @@ describe('Create Task', () => {
     context('Add Task button', () => {
         it('opens task form', () => {
             cy.contains(l('be.tasks.addTask')).click();
+            cy.contains(l('be.tasks.addTask.approval')).click();
             cy.getByTestId('create-task-modal').within(() => {
-                cy.contains(l('be.tasks.addTaskForm.title')).should('exist');
+                cy.contains(l('be.tasks.createTask.approval.title')).should('exist');
                 getSubmitButton().should('exist');
                 getCancelButton().should('exist');
             });
@@ -27,6 +28,7 @@ describe('Create Task', () => {
     context('Task Form', () => {
         beforeEach(() => {
             cy.contains(l('be.tasks.addTask')).click();
+            cy.contains(l('be.tasks.addTask.approval')).click();
         });
         it('does not allow submitting form without input', () => {
             getMessageField()

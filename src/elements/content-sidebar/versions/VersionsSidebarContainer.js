@@ -12,13 +12,14 @@ import type { Match, RouterHistory } from 'react-router-dom';
 import API from '../../../api';
 import VersionsSidebar from './VersionsSidebar';
 import { withAPIContext } from '../../common/api-context';
+import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 type Props = {
     api: API,
     fileId: string,
     history: RouterHistory,
     match: Match,
-    onVersionChange: (versionId?: string) => void,
+    onVersionChange: OnVersionChange,
     parentName: string,
     versionId?: string,
 };
@@ -31,6 +32,11 @@ type State = {
 };
 
 class VersionsSidebarContainer extends React.Component<Props, State> {
+    static defaultProps = {
+        onVersionChange: noop,
+        parentName: '',
+    };
+
     props: Props;
 
     state: State = {
@@ -39,13 +45,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         versions: [],
     };
 
-    static defaultProps = {
-        onVersionChange: noop,
-        parentName: '',
-    };
-
     componentDidMount() {
-        this.fetchFile();
+        this.fetchData();
     }
 
     componentDidUpdate({ versionId: prevVersionId }: Props) {
@@ -53,7 +54,13 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         // Forward the current version id that is passed in via the wrapping route
         if (prevVersionId !== versionId) {
-            onVersionChange(versionId);
+            const { versions } = this.state;
+            const previewedVersion = versions.find(version => version.id === versionId);
+            const isCurrentVersion = previewedVersion === versions[0];
+            onVersionChange(previewedVersion, {
+                isCurrentVersion,
+                updateVersionToCurrent: this.updateVersionToCurrent,
+            });
         }
     }
 
@@ -62,27 +69,45 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.props.onVersionChange();
     }
 
-    fetchFile = () => {
-        const { api, fileId } = this.props;
-
-        api.getFileAPI().getFile(fileId, this.fetchVersions, this.handleFetchError);
+    handleActionDelete = (versionId: string): void => {
+        this.setState({ isLoading: true }, () => {
+            this.deleteVersion(versionId)
+                .then(this.fetchData)
+                .then(() => this.handleDeleteSuccess(versionId))
+                .catch(this.handleActionError);
+        });
     };
 
-    fetchVersions = (file: BoxItem) => {
-        const { api, fileId } = this.props;
-
-        api.getVersionsAPI(false).getVersions(
-            fileId,
-            responseData => this.handleFetchSuccess(responseData, file),
-            this.handleFetchError,
-        );
+    handleActionError = ({ message }: ElementsXhrError): void => {
+        this.setState({
+            error: message,
+            isLoading: false,
+        });
     };
 
     handleActionPreview = (versionId: string): void => {
         this.updateVersion(versionId);
     };
 
-    handleFetchError = ({ message }: ElementsXhrError) => {
+    handleActionPromote = (versionId: string): void => {
+        this.setState({ isLoading: true }, () => {
+            this.promoteVersion(versionId)
+                .then(this.fetchData)
+                .then(this.handlePromoteSuccess)
+                .catch(this.handleActionError);
+        });
+    };
+
+    handleDeleteSuccess = (versionId: string) => {
+        const { versionId: selectedVersionId } = this.props;
+
+        // Bump the user to the current version if they deleted their selected version
+        if (versionId === selectedVersionId) {
+            this.updateVersionToCurrent();
+        }
+    };
+
+    handleFetchError = ({ message }: ElementsXhrError): void => {
         this.setState({
             error: message,
             isLoading: false,
@@ -91,26 +116,105 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         });
     };
 
-    handleFetchSuccess = (responseData: FileVersions, file: BoxItem) => {
+    handleFetchSuccess = ([file, versions]): [BoxItem, FileVersions] => {
         const { api } = this.props;
-        const { entries: versions } = api.getVersionsAPI(false).addCurrentVersion(responseData, file) || {};
+        const { entries } = api.getVersionsAPI(false).addCurrentVersion(versions, file) || {};
 
         this.setState({
             error: undefined,
             isLoading: false,
             permissions: file.permissions || {},
-            versions: versions.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
+            versions: entries.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
         });
+
+        return [file, versions];
     };
 
-    updateVersion = (versionId?: string): void => {
+    handlePromoteSuccess = ([file]: [BoxItem, FileVersions]): void => {
+        const { file_version: fileVersion } = file;
+
+        if (fileVersion) {
+            this.updateVersion(fileVersion.id);
+        }
+    };
+
+    fetchData = (): Promise<any> => {
+        return Promise.all([this.fetchFile(), this.fetchVersions()])
+            .then(this.handleFetchSuccess)
+            .catch(this.handleFetchError);
+    };
+
+    fetchFile = (options = {}): Promise<BoxItem> => {
+        const { api, fileId } = this.props;
+
+        return new Promise((resolve, reject) =>
+            api.getFileAPI().getFile(fileId, resolve, reject, {
+                fields: FILE_VERSION_FIELDS_TO_FETCH,
+                forceFetch: true,
+                ...options,
+            }),
+        );
+    };
+
+    fetchVersions = (): Promise<FileVersions> => {
+        const { api, fileId } = this.props;
+
+        return new Promise((resolve, reject) => api.getVersionsAPI(false).getVersions(fileId, resolve, reject));
+    };
+
+    deleteVersion = (versionId: string): Promise<null> => {
+        const { api, fileId } = this.props;
+        const { permissions } = this.state;
+
+        return new Promise((successCallback, errorCallback) =>
+            api.getVersionsAPI(false).deleteVersion({
+                fileId,
+                permissions,
+                successCallback,
+                errorCallback,
+                versionId,
+            }),
+        );
+    };
+
+    promoteVersion = (versionId: string): Promise<BoxItemVersion> => {
+        const { api, fileId } = this.props;
+        const { permissions } = this.state;
+
+        return new Promise((successCallback, errorCallback) =>
+            api.getVersionsAPI(false).promoteVersion({
+                fileId,
+                permissions,
+                successCallback,
+                errorCallback,
+                versionId,
+            }),
+        );
+    };
+
+    updateVersion = (versionId?: ?string): void => {
         const { history, match } = this.props;
         return history.push(generatePath(match.path, { ...match.params, versionId }));
     };
 
+    updateVersionToCurrent = (): void => {
+        const { versions } = this.state;
+        const versionId = versions[0] ? versions[0].id : null;
+        this.updateVersion(versionId);
+    };
+
     render() {
         const { parentName } = this.props;
-        return <VersionsSidebar onPreview={this.handleActionPreview} parentName={parentName} {...this.state} />;
+
+        return (
+            <VersionsSidebar
+                onDelete={this.handleActionDelete}
+                onPreview={this.handleActionPreview}
+                onPromote={this.handleActionPromote}
+                parentName={parentName}
+                {...this.state}
+            />
+        );
     }
 }
 

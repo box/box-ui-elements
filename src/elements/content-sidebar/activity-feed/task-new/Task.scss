@@ -2,6 +2,15 @@
 
 $success-color: $shady-acres;
 $error-color: $red;
+$gray: $nines;
+$assignment-avatar-spacing: 4px;
+$card-left-offset: 40px;
+
+@mixin avatar-badge-icon {
+    border: 1px solid $white;
+    border-radius: 50%;
+    position: absolute;
+}
 
 .be .bcs-task {
     opacity: 1;
@@ -11,14 +20,14 @@ $error-color: $red;
         opacity: .4;
     }
 
-    .bcs-task-assignment-container {
-        margin-left: 40px;
+    .bcs-task-content {
+        margin-left: $card-left-offset;
     }
 
     .bcs-task-due-date {
-        color: $threes;
+        color: $bdl-neutral-02;
         font-weight: bold;
-        margin: 5px 0;
+        margin-top: 8px;
 
         span:first-child {
             padding-right: 3px;
@@ -31,7 +40,7 @@ $error-color: $red;
 
     .bcs-task-assignments {
         display: flex;
-        margin: 8px 0;
+        margin: 10px 0;
     }
 
     .bcs-task-assignment-avatar {
@@ -39,9 +48,21 @@ $error-color: $red;
         width: 32px;
     }
 
+    .bcs-task-avatar {
+        height: 100%;
+        position: relative;
+    }
+
+    .bcs-task-avatar-badge {
+        @include avatar-badge-icon;
+
+        bottom: 0;
+        right: 4px;
+    }
+
     .bcs-task-assignment-count {
         align-items: center;
-        background: $grey;
+        background: $gray;
         border-radius: 100%;
         color: #fff;
         display: flex;
@@ -54,20 +75,17 @@ $error-color: $red;
         position: relative;
         width: 32px;
 
-        // select all but first instance
-        & + & {
-            margin-left: 3px;
+        & + .bcs-task-assignment-status,
+        & + .bcs-task-assignment-count {
+            margin-left: $assignment-avatar-spacing;
         }
     }
 
     .bcs-task-assignment-status-icon {
-        border: 1px solid $white;
-        border-radius: 50%;
+        @include avatar-badge-icon;
+
         bottom: 0;
-        height: 12px;
-        position: absolute;
         right: 0;
-        width: 12px;
 
         &.completed,
         &.approved,
@@ -79,7 +97,7 @@ $error-color: $red;
     .bcs-task-status {
         align-items: center;
         display: flex;
-        margin-top: 15px;
+        margin-top: 18px;
     }
 
     .bcs-task-status-icon {
@@ -97,7 +115,7 @@ $error-color: $red;
         }
 
         &.pending,
-        &.incomplete,
+        &.inProgress,
         &.notStarted {
             align-items: center;
             color: white;
@@ -107,13 +125,17 @@ $error-color: $red;
             justify-content: center;
 
             .fill-color {
-                fill: $grey;
+                fill: $gray;
             }
         }
     }
 
     .bcs-task-pending-assignment {
         margin-top: 5px;
+    }
+
+    .bcs-comment-user-name {
+        margin-right: 0;
     }
 
     button:first-of-type.bcs-task-action-button {

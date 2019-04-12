@@ -33,6 +33,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -125,7 +126,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -262,6 +263,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -354,7 +356,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -436,6 +438,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -528,7 +531,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -610,6 +613,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -702,7 +706,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -788,6 +792,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={true}
         position="middle-left"
         showCloseButton={true}
@@ -880,7 +885,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -962,6 +967,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1054,7 +1060,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1136,6 +1142,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1228,7 +1235,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1281,6 +1288,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1374,7 +1382,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1456,6 +1464,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1549,7 +1558,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1631,6 +1640,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1724,7 +1734,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1806,6 +1816,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1899,7 +1910,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2016,6 +2027,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2108,7 +2120,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2194,6 +2206,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2286,7 +2299,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2372,6 +2385,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2464,7 +2478,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2546,6 +2560,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2640,7 +2655,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   "Editor",
@@ -2719,6 +2734,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2814,7 +2830,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2867,6 +2883,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2960,7 +2977,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {

@@ -5,7 +5,13 @@ import camelCase from 'lodash/camelCase';
 import IconComplete from '../../../../icons/general/IconVerified';
 import IconReject from '../../../../icons/general/IconRejected';
 import IconPending from '../../../../icons/general/IconHelp';
-import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_INCOMPLETE } from '../../../../constants';
+import {
+    TASK_NEW_APPROVED,
+    TASK_NEW_REJECTED,
+    TASK_NEW_COMPLETED,
+    TASK_NEW_NOT_STARTED,
+    TASK_NEW_IN_PROGRESS,
+} from '../../../../constants';
 import messages from '../../../common/messages';
 
 type Props = {|
@@ -21,7 +27,8 @@ const StatusIcon = ({ status, ...rest }: { status: TaskStatus }) => {
             return <IconComplete width={ICON_SIZE} height={ICON_SIZE} {...rest} />;
         case TASK_NEW_REJECTED:
             return <IconReject width={ICON_SIZE} height={ICON_SIZE} {...rest} />;
-        case TASK_NEW_INCOMPLETE:
+        case TASK_NEW_NOT_STARTED:
+        case TASK_NEW_IN_PROGRESS:
             return <IconPending width={ICON_SIZE} height={ICON_SIZE} {...rest} />;
         default:
             return null;
@@ -36,7 +43,8 @@ const StatusMessage = ({ status }: { status: TaskStatus }) => {
             return <FormattedMessage {...messages.tasksFeedCompletedLabel} />;
         case TASK_NEW_REJECTED:
             return <FormattedMessage {...messages.tasksFeedRejectedLabel} />;
-        case TASK_NEW_INCOMPLETE:
+        case TASK_NEW_NOT_STARTED:
+        case TASK_NEW_IN_PROGRESS:
             return <FormattedMessage {...messages.tasksFeedIncompleteLabel} />;
         default:
             return null;

@@ -12,6 +12,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -35,7 +36,6 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -57,6 +57,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -80,7 +81,6 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -107,6 +107,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -130,7 +131,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -148,6 +148,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="bottom-center"
     text="You do not have permission to invite collaborators."
     theme="default"
@@ -159,6 +160,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={true}
         position="middle-right"
         showCloseButton={true}
@@ -182,7 +184,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           onContactAdd={[Function]}
           onContactRemove={[Function]}
           onInput={[Function]}
-          onSuggestedCollaboratorAdd={[Function]}
           selectedContacts={Array []}
           validateForError={[Function]}
           validator={[Function]}
@@ -238,6 +239,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -261,7 +263,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -316,6 +317,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -339,7 +341,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -366,6 +367,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -389,7 +391,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}
@@ -449,6 +450,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -472,7 +474,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        onSuggestedCollaboratorAdd={[Function]}
         selectedContacts={Array []}
         validateForError={[Function]}
         validator={[Function]}

@@ -56,13 +56,14 @@ describe('features/query-bar/components/filter/ValueField', () => {
             const dateValue = new Date(1995, 11, 25, 9, 30, 0);
 
             test.each`
-                description                                                     | valueType       | componentName          | selectedValues     | expectedValue
-                ${'should render MultiSelectField for valueType of multi-enum'} | ${'multi-enum'} | ${'MultiSelectField'}  | ${['r', 'g', 'b']} | ${['r', 'g', 'b']}
-                ${'should render SingleSelectField for valueType of enum'}      | ${'enum'}       | ${'SingleSelectField'} | ${[stringValue]}   | ${stringValue}
-                ${'should render DatePicker for valueType of date'}             | ${'date'}       | ${'DatePicker'}        | ${[dateValue]}     | ${dateValue}
-                ${'should render TextInput for valueType of string'}            | ${'string'}     | ${'TextInput'}         | ${[stringValue]}   | ${stringValue}
-                ${'should render TextInput for valueType of float'}             | ${'float'}      | ${'TextInput'}         | ${[stringValue]}   | ${stringValue}
-                ${'should render TextInput for valueType of number'}            | ${'number'}     | ${'TextInput'}         | ${[stringValue]}   | ${stringValue}
+                description                                                                                     | valueType        | componentName          | selectedValues     | expectedValue
+                ${'should render MultiSelectField for valueType of multiSelect'}                                | ${'multiSelect'} | ${'MultiSelectField'}  | ${['r', 'g', 'b']} | ${['r', 'g', 'b']}
+                ${'should render SingleSelectField for valueType of enum'}                                      | ${'enum'}        | ${'SingleSelectField'} | ${[stringValue]}   | ${stringValue}
+                ${'should render DatePicker for valueType of date'}                                             | ${'date'}        | ${'DatePicker'}        | ${[dateValue]}     | ${dateValue}
+                ${'should render DatePicker for valueType of date and user tries to delete the existing input'} | ${'date'}        | ${'DatePicker'}        | ${[null]}          | ${undefined}
+                ${'should render TextInput for valueType of string'}                                            | ${'string'}      | ${'TextInput'}         | ${[stringValue]}   | ${stringValue}
+                ${'should render TextInput for valueType of float'}                                             | ${'float'}       | ${'TextInput'}         | ${[stringValue]}   | ${stringValue}
+                ${'should render TextInput for valueType of number'}                                            | ${'number'}      | ${'TextInput'}         | ${[stringValue]}   | ${stringValue}
             `('$description', ({ componentName, expectedValue, selectedValues, valueType }) => {
                 const wrapper = getWrapper({ valueType, selectedValues });
 

@@ -104,6 +104,9 @@
     },
     "jest": {
         "clearMocks": true,
+        "globals": {
+            "__VERSION__": "test"
+        },
         "restoreMocks": true,
         "moduleNameMapper": {
             "react-intl": "<rootDir>/conf/jest/mocks/react-intl-mocks.js",
@@ -118,7 +121,7 @@
         "collectCoverage": false,
         "coverageDirectory": "<rootDir>/reports",
         "collectCoverageFrom": ["src/**/*.js", "!**/node_modules/**", "!**/__tests__/**"],
-        "globalSetup": "<rootDir>/test-utils/env-setup.js",
+        "globalSetup": "<rootDir>/conf/jest/env-setup.js",
         "roots": ["src"],
         "setupFilesAfterEnv": [
             "<rootDir>/node_modules/regenerator-runtime/runtime.js",

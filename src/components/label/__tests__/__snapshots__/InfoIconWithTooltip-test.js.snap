@@ -8,6 +8,7 @@ exports[`components/label/InfoIconWithTooltip should render correctly 1`] = `
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="top-center"
     text="I am a tooltip"
     theme="default"

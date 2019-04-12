@@ -858,19 +858,49 @@ const messages = defineMessages({
         defaultMessage: 'Decline',
         description: 'Reject option for a task',
     },
+    taskDueDateLabel: {
+        id: 'be.tasks.taskDueDate',
+        defaultMessage: 'Due: {date}',
+        description: 'Label and date for task due date',
+    },
     tasksAddTask: {
         id: 'be.tasks.addTask',
         defaultMessage: 'Add Task',
         description: 'label for button that opens task popup',
     },
-    tasksAddTaskFormTitle: {
-        id: 'be.tasks.addTaskForm.title',
-        defaultMessage: 'Add Task',
-        description: 'title for task popup',
+    taskAddTaskGeneral: {
+        id: 'be.tasks.addTask.general',
+        defaultMessage: 'Task',
+        description: 'label for menu item that opens general task popup',
     },
-    tasksAddTaskFormAssigneesLabel: {
-        id: 'be.tasks.addTaskForm.assigneesLabel',
-        defaultMessage: 'Assignees',
+    taskAddTaskGeneralDescription: {
+        id: 'be.tasks.addTask.general.description',
+        defaultMessage: 'Add Task',
+        description: 'description for menu item that opens general task popup',
+    },
+    taskAddTaskApproval: {
+        id: 'be.tasks.addTask.approval',
+        defaultMessage: 'Approval',
+        description: 'label for menu item that opens approval task popup',
+    },
+    taskAddTaskApprovalDescription: {
+        id: 'be.tasks.addTask.approval.description',
+        defaultMessage: 'Request an approval to move work forward',
+        description: 'description for menu item that opens approval task popup',
+    },
+    tasksCreateGeneralTaskFormTitle: {
+        id: 'be.tasks.createTask.general.title',
+        defaultMessage: 'Create General Task',
+        description: 'title for general task popup',
+    },
+    tasksCreateApprovalTaskFormTitle: {
+        id: 'be.tasks.createTask.approval.title',
+        defaultMessage: 'Create Approval Task',
+        description: 'title for approval task popup',
+    },
+    tasksAddTaskFormSelectAssigneesLabel: {
+        id: 'be.tasks.addTaskForm.selectAssigneesLabel',
+        defaultMessage: 'Select Assignee(s)',
         description: 'label for task create form assignee input',
     },
     tasksAddTaskFormMessageLabel: {
@@ -927,6 +957,26 @@ const messages = defineMessages({
         id: 'be.tasks.feed.incompleteLabel',
         defaultMessage: 'Awaiting Assignees',
         description: 'Label for an incomplete task',
+    },
+    tasksFeedHeadlineApprovalCurrentUser: {
+        id: 'be.tasks.feed.headline.approval.currentUser',
+        defaultMessage: '{ user } assigned you an Approval Task',
+        description: 'Comment headline for an approval task assigned to the current user',
+    },
+    tasksFeedHeadlineApproval: {
+        id: 'be.tasks.feed.headline.approval',
+        defaultMessage: '{ user } assigned an Approval Task',
+        description: 'Comment headline for an approval task',
+    },
+    tasksFeedHeadlineGeneralCurrentUser: {
+        id: 'be.tasks.feed.headline.general.currentUser',
+        defaultMessage: '{ user } assigned you a Task',
+        description: 'Comment headline for a general task assigned to the current user',
+    },
+    tasksFeedHeadlineGeneral: {
+        id: 'be.tasks.feed.headline.general',
+        defaultMessage: '{ user } assigned a Task',
+        description: 'Comment headline for a general task',
     },
     versionDeleted: {
         id: 'be.versionDeleted',

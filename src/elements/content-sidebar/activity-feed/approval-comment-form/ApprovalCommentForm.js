@@ -29,7 +29,7 @@ type Props = {
     createTask?: Function,
     entityId?: string,
     getApproverWithQuery?: Function,
-    getAvatarUrl: string => Promise<?string>,
+    getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     isDisabled?: boolean,
     isEditing?: boolean,

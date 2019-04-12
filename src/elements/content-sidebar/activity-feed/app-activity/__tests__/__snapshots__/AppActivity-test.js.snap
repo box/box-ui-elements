@@ -45,6 +45,7 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="top-center"
           text={
             <FormattedMessage

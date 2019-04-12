@@ -26,6 +26,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
+import globalUtils from '../../utils/globals';
 import { withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
@@ -74,6 +75,7 @@ type Props = {
     onDownload: Function,
     onLoad: Function,
     onNavigate: Function,
+    onVersionChange: OnVersionChange,
     previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
@@ -186,6 +188,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onError: noop,
         onLoad: noop,
         onNavigate: noop,
+        onVersionChange: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         showAnnotations: false,
         staticHost: DEFAULT_HOSTNAME_STATIC,
@@ -242,6 +245,8 @@ class ContentPreview extends PureComponent<Props, State> {
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
+
+        globalUtils.setElementsDebugInfo();
     }
 
     /**
@@ -1043,10 +1048,13 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Handles version change events
      *
-     * @param {string} versionId - The version id to set as current
+     * @param {string} [version] - The version that is now previewed
+     * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (versionId?: string) => {
-        this.setState({ selectedVersionId: versionId });
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: Object): void => {
+        const { onVersionChange }: Props = this.props;
+        onVersionChange(version, additionalVersionInfo);
+        this.setState({ selectedVersionId: getProp(version, 'id') });
     };
 
     /**

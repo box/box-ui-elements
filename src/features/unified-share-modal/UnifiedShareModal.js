@@ -21,6 +21,7 @@ import messages from './messages';
 import RemoveLinkConfirmModal from './RemoveLinkConfirmModal';
 import SharedLinkSection from './SharedLinkSection';
 import EmailForm from './EmailForm';
+import getDefaultPermissionLevel from './utils/defaultPermissionLevel';
 import type {
     accessLevelType,
     collaboratorsListType,
@@ -31,8 +32,8 @@ import type {
     tooltipComponentIdentifierType,
     trackingPropsType,
     sharedLinkType,
+    suggestedCollaboratorsType,
 } from './flowTypes';
-import { EDITOR } from './constants';
 
 import './UnifiedShareModal.scss';
 
@@ -112,7 +113,7 @@ type Props = {
     /** Whether or not a request is in progress */
     submitting: boolean,
     /** Data for suggested collaborators shown at bottom of input box. UI doesn't render when this has length of 0. */
-    suggestedCollaborators?: Array<Object>,
+    suggestedCollaborators?: suggestedCollaboratorsType,
     /** Mapping of components to the content that should be rendered in their tooltips */
     tooltips?: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
     /** Object with props and handlers for tracking interactions in unified share modal */
@@ -153,7 +154,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
         this.state = {
             emailSharedLinkContacts: [],
             inviteCollabsContacts: [],
-            inviteePermissionLevel: EDITOR,
+            inviteePermissionLevel: '',
             isConfirmModalOpen: false,
             isEmailLinkSectionExpanded: false,
             isFetching: true,
@@ -254,16 +255,18 @@ class UnifiedShareModal extends React.Component<Props, State> {
     };
 
     handleSendInvites = (data: Object) => {
-        const { sendInvites, trackingProps } = this.props;
+        const { inviteePermissions, sendInvites, trackingProps } = this.props;
         const { inviteCollabsEmailTracking } = trackingProps;
         const { onSendClick } = inviteCollabsEmailTracking;
         const { inviteePermissionLevel } = this.state;
+        const defaultPermissionLevel = getDefaultPermissionLevel(inviteePermissions);
+        const selectedPermissionLevel = inviteePermissionLevel || defaultPermissionLevel;
         const { emails, groupIDs, message } = data;
         const params = {
             emails: emails.join(','),
             groupIDs: groupIDs.join(','),
             emailMessage: message,
-            permission: inviteePermissionLevel,
+            permission: selectedPermissionLevel,
             numsOfInvitees: emails.length,
             numOfInviteeGroups: groupIDs.length,
         };

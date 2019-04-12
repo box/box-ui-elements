@@ -82,6 +82,50 @@ const icons = [
                 </div>
             );
         },
+    }, {
+        name: 'IconTaskGeneral',
+        content: () => {
+            const IconTaskGeneral = require('./IconTaskGeneral').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-task-general-example .foreground-color {
+                                fill: #fff;
+                            }
+
+                            .icon-task-general-example .background-color {
+                                fill: #0061d5;
+                            }
+                        `}
+                    </style>
+                    <IconTaskGeneral />
+                    <IconTaskGeneral className="icon-task-general-example" />
+                </div>
+            );
+        },
+    }, {
+        name: 'IconTaskApproval',
+        content: () => {
+            const IconTaskApproval = require('./IconTaskApproval').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-task-approval-example .foreground-color {
+                                fill: #fff;
+                            }
+
+                            .icon-task-approval-example .background-color {
+                                fill: #0061d5;
+                            }
+                        `}
+                    </style>
+                    <IconTaskApproval />
+                    <IconTaskApproval className="icon-task-approval-example" />
+                </div>
+            );
+        },
     },
 ];
 

@@ -219,32 +219,6 @@ describe('features/unified-share-modal/EmailForm', () => {
         });
     });
 
-    describe('handleSuggestedCollaboratorAdd()', () => {
-        const contact = {
-            id: 123,
-            type: 'user',
-        };
-
-        test('should call handleContactAdd', () => {
-            const wrapper = getWrapper();
-            const handleContactAddSpy = jest.spyOn(wrapper.instance(), 'handleContactAdd');
-            wrapper.instance().handleSuggestedCollaboratorAdd(contact);
-
-            expect(handleContactAddSpy).toHaveBeenCalledWith([contact]);
-        });
-
-        test('should call openInviteCollaboratorsSection', () => {
-            const openInviteCollaboratorsSection = jest.fn();
-            const wrapper = getWrapper({
-                openInviteCollaboratorsSection,
-            });
-
-            wrapper.instance().handleSuggestedCollaboratorAdd(contact);
-
-            expect(openInviteCollaboratorsSection).toHaveBeenCalled();
-        });
-    });
-
     describe('filterSentEmails()', () => {
         test('should filter out the user if that user is already selected', () => {
             const updateSelectedContacts = jest.fn();
