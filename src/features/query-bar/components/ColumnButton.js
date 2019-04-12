@@ -19,6 +19,7 @@ type State = {
 
 type Props = {
     columns?: Array<ColumnType>,
+    nameColumn?: ColumnType,
     onColumnChange?: (columnTypes: Array<ColumnType>) => void,
     template?: MetadataTemplate,
 };
@@ -61,7 +62,7 @@ class ColumnButton extends React.Component<Props, State> {
     };
 
     render() {
-        const { template, columns, onColumnChange } = this.props;
+        const { columns, nameColumn, onColumnChange, template } = this.props;
         const { isColumnMenuOpen } = this.state;
         const numberOfHiddenColumns = this.getNumberOfHiddenColumns();
 
@@ -101,7 +102,11 @@ class ColumnButton extends React.Component<Props, State> {
 
                 <Overlay>
                     {isColumnMenuOpen ? (
-                        <ColumnButtonOverlay columns={columns} onColumnChange={onColumnChange} />
+                        <ColumnButtonOverlay
+                            columns={columns}
+                            nameColumn={nameColumn}
+                            onColumnChange={onColumnChange}
+                        />
                     ) : (
                         <div />
                     )}

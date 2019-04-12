@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { columnForDateType, columnWithFloatType } from '../components/fixtures';
+import { columnForDateType, columnForItemName, columnWithFloatType } from '../components/fixtures';
 import ColumnButtonOverlay from '../components/ColumnButtonOverlay';
 
 const columns = [columnForDateType, columnWithFloatType];
@@ -41,20 +41,30 @@ describe('features/query-bar/components/ColumnButtonOverlay', () => {
     });
 
     describe('applyFilters()', () => {
-        [
-            {
-                description: 'Should apply filters to parent state',
-                pendingColumns: columns,
-            },
-        ].forEach(({ description, pendingColumns }) => {
-            test(`${description}`, () => {
-                const wrapper = getWrapper();
-
-                wrapper.setState({
-                    pendingColumns,
-                });
-                wrapper.instance().applyFilters();
+        test('Should apply filters to parent state and call onColumnChange with columns that include name column', () => {
+            const onColumnChange = jest.fn();
+            const wrapper = getWrapper({
+                nameColumn: columnForItemName,
+                onColumnChange,
             });
+            const updatedColumns = [columnForItemName, ...columns];
+
+            wrapper.setState({
+                pendingColumns: columns,
+            });
+            wrapper.instance().applyFilters();
+            expect(onColumnChange).toBeCalledWith(updatedColumns);
+        });
+
+        test('Should throw error if name column was not passed in', () => {
+            const onColumnChange = jest.fn();
+            const wrapper = getWrapper({
+                onColumnChange,
+            });
+
+            expect(() => {
+                wrapper.instance().applyFilters();
+            }).toThrow('Should have Name Column');
         });
     });
 

@@ -21,6 +21,7 @@ type State = {
 
 type Props = {
     columns?: Array<ColumnType>,
+    nameColumn?: ColumnType,
     onColumnChange?: (columnTypes: Array<ColumnType>) => void,
 };
 
@@ -57,10 +58,16 @@ class ColumnButtonOverlay extends React.Component<Props, State> {
     };
 
     applyFilters = () => {
-        const { onColumnChange } = this.props;
+        const { nameColumn, onColumnChange } = this.props;
         const { pendingColumns } = this.state;
+        const pendingColumnsCopy = cloneDeep(pendingColumns);
+        pendingColumnsCopy.unshift(nameColumn);
+        if (!nameColumn) {
+            throw new Error('Should have Name Column');
+        }
+
         if (onColumnChange) {
-            onColumnChange(pendingColumns);
+            onColumnChange(pendingColumnsCopy);
         }
     };
 

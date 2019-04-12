@@ -28,6 +28,12 @@ describe('features/query-bar/components/QueryBar', () => {
         expect(ColumnButton.props().columns).toEqual([columnForTemplateFieldName]);
     });
 
+    test('should render ColumnButton with nameColumn', () => {
+        const wrapper = getWrapper({ columns });
+        const ColumnButton = wrapper.find('ColumnButton');
+        expect(ColumnButton.props().nameColumn).toEqual(columnForItemName);
+    });
+
     test('should render FilterButton with metadata columns', () => {
         const wrapper = getWrapper({ columns });
         const FilterButton = wrapper.find('FilterButton');
