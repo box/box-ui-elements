@@ -1,9 +1,11 @@
 // @flow
 import * as React from 'react';
 
-import { columnWithEnumType, initialCondition } from '../components/fixtures';
+import { columnWithEnumType } from '../components/fixtures';
 import Condition from '../components/filter/Condition';
+import { EQUALS } from '../constants';
 
+const invalidCondition: ConditionType = { columnId: '3', id: '0', operator: EQUALS, values: [] };
 const columns = [columnWithEnumType];
 
 describe('features/query-bar/components/filter/Condition', () => {
@@ -12,7 +14,7 @@ describe('features/query-bar/components/filter/Condition', () => {
             <Condition
                 index={0}
                 columns={columns}
-                condition={initialCondition}
+                condition={invalidCondition}
                 deleteCondition={() => {}}
                 update={() => {}}
                 intl={{ formatMessage: () => {} }}
@@ -23,7 +25,7 @@ describe('features/query-bar/components/filter/Condition', () => {
 
     describe('render()', () => {
         test('should render Condition', () => {
-            const condition = initialCondition;
+            const condition = invalidCondition;
             const wrapper = getWrapper({ condition });
 
             expect(wrapper).toMatchSnapshot();
@@ -32,7 +34,7 @@ describe('features/query-bar/components/filter/Condition', () => {
 
     describe('handleColumnChange()', () => {
         test('should select a column', () => {
-            const condition = initialCondition;
+            const condition = invalidCondition;
             const columnId = '1';
             const option = {
                 type: 'string',
@@ -54,7 +56,7 @@ describe('features/query-bar/components/filter/Condition', () => {
 
     describe('handleOperatorChange()', () => {
         const displayText = 'Vendor Name';
-        const condition = initialCondition;
+        const condition = invalidCondition;
         const value = '0';
         const option = {
             displayText,
@@ -76,7 +78,7 @@ describe('features/query-bar/components/filter/Condition', () => {
     });
 
     describe('handleValueChange()', () => {
-        const condition = initialCondition;
+        const condition = invalidCondition;
         const textInputValue = 'string';
         const selectFieldValue = '1';
         const dateFieldValue = new Date(2018, 11, 24, 10, 33, 30, 0);

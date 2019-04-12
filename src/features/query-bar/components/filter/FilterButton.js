@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
+import cloneDeep from 'lodash/cloneDeep';
 
 import IconMetadataFilter from '../../../../icons/metadata-view/IconMetadataFilter';
 import Condition from './Condition';
@@ -41,30 +42,30 @@ class FilterButton extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            transientConditions: this.props.conditions.slice(0),
-            selectedConnector: AND,
             areErrorsEnabled: false,
             isMenuOpen: false,
+            selectedConnector: AND,
+            transientConditions: cloneDeep(this.props.conditions),
         };
     }
 
-    componentDidMount() {
-        const initialCondition = this.createCondition();
-
-        this.setState({
-            transientConditions: [initialCondition],
-        });
-    }
-
-    componentDidUpdate() {
-        const { conditions } = this.props;
-        const { transientConditions } = this.state;
-        const wasFlyoutClosed = transientConditions.length === 0;
-        const shouldHydrateConditions = transientConditions.length !== conditions.length;
-        if (wasFlyoutClosed && shouldHydrateConditions) {
-            this.setState({
-                transientConditions: this.props.conditions.slice(0),
-            });
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        const { columns } = this.props;
+        const { isMenuOpen } = this.state;
+        const { isMenuOpen: prevIsMenuOpen } = prevState;
+        const wasFlyoutOpened = isMenuOpen && !prevIsMenuOpen;
+        if (wasFlyoutOpened) {
+            const areConditionsEmpty = this.props.conditions.length === 0;
+            if (areConditionsEmpty) {
+                const transientConditions = columns && columns.length === 0 ? [] : [this.createCondition()];
+                this.setState({
+                    transientConditions,
+                });
+            } else {
+                this.setState({
+                    transientConditions: cloneDeep(this.props.conditions),
+                });
+            }
         }
     }
 
@@ -96,7 +97,7 @@ class FilterButton extends React.Component<Props, State> {
                 values: [],
             };
         }
-        return {};
+        throw new Error('Columns Required');
     };
 
     addFilter = () => {
@@ -120,6 +121,7 @@ class FilterButton extends React.Component<Props, State> {
             this.setState({
                 isMenuOpen: false,
                 transientConditions: [],
+                areErrorsEnabled: false,
             });
         } else {
             this.setState({
@@ -139,7 +141,7 @@ class FilterButton extends React.Component<Props, State> {
         let newCondition = { ...conditionToUpdate };
         newCondition = updateCondition(newCondition);
 
-        const newConditions = transientConditions.slice(0);
+        const newConditions = cloneDeep(transientConditions);
         newConditions[newConditionIndex] = newCondition;
 
         this.setState({
@@ -172,7 +174,7 @@ class FilterButton extends React.Component<Props, State> {
             values: [],
         };
 
-        const newConditions = transientConditions.slice(0);
+        const newConditions = cloneDeep(transientConditions);
         newConditions[newConditionIndex] = newCondition;
 
         this.setState({
@@ -255,8 +257,12 @@ class FilterButton extends React.Component<Props, State> {
         const { transientConditions, areErrorsEnabled, isMenuOpen, selectedConnector } = this.state;
 
         const numberOfConditions = conditions.length;
+        const areAllValid = this.areAllValid();
 
-        const buttonClasses = classNames('query-bar-button', numberOfConditions !== 0 ? 'is-active' : '');
+        const buttonClasses = classNames(
+            'query-bar-button',
+            numberOfConditions !== 0 && areAllValid ? 'is-active' : '',
+        );
 
         const isFilterDisabled = !columns || columns.length === 0;
 
