@@ -39,10 +39,7 @@ const AddTaskMenu = (props: Props) => (
                     </div>
                 </div>
             </MenuItem>
-            <MenuItem
-                className="bcs-AddTaskMenu-menuItem bcs-AddTaskMenu-menuItem--last"
-                onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}
-            >
+            <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}>
                 <div className="bcs-AddTaskMenu-icon">
                     <IconTaskApproval />
                 </div>

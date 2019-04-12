@@ -50,7 +50,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
       </div>
     </MenuItem>
     <MenuItem
-      className="bcs-AddTaskMenu-menuItem bcs-AddTaskMenu-menuItem--last"
+      className="bcs-AddTaskMenu-menuItem"
       onClick={[Function]}
     >
       <div
