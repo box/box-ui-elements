@@ -442,4 +442,27 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         expect(wrapper.find('.userHeadlineRenderer')).toHaveLength(1);
     });
+
+    test('should use avatarRenderer if prop is passed in', () => {
+        const comment = {
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
+        };
+        const avatarRenderer = avatar => <div className="avatar-test">{avatar}</div>;
+
+        const wrapper = shallow(
+            <Comment
+                id="123"
+                {...comment}
+                avatarRenderer={avatarRenderer}
+                approverSelectorContacts={approverSelectorContacts}
+                currentUser={currentUser}
+                handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
+            />,
+        );
+
+        expect(wrapper.find('.avatar-test')).toHaveLength(1);
+    });
 });
