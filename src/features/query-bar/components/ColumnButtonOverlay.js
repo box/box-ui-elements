@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import uniqueId from 'lodash/uniqueId';
+import cloneDeep from 'lodash/cloneDeep';
 
 import Checkbox from '../../../components/checkbox/Checkbox';
 import DraggableList from '../../../components/draggable-list';
@@ -28,7 +29,7 @@ class ColumnButtonOverlay extends React.Component<Props, State> {
         super(props);
         this.state = {
             listId: uniqueId(),
-            pendingColumns: props.columns ? props.columns.slice(0) : [],
+            pendingColumns: props.columns ? cloneDeep(props.columns) : [],
         };
     }
 
@@ -36,14 +37,14 @@ class ColumnButtonOverlay extends React.Component<Props, State> {
         const { pendingColumns } = this.state;
         const columns = reorder(pendingColumns, sourceIndex, destinationIndex);
         this.setState({
-            pendingColumns: columns.slice(0),
+            pendingColumns: cloneDeep(columns),
         });
     };
 
     updatePendingColumns = (column: ColumnType) => {
         const { pendingColumns } = this.state;
 
-        const pendingColumnsCopy = pendingColumns.slice(0);
+        const pendingColumnsCopy = cloneDeep(pendingColumns);
 
         const newColumn = { ...column, isShown: !column.isShown };
 
