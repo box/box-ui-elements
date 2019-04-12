@@ -28,6 +28,7 @@ import './Comment.scss';
 import { PLACEHOLDER_USER } from '../../../../constants';
 
 type Props = {
+    avatarRenderer?: React.Node => React.Element<any>,
     created_at: string | number,
     created_by: User,
     currentUser?: User,
@@ -93,6 +94,7 @@ class Comment extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
+            avatarRenderer = identity,
             created_by,
             created_at,
             permissions,
@@ -130,7 +132,9 @@ class Comment extends React.Component<Props, State> {
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
                 >
-                    <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />
+                    {avatarRenderer(
+                        <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />,
+                    )}
                     <div className="bcs-comment-content">
                         <div className="bcs-comment-headline">
                             {userHeadlineRenderer(
