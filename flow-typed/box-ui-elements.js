@@ -722,6 +722,12 @@ type TaskNew = {|
     type: 'task',
 |};
 
+type TaskPayload = {
+    due_at?: ?string,
+    name: string,
+    task_type: TaskType,
+};
+
 /* New Task Types END */
 
 type Comment = {
