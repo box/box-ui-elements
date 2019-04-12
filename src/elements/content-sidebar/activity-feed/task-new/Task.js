@@ -5,6 +5,10 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { fillUserPlaceholder } from '../../../../utils/fields';
 import messages from '../../../common/messages';
+
+import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
+import IconTaskGeneral from '../../../../icons/two-toned/IconTaskGeneral';
+
 import {
     TASK_NEW_APPROVED,
     TASK_NEW_REJECTED,
@@ -129,6 +133,8 @@ const Task = ({
         currentUserAssignment.status === TASK_NEW_NOT_STARTED &&
         (status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
 
+    const TaskTypeIcon = task_type === TASK_TYPE_APPROVAL ? IconTaskApproval : IconTaskGeneral;
+
     return (
         <div
             className={classNames('bcs-task', {
@@ -137,6 +143,12 @@ const Task = ({
             data-testid="task-card"
         >
             <Comment
+                avatarRenderer={avatar => (
+                    <div className="bcs-task-avatar">
+                        {avatar}
+                        <TaskTypeIcon width={20} height={20} className="bcs-task-avatar-badge" />
+                    </div>
+                )}
                 created_at={created_at}
                 created_by={created_by.target}
                 currentUser={currentUser}

@@ -6,6 +6,12 @@ $gray: $nines;
 $assignment-avatar-spacing: 4px;
 $card-left-offset: 40px;
 
+@mixin avatar-badge-icon {
+    border: 1px solid $white;
+    border-radius: 50%;
+    position: absolute;
+}
+
 .be .bcs-task {
     opacity: 1;
     transition: opacity .33s;
@@ -42,6 +48,18 @@ $card-left-offset: 40px;
         width: 32px;
     }
 
+    .bcs-task-avatar {
+        height: 100%;
+        position: relative;
+    }
+
+    .bcs-task-avatar-badge {
+        @include avatar-badge-icon;
+
+        bottom: 0;
+        right: 4px;
+    }
+
     .bcs-task-assignment-count {
         align-items: center;
         background: $gray;
@@ -64,13 +82,10 @@ $card-left-offset: 40px;
     }
 
     .bcs-task-assignment-status-icon {
-        border: 1px solid $white;
-        border-radius: 50%;
+        @include avatar-badge-icon;
+
         bottom: 0;
-        height: 12px;
-        position: absolute;
         right: 0;
-        width: 12px;
 
         &.completed,
         &.approved,
