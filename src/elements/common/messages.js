@@ -875,7 +875,7 @@ const messages = defineMessages({
     },
     taskAddTaskGeneralDescription: {
         id: 'be.tasks.addTask.general.description',
-        defaultMessage: 'Add Task',
+        defaultMessage: 'Keep track of work that needs to get done',
         description: 'description for menu item that opens general task popup',
     },
     taskAddTaskApproval: {
