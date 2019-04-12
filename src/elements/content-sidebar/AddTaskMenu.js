@@ -7,8 +7,9 @@ import DropdownMenu from '../../components/dropdown-menu';
 import MenuToggle from '../../components/dropdown-menu/MenuToggle';
 import { Menu, MenuItem } from '../../components/menu';
 import IconTaskApproval from '../../icons/two-toned/IconTaskApproval';
+import IconTaskGeneral from '../../icons/two-toned/IconTaskGeneral';
 import messages from '../common/messages';
-import { TASK_TYPE_APPROVAL } from '../../constants';
+import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 
 import './AddTaskMenu.scss';
 
@@ -25,7 +26,23 @@ const AddTaskMenu = (props: Props) => (
             </MenuToggle>
         </Button>
         <Menu className="bcs-AddTaskMenu">
-            <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}>
+            <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_GENERAL)}>
+                <div className="bcs-AddTaskMenu-icon">
+                    <IconTaskGeneral />
+                </div>
+                <div>
+                    <div className="bcs-AddTaskMenu-title">
+                        <FormattedMessage {...messages.taskAddTaskGeneral} />
+                    </div>
+                    <div className="bcs-AddTaskMenu-description">
+                        <FormattedMessage {...messages.taskAddTaskGeneralDescription} />
+                    </div>
+                </div>
+            </MenuItem>
+            <MenuItem
+                className="bcs-AddTaskMenu-menuItem bcs-AddTaskMenu-menuItem--last"
+                onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}
+            >
                 <div className="bcs-AddTaskMenu-icon">
                     <IconTaskApproval />
                 </div>

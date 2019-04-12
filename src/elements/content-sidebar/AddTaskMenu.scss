@@ -8,10 +8,15 @@ $bcs-AddTaskMenu-width: 256px;
 
 .bcs-AddTaskMenu-menuItem {
     display: flex;
+    margin-top: 10px;
     max-width: $bcs-AddTaskMenu-width;
     min-height: 80px;
-    padding: 20px;
+    padding: 10px 20px;
     white-space: normal;
+}
+
+.bcs-AddTaskMenu-menuItem--last {
+    margin: 0 0 10px;
 }
 
 .bcs-AddTaskMenu-icon {
