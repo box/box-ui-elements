@@ -1,15 +1,5 @@
 // @flow
-import type { ColumnType, ConditionType } from '../flowTypes';
-import { EQUALS } from '../constants';
-
-const initialCondition: ConditionType = {
-    columnId: '3',
-    id: '0',
-    operator: EQUALS,
-    values: [],
-};
-
-const conditions: Array<ConditionType> = [initialCondition];
+import type { ColumnType } from '../flowTypes';
 
 export const columnForItemName: ColumnType = {
     displayName: 'Name',
@@ -510,8 +500,6 @@ const metadataTableStateAfterMount = {
 };
 
 export {
-    initialCondition,
-    conditions,
     metadataColumns,
     expectedVisibleColumns,
     visibleColumnsOneHidden,
