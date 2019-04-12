@@ -24,6 +24,10 @@ const getDateValue = selectedValues => {
         return undefined;
     }
 
+    if (selectedValues[0] === null) {
+        return undefined;
+    }
+
     const value = selectedValues[0];
     if (value instanceof Date) {
         return value;
