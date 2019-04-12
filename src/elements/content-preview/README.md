@@ -20,6 +20,7 @@ var ContentPreview = require('./ContentPreview').default;
             hasMetadata: true,
             hasSkills: true,
         }}
+        hasHeader={true}
         features={FEATURES}
         fileId={FILE_ID}
         token={TOKEN}

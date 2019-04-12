@@ -7,9 +7,7 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import PlainButton from '../../../components/plain-button/PlainButton';
-import IconClose from '../../../icons/general/IconClose';
-import messages from '../../../common/messages';
-import { haze } from '../../../styles/variables';
+import messages from '../../common/messages';
 import FileInfo from './FileInfo';
 import './Header.scss';
 
@@ -19,7 +17,7 @@ type Props = {
 } & InjectIntlProvidedProps;
 
 const VersionsHeader = ({ file, intl, onClose }: Props) => {
-    const closeMsg = intl.formatMessage(messages.close);
+    const backMsg = intl.formatMessage(messages.back);
 
     return (
         <React.Fragment>
@@ -27,13 +25,13 @@ const VersionsHeader = ({ file, intl, onClose }: Props) => {
             <div className="bcpr-btns">
                 {onClose && (
                     <PlainButton
-                        aria-label={closeMsg}
-                        className="bcpr-btn"
+                        aria-label={backMsg}
+                        className="bcpr-btn bcpr-name"
                         onClick={onClose}
-                        title={closeMsg}
+                        title={backMsg}
                         type="button"
                     >
-                        <IconClose color={haze} height={24} width={24} />
+                        {backMsg}
                     </PlainButton>
                 )}
             </div>
