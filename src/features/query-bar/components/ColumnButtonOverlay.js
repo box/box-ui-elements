@@ -60,11 +60,12 @@ class ColumnButtonOverlay extends React.Component<Props, State> {
     applyFilters = () => {
         const { nameColumn, onColumnChange } = this.props;
         const { pendingColumns } = this.state;
+
         const pendingColumnsCopy = cloneDeep(pendingColumns);
-        pendingColumnsCopy.unshift(nameColumn);
         if (!nameColumn) {
             throw new Error('Should have Name Column');
         }
+        pendingColumnsCopy.unshift(nameColumn);
 
         if (onColumnChange) {
             onColumnChange(pendingColumnsCopy);
