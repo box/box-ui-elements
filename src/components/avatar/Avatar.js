@@ -13,9 +13,9 @@ const SIZES = { large: true };
 
 type Props = {
     /**
-     * Url to avatar image.  If passed in, component will render the avatar image instead of the initials
+     * Url to avatar image.  If passed in, component will render the avatar image instead of the initials.
      *
-     * Required if "name" is not specified.
+     * Will fall back to initials of "name" prop if no url is specified, and UnknownUser if neither is specified.
      */
     avatarUrl?: ?string,
     /** classname to add to the container element. */
@@ -27,9 +27,9 @@ type Props = {
      */
     isPending?: boolean,
     /**
-     * Users full name.
+     * Users full name, used to get initials.
      *
-     * Required if "avatarUrl" is not specified.
+     * Used if "avatarUrl" is not specified. Will fall back to UnknownUser if neither is specified.
      */
     name?: string,
     /* avatar size (enum) */
@@ -71,12 +71,12 @@ class Avatar extends React.PureComponent<Props, State> {
         const backgroundColor = hasNoAvatar || hasImageErrored ? initialsBackgroundColor : loadingBackgroundColor;
 
         let avatar;
-        if (!isPending && avatarUrl && !hasImageErrored) {
-            avatar = <AvatarImage onError={this.onImageError} url={avatarUrl} />;
-        } else if (!isPending && name) {
-            avatar = <AvatarInitials name={name} />;
-        } else if (isPending) {
+        if (isPending) {
             avatar = <span />;
+        } else if (avatarUrl && !hasImageErrored) {
+            avatar = <AvatarImage onError={this.onImageError} url={avatarUrl} />;
+        } else if (name) {
+            avatar = <AvatarInitials name={name} />;
         } else {
             avatar = <UnknownUserAvatar className="avatar-icon" />;
         }
