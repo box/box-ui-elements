@@ -3,14 +3,14 @@
 $bcs-AddTaskMenu-width: 256px;
 
 .bcs-AddTaskMenu {
-    padding: 0;
+    padding: 10px 0;
 }
 
 .bcs-AddTaskMenu-menuItem {
     display: flex;
     max-width: $bcs-AddTaskMenu-width;
     min-height: 80px;
-    padding: 20px;
+    padding: 10px 20px;
     white-space: normal;
 }
 
