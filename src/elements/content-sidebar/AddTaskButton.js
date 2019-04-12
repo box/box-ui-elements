@@ -6,6 +6,7 @@ import AddTaskMenu from './AddTaskMenu';
 import Modal from '../../components/modal/Modal';
 import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
+import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 
 type AddTaskButtonProps = {|
     feedbackUrl: string,
@@ -25,18 +26,28 @@ type Props = {| ...AddTaskButtonProps, ...PassThroughProps |};
 
 type State = {
     isTaskFormOpen: boolean,
-    taskType: ?TaskType,
+    taskType: TaskType,
 };
 
 class AddTaskButton extends React.Component<Props, State> {
     state = {
         isTaskFormOpen: false,
-        taskType: null,
+        taskType: TASK_TYPE_APPROVAL,
     };
 
     static defaultProps = {
         isDisabled: false,
     };
+
+    getMessageForModalTitle(taskType: TaskType): Object {
+        switch (taskType) {
+            case TASK_TYPE_GENERAL:
+                return messages.tasksCreateGeneralTaskFormTitle;
+            case TASK_TYPE_APPROVAL:
+            default:
+                return messages.tasksCreateApprovalTaskFormTitle;
+        }
+    }
 
     handleClickMenuItem = (taskType: TaskType) => this.setState({ isTaskFormOpen: true, taskType });
 
@@ -58,7 +69,7 @@ class AddTaskButton extends React.Component<Props, State> {
                     onRequestClose={this.handleModalClose}
                     title={
                         <React.Fragment>
-                            <FormattedMessage {...messages.tasksAddTaskFormTitle} />
+                            <FormattedMessage {...this.getMessageForModalTitle(taskType)} />
                             <BetaFeedbackBadge tooltip formUrl={feedbackUrl} />
                         </React.Fragment>
                     }

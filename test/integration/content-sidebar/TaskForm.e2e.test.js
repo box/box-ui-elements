@@ -18,7 +18,7 @@ describe('Create Task', () => {
             cy.contains(l('be.tasks.addTask')).click();
             cy.contains(l('be.tasks.addTask.approval')).click();
             cy.getByTestId('create-task-modal').within(() => {
-                cy.contains(l('be.tasks.addTaskForm.title')).should('exist');
+                cy.contains(l('be.tasks.createTask.approval.title')).should('exist');
                 getSubmitButton().should('exist');
                 getCancelButton().should('exist');
             });
