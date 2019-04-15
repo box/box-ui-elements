@@ -55,10 +55,10 @@ class FilterButton extends React.Component<Props, State> {
         const { isMenuOpen: prevIsMenuOpen } = prevState;
         const wasFlyoutOpened = isMenuOpen && !prevIsMenuOpen;
         if (wasFlyoutOpened) {
-            const isInitialConditionSet = transientConditions.length > 0;
+            const hasUnsavedConditions = transientConditions.length > 0;
             const shouldSetInitialCondition = conditions.length === 0;
 
-            if (!isInitialConditionSet) {
+            if (!hasUnsavedConditions) {
                 if (shouldSetInitialCondition) {
                     const newConditions = columns && columns.length === 0 ? [] : [this.createCondition()];
                     this.setState({
