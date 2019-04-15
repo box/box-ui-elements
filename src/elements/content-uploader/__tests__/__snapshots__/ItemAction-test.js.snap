@@ -7,6 +7,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span
@@ -35,6 +36,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span
@@ -63,6 +65,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span
@@ -89,6 +92,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span

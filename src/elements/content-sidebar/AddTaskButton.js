@@ -2,10 +2,11 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import BetaFeedbackBadge from '../../features/beta-feedback';
-import Button from '../../components/button';
+import AddTaskMenu from './AddTaskMenu';
 import Modal from '../../components/modal/Modal';
 import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
+import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 
 type AddTaskButtonProps = {|
     feedbackUrl: string,
@@ -25,46 +26,61 @@ type Props = {| ...AddTaskButtonProps, ...PassThroughProps |};
 
 type State = {
     isTaskFormOpen: boolean,
+    taskType: TaskType,
 };
 
 class AddTaskButton extends React.Component<Props, State> {
     state = {
         isTaskFormOpen: false,
+        taskType: TASK_TYPE_APPROVAL,
     };
 
     static defaultProps = {
         isDisabled: false,
     };
 
-    handleClickAdd = () => this.setState({ isTaskFormOpen: true });
+    getMessageForModalTitle(taskType: TaskType): Object {
+        switch (taskType) {
+            case TASK_TYPE_GENERAL:
+                return messages.tasksCreateGeneralTaskFormTitle;
+            case TASK_TYPE_APPROVAL:
+            default:
+                return messages.tasksCreateApprovalTaskFormTitle;
+        }
+    }
 
-    handleClose = () => this.setState({ isTaskFormOpen: false });
+    handleClickMenuItem = (taskType: TaskType) => this.setState({ isTaskFormOpen: true, taskType });
+
+    handleModalClose = () => this.setState({ isTaskFormOpen: false });
 
     handleSubmit = () => this.setState({ isTaskFormOpen: false });
 
     render() {
         const { isDisabled, feedbackUrl, ...passThrough } = this.props;
-        const { isTaskFormOpen } = this.state;
+        const { isTaskFormOpen, taskType } = this.state;
 
         return (
             <React.Fragment>
-                <Button isDisabled={isDisabled} onClick={this.handleClickAdd} type="button">
-                    <FormattedMessage {...messages.tasksAddTask} />
-                </Button>
+                <AddTaskMenu isDisabled={isDisabled} onMenuItemClick={this.handleClickMenuItem} />
                 <Modal
                     className="be-modal task-modal"
                     data-testid="create-task-modal"
                     isOpen={isTaskFormOpen}
-                    onRequestClose={this.handleClose}
+                    onRequestClose={this.handleModalClose}
                     title={
                         <React.Fragment>
-                            <FormattedMessage {...messages.tasksAddTaskFormTitle} />
+                            <FormattedMessage {...this.getMessageForModalTitle(taskType)} />
                             <BetaFeedbackBadge tooltip formUrl={feedbackUrl} />
                         </React.Fragment>
                     }
                 >
                     <div className="be">
-                        <TaskForm {...passThrough} onCancel={this.handleClose} onSubmit={this.handleSubmit} />
+                        <TaskForm
+                            {...passThrough}
+                            onCancel={this.handleModalClose}
+                            onSubmit={this.handleSubmit}
+                            taskType={taskType}
+                        />
                     </div>
                 </Modal>
             </React.Fragment>

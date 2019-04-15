@@ -13,7 +13,7 @@ import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
 
 type Props = {
-    getUserProfileUrl?: string => Promise<string>,
+    getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
     onTranslate?: Function,
     tagged_message: string,

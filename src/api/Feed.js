@@ -25,11 +25,11 @@ import {
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_INCOMPLETE,
-    TASK_NEW_INCOMPLETE,
+    TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
 } from '../constants';
 
-const TASK_NEW_INITIAL_STATUS = TASK_NEW_INCOMPLETE;
+const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 const TASK = 'task';
 const TASK_ASSIGNMENT = 'task_assignment';
 const TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
@@ -679,6 +679,7 @@ class Feed extends Base {
         currentUser: User,
         message: string,
         assignees: SelectorItems,
+        taskType: TaskType,
         dueAt: ?string,
         successCallback: Function,
         errorCallback: ErrorCallback,
@@ -749,13 +750,13 @@ class Feed extends Base {
                 limit: 1,
                 next_marker: null,
             },
-            task_type: 'GENERAL',
-            status: TASK_NEW_INCOMPLETE,
+            task_type: taskType,
+            status: TASK_NEW_NOT_STARTED,
         };
 
         this.addPendingItem(this.id, currentUser, pendingTask);
 
-        const taskPayload = { name: message, due_at: dueAtString };
+        const taskPayload: TaskPayload = { name: message, due_at: dueAtString, task_type: taskType };
 
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.tasksNewAPI.createTask({

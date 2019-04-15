@@ -124,11 +124,15 @@ describe('components/form-elements/text-input/TextInput', () => {
         stub.onCall(1).returns();
 
         const wrapper = mount(<TextInput label="label" name="input" type="custom" validation={stub} value="yes" />);
-        const input = wrapper.find('input');
-        const setCustomValiditySpy = jest.spyOn(input.getDOMNode(), 'setCustomValidity');
+        let input = wrapper.find('input');
+        let setCustomValiditySpy = jest.spyOn(input.getDOMNode(), 'setCustomValidity');
 
         input.simulate('blur');
         expect(setCustomValiditySpy).toHaveBeenCalledWith('errCode');
+
+        // Get the re-rendered input again
+        input = wrapper.find('input');
+        setCustomValiditySpy = jest.spyOn(input.getDOMNode(), 'setCustomValidity');
 
         input.simulate('blur');
         expect(setCustomValiditySpy).toHaveBeenCalledWith('');

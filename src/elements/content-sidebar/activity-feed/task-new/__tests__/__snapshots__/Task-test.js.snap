@@ -6,6 +6,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
   data-testid="task-card"
 >
   <Comment
+    avatarRenderer={[Function]}
     created_at="2010-01-01"
     created_by={
       Object {
@@ -28,12 +29,6 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         "id": "be.taskDeletePrompt",
       }
     }
-    messageHeader={
-      <TaskDueDate
-        dueDate={null}
-        status="NOT_STARTED"
-      />
-    }
     onDelete={[MockFunction]}
     onEdit={[MockFunction]}
     permissions={
@@ -49,36 +44,56 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     userHeadlineRenderer={[Function]}
   />
   <div
-    className="bcs-task-assignment-container"
+    className="bcs-task-content"
+  />
+  <div
+    className="bcs-task-content"
   >
-    <div
-      className="bcs-task-assignments"
-    >
-      <Component
-        data-testid="task-assignment-status"
-        key="current-user-assignment-id"
-        status="NOT_STARTED"
-        user={
-          Object {
-            "id": "1",
-            "name": "Jake Thomas",
-            "type": "user",
-          }
+    <Component
+      assignees={
+        Object {
+          "entries": Array [
+            Object {
+              "id": "current-user-assignment-id",
+              "permissions": Object {
+                "can_delete": true,
+                "can_update": true,
+              },
+              "role": "ASSIGNEE",
+              "status": "NOT_STARTED",
+              "target": Object {
+                "id": "1",
+                "name": "Jake Thomas",
+                "type": "user",
+              },
+              "type": "task_collaborator",
+            },
+            Object {
+              "id": "other-user-assignment-id",
+              "permissions": Object {
+                "can_delete": true,
+                "can_update": true,
+              },
+              "role": "ASSIGNEE",
+              "status": "COMPLETED",
+              "target": Object {
+                "id": "3",
+                "name": "Patrick Paul",
+                "type": "user",
+              },
+              "type": "task_collaborator",
+            },
+          ],
+          "limit": 10,
+          "next_marker": null,
         }
-      />
-      <Component
-        data-testid="task-assignment-status"
-        key="other-user-assignment-id"
-        status="COMPLETED"
-        user={
-          Object {
-            "id": "3",
-            "name": "Patrick Paul",
-            "type": "user",
-          }
-        }
-      />
-    </div>
+      }
+      maxAvatars={3}
+    />
+  </div>
+  <div
+    className="bcs-task-content"
+  >
     <TaskActions
       onTaskApproval={[Function]}
       onTaskComplete={[Function]}

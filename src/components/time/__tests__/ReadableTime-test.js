@@ -27,6 +27,10 @@ describe('components/time/ReadableTime', () => {
     const msBeginningOfCenturyTime = new Date(2000, 0, 0).getTime();
     const ms1HourInFuture = now + oneHourInMs;
 
+    const relativeThreshold = oneHourInMs;
+    const withinRelativeThresholdAhead = now + relativeThreshold / 2;
+    const withinRelativeThresholdBehind = now - relativeThreshold / 2;
+
     [
         // {
         //     timestamp: now,
@@ -59,7 +63,7 @@ describe('components/time/ReadableTime', () => {
             expectedValue: '{time, date, medium}',
         },
     ].forEach(({ timestamp, hasFormattedRelativeComp, hasFormattedMessageComp, expectedValue }) => {
-        test('should correctly render comment posted time when component is rendered with different times', () => {
+        test('should render comment posted time when component is rendered with different times', () => {
             const wrapper = shallow(<ReadableTime relativeThreshold={oneHourInMs} timestamp={timestamp} />);
 
             expect(wrapper.find('FormattedRelative').length === 1).toEqual(hasFormattedRelativeComp);
@@ -74,30 +78,40 @@ describe('components/time/ReadableTime', () => {
     });
     [
         {
-            description: 'Correctly renders timestamp that is yesterday',
+            description: 'should render with format "Yesterday at hh:mm"',
             timestamp: msYesterday,
         },
         {
-            description: 'Correctly renders timestamp that is the distant past',
+            description: 'should render with distant past format "mm dd yy at hh:mm"',
             timestamp: msBeginningOfCenturyTime,
         },
         {
-            description: 'Correctly renders timestamp that is a few days ago in the same year',
+            description: 'should render two days ago with format "mm dd"',
             timestamp: msTwoDaysAgo,
         },
         {
-            description: 'Correctly renders timestamp that is a few days ago in the same year with the time',
+            description: 'should render two days ago with format "mm dd at hh:mm" when we show the time',
             timestamp: msTwoDaysAgo,
             alwaysShowTime: true,
         },
         {
-            description: 'Correctly renders timestamp that is 1 hour in the future with future timestamps enabled',
-            timestamp: ms1HourInFuture,
+            description: 'should render with format "Today at hh:mm" when there is a future time stamp',
+            timestamp: relativeThreshold * 2 + now,
         },
         {
-            description: 'Correctly renders timestamp that is 1 hour in the future with future timestamps disabled',
+            description: 'should render with format "Today at hh:mm" when `allowFutureTimestamps` is false',
             timestamp: ms1HourInFuture,
             allowFutureTimestamps: false,
+        },
+        {
+            description:
+                'should render with format "in 30 minutes" when timestamp is within relative threshold (ahead)',
+            timestamp: withinRelativeThresholdAhead,
+        },
+        {
+            description:
+                'should render with format "30 minutes ago" when timestamp is within relative threshold (behind)',
+            timestamp: withinRelativeThresholdBehind,
         },
     ].forEach(({ description, timestamp, allowFutureTimestamps = true, alwaysShowTime = false }) => {
         test(description, () => {
@@ -112,5 +126,11 @@ describe('components/time/ReadableTime', () => {
 
             expect(wrapper).toMatchSnapshot();
         });
+    });
+
+    test('should use default relative threshold if not provided', () => {
+        const wrapper = shallow(<ReadableTime timestamp={withinRelativeThresholdAhead} />);
+
+        expect(wrapper.find('FormattedRelative')).toHaveLength(1);
     });
 });

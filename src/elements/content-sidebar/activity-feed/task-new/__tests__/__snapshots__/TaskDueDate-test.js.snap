@@ -10,19 +10,19 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
     data-testid="task-due-date"
   >
     <FormattedMessage
-      defaultMessage="Due"
-      id="be.taskDueDate"
+      defaultMessage="Due: {date}"
+      id="be.tasks.taskDueDate"
+      values={
+        Object {
+          "date": <ReadableTime
+            alwaysShowTime={true}
+            timestamp={987654321000}
+          />,
+        }
+      }
     >
       <div />
     </FormattedMessage>
-    <FormattedTime
-      day="numeric"
-      month="short"
-      value={2001-04-19T04:25:21.000Z}
-      year="numeric"
-    >
-      <div />
-    </FormattedTime>
   </div>
 </TaskDueDate>
 `;

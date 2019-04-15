@@ -25,23 +25,23 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
 
 import './Comment.scss';
-import { ONE_HOUR_MS, PLACEHOLDER_USER } from '../../../../constants';
+import { PLACEHOLDER_USER } from '../../../../constants';
 
 type Props = {
+    avatarRenderer?: React.Node => React.Element<any>,
     created_at: string | number,
     created_by: User,
     currentUser?: User,
     error?: ActionItemError,
-    getAvatarUrl: string => Promise<?string>,
+    getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
-    getUserProfileUrl?: string => Promise<string>,
+    getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
     inlineDeleteMessage?: MessageDescriptor,
     isDisabled?: boolean,
     isPending?: boolean,
     is_reply_comment?: boolean,
     mentionSelectorContacts?: SelectorItems,
-    messageHeader?: React.Node,
     modified_at?: string | number,
     onDelete?: Function,
     onEdit?: Function,
@@ -94,6 +94,7 @@ class Comment extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
+            avatarRenderer = identity,
             created_by,
             created_at,
             permissions,
@@ -103,7 +104,6 @@ class Comment extends React.Component<Props, State> {
             error,
             onDelete,
             onEdit,
-            messageHeader,
             tagged_message = '',
             userHeadlineRenderer = identity,
             translatedTaggedMessage,
@@ -132,7 +132,9 @@ class Comment extends React.Component<Props, State> {
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
                 >
-                    <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />
+                    {avatarRenderer(
+                        <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />,
+                    )}
                     <div className="bcs-comment-content">
                         <div className="bcs-comment-headline">
                             {userHeadlineRenderer(
@@ -164,11 +166,10 @@ class Comment extends React.Component<Props, State> {
                                 }
                             >
                                 <small className="bcs-comment-created-at">
-                                    <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
+                                    <ReadableTime alwaysShowTime timestamp={createdAtTimestamp} />
                                 </small>
                             </Tooltip>
                         </div>
-                        {messageHeader}
                         {isEditing ? (
                             <ApprovalCommentForm
                                 onSubmit={() => {}}

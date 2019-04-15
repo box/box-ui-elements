@@ -22,7 +22,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of pre
         id="boxui.accessStats.accessStatsPreviews"
       />
     </span>
-    <Component
+    <FormattedNumber
       value={100}
     />
   </PlainButton>
@@ -49,7 +49,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
         id="boxui.accessStats.accessStatsPreviews"
       />
     </span>
-    <Component
+    <FormattedNumber
       value={100}
     />
   </span>
@@ -76,7 +76,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
         id="boxui.accessStats.accessStatsViews"
       />
     </span>
-    <Component
+    <FormattedNumber
       value={100}
     />
   </span>
@@ -103,7 +103,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
         id="boxui.accessStats.accessStatsDownloads"
       />
     </span>
-    <Component
+    <FormattedNumber
       value={100}
     />
   </span>
@@ -130,7 +130,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
         id="boxui.accessStats.accessStatsComments"
       />
     </span>
-    <Component
+    <FormattedNumber
       value={100}
     />
   </span>
@@ -157,7 +157,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
         id="boxui.accessStats.accessStatsEdits"
       />
     </span>
-    <Component
+    <FormattedNumber
       value={100}
     />
   </span>
@@ -186,7 +186,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats with a
         id="boxui.accessStats.accessStatsPreviews"
       />
     </span>
-    <Component
+    <FormattedNumber
       value={100}
     />
     +
@@ -214,7 +214,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats with a
         id="boxui.accessStats.accessStatsPreviews"
       />
     </span>
-    <Component
+    <FormattedNumber
       value={0}
     />
   </span>

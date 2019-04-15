@@ -35,6 +35,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="top-center"
           text={
             <FormattedMessage
@@ -53,7 +54,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
             className="bcs-comment-created-at"
           >
             <ReadableTime
-              relativeThreshold={3600000}
+              alwaysShowTime={true}
               timestamp={1506534041000}
             />
           </small>
@@ -105,6 +106,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="top-center"
           text={
             <FormattedMessage
@@ -123,7 +125,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
             className="bcs-comment-created-at"
           >
             <ReadableTime
-              relativeThreshold={3600000}
+              alwaysShowTime={true}
               timestamp={1506534041000}
             />
           </small>
@@ -176,6 +178,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="top-center"
           text={
             <FormattedMessage
@@ -194,7 +197,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
             className="bcs-comment-created-at"
           >
             <ReadableTime
-              relativeThreshold={3600000}
+              alwaysShowTime={true}
               timestamp={1506534041000}
             />
           </small>
@@ -250,6 +253,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
+          isDisabled={false}
           position="top-center"
           text={
             <FormattedMessage
@@ -268,7 +272,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
             className="bcs-comment-created-at"
           >
             <ReadableTime
-              relativeThreshold={3600000}
+              alwaysShowTime={true}
               timestamp={1506534041000}
             />
           </small>

@@ -26,7 +26,7 @@ import './ActivitySidebar.scss';
 
 type ExternalProps = {
     currentUser?: User,
-    getUserProfileUrl?: string => Promise<string>,
+    getUserProfileUrl?: GetProfileUrlCallback,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskAssignmentUpdate?: Function,
@@ -135,7 +135,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     tasksApiNew = {
-        createTask: (message: string, assignees: SelectorItems, dueAt: ?string): void => {
+        createTask: (message: string, assignees: SelectorItems, taskType: TaskType, dueAt: ?string): void => {
             const { currentUser } = this.state;
             const { file, api } = this.props;
 
@@ -148,6 +148,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 currentUser,
                 message,
                 assignees,
+                taskType,
                 dueAt,
                 this.feedSuccessCallback,
                 this.feedErrorCallback,

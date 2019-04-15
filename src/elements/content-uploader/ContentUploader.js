@@ -89,7 +89,7 @@ type State = {
     view: View,
 };
 
-const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
+const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 104857600; // 100MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
@@ -1096,4 +1096,4 @@ class ContentUploader extends Component<Props, State> {
 }
 
 export default makeResponsive(ContentUploader);
-export { ContentUploader as ContentUploaderComponent };
+export { ContentUploader as ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES };
