@@ -166,4 +166,14 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
 />
 `;
 
-exports[`elements/content-sidebar/DetailsSidebar render() should render nothing if there is no file information 1`] = `""`;
+exports[`elements/content-sidebar/DetailsSidebar render() should render an empty container if there is no file information 1`] = `
+<SidebarContent
+  className="bcs-details"
+  title={
+    <FormattedMessage
+      defaultMessage="Details"
+      id="be.sidebarDetailsTitle"
+    />
+  }
+/>
+`;
