@@ -20,7 +20,7 @@ type Props = {
 };
 
 const getDateValue = selectedValues => {
-    if (selectedValues.length === 0) {
+    if (selectedValues.length === 0 || selectedValues[0] === null) {
         return undefined;
     }
 

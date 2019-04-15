@@ -24,12 +24,13 @@ import './TaskForm.scss';
 type TaskFormProps = {|
     approverSelectorContacts: SelectorItems,
     className?: string,
-    createTask: (text: string, approvers: SelectorItems, dueDate: ?Date) => any,
+    createTask: (text: string, approvers: SelectorItems, taskType: TaskType, dueDate: ?Date) => any,
     getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
     isDisabled?: boolean,
     onCancel: () => any,
     onSubmit: () => any,
+    taskType: TaskType,
 |};
 
 type Props = TaskFormProps & InjectIntlProvidedProps;
@@ -100,12 +101,12 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     handleValidSubmit = (): void => {
-        const { createTask, onSubmit } = this.props;
+        const { createTask, onSubmit, taskType } = this.props;
         const { message, approvers, dueDate, isValid } = this.state;
 
         if (!isValid) return;
 
-        createTask(message, approvers, dueDate);
+        createTask(message, approvers, taskType, dueDate);
 
         if (onSubmit) {
             // TODO: could this show server errors? <ApprovalCommentForm /> does not.
@@ -175,7 +176,7 @@ class TaskForm extends React.Component<Props, State> {
                             error={this.getErrorByFieldname('taskAssignees')}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
-                            label={<FormattedMessage {...messages.tasksAddTaskFormAssigneesLabel} />}
+                            label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
                             name="taskAssignees"
                             onBlur={() => this.validateForm('taskAssignees')}
                             onInput={this.handleApproverSelectorInput}

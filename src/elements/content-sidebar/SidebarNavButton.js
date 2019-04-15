@@ -22,12 +22,12 @@ const SidebarNavButton = ({ children, interactionTarget, onNavigate, sidebarView
     const sidebarPath = `/${sidebarView}`;
 
     return (
-        <Tooltip position="middle-left" text={tooltip}>
-            <Route path={sidebarPath}>
-                {({ match }) => {
-                    const isToggle = !!match && match.isExact;
+        <Route path={sidebarPath}>
+            {({ match }) => {
+                const isToggle = !!match && match.isExact;
 
-                    return (
+                return (
+                    <Tooltip position="middle-left" text={tooltip}>
                         <NavButton
                             activeClassName="bcs-is-selected"
                             className="bcs-NavButton"
@@ -44,10 +44,10 @@ const SidebarNavButton = ({ children, interactionTarget, onNavigate, sidebarView
                         >
                             {children}
                         </NavButton>
-                    );
-                }}
-            </Route>
-        </Tooltip>
+                    </Tooltip>
+                );
+            }}
+        </Route>
     );
 };
 

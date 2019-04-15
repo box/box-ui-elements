@@ -3,10 +3,9 @@ import * as React from 'react';
 import { columnForDateType, columnWithFloatType, template } from '../components/fixtures';
 import ColumnButton from '../components/ColumnButton';
 
-const columns = [columnForDateType, columnWithFloatType];
-
 describe('features/query-bar/components/ColumnButton', () => {
     const getWrapper = (props = {}) => {
+        const columns = [columnForDateType, columnWithFloatType];
         return shallow(<ColumnButton onColumnChange={jest.fn()} columns={columns} {...props} />);
     };
 
@@ -27,6 +26,21 @@ describe('features/query-bar/components/ColumnButton', () => {
         test('should render ColumnButton with template passed in', () => {
             const wrapper = getWrapper({ template });
             expect(wrapper).toMatchSnapshot();
+        });
+
+        const visibleColumns = [columnForDateType, columnWithFloatType];
+        const oneHiddenColumn = [{ ...columnForDateType, isShown: false }];
+        const twoHiddenColumns = [{ ...columnForDateType, isShown: false }, { ...columnWithFloatType, isShown: false }];
+
+        test.each`
+            columns             | values          | should
+            ${visibleColumns}   | ${undefined}    | ${'should render ColumnButton with no column count when all columns are visible'}
+            ${oneHiddenColumn}  | ${{ count: 1 }} | ${'should render ColumnButton with a column count of 1 when one column is hidden'}
+            ${twoHiddenColumns} | ${{ count: 2 }} | ${'should render ColumnButton with a column count of 2 when multiple columns are hidden'}
+        `('$should', ({ columns, values }) => {
+            const wrapper = getWrapper({ columns });
+            const FormattedMessage = wrapper.find('FormattedMessage');
+            expect(FormattedMessage.props().values).toEqual(values);
         });
     });
 
