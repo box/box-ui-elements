@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/AddTaskMenu render should render a default component with default props 1`] = `
+<DropdownMenu
+  constrainToScrollParent={true}
+  constrainToWindow={false}
+  isRightAligned={true}
+>
+  <Button
+    type="button"
+  >
+    <MenuToggle>
+      <FormattedMessage
+        defaultMessage="Add Task"
+        id="be.tasks.addTask"
+      />
+    </MenuToggle>
+  </Button>
+  <Menu
+    className="bcs-AddTaskMenu"
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <MenuItem
+      className="bcs-AddTaskMenu-menuItem"
+      onClick={[Function]}
+    >
+      <div
+        className="bcs-AddTaskMenu-icon"
+      >
+        <IconTaskGeneral />
+      </div>
+      <div>
+        <div
+          className="bcs-AddTaskMenu-title"
+        >
+          <FormattedMessage
+            defaultMessage="Task"
+            id="be.tasks.addTask.general"
+          />
+        </div>
+        <div
+          className="bcs-AddTaskMenu-description"
+        >
+          <FormattedMessage
+            defaultMessage="Keep track of work that needs to get done"
+            id="be.tasks.addTask.general.description"
+          />
+        </div>
+      </div>
+    </MenuItem>
+    <MenuItem
+      className="bcs-AddTaskMenu-menuItem"
+      onClick={[Function]}
+    >
+      <div
+        className="bcs-AddTaskMenu-icon"
+      >
+        <IconTaskApproval />
+      </div>
+      <div>
+        <div
+          className="bcs-AddTaskMenu-title"
+        >
+          <FormattedMessage
+            defaultMessage="Approval"
+            id="be.tasks.addTask.approval"
+          />
+        </div>
+        <div
+          className="bcs-AddTaskMenu-description"
+        >
+          <FormattedMessage
+            defaultMessage="Request an approval to move work forward"
+            id="be.tasks.addTask.approval.description"
+          />
+        </div>
+      </div>
+    </MenuItem>
+  </Menu>
+</DropdownMenu>
+`;
