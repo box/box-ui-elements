@@ -267,7 +267,12 @@ describe('elements/content-preview/ContentPreview', () => {
             };
             TokenService.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
             const wrapper = getWrapper(props);
-            wrapper.setState({ file, selectedVersionId: '12345' });
+            wrapper.setState({
+                file,
+                selectedVersion: {
+                    id: '12345',
+                },
+            });
             const instance = wrapper.instance();
             await instance.loadPreview();
             expect(instance.preview.show).toHaveBeenCalledWith(

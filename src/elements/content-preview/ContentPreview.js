@@ -93,11 +93,10 @@ type State = {
     currentFileId?: string,
     file?: BoxItem,
     isFileError: boolean,
-    isPreviewingCurrentVersion?: boolean, // Determines if we are previewing the current version
     isReloadNotificationVisible: boolean,
     isThumbnailSidebarOpen: boolean,
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
-    selectedVersionId?: string,
+    selectedVersion?: BoxItemVersion,
 };
 
 // Emitted by preview's 'load' event
@@ -167,11 +166,10 @@ class ContentPreview extends PureComponent<Props, State> {
 
     stagedFile: ?BoxItem;
 
-    updateVersionToCurrent: ?Function;
+    updateVersionToCurrent: ?() => void;
 
     initialState: State = {
         isFileError: false,
-        isPreviewingCurrentVersion: true,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
     };
@@ -274,7 +272,7 @@ class ContentPreview extends PureComponent<Props, State> {
             this.preview = undefined;
         }
 
-        this.setState({ selectedVersionId: undefined });
+        this.setState({ selectedVersion: undefined });
     }
 
     /**
@@ -351,8 +349,10 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {boolean}
      */
     shouldLoadPreview(prevState: State): boolean {
-        const { file, selectedVersionId }: State = this.state;
-        const { file: prevFile, selectedVersionId: prevSelectedVersionId }: State = prevState;
+        const { file, selectedVersion }: State = this.state;
+        const { file: prevFile, selectedVersion: prevSelectedVersion }: State = prevState;
+        const prevSelectedVersionId = getProp(prevSelectedVersion, 'id');
+        const selectedVersionId = getProp(selectedVersion, 'id');
         const versionPath = 'file_version.id';
         const prevFileVersionId = getProp(prevFile, versionPath);
         const fileVersionId = getProp(file, versionPath);
@@ -682,7 +682,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const { enableThumbnailsSidebar, fileOptions, token: tokenOrTokenFunction, ...rest }: Props = this.props;
-        const { file, selectedVersionId }: State = this.state;
+        const { file, selectedVersion }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
             return;
@@ -698,9 +698,9 @@ class ContentPreview extends PureComponent<Props, State> {
         const typedId: string = getTypedFileId(fileId);
         const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
 
-        if (selectedVersionId) {
+        if (selectedVersion) {
             fileOpts[fileId] = fileOpts[fileId] || {};
-            fileOpts[fileId].fileVersionId = selectedVersionId;
+            fileOpts[fileId].fileVersionId = selectedVersion.id;
         }
 
         const previewOptions = {
@@ -1056,15 +1056,12 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
     onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: AdditionalVersionInfo): void => {
-        const { onVersionChange, hasHeader }: Props = this.props;
-        const isCurrentVersion = getProp(additionalVersionInfo, 'isCurrentVersion', true);
+        const { onVersionChange }: Props = this.props;
         this.updateVersionToCurrent = getProp(additionalVersionInfo, 'updateVersionToCurrent');
-        const isPreviewingCurrentVersion = hasHeader ? { isPreviewingCurrentVersion: isCurrentVersion } : {};
 
         onVersionChange(version, additionalVersionInfo);
         this.setState({
-            selectedVersionId: getProp(version, 'id'),
-            ...isPreviewingCurrentVersion,
+            selectedVersion: version,
         });
     };
 
@@ -1108,7 +1105,7 @@ class ContentPreview extends PureComponent<Props, State> {
             isReloadNotificationVisible,
             currentFileId,
             isThumbnailSidebarOpen,
-            isPreviewingCurrentVersion,
+            selectedVersion,
         }: State = this.state;
         const { collection }: Props = this.props;
         const styleClassName = classNames(
@@ -1123,7 +1120,10 @@ class ContentPreview extends PureComponent<Props, State> {
             return null;
         }
 
-        const onHeaderClose = isPreviewingCurrentVersion ? onClose : this.updateVersionToCurrent;
+        const currentVersionId = getProp(file, 'file_version.id');
+        const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
+
+        const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1140,7 +1140,7 @@ class ContentPreview extends PureComponent<Props, State> {
                             onDownload={this.download}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}
-                            isPreviewingCurrentVersion={isPreviewingCurrentVersion}
+                            selectedVersion={selectedVersion}
                         />
                     )}
                     <div className="bcpr-body">

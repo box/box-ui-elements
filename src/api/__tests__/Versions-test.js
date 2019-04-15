@@ -1,6 +1,6 @@
 import Versions from '../Versions';
 import { PERMISSION_CAN_DELETE, PERMISSION_CAN_UPLOAD } from '../../constants';
-import { VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
+import { FILE_VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
 
 let versions;
 
@@ -215,7 +215,7 @@ describe('api/Versions', () => {
                     errorCallback,
                     0,
                     1000,
-                    VERSIONS_FIELDS_TO_FETCH,
+                    FILE_VERSIONS_FIELDS_TO_FETCH,
                     true,
                 );
             });

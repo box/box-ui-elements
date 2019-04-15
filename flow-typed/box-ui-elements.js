@@ -340,6 +340,7 @@ type BoxItemVersion = {
     action: 'upload' | 'delete' | 'restore',
     collaborators?: Object,
     created_at: string,
+    extension?: string,
     id: string,
     modified_at?: string,
     modified_by: User,
@@ -971,7 +972,6 @@ type NavigateOptions = {
 };
 
 type AdditionalVersionInfo = {
-    isCurrentVersion: boolean,
     updateVersionToCurrent: () => void,
 };
 

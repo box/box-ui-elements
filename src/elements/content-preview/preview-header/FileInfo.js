@@ -5,17 +5,17 @@
  */
 
 import React from 'react';
-import { getIcon } from '../../common/item/iconCellRenderer';
+import FileIcon from '../../../icons/file-icon/FileIcon';
 import './Header.scss';
 
 type Props = {
-    file: BoxItem,
+    item: BoxItem | BoxItemVersion,
 };
 
-const FileInfo = ({ file }: Props) => (
+const FileInfo = ({ item }: Props) => (
     <div className="bcpr-name">
-        {file ? getIcon(24, file) : null}
-        <span>{file.name}</span>
+        {item ? <FileIcon dimension={24} extension={item.extension} /> : null}
+        <span>{item.name}</span>
     </div>
 );
 

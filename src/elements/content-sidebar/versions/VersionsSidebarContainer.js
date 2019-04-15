@@ -56,9 +56,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         if (prevVersionId !== versionId) {
             const { versions } = this.state;
             const previewedVersion = versions.find(version => version.id === versionId);
-            const isCurrentVersion = previewedVersion === versions[0];
             onVersionChange(previewedVersion, {
-                isCurrentVersion,
                 updateVersionToCurrent: this.updateVersionToCurrent,
             });
         }
