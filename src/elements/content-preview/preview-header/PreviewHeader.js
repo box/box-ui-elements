@@ -54,7 +54,7 @@ const PreviewHeader = ({
     const currentVersionId = getProp(file, 'file_version.id');
     const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
     const isPreviewingCurrentVersion = currentVersionId === selectedVersionId;
-    const displayItem = isPreviewingCurrentVersion ? file : selectedVersion;
+    const displayItem = selectedVersion || file;
 
     const closeMsg = intl.formatMessage(messages.close);
     const printMsg = intl.formatMessage(messages.print);
@@ -62,10 +62,12 @@ const PreviewHeader = ({
     const drawMsg = intl.formatMessage(messages.drawAnnotation);
     const pointMsg = intl.formatMessage(messages.pointAnnotation);
 
-    const classes = classNames(['bcpr-header', !isPreviewingCurrentVersion && 'bcpr-header--basic']);
+    const className = classNames('bcpr-header', {
+        'bcpr-header--basic': !isPreviewingCurrentVersion,
+    });
 
     return (
-        <div className={classes}>
+        <div className={className}>
             <div className="bp-header bp-base-header">
                 {displayItem && <FileInfo item={displayItem} />}
                 <div className="bcpr-btns">
