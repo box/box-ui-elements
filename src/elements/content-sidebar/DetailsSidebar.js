@@ -441,16 +441,15 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             isLoadingClassification,
         }: State = this.state;
 
-        if (!file) {
-            return null; // TODO: change to loading indicator and handle errors once file call split out
-        }
-
+        // TODO: Add loading indicator and handle errors once file call is split out
         return (
             <SidebarContent className="bcs-details" title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_DETAILS)}>
-                {hasNotices && (
-                    <div className="bcs-details-content">{hasNotices && <SidebarNotices file={file} />}</div>
+                {file && hasNotices && (
+                    <div className="bcs-details-content">
+                        <SidebarNotices file={file} />
+                    </div>
                 )}
-                {hasAccessStats && (
+                {file && hasAccessStats && (
                     <SidebarAccessStats
                         accessStats={accessStats}
                         file={file}
@@ -458,16 +457,14 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                         {...accessStatsError}
                     />
                 )}
-                {hasProperties && (
+                {file && hasProperties && (
                     <SidebarSection
                         interactionTarget={SECTION_TARGETS.FILE_PROPERTIES}
                         title={<FormattedMessage {...messages.sidebarProperties} />}
                     >
                         {hasVersions && (
                             <div className="bcs-details-content">
-                                {hasVersions && (
-                                    <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />
-                                )}
+                                <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />
                             </div>
                         )}
                         <SidebarFileProperties

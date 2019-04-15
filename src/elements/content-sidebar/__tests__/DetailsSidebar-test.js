@@ -67,7 +67,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('render()', () => {
-        test('should render nothing if there is no file information', () => {
+        test('should render an empty container if there is no file information', () => {
             // TODO: replace this test with proper loading and error cases once files call split out
             const wrapper = getWrapper({}, { disableLifecycleMethods: true });
             expect(wrapper).toMatchSnapshot();
