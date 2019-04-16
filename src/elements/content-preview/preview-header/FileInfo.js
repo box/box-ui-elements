@@ -9,13 +9,17 @@ import FileIcon from '../../../icons/file-icon/FileIcon';
 import './Header.scss';
 
 type Props = {
-    item: BoxItem | BoxItemVersion,
+    item: ?BoxItem | ?BoxItemVersion,
 };
 
 const FileInfo = ({ item }: Props) => (
     <div className="bcpr-name">
-        {item ? <FileIcon dimension={24} extension={item.extension} /> : null}
-        <span>{item.name}</span>
+        {item && (
+            <React.Fragment>
+                <FileIcon dimension={24} extension={item.extension} />
+                <span> {item.name} </span>
+            </React.Fragment>
+        )}
     </div>
 );
 

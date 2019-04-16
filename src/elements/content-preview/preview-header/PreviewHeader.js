@@ -71,7 +71,7 @@ const PreviewHeader = ({
     return (
         <div className={className}>
             <div className="bp-header bp-base-header">
-                {displayItem && <FileInfo item={displayItem} />}
+                <FileInfo item={displayItem} />
                 <div className="bcpr-btns">
                     {shouldRenderOpenWith && isPreviewingCurrentVersion && (
                         <LoadableContentOpenWith
