@@ -360,7 +360,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
         if (selectedVersionId !== prevSelectedVersionId) {
             // Load preview if the user has selected a non-current version of the file
-            loadPreview = prevSelectedVersionId !== fileVersionId;
+            loadPreview = !!selectedVersionId || prevSelectedVersionId !== fileVersionId;
         } else if (fileVersionId && prevFileVersionId) {
             // Load preview if the file's current version ID has changed
             loadPreview = fileVersionId !== prevFileVersionId;

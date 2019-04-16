@@ -112,13 +112,15 @@ class Versions extends OffsetBasedAPI {
         }
 
         const { entries, total_count } = versions;
-        const { modified_at, modified_by, size, version_number } = file;
+        const { modified_at, modified_by, size, version_number, name, extension } = file;
         const currentVersion: BoxItemVersion = {
             ...file_version,
             action: VERSION_UPLOAD_ACTION,
             created_at: modified_at,
+            extension,
             modified_at,
             modified_by,
+            name,
             size,
             version_number,
         };
