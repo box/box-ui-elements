@@ -111,12 +111,25 @@ const PREVIEW_FIELDS_TO_FETCH = [
     FIELD_IS_DOWNLOAD_AVAILABLE,
 ];
 
+// Fields needed to get information on the current version of a file
 const FILE_VERSION_FIELDS_TO_FETCH = [
     FIELD_FILE_VERSION,
     FIELD_MODIFIED_AT,
     FIELD_MODIFIED_BY,
     FIELD_RESTORED_FROM,
     FIELD_SIZE,
+    FIELD_VERSION_NUMBER,
+];
+
+// Fields needed to get versions for a file
+const FILE_VERSIONS_FIELDS_TO_FETCH = [
+    FIELD_EXTENSION,
+    FIELD_CREATED_AT,
+    FIELD_MODIFIED_AT,
+    FIELD_MODIFIED_BY,
+    FIELD_NAME,
+    FIELD_SIZE,
+    FIELD_TRASHED_AT,
     FIELD_VERSION_NUMBER,
 ];
 
@@ -131,16 +144,6 @@ const TASKS_FIELDS_TO_FETCH = [
     FIELD_CREATED_BY,
     FIELD_DUE_AT,
     FIELD_MESSAGE,
-];
-
-// Fields needed to get tasks data
-const VERSIONS_FIELDS_TO_FETCH = [
-    FIELD_CREATED_AT,
-    FIELD_MODIFIED_AT,
-    FIELD_MODIFIED_BY,
-    FIELD_SIZE,
-    FIELD_TRASHED_AT,
-    FIELD_VERSION_NUMBER,
 ];
 
 // Fields needed to get task assignments data
@@ -230,6 +233,7 @@ export {
     COMMENTS_FIELDS_TO_FETCH,
     FILE_SHARED_LINK_FIELDS_TO_FETCH,
     FILE_VERSION_FIELDS_TO_FETCH,
+    FILE_VERSIONS_FIELDS_TO_FETCH,
     fillMissingProperties,
     fillUserPlaceholder,
     findMissingProperties,
@@ -239,5 +243,4 @@ export {
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
     TASKS_FIELDS_TO_FETCH,
     USER_FIELDS,
-    VERSIONS_FIELDS_TO_FETCH,
 };
