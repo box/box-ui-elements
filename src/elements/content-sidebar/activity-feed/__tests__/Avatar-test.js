@@ -18,13 +18,13 @@ describe('elements/content-sidebar/ActivityFeed/Avatar', () => {
         const wrappedAvatar = wrapper.find('Avatar').first();
         expect(wrappedAvatar.props()).toEqual(expect.objectContaining({ isPending: true }));
         expect(wrapper).toMatchInlineSnapshot(`
-<Avatar
-  avatarUrl={null}
-  id="foo"
-  isPending={true}
-  name="foo bar"
-/>
-`);
+            <Avatar
+              avatarUrl={null}
+              id="foo"
+              isPending={true}
+              name="foo bar"
+            />
+        `);
     });
 
     test('should call getAvatarUrl prop with user id and pass result to child', async () => {
@@ -36,13 +36,13 @@ describe('elements/content-sidebar/ActivityFeed/Avatar', () => {
         const wrappedAvatar = wrapper.find('Avatar').first();
         expect(wrappedAvatar.props()).toEqual(expect.objectContaining({ isPending: false, avatarUrl: 'avatar.jpg' }));
         expect(wrapper).toMatchInlineSnapshot(`
-<Avatar
-  avatarUrl="avatar.jpg"
-  id="foo"
-  isPending={false}
-  name="foo bar"
-/>
-`);
+            <Avatar
+              avatarUrl="avatar.jpg"
+              id="foo"
+              isPending={false}
+              name="foo bar"
+            />
+        `);
     });
 
     test('should render avatar with initials if getAvatarUrl is not passed in and user prop does not have avatar_url', () => {
