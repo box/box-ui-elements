@@ -13,7 +13,7 @@ type Props = {
 };
 
 type State = {
-    avatarUrl?: ?string,
+    avatarUrl: ?string,
     isPending: boolean,
 };
 
@@ -24,7 +24,7 @@ class Avatar extends React.PureComponent<Props, State> {
         super(props);
         // short-circuit promises by checking if we already have a url
         // or if we don't have a method to get one
-        const avatarUrl = props.user.avatar_url || null;
+        const { user: { avatar_url: avatarUrl = null } = {} } = props;
         this.state = {
             avatarUrl,
             // pending state means we are using getAvatarUrl to get a url asynchronously
@@ -36,7 +36,7 @@ class Avatar extends React.PureComponent<Props, State> {
         this.getAvatarUrl();
     }
 
-    async getAvatarUrl() {
+    getAvatarUrl() {
         const { user, getAvatarUrl } = this.props;
         const { isPending } = this.state;
         // don't fetch if url exists or no handler was passed
@@ -44,8 +44,11 @@ class Avatar extends React.PureComponent<Props, State> {
             return;
         }
 
-        const avatarUrl = await getAvatarUrl(user.id).catch(() => null);
-        this.setState({ avatarUrl, isPending: false });
+        getAvatarUrl(user.id)
+            .catch(() => null)
+            .then(avatarUrl => {
+                this.setState({ avatarUrl, isPending: false });
+            });
     }
 
     render() {

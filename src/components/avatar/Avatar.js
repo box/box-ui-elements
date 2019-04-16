@@ -25,7 +25,7 @@ type Props = {
     /** Force loading state
      *  (useful to avoid flashing empty container or initials if determining avatarUrl is async)
      */
-    isPending: boolean,
+    isPending?: boolean,
     /**
      * Users full name, used to get initials.
      *
@@ -42,10 +42,6 @@ type State = {
 };
 
 class Avatar extends React.PureComponent<Props, State> {
-    static defaultProps = {
-        isPending: false,
-    };
-
     state = {
         hasImageErrored: false,
     };
@@ -65,22 +61,19 @@ class Avatar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { avatarUrl, className, name, id, size = '', isPending }: Props = this.props;
+        const { avatarUrl, className, name, id, size = '', isPending = false }: Props = this.props;
         const { hasImageErrored }: State = this.state;
         const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
-        const hasNoAvatar = !avatarUrl && !isPending;
-        const loadingBackgroundColor = lightGray;
-        const initialsBackgroundColor = `${getColor(id)}`;
-        const backgroundColor = hasNoAvatar || hasImageErrored ? initialsBackgroundColor : loadingBackgroundColor;
-
         let avatar;
+        let backgroundColor = lightGray;
         if (isPending) {
             avatar = <span />;
         } else if (avatarUrl && !hasImageErrored) {
             avatar = <AvatarImage onError={this.onImageError} url={avatarUrl} />;
         } else if (name) {
             avatar = <AvatarInitials name={name} />;
+            backgroundColor = getColor(id);
         } else {
             avatar = <UnknownUserAvatar className="avatar-icon" />;
         }
