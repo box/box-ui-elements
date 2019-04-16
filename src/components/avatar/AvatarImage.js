@@ -1,5 +1,5 @@
 // @flow
-import * as React from 'react';
+import React from 'react';
 
 type Props = {
     className?: string,
@@ -7,9 +7,8 @@ type Props = {
     url: string,
 };
 
-const AvatarImage = ({ className = '', url, onError, ...rest }: Props) => (
+const AvatarImage = ({ className = '', url, onError }: Props) => (
     <img
-        {...rest}
         alt=""
         className={`avatar-image ${className}`}
         onError={event => {
