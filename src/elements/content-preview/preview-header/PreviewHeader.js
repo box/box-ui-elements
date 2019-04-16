@@ -54,9 +54,12 @@ const PreviewHeader = ({
     const currentVersionId = getProp(file, 'file_version.id');
     const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
     const isPreviewingCurrentVersion = currentVersionId === selectedVersionId;
-    const displayItem = selectedVersion || file;
+    const displayItem = isPreviewingCurrentVersion ? file : selectedVersion;
 
-    const closeMsg = intl.formatMessage(messages.close);
+    // When previewing an older version the close button returns the user to the current version
+    const closeMsg = isPreviewingCurrentVersion
+        ? intl.formatMessage(messages.close)
+        : intl.formatMessage(messages.back);
     const printMsg = intl.formatMessage(messages.print);
     const downloadMsg = intl.formatMessage(messages.download);
     const drawMsg = intl.formatMessage(messages.drawAnnotation);
@@ -129,7 +132,7 @@ const PreviewHeader = ({
                             title={closeMsg}
                             type="button"
                         >
-                            <IconClose color={nines} height={24} width={24} />
+                            {isPreviewingCurrentVersion ? <IconClose color={nines} height={24} width={24} /> : closeMsg}
                         </PlainButton>
                     )}
                 </div>
