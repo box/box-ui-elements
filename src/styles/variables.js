@@ -3,6 +3,7 @@
 
 export const bdlBoxBlue = '#0061d5'; // bdl-box-blue
 export const bdlSecondaryBlue = '#003c84'; // bdl-secondary-blue
+export const bdlBlueLight = '#2486fc'; // bdl-blue-light
 export const bdlGreenLight = '#26c281'; // bdl-green-light
 export const bdlYellorange = '#f5b31b'; // bdl-yellorange
 export const bdlGrimace = '#4826c2'; // bdl-grimace
@@ -14,8 +15,6 @@ export const bdlNeutral02 = '#767676'; // bdl-neutral-02
 export const bdlNeutral03 = '#999'; // bdl-neutral-03
 export const bdlNeutral04 = '#f3f3f3'; // bdl-neutral-04
 export const bdlNeutral05 = '#fafafa'; // bdl-neutral-05
-export const bdlBlueDark = '#003c84'; // bdl-blue-dark
-export const bdlBlueLight = '#2486fc'; // bdl-blue-light
 export const boxBlue = '#0061d5'; // box-blue
 export const primaryColor = '#0061d5'; // primary-color
 export const korayIng = '#2a62b9'; // koray-ing

@@ -4,10 +4,10 @@
  * Avatars
  **************************************/
 
-$size-default: 32px;
-$size-large: 44px;
-
 .avatar {
+    $size-default: 32px;
+    $size-large: 44px;
+
     border-radius: 100%;
     display: inline-block;
     height: $size-default;
