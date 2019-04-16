@@ -100,19 +100,19 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should return true if the currently-selected version ID has changed', () => {
-            expect(instance.shouldLoadPreview({ selectedVersionId: '12345' })).toBe(true);
+            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
         });
 
         test('should return true if the selected version is missing and the previous selection was an old version', () => {
-            wrapper.setState({ selectedVersionId: undefined });
+            wrapper.setState({ selectedVersion: { id: undefined } });
 
-            expect(instance.shouldLoadPreview({ selectedVersionId: '12345' })).toBe(true);
+            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
         });
 
         test('should return false if the selected version is missing but the previous selection was the current version', () => {
-            wrapper.setState({ selectedVersionId: undefined });
+            wrapper.setState({ selectedVersion: { id: undefined } });
 
-            expect(instance.shouldLoadPreview({ selectedVersionId: '1' })).toBe(false);
+            expect(instance.shouldLoadPreview({ selectedVersion: { id: '1' } })).toBe(false);
         });
     });
 
