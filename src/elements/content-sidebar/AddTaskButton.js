@@ -25,12 +25,14 @@ type PassThroughProps = {|
 type Props = {| ...AddTaskButtonProps, ...PassThroughProps |};
 
 type State = {
+    error: ?ElementsXhrError,
     isTaskFormOpen: boolean,
     taskType: TaskType,
 };
 
 class AddTaskButton extends React.Component<Props, State> {
     state = {
+        error: null,
         isTaskFormOpen: false,
         taskType: TASK_TYPE_APPROVAL,
     };
@@ -51,13 +53,15 @@ class AddTaskButton extends React.Component<Props, State> {
 
     handleClickMenuItem = (taskType: TaskType) => this.setState({ isTaskFormOpen: true, taskType });
 
-    handleModalClose = () => this.setState({ isTaskFormOpen: false });
+    handleModalClose = () => this.setState({ isTaskFormOpen: false, error: null });
 
-    handleSubmit = () => this.setState({ isTaskFormOpen: false });
+    handleCreateSuccess = () => this.setState({ isTaskFormOpen: false });
+
+    handleCreateError = (e: ElementsXhrError) => this.setState({ error: e });
 
     render() {
         const { isDisabled, feedbackUrl, ...passThrough } = this.props;
-        const { isTaskFormOpen, taskType } = this.state;
+        const { isTaskFormOpen, taskType, error } = this.state;
 
         return (
             <React.Fragment>
@@ -77,8 +81,10 @@ class AddTaskButton extends React.Component<Props, State> {
                     <div className="be">
                         <TaskForm
                             {...passThrough}
+                            error={error}
                             onCancel={this.handleModalClose}
-                            onSubmit={this.handleSubmit}
+                            onCreateSuccess={this.handleCreateSuccess}
+                            onCreateError={this.handleCreateError}
                             taskType={taskType}
                         />
                     </div>

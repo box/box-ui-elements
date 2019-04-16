@@ -93,6 +93,14 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         expect(wrapper.find('PillSelectorDropdown').prop('selectorOptions').length).toBe(1);
     });
 
+    test('should show inline error when error prop is passed', () => {
+        const wrapper = render({
+            createTask: jest.fn(),
+            error: 'error',
+        });
+        expect(wrapper.find('.inline-alert').length).toBe(1);
+    });
+
     describe('handleDueDateChange()', () => {
         test('should set the approval date to be one millisecond before midnight of the next day', async () => {
             // Midnight on December 3rd GMT

@@ -754,8 +754,6 @@ class Feed extends Base {
             status: TASK_NEW_NOT_STARTED,
         };
 
-        this.addPendingItem(this.id, currentUser, pendingTask);
-
         const taskPayload: TaskPayload = { name: message, due_at: dueAtString, task_type: taskType };
 
         this.tasksNewAPI = new TasksNewAPI(this.options);
@@ -763,10 +761,10 @@ class Feed extends Base {
             file,
             task: taskPayload,
             successCallback: (taskData: Task) => {
+                this.addPendingItem(this.id, currentUser, pendingTask);
                 this.createTaskNewSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
             },
             errorCallback: (e: ElementsXhrError, code: string) => {
-                this.updateFeedItem(this.createFeedError(messages.taskCreateErrorMessage), uuid);
                 this.feedErrorCallback(false, e, code);
             },
         });
