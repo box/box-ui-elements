@@ -927,8 +927,9 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    Box__Security__Classification__Key?: string,
-} & MetadataInstance;
+    description: ?string,
+    type: ?string,
+};
 
 type MetricType =
     | typeof METRIC_TYPE_PREVIEW
