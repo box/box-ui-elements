@@ -54,7 +54,6 @@ const PreviewHeader = ({
     const currentVersionId = getProp(file, 'file_version.id');
     const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
     const isPreviewingCurrentVersion = currentVersionId === selectedVersionId;
-    const displayItem = selectedVersion || file;
 
     // When previewing an older version the close button returns the user to the current version
     const closeMsg = intl.formatMessage(messages.close);
@@ -71,7 +70,7 @@ const PreviewHeader = ({
     return (
         <div className={className}>
             <div className="bp-header bp-base-header">
-                <FileInfo item={displayItem} />
+                <FileInfo file={file} version={selectedVersion} />
                 <div className="bcpr-btns">
                     {shouldRenderOpenWith && isPreviewingCurrentVersion && (
                         <LoadableContentOpenWith
@@ -125,13 +124,7 @@ const PreviewHeader = ({
                     )}
                     {onClose &&
                         (isPreviewingCurrentVersion ? (
-                            <PlainButton
-                                aria-label={closeMsg}
-                                className="bcpr-btn"
-                                onClick={onClose}
-                                title={closeMsg}
-                                type="button"
-                            >
+                            <PlainButton aria-label={closeMsg} className="bcpr-btn" onClick={onClose} type="button">
                                 <IconClose color={nines} height={24} width={24} />
                             </PlainButton>
                         ) : (

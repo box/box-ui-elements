@@ -9,18 +9,24 @@ import FileIcon from '../../../icons/file-icon/FileIcon';
 import './Header.scss';
 
 type Props = {
-    item: ?BoxItem | ?BoxItemVersion,
+    file: ?BoxItem,
+    version: ?BoxItemVersion,
 };
 
-const FileInfo = ({ item }: Props) => (
-    <div className="bcpr-name">
-        {item && (
-            <React.Fragment>
-                <FileIcon dimension={24} extension={item.extension} />
-                <span> {item.name} </span>
-            </React.Fragment>
-        )}
-    </div>
-);
+const FileInfo = ({ file, version }: Props) => {
+    // Opt to show version over the file object since it is more specific
+    const displayItem = version || file;
+
+    return (
+        <div className="bcpr-name">
+            {displayItem && (
+                <React.Fragment>
+                    <FileIcon dimension={24} extension={displayItem.extension} />
+                    <span>{displayItem.name}</span>
+                </React.Fragment>
+            )}
+        </div>
+    );
+};
 
 export default FileInfo;
