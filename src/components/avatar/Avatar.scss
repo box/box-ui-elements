@@ -33,6 +33,7 @@
         align-items: center;
         color: $white;
         display: flex;
+        font-weight: bold;
         justify-content: center;
     }
 
@@ -42,7 +43,6 @@
 
         .avatar-initials {
             font-size: 14px;
-            font-weight: bold;
         }
     }
 }
