@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { silverChalice } from '../../../styles/variables';
 import IconDoubleArrows from '../IconDoubleArrows';
 
 describe('icons/general/IconDoubleArrows', () => {
@@ -7,6 +8,12 @@ describe('icons/general/IconDoubleArrows', () => {
         const wrapper = shallow(<IconDoubleArrows />);
 
         expect(wrapper.hasClass('icon-double-arrows')).toEqual(true);
+    });
+
+    test('should correctly render default icon with default color', () => {
+        const wrapper = shallow(<IconDoubleArrows />);
+
+        expect(wrapper.find('path').prop('fill')).toEqual(silverChalice);
     });
 
     test('should correctly render icon with specified color', () => {
