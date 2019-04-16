@@ -22,10 +22,10 @@ type Props = {
     className?: string,
     /** Users id */
     id?: string | number,
-    /** force loading state if avatarUrl is not passed
-     *  (useful if avatar url is determined asynchronously to avoid flashing background color)
+    /** Force loading state
+     *  (useful to avoid flashing empty container or initials if determining avatarUrl is async)
      */
-    isPending?: boolean,
+    isPending: boolean,
     /**
      * Users full name, used to get initials.
      *
@@ -42,6 +42,10 @@ type State = {
 };
 
 class Avatar extends React.PureComponent<Props, State> {
+    static defaultProps = {
+        isPending: false,
+    };
+
     state = {
         hasImageErrored: false,
     };
@@ -61,7 +65,7 @@ class Avatar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { avatarUrl, className, name, id, size = '', isPending = false }: Props = this.props;
+        const { avatarUrl, className, name, id, size = '', isPending }: Props = this.props;
         const { hasImageErrored }: State = this.state;
         const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
