@@ -12,10 +12,9 @@ import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingI
 import getFileSize from '../../utils/getFileSize';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../common/interactionTargets';
 import withErrorHandling from './withErrorHandling';
-import { FIELD_PERMISSIONS_CAN_UPLOAD, KEY_CLASSIFICATION_TYPE } from '../../constants';
+import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../constants';
 
 type Props = {
-    bannerPolicy?: Object,
     classification?: ClassificationInfo,
     file: BoxItem,
     hasClassification: boolean,
@@ -44,19 +43,18 @@ export const getClassificationModal = (file: BoxItem, onClassificationClick: ?Fu
 };
 
 const SidebarFileProperties = ({
-    classification,
     file,
     onDescriptionChange,
     hasClassification,
     onClassificationClick,
     hasRetentionPolicy,
     retentionPolicy,
-    bannerPolicy,
+    classification,
     onRetentionPolicyExtendClick,
     isLoading,
     intl,
 }: Props) => {
-    const classificationType = getProp(classification, KEY_CLASSIFICATION_TYPE);
+    const classificationType = getProp(classification, 'type');
 
     return (
         <LoadingIndicatorWrapper isLoading={isLoading}>
@@ -65,7 +63,7 @@ const SidebarFileProperties = ({
                     hasClassification
                         ? {
                               openModal: getClassificationModal(file, onClassificationClick),
-                              tooltip: getProp(bannerPolicy, 'body'),
+                              tooltip: getProp(classification, 'description'),
                               value: classificationType,
                               [INTERACTION_TARGET]: classificationType
                                   ? DETAILS_TARGETS.CLASSIFICATION_EDIT
