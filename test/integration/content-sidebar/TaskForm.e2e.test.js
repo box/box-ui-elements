@@ -38,6 +38,7 @@ describe('Create Task', () => {
         });
 
         it('creates task if form is filled out', () => {
+            getSubmitButton().should('not.have.class', 'is-loading');
             cy.getByTestId('create-task-modal').within(() => {
                 getAssigneeField()
                     .type(username)
@@ -48,19 +49,8 @@ describe('Create Task', () => {
                 getSubmitButton().click();
             });
 
-            // modal should close
-            cy.getByTestId('create-task-modal').should('not.exist');
-
-            // validate task appears in feed
-            // note that in the test environment task create fails with default token
-            // but the card temporarily appears
-            cy.getByTestId('activityfeed').within(() => {
-                cy.getByTestId('task-card')
-                    .last()
-                    .within(() => {
-                        cy.contains('valid e2e task').should('exist');
-                    });
-            });
+            // submit button should be in loading state
+            getSubmitButton().should('have.class', 'is-loading');
         });
     });
 });
