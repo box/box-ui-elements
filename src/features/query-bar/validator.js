@@ -2,7 +2,7 @@
 import { FLOAT } from './constants';
 
 const isFloat = (value: string) => {
-    return !/^\s*$/.test(value) && !Number.isNaN(value);
+    return !/^\s*$/.test(value) && !Number.isNaN(Number(value));
 };
 
 const isInt = (value: string) => {
