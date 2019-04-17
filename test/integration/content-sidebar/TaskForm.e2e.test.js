@@ -6,11 +6,10 @@ describe('Create Task', () => {
     const getMessageField = () => cy.getByTestId('task-form-name-input');
     const getSubmitButton = () => cy.getByTestId('task-form-submit-button');
     const getCancelButton = () => cy.getByTestId('task-form-cancel-button');
-    const username = 'Platform '; // will be used as assignee
+    const username = 'PreviewTestApp'; // will be used as assignee
 
     beforeEach(() => {
         cy.visit('/Elements/ContentSidebar'); // Open sidebar example page
-        cy.getByTestId('sidebaractivity').click(); // Open activity tab
     });
 
     context('Add Task button', () => {

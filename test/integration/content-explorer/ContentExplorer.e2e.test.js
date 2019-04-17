@@ -3,11 +3,12 @@
 describe('ContentExplorer', () => {
     beforeEach(() => {
         cy.visit('/Elements/ContentExplorer');
+        cy.contains('An Ordered Folder').click();
     });
 
     describe('ContentPreview', () => {
         beforeEach(() => {
-            cy.contains('Sample Audio.mp3').click();
+            cy.contains('Video - Skills.mp4').click();
         });
 
         it('Navigation within a collection keeps sidebar open', () => {
@@ -40,9 +41,8 @@ describe('ContentExplorer', () => {
             // Skills tab should be selected
             cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
 
-            // Navigate to previous file (Sample 3D.box3d) should default to activity feed
+            // Navigate to previous file should default to activity feed
             cy.getByTitle('Previous File').click();
-            cy.contains('Sample 3D.box3d').should('exist');
             cy.getByTestId('bcs-content').should('exist');
             cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
         });
