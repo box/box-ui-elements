@@ -1,14 +1,53 @@
 // <reference types="Cypress" />
+const COLLECTION = [
+    Cypress.env('FILE_ID_DOC_VERSIONED'),
+    Cypress.env('FILE_ID_DOC'),
+    Cypress.env('FILE_ID_SKILLS'),
+    Cypress.env('FILE_ID_VIDEO'),
+];
 
-describe('ContentExplorer', () => {
-    beforeEach(() => {
-        cy.visit('/Elements/ContentExplorer');
-        cy.contains('An Ordered Folder').click();
-    });
+describe('ContentPreview', () => {
+    const helpers = {
+        load({ features, fileId } = {}) {
+            cy.visit('/Elements/ContentPreview', {
+                onBeforeLoad: contentWindow => {
+                    contentWindow.FEATURES = features;
+                    contentWindow.FILE_ID = fileId;
+                    contentWindow.PROPS = {
+                        collection: COLLECTION,
+                    };
+                },
+            });
+        },
+        checkPreviewHeader() {
+            cy.getByTestId('previewheader')
+                .as('previewheader')
+                .contains('Document - Versioned (PDF).pdf');
 
-    describe('ContentPreview', () => {
+            cy.get('@previewheader').should('not.contain', 'Back');
+        },
+        checkVersionsHeader() {
+            cy.getByTestId('previewheader')
+                .as('previewheader')
+                .contains('Document - Versioned.docx');
+
+            cy.get('@previewheader').contains('Back');
+        },
+        selectVersion(versionName) {
+            cy.getByTestId('versions-item-button').within($versionsItem => {
+                cy.wrap($versionsItem)
+                    .contains(versionName)
+                    .click();
+            });
+        },
+    };
+
+    describe('Navigation', () => {
         beforeEach(() => {
-            cy.contains('Video - Skills.mp4').click();
+            helpers.load({
+                features: { versions: true },
+                fileId: Cypress.env('FILE_ID_SKILLS'),
+            });
         });
 
         it('Navigation within a collection keeps sidebar open', () => {
@@ -76,6 +115,40 @@ describe('ContentExplorer', () => {
             // Click the activity tab to toggle it closed
             cy.getByTestId('sidebaractivity').click();
             cy.getByTestId('bcs-content').should('not.exist');
+        });
+    });
+
+    describe('Previous Versions', () => {
+        beforeEach(() => {
+            helpers.load({
+                features: { versions: true },
+                fileId: Cypress.env('FILE_ID_DOC_VERSIONED'),
+            });
+
+            // Preview an older version via the sidebar
+            cy.getByTestId('sidebardetails').click();
+            cy.getByTestId('versionhistory').click();
+            cy.contains('[data-testid="bcs-content"]', 'Version History');
+
+            helpers.selectVersion('V2');
+            helpers.checkVersionsHeader();
+        });
+
+        it('Toggling between previous and current versions should show the correct header', () => {
+            helpers.selectVersion('Current');
+            helpers.checkPreviewHeader();
+        });
+        it('Clicking the back button while previewing a previous version should return to the current version', () => {
+            cy.getByTestId('versionsheaderback').click();
+            helpers.checkPreviewHeader();
+        });
+        it('Clicking the back arrow while previewing a previous version should return to the current version', () => {
+            cy.get('.bdl-BackButton').click();
+            helpers.checkPreviewHeader();
+        });
+        it('Navigating while previewing a previous version should preview the current version of the next file', () => {
+            cy.getByTitle('Next File').click();
+            helpers.checkPreviewHeader();
         });
     });
 });
