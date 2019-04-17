@@ -22,14 +22,26 @@ type Props = {
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
     height: number,
+    onCellHover?: ({|
+        columnIndex: number,
+        rowIndex: number,
+    |}) => void,
     onSortChange?: (columnIndex: number) => void,
     rowCount: number,
     width: number,
 };
 
 class ListView extends React.PureComponent<Props> {
+    gridEl: ?HTMLElement;
+
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
-        const { getGridCell, getGridHeader, getGridHeaderSort = noop, onSortChange = noop } = this.props;
+        const {
+            getGridCell,
+            getGridHeader,
+            getGridHeaderSort = noop,
+            onCellHover = noop,
+            onSortChange = noop,
+        } = this.props;
 
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
@@ -53,10 +65,23 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
+        const grid = this.gridEl;
         const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
 
         return (
-            <div className="bdl-ListView-columnCell" key={key} style={style}>
+            <div
+                className="bdl-ListView-columnCell"
+                key={key}
+                style={style}
+                onFocus={() => {
+                    onCellHover({ columnIndex, rowIndex: rowIndex - 1 });
+                    grid.forceUpdateGrids();
+                }}
+                onMouseOver={() => {
+                    onCellHover({ columnIndex, rowIndex: rowIndex - 1 });
+                    grid.forceUpdateGrids();
+                }}
+            >
                 {cellData}
             </div>
         );
@@ -120,6 +145,9 @@ class ListView extends React.PureComponent<Props> {
                     fixedColumnCount={1}
                     fixedRowCount={FIXED_ROW_COUNT}
                     height={height}
+                    ref={ref => {
+                        this.gridEl = ref;
+                    }}
                     rowHeight={ROW_HEIGHT}
                     rowCount={rowCount + FIXED_ROW_COUNT}
                     scrollToColumn={0}
