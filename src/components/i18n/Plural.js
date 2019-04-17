@@ -3,7 +3,33 @@ import * as React from 'react';
 
 type Props = {
     /** The plural category this string. (required) */
-    category: 'zero' | 'one' | 'two' | 'few' | 'many' | 'other',
+    category:
+        | 'zero'
+        | 'one'
+        | 'two'
+        | 'few'
+        | 'many'
+        | 'other'
+        | '=0'
+        | '=1'
+        | '=2'
+        | '=3'
+        | '=4'
+        | '=5'
+        | '=6'
+        | '=7'
+        | '=8'
+        | '=9'
+        | '=10'
+        | '=11'
+        | '=12'
+        | '=13'
+        | '=14'
+        | '=15'
+        | '=16'
+        | '=17'
+        | '=18'
+        | '=19',
 
     children: React.Node,
 };
@@ -20,6 +46,6 @@ type Props = {
  * See the [Unicode CLDR description of plural category
  * rules](http://cldr.unicode.org/index/cldr-spec/plural-rules) for more details.
  */
-export default function Plural(props: Props) {
-    return props.children;
-}
+const Plural = ({ children }: Props) => children;
+
+export default Plural;
