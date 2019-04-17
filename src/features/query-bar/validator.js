@@ -11,7 +11,7 @@ const isInt = (value: string) => {
 
 const isValidValue = (type: string, value?: string | Date | any) => {
     if (type === FLOAT) {
-        if (value != null && !isFloat(String(value))) {
+        if (value != null && isFloat(String(value))) {
             return true;
         }
         if (value == null) {
