@@ -8,6 +8,7 @@ import Tooltip from '../../../../components/tooltip';
 import IconAlertDefault from '../../../../icons/general/IconAlertDefault';
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
 import ValueField from './ValueField';
+import { isFloat, isInt } from '../../validator';
 
 import messages from '../../messages';
 import {
@@ -109,22 +110,46 @@ const Condition = ({
         return [];
     };
 
+    const checkValidValue = (values: Array<ConditionValueType>, type: string) => {
+        let isValueInvalid = false;
+        switch (type) {
+            case NUMBER:
+                isValueInvalid = !isInt(String(values[0]));
+                break;
+            case FLOAT:
+                isValueInvalid = !isFloat(String(values[0]));
+                break;
+            default:
+                break;
+        }
+        return isValueInvalid;
+    };
+
     const getErrorMessage = () => {
         const { values, columnId } = condition;
         const column = columns && columns.find(c => c.id === columnId);
         const type = column && column.type;
 
         const isValueSet = values.length !== 0;
+
+        let isValueInvalid = false;
+        if (isValueSet && type) {
+            isValueInvalid = checkValidValue(values, type);
+        }
+
         let message;
+        let messageText;
         switch (type) {
             case STRING:
                 message = <FormattedMessage {...messages.tooltipEnterValueError} />;
                 break;
             case NUMBER:
-                message = <FormattedMessage {...messages.tooltipEnterValueError} />;
+                messageText = isValueInvalid ? messages.tooltipInvalidNumberError : messages.tooltipEnterValueError;
+                message = <FormattedMessage {...messageText} />;
                 break;
             case FLOAT:
-                message = <FormattedMessage {...messages.tooltipEnterValueError} />;
+                messageText = isValueInvalid ? messages.tooltipInvalidFloatError : messages.tooltipEnterValueError;
+                message = <FormattedMessage {...messageText} />;
                 break;
             case DATE:
                 message = <FormattedMessage {...messages.tooltipSelectDateError} />;
@@ -138,8 +163,7 @@ const Condition = ({
             default:
                 break;
         }
-
-        const error = areErrorsEnabled && !isValueSet ? message : null;
+        const error = isValueInvalid || (areErrorsEnabled && !isValueSet) ? message : null;
 
         return error;
     };

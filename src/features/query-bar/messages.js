@@ -7,6 +7,16 @@ const messages = defineMessages({
         description: 'Text displayed on the Tooltip for an input field',
         id: 'boxui.queryBar.tooltipEnterValueError',
     },
+    tooltipInvalidFloatError: {
+        defaultMessage: 'Please Enter a Float',
+        description: 'Text displayed on the Tooltip for an input field of type float',
+        id: 'boxui.queryBar.tooltipInvalidFloatError',
+    },
+    tooltipInvalidNumberError: {
+        defaultMessage: 'Please Enter an Integer',
+        description: 'Text displayed on the Tooltip for an input field of type number',
+        id: 'boxui.queryBar.tooltipInvalidNumberError',
+    },
     tooltipSelectValueError: {
         defaultMessage: 'Please Select a Value',
         description: 'Text displayed on the Tooltip for a value field',

@@ -1,15 +1,17 @@
 // @flow
 import { FLOAT } from './constants';
 
-const floatRegex = /[^$,.\d]/;
+const isFloat = (value: string) => {
+    return !/^\s*$/.test(value) && !Number.isNaN(value);
+};
 
-const floatValidator = (value: string) => {
-    return value.match(floatRegex);
+const isInt = (value: string) => {
+    return /^\d+$/.test(value);
 };
 
 const isValidValue = (type: string, value?: string | Date | any) => {
     if (type === FLOAT) {
-        if (value != null && !floatValidator(String(value))) {
+        if (value != null && !isFloat(String(value))) {
             return true;
         }
         if (value == null) {
@@ -21,4 +23,4 @@ const isValidValue = (type: string, value?: string | Date | any) => {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export { isValidValue };
+export { isFloat, isInt, isValidValue };
