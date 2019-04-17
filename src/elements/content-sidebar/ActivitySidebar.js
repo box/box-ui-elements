@@ -135,13 +135,32 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     tasksApiNew = {
-        createTask: (message: string, assignees: SelectorItems, taskType: TaskType, dueAt: ?string): void => {
+        createTask: (
+            message: string,
+            assignees: SelectorItems,
+            taskType: TaskType,
+            dueAt: ?string,
+            onSuccess: ?Function,
+            onError: ?Function,
+        ): void => {
             const { currentUser } = this.state;
             const { file, api } = this.props;
 
             if (!currentUser) {
                 throw getBadUserError();
             }
+            const errorCallback = (e, code, contextInfo) => {
+                if (onError) {
+                    onError(e, code, contextInfo);
+                }
+                this.feedErrorCallback(e, code, contextInfo);
+            };
+            const successCallback = () => {
+                if (onSuccess) {
+                    onSuccess();
+                }
+                this.feedSuccessCallback();
+            };
 
             api.getFeedAPI(false).createTaskNew(
                 file,
@@ -150,8 +169,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 assignees,
                 taskType,
                 dueAt,
-                this.feedSuccessCallback,
-                this.feedErrorCallback,
+                successCallback,
+                errorCallback,
             );
 
             // need to load the pending item

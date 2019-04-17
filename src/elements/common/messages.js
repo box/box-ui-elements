@@ -763,10 +763,15 @@ const messages = defineMessages({
         defaultMessage: 'Delete task?',
         description: 'Confirmation prompt text to delete task',
     },
+    taskCreateErrorTitle: {
+        id: 'be.taskCreateErrorTitle',
+        description: 'Title shown above error message when a task creation fails',
+        defaultMessage: 'Error',
+    },
     taskCreateErrorMessage: {
-        id: 'be.taskCreateErrornMessage',
+        id: 'be.taskCreateErrorMessage',
         description: 'Error message when a task creation fails',
-        defaultMessage: 'There was an error creating this task.',
+        defaultMessage: 'An error occurred while creating this task. Please try again.',
     },
     taskUpdateErrorMessage: {
         id: 'be.taskEditErrorMessage',

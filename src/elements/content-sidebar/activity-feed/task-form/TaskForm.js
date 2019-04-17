@@ -15,6 +15,7 @@ import DatePicker from '../../../../components/date-picker/DatePicker';
 import PillSelectorDropdown from '../../../../components/pill-selector-dropdown/PillSelectorDropdown';
 import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
+import InlineError from '../../../../components/inline-error/InlineError';
 
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
@@ -24,12 +25,21 @@ import './TaskForm.scss';
 type TaskFormProps = {|
     approverSelectorContacts: SelectorItems,
     className?: string,
-    createTask: (text: string, approvers: SelectorItems, taskType: TaskType, dueDate: ?Date) => any,
+    createTask: (
+        text: string,
+        approvers: SelectorItems,
+        taskType: TaskType,
+        dueDate: ?Date,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => any,
+    error?: any,
     getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
     isDisabled?: boolean,
     onCancel: () => any,
-    onSubmit: () => any,
+    onCreateError: (e: ElementsXhrError) => any,
+    onCreateSuccess: () => any,
     taskType: TaskType,
 |};
 
@@ -41,6 +51,7 @@ type State = {|
     approvers: SelectorItems,
     dueDate: ?Date,
     formValidityState: { [key: TaskFormFieldName]: ?{ code: string, message: string } },
+    isLoading: boolean,
     isValid: ?boolean,
     message: string,
 |};
@@ -58,6 +69,7 @@ class TaskForm extends React.Component<Props, State> {
             dueDate: null,
             formValidityState: {},
             message: '',
+            isLoading: false,
             isValid: null,
         };
     }
@@ -100,20 +112,30 @@ class TaskForm extends React.Component<Props, State> {
         this.validateForm();
     };
 
+    handleCreateSuccess = () => {
+        const { onCreateSuccess } = this.props;
+        if (onCreateSuccess) {
+            onCreateSuccess();
+        }
+
+        this.clearForm();
+        this.setState({ isLoading: false });
+    };
+
+    handleCreateError = (e: ElementsXhrError) => {
+        const { onCreateError } = this.props;
+        onCreateError(e);
+        this.setState({ isLoading: false });
+    };
+
     handleValidSubmit = (): void => {
-        const { createTask, onSubmit, taskType } = this.props;
+        const { createTask, taskType } = this.props;
         const { message, approvers, dueDate, isValid } = this.state;
 
         if (!isValid) return;
 
-        createTask(message, approvers, taskType, dueDate);
-
-        if (onSubmit) {
-            // TODO: could this show server errors? <ApprovalCommentForm /> does not.
-            onSubmit();
-        }
-
-        this.clearForm();
+        this.setState({ isLoading: true });
+        createTask(message, approvers, taskType, dueDate, this.handleCreateSuccess, this.handleCreateError);
     };
 
     handleDueDateChange = (date: ?Date): void => {
@@ -154,8 +176,8 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     render() {
-        const { approverSelectorContacts, className, isDisabled, intl } = this.props;
-        const { dueDate, approvers, message, formValidityState, isValid } = this.state;
+        const { approverSelectorContacts, className, error, isDisabled, intl } = this.props;
+        const { dueDate, approvers, message, formValidityState, isLoading, isValid } = this.state;
         const inputContainerClassNames = classNames('bcs-task-input-container', 'bcs-task-input-is-open', className);
 
         // filter out selected approvers
@@ -167,6 +189,11 @@ class TaskForm extends React.Component<Props, State> {
         return (
             <div className={inputContainerClassNames}>
                 <div className="bcs-task-input-form-container">
+                    {error ? (
+                        <InlineError title={<FormattedMessage {...messages.taskCreateErrorTitle} />}>
+                            <FormattedMessage {...messages.taskCreateErrorMessage} />
+                        </InlineError>
+                    ) : null}
                     <Form
                         formValidityState={formValidityState}
                         onInvalidSubmit={this.handleInvalidSubmit}
@@ -231,6 +258,7 @@ class TaskForm extends React.Component<Props, State> {
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_CANCEL}
                                 data-testid="task-form-cancel-button"
                                 onClick={this.handleCancelClick}
+                                isDisabled={isLoading}
                                 type="button"
                             >
                                 <FormattedMessage {...messages.tasksAddTaskFormCancelLabel} />
@@ -240,6 +268,7 @@ class TaskForm extends React.Component<Props, State> {
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
                                 data-testid="task-form-submit-button"
                                 isDisabled={!isValid}
+                                isLoading={isLoading}
                                 onFocus={this.handleFocusChange}
                                 onMouseEnter={this.handleFocusChange}
                             >
