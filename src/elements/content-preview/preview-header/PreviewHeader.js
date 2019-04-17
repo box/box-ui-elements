@@ -6,16 +6,19 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import PlainButton from '../../components/plain-button/PlainButton';
-import IconClose from '../../icons/general/IconClose';
-import IconDrawAnnotationMode from '../../icons/annotations/IconDrawAnnotation';
-import IconPointAnnotation from '../../icons/annotations/IconPointAnnotation';
-import IconPrint from '../../icons/general/IconPrint';
-import IconDownload from '../../icons/general/IconDownloadSolid';
-import AsyncLoad from '../common/async-load';
-import messages from '../common/messages';
-import { getIcon } from '../common/item/iconCellRenderer';
-import { COLOR_999 } from '../../constants';
+import classNames from 'classnames';
+import getProp from 'lodash/get';
+import AsyncLoad from '../../common/async-load';
+import FileInfo from './FileInfo';
+import IconClose from '../../../icons/general/IconClose';
+import IconDrawAnnotationMode from '../../../icons/annotations/IconDrawAnnotation';
+import IconPointAnnotation from '../../../icons/annotations/IconPointAnnotation';
+import IconPrint from '../../../icons/general/IconPrint';
+import IconDownload from '../../../icons/general/IconDownloadSolid';
+import messages from '../../common/messages';
+import { nines } from '../../../styles/variables';
+import PlainButton from '../../../components/plain-button/PlainButton';
+
 import './Header.scss';
 
 type Props = {
@@ -26,14 +29,15 @@ type Props = {
     onClose?: Function,
     onDownload: Function,
     onPrint: Function,
+    selectedVersion: ?BoxItemVersion,
     token: ?string,
 } & InjectIntlProvidedProps;
 
 const LoadableContentOpenWith = AsyncLoad({
-    loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-open-with" */ '../content-open-with'),
+    loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-open-with" */ '../../content-open-with'),
 });
 
-const Header = ({
+const PreviewHeader = ({
     canAnnotate,
     canDownload,
     contentOpenWithProps = {},
@@ -42,34 +46,41 @@ const Header = ({
     onClose,
     onDownload,
     onPrint,
+    selectedVersion,
     token,
 }: Props) => {
-    const name = file ? file.name : '';
-    const id = file && file.id;
+    const fileId = file && file.id;
+    const shouldRenderOpenWith = fileId && contentOpenWithProps.show;
+    const currentVersionId = getProp(file, 'file_version.id');
+    const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
+    const isPreviewingCurrentVersion = currentVersionId === selectedVersionId;
+
+    // When previewing an older version the close button returns the user to the current version
     const closeMsg = intl.formatMessage(messages.close);
+    const backMsg = intl.formatMessage(messages.back);
     const printMsg = intl.formatMessage(messages.print);
     const downloadMsg = intl.formatMessage(messages.download);
     const drawMsg = intl.formatMessage(messages.drawAnnotation);
     const pointMsg = intl.formatMessage(messages.pointAnnotation);
-    const shouldRenderOpenWith = id && contentOpenWithProps.show;
+
+    const className = classNames('bcpr-header', {
+        'bcpr-header--basic': !isPreviewingCurrentVersion,
+    });
 
     return (
-        <div className="bcpr-header">
+        <div className={className}>
             <div className="bp-header bp-base-header">
-                <div className="bcpr-name">
-                    {file ? getIcon(24, file) : null}
-                    <span>{name}</span>
-                </div>
+                <FileInfo file={file} version={selectedVersion} />
                 <div className="bcpr-btns">
-                    {shouldRenderOpenWith && (
+                    {shouldRenderOpenWith && isPreviewingCurrentVersion && (
                         <LoadableContentOpenWith
                             className="bcpr-bcow-btn"
-                            fileId={id}
+                            fileId={fileId}
                             token={token}
                             {...contentOpenWithProps}
                         />
                     )}
-                    {canAnnotate && (
+                    {canAnnotate && isPreviewingCurrentVersion && (
                         <React.Fragment>
                             <PlainButton
                                 aria-label={drawMsg}
@@ -77,7 +88,7 @@ const Header = ({
                                 title={drawMsg}
                                 type="button"
                             >
-                                <IconDrawAnnotationMode color={COLOR_999} height={18} width={18} />
+                                <IconDrawAnnotationMode color={nines} height={18} width={18} />
                             </PlainButton>
                             <PlainButton
                                 aria-label={pointMsg}
@@ -85,11 +96,11 @@ const Header = ({
                                 title={pointMsg}
                                 type="button"
                             >
-                                <IconPointAnnotation color={COLOR_999} height={18} width={18} />
+                                <IconPointAnnotation color={nines} height={18} width={18} />
                             </PlainButton>
                         </React.Fragment>
                     )}
-                    {canDownload && (
+                    {canDownload && isPreviewingCurrentVersion && (
                         <PlainButton
                             aria-label={printMsg}
                             className="bcpr-btn"
@@ -97,10 +108,10 @@ const Header = ({
                             title={printMsg}
                             type="button"
                         >
-                            <IconPrint color={COLOR_999} height={22} width={22} />
+                            <IconPrint color={nines} height={22} width={22} />
                         </PlainButton>
                     )}
-                    {canDownload && (
+                    {canDownload && isPreviewingCurrentVersion && (
                         <PlainButton
                             aria-label={downloadMsg}
                             className="bcpr-btn"
@@ -108,24 +119,23 @@ const Header = ({
                             title={downloadMsg}
                             type="button"
                         >
-                            <IconDownload color={COLOR_999} height={18} width={18} />
+                            <IconDownload color={nines} height={18} width={18} />
                         </PlainButton>
                     )}
-                    {onClose && (
-                        <PlainButton
-                            aria-label={closeMsg}
-                            className="bcpr-btn"
-                            onClick={onClose}
-                            title={closeMsg}
-                            type="button"
-                        >
-                            <IconClose color={COLOR_999} height={24} width={24} />
-                        </PlainButton>
-                    )}
+                    {onClose &&
+                        (isPreviewingCurrentVersion ? (
+                            <PlainButton aria-label={closeMsg} className="bcpr-btn" onClick={onClose} type="button">
+                                <IconClose color={nines} height={24} width={24} />
+                            </PlainButton>
+                        ) : (
+                            <PlainButton className="bcpr-btn" onClick={onClose} title={backMsg} type="button">
+                                {backMsg}
+                            </PlainButton>
+                        ))}
                 </div>
             </div>
         </div>
     );
 };
 
-export default injectIntl(Header);
+export default injectIntl(PreviewHeader);

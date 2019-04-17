@@ -20,6 +20,7 @@ var ContentPreview = require('./ContentPreview').default;
             hasMetadata: true,
             hasSkills: true,
         }}
+        hasHeader={true}
         features={FEATURES}
         fileId={FILE_ID}
         token={TOKEN}
@@ -28,7 +29,7 @@ var ContentPreview = require('./ContentPreview').default;
 ```
 
 ### Screenshot
-<img src="https://user-images.githubusercontent.com/1075325/27419184-596b485c-56d4-11e7-8d42-c65328089c95.png" style="border: 1px solid #e8e8e8" width="600" />
+<img src="https://user-images.githubusercontent.com/1075325/27419184-596b485c-56d4-11e7-8d42-c65328089c95.png" style="border: 1px solid #e8e8e8;" width="600" />
 ---
 
 ### Props
