@@ -80,6 +80,15 @@ export const columnForTemplateFieldName = {
     type: 'string',
 };
 
+export const columnWithNumberType: ColumnType = {
+    displayName: 'Assets',
+    id: '8',
+    isShown: true,
+    property: 'assets',
+    source: 'metadata',
+    type: 'number',
+};
+
 const metadataColumns: Array<ColumnType> = [columnWithEnumType, columnWithMultiEnumType];
 
 const expectedVisibleColumns = {
