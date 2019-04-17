@@ -20,11 +20,6 @@
         text-transform: none;
         width: 100%;
 
-        .bdl-icon-sort-chevron {
-            height: 17px;
-            width: 17px;
-        }
-
         .bdl-icon-sort-chevron.bdl-ListView-isSortAsc {
             transform: rotate(180deg);
         }

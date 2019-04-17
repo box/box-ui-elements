@@ -1,19 +1,20 @@
-// colors defined by BDL
+// Box Design Language Theme Colors
 $bdl-box-blue: #0061d5 !default;
 $bdl-secondary-blue: #003c84 !default;
+$bdl-light-blue: #2486fc !default;
+$bdl-green-light: #26c281 !default;
+$bdl-yellorange: #f5b31b !default;
+$bdl-grimace: #4826c2 !default;
+$bdl-purple-rain: #9f3fed !default;
+$bdl-coral: #fc627a !default;
+$bdl-watermelon-red: #ed3757 !default;
 
-// Neutral colors
+// Box Design Language Neutral Colors
 $bdl-neutral-01: #222 !default;
 $bdl-neutral-02: #767676 !default;
 $bdl-neutral-03: #999 !default;
 $bdl-neutral-04: #f3f3f3 !default;
 $bdl-neutral-05: #fafafa !default;
-
-$bdl-green-light: #26c281 !default;
-$bdl-watermelon-red: #ed3757 !default;
-$bdl-yellorange: #f5b31b !default;
-$bdl-purple-rain: #9f3fed !default;
-$bdl-coral: #fc627a !default;
 
 // Primary colors
 $box-blue: $bdl-box-blue !default;

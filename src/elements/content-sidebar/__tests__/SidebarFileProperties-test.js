@@ -6,7 +6,6 @@ import SidebarFileProperties, {
     SidebarFilePropertiesComponent,
     getClassificationModal,
 } from '../SidebarFileProperties';
-import { KEY_CLASSIFICATION_TYPE } from '../../../constants';
 
 describe('elements/content-sidebar/SidebarFileProperties', () => {
     const getWrapper = props => shallow(<SidebarFilePropertiesComponent {...props} />);
@@ -36,8 +35,9 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
     const classificationProps = {
         hasClassification: true,
         onClassificationClick: jest.fn(),
-        bannerPolicy: {
-            body: 'tooltip value',
+        classification: {
+            type: 'Public',
+            description: 'tooltip value',
         },
         file: {
             size: '1',
@@ -47,9 +47,6 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
         },
         intl: {
             locale: 'en',
-        },
-        classification: {
-            [KEY_CLASSIFICATION_TYPE]: 'Public',
         },
     };
 
@@ -125,10 +122,10 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should not render a tooltip if no banner policy body is provided', () => {
+        test('should not render a tooltip if no classification description is provided', () => {
             const wrapper = getMountWrapper({
                 ...classificationProps,
-                bannerPolicy: undefined,
+                classification: { type: 'Public' },
                 file: {
                     ...classificationProps.file,
                     permissions: {
