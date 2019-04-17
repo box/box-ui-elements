@@ -1,8 +1,10 @@
 // @flow
+import { isNaN } from 'lodash';
+
 import { FLOAT } from './constants';
 
 const isFloat = (value: string) => {
-    return !/^\s*$/.test(value) && !Number.isNaN(Number(value));
+    return !/^\s*$/.test(value) && !isNaN(Number(value));
 };
 
 const isInt = (value: string) => {
@@ -11,7 +13,7 @@ const isInt = (value: string) => {
 
 const isValidValue = (type: string, value?: string | Date | any) => {
     if (type === FLOAT) {
-        if (value != null && !isFloat(String(value))) {
+        if (value != null && isFloat(String(value))) {
             return true;
         }
         if (value == null) {
