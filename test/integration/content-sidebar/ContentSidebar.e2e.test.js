@@ -14,7 +14,9 @@ describe('ContentSidebar', () => {
 
     describe('navigation buttons', () => {
         beforeEach(() => {
-            helpers.load();
+            helpers.load({
+                fileId: Cypress.env('FILE_ID_SKILLS'),
+            });
         });
 
         it('should toggle sidebar content when a user toggles a sidebar tab', () => {
@@ -45,7 +47,7 @@ describe('ContentSidebar', () => {
         beforeEach(() => {
             helpers.load({
                 features: { versions: true },
-                fileId: Cypress.env('FILE_ID_DOC'),
+                fileId: Cypress.env('FILE_ID_DOC_VERSIONED'),
             });
         });
 
