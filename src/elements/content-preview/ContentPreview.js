@@ -26,12 +26,11 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
-import globalUtils from '../../utils/globals';
 import { withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
-import Header from './Header';
+import PreviewHeader from './preview-header';
 import PreviewNavigation from './PreviewNavigation';
 import PreviewLoading from './PreviewLoading';
 import {
@@ -93,10 +92,10 @@ type State = {
     currentFileId?: string,
     file?: BoxItem,
     isFileError: boolean,
-    isReloadNotificationVisible: boolean, // the currently displayed file id in the collection
-    isThumbnailSidebarOpen: boolean, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
-    prevFileIdProp?: string,
-    selectedVersionId?: string,
+    isReloadNotificationVisible: boolean,
+    isThumbnailSidebarOpen: boolean,
+    prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
+    selectedVersion?: BoxItemVersion,
 };
 
 // Emitted by preview's 'load' event
@@ -165,6 +164,8 @@ class ContentPreview extends PureComponent<Props, State> {
     rootElement: HTMLElement;
 
     stagedFile: ?BoxItem;
+
+    updateVersionToCurrent: ?() => void;
 
     initialState: State = {
         isFileError: false,
@@ -245,8 +246,6 @@ class ContentPreview extends PureComponent<Props, State> {
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
-
-        globalUtils.setElementsDebugInfo();
     }
 
     /**
@@ -270,7 +269,7 @@ class ContentPreview extends PureComponent<Props, State> {
             this.preview = undefined;
         }
 
-        this.setState({ selectedVersionId: undefined });
+        this.setState({ selectedVersion: undefined });
     }
 
     /**
@@ -347,8 +346,10 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {boolean}
      */
     shouldLoadPreview(prevState: State): boolean {
-        const { file, selectedVersionId }: State = this.state;
-        const { file: prevFile, selectedVersionId: prevSelectedVersionId }: State = prevState;
+        const { file, selectedVersion }: State = this.state;
+        const { file: prevFile, selectedVersion: prevSelectedVersion }: State = prevState;
+        const prevSelectedVersionId = getProp(prevSelectedVersion, 'id');
+        const selectedVersionId = getProp(selectedVersion, 'id');
         const versionPath = 'file_version.id';
         const prevFileVersionId = getProp(prevFile, versionPath);
         const fileVersionId = getProp(file, versionPath);
@@ -356,7 +357,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
         if (selectedVersionId !== prevSelectedVersionId) {
             // Load preview if the user has selected a non-current version of the file
-            loadPreview = prevSelectedVersionId !== fileVersionId;
+            loadPreview = !!selectedVersionId || prevSelectedVersionId !== fileVersionId;
         } else if (fileVersionId && prevFileVersionId) {
             // Load preview if the file's current version ID has changed
             loadPreview = fileVersionId !== prevFileVersionId;
@@ -678,7 +679,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const { enableThumbnailsSidebar, fileOptions, token: tokenOrTokenFunction, ...rest }: Props = this.props;
-        const { file, selectedVersionId }: State = this.state;
+        const { file, selectedVersion }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
             return;
@@ -694,9 +695,9 @@ class ContentPreview extends PureComponent<Props, State> {
         const typedId: string = getTypedFileId(fileId);
         const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
 
-        if (selectedVersionId) {
+        if (selectedVersion) {
             fileOpts[fileId] = fileOpts[fileId] || {};
-            fileOpts[fileId].fileVersionId = selectedVersionId;
+            fileOpts[fileId].fileVersionId = selectedVersion.id;
         }
 
         const previewOptions = {
@@ -1051,10 +1052,14 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {string} [version] - The version that is now previewed
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: Object): void => {
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: AdditionalVersionInfo = {}): void => {
         const { onVersionChange }: Props = this.props;
+        this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
+
         onVersionChange(version, additionalVersionInfo);
-        this.setState({ selectedVersionId: getProp(version, 'id') });
+        this.setState({
+            selectedVersion: version,
+        });
     };
 
     /**
@@ -1097,6 +1102,7 @@ class ContentPreview extends PureComponent<Props, State> {
             isReloadNotificationVisible,
             currentFileId,
             isThumbnailSidebarOpen,
+            selectedVersion,
         }: State = this.state;
         const { collection }: Props = this.props;
         const styleClassName = classNames(
@@ -1110,21 +1116,28 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!currentFileId) {
             return null;
         }
+
+        const currentVersionId = getProp(file, 'file_version.id');
+        const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
+
+        const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
+
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
                     {hasHeader && (
-                        <Header
+                        <PreviewHeader
                             file={file}
                             token={token}
-                            onClose={onClose}
+                            onClose={onHeaderClose}
                             onPrint={this.print}
                             canDownload={this.canDownload()}
                             onDownload={this.download}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}
+                            selectedVersion={selectedVersion}
                         />
                     )}
                     <div className="bcpr-body">

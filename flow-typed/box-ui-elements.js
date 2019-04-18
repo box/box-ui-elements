@@ -340,6 +340,7 @@ type BoxItemVersion = {
     action: 'upload' | 'delete' | 'restore',
     collaborators?: Object,
     created_at: string,
+    extension?: string,
     id: string,
     modified_at?: string,
     modified_by: User,
@@ -704,11 +705,10 @@ type TaskNew = {|
     completion_rule?: 'ANY_ASSIGNEE' | 'ALL_ASSIGNEES',
     created_at: ISODate,
     created_by: TaskCollabCreator,
-    description?: ?string,
+    description: string,
     due_at?: ?ISODate,
     id: ID,
     modified_at?: ISODate,
-    name: string,
     permissions: {|
         can_create_task_collaborator: boolean,
         can_create_task_link: boolean,
@@ -723,8 +723,8 @@ type TaskNew = {|
 |};
 
 type TaskPayload = {
+    description: string,
     due_at?: ?string,
-    name: string,
     task_type: TaskType,
 };
 
@@ -926,8 +926,9 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    Box__Security__Classification__Key?: string,
-} & MetadataInstance;
+    description: ?string,
+    type: ?string,
+};
 
 type MetricType =
     | typeof METRIC_TYPE_PREVIEW
@@ -971,7 +972,6 @@ type NavigateOptions = {
 };
 
 type AdditionalVersionInfo = {
-    isCurrentVersion: boolean,
     updateVersionToCurrent: () => void,
 };
 

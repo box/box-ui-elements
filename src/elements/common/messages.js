@@ -763,15 +763,40 @@ const messages = defineMessages({
         defaultMessage: 'Delete task?',
         description: 'Confirmation prompt text to delete task',
     },
+    taskCreateErrorTitle: {
+        id: 'be.taskCreateErrorTitle',
+        description: 'Title shown above error message when a task creation fails',
+        defaultMessage: 'Error',
+    },
     taskCreateErrorMessage: {
-        id: 'be.taskCreateErrornMessage',
+        id: 'be.taskCreateErrorMessage',
         description: 'Error message when a task creation fails',
-        defaultMessage: 'There was an error creating this task.',
+        defaultMessage: 'An error occurred while creating this task. Please try again.',
     },
     taskUpdateErrorMessage: {
         id: 'be.taskEditErrorMessage',
         description: 'Error message when a task edit fails',
         defaultMessage: 'There was an error updating this task.',
+    },
+    taskActionErrorTitle: {
+        id: 'be.taskActionErrorTitle',
+        description: 'Title shown when an error occurs performing an action on a task',
+        defaultMessage: 'Error',
+    },
+    taskApproveErrorMessage: {
+        id: 'be.taskApproveErrorMessage',
+        description: 'Error message when approving a task fails',
+        defaultMessage: 'An error has occurred while approving this task. Please refresh the page and try again.',
+    },
+    taskCompleteErrorMessage: {
+        id: 'be.taskCompleteErrorMessage',
+        description: 'Error message when completing a task fails',
+        defaultMessage: 'An error has occurred while completing this task. Please refresh the page and try again.',
+    },
+    taskRejectErrorMessage: {
+        id: 'be.taskRejectErrorMessage',
+        description: 'Error message when rejecting a task fails',
+        defaultMessage: 'An error has occurred while rejecting this task. Please refresh the page and try again.',
     },
     taskDeleteErrorMessage: {
         id: 'be.taskDeleteErrorMessage',
@@ -977,6 +1002,41 @@ const messages = defineMessages({
         id: 'be.tasks.feed.headline.general',
         defaultMessage: '{ user } assigned a Task',
         description: 'Comment headline for a general task',
+    },
+    tasksFeedMoreAssigneesLabel: {
+        id: 'be.tasks.feed.moreAssigneesLabel',
+        defaultMessage: 'See all assignees',
+        description: 'Label for button to expand flyout to see all task assignees',
+    },
+    tasksFeedAssigneeListTitle: {
+        id: 'be.tasks.feed.assigneeList.title',
+        defaultMessage: 'Assignees',
+        description: 'Title for list of all task assignees',
+    },
+    tasksFeedStatusRejected: {
+        id: 'be.tasks.status.rejected',
+        defaultMessage: 'Rejected',
+        description: 'Rejected task status',
+    },
+    tasksFeedStatusAccepted: {
+        id: 'be.tasks.status.accepted',
+        defaultMessage: 'Accepted',
+        description: 'accepted task status',
+    },
+    tasksFeedStatusCompleted: {
+        id: 'be.tasks.status.completed',
+        defaultMessage: 'Completed',
+        description: 'Completed task status',
+    },
+    tasksFeedStatusNotStarted: {
+        id: 'be.tasks.status.notStarted',
+        defaultMessage: 'Awaiting',
+        description: 'Task status when not started',
+    },
+    tasksFeedStatusInProgress: {
+        id: 'be.tasks.status.inProgress',
+        defaultMessage: 'Awaiting',
+        description: 'Task status when in progress',
     },
     versionDeleted: {
         id: 'be.versionDeleted',

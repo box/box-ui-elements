@@ -52,7 +52,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         created_by: { id: '0', target: currentUser, role: 'CREATOR', status: 'NOT_STARTED', type: 'task_collaborator' },
         due_at: null,
         id: '123125',
-        name: 'This is where we tell each other what we need to do',
+        description: 'This is where we tell each other what we need to do',
         status: 'NOT_STARTED',
         permissions: {
             can_update: true,
@@ -133,7 +133,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         };
 
         const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...myTask} />);
-        expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
+        expect(wrapper.find('[data-testid="task-card"]').hasClass('bcs-is-pending')).toBe(true);
     });
 
     test('should show actions when current user is assigned and task is incomplete', () => {
@@ -235,5 +235,19 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         );
 
         expect(wrapper.find('Comment').getElements()[0].props.permissions.can_edit).toBe(false);
+    });
+
+    test('should show inline error for error prop', () => {
+        const wrapper = mount(
+            <Task
+                {...task}
+                currentUser={currentUser}
+                error={{ title: 'blah', message: 'blah' }}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+            />,
+        );
+
+        expect(wrapper.find('CommentInlineError')).toHaveLength(1);
     });
 });

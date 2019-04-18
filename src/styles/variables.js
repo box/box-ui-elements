@@ -3,16 +3,18 @@
 
 export const bdlBoxBlue = '#0061d5'; // bdl-box-blue
 export const bdlSecondaryBlue = '#003c84'; // bdl-secondary-blue
+export const bdlLightBlue = '#2486fc'; // bdl-light-blue
+export const bdlGreenLight = '#26c281'; // bdl-green-light
+export const bdlYellorange = '#f5b31b'; // bdl-yellorange
+export const bdlGrimace = '#4826c2'; // bdl-grimace
+export const bdlPurpleRain = '#9f3fed'; // bdl-purple-rain
+export const bdlCoral = '#fc627a'; // bdl-coral
+export const bdlWatermelonRed = '#ed3757'; // bdl-watermelon-red
 export const bdlNeutral01 = '#222'; // bdl-neutral-01
 export const bdlNeutral02 = '#767676'; // bdl-neutral-02
 export const bdlNeutral03 = '#999'; // bdl-neutral-03
 export const bdlNeutral04 = '#f3f3f3'; // bdl-neutral-04
 export const bdlNeutral05 = '#fafafa'; // bdl-neutral-05
-export const bdlGreenLight = '#26c281'; // bdl-green-light
-export const bdlWatermelonRed = '#ed3757'; // bdl-watermelon-red
-export const bdlYellorange = '#f5b31b'; // bdl-yellorange
-export const bdlPurpleRain = '#9f3fed'; // bdl-purple-rain
-export const bdlCoral = '#fc627a'; // bdl-coral
 export const boxBlue = '#0061d5'; // box-blue
 export const primaryColor = '#0061d5'; // primary-color
 export const korayIng = '#2a62b9'; // koray-ing

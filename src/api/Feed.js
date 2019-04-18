@@ -25,6 +25,9 @@ import {
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_INCOMPLETE,
+    TASK_NEW_APPROVED,
+    TASK_NEW_COMPLETED,
+    TASK_NEW_REJECTED,
     TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
 } from '../constants';
@@ -396,6 +399,21 @@ class Feed extends Base {
             status: taskCollaboratorStatus,
         };
         const handleError = (e: ElementsXhrError, code: string) => {
+            let errorMessage;
+            switch (taskCollaboratorStatus) {
+                case TASK_NEW_APPROVED:
+                    errorMessage = messages.taskApproveErrorMessage;
+                    break;
+                case TASK_NEW_COMPLETED:
+                    errorMessage = messages.taskCompleteErrorMessage;
+                    break;
+                case TASK_NEW_REJECTED:
+                    errorMessage = messages.taskRejectErrorMessage;
+                    break;
+                default:
+                    errorMessage = messages.taskCompleteErrorMessage;
+            }
+            this.updateFeedItem(this.createFeedError(errorMessage, messages.taskActionErrorTitle), taskId);
             this.feedErrorCallback(true, e, code);
         };
         collaboratorsApi.updateTaskCollaborator({
@@ -709,7 +727,7 @@ class Feed extends Base {
             created_at: new Date().toISOString(),
             due_at: dueAtString,
             id: uuid,
-            name: message,
+            description: message,
             type: TASK,
             assigned_to: {
                 entries: assignees.map((assignee: SelectorItem) => ({
@@ -754,19 +772,17 @@ class Feed extends Base {
             status: TASK_NEW_NOT_STARTED,
         };
 
-        this.addPendingItem(this.id, currentUser, pendingTask);
-
-        const taskPayload: TaskPayload = { name: message, due_at: dueAtString, task_type: taskType };
+        const taskPayload: TaskPayload = { description: message, due_at: dueAtString, task_type: taskType };
 
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.tasksNewAPI.createTask({
             file,
             task: taskPayload,
             successCallback: (taskData: Task) => {
+                this.addPendingItem(this.id, currentUser, pendingTask);
                 this.createTaskNewSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
             },
             errorCallback: (e: ElementsXhrError, code: string) => {
-                this.updateFeedItem(this.createFeedError(messages.taskCreateErrorMessage), uuid);
                 this.feedErrorCallback(false, e, code);
             },
         });
