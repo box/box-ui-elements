@@ -2,8 +2,10 @@
 import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
+import uniqueId from 'lodash/uniqueId';
 import { Flyout, Overlay } from '../../../../components/flyout';
 import Tooltip from '../../../../components/tooltip';
+import PlainButton from '../../../../components/plain-button';
 import messages from '../../../common/messages';
 import AssigneeStatus from './AssigneeStatus';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
@@ -13,7 +15,7 @@ const MAX_AVATARS = 3;
 type Props = {|
     assignees: TaskAssigneeCollection,
     getAvatarUrl: GetAvatarUrlCallback,
-    maxAvatars?: number,
+    maxAvatars: number,
 |} & InjectIntlProvidedProps;
 
 const statusMessages = {
@@ -37,12 +39,19 @@ const AssigneeTooltipLabel = React.memo(({ user, status }) => {
 
 /* eslint-disable react/prefer-stateless-function */
 class Assignees extends React.Component<Props> {
+    static defaultProps = {
+        maxAvatars: MAX_AVATARS,
+    };
+
+    listTitleId = `task-assignment-list-title-${uniqueId()}`;
+
     render() {
-        const { maxAvatars = MAX_AVATARS, assignees, getAvatarUrl, intl } = this.props;
-        const assigneeCount = (assignees && assignees.entries.length) || 0;
-        const hiddenAssigneeCount = assigneeCount - maxAvatars;
-        const overflowLabel = `+${hiddenAssigneeCount}`;
-        const visibleAssignees = assignees.entries
+        const { maxAvatars, assignees = {}, getAvatarUrl, intl } = this.props;
+        const { entries = [], limit } = assignees;
+        const assigneeCount = entries.length;
+        const hiddenAssigneeCount = Math.max(0, assigneeCount - maxAvatars);
+        const areThereMoreEntries = limit != null && assigneeCount >= limit; // there are more assignees in another page of results
+        const visibleAssignees = entries
             .slice(0, maxAvatars)
             .map(({ id: assignmentId, target, status: assigneeStatus }) => {
                 return (
@@ -57,10 +66,10 @@ class Assignees extends React.Component<Props> {
                     </Tooltip>
                 );
             });
-        const hiddenAssignees = assignees.entries.map(({ id: assignmentId, target, status: assigneeStatus }) => {
+        const allAssignees = entries.map(({ id: assignmentId, target, status: assigneeStatus }) => {
             const statusMessage = statusMessages[assigneeStatus] || null;
             return (
-                <div key={assignmentId} className="bcs-task-assignment-list-item">
+                <li key={assignmentId} className="bcs-task-assignment-list-item">
                     <AssigneeStatus
                         status={assigneeStatus}
                         className="bcs-task-assignment-list-item-avatar"
@@ -72,7 +81,7 @@ class Assignees extends React.Component<Props> {
                         <div>{target.name}</div>
                         <div className="bcs-task-assignment-list-item-status">{statusMessage}</div>
                     </div>
-                </div>
+                </li>
             );
         });
         return (
@@ -80,24 +89,24 @@ class Assignees extends React.Component<Props> {
                 <div className="bcs-task-assignments">
                     {visibleAssignees}
                     {hiddenAssigneeCount > 0 && (
-                        <Flyout position="top-left">
-                            <button
+                        <Flyout position="top-left" shouldDefaultFocus>
+                            <PlainButton
                                 type="button"
                                 className="bcs-task-assignment-count-container"
                                 data-testid="task-assignment-overflow"
                             >
                                 <Tooltip text={intl.formatMessage(messages.tasksFeedMoreAssigneesLabel)}>
                                     <span className="bcs-task-assignment-count bcs-task-assignment-avatar">
-                                        {overflowLabel}
+                                        {areThereMoreEntries ? '+' : `+${hiddenAssigneeCount}`}
                                     </span>
                                 </Tooltip>
-                            </button>
+                            </PlainButton>
                             <Overlay>
                                 <div className="bcs-task-assignment-list">
-                                    <h5 className="bcs-task-assignment-list-title">
+                                    <p className="bcs-task-assignment-list-title" id={this.listTitleId}>
                                         <FormattedMessage {...messages.tasksFeedAssigneeListTitle} />
-                                    </h5>
-                                    {hiddenAssignees}
+                                    </p>
+                                    <ul arial-labelledby={this.listTitleId}>{allAssignees}</ul>
                                 </div>
                             </Overlay>
                         </Flyout>

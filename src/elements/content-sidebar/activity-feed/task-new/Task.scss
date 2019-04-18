@@ -62,13 +62,6 @@ $card-left-offset: 40px;
         right: 4px;
     }
 
-    .bcs-task-assignment-count-container {
-        // override button styles
-        border: 0;
-        font-size: 100%;
-        padding: 0;
-    }
-
     .bcs-task-assignment-count {
         align-items: center;
         background: $gray;
@@ -152,16 +145,23 @@ $card-left-offset: 40px;
 .bcs-task-assignment-list {
     max-width: 100%;
     width: 280px;
+
+    // reset base styles set by ui-elements
+    ul {
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .bcs-task-assignment-list-title {
-    margin-top: 0;
+    font-size: 15px;
+    margin: 0 0 12px 0;
 }
 
 .bcs-task-assignment-list-item {
     align-items: flex-start;
     display: flex;
-    margin-top: 12px;
+    margin: 12px 0 0 0;
 }
 
 .bcs-task-assignment-list-item-avatar {
