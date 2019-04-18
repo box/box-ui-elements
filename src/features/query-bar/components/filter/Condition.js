@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import isInteger from 'lodash/isInteger';
 import classNames from 'classnames';
 
 import IconClose from '../../../../icons/general/IconClose';
@@ -8,7 +9,7 @@ import Tooltip from '../../../../components/tooltip';
 import IconAlertDefault from '../../../../icons/general/IconAlertDefault';
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
 import ValueField from './ValueField';
-import { isFloat, isInt } from '../../validator';
+import { isFloat } from '../../../../common/utils';
 
 import messages from '../../messages';
 import {
@@ -113,9 +114,9 @@ const Condition = ({
     const validateValue = (values: Array<ConditionValueType>, type: string) => {
         switch (type) {
             case NUMBER:
-                return isInt(String(values[0]));
+                return isInteger(Number(values[0]));
             case FLOAT:
-                return isFloat(String(values[0]));
+                return isFloat(Number(values[0]));
             default:
                 break;
         }
