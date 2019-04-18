@@ -49,6 +49,10 @@
         + span + span {
             margin-left: 10px;
         }
+
+        &:disabled + span + span {
+            color: $bfive;
+        }
     }
 }
 
