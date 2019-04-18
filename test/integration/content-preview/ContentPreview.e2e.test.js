@@ -1,4 +1,6 @@
 // <reference types="Cypress" />
+import l from '../../support/i18n';
+
 const COLLECTION = [
     Cypress.env('FILE_ID_DOC_VERSIONED'),
     Cypress.env('FILE_ID_DOC'),
@@ -20,18 +22,10 @@ describe('ContentPreview', () => {
             });
         },
         checkPreviewHeader() {
-            cy.getByTestId('previewheader')
-                .as('previewheader')
-                .contains('Document - Versioned (PDF).pdf');
-
-            cy.get('@previewheader').should('not.contain', 'Back');
+            cy.get('.bcpr-header').should('be.visible');
         },
         checkVersionsHeader() {
-            cy.getByTestId('previewheader')
-                .as('previewheader')
-                .contains('Document - Versioned.docx');
-
-            cy.get('@previewheader').contains('Back');
+            cy.get('.bcpr-header--basic').should('be.visible');
         },
         selectVersion(versionName) {
             cy.getByTestId('versions-item-button').within($versionsItem => {
@@ -139,7 +133,7 @@ describe('ContentPreview', () => {
             helpers.checkPreviewHeader();
         });
         it('Clicking the back button while previewing a previous version should return to the current version', () => {
-            cy.getByTestId('versionsheaderback').click();
+            cy.contains(l('be.back')).click();
             helpers.checkPreviewHeader();
         });
         it('Clicking the back arrow while previewing a previous version should return to the current version', () => {

@@ -68,7 +68,7 @@ const PreviewHeader = ({
     });
 
     return (
-        <div data-testid="previewheader" className={className}>
+        <div className={className}>
             <div className="bp-header bp-base-header">
                 <FileInfo file={file} version={selectedVersion} />
                 <div className="bcpr-btns">
@@ -128,13 +128,7 @@ const PreviewHeader = ({
                                 <IconClose color={nines} height={24} width={24} />
                             </PlainButton>
                         ) : (
-                            <PlainButton
-                                data-testid="versionsheaderback"
-                                className="bcpr-btn"
-                                onClick={onClose}
-                                title={backMsg}
-                                type="button"
-                            >
+                            <PlainButton className="bcpr-btn" onClick={onClose} title={backMsg} type="button">
                                 {backMsg}
                             </PlainButton>
                         ))}
