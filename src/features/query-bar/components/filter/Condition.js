@@ -148,22 +148,26 @@ const Condition = ({
         let messageText;
         switch (type) {
             case STRING:
-                messageText = messages.tooltipEnterValueError;
+                messageText = { ...messages.tooltipEnterValueError };
                 break;
             case NUMBER:
-                messageText = !isValueValid ? messages.tooltipInvalidNumberError : messages.tooltipEnterValueError;
+                messageText = !isValueValid
+                    ? { ...messages.tooltipInvalidNumberError }
+                    : { ...messages.tooltipEnterValueError };
                 break;
             case FLOAT:
-                messageText = !isValueValid ? messages.tooltipInvalidFloatError : messages.tooltipEnterValueError;
+                messageText = !isValueValid
+                    ? { ...messages.tooltipInvalidFloatError }
+                    : { ...messages.tooltipEnterValueError };
                 break;
             case DATE:
-                messageText = messages.tooltipSelectDateError;
+                messageText = { ...messages.tooltipSelectDateError };
                 break;
             case ENUM:
-                messageText = messages.tooltipSelectValueError;
+                messageText = { ...messages.tooltipSelectValueError };
                 break;
             case MULTI_SELECT:
-                messageText = messages.tooltipSelectValueError;
+                messageText = { ...messages.tooltipSelectValueError };
                 break;
             default:
                 break;
