@@ -1,21 +1,22 @@
 @import '../../styles/variables';
 
 .collapsible-card {
-    border-radius: 4px;
+    // no overflow hidden sticky header
+    border-radius: $bdl-border-radius-size;
 
     .collapsible-card-header {
         align-items: center;
         background-color: $white;
-        border-radius: 4px;
+        border-radius: $bdl-border-radius-size;
         display: flex;
         flex-direction: row;
-        position: relative;
+        position: relative; // for action items
         width: 100%;
 
         &.has-sticky-header {
             position: sticky;
-            top: 0;
-            z-index: 1;
+            top: 0; // required by sticky position
+            z-index: 1; // required by sticky position
         }
     }
 
