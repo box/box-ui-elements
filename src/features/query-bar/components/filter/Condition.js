@@ -37,11 +37,11 @@ import type {
 import '../../styles/Condition.scss';
 
 type Props = {
-    areErrorsEnabled: boolean,
     columns?: Array<ColumnType>,
     condition: ConditionType,
     deleteCondition: (index: number) => void,
     index: number,
+    isErrorEnabled: boolean,
     onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
     onOperatorChange: (conditionId: string, value: OperatorType) => void,
@@ -53,7 +53,7 @@ const deleteButtonIconHeight = 18;
 const deleteButtonIconWidth = 18;
 
 const Condition = ({
-    areErrorsEnabled,
+    isErrorEnabled,
     columns,
     condition,
     deleteCondition,
@@ -134,7 +134,7 @@ const Condition = ({
             isValueValid = validateValue(values, type);
         }
 
-        if (isValueValid || (!areErrorsEnabled && !isValueSet)) {
+        if (isValueValid || (!isErrorEnabled && !isValueSet)) {
             return null;
         }
 
