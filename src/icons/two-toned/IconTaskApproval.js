@@ -3,17 +3,16 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 import type { TwoTonedIcon } from '../flowTypes';
+import { dehydrated, white } from '../../styles/variables';
 
 const IconTaskApproval = ({ className = '', height = 24, title, width = 24 }: TwoTonedIcon) => (
-    <AccessibleSVG className={className} height={height} title={title} viewBox="0 0 20 20" width={width}>
-        <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-            <g transform="translate(1.000000, 1.000000)" fillRule="nonzero">
-                <circle className="background-color" stroke="#FFFFFF" fill="#F5B31B" cx="9" cy="9" r="9.5" />
-                <g className="foreground-color" transform="translate(4.500000, 3.000000)" fill="#FFFFFF">
-                    <path d="M6.33748102,3.66175758 C5.70042437,4.92277116 5.39902565,6.06704494 5.42957549,7.0944082 C5.43312774,7.21386706 5.33018985,7.3125 5.20196482,7.3125 L4.5,7.3125 L3.79803518,7.3125 C3.66981015,7.3125 3.56687226,7.21386706 3.57042451,7.0944082 C3.60097435,6.06704494 3.29957563,4.92277116 2.66251898,3.66175758 C1.66114814,1.67960696 2.5633313,1.37680828e-15 4.5,0 C6.4366687,1.37680828e-15 7.33885186,1.67960696 6.33748102,3.66175758 Z" />
-                    <rect x="0" y="8.06470588" width="9" height="1.88602941" rx="0.943014706" />
-                    <rect x="0.642857143" y="10.5794118" width="7.71428571" height="1" rx="0.5" />
-                </g>
+    <AccessibleSVG className={className} height={height} title={title} viewBox="0 0 32 32" width={width}>
+        <g fill="none" fillRule="nonzero">
+            <circle className="background-color" fill={dehydrated} cx="16" cy="16" r="16" />
+            <g transform="translate(8 5.333)" className="foreground-color" fill={white}>
+                <path d="M11.267 6.51c-1.133 2.242-1.669 4.276-1.614 6.102.006.213-.177.388-.405.388H6.752c-.228 0-.41-.175-.405-.388.055-1.826-.481-3.86-1.614-6.102C2.953 2.986 4.557 0 8 0s5.047 2.986 3.267 6.51z" />
+                <rect y="14.337" width="16" height="3.353" rx="1.676" />
+                <rect x="1.143" y="18.808" width="13.714" height="1.192" rx=".596" />
             </g>
         </g>
     </AccessibleSVG>
