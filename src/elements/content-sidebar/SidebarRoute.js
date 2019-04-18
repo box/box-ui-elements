@@ -1,5 +1,5 @@
 import * as React from 'react';
-import noop from 'lodash';
+import noop from 'lodash/noop';
 import { Redirect, Route } from 'react-router-dom';
 
 const SidebarRoute = ({ children, enabled, pathFallback = '/', render = noop, ...rest }) => (
