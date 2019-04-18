@@ -14,8 +14,7 @@ type Props = {|
     assignees: TaskAssigneeCollection,
     getAvatarUrl: GetAvatarUrlCallback,
     maxAvatars?: number,
-    ...InjectIntlProvidedProps,
-|};
+|} & InjectIntlProvidedProps;
 
 const statusMessages = {
     [TASK_NEW_APPROVED]: <FormattedMessage {...messages.tasksFeedStatusAccepted} />,
@@ -36,9 +35,8 @@ const AssigneeTooltipLabel = React.memo(({ user, status }) => {
     );
 });
 
+/* eslint-disable react/prefer-stateless-function */
 class Assignees extends React.Component<Props> {
-    state = {};
-
     render() {
         const { maxAvatars = MAX_AVATARS, assignees, getAvatarUrl, intl } = this.props;
         const assigneeCount = (assignees && assignees.entries.length) || 0;
