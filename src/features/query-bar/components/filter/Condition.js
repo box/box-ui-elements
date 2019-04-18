@@ -134,6 +134,10 @@ const Condition = ({
             isValueValid = validateValue(values, type);
         }
 
+        if (isValueValid || (!areErrorsEnabled && !isValueSet)) {
+            return null;
+        }
+
         let message;
         let messageText;
         switch (type) {
@@ -161,13 +165,7 @@ const Condition = ({
                 break;
         }
 
-        const error = !isValueValid || (areErrorsEnabled && !isValueSet) ? message : null;
-
-        if (!error) {
-            return null;
-        }
-
-        return error;
+        return message;
     };
 
     const renderDeleteButton = () => {
