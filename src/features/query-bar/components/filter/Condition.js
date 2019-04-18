@@ -113,13 +113,13 @@ const Condition = ({
     const validateValue = (values: Array<ConditionValueType>, type: string) => {
         switch (type) {
             case NUMBER:
-                return !isInt(String(values[0]));
+                return isInt(String(values[0]));
             case FLOAT:
-                return !isFloat(String(values[0]));
+                return isFloat(String(values[0]));
             default:
                 break;
         }
-        return false;
+        return true;
     };
 
     const getErrorMessage = () => {
@@ -129,9 +129,9 @@ const Condition = ({
 
         const isValueSet = values.length !== 0;
 
-        let isValueInvalid = false;
+        let isValueValid = true;
         if (isValueSet && type) {
-            isValueInvalid = validateValue(values, type);
+            isValueValid = validateValue(values, type);
         }
 
         let message;
@@ -141,11 +141,11 @@ const Condition = ({
                 message = <FormattedMessage {...messages.tooltipEnterValueError} />;
                 break;
             case NUMBER:
-                messageText = isValueInvalid ? messages.tooltipInvalidNumberError : messages.tooltipEnterValueError;
+                messageText = !isValueValid ? messages.tooltipInvalidNumberError : messages.tooltipEnterValueError;
                 message = <FormattedMessage {...messageText} />;
                 break;
             case FLOAT:
-                messageText = isValueInvalid ? messages.tooltipInvalidFloatError : messages.tooltipEnterValueError;
+                messageText = !isValueValid ? messages.tooltipInvalidFloatError : messages.tooltipEnterValueError;
                 message = <FormattedMessage {...messageText} />;
                 break;
             case DATE:
@@ -161,7 +161,7 @@ const Condition = ({
                 break;
         }
 
-        const error = isValueInvalid || (areErrorsEnabled && !isValueSet) ? message : null;
+        const error = !isValueValid || (areErrorsEnabled && !isValueSet) ? message : null;
 
         if (!error) {
             return null;
