@@ -41,8 +41,8 @@ type Props = {
     columns?: Array<ColumnType>,
     condition: ConditionType,
     deleteCondition: (index: number) => void,
+    hasUserSubmitted: boolean,
     index: number,
-    isErrorEnabled: boolean,
     onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
     onOperatorChange: (conditionId: string, value: OperatorType) => void,
@@ -54,7 +54,7 @@ const deleteButtonIconHeight = 18;
 const deleteButtonIconWidth = 18;
 
 const Condition = ({
-    isErrorEnabled,
+    hasUserSubmitted,
     columns,
     condition,
     deleteCondition,
@@ -128,10 +128,10 @@ const Condition = ({
         const column = columns && columns.find(c => c.id === columnId);
         const type = column && column.type;
 
-        const isValueSet = values.length !== 0;
+        const isValueEmpty = values.length === 0;
 
         let isValueValid = false;
-        if (isValueSet && type) {
+        if (!isValueEmpty && type) {
             isValueValid = validateValue(values, type);
         }
 
@@ -139,10 +139,10 @@ const Condition = ({
          * isValueValid handles the error case when the user tries to enter an invalid input in either a
          * number type field or a float type field
          *
-         * (!isErrorEnabled && !isValueSet) handles the error case when a user presses on the Apply button
+         * (!hasUserSubmitted && !isValueSet) handles the error case when a user presses on the Apply button
          * but the input field is empty
          */
-        if (isValueValid || (!isErrorEnabled && !isValueSet)) {
+        if (isValueValid || (!hasUserSubmitted && isValueEmpty)) {
             return null;
         }
 
