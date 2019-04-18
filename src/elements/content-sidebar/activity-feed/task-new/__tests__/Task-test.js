@@ -52,7 +52,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         created_by: { id: '0', target: currentUser, role: 'CREATOR', status: 'NOT_STARTED', type: 'task_collaborator' },
         due_at: null,
         id: '123125',
-        name: 'This is where we tell each other what we need to do',
+        description: 'This is where we tell each other what we need to do',
         status: 'NOT_STARTED',
         permissions: {
             can_update: true,
