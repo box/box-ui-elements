@@ -273,5 +273,6 @@ module.exports = {
         lineHeight: 'inherit',
         maxWidth: '100%',
     },
+    usageMode: 'expand', // expand props & methods panel by default
     webpackConfig,
 };
