@@ -27,8 +27,8 @@ const StatusIcon = ({ status, ...rest }: { status: TaskCollabStatus }) => {
     }
 };
 
-const AssignmentStatus = React.memo<Props>(({ user, status, getAvatarUrl, ...rest }: Props) => (
-    <div className="bcs-task-assignment-status" {...rest}>
+const AssignmentStatus = React.memo<Props>(({ user, status, getAvatarUrl, className, ...rest }: Props) => (
+    <div className={`bcs-task-assignment-status ${className}`} {...rest}>
         <Avatar className="bcs-task-assignment-avatar" user={user} getAvatarUrl={getAvatarUrl} />
         <StatusIcon
             status={status}
