@@ -34,16 +34,25 @@ class Users extends Base {
     }
 
     /**
-     * Gets the user avatar URL
+     * Gets authenticated user avatar URL from cache or by getting new token
      *
      * @param {string} userId the user id
      * @param {string} fileId the file id
      * @return {string} the user avatar URL string for a given user with access token attached
      */
     async getAvatarUrlWithAccessToken(userId: string, fileId: string): Promise<?string> {
+        // treat cache as key-value pairs of { userId: avatarUrl }
+        const cache = this.getCache();
+        if (cache.has(userId)) {
+            return cache.get(userId);
+        }
+
         const accessToken: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);
+
         if (typeof accessToken === 'string') {
-            return `${this.getAvatarUrl(userId)}?access_token=${accessToken}`;
+            const url = `${this.getAvatarUrl(userId)}?access_token=${accessToken}`;
+            cache.set(userId, url);
+            return url;
         }
 
         return null;

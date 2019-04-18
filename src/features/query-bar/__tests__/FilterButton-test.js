@@ -69,19 +69,21 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
     describe('componentDidUpdate()', () => {
         const initialCondition = {
             columnId: columnForTemplateFieldName.id,
-            id: '2',
+            id: '1',
             operator: '=',
             values: [],
         };
+
         test.each`
-            innerColumns | conditions         | expectedConditions    | should
-            ${columns}   | ${validConditions} | ${validConditions}    | ${'should reinitialize conditions from props.conditions when flyout is opened and props.conditions is not empty'}
-            ${columns}   | ${[]}              | ${[initialCondition]} | ${'should set to initial condition when flyout is opened and props.conditions is empty'}
-            ${[]}        | ${[]}              | ${[]}                 | ${'should set to empty array when flyout is opened and both props.columns and props.conditions is empty'}
-        `('$should', ({ innerColumns, conditions, expectedConditions }) => {
+            innerColumns | conditions         | transientConditions | expectedConditions    | should
+            ${columns}   | ${validConditions} | ${[]}               | ${validConditions}    | ${'should reinitialize conditions from props.conditions when flyout is opened and props.conditions is not empty'}
+            ${columns}   | ${[]}              | ${[]}               | ${[initialCondition]} | ${'should set initial condition if props.conditions is empty and transientConditions are empty'}
+            ${[]}        | ${[]}              | ${[]}               | ${[]}                 | ${'should set empty array if props.conditions is empty and transientConditions are empty and columns are empty'}
+        `('$should', ({ innerColumns, conditions, transientConditions, expectedConditions }) => {
             const wrapper = getWrapper({ columns: innerColumns, conditions });
             wrapper.setState({
                 isMenuOpen: true,
+                transientConditions,
             });
             wrapper.instance().componentDidUpdate({}, { isMenuOpen: false });
 

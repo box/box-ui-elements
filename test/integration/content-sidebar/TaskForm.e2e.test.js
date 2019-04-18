@@ -6,11 +6,10 @@ describe('Create Task', () => {
     const getMessageField = () => cy.getByTestId('task-form-name-input');
     const getSubmitButton = () => cy.getByTestId('task-form-submit-button');
     const getCancelButton = () => cy.getByTestId('task-form-cancel-button');
-    const username = 'Platform '; // will be used as assignee
+    const username = 'PreviewTestApp'; // will be used as assignee
 
     beforeEach(() => {
         cy.visit('/Elements/ContentSidebar'); // Open sidebar example page
-        cy.getByTestId('sidebaractivity').click(); // Open activity tab
     });
 
     context('Add Task button', () => {
@@ -27,6 +26,7 @@ describe('Create Task', () => {
 
     context('Task Form', () => {
         beforeEach(() => {
+            cy.server();
             cy.contains(l('be.tasks.addTask')).click();
             cy.contains(l('be.tasks.addTask.approval')).click();
         });
@@ -37,7 +37,9 @@ describe('Create Task', () => {
             cy.contains('Required Field').should('exist');
         });
 
-        it('creates task if form is filled out', () => {
+        it('shows error state after receiving server error', () => {
+            cy.route('POST', '**/undoc/tasks').as('createTaskLink');
+            getSubmitButton().should('not.have.class', 'is-loading');
             cy.getByTestId('create-task-modal').within(() => {
                 getAssigneeField()
                     .type(username)
@@ -48,18 +50,16 @@ describe('Create Task', () => {
                 getSubmitButton().click();
             });
 
-            // modal should close
-            cy.getByTestId('create-task-modal').should('not.exist');
+            // submit button should be in loading state
+            getSubmitButton().should('have.class', 'is-loading');
 
-            // validate task appears in feed
-            // note that in the test environment task create fails with default token
-            // but the card temporarily appears
-            cy.getByTestId('activityfeed').within(() => {
-                cy.getByTestId('task-card')
-                    .last()
-                    .within(() => {
-                        cy.contains('valid e2e task').should('exist');
-                    });
+            // wait for task creation request to finish
+            cy.wait('@createTaskLink');
+
+            // test environment task create fails with default token, so an
+            // inline error should appear in the form
+            cy.getByTestId('create-task-modal').within(() => {
+                cy.contains('An error occurred while creating this task.').should('exist');
             });
         });
     });

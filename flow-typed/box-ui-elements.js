@@ -340,6 +340,7 @@ type BoxItemVersion = {
     action: 'upload' | 'delete' | 'restore',
     collaborators?: Object,
     created_at: string,
+    extension?: string,
     id: string,
     modified_at?: string,
     modified_by: User,
@@ -926,8 +927,9 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    Box__Security__Classification__Key?: string,
-} & MetadataInstance;
+    description: ?string,
+    type: ?string,
+};
 
 type MetricType =
     | typeof METRIC_TYPE_PREVIEW
@@ -971,7 +973,6 @@ type NavigateOptions = {
 };
 
 type AdditionalVersionInfo = {
-    isCurrentVersion: boolean,
     updateVersionToCurrent: () => void,
 };
 
