@@ -101,13 +101,13 @@ class Assignees extends React.Component<Props> {
                                     </span>
                                 </Tooltip>
                             </PlainButton>
-                            <Overlay>
-                                <div className="bcs-task-assignment-list">
-                                    <p className="bcs-task-assignment-list-title" id={this.listTitleId}>
-                                        <FormattedMessage {...messages.tasksFeedAssigneeListTitle} />
-                                    </p>
-                                    <ul arial-labelledby={this.listTitleId}>{allAssignees}</ul>
-                                </div>
+                            <Overlay className="bcs-task-assignment-list-flyout">
+                                <p className="bcs-task-assignment-list-title" id={this.listTitleId}>
+                                    <FormattedMessage {...messages.tasksFeedAssigneeListTitle} />
+                                </p>
+                                <ul className="bcs-task-assignment-list" arial-labelledby={this.listTitleId}>
+                                    {allAssignees}
+                                </ul>
                             </Overlay>
                         </Flyout>
                     )}

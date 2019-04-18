@@ -1,32 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open assignee list when overflow icon is clicked: assignment list 1`] = `
-<div
+<ul
+  arial-labelledby="task-assignment-list-title-23"
   className="bcs-task-assignment-list"
 >
-  <p
-    className="bcs-task-assignment-list-title"
-    id="task-assignment-list-title-23"
+  <li
+    className="bcs-task-assignment-list-item"
+    key="0001"
   >
-    <FormattedMessage
-      defaultMessage="Assignees"
-      id="be.tasks.feed.assigneeList.title"
+    <Component
+      className="bcs-task-assignment-list-item-avatar"
+      data-testid="task-assignment-status"
+      getAvatarUrl={[Function]}
+      status="REJECTED"
+      user={
+        Object {
+          "id": "111",
+          "name": "AL",
+          "type": "user",
+        }
+      }
     >
-      <div />
-    </FormattedMessage>
-  </p>
-  <ul
-    arial-labelledby="task-assignment-list-title-23"
-  >
-    <li
-      className="bcs-task-assignment-list-item"
-      key="0001"
-    >
-      <Component
-        className="bcs-task-assignment-list-item-avatar"
-        data-testid="task-assignment-status"
+      <Avatar
+        className="bcs-task-assignment-avatar"
         getAvatarUrl={[Function]}
-        status="REJECTED"
         user={
           Object {
             "id": "111",
@@ -36,48 +34,48 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open as
         }
       >
         <Avatar
+          avatarUrl={null}
           className="bcs-task-assignment-avatar"
-          getAvatarUrl={[Function]}
-          user={
-            Object {
-              "id": "111",
-              "name": "AL",
-              "type": "user",
-            }
-          }
+          id="111"
+          name="AL"
         >
-          <Avatar
-            avatarUrl={null}
-            className="bcs-task-assignment-avatar"
-            id="111"
-            name="AL"
+          <span
+            className="avatar bcs-task-assignment-avatar"
+            role="presentation"
           >
-            <span
-              className="avatar bcs-task-assignment-avatar"
-              role="presentation"
+            <AvatarInitials
+              id="111"
+              name="AL"
             >
-              <AvatarInitials
-                id="111"
-                name="AL"
-              >
-                <span
-                  className="avatar-initials "
-                  style={
-                    Object {
-                      "backgroundColor": "#26c281",
-                    }
+              <span
+                className="avatar-initials "
+                style={
+                  Object {
+                    "backgroundColor": "#26c281",
                   }
-                >
-                  AA
-                </span>
-              </AvatarInitials>
-            </span>
-          </Avatar>
+                }
+              >
+                AA
+              </span>
+            </AvatarInitials>
+          </span>
         </Avatar>
-        <StatusIcon
+      </Avatar>
+      <StatusIcon
+        className="bcs-task-assignment-status-icon rejected"
+        height={12}
+        status="REJECTED"
+        title={
+          <FormattedMessage
+            defaultMessage="Completed"
+            id="be.completedAssignment"
+          />
+        }
+        width={12}
+      >
+        <IconRejected
           className="bcs-task-assignment-status-icon rejected"
           height={12}
-          status="REJECTED"
           title={
             <FormattedMessage
               defaultMessage="Completed"
@@ -86,8 +84,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open as
           }
           width={12}
         >
-          <IconRejected
-            className="bcs-task-assignment-status-icon rejected"
+          <AccessibleSVG
+            className="icon-rejected bcs-task-assignment-status-icon rejected"
             height={12}
             title={
               <FormattedMessage
@@ -95,87 +93,87 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open as
                 id="be.completedAssignment"
               />
             }
+            viewBox="0 0 18 18"
             width={12}
           >
-            <AccessibleSVG
+            <svg
+              aria-labelledby="icon31-title"
               className="icon-rejected bcs-task-assignment-status-icon rejected"
+              focusable="false"
               height={12}
-              title={
-                <FormattedMessage
-                  defaultMessage="Completed"
-                  id="be.completedAssignment"
-                />
-              }
+              role="img"
               viewBox="0 0 18 18"
               width={12}
             >
-              <svg
-                aria-labelledby="icon31-title"
-                className="icon-rejected bcs-task-assignment-status-icon rejected"
-                focusable="false"
-                height={12}
-                role="img"
-                viewBox="0 0 18 18"
-                width={12}
+              <title
+                id="icon31-title"
               >
-                <title
-                  id="icon31-title"
+                <FormattedMessage
+                  defaultMessage="Completed"
+                  id="be.completedAssignment"
                 >
-                  <FormattedMessage
-                    defaultMessage="Completed"
-                    id="be.completedAssignment"
-                  >
-                    <div />
-                  </FormattedMessage>
-                </title>
-                <g
-                  fill="none"
-                  fillRule="evenodd"
-                >
-                  <circle
-                    cx={9}
-                    cy={9}
-                    fill="#ED3757"
-                    r={9}
-                  />
-                  <path
-                    d="M9 7.586l2.828-2.829 1.415 1.415L10.414 9l2.829 2.828-1.415 1.415L9 10.414l-2.828 2.829-1.415-1.415L7.586 9 4.757 6.172l1.415-1.415z"
-                    fill="#FFF"
-                    fillRule="nonzero"
-                  />
-                </g>
-              </svg>
-            </AccessibleSVG>
-          </IconRejected>
-        </StatusIcon>
-      </Component>
-      <div
-        className="bcs-task-assignment-list-item-details"
-      >
-        <div>
-          AL
-        </div>
-        <div
-          className="bcs-task-assignment-list-item-status"
-        >
-          <FormattedMessage
-            defaultMessage="Rejected"
-            id="be.tasks.status.rejected"
-          >
-            <div />
-          </FormattedMessage>
-        </div>
-      </div>
-    </li>
-    <li
-      className="bcs-task-assignment-list-item"
-      key="0002"
+                  <div />
+                </FormattedMessage>
+              </title>
+              <g
+                fill="none"
+                fillRule="evenodd"
+              >
+                <circle
+                  cx={9}
+                  cy={9}
+                  fill="#ED3757"
+                  r={9}
+                />
+                <path
+                  d="M9 7.586l2.828-2.829 1.415 1.415L10.414 9l2.829 2.828-1.415 1.415L9 10.414l-2.828 2.829-1.415-1.415L7.586 9 4.757 6.172l1.415-1.415z"
+                  fill="#FFF"
+                  fillRule="nonzero"
+                />
+              </g>
+            </svg>
+          </AccessibleSVG>
+        </IconRejected>
+      </StatusIcon>
+    </Component>
+    <div
+      className="bcs-task-assignment-list-item-details"
     >
-      <Component
-        className="bcs-task-assignment-list-item-avatar"
-        data-testid="task-assignment-status"
+      <div>
+        AL
+      </div>
+      <div
+        className="bcs-task-assignment-list-item-status"
+      >
+        <FormattedMessage
+          defaultMessage="Rejected"
+          id="be.tasks.status.rejected"
+        >
+          <div />
+        </FormattedMessage>
+      </div>
+    </div>
+  </li>
+  <li
+    className="bcs-task-assignment-list-item"
+    key="0002"
+  >
+    <Component
+      className="bcs-task-assignment-list-item-avatar"
+      data-testid="task-assignment-status"
+      getAvatarUrl={[Function]}
+      status="APPROVED"
+      user={
+        Object {
+          "id": "222",
+          "name": "AK",
+          "type": "user",
+        }
+      }
+    >
+      <Avatar
+        className="bcs-task-assignment-avatar"
         getAvatarUrl={[Function]}
-        status="APPROVED"
         user={
           Object {
             "id": "222",
@@ -185,48 +183,48 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open as
         }
       >
         <Avatar
+          avatarUrl={null}
           className="bcs-task-assignment-avatar"
-          getAvatarUrl={[Function]}
-          user={
-            Object {
-              "id": "222",
-              "name": "AK",
-              "type": "user",
-            }
-          }
+          id="222"
+          name="AK"
         >
-          <Avatar
-            avatarUrl={null}
-            className="bcs-task-assignment-avatar"
-            id="222"
-            name="AK"
+          <span
+            className="avatar bcs-task-assignment-avatar"
+            role="presentation"
           >
-            <span
-              className="avatar bcs-task-assignment-avatar"
-              role="presentation"
+            <AvatarInitials
+              id="222"
+              name="AK"
             >
-              <AvatarInitials
-                id="222"
-                name="AK"
-              >
-                <span
-                  className="avatar-initials "
-                  style={
-                    Object {
-                      "backgroundColor": "#9f3fed",
-                    }
+              <span
+                className="avatar-initials "
+                style={
+                  Object {
+                    "backgroundColor": "#9f3fed",
                   }
-                >
-                  AA
-                </span>
-              </AvatarInitials>
-            </span>
-          </Avatar>
+                }
+              >
+                AA
+              </span>
+            </AvatarInitials>
+          </span>
         </Avatar>
-        <StatusIcon
+      </Avatar>
+      <StatusIcon
+        className="bcs-task-assignment-status-icon approved"
+        height={12}
+        status="APPROVED"
+        title={
+          <FormattedMessage
+            defaultMessage="Completed"
+            id="be.completedAssignment"
+          />
+        }
+        width={12}
+      >
+        <IconVerified
           className="bcs-task-assignment-status-icon approved"
           height={12}
-          status="APPROVED"
           title={
             <FormattedMessage
               defaultMessage="Completed"
@@ -235,87 +233,87 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open as
           }
           width={12}
         >
-          <IconVerified
-            className="bcs-task-assignment-status-icon approved"
+          <AccessibleSVG
+            className="icon-verified bcs-task-assignment-status-icon approved"
             height={12}
+            opacity={1}
             title={
               <FormattedMessage
                 defaultMessage="Completed"
                 id="be.completedAssignment"
               />
             }
+            viewBox="0 0 14 14"
             width={12}
           >
-            <AccessibleSVG
+            <svg
+              aria-labelledby="icon32-title"
               className="icon-verified bcs-task-assignment-status-icon approved"
+              focusable="false"
               height={12}
               opacity={1}
-              title={
-                <FormattedMessage
-                  defaultMessage="Completed"
-                  id="be.completedAssignment"
-                />
-              }
+              role="img"
               viewBox="0 0 14 14"
               width={12}
             >
-              <svg
-                aria-labelledby="icon32-title"
-                className="icon-verified bcs-task-assignment-status-icon approved"
-                focusable="false"
-                height={12}
-                opacity={1}
-                role="img"
-                viewBox="0 0 14 14"
-                width={12}
+              <title
+                id="icon32-title"
               >
-                <title
-                  id="icon32-title"
+                <FormattedMessage
+                  defaultMessage="Completed"
+                  id="be.completedAssignment"
                 >
-                  <FormattedMessage
-                    defaultMessage="Completed"
-                    id="be.completedAssignment"
-                  >
-                    <div />
-                  </FormattedMessage>
-                </title>
-                <path
-                  d="M7 14c-3.865993 0-7-3.134007-7-7s3.134007-7 7-7 7 3.134007 7 7-3.134007 7-7 7zM5.31288 9.303048l1.44555 1.21296 4.499514-5.36231-1.44555-1.21296-4.499514 5.36231zM3 7.36231L5.31288 9.30305l1.21296-1.44555L4.21296 5.91676 3 7.36231z"
-                  fill="#00E287"
-                  fillRule="evenodd"
-                />
-              </svg>
-            </AccessibleSVG>
-          </IconVerified>
-        </StatusIcon>
-      </Component>
-      <div
-        className="bcs-task-assignment-list-item-details"
-      >
-        <div>
-          AK
-        </div>
-        <div
-          className="bcs-task-assignment-list-item-status"
-        >
-          <FormattedMessage
-            defaultMessage="Accepted"
-            id="be.tasks.status.accepted"
-          >
-            <div />
-          </FormattedMessage>
-        </div>
-      </div>
-    </li>
-    <li
-      className="bcs-task-assignment-list-item"
-      key="0003"
+                  <div />
+                </FormattedMessage>
+              </title>
+              <path
+                d="M7 14c-3.865993 0-7-3.134007-7-7s3.134007-7 7-7 7 3.134007 7 7-3.134007 7-7 7zM5.31288 9.303048l1.44555 1.21296 4.499514-5.36231-1.44555-1.21296-4.499514 5.36231zM3 7.36231L5.31288 9.30305l1.21296-1.44555L4.21296 5.91676 3 7.36231z"
+                fill="#00E287"
+                fillRule="evenodd"
+              />
+            </svg>
+          </AccessibleSVG>
+        </IconVerified>
+      </StatusIcon>
+    </Component>
+    <div
+      className="bcs-task-assignment-list-item-details"
     >
-      <Component
-        className="bcs-task-assignment-list-item-avatar"
-        data-testid="task-assignment-status"
+      <div>
+        AK
+      </div>
+      <div
+        className="bcs-task-assignment-list-item-status"
+      >
+        <FormattedMessage
+          defaultMessage="Accepted"
+          id="be.tasks.status.accepted"
+        >
+          <div />
+        </FormattedMessage>
+      </div>
+    </div>
+  </li>
+  <li
+    className="bcs-task-assignment-list-item"
+    key="0003"
+  >
+    <Component
+      className="bcs-task-assignment-list-item-avatar"
+      data-testid="task-assignment-status"
+      getAvatarUrl={[Function]}
+      status="NOT_STARTED"
+      user={
+        Object {
+          "id": "333",
+          "name": "AJ",
+          "type": "user",
+        }
+      }
+    >
+      <Avatar
+        className="bcs-task-assignment-avatar"
         getAvatarUrl={[Function]}
-        status="NOT_STARTED"
         user={
           Object {
             "id": "333",
@@ -325,77 +323,65 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open as
         }
       >
         <Avatar
+          avatarUrl={null}
           className="bcs-task-assignment-avatar"
-          getAvatarUrl={[Function]}
-          user={
-            Object {
-              "id": "333",
-              "name": "AJ",
-              "type": "user",
-            }
-          }
+          id="333"
+          name="AJ"
         >
-          <Avatar
-            avatarUrl={null}
-            className="bcs-task-assignment-avatar"
-            id="333"
-            name="AJ"
+          <span
+            className="avatar bcs-task-assignment-avatar"
+            role="presentation"
           >
-            <span
-              className="avatar bcs-task-assignment-avatar"
-              role="presentation"
+            <AvatarInitials
+              id="333"
+              name="AJ"
             >
-              <AvatarInitials
-                id="333"
-                name="AJ"
-              >
-                <span
-                  className="avatar-initials "
-                  style={
-                    Object {
-                      "backgroundColor": "#0061d5",
-                    }
+              <span
+                className="avatar-initials "
+                style={
+                  Object {
+                    "backgroundColor": "#0061d5",
                   }
-                >
-                  AA
-                </span>
-              </AvatarInitials>
-            </span>
-          </Avatar>
+                }
+              >
+                AA
+              </span>
+            </AvatarInitials>
+          </span>
         </Avatar>
-        <StatusIcon
-          className="bcs-task-assignment-status-icon notStarted"
-          height={12}
-          status="NOT_STARTED"
-          title={
-            <FormattedMessage
-              defaultMessage="Completed"
-              id="be.completedAssignment"
-            />
-          }
-          width={12}
-        />
-      </Component>
-      <div
-        className="bcs-task-assignment-list-item-details"
-      >
-        <div>
-          AJ
-        </div>
-        <div
-          className="bcs-task-assignment-list-item-status"
-        >
+      </Avatar>
+      <StatusIcon
+        className="bcs-task-assignment-status-icon notStarted"
+        height={12}
+        status="NOT_STARTED"
+        title={
           <FormattedMessage
-            defaultMessage="Awaiting"
-            id="be.tasks.status.notStarted"
-          >
-            <div />
-          </FormattedMessage>
-        </div>
+            defaultMessage="Completed"
+            id="be.completedAssignment"
+          />
+        }
+        width={12}
+      />
+    </Component>
+    <div
+      className="bcs-task-assignment-list-item-details"
+    >
+      <div>
+        AJ
       </div>
-    </li>
-  </ul>
-</div>
+      <div
+        className="bcs-task-assignment-list-item-status"
+      >
+        <FormattedMessage
+          defaultMessage="Awaiting"
+          id="be.tasks.status.notStarted"
+        >
+          <div />
+        </FormattedMessage>
+      </div>
+    </div>
+  </li>
+</ul>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should render avatars for each assignee up to maxAvatars: assignment avatars with overflow icon 1`] = `

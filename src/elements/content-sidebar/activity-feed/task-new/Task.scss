@@ -141,7 +141,7 @@ $card-left-offset: 40px;
     @include avatar-badge-icon;
 }
 
-.bcs-task-assignment-list {
+.bcs-task-assignment-list-flyout {
     max-width: 100%;
     width: 280px;
 
@@ -152,6 +152,12 @@ $card-left-offset: 40px;
     }
 }
 
+.bcs-task-assignment-list {
+    max-height: 215px;
+    overflow: hidden auto;
+    overflow-y: overlay; // nicer scroll bar for Blink engines only
+}
+
 .bcs-task-assignment-list-title {
     font-size: 15px;
     margin: 0 0 12px 0;
@@ -160,7 +166,8 @@ $card-left-offset: 40px;
 .bcs-task-assignment-list-item {
     align-items: flex-start;
     display: flex;
-    margin: 12px 0 0 0;
+    margin: 6px 0 0 0;
+    padding: 3px 0;
 }
 
 .bcs-task-assignment-list-item-avatar {
