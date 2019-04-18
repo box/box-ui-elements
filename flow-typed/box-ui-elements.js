@@ -705,11 +705,10 @@ type TaskNew = {|
     completion_rule?: 'ANY_ASSIGNEE' | 'ALL_ASSIGNEES',
     created_at: ISODate,
     created_by: TaskCollabCreator,
-    description?: ?string,
+    description: string,
     due_at?: ?ISODate,
     id: ID,
     modified_at?: ISODate,
-    name: string,
     permissions: {|
         can_create_task_collaborator: boolean,
         can_create_task_link: boolean,
@@ -724,8 +723,8 @@ type TaskNew = {|
 |};
 
 type TaskPayload = {
+    description: string,
     due_at?: ?string,
-    name: string,
     task_type: TaskType,
 };
 

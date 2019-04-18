@@ -727,7 +727,7 @@ class Feed extends Base {
             created_at: new Date().toISOString(),
             due_at: dueAtString,
             id: uuid,
-            name: message,
+            description: message,
             type: TASK,
             assigned_to: {
                 entries: assignees.map((assignee: SelectorItem) => ({
@@ -772,7 +772,7 @@ class Feed extends Base {
             status: TASK_NEW_NOT_STARTED,
         };
 
-        const taskPayload: TaskPayload = { name: message, due_at: dueAtString, task_type: taskType };
+        const taskPayload: TaskPayload = { description: message, due_at: dueAtString, task_type: taskType };
 
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.tasksNewAPI.createTask({

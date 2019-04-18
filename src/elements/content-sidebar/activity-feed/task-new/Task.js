@@ -106,7 +106,7 @@ const Task = ({
     id,
     isPending,
     mentionSelectorContacts,
-    name,
+    description,
     onAssignmentUpdate = noop,
     onDelete,
     onEdit,
@@ -161,7 +161,7 @@ const Task = ({
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={taskPermissions}
-                    tagged_message={name}
+                    tagged_message={description}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
                     getAvatarUrl={getAvatarUrl}
