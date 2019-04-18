@@ -2,7 +2,7 @@
 
 exports[`icons/general/IconTaskGeneral should correctly render default icon 1`] = `
 <AccessibleSVG
-  className=""
+  className="bdl-IconTaskGeneral "
   height={24}
   viewBox="0 0 32 32"
   width={24}

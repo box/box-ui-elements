@@ -6,7 +6,13 @@ import type { TwoTonedIcon } from '../flowTypes';
 import { dehydrated, white } from '../../styles/variables';
 
 const IconTaskApproval = ({ className = '', height = 24, title, width = 24 }: TwoTonedIcon) => (
-    <AccessibleSVG className={className} height={height} title={title} viewBox="0 0 32 32" width={width}>
+    <AccessibleSVG
+        className={`bdl-IconTaskApproval ${className}`}
+        height={height}
+        title={title}
+        viewBox="0 0 32 32"
+        width={width}
+    >
         <g fill="none" fillRule="nonzero">
             <circle className="background-color" fill={dehydrated} cx="16" cy="16" r="16" />
             <g transform="translate(8 5.333)" className="foreground-color" fill={white}>
