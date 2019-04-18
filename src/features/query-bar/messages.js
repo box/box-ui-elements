@@ -8,7 +8,7 @@ const messages = defineMessages({
         id: 'boxui.queryBar.tooltipEnterValueError',
     },
     tooltipInvalidFloatError: {
-        defaultMessage: 'Please Enter a Float',
+        defaultMessage: 'Please Enter a Decimal Number',
         description: 'Text displayed on the Tooltip for an input field of type float',
         id: 'boxui.queryBar.tooltipInvalidFloatError',
     },
