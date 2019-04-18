@@ -2,7 +2,6 @@
 
 $success-color: $shady-acres;
 $error-color: $red;
-$gray: $bdl-neutral-03;
 $assignment-avatar-spacing: 4px;
 $card-left-offset: 40px;
 
@@ -64,7 +63,7 @@ $card-left-offset: 40px;
 
     .bcs-task-assignment-count {
         align-items: center;
-        background: $gray;
+        background: $bdl-neutral-02;
         border-radius: 100%;
         color: #fff;
         cursor: pointer;
@@ -104,7 +103,7 @@ $card-left-offset: 40px;
             justify-content: center;
 
             .fill-color {
-                fill: $gray;
+                fill: $bdl-neutral-02;
             }
         }
     }
@@ -173,5 +172,5 @@ $card-left-offset: 40px;
 }
 
 .bcs-task-assignment-list-item-status {
-    color: $bdl-neutral-03;
+    color: $bdl-neutral-02;
 }
