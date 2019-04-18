@@ -129,7 +129,7 @@ const Condition = ({
 
         const isValueSet = values.length !== 0;
 
-        let isValueValid = true;
+        let isValueValid = false;
         if (isValueSet && type) {
             isValueValid = validateValue(values, type);
         }
@@ -145,34 +145,31 @@ const Condition = ({
             return null;
         }
 
-        let message;
         let messageText;
         switch (type) {
             case STRING:
-                message = <FormattedMessage {...messages.tooltipEnterValueError} />;
+                messageText = messages.tooltipEnterValueError;
                 break;
             case NUMBER:
                 messageText = !isValueValid ? messages.tooltipInvalidNumberError : messages.tooltipEnterValueError;
-                message = <FormattedMessage {...messageText} />;
                 break;
             case FLOAT:
                 messageText = !isValueValid ? messages.tooltipInvalidFloatError : messages.tooltipEnterValueError;
-                message = <FormattedMessage {...messageText} />;
                 break;
             case DATE:
-                message = <FormattedMessage {...messages.tooltipSelectDateError} />;
+                messageText = messages.tooltipSelectDateError;
                 break;
             case ENUM:
-                message = <FormattedMessage {...messages.tooltipSelectValueError} />;
+                messageText = messages.tooltipSelectValueError;
                 break;
             case MULTI_SELECT:
-                message = <FormattedMessage {...messages.tooltipSelectValueError} />;
+                messageText = messages.tooltipSelectValueError;
                 break;
             default:
                 break;
         }
 
-        return message;
+        return <FormattedMessage {...messageText} />;
     };
 
     const renderDeleteButton = () => {
