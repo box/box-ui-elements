@@ -25,6 +25,9 @@ import {
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_INCOMPLETE,
+    TASK_NEW_APPROVED,
+    TASK_NEW_COMPLETED,
+    TASK_NEW_REJECTED,
     TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
 } from '../constants';
@@ -396,6 +399,21 @@ class Feed extends Base {
             status: taskCollaboratorStatus,
         };
         const handleError = (e: ElementsXhrError, code: string) => {
+            let errorMessage;
+            switch (taskCollaboratorStatus) {
+                case TASK_NEW_APPROVED:
+                    errorMessage = messages.taskApproveErrorMessage;
+                    break;
+                case TASK_NEW_COMPLETED:
+                    errorMessage = messages.taskCompleteErrorMessage;
+                    break;
+                case TASK_NEW_REJECTED:
+                    errorMessage = messages.taskRejectErrorMessage;
+                    break;
+                default:
+                    errorMessage = messages.taskCompleteErrorMessage;
+            }
+            this.updateFeedItem(this.createFeedError(errorMessage, messages.taskActionErrorTitle), taskId);
             this.feedErrorCallback(true, e, code);
         };
         collaboratorsApi.updateTaskCollaborator({
