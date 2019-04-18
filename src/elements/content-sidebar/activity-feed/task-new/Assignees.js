@@ -83,7 +83,8 @@ class Assignees extends React.Component<Props> {
                     {visibleAssignees}
                     {hiddenAssigneeCount > 0 && (
                         <Flyout position="top-left">
-                            <span
+                            <button
+                                type="button"
                                 className="bcs-task-assignment-count-container"
                                 data-testid="task-assignment-overflow"
                             >
@@ -92,7 +93,7 @@ class Assignees extends React.Component<Props> {
                                         {overflowLabel}
                                     </span>
                                 </Tooltip>
-                            </span>
+                            </button>
                             <Overlay>
                                 <div className="bcs-task-assignment-list">
                                     <h5 className="bcs-task-assignment-list-title">
