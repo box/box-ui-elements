@@ -1,69 +1,68 @@
 @import '../../styles/variables';
 
 .collapsible-card {
+    border-radius: 4px;
+
     .collapsible-card-header {
         align-items: center;
         background-color: $white;
+        border-radius: 4px;
         display: flex;
         flex-direction: row;
         position: relative;
-        top: 0;
         width: 100%;
-        z-index: 10;
 
         &.has-sticky-header {
             position: sticky;
-        }
-
-        .collapsible-card-action-items {
-            bottom: 0;
-            position: absolute;
-            right: 34px;
-        }
-
-        .collapsible-card-header-caret {
-            display: flex;
-            position: absolute;
-            right: 10px;
-            top: 18px;
+            top: 0;
             z-index: 1;
         }
     }
 
-    &.is-open {
-        .collapsible-card-header {
-            .collapsible-card-header-caret.icon-caret-down {
-                transform: rotateZ(-90deg);
-            }
-        }
+    .collapsible-card-action-items {
+        bottom: 0;
+        position: absolute;
+        right: 34px;
+    }
+
+    .collapsible-card-header-caret {
+        position: absolute;
+        right: 0;
     }
 
     .btn-plain.collapsible-card-title {
         align-items: center;
         display: flex;
-        padding: 10px;
+        padding: 10px 0;
+        position: relative;
         text-align: left;
         width: 100%;
     }
 
-    &.is-open .btn-plain.collapsible-card-title .icon-caret-down {
-        transform: none;
+    .collapsible-card-content {
+        padding: 10px 0;
     }
 
     &.is-bordered {
         border: 1px solid $eees;
-        border-radius: 4px;
+
+        .btn-plain.collapsible-card-title,
+        .collapsible-card-content {
+            padding: 10px;
+        }
 
         &.is-open .btn-plain.collapsible-card-title {
             border-bottom: 1px solid $eees;
-            border-radius: 4px 4px 0 0;
+        }
+
+        .collapsible-card-header-caret {
+            right: 10px;
         }
     }
 
     &:not(.is-bordered) {
         .btn-plain.collapsible-card-title {
             border-bottom: 1px solid $eees;
-            padding: 5px 0 10px;
 
             &:hover,
             &:active,
@@ -72,13 +71,5 @@
                 text-decoration: none;
             }
         }
-
-        .collapsible-card-content {
-            padding: 0;
-        }
-    }
-
-    .collapsible-card-content {
-        padding: 10px;
     }
 }
