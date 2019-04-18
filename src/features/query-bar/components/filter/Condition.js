@@ -110,19 +110,16 @@ const Condition = ({
         return [];
     };
 
-    const checkValidValue = (values: Array<ConditionValueType>, type: string) => {
-        let isValueInvalid = false;
+    const validateValue = (values: Array<ConditionValueType>, type: string) => {
         switch (type) {
             case NUMBER:
-                isValueInvalid = !isInt(String(values[0]));
-                break;
+                return !isInt(String(values[0]));
             case FLOAT:
-                isValueInvalid = !isFloat(String(values[0]));
-                break;
+                return !isFloat(String(values[0]));
             default:
                 break;
         }
-        return isValueInvalid;
+        return false;
     };
 
     const getErrorMessage = () => {
@@ -134,7 +131,7 @@ const Condition = ({
 
         let isValueInvalid = false;
         if (isValueSet && type) {
-            isValueInvalid = checkValidValue(values, type);
+            isValueInvalid = validateValue(values, type);
         }
 
         let message;
@@ -163,7 +160,12 @@ const Condition = ({
             default:
                 break;
         }
+
         const error = isValueInvalid || (areErrorsEnabled && !isValueSet) ? message : null;
+
+        if (!error) {
+            return null;
+        }
 
         return error;
     };
