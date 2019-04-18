@@ -134,6 +134,13 @@ const Condition = ({
             isValueValid = validateValue(values, type);
         }
 
+        /**
+         * isValueValid handles the error case when the user tries to enter an invalid input in either a
+         * number type field or a float type field
+         *
+         * (!isErrorEnabled && !isValueSet) handles the error case when a user presses on the Apply button
+         * but the input field is empty
+         */
         if (isValueValid || (!isErrorEnabled && !isValueSet)) {
             return null;
         }
