@@ -1,5 +1,5 @@
 // @flow
-import { isNaN } from 'lodash';
+import { isInteger, isNaN } from 'lodash';
 
 import { FLOAT } from './constants';
 
@@ -8,7 +8,7 @@ const isFloat = (value: string) => {
 };
 
 const isInt = (value: string) => {
-    return /^\d+$/.test(value);
+    return isInteger(Number(value)) && !isNaN(Number(value));
 };
 
 const isValidValue = (type: string, value?: string | Date | any) => {

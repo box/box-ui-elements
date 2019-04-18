@@ -46,7 +46,7 @@ describe('isInt()', () => {
     test.each`
         value     | expected | should
         ${'1.0.'} | ${false} | ${'Should return false if the value is 1.0.'}
-        ${'1.0'}  | ${false} | ${'Should return false if the value is 1.0'}
+        ${'1.0'}  | ${true}  | ${'Should return true if the value is 1.0'}
         ${'1'}    | ${true}  | ${'Should return true if the value is 1'}
         ${'a'}    | ${false} | ${'Should return false if the value is a'}
         ${'1a'}   | ${false} | ${'Should return false if the value is 1a'}
