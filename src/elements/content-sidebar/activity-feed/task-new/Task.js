@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { fillUserPlaceholder } from '../../../../utils/fields';
 import messages from '../../../common/messages';
 
+import CommentInlineError from '../comment/CommentInlineError';
 import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../../../icons/two-toned/IconTaskGeneral';
 
@@ -136,68 +137,74 @@ const Task = ({
     const TaskTypeIcon = task_type === TASK_TYPE_APPROVAL ? IconTaskApproval : IconTaskGeneral;
 
     return (
-        <div
-            className={classNames('bcs-task', {
-                'bcs-is-pending': isPending || error,
-            })}
-            data-testid="task-card"
-        >
-            <Comment
-                avatarRenderer={avatar => (
-                    <div className="bcs-task-avatar">
-                        {avatar}
-                        <TaskTypeIcon width={20} height={20} className="bcs-task-avatar-badge" />
-                    </div>
-                )}
-                created_at={created_at}
-                created_by={created_by.target}
-                currentUser={currentUser}
-                error={error}
-                id={id}
-                inlineDeleteMessage={messages.taskDeletePrompt}
-                isPending={isPending}
-                onDelete={onDelete}
-                onEdit={onEdit}
-                permissions={taskPermissions}
-                tagged_message={description}
-                translatedTaggedMessage={translatedTaggedMessage}
-                translations={translations}
-                getAvatarUrl={getAvatarUrl}
-                getUserProfileUrl={getUserProfileUrl}
-                mentionSelectorContacts={mentionSelectorContacts}
-                getMentionWithQuery={getMentionWithQuery}
-                userHeadlineRenderer={userLinkInstance => {
-                    return (
-                        <FormattedMessage
-                            {...getMessageForTask(!!currentUserAssignment, task_type)}
-                            values={{ user: userLinkInstance }}
+        <div className="bcs-task-container">
+            {error ? <CommentInlineError {...error} /> : null}
+            <div
+                className={classNames('bcs-task', {
+                    'bcs-is-pending': isPending || error,
+                })}
+                data-testid="task-card"
+            >
+                <Comment
+                    avatarRenderer={avatar => (
+                        <div className="bcs-task-avatar">
+                            {avatar}
+                            <TaskTypeIcon width={20} height={20} className="bcs-task-avatar-badge" />
+                        </div>
+                    )}
+                    created_at={created_at}
+                    created_by={created_by.target}
+                    currentUser={currentUser}
+                    id={id}
+                    inlineDeleteMessage={messages.taskDeletePrompt}
+                    isPending={isPending}
+                    onDelete={onDelete}
+                    onEdit={onEdit}
+                    permissions={taskPermissions}
+                    tagged_message={description}
+                    translatedTaggedMessage={translatedTaggedMessage}
+                    translations={translations}
+                    getAvatarUrl={getAvatarUrl}
+                    getUserProfileUrl={getUserProfileUrl}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    getMentionWithQuery={getMentionWithQuery}
+                    userHeadlineRenderer={userLinkInstance => {
+                        return (
+                            <FormattedMessage
+                                {...getMessageForTask(!!currentUserAssignment, task_type)}
+                                values={{ user: userLinkInstance }}
+                            />
+                        );
+                    }}
+                />
+                <div className="bcs-task-content">{!!due_at && <TaskDueDate dueDate={due_at} status={status} />}</div>
+                <div className="bcs-task-content">
+                    <Assignees maxAvatars={MAX_AVATARS} assignees={assigned_to} getAvatarUrl={getAvatarUrl} />
+                </div>
+                <div className="bcs-task-content">
+                    {currentUserAssignment && shouldShowActions ? (
+                        <TaskActions
+                            taskType={task_type}
+                            onTaskApproval={
+                                isPending
+                                    ? noop
+                                    : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_APPROVED)
+                            }
+                            onTaskReject={
+                                isPending
+                                    ? noop
+                                    : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_REJECTED)
+                            }
+                            onTaskComplete={
+                                isPending
+                                    ? noop
+                                    : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_COMPLETED)
+                            }
                         />
-                    );
-                }}
-            />
-            <div className="bcs-task-content">{!!due_at && <TaskDueDate dueDate={due_at} status={status} />}</div>
-            <div className="bcs-task-content">
-                <Assignees maxAvatars={MAX_AVATARS} assignees={assigned_to} getAvatarUrl={getAvatarUrl} />
-            </div>
-            <div className="bcs-task-content">
-                {currentUserAssignment && shouldShowActions ? (
-                    <TaskActions
-                        taskType={task_type}
-                        onTaskApproval={
-                            isPending ? noop : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_APPROVED)
-                        }
-                        onTaskReject={
-                            isPending ? noop : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_REJECTED)
-                        }
-                        onTaskComplete={
-                            isPending
-                                ? noop
-                                : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_COMPLETED)
-                        }
-                    />
-                ) : (
-                    <Status status={status} />
-                )}
+                    ) : (
+                        <Status status={status} />
+                    )}
+                </div>
             </div>
         </div>
     );

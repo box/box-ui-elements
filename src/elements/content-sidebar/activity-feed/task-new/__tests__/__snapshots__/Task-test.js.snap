@@ -2,104 +2,108 @@
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly render task 1`] = `
 <div
-  className="bcs-task"
-  data-testid="task-card"
+  className="bcs-task-container"
 >
-  <Comment
-    avatarRenderer={[Function]}
-    created_at="2010-01-01"
-    created_by={
-      Object {
-        "id": "1",
-        "name": "Jake Thomas",
-        "type": "user",
-      }
-    }
-    currentUser={
-      Object {
-        "id": "1",
-        "name": "Jake Thomas",
-        "type": "user",
-      }
-    }
-    id="123125"
-    inlineDeleteMessage={
-      Object {
-        "defaultMessage": "Delete task?",
-        "id": "be.taskDeletePrompt",
-      }
-    }
-    onDelete={[MockFunction]}
-    onEdit={[MockFunction]}
-    permissions={
-      Object {
-        "can_create_task_collaborator": true,
-        "can_create_task_link": true,
-        "can_delete": true,
-        "can_edit": false,
-        "can_update": true,
-      }
-    }
-    tagged_message="This is where we tell each other what we need to do"
-    userHeadlineRenderer={[Function]}
-  />
   <div
-    className="bcs-task-content"
-  />
-  <div
-    className="bcs-task-content"
+    className="bcs-task"
+    data-testid="task-card"
   >
-    <Component
-      assignees={
+    <Comment
+      avatarRenderer={[Function]}
+      created_at="2010-01-01"
+      created_by={
         Object {
-          "entries": Array [
-            Object {
-              "id": "current-user-assignment-id",
-              "permissions": Object {
-                "can_delete": true,
-                "can_update": true,
-              },
-              "role": "ASSIGNEE",
-              "status": "NOT_STARTED",
-              "target": Object {
-                "id": "1",
-                "name": "Jake Thomas",
-                "type": "user",
-              },
-              "type": "task_collaborator",
-            },
-            Object {
-              "id": "other-user-assignment-id",
-              "permissions": Object {
-                "can_delete": true,
-                "can_update": true,
-              },
-              "role": "ASSIGNEE",
-              "status": "COMPLETED",
-              "target": Object {
-                "id": "3",
-                "name": "Patrick Paul",
-                "type": "user",
-              },
-              "type": "task_collaborator",
-            },
-          ],
-          "limit": 10,
-          "next_marker": null,
+          "id": "1",
+          "name": "Jake Thomas",
+          "type": "user",
         }
       }
-      maxAvatars={3}
+      currentUser={
+        Object {
+          "id": "1",
+          "name": "Jake Thomas",
+          "type": "user",
+        }
+      }
+      id="123125"
+      inlineDeleteMessage={
+        Object {
+          "defaultMessage": "Delete task?",
+          "id": "be.taskDeletePrompt",
+        }
+      }
+      onDelete={[MockFunction]}
+      onEdit={[MockFunction]}
+      permissions={
+        Object {
+          "can_create_task_collaborator": true,
+          "can_create_task_link": true,
+          "can_delete": true,
+          "can_edit": false,
+          "can_update": true,
+        }
+      }
+      tagged_message="This is where we tell each other what we need to do"
+      userHeadlineRenderer={[Function]}
     />
-  </div>
-  <div
-    className="bcs-task-content"
-  >
-    <TaskActions
-      onTaskApproval={[Function]}
-      onTaskComplete={[Function]}
-      onTaskReject={[Function]}
-      taskType="GENERAL"
+    <div
+      className="bcs-task-content"
     />
+    <div
+      className="bcs-task-content"
+    >
+      <Component
+        assignees={
+          Object {
+            "entries": Array [
+              Object {
+                "id": "current-user-assignment-id",
+                "permissions": Object {
+                  "can_delete": true,
+                  "can_update": true,
+                },
+                "role": "ASSIGNEE",
+                "status": "NOT_STARTED",
+                "target": Object {
+                  "id": "1",
+                  "name": "Jake Thomas",
+                  "type": "user",
+                },
+                "type": "task_collaborator",
+              },
+              Object {
+                "id": "other-user-assignment-id",
+                "permissions": Object {
+                  "can_delete": true,
+                  "can_update": true,
+                },
+                "role": "ASSIGNEE",
+                "status": "COMPLETED",
+                "target": Object {
+                  "id": "3",
+                  "name": "Patrick Paul",
+                  "type": "user",
+                },
+                "type": "task_collaborator",
+              },
+            ],
+            "limit": 10,
+            "next_marker": null,
+          }
+        }
+        maxAvatars={3}
+      />
+    </div>
+    <div
+      className="bcs-task-content"
+    >
+      <TaskActions
+        onTaskApproval={[Function]}
+        onTaskComplete={[Function]}
+        onTaskReject={[Function]}
+        taskType="GENERAL"
+      />
+    </div>
   </div>
 </div>
 `;
