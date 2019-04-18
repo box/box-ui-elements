@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import isFinite from 'lodash/isFinite';
 import isInteger from 'lodash/isInteger';
 import classNames from 'classnames';
 
@@ -9,7 +10,6 @@ import Tooltip from '../../../../components/tooltip';
 import IconAlertDefault from '../../../../icons/general/IconAlertDefault';
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
 import ValueField from './ValueField';
-import { isFloat } from '../../../../common/utils';
 
 import messages from '../../messages';
 import {
@@ -116,7 +116,7 @@ const Condition = ({
             case NUMBER:
                 return isInteger(Number(values[0]));
             case FLOAT:
-                return isFloat(Number(values[0]));
+                return isFinite(Number(values[0]));
             default:
                 break;
         }
