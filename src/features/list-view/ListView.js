@@ -75,11 +75,15 @@ class ListView extends React.PureComponent<Props> {
                 style={style}
                 onFocus={() => {
                     onCellHover({ columnIndex, rowIndex: rowIndex - 1 });
-                    grid.forceUpdateGrids();
+                    if (grid) {
+                        grid.forceUpdateGrids();
+                    }
                 }}
                 onMouseOver={() => {
                     onCellHover({ columnIndex, rowIndex: rowIndex - 1 });
-                    grid.forceUpdateGrids();
+                    if (grid) {
+                        grid.forceUpdateGrids();
+                    }
                 }}
             >
                 {cellData}
