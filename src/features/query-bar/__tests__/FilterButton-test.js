@@ -52,7 +52,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             expect(wrapper.state('transientConditions')).toHaveLength(0);
         });
 
-        test('Should set areErrorsEnabled to true for Condition if any condition is invalid', () => {
+        test('Should set hasUserSubmitted to true for Condition if any condition is invalid', () => {
             const wrapper = getWrapper({ conditions: [{ values: [] }] });
             wrapper.instance().setState({
                 transientConditions: invalidConditions,
@@ -62,7 +62,7 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             wrapper.find('.apply-filters-button').simulate('click');
 
             const Condition = wrapper.find('Condition');
-            expect(Condition.props().areErrorsEnabled).toBeTruthy();
+            expect(Condition.props().hasUserSubmitted).toBeTruthy();
         });
     });
 

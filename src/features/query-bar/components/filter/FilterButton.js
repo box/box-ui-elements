@@ -25,7 +25,7 @@ import type {
 } from '../../flowTypes';
 
 type State = {
-    areErrorsEnabled: boolean,
+    hasUserSubmitted: boolean,
     isMenuOpen: boolean,
     selectedConnector: ConnectorType,
     transientConditions: Array<Object>,
@@ -42,7 +42,7 @@ class FilterButton extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            areErrorsEnabled: false,
+            hasUserSubmitted: false,
             isMenuOpen: false,
             selectedConnector: AND,
             transientConditions: cloneDeep(this.props.conditions),
@@ -108,7 +108,7 @@ class FilterButton extends React.Component<Props, State> {
         const newCondition = this.createCondition();
         this.setState({
             transientConditions: [...this.state.transientConditions, newCondition],
-            areErrorsEnabled: false,
+            hasUserSubmitted: false,
         });
     };
 
@@ -125,11 +125,11 @@ class FilterButton extends React.Component<Props, State> {
             this.setState({
                 isMenuOpen: false,
                 transientConditions: [],
-                areErrorsEnabled: false,
+                hasUserSubmitted: false,
             });
         } else {
             this.setState({
-                areErrorsEnabled: true,
+                hasUserSubmitted: true,
             });
         }
     };
@@ -258,7 +258,7 @@ class FilterButton extends React.Component<Props, State> {
 
     render() {
         const { columns, conditions } = this.props;
-        const { transientConditions, areErrorsEnabled, isMenuOpen, selectedConnector } = this.state;
+        const { transientConditions, hasUserSubmitted, isMenuOpen, selectedConnector } = this.state;
 
         const numberOfConditions = conditions.length;
         const areAllValid = this.areAllValid();
@@ -317,7 +317,7 @@ class FilterButton extends React.Component<Props, State> {
                                     return (
                                         <Condition
                                             key={`metadata-view-filter-item-${condition.id}`}
-                                            areErrorsEnabled={areErrorsEnabled}
+                                            hasUserSubmitted={hasUserSubmitted}
                                             columns={columns}
                                             condition={condition}
                                             deleteCondition={this.deleteCondition}
