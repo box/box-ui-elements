@@ -9,6 +9,19 @@ const TextArea = require('box-ui-elements/es/components/text-area').default;
     placeholder="Once upon a time"
 />
 ```
+
+**Basic with (optional) text hidden**
+```
+const TextArea = require('box-ui-elements/es/components/text-area').default;
+
+<TextArea
+    hideOptionalLabel
+    name="textarea"
+    label="Your story"
+    placeholder="Once upon a time"
+/>
+```
+
 **Required**
 ```
 const TextArea = require('box-ui-elements/es/components/text-area').default;
