@@ -38,9 +38,10 @@ class Avatar extends React.PureComponent<Props, State> {
      * @return {Promise<?string>} Promise which resolve with the avatar url string
      */
     getAvatarUrl(): Promise<?string> {
-        const { user, getAvatarUrl }: Props = this.props;
+        const { user = {}, getAvatarUrl }: Props = this.props;
+        const { avatar_url = null, id } = user;
 
-        const avatarPromise = getAvatarUrl ? getAvatarUrl(user.id) : Promise.resolve(user.avatar_url);
+        const avatarPromise = id && getAvatarUrl ? getAvatarUrl(`${id}`) : Promise.resolve(avatar_url);
         return avatarPromise.then(this.getAvatarUrlHandler);
     }
 
