@@ -12,7 +12,7 @@ type Props = {
     width?: number,
 };
 
-const IconSortChevron = ({ className = '', color = '#aeaeae', height = 11, title, width = 11 }: Props) => (
+const IconSortChevron = ({ className = '', color = '#aeaeae', height = 12, title, width = 12 }: Props) => (
     <AccessibleSVG
         className={`bdl-icon-sort-chevron ${className}`}
         height={height}
