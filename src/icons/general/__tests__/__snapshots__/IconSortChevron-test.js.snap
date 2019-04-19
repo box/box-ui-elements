@@ -3,9 +3,9 @@
 exports[`icons/general/IconSortChevron should correctly render default icon 1`] = `
 <AccessibleSVG
   className="bdl-icon-sort-chevron "
-  height={11}
+  height={12}
   viewBox="0 0 9.8 9.7"
-  width={11}
+  width={12}
 >
   <path
     className="fill-color"
