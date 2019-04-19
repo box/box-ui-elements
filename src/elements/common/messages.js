@@ -1003,6 +1003,41 @@ const messages = defineMessages({
         defaultMessage: '{ user } assigned a Task',
         description: 'Comment headline for a general task',
     },
+    tasksFeedMoreAssigneesLabel: {
+        id: 'be.tasks.feed.moreAssigneesLabel',
+        defaultMessage: 'See all assignees',
+        description: 'Label for button to expand flyout to see all task assignees',
+    },
+    tasksFeedAssigneeListTitle: {
+        id: 'be.tasks.feed.assigneeList.title',
+        defaultMessage: 'Assignees',
+        description: 'Title for list of all task assignees',
+    },
+    tasksFeedStatusRejected: {
+        id: 'be.tasks.status.rejected',
+        defaultMessage: 'Rejected',
+        description: 'Rejected task status',
+    },
+    tasksFeedStatusAccepted: {
+        id: 'be.tasks.status.accepted',
+        defaultMessage: 'Accepted',
+        description: 'accepted task status',
+    },
+    tasksFeedStatusCompleted: {
+        id: 'be.tasks.status.completed',
+        defaultMessage: 'Completed',
+        description: 'Completed task status',
+    },
+    tasksFeedStatusNotStarted: {
+        id: 'be.tasks.status.notStarted',
+        defaultMessage: 'Awaiting',
+        description: 'Task status when not started',
+    },
+    tasksFeedStatusInProgress: {
+        id: 'be.tasks.status.inProgress',
+        defaultMessage: 'Awaiting',
+        description: 'Task status when in progress',
+    },
     versionDeleted: {
         id: 'be.versionDeleted',
         defaultMessage: '{ name } deleted version { version_number }',
