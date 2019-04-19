@@ -27,7 +27,7 @@ const icons = [
                             }
 
                             .icon-chat-bubble-example .background-color {
-                                fill: #999;
+                                fill: #999999;
                             }
                         `}
                     </style>
@@ -69,7 +69,7 @@ const icons = [
                     <style>
                         {`
                             .icon-shared-link-example .foreground-color {
-                                fill: #fff;
+                                fill: #ffffff;
                             }
 
                             .icon-shared-link-example .background-color {
@@ -91,7 +91,7 @@ const icons = [
                     <style>
                         {`
                             .icon-task-general-example .foreground-color {
-                                fill: #fff;
+                                fill: #ffffff;
                             }
 
                             .icon-task-general-example .background-color {
@@ -113,7 +113,7 @@ const icons = [
                     <style>
                         {`
                             .icon-task-approval-example .foreground-color {
-                                fill: #fff;
+                                fill: #ffffff;
                             }
 
                             .icon-task-approval-example .background-color {
