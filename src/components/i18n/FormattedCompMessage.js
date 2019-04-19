@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import _ from 'lodash';
+import isNaN from 'lodash/isNaN';
 
 import isDevEnvironment from '../../utils/env';
 import { CATEGORY_ZERO, CATEGORY_ONE, CATEGORY_TWO, CATEGORY_FEW, CATEGORY_MANY, CATEGORY_OTHER } from './constants';
@@ -53,7 +53,6 @@ type Props = {
 
 type State = {
     composition: Composition,
-    id: string,
     source: string,
 };
 
@@ -81,7 +80,6 @@ class FormattedCompMessage extends React.Component<Props, State> {
         // these parameters echo the ones in react-intl's FormattedMessage
         // component, plus a few extra
         const {
-            id, // the unique id of the string
             defaultMessage, // The English string + HTML + components that you want translated
             count, // the pivot count to choose a plural form
             children, // the components within the body
@@ -93,7 +91,7 @@ class FormattedCompMessage extends React.Component<Props, State> {
             const composition = new Composition(sourceElements);
             let source = '';
 
-            if (!_.isNaN(Number(count))) {
+            if (!isNaN(Number(count))) {
                 if (children) {
                     source = this.composePluralString(children);
                 } else if (isDevEnvironment()) {
@@ -104,7 +102,6 @@ class FormattedCompMessage extends React.Component<Props, State> {
             }
 
             this.state = {
-                id,
                 source,
                 composition,
             };
@@ -153,8 +150,8 @@ class FormattedCompMessage extends React.Component<Props, State> {
     }
 
     render() {
-        const { count, tagName, intl, description } = this.props;
-        const { composition, id, source } = this.state;
+        const { count, tagName, intl, description, id, ...rest } = this.props;
+        const { composition, source } = this.state;
         const values = {};
         if (typeof count === 'number') {
             // make sure intl.formatMessage switches properly on the count
@@ -172,12 +169,25 @@ class FormattedCompMessage extends React.Component<Props, State> {
         );
 
         // always wrap the translated string in a tag to contain everything
-        // and to give us a spot to record the id
+        // and to give us a spot to record the id. The resource id is the
+        // the id in mojito for the string. Having this attr has these advantages:
+        // 1. When debugging i18n or translation problems, it is MUCH easier to find
+        // the exact string to fix in Mojito rather than guessing. It might be useful
+        // for general debugging as well to map from something you see in the UI to
+        // the actual code that implements it.
+        // 2. It can be used by an in-context linguistic review tool. The tool code
+        // can contact mojito and retrieve the English for any translation errors that
+        // the reviewer finds and submit translation tickets to Jira and/or fixed
+        // translations directly back to Mojito.
+        // 3. It can be used by the planned "text experiment framework" to identify
+        // whole strings in the UI that can be A/B tested in various langauges without
+        // publishing new versions of the code.
         return React.createElement(
             tagName,
             {
                 key: id,
                 'x-resource-id': id,
+                ...rest,
             },
             composition.decompose(translation),
         );

@@ -11,5 +11,5 @@
  * @return {boolean} true if we are running in a test or dev environment
  */
 export default function isDevEnvironment() {
-    return process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'dev';
+    return (process && process.env.NODE_ENV === 'test') || process.env.NODE_ENV === 'dev';
 }

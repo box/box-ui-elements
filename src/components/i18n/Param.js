@@ -33,8 +33,7 @@ type Props = {
  *   </FormattedCompMessage>
  * </pre>
  */
-export default function Param(props: Props) {
-    const { value } = props;
+const Param = ({ value }: Props) => {
     switch (typeof value) {
         default:
         case JSTYPE_UNDEFINED:
@@ -59,4 +58,6 @@ export default function Param(props: Props) {
             }
             return value.toString();
     }
-}
+};
+
+export default Param;
