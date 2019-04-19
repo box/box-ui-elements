@@ -10,13 +10,14 @@ const COLLECTION = [
 
 describe('ContentPreview', () => {
     const helpers = {
-        load({ features, fileId } = {}) {
+        load({ features, fileId, props } = {}) {
             cy.visit('/Elements/ContentPreview', {
                 onBeforeLoad: contentWindow => {
                     contentWindow.FEATURES = features;
                     contentWindow.FILE_ID = fileId;
                     contentWindow.PROPS = {
                         collection: COLLECTION,
+                        ...props,
                     };
                 },
             });
@@ -35,6 +36,36 @@ describe('ContentPreview', () => {
             });
         },
     };
+
+    describe('Sanity', () => {
+        it('The sidebar should not render when sidebar props are omitted', () => {
+            helpers.load({
+                fileId: Cypress.env('FILE_ID_SKILLS'),
+                props: {
+                    contentSidebarProps: {
+                        hasActivityFeed: null,
+                    },
+                },
+            });
+
+            cy.wait(2000); // eslint-disable-line cypress/no-unnecessary-waiting
+            cy.getByTestId('bcs-content').should('not.exist');
+        });
+
+        it('The sidebar should render when given sidebar props', () => {
+            helpers.load({
+                fileId: Cypress.env('FILE_ID_SKILLS'),
+                props: {
+                    contentSidebarProps: {
+                        hasActivityFeed: true,
+                    },
+                },
+            });
+
+            // Sidebar should not exist
+            cy.getByTestId('bcs-content').should('exist');
+        });
+    });
 
     describe('Navigation', () => {
         beforeEach(() => {
