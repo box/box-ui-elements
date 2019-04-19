@@ -32,7 +32,7 @@ const getInitials = name => {
 
 type Props = {
     className?: string,
-    id?: string | number,
+    id?: ?string | number,
     name: string,
 };
 
