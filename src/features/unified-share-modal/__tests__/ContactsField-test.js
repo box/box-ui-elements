@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { ContactsFieldBase as ContactsField } from '../ContactsField';
 import messages from '../messages';
+import { MAX_SUGGESTIONS_TO_SHOW } from '../constants';
 
 describe('features/unified-share-modal/ContactsField', () => {
     const contactsFromServer = [
@@ -77,6 +78,33 @@ describe('features/unified-share-modal/ContactsField', () => {
             '34567': { id: '34567', userScore: 0.1 }, // expectedContacts[2]
         };
 
+        const largeSuggestions = {
+            '123': {
+                id: '123',
+                name: 'person alright',
+                email: 'aaa@box.com',
+                userScore: 0.5,
+            },
+            '234': {
+                id: '234',
+                name: 'person belong',
+                email: 'bbb@box.com',
+                userScore: 1,
+            },
+            '345': {
+                id: '345',
+                name: 'person conclude',
+                email: 'ccc@box.com',
+                userScore: 1.5,
+            },
+            '567': {
+                id: '567',
+                name: 'unmatched',
+                email: 'ddd@box.com',
+                userScore: 2,
+            },
+        };
+
         test('should sort suggestions by highest score', () => {
             const wrapper = getWrapper({
                 suggestedCollaborators: suggestions,
@@ -110,6 +138,122 @@ describe('features/unified-share-modal/ContactsField', () => {
 
             expect(resultIDs).not.toContain('56789');
             expect(resultIDs).not.toContain('67890');
+        });
+
+        test('should limit suggestions to MAX_SUGGESTIONS_TO_SHOW', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.instance().addSuggestedContacts(Object.values(largeSuggestions));
+            expect(wrapper.state().numSuggestedShowing).toEqual(MAX_SUGGESTIONS_TO_SHOW);
+        });
+
+        test('should order the suggested selectorOptions by userScore', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            const result = wrapper.instance().addSuggestedContacts(Object.values(largeSuggestions));
+            expect(wrapper.state().numSuggestedShowing).toEqual(MAX_SUGGESTIONS_TO_SHOW);
+            expect(result).toMatchSnapshot();
+        });
+
+        test('should match suggested collaborators even when options are empty if a search matches', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.setState({
+                pillSelectorInputValue: 'person',
+            });
+            const result = wrapper.instance().addSuggestedContacts([]);
+            expect(result).toMatchSnapshot();
+        });
+
+        test('should match suggested collaborators last names', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.setState({
+                pillSelectorInputValue: 'alright',
+            });
+            const result = wrapper.instance().addSuggestedContacts([]);
+            expect(result).toMatchSnapshot();
+        });
+
+        test('should match suggested collaborators full names no spaces', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.setState({
+                pillSelectorInputValue: 'personalright',
+            });
+            const result = wrapper.instance().addSuggestedContacts([]);
+            expect(result).toMatchSnapshot();
+        });
+
+        test('should match suggested collaborators full name', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.setState({
+                pillSelectorInputValue: 'person alright',
+            });
+            const result = wrapper.instance().addSuggestedContacts([]);
+            expect(result).toMatchSnapshot();
+        });
+
+        test('should match suggested collaborators by email alias', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.setState({
+                pillSelectorInputValue: 'bbb',
+            });
+            const result = wrapper.instance().addSuggestedContacts([]);
+            expect(result).toMatchSnapshot();
+        });
+
+        test('should not match suggested collaborators with email domain', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.setState({
+                pillSelectorInputValue: 'box',
+            });
+            const result = wrapper.instance().addSuggestedContacts([]);
+            expect(result).toMatchSnapshot();
+        });
+
+        test('should not match suggested collaborators when search is less than 3 characters', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.setState({
+                pillSelectorInputValue: 'ba',
+            });
+            const result = wrapper.instance().addSuggestedContacts([]);
+            expect(result).toMatchSnapshot();
+        });
+
+        test('should match suggested collaborators but not duplicate', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.setState({
+                pillSelectorInputValue: 'person',
+            });
+            const result = wrapper.instance().addSuggestedContacts(Object.values(largeSuggestions));
+            expect(result).toMatchSnapshot();
+        });
+
+        test('should prioritize matches from the service over fuzzy matches', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: largeSuggestions,
+            });
+            wrapper.setState({
+                pillSelectorInputValue: 'person',
+            });
+            const result = wrapper.instance().addSuggestedContacts([largeSuggestions['123']]);
+            expect(result).toMatchSnapshot();
         });
     });
 
@@ -305,7 +449,7 @@ describe('features/unified-share-modal/ContactsField', () => {
         test('should pass overlayTitle when there are suggested collabs', async () => {
             const wrapper = getWrapper({
                 getContacts,
-                suggestedCollaborators: { '12': { id: 12, userScore: 1 } },
+                suggestedCollaborators: { '12': { id: 12, name: 'a test user', userScore: 1 } },
             });
 
             wrapper.setState({ pillSelectorInputValue: 'a' });

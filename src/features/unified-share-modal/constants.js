@@ -23,6 +23,11 @@ const COLLAB_GROUP_TYPE = 'group';
 const COLLAB_USER_TYPE = 'user';
 const COLLAB_PENDING_TYPE = 'pending';
 
+// Fuzzy Search/Suggested Collabs Constants
+const MAX_GAPS_FUZZY_MATCH = 2;
+const MAX_SUGGESTIONS_TO_SHOW = 3;
+const MIN_CHARACTERS_FOR_MATCHING = 3;
+
 export {
     CAN_VIEW_DOWNLOAD,
     CAN_VIEW_ONLY,
@@ -40,4 +45,7 @@ export {
     COLLAB_GROUP_TYPE,
     COLLAB_USER_TYPE,
     COLLAB_PENDING_TYPE,
+    MAX_GAPS_FUZZY_MATCH,
+    MAX_SUGGESTIONS_TO_SHOW,
+    MIN_CHARACTERS_FOR_MATCHING,
 };

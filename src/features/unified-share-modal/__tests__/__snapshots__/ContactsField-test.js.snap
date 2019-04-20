@@ -1,5 +1,157 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should match suggested collaborators but not duplicate 1`] = `
+Array [
+  Object {
+    "email": "ddd@box.com",
+    "id": "567",
+    "name": "unmatched",
+    "userScore": 2,
+  },
+  Object {
+    "email": "ccc@box.com",
+    "id": "345",
+    "name": "person conclude",
+    "userScore": 1.5,
+  },
+  Object {
+    "email": "bbb@box.com",
+    "id": "234",
+    "name": "person belong",
+    "userScore": 1,
+  },
+  Object {
+    "email": "aaa@box.com",
+    "id": "123",
+    "name": "person alright",
+    "userScore": 0.5,
+  },
+]
+`;
+
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should match suggested collaborators by email alias 1`] = `
+Array [
+  Object {
+    "email": "bbb@box.com",
+    "id": "234",
+    "name": "person belong",
+    "userScore": 1,
+  },
+]
+`;
+
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should match suggested collaborators even when options are empty if a search matches 1`] = `
+Array [
+  Object {
+    "email": "ccc@box.com",
+    "id": "345",
+    "name": "person conclude",
+    "userScore": 1.5,
+  },
+  Object {
+    "email": "bbb@box.com",
+    "id": "234",
+    "name": "person belong",
+    "userScore": 1,
+  },
+  Object {
+    "email": "aaa@box.com",
+    "id": "123",
+    "name": "person alright",
+    "userScore": 0.5,
+  },
+]
+`;
+
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should match suggested collaborators full name 1`] = `
+Array [
+  Object {
+    "email": "aaa@box.com",
+    "id": "123",
+    "name": "person alright",
+    "userScore": 0.5,
+  },
+]
+`;
+
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should match suggested collaborators full names no spaces 1`] = `
+Array [
+  Object {
+    "email": "aaa@box.com",
+    "id": "123",
+    "name": "person alright",
+    "userScore": 0.5,
+  },
+]
+`;
+
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should match suggested collaborators last names 1`] = `
+Array [
+  Object {
+    "email": "aaa@box.com",
+    "id": "123",
+    "name": "person alright",
+    "userScore": 0.5,
+  },
+]
+`;
+
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should not match suggested collaborators when search is less than 3 characters 1`] = `Array []`;
+
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should not match suggested collaborators with email domain 1`] = `Array []`;
+
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should order the suggested selectorOptions by userScore 1`] = `
+Array [
+  Object {
+    "email": "ddd@box.com",
+    "id": "567",
+    "name": "unmatched",
+    "userScore": 2,
+  },
+  Object {
+    "email": "ccc@box.com",
+    "id": "345",
+    "name": "person conclude",
+    "userScore": 1.5,
+  },
+  Object {
+    "email": "bbb@box.com",
+    "id": "234",
+    "name": "person belong",
+    "userScore": 1,
+  },
+  Object {
+    "email": "aaa@box.com",
+    "id": "123",
+    "name": "person alright",
+    "userScore": 0.5,
+  },
+]
+`;
+
+exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should prioritize matches from the service over fuzzy matches 1`] = `
+Array [
+  Object {
+    "email": "aaa@box.com",
+    "id": "123",
+    "name": "person alright",
+    "userScore": 0.5,
+  },
+  Object {
+    "email": "ccc@box.com",
+    "id": "345",
+    "name": "person conclude",
+    "userScore": 1.5,
+  },
+  Object {
+    "email": "bbb@box.com",
+    "id": "234",
+    "name": "person belong",
+    "userScore": 1,
+  },
+]
+`;
+
 exports[`features/unified-share-modal/ContactsField render should have scrollable dropdown if contacts > 5 1`] = `
 <PillSelectorDropdown
   allowCustomPills={true}

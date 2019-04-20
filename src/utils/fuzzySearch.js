@@ -19,6 +19,9 @@
  * @returns {boolean} If a match is found
  */
 const fuzzySearch = (search: string, content: string, minCharacters: number = 3, maxGaps: number = 2) => {
+    if (typeof search !== 'string' || typeof content !== 'string') {
+        return false;
+    }
     const uniformContent = content.toLowerCase().replace(/\s/g, '');
     const uniformSearch = search.toLowerCase().replace(/\s/g, '');
     const contentLength = uniformContent.length;

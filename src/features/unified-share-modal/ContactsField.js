@@ -13,9 +13,11 @@ import classNames from 'classnames';
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import ContactDatalistItem from '../../components/contact-datalist-item';
 import parseEmails from '../../utils/parseEmails';
+import fuzzySearch from '../../utils/fuzzySearch';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';
+import { MAX_GAPS_FUZZY_MATCH, MAX_SUGGESTIONS_TO_SHOW, MIN_CHARACTERS_FOR_MATCHING } from './constants';
 import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
 
 type Props = {
@@ -57,18 +59,49 @@ class ContactsField extends React.Component<Props, State> {
 
     addSuggestedContacts = (contacts: Array<Contact>) => {
         const { suggestedCollaborators = {} } = this.props;
+        const { pillSelectorInputValue } = this.state;
 
-        const suggestedSelectorOptions = contacts
-            .filter(option => {
-                const id = option.id;
-                return id && suggestedCollaborators[id.toString()];
-            })
-            .sort((optionA, optionB) => {
+        const suggestedExactMatches = contacts.filter(option => {
+            const id = option.id;
+            return id && suggestedCollaborators[id.toString()];
+        });
+
+        const exactMatchIds = suggestedExactMatches.map(option => option.id);
+
+        const suggestedFuzzyMatches =
+            exactMatchIds.length >= MAX_SUGGESTIONS_TO_SHOW
+                ? []
+                : Object.values(suggestedCollaborators).filter(option => {
+                      if (!pillSelectorInputValue || exactMatchIds.includes(option.id)) {
+                          return false;
+                      }
+                      const nameMatches = fuzzySearch(
+                          pillSelectorInputValue,
+                          option.name,
+                          MIN_CHARACTERS_FOR_MATCHING,
+                          MAX_GAPS_FUZZY_MATCH,
+                      );
+                      const emailAddress = option.email || '';
+                      const emailAlias = emailAddress.substring(0, emailAddress.indexOf('@'));
+                      const emailMatches =
+                          pillSelectorInputValue.length >= MIN_CHARACTERS_FOR_MATCHING &&
+                          emailAlias.indexOf(pillSelectorInputValue) > -1;
+                      return nameMatches || emailMatches;
+                  });
+
+        const sortSuggestionList = list => {
+            return list.sort((optionA, optionB) => {
                 const currentSuggestedItemA = suggestedCollaborators[optionA.id.toString()];
                 const currentSuggestedItemB = suggestedCollaborators[optionB.id.toString()];
                 return currentSuggestedItemB.userScore - currentSuggestedItemA.userScore;
-            })
-            .slice(0, 3);
+            });
+        };
+
+        // combine both lists preferring exact id matches over fuzzy matches
+        const suggestedSelectorOptions = [
+            ...sortSuggestionList(suggestedExactMatches),
+            ...sortSuggestionList(suggestedFuzzyMatches),
+        ].slice(0, MAX_SUGGESTIONS_TO_SHOW);
 
         this.setState({ numSuggestedShowing: suggestedSelectorOptions.length });
         const selectorOptionsParsed = contacts.filter(

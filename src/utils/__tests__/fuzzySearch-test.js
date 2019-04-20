@@ -71,4 +71,15 @@ describe('util/fuzzySearch', () => {
     test('should return false when search is empty', () => {
         expect(fuzzySearch('', 'foo bar')).toBe(false);
     });
+
+    test('should return false when search/content are not a string', () => {
+        expect(fuzzySearch(undefined, 'foo bar')).toBe(false);
+        expect(fuzzySearch(null, 'foo bar')).toBe(false);
+        expect(fuzzySearch(1, 'foo bar')).toBe(false);
+        expect(fuzzySearch({}, 'foo bar')).toBe(false);
+        expect(fuzzySearch('test', undefined)).toBe(false);
+        expect(fuzzySearch('test', null)).toBe(false);
+        expect(fuzzySearch('test', 1)).toBe(false);
+        expect(fuzzySearch('test', {})).toBe(false);
+    });
 });
