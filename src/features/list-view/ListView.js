@@ -34,14 +34,17 @@ type Props = {
 class ListView extends React.PureComponent<Props> {
     gridEl: MultiGrid;
 
+    handleCellHover = (columnIndex: number, rowIndex: number) => {
+        const { onCellHover } = this.props;
+        const grid = this.gridEl;
+        onCellHover({ columnIndex, rowIndex: rowIndex - 1 });
+        if (grid) {
+            grid.forceUpdateGrids();
+        }
+    };
+
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
-        const {
-            getGridCell,
-            getGridHeader,
-            getGridHeaderSort = noop,
-            onCellHover = noop,
-            onSortChange = noop,
-        } = this.props;
+        const { getGridCell, getGridHeader, getGridHeaderSort = noop, onSortChange = noop } = this.props;
 
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
@@ -65,7 +68,6 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
-        const grid = this.gridEl;
         const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
 
         return (
@@ -73,18 +75,8 @@ class ListView extends React.PureComponent<Props> {
                 className="bdl-ListView-columnCell"
                 key={key}
                 style={style}
-                onFocus={() => {
-                    onCellHover({ columnIndex, rowIndex: rowIndex - 1 });
-                    if (grid) {
-                        grid.forceUpdateGrids();
-                    }
-                }}
-                onMouseOver={() => {
-                    onCellHover({ columnIndex, rowIndex: rowIndex - 1 });
-                    if (grid) {
-                        grid.forceUpdateGrids();
-                    }
-                }}
+                onFocus={() => this.handleCellHover(columnIndex, rowIndex)}
+                onMouseOver={() => this.handleCellHover(columnIndex, rowIndex)}
             >
                 {cellData}
             </div>
