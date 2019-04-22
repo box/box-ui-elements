@@ -9,6 +9,7 @@ import {
     columnWithEnumType,
     columnForDateType,
     columnWithMultiEnumType,
+    columnWithNumberType,
     columnWithFloatType,
     columnForTemplateFieldName,
 } from '../../src/features/query-bar/components/fixtures';
@@ -27,6 +28,7 @@ const columns = [
     columnWithEnumType,
     columnForDateType,
     columnWithMultiEnumType,
+    columnWithNumberType,
     columnWithFloatType,
     columnForTemplateFieldName,
 ];

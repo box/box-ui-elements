@@ -40,7 +40,11 @@ class Users extends Base {
      * @param {string} fileId the file id
      * @return {string} the user avatar URL string for a given user with access token attached
      */
-    async getAvatarUrlWithAccessToken(userId: string, fileId: string): Promise<?string> {
+    async getAvatarUrlWithAccessToken(userId?: ?string, fileId: string): Promise<?string> {
+        if (!userId) {
+            return null;
+        }
+
         // treat cache as key-value pairs of { userId: avatarUrl }
         const cache = this.getCache();
         if (cache.has(userId)) {
