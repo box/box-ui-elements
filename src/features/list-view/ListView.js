@@ -32,7 +32,7 @@ type Props = {
 };
 
 class ListView extends React.PureComponent<Props> {
-    gridEl: ?HTMLElement;
+    gridEl: MultiGrid;
 
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
         const {
@@ -65,7 +65,7 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
-        const grid = this.gridEl || React.createRef();
+        const grid = this.gridEl;
         const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
 
         return (
