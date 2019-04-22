@@ -35,7 +35,7 @@ class ListView extends React.PureComponent<Props> {
     gridEl: MultiGrid;
 
     handleCellHover = (columnIndex: number, rowIndex: number) => {
-        const { onCellHover } = this.props;
+        const { onCellHover = noop } = this.props;
         const grid = this.gridEl;
         onCellHover({ columnIndex, rowIndex: rowIndex - 1 });
         if (grid) {

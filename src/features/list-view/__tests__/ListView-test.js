@@ -77,6 +77,32 @@ describe('features/list-view/ListView', () => {
         });
     });
 
+    describe('handleCellHover()', () => {
+        const columnIndex = 1;
+        const rowIndex = 1;
+
+        test('should call onCellHover with the correct columnIndex and rowIndex', () => {
+            const onCellHover = jest.fn();
+            const wrapper = getWrapper({
+                onCellHover,
+            });
+
+            wrapper.instance().handleCellHover(columnIndex, rowIndex);
+
+            expect(onCellHover).toHaveBeenCalledWith({ columnIndex, rowIndex: rowIndex - 1 });
+        });
+
+        test('should call forceUpdateGrids if gridEl is defined', () => {
+            const forceUpdateGridStub = jest.fn();
+            const wrapper = getWrapper();
+            wrapper.instance().gridEl = { forceUpdateGrids: forceUpdateGridStub };
+
+            wrapper.instance().handleCellHover(columnIndex, rowIndex);
+
+            expect(forceUpdateGridStub).toHaveBeenCalled();
+        });
+    });
+
     describe('computeColumnWidth()', () => {
         describe('when props.getColumnWidth is included', () => {
             test('should delegate to props.getColumnWidth', () => {
