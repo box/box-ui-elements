@@ -3,13 +3,10 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import { fillUserPlaceholder } from '../../../../utils/fields';
 import messages from '../../../common/messages';
-
 import CommentInlineError from '../comment/CommentInlineError';
 import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../../../icons/two-toned/IconTaskGeneral';
-
 import {
     TASK_NEW_APPROVED,
     TASK_NEW_REJECTED,
@@ -19,13 +16,11 @@ import {
     TASK_TYPE_APPROVAL,
 } from '../../../../constants';
 import Comment from '../comment';
-import AssigneeStatus from './AssigneeStatus';
 import TaskActions from './TaskActions';
 import TaskDueDate from './TaskDueDate';
 import Status from './TaskStatus';
+import Assignees from './Assignees';
 import './Task.scss';
-
-const MAX_AVATARS = 3;
 
 type Props = {|
     ...TaskNew,
@@ -43,41 +38,6 @@ type Props = {|
     translatedTaggedMessage?: string,
     translations?: Translations,
 |};
-
-type AssigneeProps = {|
-    assignees: TaskAssigneeCollection,
-    getAvatarUrl: GetAvatarUrlCallback,
-    maxAvatars?: number,
-|};
-
-const Assignees = React.memo<AssigneeProps>(({ maxAvatars = MAX_AVATARS, assignees, getAvatarUrl }: AssigneeProps) => {
-    const assigneeCount = (assignees && assignees.entries.length) || 0;
-    const hiddenAssigneeCount = assigneeCount - maxAvatars;
-    return (
-        <div className="bcs-task-assignment-container">
-            <div className="bcs-task-assignments">
-                {assigneeCount > 0 &&
-                    assignees.entries
-                        .map(fillUserPlaceholder)
-                        .slice(0, MAX_AVATARS)
-                        .map(({ id: assignmentId, target, status: assigneeStatus }) => {
-                            return (
-                                <AssigneeStatus
-                                    key={assignmentId}
-                                    status={assigneeStatus}
-                                    user={target}
-                                    getAvatarUrl={getAvatarUrl}
-                                    data-testid="task-assignment-status"
-                                />
-                            );
-                        })}
-                {hiddenAssigneeCount > 0 ? (
-                    <span className="bcs-task-assignment-avatar bcs-task-assignment-count">+{hiddenAssigneeCount}</span>
-                ) : null}
-            </div>
-        </div>
-    );
-});
 
 const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
     if (isCurrentUser) {
@@ -179,7 +139,7 @@ const Task = ({
                 />
                 <div className="bcs-task-content">{!!due_at && <TaskDueDate dueDate={due_at} status={status} />}</div>
                 <div className="bcs-task-content">
-                    <Assignees maxAvatars={MAX_AVATARS} assignees={assigned_to} getAvatarUrl={getAvatarUrl} />
+                    <Assignees maxAvatars={3} assignees={assigned_to} getAvatarUrl={getAvatarUrl} />
                 </div>
                 <div className="bcs-task-content">
                     {currentUserAssignment && shouldShowActions ? (

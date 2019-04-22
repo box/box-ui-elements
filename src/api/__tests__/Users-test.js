@@ -36,5 +36,10 @@ describe('api/Users', () => {
             const url2 = await users.getAvatarUrlWithAccessToken('bar');
             expect(url1).not.toEqual(url2);
         });
+
+        test('should return null if there is no user id specified', async () => {
+            const url1 = await users.getAvatarUrlWithAccessToken();
+            expect(url1).toBeNull();
+        });
     });
 });
