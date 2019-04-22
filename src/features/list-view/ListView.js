@@ -37,7 +37,7 @@ class ListView extends React.PureComponent<Props> {
     handleCellHover = (columnIndex: number, rowIndex: number) => {
         const { onCellHover = noop } = this.props;
         const grid = this.gridEl;
-        onCellHover({ columnIndex, rowIndex: rowIndex - 1 });
+        onCellHover({ columnIndex, rowIndex });
         if (grid) {
             grid.forceUpdateGrids();
         }
@@ -75,8 +75,8 @@ class ListView extends React.PureComponent<Props> {
                 className="bdl-ListView-columnCell"
                 key={key}
                 style={style}
-                onFocus={() => this.handleCellHover(columnIndex, rowIndex)}
-                onMouseOver={() => this.handleCellHover(columnIndex, rowIndex)}
+                onFocus={() => this.handleCellHover(columnIndex, rowIndex - 1)}
+                onMouseOver={() => this.handleCellHover(columnIndex, rowIndex - 1)}
             >
                 {cellData}
             </div>

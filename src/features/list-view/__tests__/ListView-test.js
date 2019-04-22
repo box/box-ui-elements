@@ -87,7 +87,7 @@ describe('features/list-view/ListView', () => {
                 onCellHover,
             });
 
-            wrapper.instance().handleCellHover(columnIndex, rowIndex);
+            wrapper.instance().handleCellHover(columnIndex, rowIndex - 1);
 
             expect(onCellHover).toHaveBeenCalledWith({ columnIndex, rowIndex: rowIndex - 1 });
         });
@@ -97,7 +97,7 @@ describe('features/list-view/ListView', () => {
             const wrapper = getWrapper();
             wrapper.instance().gridEl = { forceUpdateGrids: forceUpdateGridStub };
 
-            wrapper.instance().handleCellHover(columnIndex, rowIndex);
+            wrapper.instance().handleCellHover(columnIndex, rowIndex - 1);
 
             expect(forceUpdateGridStub).toHaveBeenCalled();
         });
