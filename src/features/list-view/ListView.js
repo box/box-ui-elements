@@ -65,7 +65,7 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
-        const grid = this.gridEl;
+        const grid = this.gridEl || React.createRef();
         const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
 
         return (
