@@ -93,16 +93,13 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         expect(wrapper.find('PillSelectorDropdown').prop('selectorOptions').length).toBe(1);
     });
 
-    test('should not add scrollable class when there are not enough contacts in assignment dropdown', () => {
+    test('should add scrollable class when there are enough contacts in assignment dropdown', () => {
         const wrapper = render({
             approverSelectorContacts: [{ id: 123, item: { id: 123, name: 'name' }, name: 'name' }],
             createTask: jest.fn(),
         });
         expect(wrapper.find('PillSelectorDropdown').hasClass('scrollable')).toBe(false);
-    });
-
-    test('should add scrollable class when there are enough contacts in assignment dropdown', () => {
-        const wrapper = render({
+        wrapper.setProps({
             approverSelectorContacts: [
                 { id: 123, item: { id: 123, name: 'name' }, name: 'name' },
                 { id: 234, item: { id: 234, name: 'test' }, name: 'test' },
@@ -110,7 +107,6 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
                 { id: 890, item: { id: 890, name: 'bob' }, name: 'bob' },
                 { id: 555, item: { id: 555, name: 'ann' }, name: 'ann' },
             ],
-            createTask: jest.fn(),
         });
         expect(wrapper.find('PillSelectorDropdown').hasClass('scrollable'));
     });
