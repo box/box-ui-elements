@@ -112,8 +112,10 @@ $card-left-offset: 40px;
         margin-top: 5px;
     }
 
-    .bcs-comment-user-name {
-        margin-right: 0;
+    .bcs-comment {
+        .bcs-comment-user-name {
+            margin-right: 0;
+        }
     }
 
     button:first-of-type.bcs-task-action-button {
