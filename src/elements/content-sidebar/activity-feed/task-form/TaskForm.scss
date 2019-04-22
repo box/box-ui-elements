@@ -53,6 +53,17 @@
             .pill-selector-input-wrapper {
                 width: auto;
             }
+
+            .overlay-wrapper {
+                border: 1px solid $sf-fog;
+                height: 215px;
+                overflow-y: scroll;
+                position: absolute;
+            }
+
+            .overlay {
+                border: none;
+            }
         }
     }
 
