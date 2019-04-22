@@ -186,6 +186,10 @@ class TaskForm extends React.Component<Props, State> {
             .filter(({ id }) => !approvers.find(({ value }) => value === id))
             .map(({ id, item }) => ({ ...item, text: item.name, value: id }));
 
+        const pillSelectorOverlayClasses = classNames({
+            scrollable: approverOptions.length > 4,
+        });
+
         return (
             <div className={inputContainerClassNames}>
                 <div className="bcs-task-input-form-container">
@@ -200,6 +204,7 @@ class TaskForm extends React.Component<Props, State> {
                         onValidSubmit={this.handleValidSubmit}
                     >
                         <PillSelectorDropdown
+                            className={pillSelectorOverlayClasses}
                             error={this.getErrorByFieldname('taskAssignees')}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired

@@ -1,5 +1,7 @@
 @import '../../../common/variables';
 
+$assignee-dropdown-height: 215px;
+
 .be .bcs-task-input-container {
     display: flex;
 
@@ -54,15 +56,17 @@
                 width: auto;
             }
 
-            .overlay-wrapper {
-                border: 1px solid $sf-fog;
-                height: 215px;
-                overflow-y: scroll;
-                position: absolute;
-            }
+            &.scrollable {
+                .overlay-wrapper {
+                    border: 1px solid $sf-fog;
+                    height: $assignee-dropdown-height;
+                    overflow-y: scroll;
+                    position: absolute;
+                }
 
-            .overlay {
-                border: none;
+                .overlay {
+                    border: none;
+                }
             }
         }
     }
