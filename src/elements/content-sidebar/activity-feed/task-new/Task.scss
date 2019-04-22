@@ -115,6 +115,10 @@ $card-left-offset: 40px;
     .bcs-comment {
         .bcs-comment-user-name {
             margin-right: 0;
+
+            &.link {
+                white-space: normal;
+            }
         }
     }
 
