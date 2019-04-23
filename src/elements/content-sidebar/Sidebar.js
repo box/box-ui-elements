@@ -136,7 +136,7 @@ class Sidebar extends React.Component<Props, State> {
      * Getter/setter for sidebar forced state
      *
      * @param isOpen - Optionally set the sidebar to open/closed
-     * @returns {boolean} - The sidebar open/closed state
+     * @returns {string|null} - The sidebar open/closed state
      */
     isForced(isOpen?: boolean): ?(typeof SIDEBAR_FORCE_VALUE_CLOSED | typeof SIDEBAR_FORCE_VALUE_OPEN) {
         if (isOpen !== undefined) {
