@@ -249,10 +249,10 @@ class TaskForm extends React.Component<Props, State> {
                                 'data-testid': 'task-form-date-input',
                             }}
                             isRequired={false}
+                            isTextInputAllowed
                             label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
                             minDate={new Date()}
                             name="taskDueDate"
-                            onBlur={() => this.validateForm('taskDueDate')}
                             onChange={this.handleDueDateChange}
                             placeholder={intl.formatMessage(messages.approvalSelectDate)}
                             value={dueDate || undefined}
