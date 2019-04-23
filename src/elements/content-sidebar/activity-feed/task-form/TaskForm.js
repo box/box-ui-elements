@@ -267,7 +267,7 @@ class TaskForm extends React.Component<Props, State> {
                                 className="bcs-task-input-submit-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
                                 data-testid="task-form-submit-button"
-                                isDisabled={!isValid}
+                                isDisabled={!isValid || isLoading}
                                 isLoading={isLoading}
                                 onFocus={this.handleFocusChange}
                                 onMouseEnter={this.handleFocusChange}
