@@ -13,36 +13,24 @@ import type { CellRendererArgs, ComputeColumnWidthArgs } from './flowTypes';
 import './styles/ListView.scss';
 
 type Props = {
+    cellCoordinate: string,
     columnCount: number,
     getColumnWidth?: (columnIndex: number) => number,
     getGridCell: ({|
+        cellIndex: number,
         columnIndex: number,
-        rowIndex: number,
+        key: string,
+        style: Object,
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
     height: number,
-    onCellHover?: ({|
-        columnIndex: number,
-        rowIndex: number,
-    |}) => void,
     onSortChange?: (columnIndex: number) => void,
     rowCount: number,
     width: number,
 };
 
 class ListView extends React.PureComponent<Props> {
-    gridEl: MultiGrid;
-
-    handleCellHover = (columnIndex: number, rowIndex: number) => {
-        const { onCellHover = noop } = this.props;
-        const grid = this.gridEl;
-        onCellHover({ columnIndex, rowIndex });
-        if (grid) {
-            grid.forceUpdateGrids();
-        }
-    };
-
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
         const { getGridCell, getGridHeader, getGridHeaderSort = noop, onSortChange = noop } = this.props;
 
@@ -68,19 +56,9 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
-        const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
+        const cellData = getGridCell({ columnIndex, key, cellIndex: rowIndex - 1, style });
 
-        return (
-            <div
-                className="bdl-ListView-columnCell"
-                key={key}
-                style={style}
-                onFocus={() => this.handleCellHover(columnIndex, rowIndex - 1)}
-                onMouseOver={() => this.handleCellHover(columnIndex, rowIndex - 1)}
-            >
-                {cellData}
-            </div>
-        );
+        return cellData;
     };
 
     /**
@@ -127,11 +105,12 @@ class ListView extends React.PureComponent<Props> {
     };
 
     render() {
-        const { columnCount, height, rowCount, width } = this.props;
+        const { cellCoordinate, columnCount, height, rowCount, width } = this.props;
 
         return (
             <div className="metadata-views-list-view">
                 <MultiGrid
+                    cellCoordinate={cellCoordinate}
                     cellRenderer={this.cellRenderer}
                     classNameBottomLeftGrid="list-view-bottom-left-grid"
                     classNameTopLeftGrid="list-view-top-left-grid"
@@ -141,9 +120,6 @@ class ListView extends React.PureComponent<Props> {
                     fixedColumnCount={1}
                     fixedRowCount={FIXED_ROW_COUNT}
                     height={height}
-                    ref={ref => {
-                        this.gridEl = ref;
-                    }}
                     rowHeight={ROW_HEIGHT}
                     rowCount={rowCount + FIXED_ROW_COUNT}
                     scrollToColumn={0}
