@@ -32,6 +32,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             email: 'x@example.com',
             id: '12345',
             text: 'X User',
+            name: 'X User',
             type: 'group',
             value: 'x@example.com',
         },
@@ -39,6 +40,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             email: 'y@example.com',
             id: '23456',
             text: 'Y User',
+            name: 'Y User',
             type: 'user',
             value: 'y@example.com',
         },
@@ -46,6 +48,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             email: 'z@example.com',
             id: '34567',
             text: 'Z User',
+            name: 'Z User',
             type: 'user',
             value: 'z@example.com',
         },
@@ -74,8 +77,18 @@ describe('features/unified-share-modal/ContactsField', () => {
 
     describe('addSuggestedContacts()', () => {
         const suggestions = {
-            '23456': { id: '23456', userScore: 0.5 }, // expectedContacts[1]
-            '34567': { id: '34567', userScore: 0.1 }, // expectedContacts[2]
+            '23456': {
+                id: '23456',
+                userScore: 0.5,
+                email: 'y@example.com',
+                name: 'Y User',
+            }, // expectedContacts[1]
+            '34567': {
+                id: '34567',
+                userScore: 0.1,
+                email: 'z@example.com',
+                name: 'Z User',
+            }, // expectedContacts[2]
         };
 
         const largeSuggestions = {

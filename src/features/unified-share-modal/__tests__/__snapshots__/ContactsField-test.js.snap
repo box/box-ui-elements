@@ -6,19 +6,25 @@ Array [
     "email": "ddd@box.com",
     "id": "567",
     "name": "unmatched",
-    "userScore": 2,
+    "text": "unmatched",
+    "type": "user",
+    "value": "ddd@box.com",
   },
   Object {
     "email": "ccc@box.com",
     "id": "345",
     "name": "person conclude",
-    "userScore": 1.5,
+    "text": "person conclude",
+    "type": "user",
+    "value": "ccc@box.com",
   },
   Object {
     "email": "bbb@box.com",
     "id": "234",
     "name": "person belong",
-    "userScore": 1,
+    "text": "person belong",
+    "type": "user",
+    "value": "bbb@box.com",
   },
   Object {
     "email": "aaa@box.com",
@@ -35,7 +41,9 @@ Array [
     "email": "bbb@box.com",
     "id": "234",
     "name": "person belong",
-    "userScore": 1,
+    "text": "person belong",
+    "type": "user",
+    "value": "bbb@box.com",
   },
 ]
 `;
@@ -46,19 +54,25 @@ Array [
     "email": "ccc@box.com",
     "id": "345",
     "name": "person conclude",
-    "userScore": 1.5,
+    "text": "person conclude",
+    "type": "user",
+    "value": "ccc@box.com",
   },
   Object {
     "email": "bbb@box.com",
     "id": "234",
     "name": "person belong",
-    "userScore": 1,
+    "text": "person belong",
+    "type": "user",
+    "value": "bbb@box.com",
   },
   Object {
     "email": "aaa@box.com",
     "id": "123",
     "name": "person alright",
-    "userScore": 0.5,
+    "text": "person alright",
+    "type": "user",
+    "value": "aaa@box.com",
   },
 ]
 `;
@@ -69,7 +83,9 @@ Array [
     "email": "aaa@box.com",
     "id": "123",
     "name": "person alright",
-    "userScore": 0.5,
+    "text": "person alright",
+    "type": "user",
+    "value": "aaa@box.com",
   },
 ]
 `;
@@ -80,7 +96,9 @@ Array [
     "email": "aaa@box.com",
     "id": "123",
     "name": "person alright",
-    "userScore": 0.5,
+    "text": "person alright",
+    "type": "user",
+    "value": "aaa@box.com",
   },
 ]
 `;
@@ -91,7 +109,9 @@ Array [
     "email": "aaa@box.com",
     "id": "123",
     "name": "person alright",
-    "userScore": 0.5,
+    "text": "person alright",
+    "type": "user",
+    "value": "aaa@box.com",
   },
 ]
 `;
@@ -106,19 +126,25 @@ Array [
     "email": "ddd@box.com",
     "id": "567",
     "name": "unmatched",
-    "userScore": 2,
+    "text": "unmatched",
+    "type": "user",
+    "value": "ddd@box.com",
   },
   Object {
     "email": "ccc@box.com",
     "id": "345",
     "name": "person conclude",
-    "userScore": 1.5,
+    "text": "person conclude",
+    "type": "user",
+    "value": "ccc@box.com",
   },
   Object {
     "email": "bbb@box.com",
     "id": "234",
     "name": "person belong",
-    "userScore": 1,
+    "text": "person belong",
+    "type": "user",
+    "value": "bbb@box.com",
   },
   Object {
     "email": "aaa@box.com",
@@ -135,19 +161,25 @@ Array [
     "email": "aaa@box.com",
     "id": "123",
     "name": "person alright",
-    "userScore": 0.5,
+    "text": "person alright",
+    "type": "user",
+    "value": "aaa@box.com",
   },
   Object {
     "email": "ccc@box.com",
     "id": "345",
     "name": "person conclude",
-    "userScore": 1.5,
+    "text": "person conclude",
+    "type": "user",
+    "value": "ccc@box.com",
   },
   Object {
     "email": "bbb@box.com",
     "id": "234",
     "name": "person belong",
-    "userScore": 1,
+    "text": "person belong",
+    "type": "user",
+    "value": "bbb@box.com",
   },
 ]
 `;
@@ -181,6 +213,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "x@example.com",
         "id": "12345",
+        "name": "X User",
         "text": "X User",
         "type": "group",
         "value": "x@example.com",
@@ -188,6 +221,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "y@example.com",
         "id": "23456",
+        "name": "Y User",
         "text": "Y User",
         "type": "user",
         "value": "y@example.com",
@@ -195,6 +229,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "z@example.com",
         "id": "34567",
+        "name": "Z User",
         "text": "Z User",
         "type": "user",
         "value": "z@example.com",
@@ -202,6 +237,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "a@example.com",
         "id": "12",
+        "name": "a b",
         "text": "a b",
         "type": "user",
         "value": "a@example.com",
@@ -209,6 +245,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "b@example.com",
         "id": "13",
+        "name": "a b",
         "text": "a b",
         "type": "user",
         "value": "b@example.com",
@@ -216,6 +253,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "c@example.com",
         "id": "14",
+        "name": "a c",
         "text": "a c",
         "type": "user",
         "value": "c@example.com",
@@ -223,6 +261,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "d@example.com",
         "id": "14",
+        "name": "a d",
         "text": "a d",
         "type": "user",
         "value": "d@example.com",
@@ -230,6 +269,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "e@example.com",
         "id": "14",
+        "name": "a e",
         "text": "a e",
         "type": "user",
         "value": "e@example.com",
@@ -310,6 +350,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       Object {
         "email": "x@example.com",
         "id": "12345",
+        "name": "X User",
         "text": "X User",
         "type": "group",
         "value": "x@example.com",
@@ -317,6 +358,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       Object {
         "email": "y@example.com",
         "id": "23456",
+        "name": "Y User",
         "text": "Y User",
         "type": "user",
         "value": "y@example.com",
@@ -324,6 +366,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       Object {
         "email": "z@example.com",
         "id": "34567",
+        "name": "Z User",
         "text": "Z User",
         "type": "user",
         "value": "z@example.com",

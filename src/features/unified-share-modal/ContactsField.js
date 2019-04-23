@@ -17,8 +17,17 @@ import fuzzySearch from '../../utils/fuzzySearch';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';
-import { MAX_GAPS_FUZZY_MATCH, MAX_SUGGESTIONS_TO_SHOW, MIN_CHARACTERS_FOR_MATCHING } from './constants';
-import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
+import {
+    MAX_GAPS_FUZZY_MATCH,
+    MAX_SUGGESTIONS_TO_SHOW,
+    MIN_CHARACTERS_FOR_MATCHING,
+    SUGGESTED_COLLAB_CONTACT_TYPE,
+} from './constants';
+import type {
+    contactType as Contact,
+    suggestedCollaboratorLookupType as SuggestedCollabLookup,
+    suggestedCollaboratorType as SuggestedCollab,
+} from './flowTypes';
 
 type Props = {
     disabled: boolean,
@@ -31,7 +40,7 @@ type Props = {
     onContactRemove: Function,
     onInput?: Function,
     selectedContacts: Array<Contact>,
-    suggestedCollaborators?: suggestedCollaboratorsType,
+    suggestedCollaborators?: SuggestedCollabLookup,
     validateForError: Function,
     validator: Function,
 };
@@ -46,6 +55,17 @@ const isSubstring = (value, searchString) => {
     return value && value.toLowerCase().indexOf(searchString.toLowerCase()) !== -1;
 };
 
+const convertSuggestedCollaboratorToContact = (suggestedCollab: SuggestedCollab): Contact => {
+    return {
+        email: suggestedCollab.email,
+        id: suggestedCollab.id,
+        name: suggestedCollab.name,
+        text: suggestedCollab.name,
+        type: SUGGESTED_COLLAB_CONTACT_TYPE,
+        value: suggestedCollab.email,
+    };
+};
+
 class ContactsField extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -57,22 +77,34 @@ class ContactsField extends React.Component<Props, State> {
         };
     }
 
-    addSuggestedContacts = (contacts: Array<Contact>) => {
+    getSuggestedCollaboratorArray = (): Array<SuggestedCollab> => {
+        const { suggestedCollaborators = {} } = this.props;
+        return Object.keys(suggestedCollaborators).map(key => suggestedCollaborators[key]);
+    };
+
+    addSuggestedContacts = (contacts: Array<Contact>): Array<Contact> => {
         const { suggestedCollaborators = {} } = this.props;
         const { pillSelectorInputValue } = this.state;
 
-        const suggestedExactMatches = contacts.filter(option => {
-            const id = option.id;
-            return id && suggestedCollaborators[id.toString()];
-        });
+        const exactMatchIds = contacts
+            .filter(option => {
+                const id = option.id.toString();
+                return id && suggestedCollaborators[id];
+            })
+            .map(option => option.id);
 
-        const exactMatchIds = suggestedExactMatches.map(option => option.id);
+        const suggestedCollabs = this.getSuggestedCollaboratorArray();
+
+        const suggestedExactMatches = suggestedCollabs.filter(option => {
+            const id = option.id.toString();
+            return id && exactMatchIds.includes(id);
+        });
 
         const suggestedFuzzyMatches =
             exactMatchIds.length >= MAX_SUGGESTIONS_TO_SHOW
                 ? []
-                : Object.values(suggestedCollaborators).filter(option => {
-                      if (!pillSelectorInputValue || exactMatchIds.includes(option.id)) {
+                : suggestedCollabs.filter((option: SuggestedCollab) => {
+                      if (!pillSelectorInputValue || exactMatchIds.includes(option.id.toString())) {
                           return false;
                       }
                       const nameMatches = fuzzySearch(
@@ -90,7 +122,7 @@ class ContactsField extends React.Component<Props, State> {
                   });
 
         const sortSuggestionList = list => {
-            return list.sort((optionA, optionB) => {
+            return list.sort((optionA: SuggestedCollab, optionB: SuggestedCollab) => {
                 const currentSuggestedItemA = suggestedCollaborators[optionA.id.toString()];
                 const currentSuggestedItemB = suggestedCollaborators[optionB.id.toString()];
                 return currentSuggestedItemB.userScore - currentSuggestedItemA.userScore;
@@ -101,7 +133,9 @@ class ContactsField extends React.Component<Props, State> {
         const suggestedSelectorOptions = [
             ...sortSuggestionList(suggestedExactMatches),
             ...sortSuggestionList(suggestedFuzzyMatches),
-        ].slice(0, MAX_SUGGESTIONS_TO_SHOW);
+        ]
+            .slice(0, MAX_SUGGESTIONS_TO_SHOW)
+            .map(convertSuggestedCollaboratorToContact);
 
         this.setState({ numSuggestedShowing: suggestedSelectorOptions.length });
         const selectorOptionsParsed = contacts.filter(
@@ -131,6 +165,7 @@ class ContactsField extends React.Component<Props, State> {
                     email,
                     id,
                     text: name,
+                    name,
                     type,
                     value: email || id, // if email doesn't exist, contact is a group, use id
                 }));

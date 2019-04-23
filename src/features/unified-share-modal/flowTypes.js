@@ -149,4 +149,13 @@ export type tooltipComponentIdentifierType =
     | 'shared-link-settings'
     | 'shared-link-toggle';
 
-export type suggestedCollaboratorsType = { [id: string]: { id: string, userScore: number } };
+export type suggestedCollaboratorType = {
+    email: string,
+    id: string,
+    name: string,
+    userScore: number,
+};
+
+export type suggestedCollaboratorLookupType = {
+    [id: string]: suggestedCollaboratorType,
+};
