@@ -201,6 +201,7 @@ class TaskForm extends React.Component<Props, State> {
                     >
                         <PillSelectorDropdown
                             error={this.getErrorByFieldname('taskAssignees')}
+                            disabled={isLoading}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
@@ -226,7 +227,7 @@ class TaskForm extends React.Component<Props, State> {
                         <TextArea
                             className="bcs-task-name-input"
                             data-testid="task-form-name-input"
-                            disabled={isDisabled}
+                            disabled={isDisabled || isLoading}
                             error={this.getErrorByFieldname('taskName')}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormMessageLabel} />}
@@ -243,6 +244,7 @@ class TaskForm extends React.Component<Props, State> {
                                 [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                                 'data-testid': 'task-form-date-input',
                             }}
+                            isDisabled={isLoading}
                             isRequired={false}
                             label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
                             minDate={new Date()}
