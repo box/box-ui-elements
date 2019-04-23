@@ -64,7 +64,8 @@ describe('features/list-view/ListView', () => {
                 rowIndex,
             });
 
-            expect(cell).toBe(cellData);
+            const testCell = shallow(cell);
+            expect(testCell.text()).toBe(cellData);
         });
 
         test.each`

@@ -13,18 +13,16 @@ import type { CellRendererArgs, ComputeColumnWidthArgs } from './flowTypes';
 import './styles/ListView.scss';
 
 type Props = {
-    cellCoordinate: string,
     columnCount: number,
     getColumnWidth?: (columnIndex: number) => number,
     getGridCell: ({|
         cellRowIndex: number,
         columnIndex: number,
-        key: string,
-        style: Object,
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
     height: number,
+    hoveredCellCoordinate: string,
     onSortChange?: (columnIndex: number) => void,
     rowCount: number,
     width: number,
@@ -56,9 +54,13 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
-        const cellData = getGridCell({ columnIndex, key, cellRowIndex: rowIndex - 1, style });
+        const cellData = getGridCell({ columnIndex, cellRowIndex: rowIndex - 1 });
 
-        return cellData;
+        return (
+            <div key={key} className="bdl-ListView-columnCell" style={style}>
+                {cellData}
+            </div>
+        );
     };
 
     /**
@@ -105,12 +107,11 @@ class ListView extends React.PureComponent<Props> {
     };
 
     render() {
-        const { cellCoordinate, columnCount, height, rowCount, width } = this.props;
+        const { columnCount, height, hoveredCellCoordinate, rowCount, width } = this.props;
 
         return (
             <div className="metadata-views-list-view">
                 <MultiGrid
-                    cellCoordinate={cellCoordinate}
                     cellRenderer={this.cellRenderer}
                     classNameBottomLeftGrid="list-view-bottom-left-grid"
                     classNameTopLeftGrid="list-view-top-left-grid"
@@ -120,6 +121,7 @@ class ListView extends React.PureComponent<Props> {
                     fixedColumnCount={1}
                     fixedRowCount={FIXED_ROW_COUNT}
                     height={height}
+                    hoveredCellCoordinate={hoveredCellCoordinate}
                     rowHeight={ROW_HEIGHT}
                     rowCount={rowCount + FIXED_ROW_COUNT}
                     scrollToColumn={0}
