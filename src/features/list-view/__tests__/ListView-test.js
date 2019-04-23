@@ -13,7 +13,7 @@ const getGridHeader = columnIndex => ['h1', 'h2'][columnIndex];
 
 const getGridHeaderSort = columnIndex => [SORT_ORDER_ASCENDING, null][columnIndex];
 
-const getGridCell = ({ columnIndex, cellRowIndex }) => gridData[columnIndex][cellRowIndex];
+const getGridCell = ({ cellColumnIndex, cellRowIndex }) => gridData[cellColumnIndex][cellRowIndex];
 
 describe('features/list-view/ListView', () => {
     const getWrapper = props => {

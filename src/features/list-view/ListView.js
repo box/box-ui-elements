@@ -16,8 +16,8 @@ type Props = {
     columnCount: number,
     getColumnWidth?: (columnIndex: number) => number,
     getGridCell: ({|
+        cellColumnIndex: number,
         cellRowIndex: number,
-        columnIndex: number,
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
@@ -54,7 +54,7 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
-        const cellData = getGridCell({ columnIndex, cellRowIndex: rowIndex - 1 });
+        const cellData = getGridCell({ cellColumnIndex: columnIndex, cellRowIndex: rowIndex - 1 });
 
         return (
             <div key={key} className="bdl-ListView-columnCell" style={style}>
