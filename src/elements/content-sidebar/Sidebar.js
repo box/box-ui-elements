@@ -119,7 +119,7 @@ class Sidebar extends React.Component<Props, State> {
      * @param {SyntheticEvent} event - The event
      * @return {void}
      */
-    handleVersionHistoryClick = (event: SyntheticEvent<>) => {
+    handleVersionHistoryClick = (event: SyntheticEvent<>): void => {
         const { history } = this.props;
 
         if (event.preventDefault) {
@@ -135,7 +135,7 @@ class Sidebar extends React.Component<Props, State> {
      * @param isOpen - Optionally set the sidebar to open/closed
      * @returns {boolean} - The sidebar open/closed state
      */
-    isForced(isOpen?: boolean): ?boolean {
+    isForced(isOpen?: boolean): ?(typeof SIDEBAR_FORCE_VALUE_CLOSED | typeof SIDEBAR_FORCE_VALUE_OPEN) {
         if (isOpen !== undefined) {
             this.store.setItem(SIDEBAR_FORCE_KEY, isOpen ? SIDEBAR_FORCE_VALUE_OPEN : SIDEBAR_FORCE_VALUE_CLOSED);
         }
@@ -147,7 +147,7 @@ class Sidebar extends React.Component<Props, State> {
      * Getter for whether the sidebar has been forced open
      * @returns {boolean} - True if the sidebar has been forced open
      */
-    isForcedOpen() {
+    isForcedOpen(): boolean {
         return this.isForced() !== SIDEBAR_FORCE_VALUE_CLOSED;
     }
 
@@ -155,7 +155,7 @@ class Sidebar extends React.Component<Props, State> {
      * Getter for whether the sidebar has been forced open/closed previously
      * @returns {boolean} - True if the sidebar has been forced open/closed previously
      */
-    isForcedSet() {
+    isForcedSet(): boolean {
         return this.isForced() !== null;
     }
 
