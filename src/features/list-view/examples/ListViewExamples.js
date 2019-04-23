@@ -16,7 +16,7 @@ const generateRandomString = value => String.fromCharCode((value % 65) + 65);
 
 const getGridHeader = columnIndex => `Header ${generateRandomString(columnIndex)}`;
 
-const getGridCell = ({ cellIndex, columnIndex }) => `Row ${cellIndex}, Column ${columnIndex}`;
+const getGridCell = ({ cellRowIndex, columnIndex }) => `Row ${cellRowIndex}, Column ${columnIndex}`;
 
 const ListViewExamples = ({ columnCount }: Props) => {
     return (

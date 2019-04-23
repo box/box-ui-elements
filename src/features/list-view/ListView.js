@@ -17,7 +17,7 @@ type Props = {
     columnCount: number,
     getColumnWidth?: (columnIndex: number) => number,
     getGridCell: ({|
-        cellIndex: number,
+        cellRowIndex: number,
         columnIndex: number,
         key: string,
         style: Object,
@@ -56,7 +56,7 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
-        const cellData = getGridCell({ columnIndex, key, cellIndex: rowIndex - 1, style });
+        const cellData = getGridCell({ columnIndex, key, cellRowIndex: rowIndex - 1, style });
 
         return cellData;
     };
