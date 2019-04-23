@@ -7,7 +7,6 @@
 a,
 .lnk {
     color: $box-blue;
-    outline: none;
     text-decoration: none;
 }
 
@@ -41,7 +40,6 @@ a:focus,
 .lnk:focus,
 a.is-disabled:focus,
 .lnk.is-disabled:focus {
-    outline: none;
     text-decoration: underline;
 }
 

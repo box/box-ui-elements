@@ -34,6 +34,8 @@ type Props = {
     className?: string,
     /** The fallback option value when other options are all unselected. Default option cannot be selected at the same time as other options. `selectedValues` must not be empty when this option is used. */
     defaultValue?: SelectOptionValueProp,
+    /** An optional error to show within a tooltip. */
+    error?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
     multiple: boolean,
@@ -277,8 +279,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
     renderSelectButton = () => {
         const { activeItemID, isOpen } = this.state;
-        const { buttonProps: buttonElProps, isDisabled, className } = this.props;
-
+        const { buttonProps: buttonElProps, isDisabled, className, error } = this.props;
         const buttonText = this.renderButtonText();
         const buttonProps = {
             ...buttonElProps,
@@ -295,7 +296,11 @@ class BaseSelectField extends React.Component<Props, State> {
             title: buttonText,
         };
 
-        return <SelectButton {...buttonProps}>{buttonText}</SelectButton>;
+        return (
+            <SelectButton {...buttonProps} error={error}>
+                {buttonText}
+            </SelectButton>
+        );
     };
 
     renderSelectOptions = () => {
@@ -369,7 +374,7 @@ class BaseSelectField extends React.Component<Props, State> {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                className={classNames('select-container', className)}
+                className={classNames(className, 'select-container')}
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
             >

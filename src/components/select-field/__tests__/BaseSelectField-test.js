@@ -115,6 +115,14 @@ describe('components/select-field/BaseSelectField', () => {
             const buttonWrapper = wrapper.find('SelectButton');
             expect(buttonWrapper.prop('data-resin-thing')).toBe('hi');
         });
+
+        test('should send error to select button when error has some value', () => {
+            const wrapper = shallowRenderSelectField({
+                error: 'error',
+            });
+            const buttonWrapper = wrapper.find('SelectButton');
+            expect(buttonWrapper).toMatchSnapshot();
+        });
     });
 
     describe('renderSelectOptions()', () => {
