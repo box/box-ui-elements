@@ -233,7 +233,7 @@ describe('features/unified-share-modal/ContactsField', () => {
                 pillSelectorInputValue: 'box',
             });
             const result = wrapper.instance().addSuggestedContacts([]);
-            expect(result).toMatchSnapshot();
+            expect(result).toHaveLength(0);
         });
 
         test('should not match suggested collaborators when search is less than 3 characters', () => {
@@ -244,7 +244,7 @@ describe('features/unified-share-modal/ContactsField', () => {
                 pillSelectorInputValue: 'ba',
             });
             const result = wrapper.instance().addSuggestedContacts([]);
-            expect(result).toMatchSnapshot();
+            expect(result).toHaveLength(0);
         });
 
         test('should match suggested collaborators but not duplicate', () => {

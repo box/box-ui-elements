@@ -116,10 +116,6 @@ Array [
 ]
 `;
 
-exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should not match suggested collaborators when search is less than 3 characters 1`] = `Array []`;
-
-exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should not match suggested collaborators with email domain 1`] = `Array []`;
-
 exports[`features/unified-share-modal/ContactsField addSuggestedContacts() should order the suggested selectorOptions by userScore 1`] = `
 Array [
   Object {
