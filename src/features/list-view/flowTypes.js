@@ -1,9 +1,9 @@
 // @flow
 
 export type CellRendererArgs = {|
-    cellIndex: number,
     columnIndex: number,
     key: string,
+    rowIndex: number,
     style: Object,
 |};
 
