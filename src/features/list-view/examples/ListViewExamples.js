@@ -6,11 +6,9 @@ import { AutoSizer } from 'react-virtualized/dist/es/AutoSizer/index';
 import ListView from '../ListView';
 
 type Props = {
-    cellCoordinate: string,
     columnCount: number,
+    hoveredCellCoordinate: string,
 };
-
-const defaultCellCoordinate = '-1-1';
 
 const generateRandomString = value => String.fromCharCode((value % 65) + 65);
 
@@ -18,13 +16,13 @@ const getGridHeader = columnIndex => `Header ${generateRandomString(columnIndex)
 
 const getGridCell = ({ cellRowIndex, columnIndex }) => `Row ${cellRowIndex}, Column ${columnIndex}`;
 
-const ListViewExamples = ({ columnCount }: Props) => {
+const ListViewExamples = ({ columnCount, hoveredCellCoordinate = '-1-1' }: Props) => {
     return (
         <div style={{ height: '300px' }}>
             <AutoSizer>
                 {({ height, width }) => (
                     <ListView
-                        gridDataHash={defaultCellCoordinate}
+                        gridDataHash={hoveredCellCoordinate}
                         columnCount={columnCount}
                         height={height}
                         getGridCell={getGridCell}
