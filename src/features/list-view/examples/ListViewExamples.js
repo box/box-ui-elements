@@ -24,7 +24,7 @@ const ListViewExamples = ({ columnCount }: Props) => {
             <AutoSizer>
                 {({ height, width }) => (
                     <ListView
-                        cellCoordinate={defaultCellCoordinate}
+                        gridDataHash={defaultCellCoordinate}
                         columnCount={columnCount}
                         height={height}
                         getGridCell={getGridCell}

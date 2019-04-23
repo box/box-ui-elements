@@ -21,8 +21,8 @@ type Props = {
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
+    gridDataHash: any,
     height: number,
-    hoveredCellCoordinate: string,
     onSortChange?: (columnIndex: number) => void,
     rowCount: number,
     width: number,
@@ -107,7 +107,7 @@ class ListView extends React.PureComponent<Props> {
     };
 
     render() {
-        const { columnCount, height, hoveredCellCoordinate, rowCount, width } = this.props;
+        const { columnCount, height, gridDataHash, rowCount, width } = this.props;
 
         return (
             <div className="metadata-views-list-view">
@@ -121,7 +121,7 @@ class ListView extends React.PureComponent<Props> {
                     fixedColumnCount={1}
                     fixedRowCount={FIXED_ROW_COUNT}
                     height={height}
-                    hoveredCellCoordinate={hoveredCellCoordinate}
+                    gridDataHash={gridDataHash} // Forces MultiGrid to re-render
                     rowHeight={ROW_HEIGHT}
                     rowCount={rowCount + FIXED_ROW_COUNT}
                     scrollToColumn={0}
