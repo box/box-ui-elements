@@ -6,6 +6,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render BadgeCountElement 1`
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -29,6 +30,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render BadgeElement 1`] = `
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -58,6 +60,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render RemoveButton 1`] = `
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    isTabbable={false}
     position="middle-right"
     text="Feed"
     theme="default"
@@ -86,6 +89,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render a LinkComponent comp
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -109,6 +113,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the IconComponent 1`
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -135,6 +140,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the router link 1`] 
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -172,6 +178,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use a custom className 1`] 
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -195,6 +202,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -222,6 +230,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -245,6 +254,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -272,6 +282,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
@@ -295,6 +306,7 @@ exports[`feature/left-sidebar/LeftSidebarLink tooltip should take class from sta
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="middle-right"
   text="Feed"
   theme="default"
