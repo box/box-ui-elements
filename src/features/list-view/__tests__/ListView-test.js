@@ -33,7 +33,13 @@ describe('features/list-view/ListView', () => {
         test.each`
             columnIndex | rowIndex | cellData | should                                                  | className
             ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
+            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
+            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
+            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
             ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
+            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
+            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
+            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
         `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
             const wrapper = getWrapper();
 
@@ -45,27 +51,6 @@ describe('features/list-view/ListView', () => {
 
             expect(cell.props.children[0]).toBe(cellData);
             expect(cell.props.className).toBe(className);
-        });
-
-        test.each`
-            columnIndex | rowIndex | cellData | should
-            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}
-            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}
-            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}
-            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}
-            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}
-            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}
-        `('$should', ({ columnIndex, rowIndex, cellData }) => {
-            const wrapper = getWrapper();
-
-            const cell = wrapper.instance().cellRenderer({
-                columnIndex,
-                key: 'heh',
-                rowIndex,
-            });
-
-            const testCell = shallow(cell);
-            expect(testCell.text()).toBe(cellData);
         });
 
         test.each`
