@@ -18,6 +18,7 @@ const getGridCell = ({ columnIndex, rowIndex }) => `Row ${rowIndex}, Column ${co
 const isGridHeaderSortable = () => true;
 
 const onSortChange = columnIndex => {
+    // eslint-disable-next-line no-console
     console.log(`Column header #${columnIndex} clicked`);
 };
 
