@@ -81,6 +81,8 @@ type Props = {
     isDisabled: boolean,
     /** Forces the tooltip to be shown or hidden (useful for errors) */
     isShown?: boolean,
+    /** Whether to add tabindex=0.  Defaults to `true` */
+    isTabbable?: boolean,
     /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
     onDismiss?: () => void,
     /** Where to position the tooltip relative to the wrapped component */
@@ -167,6 +169,7 @@ class Tooltip extends React.Component<Props, State> {
             constrainToWindow,
             isDisabled,
             isShown: isShownProp,
+            isTabbable = true,
             position,
             showCloseButton,
             text,
@@ -208,7 +211,10 @@ class Tooltip extends React.Component<Props, State> {
             componentProps.onKeyDown = this.handleKeyDown;
             componentProps.onMouseEnter = this.handleMouseEnter;
             componentProps.onMouseLeave = this.handleMouseLeave;
-            componentProps.tabIndex = '0';
+
+            if (isTabbable) {
+                componentProps.tabIndex = '0';
+            }
         }
 
         const bodyEl = bodyElement instanceof HTMLElement ? bodyElement : document.body;
