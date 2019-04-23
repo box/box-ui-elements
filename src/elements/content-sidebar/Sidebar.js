@@ -47,6 +47,7 @@ type Props = {
 };
 
 type State = {
+    isDirty: boolean,
     isOpen: boolean, // Local isOpen state consists of stored forced state (if any) and responsive adjustments
 };
 
@@ -74,6 +75,7 @@ class Sidebar extends React.Component<Props, State> {
         const { isLarge } = this.props;
 
         this.state = {
+            isDirty: false,
             isOpen: this.isForcedSet() ? this.isForcedOpen() : !!isLarge,
         };
     }
@@ -81,16 +83,16 @@ class Sidebar extends React.Component<Props, State> {
     componentDidUpdate(prevProps: Props): void {
         const { fileId, history, isLarge, location }: Props = this.props;
         const { fileId: prevFileId, isLarge: prevIsLarge }: Props = prevProps;
-        const { isOpen }: State = this.state;
-        const isPristine = !this.isForcedSet();
+        const { isDirty, isOpen }: State = this.state;
+        const isForcedSet = this.isForcedSet();
 
         // User navigated to a different file without ever navigating to a tab
-        if (isPristine && fileId !== prevFileId && location.pathname !== '/') {
+        if (!isDirty && fileId !== prevFileId && location.pathname !== '/') {
             history.replace({ pathname: '/' });
         }
 
-        // User resized their viewport without ever navigating to a tab
-        if (isPristine && isLarge !== prevIsLarge && isLarge !== isOpen) {
+        // User resized their viewport without ever toggling the sidebar open/closed
+        if (!isForcedSet && isLarge !== prevIsLarge && isLarge !== isOpen) {
             this.setState({ isOpen: isLarge });
         }
     }
@@ -103,12 +105,13 @@ class Sidebar extends React.Component<Props, State> {
      * @return {void}
      */
     handleNavigation = (event: SyntheticEvent<>, { isToggle }: NavigateOptions): void => {
-        const { isOpen }: State = this.state;
+        const { isDirty, isOpen }: State = this.state;
 
         // Persist user preference for all future sessions in this browser
         this.isForced(isToggle ? !isOpen : true);
 
         this.setState({
+            isDirty: isDirty || !isToggle, // Set dirty state if user has ever navigated between tabs
             isOpen: this.isForcedOpen(),
         });
     };
