@@ -42,7 +42,9 @@ import {
     STATUS_IN_PROGRESS,
     STATUS_COMPLETE,
     STATUS_ERROR,
+    STATUS_CRITICAL,
     ERROR_CODE_UPLOAD_FILE_LIMIT,
+    ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
 } from '../../constants';
 import '../common/fonts.scss';
 import '../common/base.scss';
@@ -54,6 +56,7 @@ type Props = {
     clientName: string,
     dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
     fileLimit: number,
+    fileSizeLimit: number,
     files?: Array<UploadFileWithAPIOptions | File>,
     isDraggingItemsToUploadsManager?: boolean,
     isFolderUploadEnabled: boolean,
@@ -119,6 +122,7 @@ class ContentUploader extends Component<Props, State> {
         className: '',
         clientName: CLIENT_NAME_CONTENT_UPLOADER,
         fileLimit: FILE_LIMIT_DEFAULT,
+        fileSizeLimit: Infinity,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         onBeforeUpload: noop,
         onClose: noop,
@@ -498,7 +502,7 @@ class ContentUploader extends Component<Props, State> {
         itemUpdateCallback: Function,
     ) => {
         const { itemIds } = this.state;
-        const { rootFolderId } = this.props;
+        const { rootFolderId, fileSizeLimit } = this.props;
 
         // Convert files from the file API to upload items
         const newItems = files.map(file => {
@@ -512,6 +516,7 @@ class ContentUploader extends Component<Props, State> {
                 extension = '';
             }
 
+            const status = fileSizeLimit < size ? STATUS_CRITICAL : STATUS_PENDING;
             const api = this.getUploadAPI(uploadFile, uploadAPIOptions);
             const uploadItem: Object = {
                 api,
@@ -520,8 +525,14 @@ class ContentUploader extends Component<Props, State> {
                 name,
                 progress: 0,
                 size,
-                status: STATUS_PENDING,
+                status,
             };
+
+            if (status === STATUS_CRITICAL) {
+                uploadItem.error = {
+                    code: ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
+                };
+            }
 
             if (uploadAPIOptions) {
                 uploadItem.options = uploadAPIOptions;
@@ -788,7 +799,9 @@ class ContentUploader extends Component<Props, State> {
     updateViewAndCollection(items: UploadItem[], callback?: Function) {
         const { onComplete, useUploadsManager }: Props = this.props;
         const someUploadIsInProgress = items.some(uploadItem => uploadItem.status !== STATUS_COMPLETE);
-        const someUploadHasFailed = items.some(uploadItem => uploadItem.status === STATUS_ERROR);
+        const someUploadHasFailed = items.some(
+            uploadItem => uploadItem.status === STATUS_ERROR || uploadItem.status === STATUS_CRITICAL,
+        );
         const allItemsArePending = !items.some(uploadItem => uploadItem.status !== STATUS_PENDING);
         const noFileIsPendingOrInProgress = items.every(
             uploadItem => uploadItem.status !== STATUS_PENDING && uploadItem.status !== STATUS_IN_PROGRESS,

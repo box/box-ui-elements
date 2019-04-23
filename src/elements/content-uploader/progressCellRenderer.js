@@ -16,6 +16,7 @@ import {
     ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
     STATUS_ERROR,
     STATUS_IN_PROGRESS,
+    STATUS_CRITICAL,
 } from '../../constants';
 
 type Props = {
@@ -62,6 +63,7 @@ export default () => ({ rowData }: Props) => {
         case STATUS_IN_PROGRESS:
             return <ItemProgress {...rowData} />;
         case STATUS_ERROR:
+        case STATUS_CRITICAL:
             return getErrorMessage(code, name);
         default:
             return null;

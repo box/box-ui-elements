@@ -12,7 +12,7 @@ import IconClose from '../../icons/general/IconClose';
 import IconRetry from '../../icons/general/IconRetry';
 import messages from '../common/messages';
 import IconInProgress from './IconInProgress';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR, STATUS_CRITICAL } from '../../constants';
 
 import './ItemAction.scss';
 
@@ -28,7 +28,7 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     let icon = <IconClose />;
     let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
 
-    if (isFolder && status !== STATUS_PENDING) {
+    if (status === STATUS_CRITICAL || (isFolder && status !== STATUS_PENDING)) {
         return null;
     }
 
