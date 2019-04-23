@@ -11,6 +11,7 @@ import uniqueid from 'lodash/uniqueId';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
@@ -47,8 +48,12 @@ type Props = {
 
 type State = {
     isDirty: boolean,
-    isOpen: boolean,
+    isOpen: boolean, // Local isOpen state consists of stored forced state (if any) and responsive adjustments
 };
+
+export const SIDEBAR_FORCE_KEY: 'bcs.force' = 'bcs.force';
+export const SIDEBAR_FORCE_VALUE_CLOSED: 'closed' = 'closed';
+export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 
 class Sidebar extends React.Component<Props, State> {
     id: string = uniqueid('bcs_');
@@ -56,6 +61,8 @@ class Sidebar extends React.Component<Props, State> {
     props: Props;
 
     state: State;
+
+    store: LocalStore = new LocalStore();
 
     static defaultProps = {
         isLarge: true,
@@ -69,7 +76,7 @@ class Sidebar extends React.Component<Props, State> {
 
         this.state = {
             isDirty: false,
-            isOpen: !!isLarge,
+            isOpen: this.isForcedSet() ? this.isForcedOpen() : !!isLarge,
         };
     }
 
@@ -77,28 +84,36 @@ class Sidebar extends React.Component<Props, State> {
         const { fileId, history, isLarge, location }: Props = this.props;
         const { fileId: prevFileId, isLarge: prevIsLarge }: Props = prevProps;
         const { isDirty, isOpen }: State = this.state;
+        const isForcedSet = this.isForcedSet();
 
         // User navigated to a different file without ever navigating to a tab
         if (!isDirty && fileId !== prevFileId && location.pathname !== '/') {
             history.replace({ pathname: '/' });
         }
 
-        // User resized their viewport without ever navigating to a tab
-        if (!isDirty && isLarge !== prevIsLarge && isLarge !== isOpen) {
+        // User resized their viewport without ever toggling the sidebar open/closed
+        if (!isForcedSet && isLarge !== prevIsLarge && isLarge !== isOpen) {
             this.setState({ isOpen: isLarge });
         }
     }
 
     /**
-     * Toggle the sidebar open state
+     * Handle sidebar navigation events
      *
+     * @param {SyntheticEvent} event - The event
+     * @param {NavigateOptions} options - The navigation options
      * @return {void}
      */
     handleNavigation = (event: SyntheticEvent<>, { isToggle }: NavigateOptions): void => {
-        const { isOpen }: State = this.state;
+        const { isDirty, isOpen }: State = this.state;
 
-        // User navigated to a tab or toggled an existing tab
-        this.setState({ isDirty: true, isOpen: isToggle ? !isOpen : true });
+        // Persist user preference for all future sessions in this browser
+        this.isForced(isToggle ? !isOpen : true);
+
+        this.setState({
+            isDirty: isDirty || !isToggle, // Set dirty state if user has ever navigated between tabs
+            isOpen: this.isForcedOpen(),
+        });
     };
 
     /**
@@ -107,7 +122,7 @@ class Sidebar extends React.Component<Props, State> {
      * @param {SyntheticEvent} event - The event
      * @return {void}
      */
-    handleVersionHistoryClick = (event: SyntheticEvent<>) => {
+    handleVersionHistoryClick = (event: SyntheticEvent<>): void => {
         const { history } = this.props;
 
         if (event.preventDefault) {
@@ -116,6 +131,36 @@ class Sidebar extends React.Component<Props, State> {
 
         history.push(`${history.location.pathname}/versions`);
     };
+
+    /**
+     * Getter/setter for sidebar forced state
+     *
+     * @param isOpen - Optionally set the sidebar to open/closed
+     * @returns {string|null} - The sidebar open/closed state
+     */
+    isForced(isOpen?: boolean): ?(typeof SIDEBAR_FORCE_VALUE_CLOSED | typeof SIDEBAR_FORCE_VALUE_OPEN) {
+        if (isOpen !== undefined) {
+            this.store.setItem(SIDEBAR_FORCE_KEY, isOpen ? SIDEBAR_FORCE_VALUE_OPEN : SIDEBAR_FORCE_VALUE_CLOSED);
+        }
+
+        return this.store.getItem(SIDEBAR_FORCE_KEY);
+    }
+
+    /**
+     * Getter for whether the sidebar has been forced open
+     * @returns {boolean} - True if the sidebar has been forced open
+     */
+    isForcedOpen(): boolean {
+        return this.isForced() !== SIDEBAR_FORCE_VALUE_CLOSED;
+    }
+
+    /**
+     * Getter for whether the sidebar has been forced open/closed previously
+     * @returns {boolean} - True if the sidebar has been forced open/closed previously
+     */
+    isForcedSet(): boolean {
+        return this.isForced() !== null;
+    }
 
     render() {
         const {
