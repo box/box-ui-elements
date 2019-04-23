@@ -1,5 +1,7 @@
 @import '../../../common/variables';
 
+$assignee-dropdown-height: 215px;
+
 .be .bcs-task-input-container {
     display: flex;
 
@@ -52,6 +54,19 @@
 
             .pill-selector-input-wrapper {
                 width: auto;
+            }
+
+            &.scrollable {
+                .overlay-wrapper {
+                    border: 1px solid $sf-fog;
+                    height: $assignee-dropdown-height;
+                    overflow-y: scroll;
+                    position: absolute;
+                }
+
+                .overlay {
+                    border: none;
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Toggle from '../../components/toggle';
 import { RadioButton, RadioGroup } from '../../components/radio';
 import Link from '../../components/link/Link';
+import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import messages from './messages';
 import './CascadePolicy.scss';
 
@@ -36,38 +37,48 @@ const CascadePolicy = ({
     ) : null;
 
     return canEdit ? (
-        <div className="metadata-cascade-editor">
-            <div className="metadata-cascade-enable">
-                <div>
-                    <FormattedMessage tagName="strong" {...messages.enableCascadePolicy} />
-                    {!isCustomMetadata && (
-                        <Toggle
-                            className={`metadata-cascade-toggle ${isCascadingEnabled ? 'cascade-on' : 'cascade-off'}`}
-                            isOn={isCascadingEnabled}
-                            label=""
-                            onChange={e => onCascadeToggle(e.target.checked)}
-                        />
+        <React.Fragment>
+            <div className="metadata-cascade-editor">
+                <div className="metadata-cascade-enable">
+                    <div>
+                        <FormattedMessage tagName="strong" {...messages.enableCascadePolicy} />
+                        {!isCustomMetadata && (
+                            <Toggle
+                                className={`metadata-cascade-toggle ${
+                                    isCascadingEnabled ? 'cascade-on' : 'cascade-off'
+                                }`}
+                                isOn={isCascadingEnabled}
+                                label=""
+                                onChange={e => onCascadeToggle(e.target.checked)}
+                            />
+                        )}
+                    </div>
+                    {!isCustomMetadata ? (
+                        <div className="cascade-policy-text">
+                            <FormattedMessage {...messages.applyCascadePolicyText} />
+                            &nbsp;
+                            <Link className="cascade-policy-learnmore-link" href={COMMUNITY_LINK} target="_blank">
+                                <FormattedMessage {...messages.cascadePolicyLearnMore} />
+                            </Link>
+                        </div>
+                    ) : (
+                        <div>
+                            <FormattedMessage {...messages.cannotApplyCascadePolicyText} />
+                        </div>
                     )}
                 </div>
-                {!isCustomMetadata ? (
-                    <div>
-                        <FormattedMessage {...messages.applyCascadePolicyText} />
-                        &nbsp;
-                        <Link className="cascade-policy-learnmore-link" href={COMMUNITY_LINK} target="_blank">
-                            <FormattedMessage {...messages.cascadePolicyLearnMore} />
-                        </Link>
-                    </div>
-                ) : (
-                    <div>
-                        <FormattedMessage {...messages.cannotApplyCascadePolicyText} />
-                    </div>
-                )}
             </div>
             {shouldShowCascadeOptions && (
-                <React.Fragment>
-                    <hr />
+                <div className="metadata-cascade-editor">
                     <div className="metadata-cascading-mode">
                         <FormattedMessage {...messages.cascadePolicyModeQuestion} />
+
+                        <div className="metadata-operation-not-immediate">
+                            <IconAlertDefault />
+                            <span>
+                                <FormattedMessage {...messages.operationNotImmediate} />
+                            </span>
+                        </div>
                         <RadioGroup
                             className="metadata-cascading-options"
                             onChange={e => onCascadeModeChange(e.target.value === 'overwrite')}
@@ -83,9 +94,9 @@ const CascadePolicy = ({
                             />
                         </RadioGroup>
                     </div>
-                </React.Fragment>
+                </div>
             )}
-        </div>
+        </React.Fragment>
     ) : (
         readOnlyState
     );

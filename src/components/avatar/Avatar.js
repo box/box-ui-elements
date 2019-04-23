@@ -19,13 +19,13 @@ type Props = {
     /** classname to add to the container element. */
     className?: string,
     /** Users id */
-    id?: string | number,
+    id?: ?string | number,
     /**
      * Users full name.
      *
      * Required if "avatarUrl" is not specified.
      */
-    name?: string,
+    name?: ?string,
     /* avatar size (enum) */
     size?: $Keys<typeof SIZES>,
 };

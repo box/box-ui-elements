@@ -116,6 +116,7 @@ class LeftSidebarLink extends React.Component<Props, State> {
                     className={classNames('nav-link-tooltip', {
                         'is-visible': this.state.isTextOverflowed && !isScrolling,
                     })}
+                    isTabbable={false}
                     position="middle-right"
                     text={message}
                 >
