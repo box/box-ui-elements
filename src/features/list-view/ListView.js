@@ -47,16 +47,16 @@ class ListView extends React.PureComponent<Props> {
             });
             const isHeaderSortable = isGridHeaderSortable(columnIndex);
 
-            const headerClassName = classNames('bdl-ListView-columnHeader', {
+            const buttonClassName = classNames('bdl-ListView-columnHeader', {
                 'bdl-ListView-isHeaderSortable': isHeaderSortable,
             });
             return (
                 <button
-                    className={headerClassName}
+                    className={buttonClassName}
                     key={key}
                     style={style}
                     type="button"
-                    onClick={() => onSortChange(columnIndex)}
+                    onClick={() => isHeaderSortable && onSortChange(columnIndex)}
                 >
                     {displayName}
                     {sortDirection && <IconSortChevron className={iconClassName} />}
