@@ -9,11 +9,23 @@
     justify-content: space-between;
     padding: 0 20px;
 
+    .bcp-footer-left {
+        display: flex;
+        flex: 1;
+        min-width: 0;
+    }
+
     .bcp-selected {
+        flex: 0 0 75px;
         margin: 0;
+        width: 100%;
 
         .btn-content {
-            display: flex;
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
         }
     }
 
