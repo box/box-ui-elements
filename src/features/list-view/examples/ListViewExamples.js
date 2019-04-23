@@ -15,6 +15,12 @@ const getGridHeader = columnIndex => `Header ${generateRandomString(columnIndex)
 
 const getGridCell = ({ columnIndex, rowIndex }) => `Row ${rowIndex}, Column ${columnIndex}`;
 
+const isGridHeaderSortable = () => true;
+
+const onSortChange = columnIndex => {
+    console.log(`Column header #${columnIndex} clicked`);
+};
+
 const ListViewExamples = ({ columnCount }: Props) => {
     return (
         <div style={{ height: '300px' }}>
@@ -25,6 +31,8 @@ const ListViewExamples = ({ columnCount }: Props) => {
                         height={height}
                         getGridCell={getGridCell}
                         getGridHeader={getGridHeader}
+                        isGridHeaderSortable={isGridHeaderSortable}
+                        onSortChange={onSortChange}
                         rowCount={1000}
                         width={width}
                     />

@@ -1,6 +1,8 @@
 @import '../../../styles/variables';
 
-.metadata-views-list-view {
+$prefix: bdl-MetadataViews-ListView;
+
+.#{$prefix} {
     display: flex;
     flex-direction: row;
 
@@ -8,7 +10,7 @@
         padding-left: 53px;
     }
 
-    button.bdl-ListView-columnHeader {
+    button.#{$prefix}-columnHeader {
         border: none;
         color: $seventy-sixers;
         display: flex;
@@ -20,16 +22,24 @@
         text-transform: none;
         width: 100%;
 
-        .bdl-icon-sort-chevron.bdl-ListView-isSortAsc {
+        &--sortable {
+            cursor: pointer;
+        }
+
+        .bdl-icon-sort-chevron.#{$prefix}-isSortAsc {
             transform: rotate(180deg);
         }
     }
 
-    .bdl-ListView-columnCell {
+    .#{$prefix}-columnCell {
         border-top: 1px solid $off-white;
         color: $seventy-sixers;
         display: flex;
         justify-content: flex-start;
         padding-top: 16px;
+    }
+
+    .ReactVirtualized__Grid {
+        outline: none;
     }
 }
