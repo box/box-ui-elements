@@ -93,6 +93,17 @@ describe('components/tooltip/Tooltip', () => {
             expect(component.prop('tabIndex')).toEqual('0');
         });
 
+        test('should not add tabindex if isTabbable is false', () => {
+            const wrapper = shallow(
+                <Tooltip isShown isTabbable={false} text="hi">
+                    <button />
+                </Tooltip>,
+            );
+            const component = wrapper.find('button');
+
+            expect(component.prop('tabIndex')).toBeFalsy();
+        });
+
         test('should show tooltip when isShown state is true', () => {
             const wrapper = shallow(
                 <Tooltip text="hi">
