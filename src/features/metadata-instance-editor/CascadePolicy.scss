@@ -24,6 +24,17 @@ $cascade-policy-background: #f1e2fd;
         height: 1px;
         padding: 0;
     }
+
+    .metadata-operation-not-immediate {
+        color: $seventy-sixers;
+        font-weight: bold;
+
+        svg {
+            margin-left: -5px;
+            position: relative;
+            top: 8px;
+        }
+    }
 }
 
 .metadata-cascade-enable {
@@ -32,7 +43,13 @@ $cascade-policy-background: #f1e2fd;
 }
 
 .metadata-cascade-toggle {
-    float: right;
+    float: left;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.cascade-policy-text {
+    clear: left;
 }
 
 .cascade-policy-learnmore-link {
@@ -41,7 +58,7 @@ $cascade-policy-background: #f1e2fd;
 
 .metadata-cascading-mode {
     margin: 10px 0;
-    padding: 0 15px;
+    padding: 10px 15px 15px 15px;
 
     .metadata-cascading-options {
         padding: 10px;
