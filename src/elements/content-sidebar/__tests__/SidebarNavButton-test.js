@@ -12,26 +12,30 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
                 <SidebarNavButton {...props}>{children}</SidebarNavButton>
             </MemoryRouter>,
         ).find('SidebarNavButton');
+    const getButton = wrapper => wrapper.find(PlainButton).first();
 
     test('should render nav button properly', () => {
-        const props = {
-            tooltip: 'foo',
-        };
-        const wrapper = getWrapper(props);
+        const wrapper = getWrapper({ tooltip: 'foo' });
+        const button = getButton(wrapper);
+
         expect(wrapper.find(Tooltip).prop('text')).toBe('foo');
+        expect(button.hasClass('bcs-is-selected')).toBe(false);
     });
 
-    test('should render nav button properly when selected', () => {
+    test.each`
+        isOpen       | expected
+        ${true}      | ${true}
+        ${false}     | ${false}
+        ${undefined} | ${false}
+    `('should render nav button properly when selected with the sidebar open or closed', ({ expected, isOpen }) => {
         const props = {
+            isOpen,
             sidebarView: 'activity',
             tooltip: 'foo',
         };
         const wrapper = getWrapper(props, 'activity');
-        expect(
-            wrapper
-                .find(PlainButton)
-                .first()
-                .prop('className'),
-        ).toContain('bcs-is-selected');
+        const button = getButton(wrapper);
+
+        expect(button.hasClass('bcs-is-selected')).toBe(expected);
     });
 });

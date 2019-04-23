@@ -209,6 +209,7 @@ class Sidebar extends React.Component<Props, State> {
                             hasMetadata={hasMetadata}
                             hasActivityFeed={hasActivityFeed}
                             hasDetails={hasDetails}
+                            isOpen={isOpen}
                             onNavigate={this.handleNavigation}
                         />
                         <SidebarPanels

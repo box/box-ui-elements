@@ -25,9 +25,11 @@ describe('ContentSidebar', () => {
             cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
 
             cy.getByTestId('sidebarskills').click();
+            cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
             cy.getByTestId('bcs-content').should('not.exist');
 
             cy.getByTestId('sidebarskills').click();
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
             cy.getByTestId('bcs-content').should('exist');
         });
 
@@ -38,7 +40,6 @@ describe('ContentSidebar', () => {
 
             cy.getByTestId('sidebaractivity').click();
             cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
-
             cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
         });
     });
