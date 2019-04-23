@@ -13,7 +13,7 @@ const getGridHeader = columnIndex => ['h1', 'h2'][columnIndex];
 
 const getGridHeaderSort = columnIndex => [SORT_ORDER_ASCENDING, null][columnIndex];
 
-const getGridCell = ({ columnIndex, rowIndex }) => gridData[columnIndex][rowIndex];
+const getGridCell = ({ columnIndex, cellIndex }) => gridData[columnIndex][cellIndex];
 
 describe('features/list-view/ListView', () => {
     const getWrapper = props => {
@@ -33,13 +33,7 @@ describe('features/list-view/ListView', () => {
         test.each`
             columnIndex | rowIndex | cellData | should                                                  | className
             ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
-            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
-            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
-            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
             ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
-            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
-            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
-            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
         `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
             const wrapper = getWrapper();
 
@@ -49,11 +43,28 @@ describe('features/list-view/ListView', () => {
                 rowIndex,
             });
 
-            const testCell = shallow(cell);
+            expect(cell.props.children[0]).toBe(cellData);
+            expect(cell.props.className).toBe(className);
+        });
 
-            expect(testCell.text()).toEqual(cellData);
+        test.each`
+            columnIndex | rowIndex | cellData | should
+            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}
+            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}
+            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}
+            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}
+            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}
+            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}
+        `('$should', ({ columnIndex, rowIndex, cellData }) => {
+            const wrapper = getWrapper();
 
-            expect(testCell.hasClass(className)).toBeTruthy();
+            const cell = wrapper.instance().cellRenderer({
+                columnIndex,
+                key: 'heh',
+                rowIndex,
+            });
+
+            expect(cell).toBe(cellData);
         });
 
         test.each`
@@ -74,32 +85,6 @@ describe('features/list-view/ListView', () => {
             const testCell = shallow(cell);
             expect(testCell.text()).toEqual(cellData);
             expect(testCell.find(className)).toBeTruthy();
-        });
-    });
-
-    describe('handleCellHover()', () => {
-        const columnIndex = 1;
-        const rowIndex = 1;
-
-        test('should call onCellHover with the correct columnIndex and rowIndex', () => {
-            const onCellHover = jest.fn();
-            const wrapper = getWrapper({
-                onCellHover,
-            });
-
-            wrapper.instance().handleCellHover(columnIndex, rowIndex - 1);
-
-            expect(onCellHover).toHaveBeenCalledWith({ columnIndex, rowIndex: rowIndex - 1 });
-        });
-
-        test('should call forceUpdateGrids if gridEl is defined', () => {
-            const forceUpdateGridStub = jest.fn();
-            const wrapper = getWrapper();
-            wrapper.instance().gridEl = { forceUpdateGrids: forceUpdateGridStub };
-
-            wrapper.instance().handleCellHover(columnIndex, rowIndex - 1);
-
-            expect(forceUpdateGridStub).toHaveBeenCalled();
         });
     });
 
