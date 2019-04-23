@@ -32,14 +32,14 @@ describe('features/list-view/ListView', () => {
     describe('CellRenderer()', () => {
         test.each`
             columnIndex | rowIndex | cellData | should                                                  | className
-            ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
-            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
-            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
-            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
-            ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'bdl-ListView-columnHeader'}
-            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-ListView-columnCell'}
-            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-ListView-columnCell'}
-            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-ListView-columnCell'}
+            ${0}        | ${0}     | ${'h1'}  | ${'returns h1 when columnIndex is 0 and rowIndex is 0'} | ${'bdl-MetadataViews-ListView-columnHeader'}
+            ${0}        | ${1}     | ${'A'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-MetadataViews-ListView-columnCell'}
+            ${0}        | ${2}     | ${'B'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-MetadataViews-ListView-columnCell'}
+            ${0}        | ${3}     | ${'C'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-MetadataViews-ListView-columnCell'}
+            ${1}        | ${0}     | ${'h2'}  | ${'returns h2 when columnIndex is 1 and rowIndex is 0'} | ${'bdl-MetadataViews-ListView-columnHeader'}
+            ${1}        | ${1}     | ${'D'}   | ${'returns A when columnIndex is 0 and rowIndex is 1'}  | ${'bdl-MetadataViews-ListView-columnCell'}
+            ${1}        | ${2}     | ${'E'}   | ${'returns B when columnIndex is 0 and rowIndex is 2'}  | ${'bdl-MetadataViews-ListView-columnCell'}
+            ${1}        | ${3}     | ${'F'}   | ${'returns C when columnIndex is 0 and rowIndex is 3'}  | ${'bdl-MetadataViews-ListView-columnCell'}
         `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
             const wrapper = getWrapper();
 
@@ -58,7 +58,7 @@ describe('features/list-view/ListView', () => {
 
         test.each`
             columnIndex | rowIndex | cellData                   | should                                                                                                        | className
-            ${0}        | ${0}     | ${'h1<IconSortChevron />'} | ${'returns h1<IconSortChevron /> when columnIndex is 0 and rowIndex is 0 and getGridHeaderSort is passed in'} | ${'.bdl-icon-sort-chevron.bdl-ListView-isSortAsc'}
+            ${0}        | ${0}     | ${'h1<IconSortChevron />'} | ${'returns h1<IconSortChevron /> when columnIndex is 0 and rowIndex is 0 and getGridHeaderSort is passed in'} | ${'.bdl-icon-sort-chevron.bdl-MetadataViews-ListView-isSortAsc'}
             ${1}        | ${0}     | ${'h2'}                    | ${'returns h2 when columnIndex is 1 and rowIndex is 0 and getGridHeaderSort is passed in'}                    | ${'.bdl-icon-short-chevron'}
         `('$should', ({ columnIndex, rowIndex, cellData, className }) => {
             const wrapper = getWrapper({
