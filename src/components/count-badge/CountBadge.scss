@@ -1,8 +1,10 @@
 @import '../../styles/variables';
 
+$bdl-CountBadge-background: $bdl-watermelon-red;
+
 @keyframes reveal_badge {
     0% {
-        color: $bdl-coral;
+        color: $bdl-CountBadge-background;
         transform: scale(0);
     }
 
@@ -15,7 +17,7 @@
     }
 
     65% {
-        color: $bdl-coral;
+        color: $bdl-CountBadge-background;
         transform: scale(1);
     }
 
@@ -26,7 +28,7 @@
 }
 
 .count-badge {
-    background-color: $bdl-coral;
+    background-color: $bdl-CountBadge-background;
     border-radius: 16px;
     box-shadow: 0 1px 4px 0 rgba($black, .3);
     color: $white;
