@@ -7,7 +7,6 @@ import ListView from '../ListView';
 
 type Props = {
     columnCount: number,
-    hoveredCellCoordinate: string,
 };
 
 const generateRandomString = value => String.fromCharCode((value % 65) + 65);
@@ -16,13 +15,12 @@ const getGridHeader = columnIndex => `Header ${generateRandomString(columnIndex)
 
 const getGridCell = ({ cellRowIndex, cellColumnIndex }) => `Row ${cellRowIndex}, Column ${cellColumnIndex}`;
 
-const ListViewExamples = ({ columnCount, hoveredCellCoordinate = '-1-1' }: Props) => {
+const ListViewExamples = ({ columnCount }: Props) => {
     return (
         <div style={{ height: '300px' }}>
             <AutoSizer>
                 {({ height, width }) => (
                     <ListView
-                        gridDataHash={hoveredCellCoordinate}
                         columnCount={columnCount}
                         height={height}
                         getGridCell={getGridCell}
