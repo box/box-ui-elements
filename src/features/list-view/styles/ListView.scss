@@ -35,6 +35,13 @@
         display: flex;
         justify-content: flex-start;
         padding-top: 16px;
+
+        .bdl-ListView-iconRename {
+            border: none;
+            cursor: pointer;
+            height: 20px;
+            width: 20px;
+        }
     }
 
     .ReactVirtualized__Grid {
