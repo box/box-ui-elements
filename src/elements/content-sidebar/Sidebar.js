@@ -105,13 +105,13 @@ class Sidebar extends React.Component<Props, State> {
      * @return {void}
      */
     handleNavigation = (event: SyntheticEvent<>, { isToggle }: NavigateOptions): void => {
-        const { isDirty, isOpen }: State = this.state;
+        const { isOpen }: State = this.state;
 
         // Persist user preference for all future sessions in this browser
         this.isForced(isToggle ? !isOpen : true);
 
         this.setState({
-            isDirty: isDirty || !isToggle, // Set dirty state if user has ever navigated between tabs
+            isDirty: true, // Set dirty state if user has ever clicked on a tab
             isOpen: this.isForcedOpen(),
         });
     };
