@@ -21,7 +21,7 @@ type Props = {
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
-    gridDataHash: any, // Forces MultiGrid to re-render
+    gridDataHash?: any, // Forces MultiGrid to re-render
     height: number,
     onSortChange?: (columnIndex: number) => void,
     rowCount: number,
