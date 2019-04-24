@@ -22,6 +22,7 @@ type Props = {
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
     height: number,
+    isGridHeaderSortable?: (columnIndex: number) => boolean,
     onSortChange?: (columnIndex: number) => void,
     rowCount: number,
     width: number,
@@ -29,26 +30,36 @@ type Props = {
 
 class ListView extends React.PureComponent<Props> {
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
-        const { getGridCell, getGridHeader, getGridHeaderSort = noop, onSortChange = noop } = this.props;
+        const {
+            getGridCell,
+            getGridHeader,
+            getGridHeaderSort = noop,
+            isGridHeaderSortable = noop,
+            onSortChange = noop,
+        } = this.props;
 
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
             const sortDirection = getGridHeaderSort(columnIndex);
             const isSortAsc = sortDirection === SORT_ORDER_ASCENDING;
-            const className = classNames({
+            const iconClassName = classNames({
                 'bdl-ListView-isSortAsc': isSortAsc,
             });
+            const isHeaderSortable = isGridHeaderSortable(columnIndex);
 
+            const buttonClassName = classNames('bdl-ListView-columnHeader', {
+                'bdl-ListView-isHeaderSortable': isHeaderSortable,
+            });
             return (
                 <button
-                    className="bdl-ListView-columnHeader"
+                    className={buttonClassName}
                     key={key}
                     style={style}
                     type="button"
-                    onClick={() => onSortChange(columnIndex)}
+                    onClick={() => isHeaderSortable && onSortChange(columnIndex)}
                 >
                     {displayName}
-                    {sortDirection && <IconSortChevron className={className} />}
+                    {sortDirection && <IconSortChevron className={iconClassName} />}
                 </button>
             );
         }
