@@ -6,9 +6,9 @@ import SidebarNavButton from '../SidebarNavButton';
 import Tooltip from '../../../components/tooltip/Tooltip';
 
 describe('elements/content-sidebar/SidebarNavButton', () => {
-    const getWrapper = ({ children, ...props }, active = '') =>
+    const getWrapper = ({ children, ...props }, path = '/') =>
         mount(
-            <MemoryRouter initialEntries={[`/${active}`]}>
+            <MemoryRouter initialEntries={[path]}>
                 <SidebarNavButton {...props}>{children}</SidebarNavButton>
             </MemoryRouter>,
         ).find('SidebarNavButton');
@@ -33,7 +33,21 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
             sidebarView: 'activity',
             tooltip: 'foo',
         };
-        const wrapper = getWrapper(props, 'activity');
+        const wrapper = getWrapper(props, '/activity');
+        const button = getButton(wrapper);
+
+        expect(button.hasClass('bcs-is-selected')).toBe(expected);
+    });
+
+    test.each`
+        path                | expected
+        ${'/'}              | ${false}
+        ${'/activity'}      | ${true}
+        ${'/activity/'}     | ${true}
+        ${'/activity/test'} | ${true}
+        ${'/skills'}        | ${false}
+    `('should reflect active state ($expected) correctly based on active path', ({ expected, path }) => {
+        const wrapper = getWrapper({ isOpen: true, sidebarView: 'activity' }, path);
         const button = getButton(wrapper);
 
         expect(button.hasClass('bcs-is-selected')).toBe(expected);
