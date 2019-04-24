@@ -1091,9 +1091,9 @@
     to-fast-properties "^2.0.0"
 
 "@box/frontend@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-1.1.1.tgz#e8c1af73163ab9015a22a61f1a6186e4f042e920"
-  integrity sha512-m4WlrnQ3R4f5qU9SHBjxa4rWS7F1rAr+lp19LvXgwaA2ULEOed5RL7AASiSbwE+agQglWbLqKJkFpYmq4+aJqA==
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-1.3.0.tgz#dd60977e1a3d8c04891d56b82e926167ff0a9124"
+  integrity sha512-0qbRSQcjqpohHRJn5xh3Kz9R8zl1WClqPl4oah1EFTP6y30lxi0MqClhBF4BH5/rZAnItTJNybqULrGWoxyynQ==
   dependencies:
     properties-parser "^0.3.1"
     rimraf "^2.6.3"
@@ -6077,10 +6077,10 @@ eslint-plugin-babel@^5.2.0:
   dependencies:
     eslint-rule-composer "^0.3.0"
 
-eslint-plugin-cypress@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-2.2.0.tgz#31f23bec82eb4078711b374af66af3daa9fdbd2e"
-  integrity sha512-Xk1DMXPfnSChpNhQPw8E9lfRUse9nSyPccxMbKlOuwCmTm2fhyNQWfulDr9DDgUL1Xetdub5lnYQkKniHjNbYw==
+eslint-plugin-cypress@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-2.2.1.tgz#17295d8ef76984fe05886c7c5830ba216c1f9717"
+  integrity sha512-WkH81MEALKhnpeRo/wWHBHR883LdkS8aFzbGAGFxiwRwik2IKBZxb/JrxbiA6+SZskXGcmdEi6rwL7xmiqo9MA==
   dependencies:
     globals "^11.0.1"
 
@@ -6125,6 +6125,13 @@ eslint-plugin-jsx-a11y@^6.0.2:
     emoji-regex "^6.5.1"
     has "^1.0.3"
     jsx-ast-utils "^2.0.1"
+
+eslint-plugin-lodash@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-lodash/-/eslint-plugin-lodash-5.1.0.tgz#f7dc6c14f104cacb169a18d17c27d9c015a53924"
+  integrity sha512-mMKmf1OMLS8VExtaHCcrwBmsYIiOVYEibnAFDzXrbJdtFGOcLEw37tryN/WGYKBiJy6nAIGC43i5Wh3KA9lO2g==
+  dependencies:
+    lodash "4.17.11"
 
 eslint-plugin-prettier@^2.6.2:
   version "2.6.2"
