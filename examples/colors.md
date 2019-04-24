@@ -61,10 +61,6 @@
         <div className="swatch amaranth" />
         <label>#ED3757 - Amaranth</label>
     </div>
-    <div className="swatch-container">
-        <div className="swatch coral" />
-        <label>#FC627A - Coral</label>
-    </div>
 </div>
 ```
 
