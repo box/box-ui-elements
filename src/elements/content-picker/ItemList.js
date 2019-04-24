@@ -120,7 +120,7 @@ const ItemList = ({
                             height={height}
                             disableHeader
                             headerHeight={0}
-                            rowHeight={65}
+                            rowHeight={isSmall ? 70 : 50}
                             rowCount={rowCount}
                             rowGetter={({ index }) => items[index]}
                             ref={tableRef}
