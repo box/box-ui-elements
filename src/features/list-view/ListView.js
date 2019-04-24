@@ -16,12 +16,14 @@ type Props = {
     columnCount: number,
     getColumnWidth?: (columnIndex: number) => number,
     getGridCell: ({|
-        columnIndex: number,
-        rowIndex: number,
+        cellColumnIndex: number,
+        cellRowIndex: number,
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
+    gridDataHash?: any, // Forces MultiGrid to re-render
     height: number,
+    isGridHeaderSortable?: (columnIndex: number) => boolean,
     onSortChange?: (columnIndex: number) => void,
     rowCount: number,
     width: number,
@@ -29,34 +31,44 @@ type Props = {
 
 class ListView extends React.PureComponent<Props> {
     cellRenderer = ({ columnIndex, key, rowIndex, style }: CellRendererArgs) => {
-        const { getGridCell, getGridHeader, getGridHeaderSort = noop, onSortChange = noop } = this.props;
+        const {
+            getGridCell,
+            getGridHeader,
+            getGridHeaderSort = noop,
+            isGridHeaderSortable = noop,
+            onSortChange = noop,
+        } = this.props;
 
         if (rowIndex === 0) {
             const displayName = getGridHeader(columnIndex);
             const sortDirection = getGridHeaderSort(columnIndex);
             const isSortAsc = sortDirection === SORT_ORDER_ASCENDING;
-            const className = classNames({
+            const iconClassName = classNames({
                 'bdl-ListView-isSortAsc': isSortAsc,
             });
+            const isHeaderSortable = isGridHeaderSortable(columnIndex);
 
+            const buttonClassName = classNames('bdl-ListView-columnHeader', {
+                'bdl-ListView-isHeaderSortable': isHeaderSortable,
+            });
             return (
                 <button
-                    className="bdl-ListView-columnHeader"
+                    className={buttonClassName}
                     key={key}
                     style={style}
                     type="button"
-                    onClick={() => onSortChange(columnIndex)}
+                    onClick={() => isHeaderSortable && onSortChange(columnIndex)}
                 >
                     {displayName}
-                    {sortDirection && <IconSortChevron className={className} />}
+                    {sortDirection && <IconSortChevron className={iconClassName} />}
                 </button>
             );
         }
 
-        const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
+        const cellData = getGridCell({ cellColumnIndex: columnIndex, cellRowIndex: rowIndex - 1 });
 
         return (
-            <div className="bdl-ListView-columnCell" key={key} style={style}>
+            <div key={key} className="bdl-ListView-columnCell" style={style}>
                 {cellData}
             </div>
         );
@@ -106,7 +118,7 @@ class ListView extends React.PureComponent<Props> {
     };
 
     render() {
-        const { columnCount, height, rowCount, width } = this.props;
+        const { columnCount, height, gridDataHash, rowCount, width } = this.props;
 
         return (
             <div className="metadata-views-list-view">
@@ -120,6 +132,7 @@ class ListView extends React.PureComponent<Props> {
                     fixedColumnCount={1}
                     fixedRowCount={FIXED_ROW_COUNT}
                     height={height}
+                    gridDataHash={gridDataHash}
                     rowHeight={ROW_HEIGHT}
                     rowCount={rowCount + FIXED_ROW_COUNT}
                     scrollToColumn={0}

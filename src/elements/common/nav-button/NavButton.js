@@ -7,6 +7,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { Route } from 'react-router-dom';
+import type { Match, Location } from 'react-router-dom';
 import PlainButton from '../../../components/plain-button';
 import { isLeftClick } from '../../../utils/dom';
 
@@ -16,6 +17,7 @@ type Props = {
     className?: string,
     component?: React.ComponentType<any>,
     exact?: boolean,
+    isActive?: (match: Match, location: Location) => ?boolean,
     onClick?: (event: SyntheticEvent<>) => void,
     replace?: boolean,
     strict?: boolean,
@@ -29,6 +31,7 @@ const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: Re
         className = 'bdl-NavButton',
         component: Component = PlainButton,
         exact,
+        isActive,
         onClick,
         replace,
         strict,
@@ -39,25 +42,29 @@ const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: Re
 
     return (
         <Route exact={exact} path={path} strict={strict}>
-            {({ history, match }) => (
-                <Component
-                    className={classNames(className, { [activeClassName]: !!match })}
-                    onClick={event => {
-                        if (onClick) {
-                            onClick(event);
-                        }
+            {({ history, location, match }) => {
+                const isActiveValue = !!(isActive ? isActive(match, location) : match);
 
-                        if (!event.defaultPrevented && isLeftClick(event)) {
-                            const method = replace ? history.replace : history.push;
-                            method(path);
-                        }
-                    }}
-                    ref={ref}
-                    {...rest}
-                >
-                    {children}
-                </Component>
-            )}
+                return (
+                    <Component
+                        className={classNames(className, { [activeClassName]: isActiveValue })}
+                        onClick={event => {
+                            if (onClick) {
+                                onClick(event);
+                            }
+
+                            if (!event.defaultPrevented && isLeftClick(event)) {
+                                const method = replace ? history.replace : history.push;
+                                method(path);
+                            }
+                        }}
+                        ref={ref}
+                        {...rest}
+                    >
+                        {children}
+                    </Component>
+                );
+            }}
         </Route>
     );
 });
