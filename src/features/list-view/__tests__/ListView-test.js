@@ -13,7 +13,7 @@ const getGridHeader = columnIndex => ['h1', 'h2'][columnIndex];
 
 const getGridHeaderSort = columnIndex => [SORT_ORDER_ASCENDING, null][columnIndex];
 
-const getGridCell = ({ columnIndex, rowIndex }) => gridData[columnIndex][rowIndex];
+const getGridCell = ({ cellColumnIndex, cellRowIndex }) => gridData[cellColumnIndex][cellRowIndex];
 
 describe('features/list-view/ListView', () => {
     const getWrapper = props => {
@@ -49,11 +49,8 @@ describe('features/list-view/ListView', () => {
                 rowIndex,
             });
 
-            const testCell = shallow(cell);
-
-            expect(testCell.text()).toEqual(cellData);
-
-            expect(testCell.hasClass(className)).toBeTruthy();
+            expect(cell.props.children[0]).toBe(cellData);
+            expect(cell.props.className).toBe(className);
         });
 
         test.each`

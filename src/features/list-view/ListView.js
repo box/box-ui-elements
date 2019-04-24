@@ -16,11 +16,12 @@ type Props = {
     columnCount: number,
     getColumnWidth?: (columnIndex: number) => number,
     getGridCell: ({|
-        columnIndex: number,
-        rowIndex: number,
+        cellColumnIndex: number,
+        cellRowIndex: number,
     |}) => string | React.Node,
     getGridHeader: (columnIndex: number) => any,
     getGridHeaderSort?: (columnIndex: number) => typeof SORT_ORDER_ASCENDING | typeof SORT_ORDER_DESCENDING | null,
+    gridDataHash?: any, // Forces MultiGrid to re-render
     height: number,
     isGridHeaderSortable?: (columnIndex: number) => boolean,
     onSortChange?: (columnIndex: number) => void,
@@ -64,10 +65,10 @@ class ListView extends React.PureComponent<Props> {
             );
         }
 
-        const cellData = getGridCell({ columnIndex, rowIndex: rowIndex - 1 });
+        const cellData = getGridCell({ cellColumnIndex: columnIndex, cellRowIndex: rowIndex - 1 });
 
         return (
-            <div className="bdl-ListView-columnCell" key={key} style={style}>
+            <div key={key} className="bdl-ListView-columnCell" style={style}>
                 {cellData}
             </div>
         );
@@ -117,7 +118,7 @@ class ListView extends React.PureComponent<Props> {
     };
 
     render() {
-        const { columnCount, height, rowCount, width } = this.props;
+        const { columnCount, height, gridDataHash, rowCount, width } = this.props;
 
         return (
             <div className="metadata-views-list-view">
@@ -131,6 +132,7 @@ class ListView extends React.PureComponent<Props> {
                     fixedColumnCount={1}
                     fixedRowCount={FIXED_ROW_COUNT}
                     height={height}
+                    gridDataHash={gridDataHash}
                     rowHeight={ROW_HEIGHT}
                     rowCount={rowCount + FIXED_ROW_COUNT}
                     scrollToColumn={0}
