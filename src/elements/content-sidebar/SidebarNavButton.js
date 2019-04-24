@@ -25,8 +25,9 @@ const SidebarNavButton = ({ children, interactionTarget, isOpen, onNavigate, sid
     return (
         <Route path={sidebarPath}>
             {({ match }) => {
-                const isMatch = !!match && match.isExact;
-                const isActive = () => !!isOpen && isMatch;
+                const isMatch = !!match;
+                const isActive = () => isMatch && !!isOpen;
+                const isToggle = isMatch && match.isExact;
 
                 return (
                     <Tooltip position="middle-left" text={tooltip}>
@@ -38,10 +39,10 @@ const SidebarNavButton = ({ children, interactionTarget, isOpen, onNavigate, sid
                             isActive={isActive}
                             onClick={event => {
                                 if (onNavigate) {
-                                    onNavigate(event, { isToggle: isMatch });
+                                    onNavigate(event, { isToggle });
                                 }
                             }}
-                            replace={isMatch}
+                            replace={isToggle}
                             to={sidebarPath}
                             type="button"
                         >
