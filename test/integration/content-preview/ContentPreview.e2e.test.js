@@ -42,14 +42,12 @@ describe('ContentPreview', () => {
             helpers.load({
                 fileId: Cypress.env('FILE_ID_SKILLS'),
                 props: {
-                    contentSidebarProps: {
-                        hasActivityFeed: null,
-                    },
+                    contentSidebarProps: null,
                 },
             });
 
             cy.wait(2000); // eslint-disable-line cypress/no-unnecessary-waiting
-            cy.getByTestId('bcs-content').should('not.exist');
+            cy.get('.bcs').should('not.exist');
         });
 
         it('The sidebar should render when given sidebar props', () => {
@@ -63,7 +61,7 @@ describe('ContentPreview', () => {
             });
 
             // Sidebar should not exist
-            cy.getByTestId('bcs-content').should('exist');
+            cy.get('.bcs').should('exist');
         });
     });
 
