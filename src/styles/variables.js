@@ -8,7 +8,6 @@ export const bdlGreenLight = '#26c281'; // bdl-green-light
 export const bdlYellorange = '#f5b31b'; // bdl-yellorange
 export const bdlGrimace = '#4826c2'; // bdl-grimace
 export const bdlPurpleRain = '#9f3fed'; // bdl-purple-rain
-export const bdlCoral = '#fc627a'; // bdl-coral
 export const bdlWatermelonRed = '#ed3757'; // bdl-watermelon-red
 export const bdlNeutral01 = '#222'; // bdl-neutral-01
 export const bdlNeutral02 = '#767676'; // bdl-neutral-02

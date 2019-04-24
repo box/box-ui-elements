@@ -51,7 +51,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open as
                 className="avatar-initials "
                 style={
                   Object {
-                    "backgroundColor": "#26c281",
+                    "backgroundColor": "#767676",
                   }
                 }
               >
@@ -200,7 +200,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open as
                 className="avatar-initials "
                 style={
                   Object {
-                    "backgroundColor": "#9f3fed",
+                    "backgroundColor": "#4826c2",
                   }
                 }
               >
@@ -340,7 +340,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should open as
                 className="avatar-initials "
                 style={
                   Object {
-                    "backgroundColor": "#0061d5",
+                    "backgroundColor": "#2486fc",
                   }
                 }
               >
@@ -560,7 +560,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should render 
                         className="avatar-initials "
                         style={
                           Object {
-                            "backgroundColor": "#26c281",
+                            "backgroundColor": "#767676",
                           }
                         }
                       >
@@ -732,7 +732,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Assignees should render 
                         className="avatar-initials "
                         style={
                           Object {
-                            "backgroundColor": "#9f3fed",
+                            "backgroundColor": "#4826c2",
                           }
                         }
                       >
