@@ -30,23 +30,26 @@ type Props = {
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
+    isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
 };
 
 const SidebarNav = ({
-    fileId,
-    hasSkills,
-    hasMetadata,
-    hasActivityFeed,
-    hasDetails,
-    hasAdditionalTabs,
     additionalTabs,
+    fileId,
+    hasActivityFeed,
+    hasAdditionalTabs,
+    hasDetails,
+    hasMetadata,
+    hasSkills,
+    isOpen,
     onNavigate,
 }: Props) => (
     <nav>
         {hasActivityFeed && (
             <SidebarNavButton
                 interactionTarget={SIDEBAR_NAV_TARGETS.ACTIVITY}
+                isOpen={isOpen}
                 sidebarView={SIDEBAR_VIEW_ACTIVITY}
                 onNavigate={onNavigate}
                 tooltip={<FormattedMessage {...messages.sidebarActivityTitle} />}
@@ -57,6 +60,7 @@ const SidebarNav = ({
         {hasDetails && (
             <SidebarNavButton
                 interactionTarget={SIDEBAR_NAV_TARGETS.DETAILS}
+                isOpen={isOpen}
                 sidebarView={SIDEBAR_VIEW_DETAILS}
                 onNavigate={onNavigate}
                 tooltip={<FormattedMessage {...messages.sidebarDetailsTitle} />}
@@ -67,6 +71,7 @@ const SidebarNav = ({
         {hasSkills && (
             <SidebarNavButton
                 interactionTarget={SIDEBAR_NAV_TARGETS.SKILLS}
+                isOpen={isOpen}
                 sidebarView={SIDEBAR_VIEW_SKILLS}
                 onNavigate={onNavigate}
                 tooltip={<FormattedMessage {...messages.sidebarSkillsTitle} />}
@@ -77,6 +82,7 @@ const SidebarNav = ({
         {hasMetadata && (
             <SidebarNavButton
                 interactionTarget={SIDEBAR_NAV_TARGETS.METADATA}
+                isOpen={isOpen}
                 sidebarView={SIDEBAR_VIEW_METADATA}
                 onNavigate={onNavigate}
                 tooltip={<FormattedMessage {...messages.sidebarMetadataTitle} />}

@@ -20,6 +20,10 @@
         text-transform: none;
         width: 100%;
 
+        &.bdl-ListView-isHeaderSortable {
+            cursor: pointer;
+        }
+
         .bdl-icon-sort-chevron.bdl-ListView-isSortAsc {
             transform: rotate(180deg);
         }
@@ -38,5 +42,9 @@
             height: 20px;
             width: 20px;
         }
+    }
+
+    .ReactVirtualized__Grid {
+        outline: none;
     }
 }
