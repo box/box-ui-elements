@@ -72,7 +72,7 @@ exports[`features/query-bar/components/filter/Condition render() should render C
             },
             Object {
               "displayText": "is not",
-              "value": "!=",
+              "value": "<>",
             },
             Object {
               "displayText": "is greater than",
