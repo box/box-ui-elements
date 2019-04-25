@@ -46,7 +46,8 @@ describe('ContentPreview', () => {
                 },
             });
 
-            cy.wait(2000); // eslint-disable-line cypress/no-unnecessary-waiting
+            // Gives time for sidebar chunk to potentially load, it shouldn't in this case
+            cy.wait(3000); // eslint-disable-line cypress/no-unnecessary-waiting
             cy.get('.bcs').should('not.exist');
         });
 
