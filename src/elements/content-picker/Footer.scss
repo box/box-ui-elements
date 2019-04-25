@@ -10,13 +10,10 @@
     padding: 0 20px;
 
     .bcp-footer-left {
-        display: flex;
-        flex: 1;
         min-width: 0;
     }
 
     .bcp-selected {
-        flex: 0 0 75px;
         margin: 0;
         width: 100%;
 
@@ -55,6 +52,7 @@
 
     .bcp-footer-right {
         display: flex;
+        flex-shrink: 0;
     }
 
     .btn-group {
