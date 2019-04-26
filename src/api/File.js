@@ -14,6 +14,7 @@ import {
     ERROR_CODE_GET_DOWNLOAD_URL,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_EXTENSION,
+    FIELD_IS_DOWNLOAD_AVAILABLE,
     X_REP_HINTS,
 } from '../constants';
 import Item from './Item';
@@ -34,60 +35,53 @@ class File extends Item {
      * API URL for files
      *
      * @param {string} [id] - Optional file id
-     * @param {string} [versionId] - Optional file version id
      * @return {string} base url for files
      */
-    getUrl(id: string, versionId: ?string): string {
-        const fileSuffix: string = id ? `/${id}` : '';
-        const fileVersionSuffix: string = versionId ? `/versions/${versionId}` : '';
-        return `${this.getBaseApiUrl()}/files${fileSuffix}${fileVersionSuffix}`;
+    getUrl(id: string): string {
+        const suffix: string = id ? `/${id}` : '';
+        return `${this.getBaseApiUrl()}/files${suffix}`;
     }
 
     /**
-     * API for getting download URL for files
+     * API for getting download URL for files and file versions
      *
-     * @param {string} id - File id
-     * @param {string|null} versionId - File version id
+     * @param {string} fileId - File id
+     * @param {BoxItem|BoxItemVersion} fileOrFileVersion - File or file version to download
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    getDownloadUrl(
-        id: string,
-        versionId: ?string,
-        successCallback: Function,
+    async getDownloadUrl(
+        fileId: string,
+        fileOrFileVersion: BoxItem | BoxItemVersion,
+        successCallback: string => void,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_GET_DOWNLOAD_URL;
         this.errorCallback = errorCallback;
         this.successCallback = successCallback;
 
-        return this.xhr
-            .get({
-                url: this.getUrl(id, versionId),
-                params: {
-                    fields: FIELD_AUTHENTICATED_DOWNLOAD_URL,
-                },
-            })
-            .then(async ({ data }: { data: BoxItem }) => {
-                const dataUrl = data[FIELD_AUTHENTICATED_DOWNLOAD_URL];
-                const typedId = getTypedFileId(id);
-                const token: TokenLiteral = await TokenService.getReadToken(typedId, this.options.token);
-                const tokenString: ?string = token && (typeof token === 'string' ? token : token.read);
+        const downloadAvailable = fileOrFileVersion[FIELD_IS_DOWNLOAD_AVAILABLE];
+        const downloadUrl = fileOrFileVersion[FIELD_AUTHENTICATED_DOWNLOAD_URL];
 
-                if (!dataUrl || !tokenString) {
-                    this.errorHandler({ code: this.errorCode });
-                }
+        if (!downloadAvailable || !downloadUrl) {
+            this.errorHandler({ code: this.errorCode, message: 'Item to download missing required fields.' });
+            return;
+        }
 
-                const { query, url: downloadUrl } = queryString.parseUrl(dataUrl);
-                const downloadUrlParams = { ...query, access_token: tokenString };
-                const downloadUrlQuery = queryString.stringify(downloadUrlParams);
+        const token: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);
+        const tokenString: ?string = token && (typeof token === 'string' ? token : token.read);
 
-                this.successHandler(`${downloadUrl}?${downloadUrlQuery}`);
-            })
-            .catch((e: $AxiosError<any>) => {
-                this.errorHandler(e);
-            });
+        if (!tokenString) {
+            this.errorHandler({ code: this.errorCode, message: 'Item to download missing a valid token.' });
+            return;
+        }
+
+        const { query, url: downloadBaseUrl } = queryString.parseUrl(downloadUrl);
+        const downloadUrlParams = { ...query, access_token: tokenString };
+        const downloadUrlQuery = queryString.stringify(downloadUrlParams);
+
+        this.successHandler(`${downloadBaseUrl}?${downloadUrlQuery}`);
     }
 
     /**

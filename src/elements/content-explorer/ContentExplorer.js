@@ -856,7 +856,7 @@ class ContentExplorer extends Component<Props, State> {
 
         const { type }: BoxItem = selected;
         if (type === TYPE_FILE) {
-            this.api.getFileAPI().getDownloadUrl(id, null, openUrl, noop);
+            this.api.getFileAPI().getDownloadUrl(id, selected, openUrl, noop);
         }
     };
 

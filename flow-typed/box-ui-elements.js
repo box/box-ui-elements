@@ -338,10 +338,12 @@ type JSONPatchOperations = Array<JSONPatch>;
 
 type BoxItemVersion = {
     action: 'upload' | 'delete' | 'restore',
+    authenticated_download_url?: string,
     collaborators?: Object,
     created_at: string,
     extension?: string,
     id: string,
+    is_download_available?: boolean,
     modified_at?: string,
     modified_by: User,
     name?: string,

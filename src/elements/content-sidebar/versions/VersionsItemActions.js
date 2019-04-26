@@ -21,6 +21,7 @@ import './VersionsItemActions.scss';
 type Props = {
     isCurrent: boolean,
     isDeleted: boolean,
+    isDownloadable: boolean,
     onDelete?: () => void,
     onDownload?: () => void,
     onPreview?: () => void,
@@ -42,6 +43,7 @@ const handleToggleClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
 const VersionsItemActions = ({
     isCurrent = false,
     isDeleted = false,
+    isDownloadable = false,
     onDelete,
     onDownload,
     onPreview,
@@ -50,11 +52,11 @@ const VersionsItemActions = ({
     permissions,
 }: Props) => {
     const { can_delete, can_download, can_preview, can_upload } = permissions;
-    const showDelete = can_delete && !isDeleted && !isCurrent;
-    const showDownload = can_download && !isDeleted;
-    const showPreview = can_preview && !isDeleted;
-    const showPromote = can_upload && !isDeleted && !isCurrent;
-    const showRestore = can_delete && isDeleted;
+    const showDelete = can_delete && !isDeleted && !isCurrent && onDelete;
+    const showDownload = can_download && !isDeleted && isDownloadable && onDownload;
+    const showPreview = can_preview && !isDeleted && onPreview;
+    const showPromote = can_upload && !isDeleted && !isCurrent && onPromote;
+    const showRestore = can_delete && isDeleted && onRestore;
 
     if (!showDelete && !showDownload && !showPreview && !showPromote && !showRestore) {
         return null;
