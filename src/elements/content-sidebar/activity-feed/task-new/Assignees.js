@@ -47,10 +47,10 @@ class Assignees extends React.Component<Props> {
 
     render() {
         const { maxAvatars, assignees = {}, getAvatarUrl, intl } = this.props;
-        const { entries = [], limit } = assignees;
+        const { entries = [], next_marker } = assignees;
         const assigneeCount = entries.length;
         const hiddenAssigneeCount = Math.max(0, assigneeCount - maxAvatars);
-        const areThereMoreEntries = limit != null && assigneeCount >= limit; // there are more assignees in another page of results
+        const areThereMoreEntries = !!next_marker; // there are more assignees in another page of results
         const visibleAssignees = entries
             .slice(0, maxAvatars)
             .map(({ id: assignmentId, target, status: assigneeStatus }) => {
@@ -90,14 +90,13 @@ class Assignees extends React.Component<Props> {
                     {visibleAssignees}
                     {hiddenAssigneeCount > 0 && (
                         <Flyout position="top-left" shouldDefaultFocus>
-                            <PlainButton
-                                type="button"
-                                className="bcs-task-assignment-count-container"
-                                data-testid="task-assignment-overflow"
-                            >
+                            <PlainButton type="button" className="bcs-task-assignment-count-container">
                                 <Tooltip text={intl.formatMessage(messages.tasksFeedMoreAssigneesLabel)}>
-                                    <span className="bcs-task-assignment-count bcs-task-assignment-avatar">
-                                        {areThereMoreEntries ? '+' : `+${hiddenAssigneeCount}`}
+                                    <span
+                                        className="bcs-task-assignment-count bcs-task-assignment-avatar"
+                                        data-testid="task-assignment-overflow"
+                                    >
+                                        {areThereMoreEntries ? `${hiddenAssigneeCount}+` : `+${hiddenAssigneeCount}`}
                                     </span>
                                 </Tooltip>
                             </PlainButton>
