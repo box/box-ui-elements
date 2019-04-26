@@ -74,4 +74,5 @@ const TextInput = ({
 
 TextInput.displayName = 'TextInput';
 
+export type TextInputProps = Props;
 export default TextInput;

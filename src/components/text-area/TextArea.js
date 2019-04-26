@@ -56,4 +56,5 @@ const TextArea = ({
 
 TextArea.displayName = 'TextArea';
 
+export type TextAreaProps = Props;
 export default TextArea;

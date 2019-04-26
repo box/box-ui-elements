@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/checkbox/CheckboxField should render properly when turned off 1`] = `
+<Checkbox
+  isChecked={false}
+  label="Enter things"
+  name="checkbox"
+  onBlur="onblur"
+  onChange="onchange"
+/>
+`;
+
+exports[`components/checkbox/CheckboxField should render properly when turned on 1`] = `
+<Checkbox
+  isChecked={true}
+  label="Enter things"
+  name="checkbox"
+  onBlur="onblur"
+  onChange="onchange"
+  value="value"
+/>
+`;

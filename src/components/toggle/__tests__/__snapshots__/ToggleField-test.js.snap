@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/toggle/ToggleField should render properly when turned off 1`] = `
+<Toggle
+  isOn={false}
+  label="Enter things"
+  name="toggle"
+  onBlur="onblur"
+  onChange="onchange"
+/>
+`;
+
+exports[`components/toggle/ToggleField should render properly when turned on 1`] = `
+<Toggle
+  isOn={true}
+  label="Enter things"
+  name="toggle"
+  onBlur="onblur"
+  onChange="onchange"
+  value="value"
+/>
+`;
