@@ -37,7 +37,9 @@ describe('elements/common/droppable/makeDroppable', () => {
                 foo: 'bar',
                 removeEventListener,
             };
+
             wrapper.instance().removeEventListeners(element);
+
             expect(removeEventListener).toBeCalledTimes(4);
         });
     });
@@ -45,13 +47,16 @@ describe('elements/common/droppable/makeDroppable', () => {
     describe('bindDragDropHandlers()', () => {
         test('should add 4 event listeners on the test element when the wrapped droppable element is not null for the first time', () => {
             getWrapper();
+
             expect(addEventListenerMock).toBeCalledTimes(4);
         });
 
         test('should verify the instance attritute droppableEl is assigned when the wrapped element is not null', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
+
             instance.bindDragDropHandlers();
+
             expect(instance.droppableEl).toEqual(testElement);
         });
 
@@ -61,6 +66,7 @@ describe('elements/common/droppable/makeDroppable', () => {
             const spanElement = document.createElement('span');
             const spanRemoveEventListenerMock = jest.fn();
             spanElement.removeEventListener = spanRemoveEventListenerMock;
+
             instance.droppableEl = spanElement;
             instance.bindDragDropHandlers();
 
