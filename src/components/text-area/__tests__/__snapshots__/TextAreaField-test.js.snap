@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/text-area/TextAreaField should forward innerRef to textareaRef 1`] = `
+<TextArea
+  error="error"
+  hideOptionalLabel={true}
+  label="Enter things"
+  name="textarea"
+  onBlur="onblur"
+  onChange="onchange"
+  textareaRef="ref"
+  value="value"
+/>
+`;
+
 exports[`components/text-area/TextAreaField should hide optional label when required 1`] = `
 <TextArea
   error="error"

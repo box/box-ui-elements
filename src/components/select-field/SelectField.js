@@ -21,11 +21,8 @@ function createFakeSyntheticEvent(name: string, value: SelectOptionValueProp | A
 }
 
 function onSelect(name: string, onChange: Function, options: SelectOptionProp | Array<SelectOptionProp>) {
-    if (Array.isArray(options)) {
-        onChange(createFakeSyntheticEvent(name, options.map(option => option.value)));
-    } else {
-        onChange(createFakeSyntheticEvent(name, options.value));
-    }
+    const value = Array.isArray(options) ? options.map(option => option.value) : options.value;
+    onChange(createFakeSyntheticEvent(name, value));
 }
 
 const SelectField = ({ field, form, multiple, ...rest }: Props) => {

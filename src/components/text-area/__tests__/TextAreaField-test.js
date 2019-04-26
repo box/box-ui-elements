@@ -62,4 +62,27 @@ describe('components/text-area/TextAreaField', () => {
         });
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should forward innerRef to textareaRef', () => {
+        const wrapper = getWrapper({
+            field: {
+                name: 'textarea',
+                value: 'value',
+                onBlur: 'onblur',
+                onChange: 'onchange',
+            },
+            form: {
+                errors: {
+                    textarea: 'error',
+                },
+                touched: {
+                    textarea: true,
+                },
+            },
+            isRequired: true,
+            label: 'Enter things',
+            innerRef: 'ref',
+        });
+        expect(wrapper).toMatchSnapshot();
+    });
 });

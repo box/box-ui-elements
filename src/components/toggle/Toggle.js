@@ -37,7 +37,6 @@ const Toggle = ({
     name,
     onBlur,
     onChange,
-    value,
 }: Props) => {
     const classes = classNames('toggle-container', className, {
         'is-toggle-right-aligned': isToggleRightAligned,
@@ -65,7 +64,6 @@ const Toggle = ({
                     onBlur={onBlur}
                     onChange={onChange}
                     type="checkbox"
-                    value={value}
                     {...inputProps}
                 />
                 {toggleElements}

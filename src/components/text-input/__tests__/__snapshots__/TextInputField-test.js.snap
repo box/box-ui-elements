@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/text-input/TextInputField should forward innerRef to inputRef 1`] = `
+<TextInput
+  error="error"
+  hideOptionalLabel={true}
+  inputRef="ref"
+  label="Enter things"
+  name="input"
+  onBlur="onblur"
+  onChange="onchange"
+  value="value"
+/>
+`;
+
 exports[`components/text-input/TextInputField should hide optional label when required 1`] = `
 <TextInput
   error="error"

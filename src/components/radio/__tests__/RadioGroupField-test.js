@@ -17,5 +17,6 @@ describe('components/radio/RadioGroupField', () => {
             label: 'Enter things',
         });
         expect(wrapper).toMatchSnapshot();
+        expect(wrapper.prop('value')).toBe('value');
     });
 });

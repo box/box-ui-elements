@@ -20,7 +20,7 @@ type Props = {
     isResizable?: boolean,
     /** Label displayed for the text area */
     label: React.Node,
-    textareaRef?: Function,
+    textareaRef?: Function, // @TODO: eventually rename to innerRef for consistancy across all form elements
 };
 
 const TextArea = ({
