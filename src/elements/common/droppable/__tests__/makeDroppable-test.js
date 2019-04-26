@@ -44,18 +44,20 @@ describe('elements/common/droppable/makeDroppable', () => {
         });
     });
 
-    describe('bindDragDropHandlers()', () => {
+    describe('componentDidMount()', () => {
         test('should add 4 event listeners on the test element when the wrapped droppable element is not null for the first time', () => {
             getWrapper();
 
             expect(addEventListenerMock).toBeCalledTimes(4);
         });
+    });
 
+    describe('componentDidUpdate()', () => {
         test('should verify the instance attritute droppableEl is assigned when the wrapped element is not null', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            instance.bindDragDropHandlers();
+            instance.componentDidUpdate();
 
             expect(instance.droppableEl).toEqual(testElement);
         });
@@ -68,7 +70,7 @@ describe('elements/common/droppable/makeDroppable', () => {
             spanElement.removeEventListener = spanRemoveEventListenerMock;
 
             instance.droppableEl = spanElement;
-            instance.bindDragDropHandlers();
+            instance.componentDidUpdate();
 
             expect(spanRemoveEventListenerMock).toBeCalledTimes(4);
             expect(instance.droppableEl).toEqual(testElement);

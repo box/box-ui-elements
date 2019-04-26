@@ -62,7 +62,15 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
         }
 
         componentDidUpdate() {
-            this.bindDragDropHandlers();
+            if (!this.droppableEl) {
+                this.bindDragDropHandlers();
+                return;
+            }
+            // eslint-disable-next-line react/no-find-dom-node
+            if (findDOMNode(this) !== this.droppableEl) {
+                this.removeEventListeners(this.droppableEl);
+                this.bindDragDropHandlers();
+            }
         }
 
         /**
@@ -85,12 +93,8 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
          */
         bindDragDropHandlers = () => {
             const droppableEl = findDOMNode(this); // eslint-disable-line react/no-find-dom-node
-            if (!droppableEl || !(droppableEl instanceof Element) || droppableEl === this.droppableEl) {
+            if (!droppableEl || !(droppableEl instanceof Element)) {
                 return;
-            }
-
-            if (this.droppableEl) {
-                this.removeEventListeners(this.droppableEl);
             }
 
             // add event listeners directly on the element
