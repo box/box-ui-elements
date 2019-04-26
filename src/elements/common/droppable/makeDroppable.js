@@ -62,20 +62,35 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
         }
 
         componentDidUpdate() {
-            if (this.droppableEl) {
-                return;
-            }
-
             this.bindDragDropHandlers();
         }
 
         /**
-         * Bind drag and drop event handlers to the droppableEl
+         * Function that removes the drag and drop related event listeners on the input element
+         *
+         * @param {Element} element
+         * @return {void}
+         */
+        removeEventListeners = (element: Element) => {
+            element.removeEventListener('dragenter', this.handleDragEnter);
+            element.removeEventListener('dragover', this.handleDragOver);
+            element.removeEventListener('dragleave', this.handleDragLeave);
+            element.removeEventListener('drop', this.handleDrop);
+        };
+
+        /**
+         * Bind drag and drop event handlers to the droppableEl, when the wrapped element
+         * is changed, remove the event listeners on the previous droppableEl and add
+         * event listeners on the new droppableEl
          */
         bindDragDropHandlers = () => {
             const droppableEl = findDOMNode(this); // eslint-disable-line react/no-find-dom-node
-            if (!droppableEl || !(droppableEl instanceof Element)) {
+            if (!droppableEl || !(droppableEl instanceof Element) || droppableEl === this.droppableEl) {
                 return;
+            }
+
+            if (this.droppableEl) {
+                this.removeEventListeners(this.droppableEl);
             }
 
             // add event listeners directly on the element
@@ -96,10 +111,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
                 return;
             }
 
-            this.droppableEl.removeEventListener('dragenter', this.handleDragEnter);
-            this.droppableEl.removeEventListener('dragover', this.handleDragOver);
-            this.droppableEl.removeEventListener('dragleave', this.handleDragLeave);
-            this.droppableEl.removeEventListener('drop', this.handleDrop);
+            this.removeEventListeners(this.droppableEl);
         }
 
         /**
