@@ -10,9 +10,10 @@ import noop from 'lodash/noop';
 import { generatePath, withRouter } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
 import API from '../../../api';
+import openUrlInsideIframe from '../../../utils/iframe';
 import VersionsSidebar from './VersionsSidebar';
-import { withAPIContext } from '../../common/api-context';
 import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../utils/fields';
+import { withAPIContext } from '../../common/api-context';
 
 type Props = {
     api: API,
@@ -73,6 +74,12 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 .then(this.fetchData)
                 .then(() => this.handleDeleteSuccess(versionId))
                 .catch(this.handleActionError);
+        });
+    };
+
+    handleActionDownload = (versionId: string): void => {
+        this.fetchDownloadUrl(versionId).then(url => {
+            openUrlInsideIframe(url);
         });
     };
 
@@ -142,6 +149,14 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
             .catch(this.handleFetchError);
     };
 
+    fetchDownloadUrl = (versionId: string): Promise<string> => {
+        const { api, fileId } = this.props;
+
+        return new Promise((resolve, reject) => {
+            api.getFileAPI().getDownloadUrl(fileId, versionId, resolve, reject);
+        });
+    };
+
     fetchFile = (options = {}): Promise<BoxItem> => {
         const { api, fileId } = this.props;
 
@@ -207,6 +222,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         return (
             <VersionsSidebar
                 onDelete={this.handleActionDelete}
+                onDownload={this.handleActionDownload}
                 onPreview={this.handleActionPreview}
                 onPromote={this.handleActionPromote}
                 parentName={parentName}

@@ -4,18 +4,20 @@
  * @author Box
  */
 
+import queryString from 'query-string';
 import { findMissingProperties, fillMissingProperties } from '../utils/fields';
 import { getTypedFileId } from '../utils/file';
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
 import {
-    FIELD_DOWNLOAD_URL,
     CACHE_PREFIX_FILE,
-    X_REP_HINTS,
-    ERROR_CODE_GET_DOWNLOAD_URL,
     ERROR_CODE_FETCH_FILE,
+    ERROR_CODE_GET_DOWNLOAD_URL,
+    FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_EXTENSION,
+    X_REP_HINTS,
 } from '../constants';
 import Item from './Item';
+import TokenService from '../utils/TokenService';
 
 class File extends Item {
     /**
@@ -32,34 +34,56 @@ class File extends Item {
      * API URL for files
      *
      * @param {string} [id] - Optional file id
+     * @param {string} [versionId] - Optional file version id
      * @return {string} base url for files
      */
-    getUrl(id: string): string {
-        const suffix: string = id ? `/${id}` : '';
-        return `${this.getBaseApiUrl()}/files${suffix}`;
+    getUrl(id: string, versionId: ?string): string {
+        const fileSuffix: string = id ? `/${id}` : '';
+        const fileVersionSuffix: string = versionId ? `/versions/${versionId}` : '';
+        return `${this.getBaseApiUrl()}/files${fileSuffix}${fileVersionSuffix}`;
     }
 
     /**
      * API for getting download URL for files
      *
      * @param {string} id - File id
+     * @param {string|null} versionId - File version id
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    getDownloadUrl(id: string, successCallback: Function, errorCallback: ElementsErrorCallback): Promise<void> {
+    getDownloadUrl(
+        id: string,
+        versionId: ?string,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
         this.errorCode = ERROR_CODE_GET_DOWNLOAD_URL;
-        this.successCallback = successCallback;
         this.errorCallback = errorCallback;
+        this.successCallback = successCallback;
+
         return this.xhr
             .get({
-                url: this.getUrl(id),
+                url: this.getUrl(id, versionId),
                 params: {
-                    fields: FIELD_DOWNLOAD_URL,
+                    fields: FIELD_AUTHENTICATED_DOWNLOAD_URL,
                 },
             })
-            .then(({ data }: { data: BoxItem }) => {
-                this.successHandler(data[FIELD_DOWNLOAD_URL]);
+            .then(async ({ data }: { data: BoxItem }) => {
+                const dataUrl = data[FIELD_AUTHENTICATED_DOWNLOAD_URL];
+                const typedId = getTypedFileId(id);
+                const token: TokenLiteral = await TokenService.getReadToken(typedId, this.options.token);
+                const tokenString: ?string = token && (typeof token === 'string' ? token : token.read);
+
+                if (!dataUrl || !tokenString) {
+                    this.errorHandler({ code: this.errorCode });
+                }
+
+                const { query, url: downloadUrl } = queryString.parseUrl(dataUrl);
+                const downloadUrlParams = { ...query, access_token: tokenString };
+                const downloadUrlQuery = queryString.stringify(downloadUrlParams);
+
+                this.successHandler(`${downloadUrl}?${downloadUrlQuery}`);
             })
             .catch((e: $AxiosError<any>) => {
                 this.errorHandler(e);

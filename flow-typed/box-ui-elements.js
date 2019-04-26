@@ -358,6 +358,7 @@ type BoxItemVersion = {
 
 type BoxItem = {
     allowed_shared_link_access_levels?: Array<Access>,
+    authenticated_download_url?: string,
     content_created_at?: string,
     content_modified_at?: string,
     created_at?: string,
