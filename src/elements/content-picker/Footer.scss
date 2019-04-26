@@ -5,18 +5,18 @@
     background-color: $almost-white;
     border-top: 1px solid $off-white;
     display: flex;
-    flex: 0 0 70px;
+    flex: 0 1 70px;
     justify-content: space-between;
     padding: 0 20px;
 
     .bcp-footer-left {
+        flex: 0 1 100%;
         min-width: 0;
     }
 
     .bcp-selected {
-        flex: 0 1 auto;
         margin: 0;
-        width: 100%;
+        max-width: 100%;
 
         .btn-content {
             display: inline-block;
@@ -54,7 +54,11 @@
 
     .bcp-footer-right {
         display: flex;
-        flex-shrink: 0;
+        flex: 1 0 auto;
+    }
+
+    .be-pagination {
+        margin-left: 5px;
     }
 
     .btn-group {
