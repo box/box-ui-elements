@@ -18,11 +18,19 @@ type Props = {
 };
 
 const Badgeable = (props: Props) => {
-    const { children, className = '', topLeft = null, topRight = null, bottomLeft = null, bottomRight = null } = props;
+    const {
+        children,
+        className = '',
+        topLeft = null,
+        topRight = null,
+        bottomLeft = null,
+        bottomRight = null,
+        ...rest
+    } = props;
 
     return (
         <div className={`badgeable-container ${className}`}>
-            {children}
+            {React.isValidElement(children) ? React.cloneElement(React.Children.only(children), rest) : children}
             <div className="badges">
                 {topLeft && <div className="top-left-badge">{topLeft}</div>}
                 {topRight && <div className="top-right-badge">{topRight}</div>}

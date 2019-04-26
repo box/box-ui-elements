@@ -10,6 +10,18 @@ describe('components/badgeable/Badgeable', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should pass down props to children when it is an element', () => {
+        const children = <div id="render">Some text to render</div>;
+        const wrapper = shallow(<Badgeable foo="bar">{children}</Badgeable>);
+        // console.log(wrapper.prop("foo"));
+        expect(
+            wrapper
+                .find('#render')
+                .first()
+                .prop('foo'),
+        ).toEqual('bar');
+    });
+
     test('should render badges to any corner when given an element', () => {
         const wrapper = shallow(
             <Badgeable
