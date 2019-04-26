@@ -895,7 +895,7 @@ const messages = defineMessages({
     },
     taskAddTaskGeneral: {
         id: 'be.tasks.addTask.general',
-        defaultMessage: 'Task',
+        defaultMessage: 'General Task',
         description: 'label for menu item that opens general task popup',
     },
     taskAddTaskGeneralDescription: {
@@ -905,7 +905,7 @@ const messages = defineMessages({
     },
     taskAddTaskApproval: {
         id: 'be.tasks.addTask.approval',
-        defaultMessage: 'Approval',
+        defaultMessage: 'Approval Task',
         description: 'label for menu item that opens approval task popup',
     },
     taskAddTaskApprovalDescription: {
