@@ -6,6 +6,7 @@ import uniqueId from 'lodash/uniqueId';
 import { Flyout, Overlay } from '../../../../components/flyout';
 import Tooltip from '../../../../components/tooltip';
 import PlainButton from '../../../../components/plain-button';
+import ReadableTime from '../../../../components/time/ReadableTime';
 import messages from '../../../common/messages';
 import AssigneeStatus from './AssigneeStatus';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
@@ -19,20 +20,28 @@ type Props = {|
 |} & InjectIntlProvidedProps;
 
 const statusMessages = {
-    [TASK_NEW_APPROVED]: <FormattedMessage {...messages.tasksFeedStatusAccepted} />,
-    [TASK_NEW_REJECTED]: <FormattedMessage {...messages.tasksFeedStatusRejected} />,
-    [TASK_NEW_COMPLETED]: <FormattedMessage {...messages.tasksFeedStatusCompleted} />,
-    [TASK_NEW_NOT_STARTED]: <FormattedMessage {...messages.tasksFeedStatusNotStarted} />,
+    [TASK_NEW_APPROVED]: messages.tasksFeedStatusAccepted,
+    [TASK_NEW_REJECTED]: messages.tasksFeedStatusRejected,
+    [TASK_NEW_COMPLETED]: messages.tasksFeedStatusCompleted,
+    [TASK_NEW_NOT_STARTED]: null,
 };
 
-const AssigneeTooltipLabel = React.memo(({ user, status }) => {
+const Datestamp = ({ date }: { date: ISODate | Date }) => {
+    return <ReadableTime timestamp={+new Date(date)} alwaysShowTime relativeThreshold={-1} />;
+};
+
+const AssigneeTooltipLabel = React.memo(({ user, status, completedAt = null }) => {
     const statusMessage = statusMessages[status] || null;
     return (
         <div className="bcs-task-assignment-tooltip-text">
             <div>
                 <strong>{user.name}</strong>
             </div>
-            {statusMessage && <div>{statusMessage}</div>}
+            {statusMessage && completedAt && (
+                <div>
+                    <FormattedMessage {...statusMessage} values={{ completedAt: <Datestamp date={completedAt} /> }} />
+                </div>
+            )}
         </div>
     );
 });
@@ -53,12 +62,14 @@ class Assignees extends React.Component<Props> {
         const areThereMoreEntries = !!next_marker; // there are more assignees in another page of results
         const visibleAssignees = entries
             .slice(0, maxAvatars)
-            .map(({ id: assignmentId, target, status: assigneeStatus }) => {
+            .map(({ id, target, status, completed_at: completedAt }) => {
                 return (
-                    <Tooltip key={assignmentId} text={<AssigneeTooltipLabel user={target} status={assigneeStatus} />}>
+                    <Tooltip
+                        key={id}
+                        text={<AssigneeTooltipLabel user={target} status={status} completedAt={completedAt} />}
+                    >
                         <AssigneeStatus
-                            key={assignmentId}
-                            status={assigneeStatus}
+                            status={status}
                             user={target}
                             getAvatarUrl={getAvatarUrl}
                             data-testid="task-assignment-status"
@@ -66,12 +77,12 @@ class Assignees extends React.Component<Props> {
                     </Tooltip>
                 );
             });
-        const allAssignees = entries.map(({ id: assignmentId, target, status: assigneeStatus }) => {
-            const statusMessage = statusMessages[assigneeStatus] || null;
+        const allAssignees = entries.map(({ id, target, status, completed_at: completedAt }) => {
+            const statusMessage = statusMessages[status] || null;
             return (
-                <li key={assignmentId} className="bcs-task-assignment-list-item">
+                <li key={id} className="bcs-task-assignment-list-item">
                     <AssigneeStatus
-                        status={assigneeStatus}
+                        status={status}
                         className="bcs-task-assignment-list-item-avatar"
                         user={target}
                         getAvatarUrl={getAvatarUrl}
@@ -79,7 +90,14 @@ class Assignees extends React.Component<Props> {
                     />
                     <div className="bcs-task-assignment-list-item-details">
                         <div>{target.name}</div>
-                        <div className="bcs-task-assignment-list-item-status">{statusMessage}</div>
+                        {statusMessage && completedAt && (
+                            <div className="bcs-task-assignment-list-item-status">
+                                <FormattedMessage
+                                    {...statusMessage}
+                                    values={{ completedAt: <Datestamp date={completedAt} /> }}
+                                />
+                            </div>
+                        )}
                     </div>
                 </li>
             );
