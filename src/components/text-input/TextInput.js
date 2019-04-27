@@ -22,7 +22,7 @@ type Props = {
     hideLabel?: boolean,
     /** Hides (optional) text from the label */
     hideOptionalLabel?: boolean,
-    inputRef?: Function,
+    inputRef?: Function, // @TODO: eventually rename to innerRef for consistancy across all form elements
     /** Renders a loading indicator within the component when true */
     isLoading?: boolean,
     /** Makes the input value required */
@@ -74,4 +74,5 @@ const TextInput = ({
 
 TextInput.displayName = 'TextInput';
 
+export type TextInputProps = Props;
 export default TextInput;

@@ -27,6 +27,9 @@ class RadioGroup extends React.Component<Props, State> {
         };
     }
 
+    // @TODO: think about adding componentDidUpdate or gDSFP
+    // to update the internal state value based on new props value
+
     onChangeHandler = (event: SyntheticEvent<>) => {
         const { target } = event;
         const { onChange } = this.props;
@@ -47,7 +50,7 @@ class RadioGroup extends React.Component<Props, State> {
         const { value } = this.state;
 
         return (
-            <div className={`radio-group ${className}`} key={value} onChange={this.onChangeHandler}>
+            <div className={`radio-group ${className}`} onChange={this.onChangeHandler}>
                 {React.Children.map(children, radio => (
                     <RadioButton
                         description={radio.props.description}
@@ -63,4 +66,5 @@ class RadioGroup extends React.Component<Props, State> {
     }
 }
 
+export type RadioGroupProps = Props;
 export default RadioGroup;

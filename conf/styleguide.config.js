@@ -190,6 +190,10 @@ const allSections = [
         ],
     },
     {
+        name: 'Formik Elements',
+        content: '../src/components/form-elements/formik/README.md',
+    },
+    {
         name: 'Features',
         components: () => [
             '../src/features/activity-feed/activity-feed/ActivityFeed.js',
