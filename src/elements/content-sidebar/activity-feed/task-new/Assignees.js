@@ -27,19 +27,17 @@ const statusMessages = {
 };
 
 const Datestamp = ({ date }: { date: ISODate | Date }) => {
-    return <ReadableTime timestamp={+new Date(date)} alwaysShowTime relativeThreshold={-1} />;
+    return <ReadableTime timestamp={new Date(date).getTime()} alwaysShowTime relativeThreshold={0} />;
 };
 
-const AssigneeTooltipLabel = React.memo(({ user, status, completedAt = null }) => {
+const AssignmentDetails = React.memo(({ user, status, completedAt, className }) => {
     const statusMessage = statusMessages[status] || null;
     return (
-        <div className="bcs-task-assignment-tooltip-text">
-            <div>
-                <strong>{user.name}</strong>
-            </div>
+        <div className={className}>
+            <div className="bcs-task-assignment-details-name">{user.name}</div>
             {statusMessage && completedAt && (
-                <div>
-                    <FormattedMessage {...statusMessage} values={{ completedAt: <Datestamp date={completedAt} /> }} />
+                <div className="bcs-task-assignment-details-status">
+                    <FormattedMessage {...statusMessage} values={{ dateTime: <Datestamp date={completedAt} /> }} />
                 </div>
             )}
         </div>
@@ -66,7 +64,14 @@ class Assignees extends React.Component<Props> {
                 return (
                     <Tooltip
                         key={id}
-                        text={<AssigneeTooltipLabel user={target} status={status} completedAt={completedAt} />}
+                        text={
+                            <AssignmentDetails
+                                className="bcs-task-assignment-tooltip"
+                                user={target}
+                                status={status}
+                                completedAt={completedAt}
+                            />
+                        }
                     >
                         <AssigneeStatus
                             status={status}
@@ -78,7 +83,6 @@ class Assignees extends React.Component<Props> {
                 );
             });
         const allAssignees = entries.map(({ id, target, status, completed_at: completedAt }) => {
-            const statusMessage = statusMessages[status] || null;
             return (
                 <li key={id} className="bcs-task-assignment-list-item">
                     <AssigneeStatus
@@ -88,17 +92,12 @@ class Assignees extends React.Component<Props> {
                         getAvatarUrl={getAvatarUrl}
                         data-testid="task-assignment-status"
                     />
-                    <div className="bcs-task-assignment-list-item-details">
-                        <div>{target.name}</div>
-                        {statusMessage && completedAt && (
-                            <div className="bcs-task-assignment-list-item-status">
-                                <FormattedMessage
-                                    {...statusMessage}
-                                    values={{ completedAt: <Datestamp date={completedAt} /> }}
-                                />
-                            </div>
-                        )}
-                    </div>
+                    <AssignmentDetails
+                        className="bcs-task-assignment-list-item-details"
+                        user={target}
+                        status={status}
+                        completedAt={completedAt}
+                    />
                 </li>
             );
         });

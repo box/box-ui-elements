@@ -55,7 +55,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           >
             <ReadableTime
               alwaysShowTime={true}
-              relativeThreshold={-1}
+              relativeThreshold={0}
               timestamp={1506534041000}
             />
           </small>
@@ -127,7 +127,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           >
             <ReadableTime
               alwaysShowTime={true}
-              relativeThreshold={-1}
+              relativeThreshold={0}
               timestamp={1506534041000}
             />
           </small>
@@ -200,7 +200,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
           >
             <ReadableTime
               alwaysShowTime={true}
-              relativeThreshold={-1}
+              relativeThreshold={0}
               timestamp={1506534041000}
             />
           </small>
@@ -276,7 +276,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
           >
             <ReadableTime
               alwaysShowTime={true}
-              relativeThreshold={-1}
+              relativeThreshold={0}
               timestamp={1506534041000}
             />
           </small>
