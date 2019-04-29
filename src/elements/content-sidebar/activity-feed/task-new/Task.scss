@@ -74,8 +74,24 @@ $card-left-offset: 40px;
 
     .bcs-task-status {
         align-items: center;
+        color: $bdl-neutral-02;
         display: flex;
-        margin-top: 18px;
+        font-weight: bold;
+    }
+
+    .bcs-task-status-label {
+        margin-right: 5px;
+    }
+
+    .bcs-task-status-message {
+        &.completed,
+        &.approved {
+            color: $bdl-green-light;
+        }
+
+        &.rejected {
+            color: $bdl-watermelon-red;
+        }
     }
 
     .bcs-task-status-icon {
@@ -83,7 +99,7 @@ $card-left-offset: 40px;
         border-radius: 100%;
         bottom: 0;
         height: 14px;
-        margin-right: 5px;
+        margin-right: 3px;
         width: 14px;
 
         &.completed,
@@ -110,6 +126,10 @@ $card-left-offset: 40px;
 
     .bcs-task-pending-assignment {
         margin-top: 5px;
+    }
+
+    .bcs-comment-container {
+        margin-bottom: 8px;
     }
 
     .bcs-comment {

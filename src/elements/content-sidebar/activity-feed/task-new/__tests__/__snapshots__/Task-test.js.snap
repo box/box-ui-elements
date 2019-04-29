@@ -48,7 +48,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     />
     <div
       className="bcs-task-content"
-    />
+    >
+      <Component
+        status="NOT_STARTED"
+      />
+    </div>
     <div
       className="bcs-task-content"
     >

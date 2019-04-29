@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import camelCase from 'lodash/camelCase';
 import IconComplete from '../../../../icons/general/IconVerified';
 import IconReject from '../../../../icons/general/IconRejected';
-import IconPending from '../../../../icons/general/IconHelp';
 import {
     TASK_NEW_APPROVED,
     TASK_NEW_REJECTED,
@@ -29,30 +28,43 @@ const StatusIcon = ({ status, ...rest }: { status: TaskStatus }) => {
             return <IconReject width={ICON_SIZE} height={ICON_SIZE} {...rest} />;
         case TASK_NEW_NOT_STARTED:
         case TASK_NEW_IN_PROGRESS:
-            return <IconPending width={ICON_SIZE} height={ICON_SIZE} {...rest} />;
         default:
             return null;
     }
 };
 
 const StatusMessage = ({ status }: { status: TaskStatus }) => {
+    let statusMessage;
     switch (status) {
         case TASK_NEW_APPROVED:
-            return <FormattedMessage {...messages.tasksFeedApprovedLabel} />;
+            statusMessage = messages.tasksFeedApprovedLabel;
+            break;
         case TASK_NEW_COMPLETED:
-            return <FormattedMessage {...messages.tasksFeedCompletedLabel} />;
+            statusMessage = messages.tasksFeedCompletedLabel;
+            break;
         case TASK_NEW_REJECTED:
-            return <FormattedMessage {...messages.tasksFeedRejectedLabel} />;
+            statusMessage = messages.tasksFeedRejectedLabel;
+            break;
         case TASK_NEW_NOT_STARTED:
         case TASK_NEW_IN_PROGRESS:
-            return <FormattedMessage {...messages.tasksFeedIncompleteLabel} />;
+            statusMessage = messages.tasksFeedInProgressLabel;
+            break;
         default:
             return null;
     }
+
+    return (
+        <span className={`bcs-task-status-message ${camelCase(status)}`}>
+            <FormattedMessage {...statusMessage} />
+        </span>
+    );
 };
 
 const Status = React.memo<Props>(({ status }: Props) => (
     <div className="bcs-task-status">
+        <span className="bcs-task-status-label">
+            <FormattedMessage {...messages.tasksFeedStatusLabel} />
+        </span>
         <StatusIcon status={status} className={`bcs-task-status-icon ${camelCase(status)}`} aria-hidden />
         <StatusMessage status={status} />
     </div>

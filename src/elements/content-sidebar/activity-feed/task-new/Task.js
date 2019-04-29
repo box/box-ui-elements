@@ -137,12 +137,15 @@ const Task = ({
                         );
                     }}
                 />
-                <div className="bcs-task-content">{!!due_at && <TaskDueDate dueDate={due_at} status={status} />}</div>
+                <div className="bcs-task-content">
+                    {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
+                    <Status status={status} />
+                </div>
                 <div className="bcs-task-content">
                     <Assignees maxAvatars={3} assignees={assigned_to} getAvatarUrl={getAvatarUrl} />
                 </div>
                 <div className="bcs-task-content">
-                    {currentUserAssignment && shouldShowActions ? (
+                    {currentUserAssignment && shouldShowActions && (
                         <TaskActions
                             taskType={task_type}
                             onTaskApproval={
@@ -161,8 +164,6 @@ const Task = ({
                                     : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_COMPLETED)
                             }
                         />
-                    ) : (
-                        <Status status={status} />
                     )}
                 </div>
             </div>
