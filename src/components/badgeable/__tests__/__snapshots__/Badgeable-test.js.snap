@@ -4,7 +4,11 @@ exports[`components/badgeable/Badgeable should correctly render children in a ba
 <div
   className="badgeable-container "
 >
-  some text to render
+  <div
+    id="render"
+  >
+    Some text to render
+  </div>
   <div
     className="badges"
   />
