@@ -114,7 +114,7 @@ $card-left-offset: 40px;
 
     .bcs-comment {
         .bcs-comment-user-name {
-            margin-right: 0;
+            margin-right: 3px;
 
             &.link {
                 white-space: normal;
@@ -125,10 +125,6 @@ $card-left-offset: 40px;
     button:first-of-type.bcs-task-action-button {
         margin-left: 0;
     }
-}
-
-.bcs-task-assignment-tooltip-text {
-    text-align: center;
 }
 
 .bcs-task-assignment-status {
@@ -170,10 +166,14 @@ $card-left-offset: 40px;
 }
 
 .bcs-task-assignment-list-item {
-    align-items: flex-start;
+    align-items: center;
     display: flex;
     margin: 6px 0 0 0;
     padding: 3px 0;
+
+    .bcs-task-assignment-details-status {
+        color: $bdl-neutral-02;
+    }
 }
 
 .bcs-task-assignment-list-item-avatar {
@@ -186,4 +186,12 @@ $card-left-offset: 40px;
 
 .bcs-task-assignment-list-item-status {
     color: $bdl-neutral-02;
+}
+
+.bcs-task-assignment-tooltip {
+    text-align: center;
+
+    .bcs-task-assignment-details-name {
+        font-weight: bold;
+    }
 }

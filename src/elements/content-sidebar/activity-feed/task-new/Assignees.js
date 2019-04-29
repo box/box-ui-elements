@@ -6,6 +6,7 @@ import uniqueId from 'lodash/uniqueId';
 import { Flyout, Overlay } from '../../../../components/flyout';
 import Tooltip from '../../../../components/tooltip';
 import PlainButton from '../../../../components/plain-button';
+import ReadableTime from '../../../../components/time/ReadableTime';
 import messages from '../../../common/messages';
 import AssigneeStatus from './AssigneeStatus';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
@@ -19,20 +20,26 @@ type Props = {|
 |} & InjectIntlProvidedProps;
 
 const statusMessages = {
-    [TASK_NEW_APPROVED]: <FormattedMessage {...messages.tasksFeedStatusAccepted} />,
-    [TASK_NEW_REJECTED]: <FormattedMessage {...messages.tasksFeedStatusRejected} />,
-    [TASK_NEW_COMPLETED]: <FormattedMessage {...messages.tasksFeedStatusCompleted} />,
-    [TASK_NEW_NOT_STARTED]: <FormattedMessage {...messages.tasksFeedStatusNotStarted} />,
+    [TASK_NEW_APPROVED]: messages.tasksFeedStatusAccepted,
+    [TASK_NEW_REJECTED]: messages.tasksFeedStatusRejected,
+    [TASK_NEW_COMPLETED]: messages.tasksFeedStatusCompleted,
+    [TASK_NEW_NOT_STARTED]: null,
 };
 
-const AssigneeTooltipLabel = React.memo(({ user, status }) => {
+const Datestamp = ({ date }: { date: ISODate | Date }) => {
+    return <ReadableTime timestamp={new Date(date).getTime()} alwaysShowTime relativeThreshold={0} />;
+};
+
+const AssignmentDetails = React.memo(({ user, status, completedAt, className }) => {
     const statusMessage = statusMessages[status] || null;
     return (
-        <div className="bcs-task-assignment-tooltip-text">
-            <div>
-                <strong>{user.name}</strong>
-            </div>
-            {statusMessage && <div>{statusMessage}</div>}
+        <div className={className}>
+            <div className="bcs-task-assignment-details-name">{user.name}</div>
+            {statusMessage && completedAt && (
+                <div className="bcs-task-assignment-details-status">
+                    <FormattedMessage {...statusMessage} values={{ dateTime: <Datestamp date={completedAt} /> }} />
+                </div>
+            )}
         </div>
     );
 });
@@ -53,12 +60,21 @@ class Assignees extends React.Component<Props> {
         const areThereMoreEntries = !!next_marker; // there are more assignees in another page of results
         const visibleAssignees = entries
             .slice(0, maxAvatars)
-            .map(({ id: assignmentId, target, status: assigneeStatus }) => {
+            .map(({ id, target, status, completed_at: completedAt }) => {
                 return (
-                    <Tooltip key={assignmentId} text={<AssigneeTooltipLabel user={target} status={assigneeStatus} />}>
+                    <Tooltip
+                        key={id}
+                        text={
+                            <AssignmentDetails
+                                className="bcs-task-assignment-tooltip"
+                                user={target}
+                                status={status}
+                                completedAt={completedAt}
+                            />
+                        }
+                    >
                         <AssigneeStatus
-                            key={assignmentId}
-                            status={assigneeStatus}
+                            status={status}
                             user={target}
                             getAvatarUrl={getAvatarUrl}
                             data-testid="task-assignment-status"
@@ -66,21 +82,22 @@ class Assignees extends React.Component<Props> {
                     </Tooltip>
                 );
             });
-        const allAssignees = entries.map(({ id: assignmentId, target, status: assigneeStatus }) => {
-            const statusMessage = statusMessages[assigneeStatus] || null;
+        const allAssignees = entries.map(({ id, target, status, completed_at: completedAt }) => {
             return (
-                <li key={assignmentId} className="bcs-task-assignment-list-item">
+                <li key={id} className="bcs-task-assignment-list-item">
                     <AssigneeStatus
-                        status={assigneeStatus}
+                        status={status}
                         className="bcs-task-assignment-list-item-avatar"
                         user={target}
                         getAvatarUrl={getAvatarUrl}
                         data-testid="task-assignment-status"
                     />
-                    <div className="bcs-task-assignment-list-item-details">
-                        <div>{target.name}</div>
-                        <div className="bcs-task-assignment-list-item-status">{statusMessage}</div>
-                    </div>
+                    <AssignmentDetails
+                        className="bcs-task-assignment-list-item-details"
+                        user={target}
+                        status={status}
+                        completedAt={completedAt}
+                    />
                 </li>
             );
         });
