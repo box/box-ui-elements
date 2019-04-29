@@ -42,25 +42,25 @@ const StatusIcon = ({ status, ...rest }: { status: TaskStatus }) => {
 };
 
 const Status = React.memo<Props>(({ status }: Props) => (
-    <div className="bcs-task-status">
-        <FormattedMessage
-            {...messages.tasksFeedStatusLabel}
-            values={{
-                taskStatus: (
-                    <React.Fragment>
-                        <StatusIcon
-                            status={status}
-                            className={`bcs-task-status-icon ${camelCase(status)}`}
-                            aria-hidden
-                        />
-                        <span className={`bcs-task-status-message ${camelCase(status)}`}>
-                            <FormattedMessage {...statusMessageKeyMap[status]} />
-                        </span>
-                    </React.Fragment>
-                ),
-            }}
-        />
-    </div>
+    <FormattedMessage
+        {...messages.tasksFeedStatusLabel}
+        values={{
+            taskStatus: (
+                <React.Fragment>
+                    <StatusIcon
+                        status={status}
+                        className={`bcs-task-status-item bcs-task-status-icon ${camelCase(status)}`}
+                        aria-hidden
+                    />
+                    <span className={`bcs-task-status-item bcs-task-status-message ${camelCase(status)}`}>
+                        <FormattedMessage {...statusMessageKeyMap[status]} />
+                    </span>
+                </React.Fragment>
+            ),
+        }}
+    >
+        {(...msg: Array<React.Node>): React.Node => <div className="bcs-task-status">{msg}</div>}
+    </FormattedMessage>
 ));
 
 export default Status;

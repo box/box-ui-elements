@@ -137,7 +137,7 @@ const Task = ({
                         );
                     }}
                 />
-                <div className="bcs-task-content">
+                <div className="bcs-task-content bcs-task-status-container">
                     {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
                     <Status status={status} />
                 </div>

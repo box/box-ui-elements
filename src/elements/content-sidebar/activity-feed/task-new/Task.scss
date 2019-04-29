@@ -29,7 +29,6 @@ $card-left-offset: 40px;
     .bcs-task-due-date {
         color: $bdl-neutral-02;
         font-weight: bold;
-        margin-top: 8px;
 
         span:first-child {
             padding-right: 3px;
@@ -72,19 +71,18 @@ $card-left-offset: 40px;
         justify-content: center;
     }
 
+    .bcs-task-status-container {
+        margin-top: 8px;
+    }
+
     .bcs-task-status {
         align-items: center;
         color: $bdl-neutral-02;
         display: flex;
         font-weight: bold;
 
-        > span {
-            align-items: center;
-            display: flex;
-
-            > *:first-child {
-                margin-left: 5px;
-            }
+        .bcs-task-status-item:first-child {
+            margin-left: 5px;
         }
     }
 
@@ -131,10 +129,6 @@ $card-left-offset: 40px;
 
     .bcs-task-pending-assignment {
         margin-top: 5px;
-    }
-
-    .bcs-comment-container {
-        margin-bottom: 8px;
     }
 
     .bcs-comment {
