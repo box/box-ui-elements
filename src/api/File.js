@@ -63,22 +63,15 @@ class File extends Item {
 
         const downloadAvailable = fileOrFileVersion[FIELD_IS_DOWNLOAD_AVAILABLE];
         const downloadUrl = fileOrFileVersion[FIELD_AUTHENTICATED_DOWNLOAD_URL];
+        const token = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);
 
-        if (!downloadAvailable || !downloadUrl) {
-            this.errorHandler({ code: this.errorCode, message: 'Item to download missing required fields.' });
-            return;
-        }
-
-        const token: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);
-        const tokenString: ?string = token && (typeof token === 'string' ? token : token.read);
-
-        if (!tokenString) {
-            this.errorHandler({ code: this.errorCode, message: 'Item to download missing a valid token.' });
+        if (!downloadAvailable || !downloadUrl || !token) {
+            this.errorHandler(new Error('Download is missing required fields or token.'));
             return;
         }
 
         const { query, url: downloadBaseUrl } = queryString.parseUrl(downloadUrl);
-        const downloadUrlParams = { ...query, access_token: tokenString };
+        const downloadUrlParams = { ...query, access_token: token };
         const downloadUrlQuery = queryString.stringify(downloadUrlParams);
 
         this.successHandler(`${downloadBaseUrl}?${downloadUrlQuery}`);

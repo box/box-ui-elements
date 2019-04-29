@@ -52,11 +52,11 @@ const VersionsItemActions = ({
     permissions,
 }: Props) => {
     const { can_delete, can_download, can_preview, can_upload } = permissions;
-    const showDelete = can_delete && !isDeleted && !isCurrent && onDelete;
-    const showDownload = can_download && !isDeleted && isDownloadable && onDownload;
-    const showPreview = can_preview && !isDeleted && onPreview;
-    const showPromote = can_upload && !isDeleted && !isCurrent && onPromote;
-    const showRestore = can_delete && isDeleted && onRestore;
+    const showDelete = can_delete && !isDeleted && !isCurrent;
+    const showDownload = can_download && !isDeleted && isDownloadable;
+    const showPreview = can_preview && !isDeleted;
+    const showPromote = can_upload && !isDeleted && !isCurrent;
+    const showRestore = can_delete && isDeleted;
 
     if (!showDelete && !showDownload && !showPreview && !showPromote && !showRestore) {
         return null;
