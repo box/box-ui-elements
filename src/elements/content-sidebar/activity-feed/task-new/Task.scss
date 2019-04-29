@@ -77,10 +77,15 @@ $card-left-offset: 40px;
         color: $bdl-neutral-02;
         display: flex;
         font-weight: bold;
-    }
 
-    .bcs-task-status-label {
-        margin-right: 5px;
+        > span {
+            align-items: center;
+            display: flex;
+
+            > *:first-child {
+                margin-left: 5px;
+            }
+        }
     }
 
     .bcs-task-status-message {

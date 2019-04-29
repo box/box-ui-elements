@@ -965,7 +965,7 @@ const messages = defineMessages({
     },
     tasksFeedStatusLabel: {
         id: 'be.tasks.feed.statusLabel',
-        defaultMessage: 'Status:',
+        defaultMessage: 'Status: {taskStatus}',
         description: 'Label for the task status',
     },
     tasksFeedCompletedLabel: {
