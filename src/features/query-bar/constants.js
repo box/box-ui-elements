@@ -22,7 +22,7 @@ export const MULTI_SELECT: 'multiSelect' = 'multiSelect';
 export const DATE: 'date' = 'date';
 
 export const EQUALS: '=' = '=';
-export const NOT_EQUALS: '!=' = '!=';
+export const NOT_EQUALS: '<>' = '<>';
 export const GREATER_THAN: '>' = '>';
 export const LESS_THAN: '<' = '<';
 

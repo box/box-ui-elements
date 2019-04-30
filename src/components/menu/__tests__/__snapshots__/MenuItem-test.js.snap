@@ -6,6 +6,7 @@ exports[`components/menu/MenuItem render() should render a RadarAnimation if sho
 <RadarAnimation
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isShown={true}
   position="middle-right"
 >
   <li

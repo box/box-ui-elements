@@ -13,7 +13,12 @@ const generateRandomString = value => String.fromCharCode((value % 65) + 65);
 
 const getGridHeader = columnIndex => `Header ${generateRandomString(columnIndex)}`;
 
-const getGridCell = ({ columnIndex, rowIndex }) => `Row ${rowIndex}, Column ${columnIndex}`;
+const getGridCell = ({ cellRowIndex, cellColumnIndex }) => `Row ${cellRowIndex}, Column ${cellColumnIndex}`;
+
+const onSortChange = columnIndex => {
+    // eslint-disable-next-line no-console
+    console.log(`Column header #${columnIndex} clicked`);
+};
 
 const ListViewExamples = ({ columnCount }: Props) => {
     return (
@@ -25,6 +30,7 @@ const ListViewExamples = ({ columnCount }: Props) => {
                         height={height}
                         getGridCell={getGridCell}
                         getGridHeader={getGridHeader}
+                        onSortChange={onSortChange}
                         rowCount={1000}
                         width={width}
                     />

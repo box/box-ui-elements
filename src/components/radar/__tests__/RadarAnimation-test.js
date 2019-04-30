@@ -56,4 +56,43 @@ describe('components/radar/RadarAnimation', () => {
             expect(wrapper).toMatchSnapshot();
         });
     });
+
+    describe('isShown', () => {
+        test('should be shown when isShown is not provided', () => {
+            expect(
+                getWrapper({ isShown: undefined })
+                    .find('.radar')
+                    .exists(),
+            ).toBe(true);
+        });
+
+        test('should be shown when isShown is true', () => {
+            expect(
+                getWrapper({ isShown: true })
+                    .find('.radar')
+                    .exists(),
+            ).toBe(true);
+        });
+
+        test('should not be shown when isShown is false', () => {
+            expect(
+                getWrapper({ isShown: false })
+                    .find('.radar')
+                    .exists(),
+            ).toBe(false);
+        });
+    });
+
+    describe('position instance method', () => {
+        test.each([true, false])(`should only position the tether when shown`, isShown => {
+            const positionTetherMock = jest.fn();
+
+            const wrapper = getWrapper({ isShown });
+            wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
+
+            wrapper.instance().position();
+
+            expect(positionTetherMock).toHaveBeenCalledTimes(isShown ? 1 : 0);
+        });
+    });
 });

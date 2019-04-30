@@ -114,6 +114,20 @@ describe('elements/common/nav-button/NavButton', () => {
         });
     });
 
+    describe('isActive', () => {
+        test('overrides the default matching behavior and sets the active class name', () => {
+            const button = render(
+                <MemoryRouter initialEntries={['/activity']}>
+                    <NavButton isActive={() => true} to="/skills">
+                        Skills
+                    </NavButton>
+                </MemoryRouter>,
+            );
+
+            expect(button.hasClass('bdl-is-active')).toBe(true);
+        });
+    });
+
     describe('strict', () => {
         test('does not do strict matching by default', () => {
             const button = render(

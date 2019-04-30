@@ -8,18 +8,22 @@ type Props = {
     className?: string,
     /** Description of the input */
     description?: React.Node,
-    inputProps?: Object,
-    isDisabled?: boolean,
+    inputProps?: Object, // @TODO: eventually get rid of this
+    isDisabled?: boolean, // @TODO: eventually call this `disabled`
     /** Toggle state */
-    isOn?: boolean,
+    isOn?: boolean, // @TODO: eventually call this `checked`
     /** If set to true, the toggle will be aligned to the right */
     isToggleRightAligned?: boolean,
     /** Label displayed for the input */
     label: React.Node,
     /** Name of the input */
     name?: string,
+    /** blur callback function called with event as the argument */
+    onBlur?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
     /** change callback function called with event as the argument */
-    onChange?: Function,
+    onChange?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
+    /** optional value for the toggles checkbox */
+    value?: any,
 };
 
 const Toggle = ({
@@ -31,6 +35,7 @@ const Toggle = ({
     isToggleRightAligned = false,
     label,
     name,
+    onBlur,
     onChange,
 }: Props) => {
     const classes = classNames('toggle-container', className, {
@@ -56,6 +61,7 @@ const Toggle = ({
                     className="toggle-simple-input"
                     disabled={isDisabled}
                     name={name}
+                    onBlur={onBlur}
                     onChange={onChange}
                     type="checkbox"
                     {...inputProps}
@@ -67,4 +73,5 @@ const Toggle = ({
     );
 };
 
+export type ToggleProps = Props;
 export default Toggle;

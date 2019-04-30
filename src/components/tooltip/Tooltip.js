@@ -117,6 +117,15 @@ class Tooltip extends React.Component<Props, State> {
 
     tooltipID = uniqueId('tooltip');
 
+    tetherRef = React.createRef<{ position: () => {} }>();
+
+    // Instance API: Forces the radar to be repositioned
+    position = () => {
+        if (this.tetherRef.current && this.isShown()) {
+            this.tetherRef.current.position();
+        }
+    };
+
     closeTooltip = () => {
         const { onDismiss } = this.props;
         this.setState({ wasClosedByUser: true });
@@ -160,6 +169,22 @@ class Tooltip extends React.Component<Props, State> {
         this.fireChildEvent('onKeyDown', event);
     };
 
+    isControlled = () => {
+        const { isShown: isShownProp } = this.props;
+        return typeof isShownProp !== 'undefined';
+    };
+
+    isShown = () => {
+        const { isShown: isShownProp } = this.props;
+        const isControlled = this.isControlled();
+
+        const isShown = isControlled ? isShownProp : this.state.isShown;
+
+        const showTooltip = isShown && !this.state.wasClosedByUser;
+
+        return showTooltip;
+    };
+
     render() {
         const {
             bodyElement,
@@ -168,7 +193,6 @@ class Tooltip extends React.Component<Props, State> {
             constrainToScrollParent,
             constrainToWindow,
             isDisabled,
-            isShown: isShownProp,
             isTabbable = true,
             position,
             showCloseButton,
@@ -181,9 +205,9 @@ class Tooltip extends React.Component<Props, State> {
             return React.Children.only(children);
         }
 
-        const isControlled = typeof isShownProp !== 'undefined';
-        const isShown = isControlled ? isShownProp : this.state.isShown;
-        const showTooltip = isShown && !this.state.wasClosedByUser;
+        const isControlled = this.isControlled();
+        const showTooltip = this.isShown();
+
         const withCloseButton = showCloseButton && isControlled;
         const tetherPosition = positions[position];
         const constraints = [];
@@ -233,6 +257,7 @@ class Tooltip extends React.Component<Props, State> {
                 constraints={constraints}
                 enabled={showTooltip}
                 targetAttachment={tetherPosition.targetAttachment}
+                ref={this.tetherRef}
             >
                 {React.cloneElement(React.Children.only(children), componentProps)}
                 {showTooltip && (

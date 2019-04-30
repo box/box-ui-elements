@@ -357,4 +357,17 @@ describe('components/tooltip/Tooltip', () => {
             expect(onKeyDown.calledOnce).toBe(true);
         });
     });
+
+    describe('position instance method', () => {
+        test.each([true, false])(`should only position the tether when shown`, isShown => {
+            const positionTetherMock = jest.fn();
+
+            const wrapper = getWrapper({ isShown });
+            wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
+
+            wrapper.instance().position();
+
+            expect(positionTetherMock).toHaveBeenCalledTimes(isShown ? 1 : 0);
+        });
+    });
 });

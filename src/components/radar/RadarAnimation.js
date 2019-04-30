@@ -65,6 +65,8 @@ type Props = {
     constrainToScrollParent: boolean,
     /** Whether to constrain the radar to window. Defaults to `true` */
     constrainToWindow: boolean,
+    /** Forces the radar to be shown or hidden - defaults to true */
+    isShown: boolean,
     /** Where to position the radar relative to the wrapped component */
     position: Position,
 };
@@ -73,13 +75,24 @@ class RadarAnimation extends React.Component<Props> {
     static defaultProps = {
         constrainToScrollParent: false,
         constrainToWindow: true,
+        isShown: true,
         position: MIDDLE_RIGHT,
     };
 
+    tetherRef = React.createRef<{ position: () => {} }>();
+
     radarAnimationID = uniqueId('radarAnimation');
 
+    // Instance API: Forces the radar to be repositioned
+    position = () => {
+        const { isShown } = this.props;
+        if (this.tetherRef.current && isShown) {
+            this.tetherRef.current.position();
+        }
+    };
+
     render() {
-        const { children, className = '', constrainToScrollParent, constrainToWindow, position } = this.props;
+        const { children, className = '', constrainToScrollParent, constrainToWindow, position, isShown } = this.props;
 
         const constraints = [];
         if (constrainToScrollParent) {
@@ -102,14 +115,17 @@ class RadarAnimation extends React.Component<Props> {
                 classPrefix="radar-animation"
                 constraints={constraints}
                 targetAttachment={tetherPosition.targetAttachment}
+                ref={this.tetherRef}
             >
                 {React.cloneElement(React.Children.only(children), {
                     'aria-describedby': this.radarAnimationID,
                 })}
-                <div className={`radar ${className}`} id={this.radarAnimationID}>
-                    <div className="radar-dot" />
-                    <div className="radar-circle" />
-                </div>
+                {isShown && (
+                    <div className={`radar ${className}`} id={this.radarAnimationID}>
+                        <div className="radar-dot" />
+                        <div className="radar-circle" />
+                    </div>
+                )}
             </TetherComponent>
         );
     }

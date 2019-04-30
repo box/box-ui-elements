@@ -6,15 +6,15 @@ $bdl-green-light: #26c281 !default;
 $bdl-yellorange: #f5b31b !default;
 $bdl-grimace: #4826c2 !default;
 $bdl-purple-rain: #9f3fed !default;
-$bdl-coral: #fc627a !default;
 $bdl-watermelon-red: #ed3757 !default;
 
 // Box Design Language Neutral Colors
 $bdl-neutral-01: #222 !default;
 $bdl-neutral-02: #767676 !default;
-$bdl-neutral-03: #999 !default;
-$bdl-neutral-04: #f3f3f3 !default;
-$bdl-neutral-05: #fafafa !default;
+$bdl-neutral-03: #909090 !default;
+$bdl-neutral-04: #eaeaea !default;
+$bdl-neutral-05: #f3f3f3 !default;
+$bdl-neutral-06: #fafafa !default;
 
 // Primary colors
 $box-blue: $bdl-box-blue !default;
@@ -56,7 +56,7 @@ $ffive: #f5f5f5 !default;
 $fnine: #f9f9f9 !default;
 $seesee: #ccc !default;
 $haze: #fcfcfc !default;
-$off-white: #eaeaea !default;
+$off-white: $bdl-neutral-04 !default;
 $sf-fog: #bdc3c7 !default;
 $karl-fog: #fbfbfc !default;
 $silver-chalice: #afafaf !default;

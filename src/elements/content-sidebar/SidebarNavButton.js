@@ -13,18 +13,21 @@ import './SidebarNavButton.scss';
 type Props = {
     children: React.Node,
     interactionTarget: string,
+    isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
     sidebarView: string,
     tooltip: React.Node,
 };
 
-const SidebarNavButton = ({ children, interactionTarget, onNavigate, sidebarView, tooltip }: Props) => {
+const SidebarNavButton = ({ children, interactionTarget, isOpen, onNavigate, sidebarView, tooltip }: Props) => {
     const sidebarPath = `/${sidebarView}`;
 
     return (
         <Route path={sidebarPath}>
             {({ match }) => {
-                const isToggle = !!match && match.isExact;
+                const isMatch = !!match;
+                const isActive = () => isMatch && !!isOpen;
+                const isToggle = isMatch && match.isExact;
 
                 return (
                     <Tooltip position="middle-left" text={tooltip}>
@@ -33,6 +36,7 @@ const SidebarNavButton = ({ children, interactionTarget, onNavigate, sidebarView
                             className="bcs-NavButton"
                             data-resin-target={interactionTarget}
                             data-testid={interactionTarget}
+                            isActive={isActive}
                             onClick={event => {
                                 if (onNavigate) {
                                     onNavigate(event, { isToggle });
