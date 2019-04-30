@@ -370,3 +370,9 @@ export const KEYS = {
 
 /* ----------------- Other ----------------------- */
 export const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
+
+/* ----------------- Fuzzy Search/Suggested Collabs ----------------------- */
+export const MAX_GAPS_FUZZY_MATCH = 2;
+export const MAX_SUGGESTIONS_TO_SHOW = 3;
+export const MIN_CHARACTERS_FOR_MATCHING = 3;
+export const SUGGESTED_COLLAB_CONTACT_TYPE = 'user';

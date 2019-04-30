@@ -29,15 +29,6 @@ export type allowedAccessLevelsType = {
     peopleWithTheLink?: boolean,
 };
 
-export type contactType = {
-    email?: string,
-    id: number | string,
-    name?: string,
-    text?: string,
-    type: string,
-    value?: number | string,
-};
-
 export type inviteePermissionType = {
     default: boolean,
     disabled?: boolean,
@@ -148,14 +139,3 @@ export type tooltipComponentIdentifierType =
     | 'shared-link-copy-button'
     | 'shared-link-settings'
     | 'shared-link-toggle';
-
-export type suggestedCollaboratorType = {
-    email: string,
-    id: string,
-    name: string,
-    userScore: number,
-};
-
-export type suggestedCollaboratorLookupType = {
-    [id: string]: suggestedCollaboratorType,
-};

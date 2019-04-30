@@ -976,3 +976,23 @@ type AdditionalVersionInfo = {
 };
 
 type OnVersionChange = (version: ?BoxItemVersion, additionalVersionInfo: ?AdditionalVersionInfo) => void;
+
+type Contact = {
+    email?: string,
+    id: number | string,
+    name?: string,
+    text?: string,
+    type: string,
+    value?: number | string,
+};
+
+type SuggestedCollab = {
+    email: string,
+    id: string,
+    name: string,
+    userScore: number,
+};
+
+type SuggestedCollabLookup = {
+    [id: string]: SuggestedCollab,
+};
