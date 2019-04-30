@@ -6,6 +6,7 @@ exports[`components/button/Button should render a RadarAnimation if showRadar is
 <RadarAnimation
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isShown={true}
   position="middle-right"
 >
   <button
