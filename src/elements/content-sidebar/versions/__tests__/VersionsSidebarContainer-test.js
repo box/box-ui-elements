@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme/build';
+import openUrlInsideIframe from '../../../../utils/iframe';
 import VersionsSidebar from '../VersionsSidebarContainer';
 import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../../utils/fields';
 
@@ -12,9 +13,15 @@ jest.mock('../../../common/api-context', () => ({
     withAPIContext: Component => Component,
 }));
 
+jest.mock('../../../../utils/iframe', () => ({
+    __esModule: true,
+    default: jest.fn(),
+}));
+
 describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     const defaultId = '12345';
     const fileAPI = {
+        getDownloadUrl: jest.fn(),
         getFile: jest.fn(),
     };
     const versionsAPI = {
@@ -85,6 +92,22 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
+    describe('handleActionDownload', () => {
+        test('should call api endpoint helpers', async () => {
+            const downloadUrl = 'https://box.com/url';
+            const wrapper = getWrapper({ versionId: '123' });
+            const instance = wrapper.instance();
+            const versionId = '456';
+
+            instance.fetchDownloadUrl = jest.fn().mockResolvedValueOnce(downloadUrl);
+
+            await instance.handleActionDownload(versionId);
+
+            expect(instance.fetchDownloadUrl).toHaveBeenCalledWith(versionId);
+            expect(openUrlInsideIframe).toHaveBeenCalledWith(downloadUrl);
+        });
+    });
+
     describe('handleActionPRomote', () => {
         test('should set state and call api endpoint helpers', () => {
             const wrapper = getWrapper({ versionId: '123' });
@@ -147,6 +170,27 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
+    describe('fetchDownloadUrl', () => {
+        test('should call getDownloadUrl', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const versionId = '456';
+            const version = { id: versionId };
+
+            instance.findVersion = jest.fn().mockReturnValueOnce(version);
+
+            const urlPromise = instance.fetchDownloadUrl(versionId);
+
+            expect(urlPromise).toBeInstanceOf(Promise);
+            expect(fileAPI.getDownloadUrl).toBeCalledWith(
+                defaultId,
+                version,
+                expect.any(Function),
+                expect.any(Function),
+            );
+        });
+    });
+
     describe('fetchFile', () => {
         test('should call getFile', () => {
             const wrapper = getWrapper();
@@ -187,6 +231,23 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 successCallback: expect.any(Function),
                 versionId: '123',
             });
+        });
+    });
+
+    describe('findVersion', () => {
+        test('should return the version stored in state if available', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const versions = [
+                { id: '123', name: 'Version 1' },
+                { id: '456', name: 'Version 2' },
+                { id: '789', name: 'Version 3' },
+            ];
+
+            wrapper.setState({ versions });
+
+            expect(instance.findVersion('456')).toEqual(versions[1]);
+            expect(instance.findVersion('abc')).toEqual(undefined);
         });
     });
 

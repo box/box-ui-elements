@@ -46,7 +46,7 @@ describe('api/File', () => {
             };
             const success = jest.fn();
 
-            file.getDownloadUrl('foo', downloadFile, success).then(() => {
+            return file.getDownloadUrl('foo', downloadFile, success).then(() => {
                 expect(success).toHaveBeenCalledWith(`${downloadUrl}?access_token=${TOKEN}`);
             });
         });
@@ -59,7 +59,7 @@ describe('api/File', () => {
             };
             const success = jest.fn();
 
-            file.getDownloadUrl('foo', downloadVersion, success).then(() => {
+            return file.getDownloadUrl('foo', downloadVersion, success).then(() => {
                 expect(success).toHaveBeenCalledWith(
                     `https://api.box.com/2.0/files/foo/content?access_token=${TOKEN}&version=bar`,
                 );
@@ -74,7 +74,7 @@ describe('api/File', () => {
             const error = jest.fn();
             const success = jest.fn();
 
-            file.getDownloadUrl('foo', downloadFile, success, error).catch(() => {
+            return file.getDownloadUrl('foo', downloadFile, success, error).catch(() => {
                 expect(success).not.toHaveBeenCalled();
                 expect(error).toHaveBeenCalledWith(new Error(ERROR), ERROR_CODE_GET_DOWNLOAD_URL);
             });
@@ -88,7 +88,7 @@ describe('api/File', () => {
             const error = jest.fn();
             const success = jest.fn();
 
-            file.getDownloadUrl('foo', downloadFile, success, error).catch(() => {
+            return file.getDownloadUrl('foo', downloadFile, success, error).catch(() => {
                 expect(success).not.toHaveBeenCalled();
                 expect(error).toHaveBeenCalledWith(new Error(ERROR), ERROR_CODE_GET_DOWNLOAD_URL);
             });
