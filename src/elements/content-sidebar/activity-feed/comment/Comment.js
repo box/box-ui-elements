@@ -166,7 +166,7 @@ class Comment extends React.Component<Props, State> {
                                 }
                             >
                                 <small className="bcs-comment-created-at">
-                                    <ReadableTime alwaysShowTime timestamp={createdAtTimestamp} />
+                                    <ReadableTime relativeThreshold={0} alwaysShowTime timestamp={createdAtTimestamp} />
                                 </small>
                             </Tooltip>
                         </div>

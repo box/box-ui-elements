@@ -657,6 +657,7 @@ type TaskMini = {|
 type TaskCollabRole = 'CREATOR' | 'ASSIGNEE';
 
 type TaskCollab<R> = {|
+    completed_at?: ?ISODate,
     id: ID,
     role: R,
     status: TaskCollabStatus,

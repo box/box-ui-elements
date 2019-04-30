@@ -46,13 +46,25 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Assignees', () => {
         const max = 2;
         const wrapper = mount(<Assignees assignees={assignees} maxAvatars={max} getAvatarUrl={mockGetAvatarUrl} />);
         expect(global.queryAllByTestId(wrapper.render(), 'task-assignment-status')).toHaveLength(max);
-        expect(wrapper).toMatchSnapshot('assignment avatars with overflow icon');
     });
 
     test('should show +N overflow when there are more assignees than maxAvatars', () => {
         const max = 2;
         const wrapper = shallow(<Assignees assignees={assignees} maxAvatars={max} getAvatarUrl={mockGetAvatarUrl} />);
-        expect(global.queryAllByTestId(wrapper.render(), 'task-assignment-overflow')).toHaveLength(1);
+        const overflowIcon = global.queryAllByTestId(wrapper.dive(), 'task-assignment-overflow');
+        expect(overflowIcon).toHaveLength(1);
+        expect(overflowIcon.text()).toBe('+1');
+    });
+
+    test('should show N+ overflow when there are more assignees and another page of results', () => {
+        const max = 2;
+        const assigneesWithPagination = { ...assignees, next_marker: 'abc', limit: 20 };
+        const wrapper = shallow(
+            <Assignees assignees={assigneesWithPagination} maxAvatars={max} getAvatarUrl={mockGetAvatarUrl} />,
+        );
+        const overflowIcon = global.queryAllByTestId(wrapper.dive(), 'task-assignment-overflow');
+        expect(overflowIcon).toHaveLength(1);
+        expect(overflowIcon.text()).toBe('1+');
     });
 
     test('should show not show overflow icon when there are fewer assignees than maxAvatars', () => {
@@ -70,6 +82,5 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Assignees', () => {
         expect(wrapper.find('Overlay')).toHaveLength(1);
         const assignmentList = wrapper.find('.bcs-task-assignment-list');
         expect(assignmentList.find('.bcs-task-assignment-list-item')).toHaveLength(3);
-        expect(assignmentList).toMatchSnapshot('assignment list');
     });
 });
