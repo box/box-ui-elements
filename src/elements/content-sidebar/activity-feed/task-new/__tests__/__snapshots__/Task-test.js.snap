@@ -47,8 +47,12 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       userHeadlineRenderer={[Function]}
     />
     <div
-      className="bcs-task-content"
-    />
+      className="bcs-task-content bcs-task-status-container"
+    >
+      <Component
+        status="NOT_STARTED"
+      />
+    </div>
     <div
       className="bcs-task-content"
     >
