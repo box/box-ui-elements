@@ -1,7 +1,9 @@
 @import '../../../styles/variables';
 
 .bcs-VersionsList {
-    padding-bottom: 20px;
+    .be & {
+        padding-bottom: 20px;
+    }
 
     &.bcs-is-empty {
         padding-top: 10px;
