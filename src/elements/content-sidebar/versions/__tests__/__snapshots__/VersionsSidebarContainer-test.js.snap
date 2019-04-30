@@ -7,6 +7,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer render shoul
   onDownload={[Function]}
   onPreview={[Function]}
   onPromote={[Function]}
+  onRestore={[Function]}
   parentName="activity"
   permissions={Object {}}
   versions={Array []}

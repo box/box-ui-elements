@@ -18,11 +18,12 @@ type Props = {
     onDownload: VersionActionCallback,
     onPreview: VersionActionCallback,
     onPromote: VersionActionCallback,
+    onRestore: VersionActionCallback,
     permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsList = ({ isLoading, onDelete, onDownload, onPreview, onPromote, permissions, versions }: Props) => {
+const VersionsList = ({ isLoading, versions, ...rest }: Props) => {
     if (!isLoading && !versions.length) {
         return (
             <div className="bcs-VersionsList bcs-is-empty">
@@ -40,12 +41,8 @@ const VersionsList = ({ isLoading, onDelete, onDownload, onPreview, onPromote, p
                             <VersionsItem
                                 isCurrent={index === 0}
                                 isSelected={match.params.versionId === version.id}
-                                onDelete={onDelete}
-                                onDownload={onDownload}
-                                onPreview={onPreview}
-                                onPromote={onPromote}
-                                permissions={permissions}
                                 version={version}
+                                {...rest}
                             />
                         )}
                     />
