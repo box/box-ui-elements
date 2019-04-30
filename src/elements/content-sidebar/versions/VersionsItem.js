@@ -53,12 +53,14 @@ const VersionsItem = ({
         action = VERSION_UPLOAD_ACTION,
         created_at: createdAt,
         id: versionId,
+        is_download_available,
         modified_by: modifiedBy,
         size,
         version_number: versionNumber,
     } = version;
     const isDeleted = action === VERSION_DELETE_ACTION;
     const isDisabled = isDeleted || !permissions.can_preview;
+    const isDownloadable = !!is_download_available;
 
     // Version info helpers
     const versionSize = sizeUtil(size);
@@ -113,6 +115,7 @@ const VersionsItem = ({
             <VersionsItemActions
                 isCurrent={isCurrent}
                 isDeleted={isDeleted}
+                isDownloadable={isDownloadable}
                 onDelete={handleAction(onDelete)}
                 onDownload={handleAction(onDownload)}
                 onPreview={handleAction(onPreview)}

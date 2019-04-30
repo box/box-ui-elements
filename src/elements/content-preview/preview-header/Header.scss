@@ -3,15 +3,36 @@
 .bcpr-btns {
     display: flex;
 
-    .be & .bcpr-bcow-btn,
+    .be & .bcpr-bcow-btn {
+        margin: 0 10px 0 0;
+        padding: 0 5px;
+
+        &:active,
+        &:focus,
+        &:hover {
+            background: none;
+        }
+    }
+
     .be & .btn-plain.bcpr-btn {
         display: flex;
-        margin: 0 10px 0 0;
-        padding: 0 5px 0 5px;
+        padding: 5px 10px;
 
-        &:hover,
-        &:active {
-            background: none;
+        &:focus,
+        &:hover {
+            color: $bdl-neutral-04;
+
+            .fill-color {
+                fill: $bdl-neutral-02;
+            }
+        }
+    }
+
+    .be & .btn-plain.bcpr-btn-close {
+        font-weight: bold;
+
+        .icon-close {
+            margin: -3px; // Close icon has more padding than print/download
         }
     }
 }
@@ -32,7 +53,7 @@
     }
 
     .bp-base-header {
-        padding: 0 0 0 15px;
+        padding: 0 15px;
     }
 }
 

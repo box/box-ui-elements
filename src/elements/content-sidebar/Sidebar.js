@@ -180,7 +180,6 @@ class Sidebar extends React.Component<Props, State> {
             metadataEditors,
             metadataSidebarProps,
             onVersionChange,
-            onVersionHistoryClick,
         }: Props = this.props;
 
         const { isOpen } = this.state;
@@ -188,7 +187,7 @@ class Sidebar extends React.Component<Props, State> {
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasVersions = isFeatureEnabled(features, 'versions');
-        const handleVersionHistoryClick = hasVersions && this.handleVersionHistoryClick;
+        const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
         });
@@ -229,7 +228,7 @@ class Sidebar extends React.Component<Props, State> {
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
                             onVersionChange={onVersionChange}
-                            onVersionHistoryClick={onVersionHistoryClick || handleVersionHistoryClick}
+                            onVersionHistoryClick={onVersionHistoryClick}
                         />
                     </React.Fragment>
                 )}

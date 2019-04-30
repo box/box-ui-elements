@@ -20,6 +20,7 @@ type Props = {
     error?: string,
     isLoading: boolean,
     onDelete: VersionActionCallback,
+    onDownload: VersionActionCallback,
     onPreview: VersionActionCallback,
     onPromote: VersionActionCallback,
     parentName: string,
@@ -31,6 +32,7 @@ const VersionsSidebar = ({
     error,
     isLoading,
     onDelete,
+    onDownload,
     onPreview,
     onPromote,
     parentName,
@@ -53,6 +55,7 @@ const VersionsSidebar = ({
                 <VersionsList
                     isLoading={isLoading}
                     onDelete={onDelete}
+                    onDownload={onDownload}
                     onPreview={onPreview}
                     onPromote={onPromote}
                     permissions={permissions}

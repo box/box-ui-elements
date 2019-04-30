@@ -4,6 +4,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer render shoul
 <VersionsSidebar
   isLoading={true}
   onDelete={[Function]}
+  onDownload={[Function]}
   onPreview={[Function]}
   onPromote={[Function]}
   parentName="activity"
