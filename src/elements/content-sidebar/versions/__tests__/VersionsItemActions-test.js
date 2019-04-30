@@ -9,7 +9,7 @@ import IconUpload from '../../../../icons/general/IconUpload';
 import VersionsItemActions from '../VersionsItemActions';
 
 describe('elements/content-sidebar/versions/VersionsItemActions', () => {
-    const getWrapper = (props = {}) => shallow(<VersionsItemActions {...props} />);
+    const getWrapper = (props = {}) => shallow(<VersionsItemActions isDownloadable {...props} />);
 
     describe('render', () => {
         test.each`
@@ -52,6 +52,7 @@ describe('elements/content-sidebar/versions/VersionsItemActions', () => {
             ({ expected, isDeleted }) => {
                 const wrapper = getWrapper({
                     isDeleted,
+                    isDownloadable: true,
                     permissions: { can_download: true, can_preview: true },
                 });
                 expect(wrapper.find(IconDownload).exists()).toBe(expected);

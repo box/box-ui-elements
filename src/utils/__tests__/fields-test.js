@@ -69,6 +69,8 @@ describe('util/fields', () => {
             FIELD_HAS_COLLABORATIONS,
             FIELD_IS_EXTERNALLY_OWNED,
             FIELD_ITEM_COLLECTION,
+            FIELD_AUTHENTICATED_DOWNLOAD_URL,
+            FIELD_IS_DOWNLOAD_AVAILABLE,
         ]);
     });
 
@@ -111,6 +113,8 @@ describe('util/fields', () => {
             FIELD_VERSION_NUMBER,
             FIELD_IS_EXTERNALLY_OWNED,
             FIELD_RESTORED_FROM,
+            FIELD_AUTHENTICATED_DOWNLOAD_URL,
+            FIELD_IS_DOWNLOAD_AVAILABLE,
         ]);
     });
 
@@ -127,8 +131,10 @@ describe('util/fields', () => {
 
     test('should fetch correct version fields', () => {
         expect(FILE_VERSIONS_FIELDS_TO_FETCH).toEqual([
-            FIELD_EXTENSION,
+            FIELD_AUTHENTICATED_DOWNLOAD_URL,
             FIELD_CREATED_AT,
+            FIELD_EXTENSION,
+            FIELD_IS_DOWNLOAD_AVAILABLE,
             FIELD_MODIFIED_AT,
             FIELD_MODIFIED_BY,
             FIELD_NAME,
