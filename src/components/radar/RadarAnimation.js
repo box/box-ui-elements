@@ -65,6 +65,8 @@ type Props = {
     constrainToScrollParent: boolean,
     /** Whether to constrain the radar to window. Defaults to `true` */
     constrainToWindow: boolean,
+    /** Forces the radar to be shown or hidden - defaults to true */
+    isShown?: boolean,
     /** Where to position the radar relative to the wrapped component */
     position: Position,
 };
@@ -76,7 +78,21 @@ class RadarAnimation extends React.Component<Props> {
         position: MIDDLE_RIGHT,
     };
 
+    tetherRef = React.createRef<{ position: () => {} }>();
+
     radarAnimationID = uniqueId('radarAnimation');
+
+    isShown = () => {
+        const { isShown = true } = this.props;
+        return isShown;
+    };
+
+    // Instance API: Forces the radar to be repositioned
+    position = () => {
+        if (this.tetherRef.current && this.isShown()) {
+            this.tetherRef.current.position();
+        }
+    };
 
     render() {
         const { children, className = '', constrainToScrollParent, constrainToWindow, position } = this.props;
@@ -102,14 +118,17 @@ class RadarAnimation extends React.Component<Props> {
                 classPrefix="radar-animation"
                 constraints={constraints}
                 targetAttachment={tetherPosition.targetAttachment}
+                ref={this.tetherRef}
             >
                 {React.cloneElement(React.Children.only(children), {
                     'aria-describedby': this.radarAnimationID,
                 })}
-                <div className={`radar ${className}`} id={this.radarAnimationID}>
-                    <div className="radar-dot" />
-                    <div className="radar-circle" />
-                </div>
+                {this.isShown() && (
+                    <div className={`radar ${className}`} id={this.radarAnimationID}>
+                        <div className="radar-dot" />
+                        <div className="radar-circle" />
+                    </div>
+                )}
             </TetherComponent>
         );
     }
