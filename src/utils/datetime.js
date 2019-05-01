@@ -3,12 +3,20 @@
  * @file Date and time utilities
  * @author Box
  */
+import isNaN from 'lodash/isNaN';
 
 const MILLISECONDS_PER_SECOND = 1000;
 // 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * MILLISECONDS_PER_SECOND;
 // 60 sec * 1000
 const MILLISECONDS_PER_MINUTE = 60 * MILLISECONDS_PER_SECOND;
+
+// matcher for acceptable ISO 8601 date formats w/ timezone (see below)
+const RE_ISO8601_DATE = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{1,3})?((Z$)|(?:[+-](?:([0-2]\d$)|([0-2]\d(?:00|30)$)|([0-2]\d:(?:00|30)$))))$/;
+const ISO8601_Z_FMT = 3;
+const ISO8601_SHORT_FMT = 4;
+const ISO8601_MEDIUM_FMT = 5;
+const ISO8601_LONG_FMT = 6;
 
 /**
  * Converts an integer value in seconds to milliseconds.
@@ -123,6 +131,69 @@ function convertDateToUnixMidnightTime(date: Date) {
 }
 
 /**
+ * Will check to see if a date object is not valid, according to the browser
+ * JS engine.
+ *
+ * @param {Date} date
+ * @return {boolean} whether the date value passes validation
+ */
+function isValidDate(date: Date): boolean {
+    return !isNaN(date.getTime());
+}
+
+/**
+ * Will convert ISO8601-compatible dates (with zone designators)
+ *      2018-06-13T00:00:00.000-0500
+ *      or
+ *      2018-06-13T00:00:00.000-05
+ *
+ * to
+ *      2018-06-13T00:00:00.000-05:00
+ *
+ * Equivalent formats between the two (e.g., uzing 'Z') will remain unchanged.
+ * If the date format cannot be converted, it will pass along the existing value
+ * @param {string} isoString
+ * @return {string} converted date format, if applicable
+ */
+function convertISOStringtoRFC3339String(isoString: string): string {
+    // test that the date format inbound is ISO8601-compatible
+    if (RE_ISO8601_DATE.test(isoString)) {
+        // if it is, parse out the timezone part if it's in a longer format
+        // use the capture groups instead of the split result for the datetime and the time zone
+        const parseDate = isoString.split(RE_ISO8601_DATE);
+        const dateTz = parseDate.slice(1, 3);
+        const timeZone = dateTz[1];
+
+        /**
+         * This contains an array structured:
+         * 1) the date/time portion (2018-06-13T00:00:00.000)
+         * 2) the timezone portion (e.g., Z, +03, -0400, +05:00)
+         * 3) the Z format for timezone (if matched)
+         * 4) the short format for timezone (if matched)
+         * 5) the colon-less format for timezone (if matched)
+         * 6) the colon long format for timezone (if matched)
+         */
+
+        if (parseDate[ISO8601_Z_FMT]) {
+            return isoString;
+        }
+
+        if (parseDate[ISO8601_SHORT_FMT]) {
+            return `${dateTz[0] + timeZone}:00`;
+        }
+
+        if (parseDate[ISO8601_MEDIUM_FMT]) {
+            return `${dateTz[0] + timeZone.substr(0, 3)}:${timeZone.substr(3)}`;
+        }
+
+        if (parseDate[ISO8601_LONG_FMT]) {
+            return isoString;
+        }
+    }
+    return isoString;
+}
+
+/**
  * Will convert
  *      2018-06-13T00:00:00.000Z
  * to
@@ -134,7 +205,7 @@ function convertDateToUnixMidnightTime(date: Date) {
  */
 function convertISOStringToUTCDate(isoString: string): Date {
     // get date in UTC midnight time
-    const utcDate = new Date(isoString);
+    const utcDate = new Date(convertISOStringtoRFC3339String(isoString));
     const utcTime = utcDate.getTime();
 
     // get browser's timezone
@@ -150,8 +221,10 @@ export {
     convertToMs,
     convertDateToUnixMidnightTime,
     convertISOStringToUTCDate,
+    convertISOStringtoRFC3339String,
     isToday,
     isTomorrow,
+    isValidDate,
     isYesterday,
     isCurrentYear,
     formatTime,
