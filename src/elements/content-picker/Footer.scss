@@ -5,15 +5,26 @@
     background-color: $almost-white;
     border-top: 1px solid $off-white;
     display: flex;
-    flex: 0 0 70px;
+    flex: 0 1 70px;
     justify-content: space-between;
     padding: 0 20px;
 
+    .bcp-footer-left {
+        flex: 0 1 100%;
+        min-width: 0;
+    }
+
     .bcp-selected {
         margin: 0;
+        max-width: 100%;
 
         .btn-content {
-            display: flex;
+            display: inline-block;
+            line-height: 13px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
         }
     }
 
@@ -43,6 +54,7 @@
 
     .bcp-footer-right {
         display: flex;
+        flex: 1 0 auto;
     }
 
     .btn-group {
