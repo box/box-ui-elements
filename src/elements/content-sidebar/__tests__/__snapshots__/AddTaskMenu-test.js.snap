@@ -35,7 +35,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
           className="bcs-AddTaskMenu-title"
         >
           <FormattedMessage
-            defaultMessage="Task"
+            defaultMessage="General Task"
             id="be.tasks.addTask.general"
           />
         </div>
@@ -63,7 +63,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
           className="bcs-AddTaskMenu-title"
         >
           <FormattedMessage
-            defaultMessage="Approval"
+            defaultMessage="Approval Task"
             id="be.tasks.addTask.approval"
           />
         </div>

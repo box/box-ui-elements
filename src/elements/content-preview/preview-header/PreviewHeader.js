@@ -56,8 +56,9 @@ const PreviewHeader = ({
     const isPreviewingCurrentVersion = currentVersionId === selectedVersionId;
 
     // When previewing an older version the close button returns the user to the current version
-    const closeMsg = intl.formatMessage(messages.close);
-    const backMsg = intl.formatMessage(messages.back);
+    const closeMsg = isPreviewingCurrentVersion
+        ? intl.formatMessage(messages.close)
+        : intl.formatMessage(messages.back);
     const printMsg = intl.formatMessage(messages.print);
     const downloadMsg = intl.formatMessage(messages.download);
     const drawMsg = intl.formatMessage(messages.drawAnnotation);
@@ -122,16 +123,16 @@ const PreviewHeader = ({
                             <IconDownload color={nines} height={18} width={18} />
                         </PlainButton>
                     )}
-                    {onClose &&
-                        (isPreviewingCurrentVersion ? (
-                            <PlainButton aria-label={closeMsg} className="bcpr-btn" onClick={onClose} type="button">
-                                <IconClose color={nines} height={24} width={24} />
-                            </PlainButton>
-                        ) : (
-                            <PlainButton className="bcpr-btn" onClick={onClose} title={backMsg} type="button">
-                                {backMsg}
-                            </PlainButton>
-                        ))}
+                    {onClose && (
+                        <PlainButton
+                            aria-label={isPreviewingCurrentVersion && closeMsg}
+                            className="bcpr-btn bcpr-btn-close"
+                            onClick={onClose}
+                            type="button"
+                        >
+                            {isPreviewingCurrentVersion ? <IconClose color={nines} height={24} width={24} /> : closeMsg}
+                        </PlainButton>
+                    )}
                 </div>
             </div>
         </div>

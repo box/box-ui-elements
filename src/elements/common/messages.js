@@ -895,7 +895,7 @@ const messages = defineMessages({
     },
     taskAddTaskGeneral: {
         id: 'be.tasks.addTask.general',
-        defaultMessage: 'Task',
+        defaultMessage: 'General Task',
         description: 'label for menu item that opens general task popup',
     },
     taskAddTaskGeneralDescription: {
@@ -905,7 +905,7 @@ const messages = defineMessages({
     },
     taskAddTaskApproval: {
         id: 'be.tasks.addTask.approval',
-        defaultMessage: 'Approval',
+        defaultMessage: 'Approval Task',
         description: 'label for menu item that opens approval task popup',
     },
     taskAddTaskApprovalDescription: {
@@ -963,25 +963,30 @@ const messages = defineMessages({
         defaultMessage: 'Reject',
         description: 'Reject option for an approval task',
     },
+    tasksFeedStatusLabel: {
+        id: 'be.tasks.feed.statusLabel',
+        defaultMessage: 'Status: {taskStatus}',
+        description: 'Label for the task status',
+    },
     tasksFeedCompletedLabel: {
         id: 'be.tasks.feed.completedLabel',
-        defaultMessage: 'Task Complete',
+        defaultMessage: 'Completed',
         description: 'Label for a completed task',
     },
     tasksFeedApprovedLabel: {
         id: 'be.tasks.feed.approvedLabel',
-        defaultMessage: 'Task Approved',
+        defaultMessage: 'Approved',
         description: 'Label for an approved task',
     },
     tasksFeedRejectedLabel: {
         id: 'be.tasks.feed.rejectedLabel',
-        defaultMessage: 'Task Rejected',
+        defaultMessage: 'Rejected',
         description: 'Label for a rejected task',
     },
-    tasksFeedIncompleteLabel: {
-        id: 'be.tasks.feed.incompleteLabel',
-        defaultMessage: 'Awaiting Assignees',
-        description: 'Label for an incomplete task',
+    tasksFeedInProgressLabel: {
+        id: 'be.tasks.feed.inProgressLabel',
+        defaultMessage: 'In Progress',
+        description: 'Label for a task in progress',
     },
     tasksFeedHeadlineApprovalCurrentUser: {
         id: 'be.tasks.feed.headline.approval.currentUser',
@@ -1015,18 +1020,18 @@ const messages = defineMessages({
     },
     tasksFeedStatusRejected: {
         id: 'be.tasks.status.rejected',
-        defaultMessage: 'Rejected',
-        description: 'Rejected task status',
+        defaultMessage: 'Rejected {dateTime}',
+        description: 'Rejected task status, where dateTime is a readable time like "Today at 2pm"',
     },
     tasksFeedStatusAccepted: {
         id: 'be.tasks.status.accepted',
-        defaultMessage: 'Accepted',
-        description: 'accepted task status',
+        defaultMessage: 'Accepted {dateTime}',
+        description: 'Accepted task status, where dateTime is a readable time like "Today at 2pm"',
     },
     tasksFeedStatusCompleted: {
         id: 'be.tasks.status.completed',
-        defaultMessage: 'Completed',
-        description: 'Completed task status',
+        defaultMessage: 'Completed {dateTime}',
+        description: 'Completed task status, where dateTime is a readable time like "Today at 2pm"',
     },
     tasksFeedStatusNotStarted: {
         id: 'be.tasks.status.notStarted',

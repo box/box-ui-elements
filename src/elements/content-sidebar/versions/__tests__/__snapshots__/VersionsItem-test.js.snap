@@ -94,6 +94,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
   </div>
   <VersionsItemActions
     isDeleted={true}
+    isDownloadable={false}
     onDelete={[Function]}
     onDownload={[Function]}
     onPreview={[Function]}
@@ -163,6 +164,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
   </div>
   <VersionsItemActions
     isDeleted={false}
+    isDownloadable={false}
     onDelete={[Function]}
     onDownload={[Function]}
     onPreview={[Function]}

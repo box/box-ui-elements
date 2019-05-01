@@ -15,13 +15,14 @@ import './VersionsList.scss';
 type Props = {
     isLoading: boolean,
     onDelete: VersionActionCallback,
+    onDownload: VersionActionCallback,
     onPreview: VersionActionCallback,
     onPromote: VersionActionCallback,
     permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsList = ({ isLoading, onDelete, onPreview, onPromote, permissions, versions }: Props) => {
+const VersionsList = ({ isLoading, onDelete, onDownload, onPreview, onPromote, permissions, versions }: Props) => {
     if (!isLoading && !versions.length) {
         return (
             <div className="bcs-VersionsList bcs-is-empty">
@@ -40,6 +41,7 @@ const VersionsList = ({ isLoading, onDelete, onPreview, onPromote, permissions, 
                                 isCurrent={index === 0}
                                 isSelected={match.params.versionId === version.id}
                                 onDelete={onDelete}
+                                onDownload={onDownload}
                                 onPreview={onPreview}
                                 onPromote={onPromote}
                                 permissions={permissions}

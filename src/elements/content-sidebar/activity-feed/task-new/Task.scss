@@ -29,7 +29,6 @@ $card-left-offset: 40px;
     .bcs-task-due-date {
         color: $bdl-neutral-02;
         font-weight: bold;
-        margin-top: 8px;
 
         span:first-child {
             padding-right: 3px;
@@ -72,10 +71,30 @@ $card-left-offset: 40px;
         justify-content: center;
     }
 
+    .bcs-task-status-container {
+        margin-top: 8px;
+    }
+
     .bcs-task-status {
         align-items: center;
+        color: $bdl-neutral-02;
         display: flex;
-        margin-top: 18px;
+        font-weight: bold;
+
+        .bcs-task-status-item:first-child {
+            margin-left: 5px;
+        }
+    }
+
+    .bcs-task-status-message {
+        &.completed,
+        &.approved {
+            color: $bdl-green-light;
+        }
+
+        &.rejected {
+            color: $bdl-watermelon-red;
+        }
     }
 
     .bcs-task-status-icon {
@@ -83,7 +102,7 @@ $card-left-offset: 40px;
         border-radius: 100%;
         bottom: 0;
         height: 14px;
-        margin-right: 5px;
+        margin-right: 3px;
         width: 14px;
 
         &.completed,
@@ -114,7 +133,7 @@ $card-left-offset: 40px;
 
     .bcs-comment {
         .bcs-comment-user-name {
-            margin-right: 0;
+            margin-right: 3px;
 
             &.link {
                 white-space: normal;
@@ -125,10 +144,6 @@ $card-left-offset: 40px;
     button:first-of-type.bcs-task-action-button {
         margin-left: 0;
     }
-}
-
-.bcs-task-assignment-tooltip-text {
-    text-align: center;
 }
 
 .bcs-task-assignment-status {
@@ -170,10 +185,14 @@ $card-left-offset: 40px;
 }
 
 .bcs-task-assignment-list-item {
-    align-items: flex-start;
+    align-items: center;
     display: flex;
     margin: 6px 0 0 0;
     padding: 3px 0;
+
+    .bcs-task-assignment-details-status {
+        color: $bdl-neutral-02;
+    }
 }
 
 .bcs-task-assignment-list-item-avatar {
@@ -186,4 +205,12 @@ $card-left-offset: 40px;
 
 .bcs-task-assignment-list-item-status {
     color: $bdl-neutral-02;
+}
+
+.bcs-task-assignment-tooltip {
+    text-align: center;
+
+    .bcs-task-assignment-details-name {
+        font-weight: bold;
+    }
 }

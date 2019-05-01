@@ -1,9 +1,11 @@
 import {
     convertToMs,
+    convertISOStringtoRFC3339String,
     convertDateToUnixMidnightTime,
     convertISOStringToUTCDate,
     isToday,
     isTomorrow,
+    isValidDate,
     isYesterday,
     isCurrentYear,
     formatTime,
@@ -131,6 +133,19 @@ describe('utils/datetime', () => {
         });
     });
 
+    describe('isValidDate()', () => {
+        test.each([
+            ['2019-01-01', true],
+            ['2019-01-01T12:34:56', true],
+            ['2019-01-01T09:41:56-07:00', true],
+            ['some random string', false],
+            ['', false],
+        ])('should interpret %s as a %p date', (dateString, expected) => {
+            const date = new Date(dateString);
+            expect(isValidDate(date)).toBe(expected);
+        });
+    });
+
     describe('addTime()', () => {
         test('should correctly add time', () => {
             const TEN_MIN_IN_MS = 600000;
@@ -148,9 +163,14 @@ describe('utils/datetime', () => {
     });
 
     describe('convertISOStringToUTCDate()', () => {
-        test('should correctly convert date', () => {
-            const result = convertISOStringToUTCDate('2018-06-13T00:00:00.000Z');
-            expect(result.toISOString()).toBe('2018-06-13T07:00:00.000Z');
+        test.each([
+            ['2018-06-13T00:00:00.000Z', '2018-06-13T07:00:00.000Z'],
+            ['2018-06-13T01:00:00.000+01:00', '2018-06-13T07:00:00.000Z'],
+            ['2018-06-12T23:00:00.000-0100', '2018-06-13T07:00:00.000Z'],
+            ['2018-06-13T02:00:00.000+02', '2018-06-13T07:00:00.000Z'],
+        ])('should correctly convert from %s to %s', (originDateTime, expectedDateTime) => {
+            const result = convertISOStringToUTCDate(originDateTime);
+            expect(result.toISOString()).toBe(expectedDateTime);
         });
     });
 
@@ -158,6 +178,31 @@ describe('utils/datetime', () => {
         test('should correctly convert date', () => {
             const result = new Date(convertDateToUnixMidnightTime(new Date('2018-06-13T07:00:00.000Z')));
             expect(result.toISOString()).toBe('2018-06-13T00:00:00.000Z');
+        });
+    });
+
+    describe('convertISOStringtoRFC3339String()', () => {
+        test.each([
+            // UTC
+            ['2018-06-13T00:00:00.000Z', '2018-06-13T00:00:00.000Z'],
+            // backward-looking timezone examples
+            ['2018-06-13T00:00:00.000-05', '2018-06-13T00:00:00.000-05:00'],
+            ['2018-06-13T00:00:00.000-0500', '2018-06-13T00:00:00.000-05:00'],
+            ['2018-06-13T00:00:00.000-05:00', '2018-06-13T00:00:00.000-05:00'],
+            // forward-looking timezone examples
+            ['2018-06-13T00:00:00.000+05', '2018-06-13T00:00:00.000+05:00'],
+            ['2018-06-13T00:00:00.000+0600', '2018-06-13T00:00:00.000+06:00'],
+            ['2018-06-13T00:00:00.000+07:00', '2018-06-13T00:00:00.000+07:00'],
+            // Half hour examples
+            ['2018-06-13T00:00:00.000-07:30', '2018-06-13T00:00:00.000-07:30'],
+            ['2018-06-13T00:00:00.000-05:00', '2018-06-13T00:00:00.000-05:00'],
+            ['2018-06-13T00:00:00.000-0630', '2018-06-13T00:00:00.000-06:30'],
+            // Null-conversion examples
+            ['2018-06-13T00:00:00.000-05:45', '2018-06-13T00:00:00.000-05:45'],
+            ['2018-06-13T00:00:00.000+34', '2018-06-13T00:00:00.000+34'],
+        ])('should convert %s to %s correctly', (from, to) => {
+            const input = convertISOStringtoRFC3339String(from);
+            expect(input).toEqual(to);
         });
     });
 });
