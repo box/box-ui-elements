@@ -24,6 +24,14 @@ describe('Create Task', () => {
         });
     });
 
+    context('Task Modal', () => {
+        it('autofocuses first input (assignees)', () => {
+            cy.contains(l('be.tasks.addTask')).click();
+            cy.contains(l('be.tasks.addTask.approval')).click();
+            cy.focused().should('have.attr', 'id', 'taskAssignees');
+        });
+    });
+
     context('Task Form', () => {
         beforeEach(() => {
             cy.server();
