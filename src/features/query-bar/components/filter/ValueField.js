@@ -13,6 +13,7 @@ import type { ConditionValueType } from '../../flowTypes';
 import '../../styles/Condition.scss';
 
 type Props = {
+    className?: string,
     onChange: (value: Array<ConditionValueType>) => void,
     selectedValues: Array<ConditionValueType>,
     valueOptions: Array<Object>,
@@ -25,8 +26,9 @@ const getDateValue = selectedValues => {
     }
 
     const value = selectedValues[0];
-    if (value instanceof Date) {
-        return value;
+
+    if (Date.parse(value)) {
+        return new Date(value);
     }
 
     throw new Error('Expected Date');
@@ -45,7 +47,7 @@ const getStringValue = selectedValues => {
     throw new Error('Expected string');
 };
 
-const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props) => {
+const ValueField = ({ className = '', onChange, selectedValues, valueOptions, valueType }: Props) => {
     const value = selectedValues.length > 0 ? selectedValues[0] : '';
     const onInputChange = e => {
         return e.target.value !== '' ? onChange([e.target.value]) : onChange([]);
@@ -58,6 +60,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
             return (
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
+                        className={className}
                         hideLabel
                         label="Text Input"
                         name="text"
@@ -71,6 +74,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
             return (
                 <div className="filter-dropdown-date-field-container">
                     <DatePicker
+                        className={className}
                         displayFormat={{
                             day: 'numeric',
                             month: 'long',
@@ -88,6 +92,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
         case ENUM:
             return (
                 <SingleSelectField
+                    className={className}
                     fieldType={VALUE}
                     onChange={e => onChange([e.value])}
                     options={valueOptions}
@@ -98,6 +103,7 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
         case MULTI_SELECT:
             return (
                 <MultiSelectField
+                    className={className}
                     fieldType={VALUE}
                     onChange={e => onChange(e.map(option => option.value))}
                     options={valueOptions}
