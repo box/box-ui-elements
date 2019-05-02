@@ -27,7 +27,7 @@ const getDateValue = selectedValues => {
 
     const value = selectedValues[0];
 
-    if (Date.parse(value)) {
+    if (Date.parse(String(value))) {
         return new Date(value);
     }
 
