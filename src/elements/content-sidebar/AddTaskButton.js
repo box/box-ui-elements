@@ -65,7 +65,7 @@ class AddTaskButton extends React.Component<Props, State> {
 
         // CSS selector for first form element
         // Note: Modal throws an error if this fails to find an element!
-        const focusTargetSelector = '.task-modal #taskAssignees';
+        const focusTargetSelector = '.task-modal input';
         return (
             <React.Fragment>
                 <AddTaskMenu isDisabled={isDisabled} onMenuItemClick={this.handleClickMenuItem} />

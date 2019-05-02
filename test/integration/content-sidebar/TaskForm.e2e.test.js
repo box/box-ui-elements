@@ -28,7 +28,7 @@ describe('Create Task', () => {
         it('autofocuses first input (assignees)', () => {
             cy.contains(l('be.tasks.addTask')).click();
             cy.contains(l('be.tasks.addTask.approval')).click();
-            cy.focused().should('have.attr', 'id', 'taskAssignees');
+            cy.focused().should('have.attr', 'data-testid', 'task-form-assignee-input');
         });
     });
 

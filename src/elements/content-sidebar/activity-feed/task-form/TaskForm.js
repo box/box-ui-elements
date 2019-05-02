@@ -207,10 +207,7 @@ class TaskForm extends React.Component<Props, State> {
                             className={pillSelectorOverlayClasses}
                             error={this.getErrorByFieldname('taskAssignees')}
                             disabled={isLoading}
-                            inputProps={{
-                                'data-testid': 'task-form-assignee-input',
-                                id: 'taskAssignees' /* do not remove, used by modal to focus element */,
-                            }}
+                            inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
                             name="taskAssignees"
