@@ -164,10 +164,6 @@ describe('elements/content-sidebar/ContentSidebar', () => {
         });
 
         test('should set the state with the file and view and then call fetchMetadata', () => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.setState = setState;
-
             instance.fetchMetadata = jest.fn();
             instance.fetchFileSuccessCallback(file);
 

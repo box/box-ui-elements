@@ -73,12 +73,7 @@ class Assignees extends React.Component<Props> {
                             />
                         }
                     >
-                        <AssigneeStatus
-                            status={status}
-                            user={target}
-                            getAvatarUrl={getAvatarUrl}
-                            data-testid="task-assignment-status"
-                        />
+                        <AssigneeStatus status={status} user={target} getAvatarUrl={getAvatarUrl} />
                     </Tooltip>
                 );
             });
@@ -90,7 +85,6 @@ class Assignees extends React.Component<Props> {
                         className="bcs-task-assignment-list-item-avatar"
                         user={target}
                         getAvatarUrl={getAvatarUrl}
-                        data-testid="task-assignment-status"
                     />
                     <AssignmentDetails
                         className="bcs-task-assignment-list-item-details"
