@@ -54,8 +54,10 @@
 
     .ReactVirtualized__Grid__innerScrollContainer {
         /* Currently there is an issue where overflow is hidden for the Grid
-            which results in dropdowns getting cut off at the bottom of each row in the Grid
-            Setting overflow to visible solves that issue
+            which results in dropdowns getting cut off at the bottom of each row
+
+            TODO: The correct solution would be to use Portal + Tether. This approach will be attempted during
+            the Raise the Bar phase.
         */
         overflow: visible !important;
     }
