@@ -36,9 +36,7 @@ function Avatar({ avatarUrl, className, name, id, size = '' }: Props) {
 
     // Reset hasImageErrored state when avatarUrl changes
     useEffect(() => {
-        if (hasImageErrored) {
-            setHasImageErrored(false);
-        }
+        setHasImageErrored(false);
     }, [avatarUrl]);
 
     let avatar;
