@@ -14,7 +14,7 @@ import '../../styles/Condition.scss';
 
 type Props = {
     className?: string,
-    error?: string,
+    error?: React.Node,
     onChange: (value: Array<ConditionValueType>) => void,
     selectedValues: Array<ConditionValueType>,
     valueOptions: Array<Object>,
@@ -27,7 +27,6 @@ const getDateValue = selectedValues => {
     }
 
     const value = selectedValues[0];
-
     if (value instanceof Date) {
         return value;
     }
