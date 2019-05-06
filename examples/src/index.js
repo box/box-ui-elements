@@ -18,7 +18,6 @@ export { default as ProgressBarExamples } from './ProgressBarExamples';
 export { default as SecurityCloudGameExamples } from './SecurityCloudGameExamples';
 export { default as SelectableTableExamples } from './SelectableTableExamples';
 export { default as SelectorDropdownExamples } from './SelectorDropdownExamples';
-export { default as SubmenuWithBoundariesElementExample } from './SubmenuWithBoundariesElementExample';
 export { default as VersionHistoryModalExamples } from './VersionHistoryModalExamples';
 export { default as MetadataExamples } from './MetadataExamples';
 export { default as ThumbnailCardExamples } from './ThumbnailCardExamples';
