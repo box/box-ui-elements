@@ -37,18 +37,20 @@ class Menu extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
 
-        this.menuEl = null;
         this.focusIndex = 0;
+        this.menuEl = null;
         this.menuItemEls = [];
     }
 
     componentDidMount() {
+        this.setMenuItemEls();
         this.setInitialFocusIndex();
     }
 
     componentWillReceiveProps(nextProps: Props) {
         if (nextProps.isSubmenu && !nextProps.isHidden && this.props.isHidden) {
             // If updating submenu, use the upcoming props instead of current props.
+            this.setMenuItemEls();
             this.setInitialFocusIndex(nextProps);
         }
     }
@@ -63,13 +65,12 @@ class Menu extends React.Component<Props> {
         }
     }
 
-    setInitialFocusIndex = (props: ?Props) => {
-        if (!props) {
-            props = this.props;
-        }
-        const { initialFocusIndex } = props;
+    setInitialFocusIndex = (props: Props = this.props) => {
+        const { initialFocusIndex, isHidden } = props;
 
-        this.setMenuItemEls();
+        if (isHidden || initialFocusIndex === undefined) {
+            return;
+        }
 
         // If an initialFocusIndex was specified, attempt to use it to focus
         if (typeof initialFocusIndex === 'number') {
