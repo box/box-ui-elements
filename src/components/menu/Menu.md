@@ -76,15 +76,6 @@ const SubmenuItem = require('box-ui-elements/es/components/menu').SubmenuItem;
 </div>;
 ```
 
-**Submenu with rightBoundaryElement**
-
-```js
-const SubmenuWithBoundariesElementExample = require('examples')
-  .SubmenuWithBoundariesElementExample;
-
-<SubmenuWithBoundariesElementExample />;
-```
-
 **Select Menu**
 
 ```
