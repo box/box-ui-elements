@@ -1,6 +1,13 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 
 import Avatar from '../Avatar';
+
+function MockAvatarImage() {
+    return <div className="avatar-image" />;
+}
+
+jest.mock('../AvatarImage', () => MockAvatarImage);
 
 const testDataURI = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
@@ -22,7 +29,7 @@ describe('components/avatar/Avatar', () => {
 
     test('should render an AvatarImage when avatarUrl is passed in', () => {
         const wrapper = shallow(<Avatar avatarUrl={testDataURI} />);
-        const avatarImage = wrapper.find('AvatarImage');
+        const avatarImage = wrapper.find(MockAvatarImage);
         expect(avatarImage.length).toEqual(1);
         expect(avatarImage.prop('url')).toEqual(testDataURI);
     });
@@ -51,10 +58,9 @@ describe('components/avatar/Avatar', () => {
 
     test('should fall back to AvatarInitials when there is an error in AvatarImage', () => {
         const wrapper = shallow(<Avatar avatarUrl="http://foo.bar/baz123_invalid" id="1" name="hello world" />);
+        const avatarImage = wrapper.find(MockAvatarImage);
+        avatarImage.prop('onError')();
 
-        wrapper.instance().onImageError();
-        expect(wrapper.state('hasImageErrored')).toEqual(true);
-        wrapper.update();
         const avatarInitials = wrapper.find('AvatarInitials');
         expect(avatarInitials.length).toEqual(1);
     });
@@ -66,18 +72,27 @@ describe('components/avatar/Avatar', () => {
             avatarUrl: 'http://foo.bar/baz123_invalid',
         };
 
-        const wrapper = shallow(<Avatar {...props} />);
+        let wrapper;
+        act(() => {
+            wrapper = mount(<Avatar {...props} />);
+        });
+        expect(wrapper.find(MockAvatarImage).length).toEqual(1);
 
-        wrapper.instance().onImageError();
-        expect(wrapper.state('hasImageErrored')).toEqual(true);
-
-        wrapper.setProps({
-            ...props,
-            avatarUrl: 'http://foo.bar/baz123_invalid_new',
+        act(() => {
+            const avatarImage = wrapper.find(MockAvatarImage);
+            avatarImage.prop('onError')();
         });
         wrapper.update();
+        expect(wrapper.find(MockAvatarImage).length).toEqual(0);
+        expect(wrapper.find('AvatarInitials').length).toEqual(1);
 
-        expect(wrapper.state('hasImageErrored')).toEqual(false);
-        expect(wrapper.find('AvatarImage').length).toEqual(1);
+        act(() => {
+            wrapper.setProps({
+                ...props,
+                avatarUrl: 'http://foo.bar/baz123_invalid_new',
+            });
+        });
+        wrapper.update();
+        expect(wrapper.find(MockAvatarImage).length).toEqual(1);
     });
 });
