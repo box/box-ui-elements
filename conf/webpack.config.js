@@ -9,7 +9,7 @@ const safeParser = require('postcss-safe-parser');
 const packageJSON = require('../package.json');
 const license = require('./license');
 
-const { BannerPlugin, DefinePlugin } = webpack;
+const { BannerPlugin, DefinePlugin, IgnorePlugin } = webpack;
 const noReactSuffix = '.no.react';
 const isRelease = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'dev';
@@ -67,7 +67,6 @@ function getConfig(isReactExternalized) {
                 examples: path.join(__dirname, '../examples/src'), // for examples only
                 'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
-                moment: path.resolve('src/utils/MomentShim'), // Hack to leverage Intl instead
                 'rsg-components/Wrapper': path.join(__dirname, '../examples/Wrapper'), // for examples only
             },
         },
@@ -84,8 +83,7 @@ function getConfig(isReactExternalized) {
                     test: /\.(js|mjs)$/,
                     loader: 'babel-loader',
                     // For webpack dev build perf we want to exlcude node_modules unless we want to support legacy browsers like IE11
-                    // Pikaday complains about moment.js which we don't use, hence excluding it from compilation as its already es5
-                    exclude: shouldIncludeAllSupportedBrowsers ? /node_modules\/pikaday/ : /node_modules/,
+                    exclude: shouldIncludeAllSupportedBrowsers ? [] : /node_modules/,
                 },
                 {
                     test: /\.s?css$/,
@@ -115,6 +113,9 @@ function getConfig(isReactExternalized) {
                 },
             }),
             new BannerPlugin(license),
+            new IgnorePlugin({
+                resourceRegExp: /moment$/, // Moment is optionally included by Pikaday, but is not needed in our bundle
+            }),
         ],
         stats,
     };
