@@ -23,7 +23,7 @@ const FloatField = ({ dataKey, dataValue, displayName, description, error, onCha
         displayName={displayName}
         error={error}
         onChange={(key: string, value: MetadataFieldValue) => {
-            if (isValidValue(type, value, { allowTrailingPeriod: true })) {
+            if (isValidValue(type, value)) {
                 onChange(key, value);
             }
         }}
