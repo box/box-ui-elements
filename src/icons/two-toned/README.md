@@ -61,6 +61,29 @@ const icons = [
         },
     },
     {
+        name: 'IconLightning',
+        content: () => {
+            const IconLightning = require('./IconLightning').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-lightning-example .foreground-color {
+                                fill: #efefef;
+                            }
+
+                            .icon-lightning-example .background-color {
+                                fill: #999;
+                            }
+                        `}
+                    </style>
+                    <IconLightning />
+                    <IconLightning className="icon-lightning-example" />
+                </div>
+            );
+        },
+    },
+    {
         name: 'IconSharedLink',
         content: () => {
             const IconSharedLink = require('./IconSharedLink').default;
