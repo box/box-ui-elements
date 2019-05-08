@@ -29,6 +29,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         deleteVersion: jest.fn(),
         getVersions: jest.fn(),
         promoteVersion: jest.fn(),
+        restoreVersion: jest.fn(),
     };
     const api = {
         getFileAPI: () => fileAPI,
@@ -108,7 +109,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
-    describe('handleActionPRomote', () => {
+    describe('handleActionPromote', () => {
         test('should set state and call api endpoint helpers', () => {
             const wrapper = getWrapper({ versionId: '123' });
             const instance = wrapper.instance();
@@ -122,6 +123,22 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             expect(wrapper.state('isLoading')).toBe(true);
             expect(instance.promoteVersion).toHaveBeenCalledWith(versionId);
+        });
+    });
+
+    describe('handleActionRestore', () => {
+        test('should set state and call api endpoint helpers', () => {
+            const wrapper = getWrapper({ versionId: '123' });
+            const instance = wrapper.instance();
+            const versionId = '456';
+
+            instance.restoreVersion = jest.fn().mockResolvedValueOnce();
+            instance.fetchData = jest.fn().mockResolvedValueOnce();
+
+            instance.handleActionRestore(versionId);
+
+            expect(wrapper.state('isLoading')).toBe(true);
+            expect(instance.restoreVersion).toHaveBeenCalledWith(versionId);
         });
     });
 
@@ -262,6 +279,26 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             expect(promotePromise).toBeInstanceOf(Promise);
             expect(versionsAPI.promoteVersion).toBeCalledWith({
+                fileId: defaultId,
+                permissions,
+                errorCallback: expect.any(Function),
+                successCallback: expect.any(Function),
+                versionId: '123',
+            });
+        });
+    });
+
+    describe('restoreVersion', () => {
+        test('should call restoreVersion', () => {
+            const wrapper = getWrapper();
+            const permissions = { can_upload: true };
+
+            wrapper.setState({ permissions });
+
+            const promotePromise = wrapper.instance().restoreVersion('123');
+
+            expect(promotePromise).toBeInstanceOf(Promise);
+            expect(versionsAPI.restoreVersion).toBeCalledWith({
                 fileId: defaultId,
                 permissions,
                 errorCallback: expect.any(Function),

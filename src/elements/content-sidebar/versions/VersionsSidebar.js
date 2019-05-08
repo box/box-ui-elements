@@ -23,22 +23,13 @@ type Props = {
     onDownload: VersionActionCallback,
     onPreview: VersionActionCallback,
     onPromote: VersionActionCallback,
+    onRestore: VersionActionCallback,
     parentName: string,
     permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({
-    error,
-    isLoading,
-    onDelete,
-    onDownload,
-    onPreview,
-    onPromote,
-    parentName,
-    permissions,
-    versions,
-}: Props) => (
+const VersionsSidebar = ({ error, isLoading, parentName, ...rest }: Props) => (
     <SidebarContent
         className="bcs-Versions"
         title={
@@ -52,15 +43,7 @@ const VersionsSidebar = ({
             {error ? (
                 <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
             ) : (
-                <VersionsList
-                    isLoading={isLoading}
-                    onDelete={onDelete}
-                    onDownload={onDownload}
-                    onPreview={onPreview}
-                    onPromote={onPromote}
-                    permissions={permissions}
-                    versions={versions}
-                />
+                <VersionsList isLoading={isLoading} {...rest} />
             )}
         </LoadingIndicatorWrapper>
     </SidebarContent>

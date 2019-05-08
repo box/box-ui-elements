@@ -101,6 +101,14 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         });
     };
 
+    handleActionRestore = (versionId: string): void => {
+        this.setState({ isLoading: true }, () => {
+            this.restoreVersion(versionId)
+                .then(this.fetchData)
+                .catch(this.handleActionError);
+        });
+    };
+
     handleDeleteSuccess = (versionId: string) => {
         const { versionId: selectedVersionId } = this.props;
 
@@ -214,6 +222,21 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         );
     };
 
+    restoreVersion = (versionId: string): Promise<any> => {
+        const { api, fileId } = this.props;
+        const { permissions } = this.state;
+
+        return new Promise((successCallback, errorCallback) =>
+            api.getVersionsAPI(false).restoreVersion({
+                fileId,
+                permissions,
+                successCallback,
+                errorCallback,
+                versionId,
+            }),
+        );
+    };
+
     updateVersion = (versionId?: ?string): void => {
         const { history, match } = this.props;
         return history.push(generatePath(match.path, { ...match.params, versionId }));
@@ -234,6 +257,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 onDownload={this.handleActionDownload}
                 onPreview={this.handleActionPreview}
                 onPromote={this.handleActionPromote}
+                onRestore={this.handleActionRestore}
                 parentName={parentName}
                 {...this.state}
             />
