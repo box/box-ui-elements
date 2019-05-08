@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import isNaN from 'lodash/isNaN';
 
 import DatePicker from '../../../../components/date-picker';
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
@@ -27,8 +28,9 @@ const getDateValue = selectedValues => {
     }
 
     const value = selectedValues[0];
-    if (value instanceof Date) {
-        return value;
+    const formattedDate = new Date(value);
+    if (!isNaN(formattedDate.valueOf())) {
+        return formattedDate;
     }
 
     throw new Error('Expected Date');
@@ -47,7 +49,7 @@ const getStringValue = selectedValues => {
     throw new Error('Expected string');
 };
 
-const ValueField = ({ className = '', error, onChange, selectedValues, valueOptions, valueType }: Props) => {
+const ValueField = ({ error, onChange, selectedValues, valueOptions, valueType }: Props) => {
     const value = selectedValues.length > 0 ? selectedValues[0] : '';
     const onInputChange = e => {
         return e.target.value !== '' ? onChange([e.target.value]) : onChange([]);
@@ -60,7 +62,6 @@ const ValueField = ({ className = '', error, onChange, selectedValues, valueOpti
             return (
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
-                        className={className}
                         error={error}
                         errorPosition="middle-left"
                         hideLabel
@@ -76,7 +77,6 @@ const ValueField = ({ className = '', error, onChange, selectedValues, valueOpti
             return (
                 <div className="filter-dropdown-date-field-container">
                     <DatePicker
-                        className={className}
                         displayFormat={{
                             day: 'numeric',
                             month: 'long',
@@ -94,7 +94,6 @@ const ValueField = ({ className = '', error, onChange, selectedValues, valueOpti
         case ENUM:
             return (
                 <SingleSelectField
-                    className={className}
                     fieldType={VALUE}
                     onChange={e => onChange([e.value])}
                     options={valueOptions}
@@ -105,7 +104,6 @@ const ValueField = ({ className = '', error, onChange, selectedValues, valueOpti
         case MULTI_SELECT:
             return (
                 <MultiSelectField
-                    className={className}
                     fieldType={VALUE}
                     onChange={e => onChange(e.map(option => option.value))}
                     options={valueOptions}
