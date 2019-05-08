@@ -688,5 +688,30 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 expect.any(Function),
             );
         });
+
+        describe('onRemove()', () => {
+            test('onRemove should be called with both the id and cascadePolicy id if both are present', () => {
+                const onRemoveMock = jest.fn();
+                const testId = 'test-id-123';
+                const wrapper = shallow(
+                    <Instance
+                        canEdit
+                        cascadePolicy={{
+                            id: 'hello',
+                        }}
+                        id={testId}
+                        onRemove={onRemoveMock}
+                        onModification={jest.fn()}
+                        onSave={jest.fn()}
+                        template={{
+                            fields,
+                        }}
+                    />,
+                );
+                wrapper.setState({ isEditing: true });
+                wrapper.instance().onRemove();
+                expect(onRemoveMock).toBeCalledWith(testId, 'hello');
+            });
+        });
     });
 });

@@ -45,7 +45,7 @@ type Props = {
     isDirty: boolean,
     isOpen: boolean,
     onModification?: (id: string, isDirty: boolean, type?: string) => void,
-    onRemove?: (id: string) => void,
+    onRemove?: (id: string, cascadePolicyId?: string | null) => void,
     onSave?: (
         id: string,
         data: JSONPatchOperations,
@@ -185,9 +185,16 @@ class Instance extends React.PureComponent<Props, State> {
             return;
         }
 
-        const { id, onRemove }: Props = this.props;
+        const { id, onRemove, cascadePolicy }: Props = this.props;
+
         if (onRemove) {
-            onRemove(id);
+            if (cascadePolicy) {
+                // the endpoint for instances/:id doesn't exist, so we have to send the cascadePolicy id, in order to fully clear the instance
+                onRemove(id, cascadePolicy.id);
+            } else {
+                onRemove(id, null);
+            }
+
             this.setState({ isBusy: true });
         }
     };
