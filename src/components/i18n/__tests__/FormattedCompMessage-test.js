@@ -345,69 +345,6 @@ describe('components/i18n', () => {
             expect(a.text()).toContain('bold!');
         });
 
-        /*
-    test('should correctly render FormattedCompMessage with actual translations available', () => {
-        const messages = {
-            test: {
-                id: 'test',
-                description: 'asdf',
-                messages: 'Mittens <c0><c1/></c0>',
-            },
-        };
-        const area = "Berlin";
-        const wrapper = mount(
-            <IntlProvider locale="de-DE" messages={messages}>
-                <FormattedCompMessage id="test" description="asdf">
-                    Downtown <b><Param value={area} description=""/></b>
-                </FormattedCompMessage>
-            </IntlProvider>,
-        );
-
-        let span = wrapper.find('span');
-        expect(span.prop('x-resource-id')).toEqual('test');
-        expect(span.prop('children')).toContain('Mittens ');
-
-        let a = wrapper.find('b');
-        expect(a.prop('children')).toContain('Berlin');
-    });
-
-
-    test('should correctly render FormattedCompMessage with actual translations available', () => {
-        const messages = {
-            test: {
-                id: 'test',
-                description: 'asdf',
-                messages: 'Mittens <c0><c1/></c0>',
-            },
-        };
-        const wrapper = render(
-            <IntlProvider locale="de-DE" messages={messages}>
-                <span id="foo">This is a test</span>
-            </IntlProvider>,
-        );
-
-        let span = wrapper.find('span');
-        expect(span.prop('x-resource-id')).toEqual('test');
-        expect(span.prop('children')).toContain('Mittens ');
-
-        let a = wrapper.find('b');
-        expect(a.prop('children')).toContain('Berlin');
-    });
-
-    test('should correctly render FormattedCompMessage with translations', () => {
-        const wrapper = mount(
-            <FormattedCompMessage locale id="test" description="asdf">
-                some <b>bold</b> text
-            </FormattedCompMessage>,
-        );
-
-        let span = wrapper.find('span');
-        expect(span.prop('x-resource-id')).toEqual('test');
-        expect(span.prop('children')).toContain('etwas ');
-        expect(span.prop('children')).toContain(' Texte');
-    });
-    */
-
         test('should throw when specifying a count but no nested plurals', () => {
             function testCount() {
                 mount(

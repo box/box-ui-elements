@@ -3,32 +3,32 @@ import React from 'react';
 import Composition from '../Composition';
 
 describe('components/i18n/Composition', () => {
-    test('ComposeString', () => {
+    test('Compose strings to a string properly', () => {
         const c = new Composition('this is a test');
         expect(c.compose()).toEqual('this is a test');
     });
 
-    test('ComposeNull', () => {
+    test('Compose nulls to a empty string', () => {
         const c = new Composition(null);
         expect(c.compose()).toEqual('');
     });
 
-    test('ComposeUndefined', () => {
+    test('Compose undefined to an empty string', () => {
         const c = new Composition();
         expect(c.compose()).toEqual('');
     });
 
-    test('ComposeBoolean', () => {
+    test('Compose booleans to a string properly', () => {
         const c = new Composition(false);
         expect(c.compose()).toEqual('false');
     });
 
-    test('ComposeNumeric', () => {
+    test('Compose numbers to a string properly', () => {
         const c = new Composition(5.4);
         expect(c.compose()).toEqual('5.4');
     });
 
-    test('ComposeElementNoChildren', () => {
+    test('Compose React elements with no children to an empty string', () => {
         const el = React.createElement('span', { key: 'a' });
         const c = new Composition(el);
 
@@ -36,20 +36,20 @@ describe('components/i18n/Composition', () => {
         expect(c.compose()).toEqual('');
     });
 
-    test('ComposeElementOneChild', () => {
+    test('Compose React elements that only have one child to a simple string', () => {
         const el = React.createElement('span', { key: 'a' }, 'foo');
         const c = new Composition(el);
         expect(c.compose()).toEqual('foo');
     });
 
-    test('ComposeElementTwoChildren', () => {
+    test('Compose React elements with two string children to a simple string', () => {
         const el = React.createElement('span', { key: 'a' }, ['foo', ' bar']);
         const c = new Composition(el);
 
         expect(c.compose()).toEqual('foo bar');
     });
 
-    test('ComposeElementSubchildrenSimple', () => {
+    test('Compose React elements that have subchildren into a coded string', () => {
         const el = React.createElement('span', { key: 'a' }, [
             'This is a test of the ',
             React.createElement('b', { key: 'b' }, 'emergency broadcast system'),
@@ -59,7 +59,7 @@ describe('components/i18n/Composition', () => {
         expect(c.compose()).toEqual('This is a test of the <c0>emergency broadcast system</c0>. This is only a test.');
     });
 
-    test('ComposeElementComposeTwice', () => {
+    test('Make sure you get the same thing when you compose twice', () => {
         const el = React.createElement('span', { key: 'a' }, [
             'This is a test of the ',
             React.createElement('b', { key: 'b' }, 'emergency broadcast system'),
@@ -71,7 +71,7 @@ describe('components/i18n/Composition', () => {
         expect(c.compose()).toEqual(expected); // should be the same the second time around too
     });
 
-    test('ComposeElementMultipleSubchildren', () => {
+    test('Compose multiple subchildren into a coded string', () => {
         const el = React.createElement('span', { key: 'a' }, [
             'This is a test of the ',
             React.createElement('b', { key: 'b' }, 'emergency broadcast system'),
@@ -85,7 +85,7 @@ describe('components/i18n/Composition', () => {
         expect(actual).toEqual(expected);
     });
 
-    test('ComposeElementSubchildrenComplex', () => {
+    test('Compose properly with a complex set of nested subchildren to a coded string', () => {
         const el = React.createElement('span', { key: 'x' }, [
             'This is a test of the ',
             React.createElement('b', { key: 'y' }, [
@@ -102,12 +102,12 @@ describe('components/i18n/Composition', () => {
         expect(actual).toEqual(expected);
     });
 
-    test('DecomposeElementString', () => {
+    test('Decompose a React element with a string', () => {
         const c = new Composition('simple string');
         expect(c.decompose('einfache Zeichenfolge')).toEqual('einfache Zeichenfolge');
     });
 
-    test('DecomposeOneChild', () => {
+    test('Decompose a React element with only one child', () => {
         const el = React.createElement('span', { key: 'a' }, 'simple string');
 
         const expected = React.createElement('span', { key: 'a' }, 'einfache Zeichenfolge');
@@ -116,7 +116,7 @@ describe('components/i18n/Composition', () => {
         expect(c.decompose('einfache Zeichenfolge')).toEqual(expected);
     });
 
-    test('DecomposeSubchildren', () => {
+    test('Decompose a React element with subchildren', () => {
         const el = React.createElement('span', { key: 'a' }, [
             'This is a test of the ',
             React.createElement('b', { key: 'b' }, 'emergency broadcast system'),
@@ -135,7 +135,7 @@ describe('components/i18n/Composition', () => {
         );
     });
 
-    test('DecomposeComplex', () => {
+    test('Decompose with a complex set of children', () => {
         const el = React.createElement('span', { key: 'a' }, [
             'This is a test of the ',
             React.createElement('b', { key: 'b' }, [
@@ -162,7 +162,7 @@ describe('components/i18n/Composition', () => {
         ).toEqual(expected);
     });
 
-    test('DecomposeComplexPreservingOtherProperties', () => {
+    test('Make sure other properties are preserved while decomposing', () => {
         const el = React.createElement('span', { key: 'a', foo: 'bar' }, [
             'This is a test of the ',
             React.createElement('b', { key: 'b' }, [
@@ -189,7 +189,7 @@ describe('components/i18n/Composition', () => {
         ).toEqual(expected);
     });
 
-    test('DecomposeRearrangedComponents', () => {
+    test('Make sure we can decompose if the translator rearranges components', () => {
         const el = React.createElement('span', { key: 'a', foo: 'bar' }, [
             'This is ',
             React.createElement('b', { key: 'b' }, 'bold'),
