@@ -37,3 +37,17 @@ In addition to the properties defined above, you can also specify any of the `in
     const TextInput = require('box-ui-elements/es/components/text-input').default;
     <TextInput label='Email' name='textinput' type="email" isValid placeholder='Enter email here' />
 ```
+**Required with onChange**
+```jsx
+    const TextInput = require('box-ui-elements/es/components/text-input').default;
+    initialState = { error: 'required', value: '' };
+    <TextInput
+        label='Email'
+        name='textinput'
+        type="text"
+        placeholder='Enter email here'
+        value={state.value}
+        error={state.error}
+        onChange={(e) => setState({ error: e.target.value ? '' : 'required', value: e.target.value })}
+    />
+```
