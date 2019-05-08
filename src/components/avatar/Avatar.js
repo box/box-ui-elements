@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
@@ -30,36 +30,50 @@ type Props = {
     size?: $Keys<typeof SIZES>,
 };
 
-function Avatar({ avatarUrl, className, name, id, size = '' }: Props) {
-    const [hasImageErrored, setHasImageErrored] = useState(false);
-    const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
+type State = {
+    /** boolean to determine if image did not load correctly */
+    hasImageErrored: boolean,
+};
 
-    // Reset hasImageErrored state when avatarUrl changes
-    useEffect(() => {
-        setHasImageErrored(false);
-    }, [avatarUrl]);
+class Avatar extends React.PureComponent<Props, State> {
+    state = {
+        hasImageErrored: false,
+    };
 
-    let avatar;
-    if (avatarUrl && !hasImageErrored) {
-        avatar = (
-            <AvatarImage
-                onError={() => {
-                    setHasImageErrored(true);
-                }}
-                url={avatarUrl}
-            />
-        );
-    } else if (name) {
-        avatar = <AvatarInitials id={id} name={name} />;
-    } else {
-        avatar = <UnknownUserAvatar className="avatar-icon" />;
+    componentWillReceiveProps(nextProps: Props) {
+        if (this.state.hasImageErrored && this.props.avatarUrl !== nextProps.avatarUrl) {
+            this.setState({
+                hasImageErrored: false,
+            });
+        }
     }
 
-    return (
-        <span className={classes} role="presentation">
-            {avatar}
-        </span>
-    );
+    onImageError = () => {
+        this.setState({
+            hasImageErrored: true,
+        });
+    };
+
+    render() {
+        const { avatarUrl, className, name, id, size = '' }: Props = this.props;
+        const { hasImageErrored }: State = this.state;
+        const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
+
+        let avatar;
+        if (avatarUrl && !hasImageErrored) {
+            avatar = <AvatarImage onError={this.onImageError} url={avatarUrl} />;
+        } else if (name) {
+            avatar = <AvatarInitials id={id} name={name} />;
+        } else {
+            avatar = <UnknownUserAvatar className="avatar-icon" />;
+        }
+
+        return (
+            <span className={classes} role="presentation">
+                {avatar}
+            </span>
+        );
+    }
 }
 
 export default Avatar;
