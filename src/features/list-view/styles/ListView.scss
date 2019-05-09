@@ -24,12 +24,15 @@
             cursor: pointer;
         }
 
-        .bdl-icon-sort-chevron.bdl-ListView-isSortAsc {
+        .bdl-icon-sort-chevron {
             height: 12px;
             margin-left: 2px;
             margin-top: 3px;
-            transform: rotate(180deg);
             width: 12px;
+        }
+
+        .bdl-icon-sort-chevron.bdl-ListView-isSortAsc {
+            transform: rotate(180deg);
         }
     }
 
