@@ -28,9 +28,9 @@ const getDateValue = selectedValues => {
     }
 
     const value = selectedValues[0];
-    const formattedDate = new Date(value);
-    if (!isNaN(formattedDate.valueOf())) {
-        return formattedDate;
+    const date = new Date(value);
+    if (!isNaN(date.valueOf())) {
+        return date;
     }
 
     throw new Error('Expected Date');
