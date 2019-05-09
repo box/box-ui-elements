@@ -8332,6 +8332,11 @@ ignore@^4.0.0, ignore@^4.0.3:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
+ilib-tree-node@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ilib-tree-node/-/ilib-tree-node-1.2.0.tgz#c47eb4d6d2df321a9950373c257e75a5577ff04d"
+  integrity sha512-CRxj87hpN/kf3/dVd+vWD2Grv0BktCj82LRQfDD7Oz1DVkruFtIKz1QUVUVIfNepLv155zfAwyfFlj/l32wnaA==
+
 immer@1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/immer/-/immer-1.7.2.tgz#a51e9723c50b27e132f6566facbec1c85fc69547"
@@ -10968,6 +10973,13 @@ merge@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.0.tgz#7531e39d4949c281a66b8c5a6e0265e8b05894da"
   integrity sha1-dTHjnUlJwoGma4xabgJl6LBYlNo=
+
+message-accumulator@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/message-accumulator/-/message-accumulator-2.1.1.tgz#f0bdff6156e0f53ba7b932ab5577344ec8614421"
+  integrity sha512-AOSsiMN1QiJfN/ng1m5Lf9v1wTUZkgYx8nqfUsXg9GuDg0LnkixicVbbv4dYMyW/a+i6YE0RUvC+PNjdO14dUw==
+  dependencies:
+    ilib-tree-node "^1.2.0"
 
 messageformat-parser@^1.0.0:
   version "1.0.0"

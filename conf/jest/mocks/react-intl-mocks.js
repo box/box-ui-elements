@@ -1,7 +1,8 @@
+// @flow
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import PropTypes from 'prop-types';
-import intl from './lib-intl-mock';
+import IntlMessageFormat from 'intl-messageformat';
 
 export const FormattedDate = () => <div />;
 FormattedDate.displayName = 'FormattedDate';
@@ -22,14 +23,29 @@ export const IntlProvider = () => <div />;
 IntlProvider.displayName = 'IntlProvider';
 
 export const defineMessages = messages => messages;
-
 export const intlShape = PropTypes.any;
 
 export const addLocaleData = () => {};
 
+type Props = {
+    locale: string,
+};
+
 export const injectIntl = Component => {
-    const WrapperComponent = props => {
-        const injectedProps = { ...props, intl };
+    const WrapperComponent = (props: Props) => {
+        const injectedProps = {
+            ...props,
+            intl: {
+                formatMessage: (message, values) => {
+                    const imf = new IntlMessageFormat(
+                        message.defaultMessage || message.message,
+                        props.locale || 'en-US',
+                    );
+                    return imf.format(values);
+                },
+                formatDate: date => date,
+            },
+        };
         return <Component {...{ ...injectedProps }} />;
     };
     WrapperComponent.displayName = Component.displayName || Component.name || 'Component';
