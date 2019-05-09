@@ -11,12 +11,25 @@ const MILLISECONDS_PER_DAY = 24 * 60 * 60 * MILLISECONDS_PER_SECOND;
 // 60 sec * 1000
 const MILLISECONDS_PER_MINUTE = 60 * MILLISECONDS_PER_SECOND;
 
-// matcher for acceptable ISO 8601 date formats w/ timezone (see below)
-const RE_ISO8601_DATE = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{1,3})?((Z$)|(?:[+-](?:([0-2]\d$)|([0-2]\d(?:00|30)$)|([0-2]\d:(?:00|30)$))))$/;
-const ISO8601_Z_FMT = 3;
-const ISO8601_SHORT_FMT = 4;
-const ISO8601_MEDIUM_FMT = 5;
-const ISO8601_LONG_FMT = 6;
+/**
+ * RegExp matcher for acceptable ISO 8601 date formats w/ timezone (see below)
+ * Capture groups structured as follows:
+ * 1) the date/time portion (2018-06-13T00:00:00.000)
+ * 2) the milliseconds (if matched)
+ * 3) the timezone portion (e.g., Z, +03, -0400, +05:00)
+ * 4) the Z format for timezone (if matched)
+ * 5) the short format for timezone (if matched)
+ * 6) the colon-less format for timezone (if matched)
+ * 7) the colon long format for timezone (if matched)
+ */
+const RE_ISO8601_DATE = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?)?((Z$)|(?:[+-](?:([0-2]\d$)|([0-2]\d(?:00|30)$)|([0-2]\d:(?:00|30)$))))$/;
+const ISO8601_DATETIME: 1 = 1;
+const ISO8601_MILLISECONDS: 2 = 2;
+const ISO8601_TIMEZONE: 3 = 3;
+const ISO8601_Z_FMT: 4 = 4;
+const ISO8601_SHORT_FMT: 5 = 5;
+const ISO8601_MEDIUM_FMT: 6 = 6;
+const ISO8601_LONG_FMT: 7 = 7;
 
 /**
  * Converts an integer value in seconds to milliseconds.
@@ -161,29 +174,25 @@ function convertISOStringtoRFC3339String(isoString: string): string {
         // if it is, parse out the timezone part if it's in a longer format
         // use the capture groups instead of the split result for the datetime and the time zone
         const parseDate = isoString.split(RE_ISO8601_DATE);
-        const dateTz = parseDate.slice(1, 3);
-        const timeZone = dateTz[1];
+        let dateTime = parseDate[ISO8601_DATETIME];
+        const milliseconds = parseDate[ISO8601_MILLISECONDS];
+        const timeZone = parseDate[ISO8601_TIMEZONE];
 
-        /**
-         * This contains an array structured:
-         * 1) the date/time portion (2018-06-13T00:00:00.000)
-         * 2) the timezone portion (e.g., Z, +03, -0400, +05:00)
-         * 3) the Z format for timezone (if matched)
-         * 4) the short format for timezone (if matched)
-         * 5) the colon-less format for timezone (if matched)
-         * 6) the colon long format for timezone (if matched)
-         */
+        // add milliseconds if missing, to standardize output
+        if (!milliseconds) {
+            dateTime += '.000';
+        }
 
         if (parseDate[ISO8601_Z_FMT]) {
             return isoString;
         }
 
         if (parseDate[ISO8601_SHORT_FMT]) {
-            return `${dateTz[0] + timeZone}:00`;
+            return `${dateTime + timeZone}:00`;
         }
 
         if (parseDate[ISO8601_MEDIUM_FMT]) {
-            return `${dateTz[0] + timeZone.substr(0, 3)}:${timeZone.substr(3)}`;
+            return `${dateTime + timeZone.substr(0, 3)}:${timeZone.substr(3)}`;
         }
 
         if (parseDate[ISO8601_LONG_FMT]) {
