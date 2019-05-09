@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import isNaN from 'lodash/isNaN';
 
 import DatePicker from '../../../../components/date-picker';
 import SingleSelectField from '../../../../components/select-field/SingleSelectField';
@@ -13,6 +14,7 @@ import type { ConditionValueType } from '../../flowTypes';
 import '../../styles/Condition.scss';
 
 type Props = {
+    error?: React.Node,
     onChange: (value: Array<ConditionValueType>) => void,
     selectedValues: Array<ConditionValueType>,
     valueOptions: Array<Object>,
@@ -25,8 +27,9 @@ const getDateValue = selectedValues => {
     }
 
     const value = selectedValues[0];
-    if (value instanceof Date) {
-        return value;
+    const date = new Date(value);
+    if (!isNaN(date.valueOf())) {
+        return date;
     }
 
     throw new Error('Expected Date');
@@ -45,7 +48,7 @@ const getStringValue = selectedValues => {
     throw new Error('Expected string');
 };
 
-const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props) => {
+const ValueField = ({ error, onChange, selectedValues, valueOptions, valueType }: Props) => {
     const value = selectedValues.length > 0 ? selectedValues[0] : '';
     const onInputChange = e => {
         return e.target.value !== '' ? onChange([e.target.value]) : onChange([]);
@@ -58,6 +61,8 @@ const ValueField = ({ onChange, selectedValues, valueOptions, valueType }: Props
             return (
                 <div className="filter-dropdown-text-field-container">
                     <TextInput
+                        error={error}
+                        errorPosition="middle-left"
                         hideLabel
                         label="Text Input"
                         name="text"

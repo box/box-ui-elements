@@ -72,5 +72,32 @@ describe('features/query-bar/components/filter/ValueField', () => {
                 expect(component.prop(valuePropNames[componentName])).toEqual(expectedValue);
             });
         });
+
+        describe('should not show an error for a', () => {
+            test.each`
+                valueType        | componentName          | should
+                ${'multiSelect'} | ${'MultiSelectField'}  | ${'MultiSelectField of type multiSelect'}
+                ${'enum'}        | ${'SingleSelectField'} | ${'SingleSelectField of type enum'}
+                ${'date'}        | ${'DatePicker'}        | ${'DatePicker of type date'}
+            `('$should', ({ componentName, valueType }) => {
+                const wrapper = getWrapper({ valueType, error: null, selectedValues: [] });
+                const component = wrapper.find(componentName);
+                expect(component.prop('error')).toBe(undefined);
+            });
+        });
+
+        describe('should show an error for a TextInput of ', () => {
+            const error = <div />;
+            test.each`
+                valueType   | should
+                ${'string'} | ${'type string'}
+                ${'float'}  | ${'type float'}
+                ${'number'} | ${'type number'}
+            `('$should', ({ valueType }) => {
+                const wrapper = getWrapper({ valueType, error, selectedValues: [] });
+                const component = wrapper.find('TextInput');
+                expect(component.prop('error')).toBe(error);
+            });
+        });
     });
 });
