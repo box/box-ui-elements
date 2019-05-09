@@ -11,6 +11,7 @@ import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 type AddTaskButtonProps = {|
     feedbackUrl: string,
     isDisabled: boolean,
+    onTaskModalClose: () => void,
 |};
 
 // These are used by the wrapped form
@@ -53,7 +54,10 @@ class AddTaskButton extends React.Component<Props, State> {
 
     handleClickMenuItem = (taskType: TaskType) => this.setState({ isTaskFormOpen: true, taskType });
 
-    handleModalClose = () => this.setState({ isTaskFormOpen: false, error: null });
+    handleModalClose = () => {
+        this.props.onTaskModalClose();
+        this.setState({ isTaskFormOpen: false, error: null });
+    };
 
     handleCreateSuccess = () => this.setState({ isTaskFormOpen: false, error: null });
 

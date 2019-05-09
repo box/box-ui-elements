@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { bdlGreenLight } from '../../styles/variables';
 
 import AccessibleSVG from '../accessible-svg';
 
@@ -13,7 +14,14 @@ type Props = {
     width?: number,
 };
 
-const IconVerified = ({ className = '', color = '#00E287', height = 14, opacity = 1, title, width = 14 }: Props) => (
+const IconVerified = ({
+    className = '',
+    color = bdlGreenLight,
+    height = 14,
+    opacity = 1,
+    title,
+    width = 14,
+}: Props) => (
     <AccessibleSVG
         className={`icon-verified ${className}`}
         height={height}
