@@ -552,6 +552,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, file.id);
     };
 
+    onTaskModalClose = () => {
+        this.setState({
+            approverSelectorContacts: [],
+        });
+    };
+
     renderAddTaskButton = () => {
         const { isDisabled, features } = this.props;
         const { approverSelectorContacts } = this.state;
@@ -559,6 +565,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getApproverWithQuery,
             getAvatarUrl,
             tasksApiNew: { createTask },
+            onTaskModalClose,
         } = this;
         const props = {
             isDisabled,
@@ -567,6 +574,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             approverSelectorContacts,
             getAvatarUrl,
             feedbackUrl: getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || '',
+            onTaskModalClose,
         };
         return (
             <FeatureFlag feature="activityFeed.tasks.newApi">

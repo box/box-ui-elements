@@ -223,7 +223,7 @@ describe('components/tooltip/Tooltip', () => {
             ).toMatchSnapshot();
         });
 
-        test('should render children only when tooltip text is missing', () => {
+        test('should render children wrapped in tether when tooltip has text missing', () => {
             expect(
                 getWrapper({
                     text: null,

@@ -11,6 +11,7 @@ import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 type AddTaskButtonProps = {|
     feedbackUrl: string,
     isDisabled: boolean,
+    onTaskModalClose: () => void,
 |};
 
 // These are used by the wrapped form
@@ -53,7 +54,10 @@ class AddTaskButton extends React.Component<Props, State> {
 
     handleClickMenuItem = (taskType: TaskType) => this.setState({ isTaskFormOpen: true, taskType });
 
-    handleModalClose = () => this.setState({ isTaskFormOpen: false, error: null });
+    handleModalClose = () => {
+        this.props.onTaskModalClose();
+        this.setState({ isTaskFormOpen: false, error: null });
+    };
 
     handleCreateSuccess = () => this.setState({ isTaskFormOpen: false, error: null });
 
@@ -63,12 +67,16 @@ class AddTaskButton extends React.Component<Props, State> {
         const { isDisabled, feedbackUrl, ...passThrough } = this.props;
         const { isTaskFormOpen, taskType, error } = this.state;
 
+        // CSS selector for first form element
+        // Note: Modal throws an error if this fails to find an element!
+        const focusTargetSelector = '.task-modal input';
         return (
             <React.Fragment>
                 <AddTaskMenu isDisabled={isDisabled} onMenuItemClick={this.handleClickMenuItem} />
                 <Modal
                     className="be-modal task-modal"
                     data-testid="create-task-modal"
+                    focusElementSelector={focusTargetSelector}
                     isOpen={isTaskFormOpen}
                     onRequestClose={this.handleModalClose}
                     title={

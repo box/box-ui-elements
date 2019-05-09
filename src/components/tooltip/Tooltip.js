@@ -200,8 +200,8 @@ class Tooltip extends React.Component<Props, State> {
             theme,
         } = this.props;
 
-        // If the tooltip is disabled or if the text is missing, just render the children
-        if (isDisabled || !text) {
+        // If the tooltip is disabled just render the children
+        if (isDisabled) {
             return React.Children.only(children);
         }
 

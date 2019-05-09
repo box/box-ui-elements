@@ -78,13 +78,17 @@ class TaskForm extends React.Component<Props, State> {
         this.setState(state => {
             const { intl } = this.props;
             const { approvers, message } = state;
-            const requiredFieldError = {
+            const assigneeFieldError = {
+                code: 'required',
+                message: intl.formatMessage(commonMessages.invalidUserError),
+            };
+            const messageFieldError = {
                 code: 'required',
                 message: intl.formatMessage(commonMessages.requiredFieldError),
             };
             const formValidityState = {
-                taskAssignees: approvers.length ? null : requiredFieldError,
-                taskName: message ? null : requiredFieldError,
+                taskAssignees: approvers.length ? null : assigneeFieldError,
+                taskName: message ? null : messageFieldError,
                 taskDueDate: null,
             };
             const isValid = Object.values(formValidityState).every(val => val == null);
@@ -103,10 +107,6 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     clearForm = () => this.setState(this.getInitialFormState());
-
-    handleFocusChange = () => {
-        this.validateForm();
-    };
 
     handleInvalidSubmit = () => {
         this.validateForm();
@@ -276,8 +276,6 @@ class TaskForm extends React.Component<Props, State> {
                                 data-testid="task-form-submit-button"
                                 isDisabled={!isValid || isLoading}
                                 isLoading={isLoading}
-                                onFocus={this.handleFocusChange}
-                                onMouseEnter={this.handleFocusChange}
                             >
                                 <FormattedMessage {...messages.tasksAddTaskFormSubmitLabel} />
                             </PrimaryButton>

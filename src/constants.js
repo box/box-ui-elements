@@ -230,6 +230,7 @@ export const ERROR_CODE_DELETE_ITEM = 'delete_item_error';
 export const ERROR_CODE_DELETE_METADATA = 'delete_metadata_error';
 export const ERROR_CODE_DELETE_VERSION = 'delete_version_error';
 export const ERROR_CODE_PROMOTE_VERSION = 'promote_version_error';
+export const ERROR_CODE_RESTORE_VERSION = 'restore_version_error';
 export const ERROR_CODE_UPDATE_TASK = 'update_task_error';
 export const ERROR_CODE_UPDATE_TASK_ASSIGNMENT = 'update_task_assignment_error';
 export const ERROR_CODE_UPDATE_TASK_COLLABORATOR = 'update_task_collaborator_error';

@@ -24,6 +24,14 @@ describe('Create Task', () => {
         });
     });
 
+    context('Task Modal', () => {
+        it('autofocuses first input (assignees)', () => {
+            cy.contains(l('be.tasks.addTask')).click();
+            cy.contains(l('be.tasks.addTask.approval')).click();
+            cy.focused().should('have.attr', 'data-testid', 'task-form-assignee-input');
+        });
+    });
+
     context('Task Form', () => {
         beforeEach(() => {
             cy.server();
@@ -35,6 +43,21 @@ describe('Create Task', () => {
                 .type('...')
                 .clear();
             cy.contains('Required Field').should('exist');
+        });
+
+        it('should not show approver options after reopening form', () => {
+            getAssigneeField().type(username);
+
+            cy.getByTestId('task-assignee-option').should('exist');
+
+            // close modal
+            getCancelButton().click();
+
+            // reopen modal
+            cy.contains(l('be.tasks.addTask')).click();
+            cy.contains(l('be.tasks.addTask.approval')).click();
+
+            cy.getByTestId('task-assignee-option').should('not.exist');
         });
 
         it('shows error state after receiving server error', () => {

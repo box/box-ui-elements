@@ -13,6 +13,7 @@ import {
     ERROR_CODE_DELETE_VERSION,
     ERROR_CODE_FETCH_VERSIONS,
     ERROR_CODE_PROMOTE_VERSION,
+    ERROR_CODE_RESTORE_VERSION,
     PERMISSION_CAN_DELETE,
     PERMISSION_CAN_UPLOAD,
     VERSION_DELETE_ACTION,
@@ -247,6 +248,53 @@ class Versions extends OffsetBasedAPI {
                 },
             },
             url: this.getVersionUrl(fileId, 'current'),
+            successCallback,
+            errorCallback,
+        });
+    }
+
+    /**
+     * API for restoring a deleted version of a file
+     *
+     * @param {Object} options - the request options
+     * @param {string} options.fileId - a box file id
+     * @param {string} options.versionId - a box file version id
+     * @param {BoxItemPermission} options.permissions - the permissions for the file
+     * @param {Function} options.successCallback - the success callback
+     * @param {Function} options.errorCallback - the error callback
+     * @returns {void}
+     */
+    restoreVersion({
+        errorCallback,
+        fileId,
+        permissions,
+        successCallback,
+        versionId,
+    }: {
+        errorCallback: ElementsErrorCallback,
+        fileId: string,
+        permissions: BoxItemPermission,
+        successCallback: BoxItemVersion => any,
+        versionId: string,
+    }): void {
+        this.errorCode = ERROR_CODE_RESTORE_VERSION;
+
+        try {
+            this.checkApiCallValidity(PERMISSION_CAN_UPLOAD, permissions, fileId);
+        } catch (e) {
+            errorCallback(e, this.errorCode);
+            return;
+        }
+
+        this.post({
+            id: fileId,
+            data: {
+                data: {
+                    id: versionId,
+                    type: 'file_version',
+                },
+            },
+            url: this.getVersionUrl(fileId, versionId),
             successCallback,
             errorCallback,
         });

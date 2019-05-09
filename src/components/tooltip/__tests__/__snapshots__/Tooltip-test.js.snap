@@ -87,10 +87,35 @@ exports[`components/tooltip/Tooltip render() should render children only when to
 </div>
 `;
 
-exports[`components/tooltip/Tooltip render() should render children only when tooltip text is missing 1`] = `
-<div>
-  Hello
-</div>
+exports[`components/tooltip/Tooltip render() should render children wrapped in tether when tooltip has text missing 1`] = `
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
+  }
+  enabled={false}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
+>
+  <div
+    onBlur={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    tabIndex="0"
+  >
+    Hello
+  </div>
+</TetherComponent>
 `;
 
 exports[`components/tooltip/Tooltip render() should render correctly with callout theme 1`] = `

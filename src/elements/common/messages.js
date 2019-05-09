@@ -925,7 +925,7 @@ const messages = defineMessages({
     },
     tasksAddTaskFormSelectAssigneesLabel: {
         id: 'be.tasks.addTaskForm.selectAssigneesLabel',
-        defaultMessage: 'Select Assignee(s)',
+        defaultMessage: 'Select Assignees',
         description: 'label for task create form assignee input',
     },
     tasksAddTaskFormMessageLabel: {
