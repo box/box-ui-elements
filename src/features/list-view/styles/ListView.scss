@@ -24,12 +24,15 @@
             cursor: pointer;
         }
 
-        .bdl-icon-sort-chevron.bdl-ListView-isSortAsc {
+        .bdl-icon-sort-chevron {
             height: 12px;
             margin-left: 2px;
             margin-top: 3px;
-            transform: rotate(180deg);
             width: 12px;
+        }
+
+        .bdl-icon-sort-chevron.bdl-ListView-isSortAsc {
+            transform: rotate(180deg);
         }
     }
 
@@ -38,7 +41,6 @@
         color: $seventy-sixers;
         display: flex;
         justify-content: flex-start;
-        padding-top: 16px;
 
         .bdl-ListView-iconRename {
             border: none;
@@ -50,5 +52,15 @@
 
     .ReactVirtualized__Grid {
         outline: none;
+    }
+
+    .ReactVirtualized__Grid__innerScrollContainer {
+        /* Currently there is an issue where overflow is hidden for the Grid
+            which results in dropdowns getting cut off at the bottom of each row
+
+            TODO: The correct solution would be to use Portal + Tether. This approach will be attempted during
+            the Raise the Bar phase.
+        */
+        overflow: visible !important;
     }
 }
