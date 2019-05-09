@@ -14,7 +14,6 @@ import type { ConditionValueType } from '../../flowTypes';
 import '../../styles/Condition.scss';
 
 type Props = {
-    className?: string,
     error?: React.Node,
     onChange: (value: Array<ConditionValueType>) => void,
     selectedValues: Array<ConditionValueType>,
