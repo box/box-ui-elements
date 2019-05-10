@@ -9,19 +9,21 @@ import Label from '../label';
 import SelectorDropdown from '../selector-dropdown';
 
 import PillSelector from './PillSelector';
-import type { SelectedOptions, SuggestedPillsFilter } from './flowTypes';
+import type { SelectedPills, SuggestedPillsFilter } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
 
 type Props = {
     /** If true, user can add pills not included in selector options */
-    allowCustomPills?: boolean,
+    allowCustomPills: boolean,
+    /** If true, pills with errors are parsed as pills also */
+    allowInvalidPills: boolean,
     /** `DatalistItem` components for dropdown options to select */
     children: React.Node,
     /** CSS class for the component */
     className?: string,
     /** If true, the input control is disabled so no more input can be made */
-    disabled?: boolean,
+    disabled: boolean,
     /** Index at which to insert a divider */
     dividerIndex?: number,
     /** Error message */
@@ -45,7 +47,7 @@ type Props = {
     /** A placeholder to show in the input when there are no pills */
     placeholder: string,
     /** Array or Immutable list with data for the selected options shown as pills */
-    selectedOptions: SelectedOptions,
+    selectedOptions: SelectedPills,
     /** Array or Immutable list with data for the dropdown options to select */
     selectorOptions: Array<Object> | List<Object>,
     /** Array of suggested collaborators */
@@ -57,7 +59,7 @@ type Props = {
     /** Validate the given input value, and update `error` prop if necessary */
     validateForError?: Function,
     /** Called to check if pill item data is valid. The `item` is passed in. */
-    validator?: Function,
+    validator: (text: string) => boolean,
 };
 
 type State = {
@@ -67,6 +69,7 @@ type State = {
 class PillSelectorDropdown extends React.Component<Props, State> {
     static defaultProps = {
         allowCustomPills: false,
+        allowInvalidPills: false,
         disabled: false,
         error: '',
         inputProps: {},
@@ -74,13 +77,14 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         placeholder: '',
         selectedOptions: [],
         selectorOptions: [],
+        validator: () => true,
     };
 
     state = { inputValue: '' };
 
     parsePills = () => {
         const { inputValue } = this.state;
-        const { parseItems, validator } = this.props;
+        const { allowInvalidPills, parseItems, validator } = this.props;
 
         let pills = parseItems ? parseItems(inputValue) : parseCSV(inputValue);
 
@@ -88,12 +92,13 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             return [];
         }
 
-        if (validator) {
+        if (validator && !allowInvalidPills) {
             pills = pills.filter(pill => validator(pill));
         }
 
         // Keep the data format consistent with DatalistItem
         return pills.map(pill => ({
+            displayText: pill,
             text: pill,
             value: pill,
         }));
@@ -165,6 +170,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
 
     render() {
         const {
+            allowInvalidPills,
             children,
             className,
             disabled,
@@ -180,6 +186,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
+            validator,
         } = this.props;
 
         return (
@@ -192,6 +199,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                 selector={
                     <Label text={label}>
                         <PillSelector
+                            allowInvalidPills={allowInvalidPills}
                             onChange={noop} // fix console error
                             {...inputProps}
                             disabled={disabled}
@@ -206,6 +214,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             suggestedPillsData={suggestedPillsData}
                             suggestedPillsFilter={suggestedPillsFilter}
                             suggestedPillsTitle={suggestedPillsTitle}
+                            validator={validator}
                             value={this.state.inputValue}
                         />
                     </Label>

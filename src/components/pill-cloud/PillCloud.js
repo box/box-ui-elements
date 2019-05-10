@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 
 import Button from '../button';
 
-type Option = { text: string, value: number | string };
+type Option = { text: string, value: number | string | null };
 
 type Props = {
     buttonProps?: Object,

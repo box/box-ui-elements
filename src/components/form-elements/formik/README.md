@@ -9,6 +9,9 @@ const Checkbox = require('box-ui-elements/es/components/checkbox').CheckboxField
 const RadioGroup = require('box-ui-elements/es/components/radio').RadioGroupField;
 const RadioButton = require('box-ui-elements/es/components/radio').RadioButton;
 const SelectField = require('box-ui-elements/es/components/select-field').SelectField;
+const PillSelectorDropdownField = require('box-ui-elements/es/components/pill-selector-dropdown').PillSelectorDropdownField;
+
+const pillValidator = value => ['red', 'green', 'blue', 'yellow', 'white', 'black'].includes(value.toLowerCase());
 
 <Formik
     initialValues={{
@@ -20,7 +23,7 @@ const SelectField = require('box-ui-elements/es/components/select-field').Select
     }}
     validate={values => {
         const errors = {};
-        const { textinput, textarea } = values;
+        const { textinput, textarea, pillselector } = values;
 
         if (!textinput) {
             errors.textinput = 'Required';
@@ -28,6 +31,10 @@ const SelectField = require('box-ui-elements/es/components/select-field').Select
 
         if (!textarea) {
             errors.textarea = 'Required';
+        }
+
+        if (!pillselector.every((pill => pillValidator(pill.value)))) {
+            errors.pillselector = 'Bad colors';
         }
 
         return errors;
@@ -99,6 +106,21 @@ const SelectField = require('box-ui-elements/es/components/select-field').Select
                         description="Blue color"
                     />
                 </Field>
+                <br />
+                <br />
+                <Field
+                    isCustomInputAllowed
+                    label="Pill Selector Field"
+                    name="pillselector"
+                    placeholder="Pill Selector Field"
+                    options={[
+                        { displayText: 'Red', value: 'Red' },
+                        { displayText: 'Green', value: 'Green' },
+                        { displayText: 'Blue', value: 'Blue' },
+                    ]}
+                    component={PillSelectorDropdownField}
+                    validator={pillValidator}
+                />
             </Form>
             <br />
             <br />
