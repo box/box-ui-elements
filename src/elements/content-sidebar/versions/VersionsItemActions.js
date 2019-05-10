@@ -27,7 +27,7 @@ type Props = {
     onPreview?: () => void,
     onPromote?: () => void,
     onRestore?: () => void,
-    permissions: BoxItemPermission,
+    permissions: BoxItemVersionPermission,
 };
 
 const ICON_SIZE = { height: 12, width: 12 };

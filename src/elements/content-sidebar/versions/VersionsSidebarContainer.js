@@ -28,7 +28,6 @@ type Props = {
 type State = {
     error?: string,
     isLoading: boolean,
-    permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 
@@ -42,7 +41,6 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     state: State = {
         isLoading: true,
-        permissions: {},
         versions: [],
     };
 
@@ -122,23 +120,24 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState({
             error: message,
             isLoading: false,
-            permissions: {},
             versions: [],
         });
     };
 
-    handleFetchSuccess = ([file, versions]): [BoxItem, FileVersions] => {
+    handleFetchSuccess = ([fileResponse, versionsResponse]): [BoxItem, FileVersions] => {
         const { api } = this.props;
-        const { entries } = api.getVersionsAPI(false).addCurrentVersion(versions, file) || {};
+        const versionsApi = api.getVersionsAPI(false);
+        const versionsWithCurrent = versionsApi.addCurrentVersion(versionsResponse, fileResponse);
+        const versionsWithPermissions = versionsApi.addPermissions(versionsWithCurrent, fileResponse);
+        const { entries: versions } = versionsApi.sortVersions(versionsWithPermissions) || {};
 
         this.setState({
             error: undefined,
             isLoading: false,
-            permissions: file.permissions || {},
-            versions: entries.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
+            versions,
         });
 
-        return [file, versions];
+        return [fileResponse, versionsResponse];
     };
 
     handlePromoteSuccess = ([file]: [BoxItem, FileVersions]): void => {
@@ -194,7 +193,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     deleteVersion = (versionId: string): Promise<null> => {
         const { api, fileId } = this.props;
-        const { permissions } = this.state;
+        const { permissions = {} } = this.findVersion(versionId) || {};
 
         return new Promise((successCallback, errorCallback) =>
             api.getVersionsAPI(false).deleteVersion({
@@ -209,7 +208,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     promoteVersion = (versionId: string): Promise<BoxItemVersion> => {
         const { api, fileId } = this.props;
-        const { permissions } = this.state;
+        const { permissions = {} } = this.findVersion(versionId) || {};
 
         return new Promise((successCallback, errorCallback) =>
             api.getVersionsAPI(false).promoteVersion({
@@ -224,7 +223,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     restoreVersion = (versionId: string): Promise<any> => {
         const { api, fileId } = this.props;
-        const { permissions } = this.state;
+        const { permissions = {} } = this.findVersion(versionId) || {};
 
         return new Promise((successCallback, errorCallback) =>
             api.getVersionsAPI(false).restoreVersion({

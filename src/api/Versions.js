@@ -99,7 +99,7 @@ class Versions extends OffsetBasedAPI {
     };
 
     /**
-     * Adds the current version from the file object, which may be a restore
+     * Helper to add the current version from the file object, which may be a restore
      *
      * @param {FileVersions} versions - API returned file versions for this file
      * @param {BoxItem} file - The parent file object
@@ -113,14 +113,25 @@ class Versions extends OffsetBasedAPI {
         }
 
         const { entries, total_count } = versions;
-        const { modified_at, modified_by, size, version_number, name, extension } = file;
+        const {
+            extension,
+            is_download_available,
+            modified_at,
+            modified_by,
+            name,
+            permissions,
+            size,
+            version_number,
+        } = file;
         const currentVersion: BoxItemVersion = {
             ...file_version,
             action: VERSION_UPLOAD_ACTION,
             created_at: modified_at,
             extension,
+            is_download_available,
             modified_at,
             modified_by,
+            permissions,
             name,
             size,
             version_number,
@@ -141,12 +152,37 @@ class Versions extends OffsetBasedAPI {
     }
 
     /**
+     * Helper to add associated permissions from the file to the version objects
+     *
+     * @param {FileVersions} versions - API returned file versions for this file
+     * @param {BoxItem} file - The parent file object
+     * @return {FileVersions} modified versions array including associated file permissions
+     */
+    addPermissions(versions: ?FileVersions, file: BoxItem): ?FileVersions {
+        if (!versions) {
+            return versions;
+        }
+
+        // Versions defer to the parent file for upload (promote) permissions
+        const can_upload = getProp([file, 'permissions', PERMISSION_CAN_UPLOAD], false);
+        const { entries, total_count } = versions;
+
+        return {
+            entries: entries.map(({ permissions, ...version }) => ({
+                ...version,
+                permissions: { can_upload, ...permissions },
+            })),
+            total_count,
+        };
+    }
+
+    /**
      * API for deleting a version of a file
      *
      * @param {Object} options - the request options
      * @param {string} options.fileId - a box file id
      * @param {string} options.versionId - a box file version id
-     * @param {BoxItemPermission} options.permissions - the permissions for the file
+     * @param {BoxItemVersionPermission} options.permissions - the permissions for the file
      * @param {Function} options.successCallback - the success callback
      * @param {Function} options.errorCallback - the error callback
      * @returns {void}
@@ -160,7 +196,7 @@ class Versions extends OffsetBasedAPI {
     }: {
         errorCallback: ElementsErrorCallback,
         fileId: string,
-        permissions: BoxItemPermission,
+        permissions: BoxItemVersionPermission,
         successCallback: null => any,
         versionId: string,
     }): void {
@@ -212,7 +248,7 @@ class Versions extends OffsetBasedAPI {
      * @param {Object} options - the request options
      * @param {string} options.fileId - a box file id
      * @param {string} options.versionId - a box file version id
-     * @param {BoxItemPermission} options.permissions - the permissions for the file
+     * @param {BoxItemVersionPermission} options.permissions - the permissions for the file
      * @param {Function} options.successCallback - the success callback
      * @param {Function} options.errorCallback - the error callback
      * @returns {void}
@@ -226,7 +262,7 @@ class Versions extends OffsetBasedAPI {
     }: {
         errorCallback: ElementsErrorCallback,
         fileId: string,
-        permissions: BoxItemPermission,
+        permissions: BoxItemVersionPermission,
         successCallback: BoxItemVersion => any,
         versionId: string,
     }): void {
@@ -259,7 +295,7 @@ class Versions extends OffsetBasedAPI {
      * @param {Object} options - the request options
      * @param {string} options.fileId - a box file id
      * @param {string} options.versionId - a box file version id
-     * @param {BoxItemPermission} options.permissions - the permissions for the file
+     * @param {BoxItemVersionPermission} options.permissions - the permissions for the file
      * @param {Function} options.successCallback - the success callback
      * @param {Function} options.errorCallback - the error callback
      * @returns {void}
@@ -273,7 +309,7 @@ class Versions extends OffsetBasedAPI {
     }: {
         errorCallback: ElementsErrorCallback,
         fileId: string,
-        permissions: BoxItemPermission,
+        permissions: BoxItemVersionPermission,
         successCallback: BoxItemVersion => any,
         versionId: string,
     }): void {
@@ -298,6 +334,25 @@ class Versions extends OffsetBasedAPI {
             successCallback,
             errorCallback,
         });
+    }
+
+    /**
+     * Helper to sort versions by their created date
+     *
+     * @param {FileVersions} versions - API returned file versions for this file
+     * @return {FileVersions} sorted versions array
+     */
+    sortVersions(versions: ?FileVersions): ?FileVersions {
+        if (!versions) {
+            return versions;
+        }
+
+        const { entries, total_count } = versions;
+
+        return {
+            entries: entries.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
+            total_count,
+        };
     }
 }
 
