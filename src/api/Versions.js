@@ -164,8 +164,8 @@ class Versions extends OffsetBasedAPI {
         }
 
         // Versions defer to the parent file for upload (promote) permissions
-        const can_upload = getProp([file, 'permissions', PERMISSION_CAN_UPLOAD], false);
         const { entries, total_count } = versions;
+        const can_upload = getProp(file, ['permissions', PERMISSION_CAN_UPLOAD], false);
 
         return {
             entries: entries.map(({ permissions, ...version }) => ({
@@ -350,7 +350,7 @@ class Versions extends OffsetBasedAPI {
         const { entries, total_count } = versions;
 
         return {
-            entries: entries.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
+            entries: [...entries].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
             total_count,
         };
     }
