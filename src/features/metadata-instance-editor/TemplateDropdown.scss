@@ -38,6 +38,13 @@
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
                 max-height: 300px;
             }
+
+            // TemplateDropdown component is wrapped under two layers of Overlay components.
+            // Removing the extra transform and animation properties so it doesn't mess up safari's scroll bar.
+            ul.overlay {
+                animation: none;
+                transform: none;
+            }
         }
 
         .overlay {
