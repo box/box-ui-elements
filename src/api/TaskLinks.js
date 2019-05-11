@@ -25,7 +25,7 @@ const RETRYABLE = [
 ];
 
 class TaskLinks extends Base {
-    constructor({ retryableStatusCodes = RETRYABLE, ...options }) {
+    constructor({ retryableStatusCodes = RETRYABLE, ...options }: Options) {
         super({ ...options, retryableStatusCodes });
     }
 

@@ -30,7 +30,7 @@ const RETRYABLE = [
 ];
 
 class TaskCollaborators extends Base {
-    constructor({ retryableStatusCodes = RETRYABLE, ...options }) {
+    constructor({ retryableStatusCodes = RETRYABLE, ...options }: Options) {
         super({ ...options, retryableStatusCodes });
     }
 
