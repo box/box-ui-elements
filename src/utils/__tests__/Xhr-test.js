@@ -308,135 +308,28 @@ describe('util/Xhr', () => {
             });
         };
 
-        test.each([
-            [
-                false,
-                undefined,
-                {
-                    status: 429,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                4,
-                false,
-                'shouldRetry=false',
-            ],
-            [
-                true,
-                undefined,
-                {
-                    status: 429,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                true,
-                'rateLimit',
-            ],
-            [
-                true,
-                undefined,
-                {
-                    status: 429,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                3,
-                false,
-                'max retries exceeded',
-            ],
-            [
-                true,
-                undefined,
-                {
-                    status: 500,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                false,
-                'status code is invalid',
-            ],
-            [
-                true,
-                undefined,
-                {
-                    status: 404,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                false,
-                'status code is invalid',
-            ],
-            [
-                true,
-                undefined,
-                undefined,
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                true,
-                'generic network error',
-            ],
-            [
-                true,
-                undefined,
-                {
-                    status: 404,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                false,
-                'standard network error',
-            ],
-            [
-                true,
-                [503, 429],
-                {
-                    status: 503,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                true,
-                'network error in custom retryableStatusCodes',
-            ],
-            [true, undefined, undefined, undefined, 0, false, 'error thrown during request'],
-        ])('should retry request %#', (shouldRetry, retryableStatusCodes, response, request, retryCount, expected) => {
-            createXhrInstance({ shouldRetry, retryableStatusCodes });
-            xhrInstance.retryCount = retryCount;
-            const result = xhrInstance.shouldRetryRequest({
-                response,
-                request,
-            });
-            expect(result).toBe(expected);
-        });
+        test.each`
+            condition                      | shouldRetry | retryableStatusCodes | responseCode | hasRequestBody | retryCount | expected
+            ${'shouldRetry=false'}         | ${false}    | ${undefined}         | ${429}       | ${true}        | ${0}       | ${false}
+            ${'max retries hit'}           | ${true}     | ${undefined}         | ${429}       | ${true}        | ${3}       | ${false}
+            ${'invalid status 5xx'}        | ${true}     | ${undefined}         | ${500}       | ${true}        | ${0}       | ${false}
+            ${'invalid status 4xx'}        | ${true}     | ${undefined}         | ${404}       | ${true}        | ${0}       | ${false}
+            ${'error was thrown'}          | ${true}     | ${undefined}         | ${undefined} | ${false}       | ${0}       | ${false}
+            ${'rate limit status 429'}     | ${true}     | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
+            ${'custom retryable statuses'} | ${true}     | ${[503, 429]}        | ${503}       | ${true}        | ${0}       | ${true}
+            ${'generic error is thrown'}   | ${true}     | ${undefined}         | ${undefined} | ${true}        | ${0}       | ${true}
+        `(
+            `should retry = $expected when $condition`,
+            ({ shouldRetry, retryableStatusCodes, responseCode, hasRequestBody, retryCount, expected }) => {
+                createXhrInstance({ shouldRetry, retryableStatusCodes });
+                xhrInstance.retryCount = retryCount;
+                const result = xhrInstance.shouldRetryRequest({
+                    response: responseCode ? { status: responseCode } : undefined,
+                    request: hasRequestBody ? { data: { foo: 'bar' } } : undefined,
+                });
+                expect(result).toBe(expected);
+            },
+        );
     });
 
     describe('getExponentialRetryTimeoutInMs()', () => {
