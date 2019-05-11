@@ -309,19 +309,19 @@ describe('util/Xhr', () => {
         };
 
         test.each`
-            condition                      | shouldRetry | method    | retryableStatusCodes | responseCode | hasRequestBody | retryCount | expected
-            ${'shouldRetry=false'}         | ${false}    | ${'GET'}  | ${undefined}         | ${429}       | ${true}        | ${0}       | ${false}
-            ${'max retries hit'}           | ${true}     | ${'GET'}  | ${undefined}         | ${429}       | ${true}        | ${3}       | ${false}
-            ${'invalid status 5xx'}        | ${true}     | ${'GET'}  | ${undefined}         | ${500}       | ${true}        | ${0}       | ${false}
-            ${'invalid status 4xx'}        | ${true}     | ${'GET'}  | ${undefined}         | ${404}       | ${true}        | ${0}       | ${false}
-            ${'error was thrown'}          | ${true}     | ${'GET'}  | ${undefined}         | ${undefined} | ${false}       | ${0}       | ${false}
-            ${'unsafe http method POST'}   | ${true}     | ${'POST'} | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
-            ${'unsafe http method PUT'}    | ${true}     | ${'PUT'}  | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
-            ${'unsafe http method DELETE'} | ${true}     | ${'PUT'}  | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
-            ${'unsafe method w/429 code'}  | ${true}     | ${'PUT'}  | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
-            ${'rate limit status 429'}     | ${true}     | ${'GET'}  | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
-            ${'custom retryable statuses'} | ${true}     | ${'GET'}  | ${[503, 429]}        | ${503}       | ${true}        | ${0}       | ${true}
-            ${'generic error is thrown'}   | ${true}     | ${'GET'}  | ${undefined}         | ${undefined} | ${true}        | ${0}       | ${true}
+            condition                      | shouldRetry | method      | retryableStatusCodes | responseCode | hasRequestBody | retryCount | expected
+            ${'shouldRetry=false'}         | ${false}    | ${'get'}    | ${undefined}         | ${429}       | ${true}        | ${0}       | ${false}
+            ${'max retries hit'}           | ${true}     | ${'get'}    | ${undefined}         | ${429}       | ${true}        | ${3}       | ${false}
+            ${'invalid status 5xx'}        | ${true}     | ${'get'}    | ${undefined}         | ${500}       | ${true}        | ${0}       | ${false}
+            ${'invalid status 4xx'}        | ${true}     | ${'get'}    | ${undefined}         | ${404}       | ${true}        | ${0}       | ${false}
+            ${'error was thrown'}          | ${true}     | ${'get'}    | ${undefined}         | ${undefined} | ${false}       | ${0}       | ${false}
+            ${'unsafe http method POST'}   | ${true}     | ${'post'}   | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
+            ${'unsafe http method PUT'}    | ${true}     | ${'put'}    | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
+            ${'unsafe http method DELETE'} | ${true}     | ${'delete'} | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
+            ${'unsafe method w/429 code'}  | ${true}     | ${'post'}   | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
+            ${'rate limit status 429'}     | ${true}     | ${'get'}    | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
+            ${'custom retryable statuses'} | ${true}     | ${'get'}    | ${[503, 429]}        | ${503}       | ${true}        | ${0}       | ${true}
+            ${'generic error is thrown'}   | ${true}     | ${'get'}    | ${undefined}         | ${undefined} | ${true}        | ${0}       | ${true}
         `(
             `should retry = $expected when $condition`,
             ({ shouldRetry, method, retryableStatusCodes, responseCode, hasRequestBody, retryCount, expected }) => {

@@ -127,7 +127,7 @@ class Xhr {
         }
 
         // Network methods that are safe to retry
-        const idempotentMethods = [HTTP_GET, HTTP_OPTIONS, HTTP_HEAD];
+        const idempotentMethods = [HTTP_GET, HTTP_OPTIONS, HTTP_HEAD].map(s => s.toLowerCase());
 
         const { response, request } = error;
         // Retry if there is a network error (e.g. ECONNRESET) or rate limited
