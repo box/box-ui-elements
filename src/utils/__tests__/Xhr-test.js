@@ -301,16 +301,17 @@ describe('util/Xhr', () => {
     });
 
     describe('shouldRetryRequest', () => {
-        const createXhrInstance = shouldRetryRequest => {
+        const createXhrInstance = options => {
             xhrInstance = new Xhr({
                 token: '123',
-                shouldRetryRequest,
+                ...options,
             });
         };
 
         test.each([
             [
                 false,
+                undefined,
                 {
                     status: 429,
                 },
@@ -321,9 +322,11 @@ describe('util/Xhr', () => {
                 },
                 4,
                 false,
-            ], // false, shouldRetry false
+                'shouldRetry=false',
+            ],
             [
                 true,
+                undefined,
                 {
                     status: 429,
                 },
@@ -334,9 +337,11 @@ describe('util/Xhr', () => {
                 },
                 0,
                 true,
-            ], // true, rate limit
+                'rateLimit',
+            ],
             [
                 true,
+                undefined,
                 {
                     status: 429,
                 },
@@ -347,9 +352,11 @@ describe('util/Xhr', () => {
                 },
                 3,
                 false,
-            ], // false, max number exceeded
+                'max retries exceeded',
+            ],
             [
                 true,
+                undefined,
                 {
                     status: 500,
                 },
@@ -360,9 +367,11 @@ describe('util/Xhr', () => {
                 },
                 0,
                 false,
-            ], // false, not valid code
+                'status code is invalid',
+            ],
             [
                 true,
+                undefined,
                 {
                     status: 404,
                 },
@@ -373,9 +382,11 @@ describe('util/Xhr', () => {
                 },
                 0,
                 false,
-            ], // false, not valid code
+                'status code is invalid',
+            ],
             [
                 true,
+                undefined,
                 undefined,
                 {
                     data: {
@@ -384,9 +395,11 @@ describe('util/Xhr', () => {
                 },
                 0,
                 true,
-            ], // true, generic network error
+                'generic network error',
+            ],
             [
                 true,
+                undefined,
                 {
                     status: 404,
                 },
@@ -397,10 +410,26 @@ describe('util/Xhr', () => {
                 },
                 0,
                 false,
-            ], // false, invalid status code
-            [true, undefined, undefined, 0, false], // false, error thrown during request
-        ])('should retry request %#', (shouldRetryRequest, response, request, retryCount, expected) => {
-            createXhrInstance(shouldRetryRequest);
+                'standard network error',
+            ],
+            [
+                true,
+                [503, 429],
+                {
+                    status: 503,
+                },
+                {
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+                0,
+                true,
+                'network error in custom retryableStatusCodes',
+            ],
+            [true, undefined, undefined, undefined, 0, false, 'error thrown during request'],
+        ])('should retry request %#', (shouldRetry, retryableStatusCodes, response, request, retryCount, expected) => {
+            createXhrInstance({ shouldRetry, retryableStatusCodes });
             xhrInstance.retryCount = retryCount;
             const result = xhrInstance.shouldRetryRequest({
                 response,

@@ -12,9 +12,22 @@ import {
     ERROR_CODE_UPDATE_TASK_COLLABORATOR,
     ERROR_CODE_DELETE_TASK_COLLABORATOR,
     API_PAGE_LIMIT,
+    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
+    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
+    HTTP_STATUS_CODE_BAD_GATEWAY,
+    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
+    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
 } from '../constants';
 
 class TaskCollaborators extends Base {
+    retryableStatusCodes = [
+        HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
+        HTTP_STATUS_CODE_NOT_IMPLEMENTED,
+        HTTP_STATUS_CODE_BAD_GATEWAY,
+        HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
+        HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
+    ];
+
     getUrlForTaskCollaborators(taskId: string): string {
         return `${this.getBaseApiUrl()}/undoc/tasks/${taskId}/task_collaborators?limit=${API_PAGE_LIMIT}`;
     }

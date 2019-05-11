@@ -11,9 +11,22 @@ import {
     ERROR_CODE_DELETE_TASK,
     ERROR_CODE_FETCH_TASKS,
     API_PAGE_LIMIT,
+    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
+    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
+    HTTP_STATUS_CODE_BAD_GATEWAY,
+    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
+    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
 } from '../constants';
 
 class TasksNew extends Base {
+    retryableStatusCodes = [
+        HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
+        HTTP_STATUS_CODE_NOT_IMPLEMENTED,
+        HTTP_STATUS_CODE_BAD_GATEWAY,
+        HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
+        HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
+    ];
+
     getUrlForFileTasks(id: string): string {
         return `${this.getBaseApiUrl()}/undoc/files/${id}/linked_tasks?limit=${API_PAGE_LIMIT}`;
     }

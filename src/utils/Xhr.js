@@ -51,6 +51,8 @@ class Xhr {
 
     retryCount: number = 0;
 
+    retryableStatusCodes: Array<number>;
+
     retryTimeout: ?TimeoutID;
 
     shouldRetry: boolean;
@@ -66,6 +68,8 @@ class Xhr {
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.requestInterceptor] - Request interceptor
      * @param {string} [options.responseInterceptor] - Response interceptor
+     * @param {number[]} [options.retryableStatusCodes] - Response codes to retry
+     * @param {boolean} [options.shouldRetry] - Should retry failed requests
      * @return {Xhr} Cache instance
      */
     constructor({
@@ -77,6 +81,7 @@ class Xhr {
         sharedLinkPassword,
         responseInterceptor,
         requestInterceptor,
+        retryableStatusCodes = [HTTP_STATUS_CODE_RATE_LIMIT],
         shouldRetry = true,
     }: Options = {}) {
         this.id = id;
@@ -89,7 +94,7 @@ class Xhr {
         this.axios = axios.create();
         this.axiosSource = axios.CancelToken.source();
         this.shouldRetry = shouldRetry;
-
+        this.retryableStatusCodes = retryableStatusCodes;
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
 
         if (typeof requestInterceptor === 'function') {
@@ -121,7 +126,7 @@ class Xhr {
         const { response, request } = error;
         // Retry if there is a network error (e.g. ECONNRESET) or rate limited
         const isNetworkError = request && !response;
-        return isNetworkError || getProp(response, 'status') === HTTP_STATUS_CODE_RATE_LIMIT;
+        return isNetworkError || this.retryableStatusCodes.includes(getProp(response, 'status'));
     }
 
     /**

@@ -10,9 +10,22 @@ import {
     ERROR_CODE_CREATE_TASK_ASSIGNMENT,
     ERROR_CODE_UPDATE_TASK_ASSIGNMENT,
     ERROR_CODE_DELETE_TASK_ASSIGNMENT,
+    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
+    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
+    HTTP_STATUS_CODE_BAD_GATEWAY,
+    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
+    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
 } from '../constants';
 
 class TaskAssignments extends Base {
+    retryableStatusCodes = [
+        HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
+        HTTP_STATUS_CODE_NOT_IMPLEMENTED,
+        HTTP_STATUS_CODE_BAD_GATEWAY,
+        HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
+        HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
+    ];
+
     /**
      * API URL for task assignments. Getting a list of assignments "/tasks/id/assignments" does not give us the fields
      * we need. So instead we will only perform GET operations on an assignment by assignment basis,
