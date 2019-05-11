@@ -309,23 +309,27 @@ describe('util/Xhr', () => {
         };
 
         test.each`
-            condition                      | shouldRetry | retryableStatusCodes | responseCode | hasRequestBody | retryCount | expected
-            ${'shouldRetry=false'}         | ${false}    | ${undefined}         | ${429}       | ${true}        | ${0}       | ${false}
-            ${'max retries hit'}           | ${true}     | ${undefined}         | ${429}       | ${true}        | ${3}       | ${false}
-            ${'invalid status 5xx'}        | ${true}     | ${undefined}         | ${500}       | ${true}        | ${0}       | ${false}
-            ${'invalid status 4xx'}        | ${true}     | ${undefined}         | ${404}       | ${true}        | ${0}       | ${false}
-            ${'error was thrown'}          | ${true}     | ${undefined}         | ${undefined} | ${false}       | ${0}       | ${false}
-            ${'rate limit status 429'}     | ${true}     | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
-            ${'custom retryable statuses'} | ${true}     | ${[503, 429]}        | ${503}       | ${true}        | ${0}       | ${true}
-            ${'generic error is thrown'}   | ${true}     | ${undefined}         | ${undefined} | ${true}        | ${0}       | ${true}
+            condition                      | shouldRetry | method    | retryableStatusCodes | responseCode | hasRequestBody | retryCount | expected
+            ${'shouldRetry=false'}         | ${false}    | ${'GET'}  | ${undefined}         | ${429}       | ${true}        | ${0}       | ${false}
+            ${'max retries hit'}           | ${true}     | ${'GET'}  | ${undefined}         | ${429}       | ${true}        | ${3}       | ${false}
+            ${'invalid status 5xx'}        | ${true}     | ${'GET'}  | ${undefined}         | ${500}       | ${true}        | ${0}       | ${false}
+            ${'invalid status 4xx'}        | ${true}     | ${'GET'}  | ${undefined}         | ${404}       | ${true}        | ${0}       | ${false}
+            ${'error was thrown'}          | ${true}     | ${'GET'}  | ${undefined}         | ${undefined} | ${false}       | ${0}       | ${false}
+            ${'unsafe http method POST'}   | ${true}     | ${'POST'} | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
+            ${'unsafe http method PUT'}    | ${true}     | ${'PUT'}  | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
+            ${'unsafe http method DELETE'} | ${true}     | ${'PUT'}  | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
+            ${'unsafe method w/429 code'}  | ${true}     | ${'PUT'}  | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
+            ${'rate limit status 429'}     | ${true}     | ${'GET'}  | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
+            ${'custom retryable statuses'} | ${true}     | ${'GET'}  | ${[503, 429]}        | ${503}       | ${true}        | ${0}       | ${true}
+            ${'generic error is thrown'}   | ${true}     | ${'GET'}  | ${undefined}         | ${undefined} | ${true}        | ${0}       | ${true}
         `(
             `should retry = $expected when $condition`,
-            ({ shouldRetry, retryableStatusCodes, responseCode, hasRequestBody, retryCount, expected }) => {
+            ({ shouldRetry, method, retryableStatusCodes, responseCode, hasRequestBody, retryCount, expected }) => {
                 createXhrInstance({ shouldRetry, retryableStatusCodes });
                 xhrInstance.retryCount = retryCount;
                 const result = xhrInstance.shouldRetryRequest({
                     response: responseCode ? { status: responseCode } : undefined,
-                    request: hasRequestBody ? { data: { foo: 'bar' } } : undefined,
+                    request: hasRequestBody ? { data: { foo: 'bar' }, method } : undefined,
                 });
                 expect(result).toBe(expected);
             },

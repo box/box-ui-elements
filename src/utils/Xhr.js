@@ -5,6 +5,7 @@
  */
 
 import axios from 'axios';
+import type { $AxiosError, $AxiosXHR } from 'axios';
 import getProp from 'lodash/get';
 import TokenService from './TokenService';
 import {
@@ -12,10 +13,12 @@ import {
     HEADER_CLIENT_NAME,
     HEADER_CLIENT_VERSION,
     HEADER_CONTENT_TYPE,
+    HTTP_GET,
     HTTP_POST,
     HTTP_PUT,
     HTTP_DELETE,
     HTTP_OPTIONS,
+    HTTP_HEAD,
     HTTP_STATUS_CODE_RATE_LIMIT,
 } from '../constants';
 
@@ -123,10 +126,17 @@ class Xhr {
             return false;
         }
 
+        // Network methods that are safe to retry
+        const idempotentMethods = [HTTP_GET, HTTP_OPTIONS, HTTP_HEAD];
+
         const { response, request } = error;
         // Retry if there is a network error (e.g. ECONNRESET) or rate limited
+        const status = getProp(response, 'status');
+        const method = getProp(request, 'method');
         const isNetworkError = request && !response;
-        return isNetworkError || this.retryableStatusCodes.includes(getProp(response, 'status'));
+        const isRateLimitError = status === HTTP_STATUS_CODE_RATE_LIMIT;
+        const isOtherRetryableError = this.retryableStatusCodes.includes(status) && idempotentMethods.includes(method);
+        return isNetworkError || isRateLimitError || isOtherRetryableError;
     }
 
     /**
