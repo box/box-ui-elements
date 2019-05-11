@@ -129,10 +129,10 @@ class Xhr {
         // Network methods that are safe to retry
         const idempotentMethods = [HTTP_GET, HTTP_OPTIONS, HTTP_HEAD].map(s => s.toLowerCase());
 
-        const { response, request } = error;
+        const { response, request, config } = error;
         // Retry if there is a network error (e.g. ECONNRESET) or rate limited
         const status = getProp(response, 'status');
-        const method = getProp(request, 'method');
+        const method = getProp(config, 'method');
         const isNetworkError = request && !response;
         const isRateLimitError = status === HTTP_STATUS_CODE_RATE_LIMIT;
         const isOtherRetryableError = this.retryableStatusCodes.includes(status) && idempotentMethods.includes(method);

@@ -329,7 +329,8 @@ describe('util/Xhr', () => {
                 xhrInstance.retryCount = retryCount;
                 const result = xhrInstance.shouldRetryRequest({
                     response: responseCode ? { status: responseCode } : undefined,
-                    request: hasRequestBody ? { data: { foo: 'bar' }, method } : undefined,
+                    request: hasRequestBody ? { data: { foo: 'bar' } } : undefined,
+                    config: { method }, // AxiosXHRConfig for the request
                 });
                 expect(result).toBe(expected);
             },
