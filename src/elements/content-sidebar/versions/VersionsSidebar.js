@@ -25,7 +25,6 @@ type Props = {
     onPromote: VersionActionCallback,
     onRestore: VersionActionCallback,
     parentName: string,
-    permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 

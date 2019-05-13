@@ -19,7 +19,6 @@ type Props = {
     onPreview: VersionActionCallback,
     onPromote: VersionActionCallback,
     onRestore: VersionActionCallback,
-    permissions: BoxItemPermission,
     versions: Array<BoxItemVersion>,
 };
 

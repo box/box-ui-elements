@@ -5,23 +5,34 @@ import { FILE_VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
 let versions;
 
 describe('api/Versions', () => {
-    const uploadVersion = {
+    const firstVersion = {
         id: 123,
-        modified_at: 1234567892,
-        modified_by: { name: 'Jay-Z', id: 10 },
-        trashed_at: null,
+        created_at: '2018-10-02T13:01:24-07:00',
+        modified_at: '2018-10-02T13:01:24-07:00',
+        modified_by: { name: 'Foo', id: 10 },
         version_number: '1',
     };
     const deleteVersion = {
         id: 456,
-        modified_at: 1234567891,
-        modified_by: { name: 'Akon', id: 11 },
-        trashed_at: 1234567891,
+        created_at: '2018-10-02T13:01:41-07:00',
+        modified_at: '2018-10-02T13:01:41-07:00',
+        modified_by: { name: 'Bar', id: 11 },
+        permissions: { can_delete: true },
+        trashed_at: '2018-10-02T13:01:41-07:00',
         version_number: '2',
+    };
+    const restoreVersion = {
+        id: 789,
+        created_at: '2018-11-29T17:47:57-08:00',
+        modified_at: '2018-11-29T17:47:57-08:00',
+        modified_by: { name: 'Baz', id: 12 },
+        permissions: { can_delete: true },
+        trashed_at: null,
+        version_number: '3',
     };
     const file = {
         id: '12345',
-        modified_at: 1234567891,
+        modified_at: 1111111111,
         file_version: {
             id: 987,
         },
@@ -29,14 +40,14 @@ describe('api/Versions', () => {
             can_comment: true,
         },
         restored_from: {
-            id: uploadVersion.id,
-            type: uploadVersion.type,
+            id: firstVersion.id,
+            type: firstVersion.type,
         },
     };
     const { id: fileId } = file;
     const response = {
-        entries: [uploadVersion, deleteVersion],
-        total_count: 2,
+        entries: [firstVersion, deleteVersion, restoreVersion],
+        total_count: 3,
     };
 
     beforeEach(() => {
@@ -73,17 +84,21 @@ describe('api/Versions', () => {
             versions.successCallback = jest.fn();
 
             const formattedResponse = {
-                total_count: 2,
                 entries: [
                     {
-                        ...uploadVersion,
+                        ...firstVersion,
                         action: 'upload',
                     },
                     {
                         ...deleteVersion,
                         action: 'delete',
                     },
+                    {
+                        ...restoreVersion,
+                        action: 'upload',
+                    },
                 ],
+                total_count: 3,
             };
 
             versions.successHandler(response);
@@ -110,6 +125,36 @@ describe('api/Versions', () => {
             const restoredVersion = versionsWithRestore.entries.pop();
             expect(restoredVersion.action).toBe('restore');
             expect(restoredVersion.created_at).toBe(file.modified_at);
+        });
+    });
+
+    describe('addPermissions()', () => {
+        test.each([true, false])('should decorate versions with can_upload permission from parent file', canUpload => {
+            const fileWithPermissions = {
+                ...file,
+                permissions: {
+                    can_upload: canUpload,
+                },
+            };
+            const { entries, total_count } = versions.addPermissions(response, fileWithPermissions);
+            const versionDeleteMatcher = version => version.permissions.can_delete === true;
+            const versionUploadMatcher = version => version.permissions.can_upload === canUpload;
+
+            expect(entries.find(versionDeleteMatcher)).toMatchObject(deleteVersion);
+            expect(entries.every(versionUploadMatcher)).toBe(true);
+            expect(total_count).toEqual(response.total_count);
+        });
+    });
+
+    describe('sortVersions', () => {
+        test('should sort versions by their created date', () => {
+            const { entries: entriesOrigin } = response;
+            const { entries: entriesSorted, total_count } = versions.sortVersions(response);
+
+            expect(entriesOrigin).not.toBe(entriesSorted); // Sort call should create a new array
+            expect(entriesOrigin).toEqual([firstVersion, deleteVersion, restoreVersion]);
+            expect(entriesSorted).toEqual([restoreVersion, deleteVersion, firstVersion]);
+            expect(total_count).toEqual(response.total_count);
         });
     });
 
