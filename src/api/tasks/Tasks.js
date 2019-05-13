@@ -4,8 +4,8 @@
  * @author Box
  */
 
-import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from '../utils/fields';
-import Base from './Base';
+import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from '../../utils/fields';
+import TasksBase from './TasksBase';
 import {
     PERMISSION_CAN_COMMENT,
     ERROR_CODE_CREATE_TASK,
@@ -13,9 +13,9 @@ import {
     ERROR_CODE_DELETE_TASK,
     ERROR_CODE_FETCH_TASK_ASSIGNMENT,
     ERROR_CODE_FETCH_TASKS,
-} from '../constants';
+} from '../../constants';
 
-class Tasks extends Base {
+class Tasks extends TasksBase {
     /**
      * API URL for tasks
      *

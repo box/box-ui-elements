@@ -5,17 +5,22 @@
  */
 
 import axios from 'axios';
+import type { $AxiosError, $AxiosXHR } from 'axios';
 import getProp from 'lodash/get';
+import includes from 'lodash/includes';
+import lowerCase from 'lodash/lowerCase';
 import TokenService from './TokenService';
 import {
     HEADER_ACCEPT,
     HEADER_CLIENT_NAME,
     HEADER_CLIENT_VERSION,
     HEADER_CONTENT_TYPE,
+    HTTP_GET,
     HTTP_POST,
     HTTP_PUT,
     HTTP_DELETE,
     HTTP_OPTIONS,
+    HTTP_HEAD,
     HTTP_STATUS_CODE_RATE_LIMIT,
 } from '../constants';
 
@@ -23,6 +28,7 @@ type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const MAX_NUM_RETRIES = 3;
+const RETRYABLE_HTTP_METHODS = [HTTP_GET, HTTP_OPTIONS, HTTP_HEAD].map(lowerCase);
 
 class Xhr {
     id: ?string;
@@ -51,6 +57,8 @@ class Xhr {
 
     retryCount: number = 0;
 
+    retryableStatusCodes: Array<number>;
+
     retryTimeout: ?TimeoutID;
 
     shouldRetry: boolean;
@@ -66,6 +74,8 @@ class Xhr {
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.requestInterceptor] - Request interceptor
      * @param {string} [options.responseInterceptor] - Response interceptor
+     * @param {number[]} [options.retryableStatusCodes] - Response codes to retry
+     * @param {boolean} [options.shouldRetry] - Should retry failed requests
      * @return {Xhr} Cache instance
      */
     constructor({
@@ -77,6 +87,7 @@ class Xhr {
         sharedLinkPassword,
         responseInterceptor,
         requestInterceptor,
+        retryableStatusCodes = [HTTP_STATUS_CODE_RATE_LIMIT],
         shouldRetry = true,
     }: Options = {}) {
         this.id = id;
@@ -89,7 +100,7 @@ class Xhr {
         this.axios = axios.create();
         this.axiosSource = axios.CancelToken.source();
         this.shouldRetry = shouldRetry;
-
+        this.retryableStatusCodes = retryableStatusCodes;
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
 
         if (typeof requestInterceptor === 'function') {
@@ -118,10 +129,15 @@ class Xhr {
             return false;
         }
 
-        const { response, request } = error;
+        const { response, request, config } = error;
         // Retry if there is a network error (e.g. ECONNRESET) or rate limited
+        const status = getProp(response, 'status');
+        const method = getProp(config, 'method');
         const isNetworkError = request && !response;
-        return isNetworkError || getProp(response, 'status') === HTTP_STATUS_CODE_RATE_LIMIT;
+        const isRateLimitError = status === HTTP_STATUS_CODE_RATE_LIMIT;
+        const isOtherRetryableError =
+            includes(this.retryableStatusCodes, status) && includes(RETRYABLE_HTTP_METHODS, method);
+        return isNetworkError || isRateLimitError || isOtherRetryableError;
     }
 
     /**
