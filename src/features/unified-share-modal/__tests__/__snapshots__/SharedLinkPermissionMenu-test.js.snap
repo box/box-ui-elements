@@ -3,7 +3,7 @@
 exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it should render correct menu 1`] = `
 <DropdownMenu
   constrainToScrollParent={false}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={false}
 >
   <PlainButton
@@ -77,7 +77,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it should render correct menu 2`] = `
 <DropdownMenu
   constrainToScrollParent={false}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={false}
 >
   <PlainButton
@@ -151,7 +151,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it should render correct menu 3`] = `
 <DropdownMenu
   constrainToScrollParent={false}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={false}
 >
   <PlainButton
@@ -225,7 +225,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it should render correct menu 4`] = `
 <DropdownMenu
   constrainToScrollParent={false}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={false}
 >
   <PlainButton

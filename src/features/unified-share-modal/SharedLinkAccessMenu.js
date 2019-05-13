@@ -124,7 +124,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                 text={tooltipContent}
                 theme="callout"
             >
-                <DropdownMenu onMenuOpen={onSharedLinkAccessMenuOpen}>
+                <DropdownMenu onMenuOpen={onSharedLinkAccessMenuOpen} constrainToWindow>
                     <PlainButton
                         className={classNames('lnk', {
                             'is-disabled': submitting,
