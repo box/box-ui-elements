@@ -7,6 +7,8 @@
 import axios from 'axios';
 import type { $AxiosError, $AxiosXHR } from 'axios';
 import getProp from 'lodash/get';
+import includes from 'lodash/includes';
+import lowerCase from 'lodash/lowerCase';
 import TokenService from './TokenService';
 import {
     HEADER_ACCEPT,
@@ -26,6 +28,7 @@ type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const MAX_NUM_RETRIES = 3;
+const RETRYABLE_HTTP_METHODS = [HTTP_GET, HTTP_OPTIONS, HTTP_HEAD].map(lowerCase);
 
 class Xhr {
     id: ?string;
@@ -126,16 +129,14 @@ class Xhr {
             return false;
         }
 
-        // Network methods that are safe to retry
-        const idempotentMethods = [HTTP_GET, HTTP_OPTIONS, HTTP_HEAD].map(s => s.toLowerCase());
-
         const { response, request, config } = error;
         // Retry if there is a network error (e.g. ECONNRESET) or rate limited
         const status = getProp(response, 'status');
         const method = getProp(config, 'method');
         const isNetworkError = request && !response;
         const isRateLimitError = status === HTTP_STATUS_CODE_RATE_LIMIT;
-        const isOtherRetryableError = this.retryableStatusCodes.includes(status) && idempotentMethods.includes(method);
+        const isOtherRetryableError =
+            includes(this.retryableStatusCodes, status) && includes(RETRYABLE_HTTP_METHODS, method);
         return isNetworkError || isRateLimitError || isOtherRetryableError;
     }
 
