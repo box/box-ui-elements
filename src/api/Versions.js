@@ -316,18 +316,17 @@ class Versions extends OffsetBasedAPI {
         this.errorCode = ERROR_CODE_RESTORE_VERSION;
 
         try {
-            this.checkApiCallValidity(PERMISSION_CAN_UPLOAD, permissions, fileId);
+            this.checkApiCallValidity(PERMISSION_CAN_DELETE, permissions, fileId);
         } catch (e) {
             errorCallback(e, this.errorCode);
             return;
         }
 
-        this.post({
+        this.put({
             id: fileId,
             data: {
                 data: {
-                    id: versionId,
-                    type: 'file_version',
+                    trashed_at: null,
                 },
             },
             url: this.getVersionUrl(fileId, versionId),
