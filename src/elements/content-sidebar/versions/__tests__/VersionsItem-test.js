@@ -10,19 +10,18 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         created_at: new Date('2019-03-01T00:00:00'),
         modified_at: new Date('2019-03-01T00:00:00'),
         modified_by: { name: 'Test User', id: 10 },
+        permissions: {
+            can_delete: true,
+            can_preview: true,
+        },
         size: 10240,
         version_number: 1,
-    };
-    const defaultPermissions = {
-        can_delete: true,
-        can_preview: true,
     };
     const getVersion = (overrides = {}) => ({
         ...defaults,
         ...overrides,
     });
-    const getWrapper = ({ permissions = defaultPermissions, ...props } = {}) =>
-        shallow(<VersionsItem permissions={permissions} {...props} />);
+    const getWrapper = (props = {}) => shallow(<VersionsItem {...props} />);
 
     describe('render', () => {
         test('should render an uploaded version correctly', () => {

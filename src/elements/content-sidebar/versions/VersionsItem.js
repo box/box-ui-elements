@@ -25,7 +25,6 @@ type Props = {
     onPreview?: VersionActionCallback,
     onPromote?: VersionActionCallback,
     onRestore?: VersionActionCallback,
-    permissions: BoxItemPermission,
     version: BoxItemVersion,
 };
 
@@ -46,7 +45,6 @@ const VersionsItem = ({
     onPreview,
     onPromote,
     onRestore,
-    permissions,
     version,
 }: Props) => {
     const {
@@ -55,6 +53,7 @@ const VersionsItem = ({
         id: versionId,
         is_download_available,
         modified_by: modifiedBy,
+        permissions = {},
         size,
         version_number: versionNumber,
     } = version;

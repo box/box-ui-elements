@@ -26,10 +26,12 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     };
     const versionsAPI = {
         addCurrentVersion: jest.fn(),
+        addPermissions: jest.fn(),
         deleteVersion: jest.fn(),
         getVersions: jest.fn(),
         promoteVersion: jest.fn(),
         restoreVersion: jest.fn(),
+        sortVersions: jest.fn(),
     };
     const api = {
         getFileAPI: () => fileAPI,
@@ -152,7 +154,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             expect(wrapper.state()).toEqual({
                 error: message,
                 isLoading: false,
-                permissions: {},
                 versions: [],
             });
         });
@@ -162,17 +163,21 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should set state with the updated versions', () => {
             const wrapper = getWrapper();
             const file = { id: '12345', permissions: {} };
-            const versions = { entries: [], total_count: 0 };
+            const version = { id: '123', permissions: {} };
+            const versions = { entries: [version], total_count: 1 };
 
-            versionsAPI.addCurrentVersion.mockReturnValueOnce({ entries: [file], total_count: 1 });
+            versionsAPI.addCurrentVersion.mockReturnValueOnce(versions);
+            versionsAPI.addPermissions.mockReturnValueOnce(versions);
+            versionsAPI.sortVersions.mockReturnValueOnce(versions);
 
             wrapper.instance().handleFetchSuccess([file, versions]);
 
             expect(versionsAPI.addCurrentVersion).toBeCalledWith(versions, file);
+            expect(versionsAPI.addPermissions).toBeCalledWith(versions, file);
+            expect(versionsAPI.sortVersions).toBeCalledWith(versions);
             expect(wrapper.state('error')).toBeUndefined();
             expect(wrapper.state('isLoading')).toBe(false);
-            expect(wrapper.state('permissions')).toBe(file.permissions);
-            expect(wrapper.state('versions')).toBeInstanceOf(Array);
+            expect(wrapper.state('versions')).toBe(versions.entries);
         });
     });
 
@@ -235,12 +240,11 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should call deleteVersion', () => {
             const wrapper = getWrapper();
             const permissions = { can_delete: true };
+            const instance = wrapper.instance();
 
-            wrapper.setState({ permissions });
+            instance.findVersion = jest.fn(() => ({ id: '123', permissions }));
 
-            const deletePromise = wrapper.instance().deleteVersion('123');
-
-            expect(deletePromise).toBeInstanceOf(Promise);
+            expect(instance.deleteVersion('123')).toBeInstanceOf(Promise);
             expect(versionsAPI.deleteVersion).toBeCalledWith({
                 fileId: defaultId,
                 permissions,
@@ -272,12 +276,11 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should call promoteVersion', () => {
             const wrapper = getWrapper();
             const permissions = { can_upload: true };
+            const instance = wrapper.instance();
 
-            wrapper.setState({ permissions });
+            instance.findVersion = jest.fn(() => ({ id: '123', permissions }));
 
-            const promotePromise = wrapper.instance().promoteVersion('123');
-
-            expect(promotePromise).toBeInstanceOf(Promise);
+            expect(instance.promoteVersion('123')).toBeInstanceOf(Promise);
             expect(versionsAPI.promoteVersion).toBeCalledWith({
                 fileId: defaultId,
                 permissions,
@@ -292,12 +295,11 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should call restoreVersion', () => {
             const wrapper = getWrapper();
             const permissions = { can_upload: true };
+            const instance = wrapper.instance();
 
-            wrapper.setState({ permissions });
+            instance.findVersion = jest.fn(() => ({ id: '123', permissions }));
 
-            const promotePromise = wrapper.instance().restoreVersion('123');
-
-            expect(promotePromise).toBeInstanceOf(Promise);
+            expect(instance.restoreVersion('123')).toBeInstanceOf(Promise);
             expect(versionsAPI.restoreVersion).toBeCalledWith({
                 fileId: defaultId,
                 permissions,

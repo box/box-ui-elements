@@ -154,6 +154,13 @@ type BoxItemPermission = {
     can_upload?: boolean,
 };
 
+type BoxItemVersionPermission = {
+    can_delete?: boolean,
+    can_download?: boolean,
+    can_preview?: boolean,
+    can_upload?: boolean,
+};
+
 type User = {
     avatar_url?: string,
     email?: string,
@@ -347,6 +354,7 @@ type BoxItemVersion = {
     modified_at?: string,
     modified_by: User,
     name?: string,
+    permissions?: BoxItemVersionPermission,
     sha1?: string,
     size?: number,
     trashed_at: ?string,
