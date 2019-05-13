@@ -325,6 +325,10 @@ export const HTTP_STATUS_CODE_CONFLICT: 409 = 409;
 export const HTTP_STATUS_CODE_UNAUTHORIZED: 401 = 401;
 export const HTTP_STATUS_CODE_RATE_LIMIT: 429 = 429;
 export const HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR: 500 = 500;
+export const HTTP_STATUS_CODE_NOT_IMPLEMENTED: 501 = 501;
+export const HTTP_STATUS_CODE_BAD_GATEWAY: 502 = 502;
+export const HTTP_STATUS_CODE_SERVICE_UNAVAILABLE: 503 = 503;
+export const HTTP_STATUS_CODE_GATEWAY_TIMEOUT: 504 = 504;
 
 /* ------------------ Version Action Types  ---------------------- */
 export const VERSION_RESTORE_ACTION = 'restore';

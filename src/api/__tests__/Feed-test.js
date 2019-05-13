@@ -63,7 +63,7 @@ const mockTaskNew = {
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
-jest.mock('../Tasks', () => {
+jest.mock('../tasks/Tasks', () => {
     const task = {
         type: 'task',
         id: '1234',
@@ -110,7 +110,7 @@ jest.mock('../Tasks', () => {
     }));
 });
 
-jest.mock('../TasksNew', () => {
+jest.mock('../tasks/TasksNew', () => {
     const task = mockTaskNew;
     return jest.fn().mockImplementation(() => ({
         createTask: jest.fn().mockImplementation(({ successCallback }) => {
@@ -129,7 +129,7 @@ jest.mock('../TasksNew', () => {
     }));
 });
 
-jest.mock('../TaskCollaborators', () =>
+jest.mock('../tasks/TaskCollaborators', () =>
     jest.fn().mockImplementation(() => ({
         createTaskCollaborator: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
@@ -160,7 +160,7 @@ jest.mock('../TaskCollaborators', () =>
     })),
 );
 
-jest.mock('../TaskLinks', () =>
+jest.mock('../tasks/TaskLinks', () =>
     jest.fn().mockImplementation(() => ({
         createTaskLink: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
@@ -168,7 +168,7 @@ jest.mock('../TaskLinks', () =>
     })),
 );
 
-jest.mock('../TaskAssignments', () =>
+jest.mock('../tasks/TaskAssignments', () =>
     jest.fn().mockImplementation(() => ({
         updateTaskAssignment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
