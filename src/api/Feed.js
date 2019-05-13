@@ -13,11 +13,11 @@ import { sortFeedItems } from '../utils/sorter';
 import Base from './Base';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
-import TasksAPI from './Tasks';
-import TasksNewAPI from './TasksNew';
-import TaskCollaboratorsAPI from './TaskCollaborators';
-import TaskLinksAPI from './TaskLinks';
-import TaskAssignmentsAPI from './TaskAssignments';
+import TasksAPI from './tasks/Tasks';
+import TasksNewAPI from './tasks/TasksNew';
+import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
+import TaskLinksAPI from './tasks/TaskLinks';
+import TaskAssignmentsAPI from './tasks/TaskAssignments';
 import AppActivityAPI from './AppActivity';
 import {
     ERROR_CODE_CREATE_TASK,

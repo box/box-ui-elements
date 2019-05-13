@@ -1,13 +1,13 @@
 /**
  * @flow
- * @file Helper for the box Task Assignments API
+ * @file Helper for the box TaskLinks API
  * @author Box
  */
 
-import Base from './Base';
-import { ERROR_CODE_CREATE_TASK_LINK } from '../constants';
+import TasksBase from './TasksBase';
+import { ERROR_CODE_CREATE_TASK_LINK } from '../../constants';
 
-class TaskLinks extends Base {
+class TaskLinks extends TasksBase {
     getUrlForTaskLinkCreate(): string {
         return `${this.getBaseApiUrl()}/undoc/task_links`;
     }

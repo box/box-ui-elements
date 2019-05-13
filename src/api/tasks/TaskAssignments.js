@@ -4,15 +4,15 @@
  * @author Box
  */
 
-import Base from './Base';
+import TasksBase from './TasksBase';
 import {
     PERMISSION_CAN_COMMENT,
     ERROR_CODE_CREATE_TASK_ASSIGNMENT,
     ERROR_CODE_UPDATE_TASK_ASSIGNMENT,
     ERROR_CODE_DELETE_TASK_ASSIGNMENT,
-} from '../constants';
+} from '../../constants';
 
-class TaskAssignments extends Base {
+class TaskAssignments extends TasksBase {
     /**
      * API URL for task assignments. Getting a list of assignments "/tasks/id/assignments" does not give us the fields
      * we need. So instead we will only perform GET operations on an assignment by assignment basis,

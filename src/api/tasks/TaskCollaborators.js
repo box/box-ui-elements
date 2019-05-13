@@ -1,20 +1,20 @@
 /**
  * @flow
- * @file Helper for the box Task Assignments API
+ * @file Helper for the box Task Collaborators API
  * @author Box
  */
 import omit from 'lodash/omit';
 
-import Base from './Base';
+import TasksBase from './TasksBase';
 import {
     ERROR_CODE_FETCH_TASK_COLLABORATOR,
     ERROR_CODE_CREATE_TASK_COLLABORATOR,
     ERROR_CODE_UPDATE_TASK_COLLABORATOR,
     ERROR_CODE_DELETE_TASK_COLLABORATOR,
     API_PAGE_LIMIT,
-} from '../constants';
+} from '../../constants';
 
-class TaskCollaborators extends Base {
+class TaskCollaborators extends TasksBase {
     getUrlForTaskCollaborators(taskId: string): string {
         return `${this.getBaseApiUrl()}/undoc/tasks/${taskId}/task_collaborators?limit=${API_PAGE_LIMIT}`;
     }

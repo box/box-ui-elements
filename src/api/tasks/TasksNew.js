@@ -4,16 +4,16 @@
  * @author Box
  */
 
-import Base from './Base';
+import TasksBase from './TasksBase';
 import {
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
     ERROR_CODE_DELETE_TASK,
     ERROR_CODE_FETCH_TASKS,
     API_PAGE_LIMIT,
-} from '../constants';
+} from '../../constants';
 
-class TasksNew extends Base {
+class TasksNew extends TasksBase {
     getUrlForFileTasks(id: string): string {
         return `${this.getBaseApiUrl()}/undoc/files/${id}/linked_tasks?limit=${API_PAGE_LIMIT}`;
     }

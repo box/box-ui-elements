@@ -537,6 +537,7 @@ type Options = {
     id?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
+    retryableStatusCodes?: Array<number>,
     sharedLink?: string,
     sharedLinkPassword?: string,
     shouldRetry?: boolean,
