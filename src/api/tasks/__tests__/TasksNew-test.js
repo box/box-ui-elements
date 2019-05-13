@@ -1,4 +1,4 @@
-import { API_PAGE_LIMIT } from '../../constants';
+import { API_PAGE_LIMIT } from '../../../constants';
 import TasksNew from '../TasksNew';
 
 let tasks;

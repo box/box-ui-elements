@@ -1,39 +1,20 @@
 /**
  * @flow
- * @file Helper for the box Task Assignments API
+ * @file Helper for the box Task Collaborators API
  * @author Box
  */
 import omit from 'lodash/omit';
 
-import Base from './Base';
+import TasksBase from './TasksBase';
 import {
     ERROR_CODE_FETCH_TASK_COLLABORATOR,
     ERROR_CODE_CREATE_TASK_COLLABORATOR,
     ERROR_CODE_UPDATE_TASK_COLLABORATOR,
     ERROR_CODE_DELETE_TASK_COLLABORATOR,
     API_PAGE_LIMIT,
-    HTTP_STATUS_CODE_RATE_LIMIT,
-    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
-    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
-    HTTP_STATUS_CODE_BAD_GATEWAY,
-    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
-    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
-} from '../constants';
+} from '../../constants';
 
-const RETRYABLE = [
-    HTTP_STATUS_CODE_RATE_LIMIT,
-    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
-    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
-    HTTP_STATUS_CODE_BAD_GATEWAY,
-    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
-    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
-];
-
-class TaskCollaborators extends Base {
-    constructor({ retryableStatusCodes = RETRYABLE, ...options }: Options) {
-        super({ ...options, retryableStatusCodes });
-    }
-
+class TaskCollaborators extends TasksBase {
     getUrlForTaskCollaborators(taskId: string): string {
         return `${this.getBaseApiUrl()}/undoc/tasks/${taskId}/task_collaborators?limit=${API_PAGE_LIMIT}`;
     }

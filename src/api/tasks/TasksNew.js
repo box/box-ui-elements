@@ -4,35 +4,16 @@
  * @author Box
  */
 
-import Base from './Base';
+import TasksBase from './TasksBase';
 import {
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
     ERROR_CODE_DELETE_TASK,
     ERROR_CODE_FETCH_TASKS,
     API_PAGE_LIMIT,
-    HTTP_STATUS_CODE_RATE_LIMIT,
-    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
-    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
-    HTTP_STATUS_CODE_BAD_GATEWAY,
-    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
-    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
-} from '../constants';
+} from '../../constants';
 
-const RETRYABLE = [
-    HTTP_STATUS_CODE_RATE_LIMIT,
-    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
-    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
-    HTTP_STATUS_CODE_BAD_GATEWAY,
-    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
-    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
-];
-
-class TasksNew extends Base {
-    constructor({ retryableStatusCodes = RETRYABLE, ...options }: Options) {
-        super({ ...options, retryableStatusCodes });
-    }
-
+class TasksNew extends TasksBase {
     getUrlForFileTasks(id: string): string {
         return `${this.getBaseApiUrl()}/undoc/files/${id}/linked_tasks?limit=${API_PAGE_LIMIT}`;
     }

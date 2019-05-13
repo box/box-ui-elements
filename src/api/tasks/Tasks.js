@@ -4,8 +4,8 @@
  * @author Box
  */
 
-import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from '../utils/fields';
-import Base from './Base';
+import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from '../../utils/fields';
+import TasksBase from './TasksBase';
 import {
     PERMISSION_CAN_COMMENT,
     ERROR_CODE_CREATE_TASK,
@@ -13,28 +13,9 @@ import {
     ERROR_CODE_DELETE_TASK,
     ERROR_CODE_FETCH_TASK_ASSIGNMENT,
     ERROR_CODE_FETCH_TASKS,
-    HTTP_STATUS_CODE_RATE_LIMIT,
-    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
-    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
-    HTTP_STATUS_CODE_BAD_GATEWAY,
-    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
-    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
-} from '../constants';
+} from '../../constants';
 
-const RETRYABLE = [
-    HTTP_STATUS_CODE_RATE_LIMIT,
-    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
-    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
-    HTTP_STATUS_CODE_BAD_GATEWAY,
-    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
-    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
-];
-
-class Tasks extends Base {
-    constructor({ retryableStatusCodes = RETRYABLE, ...options }: Options) {
-        super({ ...options, retryableStatusCodes });
-    }
-
+class Tasks extends TasksBase {
     /**
      * API URL for tasks
      *

@@ -1,34 +1,13 @@
 /**
  * @flow
- * @file Helper for the box Task Assignments API
+ * @file Helper for the box TaskLinks API
  * @author Box
  */
 
-import Base from './Base';
-import {
-    ERROR_CODE_CREATE_TASK_LINK,
-    HTTP_STATUS_CODE_RATE_LIMIT,
-    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
-    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
-    HTTP_STATUS_CODE_BAD_GATEWAY,
-    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
-    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
-} from '../constants';
+import TasksBase from './TasksBase';
+import { ERROR_CODE_CREATE_TASK_LINK } from '../../constants';
 
-const RETRYABLE = [
-    HTTP_STATUS_CODE_RATE_LIMIT,
-    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
-    HTTP_STATUS_CODE_NOT_IMPLEMENTED,
-    HTTP_STATUS_CODE_BAD_GATEWAY,
-    HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
-    HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
-];
-
-class TaskLinks extends Base {
-    constructor({ retryableStatusCodes = RETRYABLE, ...options }: Options) {
-        super({ ...options, retryableStatusCodes });
-    }
-
+class TaskLinks extends TasksBase {
     getUrlForTaskLinkCreate(): string {
         return `${this.getBaseApiUrl()}/undoc/task_links`;
     }

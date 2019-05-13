@@ -1,5 +1,5 @@
 import TaskAssignments from '../TaskAssignments';
-import { PERMISSION_CAN_COMMENT } from '../../constants';
+import { PERMISSION_CAN_COMMENT } from '../../../constants';
 
 let taskAssignments;
 
