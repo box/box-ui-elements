@@ -15,7 +15,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
 >
   <DropdownMenu
     constrainToScrollParent={false}
-    constrainToWindow={false}
+    constrainToWindow={true}
     isRightAligned={false}
   >
     <PlainButton
@@ -155,7 +155,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
 >
   <DropdownMenu
     constrainToScrollParent={false}
-    constrainToWindow={false}
+    constrainToWindow={true}
     isRightAligned={false}
   >
     <PlainButton
@@ -295,7 +295,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
 >
   <DropdownMenu
     constrainToScrollParent={false}
-    constrainToWindow={false}
+    constrainToWindow={true}
     isRightAligned={false}
   >
     <PlainButton
