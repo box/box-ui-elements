@@ -70,7 +70,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         const filteredOptions = options.filter((option: Option) => {
             // Filter out anything that does not match the display text of the options
             const hasText = !!text && option.displayText.toLowerCase().includes(text.toLowerCase());
-            // Also filter out anything that has alrady been chosen
+            // Also filter out anything that has already been chosen
             const hasValue = !!value.find(val => isEqual(val, option));
             return hasText && !hasValue;
         });
