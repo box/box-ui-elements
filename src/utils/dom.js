@@ -106,12 +106,22 @@ export function focus(root: ?HTMLElement, selector?: string, focusRoot: boolean 
  * Scrolls the container / modal / wrapper instead of the body
  *
  * @param {HTMLElement} itemEl - the base dom element to search
+ * @param {Object} options - scroll into view options to override
  * @return {void}
  */
-export function scrollIntoView(itemEl: ?HTMLElement): void {
+export function scrollIntoView(itemEl: ?HTMLElement, options?: Object = {}): void {
     // @NOTE: breaks encapsulation but alternative is unknown child ref
     if (itemEl) {
         const parentEl = itemEl.closest(`.body, .modal, .${OVERLAY_WRAPPER_CLASS}`);
-        scrollIntoViewIfNeeded(itemEl, { scrollMode: 'if-needed', boundary: parentEl });
+        scrollIntoViewIfNeeded(
+            itemEl,
+            Object.assign(
+                {
+                    scrollMode: 'if-needed',
+                    boundary: parentEl,
+                },
+                options,
+            ),
+        );
     }
 }

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
-import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
+import { scrollIntoView } from '../../utils/dom';
 
 import Collapsible from '../../components/collapsible/Collapsible';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
@@ -134,8 +134,7 @@ class Instance extends React.PureComponent<Props, State> {
     componentDidUpdate() {
         const element = this.collapsibleRef.current;
         if (element && this.state.shouldConfirmRemove) {
-            scrollIntoViewIfNeeded(element, {
-                scrollMode: 'if-needed',
+            scrollIntoView(element, {
                 block: 'start',
                 behavior: 'smooth',
             });
