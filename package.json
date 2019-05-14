@@ -242,7 +242,7 @@
         "sass-lint": "^1.12.1",
         "sass-loader": "^7.1.0",
         "sass-variable-parser": "^1.2.2",
-        "scroll-into-view-if-needed": "^1.5.0",
+        "scroll-into-view-if-needed": "2.2.20",
         "semantic-release": "^16.0.0-beta.19",
         "sinon": "^2.3.7",
         "string-replace-loader": "^2.1.1",
@@ -289,7 +289,7 @@
         "react-textarea-autosize": "^7.1.0",
         "react-virtualized": "^9.21.0",
         "regenerator-runtime": "^0.13.2",
-        "scroll-into-view-if-needed": "^1.5.0",
+        "scroll-into-view-if-needed": "2.2.20",
         "tabbable": "^1.1.2",
         "uuid": "^3.3.2"
     }

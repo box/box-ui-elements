@@ -47,7 +47,9 @@ describe('util/dom', () => {
             const itemEl = document.querySelector('.button');
             const parentEl = document.querySelector('.modal');
             scrollIntoView(itemEl);
-            expect(scrollIntoViewIfNeeded).toHaveBeenCalledWith(itemEl, false, undefined, parentEl);
+            expect(scrollIntoViewIfNeeded).toHaveBeenCalledWith(itemEl, {
+                boundary: parentEl,
+            });
         });
 
         test('should not call scrollIntoViewIfNeeded when parent element is evaluated as null', () => {

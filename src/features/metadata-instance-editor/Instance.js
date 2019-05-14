@@ -134,10 +134,10 @@ class Instance extends React.PureComponent<Props, State> {
     componentDidUpdate() {
         const element = this.collapsibleRef.current;
         if (element && this.state.shouldConfirmRemove) {
-            scrollIntoViewIfNeeded(element, false, {
-                centerIfNeeded: false,
-                duration: 320,
-                easing: 'easeInOut',
+            scrollIntoViewIfNeeded(element, {
+                scrollMode: 'if-needed',
+                block: 'start',
+                behavior: 'smooth',
             });
         }
     }

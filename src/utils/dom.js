@@ -112,6 +112,6 @@ export function scrollIntoView(itemEl: ?HTMLElement): void {
     // @NOTE: breaks encapsulation but alternative is unknown child ref
     if (itemEl) {
         const parentEl = itemEl.closest(`.body, .modal, .${OVERLAY_WRAPPER_CLASS}`);
-        scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
+        scrollIntoViewIfNeeded(itemEl, { boundary: parentEl });
     }
 }
