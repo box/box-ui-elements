@@ -2,11 +2,11 @@
 import { List } from 'immutable';
 
 import type { PillOption } from '../pill-cloud/PillCloud';
-import type { SelectOptionProp } from '../select-field/props';
+import type { SelectOptionProp, SelectOptionValueProp } from '../select-field/props';
 
 export type Pill = PillOption;
-
 export type Option = SelectOptionProp;
+export type OptionValue = SelectOptionValueProp;
 
 export type SelectedPills = Array<PillOption> | List<PillOption>;
 

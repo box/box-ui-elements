@@ -7,25 +7,25 @@ import type { FieldProps } from 'formik';
 
 import DatalistItem from '../datalist-item';
 import PillSelectorDropdown from './PillSelectorDropdown';
-import type { Option, Pill } from './flowTypes';
+import type { Option, OptionValue, Pill } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
 
 type Props = FieldProps & {
-    /** CSS class for the component */
+    /** CSS class for the component. */
     className?: string,
-    /** If true, the input control is disabled so no more input can be made */
-    disabled?: boolean,
-    /** If true, user can add pills not included in selector options */
+    /** If true, the user can add pills not included in the dropdown options. Defaults to true. */
     isCustomInputAllowed: boolean,
-    /** Input label */
+    /** If true, the input control is disabled so no more input can be made. Defaults to false. */
+    isDisabled: boolean,
+    /** Pill selector label. */
     label: React.Node,
-    /** Array or Immutable list with data for the selected options shown as pills */
+    /** Array of options shown in the pill selector dropdown. */
     options: Array<Option>,
-    /** A placeholder to show in the input when there are no pills */
+    /** A placeholder to show in the input when there are no pills. */
     placeholder: string,
-    /** Called to check if pill item data is valid. The `item` is passed in. */
-    validator: (text: string) => boolean,
+    /** Called to check if pill text is valid. The text is passed in. */
+    validator?: (value: OptionValue) => boolean,
 };
 
 type State = {
@@ -34,9 +34,9 @@ type State = {
 
 class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     static defaultProps = {
-        isCustomInputAllowed: false,
+        isCustomInputAllowed: true,
+        isDisabled: false,
         options: [],
-        validator: () => true,
     };
 
     constructor(props: Props) {
@@ -46,43 +46,42 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         };
     }
 
-    deNormalize(options: Array<Option>): Array<Pill> {
-        return options.map((option: Option) => ({
-            text: option.displayText,
-            value: option.value,
+    toPills(options: Array<Option>): Array<Pill> {
+        return options.map(({ displayText, value }: Option) => ({
+            text: displayText,
+            value,
         }));
     }
 
-    normalize(pills: Array<Pill>): Array<Option> {
-        return pills.map((pill: Pill) => ({
-            displayText: pill.text,
-            value: pill.value,
+    toOptions(options: Array<Option & Pill>): Array<Option> {
+        return options.map(({ displayText, value }) => ({
+            displayText,
+            value,
         }));
     }
 
-    createFakeSyntheticEvent(name: string, value: Array<Option>) {
-        return {
-            currentTarget: { name, value },
-            target: { name, value },
-        };
+    createFakeEventTarget(name: string, value: Array<Option>) {
+        return { target: { name, value } };
     }
 
     handleInput = (text: string) => {
-        const { options } = this.props;
-        const { field } = this.props;
+        const { options, field } = this.props;
         const { value = [] } = field;
-        const filteredOptions = options.slice().filter((option: Option) => {
+        const filteredOptions = options.filter((option: Option) => {
+            // Filter out anything that does not match the display text of the options
             const hasText = !!text && option.displayText.toLowerCase().includes(text.toLowerCase());
-            const hasValue = !!value.find(v => isEqual(v, option));
+            // Also filter out anything that has alrady been chosen
+            const hasValue = !!value.find(val => isEqual(val, option));
             return hasText && !hasValue;
         });
         this.setState({ selectorOptions: filteredOptions });
     };
 
-    handleSelect = (options: Array<Option>) => {
+    handleSelect = (optionsOrPills: Array<Option & Pill>) => {
         const { field } = this.props;
         const { name, onChange, value = [] } = field;
-        onChange(this.createFakeSyntheticEvent(name, [...value, ...options]));
+        const options = this.toOptions(optionsOrPills);
+        onChange(this.createFakeEventTarget(name, [...value, ...options]));
     };
 
     handleRemove = (option: Option, index: number) => {
@@ -90,12 +89,12 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         const { name, onChange, value } = field;
         const options = value.slice();
         options.splice(index, 1);
-        onChange(this.createFakeSyntheticEvent(name, options));
+        onChange(this.createFakeEventTarget(name, options));
     };
 
     render() {
         const { selectorOptions } = this.state;
-        const { className, disabled, field, form, isCustomInputAllowed, label, placeholder, validator } = this.props;
+        const { className, isDisabled, field, form, isCustomInputAllowed, label, placeholder, validator } = this.props;
         const { name, value = [] } = field;
         const { errors } = form;
         const error = getProp(errors, name);
@@ -105,14 +104,14 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
                 allowCustomPills={isCustomInputAllowed}
                 allowInvalidPills
                 className={className}
-                disabled={disabled}
+                disabled={isDisabled}
                 label={label}
                 error={error}
                 onInput={this.handleInput}
                 onRemove={this.handleRemove}
                 onSelect={this.handleSelect}
                 placeholder={placeholder}
-                selectedOptions={this.deNormalize(value)}
+                selectedOptions={this.toPills(value)}
                 selectorOptions={selectorOptions}
                 validator={validator}
             >

@@ -7,7 +7,7 @@ import { KEYS } from '../../constants';
 
 import Pill from './Pill';
 import SuggestedPillsRow from './SuggestedPillsRow';
-import type { SelectedPills, SuggestedPillsFilter } from './flowTypes';
+import type { OptionValue, SelectedPills, SuggestedPillsFilter } from './flowTypes';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -28,7 +28,7 @@ type Props = {
     suggestedPillsData?: Array<Object>,
     suggestedPillsFilter?: SuggestedPillsFilter,
     suggestedPillsTitle?: string,
-    validator: (text: string) => boolean,
+    validator: (value: OptionValue) => boolean,
 };
 
 type State = {

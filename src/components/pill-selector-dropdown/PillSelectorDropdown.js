@@ -9,7 +9,7 @@ import Label from '../label';
 import SelectorDropdown from '../selector-dropdown';
 
 import PillSelector from './PillSelector';
-import type { SelectedPills, SuggestedPillsFilter } from './flowTypes';
+import type { OptionValue, SelectedPills, SuggestedPillsFilter } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
 
@@ -59,11 +59,12 @@ type Props = {
     /** Validate the given input value, and update `error` prop if necessary */
     validateForError?: Function,
     /** Called to check if pill item data is valid. The `item` is passed in. */
-    validator: (text: string) => boolean,
+    validator: (value: OptionValue) => boolean,
 };
 
 type State = {
     inputValue: string,
+    isInCompositionMode: boolean,
 };
 
 class PillSelectorDropdown extends React.Component<Props, State> {
@@ -80,7 +81,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         validator: () => true,
     };
 
-    state = { inputValue: '' };
+    state = { inputValue: '', isInCompositionMode: false };
 
     parsePills = () => {
         const { inputValue } = this.state;
@@ -92,7 +93,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             return [];
         }
 
-        if (validator && !allowInvalidPills) {
+        if (!allowInvalidPills) {
             pills = pills.filter(pill => validator(pill));
         }
 
@@ -143,8 +144,11 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     };
 
     handleEnter = (event: SyntheticEvent<>) => {
-        event.preventDefault();
-        this.addPillsFromInput();
+        const { isInCompositionMode } = this.state;
+        if (!isInCompositionMode) {
+            event.preventDefault();
+            this.addPillsFromInput();
+        }
     };
 
     handlePaste = () => {
@@ -166,6 +170,14 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         onSelect([selectedOption], event);
 
         this.handleInput({ target: { value: '' } });
+    };
+
+    onCompositionStart = () => {
+        this.setState({ isInCompositionMode: true });
+    };
+
+    onCompositionEnd = () => {
+        this.setState({ isInCompositionMode: false });
     };
 
     render() {
@@ -199,9 +211,11 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                 selector={
                     <Label text={label}>
                         <PillSelector
-                            allowInvalidPills={allowInvalidPills}
                             onChange={noop} // fix console error
+                            onCompositionEnd={this.onCompositionEnd}
+                            onCompositionStart={this.onCompositionStart}
                             {...inputProps}
+                            allowInvalidPills={allowInvalidPills}
                             disabled={disabled}
                             error={error}
                             onBlur={this.handleBlur}

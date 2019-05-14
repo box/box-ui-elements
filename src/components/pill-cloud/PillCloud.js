@@ -4,8 +4,9 @@ import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 
 import Button from '../button';
+import type { SelectOptionValueProp } from '../select-field/props';
 
-type Option = { text: string, value: number | string | null };
+type Option = { text: string, value: SelectOptionValueProp };
 
 type Props = {
     buttonProps?: Object,
