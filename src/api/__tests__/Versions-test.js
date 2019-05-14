@@ -169,6 +169,7 @@ describe('api/Versions', () => {
             versions.get = jest.fn();
             versions.offsetGet = jest.fn();
             versions.post = jest.fn();
+            versions.put = jest.fn();
         });
 
         describe('deleteVersion()', () => {
@@ -245,14 +246,13 @@ describe('api/Versions', () => {
 
         describe('restoreVersion()', () => {
             const permissions = {
-                [PERMISSION_CAN_UPLOAD]: true,
+                [PERMISSION_CAN_DELETE]: true,
             };
 
             test('should post a well formed version restore request to the versions endpoint', () => {
                 const requestData = {
                     data: {
-                        id: versionId,
-                        type: 'file_version',
+                        trashed_at: null,
                     },
                 };
 
@@ -264,8 +264,8 @@ describe('api/Versions', () => {
                     errorCallback,
                 });
 
-                expect(versions.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_UPLOAD, permissions, fileId);
-                expect(versions.post).toBeCalledWith({
+                expect(versions.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_DELETE, permissions, fileId);
+                expect(versions.put).toBeCalledWith({
                     id: fileId,
                     url: `https://api.box.com/2.0/files/${fileId}/versions/${versionId}`,
                     data: requestData,

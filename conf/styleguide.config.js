@@ -52,8 +52,6 @@ const allSections = [
             '../src/components/hotkeys/HotkeyLayer.js',
             '../src/components/hotkeys/Hotkeys.js',
             '../src/components/i18n/FormattedCompMessage.js',
-            '../src/components/i18n/Param.js',
-            '../src/components/i18n/Plural.js',
             '../src/components/infinite-scroll/InfiniteScroll.js',
             '../src/components/inline-error/InlineError.js',
             '../src/components/inline-notice/InlineNotice.js',
