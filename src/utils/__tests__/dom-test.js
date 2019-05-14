@@ -49,6 +49,7 @@ describe('util/dom', () => {
             scrollIntoView(itemEl);
             expect(scrollIntoViewIfNeeded).toHaveBeenCalledWith(itemEl, {
                 boundary: parentEl,
+                scrollMode: 'if-needed',
             });
         });
 
