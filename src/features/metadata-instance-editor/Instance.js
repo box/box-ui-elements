@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
-import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 
 import Collapsible from '../../components/collapsible/Collapsible';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
@@ -14,6 +13,7 @@ import IconMetadataColored from '../../icons/general/IconMetadataColored';
 import IconAlertCircle from '../../icons/general/IconAlertCircle';
 import IconEdit from '../../icons/general/IconEdit';
 import { kingCrimson } from '../../styles/variables';
+import { scrollIntoView } from '../../utils/dom';
 
 import CascadePolicy from './CascadePolicy';
 import TemplatedInstance from './TemplatedInstance';
@@ -134,10 +134,9 @@ class Instance extends React.PureComponent<Props, State> {
     componentDidUpdate() {
         const element = this.collapsibleRef.current;
         if (element && this.state.shouldConfirmRemove) {
-            scrollIntoViewIfNeeded(element, false, {
-                centerIfNeeded: false,
-                duration: 320,
-                easing: 'easeInOut',
+            scrollIntoView(element, {
+                block: 'start',
+                behavior: 'smooth',
             });
         }
     }
