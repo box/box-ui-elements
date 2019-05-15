@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
-import { scrollIntoView } from '../../utils/dom';
 
 import Collapsible from '../../components/collapsible/Collapsible';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
@@ -14,6 +13,7 @@ import IconMetadataColored from '../../icons/general/IconMetadataColored';
 import IconAlertCircle from '../../icons/general/IconAlertCircle';
 import IconEdit from '../../icons/general/IconEdit';
 import { kingCrimson } from '../../styles/variables';
+import { scrollIntoView } from '../../utils/dom';
 
 import CascadePolicy from './CascadePolicy';
 import TemplatedInstance from './TemplatedInstance';
