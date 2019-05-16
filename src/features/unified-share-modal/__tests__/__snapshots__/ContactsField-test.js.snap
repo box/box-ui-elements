@@ -3,6 +3,7 @@
 exports[`features/unified-share-modal/ContactsField render should have scrollable dropdown if contacts > 5 1`] = `
 <PillSelectorDropdown
   allowCustomPills={true}
+  allowInvalidPills={false}
   className="scrollable"
   disabled={false}
   error=""
@@ -133,6 +134,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
 exports[`features/unified-share-modal/ContactsField render should render default component 1`] = `
 <PillSelectorDropdown
   allowCustomPills={true}
+  allowInvalidPills={false}
   className=""
   disabled={false}
   error=""

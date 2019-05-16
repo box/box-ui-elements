@@ -10,16 +10,20 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should 
       text=""
     >
       <PillSelector
+        allowInvalidPills={false}
         disabled={true}
         error=""
         inputProps={Object {}}
         onBlur={[Function]}
         onChange={[Function]}
+        onCompositionEnd={[Function]}
+        onCompositionStart={[Function]}
         onInput={[Function]}
         onPaste={[Function]}
         onRemove={[Function]}
         placeholder=""
         selectedOptions={Array []}
+        validator={[Function]}
         value=""
       />
     </Label>

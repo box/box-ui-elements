@@ -1,6 +1,7 @@
 ### Examples
 ```jsx
 const { Formik, Form, Field } = require('formik');
+const isEqual = require('lodash/isEqual');
 
 const TextInput = require('box-ui-elements/es/components/text-input').TextInputField;
 const TextArea = require('box-ui-elements/es/components/text-area').TextAreaField;
@@ -10,8 +11,12 @@ const RadioGroup = require('box-ui-elements/es/components/radio').RadioGroupFiel
 const RadioButton = require('box-ui-elements/es/components/radio').RadioButton;
 const SelectField = require('box-ui-elements/es/components/select-field').SelectField;
 const PillSelectorDropdownField = require('box-ui-elements/es/components/pill-selector-dropdown').PillSelectorDropdownField;
+const DatalistItem = require('box-ui-elements/es/components/datalist-item').default;
 
-const pillValidator = value => ['red', 'green', 'blue', 'yellow', 'white', 'black'].includes(value.toLowerCase());
+const pillSelectorValidator = option => {
+    const value = typeof option === 'string' ? option : option.value;
+    return ['red', 'green', 'blue', 'yellow', 'white', 'black'].includes(value);
+};
 
 <Formik
     initialValues={{
@@ -33,7 +38,7 @@ const pillValidator = value => ['red', 'green', 'blue', 'yellow', 'white', 'blac
             errors.textarea = 'Required';
         }
 
-        if (!pillselector.every((pill => pillValidator(pill.value)))) {
+        if (!pillselector.every((pill => pillSelectorValidator(pill)))) {
             errors.pillselector = 'Bad colors';
         }
 
@@ -72,9 +77,9 @@ const pillValidator = value => ['red', 'green', 'blue', 'yellow', 'white', 'blac
                     name="singleselect"
                     placeholder="Single Select Field"
                     options={[
-                        { displayText: 'Red', value: 'Red' },
-                        { displayText: 'Green', value: 'Green' },
-                        { displayText: 'Blue', value: 'Blue' },
+                        { displayText: 'Red', value: 'red' },
+                        { displayText: 'Green', value: 'green' },
+                        { displayText: 'Blue', value: 'blue' },
                     ]}
                     component={SelectField}
                 />
@@ -86,9 +91,9 @@ const pillValidator = value => ['red', 'green', 'blue', 'yellow', 'white', 'blac
                     placeholder="Multi Select Field"
                     multiple
                     options={[
-                        { displayText: 'Red', value: 'Red' },
-                        { displayText: 'Green', value: 'Green' },
-                        { displayText: 'Blue', value: 'Blue' },
+                        { displayText: 'Red', value: 'red' },
+                        { displayText: 'Green', value: 'green' },
+                        { displayText: 'Blue', value: 'blue' },
                     ]}
                     component={SelectField}
                 />
@@ -109,17 +114,21 @@ const pillValidator = value => ['red', 'green', 'blue', 'yellow', 'white', 'blac
                 <br />
                 <br />
                 <Field
-                    isCustomInputAllowed
                     label="Pill Selector Field"
                     name="pillselector"
-                    placeholder="Pill Selector Field"
+                    placeholder="Colors"
                     options={[
-                        { displayText: 'Red', value: 'Red' },
-                        { displayText: 'Green', value: 'Green' },
-                        { displayText: 'Blue', value: 'Blue' },
+                        { displayText: 'Red', value: 'red' },
+                        { displayText: 'Green', value: 'green' },
+                        { displayText: 'Blue', value: 'blue' },
                     ]}
                     component={PillSelectorDropdownField}
-                    validator={pillValidator}
+                    validator={pillSelectorValidator}
+                    dropdownRenderer={options => options.map(option => (
+                        <DatalistItem key={option.value} style={{ color: option.value }}>
+                            {option.displayText}
+                        </DatalistItem>
+                    ))}
                 />
             </Form>
             <br />

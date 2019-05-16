@@ -1,86 +1,64 @@
 // @flow
 import * as React from 'react';
 import getProp from 'lodash/get';
-import isEqual from 'lodash/isEqual';
-
 import type { FieldProps } from 'formik';
 
-import DatalistItem from '../datalist-item';
 import PillSelectorDropdown from './PillSelectorDropdown';
-import type { Option, OptionValue, Pill } from './flowTypes';
-
-import './PillSelectorDropdown.scss';
+import defaultDropdownRenderer from './defaultDropdownRenderer';
+import defaultDropdownFilter from './defaultDropdownFilter';
+import parseCSV from '../../utils/parseCSV';
+import type { Option, OptionValue } from './flowTypes';
 
 type Props = FieldProps & {
     /** CSS class for the component. */
     className?: string,
+    /** Given selected values and input text, returns a list of filtered options. Defaults to defaultDropdownFilter. */
+    dropdownFilter: (options: Array<Option>, selectedValues: Array<Option>, inputText: string) => Array<Option>,
+    /** Given options, renders the dropdown list. Defaults to defaultDropdownRenderer. */
+    dropdownRenderer: (options: Array<Option>) => React.Node,
+    /** Function to parse user input into an array of items. Defaults to CSV parser. */
+    inputParser: (inputValue: string) => Array<Option>,
     /** If true, the user can add pills not included in the dropdown options. Defaults to true. */
     isCustomInputAllowed: boolean,
     /** If true, the input control is disabled so no more input can be made. Defaults to false. */
     isDisabled: boolean,
     /** Pill selector label. */
     label: React.Node,
-    /** Array of options shown in the pill selector dropdown. */
+    /** Array of options shown in the dropdown. */
     options: Array<Option>,
-    /** A placeholder to show in the input when there are no pills. */
-    placeholder: string,
     /** Called to check if pill text is valid. The text is passed in. */
-    validator?: (value: OptionValue) => boolean,
+    placeholder: string,
+    /** A placeholder to show in the input when there are no pills. */
+    validator?: (option: Option | OptionValue) => boolean,
 };
 
 type State = {
-    selectorOptions: Array<Option>,
+    inputText: string,
 };
 
 class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     static defaultProps = {
+        dropdownFilter: defaultDropdownFilter,
+        dropdownRenderer: defaultDropdownRenderer,
+        inputParser: parseCSV,
         isCustomInputAllowed: true,
         isDisabled: false,
         options: [],
     };
 
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            selectorOptions: props.options,
-        };
-    }
-
-    toPills(options: Array<Option>): Array<Pill> {
-        return options.map(({ displayText, value }: Option) => ({
-            text: displayText,
-            value,
-        }));
-    }
-
-    toOptions(options: Array<Option & Pill>): Array<Option> {
-        return options.map(({ displayText, value }) => ({
-            displayText,
-            value,
-        }));
-    }
+    state = { inputText: '' };
 
     createFakeEventTarget(name: string, value: Array<Option>) {
         return { target: { name, value } };
     }
 
     handleInput = (text: string) => {
-        const { options, field } = this.props;
-        const { value = [] } = field;
-        const filteredOptions = options.filter((option: Option) => {
-            // Filter out anything that does not match the display text of the options
-            const hasText = !!text && option.displayText.toLowerCase().includes(text.toLowerCase());
-            // Also filter out anything that has already been chosen
-            const hasValue = !!value.find(val => isEqual(val, option));
-            return hasText && !hasValue;
-        });
-        this.setState({ selectorOptions: filteredOptions });
+        this.setState({ inputText: text });
     };
 
-    handleSelect = (optionsOrPills: Array<Option & Pill>) => {
+    handleSelect = (options: Array<Option>) => {
         const { field } = this.props;
         const { name, onChange, value = [] } = field;
-        const options = this.toOptions(optionsOrPills);
         onChange(this.createFakeEventTarget(name, [...value, ...options]));
     };
 
@@ -93,11 +71,25 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { selectorOptions } = this.state;
-        const { className, isDisabled, field, form, isCustomInputAllowed, label, placeholder, validator } = this.props;
+        const { inputText } = this.state;
+        const {
+            className,
+            dropdownFilter,
+            dropdownRenderer,
+            field,
+            form,
+            inputParser,
+            isCustomInputAllowed,
+            isDisabled,
+            label,
+            options,
+            placeholder,
+            validator,
+        } = this.props;
         const { name, value = [] } = field;
         const { errors } = form;
         const error = getProp(errors, name);
+        const filteredOptions: Array<Option> = dropdownFilter(options, value, inputText);
 
         return (
             <PillSelectorDropdown
@@ -110,14 +102,13 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
                 onInput={this.handleInput}
                 onRemove={this.handleRemove}
                 onSelect={this.handleSelect}
+                parseItems={inputParser}
                 placeholder={placeholder}
-                selectedOptions={this.toPills(value)}
-                selectorOptions={selectorOptions}
+                selectedOptions={value}
+                selectorOptions={filteredOptions}
                 validator={validator}
             >
-                {selectorOptions.map(option => (
-                    <DatalistItem key={option.value}>{option.displayText}</DatalistItem>
-                ))}
+                {dropdownRenderer(filteredOptions)}
             </PillSelectorDropdown>
         );
     }

@@ -114,13 +114,13 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
             const result = instance.parsePills();
             expect(result).toEqual([
-                { text: 'value1', value: 'value1' },
-                { text: 'value2', value: 'value2' },
-                { text: 'value3', value: 'value3' },
+                { displayText: 'value1', text: 'value1', value: 'value1' },
+                { displayText: 'value2', text: 'value2', value: 'value2' },
+                { displayText: 'value3', text: 'value3', value: 'value3' },
             ]);
         });
 
-        test('should only return pills that pass validator if one is provided', () => {
+        test('should only return pills that pass validator if one is provided and allowInvalidPills is false', () => {
             const validator = text => {
                 // W3C type="email" input validation
                 const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -142,8 +142,37 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
             const result = instance.parsePills();
             expect(result).toEqual([
-                { text: 'aaron@example.com', value: 'aaron@example.com' },
-                { text: 'hello@gmail.com', value: 'hello@gmail.com' },
+                { displayText: 'aaron@example.com', text: 'aaron@example.com', value: 'aaron@example.com' },
+                { displayText: 'hello@gmail.com', text: 'hello@gmail.com', value: 'hello@gmail.com' },
+            ]);
+        });
+
+        test('should ignore validator if one is provided but allowInvalidPills is true', () => {
+            const validator = text => {
+                // W3C type="email" input validation
+                const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                return pattern.test(text);
+            };
+
+            const wrapper = shallow(
+                <PillSelectorDropdown
+                    allowInvalidPills
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    onSelect={onSelectStub}
+                    validator={validator}
+                />,
+            );
+            const instance = wrapper.instance();
+            wrapper.setState({
+                inputValue: 'aaron@example.com, bademail, hello@gmail.com',
+            });
+
+            const result = instance.parsePills();
+            expect(result).toEqual([
+                { displayText: 'aaron@example.com', text: 'aaron@example.com', value: 'aaron@example.com' },
+                { displayText: 'bademail', text: 'bademail', value: 'bademail' },
+                { displayText: 'hello@gmail.com', text: 'hello@gmail.com', value: 'hello@gmail.com' },
             ]);
         });
     });
@@ -298,6 +327,17 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     });
 
     describe('handleEnter()', () => {
+        test('should do nothing when in composition mode', () => {
+            const wrapper = shallow(<PillSelectorDropdown />);
+            const instance = wrapper.instance();
+            const event = { preventDefault: jest.fn() };
+            instance.addPillsFromInput = jest.fn();
+            instance.onCompositionStart();
+            instance.handleEnter(event);
+            expect(event.preventDefault).not.toHaveBeenCalled();
+            expect(instance.addPillsFromInput).not.toHaveBeenCalled();
+        });
+
         test('should call addPillsFromInput and prevent default when called', () => {
             const wrapper = shallow(
                 <PillSelectorDropdown onInput={onInputStub} onRemove={onRemoveStub} onSelect={onSelectStub} />,
@@ -389,6 +429,26 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 .withArgs({ target: { value: '' } });
 
             instance.handleSelect(0, {});
+        });
+    });
+
+    describe('onCompositionStart()', () => {
+        test('should set composition mode', () => {
+            const wrapper = shallow(<PillSelectorDropdown />);
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.onCompositionStart();
+            expect(instance.setState).toHaveBeenCalledWith({ isInCompositionMode: true });
+        });
+    });
+
+    describe('onCompositionEnd()', () => {
+        test('should unset composition mode', () => {
+            const wrapper = shallow(<PillSelectorDropdown />);
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.onCompositionEnd();
+            expect(instance.setState).toHaveBeenCalledWith({ isInCompositionMode: false });
         });
     });
 });

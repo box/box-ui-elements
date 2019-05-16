@@ -1,14 +1,10 @@
 // @flow
 import { List } from 'immutable';
-
-import type { PillOption } from '../pill-cloud/PillCloud';
 import type { SelectOptionProp, SelectOptionValueProp } from '../select-field/props';
 
-export type Pill = PillOption;
 export type Option = SelectOptionProp;
 export type OptionValue = SelectOptionValueProp;
-
-export type SelectedPills = Array<PillOption> | List<PillOption>;
+export type SelectedOptions = Array<Option> | List<Option>;
 
 export type SuggestedPill = {
     email: string,

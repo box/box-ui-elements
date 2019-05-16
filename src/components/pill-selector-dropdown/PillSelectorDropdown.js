@@ -9,7 +9,7 @@ import Label from '../label';
 import SelectorDropdown from '../selector-dropdown';
 
 import PillSelector from './PillSelector';
-import type { OptionValue, SelectedPills, SuggestedPillsFilter } from './flowTypes';
+import type { Option, OptionValue, SelectedOptions, SuggestedPillsFilter } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
 
@@ -47,7 +47,7 @@ type Props = {
     /** A placeholder to show in the input when there are no pills */
     placeholder: string,
     /** Array or Immutable list with data for the selected options shown as pills */
-    selectedOptions: SelectedPills,
+    selectedOptions: SelectedOptions,
     /** Array or Immutable list with data for the dropdown options to select */
     selectorOptions: Array<Object> | List<Object>,
     /** Array of suggested collaborators */
@@ -59,7 +59,7 @@ type Props = {
     /** Validate the given input value, and update `error` prop if necessary */
     validateForError?: Function,
     /** Called to check if pill item data is valid. The `item` is passed in. */
-    validator: (value: OptionValue) => boolean,
+    validator: (option: Option | OptionValue) => boolean,
 };
 
 type State = {
@@ -86,7 +86,6 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     parsePills = () => {
         const { inputValue } = this.state;
         const { allowInvalidPills, parseItems, validator } = this.props;
-
         let pills = parseItems ? parseItems(inputValue) : parseCSV(inputValue);
 
         if (!pills) {
@@ -97,10 +96,9 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             pills = pills.filter(pill => validator(pill));
         }
 
-        // Keep the data format consistent with DatalistItem
         return pills.map(pill => ({
             displayText: pill,
-            text: pill,
+            text: pill, // deprecated, left for backwards compatibility
             value: pill,
         }));
     };

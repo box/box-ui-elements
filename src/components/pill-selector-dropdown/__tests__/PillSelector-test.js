@@ -67,13 +67,47 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             expect(wrapper.find('.show-error').length).toBe(0);
         });
 
-        test('should render pills when there are selected options', () => {
+        test('should render pills when there are selected options using legacy text attribute', () => {
             const options = [{ text: 'test', value: 'test' }, { text: 'blah', value: 'hi' }];
             const wrapper = shallow(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
 
             expect(wrapper.find('Pill').length).toBe(2);
+        });
+
+        test('should render pills when there are selected options', () => {
+            const options = [{ displayText: 'test', value: 'test' }, { displayText: 'blah', value: 'hi' }];
+            const wrapper = shallow(
+                <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
+            );
+
+            const pills = wrapper.find('Pill');
+            expect(pills.length).toBe(2);
+            expect(pills.at(0).prop('isValid')).toBeTruthy();
+            expect(pills.at(1).prop('isValid')).toBeTruthy();
+        });
+
+        test('should render invalid pills when validator is provided and allowInvalidPills is true', () => {
+            const validator = ({ displayText }) => {
+                // W3C type="email" input validation
+                const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                return pattern.test(displayText);
+            };
+            const options = [{ displayText: 'test', value: 'test' }, { displayText: 'blah', value: 'hi' }];
+            const wrapper = shallow(
+                <PillSelector
+                    allowInvalidPills
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    selectedOptions={options}
+                    validator={validator}
+                />,
+            );
+            const pills = wrapper.find('Pill');
+            expect(pills.length).toBe(2);
+            expect(pills.at(0).prop('isValid')).toBeFalsy();
+            expect(pills.at(1).prop('isValid')).toBeFalsy();
         });
 
         test('should render pills when selected options are immutable', () => {

@@ -5,6 +5,7 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
   className="pill-selector-wrapper"
 >
   <PillSelector
+    allowInvalidPills={false}
     disabled={false}
     error=""
     inputProps={Object {}}
@@ -19,15 +20,16 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
     selectedOptions={
       Array [
         Object {
-          "text": "foo",
+          "displayText": "foo",
           "value": 0,
         },
         Object {
-          "text": "bar",
+          "displayText": "bar",
           "value": 1,
         },
       ]
     }
+    validator={[Function]}
     value=""
   />
   <div
