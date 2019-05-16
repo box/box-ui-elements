@@ -19,6 +19,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       id="boxui.unifiedShare.inviteFieldLabel"
     />
   }
+  onBlur={[Function]}
   onInput={[Function]}
   onRemove={[MockFunction]}
   onSelect={[MockFunction]}
@@ -150,6 +151,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       id="boxui.unifiedShare.inviteFieldLabel"
     />
   }
+  onBlur={[Function]}
   onInput={[Function]}
   onRemove={[MockFunction]}
   onSelect={[MockFunction]}

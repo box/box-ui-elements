@@ -322,7 +322,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
             instance.handleInput({ target: { value: 'test' } });
 
-            expect(onInputStub.calledWith('test')).toBe(true);
+            expect(onInputStub.calledWith('test', { target: { value: 'test' } })).toBe(true);
         });
     });
 
@@ -332,7 +332,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const instance = wrapper.instance();
             const event = { preventDefault: jest.fn() };
             instance.addPillsFromInput = jest.fn();
-            instance.onCompositionStart();
+            instance.handleCompositionStart();
             instance.handleEnter(event);
             expect(event.preventDefault).not.toHaveBeenCalled();
             expect(instance.addPillsFromInput).not.toHaveBeenCalled();
@@ -432,22 +432,37 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
     });
 
-    describe('onCompositionStart()', () => {
+    describe('handleBlur', () => {
+        test('should call onBlur() and addPillsFromInput() when underlying input is blurred', () => {
+            const onBlur = jest.fn();
+            const wrapper = shallow(<PillSelectorDropdown onBlur={onBlur} />);
+            const instance = wrapper.instance();
+            const event = { type: 'blur' };
+
+            instance.addPillsFromInput = jest.fn();
+            instance.handleBlur(event);
+
+            expect(instance.addPillsFromInput).toHaveBeenCalled();
+            expect(onBlur).toHaveBeenCalled();
+        });
+    });
+
+    describe('handleCompositionStart()', () => {
         test('should set composition mode', () => {
             const wrapper = shallow(<PillSelectorDropdown />);
             const instance = wrapper.instance();
             instance.setState = jest.fn();
-            instance.onCompositionStart();
+            instance.handleCompositionStart();
             expect(instance.setState).toHaveBeenCalledWith({ isInCompositionMode: true });
         });
     });
 
-    describe('onCompositionEnd()', () => {
+    describe('handleCompositionEnd()', () => {
         test('should unset composition mode', () => {
             const wrapper = shallow(<PillSelectorDropdown />);
             const instance = wrapper.instance();
             instance.setState = jest.fn();
-            instance.onCompositionEnd();
+            instance.handleCompositionEnd();
             expect(instance.setState).toHaveBeenCalledWith({ isInCompositionMode: false });
         });
     });

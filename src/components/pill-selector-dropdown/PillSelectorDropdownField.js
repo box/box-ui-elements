@@ -6,7 +6,6 @@ import type { FieldProps } from 'formik';
 import PillSelectorDropdown from './PillSelectorDropdown';
 import defaultDropdownRenderer from './defaultDropdownRenderer';
 import defaultDropdownFilter from './defaultDropdownFilter';
-import parseCSV from '../../utils/parseCSV';
 import type { Option, OptionValue } from './flowTypes';
 
 type Props = FieldProps & {
@@ -17,7 +16,7 @@ type Props = FieldProps & {
     /** Given options, renders the dropdown list. Defaults to defaultDropdownRenderer. */
     dropdownRenderer: (options: Array<Option>) => React.Node,
     /** Function to parse user input into an array of items. Defaults to CSV parser. */
-    inputParser: (inputValue: string) => Array<Option>,
+    inputParser?: (inputValue: string) => Array<Option>,
     /** If true, the user can add pills not included in the dropdown options. Defaults to true. */
     isCustomInputAllowed: boolean,
     /** If true, the input control is disabled so no more input can be made. Defaults to false. */
@@ -40,7 +39,6 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     static defaultProps = {
         dropdownFilter: defaultDropdownFilter,
         dropdownRenderer: defaultDropdownRenderer,
-        inputParser: parseCSV,
         isCustomInputAllowed: true,
         isDisabled: false,
         options: [],
@@ -48,18 +46,35 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
 
     state = { inputText: '' };
 
-    createFakeEventTarget(name: string, value: Array<Option>) {
+    isValidOption({ displayText }: Option) {
+        return !!displayText.trim();
+    }
+
+    createFakeEventTarget(name: string, value?: Array<Option>) {
+        // Returns a dummy EventTarget like object that formik understands how to read
         return { target: { name, value } };
     }
 
-    handleInput = (text: string) => {
+    handleBlur = (event: SyntheticInputEvent<HTMLInputElement>) => {
+        const { field } = this.props;
+        const { name, onBlur } = field;
+        // Sets touched in formik for the pill selector field.
+        // Event may or may not be available at this time.
+        onBlur(event || this.createFakeEventTarget(name));
+    };
+
+    handleInput = (text: string, event: SyntheticInputEvent<HTMLInputElement>) => {
         this.setState({ inputText: text });
+        if (text === '') {
+            this.handleBlur(event);
+        }
     };
 
     handleSelect = (options: Array<Option>) => {
         const { field } = this.props;
         const { name, onChange, value = [] } = field;
-        onChange(this.createFakeEventTarget(name, [...value, ...options]));
+        const filteredOptions = options.filter(option => this.isValidOption(option));
+        onChange(this.createFakeEventTarget(name, [...value, ...filteredOptions]));
     };
 
     handleRemove = (option: Option, index: number) => {
@@ -87,9 +102,11 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
             validator,
         } = this.props;
         const { name, value = [] } = field;
-        const { errors } = form;
-        const error = getProp(errors, name);
+        const { errors, touched } = form;
+        const isTouched = getProp(touched, name);
+        const error = isTouched ? getProp(errors, name) : null;
         const filteredOptions: Array<Option> = dropdownFilter(options, value, inputText);
+        const inputProps = { name }; // so that events generated have event.target.name
 
         return (
             <PillSelectorDropdown
@@ -97,8 +114,10 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
                 allowInvalidPills
                 className={className}
                 disabled={isDisabled}
+                inputProps={inputProps}
                 label={label}
                 error={error}
+                onBlur={this.handleBlur}
                 onInput={this.handleInput}
                 onRemove={this.handleRemove}
                 onSelect={this.handleSelect}

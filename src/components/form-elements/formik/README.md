@@ -117,6 +117,15 @@ const pillSelectorValidator = option => {
                     label="Pill Selector Field"
                     name="pillselector"
                     placeholder="Colors"
+                    component={PillSelectorDropdownField}
+                    validator={pillSelectorValidator}
+                />
+                <br />
+                <br />
+                <Field
+                    label="Pill Selector Field With Dropdown"
+                    name="pillselectordropdown"
+                    placeholder="Colors"
                     options={[
                         { displayText: 'Red', value: 'red' },
                         { displayText: 'Green', value: 'green' },

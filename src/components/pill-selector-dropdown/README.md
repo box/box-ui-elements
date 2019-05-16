@@ -90,7 +90,7 @@ const validator = text => {
 >
     {state.selectorOptions.map(option => (
         <DatalistItem key={ option.value }>
-            {option.text}
+            {option.displayText}
         </DatalistItem>
     ))}
 </PillSelectorDropdown>

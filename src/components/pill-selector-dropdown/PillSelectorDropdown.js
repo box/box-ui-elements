@@ -32,6 +32,8 @@ type Props = {
     inputProps: Object,
     /** Input label */
     label: React.Node,
+    /** Called when pill selector input is blurred */
+    onBlur: (event: SyntheticInputEvent<HTMLInputElement>) => void,
     /** Should update selectorOptions based on the given input value */
     onInput: Function,
     /** Should update selectedOptions given the option and index to remove */
@@ -75,6 +77,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         error: '',
         inputProps: {},
         label: '',
+        onBlur: noop,
         placeholder: '',
         selectedOptions: [],
         selectorOptions: [],
@@ -131,14 +134,17 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         }
     };
 
-    handleBlur = () => {
+    handleBlur = (event: SyntheticInputEvent<HTMLInputElement>) => {
+        const { onBlur } = this.props;
         this.addPillsFromInput();
+        onBlur(event);
     };
 
-    handleInput = ({ target }: { target: HTMLInputElement | Object }) => {
+    handleInput = (event: SyntheticInputEvent<HTMLInputElement> | { target: HTMLInputElement | Object }) => {
+        const { target } = event;
         const { value } = target;
         this.setState({ inputValue: value });
-        this.props.onInput(value);
+        this.props.onInput(value, event);
     };
 
     handleEnter = (event: SyntheticEvent<>) => {
@@ -170,11 +176,11 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         this.handleInput({ target: { value: '' } });
     };
 
-    onCompositionStart = () => {
+    handleCompositionStart = () => {
         this.setState({ isInCompositionMode: true });
     };
 
-    onCompositionEnd = () => {
+    handleCompositionEnd = () => {
         this.setState({ isInCompositionMode: false });
     };
 
@@ -210,8 +216,8 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                     <Label text={label}>
                         <PillSelector
                             onChange={noop} // fix console error
-                            onCompositionEnd={this.onCompositionEnd}
-                            onCompositionStart={this.onCompositionStart}
+                            onCompositionEnd={this.handleCompositionEnd}
+                            onCompositionStart={this.handleCompositionStart}
                             {...inputProps}
                             allowInvalidPills={allowInvalidPills}
                             disabled={disabled}
