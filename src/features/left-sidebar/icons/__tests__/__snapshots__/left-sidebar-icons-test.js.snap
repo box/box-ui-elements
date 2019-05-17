@@ -16,6 +16,35 @@ exports[`icons/left-sidebar should correctly render default icon 1`] = `
 
 exports[`icons/left-sidebar should correctly render default icon 2`] = `
 <AccessibleSVG
+  className="icon-automations"
+  viewBox="0 0 14 14"
+  width={14}
+>
+  <path
+    className="fill-color"
+    color="#c4c4c4"
+    d="M8,5 L11.4585117,5 C11.7575674,5 12,5.23405867 12,5.52278468 C12,5.61753624 11.9733275,5.71050639 11.9228341,5.79175518 L7.00581071,13.7461068 C6.8519478,13.9936873 6.51933305,14.0739688 6.26289487,13.9254205 C6.09979566,13.8309411 6,13.6607712 6,13.4771363 L6,9 L2.54148831,9 C2.24243258,9 2,8.76594133 2,8.47721532 C2,8.38246376 2.02667254,8.28949361 2.07716592,8.20824482 L6.99418929,0.253893189 C7.1480522,0.00631268077 7.48066695,-0.0739687821 7.73710513,0.0745795227 C7.90020434,0.169058867 8,0.33922885 8,0.522863688 L8,5 Z"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should correctly render default icon 3`] = `
+<AccessibleSVG
+  className="icon-box-relay"
+  viewBox="0 0 14 14"
+  width={14}
+>
+  <path
+    className="fill-color"
+    color="#c4c4c4"
+    d="M1 1.002V1h5.001l-1.94 3.668a.5.5 0 0 0 .094.592L8.001 9H3.947l1.022 3.743a1 1 0 0 1-1.932.517L.034 2.261A1 1 0 0 1 1 1.001zM8.001 1h3.495a.5.5 0 0 1 .458.7L10.08 4.625a.5.5 0 0 0 .112.662L13.87 8.17a.5.5 0 0 1-.375.831h-3.494L6.155 5.33a.5.5 0 0 1-.098-.593z"
+    fillRule="evenodd"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should correctly render default icon 4`] = `
+<AccessibleSVG
   className="icon-all-files"
   viewBox="0 0 14 14"
   width={14}
@@ -28,7 +57,7 @@ exports[`icons/left-sidebar should correctly render default icon 2`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 3`] = `
+exports[`icons/left-sidebar should correctly render default icon 5`] = `
 <AccessibleSVG
   className="icon-dev-console"
   viewBox="0 0 14 14"
@@ -42,7 +71,7 @@ exports[`icons/left-sidebar should correctly render default icon 3`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 4`] = `
+exports[`icons/left-sidebar should correctly render default icon 6`] = `
 <AccessibleSVG
   className="icon-favorites"
   viewBox="0 0 14 14"
@@ -56,7 +85,7 @@ exports[`icons/left-sidebar should correctly render default icon 4`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 5`] = `
+exports[`icons/left-sidebar should correctly render default icon 7`] = `
 <AccessibleSVG
   className="icon-feed"
   viewBox="0 0 14 14"
@@ -70,7 +99,7 @@ exports[`icons/left-sidebar should correctly render default icon 5`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 6`] = `
+exports[`icons/left-sidebar should correctly render default icon 8`] = `
 <AccessibleSVG
   className="icon-notes"
   viewBox="0 0 14 14"
@@ -84,7 +113,7 @@ exports[`icons/left-sidebar should correctly render default icon 6`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 7`] = `
+exports[`icons/left-sidebar should correctly render default icon 9`] = `
 <AccessibleSVG
   className="icon-notifications"
   viewBox="0 0 14 16.1"
@@ -98,7 +127,7 @@ exports[`icons/left-sidebar should correctly render default icon 7`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 8`] = `
+exports[`icons/left-sidebar should correctly render default icon 10`] = `
 <AccessibleSVG
   className="icon-owned-by-me"
   viewBox="0 0 14 14"
@@ -112,7 +141,7 @@ exports[`icons/left-sidebar should correctly render default icon 8`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 9`] = `
+exports[`icons/left-sidebar should correctly render default icon 11`] = `
 <AccessibleSVG
   className="icon-recents"
   viewBox="0 0 14 14"
@@ -126,7 +155,7 @@ exports[`icons/left-sidebar should correctly render default icon 9`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 10`] = `
+exports[`icons/left-sidebar should correctly render default icon 12`] = `
 <AccessibleSVG
   className="icon-relay"
   viewBox="0 0 14 14"
@@ -140,7 +169,7 @@ exports[`icons/left-sidebar should correctly render default icon 10`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 11`] = `
+exports[`icons/left-sidebar should correctly render default icon 13`] = `
 <AccessibleSVG
   className="icon-shared-with-me"
   viewBox="0 0 14 14"
@@ -154,7 +183,7 @@ exports[`icons/left-sidebar should correctly render default icon 11`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 12`] = `
+exports[`icons/left-sidebar should correctly render default icon 14`] = `
 <AccessibleSVG
   className="icon-synced"
   viewBox="0 0 14 14"
@@ -168,7 +197,7 @@ exports[`icons/left-sidebar should correctly render default icon 12`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render default icon 13`] = `
+exports[`icons/left-sidebar should correctly render default icon 15`] = `
 <AccessibleSVG
   className="icon-trash"
   viewBox="0 0 14 14"
@@ -198,6 +227,35 @@ exports[`icons/left-sidebar should correctly render icon with specified color 1`
 
 exports[`icons/left-sidebar should correctly render icon with specified color 2`] = `
 <AccessibleSVG
+  className="icon-automations"
+  viewBox="0 0 14 14"
+  width={14}
+>
+  <path
+    className="fill-color"
+    color="#ffffff"
+    d="M8,5 L11.4585117,5 C11.7575674,5 12,5.23405867 12,5.52278468 C12,5.61753624 11.9733275,5.71050639 11.9228341,5.79175518 L7.00581071,13.7461068 C6.8519478,13.9936873 6.51933305,14.0739688 6.26289487,13.9254205 C6.09979566,13.8309411 6,13.6607712 6,13.4771363 L6,9 L2.54148831,9 C2.24243258,9 2,8.76594133 2,8.47721532 C2,8.38246376 2.02667254,8.28949361 2.07716592,8.20824482 L6.99418929,0.253893189 C7.1480522,0.00631268077 7.48066695,-0.0739687821 7.73710513,0.0745795227 C7.90020434,0.169058867 8,0.33922885 8,0.522863688 L8,5 Z"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should correctly render icon with specified color 3`] = `
+<AccessibleSVG
+  className="icon-box-relay"
+  viewBox="0 0 14 14"
+  width={14}
+>
+  <path
+    className="fill-color"
+    color="#ffffff"
+    d="M1 1.002V1h5.001l-1.94 3.668a.5.5 0 0 0 .094.592L8.001 9H3.947l1.022 3.743a1 1 0 0 1-1.932.517L.034 2.261A1 1 0 0 1 1 1.001zM8.001 1h3.495a.5.5 0 0 1 .458.7L10.08 4.625a.5.5 0 0 0 .112.662L13.87 8.17a.5.5 0 0 1-.375.831h-3.494L6.155 5.33a.5.5 0 0 1-.098-.593z"
+    fillRule="evenodd"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should correctly render icon with specified color 4`] = `
+<AccessibleSVG
   className="icon-all-files"
   viewBox="0 0 14 14"
   width={14}
@@ -210,7 +268,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 2`
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 3`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 5`] = `
 <AccessibleSVG
   className="icon-dev-console"
   viewBox="0 0 14 14"
@@ -224,7 +282,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 3`
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 4`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 6`] = `
 <AccessibleSVG
   className="icon-favorites"
   viewBox="0 0 14 14"
@@ -238,7 +296,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 4`
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 5`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 7`] = `
 <AccessibleSVG
   className="icon-feed"
   viewBox="0 0 14 14"
@@ -252,7 +310,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 5`
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 6`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 8`] = `
 <AccessibleSVG
   className="icon-notes"
   viewBox="0 0 14 14"
@@ -266,7 +324,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 6`
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 7`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 9`] = `
 <AccessibleSVG
   className="icon-notifications"
   viewBox="0 0 14 16.1"
@@ -280,7 +338,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 7`
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 8`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 10`] = `
 <AccessibleSVG
   className="icon-owned-by-me"
   viewBox="0 0 14 14"
@@ -294,7 +352,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 8`
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 9`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 11`] = `
 <AccessibleSVG
   className="icon-recents"
   viewBox="0 0 14 14"
@@ -308,7 +366,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 9`
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 10`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 12`] = `
 <AccessibleSVG
   className="icon-relay"
   viewBox="0 0 14 14"
@@ -322,7 +380,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 10
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 11`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 13`] = `
 <AccessibleSVG
   className="icon-shared-with-me"
   viewBox="0 0 14 14"
@@ -336,7 +394,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 11
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 12`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 14`] = `
 <AccessibleSVG
   className="icon-synced"
   viewBox="0 0 14 14"
@@ -350,7 +408,7 @@ exports[`icons/left-sidebar should correctly render icon with specified color 12
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified color 13`] = `
+exports[`icons/left-sidebar should correctly render icon with specified color 15`] = `
 <AccessibleSVG
   className="icon-trash"
   viewBox="0 0 14 14"
@@ -380,6 +438,35 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 
 exports[`icons/left-sidebar should correctly render icon with specified width and height 2`] = `
 <AccessibleSVG
+  className="icon-automations"
+  viewBox="0 0 14 14"
+  width={16}
+>
+  <path
+    className="fill-color"
+    color="#c4c4c4"
+    d="M8,5 L11.4585117,5 C11.7575674,5 12,5.23405867 12,5.52278468 C12,5.61753624 11.9733275,5.71050639 11.9228341,5.79175518 L7.00581071,13.7461068 C6.8519478,13.9936873 6.51933305,14.0739688 6.26289487,13.9254205 C6.09979566,13.8309411 6,13.6607712 6,13.4771363 L6,9 L2.54148831,9 C2.24243258,9 2,8.76594133 2,8.47721532 C2,8.38246376 2.02667254,8.28949361 2.07716592,8.20824482 L6.99418929,0.253893189 C7.1480522,0.00631268077 7.48066695,-0.0739687821 7.73710513,0.0745795227 C7.90020434,0.169058867 8,0.33922885 8,0.522863688 L8,5 Z"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should correctly render icon with specified width and height 3`] = `
+<AccessibleSVG
+  className="icon-box-relay"
+  viewBox="0 0 14 14"
+  width={16}
+>
+  <path
+    className="fill-color"
+    color="#c4c4c4"
+    d="M1 1.002V1h5.001l-1.94 3.668a.5.5 0 0 0 .094.592L8.001 9H3.947l1.022 3.743a1 1 0 0 1-1.932.517L.034 2.261A1 1 0 0 1 1 1.001zM8.001 1h3.495a.5.5 0 0 1 .458.7L10.08 4.625a.5.5 0 0 0 .112.662L13.87 8.17a.5.5 0 0 1-.375.831h-3.494L6.155 5.33a.5.5 0 0 1-.098-.593z"
+    fillRule="evenodd"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should correctly render icon with specified width and height 4`] = `
+<AccessibleSVG
   className="icon-all-files"
   viewBox="0 0 14 14"
   width={16}
@@ -392,7 +479,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 3`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 5`] = `
 <AccessibleSVG
   className="icon-dev-console"
   viewBox="0 0 14 14"
@@ -406,7 +493,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 4`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 6`] = `
 <AccessibleSVG
   className="icon-favorites"
   viewBox="0 0 14 14"
@@ -420,7 +507,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 5`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 7`] = `
 <AccessibleSVG
   className="icon-feed"
   viewBox="0 0 14 14"
@@ -434,7 +521,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 6`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 8`] = `
 <AccessibleSVG
   className="icon-notes"
   viewBox="0 0 14 14"
@@ -448,7 +535,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 7`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 9`] = `
 <AccessibleSVG
   className="icon-notifications"
   viewBox="0 0 14 16.1"
@@ -462,7 +549,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 8`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 10`] = `
 <AccessibleSVG
   className="icon-owned-by-me"
   viewBox="0 0 14 14"
@@ -476,7 +563,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 9`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 11`] = `
 <AccessibleSVG
   className="icon-recents"
   viewBox="0 0 14 14"
@@ -490,7 +577,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 10`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 12`] = `
 <AccessibleSVG
   className="icon-relay"
   viewBox="0 0 14 14"
@@ -504,7 +591,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 11`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 13`] = `
 <AccessibleSVG
   className="icon-shared-with-me"
   viewBox="0 0 14 14"
@@ -518,7 +605,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 12`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 14`] = `
 <AccessibleSVG
   className="icon-synced"
   viewBox="0 0 14 14"
@@ -532,7 +619,7 @@ exports[`icons/left-sidebar should correctly render icon with specified width an
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with specified width and height 13`] = `
+exports[`icons/left-sidebar should correctly render icon with specified width and height 15`] = `
 <AccessibleSVG
   className="icon-trash"
   viewBox="0 0 14 14"
@@ -563,6 +650,36 @@ exports[`icons/left-sidebar should correctly render icon with title 1`] = `
 
 exports[`icons/left-sidebar should correctly render icon with title 2`] = `
 <AccessibleSVG
+  className="icon-automations"
+  viewBox="0 0 14 14"
+  width={14}
+>
+  <path
+    className="fill-color"
+    color="#c4c4c4"
+    d="M8,5 L11.4585117,5 C11.7575674,5 12,5.23405867 12,5.52278468 C12,5.61753624 11.9733275,5.71050639 11.9228341,5.79175518 L7.00581071,13.7461068 C6.8519478,13.9936873 6.51933305,14.0739688 6.26289487,13.9254205 C6.09979566,13.8309411 6,13.6607712 6,13.4771363 L6,9 L2.54148831,9 C2.24243258,9 2,8.76594133 2,8.47721532 C2,8.38246376 2.02667254,8.28949361 2.07716592,8.20824482 L6.99418929,0.253893189 C7.1480522,0.00631268077 7.48066695,-0.0739687821 7.73710513,0.0745795227 C7.90020434,0.169058867 8,0.33922885 8,0.522863688 L8,5 Z"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should correctly render icon with title 3`] = `
+<AccessibleSVG
+  className="icon-box-relay"
+  title="fool"
+  viewBox="0 0 14 14"
+  width={14}
+>
+  <path
+    className="fill-color"
+    color="#c4c4c4"
+    d="M1 1.002V1h5.001l-1.94 3.668a.5.5 0 0 0 .094.592L8.001 9H3.947l1.022 3.743a1 1 0 0 1-1.932.517L.034 2.261A1 1 0 0 1 1 1.001zM8.001 1h3.495a.5.5 0 0 1 .458.7L10.08 4.625a.5.5 0 0 0 .112.662L13.87 8.17a.5.5 0 0 1-.375.831h-3.494L6.155 5.33a.5.5 0 0 1-.098-.593z"
+    fillRule="evenodd"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should correctly render icon with title 4`] = `
+<AccessibleSVG
   className="icon-all-files"
   title="fool"
   viewBox="0 0 14 14"
@@ -576,7 +693,7 @@ exports[`icons/left-sidebar should correctly render icon with title 2`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 3`] = `
+exports[`icons/left-sidebar should correctly render icon with title 5`] = `
 <AccessibleSVG
   className="icon-dev-console"
   title="fool"
@@ -591,7 +708,7 @@ exports[`icons/left-sidebar should correctly render icon with title 3`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 4`] = `
+exports[`icons/left-sidebar should correctly render icon with title 6`] = `
 <AccessibleSVG
   className="icon-favorites"
   title="fool"
@@ -606,7 +723,7 @@ exports[`icons/left-sidebar should correctly render icon with title 4`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 5`] = `
+exports[`icons/left-sidebar should correctly render icon with title 7`] = `
 <AccessibleSVG
   className="icon-feed"
   title="fool"
@@ -621,7 +738,7 @@ exports[`icons/left-sidebar should correctly render icon with title 5`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 6`] = `
+exports[`icons/left-sidebar should correctly render icon with title 8`] = `
 <AccessibleSVG
   className="icon-notes"
   title="fool"
@@ -636,7 +753,7 @@ exports[`icons/left-sidebar should correctly render icon with title 6`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 7`] = `
+exports[`icons/left-sidebar should correctly render icon with title 9`] = `
 <AccessibleSVG
   className="icon-notifications"
   title="fool"
@@ -651,7 +768,7 @@ exports[`icons/left-sidebar should correctly render icon with title 7`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 8`] = `
+exports[`icons/left-sidebar should correctly render icon with title 10`] = `
 <AccessibleSVG
   className="icon-owned-by-me"
   title="fool"
@@ -666,7 +783,7 @@ exports[`icons/left-sidebar should correctly render icon with title 8`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 9`] = `
+exports[`icons/left-sidebar should correctly render icon with title 11`] = `
 <AccessibleSVG
   className="icon-recents"
   title="fool"
@@ -681,7 +798,7 @@ exports[`icons/left-sidebar should correctly render icon with title 9`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 10`] = `
+exports[`icons/left-sidebar should correctly render icon with title 12`] = `
 <AccessibleSVG
   className="icon-relay"
   title="fool"
@@ -696,7 +813,7 @@ exports[`icons/left-sidebar should correctly render icon with title 10`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 11`] = `
+exports[`icons/left-sidebar should correctly render icon with title 13`] = `
 <AccessibleSVG
   className="icon-shared-with-me"
   title="fool"
@@ -711,7 +828,7 @@ exports[`icons/left-sidebar should correctly render icon with title 11`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 12`] = `
+exports[`icons/left-sidebar should correctly render icon with title 14`] = `
 <AccessibleSVG
   className="icon-synced"
   title="fool"
@@ -726,7 +843,7 @@ exports[`icons/left-sidebar should correctly render icon with title 12`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should correctly render icon with title 13`] = `
+exports[`icons/left-sidebar should correctly render icon with title 15`] = `
 <AccessibleSVG
   className="icon-trash"
   title="fool"
@@ -759,6 +876,38 @@ exports[`icons/left-sidebar should respect selected state 1`] = `
 
 exports[`icons/left-sidebar should respect selected state 2`] = `
 <AccessibleSVG
+  className="icon-automations is-selected"
+  viewBox="0 0 14 14"
+  width={14}
+>
+  <path
+    className="fill-color"
+    color="#c4c4c4"
+    d="M8,5 L11.4585117,5 C11.7575674,5 12,5.23405867 12,5.52278468 C12,5.61753624 11.9733275,5.71050639 11.9228341,5.79175518 L7.00581071,13.7461068 C6.8519478,13.9936873 6.51933305,14.0739688 6.26289487,13.9254205 C6.09979566,13.8309411 6,13.6607712 6,13.4771363 L6,9 L2.54148831,9 C2.24243258,9 2,8.76594133 2,8.47721532 C2,8.38246376 2.02667254,8.28949361 2.07716592,8.20824482 L6.99418929,0.253893189 C7.1480522,0.00631268077 7.48066695,-0.0739687821 7.73710513,0.0745795227 C7.90020434,0.169058867 8,0.33922885 8,0.522863688 L8,5 Z"
+    fill="#c4c4c4"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should respect selected state 3`] = `
+<AccessibleSVG
+  className="icon-box-relay is-selected"
+  title="pity"
+  viewBox="0 0 14 14"
+  width={14}
+>
+  <path
+    className="fill-color"
+    color="#c4c4c4"
+    d="M1 1.002V1h5.001l-1.94 3.668a.5.5 0 0 0 .094.592L8.001 9H3.947l1.022 3.743a1 1 0 0 1-1.932.517L.034 2.261A1 1 0 0 1 1 1.001zM8.001 1h3.495a.5.5 0 0 1 .458.7L10.08 4.625a.5.5 0 0 0 .112.662L13.87 8.17a.5.5 0 0 1-.375.831h-3.494L6.155 5.33a.5.5 0 0 1-.098-.593z"
+    fill="#c4c4c4"
+    fillRule="evenodd"
+  />
+</AccessibleSVG>
+`;
+
+exports[`icons/left-sidebar should respect selected state 4`] = `
+<AccessibleSVG
   className="icon-all-files is-selected"
   title="pity"
   viewBox="0 0 14 14"
@@ -773,7 +922,7 @@ exports[`icons/left-sidebar should respect selected state 2`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 3`] = `
+exports[`icons/left-sidebar should respect selected state 5`] = `
 <AccessibleSVG
   className="icon-dev-console is-selected"
   title="pity"
@@ -789,7 +938,7 @@ exports[`icons/left-sidebar should respect selected state 3`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 4`] = `
+exports[`icons/left-sidebar should respect selected state 6`] = `
 <AccessibleSVG
   className="icon-favorites is-selected"
   title="pity"
@@ -805,7 +954,7 @@ exports[`icons/left-sidebar should respect selected state 4`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 5`] = `
+exports[`icons/left-sidebar should respect selected state 7`] = `
 <AccessibleSVG
   className="icon-feed is-selected"
   title="pity"
@@ -821,7 +970,7 @@ exports[`icons/left-sidebar should respect selected state 5`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 6`] = `
+exports[`icons/left-sidebar should respect selected state 8`] = `
 <AccessibleSVG
   className="icon-notes is-selected"
   title="pity"
@@ -837,7 +986,7 @@ exports[`icons/left-sidebar should respect selected state 6`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 7`] = `
+exports[`icons/left-sidebar should respect selected state 9`] = `
 <AccessibleSVG
   className="icon-notifications is-selected"
   title="pity"
@@ -853,7 +1002,7 @@ exports[`icons/left-sidebar should respect selected state 7`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 8`] = `
+exports[`icons/left-sidebar should respect selected state 10`] = `
 <AccessibleSVG
   className="icon-owned-by-me is-selected"
   title="pity"
@@ -869,7 +1018,7 @@ exports[`icons/left-sidebar should respect selected state 8`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 9`] = `
+exports[`icons/left-sidebar should respect selected state 11`] = `
 <AccessibleSVG
   className="icon-recents is-selected"
   title="pity"
@@ -885,7 +1034,7 @@ exports[`icons/left-sidebar should respect selected state 9`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 10`] = `
+exports[`icons/left-sidebar should respect selected state 12`] = `
 <AccessibleSVG
   className="icon-relay is-selected"
   title="pity"
@@ -901,7 +1050,7 @@ exports[`icons/left-sidebar should respect selected state 10`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 11`] = `
+exports[`icons/left-sidebar should respect selected state 13`] = `
 <AccessibleSVG
   className="icon-shared-with-me is-selected"
   title="pity"
@@ -917,7 +1066,7 @@ exports[`icons/left-sidebar should respect selected state 11`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 12`] = `
+exports[`icons/left-sidebar should respect selected state 14`] = `
 <AccessibleSVG
   className="icon-synced is-selected"
   title="pity"
@@ -933,7 +1082,7 @@ exports[`icons/left-sidebar should respect selected state 12`] = `
 </AccessibleSVG>
 `;
 
-exports[`icons/left-sidebar should respect selected state 13`] = `
+exports[`icons/left-sidebar should respect selected state 15`] = `
 <AccessibleSVG
   className="icon-trash is-selected"
   title="pity"

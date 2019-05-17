@@ -3,6 +3,8 @@ import React from 'react';
 
 import IconAdminConsole from '../IconAdminConsole';
 import IconAllFiles from '../IconAllFiles';
+import IconAutomations from '../IconAutomations';
+import IconBoxRelay from '../IconBoxRelay';
 import IconDevConsole from '../IconDevConsole';
 import IconFavorites from '../IconFavorites';
 import IconFeed from '../IconFeed';
@@ -19,6 +21,12 @@ describe('icons/left-sidebar', () => {
     [
         {
             Icon: IconAdminConsole,
+        },
+        {
+            Icon: IconAutomations,
+        },
+        {
+            Icon: IconBoxRelay,
         },
         {
             Icon: IconAllFiles,
