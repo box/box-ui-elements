@@ -8,6 +8,7 @@ const TextArea = require('box-ui-elements/es/components/text-area').TextAreaFiel
 const Toggle = require('box-ui-elements/es/components/toggle').ToggleField;
 const Checkbox = require('box-ui-elements/es/components/checkbox').CheckboxField;
 const RadioGroup = require('box-ui-elements/es/components/radio').RadioGroupField;
+const RadioButtonField = require('box-ui-elements/es/components/radio').RadioButtonField;
 const RadioButton = require('box-ui-elements/es/components/radio').RadioButton;
 const SelectField = require('box-ui-elements/es/components/select-field').SelectField;
 const PillSelectorDropdownField = require('box-ui-elements/es/components/pill-selector-dropdown').PillSelectorDropdownField;
@@ -72,6 +73,24 @@ const pillSelectorValidator = option => {
                     placeholder="Text Area Field"
                     component={TextArea}
                 />
+                <b>Non-RadioGroup RadioButtons sharing the same name</b>
+                <br />
+                <br />
+                <Field
+                    isSelected={false}
+                    label="Radio Button Field 1"
+                    name="radiobutton"
+                    component={RadioButtonField}
+                    value="radio1"
+                />
+                <Field
+                    isSelected={false}
+                    label="Radio Button Field 2"
+                    name="radiobutton"
+                    component={RadioButtonField}
+                    value="radio2"
+                />
+                <br />
                 <Field
                     label="Single Select Field"
                     name="singleselect"
@@ -97,6 +116,9 @@ const pillSelectorValidator = option => {
                     ]}
                     component={SelectField}
                 />
+                <br />
+                <br />
+                <b>RadioGroup-ed RadioButtons</b>
                 <br />
                 <br />
                 <Field name="radiogroup" component={RadioGroup}>

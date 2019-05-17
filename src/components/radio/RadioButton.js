@@ -46,4 +46,5 @@ const RadioButton = ({
     </div>
 );
 
+export type RadioButtonProps = Props;
 export default RadioButton;

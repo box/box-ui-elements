@@ -8,7 +8,7 @@ import type { CheckboxProps } from './Checkbox';
 
 type Props = CheckboxProps & FieldProps;
 
-const CheckboxField = ({ field, ...rest }: Props) => {
+const CheckboxField = ({ field, form, ...rest }: Props) => {
     const { value } = field;
     return <CheckboxPrimitive {...field} {...rest} isChecked={!!value} />;
 };
