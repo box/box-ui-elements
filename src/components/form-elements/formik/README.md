@@ -1,6 +1,7 @@
 ### Examples
 ```jsx
 const { Formik, Form, Field } = require('formik');
+const isEqual = require('lodash/isEqual');
 
 const TextInput = require('box-ui-elements/es/components/text-input').TextInputField;
 const TextArea = require('box-ui-elements/es/components/text-area').TextAreaField;
@@ -10,6 +11,13 @@ const RadioGroup = require('box-ui-elements/es/components/radio').RadioGroupFiel
 const RadioButtonField = require('box-ui-elements/es/components/radio').RadioButtonField;
 const RadioButton = require('box-ui-elements/es/components/radio').RadioButton;
 const SelectField = require('box-ui-elements/es/components/select-field').SelectField;
+const PillSelectorDropdownField = require('box-ui-elements/es/components/pill-selector-dropdown').PillSelectorDropdownField;
+const DatalistItem = require('box-ui-elements/es/components/datalist-item').default;
+
+const pillSelectorValidator = option => {
+    const value = typeof option === 'string' ? option : option.value;
+    return ['red', 'green', 'blue', 'yellow', 'white', 'black'].includes(value);
+};
 
 <Formik
     initialValues={{
@@ -21,7 +29,7 @@ const SelectField = require('box-ui-elements/es/components/select-field').Select
     }}
     validate={values => {
         const errors = {};
-        const { textinput, textarea } = values;
+        const { textinput, textarea, pillselector } = values;
 
         if (!textinput) {
             errors.textinput = 'Required';
@@ -29,6 +37,10 @@ const SelectField = require('box-ui-elements/es/components/select-field').Select
 
         if (!textarea) {
             errors.textarea = 'Required';
+        }
+
+        if (!pillselector.every((pill => pillSelectorValidator(pill)))) {
+            errors.pillselector = 'Bad colors';
         }
 
         return errors;
@@ -84,9 +96,9 @@ const SelectField = require('box-ui-elements/es/components/select-field').Select
                     name="singleselect"
                     placeholder="Single Select Field"
                     options={[
-                        { displayText: 'Red', value: 'Red' },
-                        { displayText: 'Green', value: 'Green' },
-                        { displayText: 'Blue', value: 'Blue' },
+                        { displayText: 'Red', value: 'red' },
+                        { displayText: 'Green', value: 'green' },
+                        { displayText: 'Blue', value: 'blue' },
                     ]}
                     component={SelectField}
                 />
@@ -98,9 +110,9 @@ const SelectField = require('box-ui-elements/es/components/select-field').Select
                     placeholder="Multi Select Field"
                     multiple
                     options={[
-                        { displayText: 'Red', value: 'Red' },
-                        { displayText: 'Green', value: 'Green' },
-                        { displayText: 'Blue', value: 'Blue' },
+                        { displayText: 'Red', value: 'red' },
+                        { displayText: 'Green', value: 'green' },
+                        { displayText: 'Blue', value: 'blue' },
                     ]}
                     component={SelectField}
                 />
@@ -121,6 +133,34 @@ const SelectField = require('box-ui-elements/es/components/select-field').Select
                         description="Blue color"
                     />
                 </Field>
+                <br />
+                <br />
+                <Field
+                    label="Pill Selector Field"
+                    name="pillselector"
+                    placeholder="Colors"
+                    component={PillSelectorDropdownField}
+                    validator={pillSelectorValidator}
+                />
+                <br />
+                <br />
+                <Field
+                    label="Pill Selector Field With Dropdown"
+                    name="pillselectordropdown"
+                    placeholder="Colors"
+                    options={[
+                        { displayText: 'Red', value: 'red' },
+                        { displayText: 'Green', value: 'green' },
+                        { displayText: 'Blue', value: 'blue' },
+                    ]}
+                    component={PillSelectorDropdownField}
+                    validator={pillSelectorValidator}
+                    dropdownRenderer={options => options.map(option => (
+                        <DatalistItem key={option.value} style={{ color: option.value }}>
+                            {option.displayText}
+                        </DatalistItem>
+                    ))}
+                />
             </Form>
             <br />
             <br />

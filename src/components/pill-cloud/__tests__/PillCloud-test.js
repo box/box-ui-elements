@@ -3,8 +3,22 @@ import React from 'react';
 import PillCloud from '..';
 
 describe('components/pill-cloud/PillCloud', () => {
+    test('should render pills', () => {
+        const pills = [
+            { value: 1, displayText: 'Hello' },
+            { value: 2, displayText: 'There' },
+            { value: 3, displayText: 'Sir' },
+        ];
+        const wrapper = shallow(<PillCloud options={pills} />);
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should create a button for each child', () => {
-        const pills = [{ value: 1, text: 'Hello' }, { value: 2, text: 'There' }, { value: 3, text: 'Sir' }];
+        const pills = [
+            { value: 1, displayText: 'Hello' },
+            { value: 2, displayText: 'There' },
+            { value: 3, displayText: 'Sir' },
+        ];
         const wrapper = shallow(<PillCloud options={pills} />);
 
         expect(wrapper.find('.pill-cloud-button').length).toEqual(3);
@@ -17,14 +31,18 @@ describe('components/pill-cloud/PillCloud', () => {
     });
 
     test('should be able to handle 1 child', () => {
-        const pills = [{ value: 1, text: 'Hello' }];
+        const pills = [{ value: 1, displayText: 'Hello' }];
         const wrapper = shallow(<PillCloud options={pills} />);
 
         expect(wrapper.find('.pill-cloud-button').length).toEqual(1);
     });
 
     test('should add selected class to a selected pill when passed by reference', () => {
-        const pills = [{ value: 1, text: 'Hello' }, { value: 2, text: 'There' }, { value: 3, text: 'Sir' }];
+        const pills = [
+            { value: 1, displayText: 'Hello' },
+            { value: 2, displayText: 'There' },
+            { value: 3, displayText: 'Sir' },
+        ];
         const wrapper = shallow(<PillCloud options={pills} selectedOptions={[pills[1]]} />);
         const buttons = wrapper.find('.pill-cloud-button');
         expect(
@@ -36,8 +54,12 @@ describe('components/pill-cloud/PillCloud', () => {
     });
 
     test('should add selected class to a selected pill when passed by value', () => {
-        const pills = [{ value: 1, text: 'Hello' }, { value: 2, text: 'There' }, { value: 3, text: 'Sir' }];
-        const wrapper = shallow(<PillCloud options={pills} selectedOptions={[{ value: 3, text: 'Sir' }]} />);
+        const pills = [
+            { value: 1, displayText: 'Hello' },
+            { value: 2, displayText: 'There' },
+            { value: 3, displayText: 'Sir' },
+        ];
+        const wrapper = shallow(<PillCloud options={pills} selectedOptions={[{ value: 3, displayText: 'Sir' }]} />);
         const buttons = wrapper.find('.pill-cloud-button');
         expect(
             buttons
@@ -48,11 +70,11 @@ describe('components/pill-cloud/PillCloud', () => {
     });
 
     test('should pass selected child through to onSelect', () => {
-        const pills = [{ value: 1, text: 'Hello' }];
+        const pills = [{ value: 1, displayText: 'Hello' }];
         const wrapper = shallow(
             <PillCloud
                 onSelect={option => {
-                    expect(option.text).toEqual('Hello');
+                    expect(option.displayText).toEqual('Hello');
                     expect(option.value).toEqual(1);
                 }}
                 options={pills}

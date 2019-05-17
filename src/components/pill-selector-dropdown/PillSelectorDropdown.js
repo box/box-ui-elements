@@ -9,19 +9,21 @@ import Label from '../label';
 import SelectorDropdown from '../selector-dropdown';
 
 import PillSelector from './PillSelector';
-import type { SelectedOptions, SuggestedPillsFilter } from './flowTypes';
+import type { Option, OptionValue, SelectedOptions, SuggestedPillsFilter } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
 
 type Props = {
     /** If true, user can add pills not included in selector options */
-    allowCustomPills?: boolean,
+    allowCustomPills: boolean,
+    /** If true, pills with errors are parsed as pills also */
+    allowInvalidPills: boolean,
     /** `DatalistItem` components for dropdown options to select */
     children: React.Node,
     /** CSS class for the component */
     className?: string,
     /** If true, the input control is disabled so no more input can be made */
-    disabled?: boolean,
+    disabled: boolean,
     /** Index at which to insert a divider */
     dividerIndex?: number,
     /** Error message */
@@ -30,6 +32,8 @@ type Props = {
     inputProps: Object,
     /** Input label */
     label: React.Node,
+    /** Called when pill selector input is blurred */
+    onBlur: (event: SyntheticInputEvent<HTMLInputElement>) => void,
     /** Should update selectorOptions based on the given input value */
     onInput: Function,
     /** Should update selectedOptions given the option and index to remove */
@@ -57,44 +61,47 @@ type Props = {
     /** Validate the given input value, and update `error` prop if necessary */
     validateForError?: Function,
     /** Called to check if pill item data is valid. The `item` is passed in. */
-    validator?: Function,
+    validator: (option: Option | OptionValue) => boolean,
 };
 
 type State = {
     inputValue: string,
+    isInCompositionMode: boolean,
 };
 
 class PillSelectorDropdown extends React.Component<Props, State> {
     static defaultProps = {
         allowCustomPills: false,
+        allowInvalidPills: false,
         disabled: false,
         error: '',
         inputProps: {},
         label: '',
+        onBlur: noop,
         placeholder: '',
         selectedOptions: [],
         selectorOptions: [],
+        validator: () => true,
     };
 
-    state = { inputValue: '' };
+    state = { inputValue: '', isInCompositionMode: false };
 
     parsePills = () => {
         const { inputValue } = this.state;
-        const { parseItems, validator } = this.props;
-
+        const { allowInvalidPills, parseItems, validator } = this.props;
         let pills = parseItems ? parseItems(inputValue) : parseCSV(inputValue);
 
         if (!pills) {
             return [];
         }
 
-        if (validator) {
+        if (!allowInvalidPills) {
             pills = pills.filter(pill => validator(pill));
         }
 
-        // Keep the data format consistent with DatalistItem
         return pills.map(pill => ({
-            text: pill,
+            displayText: pill,
+            text: pill, // deprecated, left for backwards compatibility
             value: pill,
         }));
     };
@@ -127,19 +134,25 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         }
     };
 
-    handleBlur = () => {
+    handleBlur = (event: SyntheticInputEvent<HTMLInputElement>) => {
+        const { onBlur } = this.props;
         this.addPillsFromInput();
+        onBlur(event);
     };
 
-    handleInput = ({ target }: { target: HTMLInputElement | Object }) => {
+    handleInput = (event: SyntheticInputEvent<HTMLInputElement> | { target: HTMLInputElement | Object }) => {
+        const { target } = event;
         const { value } = target;
         this.setState({ inputValue: value });
-        this.props.onInput(value);
+        this.props.onInput(value, event);
     };
 
     handleEnter = (event: SyntheticEvent<>) => {
-        event.preventDefault();
-        this.addPillsFromInput();
+        const { isInCompositionMode } = this.state;
+        if (!isInCompositionMode) {
+            event.preventDefault();
+            this.addPillsFromInput();
+        }
     };
 
     handlePaste = () => {
@@ -163,8 +176,17 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         this.handleInput({ target: { value: '' } });
     };
 
+    handleCompositionStart = () => {
+        this.setState({ isInCompositionMode: true });
+    };
+
+    handleCompositionEnd = () => {
+        this.setState({ isInCompositionMode: false });
+    };
+
     render() {
         const {
+            allowInvalidPills,
             children,
             className,
             disabled,
@@ -180,6 +202,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
+            validator,
         } = this.props;
 
         return (
@@ -193,7 +216,10 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                     <Label text={label}>
                         <PillSelector
                             onChange={noop} // fix console error
+                            onCompositionEnd={this.handleCompositionEnd}
+                            onCompositionStart={this.handleCompositionStart}
                             {...inputProps}
+                            allowInvalidPills={allowInvalidPills}
                             disabled={disabled}
                             error={error}
                             onBlur={this.handleBlur}
@@ -206,6 +232,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             suggestedPillsData={suggestedPillsData}
                             suggestedPillsFilter={suggestedPillsFilter}
                             suggestedPillsTitle={suggestedPillsTitle}
+                            validator={validator}
                             value={this.state.inputValue}
                         />
                     </Label>

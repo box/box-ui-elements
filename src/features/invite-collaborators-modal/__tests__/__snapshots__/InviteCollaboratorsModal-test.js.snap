@@ -31,6 +31,7 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
 >
   <PillSelectorDropdown
     allowCustomPills={true}
+    allowInvalidPills={false}
     disabled={false}
     error=""
     inputProps={Object {}}
@@ -40,6 +41,7 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
         id="boxui.share.inviteFieldLabel"
       />
     }
+    onBlur={[Function]}
     onInput={[Function]}
     onRemove={[Function]}
     onSelect={[Function]}

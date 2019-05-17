@@ -4,8 +4,7 @@ import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 
 import Button from '../button';
-
-type Option = { text: string, value: number | string };
+import type { Option } from '../pill-selector-dropdown/flowTypes';
 
 type Props = {
     buttonProps?: Object,
@@ -26,11 +25,10 @@ const PillCloud = ({ options, onSelect, selectedOptions = [], buttonProps = {} }
                     onClick={onSelect ? () => onSelect(option) : undefined}
                     {...buttonProps}
                 >
-                    {option.text}
+                    {option.displayText}
                 </Button>
             ))}
     </div>
 );
 
-export type PillOption = Option;
 export default PillCloud;

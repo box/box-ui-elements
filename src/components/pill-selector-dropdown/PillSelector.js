@@ -7,7 +7,7 @@ import { KEYS } from '../../constants';
 
 import Pill from './Pill';
 import SuggestedPillsRow from './SuggestedPillsRow';
-import type { SelectedOptions, SuggestedPillsFilter } from './flowTypes';
+import type { Option, OptionValue, SelectedOptions, SuggestedPillsFilter } from './flowTypes';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -15,6 +15,7 @@ function stopDefaultEvent(event) {
 }
 
 type Props = {
+    allowInvalidPills: boolean,
     className?: string,
     disabled?: boolean,
     error?: React.Node,
@@ -27,6 +28,7 @@ type Props = {
     suggestedPillsData?: Array<Object>,
     suggestedPillsFilter?: SuggestedPillsFilter,
     suggestedPillsTitle?: string,
+    validator: (option: Option | OptionValue) => boolean,
 };
 
 type State = {
@@ -36,11 +38,13 @@ type State = {
 
 class PillSelector extends React.Component<Props, State> {
     static defaultProps = {
+        allowInvalidPills: false,
         disabled: false,
         error: '',
         inputProps: {},
         placeholder: '',
         selectedOptions: [],
+        validator: () => true,
     };
 
     state = {
@@ -151,6 +155,7 @@ class PillSelector extends React.Component<Props, State> {
     render() {
         const { isFocused, selectedIndex } = this.state;
         const {
+            allowInvalidPills,
             className,
             disabled,
             error,
@@ -163,6 +168,7 @@ class PillSelector extends React.Component<Props, State> {
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
+            validator,
             ...rest
         } = this.props;
         const suggestedPillsEnabled = suggestedPillsData && suggestedPillsData.length > 0;
@@ -184,12 +190,14 @@ class PillSelector extends React.Component<Props, State> {
                     role="button"
                     tabIndex={0}
                 >
-                    {selectedOptions.map((option, index) => (
+                    {selectedOptions.map((option: Option, index: number) => (
                         <Pill
+                            isValid={allowInvalidPills ? validator(option) : true}
                             isSelected={index === selectedIndex}
                             key={option.value}
                             onRemove={onRemove.bind(this, option, index)}
-                            text={option.text}
+                            // $FlowFixMe option.text is for backwards compatibility
+                            text={option.displayText || option.text}
                         />
                     ))}
                     {/* hidden element for focus/key events during pill selection */}

@@ -32,20 +32,12 @@ $pillTextColorDark: lighten($black, 31%);
         cursor: pointer;
         flex: none;
         font-size: 8px;
+        font-weight: 600;
         margin-left: 8px;
     }
 
     &.is-invalid {
-        background-color: $white;
-        color: $pillTextColorDark;
-
-        .close-btn {
-            color: $pillTextColorDark;
-        }
-
-        .pill-text {
-            border-bottom: 2px dotted $king-crimson;
-        }
+        background-color: $bdl-watermelon-red;
     }
 
     &.is-selected {

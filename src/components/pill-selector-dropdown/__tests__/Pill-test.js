@@ -27,4 +27,9 @@ describe('components/pill-selector-dropdown/Pill', () => {
 
         expect(wrapper.hasClass('is-selected')).toBe(true);
     });
+
+    test('should generate pill with invalid class when pill is not valid', () => {
+        const wrapper = shallow(<Pill isValid={false} isSelected onRemove={onRemoveStub} text="box" />);
+        expect(wrapper).toMatchSnapshot();
+    });
 });
