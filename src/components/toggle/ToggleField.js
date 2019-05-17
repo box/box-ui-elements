@@ -8,7 +8,7 @@ import type { ToggleProps } from './Toggle';
 
 type Props = ToggleProps & FieldProps;
 
-const ToggleField = ({ field, ...rest }: Props) => {
+const ToggleField = ({ field, form, ...rest }: Props) => {
     const { value } = field;
     return <TogglePrimitive {...field} {...rest} isOn={!!value} />;
 };
