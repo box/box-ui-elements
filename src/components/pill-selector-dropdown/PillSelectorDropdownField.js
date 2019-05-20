@@ -101,7 +101,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
             placeholder,
             validator,
         } = this.props;
-        const { name, value = [] } = field;
+        const { name, value = [] }: { name: string, value: Array<Option> } = field;
         const { errors, touched } = form;
         const isTouched = getProp(touched, name);
         const error = isTouched ? getProp(errors, name) : null;
