@@ -1054,10 +1054,9 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: AdditionalVersionInfo = {}): void => {
         const { onVersionChange }: Props = this.props;
-        const { file }: State = this.state;
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
-        onVersionChange(version, { ...additionalVersionInfo, currentVersionId: getProp(file, 'file_version.id') });
+        onVersionChange(version, additionalVersionInfo);
         this.setState({
             selectedVersion: version,
         });

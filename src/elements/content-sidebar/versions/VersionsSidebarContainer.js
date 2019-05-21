@@ -50,11 +50,13 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     componentDidUpdate({ versionId: prevVersionId }: Props) {
         const { onVersionChange, versionId } = this.props;
+        const { versions } = this.state;
 
         // Forward the current version id that is passed in via the wrapping route
         if (prevVersionId !== versionId) {
             onVersionChange(this.findVersion(versionId), {
                 updateVersionToCurrent: this.updateVersionToCurrent,
+                currentVersionId: versions[0].id,
             });
         }
     }
