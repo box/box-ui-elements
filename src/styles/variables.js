@@ -61,6 +61,7 @@ export const blueSteel = '#2c3e50'; // blue-steel
 export const betterBlack = '#494949'; // better-black
 export const downtownGrey = '#999ea4'; // downtown-grey
 export const twos = '#222'; // twos
+export const threes = '#333'; // threes
 export const fours = '#444'; // fours
 export const sevens = '#777'; // sevens
 export const eights = '#888'; // eights
