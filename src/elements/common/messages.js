@@ -1023,10 +1023,10 @@ const messages = defineMessages({
         defaultMessage: 'Rejected {dateTime}',
         description: 'Rejected task status, where dateTime is a readable time like "Today at 2pm"',
     },
-    tasksFeedStatusAccepted: {
-        id: 'be.tasks.status.accepted',
-        defaultMessage: 'Accepted {dateTime}',
-        description: 'Accepted task status, where dateTime is a readable time like "Today at 2pm"',
+    tasksFeedStatusApproved: {
+        id: 'be.tasks.status.approved',
+        defaultMessage: 'Approved {dateTime}',
+        description: 'Approved task status, where dateTime is a readable time like "Today at 2pm"',
     },
     tasksFeedStatusCompleted: {
         id: 'be.tasks.status.completed',

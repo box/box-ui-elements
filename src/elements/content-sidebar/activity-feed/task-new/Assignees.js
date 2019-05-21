@@ -20,7 +20,7 @@ type Props = {|
 |} & InjectIntlProvidedProps;
 
 const statusMessages = {
-    [TASK_NEW_APPROVED]: messages.tasksFeedStatusAccepted,
+    [TASK_NEW_APPROVED]: messages.tasksFeedStatusApproved,
     [TASK_NEW_REJECTED]: messages.tasksFeedStatusRejected,
     [TASK_NEW_COMPLETED]: messages.tasksFeedStatusCompleted,
     [TASK_NEW_NOT_STARTED]: null,
