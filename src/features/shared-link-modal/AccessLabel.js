@@ -9,9 +9,14 @@ type Props = {
     accessLevel: string,
     enterpriseName?: string,
     itemType: string,
+    messageOverride?: React.Node,
 };
 
-const AccessLabel = ({ accessLevel, enterpriseName, itemType }: Props) => {
+const AccessLabel = ({ accessLevel, enterpriseName, itemType, messageOverride }: Props) => {
+    if (messageOverride) {
+        return messageOverride;
+    }
+
     switch (accessLevel) {
         case PEOPLE_WITH_LINK:
             return <FormattedMessage {...messages.peopleWithTheLink} />;

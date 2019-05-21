@@ -39,3 +39,5 @@ exports[`features/shared-link-modal/AccessLabel render() should render correctly
   id="boxui.share.peopleInThisFile"
 />
 `;
+
+exports[`features/shared-link-modal/AccessLabel render() should render correctly 6`] = `"Hurrah"`;

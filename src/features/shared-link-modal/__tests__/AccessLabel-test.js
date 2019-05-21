@@ -39,12 +39,19 @@ describe('features/shared-link-modal/AccessLabel', () => {
                 enterpriseName: undefined,
                 itemType: 'file',
             },
-        ].forEach(({ accessLevel, enterpriseName, itemType }) => {
+            {
+                accessLevel: PEOPLE_IN_ITEM,
+                enterpriseName: undefined,
+                itemType: 'file',
+                messageOverride: 'Hurrah',
+            },
+        ].forEach(({ accessLevel, enterpriseName, itemType, messageOverride }) => {
             test('should render correctly', () => {
                 const wrapper = getWrapper({
                     accessLevel,
                     enterpriseName,
                     itemType,
+                    messageOverride,
                 });
 
                 expect(wrapper).toMatchSnapshot();
