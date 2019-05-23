@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`icons/states/IconShieldProduct should override color in svg when specified 1`] = `
+<AccessibleSVG
+  className="bdl-IconShieldProduct"
+  height={62}
+  viewBox="0 0 53 62"
+  width={53}
+>
+  <g
+    fill="none"
+    fillRule="evenodd"
+    stroke="none"
+    strokeWidth="1"
+  >
+    <g
+      transform="translate(-275.000000, -299.000000)"
+    >
+      <g
+        transform="translate(276.000000, 287.000000)"
+      >
+        <g
+          transform="translate(8.000000, 0.000000)"
+        />
+        <g
+          transform="translate(0.000000, 13.000000)"
+        >
+          <path
+            d="M0,4.61538462 C0,4.61538462 12.75,11.9230769 25.5,0 C38.25,11.9230769 51,4.61538462 51,4.61538462 L51,45.5769231 L25.5,60 L0,45.5769231 L0,4.61538462 Z"
+            fill="#fff"
+            stroke="#bdf"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
+          <path
+            d="M4,6 C14.5,15.5384615 25,9.69230769 25,9.69230769 L25,42.4615385 L4,54 C4,54 4,26.6991132 4,6 Z"
+            fill="#bdf"
+            fillOpacity="0.3"
+            transform="translate(14.500000, 30.000000) scale(-1, 1) translate(-14.500000, -30.000000) "
+          />
+          <path
+            d="M43,18 L43,38"
+            stroke="#bdf"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
+        </g>
+      </g>
+    </g>
+  </g>
+</AccessibleSVG>
+`;
