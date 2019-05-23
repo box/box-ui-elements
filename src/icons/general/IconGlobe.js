@@ -2,6 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
+import { bdlNeutral03 } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -12,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconGlobe = ({ className = '', color = '#000', height = 16, title, width = 16 }: Props) => (
+const IconGlobe = ({ className = '', color = bdlNeutral03, height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={`icon-globe ${className}`}
         height={height}
@@ -20,10 +21,9 @@ const IconGlobe = ({ className = '', color = '#000', height = 16, title, width =
         viewBox="0 0 16 16"
         width={width}
     >
-        <circle className="fill-color" cx="8" cy="8" fill={color} r="8" />
         <path
-            d="M8 1.5C4.4 1.5 1.5 4.4 1.5 8s2.9 6.5 6.5 6.5 6.5-2.9 6.5-6.5S11.6 1.5 8 1.5zm-.7 11.7c-2.5-.4-4.5-2.5-4.5-5.2 0-.4.1-.8.1-1.2L6 9.9v.7c0 .7.6 1.3 1.3 1.3v1.3zm4.5-1.7c-.2-.5-.7-.9-1.2-.9h-.7v-2c0-.3-.2-.6-.6-.6H5.4V6.7h1.3c.4 0 .7-.3.7-.7V4.8h1.3c.7 0 1.3-.6 1.3-1.3v-.3c1.9.8 3.2 2.6 3.2 4.8 0 1.4-.5 2.6-1.4 3.5z"
-            fill="#FFF"
+            d="M8 0C3.57 0 0 3.57 0 8s3.57 8 8 8 8-3.57 8-8-3.57-8-8-8zm-.862 14.4C4.062 13.908 1.6 11.323 1.6 8c0-.492.123-.985.123-1.477l3.815 3.815v.862c0 .862.739 1.6 1.6 1.6v1.6zm5.539-2.092c-.246-.616-.862-1.108-1.477-1.108h-.862V8.738c0-.369-.246-.738-.738-.738H4.8V6.4h1.6c.492 0 .862-.37.862-.862V4.062h1.6c.861 0 1.6-.739 1.6-1.6v-.37C12.8 3.077 14.4 5.292 14.4 8c0 1.723-.615 3.2-1.723 4.308z"
+            fill={color}
         />
     </AccessibleSVG>
 );
