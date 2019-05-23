@@ -16,6 +16,7 @@ import Tooltip from '../../components/tooltip';
 import InlineNotice from '../../components/inline-notice';
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import commonMessages from '../../common/messages';
+import { emailValidator } from '../../utils/validators';
 import type { inlineNoticeType } from '../../common/box-types';
 
 import ContactsField from './ContactsField';
@@ -195,9 +196,7 @@ class EmailForm extends React.Component<Props, State> {
     };
 
     isValidEmail = (text: string): boolean => {
-        // TODO-AH: make this a constant somewhere
-        const emailValidation = /^[^\s<>@,]+@[^\s<>@,/\\]+\.[^\s<>@,]+$/i;
-        return emailValidation.test(text);
+        return emailValidator(text);
     };
 
     render() {
