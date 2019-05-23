@@ -15,9 +15,9 @@ type Props = {
     width?: number,
 };
 
-const IconShieldProduct = ({ className, color = boxBlue, height = 62, opacity = 0.2, width = 53, title }: Props) => (
+const IconShield = ({ className, color = boxBlue, height = 62, opacity = 0.2, width = 53, title }: Props) => (
     <AccessibleSVG
-        className={classNames('bdl-IconShieldProduct', className)}
+        className={classNames('bdl-IconShield', className)}
         height={height}
         title={title}
         viewBox="0 0 53 62"
@@ -38,4 +38,4 @@ const IconShieldProduct = ({ className, color = boxBlue, height = 62, opacity = 
     </AccessibleSVG>
 );
 
-export default IconShieldProduct;
+export default IconShield;
