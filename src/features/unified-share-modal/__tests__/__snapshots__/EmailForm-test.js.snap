@@ -515,3 +515,97 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   </ModalActions>
 </form>
 `;
+
+exports[`features/unified-share-modal/EmailForm render() should render default component with secruity indicator notes when expanded and has external users selected 1`] = `
+<form
+  className="is-expanded"
+  onSubmit={[Function]}
+>
+  <div
+    className="tooltip-target"
+  >
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      isShown={true}
+      position="middle-right"
+      showCloseButton={true}
+      text={
+        <FormattedMessage
+          defaultMessage="Share this item with coworkers by entering their email addresses"
+          id="boxui.unifiedShare.enterEmailAddressesCalloutText"
+        />
+      }
+      theme="callout"
+    >
+      <ContactsField
+        disabled={false}
+        error=""
+        fieldRef={
+          Object {
+            "current": null,
+          }
+        }
+        getContacts={[MockFunction]}
+        onContactAdd={[Function]}
+        onContactRemove={[Function]}
+        onInput={[Function]}
+        selectedContacts={Array []}
+        validateForError={[Function]}
+        validator={[Function]}
+      />
+    </Tooltip>
+  </div>
+  <TextArea
+    label={
+      <FormattedMessage
+        defaultMessage="Message"
+        id="boxui.unifiedShare.message"
+      />
+    }
+    onChange={[Function]}
+    rows={3}
+    value=""
+  />
+  <div
+    className="security-indicator-note"
+  >
+    <span
+      className="security-indicator-icon-globe"
+    >
+      <IconGlobe
+        height={12}
+        width={12}
+      />
+    </span>
+    <FormattedMessage
+      defaultMessage="This content will be shared with external collaborators."
+      id="boxui.unifiedShare.contentSharedWithExternalCollaborators"
+    />
+  </div>
+  <ModalActions>
+    <Button
+      isDisabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      <FormattedMessage
+        defaultMessage="Cancel"
+        id="boxui.core.cancel"
+      />
+    </Button>
+    <PrimaryButton
+      isDisabled={true}
+      isLoading={false}
+      type="submit"
+    >
+      <FormattedMessage
+        defaultMessage="Send"
+        id="boxui.core.send"
+      />
+    </PrimaryButton>
+  </ModalActions>
+</form>
+`;

@@ -31,6 +31,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "x@example.com",
         "id": "12345",
+        "isExternalUser": false,
         "text": "X User",
         "type": "group",
         "value": "x@example.com",
@@ -38,6 +39,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "y@example.com",
         "id": "23456",
+        "isExternalUser": true,
         "text": "Y User",
         "type": "user",
         "value": "y@example.com",
@@ -45,6 +47,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "z@example.com",
         "id": "34567",
+        "isExternalUser": false,
         "text": "Z User",
         "type": "user",
         "value": "z@example.com",
@@ -52,6 +55,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "a@example.com",
         "id": "12",
+        "isExternalUser": true,
         "text": "a b",
         "type": "user",
         "value": "a@example.com",
@@ -59,6 +63,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "b@example.com",
         "id": "13",
+        "isExternalUser": false,
         "text": "a b",
         "type": "user",
         "value": "b@example.com",
@@ -66,6 +71,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "c@example.com",
         "id": "14",
+        "isExternalUser": true,
         "text": "a c",
         "type": "user",
         "value": "c@example.com",
@@ -73,6 +79,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "d@example.com",
         "id": "14",
+        "isExternalUser": false,
         "text": "a d",
         "type": "user",
         "value": "d@example.com",
@@ -80,6 +87,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "email": "e@example.com",
         "id": "14",
+        "isExternalUser": true,
         "text": "a e",
         "type": "user",
         "value": "e@example.com",
@@ -162,6 +170,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       Object {
         "email": "x@example.com",
         "id": "12345",
+        "isExternalUser": false,
         "text": "X User",
         "type": "group",
         "value": "x@example.com",
@@ -169,6 +178,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       Object {
         "email": "y@example.com",
         "id": "23456",
+        "isExternalUser": true,
         "text": "Y User",
         "type": "user",
         "value": "y@example.com",
@@ -176,6 +186,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       Object {
         "email": "z@example.com",
         "id": "34567",
+        "isExternalUser": false,
         "text": "Z User",
         "type": "user",
         "value": "z@example.com",
