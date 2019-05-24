@@ -284,6 +284,18 @@ describe('features/unified-share-modal/EmailForm', () => {
                 expectedValue: false,
             },
             {
+                email: 'foo@bar.dog',
+                expectedValue: true,
+            },
+            {
+                email: 'foo@bar.design',
+                expectedValue: true,
+            },
+            {
+                email: 'foo@bar.dev',
+                expectedValue: true,
+            },
+            {
                 email: 'test@@example.com',
                 expectedValue: false,
             },
