@@ -29,6 +29,7 @@
     .collapsible-card-header-caret {
         position: absolute;
         right: 0;
+        transition: transform .25s;
     }
 
     .btn-plain.collapsible-card-title {
@@ -42,6 +43,10 @@
 
     .collapsible-card-content {
         padding: 10px 0;
+    }
+
+    &.is-open .collapsible-card-header-caret {
+        transform: rotateZ(180deg);
     }
 
     &.is-bordered {
