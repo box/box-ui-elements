@@ -1,6 +1,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    contentSharedWithExternalCollaborators: {
+        defaultMessage: 'This content will be shared with external collaborators.',
+        description: 'Text shown in share modal when there is at least one external collaborators',
+        id: 'boxui.unifiedShare.contentSharedWithExternalCollaborators',
+    },
     disabledShareLinkPermission: {
         defaultMessage: 'This option isn’t available for this item due to a security restriction or classification.',
         description:

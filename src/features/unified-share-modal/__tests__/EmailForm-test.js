@@ -316,6 +316,11 @@ describe('features/unified-share-modal/EmailForm', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
+        test('should render default component with secruity indicator notes when expanded and has external users selected', () => {
+            const wrapper = getWrapper({ isExpanded: true, isExternalUserSelected: true });
+            expect(wrapper).toMatchSnapshot();
+        });
+
         test('should render default component when not expanded', () => {
             const wrapper = getWrapper({ isExpanded: false });
             expect(wrapper).toMatchSnapshot();
