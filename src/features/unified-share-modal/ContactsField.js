@@ -93,10 +93,11 @@ class ContactsField extends React.Component<Props, State> {
                     // filter contacts who have already been selected
                     ({ email, id }) => !selectedContacts.find(({ value }) => value === email || value === id),
                 )
-                .map<Object>(({ email, id, name, type }) => ({
+                .map<Object>(({ email, id, isExternalUser, name, type }) => ({
                     // map to standardized DatalistItem format
                     email,
                     id,
+                    isExternalUser,
                     text: name,
                     type,
                     value: email || id, // if email doesn't exist, contact is a group, use id

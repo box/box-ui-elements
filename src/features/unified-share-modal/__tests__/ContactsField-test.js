@@ -9,18 +9,21 @@ describe('features/unified-share-modal/ContactsField', () => {
         {
             email: 'x@example.com',
             id: '12345',
+            isExternalUser: false,
             name: 'X User',
             type: 'group',
         },
         {
             email: 'y@example.com',
             id: '23456',
+            isExternalUser: true,
             name: 'Y User',
             type: 'user',
         },
         {
             email: 'z@example.com',
             id: '34567',
+            isExternalUser: false,
             name: 'Z User',
             type: 'user',
         },
@@ -30,6 +33,7 @@ describe('features/unified-share-modal/ContactsField', () => {
         {
             email: 'x@example.com',
             id: '12345',
+            isExternalUser: false,
             text: 'X User',
             type: 'group',
             value: 'x@example.com',
@@ -37,6 +41,7 @@ describe('features/unified-share-modal/ContactsField', () => {
         {
             email: 'y@example.com',
             id: '23456',
+            isExternalUser: true,
             text: 'Y User',
             type: 'user',
             value: 'y@example.com',
@@ -44,6 +49,7 @@ describe('features/unified-share-modal/ContactsField', () => {
         {
             email: 'z@example.com',
             id: '34567',
+            isExternalUser: false,
             text: 'Z User',
             type: 'user',
             value: 'z@example.com',
@@ -261,30 +267,35 @@ describe('features/unified-share-modal/ContactsField', () => {
             {
                 email: 'a@example.com',
                 id: '12',
+                isExternalUser: true,
                 name: 'a b',
                 type: 'user',
             },
             {
                 email: 'b@example.com',
                 id: '13',
+                isExternalUser: false,
                 name: 'a b',
                 type: 'user',
             },
             {
                 email: 'c@example.com',
                 id: '14',
+                isExternalUser: true,
                 name: 'a c',
                 type: 'user',
             },
             {
                 email: 'd@example.com',
                 id: '14',
+                isExternalUser: false,
                 name: 'a d',
                 type: 'user',
             },
             {
                 email: 'e@example.com',
                 id: '14',
+                isExternalUser: true,
                 name: 'a e',
                 type: 'user',
             },

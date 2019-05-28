@@ -284,6 +284,18 @@ describe('features/unified-share-modal/EmailForm', () => {
                 expectedValue: false,
             },
             {
+                email: 'foo@bar.dog',
+                expectedValue: true,
+            },
+            {
+                email: 'foo@bar.design',
+                expectedValue: true,
+            },
+            {
+                email: 'foo@bar.dev',
+                expectedValue: true,
+            },
+            {
                 email: 'test@@example.com',
                 expectedValue: false,
             },
@@ -301,6 +313,11 @@ describe('features/unified-share-modal/EmailForm', () => {
     describe('render()', () => {
         test('should render default component when expanded', () => {
             const wrapper = getWrapper({ isExpanded: true });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render default component with secruity indicator notes when expanded and has external users selected', () => {
+            const wrapper = getWrapper({ isExpanded: true, isExternalUserSelected: true });
             expect(wrapper).toMatchSnapshot();
         });
 
