@@ -50,13 +50,12 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     componentDidUpdate({ versionId: prevVersionId }: Props) {
         const { onVersionChange, versionId } = this.props;
-        const { versions } = this.state;
 
         // Forward the current version id that is passed in via the wrapping route
         if (prevVersionId !== versionId) {
             onVersionChange(this.findVersion(versionId), {
                 updateVersionToCurrent: this.updateVersionToCurrent,
-                currentVersionId: versions[0] ? versions[0].id : null,
+                currentVersionId: this.getCurrentVersionId(),
             });
         }
     }
@@ -193,6 +192,11 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         return versions.find(version => version.id === versionId);
     };
 
+    getCurrentVersionId = (): ?string => {
+        const { versions } = this.state;
+        return versions[0] ? versions[0].id : null;
+    };
+
     deleteVersion = (versionId: string): Promise<null> => {
         const { api, fileId } = this.props;
         const { permissions = {} } = this.findVersion(versionId) || {};
@@ -244,8 +248,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     updateVersionToCurrent = (): void => {
-        const { versions } = this.state;
-        const versionId = versions[0] ? versions[0].id : null;
+        const versionId = this.getCurrentVersionId();
         this.updateVersion(versionId);
     };
 
