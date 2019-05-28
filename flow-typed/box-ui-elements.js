@@ -985,6 +985,7 @@ type NavigateOptions = {
 };
 
 type AdditionalVersionInfo = {
+    currentVersionId?: ?string,
     updateVersionToCurrent: () => void,
 };
 
