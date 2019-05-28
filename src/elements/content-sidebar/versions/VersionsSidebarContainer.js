@@ -56,7 +56,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         if (prevVersionId !== versionId) {
             onVersionChange(this.findVersion(versionId), {
                 updateVersionToCurrent: this.updateVersionToCurrent,
-                currentVersionId: versions[0].id,
+                currentVersionId: versions[0] ? versions[0].id : null,
             });
         }
     }
