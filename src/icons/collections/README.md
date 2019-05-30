@@ -2,21 +2,24 @@
 
 ```jsx
 const IconsExample = require('../../../examples/src/IconsExample').default;
+const IconCollections = require('./IconCollections').default;
+const IconCollectionsFilled = require('./IconCollectionsFilled').default;
+const IconCollectionsAdd = require('./IconCollectionsAdd').default;
 
 const icons = [
     {
         name: 'IconCollections',
-        component: require('./IconCollections').default,
+        component: IconCollections,
     },
     {
         name: 'IconCollectionsFilled',
-        component: require('./IconCollectionsFilled').default,
+        component: IconCollectionsFilled,
     },
     {
         name: 'IconCollectionsAdd',
-        component: require('./IconCollectionsAdd').default,
+        component: IconCollectionsAdd,
     },
 ];
 
-<IconsExample icons={icons} />;
+<IconsExample icons={icons} />
 ```
