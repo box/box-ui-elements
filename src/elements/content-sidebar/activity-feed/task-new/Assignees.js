@@ -8,8 +8,10 @@ import Tooltip from '../../../../components/tooltip';
 import PlainButton from '../../../../components/plain-button';
 import ReadableTime from '../../../../components/time/ReadableTime';
 import messages from '../../../common/messages';
-import AssigneeStatus from './AssigneeStatus';
+import AssigneeAvatar from './AssigneeAvatar';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
+
+import './Assignees.scss';
 
 const MAX_AVATARS = 3;
 
@@ -73,14 +75,14 @@ class Assignees extends React.Component<Props> {
                             />
                         }
                     >
-                        <AssigneeStatus status={status} user={target} getAvatarUrl={getAvatarUrl} />
+                        <AssigneeAvatar status={status} user={target} getAvatarUrl={getAvatarUrl} />
                     </Tooltip>
                 );
             });
         const allAssignees = entries.map(({ id, target, status, completed_at: completedAt }) => {
             return (
                 <li key={id} className="bcs-task-assignment-list-item">
-                    <AssigneeStatus
+                    <AssigneeAvatar
                         status={status}
                         className="bcs-task-assignment-list-item-avatar"
                         user={target}

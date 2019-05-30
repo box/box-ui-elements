@@ -1,0 +1,8 @@
+@mixin avatar-badge-icon {
+    background: $white;
+    border: 1px solid $white;
+    border-radius: 50%;
+    bottom: 0;
+    position: absolute;
+    right: 0;
+}
