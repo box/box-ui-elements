@@ -8,10 +8,7 @@ describe('icons/collections/IconCollectionsAdd', () => {
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
 
-        expect(wrapper.is('AccessibleSVG')).toBe(true);
-        expect(wrapper.hasClass('icon-collections-add')).toBe(true);
-        expect(wrapper.prop('height')).toEqual(32);
-        expect(wrapper.prop('width')).toEqual(32);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render icon with specified class', () => {
