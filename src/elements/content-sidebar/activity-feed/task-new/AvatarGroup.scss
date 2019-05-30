@@ -1,20 +1,18 @@
 @import '../../../common/variables';
 @import './vars';
 
-$assignment-avatar-spacing: 4px;
+$avatar-spacing: 4px;
 
-.bcs-task-assignment-container {
-    .bcs-task-assignments {
-        display: flex;
-        margin: 10px 0;
-    }
+.bcs-avatar-group {
+    display: flex;
+    margin: 10px 0;
 
-    .bcs-task-assignment-avatar {
+    .bcs-avatar-group-avatar {
         height: 32px;
         width: 32px;
     }
 
-    .bcs-task-assignment-count {
+    .bcs-avatar-group-overflow-count {
         align-items: center;
         background: $bdl-neutral-02;
         border-radius: 100%;
@@ -24,9 +22,26 @@ $assignment-avatar-spacing: 4px;
         font-weight: bold;
         justify-content: center;
     }
+
+    .bcs-avatar-group-avatar-container {
+        margin-left: $avatar-spacing;
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+    }
+
+    .bcs-avatar-group-overflow-count-container {
+        margin-left: $avatar-spacing;
+
+        &:hover,
+        &:active {
+            margin-left: $avatar-spacing;
+        }
+    }
 }
 
-.bcs-task-assignment-list-flyout {
+.bcs-avatar-group-list-flyout {
     max-width: 100%;
     width: 280px;
 
@@ -36,62 +51,57 @@ $assignment-avatar-spacing: 4px;
         padding: 0;
     }
 
-    .bcs-task-assignment-list {
+    .bcs-avatar-group-list {
         max-height: 215px;
         overflow: hidden auto;
         overflow-y: overlay; // nicer scroll bar for Blink engines only
     }
 
-    .bcs-task-assignment-list-title {
+    .bcs-avatar-group-list-title {
         font-size: 15px;
         margin: 0 0 12px 0;
     }
 
-    .bcs-task-assignment-list-item {
+    .bcs-avatar-group-list-item {
         align-items: center;
         display: flex;
         margin: 6px 0 0 0;
         padding: 3px 0;
 
-        .bcs-task-assignment-details-status {
+        .bcs-avatar-group-details-status {
             color: $bdl-neutral-02;
         }
     }
 
-    .bcs-task-assignment-list-item-avatar {
+    .bcs-avatar-group-list-item-avatar {
         margin-right: 10px;
     }
 
-    .bcs-task-assignment-list-item-details {
+    .bcs-avatar-group-list-item-details {
         line-height: 16px;
     }
 
-    .bcs-task-assignment-list-item-status {
+    .bcs-avatar-group-list-item-status {
         color: $bdl-neutral-02;
     }
 
-    .bcs-task-assignment-tooltip {
+    .bcs-avatar-group-tooltip {
         text-align: center;
 
-        .bcs-task-assignment-details-name {
+        .bcs-avatar-group-details-name {
             font-weight: bold;
         }
     }
 }
 
-// rules used in both .bcs-task-assignment-container and .bcs-task-assignment-list-flyout
-.bcs-task-assignment-status-icon {
+// rules used in both .bcs-avatar-group and .bcs-avatar-group-list-flyout
+.bcs-avatar-group-status-icon {
     @include avatar-badge-icon;
 }
 
-.bcs-task-assignment-avatar-container {
+.bcs-avatar-group-avatar-container {
     display: inline-block;
     height: 32px;
     position: relative;
     width: 32px;
-
-    & + .bcs-task-assignment-avatar-container,
-    & + .bcs-task-assignment-count-container {
-        margin-left: $assignment-avatar-spacing;
-    }
 }

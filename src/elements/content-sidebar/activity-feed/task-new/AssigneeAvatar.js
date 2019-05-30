@@ -31,14 +31,14 @@ const StatusIcon = ({ status, ...rest }: { status: TaskCollabStatus }) => {
 
 const AssigneeAvatar = React.memo<Props>(({ user, status, getAvatarUrl, className, ...rest }: Props) => (
     <div
-        className={classNames('bcs-task-assignment-avatar-container', className)}
+        className={classNames('bcs-avatar-group-avatar-container', className)}
         data-testid="task-assignment-status"
         {...rest}
     >
-        <Avatar className="bcs-task-assignment-avatar" user={user} getAvatarUrl={getAvatarUrl} />
+        <Avatar className="bcs-avatar-group-avatar" user={user} getAvatarUrl={getAvatarUrl} />
         <StatusIcon
             status={status}
-            className={`bcs-task-assignment-status-icon ${camelCase(status)}`}
+            className={`bcs-avatar-group-status-icon ${camelCase(status)}`}
             height={12}
             width={12}
             title={<FormattedMessage {...messages.completedAssignment} />}

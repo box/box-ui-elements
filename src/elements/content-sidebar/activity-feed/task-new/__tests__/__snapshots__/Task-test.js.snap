@@ -56,7 +56,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     <div
       className="bcs-task-content"
     >
-      <Assignees
+      <AvatarGroup
         assignees={
           Object {
             "entries": Array [
