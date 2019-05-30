@@ -43,7 +43,6 @@ const ItemProperties = ({
         <dl className="item-properties">
             {description || onDescriptionChange ? (
                 <React.Fragment>
-                    {/* <FormattedMessage tagName="dt" {...messages.description} /> */}
                     <FormattedMessage {...messages.description}>
                         {text => <dt id={descriptionId}>{text}</dt>}
                     </FormattedMessage>
