@@ -26,7 +26,7 @@ const AsyncLoad = (asyncProps: Props = {}) => {
             DEFAULT_INITIAL_DELAY,
             DEFAULT_BACKOFF_FACTOR,
         );
-    const LazyComponent = React.lazy(asyncLoadWithRetry);
+    const LazyComponent = React.lazy(() => asyncProps.loader().catch(asyncLoadWithRetry));
 
     return class extends React.Component<Object, State> {
         state = {
