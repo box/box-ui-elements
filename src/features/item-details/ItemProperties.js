@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import uniqueid from 'lodash/uniqueId';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import ClassificationProperty from '../classification/ClassificationProperty';
@@ -35,82 +36,88 @@ const ItemProperties = ({
     trashedAt,
     uploader,
     url,
-}) => (
-    <dl className="item-properties">
-        {description || onDescriptionChange ? (
-            <React.Fragment>
-                <FormattedMessage tagName="dt" {...messages.description} />
-                <dd>
-                    {onDescriptionChange ? (
-                        <EditableDescription
-                            onDescriptionChange={onDescriptionChange}
-                            textAreaProps={descriptionTextareaProps}
-                            value={description}
-                        />
-                    ) : (
-                        <ReadonlyDescription value={description} />
-                    )}
-                </dd>
-            </React.Fragment>
-        ) : null}
-        {!!url && (
-            <React.Fragment>
-                <FormattedMessage tagName="dt" {...messages.url} />
-                <dd>{onValidURLChange ? <EditableURL onValidURLChange={onValidURLChange} value={url} /> : url}</dd>
-            </React.Fragment>
-        )}
-        {owner ? (
-            <React.Fragment>
-                <FormattedMessage tagName="dt" {...messages.owner} />
-                <dd>{owner}</dd>
-            </React.Fragment>
-        ) : null}
-        {enterpriseOwner ? (
-            <React.Fragment>
-                <FormattedMessage tagName="dt" {...messages.enterpriseOwner} />
-                <dd>{enterpriseOwner}</dd>
-            </React.Fragment>
-        ) : null}
-        {uploader ? (
-            <React.Fragment>
-                <FormattedMessage tagName="dt" {...messages.uploader} />
-                <dd>{uploader}</dd>
-            </React.Fragment>
-        ) : null}
-        {createdAt ? (
-            <React.Fragment>
-                <FormattedMessage tagName="dt" {...messages.created} />
-                <dd>
-                    <FormattedDate value={new Date(createdAt)} {...datetimeOptions} />
-                </dd>
-            </React.Fragment>
-        ) : null}
-        {modifiedAt ? (
-            <React.Fragment>
-                <FormattedMessage tagName="dt" {...messages.modified} />
-                <dd>
-                    <FormattedDate value={new Date(modifiedAt)} {...datetimeOptions} />
-                </dd>
-            </React.Fragment>
-        ) : null}
-        {size ? (
-            <React.Fragment>
-                <FormattedMessage tagName="dt" {...messages.size} />
-                <dd>{size}</dd>
-            </React.Fragment>
-        ) : null}
-        {trashedAt ? (
-            <React.Fragment>
-                <FormattedMessage tagName="dt" {...messages.deleted} />
-                <dd>
-                    <FormattedDate value={new Date(trashedAt)} {...datetimeOptions} />
-                </dd>
-            </React.Fragment>
-        ) : null}
-        <RetentionPolicy {...retentionPolicyProps} />
-        <ClassificationProperty {...classificationProps} />
-    </dl>
-);
+}) => {
+    const descriptionId = uniqueid('description_');
+
+    return (
+        <dl className="item-properties">
+            {description || onDescriptionChange ? (
+                <React.Fragment>
+                    <FormattedMessage {...messages.description}>
+                        {text => <dt id={descriptionId}>{text}</dt>}
+                    </FormattedMessage>
+                    <dd>
+                        {onDescriptionChange ? (
+                            <EditableDescription
+                                onDescriptionChange={onDescriptionChange}
+                                textAreaProps={{ ...descriptionTextareaProps, 'aria-labelledby': descriptionId }}
+                                value={description}
+                            />
+                        ) : (
+                            <ReadonlyDescription value={description} />
+                        )}
+                    </dd>
+                </React.Fragment>
+            ) : null}
+            {!!url && (
+                <React.Fragment>
+                    <FormattedMessage tagName="dt" {...messages.url} />
+                    <dd>{onValidURLChange ? <EditableURL onValidURLChange={onValidURLChange} value={url} /> : url}</dd>
+                </React.Fragment>
+            )}
+            {owner ? (
+                <React.Fragment>
+                    <FormattedMessage tagName="dt" {...messages.owner} />
+                    <dd>{owner}</dd>
+                </React.Fragment>
+            ) : null}
+            {enterpriseOwner ? (
+                <React.Fragment>
+                    <FormattedMessage tagName="dt" {...messages.enterpriseOwner} />
+                    <dd>{enterpriseOwner}</dd>
+                </React.Fragment>
+            ) : null}
+            {uploader ? (
+                <React.Fragment>
+                    <FormattedMessage tagName="dt" {...messages.uploader} />
+                    <dd>{uploader}</dd>
+                </React.Fragment>
+            ) : null}
+            {createdAt ? (
+                <React.Fragment>
+                    <FormattedMessage tagName="dt" {...messages.created} />
+                    <dd>
+                        <FormattedDate value={new Date(createdAt)} {...datetimeOptions} />
+                    </dd>
+                </React.Fragment>
+            ) : null}
+            {modifiedAt ? (
+                <React.Fragment>
+                    <FormattedMessage tagName="dt" {...messages.modified} />
+                    <dd>
+                        <FormattedDate value={new Date(modifiedAt)} {...datetimeOptions} />
+                    </dd>
+                </React.Fragment>
+            ) : null}
+            {size ? (
+                <React.Fragment>
+                    <FormattedMessage tagName="dt" {...messages.size} />
+                    <dd>{size}</dd>
+                </React.Fragment>
+            ) : null}
+            {trashedAt ? (
+                <React.Fragment>
+                    <FormattedMessage tagName="dt" {...messages.deleted} />
+                    <dd>
+                        <FormattedDate value={new Date(trashedAt)} {...datetimeOptions} />
+                    </dd>
+                </React.Fragment>
+            ) : null}
+            <RetentionPolicy {...retentionPolicyProps} />
+            <ClassificationProperty {...classificationProps} />
+        </dl>
+    );
+};
 
 ItemProperties.propTypes = {
     /** props for the ClassificationProperty component */
