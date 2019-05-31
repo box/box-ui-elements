@@ -16,7 +16,9 @@ import Tooltip from '../../components/tooltip';
 import InlineNotice from '../../components/inline-notice';
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import commonMessages from '../../common/messages';
+import { emailValidator } from '../../utils/validators';
 import type { inlineNoticeType } from '../../common/box-types';
+import IconGlobe from '../../icons/general/IconGlobe';
 
 import ContactsField from './ContactsField';
 import messages from './messages';
@@ -36,6 +38,7 @@ type Props = {
     intl: IntlShape,
     isContactsFieldEnabled: boolean,
     isExpanded: boolean,
+    isExternalUserSelected: boolean,
     messageProps?: Object,
     onContactAdd?: Function,
     onContactInput?: Function,
@@ -195,9 +198,7 @@ class EmailForm extends React.Component<Props, State> {
     };
 
     isValidEmail = (text: string): boolean => {
-        // TODO-AH: make this a constant somewhere
-        const emailValidation = /^[^\s<>@,]+@[^\s<>@,/\\]+\.[^\s<>@,]+$/i;
-        return emailValidation.test(text);
+        return emailValidator(text);
     };
 
     render() {
@@ -211,6 +212,7 @@ class EmailForm extends React.Component<Props, State> {
             contactsFieldLabel,
             inlineNotice,
             isContactsFieldEnabled,
+            isExternalUserSelected,
             getContacts,
             intl,
             isExpanded,
@@ -283,6 +285,14 @@ class EmailForm extends React.Component<Props, State> {
                         value={message}
                         {...messageProps}
                     />
+                )}
+                {isExpanded && isExternalUserSelected && (
+                    <div className="security-indicator-note">
+                        <span className="security-indicator-icon-globe">
+                            <IconGlobe height={12} width={12} />
+                        </span>
+                        <FormattedMessage {...messages.contentSharedWithExternalCollaborators} />
+                    </div>
                 )}
                 {isExpanded && (
                     <ModalActions>

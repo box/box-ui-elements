@@ -170,7 +170,6 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should not rend
           <FormattedMessage
             defaultMessage="Description"
             id="boxui.itemDetails.description"
-            tagName="dt"
           >
             <div />
           </FormattedMessage>
@@ -179,6 +178,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should not rend
               onDescriptionChange={[MockFunction]}
               textAreaProps={
                 Object {
+                  "aria-labelledby": "description_1",
                   "data-resin-target": "description",
                 }
               }
@@ -194,12 +194,14 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should not rend
                 onDescriptionChange={[MockFunction]}
                 textAreaProps={
                   Object {
+                    "aria-labelledby": "description_1",
                     "data-resin-target": "description",
                   }
                 }
                 value="foo"
               >
                 <TextareaAutosize
+                  aria-labelledby="description_1"
                   className="description-textarea"
                   data-resin-target="description"
                   inputRef={[Function]}
@@ -213,6 +215,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should not rend
                   value="foo"
                 >
                   <textarea
+                    aria-labelledby="description_1"
                     className="description-textarea"
                     data-resin-target="description"
                     maxLength="255"

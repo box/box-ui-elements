@@ -115,6 +115,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -219,6 +220,7 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
         }
         isContactsFieldEnabled={true}
         isExpanded={true}
+        isExternalUserSelected={false}
         onRequestClose={[Function]}
         onSubmit={[Function]}
         selectedContacts={Array []}
@@ -345,6 +347,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -520,6 +523,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -695,6 +699,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -874,6 +879,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -1049,6 +1055,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -1224,6 +1231,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={true}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -1371,6 +1379,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={false}
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -1547,6 +1556,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={false}
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -1723,6 +1733,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -1899,6 +1910,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={true}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -2109,6 +2121,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -2288,6 +2301,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -2467,6 +2481,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -2643,6 +2658,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -2819,6 +2835,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={true}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
@@ -2966,6 +2983,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={true}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}

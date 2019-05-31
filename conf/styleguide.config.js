@@ -124,6 +124,10 @@ const allSections = [
                 content: '../src/icons/box-tools/README.md',
             },
             {
+                name: 'Collections',
+                content: '../src/icons/collections/README.md',
+            },
+            {
                 name: 'Files',
                 content: '../src/icons/file/README.md',
             },
