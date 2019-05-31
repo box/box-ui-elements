@@ -391,13 +391,13 @@ class ContentExplorer extends Component<Props, State> {
 
         // New folder state
         const newState = {
-            selected: undefined,
+            // selected: undefined,
             currentCollection: collection,
             rootName: id === rootFolderId ? name : '',
         };
 
         // Unselect any rows that were selected
-        this.unselect();
+        // this.unselect();
 
         // Close any open modals
         this.closeModals();
@@ -738,6 +738,7 @@ class ContentExplorer extends Component<Props, State> {
         if (selected) {
             selected.selected = false;
         }
+        this.setState({ selected });
     }
 
     /**
@@ -763,8 +764,15 @@ class ContentExplorer extends Component<Props, State> {
         this.unselect();
         item.selected = true;
 
+        const newCollection: Collection = { ...this.state.currentCollection };
+        if (newCollection.items) {
+            for (let i = 0; i < newCollection.items.length; i += 1) {
+                newCollection.items[i].selected = newCollection.items[i].id === item.id;
+            }
+        }
+
         const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
-        this.setState({ focusedRow, selected: item }, () => {
+        this.setState({ focusedRow, selected: item, currentCollection: newCollection }, () => {
             onSelect(cloneDeep([item]));
             callback(item);
         });
