@@ -18,6 +18,8 @@ import commonMessages from '../../common/messages';
 import messages from './messages';
 import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
 
+const MAX_NUM_CHAR_FOR_LISTITEM = 50;
+
 type Props = {
     disabled: boolean,
     error: string,
@@ -198,7 +200,12 @@ class ContactsField extends React.Component<Props, State> {
                 validator={validator}
             >
                 {contacts.map(({ email, text = null, id }) => (
-                    <ContactDatalistItem key={id} name={text} subtitle={email || groupLabel} />
+                    <ContactDatalistItem
+                        key={id}
+                        name={text}
+                        subtitle={email || groupLabel}
+                        title={email.length > MAX_NUM_CHAR_FOR_LISTITEM ? email : ''}
+                    />
                 ))}
             </PillSelectorDropdown>
         );

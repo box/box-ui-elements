@@ -15,6 +15,7 @@ type Props = {
     isActive?: boolean,
     /** Set by a parent datalist component to receive the updated active item ID */
     setActiveItemID?: Function,
+    title?: string,
 };
 
 class DatalistItem extends React.Component<Props> {
@@ -46,14 +47,14 @@ class DatalistItem extends React.Component<Props> {
     id: string;
 
     render() {
-        const { children, className, isActive, ...rest } = this.props;
+        const { children, className, isActive, title, ...rest } = this.props;
         const classes = classNames('datalist-item', { 'is-active': isActive }, className);
         const itemProps = omit(rest, ['closeDropdown', 'setActiveItemID']);
 
         // required aria props are added dynamically
         /* eslint-disable jsx-a11y/role-has-required-aria-props */
         return (
-            <li {...itemProps} className={classes} id={this.id} role="option">
+            <li {...itemProps} className={classes} id={this.id} role="option" title={title}>
                 {children}
             </li>
         );
