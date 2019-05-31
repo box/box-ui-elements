@@ -24,7 +24,7 @@ const NavList = ({
     ulProps = {},
 }: Props) => {
     const classes = classNames(`nav-list`, className, {
-        'is-animation-enabled': enableAnimation,
+        'is-animationEnabled': enableAnimation,
         'is-collapsed': collapsed,
     });
 
@@ -36,7 +36,7 @@ const NavList = ({
             {placeholder}
             <ul {...ulProps}>
                 {enableAnimation && children ? (
-                    <AnimateHeight duration={300} height={!collapsed ? 'auto' : 0}>
+                    <AnimateHeight duration={200} height={collapsed ? 0 : 'auto'}>
                         {childrenParsed}
                     </AnimateHeight>
                 ) : (

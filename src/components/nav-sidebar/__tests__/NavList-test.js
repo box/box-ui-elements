@@ -78,7 +78,7 @@ describe('components/nav-sidebar/NavList', () => {
             );
 
             if (expectAnimationComponent) {
-                expect(nav.find('.is-animation-enabled')).toHaveLength(1);
+                expect(nav.find('.is-animationEnabled')).toHaveLength(1);
                 expect(nav.find('AnimateHeight')).toHaveLength(1);
             } else {
                 expect(nav.exists('AnimateHeight')).toBe(false);

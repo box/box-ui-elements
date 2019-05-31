@@ -53,13 +53,13 @@
             right: 0;
 
             > svg {
-                transition: transform 100ms ease-in-out;
+                transition: transform 200ms;
             }
         }
     }
 
     &.is-collapsed {
-        :not(.is-animation-enabled) > ul,
+        :not(.is-animationEnabled) > ul,
         .placeholder {
             display: none;
         }
