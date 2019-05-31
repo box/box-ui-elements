@@ -391,13 +391,9 @@ class ContentExplorer extends Component<Props, State> {
 
         // New folder state
         const newState = {
-            // selected: undefined,
             currentCollection: collection,
             rootName: id === rootFolderId ? name : '',
         };
-
-        // Unselect any rows that were selected
-        // this.unselect();
 
         // Close any open modals
         this.closeModals();
@@ -764,6 +760,7 @@ class ContentExplorer extends Component<Props, State> {
         this.unselect();
         item.selected = true;
 
+        // ensure that only selected item is marked as selected in currentCollection
         const newCollection: Collection = { ...this.state.currentCollection };
         if (newCollection.items) {
             for (let i = 0; i < newCollection.items.length; i += 1) {
