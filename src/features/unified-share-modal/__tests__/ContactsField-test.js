@@ -28,10 +28,10 @@ describe('features/unified-share-modal/ContactsField', () => {
             type: 'user',
         },
         {
-            email: 'longname123123123123123123123123123123123123123123123123123123123@example.com',
-            id: '45678',
-            isExternalUser: false,
-            name: 'Long Name User',
+            email: 'emailwith51charactersssssssssssssssssssssssssssssss@example.com',
+            id: '15',
+            isExternalUser: true,
+            name: 'long name',
             type: 'user',
         },
     ];
@@ -62,11 +62,12 @@ describe('features/unified-share-modal/ContactsField', () => {
             value: 'z@example.com',
         },
         {
-            email: 'longname123123123123123123123123123123123123123123123123123123123@example.com',
-            id: '45678',
-            isExternalUser: false,
-            text: 'Long Name User',
+            email: 'emailwith51charactersssssssssssssssssssssssssssssss@example.com',
+            id: '15',
+            isExternalUser: true,
+            text: 'long name',
             type: 'user',
+            value: 'emailwith51charactersssssssssssssssssssssssssssssss@example.com',
         },
     ];
 

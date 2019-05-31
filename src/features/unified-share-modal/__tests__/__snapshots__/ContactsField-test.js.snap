@@ -53,12 +53,12 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "z@example.com",
       },
       Object {
-        "email": "longname123123123123123123123123123123123123123123123123123123123@example.com",
-        "id": "45678",
-        "isExternalUser": false,
-        "text": "Long Name User",
+        "email": "emailwith51charactersssssssssssssssssssssssssssssss@example.com",
+        "id": "15",
+        "isExternalUser": true,
+        "text": "long name",
         "type": "user",
-        "value": "longname123123123123123123123123123123123123123123123123123123123@example.com",
+        "value": "emailwith51charactersssssssssssssssssssssssssssssss@example.com",
       },
       Object {
         "email": "a@example.com",
@@ -124,10 +124,10 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     title=""
   />
   <ContactDatalistItem
-    key="45678"
-    name="Long Name User"
-    subtitle="longname123123123123123123123123123123123123123123123123123123123@example.com"
-    title="longname123123123123123123123123123123123123123123123123123123123@example.com"
+    key="15"
+    name="long name"
+    subtitle="emailwith51charactersssssssssssssssssssssssssssssss@example.com"
+    title="emailwith51charactersssssssssssssssssssssssssssssss@example.com"
   />
   <ContactDatalistItem
     key="12"
@@ -214,11 +214,12 @@ exports[`features/unified-share-modal/ContactsField render should render default
         "value": "z@example.com",
       },
       Object {
-        "email": "longname123123123123123123123123123123123123123123123123123123123@example.com",
-        "id": "45678",
-        "isExternalUser": false,
-        "text": "Long Name User",
+        "email": "emailwith51charactersssssssssssssssssssssssssssssss@example.com",
+        "id": "15",
+        "isExternalUser": true,
+        "text": "long name",
         "type": "user",
+        "value": "emailwith51charactersssssssssssssssssssssssssssssss@example.com",
       },
     ]
   }
