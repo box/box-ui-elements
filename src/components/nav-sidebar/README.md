@@ -43,6 +43,7 @@ initialState = {
         }
         className="is-collapsible example-collapsible"
         collapsed={state.collapsed}
+        enableAnimation
     >
         <Link>Item 1-1</Link>
         <Link>Item 1-2</Link>

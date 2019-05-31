@@ -46,8 +46,9 @@
         position: relative;
 
         .nav-list-collapse {
-            height: 100%;
-            padding: 0 10px;
+            height: calc(100% - 6px);
+            margin: 3px 5px;
+            padding: 3px 7px;
             position: absolute;
             right: 0;
 
@@ -58,7 +59,7 @@
     }
 
     &.is-collapsed {
-        > ul,
+        :not(.is-animation-enabled) > ul,
         .placeholder {
             display: none;
         }

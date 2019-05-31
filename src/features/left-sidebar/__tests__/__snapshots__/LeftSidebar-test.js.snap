@@ -9,6 +9,7 @@ exports[`feature/left-sidebar/LeftSidebar should not render nested menu items wi
   >
     <NavList
       className="left-sidebar-list"
+      enableAnimation={true}
       heading={
         <LeftSidebarLink
           canReceiveDrop={false}
@@ -229,6 +230,7 @@ exports[`feature/left-sidebar/LeftSidebar should render collapsible nested menu 
     >
       <NavList
         className="left-sidebar-list"
+        enableAnimation={true}
         heading={
           <NavListCollapseHeader
             onToggleCollapse={[Function]}
@@ -328,6 +330,7 @@ exports[`feature/left-sidebar/LeftSidebar should render non-collapsible nested m
   >
     <NavList
       className="left-sidebar-list"
+      enableAnimation={true}
       heading={
         <LeftSidebarLink
           canReceiveDrop={false}
@@ -413,6 +416,7 @@ exports[`feature/left-sidebar/LeftSidebar should render placeholder inside neste
     >
       <NavList
         className="left-sidebar-list"
+        enableAnimation={true}
         heading={
           <NavListCollapseHeader
             onToggleCollapse={[Function]}

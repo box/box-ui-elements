@@ -67,4 +67,22 @@ describe('components/nav-sidebar/NavList', () => {
 
         expect(nav.find('ul').props().hello).toEqual('world');
     });
+
+    test.each([[false, false], [true, true]])(
+        'should render animate height component when appropriate',
+        (enableAnimationProp, expectAnimationComponent) => {
+            const nav = shallow(
+                <NavList enableAnimation={enableAnimationProp}>
+                    <Link>Test</Link>
+                </NavList>,
+            );
+
+            if (expectAnimationComponent) {
+                expect(nav.find('.is-animation-enabled')).toHaveLength(1);
+                expect(nav.find('AnimateHeight')).toHaveLength(1);
+            } else {
+                expect(nav.exists('AnimateHeight')).toBe(false);
+            }
+        },
+    );
 });

@@ -253,6 +253,7 @@ class LeftSidebar extends React.Component<Props, State> {
             <NavList
                 className={classes}
                 collapsed={collapsed}
+                enableAnimation
                 heading={heading}
                 placeholder={placeholderEl}
                 key={`list-${id}`}
