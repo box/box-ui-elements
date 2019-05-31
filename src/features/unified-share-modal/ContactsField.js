@@ -204,7 +204,7 @@ class ContactsField extends React.Component<Props, State> {
                         key={id}
                         name={text}
                         subtitle={email || groupLabel}
-                        title={email.length > MAX_NUM_CHAR_FOR_LISTITEM ? email : ''}
+                        title={email && email.length > MAX_NUM_CHAR_FOR_LISTITEM ? email : ''}
                     />
                 ))}
             </PillSelectorDropdown>
