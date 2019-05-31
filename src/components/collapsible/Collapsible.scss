@@ -29,7 +29,7 @@
     .collapsible-card-header-caret {
         position: absolute;
         right: 0;
-        transition: transform .25s;
+        transition: transform $bdl-transition-duration-200ms;
     }
 
     .btn-plain.collapsible-card-title {

@@ -7,7 +7,7 @@
     > .toggle-arrow {
         flex: none;
         margin-left: 5px;
-        transition: transform .2s ease-in;
+        transition: transform $bdl-transition-duration-200ms ease-in;
 
         .dropdown-menu-enabled &,
         .is-toggled & {

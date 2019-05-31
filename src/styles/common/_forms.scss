@@ -222,7 +222,7 @@ textarea {
     position: absolute;
     right: 11px;
     top: 15px;
-    transition: transform .25s;
+    transition: transform $bdl-transition-duration-200ms;
     width: 0;
 }
 

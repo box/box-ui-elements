@@ -19,7 +19,7 @@
     width: 100%;
 
     .icon-caret-down {
-        transition: transform .25s;
+        transition: transform $bdl-transition-duration-200ms;
     }
 
     &:active,
