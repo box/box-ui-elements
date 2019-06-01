@@ -1,0 +1,18 @@
+@import '../../styles/variables';
+
+.bdl-Classification-badge {
+    background-color: $bdl-yellorange-10;
+    border: 1px solid $bdl-yellorange;
+    border-radius: $bdl-border-radius-size;
+    display: inline;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: initial;
+    margin: 0;
+    padding: 2px 5px;
+    text-transform: uppercase;
+}
+
+.bdl-Classification-advisoryMessage {
+    margin: 5px 0 0;
+}
