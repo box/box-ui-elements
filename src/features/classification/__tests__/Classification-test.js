@@ -3,7 +3,7 @@ import React from 'react';
 import Classification from '../Classification';
 
 describe('features/classification/Classification', () => {
-    const getWrapper = (props = {}) => shallow(<Classification name="Confidential" {...props} />);
+    const getWrapper = (props = {}) => shallow(<Classification {...props} />);
 
     test('should render default component in yellow with no advisory message', () => {
         const wrapper = getWrapper();
@@ -12,6 +12,7 @@ describe('features/classification/Classification', () => {
 
     test('should render default component in yellow and inline advisory message', () => {
         const wrapper = getWrapper({
+            name: 'Confidential',
             advisoryMessage: 'fubar',
         });
         expect(wrapper).toMatchSnapshot();
@@ -19,6 +20,7 @@ describe('features/classification/Classification', () => {
 
     test('should render inline advisory message in tooltip when specified', () => {
         const wrapper = getWrapper({
+            name: 'Confidential',
             advisoryMessage: 'fubar',
             isMessageInline: false,
         });

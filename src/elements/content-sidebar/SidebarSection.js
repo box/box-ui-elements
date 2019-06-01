@@ -1,3 +1,5 @@
+// @deprecated, use Collapsible
+
 /**
  * @flow
  * @file Preview sidebar section component

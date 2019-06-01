@@ -8,6 +8,7 @@ export const SIDEBAR_NAV_TARGETS = {
 export const SECTION_TARGETS = {
     FILE_PROPERTIES: 'fileproperties',
     ACCESS_STATS: 'accessstats',
+    CLASSIFICATION: 'classification',
 };
 
 export const DETAILS_TARGETS = {

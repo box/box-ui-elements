@@ -16,6 +16,11 @@ const messages = defineMessages({
         description: 'Button to edit classification on an item',
         id: 'boxui.classification.edit',
     },
+    missingClassificationMessage: {
+        defaultMessage: 'Unclassified, click the edit icon to add classification.',
+        description: 'Default message for classification in the sidebar when there is none',
+        id: 'boxui.classification.missingClassificationMessage',
+    },
 });
 
 export default messages;

@@ -30,19 +30,18 @@ exports[`features/classification/Classification should render default component 
 <article
   className="bdl-Classification"
 >
-  <Tooltip
-    constrainToScrollParent={false}
-    constrainToWindow={true}
-    isDisabled={true}
-    position="bottom-center"
-    theme="default"
+  <p
+    className="bdl-Classification-advisoryMessage"
   >
-    <h1
-      className="bdl-Classification-badge"
+    <span
+      className="bdl-Classification-unclassifiedMessage"
     >
-      Confidential
-    </h1>
-  </Tooltip>
+      <FormattedMessage
+        defaultMessage="Unclassified, click the edit icon to add classification."
+        id="boxui.classification.missingClassificationMessage"
+      />
+    </span>
+  </p>
 </article>
 `;
 

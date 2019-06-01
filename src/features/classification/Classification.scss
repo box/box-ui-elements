@@ -16,3 +16,8 @@
 .bdl-Classification-advisoryMessage {
     margin: 5px 0 0;
 }
+
+.bdl-Classification-unclassifiedMessage {
+    color: $bdl-neutral-02;
+    font-style: italic;
+}

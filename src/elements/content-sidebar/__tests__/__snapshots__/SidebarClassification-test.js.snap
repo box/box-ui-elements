@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/SidebarClassification render() should render classification with an edit button when can_upload is true 1`] = `
+<Collapsible
+  animationDuration={100}
+  buttonProps={
+    Object {
+      "data-resin-target": "classification",
+    }
+  }
+  className=""
+  headerActionItems={
+    <PlainButton
+      className="bdl-SidebarClassification-editBtn"
+      data-resin-target="editclassification"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <IconEdit />
+    </PlainButton>
+  }
+  isOpen={true}
+  title={
+    <FormattedMessage
+      defaultMessage="Classification"
+      id="be.sidebarClassification"
+    />
+  }
+>
+  <Classification
+    advisoryMessage="message"
+    name="Public"
+  />
+</Collapsible>
+`;
+
+exports[`elements/content-sidebar/SidebarClassification render() should render classification with no edit button when can_upload is false 1`] = `
+<Collapsible
+  animationDuration={100}
+  buttonProps={
+    Object {
+      "data-resin-target": "classification",
+    }
+  }
+  className=""
+  headerActionItems={null}
+  isOpen={true}
+  title={
+    <FormattedMessage
+      defaultMessage="Classification"
+      id="be.sidebarClassification"
+    />
+  }
+>
+  <Classification
+    advisoryMessage="message"
+    name="Public"
+  />
+</Collapsible>
+`;
+
+exports[`elements/content-sidebar/SidebarClassification render() should render classification with no edit button when onEdit is null 1`] = `
+<Collapsible
+  animationDuration={100}
+  buttonProps={
+    Object {
+      "data-resin-target": "classification",
+    }
+  }
+  className=""
+  headerActionItems={null}
+  isOpen={true}
+  title={
+    <FormattedMessage
+      defaultMessage="Classification"
+      id="be.sidebarClassification"
+    />
+  }
+>
+  <Classification
+    advisoryMessage="message"
+    name="Public"
+  />
+</Collapsible>
+`;
+
+exports[`elements/content-sidebar/SidebarClassification render() should render nothing when unclassified and can_upload is false 1`] = `""`;

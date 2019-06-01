@@ -3,6 +3,10 @@
 .bcs-details {
     .bcs-scroll-content {
         padding-top: 15px;
+
+        > .collapsible-card {
+            margin: 0 8px 20px 25px;
+        }
     }
 
     .item-properties dd {
