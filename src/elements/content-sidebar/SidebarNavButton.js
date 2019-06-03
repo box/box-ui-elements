@@ -32,6 +32,7 @@ const SidebarNavButton = ({ children, interactionTarget, isOpen, onNavigate, sid
                 return (
                     <Tooltip position="middle-left" text={tooltip}>
                         <NavButton
+                            aria-selected={isActive()}
                             activeClassName="bcs-is-selected"
                             className="bcs-NavButton"
                             data-resin-target={interactionTarget}
@@ -43,6 +44,7 @@ const SidebarNavButton = ({ children, interactionTarget, isOpen, onNavigate, sid
                                 }
                             }}
                             replace={isToggle}
+                            role="tab"
                             to={sidebarPath}
                             type="button"
                         >
