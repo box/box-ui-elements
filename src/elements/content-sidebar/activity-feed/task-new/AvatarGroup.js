@@ -8,7 +8,7 @@ import Tooltip from '../../../../components/tooltip';
 import PlainButton from '../../../../components/plain-button';
 import ReadableTime from '../../../../components/time/ReadableTime';
 import messages from '../../../common/messages';
-import AssigneeAvatar from './AssigneeAvatar';
+import AvatarGroupAvatar from './AvatarGroupAvatar';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
 
 import './AvatarGroup.scss';
@@ -16,9 +16,9 @@ import './AvatarGroup.scss';
 const MAX_AVATARS = 3;
 
 type Props = {|
-    assignees: TaskAssigneeCollection,
     getAvatarUrl: GetAvatarUrlCallback,
     maxAvatars: number,
+    users: TaskAssigneeCollection,
 |} & InjectIntlProvidedProps;
 
 const statusMessages = {
@@ -36,9 +36,9 @@ const AvatarDetails = React.memo(({ user, status, completedAt, className }) => {
     const statusMessage = statusMessages[status] || null;
     return (
         <div className={className}>
-            <div className="bcs-avatar-group-details-name">{user.name}</div>
+            <div className="bcs-AvatarGroup-detailsName">{user.name}</div>
             {statusMessage && completedAt && (
-                <div className="bcs-avatar-group-details-status">
+                <div className="bcs-AvatarGroup-detailsStatus">
                     <FormattedMessage {...statusMessage} values={{ dateTime: <Datestamp date={completedAt} /> }} />
                 </div>
             )}
@@ -49,13 +49,14 @@ const AvatarDetails = React.memo(({ user, status, completedAt, className }) => {
 class AvatarGroup extends React.Component<Props> {
     static defaultProps = {
         maxAvatars: MAX_AVATARS,
+        users: {},
     };
 
-    listTitleId = `avatar-group-list-title-${uniqueId()}`;
+    listTitleId = uniqueId('avatar-group-list-title-');
 
     render() {
-        const { maxAvatars, assignees = {}, getAvatarUrl, intl } = this.props;
-        const { entries = [], next_marker } = assignees;
+        const { maxAvatars, users, getAvatarUrl, intl } = this.props;
+        const { entries = [], next_marker } = users;
         const entryCount = entries.length;
         const hiddenAvatarCount = Math.max(0, entryCount - maxAvatars);
         const areThereMoreEntries = !!next_marker; // there are more entries in another page of results
@@ -65,28 +66,28 @@ class AvatarGroup extends React.Component<Props> {
                     key={id}
                     text={
                         <AvatarDetails
-                            className="bcs-avatar-group-tooltip"
+                            className="bcs-AvatarGroup-tooltip"
                             user={target}
                             status={status}
                             completedAt={completedAt}
                         />
                     }
                 >
-                    <AssigneeAvatar status={status} user={target} getAvatarUrl={getAvatarUrl} />
+                    <AvatarGroupAvatar status={status} user={target} getAvatarUrl={getAvatarUrl} />
                 </Tooltip>
             );
         });
-        const allAssignees = entries.map(({ id, target, status, completed_at: completedAt }) => {
+        const allUsers = entries.map(({ id, target, status, completed_at: completedAt }) => {
             return (
-                <li key={id} className="bcs-avatar-group-list-item">
-                    <AssigneeAvatar
+                <li key={id} className="bcs-AvatarGroup-listItem">
+                    <AvatarGroupAvatar
                         status={status}
-                        className="bcs-avatar-group-list-item-avatar"
+                        className="bcs-AvatarGroup-listItemAvatar"
                         user={target}
                         getAvatarUrl={getAvatarUrl}
                     />
                     <AvatarDetails
-                        className="bcs-avatar-group-list-item-details"
+                        className="bcs-AvatarGroup-listItemDetails"
                         user={target}
                         status={status}
                         completedAt={completedAt}
@@ -95,26 +96,26 @@ class AvatarGroup extends React.Component<Props> {
             );
         });
         return (
-            <div className="bcs-avatar-group">
+            <div className="bcs-AvatarGroup">
                 {visibleAvatars}
                 {hiddenAvatarCount > 0 && (
                     <Flyout position="top-left" shouldDefaultFocus>
-                        <PlainButton type="button" className="bcs-avatar-group-overflow-count-container">
+                        <PlainButton type="button" className="bcs-AvatarGroup-overflowCountContainer">
                             <Tooltip text={intl.formatMessage(messages.tasksFeedMoreAssigneesLabel)}>
                                 <span
-                                    className="bcs-avatar-group-overflow-count bcs-avatar-group-avatar"
-                                    data-testid="task-assignment-overflow"
+                                    className="bcs-AvatarGroup-overflowCount bcs-AvatarGroup-avatar"
+                                    data-testid="avatar-group-overflow-count"
                                 >
                                     {areThereMoreEntries ? `${hiddenAvatarCount}+` : `+${hiddenAvatarCount}`}
                                 </span>
                             </Tooltip>
                         </PlainButton>
-                        <Overlay className="bcs-avatar-group-list-flyout">
-                            <p className="bcs-avatar-group-list-title" id={this.listTitleId}>
+                        <Overlay className="bcs-AvatarGroup-listFlyout">
+                            <p className="bcs-AvatarGroup-listTitle" id={this.listTitleId}>
                                 <FormattedMessage {...messages.tasksFeedAssigneeListTitle} />
                             </p>
-                            <ul className="bcs-avatar-group-list" arial-labelledby={this.listTitleId}>
-                                {allAssignees}
+                            <ul className="bcs-AvatarGroup-list" arial-labelledby={this.listTitleId}>
+                                {allUsers}
                             </ul>
                         </Overlay>
                     </Flyout>
