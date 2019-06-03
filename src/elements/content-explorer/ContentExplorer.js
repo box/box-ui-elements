@@ -712,7 +712,7 @@ class ContentExplorer extends Component<Props, State> {
      * Chages the sort by and sort direction
      *
      * @private
-     * @param {string} sortBy - field to sorty by
+     * @param {string} sortBy - field to sort by
      * @param {string} sortDirection - sort direction
      * @return {void}
      */

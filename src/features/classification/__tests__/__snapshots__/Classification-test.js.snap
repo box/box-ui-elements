@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/classification/Classification should render default component in yellow and inline advisory message 1`] = `
+<article
+  className="bdl-Classification"
+>
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={true}
+    position="bottom-center"
+    text="fubar"
+    theme="default"
+  >
+    <h1
+      className="bdl-Classification-badge"
+    >
+      Confidential
+    </h1>
+  </Tooltip>
+  <p
+    className="bdl-Classification-advisoryMessage"
+  >
+    fubar
+  </p>
+</article>
+`;
+
+exports[`features/classification/Classification should render default component in yellow with no advisory message 1`] = `
+<article
+  className="bdl-Classification"
+>
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={true}
+    position="bottom-center"
+    theme="default"
+  >
+    <h1
+      className="bdl-Classification-badge"
+    >
+      Confidential
+    </h1>
+  </Tooltip>
+</article>
+`;
+
+exports[`features/classification/Classification should render inline advisory message in tooltip when specified 1`] = `
+<article
+  className="bdl-Classification"
+>
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
+    position="bottom-center"
+    text="fubar"
+    theme="default"
+  >
+    <h1
+      className="bdl-Classification-badge"
+    >
+      Confidential
+    </h1>
+  </Tooltip>
+</article>
+`;

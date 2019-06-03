@@ -32,6 +32,7 @@ export type allowedAccessLevelsType = {
 export type contactType = {
     email?: string,
     id: number | string,
+    isExternalUser?: boolean,
     name?: string,
     text?: string,
     type: string,

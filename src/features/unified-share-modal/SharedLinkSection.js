@@ -196,8 +196,8 @@ class SharedLinkSection extends React.Component<Props> {
                     )}
                 </div>
                 {accessLevel === ANYONE_WITH_LINK && (
-                    <div className="shared-link-access-note">
-                        <span className="shared-link-icon-globe">
+                    <div className="security-indicator-note">
+                        <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
                         <FormattedMessage {...messages.sharedLinkPubliclyAvailable} />
