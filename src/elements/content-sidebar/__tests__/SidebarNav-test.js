@@ -14,7 +14,9 @@ describe('elements/content-sidebar/SidebarNav', () => {
             <MemoryRouter initialEntries={[`/${active}`]}>
                 <SidebarNav {...props} />
             </MemoryRouter>,
-        ).find('SidebarNav');
+        )
+            .find('SidebarNav')
+            .at(1);
 
     test('should render skills tab', () => {
         const props = {
