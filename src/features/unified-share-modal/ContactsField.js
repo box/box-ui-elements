@@ -198,7 +198,7 @@ class ContactsField extends React.Component<Props, State> {
                 validator={validator}
             >
                 {contacts.map(({ email, text = null, id }) => (
-                    <ContactDatalistItem key={id} name={text} subtitle={email || groupLabel} />
+                    <ContactDatalistItem key={id} name={text} subtitle={email || groupLabel} title={text} />
                 ))}
             </PillSelectorDropdown>
         );
