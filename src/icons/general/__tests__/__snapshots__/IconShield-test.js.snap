@@ -3,36 +3,32 @@
 exports[`icons/states/IconShield should override color in svg when specified 1`] = `
 <AccessibleSVG
   className="bdl-IconShield"
-  height={62}
-  viewBox="0 0 53 62"
-  width={53}
+  height={32}
+  viewBox="0 0 32 32"
+  width={32}
 >
-  <g
-    fill="none"
-    fillRule="evenodd"
-  >
-    <path
-      d="M1 5.615S13.75 12.923 26.5 1C39.25 12.923 52 5.615 52 5.615v40.962L26.5 61 1 46.577V5.615z"
-      fill="#fff"
-      stroke="#bdf"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-    />
-    <path
-      className="fill-color"
-      d="M26 7c-10.5 9.538-21 3.692-21 3.692v32.77L26 55V7z"
-      fill="#bdf"
-      fillOpacity={0.2}
-    />
-    <path
-      className="stroke-color"
-      d="M44 19v20"
-      stroke="#bdf"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-    />
-  </g>
+  <path
+    className="stroke-color"
+    d="M3 3.308S9.5 6.962 16 1c6.5 5.962 13 2.308 13 2.308v20.48L16 31 3 23.788V3.308z"
+    fill="#fff"
+    stroke="#bdf"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="2"
+  />
+  <path
+    className="fill-color"
+    d="M16 5C10.5 8.5 6 7 6 7v14.712L16 27V5z"
+    fill="#bdf"
+    fillOpacity={0.2}
+  />
+  <path
+    className="stroke-color"
+    d="M25 10v11"
+    stroke="#bdf"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="2"
+  />
 </AccessibleSVG>
 `;
