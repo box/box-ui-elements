@@ -300,7 +300,6 @@ describe('features/unified-share-modal/ContactsField', () => {
                 type: 'user',
             },
         ];
-
         const getContacts = jest.fn().mockReturnValue(Promise.resolve(contactsFromServerLarge));
 
         test('should have scrollable dropdown if contacts > 5', async () => {
