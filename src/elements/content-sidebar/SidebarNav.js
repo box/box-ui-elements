@@ -32,7 +32,7 @@ type Props = {
     hasSkills: boolean,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
-} & InjectIntlProvidedProps;
+};
 
 const SidebarNav = ({
     additionalTabs,
