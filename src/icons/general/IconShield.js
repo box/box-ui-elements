@@ -32,8 +32,20 @@ const IconShield = ({ className, color = boxBlue, height = 62, opacity = 0.2, wi
                 strokeWidth="2"
                 d="M1 5.615S13.75 12.923 26.5 1C39.25 12.923 52 5.615 52 5.615v40.962L26.5 61 1 46.577V5.615z"
             />
-            <path fill={color} fillOpacity={opacity} d="M26 7c-10.5 9.538-21 3.692-21 3.692v32.77L26 55V7z" />
-            <path stroke={color} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M44 19v20" />
+            <path
+                className="fill-color"
+                fill={color}
+                fillOpacity={opacity}
+                d="M26 7c-10.5 9.538-21 3.692-21 3.692v32.77L26 55V7z"
+            />
+            <path
+                className="stroke-color"
+                stroke={color}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M44 19v20"
+            />
         </g>
     </AccessibleSVG>
 );

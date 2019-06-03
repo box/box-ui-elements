@@ -20,11 +20,13 @@ exports[`icons/states/IconShield should override color in svg when specified 1`]
       strokeWidth="2"
     />
     <path
+      className="fill-color"
       d="M26 7c-10.5 9.538-21 3.692-21 3.692v32.77L26 55V7z"
       fill="#bdf"
       fillOpacity={0.2}
     />
     <path
+      className="stroke-color"
       d="M44 19v20"
       stroke="#bdf"
       strokeLinecap="round"
