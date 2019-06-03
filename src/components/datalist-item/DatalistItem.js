@@ -14,7 +14,7 @@ type Props = {
     /** Set by a parent datalist component to indicate when the item is highlighted (but not necessarily selected) */
     isActive?: boolean,
     /** Set by a parent datalist component to receive the updated active item ID */
-    name: string,
+    name?: React.Node,
     setActiveItemID?: Function,
 };
 
