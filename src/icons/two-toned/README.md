@@ -149,6 +149,28 @@ const icons = [
                 </div>
             );
         },
+    }, {
+        name: 'IconWorkflow',
+        content: () => {
+            const IconWorkflow = require('./IconWorkflow').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-workflow-example .foreground-color {
+                                fill: #909090;
+                            }
+
+                            .icon-workflow-example .background-color {
+                                fill: transparent;
+                            }
+                        `}
+                    </style>
+                    <IconWorkflow height={24} width={24} />
+                    <IconWorkflow className="icon-workflow-example" height={24} width={24} />
+                </div>
+            );
+        },
     },
 ];
 
