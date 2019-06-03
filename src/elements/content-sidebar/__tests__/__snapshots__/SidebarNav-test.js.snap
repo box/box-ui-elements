@@ -4,17 +4,21 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
 <SidebarNav
   additionalTabs={Array []}
   hasAdditionalTabs={true}
-  intl={
-    Object {
-      "formatDate": [Function],
-      "formatMessage": [Function],
-    }
-  }
 >
   <div
-    aria-label="Sidebar"
     role="tablist"
+    tabIndex="-1"
   >
+    <span
+      className="accessibility-hidden"
+    >
+      <FormattedMessage
+        defaultMessage="Sidebar"
+        id="be.sidebarNavLabel"
+      >
+        <div />
+      </FormattedMessage>
+    </span>
     <AdditionalTabs
       tabs={Array []}
     >

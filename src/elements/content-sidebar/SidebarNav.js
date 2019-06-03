@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import IconMagicWand from '../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../icons/general/IconMetadataThick';
 import IconDocInfo from '../../icons/general/IconDocInfo';
@@ -42,11 +42,13 @@ const SidebarNav = ({
     hasDetails,
     hasMetadata,
     hasSkills,
-    intl,
     isOpen,
     onNavigate,
 }: Props) => (
-    <div aria-label={intl.formatMessage(messages.sidebarNavLabel)} role="tablist">
+    <div role="tablist" tabIndex="-1">
+        <span className="accessibility-hidden">
+            <FormattedMessage {...messages.sidebarNavLabel} />
+        </span>
         {hasActivityFeed && (
             <SidebarNavButton
                 interactionTarget={SIDEBAR_NAV_TARGETS.ACTIVITY}
@@ -95,4 +97,4 @@ const SidebarNav = ({
     </div>
 );
 
-export default injectIntl(SidebarNav);
+export default SidebarNav;
