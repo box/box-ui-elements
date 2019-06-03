@@ -1,21 +1,32 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 
 import AccessibleSVG from '../accessible-svg';
-import { lightestCharcoal } from '../../styles/variables';
+import { bdlNeutral03 } from '../../styles/variables';
 
 type Props = {
     className?: string,
     color?: string,
     height?: number,
+    selected?: boolean,
     /** A text-only string describing the icon if it's not purely decorative for accessibility */
     title?: string | React.Element<any>,
     width?: number,
 };
 
-const IconCollectionsAdd = ({ className = '', color = lightestCharcoal, height = 32, title, width = 32 }: Props) => (
+const IconCollectionsAdd = ({
+    className = '',
+    color = bdlNeutral03,
+    height = 32,
+    selected = false,
+    title,
+    width = 32,
+}: Props) => (
     <AccessibleSVG
-        className={`icon-collections-add ${className}`}
+        className={classNames('icon-collections-add', className, {
+            'is-selected': selected,
+        })}
         height={height}
         title={title}
         viewBox="0 0 32 32"
