@@ -12,12 +12,11 @@ import identity from 'lodash/identity';
 
 import { ReadableTime } from '../../../../components/time';
 import Tooltip from '../../../../components/tooltip';
-
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+
+import CommentMenu from './CommentMenu';
 import UserLink from './UserLink';
-import InlineDelete from '../inline-delete';
-import InlineEdit from './InlineEdit';
 import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
 import ApprovalCommentForm from '../approval-comment-form';
@@ -120,6 +119,7 @@ class Comment extends React.Component<Props, State> {
         const createdAtTimestamp = new Date(created_at).getTime();
         const canDelete = getProp(permissions, 'can_delete', false);
         const canEdit = getProp(permissions, 'can_edit', false);
+        const canShowMenu = canDelete || canEdit;
         const createdByUser = created_by || PLACEHOLDER_USER;
 
         return (
@@ -146,13 +146,15 @@ class Comment extends React.Component<Props, State> {
                                     getUserProfileUrl={getUserProfileUrl}
                                 />,
                             )}
-                            {!!onEdit && !!canEdit && !isPending && <InlineEdit id={id} toEdit={toEdit} />}
-                            {!!onDelete && !!canDelete && !isPending && (
-                                <InlineDelete
+                            {canShowMenu && (
+                                <CommentMenu
                                     id={id}
-                                    permissions={permissions}
-                                    message={<FormattedMessage {...inlineDeleteMessage} />}
+                                    isPending={isPending}
+                                    inlineDeleteMessage={<FormattedMessage {...inlineDeleteMessage} />}
                                     onDelete={onDelete}
+                                    onEdit={onEdit}
+                                    permissions={permissions}
+                                    toEdit={toEdit}
                                 />
                             )}
                         </div>

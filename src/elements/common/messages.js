@@ -758,6 +758,11 @@ const messages = defineMessages({
         description: 'Error message when a comment deletion fails',
         defaultMessage: 'There was an error deleting this comment.',
     },
+    taskDeleteMenuItem: {
+        id: 'be.taskDeleteMenuItem',
+        defaultMessage: 'Delete task',
+        description: 'Text to show on menu item to delete task',
+    },
     taskDeletePrompt: {
         id: 'be.taskDeletePrompt',
         defaultMessage: 'Delete task?',

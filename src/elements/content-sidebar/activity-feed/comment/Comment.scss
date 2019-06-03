@@ -57,6 +57,31 @@
             }
         }
 
+        .bcs-comment-delete-container {
+            margin-top: 3px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1;
+
+            &.bcs-is-confirming {
+                opacity: 1;
+            }
+
+            .bcs-comment-delete-no,
+            .bcs-comment-delete-yes {
+                margin: 0 3px;
+            }
+
+            .overlay-wrapper .overlay {
+                min-width: 120px;
+
+                .overlay-title {
+                    white-space: nowrap;
+                }
+            }
+        }
+
         &:hover,
         &.bcs-is-focused {
             .bcs-inline-delete-container {
