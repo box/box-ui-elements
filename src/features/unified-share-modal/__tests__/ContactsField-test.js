@@ -27,13 +27,6 @@ describe('features/unified-share-modal/ContactsField', () => {
             name: 'Z User',
             type: 'user',
         },
-        {
-            email: 'emailwith51charactersssssssssssssssssssssssssssssss@example.com',
-            id: '15',
-            isExternalUser: true,
-            name: 'long name',
-            type: 'user',
-        },
     ];
 
     const expectedContacts = [
@@ -60,14 +53,6 @@ describe('features/unified-share-modal/ContactsField', () => {
             text: 'Z User',
             type: 'user',
             value: 'z@example.com',
-        },
-        {
-            email: 'emailwith51charactersssssssssssssssssssssssssssssss@example.com',
-            id: '15',
-            isExternalUser: true,
-            text: 'long name',
-            type: 'user',
-            value: 'emailwith51charactersssssssssssssssssssssssssssssss@example.com',
         },
     ];
 
@@ -105,12 +90,7 @@ describe('features/unified-share-modal/ContactsField', () => {
 
             const result = wrapper.instance().addSuggestedContacts(expectedContacts);
 
-            expect(result).toEqual([
-                expectedContacts[1],
-                expectedContacts[2],
-                expectedContacts[0],
-                expectedContacts[3],
-            ]);
+            expect(result).toEqual([expectedContacts[1], expectedContacts[2], expectedContacts[0]]);
         });
 
         test('should setState with number of suggested items showing', () => {
@@ -322,28 +302,6 @@ describe('features/unified-share-modal/ContactsField', () => {
         ];
 
         const getContacts = jest.fn().mockReturnValue(Promise.resolve(contactsFromServerLarge));
-
-        test('should set title prop if email is over 50 characters long', async () => {
-            const contactWithLongEmailFromServer = [
-                {
-                    email: 'emailwith51charactersssssssssssssssssssssssssssssss@example.com',
-                    id: '15',
-                    isExternalUser: true,
-                    name: 'long name',
-                    type: 'user',
-                },
-            ];
-
-            const wrapper = getWrapper({
-                getContacts: jest.fn().mockReturnValue(Promise.resolve(contactWithLongEmailFromServer)),
-                selectedContacts: [],
-            });
-
-            wrapper.setState({ pillSelectorInputValue: 'e' });
-            await wrapper.instance().getContactsPromise('e');
-            const ContactDatalistItem = wrapper.find('ContactDatalistItem');
-            expect(ContactDatalistItem.props().title).toBe(contactWithLongEmailFromServer[0].email);
-        });
 
         test('should have scrollable dropdown if contacts > 5', async () => {
             const wrapper = getWrapper({

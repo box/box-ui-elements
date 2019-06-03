@@ -53,14 +53,6 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "z@example.com",
       },
       Object {
-        "email": "emailwith51charactersssssssssssssssssssssssssssssss@example.com",
-        "id": "15",
-        "isExternalUser": true,
-        "text": "long name",
-        "type": "user",
-        "value": "emailwith51charactersssssssssssssssssssssssssssssss@example.com",
-      },
-      Object {
         "email": "a@example.com",
         "id": "12",
         "isExternalUser": true,
@@ -109,55 +101,41 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     key="12345"
     name="X User"
     subtitle="x@example.com"
-    title=""
   />
   <ContactDatalistItem
     key="23456"
     name="Y User"
     subtitle="y@example.com"
-    title=""
   />
   <ContactDatalistItem
     key="34567"
     name="Z User"
     subtitle="z@example.com"
-    title=""
-  />
-  <ContactDatalistItem
-    key="15"
-    name="long name"
-    subtitle="emailwith51charactersssssssssssssssssssssssssssssss@example.com"
-    title="emailwith51charactersssssssssssssssssssssssssssssss@example.com"
   />
   <ContactDatalistItem
     key="12"
     name="a b"
     subtitle="a@example.com"
-    title=""
   />
   <ContactDatalistItem
     key="13"
     name="a b"
     subtitle="b@example.com"
-    title=""
   />
   <ContactDatalistItem
     key="14"
     name="a c"
     subtitle="c@example.com"
-    title=""
   />
   <ContactDatalistItem
     key="14"
     name="a d"
     subtitle="d@example.com"
-    title=""
   />
   <ContactDatalistItem
     key="14"
     name="a e"
     subtitle="e@example.com"
-    title=""
   />
 </PillSelectorDropdown>
 `;
@@ -212,14 +190,6 @@ exports[`features/unified-share-modal/ContactsField render should render default
         "text": "Z User",
         "type": "user",
         "value": "z@example.com",
-      },
-      Object {
-        "email": "emailwith51charactersssssssssssssssssssssssssssssss@example.com",
-        "id": "15",
-        "isExternalUser": true,
-        "text": "long name",
-        "type": "user",
-        "value": "emailwith51charactersssssssssssssssssssssssssssssss@example.com",
       },
     ]
   }

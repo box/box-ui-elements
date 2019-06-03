@@ -11,7 +11,7 @@ type Props = {
 };
 
 const ContactDatalistItem = ({ name, subtitle, ...rest }: Props) => (
-    <DatalistItem {...rest}>
+    <DatalistItem name={name} {...rest}>
         <div className="contact-text contact-name">{name}</div>
         {subtitle && <div className="contact-text contact-sub-name">{subtitle}</div>}
     </DatalistItem>
