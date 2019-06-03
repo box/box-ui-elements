@@ -392,6 +392,11 @@ const messages = defineMessages({
         description: 'Label for file properties section in the preview sidebar',
         defaultMessage: 'File Properties',
     },
+    sidebarNavLabel: {
+        id: 'be.sidebarNavLabel',
+        description: 'Label for the sidebar tabs list',
+        defaultMessage: 'Sidebar',
+    },
     defaultSkill: {
         id: 'be.defaultSkill',
         description: 'Label for default skill section in the preview sidebar',
