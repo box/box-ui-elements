@@ -6,7 +6,7 @@ import DatalistItem from '../datalist-item';
 import './ContactDatalistItem.scss';
 
 type Props = {
-    name: React.Node,
+    name: string,
     subtitle?: React.Node,
 };
 
