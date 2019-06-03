@@ -14,8 +14,8 @@ type Props = {
     /** Set by a parent datalist component to indicate when the item is highlighted (but not necessarily selected) */
     isActive?: boolean,
     /** Set by a parent datalist component to receive the updated active item ID */
-    name?: string | null,
     setActiveItemID?: Function,
+    title?: string | null,
 };
 
 class DatalistItem extends React.Component<Props> {
@@ -54,7 +54,7 @@ class DatalistItem extends React.Component<Props> {
         // required aria props are added dynamically
         /* eslint-disable jsx-a11y/role-has-required-aria-props */
         return (
-            <li {...itemProps} className={classes} id={this.id} role="option" title={rest.name}>
+            <li {...itemProps} className={classes} id={this.id} role="option" title={rest.title}>
                 {children}
             </li>
         );
