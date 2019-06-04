@@ -388,12 +388,18 @@ class ContentExplorer extends Component<Props, State> {
     fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
+        const { selected }: State = this.state;
 
         // New folder state
         const newState = {
-            currentCollection: collection,
+            currentCollection: { ...collection },
+            selected: undefined,
             rootName: id === rootFolderId ? name : '',
         };
+
+        const { newCollection, newSelected } = this.updateCollection(collection, selected);
+        newState.currentCollection = newCollection;
+        newState.selected = newSelected;
 
         // Close any open modals
         this.closeModals();
@@ -500,7 +506,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     searchSuccessCallback = (collection: Collection) => {
-        const { currentCollection }: State = this.state;
+        const { selected }: State = this.state;
 
         // Unselect any rows that were selected
         this.unselect();
@@ -508,9 +514,11 @@ class ContentExplorer extends Component<Props, State> {
         // Close any open modals
         this.closeModals();
 
+        const { newCollection, newSelected } = this.updateCollection(collection, selected);
+
         this.setState({
-            selected: undefined,
-            currentCollection: Object.assign(currentCollection, collection),
+            currentCollection: newCollection,
+            selected: newSelected,
         });
     };
 
@@ -572,11 +580,11 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.setState({
-            selected: undefined,
-            searchQuery: query,
-            view: VIEW_SEARCH,
             currentCollection: this.currentUnloadedCollection(),
             currentOffset: trimmedQuery === searchQuery ? currentOffset : 0,
+            searchQuery: query,
+            selected: undefined,
+            view: VIEW_SEARCH,
         });
 
         this.debouncedSearch(folderId, query);
@@ -722,6 +730,38 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Returns an object with newCollection and newSelected properties.
+     * newCollection will be the given collection, with items.selected properties
+     * updated according to the given selected param. newSelected will be the selected
+     * item if it is in newCollection, otherwise undefined.
+     *
+     * @private
+     * @param {Collection} collection - collection that needs to be updated
+     * @param {?BoxItem} selected - item that should be selected in that collection (if present)
+     * @return {Object}
+     */
+    updateCollection(collection: Collection, selected: ?BoxItem): Object {
+        const newCollection: Collection = { ...collection };
+        const targetID = selected ? selected.id : null;
+
+        const ret = { newCollection, newSelected: undefined };
+
+        if (collection.items) {
+            ret.newCollection.items = collection.items.map(obj => {
+                const item = { ...obj, selected: obj.id === targetID };
+
+                // If the previously selected item is found in the folder, keep it as selected item
+                if (item.id === targetID) {
+                    ret.newSelected = item;
+                }
+                return item;
+            });
+        }
+
+        return ret;
+    }
+
+    /**
      * Unselects an item
      *
      * @private
@@ -730,11 +770,10 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     unselect(): void {
-        const { selected }: State = this.state;
-        if (selected) {
-            selected.selected = false;
-        }
-        this.setState({ selected });
+        const { currentCollection }: State = this.state;
+
+        const { newCollection, newSelected } = this.updateCollection(currentCollection, null);
+        this.setState({ currentCollection: newCollection, selected: newSelected });
     }
 
     /**
@@ -748,6 +787,7 @@ class ContentExplorer extends Component<Props, State> {
     select = (item: BoxItem, callback: Function = noop): void => {
         const {
             selected,
+            currentCollection,
             currentCollection: { items = [] },
         }: State = this.state;
         const { onSelect }: Props = this.props;
@@ -758,20 +798,16 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.unselect();
-        item.selected = true;
 
-        // ensure that only selected item is marked as selected in currentCollection
-        const newCollection: Collection = { ...this.state.currentCollection };
-        if (newCollection.items) {
-            for (let i = 0; i < newCollection.items.length; i += 1) {
-                newCollection.items[i].selected = newCollection.items[i].id === item.id;
-            }
-        }
+        const selectedItem: BoxItem = { ...item };
+        selectedItem.selected = true;
 
-        const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
-        this.setState({ focusedRow, selected: item, currentCollection: newCollection }, () => {
-            onSelect(cloneDeep([item]));
-            callback(item);
+        const { newCollection } = this.updateCollection(currentCollection, selectedItem);
+        const focusedRow: number = items.findIndex((i: BoxItem) => i.id === item.id);
+
+        this.setState({ currentCollection: newCollection, focusedRow, selected: selectedItem }, () => {
+            onSelect(cloneDeep([selectedItem]));
+            callback(selectedItem);
         });
     };
 
