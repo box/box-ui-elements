@@ -9,7 +9,6 @@ exports[`feature/left-sidebar/LeftSidebar should not render nested menu items wi
   >
     <NavList
       className="left-sidebar-list"
-      enableAnimation={false}
       heading={
         <LeftSidebarLink
           canReceiveDrop={false}
@@ -27,6 +26,7 @@ exports[`feature/left-sidebar/LeftSidebar should not render nested menu items wi
           showTooltip={true}
         />
       }
+      isAnimationEnabled={false}
       key="list-all-files"
       onAnimationEnd={[Function]}
       onAnimationStart={[Function]}
@@ -232,7 +232,6 @@ exports[`feature/left-sidebar/LeftSidebar should render collapsible nested menu 
     >
       <NavList
         className="left-sidebar-list"
-        enableAnimation={true}
         heading={
           <NavListCollapseHeader
             onToggleCollapse={[Function]}
@@ -254,6 +253,7 @@ exports[`feature/left-sidebar/LeftSidebar should render collapsible nested menu 
             />
           </NavListCollapseHeader>
         }
+        isAnimationEnabled={true}
         key="list-all-files"
         onAnimationEnd={[Function]}
         onAnimationStart={[Function]}
@@ -334,7 +334,6 @@ exports[`feature/left-sidebar/LeftSidebar should render non-collapsible nested m
   >
     <NavList
       className="left-sidebar-list"
-      enableAnimation={false}
       heading={
         <LeftSidebarLink
           canReceiveDrop={false}
@@ -352,6 +351,7 @@ exports[`feature/left-sidebar/LeftSidebar should render non-collapsible nested m
           showTooltip={true}
         />
       }
+      isAnimationEnabled={false}
       key="list-all-files"
       onAnimationEnd={[Function]}
       onAnimationStart={[Function]}
@@ -422,7 +422,6 @@ exports[`feature/left-sidebar/LeftSidebar should render placeholder inside neste
     >
       <NavList
         className="left-sidebar-list"
-        enableAnimation={true}
         heading={
           <NavListCollapseHeader
             onToggleCollapse={[Function]}
@@ -444,6 +443,7 @@ exports[`feature/left-sidebar/LeftSidebar should render placeholder inside neste
             />
           </NavListCollapseHeader>
         }
+        isAnimationEnabled={true}
         key="list-all-files"
         onAnimationEnd={[Function]}
         onAnimationStart={[Function]}

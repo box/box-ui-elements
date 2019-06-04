@@ -70,9 +70,9 @@ describe('components/nav-sidebar/NavList', () => {
 
     test.each([[false, false], [true, true]])(
         'should render animate height component when appropriate',
-        (enableAnimationProp, expectAnimationComponent) => {
+        (isAnimationEnabled, expectAnimationComponent) => {
             const nav = shallow(
-                <NavList enableAnimation={enableAnimationProp}>
+                <NavList isAnimationEnabled={isAnimationEnabled}>
                     <Link>Test</Link>
                 </NavList>,
             );

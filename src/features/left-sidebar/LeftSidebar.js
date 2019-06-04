@@ -257,7 +257,7 @@ class LeftSidebar extends React.Component<Props, State> {
             <NavList
                 className={classes}
                 collapsed={collapsed}
-                enableAnimation={isCollapsible}
+                isAnimationEnabled={isCollapsible}
                 heading={heading}
                 onAnimationStart={this.setAnimationStart}
                 onAnimationEnd={this.setAnimationStop}
