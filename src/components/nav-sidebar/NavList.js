@@ -10,6 +10,8 @@ type Props = {
     collapsed?: boolean,
     enableAnimation?: boolean,
     heading?: React.Node,
+    onAnimationEnd?: () => void,
+    onAnimationStart?: () => void,
     placeholder?: React.Node,
     ulProps?: Object,
 };
@@ -20,6 +22,8 @@ const NavList = ({
     collapsed = false,
     enableAnimation = false,
     heading,
+    onAnimationEnd,
+    onAnimationStart,
     placeholder,
     ulProps = {},
 }: Props) => {
@@ -36,7 +40,12 @@ const NavList = ({
             {placeholder}
             <ul {...ulProps}>
                 {enableAnimation && children ? (
-                    <AnimateHeight duration={200} height={collapsed ? 0 : 'auto'}>
+                    <AnimateHeight
+                        duration={200}
+                        height={collapsed ? 0 : 'auto'}
+                        onAnimationEnd={onAnimationEnd}
+                        onAnimationStart={onAnimationStart}
+                    >
                         {childrenParsed}
                     </AnimateHeight>
                 ) : (

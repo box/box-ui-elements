@@ -9,7 +9,7 @@ exports[`feature/left-sidebar/LeftSidebar should not render nested menu items wi
   >
     <NavList
       className="left-sidebar-list"
-      enableAnimation={true}
+      enableAnimation={false}
       heading={
         <LeftSidebarLink
           canReceiveDrop={false}
@@ -28,6 +28,8 @@ exports[`feature/left-sidebar/LeftSidebar should not render nested menu items wi
         />
       }
       key="list-all-files"
+      onAnimationEnd={[Function]}
+      onAnimationStart={[Function]}
       placeholder={null}
       ulProps={Object {}}
     >
@@ -253,6 +255,8 @@ exports[`feature/left-sidebar/LeftSidebar should render collapsible nested menu 
           </NavListCollapseHeader>
         }
         key="list-all-files"
+        onAnimationEnd={[Function]}
+        onAnimationStart={[Function]}
         placeholder={null}
         ulProps={
           Object {
@@ -330,7 +334,7 @@ exports[`feature/left-sidebar/LeftSidebar should render non-collapsible nested m
   >
     <NavList
       className="left-sidebar-list"
-      enableAnimation={true}
+      enableAnimation={false}
       heading={
         <LeftSidebarLink
           canReceiveDrop={false}
@@ -349,6 +353,8 @@ exports[`feature/left-sidebar/LeftSidebar should render non-collapsible nested m
         />
       }
       key="list-all-files"
+      onAnimationEnd={[Function]}
+      onAnimationStart={[Function]}
       placeholder={null}
       ulProps={Object {}}
     >
@@ -439,6 +445,8 @@ exports[`feature/left-sidebar/LeftSidebar should render placeholder inside neste
           </NavListCollapseHeader>
         }
         key="list-all-files"
+        onAnimationEnd={[Function]}
+        onAnimationStart={[Function]}
         placeholder={
           <div
             className="placeholder"

@@ -128,6 +128,7 @@ type Props = {
 };
 
 type State = {
+    isAnimating: boolean,
     isScrollableAbove: boolean,
     isScrollableBelow: boolean,
     isScrolling: boolean,
@@ -143,6 +144,7 @@ class LeftSidebar extends React.Component<Props, State> {
         super(props);
 
         this.state = {
+            isAnimating: false,
             isScrollableAbove: false,
             isScrollableBelow: false,
             isScrolling: false,
@@ -212,6 +214,7 @@ class LeftSidebar extends React.Component<Props, State> {
         showLoadingIndicator?: boolean,
         onToggleCollapse?: ?Function,
     ) {
+        const { isAnimating, isScrollableAbove, isScrollableBelow } = this.state;
         const {
             canReceiveDrop = false,
             className = '',
@@ -221,8 +224,9 @@ class LeftSidebar extends React.Component<Props, State> {
             menuItems,
             placeholder,
         } = headerLinkProps;
+        const isCollapsible = !!onToggleCollapse;
 
-        const heading = onToggleCollapse ? (
+        const heading = isCollapsible ? (
             <NavListCollapseHeader onToggleCollapse={onToggleCollapse}>
                 {this.getNavLink(headerLinkProps, leftSidebarProps)}
             </NavListCollapseHeader>
@@ -236,11 +240,11 @@ class LeftSidebar extends React.Component<Props, State> {
             );
 
         const classes = classNames('left-sidebar-list', className, {
-            'lsb-scrollable-shadow-top': this.state.isScrollableAbove,
-            'lsb-scrollable-shadow-bottom': this.state.isScrollableBelow,
+            'lsb-scrollable-shadow-top': isScrollableAbove,
+            'lsb-scrollable-shadow-bottom': isScrollableBelow && !isAnimating,
         });
 
-        const ulProps = onToggleCollapse
+        const ulProps = isCollapsible
             ? {
                   onScroll: this.onListScroll,
                   ref: elScrollableList => {
@@ -253,8 +257,10 @@ class LeftSidebar extends React.Component<Props, State> {
             <NavList
                 className={classes}
                 collapsed={collapsed}
-                enableAnimation
+                enableAnimation={isCollapsible}
                 heading={heading}
+                onAnimationStart={this.setAnimationStart}
+                onAnimationEnd={this.setAnimationStop}
                 placeholder={placeholderEl}
                 key={`list-${id}`}
                 ulProps={ulProps}
@@ -271,6 +277,19 @@ class LeftSidebar extends React.Component<Props, State> {
             builtNavList
         );
     }
+
+    setAnimationStart = () => {
+        // we track animation to fix problem where bottom shadow shows when there is not overflow content
+        this.setState({
+            isAnimating: true,
+        });
+    };
+
+    setAnimationStop = () => {
+        this.setState({
+            isAnimating: false,
+        });
+    };
 
     getNavLink(props: MenuItem | SubMenuItem, leftSidebarProps: LeftSidebarProps) {
         const {
