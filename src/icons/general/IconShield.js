@@ -1,35 +1,46 @@
 // @flow
 import * as React from 'react';
 
+import classNames from 'classnames';
 import AccessibleSVG from '../accessible-svg';
+import { boxBlue, white } from '../../styles/variables';
 
 type Props = {
     className?: string,
     color?: string,
     height?: number,
+    opacity?: number,
     /** A text-only string describing the icon if it's not purely decorative for accessibility */
     title?: string | React.Element<any>,
     width?: number,
 };
 
-const IconShield = ({ className = '', color = '#888888', height = 14, title, width = 12 }: Props) => (
+const IconShield = ({ className, color = boxBlue, height = 32, opacity = 0.2, width = 32, title }: Props) => (
     <AccessibleSVG
-        className={`icon-governance ${className}`}
+        className={classNames('bdl-IconShield', className)}
         height={height}
         title={title}
-        viewBox="0 0 12 14"
+        viewBox="0 0 32 32"
         width={width}
     >
-        <g
+        <path
             className="stroke-color"
-            fill="none"
-            fillRule="evenodd"
+            fill={white}
             stroke={color}
             strokeLinecap="round"
             strokeLinejoin="round"
-        >
-            <path d="M.5 1.5S3.25 3.08 6 .5c2.75 2.58 5.5 1 5.5 1v8.88L6 13.5.5 10.37V1.5zM9.5 4.5v4" />
-        </g>
+            strokeWidth="2"
+            d="M3 3.308S9.5 6.962 16 1c6.5 5.962 13 2.308 13 2.308v20.48L16 31 3 23.788V3.308z"
+        />
+        <path className="fill-color" fill={color} fillOpacity={opacity} d="M16 5C10.5 8.5 6 7 6 7v14.712L16 27V5z" />
+        <path
+            className="stroke-color"
+            stroke={color}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M25 10v11"
+        />
     </AccessibleSVG>
 );
 
