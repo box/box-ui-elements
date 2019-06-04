@@ -2,7 +2,7 @@
 
 exports[`icons/collections/IconCollectionsAdd should correctly render default icon 1`] = `
 <AccessibleSVG
-  className="IconCollectionsAdd"
+  className="bdl-IconCollectionsAdd"
   height={32}
   viewBox="0 0 32 32"
   width={32}
