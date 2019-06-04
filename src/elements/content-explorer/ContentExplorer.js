@@ -785,11 +785,8 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
-        const {
-            selected,
-            currentCollection,
-            currentCollection: { items = [] },
-        }: State = this.state;
+        const { selected, currentCollection }: State = this.state;
+        const { items = [] } = currentCollection;
         const { onSelect }: Props = this.props;
 
         if (item === selected) {
