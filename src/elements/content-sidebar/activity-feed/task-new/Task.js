@@ -19,7 +19,7 @@ import Comment from '../comment';
 import TaskActions from './TaskActions';
 import TaskDueDate from './TaskDueDate';
 import Status from './TaskStatus';
-import Assignees from './Assignees';
+import AvatarGroup from './AvatarGroup';
 import './Task.scss';
 
 type Props = {|
@@ -142,7 +142,7 @@ const Task = ({
                     <Status status={status} />
                 </div>
                 <div className="bcs-task-content">
-                    <Assignees maxAvatars={3} assignees={assigned_to} getAvatarUrl={getAvatarUrl} />
+                    <AvatarGroup getAvatarUrl={getAvatarUrl} maxAvatars={3} users={assigned_to} />
                 </div>
                 <div className="bcs-task-content">
                     {currentUserAssignment && shouldShowActions && (
