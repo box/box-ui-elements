@@ -10,6 +10,7 @@ export const bdlYellow = '#ffd700'; // bdl-yellow
 export const bdlGrimace = '#4826c2'; // bdl-grimace
 export const bdlPurpleRain = '#9f3fed'; // bdl-purple-rain
 export const bdlWatermelonRed = '#ed3757'; // bdl-watermelon-red
+export const bdlYellorange10 = '#fef7e8'; // bdl-yellorange-10
 export const bdlYellow10 = '#fffbe5'; // bdl-yellow-10
 export const bdlBoxBlue50 = '#619de5'; // bdl-box-blue-50
 export const bdlBoxBlue05 = '#f2f7fd'; // bdl-box-blue-05

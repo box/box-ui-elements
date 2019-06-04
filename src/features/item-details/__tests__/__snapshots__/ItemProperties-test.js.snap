@@ -29,13 +29,15 @@ exports[`features/item-details/ItemProperties should render editable description
   <FormattedMessage
     defaultMessage="Description"
     id="boxui.itemDetails.description"
-    tagName="dt"
-  />
+  >
+    <Component />
+  </FormattedMessage>
   <dd>
     <EditableDescription
       onDescriptionChange={[Function]}
       textAreaProps={
         Object {
+          "aria-labelledby": "description_3",
           "data-resin-target": "description",
         }
       }
@@ -54,13 +56,15 @@ exports[`features/item-details/ItemProperties should render editable description
   <FormattedMessage
     defaultMessage="Description"
     id="boxui.itemDetails.description"
-    tagName="dt"
-  />
+  >
+    <Component />
+  </FormattedMessage>
   <dd>
     <EditableDescription
       onDescriptionChange={[Function]}
       textAreaProps={
         Object {
+          "aria-labelledby": "description_4",
           "data-resin-target": "description",
         }
       }
@@ -99,8 +103,9 @@ exports[`features/item-details/ItemProperties should render properties when spec
   <FormattedMessage
     defaultMessage="Description"
     id="boxui.itemDetails.description"
-    tagName="dt"
-  />
+  >
+    <Component />
+  </FormattedMessage>
   <dd>
     <ReadonlyDescription
       value="Hi

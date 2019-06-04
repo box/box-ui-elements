@@ -18,7 +18,7 @@ describe('icons/general/IconGlobe', () => {
         expect(
             wrapper
                 .find('path')
-                .at(0)
+                .at(1)
                 .prop('fill'),
         ).toEqual(color);
     });
