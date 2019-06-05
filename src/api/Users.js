@@ -54,7 +54,14 @@ class Users extends Base {
         const accessToken: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);
 
         if (typeof accessToken === 'string') {
-            const url = `${this.getAvatarUrl(userId)}?access_token=${accessToken}`;
+            const options = {
+                access_token: accessToken,
+                pic_type: 'large',
+            };
+            const urlParams = Object.keys(options)
+                .map(key => `${key}=${options[key]}`)
+                .join('&');
+            const url = `${this.getAvatarUrl(userId)}?${urlParams}`;
             cache.set(userId, url);
             return url;
         }
