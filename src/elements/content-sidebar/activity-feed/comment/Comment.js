@@ -7,6 +7,7 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
+import TetherComponent from 'react-tether';
 import getProp from 'lodash/get';
 import identity from 'lodash/identity';
 
@@ -89,7 +90,28 @@ class Comment extends React.Component<Props, State> {
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
+        const { isConfirming } = this.state;
+
         nativeEvent.stopImmediatePropagation();
+
+        switch (event.key) {
+            case 'Escape':
+                event.stopPropagation();
+                event.preventDefault();
+                if (isConfirming) {
+                    this.onDeleteCancel();
+                }
+                break;
+            case 'Enter':
+                event.stopPropagation();
+                event.preventDefault();
+                if (isConfirming) {
+                    this.onDeleteClick();
+                }
+                break;
+            default:
+                break;
+        }
     };
 
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
@@ -159,15 +181,45 @@ class Comment extends React.Component<Props, State> {
                                     getUserProfileUrl={getUserProfileUrl}
                                 />,
                             )}
-                            {canShowMenu && !isConfirming && !isPending && (
-                                <CommentMenu
-                                    id={id}
-                                    isDisabled={isConfirming}
-                                    onDelete={this.onDeleteClick}
-                                    onEdit={onEdit}
-                                    permissions={permissions}
-                                    toEdit={toEdit}
-                                />
+                            {canShowMenu && !isPending && (
+                                <TetherComponent
+                                    attachment="top right"
+                                    className="bcs-comment-delete-confirm"
+                                    constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                                    targetAttachment="bottom right"
+                                >
+                                    <CommentMenu
+                                        id={id}
+                                        isDisabled={isConfirming}
+                                        onDelete={this.onDeleteClick}
+                                        onEdit={onEdit}
+                                        permissions={permissions}
+                                        toEdit={toEdit}
+                                    />
+                                    {isConfirming && (
+                                        <Overlay className="bcs-comment-confirm-container" onKeyDown={this.onKeyDown}>
+                                            <div className="bsc-comment-confirm-prompt">
+                                                <FormattedMessage {...deleteConfirmMessage} />
+                                            </div>
+                                            <div>
+                                                <PrimaryButton
+                                                    className="bcs-comment-confirm-delete"
+                                                    onClick={this.onDeleteConfirmedHandler}
+                                                    type="button"
+                                                >
+                                                    <FormattedMessage {...messages.delete} />
+                                                </PrimaryButton>
+                                                <Button
+                                                    className="bcs-comment-confirm-cancel"
+                                                    onClick={this.onDeleteCancel}
+                                                    type="button"
+                                                >
+                                                    <FormattedMessage {...messages.cancel} />
+                                                </Button>
+                                            </div>
+                                        </Overlay>
+                                    )}
+                                </TetherComponent>
                             )}
                         </div>
                         <div>
@@ -217,25 +269,6 @@ class Comment extends React.Component<Props, State> {
                     </div>
                 </div>
                 {error ? <CommentInlineError {...error} /> : null}
-                {isConfirming && (
-                    <Overlay className="bcs-comment-confirm-container">
-                        <div className="bsc-comment-confirm-prompt">
-                            <FormattedMessage {...deleteConfirmMessage} />
-                        </div>
-                        <div>
-                            <PrimaryButton
-                                className="bcs-comment-confirm-delete"
-                                onClick={this.onDeleteConfirmedHandler}
-                                type="button"
-                            >
-                                <FormattedMessage {...messages.delete} />
-                            </PrimaryButton>
-                            <Button className="bcs-comment-confirm-cancel" onClick={this.onDeleteCancel} type="button">
-                                <FormattedMessage {...messages.cancel} />
-                            </Button>
-                        </div>
-                    </Overlay>
-                )}
             </div>
         );
     }

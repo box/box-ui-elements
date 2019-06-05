@@ -1,5 +1,31 @@
 @import '../../../common/variables';
 
+// tethered styles
+.bcs-comment-delete-confirm {
+    z-index: 1;
+}
+
+.bcs-comment-confirm-container {
+    width: 212px;
+
+    .overlay {
+        padding: 20px;
+    }
+
+    .bsc-comment-confirm-prompt {
+        margin-bottom: 20px;
+    }
+
+    .bcs-comment-confirm-delete,
+    .bcs-comment-confirm-cancel {
+        margin: 0;
+    }
+
+    .bcs-comment-confirm-delete {
+        margin-right: 8px;
+    }
+}
+
 .be {
     .bcs-comment-container {
         position: relative;
@@ -13,30 +39,6 @@
                 display: block;
                 margin-top: 5px;
                 text-decoration: underline;
-            }
-        }
-
-        .bcs-comment-confirm-container {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            width: 212px;
-
-            .overlay {
-                padding: 20px;
-            }
-
-            .bsc-comment-confirm-prompt {
-                margin-bottom: 20px;
-            }
-
-            .bcs-comment-confirm-delete,
-            .bcs-comment-confirm-cancel {
-                margin: 0;
-            }
-
-            .bcs-comment-confirm-delete {
-                margin-right: 8px;
             }
         }
     }
