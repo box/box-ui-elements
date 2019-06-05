@@ -24,7 +24,7 @@ const IconCollectionsAdd = ({
     width = 32,
 }: Props) => (
     <AccessibleSVG
-        className={classNames('icon-collections-add', className, {
+        className={classNames('bdl-IconCollectionsAdd', className, {
             'is-selected': selected,
         })}
         height={height}

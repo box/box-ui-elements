@@ -56,8 +56,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     <div
       className="bcs-task-content"
     >
-      <Assignees
-        assignees={
+      <AvatarGroup
+        maxAvatars={3}
+        users={
           Object {
             "entries": Array [
               Object {
@@ -95,7 +96,6 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
             "next_marker": null,
           }
         }
-        maxAvatars={3}
       />
     </div>
     <div
