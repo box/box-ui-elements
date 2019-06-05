@@ -29,20 +29,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         ApprovalCommentForm.default = jest.fn().mockReturnValue(<div />);
     });
 
-    const render = (props = {}) =>
-        shallow(
-            <Comment
-                approverSelectorContacts={approverSelectorContacts}
-                created_by={{ name: '50 Cent', id: 10 }}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                id="123"
-                mentionSelectorContacts={mentionSelectorContacts}
-                tagged_message="test"
-                {...props}
-            />,
-        );
-
     test('should correctly render comment', () => {
         const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
         const comment = {
@@ -66,17 +52,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.find('ReadableTime').prop('timestamp')).toEqual(unixTime);
 
         expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should correctly add bcs-is-focused class when comment is focused', () => {
-        const wrapper = render();
-        const comment = wrapper.find('.bcs-comment');
-
-        expect(comment.hasClass('bcs-is-focused')).toBe(false);
-        comment.simulate('focus');
-        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(true);
-        comment.simulate('blur');
-        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(false);
     });
 
     test('should correctly render comment when translation is enabled', () => {

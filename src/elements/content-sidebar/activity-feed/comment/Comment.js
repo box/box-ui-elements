@@ -57,7 +57,6 @@ type Props = {
 type State = {
     isConfirming?: boolean,
     isEditing?: boolean,
-    isFocused?: boolean,
     isInputOpen?: boolean,
 };
 
@@ -69,7 +68,6 @@ class Comment extends React.Component<Props, State> {
     state = {
         isConfirming: false,
         isEditing: false,
-        isFocused: false,
         isInputOpen: false,
     };
 
@@ -108,14 +106,6 @@ class Comment extends React.Component<Props, State> {
 
     toEdit = (): void => this.setState({ isEditing: true, isInputOpen: true });
 
-    handleCommentFocus = (): void => {
-        this.setState({ isFocused: true });
-    };
-
-    handleCommentBlur = (): void => {
-        this.setState({ isFocused: false });
-    };
-
     render(): React.Node {
         const {
             avatarRenderer = identity,
@@ -139,7 +129,7 @@ class Comment extends React.Component<Props, State> {
             mentionSelectorContacts,
         } = this.props;
         const { toEdit } = this;
-        const { isConfirming, isEditing, isFocused, isInputOpen } = this.state;
+        const { isConfirming, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const canDelete = getProp(permissions, 'can_delete', false);
         const canEdit = getProp(permissions, 'can_edit', false);
@@ -153,10 +143,7 @@ class Comment extends React.Component<Props, State> {
                 <div
                     className={classNames('bcs-comment', {
                         'bcs-is-pending': isPending || error,
-                        'bcs-is-focused': isFocused,
                     })}
-                    onBlur={this.handleCommentBlur}
-                    onFocus={this.handleCommentFocus}
                 >
                     {avatarRenderer(
                         <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />,

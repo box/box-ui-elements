@@ -88,17 +88,6 @@
             top: 0;
         }
 
-        &:hover,
-        &.bcs-is-focused {
-            .bcs-inline-delete-container {
-                opacity: 1;
-            }
-
-            .bcs-comment-edit-container {
-                opacity: 1;
-            }
-        }
-
         .bcs-comment-text {
             white-space: pre-wrap;
             word-wrap: break-word;
