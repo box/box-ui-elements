@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import queryString from 'query-string';
 import TokenService from '../utils/TokenService';
 import { getTypedFileId } from '../utils/file';
 import Base from './Base';
@@ -58,9 +59,7 @@ class Users extends Base {
                 access_token: accessToken,
                 pic_type: 'large',
             };
-            const urlParams = Object.keys(options)
-                .map(key => `${key}=${options[key]}`)
-                .join('&');
+            const urlParams = queryString.stringify(options);
             const url = `${this.getAvatarUrl(userId)}?${urlParams}`;
             cache.set(userId, url);
             return url;
