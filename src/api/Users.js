@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import queryString from 'query-string';
 import TokenService from '../utils/TokenService';
 import { getTypedFileId } from '../utils/file';
 import Base from './Base';
@@ -54,7 +55,12 @@ class Users extends Base {
         const accessToken: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);
 
         if (typeof accessToken === 'string') {
-            const url = `${this.getAvatarUrl(userId)}?access_token=${accessToken}`;
+            const options = {
+                access_token: accessToken,
+                pic_type: 'large',
+            };
+            const urlParams = queryString.stringify(options);
+            const url = `${this.getAvatarUrl(userId)}?${urlParams}`;
             cache.set(userId, url);
             return url;
         }
