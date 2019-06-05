@@ -14,14 +14,14 @@ describe('elements/SubHeader/Sort', () => {
         expect(wrapper.find(SortButton)).toHaveLength(1);
         expect(wrapper.find(DropdownMenu)).toHaveLength(1);
         expect(wrapper.find(Menu)).toHaveLength(1);
-        expect(wrapper.find(MenuItem)).toHaveLength(4);
+        expect(wrapper.find(MenuItem)).toHaveLength(6);
     });
 
-    test('should render a select with 4 options', () => {
+    test('should render a select with 6 options', () => {
         const wrapper = shallow(<Sort onSortChange={jest.fn()} sortBy="name" sortDirection={SORT_ASC} />);
         const options = wrapper.find(MenuItem);
 
-        expect(options).toHaveLength(4);
+        expect(options).toHaveLength(6);
         expect(
             options
                 .at(0)
@@ -73,6 +73,32 @@ describe('elements/SubHeader/Sort', () => {
                 .childAt(1)
                 .prop('id'),
         ).toBe(messages.dateDESC.id);
+
+        expect(
+            options
+                .at(4)
+                .childAt(0)
+                .text(),
+        ).toBe('');
+        expect(
+            options
+                .at(4)
+                .childAt(1)
+                .prop('id'),
+        ).toBe(messages.sizeASC.id);
+
+        expect(
+            options
+                .at(5)
+                .childAt(0)
+                .text(),
+        ).toBe('');
+        expect(
+            options
+                .at(5)
+                .childAt(1)
+                .prop('id'),
+        ).toBe(messages.sizeDESC.id);
     });
 
     test('should pass correct parameters when clicked', () => {
@@ -91,13 +117,19 @@ describe('elements/SubHeader/Sort', () => {
 
         options.at(3).simulate('click');
         expect(sort).toHaveBeenCalledWith('date', SORT_DESC);
+
+        options.at(4).simulate('click');
+        expect(sort).toHaveBeenCalledWith('size', SORT_ASC);
+
+        options.at(5).simulate('click');
+        expect(sort).toHaveBeenCalledWith('size', SORT_DESC);
     });
 
     test('should render a select with correct option selected', () => {
         const wrapper = shallow(<Sort onSortChange={jest.fn()} sortBy="date" sortDirection={SORT_DESC} />);
         const options = wrapper.find(MenuItem);
 
-        expect(options).toHaveLength(4);
+        expect(options).toHaveLength(6);
         expect(
             options
                 .at(3)

@@ -46,6 +46,7 @@ import {
     SIZE_LARGE,
     FIELD_DATE,
     FIELD_NAME,
+    FIELD_SIZE,
     FIELD_RELEVANCE,
     DEFAULT_VIEW_RECENTS,
     DEFAULT_VIEW_FILES,
@@ -120,7 +121,7 @@ type View =
     | typeof VIEW_UPLOAD_EMPTY
     | typeof VIEW_UPLOAD_IN_PROGRESS
     | typeof VIEW_UPLOAD_SUCCESS;
-type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE;
+type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE | typeof FIELD_SIZE;
 type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
 type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;

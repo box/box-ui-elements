@@ -12,7 +12,7 @@ import MenuItem from '../../../components/menu/MenuItem';
 import IconCheck from '../../../icons/general/IconCheck';
 import SortButton from './SortButton';
 import messages from '../messages';
-import { FIELD_NAME, FIELD_DATE, SORT_ASC, SORT_DESC } from '../../../constants';
+import { FIELD_NAME, FIELD_DATE, FIELD_SIZE, SORT_ASC, SORT_DESC } from '../../../constants';
 import './Sort.scss';
 
 type Props = {
@@ -26,6 +26,8 @@ const SORT_ITEMS: Array<Array<SortBy>> = [
     [FIELD_NAME, SORT_DESC],
     [FIELD_DATE, SORT_ASC],
     [FIELD_DATE, SORT_DESC],
+    [FIELD_SIZE, SORT_ASC],
+    [FIELD_SIZE, SORT_DESC],
 ];
 
 const Sort = ({ sortBy, sortDirection, onSortChange }: Props) => (
