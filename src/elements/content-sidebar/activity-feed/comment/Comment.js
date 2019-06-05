@@ -12,12 +12,14 @@ import identity from 'lodash/identity';
 
 import { ReadableTime } from '../../../../components/time';
 import Tooltip from '../../../../components/tooltip';
-
+import { Overlay } from '../../../../components/flyout';
+import PrimaryButton from '../../../../components/primary-button';
+import Button from '../../../../components/button';
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+
+import CommentMenu from './CommentMenu';
 import UserLink from './UserLink';
-import InlineDelete from '../inline-delete';
-import InlineEdit from './InlineEdit';
 import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
 import ApprovalCommentForm from '../approval-comment-form';
@@ -25,7 +27,7 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
 
 import './Comment.scss';
-import { PLACEHOLDER_USER } from '../../../../constants';
+import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK, PLACEHOLDER_USER } from '../../../../constants';
 
 type Props = {
     avatarRenderer?: React.Node => React.Element<any>,
@@ -37,7 +39,6 @@ type Props = {
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
-    inlineDeleteMessage?: MessageDescriptor,
     isDisabled?: boolean,
     isPending?: boolean,
     is_reply_comment?: boolean,
@@ -49,20 +50,43 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
+    type?: typeof COMMENT_TYPE_DEFAULT | typeof COMMENT_TYPE_TASK,
     userHeadlineRenderer?: React.Node => React.Element<typeof FormattedMessage>,
 };
 
 type State = {
+    isConfirming?: boolean,
     isEditing?: boolean,
     isFocused?: boolean,
     isInputOpen?: boolean,
 };
 
 class Comment extends React.Component<Props, State> {
+    static defaultProps = {
+        type: COMMENT_TYPE_DEFAULT,
+    };
+
     state = {
+        isConfirming: false,
         isEditing: false,
         isFocused: false,
         isInputOpen: false,
+    };
+
+    onDeleteConfirmedHandler = (): void => {
+        const { id, onDelete, permissions } = this.props;
+
+        if (onDelete) {
+            onDelete({ id, permissions });
+        }
+    };
+
+    onDeleteCancel = (): void => {
+        this.setState({ isConfirming: false });
+    };
+
+    onDeleteClick = () => {
+        this.setState({ isConfirming: true });
     };
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
@@ -99,15 +123,14 @@ class Comment extends React.Component<Props, State> {
             created_at,
             permissions,
             id,
-            inlineDeleteMessage = messages.commentDeletePrompt,
             isPending,
             error,
-            onDelete,
             onEdit,
             tagged_message = '',
             userHeadlineRenderer = identity,
             translatedTaggedMessage,
             translations,
+            type,
             currentUser,
             isDisabled,
             getAvatarUrl,
@@ -116,11 +139,14 @@ class Comment extends React.Component<Props, State> {
             mentionSelectorContacts,
         } = this.props;
         const { toEdit } = this;
-        const { isEditing, isFocused, isInputOpen } = this.state;
+        const { isConfirming, isEditing, isFocused, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const canDelete = getProp(permissions, 'can_delete', false);
         const canEdit = getProp(permissions, 'can_edit', false);
+        const canShowMenu = canDelete || canEdit;
         const createdByUser = created_by || PLACEHOLDER_USER;
+        const deleteConfirmMessage =
+            type === COMMENT_TYPE_DEFAULT ? messages.commentDeletePrompt : messages.taskDeletePrompt;
 
         return (
             <div className="bcs-comment-container">
@@ -146,13 +172,15 @@ class Comment extends React.Component<Props, State> {
                                     getUserProfileUrl={getUserProfileUrl}
                                 />,
                             )}
-                            {!!onEdit && !!canEdit && !isPending && <InlineEdit id={id} toEdit={toEdit} />}
-                            {!!onDelete && !!canDelete && !isPending && (
-                                <InlineDelete
+                            {canShowMenu && !isConfirming && (
+                                <CommentMenu
                                     id={id}
+                                    isDisabled={isConfirming}
+                                    isPending={isPending}
+                                    onDelete={this.onDeleteClick}
+                                    onEdit={onEdit}
                                     permissions={permissions}
-                                    message={<FormattedMessage {...inlineDeleteMessage} />}
-                                    onDelete={onDelete}
+                                    toEdit={toEdit}
                                 />
                             )}
                         </div>
@@ -203,6 +231,25 @@ class Comment extends React.Component<Props, State> {
                     </div>
                 </div>
                 {error ? <CommentInlineError {...error} /> : null}
+                {isConfirming && (
+                    <Overlay className="bcs-comment-confirm-container">
+                        <div className="bsc-comment-confirm-prompt">
+                            <FormattedMessage {...deleteConfirmMessage} />
+                        </div>
+                        <div>
+                            <PrimaryButton
+                                className="bcs-comment-confirm-delete"
+                                onClick={this.onDeleteConfirmedHandler}
+                                type="button"
+                            >
+                                <FormattedMessage {...messages.delete} />
+                            </PrimaryButton>
+                            <Button className="bcs-comment-confirm-cancel" onClick={this.onDeleteCancel} type="button">
+                                <FormattedMessage {...messages.cancel} />
+                            </Button>
+                        </div>
+                    </Overlay>
+                )}
             </div>
         );
     }
