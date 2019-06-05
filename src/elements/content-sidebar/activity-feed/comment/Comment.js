@@ -72,7 +72,7 @@ class Comment extends React.Component<Props, State> {
         isInputOpen: false,
     };
 
-    onDeleteConfirmedHandler = (): void => {
+    onDeleteConfirm = (): void => {
         const { id, onDelete, permissions } = this.props;
 
         if (onDelete) {
@@ -84,8 +84,12 @@ class Comment extends React.Component<Props, State> {
         this.setState({ isConfirming: false });
     };
 
-    onDeleteClick = () => {
+    handleDeleteClick = () => {
         this.setState({ isConfirming: true });
+    };
+
+    handleEditClick = (): void => {
+        this.setState({ isEditing: true, isInputOpen: true });
     };
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
@@ -106,7 +110,7 @@ class Comment extends React.Component<Props, State> {
                 event.stopPropagation();
                 event.preventDefault();
                 if (isConfirming) {
-                    this.onDeleteClick();
+                    this.onDeleteConfirm();
                 }
                 break;
             default:
@@ -126,8 +130,6 @@ class Comment extends React.Component<Props, State> {
         this.approvalCommentFormSubmitHandler();
     };
 
-    toEdit = (): void => this.setState({ isEditing: true, isInputOpen: true });
-
     render(): React.Node {
         const {
             avatarRenderer = identity,
@@ -137,7 +139,6 @@ class Comment extends React.Component<Props, State> {
             id,
             isPending,
             error,
-            onEdit,
             tagged_message = '',
             userHeadlineRenderer = identity,
             translatedTaggedMessage,
@@ -150,7 +151,6 @@ class Comment extends React.Component<Props, State> {
             getMentionWithQuery,
             mentionSelectorContacts,
         } = this.props;
-        const { toEdit } = this;
         const { isConfirming, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const canDelete = getProp(permissions, 'can_delete', false);
@@ -191,21 +191,24 @@ class Comment extends React.Component<Props, State> {
                                     <CommentMenu
                                         id={id}
                                         isDisabled={isConfirming}
-                                        onDelete={this.onDeleteClick}
-                                        onEdit={onEdit}
+                                        onDeleteClick={this.handleDeleteClick}
+                                        onEditClick={this.handleEditClick}
                                         permissions={permissions}
-                                        toEdit={toEdit}
                                         type={type}
                                     />
                                     {isConfirming && (
-                                        <Overlay className="bcs-comment-confirm-container" onKeyDown={this.onKeyDown}>
+                                        <Overlay
+                                            className="be-modal bcs-comment-confirm-container"
+                                            onKeyDown={this.onKeyDown}
+                                            shouldOutlineFocus={false}
+                                        >
                                             <div className="bsc-comment-confirm-prompt">
                                                 <FormattedMessage {...deleteConfirmMessage} />
                                             </div>
                                             <div>
                                                 <PrimaryButton
                                                     className="bcs-comment-confirm-delete"
-                                                    onClick={this.onDeleteConfirmedHandler}
+                                                    onClick={this.onDeleteConfirm}
                                                     type="button"
                                                 >
                                                     <FormattedMessage {...messages.delete} />

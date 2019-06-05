@@ -20,60 +20,52 @@ import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK } from '../../../../constants';
 type Props = {
     id: string,
     isDisabled: boolean,
-    onDelete: Function,
-    onEdit: Function,
+    onDeleteClick?: Function,
+    onEditClick?: Function,
     permissions?: BoxItemPermission,
-    toEdit: Function,
     type: typeof COMMENT_TYPE_DEFAULT | typeof COMMENT_TYPE_TASK,
 } & InjectIntlProvidedProps;
 
-class CommentMenu extends React.Component<Props> {
-    onEdit = (): void => {
-        const { id, toEdit } = this.props;
-        toEdit({ id });
-    };
+const CommentMenu = (props: Props) => {
+    const { intl, isDisabled, onDeleteClick, onEditClick, permissions, type } = props;
+    const canDelete = getProp(permissions, 'can_delete', false);
+    const canEdit = getProp(permissions, 'can_edit', false);
+    const isTaskComment = type === COMMENT_TYPE_TASK;
+    const editLabel = isTaskComment ? messages.taskEditMenuItem : messages.editLabel;
+    const deleteLabel = isTaskComment ? messages.taskDeleteMenuItem : deleteMessages.deleteLabel;
 
-    render() {
-        const { intl, isDisabled, onDelete, onEdit, permissions, type } = this.props;
-        const canDelete = getProp(permissions, 'can_delete', false);
-        const canEdit = getProp(permissions, 'can_edit', false);
-        const isTaskComment = type === COMMENT_TYPE_TASK;
-        const editLabel = isTaskComment ? messages.taskEditMenuItem : messages.editLabel;
-        const deleteLabel = isTaskComment ? messages.taskDeleteMenuItem : deleteMessages.deleteLabel;
-
-        return (
-            <DropdownMenu className="bcs-comment-menu-container" constrainToScrollParent isRightAligned>
-                <PlainButton className="bcs-comment-menu-btn" isDisabled={isDisabled}>
-                    <IconEllipsis color={nines} />
-                </PlainButton>
-                <Menu>
-                    {!!onEdit && !!canEdit && (
-                        <MenuItem
-                            aria-label={intl.formatMessage(editLabel)}
-                            className="bcs-comment-menu-edit"
-                            data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
-                            onClick={this.onEdit}
-                        >
-                            <IconPencil color={fours} />
-                            <FormattedMessage {...editLabel} />
-                        </MenuItem>
-                    )}
-                    {!!onDelete && !!canDelete && (
-                        <MenuItem
-                            aria-label={intl.formatMessage(deleteMessages.deleteLabel)}
-                            className="bcs-comment-menu-delete"
-                            data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
-                            onClick={onDelete}
-                        >
-                            <IconTrash color={fours} />
-                            <FormattedMessage {...deleteLabel} />
-                        </MenuItem>
-                    )}
-                </Menu>
-            </DropdownMenu>
-        );
-    }
-}
+    return (
+        <DropdownMenu className="bcs-comment-menu-container" constrainToScrollParent isRightAligned>
+            <PlainButton className="bcs-comment-menu-btn" isDisabled={isDisabled}>
+                <IconEllipsis color={nines} />
+            </PlainButton>
+            <Menu>
+                {!!onEditClick && !!canEdit && type === COMMENT_TYPE_TASK && (
+                    <MenuItem
+                        aria-label={intl.formatMessage(editLabel)}
+                        className="bcs-comment-menu-edit"
+                        data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
+                        onClick={onEditClick}
+                    >
+                        <IconPencil color={fours} />
+                        <FormattedMessage {...editLabel} />
+                    </MenuItem>
+                )}
+                {!!onDeleteClick && !!canDelete && (
+                    <MenuItem
+                        aria-label={intl.formatMessage(deleteMessages.deleteLabel)}
+                        className="bcs-comment-menu-delete"
+                        data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
+                        onClick={onDeleteClick}
+                    >
+                        <IconTrash color={fours} />
+                        <FormattedMessage {...deleteLabel} />
+                    </MenuItem>
+                )}
+            </Menu>
+        </DropdownMenu>
+    );
+};
 
 export { CommentMenu as CommentMenuBase };
 export default injectIntl(CommentMenu);

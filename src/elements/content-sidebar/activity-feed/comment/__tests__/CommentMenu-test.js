@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-
+import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK } from '../../../../../constants';
 import CommentMenu from '../CommentMenu';
 
 describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
     test('should allow user to delete if they have delete permissions on the comment and delete handler is defined', () => {
         const comment = {
             permissions: { can_delete: true },
-            onDelete: jest.fn(),
+            onDeleteClick: jest.fn(),
         };
 
         const wrapper = mount(<CommentMenu {...comment} />);
@@ -19,7 +19,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
     test('should not allow user to delete if they lack delete permissions on the comment', () => {
         const comment = {
             permissions: { can_delete: false },
-            onDelete: jest.fn(),
+            onDeleteClick: jest.fn(),
         };
 
         const wrapper = mount(<CommentMenu {...comment} />);
@@ -28,7 +28,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
         expect(wrapper.find('MenuItem.bcs-comment-menu-delete').length).toBe(0);
     });
 
-    test('should not allow comment creator to delete if onDelete handler is undefined', () => {
+    test('should not allow comment creator to delete if onDeleteClick handler is undefined', () => {
         const comment = {
             permissions: { can_delete: true },
         };
@@ -42,7 +42,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
     test('should allow user to edit if they have edit permissions on the comment and edit handler is defined', () => {
         const comment = {
             permissions: { can_edit: true },
-            onEdit: jest.fn(),
+            onEditClick: jest.fn(),
+            type: COMMENT_TYPE_TASK,
         };
 
         const wrapper = mount(<CommentMenu {...comment} />);
@@ -54,7 +55,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
     test('should not allow comment creator to edit if they lack edit permissions on the comment', () => {
         const comment = {
             permissions: { can_edit: false },
-            onEdit: jest.fn(),
+            onEditClick: jest.fn(),
         };
 
         const wrapper = mount(<CommentMenu {...comment} />);
@@ -63,9 +64,22 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
         expect(wrapper.find('MenuItem.bcs-comment-menu-edit').length).toBe(0);
     });
 
-    test('should not allow task creator to edit if onEdit handler is undefined', () => {
+    test('should not allow comment creator to edit if onEditClick handler is undefined', () => {
         const comment = {
             permissions: { can_edit: true },
+        };
+
+        const wrapper = mount(<CommentMenu {...comment} />);
+
+        wrapper.find('PlainButton').simulate('click');
+        expect(wrapper.find('MenuItem.bcs-comment-menu-edit').length).toBe(0);
+    });
+
+    test('should not allow comment creator to edit if the type is not task type', () => {
+        const comment = {
+            permissions: { can_edit: true },
+            onEditClick: jest.fn(),
+            type: COMMENT_TYPE_DEFAULT,
         };
 
         const wrapper = mount(<CommentMenu {...comment} />);

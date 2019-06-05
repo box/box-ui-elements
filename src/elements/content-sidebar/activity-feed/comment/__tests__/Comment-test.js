@@ -152,7 +152,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.state('isEditing')).toBe(false);
 
         expect(wrapper.state('isEditing')).toBe(false);
-        instance.toEdit();
+        instance.handleEditClick();
         wrapper.update();
         expect(wrapper.find('CommentText').length).toEqual(0);
         expect(wrapper.state('isEditing')).toBe(true);
@@ -252,7 +252,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.find('UserLink').length).toEqual(2);
         expect(wrapper.state('isEditing')).toBe(false);
 
-        wrapper.instance().toEdit();
+        wrapper.instance().handleEditClick();
         wrapper.update();
         expect(wrapper.state('isEditing')).toBe(true);
         expect(wrapper.find('CommentMenu').length).toEqual(2);
