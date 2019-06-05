@@ -16,6 +16,7 @@ type Props = {
     currentCollection: Collection,
     isSmall: boolean,
     onCreate: Function,
+    onGridViewSwitch: Function,
     onItemClick: Function,
     onSortChange: Function,
     onUpload: Function,
@@ -30,6 +31,7 @@ const SubHeader = ({
     onItemClick,
     onSortChange,
     currentCollection,
+    onGridViewSwitch,
     onUpload,
     onCreate,
     canUpload,
@@ -54,6 +56,7 @@ const SubHeader = ({
             onSortChange={onSortChange}
             onUpload={onUpload}
             view={view}
+            onGridViewSwitch={onGridViewSwitch}
         />
     </div>
 );

@@ -7,6 +7,8 @@
 import React from 'react';
 import Sort from './Sort';
 import Add from './Add';
+import Button from '../../../components/button/Button';
+import IconGridViewInverted from '../../../icons/general/IconGridViewInverted';
 import { VIEW_FOLDER } from '../../../constants';
 import './SubHeaderRight.scss';
 
@@ -15,6 +17,7 @@ type Props = {
     canUpload: boolean,
     currentCollection: Collection,
     onCreate: Function,
+    onGridViewSwitch: Function,
     onSortChange: Function,
     onUpload: Function,
     view: View,
@@ -27,6 +30,7 @@ const SubHeaderRight = ({
     canUpload,
     canCreateNewFolder,
     currentCollection,
+    onGridViewSwitch,
     onSortChange,
 }: Props) => {
     const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
@@ -48,6 +52,9 @@ const SubHeaderRight = ({
                     showUpload={canUpload}
                 />
             )}
+            <Button onClick={onGridViewSwitch}>
+                <IconGridViewInverted />
+            </Button>
         </div>
     );
 };

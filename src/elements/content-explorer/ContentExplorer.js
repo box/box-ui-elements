@@ -113,6 +113,7 @@ type State = {
     focusedRow: number,
     isCreateFolderModalOpen: boolean,
     isDeleteModalOpen: boolean,
+    isGridView: boolean,
     isLoading: boolean,
     isPreviewModalOpen: boolean,
     isRenameModalOpen: boolean,
@@ -227,6 +228,7 @@ class ContentExplorer extends Component<Props, State> {
             searchQuery: '',
             view: VIEW_FOLDER,
             isDeleteModalOpen: false,
+            isGridView: false,
             isRenameModalOpen: false,
             isCreateFolderModalOpen: false,
             isShareModalOpen: false,
@@ -1122,6 +1124,11 @@ class ContentExplorer extends Component<Props, State> {
         }
     };
 
+    switchGridView = (): void => {
+        const { isGridView }: State = this.state;
+        this.setState({ isGridView: !isGridView });
+    };
+
     /**
      * Keyboard events
      *
@@ -1248,6 +1255,7 @@ class ContentExplorer extends Component<Props, State> {
             currentPageSize,
             searchQuery,
             isDeleteModalOpen,
+            isGridView,
             isRenameModalOpen,
             isShareModalOpen,
             isUploadModalOpen,
@@ -1290,6 +1298,7 @@ class ContentExplorer extends Component<Props, State> {
                             onCreate={this.createFolder}
                             onItemClick={this.fetchFolder}
                             onSortChange={this.sort}
+                            onGridViewSwitch={this.switchGridView}
                         />
                         <Content
                             view={view}
@@ -1315,6 +1324,7 @@ class ContentExplorer extends Component<Props, State> {
                             onItemShare={this.share}
                             onItemPreview={this.preview}
                             onSortChange={this.sort}
+                            isGridView={isGridView}
                         />
                         <Footer>
                             <Pagination

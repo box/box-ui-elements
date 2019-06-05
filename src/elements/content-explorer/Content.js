@@ -31,6 +31,7 @@ type Props = {
     canShare: boolean,
     currentCollection: Collection,
     focusedRow: number,
+    isGridView: boolean,
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
@@ -71,6 +72,7 @@ const Content = ({
     onItemShare,
     onItemPreview,
     onSortChange,
+    isGridView,
 }: Props) => (
     <div className="bce-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
@@ -104,6 +106,7 @@ const Content = ({
                 onSortChange={onSortChange}
             />
         )}
+        {isGridView ? <div> This is grid view </div> : null}
     </div>
 );
 
