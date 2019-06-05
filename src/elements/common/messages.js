@@ -763,9 +763,14 @@ const messages = defineMessages({
         defaultMessage: 'Delete task',
         description: 'Text to show on menu item to delete task',
     },
+    taskEditMenuItem: {
+        id: 'be.taskEditMenuItem',
+        defaultMessage: 'Modify task',
+        description: 'Text to show on menu item to edit task',
+    },
     taskDeletePrompt: {
         id: 'be.taskDeletePrompt',
-        defaultMessage: 'Delete task?',
+        defaultMessage: 'Are you sure you want to permanently delete this task?',
         description: 'Confirmation prompt text to delete task',
     },
     taskCreateErrorTitle: {

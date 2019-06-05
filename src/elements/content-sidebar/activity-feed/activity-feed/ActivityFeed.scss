@@ -46,6 +46,12 @@
             &:first-child .bcs-comment {
                 margin-top: 0;
             }
+
+            &:hover {
+                .bcs-comment-menu-btn {
+                    opacity: 1;
+                }
+            }
         }
 
         .bcs-activity-feed-task {
