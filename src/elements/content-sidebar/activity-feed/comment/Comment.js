@@ -172,11 +172,10 @@ class Comment extends React.Component<Props, State> {
                                     getUserProfileUrl={getUserProfileUrl}
                                 />,
                             )}
-                            {canShowMenu && !isConfirming && (
+                            {canShowMenu && !isConfirming && !isPending && (
                                 <CommentMenu
                                     id={id}
                                     isDisabled={isConfirming}
-                                    isPending={isPending}
                                     onDelete={this.onDeleteClick}
                                     onEdit={onEdit}
                                     permissions={permissions}

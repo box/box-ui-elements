@@ -20,7 +20,6 @@ import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK } from '../../../../constants';
 type Props = {
     id: string,
     isDisabled: boolean,
-    isPending: boolean,
     onDelete: Function,
     onEdit: Function,
     permissions?: BoxItemPermission,
@@ -35,7 +34,7 @@ class CommentMenu extends React.Component<Props> {
     };
 
     render() {
-        const { intl, isDisabled, isPending, onDelete, onEdit, permissions, type } = this.props;
+        const { intl, isDisabled, onDelete, onEdit, permissions, type } = this.props;
         const canDelete = getProp(permissions, 'can_delete', false);
         const canEdit = getProp(permissions, 'can_edit', false);
         const isTaskComment = type === COMMENT_TYPE_TASK;
@@ -48,7 +47,7 @@ class CommentMenu extends React.Component<Props> {
                     <IconEllipsis color={nines} />
                 </PlainButton>
                 <Menu>
-                    {!!onEdit && !!canEdit && !isPending && (
+                    {!!onEdit && !!canEdit && (
                         <MenuItem
                             aria-label={intl.formatMessage(editLabel)}
                             className="bcs-comment-menu-edit"
@@ -59,7 +58,7 @@ class CommentMenu extends React.Component<Props> {
                             <FormattedMessage {...editLabel} />
                         </MenuItem>
                     )}
-                    {!!onDelete && !!canDelete && !isPending && (
+                    {!!onDelete && !!canDelete && (
                         <MenuItem
                             aria-label={intl.formatMessage(deleteMessages.deleteLabel)}
                             className="bcs-comment-menu-delete"
