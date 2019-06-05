@@ -816,7 +816,7 @@ const messages = defineMessages({
     taskDeleteErrorMessage: {
         id: 'be.taskDeleteErrorMessage',
         description: 'Error message when a task deletion fails',
-        defaultMessage: 'There was an error deleting this task.',
+        defaultMessage: 'There was an error while deleting this task. Please refresh the page and try again.',
     },
     completedAssignment: {
         id: 'be.completedAssignment',

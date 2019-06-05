@@ -195,6 +195,7 @@ class Comment extends React.Component<Props, State> {
                                         onEdit={onEdit}
                                         permissions={permissions}
                                         toEdit={toEdit}
+                                        type={type}
                                     />
                                     {isConfirming && (
                                         <Overlay className="bcs-comment-confirm-container" onKeyDown={this.onKeyDown}>
