@@ -9,28 +9,28 @@ import './Classification.scss';
 type Props = {
     advisoryMessage?: string,
     isMessageInline?: boolean,
-    name: string,
+    name?: string,
 };
 
 const Classification = ({ advisoryMessage, isMessageInline = true, name }: Props) => {
+    const isClassified = !!name;
     const hasMessage = !!advisoryMessage;
-    const isTooltipEnabled = hasMessage && !isMessageInline;
-    const message = hasMessage ? (
-        advisoryMessage
-    ) : (
-        <span className="bdl-Classification-unclassifiedMessage">
-            <FormattedMessage {...messages.missingClassificationMessage} />
-        </span>
-    );
+    const isTooltipEnabled = isClassified && hasMessage && !isMessageInline;
+    const isInlineMessageEnabled = isClassified && hasMessage && isMessageInline;
 
     return (
         <article className="bdl-Classification">
-            {hasMessage && (
+            {isClassified && (
                 <Tooltip isDisabled={!isTooltipEnabled} position="bottom-center" text={advisoryMessage}>
                     <h1 className="bdl-Classification-badge">{name}</h1>
                 </Tooltip>
             )}
-            {isMessageInline && <p className="bdl-Classification-advisoryMessage">{message}</p>}
+            {isInlineMessageEnabled && <p className="bdl-Classification-advisoryMessage">{advisoryMessage}</p>}
+            {!isClassified && (
+                <span className="bdl-Classification-missingMessage">
+                    <FormattedMessage {...messages.missing} />
+                </span>
+            )}
         </article>
     );
 };

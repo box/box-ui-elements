@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import Collapsible from '../../../components/collapsible';
-import { SidebarClassificationComponent as SidebarClassification } from '../SidebarClassification';
+import SidebarClassification from '../SidebarClassification';
 
 describe('elements/content-sidebar/SidebarClassification', () => {
     const getWrapper = props => shallow(<SidebarClassification {...props} />);
@@ -42,11 +42,8 @@ describe('elements/content-sidebar/SidebarClassification', () => {
             };
             const wrapper = getWrapper(props);
             const collapsible = wrapper.find(Collapsible);
-            const button = shallow(collapsible.prop('headerActionItems'));
             expect(collapsible).toHaveLength(1);
             expect(wrapper).toMatchSnapshot();
-            button.simulate('click');
-            expect(props.onEdit).toHaveBeenCalled();
         });
 
         test('should render classification with no edit button when can_upload is false', () => {

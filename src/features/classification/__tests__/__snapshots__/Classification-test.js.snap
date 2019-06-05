@@ -30,18 +30,14 @@ exports[`features/classification/Classification should render default component 
 <article
   className="bdl-Classification"
 >
-  <p
-    className="bdl-Classification-advisoryMessage"
+  <span
+    className="bdl-Classification-missingMessage"
   >
-    <span
-      className="bdl-Classification-unclassifiedMessage"
-    >
-      <FormattedMessage
-        defaultMessage="Unclassified, click the edit icon to add classification."
-        id="boxui.classification.missingClassificationMessage"
-      />
-    </span>
-  </p>
+    <FormattedMessage
+      defaultMessage="Not classified"
+      id="boxui.classification.missing"
+    />
+  </span>
 </article>
 `;
 

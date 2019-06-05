@@ -322,16 +322,6 @@ const messages = defineMessages({
         description: 'Title for the sidebar access stats.',
         defaultMessage: 'Access Stats',
     },
-    sidebarClassification: {
-        id: 'be.sidebarClassification',
-        description: 'Title for the sidebar classification.',
-        defaultMessage: 'Classification',
-    },
-    sidebarClassificationEditBtn: {
-        id: 'be.sidebarClassificationEditBtn',
-        description: 'Label for the sidebar classification edit button.',
-        defaultMessage: 'Edit classification',
-    },
     sidebarShow: {
         id: 'be.sidebarShow',
         description: 'Label for the show sidebar button.',
@@ -856,7 +846,7 @@ const messages = defineMessages({
     editLabel: {
         id: 'be.editLabel',
         defaultMessage: 'Edit',
-        description: 'Aria label for button to edit a comment or task',
+        description: 'Label for an edit action',
     },
     getVersionInfo: {
         id: 'be.getVersionInfo',

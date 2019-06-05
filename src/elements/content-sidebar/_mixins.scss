@@ -7,3 +7,7 @@
     position: relative;
     width: 59px; // 1px for left border
 }
+
+@mixin bdl-SidebarSection {
+    margin: 0 8px 20px 25px;
+}

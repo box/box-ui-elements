@@ -1,6 +1,13 @@
 @import '../common/variables';
+@import './mixins';
 
-.bdl-SidebarClassification-editBtn {
+.bdl-SidebarClassification {
+    @include bdl-SidebarSection;
+}
+
+.bdl-SidebarClassification-edit {
+    color: $bdl-box-blue;
     position: absolute;
     right: 20px;
+    top: 10px;
 }
