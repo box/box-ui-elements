@@ -15,7 +15,13 @@ import CompletedAssignment from './CompletedAssignment';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
 
-import { TASK_APPROVED, TASK_REJECTED, TASK_COMPLETED, TASK_INCOMPLETE } from '../../../../constants';
+import {
+    COMMENT_TYPE_TASK,
+    TASK_APPROVED,
+    TASK_REJECTED,
+    TASK_COMPLETED,
+    TASK_INCOMPLETE,
+} from '../../../../constants';
 import './Task.scss';
 
 type Props = {
@@ -97,6 +103,7 @@ class Task extends React.Component<Props> {
                     getUserProfileUrl={getUserProfileUrl}
                     mentionSelectorContacts={mentionSelectorContacts}
                     getMentionWithQuery={getMentionWithQuery}
+                    type={COMMENT_TYPE_TASK}
                 />
                 <div className="bcs-task-approvers-container">
                     <div className="bcs-task-approvers-header">

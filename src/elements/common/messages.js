@@ -763,9 +763,19 @@ const messages = defineMessages({
         description: 'Error message when a comment deletion fails',
         defaultMessage: 'There was an error deleting this comment.',
     },
+    taskDeleteMenuItem: {
+        id: 'be.taskDeleteMenuItem',
+        defaultMessage: 'Delete task',
+        description: 'Text to show on menu item to delete task',
+    },
+    taskEditMenuItem: {
+        id: 'be.taskEditMenuItem',
+        defaultMessage: 'Modify task',
+        description: 'Text to show on menu item to edit task',
+    },
     taskDeletePrompt: {
         id: 'be.taskDeletePrompt',
-        defaultMessage: 'Delete task?',
+        defaultMessage: 'Are you sure you want to permanently delete this task?',
         description: 'Confirmation prompt text to delete task',
     },
     taskCreateErrorTitle: {
@@ -806,7 +816,7 @@ const messages = defineMessages({
     taskDeleteErrorMessage: {
         id: 'be.taskDeleteErrorMessage',
         description: 'Error message when a task deletion fails',
-        defaultMessage: 'There was an error deleting this task.',
+        defaultMessage: 'There was an error while deleting this task. Please refresh the page and try again.',
     },
     completedAssignment: {
         id: 'be.completedAssignment',

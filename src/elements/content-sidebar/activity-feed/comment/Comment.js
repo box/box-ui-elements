@@ -7,17 +7,19 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import getProp from 'lodash/get';
+import TetherComponent from 'react-tether';
 import identity from 'lodash/identity';
 
 import { ReadableTime } from '../../../../components/time';
 import Tooltip from '../../../../components/tooltip';
-
+import { Overlay } from '../../../../components/flyout';
+import PrimaryButton from '../../../../components/primary-button';
+import Button from '../../../../components/button';
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+
+import CommentMenu from './CommentMenu';
 import UserLink from './UserLink';
-import InlineDelete from '../inline-delete';
-import InlineEdit from './InlineEdit';
 import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
 import ApprovalCommentForm from '../approval-comment-form';
@@ -25,7 +27,7 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
 
 import './Comment.scss';
-import { PLACEHOLDER_USER } from '../../../../constants';
+import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK, PLACEHOLDER_USER } from '../../../../constants';
 
 type Props = {
     avatarRenderer?: React.Node => React.Element<any>,
@@ -37,7 +39,6 @@ type Props = {
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
-    inlineDeleteMessage?: MessageDescriptor,
     isDisabled?: boolean,
     isPending?: boolean,
     is_reply_comment?: boolean,
@@ -49,25 +50,71 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
+    type?: typeof COMMENT_TYPE_DEFAULT | typeof COMMENT_TYPE_TASK,
     userHeadlineRenderer?: React.Node => React.Element<typeof FormattedMessage>,
 };
 
 type State = {
+    isConfirming?: boolean,
     isEditing?: boolean,
-    isFocused?: boolean,
     isInputOpen?: boolean,
 };
 
 class Comment extends React.Component<Props, State> {
+    static defaultProps = {
+        type: COMMENT_TYPE_DEFAULT,
+    };
+
     state = {
+        isConfirming: false,
         isEditing: false,
-        isFocused: false,
         isInputOpen: false,
+    };
+
+    handleDeleteConfirm = (): void => {
+        const { id, onDelete, permissions } = this.props;
+
+        if (onDelete) {
+            onDelete({ id, permissions });
+        }
+    };
+
+    handleDeleteCancel = (): void => {
+        this.setState({ isConfirming: false });
+    };
+
+    handleDeleteClick = () => {
+        this.setState({ isConfirming: true });
+    };
+
+    handleEditClick = (): void => {
+        this.setState({ isEditing: true, isInputOpen: true });
     };
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
+        const { isConfirming } = this.state;
+
         nativeEvent.stopImmediatePropagation();
+
+        switch (event.key) {
+            case 'Escape':
+                event.stopPropagation();
+                event.preventDefault();
+                if (isConfirming) {
+                    this.handleDeleteCancel();
+                }
+                break;
+            case 'Enter':
+                event.stopPropagation();
+                event.preventDefault();
+                if (isConfirming) {
+                    this.handleDeleteConfirm();
+                }
+                break;
+            default:
+                break;
+        }
     };
 
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
@@ -82,32 +129,20 @@ class Comment extends React.Component<Props, State> {
         this.approvalCommentFormSubmitHandler();
     };
 
-    toEdit = (): void => this.setState({ isEditing: true, isInputOpen: true });
-
-    handleCommentFocus = (): void => {
-        this.setState({ isFocused: true });
-    };
-
-    handleCommentBlur = (): void => {
-        this.setState({ isFocused: false });
-    };
-
     render(): React.Node {
         const {
             avatarRenderer = identity,
             created_by,
             created_at,
-            permissions,
+            permissions = {},
             id,
-            inlineDeleteMessage = messages.commentDeletePrompt,
             isPending,
             error,
-            onDelete,
-            onEdit,
             tagged_message = '',
             userHeadlineRenderer = identity,
             translatedTaggedMessage,
             translations,
+            type,
             currentUser,
             isDisabled,
             getAvatarUrl,
@@ -115,22 +150,18 @@ class Comment extends React.Component<Props, State> {
             getMentionWithQuery,
             mentionSelectorContacts,
         } = this.props;
-        const { toEdit } = this;
-        const { isEditing, isFocused, isInputOpen } = this.state;
+        const { isConfirming, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
-        const canDelete = getProp(permissions, 'can_delete', false);
-        const canEdit = getProp(permissions, 'can_edit', false);
         const createdByUser = created_by || PLACEHOLDER_USER;
+        const deleteConfirmMessage =
+            type === COMMENT_TYPE_DEFAULT ? messages.commentDeletePrompt : messages.taskDeletePrompt;
 
         return (
             <div className="bcs-comment-container">
                 <div
                     className={classNames('bcs-comment', {
                         'bcs-is-pending': isPending || error,
-                        'bcs-is-focused': isFocused,
                     })}
-                    onBlur={this.handleCommentBlur}
-                    onFocus={this.handleCommentFocus}
                 >
                     {avatarRenderer(
                         <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />,
@@ -146,15 +177,51 @@ class Comment extends React.Component<Props, State> {
                                     getUserProfileUrl={getUserProfileUrl}
                                 />,
                             )}
-                            {!!onEdit && !!canEdit && !isPending && <InlineEdit id={id} toEdit={toEdit} />}
-                            {!!onDelete && !!canDelete && !isPending && (
-                                <InlineDelete
-                                    id={id}
-                                    permissions={permissions}
-                                    message={<FormattedMessage {...inlineDeleteMessage} />}
-                                    onDelete={onDelete}
-                                />
-                            )}
+                            {permissions.can_delete ||
+                                (permissions.can_edit && !isPending && (
+                                    <TetherComponent
+                                        attachment="top right"
+                                        className="bcs-comment-delete-confirm"
+                                        constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                                        targetAttachment="bottom right"
+                                    >
+                                        <CommentMenu
+                                            id={id}
+                                            isDisabled={isConfirming}
+                                            onDeleteClick={this.handleDeleteClick}
+                                            onEditClick={this.handleEditClick}
+                                            permissions={permissions}
+                                            type={type}
+                                        />
+                                        {isConfirming && (
+                                            <Overlay
+                                                className="be-modal bcs-comment-confirm-container"
+                                                onKeyDown={this.onKeyDown}
+                                                shouldOutlineFocus={false}
+                                            >
+                                                <div className="bcs-comment-confirm-prompt">
+                                                    <FormattedMessage {...deleteConfirmMessage} />
+                                                </div>
+                                                <div>
+                                                    <PrimaryButton
+                                                        className="bcs-comment-confirm-delete"
+                                                        onClick={this.handleDeleteConfirm}
+                                                        type="button"
+                                                    >
+                                                        <FormattedMessage {...messages.delete} />
+                                                    </PrimaryButton>
+                                                    <Button
+                                                        className="bcs-comment-confirm-cancel"
+                                                        onClick={this.handleDeleteCancel}
+                                                        type="button"
+                                                    >
+                                                        <FormattedMessage {...messages.cancel} />
+                                                    </Button>
+                                                </div>
+                                            </Overlay>
+                                        )}
+                                    </TetherComponent>
+                                ))}
                         </div>
                         <div>
                             <Tooltip

@@ -22,7 +22,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should correctly render
     id="123125"
     inlineDeleteMessage={
       Object {
-        "defaultMessage": "Delete task?",
+        "defaultMessage": "Are you sure you want to permanently delete this task?",
         "id": "be.taskDeletePrompt",
       }
     }
@@ -35,6 +35,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should correctly render
       }
     }
     tagged_message="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+    type="task"
   />
   <div
     className="bcs-task-approvers-container"
@@ -106,7 +107,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should not render due d
     id="123125"
     inlineDeleteMessage={
       Object {
-        "defaultMessage": "Delete task?",
+        "defaultMessage": "Are you sure you want to permanently delete this task?",
         "id": "be.taskDeletePrompt",
       }
     }
@@ -118,6 +119,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should not render due d
       }
     }
     tagged_message="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+    type="task"
   />
   <div
     className="bcs-task-approvers-container"
@@ -175,7 +177,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should show actions for
     id="123125"
     inlineDeleteMessage={
       Object {
-        "defaultMessage": "Delete task?",
+        "defaultMessage": "Are you sure you want to permanently delete this task?",
         "id": "be.taskDeletePrompt",
       }
     }
@@ -187,6 +189,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should show actions for
       }
     }
     tagged_message="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+    type="task"
   />
   <div
     className="bcs-task-approvers-container"

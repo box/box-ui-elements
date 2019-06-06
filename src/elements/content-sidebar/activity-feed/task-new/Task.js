@@ -14,6 +14,7 @@ import {
     TASK_NEW_IN_PROGRESS,
     TASK_NEW_COMPLETED,
     TASK_TYPE_APPROVAL,
+    COMMENT_TYPE_TASK,
 } from '../../../../constants';
 import Comment from '../comment';
 import TaskActions from './TaskActions';
@@ -116,7 +117,6 @@ const Task = ({
                     created_by={created_by.target}
                     currentUser={currentUser}
                     id={id}
-                    inlineDeleteMessage={messages.taskDeletePrompt}
                     isPending={isPending}
                     onDelete={onDelete}
                     onEdit={onEdit}
@@ -124,6 +124,7 @@ const Task = ({
                     tagged_message={description}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
+                    type={COMMENT_TYPE_TASK}
                     getAvatarUrl={getAvatarUrl}
                     getUserProfileUrl={getUserProfileUrl}
                     mentionSelectorContacts={mentionSelectorContacts}
