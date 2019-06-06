@@ -177,51 +177,50 @@ class Comment extends React.Component<Props, State> {
                                     getUserProfileUrl={getUserProfileUrl}
                                 />,
                             )}
-                            {permissions.can_delete ||
-                                (permissions.can_edit && !isPending && (
-                                    <TetherComponent
-                                        attachment="top right"
-                                        className="bcs-comment-delete-confirm"
-                                        constraints={[{ to: 'scrollParent', attachment: 'together' }]}
-                                        targetAttachment="bottom right"
-                                    >
-                                        <CommentMenu
-                                            id={id}
-                                            isDisabled={isConfirming}
-                                            onDeleteClick={this.handleDeleteClick}
-                                            onEditClick={this.handleEditClick}
-                                            permissions={permissions}
-                                            type={type}
-                                        />
-                                        {isConfirming && (
-                                            <Overlay
-                                                className="be-modal bcs-comment-confirm-container"
-                                                onKeyDown={this.onKeyDown}
-                                                shouldOutlineFocus={false}
-                                            >
-                                                <div className="bcs-comment-confirm-prompt">
-                                                    <FormattedMessage {...deleteConfirmMessage} />
-                                                </div>
-                                                <div>
-                                                    <PrimaryButton
-                                                        className="bcs-comment-confirm-delete"
-                                                        onClick={this.handleDeleteConfirm}
-                                                        type="button"
-                                                    >
-                                                        <FormattedMessage {...messages.delete} />
-                                                    </PrimaryButton>
-                                                    <Button
-                                                        className="bcs-comment-confirm-cancel"
-                                                        onClick={this.handleDeleteCancel}
-                                                        type="button"
-                                                    >
-                                                        <FormattedMessage {...messages.cancel} />
-                                                    </Button>
-                                                </div>
-                                            </Overlay>
-                                        )}
-                                    </TetherComponent>
-                                ))}
+                            {(permissions.can_delete || permissions.can_edit) && !isPending && (
+                                <TetherComponent
+                                    attachment="top right"
+                                    className="bcs-comment-delete-confirm"
+                                    constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                                    targetAttachment="bottom right"
+                                >
+                                    <CommentMenu
+                                        id={id}
+                                        isDisabled={isConfirming}
+                                        onDeleteClick={this.handleDeleteClick}
+                                        onEditClick={this.handleEditClick}
+                                        permissions={permissions}
+                                        type={type}
+                                    />
+                                    {isConfirming && (
+                                        <Overlay
+                                            className="be-modal bcs-comment-confirm-container"
+                                            onKeyDown={this.onKeyDown}
+                                            shouldOutlineFocus={false}
+                                        >
+                                            <div className="bcs-comment-confirm-prompt">
+                                                <FormattedMessage {...deleteConfirmMessage} />
+                                            </div>
+                                            <div>
+                                                <Button
+                                                    className="bcs-comment-confirm-cancel"
+                                                    onClick={this.handleDeleteCancel}
+                                                    type="button"
+                                                >
+                                                    <FormattedMessage {...messages.cancel} />
+                                                </Button>
+                                                <PrimaryButton
+                                                    className="bcs-comment-confirm-delete"
+                                                    onClick={this.handleDeleteConfirm}
+                                                    type="button"
+                                                >
+                                                    <FormattedMessage {...messages.delete} />
+                                                </PrimaryButton>
+                                            </div>
+                                        </Overlay>
+                                    )}
+                                </TetherComponent>
+                            )}
                         </div>
                         <div>
                             <Tooltip
