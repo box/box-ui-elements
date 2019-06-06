@@ -1,6 +1,8 @@
 // <reference types="Cypress" />
+const selectedRowClassName = 'bce-item-row-selected';
+const selectedRowClassSelector = '.bce-item-row-selected';
 const helpers = {
-    load(additionalProps = { canUpload: true, permissions: { canUpload: true } }) {
+    load(additionalProps = {}) {
         cy.visit('/Elements/ContentExplorer', {
             onBeforeLoad: contentWindow => {
                 contentWindow.PROPS = additionalProps;
@@ -8,99 +10,71 @@ const helpers = {
         });
     },
     getRow(rowNum) {
-        return cy.getByDataPreview('ContentExplorer').find(`.bce-item-row-${rowNum}`);
+        return cy.getByTestId('content-explorer').find(`.bce-item-row-${rowNum}`);
     },
-    checkRows(rowNum) {
-        cy.getByDataPreview('ContentExplorer')
-            .find('.ReactVirtualized__Table')
-            .then(table => {
-                const totalRows = table[0].getAttribute('aria-rowcount');
-
-                for (let i = 0; i < totalRows; i += 1) {
-                    if (i !== rowNum) {
-                        this.getRow(i).should('not.have.class', 'bce-item-row-selected');
-                    }
-                }
-                if (rowNum >= 0) {
-                    this.getRow(rowNum).should('have.class', 'bce-item-row-selected');
-                }
-            });
+    checkRowSelections(selectedRow) {
+        if (selectedRow) {
+            cy.getByTestId('content-explorer')
+                .find(`${selectedRowClassSelector}`)
+                .should('have.length', 1)
+                .should('have.class', `bce-item-row-${selectedRow}`);
+        } else {
+            cy.getByTestId('content-explorer').should('not.have.descendants', selectedRowClassSelector);
+        }
     },
     selectRow(rowNum) {
         this.getRow(rowNum)
             .as('row')
             .click()
-            .should('have.class', 'bce-item-row-selected');
-
-        // Whenever a row is selected, confirm that it is the only row that appears selected
-        this.checkRows(rowNum);
+            .should('have.class', selectedRowClassName);
         return cy.get('@row');
     },
-    clickAddButton() {
-        cy.getByDataPreview('ContentExplorer')
-            .find('.be-btn-add')
-            .click();
+    getAddButton() {
+        return cy.getByTestId('be-btn-add');
     },
-    clickUploadButton() {
-        cy.get('.dropdown-menu-element > ul > li')
-            .contains('Upload')
-            .click();
+    getUploadButton() {
+        return cy.getByTestId('be-btn-add-upload');
     },
-    clickNewFolderButton() {
-        cy.get('.dropdown-menu-element > ul > li')
-            .contains('New Folder')
-            .click();
+    getNewFolderButton() {
+        return cy.getByTestId('be-btn-add-create');
     },
-    clickNewFolderCancelButton() {
-        cy.get('.be-modal-btns > button')
-            .contains('Cancel')
-            .click();
+    getNewFolderCancelButton() {
+        return cy.getByTestId('be-btn-create-folder-cancel');
     },
-    clickNewFolderCreateButton() {
-        cy.get('.be-modal-btns > button')
-            .contains('Create')
-            .click();
+    getCloseUploadModal() {
+        return cy.getByTestId('bcu-btn-close-upload');
     },
-    clickCloseUploadModal() {
-        cy.get('.bcu-footer-left > button')
-            .contains('Close')
-            .click();
+    getShareButton(rowNum) {
+        return this.getRow(rowNum).find('[data-testid="bce-btn-more-options-share"]');
     },
-    clickShareButton(rowNum) {
-        this.getRow(rowNum)
-            .find('.bce-more-options')
-            .contains('Share')
-            .click();
+    getCloseShareButton() {
+        return cy.getByTestId('bce-btn-close-share');
     },
-    clickCloseShareButton() {
-        cy.get('.be-modal-btns > button')
-            .contains('Close')
-            .click();
+    getMoreOptionsButton(rowNum) {
+        return this.getRow(rowNum).find('[data-testid="bce-btn-more-options"]');
     },
-    clickMoreOptionsButton(rowNum) {
-        this.getRow(rowNum)
-            .find('.bce-btn-more-options')
-            .click();
+    getRenameButton() {
+        return cy.getByTestId('bce-btn-more-options-rename');
     },
-    clickRenameButton() {
-        cy.get('.dropdown-menu-element')
-            .contains('Rename')
-            .click();
+    getCloseRenameButton() {
+        return cy.getByTestId('bce-btn-close-rename');
     },
-    clickCloseRenameButton() {
-        cy.get('.be-modal-btns > button')
-            .contains('Cancel')
-            .click();
+    getItemNameFromRow(rowNum) {
+        return this.getRow(rowNum).find('[data-testid="be-item-name"]');
     },
-    previewRow(rowNum) {
-        this.getRow(rowNum)
-            .find('.be-item-name > button')
-            .click();
+    getClosePreviewButton() {
+        return cy.getByTestId('bcpr-btn-close');
     },
-    closePreview() {
-        cy.get('.bcpr-btns')
-            .find('[aria-label="Close"]')
-            .click();
+    openUploadModal() {
+        this.getAddButton().click();
+        this.getUploadButton().click();
+    },
+    openNewFolderModal() {
+        this.getAddButton().click();
+        this.getNewFolderButton().click();
+    },
+    previewItemFromRow(rowNum) {
+        this.getItemNameFromRow(rowNum).click();
     },
 };
 
@@ -113,95 +87,113 @@ describe('ContentExplorer', () => {
     describe('Selection', () => {
         it('Should not have a selected row to start', () => {
             helpers.load();
-            helpers.checkRows(-1);
+            helpers.checkRowSelections();
         });
 
         it('Should be able to select a row', () => {
             helpers.load();
             helpers.selectRow(3);
+            helpers.checkRowSelections(3);
         });
 
         it('Should change selected rows', () => {
             helpers.load();
             helpers.selectRow(3);
+            helpers.checkRowSelections(3);
             helpers.selectRow(5);
+            helpers.checkRowSelections(5);
         });
 
         it('Should open and close upload modal', () => {
             helpers.load();
             helpers.selectRow(2);
-            helpers.clickAddButton();
-            helpers.clickUploadButton();
-            helpers.clickCloseUploadModal();
-            helpers.checkRows(2);
+            helpers.checkRowSelections(2);
+            helpers.openUploadModal();
+            helpers.getCloseUploadModal().click();
+            helpers.checkRowSelections(2);
             helpers.selectRow(3);
+            helpers.checkRowSelections(3);
             helpers.selectRow(1);
+            helpers.checkRowSelections(1);
         });
 
         it('Should click add button and then select new row', () => {
             helpers.load();
             helpers.selectRow(2);
-            helpers.clickAddButton();
-            helpers.checkRows(2);
+            helpers.getAddButton().click();
+            helpers.checkRowSelections(2);
             helpers.selectRow(3);
+            helpers.checkRowSelections(3);
             helpers.selectRow(5);
+            helpers.checkRowSelections(5);
         });
 
         it('Should cancel creating new folder', () => {
             helpers.load();
             helpers.selectRow(2);
-            helpers.clickAddButton();
-            helpers.clickNewFolderButton();
-            helpers.clickNewFolderCancelButton();
-            helpers.checkRows(2);
+            helpers.checkRowSelections(2);
+            helpers.openNewFolderModal();
+            helpers.getNewFolderCancelButton().click();
+            helpers.checkRowSelections(2);
             helpers.selectRow(3);
+            helpers.checkRowSelections(3);
         });
 
         it('Should open and close share text', () => {
             helpers.load();
-            helpers.clickShareButton(2);
-            helpers.clickCloseShareButton();
-            helpers.checkRows(2);
+            helpers.getShareButton(2).click();
+            helpers.getCloseShareButton().click();
+            helpers.checkRowSelections(2);
             helpers.selectRow(3);
+            helpers.checkRowSelections(3);
             helpers.selectRow(5);
+            helpers.checkRowSelections(5);
         });
 
         it('Should preview an item', () => {
             helpers.load();
-            helpers.previewRow(4);
-            helpers.closePreview();
-            helpers.checkRows(4);
+            helpers.previewItemFromRow(4);
+            helpers.getClosePreviewButton().click();
+            helpers.checkRowSelections(4);
             helpers.selectRow(6);
+            helpers.checkRowSelections(6);
             helpers.selectRow(2);
+            helpers.checkRowSelections(2);
         });
 
         it('Should open and close rename modal', () => {
             helpers.load();
             helpers.selectRow(2);
-            helpers.clickMoreOptionsButton(4);
-            helpers.clickRenameButton();
-            helpers.clickCloseRenameButton();
-            helpers.checkRows(4);
+            helpers.checkRowSelections(2);
+            helpers.getMoreOptionsButton(4).click();
+            helpers.getRenameButton().click();
+            helpers.getCloseRenameButton().click();
+            helpers.checkRowSelections(4);
             helpers.selectRow(1);
+            helpers.checkRowSelections(1);
         });
 
         it('Should perform multiple operations in sequence', () => {
             helpers.load();
             helpers.selectRow(1);
+            helpers.checkRowSelections(1);
             helpers.selectRow(4);
-            helpers.previewRow(2);
-            helpers.closePreview(2);
-            helpers.checkRows(2);
+            helpers.checkRowSelections(4);
+            helpers.previewItemFromRow(2);
+            helpers.getClosePreviewButton(2).click();
+            helpers.checkRowSelections(2);
             helpers.selectRow(5);
-            helpers.clickAddButton();
-            helpers.clickUploadButton();
-            helpers.clickCloseUploadModal();
-            helpers.checkRows(5);
+            helpers.checkRowSelections(5);
+            helpers.openUploadModal();
+            helpers.getCloseUploadModal().click();
+            helpers.checkRowSelections(5);
             helpers.selectRow(2);
-            helpers.clickShareButton(3);
-            helpers.clickCloseShareButton();
-            helpers.checkRows(3);
+            helpers.checkRowSelections(2);
+            helpers.getShareButton(3).click();
+            helpers.getCloseShareButton().click();
+            helpers.checkRowSelections(3);
             helpers.selectRow(4);
+            helpers.checkRowSelections(4);
         });
     });
 });

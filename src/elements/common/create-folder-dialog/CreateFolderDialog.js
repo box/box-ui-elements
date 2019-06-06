@@ -108,10 +108,15 @@ const CreateFolderDialog = ({
                 <input ref={ref} onKeyDown={onKeyDown} required type="text" />
             </label>
             <div className="be-modal-btns">
-                <PrimaryButton isLoading={isLoading} onClick={create} type="button">
+                <PrimaryButton dataTestId="be-btn-create-folder" isLoading={isLoading} onClick={create} type="button">
                     <FormattedMessage {...messages.create} />
                 </PrimaryButton>
-                <Button isDisabled={isLoading} onClick={onCancel} type="button">
+                <Button
+                    dataTestId="be-btn-create-folder-cancel"
+                    isDisabled={isLoading}
+                    onClick={onCancel}
+                    type="button"
+                >
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

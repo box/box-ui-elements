@@ -390,16 +390,14 @@ class ContentExplorer extends Component<Props, State> {
         const { id, name, boxItem }: Collection = collection;
         const { selected }: State = this.state;
 
+        const { newCollection, newSelected } = this.updateCollection(collection, selected);
+
         // New folder state
         const newState = {
-            currentCollection: { ...collection },
-            selected: undefined,
+            currentCollection: newCollection,
+            selected: newSelected,
             rootName: id === rootFolderId ? name : '',
         };
-
-        const { newCollection, newSelected } = this.updateCollection(collection, selected);
-        newState.currentCollection = newCollection;
-        newState.selected = newSelected;
 
         // Close any open modals
         this.closeModals();
@@ -742,23 +740,22 @@ class ContentExplorer extends Component<Props, State> {
      */
     updateCollection(collection: Collection, selected: ?BoxItem): Object {
         const newCollection: Collection = { ...collection };
+        let newSelected: ?BoxItem;
         const targetID = selected ? selected.id : null;
 
-        const ret = { newCollection, newSelected: undefined };
-
         if (collection.items) {
-            ret.newCollection.items = collection.items.map(obj => {
+            newCollection.items = collection.items.map(obj => {
                 const item = { ...obj, selected: obj.id === targetID };
 
                 // If the previously selected item is found in the folder, keep it as selected item
                 if (item.id === targetID) {
-                    ret.newSelected = item;
+                    newSelected = item;
                 }
                 return item;
             });
         }
 
-        return ret;
+        return { newCollection, newSelected };
     }
 
     /**
@@ -796,8 +793,7 @@ class ContentExplorer extends Component<Props, State> {
 
         this.unselect();
 
-        const selectedItem: BoxItem = { ...item };
-        selectedItem.selected = true;
+        const selectedItem: BoxItem = { ...item, selected: true };
 
         const { newCollection } = this.updateCollection(currentCollection, selectedItem);
         const focusedRow: number = items.findIndex((i: BoxItem) => i.id === item.id);
@@ -1307,7 +1303,7 @@ class ContentExplorer extends Component<Props, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={styleClassName} ref={measureRef}>
+                <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}

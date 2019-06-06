@@ -72,7 +72,7 @@ const Content = ({
     onItemPreview,
     onSortChange,
 }: Props) => (
-    <div className="bce-content">
+    <div className="bce-content" data-testid="bce-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
             <ProgressBar percent={currentCollection.percentLoaded} />
         )}

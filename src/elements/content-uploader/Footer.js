@@ -35,7 +35,7 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
         <div className="bcu-footer">
             <div className="bcu-footer-left">
                 {onClose ? (
-                    <Button isDisabled={hasFiles} onClick={onClose} type="button">
+                    <Button dataTestId="bcu-btn-close-upload" isDisabled={hasFiles} onClick={onClose} type="button">
                         <FormattedMessage {...messages.close} />
                     </Button>
                 ) : null}
