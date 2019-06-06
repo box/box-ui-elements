@@ -54,6 +54,7 @@ class Button extends React.Component<Props> {
         }
 
         const styleClassName = classNames(
+            'box-ui-component',
             'btn',
             {
                 'is-disabled': isDisabled,

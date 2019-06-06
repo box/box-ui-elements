@@ -10,7 +10,7 @@ type Props = {
 };
 
 const InlineNotice = ({ children, className = '', type = 'warning' }: Props) => (
-    <div className={`inline-alert inline-alert-visible inline-alert-${type} ${className}`}>{children}</div>
+    <div className={`box-ui-component inline-alert inline-alert-visible inline-alert-${type} ${className}`}>{children}</div>
 );
 
 export default InlineNotice;

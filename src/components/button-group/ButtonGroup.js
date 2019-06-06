@@ -12,7 +12,7 @@ type Props = {
 };
 
 const ButtonGroup = ({ children, className = '', isDisabled }: Props) => (
-    <div className={`btn-group ${className} ${isDisabled ? 'is-disabled' : ''}`}>{children}</div>
+    <div className={`box-ui-component btn-group ${className} ${isDisabled ? 'is-disabled' : ''}`}>{children}</div>
 );
 
 export default ButtonGroup;

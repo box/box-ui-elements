@@ -1,118 +1,122 @@
-@import '../../styles/variables';
-$radar-animation-offset: 1px;
 
-.radar {
-    position: relative;
+.box-ui-component {
+    @import '../../styles/variables';
+    $radar-animation-offset: 1px;
 
-    .radar-dot::before {
-        background-color: $box-blue;
-        border: 2px solid $white;
-        border-radius: 50%;
-        content: ' ';
-        height: 8px;
-        left: -4px;
-        position: absolute;
-        top: -4px;
-        width: 8px;
-        z-index: $overlay-z-index + 3;
-    }
+    &.radar {
+        position: relative;
 
-    .radar-dot::after {
-        animation-delay: 0s;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-        animation-name: ripple;
-        animation-timing-function: ease;
-        background-color: $box-blue;
-        border-radius: 50%;
-        box-shadow: 0 0 10px rgba(0, 0, 0, .3) inset;
-        content: ' ';
-        height: 10px;
-        position: absolute;
-        width: 10px;
-        z-index: $overlay-z-index + 2;
-    }
-
-    .radar-circle::before {
-        border: 1px solid $box-blue;
-        border-radius: 50%;
-        content: ' ';
-        height: 40px;
-        left: -20px;
-        position: absolute;
-        top: -20px;
-        width: 40px;
-        z-index: $overlay-z-index + 2;
-    }
-
-    .radar-circle::after {
-        background-color: $box-blue;
-        border-radius: 50%;
-        content: ' ';
-        height: 40px;
-        left: -20px;
-        opacity: .3;
-        position: absolute;
-        top: -20px;
-        width: 40px;
-        z-index: $overlay-z-index + 2;
-    }
-
-    @keyframes ripple {
-        0% {
-            height: 0;
-            left: 0;
-            opacity: .75;
-            top: 0;
-            width: 0;
+        .radar-dot::before {
+            background-color: $box-blue;
+            border: 2px solid $white;
+            border-radius: 50%;
+            content: ' ';
+            height: 8px;
+            left: -4px;
+            position: absolute;
+            top: -4px;
+            width: 8px;
+            z-index: $overlay-z-index + 3;
         }
 
-        100% {
+        .radar-dot::after {
+            animation-delay: 0s;
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+            animation-name: ripple;
+            animation-timing-function: ease;
+            background-color: $box-blue;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .3) inset;
+            content: ' ';
+            height: 10px;
+            position: absolute;
+            width: 10px;
+            z-index: $overlay-z-index + 2;
+        }
+
+        .radar-circle::before {
+            border: 1px solid $box-blue;
+            border-radius: 50%;
+            content: ' ';
             height: 40px;
             left: -20px;
-            opacity: 0;
+            position: absolute;
             top: -20px;
             width: 40px;
+            z-index: $overlay-z-index + 2;
         }
-    }
 
-    .radar-animation-target-attached-bottom.radar-animation-target-attached-center > & {
-        margin-top: $radar-animation-offset;
-    }
+        .radar-circle::after {
+            background-color: $box-blue;
+            border-radius: 50%;
+            content: ' ';
+            height: 40px;
+            left: -20px;
+            opacity: .3;
+            position: absolute;
+            top: -20px;
+            width: 40px;
+            z-index: $overlay-z-index + 2;
+        }
 
-    .radar-animation-target-attached-bottom.radar-animation-target-attached-left > & {
-        margin-top: $radar-animation-offset;
-    }
+        @keyframes ripple {
+            0% {
+                height: 0;
+                left: 0;
+                opacity: .75;
+                top: 0;
+                width: 0;
+            }
 
-    .radar-animation-target-attached-bottom.radar-animation-target-attached-right > & {
-        margin-top: $radar-animation-offset;
-    }
+            100% {
+                height: 40px;
+                left: -20px;
+                opacity: 0;
+                top: -20px;
+                width: 40px;
+            }
+        }
 
-    .radar-animation-target-attached-middle.radar-animation-target-attached-right > & {
-        margin-left: $radar-animation-offset;
-    }
+        .radar-animation-target-attached-bottom.radar-animation-target-attached-center > & {
+            margin-top: $radar-animation-offset;
+        }
 
-    .radar-animation-target-attached-middle.radar-animation-target-attached-center > & {
-        margin-top: $radar-animation-offset;
-    }
+        .radar-animation-target-attached-bottom.radar-animation-target-attached-left > & {
+            margin-top: $radar-animation-offset;
+        }
 
-    .radar-animation-target-attached-middle.radar-animation-target-attached-left > & {
-        margin-right: $radar-animation-offset;
-    }
+        .radar-animation-target-attached-bottom.radar-animation-target-attached-right > & {
+            margin-top: $radar-animation-offset;
+        }
 
-    .radar-animation-target-attached-top.radar-animation-target-attached-center > & {
-        margin-bottom: $radar-animation-offset;
-    }
+        .radar-animation-target-attached-middle.radar-animation-target-attached-right > & {
+            margin-left: $radar-animation-offset;
+        }
 
-    .radar-animation-target-attached-top.radar-animation-target-attached-left > & {
-        margin-bottom: $radar-animation-offset;
-    }
+        .radar-animation-target-attached-middle.radar-animation-target-attached-center > & {
+            margin-top: $radar-animation-offset;
+        }
 
-    .radar-animation-target-attached-top.radar-animation-target-attached-right > & {
-        margin-bottom: $radar-animation-offset;
+        .radar-animation-target-attached-middle.radar-animation-target-attached-left > & {
+            margin-right: $radar-animation-offset;
+        }
+
+        .radar-animation-target-attached-top.radar-animation-target-attached-center > & {
+            margin-bottom: $radar-animation-offset;
+        }
+
+        .radar-animation-target-attached-top.radar-animation-target-attached-left > & {
+            margin-bottom: $radar-animation-offset;
+        }
+
+        .radar-animation-target-attached-top.radar-animation-target-attached-right > & {
+            margin-bottom: $radar-animation-offset;
+        }
     }
 }
 
 .radar-animation-element {
+    @import '../../styles/variables';
     z-index: $overlay-z-index;
 }

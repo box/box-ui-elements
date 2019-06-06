@@ -100,7 +100,7 @@ class Notification extends React.Component<Props> {
         const contents = this.getChildren();
         const { intl, type, overflow } = this.props;
         const { formatMessage } = intl;
-        const classes = classNames('notification', type, overflow);
+        const classes = classNames('box-ui-component', 'notification', type, overflow);
 
         return (
             <div className={classes}>

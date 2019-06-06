@@ -243,7 +243,7 @@ class Tooltip extends React.Component<Props, State> {
 
         const bodyEl = bodyElement instanceof HTMLElement ? bodyElement : document.body;
 
-        const classes = classNames('tooltip', className, {
+        const classes = classNames('box-ui-component', 'tooltip', className, {
             'is-callout': theme === CALLOUT_THEME,
             'is-error': theme === ERROR_THEME,
             'with-close-button': withCloseButton,
@@ -253,7 +253,7 @@ class Tooltip extends React.Component<Props, State> {
             <TetherComponent
                 attachment={tetherPosition.attachment}
                 bodyElement={bodyEl}
-                classPrefix="tooltip"
+                classPrefix="box-ui-component-tooltip"
                 constraints={constraints}
                 enabled={showTooltip}
                 targetAttachment={tetherPosition.targetAttachment}

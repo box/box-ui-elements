@@ -41,7 +41,7 @@ class Overlay extends React.Component<Props> {
 
         return (
             <FocusTrap {...overlayProps}>
-                <div className="overlay">{children}</div>
+                <div className="box-ui-component overlay">{children}</div>
             </FocusTrap>
         );
     }

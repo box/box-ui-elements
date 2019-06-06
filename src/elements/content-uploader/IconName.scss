@@ -1,6 +1,6 @@
-@import '../common/variables';
 
 .bcu-item-icon-name {
+    @import '../common/variables';
     cursor: default;
     display: flex;
     height: 50px;

@@ -37,7 +37,7 @@ const LoadingIndicatorWrapper = ({
         hideContent ? 'hide-content' : 'blur-content',
     );
     return (
-        <div className={`loading-indicator-wrapper ${className}`} {...rest}>
+        <div className={`box-ui-component loading-indicator-wrapper ${className}`} {...rest}>
             {children}
             {isLoading && (
                 <div className={crawlerPositionClassName}>

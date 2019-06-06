@@ -17,7 +17,7 @@ class QuickSearchMessage extends Component {
 
     render() {
         const { children, isShown } = this.props;
-        const className = classNames('overlay-wrapper', { 'is-visible': isShown }, 'quick-search-message');
+        const className = classNames('box-ui-component', 'overlay-wrapper', { 'is-visible': isShown }, 'quick-search-message');
 
         return (
             <div className={className}>

@@ -1,6 +1,5 @@
-@import '../common/variables';
-
 .bcu-progress-container {
+    @import '../common/variables';
     background: $off-white;
     height: 2px;
     margin-right: 40px;

@@ -22,7 +22,7 @@ const PlainButton = ({ children, className = '', getDOMRef, isDisabled = false, 
 
     return (
         // eslint-disable-next-line react/button-has-type
-        <button ref={getDOMRef} className={`btn-plain ${className}`} type={type} {...rest} {...buttonProps}>
+        <button ref={getDOMRef} className={`box-ui-component btn-plain ${className}`} type={type} {...rest} {...buttonProps}>
             {children}
         </button>
     );

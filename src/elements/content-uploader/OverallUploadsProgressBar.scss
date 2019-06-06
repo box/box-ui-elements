@@ -1,6 +1,6 @@
-@import '../common/variables';
 
 .bcu-overall-progress-bar {
+    @import '../common/variables';
     align-items: center;
     background: $blue;
     color: $white;

@@ -9,7 +9,7 @@ type Props = {
 };
 
 const InlineError = ({ children, className = '', title }: Props) => (
-    <div className={`inline-alert inline-alert-visible inline-alert-error ${className}`}>
+    <div className={`box-ui-component inline-alert inline-alert-visible inline-alert-error ${className}`}>
         <b>{title}</b>
         <div>{children}</div>
     </div>

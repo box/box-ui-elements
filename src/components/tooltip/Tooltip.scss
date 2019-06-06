@@ -1,222 +1,224 @@
-@import '../../styles/variables';
-
 /**************************************
- * Tooltip
- **************************************/
+* Tooltip
+**************************************/
 
-$arrow-size: 6px;
-$horizontal-offset: 10px;
-$tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
+.box-ui-component {
+    @import '../../styles/variables';
+    $arrow-size: 6px;
+    $horizontal-offset: 10px;
+    $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
+    &.tooltip {
+        background-color: $fours;
+        border-color: $fours;
+        border-radius: 4px;
+        color: $white;
+        font-size: 13px;
+        line-height: 1.4;
+        max-width: 200px;
+        padding: 8px $horizontal-offset;
+        position: relative;
+        word-wrap: break-word;
 
-.tooltip {
-    background-color: $fours;
-    border-color: $fours;
-    border-radius: 4px;
-    color: $white;
-    font-size: 13px;
-    line-height: 1.4;
-    max-width: 200px;
-    padding: 8px $horizontal-offset;
-    position: relative;
-    word-wrap: break-word;
-
-    &::before {
-        border: $arrow-size solid transparent;
-        content: '';
-        height: 0;
-        position: absolute;
-        width: 0;
-    }
-
-    &.is-error::after {
-        border: $arrow-size - 1 solid transparent;
-        content: '';
-        height: 0;
-        position: absolute;
-        width: 0;
-    }
-
-    &.is-error {
-        background-color: $lavender-blush;
-        border: 1px solid $amaranth;
-        color: $amaranth;
-
-        .tooltip-close-button .icon-close .fill-color {
-            fill: $amaranth;
+        &::before {
+            border: $arrow-size solid transparent;
+            content: '';
+            height: 0;
+            position: absolute;
+            width: 0;
         }
-    }
 
-    &.is-callout {
-        background-color: $blue-purple;
-        border-color: $blue-purple;
-    }
+        &.is-error::after {
+            border: $arrow-size - 1 solid transparent;
+            content: '';
+            height: 0;
+            position: absolute;
+            width: 0;
+        }
 
-    &.is-metadata-tooltip {
-        margin-left: -8px;
-    }
+        &.is-error {
+            background-color: $lavender-blush;
+            border: 1px solid $amaranth;
+            color: $amaranth;
 
-    &.with-close-button {
-        padding-right: 24px;
-    }
-
-    .tooltip-close-button {
-        cursor: pointer;
-        position: absolute;
-        right: 0;
-        top: 4px;
-
-        .icon-close {
-            height: 16px;
-
-            .fill-color {
-                fill: $white;
+            .tooltip-close-button .icon-close .fill-color {
+                fill: $amaranth;
             }
         }
-    }
 
-    .tooltip-target-attached-top.tooltip-target-attached-center > & {
-        margin-bottom: $arrow-size + $tooltip-offset;
-
-        &::before {
-            border-top-color: inherit;
-            left: 50%;
-            margin-left: -$arrow-size;
-            top: 100%;
+        &.is-callout {
+            background-color: $blue-purple;
+            border-color: $blue-purple;
         }
 
-        &.is-error::after {
-            border-top-color: $lavender-blush;
-            left: 50%;
-            margin-left: -$arrow-size + 1;
-            top: 100%;
-        }
-    }
-
-    .tooltip-target-attached-top.tooltip-target-attached-left > & {
-        margin-bottom: $arrow-size + $tooltip-offset;
-
-        &::before {
-            border-top-color: inherit;
-            left: $horizontal-offset;
-            top: 100%;
+        &.is-metadata-tooltip {
+            margin-left: -8px;
         }
 
-        &.is-error::after {
-            border-top-color: $lavender-blush;
-            left: $horizontal-offset + 1;
-            top: 100%;
-        }
-    }
-
-    .tooltip-target-attached-top.tooltip-target-attached-right > & {
-        margin-bottom: $arrow-size + $tooltip-offset;
-
-        &::before {
-            border-top-color: inherit;
-            right: $horizontal-offset;
-            top: 100%;
+        &.with-close-button {
+            padding-right: 24px;
         }
 
-        &.is-error::after {
-            border-top-color: $lavender-blush;
-            right: $horizontal-offset + 1;
-            top: 100%;
-        }
-    }
+        .tooltip-close-button {
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 4px;
 
-    .tooltip-target-attached-middle.tooltip-target-attached-right > & {
-        margin-left: $arrow-size + $tooltip-offset;
+            .icon-close {
+                height: 16px;
 
-        &::before {
-            border-right-color: inherit;
-            margin-top: -$arrow-size;
-            right: 100%;
-            top: 50%;
+                .fill-color {
+                    fill: $white;
+                }
+            }
         }
 
-        &.is-error::after {
-            border-right-color: $lavender-blush;
-            margin-top: -$arrow-size + 1;
-            right: 100%;
-            top: 50%;
-        }
-    }
+        .tooltip-target-attached-top.tooltip-target-attached-center > & {
+            margin-bottom: $arrow-size + $tooltip-offset;
 
-    .tooltip-target-attached-middle.tooltip-target-attached-left > & {
-        margin-right: $arrow-size + $tooltip-offset;
+            &::before {
+                border-top-color: inherit;
+                left: 50%;
+                margin-left: -$arrow-size;
+                top: 100%;
+            }
 
-        &::before {
-            border-left-color: inherit;
-            left: 100%;
-            margin-top: -$arrow-size;
-            top: 50%;
-        }
-
-        &.is-error::after {
-            border-left-color: $lavender-blush;
-            left: 100%;
-            margin-top: -$arrow-size + 1;
-            top: 50%;
-        }
-    }
-
-    .tooltip-target-attached-bottom.tooltip-target-attached-center > & {
-        margin-top: $arrow-size + $tooltip-offset;
-
-        &::before {
-            border-bottom-color: inherit;
-            bottom: 100%;
-            left: 50%;
-            margin-left: -$arrow-size;
+            &.is-error::after {
+                border-top-color: $lavender-blush;
+                left: 50%;
+                margin-left: -$arrow-size + 1;
+                top: 100%;
+            }
         }
 
-        &.is-error::after {
-            border-bottom-color: $lavender-blush;
-            bottom: 100%;
-            left: 50%;
-            margin-left: -$arrow-size + 1;
-        }
-    }
+        .tooltip-target-attached-top.tooltip-target-attached-left > & {
+            margin-bottom: $arrow-size + $tooltip-offset;
 
-    .tooltip-target-attached-bottom.tooltip-target-attached-left > & {
-        margin-top: $arrow-size + $tooltip-offset;
+            &::before {
+                border-top-color: inherit;
+                left: $horizontal-offset;
+                top: 100%;
+            }
 
-        &::before {
-            border-bottom-color: inherit;
-            bottom: 100%;
-            left: $horizontal-offset;
-        }
-
-        &.is-error::after {
-            border-bottom-color: $lavender-blush;
-            bottom: 100%;
-            left: $horizontal-offset + 1;
-        }
-    }
-
-    .tooltip-target-attached-bottom.tooltip-target-attached-right > & {
-        margin-top: $arrow-size + $tooltip-offset;
-
-        &::before {
-            border-bottom-color: inherit;
-            bottom: 100%;
-            right: $horizontal-offset;
+            &.is-error::after {
+                border-top-color: $lavender-blush;
+                left: $horizontal-offset + 1;
+                top: 100%;
+            }
         }
 
-        &.is-error::after {
-            border-bottom-color: $lavender-blush;
-            bottom: 100%;
-            right: $horizontal-offset + 1;
+        .tooltip-target-attached-top.tooltip-target-attached-right > & {
+            margin-bottom: $arrow-size + $tooltip-offset;
+
+            &::before {
+                border-top-color: inherit;
+                right: $horizontal-offset;
+                top: 100%;
+            }
+
+            &.is-error::after {
+                border-top-color: $lavender-blush;
+                right: $horizontal-offset + 1;
+                top: 100%;
+            }
+        }
+
+        .tooltip-target-attached-middle.tooltip-target-attached-right > & {
+            margin-left: $arrow-size + $tooltip-offset;
+
+            &::before {
+                border-right-color: inherit;
+                margin-top: -$arrow-size;
+                right: 100%;
+                top: 50%;
+            }
+
+            &.is-error::after {
+                border-right-color: $lavender-blush;
+                margin-top: -$arrow-size + 1;
+                right: 100%;
+                top: 50%;
+            }
+        }
+
+        .tooltip-target-attached-middle.tooltip-target-attached-left > & {
+            margin-right: $arrow-size + $tooltip-offset;
+
+            &::before {
+                border-left-color: inherit;
+                left: 100%;
+                margin-top: -$arrow-size;
+                top: 50%;
+            }
+
+            &.is-error::after {
+                border-left-color: $lavender-blush;
+                left: 100%;
+                margin-top: -$arrow-size + 1;
+                top: 50%;
+            }
+        }
+
+        .tooltip-target-attached-bottom.tooltip-target-attached-center > & {
+            margin-top: $arrow-size + $tooltip-offset;
+
+            &::before {
+                border-bottom-color: inherit;
+                bottom: 100%;
+                left: 50%;
+                margin-left: -$arrow-size;
+            }
+
+            &.is-error::after {
+                border-bottom-color: $lavender-blush;
+                bottom: 100%;
+                left: 50%;
+                margin-left: -$arrow-size + 1;
+            }
+        }
+
+        .tooltip-target-attached-bottom.tooltip-target-attached-left > & {
+            margin-top: $arrow-size + $tooltip-offset;
+
+            &::before {
+                border-bottom-color: inherit;
+                bottom: 100%;
+                left: $horizontal-offset;
+            }
+
+            &.is-error::after {
+                border-bottom-color: $lavender-blush;
+                bottom: 100%;
+                left: $horizontal-offset + 1;
+            }
+        }
+
+        .tooltip-target-attached-bottom.tooltip-target-attached-right > & {
+            margin-top: $arrow-size + $tooltip-offset;
+
+            &::before {
+                border-bottom-color: inherit;
+                bottom: 100%;
+                right: $horizontal-offset;
+            }
+
+            &.is-error::after {
+                border-bottom-color: $lavender-blush;
+                bottom: 100%;
+                right: $horizontal-offset + 1;
+            }
         }
     }
 }
 
+
 // tooltip is a tethered element and as such attached to body
 // however the body may not have box specific classes and hence the
 // tooltip needs to manually inherit few of the body styles to look correct.
-.tooltip-element {
+.box-ui-component-tooltip-element {
     @include box-sizing;
     @include common-typography;
+    @import '../../styles/variables';
 
     z-index: $tooltip-z-index;
 }

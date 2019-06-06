@@ -417,7 +417,7 @@ class Flyout extends React.Component<Props, State> {
             targetAttachment: tetherPosition.targetAttachment,
             enabled: isVisible,
             classes: {
-                element: `flyout-overlay ${className}`,
+                element: `box-ui-component flyout-overlay ${className}`,
             },
             constraints,
         };

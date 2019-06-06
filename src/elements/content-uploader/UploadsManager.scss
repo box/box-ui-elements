@@ -1,6 +1,5 @@
-@import '../common/variables';
-
 .be.bcu-uploads-manager-container {
+    @import '../common/variables';
     bottom: 0;
     max-height: 0;
     position: fixed;

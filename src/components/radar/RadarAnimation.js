@@ -121,7 +121,7 @@ class RadarAnimation extends React.Component<Props> {
                     'aria-describedby': this.radarAnimationID,
                 })}
                 {isShown && (
-                    <div className={`radar ${className}`} id={this.radarAnimationID}>
+                    <div className={`box-ui-component radar ${className}`} id={this.radarAnimationID}>
                         <div className="radar-dot" />
                         <div className="radar-circle" />
                     </div>

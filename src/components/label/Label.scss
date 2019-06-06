@@ -1,24 +1,26 @@
-@import '../../styles/variables';
 
 /**************************************
- * Label
- **************************************/
+* Label
+**************************************/
 
-.label {
-    color: $seventy-sixers;
-    display: block;
-    font-weight: bold;
+.box-ui-component {
+    @import '../../styles/variables';
+    &.label {
+        color: $seventy-sixers;
+        display: block;
+        font-weight: bold;
 
-    .label-optional {
-        padding-left: 3px;
-    }
+        .label-optional {
+            padding-left: 3px;
+        }
 
-    .tooltip-icon-container {
-        padding-left: 3px;
+        .tooltip-icon-container {
+            padding-left: 3px;
 
-        .tooltip-icon {
-            position: relative;
-            top: 3px;
+            .tooltip-icon {
+                position: relative;
+                top: 3px;
+            }
         }
     }
 }

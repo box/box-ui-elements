@@ -1,6 +1,5 @@
-@import '../common/variables';
-
 .bcu-footer {
+    @import '../common/variables';
     align-items: center;
     background-color: $almost-white;
     border-top: 1px solid $off-white;

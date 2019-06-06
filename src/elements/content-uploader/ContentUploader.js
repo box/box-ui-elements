@@ -44,8 +44,7 @@ import {
     STATUS_ERROR,
     ERROR_CODE_UPLOAD_FILE_LIMIT,
 } from '../../constants';
-import '../common/fonts.scss';
-import '../common/base.scss';
+import 'ContentUploader.scss';
 
 type Props = {
     apiHost: string,

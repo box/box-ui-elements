@@ -2,140 +2,140 @@
  * Buttons
  **************************************/
 
-.btn {
-    -webkit-appearance: none;
-    background-color: $white;
-    border: 1px solid $sf-fog;
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
-    box-sizing: border-box;
-    color: $sunset-grey;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 13px;
-    -webkit-font-smoothing: antialiased;
-    font-weight: 400;
-    letter-spacing: .035em;
-    line-height: 10px;
-    margin: 5px;
-    padding: 10px 16px;
-    position: relative;
-    text-align: center;
-    text-decoration: none;
-    text-shadow: none;
-    -webkit-transition: border-color linear .15s, box-shadow linear .15s, background-color linear .15s;
-    transition: background-color .05s ease-in-out, border-color .05s ease-in-out;
-    vertical-align: top;
-    white-space: nowrap;
-    zoom: 1;
+.box-ui-component {
+    &button svg {
+        pointer-events: none;
+    }
 
-    &:active,
-    &:hover,
-    &:focus {
-        outline: none;
+    &.btn {
+        -webkit-appearance: none;
+        background-color: $white;
+        border: 1px solid $sf-fog;
+        border-radius: 4px;
+        border-style: solid;
+        border-width: 1px;
+        box-sizing: border-box;
+        color: $sunset-grey;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 13px;
+        -webkit-font-smoothing: antialiased;
+        font-weight: 400;
+        letter-spacing: .035em;
+        line-height: 10px;
+        margin: 5px;
+        padding: 10px 16px;
+        position: relative;
+        text-align: center;
         text-decoration: none;
-    }
+        text-shadow: none;
+        -webkit-transition: border-color linear .15s, box-shadow linear .15s, background-color linear .15s;
+        transition: background-color .05s ease-in-out, border-color .05s ease-in-out;
+        vertical-align: top;
+        white-space: nowrap;
+        zoom: 1;
 
-    &:not(.is-disabled) {
-        &:hover {
-            background-color: darken($white, 3%);
-        }
-
-        &:active {
-            background-color: darken($white, 8%);
-            border-color: $sf-fog;
-        }
-
+        &:active,
+        &:hover,
         &:focus {
-            border-color: darken($sf-fog, 14%);
-            box-shadow: 0 1px 2px fade-out($black, .9);
+            outline: none;
+            text-decoration: none;
+        }
+
+        &:not(.is-disabled) {
+            &:hover {
+                background-color: darken($white, 3%);
+            }
+
+            &:active {
+                background-color: darken($white, 8%);
+                border-color: $sf-fog;
+            }
+
+            &:focus {
+                border-color: darken($sf-fog, 14%);
+                box-shadow: 0 1px 2px fade-out($black, .9);
+            }
+        }
+
+        &.is-disabled,
+        &.is-loading {
+            cursor: default;
+            top: 0; /* prevents disabled button from being depressed on click */
+        }
+
+        &.is-loading {
+            .btn-content {
+                visibility: hidden;
+            }
+
+            .btn-loading-indicator {
+                align-items: center;
+                display: flex;
+                height: 100%;
+                justify-content: center;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 100%;
+            }
+        }
+
+        &.is-disabled {
+            box-shadow: none;
+            opacity: .4;
         }
     }
 
-    &.is-disabled,
-    &.is-loading {
-        cursor: default;
-        top: 0; /* prevents disabled button from being depressed on click */
-    }
-
-    &.is-loading {
-        .btn-content {
-            visibility: hidden;
-        }
-
-        .btn-loading-indicator {
-            align-items: center;
-            display: flex;
-            height: 100%;
-            justify-content: center;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 100%;
-        }
-    }
-
-    &.is-disabled {
-        box-shadow: none;
-        opacity: .4;
-    }
-}
-
-.btn-plain,
-.btn-plain:hover,
-.btn-plain:active {
-    border: none;
-    cursor: pointer;
-    font-weight: normal;
-    margin: 0;
-    padding: 0;
-}
-
-.btn-plain,
-.btn-plain:hover,
-.btn-plain:active,
-.btn-plain:focus {
-    background: transparent;
-    box-shadow: none;
-}
-
-/* This setting is being used to override the dotted border on a firefox button */
-button.btn-plain::-moz-focus-inner {
-    border: 0 none;
-}
-
-button svg {
-    pointer-events: none;
-}
-
-.btn-primary {
-    background-color: $primary-color;
-    border-color: $primary-color;
-    color: $white;
-    -webkit-font-smoothing: antialiased;
-
-    &:not(.is-disabled) {
-        &:focus {
-            border-color: $primary-color;
-            box-shadow: inset 0 0 0 1px fade-out($white, .2), 0 1px 2px fade-out($black, .9);
-        }
-
-        &:hover {
-            background-color: lighten($primary-color, 8%);
-            border-color: lighten($primary-color, 8%);
-        }
-
+    &.btn-plain {
+        &:hover,
         &:active {
-            background-color: darken($primary-color, 8%);
-            border-color: darken($primary-color, 8%);
+            border: none;
+            cursor: pointer;
+            font-weight: normal;
+            margin: 0;
+            padding: 0;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            background: transparent;
             box-shadow: none;
         }
+        /* This setting is being used to override the dotted border on a firefox button */
+        &button::-moz-focus-inner {
+            border: 0 none;
+        }
     }
 
-    &.is-loading {
-        .btn-content {
-            background-color: $sf-fog;
+    &.btn-primary {
+        background-color: $primary-color;
+        border-color: $primary-color;
+        color: $white;
+        -webkit-font-smoothing: antialiased;
+
+        &:not(.is-disabled) {
+            &:focus {
+                border-color: $primary-color;
+                box-shadow: inset 0 0 0 1px fade-out($white, .2), 0 1px 2px fade-out($black, .9);
+            }
+
+            &:hover {
+                background-color: lighten($primary-color, 8%);
+                border-color: lighten($primary-color, 8%);
+            }
+
+            &:active {
+                background-color: darken($primary-color, 8%);
+                border-color: darken($primary-color, 8%);
+                box-shadow: none;
+            }
+        }
+
+        &.is-loading {
+            .btn-content {
+                background-color: $sf-fog;
+            }
         }
     }
 }

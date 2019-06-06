@@ -5,57 +5,61 @@
 $opacity-duration: .075s;
 $transform-duration: .125s;
 
-.overlay-wrapper {
-    display: inherit;
-    position: relative;
+.box-ui-component {
+    .overlay-wrapper {
+        display: inherit;
+        position: relative;
 
-    .overlay {
-        opacity: 0;
-        pointer-events: none;
-        position: absolute;
-        transform: rotateY(-10deg) rotateX(-10deg);
-        transform-origin: left top;
-        transform-style: preserve-3d;
-        transition: visibility 0s linear $opacity-duration, opacity $opacity-duration, transform $transform-duration;
-        visibility: hidden;
-        z-index: 90;
+        .overlay {
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+            transform: rotateY(-10deg) rotateX(-10deg);
+            transform-origin: left top;
+            transform-style: preserve-3d;
+            transition: visibility 0s linear $opacity-duration, opacity $opacity-duration, transform $transform-duration;
+            visibility: hidden;
+            z-index: 90;
+        }
+
+        &.is-visible {
+            .overlay {
+                opacity: 1;
+                pointer-events: all;
+                transform: rotateY(0deg) rotateX(0deg);
+                transition-delay: 0s;
+                visibility: visible;
+            }
+        }
     }
 
-    &.is-visible {
+    .overlay {
+        background: $white;
+        border: 1px solid $sf-fog;
+        box-shadow: 0 2px 6px 0 fade-out($black, .9);
+        margin: 0;
+        padding: 8px 0;
+
+        hr {
+            border: 0;
+            border-top: 1px solid $sf-fog;
+            height: 0;
+            margin: 8px 0;
+        }
+    }
+
+    .toggle-overlay-container {
+        > .btn {
+            margin-bottom: 0;
+            margin-left: 0;
+        }
+    }
+
+    .toggle-overlay {
         .overlay {
-            opacity: 1;
-            pointer-events: all;
-            transform: rotateY(0deg) rotateX(0deg);
-            transition-delay: 0s;
-            visibility: visible;
+            margin-top: 5px;
         }
     }
 }
 
-.overlay {
-    background: $white;
-    border: 1px solid $sf-fog;
-    box-shadow: 0 2px 6px 0 fade-out($black, .9);
-    margin: 0;
-    padding: 8px 0;
 
-    hr {
-        border: 0;
-        border-top: 1px solid $sf-fog;
-        height: 0;
-        margin: 8px 0;
-    }
-}
-
-.toggle-overlay-container {
-    > .btn {
-        margin-bottom: 0;
-        margin-left: 0;
-    }
-}
-
-.toggle-overlay {
-    .overlay {
-        margin-top: 5px;
-    }
-}

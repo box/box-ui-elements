@@ -9,7 +9,7 @@ export type Props = {
 };
 
 const LoadingIndicator = ({ className = '', size = 'default' }: Props) => (
-    <div className={`crawler ${className} is-${size}`}>
+    <div className={`box-ui-component crawler ${className} is-${size}`}>
         <div />
         <div />
         <div />

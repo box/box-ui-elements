@@ -1,7 +1,6 @@
-@import '../common/variables';
-@import '~react-virtualized/styles.css';
-
 .bcu-item-row {
+    @import '../common/variables';
+    @import '~react-virtualized/styles.css';
     border-bottom: 1px solid $lighter-grey-blue;
     outline: none;
 }

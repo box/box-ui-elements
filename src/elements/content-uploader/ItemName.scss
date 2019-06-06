@@ -1,6 +1,5 @@
-@import '../common/variables';
-
 .bcu-item-label {
+    @import '../common/variables';
     max-width: 300px;
     overflow: hidden;
     text-overflow: ellipsis;

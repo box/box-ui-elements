@@ -7,6 +7,6 @@ type Props = {
     children?: React.Node,
 };
 
-const NotificationsWrapper = ({ children }: Props) => <Portal className="notifications-wrapper">{children}</Portal>;
+const NotificationsWrapper = ({ children }: Props) => <Portal className="box-ui-component notifications-wrapper">{children}</Portal>;
 
 export default NotificationsWrapper;
