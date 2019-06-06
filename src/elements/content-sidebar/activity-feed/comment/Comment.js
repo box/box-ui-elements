@@ -8,7 +8,6 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
-import getProp from 'lodash/get';
 import identity from 'lodash/identity';
 
 import { ReadableTime } from '../../../../components/time';
@@ -72,7 +71,7 @@ class Comment extends React.Component<Props, State> {
         isInputOpen: false,
     };
 
-    onDeleteConfirm = (): void => {
+    handleDeleteConfirm = (): void => {
         const { id, onDelete, permissions } = this.props;
 
         if (onDelete) {
@@ -80,7 +79,7 @@ class Comment extends React.Component<Props, State> {
         }
     };
 
-    onDeleteCancel = (): void => {
+    handleDeleteCancel = (): void => {
         this.setState({ isConfirming: false });
     };
 
@@ -103,14 +102,14 @@ class Comment extends React.Component<Props, State> {
                 event.stopPropagation();
                 event.preventDefault();
                 if (isConfirming) {
-                    this.onDeleteCancel();
+                    this.handleDeleteCancel();
                 }
                 break;
             case 'Enter':
                 event.stopPropagation();
                 event.preventDefault();
                 if (isConfirming) {
-                    this.onDeleteConfirm();
+                    this.handleDeleteConfirm();
                 }
                 break;
             default:
@@ -135,7 +134,7 @@ class Comment extends React.Component<Props, State> {
             avatarRenderer = identity,
             created_by,
             created_at,
-            permissions,
+            permissions = {},
             id,
             isPending,
             error,
@@ -153,9 +152,6 @@ class Comment extends React.Component<Props, State> {
         } = this.props;
         const { isConfirming, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
-        const canDelete = getProp(permissions, 'can_delete', false);
-        const canEdit = getProp(permissions, 'can_edit', false);
-        const canShowMenu = canDelete || canEdit;
         const createdByUser = created_by || PLACEHOLDER_USER;
         const deleteConfirmMessage =
             type === COMMENT_TYPE_DEFAULT ? messages.commentDeletePrompt : messages.taskDeletePrompt;
@@ -181,50 +177,51 @@ class Comment extends React.Component<Props, State> {
                                     getUserProfileUrl={getUserProfileUrl}
                                 />,
                             )}
-                            {canShowMenu && !isPending && (
-                                <TetherComponent
-                                    attachment="top right"
-                                    className="bcs-comment-delete-confirm"
-                                    constraints={[{ to: 'scrollParent', attachment: 'together' }]}
-                                    targetAttachment="bottom right"
-                                >
-                                    <CommentMenu
-                                        id={id}
-                                        isDisabled={isConfirming}
-                                        onDeleteClick={this.handleDeleteClick}
-                                        onEditClick={this.handleEditClick}
-                                        permissions={permissions}
-                                        type={type}
-                                    />
-                                    {isConfirming && (
-                                        <Overlay
-                                            className="be-modal bcs-comment-confirm-container"
-                                            onKeyDown={this.onKeyDown}
-                                            shouldOutlineFocus={false}
-                                        >
-                                            <div className="bsc-comment-confirm-prompt">
-                                                <FormattedMessage {...deleteConfirmMessage} />
-                                            </div>
-                                            <div>
-                                                <PrimaryButton
-                                                    className="bcs-comment-confirm-delete"
-                                                    onClick={this.onDeleteConfirm}
-                                                    type="button"
-                                                >
-                                                    <FormattedMessage {...messages.delete} />
-                                                </PrimaryButton>
-                                                <Button
-                                                    className="bcs-comment-confirm-cancel"
-                                                    onClick={this.onDeleteCancel}
-                                                    type="button"
-                                                >
-                                                    <FormattedMessage {...messages.cancel} />
-                                                </Button>
-                                            </div>
-                                        </Overlay>
-                                    )}
-                                </TetherComponent>
-                            )}
+                            {permissions.can_delete ||
+                                (permissions.can_edit && !isPending && (
+                                    <TetherComponent
+                                        attachment="top right"
+                                        className="bcs-comment-delete-confirm"
+                                        constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                                        targetAttachment="bottom right"
+                                    >
+                                        <CommentMenu
+                                            id={id}
+                                            isDisabled={isConfirming}
+                                            onDeleteClick={this.handleDeleteClick}
+                                            onEditClick={this.handleEditClick}
+                                            permissions={permissions}
+                                            type={type}
+                                        />
+                                        {isConfirming && (
+                                            <Overlay
+                                                className="be-modal bcs-comment-confirm-container"
+                                                onKeyDown={this.onKeyDown}
+                                                shouldOutlineFocus={false}
+                                            >
+                                                <div className="bcs-comment-confirm-prompt">
+                                                    <FormattedMessage {...deleteConfirmMessage} />
+                                                </div>
+                                                <div>
+                                                    <PrimaryButton
+                                                        className="bcs-comment-confirm-delete"
+                                                        onClick={this.handleDeleteConfirm}
+                                                        type="button"
+                                                    >
+                                                        <FormattedMessage {...messages.delete} />
+                                                    </PrimaryButton>
+                                                    <Button
+                                                        className="bcs-comment-confirm-cancel"
+                                                        onClick={this.handleDeleteCancel}
+                                                        type="button"
+                                                    >
+                                                        <FormattedMessage {...messages.cancel} />
+                                                    </Button>
+                                                </div>
+                                            </Overlay>
+                                        )}
+                                    </TetherComponent>
+                                ))}
                         </div>
                         <div>
                             <Tooltip

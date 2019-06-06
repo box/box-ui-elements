@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import getProp from 'lodash/get';
 
 import IconTrash from '../../../../icons/general/IconTrash';
 import IconEllipsis from '../../../../icons/general/IconEllipsis';
@@ -27,9 +26,7 @@ type Props = {
 } & InjectIntlProvidedProps;
 
 const CommentMenu = (props: Props) => {
-    const { intl, isDisabled, onDeleteClick, onEditClick, permissions, type } = props;
-    const canDelete = getProp(permissions, 'can_delete', false);
-    const canEdit = getProp(permissions, 'can_edit', false);
+    const { intl, isDisabled, onDeleteClick, onEditClick, permissions = {}, type } = props;
     const isTaskComment = type === COMMENT_TYPE_TASK;
     const editLabel = isTaskComment ? messages.taskEditMenuItem : messages.editLabel;
     const deleteLabel = isTaskComment ? messages.taskDeleteMenuItem : deleteMessages.deleteLabel;
@@ -37,10 +34,10 @@ const CommentMenu = (props: Props) => {
     return (
         <DropdownMenu className="bcs-comment-menu-container" constrainToScrollParent isRightAligned>
             <PlainButton className="bcs-comment-menu-btn" isDisabled={isDisabled}>
-                <IconEllipsis color={nines} />
+                <IconEllipsis color={nines} height={16} width={16} />
             </PlainButton>
             <Menu>
-                {!!onEditClick && !!canEdit && type === COMMENT_TYPE_TASK && (
+                {!!onEditClick && !!permissions.can_edit && isTaskComment && (
                     <MenuItem
                         aria-label={intl.formatMessage(editLabel)}
                         className="bcs-comment-menu-edit"
@@ -51,7 +48,7 @@ const CommentMenu = (props: Props) => {
                         <FormattedMessage {...editLabel} />
                     </MenuItem>
                 )}
-                {!!onDeleteClick && !!canDelete && (
+                {!!onDeleteClick && !!permissions.can_delete && (
                     <MenuItem
                         aria-label={intl.formatMessage(deleteMessages.deleteLabel)}
                         className="bcs-comment-menu-delete"
