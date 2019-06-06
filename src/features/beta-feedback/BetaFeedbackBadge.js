@@ -34,7 +34,7 @@ const BetaFeedbackBadge = ({ className = '', tooltip = false, ...rest }: Props) 
             <span id="bdl-HeaderFeedbackBadge-ariaLabel" aria-hidden="true" hidden>
                 <FormattedMessage {...messages.feedbackFormDescription} />
             </span>
-            <Link href={formUrl} target="_blank" aria-labelledBy="bdl-HeaderFeedbackBadge-ariaLabel">
+            <Link href={formUrl} target="_blank" aria-labelledby="bdl-HeaderFeedbackBadge-ariaLabel">
                 {badge}
             </Link>
         </span>
