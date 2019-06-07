@@ -38,8 +38,9 @@ const helpers = {
         return cy.get('@row');
     },
     getAddButton() {
-        return cy.getByTestId('be-btn-add');
+        return cy.getByAriaLabel(localize('be.add'));
     },
+    // need exact match since 'Upload' appears elsewhere on the page
     getUploadButton() {
         return cy.contains(this.getExactRegex(localize('be.upload')));
     },
@@ -55,17 +56,20 @@ const helpers = {
     getShareButton(rowNum) {
         return this.getRow(rowNum).contains(localize('be.share'));
     },
+    // using data-testid since more options button has "..." for text
     getMoreOptionsButton(rowNum) {
         return this.getRow(rowNum).find('[data-testid="bce-btn-more-options"]');
     },
+    // need exact match since 'Rename' appears elsewhere on the page
     getRenameButton() {
         return cy.contains(this.getExactRegex(localize('be.rename')));
     },
+    // using data-testid since name is different from row to row
     getItemNameFromRow(rowNum) {
         return this.getRow(rowNum).find('[data-testid="be-item-name"]');
     },
     getClosePreviewButton() {
-        return cy.getByTestId('bcpr-btn-close');
+        return cy.getByAriaLabel('Close');
     },
     openUploadModal() {
         this.getAddButton().click();

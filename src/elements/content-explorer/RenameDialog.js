@@ -121,7 +121,7 @@ const RenameDialog = ({
                 <PrimaryButton isLoading={isLoading} onClick={rename} type="button">
                     <FormattedMessage {...messages.rename} />
                 </PrimaryButton>
-                <Button data-testid="bce-btn-close-rename" isDisabled={isLoading} onClick={onCancel} type="button">
+                <Button isDisabled={isLoading} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

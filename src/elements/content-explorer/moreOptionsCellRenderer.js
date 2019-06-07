@@ -97,7 +97,7 @@ export default (
                         </MenuItem>
                     ) : null}
                     {allowRename ? (
-                        <MenuItem data-testid="bce-btn-more-options-rename" onClick={onRename}>
+                        <MenuItem onClick={onRename}>
                             <FormattedMessage {...messages.rename} />
                         </MenuItem>
                     ) : null}
@@ -109,7 +109,7 @@ export default (
                 </Menu>
             </DropdownMenu>
             {allowShare && !isSmall ? (
-                <Button data-testid="bce-btn-more-options-share" onClick={onShare} onFocus={onFocus} type="button">
+                <Button onClick={onShare} onFocus={onFocus} type="button">
                     <FormattedMessage {...messages.share} />
                 </Button>
             ) : null}

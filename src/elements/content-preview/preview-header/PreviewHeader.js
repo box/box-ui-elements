@@ -127,7 +127,6 @@ const PreviewHeader = ({
                         <PlainButton
                             aria-label={isPreviewingCurrentVersion && closeMsg}
                             className="bcpr-btn bcpr-btn-close"
-                            data-testid="bcpr-btn-close"
                             onClick={onClose}
                             type="button"
                         >
