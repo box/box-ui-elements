@@ -43,6 +43,7 @@ type Props = {
     onContactAdd?: Function,
     onContactInput?: Function,
     onContactRemove?: Function,
+    onPillCreate?: Function,
     onRequestClose: Function,
     onSubmit: Function,
     openInviteCollaboratorsSection?: Function,
@@ -217,6 +218,7 @@ class EmailForm extends React.Component<Props, State> {
             intl,
             isExpanded,
             messageProps,
+            onPillCreate,
             sendButtonProps,
             showEnterEmailsCallout,
             selectedContacts,
@@ -243,6 +245,7 @@ class EmailForm extends React.Component<Props, State> {
                         onContactAdd={this.handleContactAdd}
                         onContactRemove={this.handleContactRemove}
                         onInput={this.handleContactInput}
+                        onPillCreate={onPillCreate}
                         selectedContacts={selectedContacts}
                         suggestedCollaborators={suggestedCollaborators}
                         validateForError={this.validateContactField}

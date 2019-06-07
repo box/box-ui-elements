@@ -36,6 +36,8 @@ type Props = {
     onBlur: (event: SyntheticInputEvent<HTMLInputElement>) => void,
     /** Should update selectorOptions based on the given input value */
     onInput: Function,
+    /** Called when creating pill selector */
+    onPillCreate?: Function,
     /** Should update selectedOptions given the option and index to remove */
     onRemove: Function,
     /** Should update selectedOptions given an array of pills and the event */
@@ -78,6 +80,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         inputProps: {},
         label: '',
         onBlur: noop,
+        onPillCreate: noop,
         placeholder: '',
         selectedOptions: [],
         selectorOptions: [],
@@ -107,7 +110,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     };
 
     addPillsFromInput = () => {
-        const { allowCustomPills, onInput, onSelect, selectedOptions, validateForError } = this.props;
+        const { allowCustomPills, onInput, onPillCreate, onSelect, selectedOptions, validateForError } = this.props;
         const { inputValue } = this.state;
 
         // Do nothing if custom pills are not allowed
@@ -121,6 +124,9 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         // "Select" the pills
         if (pills.length > 0) {
             onSelect(pills);
+            if (onPillCreate) {
+                onPillCreate(pills);
+            }
 
             // Reset inputValue
             this.setState({ inputValue: '' });
@@ -166,12 +172,15 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     };
 
     handleSelect = (index: number, event: SyntheticEvent<>) => {
-        const { onSelect, selectorOptions } = this.props;
+        const { onPillCreate, onSelect, selectorOptions } = this.props;
         const selectedOption =
             // $FlowFixMe
             typeof selectorOptions.get === 'function' ? selectorOptions.get(index) : selectorOptions[index];
 
         onSelect([selectedOption], event);
+        if (onPillCreate) {
+            onPillCreate([selectedOption]);
+        }
 
         this.handleInput({ target: { value: '' } });
     };

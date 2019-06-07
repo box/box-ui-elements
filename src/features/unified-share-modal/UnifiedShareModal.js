@@ -9,6 +9,7 @@ import type { IntlShape } from 'react-intl';
 
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import { Modal } from '../../components/modal';
+import type { SelectOptionProp } from '../../components/select-field/props';
 import { Link } from '../../components/link';
 import Button from '../../components/button';
 import { UpgradeBadge } from '../../components/badge';
@@ -22,6 +23,7 @@ import RemoveLinkConfirmModal from './RemoveLinkConfirmModal';
 import SharedLinkSection from './SharedLinkSection';
 import EmailForm from './EmailForm';
 import getDefaultPermissionLevel from './utils/defaultPermissionLevel';
+import mergeContacts from './utils/mergeContacts';
 import type {
     accessLevelType,
     collaboratorsListType,
@@ -38,6 +40,8 @@ import type {
 import './UnifiedShareModal.scss';
 
 const SHARED_LINKS_COMMUNITY_URL = 'https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523';
+const INVITE_COLLABS_CONTACTS_TYPE = 'inviteCollabsContacts';
+const EMAIL_SHARED_LINK_CONTACTS_TYPE = 'emailSharedLinkContacts';
 
 type Props = {
     /** Flag to determine whether to enable invite collaborators section */
@@ -60,6 +64,8 @@ type Props = {
     focusSharedLinkOnLoad?: boolean,
     /** Handler function for when the user types into invite collaborators field to fetch contacts. */
     getCollaboratorContacts: (query: string) => Promise<Array<Contact>>,
+    /** Handler function that gets contacts by a list of emails */
+    getContactsByEmail?: ({ emails: Array<string> }) => Promise<Object>,
     /** Handler function for getting intial data for modal */
     getInitialData: Function,
     /** Handler function for when the user types into email shared link field to fetch contacts. */
@@ -127,8 +133,6 @@ type State = {
     inviteePermissionLevel: string,
     isConfirmModalOpen: boolean,
     isEmailLinkSectionExpanded: boolean,
-    isExternalUserInEmailSharedLinkContacts: boolean,
-    isExternalUserIninviteCollabsContacts: boolean,
     isFetching: boolean,
     isInviteSectionExpanded: boolean,
     sharedLinkLoaded: boolean,
@@ -159,8 +163,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
             inviteePermissionLevel: '',
             isConfirmModalOpen: false,
             isEmailLinkSectionExpanded: false,
-            isExternalUserInEmailSharedLinkContacts: false,
-            isExternalUserIninviteCollabsContacts: false,
             isFetching: true,
             isInviteSectionExpanded: false,
             showCollaboratorList: false,
@@ -320,6 +322,28 @@ class UnifiedShareModal extends React.Component<Props, State> {
         });
     };
 
+    onPillCreate = (type: string) => (pills: Array<SelectOptionProp | Contact>) => {
+        // If this is a dropdown select event, we ignore it
+        if (pills.length === 1 && pills[0].id) {
+            return;
+        }
+        const { getContactsByEmail } = this.props;
+
+        if (getContactsByEmail) {
+            const emails = pills.map(pill => pill.value);
+            // $FlowFixMe
+            getContactsByEmail({ emails }).then((contacts: Object) => {
+                if (type === INVITE_COLLABS_CONTACTS_TYPE) {
+                    this.setState({ inviteCollabsContacts: mergeContacts(this.state.inviteCollabsContacts, contacts) });
+                } else if (type === EMAIL_SHARED_LINK_CONTACTS_TYPE) {
+                    this.setState({
+                        emailSharedLinkContacts: mergeContacts(this.state.emailSharedLinkContacts, contacts),
+                    });
+                }
+            });
+        }
+    };
+
     openInviteCollaborators = (value: string) => {
         if (this.state.isInviteSectionExpanded) {
             return;
@@ -371,16 +395,20 @@ class UnifiedShareModal extends React.Component<Props, State> {
         this.setState({ isEmailLinkSectionExpanded: false });
     };
 
-    hasExternalContact = (contacts: Array<Contact>) => {
-        return contacts.some(contact => contact.isExternalUser);
+    hasExternalContact = (type: string) => {
+        if (type === INVITE_COLLABS_CONTACTS_TYPE) {
+            return this.state.inviteCollabsContacts.some(contact => contact.isExternalUser);
+        }
+        if (type === EMAIL_SHARED_LINK_CONTACTS_TYPE) {
+            return this.state.emailSharedLinkContacts.some(contact => contact.isExternalUser);
+        }
+        return false;
     };
 
     updateInviteCollabsContacts = (inviteCollabsContacts: Array<Contact>) => {
         const { setUpdatedContacts } = this.props;
-        const hasExternalContact = this.hasExternalContact(inviteCollabsContacts);
         this.setState({
             inviteCollabsContacts,
-            isExternalUserIninviteCollabsContacts: hasExternalContact,
         });
         if (setUpdatedContacts) {
             setUpdatedContacts(inviteCollabsContacts);
@@ -388,10 +416,8 @@ class UnifiedShareModal extends React.Component<Props, State> {
     };
 
     updateEmailSharedLinkContacts = (emailSharedLinkContacts: Array<Contact>) => {
-        const hasExternalContact = this.hasExternalContact(emailSharedLinkContacts);
         this.setState({
             emailSharedLinkContacts,
-            isExternalUserInEmailSharedLinkContacts: hasExternalContact,
         });
     };
 
@@ -425,7 +451,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             trackingProps,
         } = this.props;
         const { type } = item;
-        const { isExternalUserIninviteCollabsContacts, isInviteSectionExpanded, shouldRenderFTUXTooltip } = this.state;
+        const { isInviteSectionExpanded, shouldRenderFTUXTooltip } = this.state;
         const { inviteCollabsEmailTracking, modalTracking } = trackingProps;
         const contactsFieldDisabledTooltip =
             type === ITEM_TYPE_WEBLINK ? (
@@ -486,8 +512,9 @@ class UnifiedShareModal extends React.Component<Props, State> {
                             inlineNotice={inlineNotice}
                             isContactsFieldEnabled={canInvite}
                             isExpanded={isInviteSectionExpanded}
-                            isExternalUserSelected={isExternalUserIninviteCollabsContacts}
+                            isExternalUserSelected={this.hasExternalContact(INVITE_COLLABS_CONTACTS_TYPE)}
                             onContactInput={this.openInviteCollaborators}
+                            onPillCreate={this.onPillCreate(INVITE_COLLABS_CONTACTS_TYPE)}
                             onRequestClose={this.closeInviteCollaborators}
                             onSubmit={this.handleSendInvites}
                             openInviteCollaboratorsSection={this.openInviteCollaboratorsSection}
@@ -669,7 +696,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
         const { modalProps } = modalTracking;
         const {
             isEmailLinkSectionExpanded,
-            isExternalUserInEmailSharedLinkContacts,
             isFetching,
             isInviteSectionExpanded,
             isConfirmModalOpen,
@@ -728,7 +754,8 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 }}
                                 isContactsFieldEnabled
                                 isExpanded
-                                isExternalUserSelected={isExternalUserInEmailSharedLinkContacts}
+                                isExternalUserSelected={this.hasExternalContact(EMAIL_SHARED_LINK_CONTACTS_TYPE)}
+                                onPillCreate={this.onPillCreate(EMAIL_SHARED_LINK_CONTACTS_TYPE)}
                                 onRequestClose={this.closeEmailSharedLinkForm}
                                 onSubmit={this.handleSendSharedLink}
                                 showEnterEmailsCallout={showEnterEmailsCallout}

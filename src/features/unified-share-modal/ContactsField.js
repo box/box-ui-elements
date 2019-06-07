@@ -28,6 +28,7 @@ type Props = {
     onContactAdd: Function,
     onContactRemove: Function,
     onInput?: Function,
+    onPillCreate?: Function,
     selectedContacts: Array<Contact>,
     suggestedCollaborators?: suggestedCollaboratorsType,
     validateForError: Function,
@@ -163,6 +164,7 @@ class ContactsField extends React.Component<Props, State> {
             selectedContacts,
             onContactAdd,
             onContactRemove,
+            onPillCreate,
             validateForError,
             validator,
         } = this.props;
@@ -188,6 +190,7 @@ class ContactsField extends React.Component<Props, State> {
                 onInput={this.handlePillSelectorInput}
                 onRemove={onContactRemove}
                 onSelect={onContactAdd}
+                onPillCreate={onPillCreate}
                 overlayTitle={shouldShowSuggested ? intl.formatMessage(messages.suggestedCollabsTitle) : undefined}
                 parseItems={parseEmails}
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
