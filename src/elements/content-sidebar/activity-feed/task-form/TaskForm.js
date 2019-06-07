@@ -23,19 +23,7 @@ import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactio
 import './TaskForm.scss';
 
 type TaskFormProps = {|
-    approverSelectorContacts: SelectorItems,
-    className?: string,
-    createTask: (
-        text: string,
-        approvers: SelectorItems,
-        taskType: TaskType,
-        dueDate: ?Date,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => any,
     error?: any,
-    getApproverWithQuery?: Function,
-    getAvatarUrl: GetAvatarUrlCallback,
     isDisabled?: boolean,
     onCancel: () => any,
     onCreateError: (e: ElementsXhrError) => any,
@@ -43,7 +31,22 @@ type TaskFormProps = {|
     taskType: TaskType,
 |};
 
-type Props = TaskFormProps & InjectIntlProvidedProps;
+type TaskFormConsumerProps = {|
+    approverSelectorContacts: SelectorItems,
+    className?: string,
+    createTask: (
+        text: string,
+        approvers: SelectorItems,
+        taskType: TaskType,
+        dueDate: ?string,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => any,
+    getApproverWithQuery?: Function,
+    getAvatarUrl: GetAvatarUrlCallback,
+|};
+
+type Props = TaskFormProps & TaskFormConsumerProps & InjectIntlProvidedProps;
 
 type TaskFormFieldName = 'taskName' | 'taskAssignees' | 'taskDueDate';
 
@@ -131,21 +134,24 @@ class TaskForm extends React.Component<Props, State> {
     handleValidSubmit = (): void => {
         const { createTask, taskType } = this.props;
         const { message, approvers, dueDate, isValid } = this.state;
+        const dueDateString = dueDate && dueDate.toISOString();
 
         if (!isValid) return;
 
         this.setState({ isLoading: true });
-        createTask(message, approvers, taskType, dueDate, this.handleCreateSuccess, this.handleCreateError);
+        createTask(message, approvers, taskType, dueDateString, this.handleCreateSuccess, this.handleCreateError);
     };
 
-    handleDueDateChange = (date: ?Date): void => {
+    handleDueDateChange = (date: ?string): void => {
+        let dateValue = null;
         if (date) {
+            dateValue = new Date(date);
             // The date given to us is midnight of the date selected.
             // Modify date to be the end of day (minus 1 millisecond) for the given due date
-            date.setHours(23, 59, 59, 999);
+            dateValue.setHours(23, 59, 59, 999);
         }
 
-        this.setState({ dueDate: date });
+        this.setState({ dueDate: dateValue });
     };
 
     handleApproverSelectorInput = (value: any): void => {
@@ -289,5 +295,6 @@ class TaskForm extends React.Component<Props, State> {
 
 // For testing only
 export { TaskForm as TaskFormUnwrapped };
+export type { TaskFormConsumerProps as TaskFormProps };
 
 export default injectIntl(TaskForm);

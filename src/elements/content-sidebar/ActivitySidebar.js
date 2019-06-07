@@ -50,7 +50,7 @@ type Props = {
 
 type State = {
     activityFeedError?: Errors,
-    approverSelectorContacts?: SelectorItems,
+    approverSelectorContacts: SelectorItems,
     currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
@@ -569,16 +569,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         } = this;
         const props = {
             isDisabled,
-            createTask,
-            getApproverWithQuery,
-            approverSelectorContacts,
-            getAvatarUrl,
             feedbackUrl: getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || '',
             onTaskModalClose,
         };
+        const taskFormProps = {
+            approverSelectorContacts,
+            createTask,
+            getApproverWithQuery,
+            getAvatarUrl,
+        };
         return (
             <FeatureFlag feature="activityFeed.tasks.newApi">
-                <AddTaskButton {...props} />
+                <AddTaskButton {...props} taskFormProps={taskFormProps} />
             </FeatureFlag>
         );
     };
