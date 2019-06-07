@@ -1,6 +1,8 @@
+import localize from '../../support/i18n';
+
 // <reference types="Cypress" />
 const selectedRowClassName = 'bce-item-row-selected';
-const selectedRowClassSelector = '.bce-item-row-selected';
+const selectedRowClassSelector = `.${selectedRowClassName}`;
 const helpers = {
     load(additionalProps = {}) {
         cy.visit('/Elements/ContentExplorer', {
@@ -8,6 +10,12 @@ const helpers = {
                 contentWindow.PROPS = additionalProps;
             },
         });
+    },
+    // cy.contains('Upload') returns the 'canUpload' help text
+    // at the bottom of the page, as opposed to the Upload button.
+    // Use this function when you need cy.contains() to match exact text.
+    getExactRegex(str) {
+        return new RegExp(`^${str}$`);
     },
     getRow(rowNum) {
         return cy.getByTestId('content-explorer').find(`.bce-item-row-${rowNum}`);
@@ -33,31 +41,25 @@ const helpers = {
         return cy.getByTestId('be-btn-add');
     },
     getUploadButton() {
-        return cy.getByTestId('be-btn-add-upload');
+        return cy.contains(this.getExactRegex(localize('be.upload')));
     },
     getNewFolderButton() {
-        return cy.getByTestId('be-btn-add-create');
+        return cy.contains(localize('be.newFolder'));
     },
-    getNewFolderCancelButton() {
-        return cy.getByTestId('be-btn-create-folder-cancel');
+    getCancelButton() {
+        return cy.contains(localize('be.cancel'));
     },
-    getCloseUploadModal() {
-        return cy.getByTestId('bcu-btn-close-upload');
+    getCloseButton() {
+        return cy.contains(localize('be.close'));
     },
     getShareButton(rowNum) {
-        return this.getRow(rowNum).find('[data-testid="bce-btn-more-options-share"]');
-    },
-    getCloseShareButton() {
-        return cy.getByTestId('bce-btn-close-share');
+        return this.getRow(rowNum).contains(localize('be.share'));
     },
     getMoreOptionsButton(rowNum) {
         return this.getRow(rowNum).find('[data-testid="bce-btn-more-options"]');
     },
     getRenameButton() {
-        return cy.getByTestId('bce-btn-more-options-rename');
-    },
-    getCloseRenameButton() {
-        return cy.getByTestId('bce-btn-close-rename');
+        return cy.contains(this.getExactRegex(localize('be.rename')));
     },
     getItemNameFromRow(rowNum) {
         return this.getRow(rowNum).find('[data-testid="be-item-name"]');
@@ -109,7 +111,7 @@ describe('ContentExplorer', () => {
             helpers.selectRow(2);
             helpers.checkRowSelections(2);
             helpers.openUploadModal();
-            helpers.getCloseUploadModal().click();
+            helpers.getCloseButton().click();
             helpers.checkRowSelections(2);
             helpers.selectRow(3);
             helpers.checkRowSelections(3);
@@ -133,7 +135,7 @@ describe('ContentExplorer', () => {
             helpers.selectRow(2);
             helpers.checkRowSelections(2);
             helpers.openNewFolderModal();
-            helpers.getNewFolderCancelButton().click();
+            helpers.getCancelButton().click();
             helpers.checkRowSelections(2);
             helpers.selectRow(3);
             helpers.checkRowSelections(3);
@@ -142,7 +144,7 @@ describe('ContentExplorer', () => {
         it('Should open and close share text', () => {
             helpers.load();
             helpers.getShareButton(2).click();
-            helpers.getCloseShareButton().click();
+            helpers.getCloseButton().click();
             helpers.checkRowSelections(2);
             helpers.selectRow(3);
             helpers.checkRowSelections(3);
@@ -167,7 +169,7 @@ describe('ContentExplorer', () => {
             helpers.checkRowSelections(2);
             helpers.getMoreOptionsButton(4).click();
             helpers.getRenameButton().click();
-            helpers.getCloseRenameButton().click();
+            helpers.getCancelButton().click();
             helpers.checkRowSelections(4);
             helpers.selectRow(1);
             helpers.checkRowSelections(1);
@@ -185,12 +187,12 @@ describe('ContentExplorer', () => {
             helpers.selectRow(5);
             helpers.checkRowSelections(5);
             helpers.openUploadModal();
-            helpers.getCloseUploadModal().click();
+            helpers.getCloseButton().click();
             helpers.checkRowSelections(5);
             helpers.selectRow(2);
             helpers.checkRowSelections(2);
             helpers.getShareButton(3).click();
-            helpers.getCloseShareButton().click();
+            helpers.getCloseButton().click();
             helpers.checkRowSelections(3);
             helpers.selectRow(4);
             helpers.checkRowSelections(4);

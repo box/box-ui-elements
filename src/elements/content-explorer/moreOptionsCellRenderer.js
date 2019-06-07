@@ -69,7 +69,7 @@ export default (
             <DropdownMenu constrainToScrollParent isRightAligned>
                 <Button
                     className="bce-btn-more-options"
-                    dataTestId="bce-btn-more-options"
+                    data-testid="bce-btn-more-options"
                     onFocus={onFocus}
                     type="button"
                 >
@@ -97,7 +97,7 @@ export default (
                         </MenuItem>
                     ) : null}
                     {allowRename ? (
-                        <MenuItem dataTestId="bce-btn-more-options-rename" onClick={onRename}>
+                        <MenuItem data-testid="bce-btn-more-options-rename" onClick={onRename}>
                             <FormattedMessage {...messages.rename} />
                         </MenuItem>
                     ) : null}
@@ -109,7 +109,7 @@ export default (
                 </Menu>
             </DropdownMenu>
             {allowShare && !isSmall ? (
-                <Button dataTestId="bce-btn-more-options-share" onClick={onShare} onFocus={onFocus} type="button">
+                <Button data-testid="bce-btn-more-options-share" onClick={onShare} onFocus={onFocus} type="button">
                     <FormattedMessage {...messages.share} />
                 </Button>
             ) : null}

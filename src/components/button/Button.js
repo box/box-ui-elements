@@ -11,7 +11,6 @@ type Props = {
     children?: React.Node,
     /** Adds a class to the component */
     className?: string,
-    dataTestId?: string,
     isDisabled?: boolean,
     isLoading?: boolean,
     isSelected?: boolean,
@@ -46,7 +45,6 @@ class Button extends React.Component<Props> {
             setRef,
             type = 'submit',
             showRadar = false,
-            dataTestId,
             ...rest
         } = this.props;
 
@@ -75,7 +73,6 @@ class Button extends React.Component<Props> {
                     }
                 }}
                 className={styleClassName}
-                data-testid={dataTestId}
                 onClick={this.handleClick}
                 type={type}
                 {...buttonProps}

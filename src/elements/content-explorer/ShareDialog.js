@@ -89,7 +89,7 @@ const ShareDialog = ({
                     item={item}
                     onChange={onShareAccessChange}
                 />
-                <Button dataTestId="bce-btn-close-share" isLoading={isLoading} onClick={onCancel} type="button">
+                <Button data-testid="bce-btn-close-share" isLoading={isLoading} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.close} />
                 </Button>
             </div>

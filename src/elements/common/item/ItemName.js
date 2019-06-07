@@ -26,7 +26,7 @@ const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
     return type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview)) ? (
         <PlainButton
             className="be-item-label"
-            dataTestId="be-item-name"
+            data-testid="be-item-name"
             onClick={onItemClick}
             onFocus={onItemFocus}
             type="button"

@@ -8,7 +8,6 @@ import RadarAnimation from '../radar';
 type Props = {
     children: React.Node,
     className?: string,
-    dataTestId?: string,
     isDisabled?: boolean,
     isSelectItem?: boolean,
     isSelected?: boolean,
@@ -34,16 +33,7 @@ class MenuItem extends React.Component<Props> {
     };
 
     render() {
-        const {
-            children,
-            className,
-            dataTestId,
-            isDisabled,
-            isSelectItem,
-            isSelected,
-            showRadar,
-            ...rest
-        } = this.props;
+        const { children, className, isDisabled, isSelectItem, isSelected, showRadar, ...rest } = this.props;
         const menuItemProps = omit(rest, ['role', 'tabIndex', 'onClick']);
 
         menuItemProps.className = classNames('menu-item', className, {
@@ -62,11 +52,7 @@ class MenuItem extends React.Component<Props> {
             menuItemProps['aria-disabled'] = 'true';
         }
 
-        let menuItem = (
-            <li data-testid={dataTestId} {...menuItemProps}>
-                {children}
-            </li>
-        );
+        let menuItem = <li {...menuItemProps}>{children}</li>;
         if (showRadar) {
             menuItem = <RadarAnimation>{menuItem}</RadarAnimation>;
         }

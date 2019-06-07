@@ -24,12 +24,12 @@ const Add = ({ onUpload, onCreate, showUpload = true, showCreate = true }: Props
         <AddButton />
         <Menu>
             {showUpload && (
-                <MenuItem dataTestId="be-btn-add-upload" onClick={onUpload}>
+                <MenuItem data-testid="be-btn-add-upload" onClick={onUpload}>
                     <FormattedMessage {...messages.upload} />
                 </MenuItem>
             )}
             {showCreate && (
-                <MenuItem dataTestId="be-btn-add-create" onClick={onCreate}>
+                <MenuItem data-testid="be-btn-add-create" onClick={onCreate}>
                     <FormattedMessage {...messages.newFolder} />
                 </MenuItem>
             )}
