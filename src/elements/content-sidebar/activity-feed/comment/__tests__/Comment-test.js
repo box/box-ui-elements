@@ -101,42 +101,15 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should allow actions when can_delete permission is present', () => {
+    test.each`
+        permissions
+        ${{ can_delete: true, can_edit: false }}
+        ${{ can_delete: false, can_edit: true }}
+    `('should render comment menu based on permissions', ({ permissions }) => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-        };
-
-        const permissions = {
-            can_delete: true,
-        };
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onDelete={jest.fn()}
-                permissions={permissions}
-            />,
-        );
-
-        expect(wrapper.find('CommentMenu').length).toEqual(1);
-    });
-
-    test('should allow actions when can_edit permission is present', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-        };
-
-        const permissions = {
-            can_edit: true,
         };
 
         const wrapper = shallow(
