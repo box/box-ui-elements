@@ -1,4 +1,5 @@
 import localize from '../../support/i18n';
+import utils from '../../support/utils';
 
 // <reference types="Cypress" />
 const selectedRowClassName = 'bce-item-row-selected';
@@ -10,12 +11,6 @@ const helpers = {
                 contentWindow.PROPS = additionalProps;
             },
         });
-    },
-    // cy.contains('Upload') returns the 'canUpload' help text
-    // at the bottom of the page, as opposed to the Upload button.
-    // Use this function when you need cy.contains() to match exact text.
-    getExactRegex(str) {
-        return new RegExp(`^${str}$`);
     },
     getRow(rowNum) {
         return cy.getByTestId('content-explorer').find(`.bce-item-row-${rowNum}`);
@@ -31,18 +26,16 @@ const helpers = {
         }
     },
     selectRow(rowNum) {
-        this.getRow(rowNum)
-            .as('row')
+        return this.getRow(rowNum)
             .click()
             .should('have.class', selectedRowClassName);
-        return cy.get('@row');
     },
     getAddButton() {
         return cy.getByAriaLabel(localize('be.add'));
     },
     // need exact match since 'Upload' appears elsewhere on the page
     getUploadButton() {
-        return cy.contains(this.getExactRegex(localize('be.upload')));
+        return cy.contains(utils.getExactRegex(localize('be.upload')));
     },
     getNewFolderButton() {
         return cy.contains(localize('be.newFolder'));
@@ -62,7 +55,7 @@ const helpers = {
     },
     // need exact match since 'Rename' appears elsewhere on the page
     getRenameButton() {
-        return cy.contains(this.getExactRegex(localize('be.rename')));
+        return cy.contains(utils.getExactRegex(localize('be.rename')));
     },
     // using data-testid since name is different from row to row
     getItemNameFromRow(rowNum) {
