@@ -8,7 +8,7 @@ exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicato
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
-    position="middle-right"
+    position="top-right"
     text="abcdefghijklmnopqrstuvwxyz"
     theme="default"
   >
