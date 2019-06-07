@@ -3,23 +3,14 @@ import * as React from 'react';
 import AddTaskMenu from './AddTaskMenu';
 import TaskModal from './TaskModal';
 import { TASK_TYPE_APPROVAL } from '../../constants';
+import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
 
-type AddTaskButtonProps = {|
+type Props = {|
     feedbackUrl: string,
     isDisabled: boolean,
     onTaskModalClose: () => void,
+    taskFormProps: TaskFormProps,
 |};
-
-// These are used by the wrapped form
-type PassThroughProps = {|
-    approverSelectorContacts: any,
-    className?: string,
-    createTask: any,
-    getApproverWithQuery?: any,
-    getAvatarUrl: any,
-|};
-
-type Props = {| ...AddTaskButtonProps, ...PassThroughProps |};
 
 type State = {
     error: ?ElementsXhrError,
@@ -50,7 +41,7 @@ class AddTaskButton extends React.Component<Props, State> {
     handleCreateError = (e: ElementsXhrError) => this.setState({ error: e });
 
     render() {
-        const { isDisabled, feedbackUrl, ...passThrough } = this.props;
+        const { isDisabled, feedbackUrl, taskFormProps } = this.props;
         const { isTaskFormOpen, taskType, error } = this.state;
 
         return (
@@ -63,7 +54,7 @@ class AddTaskButton extends React.Component<Props, State> {
                     handleCreateSuccess={this.handleCreateSuccess}
                     handleModalClose={this.handleModalClose}
                     isTaskFormOpen={isTaskFormOpen}
-                    passThrough={passThrough}
+                    taskFormProps={taskFormProps}
                     taskType={taskType}
                 />
             </React.Fragment>

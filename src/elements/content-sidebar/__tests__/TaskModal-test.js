@@ -12,7 +12,7 @@ describe('elements/content-sidebar/TaskModal', () => {
                     handleCreateSuccess={jest.fn()}
                     handleModalClose={jest.fn()}
                     isTaskFormOpen
-                    passThrough={{
+                    taskFormProps={{
                         approverSelectorContacts: null,
                         createTask: jest.fn(),
                         getAvatarUrl: jest.fn(),
