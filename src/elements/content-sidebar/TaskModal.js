@@ -6,10 +6,11 @@ import BetaFeedbackBadge from '../../features/beta-feedback';
 import Modal from '../../components/modal/Modal';
 import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
-import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
+import { TASK_EDIT_MODE_CREATE, TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
 
 type TaskModalProps = {
+    editMode?: TaskEditMode,
     error: ?ElementsXhrError,
     feedbackUrl: string,
     handleCreateError: (e: ElementsXhrError) => void,
@@ -20,13 +21,17 @@ type TaskModalProps = {
     taskType: TaskType,
 };
 
-function getMessageForModalTitle(taskType: TaskType): MessageDescriptor {
+function getMessageForModalTitle(taskType: TaskType, mode: TaskEditMode): MessageDescriptor {
     switch (taskType) {
         case TASK_TYPE_GENERAL:
-            return messages.tasksCreateGeneralTaskFormTitle;
+            return mode === TASK_EDIT_MODE_CREATE
+                ? messages.tasksCreateGeneralTaskFormTitle
+                : messages.tasksEditGeneralTaskFormTitle;
         case TASK_TYPE_APPROVAL:
         default:
-            return messages.tasksCreateApprovalTaskFormTitle;
+            return mode === TASK_EDIT_MODE_CREATE
+                ? messages.tasksCreateApprovalTaskFormTitle
+                : messages.tasksEditApprovalTaskFormTitle;
     }
 }
 
@@ -34,6 +39,7 @@ const focusTargetSelector: string = '.task-modal input';
 
 const TaskModal = (props: TaskModalProps) => {
     const {
+        editMode = TASK_EDIT_MODE_CREATE,
         error,
         handleCreateError,
         handleCreateSuccess,
@@ -54,7 +60,7 @@ const TaskModal = (props: TaskModalProps) => {
             onRequestClose={handleModalClose}
             title={
                 <React.Fragment>
-                    <FormattedMessage {...getMessageForModalTitle(taskType)} />
+                    <FormattedMessage {...getMessageForModalTitle(taskType, editMode)} />
                     <BetaFeedbackBadge tooltip formUrl={feedbackUrl} />
                 </React.Fragment>
             }
