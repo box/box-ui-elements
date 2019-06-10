@@ -702,7 +702,7 @@ describe('api/Feed', () => {
             expect(() => feed.updateTaskNew({})).toThrow(fileError);
         });
 
-        test('should call the new task api and if successful, success callback', () => {
+        test('should call the new task api and if successful, the success callback', () => {
             const successCallback = jest.fn();
             const task = {
                 id: '1',

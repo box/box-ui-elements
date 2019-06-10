@@ -12,6 +12,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         deleteTask: jest.fn(),
         createTask: jest.fn(),
         updateTask: jest.fn(),
+        updateTaskNew: jest.fn(),
         updateTaskAssignment: jest.fn(),
         createComment: jest.fn(),
     };
@@ -268,6 +269,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         test('should call the update task API and fetch the items', () => {
             instance.updateTask(taskObj);
             expect(feedAPI.updateTask).toBeCalled();
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
+
+        test('should call new update task API and fetch the items', () => {
+            instance.tasksApiNew.updateTask(taskObj);
+            expect(feedAPI.updateTaskNew).toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
     });
