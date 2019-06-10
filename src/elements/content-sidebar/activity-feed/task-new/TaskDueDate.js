@@ -8,6 +8,8 @@ import { ReadableTime } from '../../../../components/time';
 
 import { TASK_NEW_NOT_STARTED } from '../../../../constants';
 
+import './TaskDueDate.scss';
+
 type Props = {
     dueDate: ISODate,
     status: TaskStatus,
@@ -19,8 +21,8 @@ const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
 
     return (
         <div
-            className={classNames('bcs-task-due-date', {
-                'bcs-task-overdue': isOverdue,
+            className={classNames('bcs-TaskDueDate', {
+                'bcs-is-taskOverdue': isOverdue,
             })}
             data-testid="task-due-date"
         >

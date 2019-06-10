@@ -1,8 +1,6 @@
 @import '../../../common/variables';
 @import './mixins';
 
-$success-color: $shady-acres;
-$error-color: $red;
 $card-left-offset: 40px;
 
 .bcs-task {
@@ -15,19 +13,6 @@ $card-left-offset: 40px;
 
     .bcs-task-content {
         margin-left: $card-left-offset;
-    }
-
-    .bcs-task-due-date {
-        color: $bdl-neutral-02;
-        font-weight: bold;
-
-        span:first-child {
-            padding-right: 3px;
-        }
-
-        &.bcs-task-overdue {
-            color: $error-color;
-        }
     }
 
     .bcs-task-avatar {
@@ -45,29 +30,13 @@ $card-left-offset: 40px;
         margin-top: 8px;
     }
 
-    .bcs-task-status {
-        color: $bdl-neutral-02;
-        font-weight: bold;
-    }
-
-    .bcs-task-status-message {
-        &.completed,
-        &.approved {
-            color: $bdl-green-light;
-        }
-
-        &.rejected {
-            color: $bdl-watermelon-red;
-        }
-    }
-
     .bcs-task-pending-assignment {
         margin-top: 5px;
     }
 
     .bcs-comment {
         .bcs-comment-user-name {
-            margin-right: 3px;
+            margin-right: 0;
 
             &.link {
                 white-space: normal;
