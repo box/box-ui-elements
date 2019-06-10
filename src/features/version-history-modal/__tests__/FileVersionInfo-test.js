@@ -138,7 +138,7 @@ describe('features/version-history-modal/FileVersionInfo', () => {
             });
             expect(messageWrapper.length).toBe(1);
             expect(messageWrapper.prop('values')).toEqual({
-                uploaded: 5000000,
+                uploaded: 1000000,
                 uploaderUserName: 'uploader',
             });
         });
