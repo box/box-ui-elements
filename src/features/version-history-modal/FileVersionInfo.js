@@ -55,8 +55,7 @@ const FileVersionInfo = ({ version }) => {
         // Both current version and other versions just use the default "Uploaded" info
         message = messages.uploadedInfo;
         values = {
-            // Use `updated` time instead of `created` timestamp for the current version of the file
-            uploaded: convertToMs(version.isCurrent ? version.updated : version.created),
+            uploaded: convertToMs(version.created),
             uploaderUserName: version.uploaderUserName,
         };
     }
