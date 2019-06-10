@@ -724,8 +724,8 @@ class ContentExplorer extends Component<Props, State> {
      * @private
      * @param {Collection} collection - collection that needs to be updated
      * @param {?BoxItem} selected - item that should be selected in that collection (if present)
-     * @param {Function} callback - callback function that should be called after setState occurs
-     * @return {Object}
+     * @param {Function} [callback] - callback function that should be called after setState occurs
+     * @return {void}
      */
     updateCollection(collection: Collection, selected: ?BoxItem, callback: Function = noop): Object {
         const newCollection: Collection = { ...collection };
@@ -743,9 +743,7 @@ class ContentExplorer extends Component<Props, State> {
                 return item;
             });
         }
-        this.setState({ currentCollection: newCollection, selected: newSelected }, () => {
-            callback();
-        });
+        this.setState({ currentCollection: newCollection, selected: newSelected }, callback);
     }
 
     /**
@@ -758,7 +756,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     unselect(): void {
         const { currentCollection }: State = this.state;
-        this.updateCollection(currentCollection, null);
+        this.updateCollection(currentCollection);
     }
 
     /**
@@ -783,14 +781,14 @@ class ContentExplorer extends Component<Props, State> {
 
         const selectedItem: BoxItem = { ...item, selected: true };
 
-        this.updateCollection(currentCollection, selectedItem);
-
-        const focusedRow: number = items.findIndex((i: BoxItem) => i.id === item.id);
-
-        this.setState({ focusedRow }, () => {
+        this.updateCollection(currentCollection, selectedItem, () => {
             onSelect(cloneDeep([selectedItem]));
             callback(selectedItem);
         });
+
+        const focusedRow: number = items.findIndex((i: BoxItem) => i.id === item.id);
+
+        this.setState({ focusedRow });
     };
 
     /**
