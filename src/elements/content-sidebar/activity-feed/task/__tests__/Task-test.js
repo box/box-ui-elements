@@ -59,7 +59,7 @@ describe('elements/content-sidebar/ActivityFeed/task/Task', () => {
                 .children()
                 .getElements().length,
         ).toEqual(2);
-        expect(wrapper.find('.bcs-task-due-date').length).toEqual(1);
+        expect(wrapper.find('.bcs-TaskDueDate').length).toEqual(1);
 
         expect(wrapper).toMatchSnapshot();
     });
