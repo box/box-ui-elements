@@ -6,8 +6,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 >
   <div
     className="bcs-comment"
-    onBlur={[Function]}
-    onFocus={[Function]}
   >
     <Component
       className="bcs-comment-avatar"
@@ -78,8 +76,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 >
   <div
     className="bcs-comment"
-    onBlur={[Function]}
-    onFocus={[Function]}
   >
     <Component
       className="bcs-comment-avatar"
@@ -151,8 +147,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
 >
   <div
     className="bcs-comment bcs-is-pending"
-    onBlur={[Function]}
-    onFocus={[Function]}
   >
     <Component
       className="bcs-comment-avatar"
@@ -227,8 +221,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
 >
   <div
     className="bcs-comment"
-    onBlur={[Function]}
-    onFocus={[Function]}
   >
     <Component
       className="bcs-comment-avatar"

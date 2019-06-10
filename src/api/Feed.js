@@ -999,6 +999,7 @@ class Feed extends Base {
             task,
             successCallback: this.deleteFeedItem.bind(this, task.id, successCallback),
             errorCallback: (e: ElementsXhrError, code: string) => {
+                this.updateFeedItem(this.createFeedError(messages.taskDeleteErrorMessage), task.id);
                 this.feedErrorCallback(true, e, code);
             },
         });

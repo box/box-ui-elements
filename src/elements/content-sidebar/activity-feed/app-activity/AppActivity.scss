@@ -5,13 +5,6 @@
         position: relative;
         z-index: 1;
 
-        &:hover,
-        &.bcs-is-focused {
-            .bcs-inline-delete-container {
-                opacity: 1;
-            }
-        }
-
         .bcs-app-activity {
             display: flex;
             margin-top: 23px;

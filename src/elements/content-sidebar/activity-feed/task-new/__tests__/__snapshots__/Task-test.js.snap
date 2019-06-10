@@ -26,12 +26,6 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         }
       }
       id="123125"
-      inlineDeleteMessage={
-        Object {
-          "defaultMessage": "Delete task?",
-          "id": "be.taskDeletePrompt",
-        }
-      }
       onDelete={[MockFunction]}
       onEdit={[MockFunction]}
       permissions={
@@ -44,6 +38,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         }
       }
       tagged_message="This is where we tell each other what we need to do"
+      type="task"
       userHeadlineRenderer={[Function]}
     />
     <div
