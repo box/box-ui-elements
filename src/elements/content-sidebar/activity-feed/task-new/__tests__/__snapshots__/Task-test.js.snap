@@ -25,6 +25,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           "type": "user",
         }
       }
+      handleEditClick={[Function]}
       id="123125"
       onDelete={[MockFunction]}
       onEdit={[MockFunction]}
@@ -33,7 +34,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           "can_create_task_collaborator": true,
           "can_create_task_link": true,
           "can_delete": true,
-          "can_edit": false,
+          "can_edit": true,
           "can_update": true,
         }
       }
@@ -104,5 +105,41 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       />
     </div>
   </div>
+  <TaskModal
+    editMode="EDIT"
+    error={null}
+    feedbackUrl=""
+    handleCreateError={[Function]}
+    handleCreateSuccess={[Function]}
+    handleModalClose={[Function]}
+    isTaskFormOpen={false}
+    taskFormProps={
+      Object {
+        "approverSelectorContacts": Array [
+          Object {
+            "id": "1",
+            "item": Object {},
+            "name": "Jake Thomas",
+            "text": "Jake Thomas",
+            "type": "user",
+            "value": "1",
+          },
+          Object {
+            "id": "3",
+            "item": Object {},
+            "name": "Patrick Paul",
+            "text": "Patrick Paul",
+            "type": "user",
+            "value": "3",
+          },
+        ],
+        "createTask": [Function],
+        "dueDate": null,
+        "getAvatarUrl": undefined,
+        "message": "This is where we tell each other what we need to do",
+      }
+    }
+    taskType="GENERAL"
+  />
 </div>
 `;

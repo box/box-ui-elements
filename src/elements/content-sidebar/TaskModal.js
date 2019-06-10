@@ -67,6 +67,7 @@ const TaskModal = (props: TaskModalProps) => {
         >
             <div className="be">
                 <TaskForm
+                    editMode={editMode}
                     error={error}
                     onCancel={handleModalClose}
                     onCreateSuccess={handleCreateSuccess}

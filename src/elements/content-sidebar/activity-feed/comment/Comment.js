@@ -27,7 +27,7 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
 
 import './Comment.scss';
-import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK, PLACEHOLDER_USER } from '../../../../constants';
+import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK, PLACEHOLDER_USER, KEYS } from '../../../../constants';
 
 type Props = {
     avatarRenderer?: React.Node => React.Element<any>,
@@ -38,6 +38,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    handleEditClick?: string => void,
     id: string,
     isDisabled?: boolean,
     isPending?: boolean,
@@ -87,8 +88,15 @@ class Comment extends React.Component<Props, State> {
         this.setState({ isConfirming: true });
     };
 
+    // default handler for edit menu click which can vary based on activity type
     handleEditClick = (): void => {
-        this.setState({ isEditing: true, isInputOpen: true });
+        const { handleEditClick } = this.props;
+
+        if (!handleEditClick) {
+            this.setState({ isEditing: true, isInputOpen: true });
+        } else {
+            handleEditClick(this.props.id);
+        }
     };
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
@@ -98,14 +106,14 @@ class Comment extends React.Component<Props, State> {
         nativeEvent.stopImmediatePropagation();
 
         switch (event.key) {
-            case 'Escape':
+            case KEYS.escape:
                 event.stopPropagation();
                 event.preventDefault();
                 if (isConfirming) {
                     this.handleDeleteCancel();
                 }
                 break;
-            case 'Enter':
+            case KEYS.enter:
                 event.stopPropagation();
                 event.preventDefault();
                 if (isConfirming) {

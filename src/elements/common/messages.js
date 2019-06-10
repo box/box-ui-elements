@@ -966,7 +966,12 @@ const messages = defineMessages({
     tasksAddTaskFormSubmitLabel: {
         id: 'be.tasks.addTaskForm.submit',
         defaultMessage: 'Add Task',
-        description: 'label for create button in create task popup',
+        description: 'label for create button in create task modal in create mode',
+    },
+    tasksEditTaskFormSubmitLabel: {
+        id: 'be.tasks.editTaskForm.submit',
+        defaultMessage: 'Update Task',
+        description: 'label for edit button in create task modal in edit mode',
     },
     tasksAddTaskFormCancelLabel: {
         id: 'be.tasks.addTaskForm.cancel',

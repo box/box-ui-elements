@@ -16,6 +16,7 @@ import PillSelectorDropdown from '../../../../components/pill-selector-dropdown/
 import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import InlineError from '../../../../components/inline-error/InlineError';
+import { TASK_EDIT_MODE_CREATE } from '../../../../constants';
 
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
@@ -31,8 +32,14 @@ type TaskFormProps = {|
     taskType: TaskType,
 |};
 
-type TaskFormConsumerProps = {|
+type TaskFormFieldProps = {|
     approverSelectorContacts: SelectorItems,
+    dueDate?: ?string,
+    message: string,
+|};
+
+type TaskFormConsumerProps = {|
+    ...TaskFormFieldProps,
     className?: string,
     createTask: (
         text: string,
@@ -42,6 +49,7 @@ type TaskFormConsumerProps = {|
         onSuccess: ?Function,
         onError: ?Function,
     ) => any,
+    editMode?: TaskEditMode,
     getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
 |};
@@ -62,16 +70,20 @@ type State = {|
 class TaskForm extends React.Component<Props, State> {
     static defaultProps = {
         approverSelectorContacts: [],
+        dueDate: null,
+        editMode: TASK_EDIT_MODE_CREATE,
+        message: '',
     };
 
     state = this.getInitialFormState();
 
     getInitialFormState() {
+        const { dueDate, approverSelectorContacts, message } = this.props;
         return {
-            approvers: [],
-            dueDate: null,
+            approvers: approverSelectorContacts,
+            dueDate: dueDate ? new Date(dueDate) : null,
             formValidityState: {},
-            message: '',
+            message,
             isLoading: false,
             isValid: null,
         };
@@ -182,7 +194,7 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     render() {
-        const { approverSelectorContacts, className, error, isDisabled, intl } = this.props;
+        const { approverSelectorContacts, className, error, isDisabled, intl, editMode } = this.props;
         const { dueDate, approvers, message, formValidityState, isLoading, isValid } = this.state;
         const inputContainerClassNames = classNames('bcs-task-input-container', 'bcs-task-input-is-open', className);
 
@@ -195,6 +207,11 @@ class TaskForm extends React.Component<Props, State> {
         const pillSelectorOverlayClasses = classNames({
             scrollable: approverOptions.length > 4,
         });
+
+        const submitButtonText =
+            editMode === TASK_EDIT_MODE_CREATE
+                ? messages.tasksAddTaskFormSubmitLabel
+                : messages.tasksEditTaskFormSubmitLabel;
 
         return (
             <div className={inputContainerClassNames}>
@@ -212,7 +229,7 @@ class TaskForm extends React.Component<Props, State> {
                         <PillSelectorDropdown
                             className={pillSelectorOverlayClasses}
                             error={this.getErrorByFieldname('taskAssignees')}
-                            disabled={isLoading}
+                            disabled={isLoading || editMode !== TASK_EDIT_MODE_CREATE}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
@@ -238,7 +255,7 @@ class TaskForm extends React.Component<Props, State> {
                         <TextArea
                             className="bcs-task-name-input"
                             data-testid="task-form-name-input"
-                            disabled={isDisabled || isLoading}
+                            disabled={isDisabled || isLoading || editMode !== TASK_EDIT_MODE_CREATE}
                             error={this.getErrorByFieldname('taskName')}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormMessageLabel} />}
@@ -255,7 +272,7 @@ class TaskForm extends React.Component<Props, State> {
                                 [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                                 'data-testid': 'task-form-date-input',
                             }}
-                            isDisabled={isLoading}
+                            isDisabled={isLoading || editMode !== TASK_EDIT_MODE_CREATE}
                             isRequired={false}
                             isTextInputAllowed
                             label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
@@ -280,10 +297,10 @@ class TaskForm extends React.Component<Props, State> {
                                 className="bcs-task-input-submit-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
                                 data-testid="task-form-submit-button"
-                                isDisabled={!isValid || isLoading}
+                                isDisabled={!isValid || isLoading || editMode !== TASK_EDIT_MODE_CREATE}
                                 isLoading={isLoading}
                             >
-                                <FormattedMessage {...messages.tasksAddTaskFormSubmitLabel} />
+                                <FormattedMessage {...submitButtonText} />
                             </PrimaryButton>
                         </div>
                     </Form>
