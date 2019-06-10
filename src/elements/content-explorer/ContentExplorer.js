@@ -389,27 +389,21 @@ class ContentExplorer extends Component<Props, State> {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
         const { selected }: State = this.state;
+        const rootName = id === rootFolderId ? name : '';
 
-        const { newCollection, newSelected } = this.updateCollection(collection, selected);
-
-        // New folder state
-        const newState = {
-            currentCollection: newCollection,
-            selected: newSelected,
-            rootName: id === rootFolderId ? name : '',
-        };
+        this.updateCollection(collection, selected);
 
         // Close any open modals
         this.closeModals();
 
         if (triggerNavigationEvent) {
             // Fire folder navigation event
-            this.setState(newState, this.finishNavigation);
+            this.setState({ rootName }, this.finishNavigation);
             if (boxItem) {
                 onNavigate(cloneDeep(boxItem));
             }
         } else {
-            this.setState(newState);
+            this.setState({ rootName });
         }
     }
 
@@ -512,12 +506,7 @@ class ContentExplorer extends Component<Props, State> {
         // Close any open modals
         this.closeModals();
 
-        const { newCollection, newSelected } = this.updateCollection(collection, selected);
-
-        this.setState({
-            currentCollection: newCollection,
-            selected: newSelected,
-        });
+        this.updateCollection(collection, selected);
     };
 
     /**
@@ -728,17 +717,17 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
-     * Returns an object with newCollection and newSelected properties.
-     * newCollection will be the given collection, with items.selected properties
-     * updated according to the given selected param. newSelected will be the selected
-     * item if it is in newCollection, otherwise undefined.
+     * Sets state with currentCollection updated to have items.selected properties
+     * set according to the given selected param. selected will be set to the selected
+     * item if it is in currentCollection, otherwise it will be set to undefined.
      *
      * @private
      * @param {Collection} collection - collection that needs to be updated
      * @param {?BoxItem} selected - item that should be selected in that collection (if present)
+     * @param {Function} callback - callback function that should be called after setState occurs
      * @return {Object}
      */
-    updateCollection(collection: Collection, selected: ?BoxItem): Object {
+    updateCollection(collection: Collection, selected: ?BoxItem, callback: Function = noop): Object {
         const newCollection: Collection = { ...collection };
         let newSelected: ?BoxItem;
         const targetID = selected ? selected.id : null;
@@ -754,8 +743,9 @@ class ContentExplorer extends Component<Props, State> {
                 return item;
             });
         }
-
-        return { newCollection, newSelected };
+        this.setState({ currentCollection: newCollection, selected: newSelected }, () => {
+            callback();
+        });
     }
 
     /**
@@ -768,9 +758,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     unselect(): void {
         const { currentCollection }: State = this.state;
-
-        const { newCollection, newSelected } = this.updateCollection(currentCollection, null);
-        this.setState({ currentCollection: newCollection, selected: newSelected });
+        this.updateCollection(currentCollection, null);
     }
 
     /**
@@ -795,10 +783,11 @@ class ContentExplorer extends Component<Props, State> {
 
         const selectedItem: BoxItem = { ...item, selected: true };
 
-        const { newCollection } = this.updateCollection(currentCollection, selectedItem);
+        this.updateCollection(currentCollection, selectedItem);
+
         const focusedRow: number = items.findIndex((i: BoxItem) => i.id === item.id);
 
-        this.setState({ currentCollection: newCollection, focusedRow, selected: selectedItem }, () => {
+        this.setState({ focusedRow }, () => {
             onSelect(cloneDeep([selectedItem]));
             callback(selectedItem);
         });
