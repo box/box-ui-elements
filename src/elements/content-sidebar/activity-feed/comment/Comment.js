@@ -38,7 +38,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
-    handleEditClick?: string => void,
+    handleEditClick?: () => void,
     id: string,
     isDisabled?: boolean,
     isPending?: boolean,
@@ -88,14 +88,13 @@ class Comment extends React.Component<Props, State> {
         this.setState({ isConfirming: true });
     };
 
-    // default handler for edit menu click which can vary based on activity type
     handleEditClick = (): void => {
         const { handleEditClick } = this.props;
 
         if (!handleEditClick) {
             this.setState({ isEditing: true, isInputOpen: true });
         } else {
-            handleEditClick(this.props.id);
+            handleEditClick();
         }
     };
 
