@@ -1,24 +1,9 @@
 @import '../../styles/variables';
 
-.bdl-Classification-badge,
-.bdl-Classification-badge:hover {
-    background-color: $bdl-yellorange-10;
-    border: 1px solid $bdl-yellorange;
-    border-radius: $bdl-border-radius-size;
-    color: $bdl-neutral-01 !important; // forcing to prevent overriding
-    display: inline;
-    font-size: 11px !important; // forcing to prevent overriding
-    font-weight: 600;
-    line-height: initial;
-    margin: 0;
-    padding: 2px 5px;
-    text-transform: uppercase;
-}
-
 .bdl-Classification-advisoryMessage {
     margin-top: 5px;
 }
 
 .bdl-Classification-missingMessage {
-    color: $bdl-neutral-02;
+    color: $bdl-gray-50;
 }

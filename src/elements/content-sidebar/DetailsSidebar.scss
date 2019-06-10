@@ -15,7 +15,7 @@
     }
 
     .bcs-details-content {
-        @include bdl-SidebarSection;
+        @include bcs-SidebarSection;
     }
 
     .bcs-details-content:empty {

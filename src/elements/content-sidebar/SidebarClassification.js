@@ -32,11 +32,11 @@ const SidebarClassification = ({ classification, file, onEdit }: Props) => {
             buttonProps={{
                 [INTERACTION_TARGET]: SECTION_TARGETS.CLASSIFICATION,
             }}
-            className="bdl-SidebarClassification"
+            className="bcs-SidebarClassification"
             headerActionItems={
                 isEditable ? (
                     <EditClassificationButton
-                        className="bdl-SidebarClassification-edit"
+                        className="bcs-SidebarClassification-edit"
                         isEditing={hasClassification}
                         onEdit={((onEdit: any): OnEdit)}
                     />
@@ -44,7 +44,7 @@ const SidebarClassification = ({ classification, file, onEdit }: Props) => {
             }
             title={<FormattedMessage {...classificationMessages.classification} />}
         >
-            <Classification {...classification} />
+            <Classification {...classification} messageStyle="inline" />
         </Collapsible>
     );
 };

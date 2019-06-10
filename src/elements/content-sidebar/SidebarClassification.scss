@@ -1,11 +1,11 @@
 @import '../common/variables';
 @import './mixins';
 
-.bdl-SidebarClassification {
-    @include bdl-SidebarSection;
+.bcs-SidebarClassification {
+    @include bcs-SidebarSection;
 }
 
-.bdl-SidebarClassification-edit {
+.bcs-SidebarClassification-edit {
     color: $bdl-box-blue;
     position: absolute;
     right: 20px;

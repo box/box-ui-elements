@@ -157,7 +157,6 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
               </PlainButton>
             </dd>
           </RetentionPolicy>
-          <ClassificationProperty />
         </dl>
       </ItemProperties>
     </div>

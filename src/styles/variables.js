@@ -2,18 +2,26 @@
 // File auto-generated
 
 export const bdlBoxBlue = '#0061d5'; // bdl-box-blue
-export const bdlSecondaryBlue = '#003c84'; // bdl-secondary-blue
+export const bdlBoxBlue50 = '#619de5'; // bdl-box-blue-50
+export const bdlBoxBlue05 = '#f2f7fd'; // bdl-box-blue-05
+export const bdlGray = '#222'; // bdl-gray
+export const bdlGray62 = '#767676'; // bdl-gray-62
+export const bdlGray50 = '#909090'; // bdl-gray-50
+export const bdlGray20 = '#d3d3d3'; // bdl-gray-20
+export const bdlGray10 = '#e8e8e8'; // bdl-gray-10
+export const bdlGray05 = '#f4f4f4'; // bdl-gray-05
+export const bdlGray02 = '#fbfbfb'; // bdl-gray-02
+export const bdlDarkBlue = '#003c84'; // bdl-dark-blue
 export const bdlLightBlue = '#2486fc'; // bdl-light-blue
-export const bdlGreenLight = '#26c281'; // bdl-green-light
 export const bdlYellorange = '#f5b31b'; // bdl-yellorange
+export const bdlYellorange10 = '#fef7e8'; // bdl-yellorange-10
 export const bdlYellow = '#ffd700'; // bdl-yellow
+export const bdlYellow10 = '#fffbe5'; // bdl-yellow-10
+export const bdlGreenLight = '#26c281'; // bdl-green-light
 export const bdlGrimace = '#4826c2'; // bdl-grimace
 export const bdlPurpleRain = '#9f3fed'; // bdl-purple-rain
 export const bdlWatermelonRed = '#ed3757'; // bdl-watermelon-red
-export const bdlYellorange10 = '#fef7e8'; // bdl-yellorange-10
-export const bdlYellow10 = '#fffbe5'; // bdl-yellow-10
-export const bdlBoxBlue50 = '#619de5'; // bdl-box-blue-50
-export const bdlBoxBlue05 = '#f2f7fd'; // bdl-box-blue-05
+export const bdlSecondaryBlue = '#003c84'; // bdl-secondary-blue
 export const bdlNeutral01 = '#222'; // bdl-neutral-01
 export const bdlNeutral02 = '#767676'; // bdl-neutral-02
 export const bdlNeutral03 = '#909090'; // bdl-neutral-03

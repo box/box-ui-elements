@@ -8,10 +8,10 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
       "data-resin-target": "classification",
     }
   }
-  className="bdl-SidebarClassification"
+  className="bcs-SidebarClassification"
   headerActionItems={
     <EditClassificationButton
-      className="bdl-SidebarClassification-edit"
+      className="bcs-SidebarClassification-edit"
       isEditing={true}
       onEdit={[MockFunction]}
     />
@@ -26,6 +26,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
 >
   <Classification
     advisoryMessage="message"
+    messageStyle="inline"
     name="Public"
   />
 </Collapsible>
@@ -39,7 +40,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
       "data-resin-target": "classification",
     }
   }
-  className="bdl-SidebarClassification"
+  className="bcs-SidebarClassification"
   headerActionItems={null}
   isOpen={true}
   title={
@@ -51,6 +52,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
 >
   <Classification
     advisoryMessage="message"
+    messageStyle="inline"
     name="Public"
   />
 </Collapsible>
@@ -64,7 +66,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
       "data-resin-target": "classification",
     }
   }
-  className="bdl-SidebarClassification"
+  className="bcs-SidebarClassification"
   headerActionItems={null}
   isOpen={true}
   title={
@@ -76,6 +78,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
 >
   <Classification
     advisoryMessage="message"
+    messageStyle="inline"
     name="Public"
   />
 </Collapsible>
