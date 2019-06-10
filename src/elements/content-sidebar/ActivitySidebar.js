@@ -192,12 +192,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             this.fetchFeedItems();
         },
         updateTask: (task: TaskUpdatePayload): void => {
-            const { file, api } = this.props;
+            const { file, api, onTaskUpdate = noop } = this.props;
             api.getFeedAPI(false).updateTaskNew(
                 file,
                 task,
                 () => {
                     this.feedSuccessCallback();
+                    onTaskUpdate();
                 },
                 this.feedErrorCallback,
             );
