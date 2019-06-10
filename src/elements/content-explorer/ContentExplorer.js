@@ -388,28 +388,22 @@ class ContentExplorer extends Component<Props, State> {
     fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
+        const { selected }: State = this.state;
+        const rootName = id === rootFolderId ? name : '';
 
-        // New folder state
-        const newState = {
-            selected: undefined,
-            currentCollection: collection,
-            rootName: id === rootFolderId ? name : '',
-        };
-
-        // Unselect any rows that were selected
-        this.unselect();
+        this.updateCollection(collection, selected);
 
         // Close any open modals
         this.closeModals();
 
         if (triggerNavigationEvent) {
             // Fire folder navigation event
-            this.setState(newState, this.finishNavigation);
+            this.setState({ rootName }, this.finishNavigation);
             if (boxItem) {
                 onNavigate(cloneDeep(boxItem));
             }
         } else {
-            this.setState(newState);
+            this.setState({ rootName });
         }
     }
 
@@ -504,7 +498,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     searchSuccessCallback = (collection: Collection) => {
-        const { currentCollection }: State = this.state;
+        const { selected }: State = this.state;
 
         // Unselect any rows that were selected
         this.unselect();
@@ -512,10 +506,7 @@ class ContentExplorer extends Component<Props, State> {
         // Close any open modals
         this.closeModals();
 
-        this.setState({
-            selected: undefined,
-            currentCollection: Object.assign(currentCollection, collection),
-        });
+        this.updateCollection(collection, selected);
     };
 
     /**
@@ -576,11 +567,11 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.setState({
-            selected: undefined,
-            searchQuery: query,
-            view: VIEW_SEARCH,
             currentCollection: this.currentUnloadedCollection(),
             currentOffset: trimmedQuery === searchQuery ? currentOffset : 0,
+            searchQuery: query,
+            selected: undefined,
+            view: VIEW_SEARCH,
         });
 
         this.debouncedSearch(folderId, query);
@@ -726,6 +717,36 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Sets state with currentCollection updated to have items.selected properties
+     * set according to the given selected param. selected will be set to the selected
+     * item if it is in currentCollection, otherwise it will be set to undefined.
+     *
+     * @private
+     * @param {Collection} collection - collection that needs to be updated
+     * @param {?BoxItem} selected - item that should be selected in that collection (if present)
+     * @param {Function} [callback] - callback function that should be called after setState occurs
+     * @return {void}
+     */
+    updateCollection(collection: Collection, selected: ?BoxItem, callback: Function = noop): Object {
+        const newCollection: Collection = { ...collection };
+        let newSelected: ?BoxItem;
+        const targetID = selected ? selected.id : null;
+
+        if (collection.items) {
+            newCollection.items = collection.items.map(obj => {
+                const item = { ...obj, selected: obj.id === targetID };
+
+                // If the previously selected item is found in the folder, keep it as selected item
+                if (item.id === targetID) {
+                    newSelected = item;
+                }
+                return item;
+            });
+        }
+        this.setState({ currentCollection: newCollection, selected: newSelected }, callback);
+    }
+
+    /**
      * Unselects an item
      *
      * @private
@@ -734,10 +755,8 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     unselect(): void {
-        const { selected }: State = this.state;
-        if (selected) {
-            selected.selected = false;
-        }
+        const { currentCollection }: State = this.state;
+        this.updateCollection(currentCollection);
     }
 
     /**
@@ -749,10 +768,8 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
-        const {
-            selected,
-            currentCollection: { items = [] },
-        }: State = this.state;
+        const { selected, currentCollection }: State = this.state;
+        const { items = [] } = currentCollection;
         const { onSelect }: Props = this.props;
 
         if (item === selected) {
@@ -761,13 +778,17 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.unselect();
-        item.selected = true;
 
-        const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
-        this.setState({ focusedRow, selected: item }, () => {
-            onSelect(cloneDeep([item]));
-            callback(item);
+        const selectedItem: BoxItem = { ...item, selected: true };
+
+        this.updateCollection(currentCollection, selectedItem, () => {
+            onSelect(cloneDeep([selectedItem]));
+            callback(selectedItem);
         });
+
+        const focusedRow: number = items.findIndex((i: BoxItem) => i.id === item.id);
+
+        this.setState({ focusedRow });
     };
 
     /**
@@ -1269,7 +1290,7 @@ class ContentExplorer extends Component<Props, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={styleClassName} ref={measureRef}>
+                <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
