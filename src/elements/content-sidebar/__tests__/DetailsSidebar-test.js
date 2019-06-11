@@ -7,6 +7,7 @@ import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
+jest.mock('../SidebarClassification', () => 'SidebarClassification');
 
 const file = {
     id: 'foo',
@@ -70,12 +71,14 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         test('should render DetailsSidebar with all components', () => {
             const wrapper = getWrapper(
                 {
+                    classification: { advisoryMessage: 'message', name: 'name' },
                     hasProperties: true,
                     hasNotices: true,
                     hasAccessStats: true,
                     hasClassification: true,
                     hasRetentionPolicy: true,
                     hasVersions: true,
+                    onClassificationClick: () => {},
                 },
                 { disableLifecycleMethods: true },
             );
@@ -445,7 +448,6 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             });
             instance = wrapper.instance();
             instance.fetchAccessStats = jest.fn();
-            instance.fetchClassification = jest.fn();
         });
 
         test('should fetch the access stats data if the access stats visibility changed', () => {

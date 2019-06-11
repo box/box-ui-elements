@@ -1,0 +1,13 @@
+@import '../common/variables';
+@import './mixins';
+
+.bcs-SidebarClassification {
+    @include bcs-SidebarSection;
+}
+
+.bcs-SidebarClassification-edit {
+    color: $bdl-box-blue;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}

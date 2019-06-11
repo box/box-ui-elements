@@ -1,36 +1,63 @@
-// Box Design Language Theme Colors
-$bdl-box-blue: #0061d5 !default;
-$bdl-secondary-blue: #003c84 !default;
-$bdl-light-blue: #2486fc !default;
-$bdl-green-light: #26c281 !default;
-$bdl-yellorange: #f5b31b !default;
-$bdl-yellow: #ffd700 !default;
-$bdl-grimace: #4826c2 !default;
-$bdl-purple-rain: #9f3fed !default;
-$bdl-watermelon-red: #ed3757 !default;
+// Box Design Language Colors, confirm with design before extending
+// @see https://gallery.io/projects/MCHbtQVoQ2HCZTdZ0F79-fQJ/files/MCEJu8Y2hyDScSTYfw7hxWcA-L66cSQvSj4
 
-// Box Design Theme Color Variations
-// Confirm with design before extending
-$bdl-yellorange-10: #fef7e8 !default;
-$bdl-yellow-10: #fffbe5 !default;
+$white: #fff !default;
+$black: #000 !default;
+
+// Box/Primary Blues
+$bdl-box-blue: #0061d5 !default;
 $bdl-box-blue-50: #619de5 !default;
 $bdl-box-blue-05: #f2f7fd !default;
 
-// Box Design Language Neutral Colors
-$bdl-neutral-01: #222 !default;
-$bdl-neutral-02: #767676 !default;
-$bdl-neutral-03: #909090 !default;
-$bdl-neutral-04: #eaeaea !default;
-$bdl-neutral-05: #f3f3f3 !default;
-$bdl-neutral-06: #fafafa !default;
+// Box/Primary Grays
+$bdl-gray: #222 !default;
+$bdl-gray-62: #767676 !default;
+$bdl-gray-50: #909090 !default;
+$bdl-gray-20: #d3d3d3 !default;
+$bdl-gray-10: #e8e8e8 !default;
+$bdl-gray-05: #f4f4f4 !default;
+$bdl-gray-02: #fbfbfb !default;
+
+// Dark Blues
+$bdl-dark-blue: #003c84 !default;
+
+// Light Blues
+$bdl-light-blue: #2486fc !default;
+
+// Yelloranges
+$bdl-yellorange: #f5b31b !default;
+$bdl-yellorange-10: #fef7e8 !default;
+
+// Yellows
+$bdl-yellow: #ffd700 !default;
+$bdl-yellow-10: #fffbe5 !default;
+
+// Green Lights
+$bdl-green-light: #26c281 !default;
+
+// Grimaces
+$bdl-grimace: #4826c2 !default;
+
+// Purple Rains
+$bdl-purple-rain: #9f3fed !default;
+
+// Watermelon Reds
+$bdl-watermelon-red: #ed3757 !default;
+
+// Do not use, deprecated colors below this line
+$bdl-secondary-blue: $bdl-dark-blue !default;
+$bdl-neutral-01: $bdl-gray !default;
+$bdl-neutral-02: $bdl-gray-62 !default;
+$bdl-neutral-03: $bdl-gray-50 !default;
+$bdl-neutral-04: $bdl-gray-10 !default;
+$bdl-neutral-05: $bdl-gray-05 !default;
+$bdl-neutral-06: $bdl-gray-02 !default;
 
 // Primary colors
 $box-blue: $bdl-box-blue !default;
 $primary-color: $bdl-box-blue !default;
 $koray-ing: #2a62b9 !default;
 $picton-blue: #3392ec !default;
-$white: #fff !default;
-$black: #000 !default;
 $hover-blue-background: #f6fafd !default;
 $hover-blue-border: #d9e3e9 !default;
 $selected-blue-background: #ecf4fc !default;
@@ -72,7 +99,7 @@ $storms-a-comin: #737f8b !default;
 $blue-steel: #2c3e50 !default;
 $better-black: #494949 !default;
 $downtown-grey: #999ea4 !default;
-$twos: #222 !default;
+$twos: $bdl-gray !default;
 $fours: #444 !default;
 $sevens: #777 !default;
 $eights: #888 !default;
@@ -80,7 +107,7 @@ $nines: #999 !default;
 $eees: #eee !default;
 $tendemob-grey: #64686d !default;
 $sunset-grey: #464a4f !default;
-$seventy-sixers: #767676 !default;
+$seventy-sixers: $bdl-gray-62 !default;
 $approx-mischka-grey: #a3adb9 !default;
 $lightest-charcoal: #c4c4c4;
 $purple-rain: $bdl-purple-rain;

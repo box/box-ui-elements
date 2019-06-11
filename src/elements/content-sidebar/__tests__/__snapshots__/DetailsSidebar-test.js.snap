@@ -43,6 +43,21 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
       }
     />
   </div>
+  <SidebarClassification
+    classification={
+      Object {
+        "advisoryMessage": "message",
+        "name": "name",
+      }
+    }
+    file={
+      Object {
+        "description": "bar",
+        "id": "foo",
+      }
+    }
+    onEdit={[Function]}
+  />
   <SidebarAccessStats
     file={
       Object {
@@ -81,10 +96,8 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
           "id": "foo",
         }
       }
-      hasClassification={true}
       hasRetentionPolicy={true}
       isLoading={false}
-      onClassificationClick={[Function]}
       onDescriptionChange={[Function]}
     />
   </SidebarSection>
@@ -144,10 +157,8 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
           "id": "foo",
         }
       }
-      hasClassification={false}
       hasRetentionPolicy={false}
       isLoading={false}
-      onClassificationClick={[Function]}
       onDescriptionChange={[Function]}
     />
   </SidebarSection>
