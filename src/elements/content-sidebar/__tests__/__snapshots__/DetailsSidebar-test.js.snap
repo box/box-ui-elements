@@ -77,18 +77,14 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
       />
     }
   >
-    <div
-      className="bcs-DetailsSidebar-versions"
-    >
-      <SidebarVersions
-        file={
-          Object {
-            "description": "bar",
-            "id": "foo",
-          }
+    <SidebarVersions
+      file={
+        Object {
+          "description": "bar",
+          "id": "foo",
         }
-      />
-    </div>
+      }
+    />
     <SidebarFileProperties
       file={
         Object {

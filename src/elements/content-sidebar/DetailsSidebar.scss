@@ -18,9 +18,3 @@
 .bcs-DetailsSidebar-notices {
     @include bcs-SidebarSection;
 }
-
-.bcs-DetailsSidebar-versions {
-    @include bcs-SidebarSection;
-
-    margin-left: 0;
-}
