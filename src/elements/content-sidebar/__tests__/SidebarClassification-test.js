@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { shallow } from 'enzyme';
 
@@ -8,7 +9,7 @@ describe('elements/content-sidebar/SidebarClassification', () => {
     const getWrapper = props => shallow(<SidebarClassification {...props} />);
 
     describe('render()', () => {
-        test('should render nothing when unclassified and can_upload is false', () => {
+        test('should render nothing when not classified and can_upload is false', () => {
             const props = {
                 file: {
                     permissions: {

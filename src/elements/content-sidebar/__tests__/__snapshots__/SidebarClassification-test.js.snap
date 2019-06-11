@@ -84,4 +84,4 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
 </Collapsible>
 `;
 
-exports[`elements/content-sidebar/SidebarClassification render() should render nothing when unclassified and can_upload is false 1`] = `""`;
+exports[`elements/content-sidebar/SidebarClassification render() should render nothing when not classified and can_upload is false 1`] = `""`;

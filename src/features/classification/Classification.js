@@ -25,7 +25,7 @@ const Classification = ({ advisoryMessage, className = '', messageStyle, name }:
     const isInlineMessageEnabled = isClassified && hasMessage && messageStyle === STYLE_INLINE;
 
     // Either the add classification badge should be visible or the "not classified" text or neither
-    const isNotClassifiedBadgeVisible = !isClassified && !messageStyle;
+    const isAddClassificationBadgeVisible = !isClassified && !messageStyle;
     const isNotClassifiedMessageVisible = !isClassified && messageStyle === STYLE_INLINE;
 
     return (
@@ -36,7 +36,7 @@ const Classification = ({ advisoryMessage, className = '', messageStyle, name }:
                     tooltipText={isTooltipMessageEnabled ? advisoryMessage : undefined}
                 />
             )}
-            {isNotClassifiedBadgeVisible && <AddClassificationBadge />}
+            {isAddClassificationBadgeVisible && <AddClassificationBadge />}
             {isInlineMessageEnabled && <p className="bdl-Classification-advisoryMessage">{advisoryMessage}</p>}
             {isNotClassifiedMessageVisible && (
                 <span className="bdl-Classification-missingMessage">
