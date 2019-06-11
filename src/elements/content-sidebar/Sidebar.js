@@ -82,13 +82,19 @@ class Sidebar extends React.Component<Props, State> {
 
     componentDidUpdate(prevProps: Props): void {
         const { fileId, history, isLarge, location }: Props = this.props;
-        const { fileId: prevFileId, isLarge: prevIsLarge }: Props = prevProps;
+        const { fileId: prevFileId, isLarge: prevIsLarge, location: prevLocation }: Props = prevProps;
         const { isDirty, isOpen }: State = this.state;
+        const { state: locationState = {} } = location;
         const isForcedSet = this.isForcedSet();
 
         // User navigated to a different file without ever navigating to a tab
         if (!isDirty && fileId !== prevFileId && location.pathname !== '/') {
-            history.replace({ pathname: '/' });
+            history.replace({ pathname: '/', state: { silent: true } });
+        }
+
+        // User navigated to a different route or tab for the first time this session
+        if (!isDirty && location !== prevLocation && !locationState.silent) {
+            this.setState({ isDirty: true });
         }
 
         // User resized their viewport without ever toggling the sidebar open/closed
@@ -109,11 +115,7 @@ class Sidebar extends React.Component<Props, State> {
 
         // Persist user preference for all future sessions in this browser
         this.isForced(isToggle ? !isOpen : true);
-
-        this.setState({
-            isDirty: true, // Set dirty state if user has ever clicked on a tab
-            isOpen: this.isForcedOpen(),
-        });
+        this.setState({ isOpen: this.isForcedOpen() });
     };
 
     /**
@@ -123,13 +125,15 @@ class Sidebar extends React.Component<Props, State> {
      * @return {void}
      */
     handleVersionHistoryClick = (event: SyntheticEvent<>): void => {
-        const { history } = this.props;
+        const { file, history } = this.props;
+        const { file_version: currentVersion } = file;
+        const fileVersionSlug = currentVersion ? `/${currentVersion.id}` : '';
 
         if (event.preventDefault) {
             event.preventDefault();
         }
 
-        history.push(`${history.location.pathname}/versions`);
+        history.push(`${history.location.pathname}/versions${fileVersionSlug}`);
     };
 
     /**
@@ -174,7 +178,6 @@ class Sidebar extends React.Component<Props, State> {
             fileId,
             getPreview,
             getViewer,
-            hasActivityFeed,
             hasAdditionalTabs,
             isLoading,
             metadataEditors,
@@ -183,6 +186,7 @@ class Sidebar extends React.Component<Props, State> {
         }: Props = this.props;
 
         const { isOpen } = this.state;
+        const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
@@ -203,11 +207,11 @@ class Sidebar extends React.Component<Props, State> {
                         <SidebarNav
                             additionalTabs={additionalTabs}
                             fileId={fileId}
+                            hasActivity={hasActivity}
                             hasAdditionalTabs={hasAdditionalTabs}
-                            hasSkills={hasSkills}
-                            hasMetadata={hasMetadata}
-                            hasActivityFeed={hasActivityFeed}
                             hasDetails={hasDetails}
+                            hasMetadata={hasMetadata}
+                            hasSkills={hasSkills}
                             isOpen={isOpen}
                             onNavigate={this.handleNavigation}
                         />
@@ -219,7 +223,7 @@ class Sidebar extends React.Component<Props, State> {
                             fileId={fileId}
                             getPreview={getPreview}
                             getViewer={getViewer}
-                            hasActivityFeed={hasActivityFeed}
+                            hasActivity={hasActivity}
                             hasDetails={hasDetails}
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}

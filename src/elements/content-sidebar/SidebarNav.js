@@ -25,7 +25,7 @@ import './SidebarNav.scss';
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
     fileId: string,
-    hasActivityFeed: boolean,
+    hasActivity: boolean,
     hasAdditionalTabs: boolean,
     hasDetails: boolean,
     hasMetadata: boolean,
@@ -37,7 +37,7 @@ type Props = {
 const SidebarNav = ({
     additionalTabs,
     fileId,
-    hasActivityFeed,
+    hasActivity,
     hasAdditionalTabs,
     hasDetails,
     hasMetadata,
@@ -47,7 +47,7 @@ const SidebarNav = ({
     onNavigate,
 }: Props) => (
     <div aria-label={intl.formatMessage(messages.sidebarNavLabel)} role="tablist">
-        {hasActivityFeed && (
+        {hasActivity && (
             <SidebarNavButton
                 interactionTarget={SIDEBAR_NAV_TARGETS.ACTIVITY}
                 isOpen={isOpen}
