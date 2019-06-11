@@ -326,7 +326,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         return (
             <SidebarContent className="bcs-details" title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_DETAILS)}>
                 {file && hasNotices && (
-                    <div className="bcs-details-content">
+                    <div className="bcs-DetailsSidebar-notices">
                         <SidebarNotices file={file} />
                     </div>
                 )}
@@ -347,7 +347,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                         title={<FormattedMessage {...messages.sidebarProperties} />}
                     >
                         {hasVersions && (
-                            <div className="bcs-details-content">
+                            <div className="bcs-DetailsSidebar-versions">
                                 <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />
                             </div>
                         )}

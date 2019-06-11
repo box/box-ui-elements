@@ -32,7 +32,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   }
 >
   <div
-    className="bcs-details-content"
+    className="bcs-DetailsSidebar-notices"
   >
     <SidebarNotices
       file={
@@ -78,7 +78,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
     }
   >
     <div
-      className="bcs-details-content"
+      className="bcs-DetailsSidebar-versions"
     >
       <SidebarVersions
         file={
@@ -115,7 +115,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   }
 >
   <div
-    className="bcs-details-content"
+    className="bcs-DetailsSidebar-notices"
   >
     <SidebarNotices
       file={
