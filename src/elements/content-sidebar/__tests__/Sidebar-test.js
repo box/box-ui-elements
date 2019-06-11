@@ -12,7 +12,15 @@ jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
 describe('elements/content-sidebar/Sidebar', () => {
-    const getWrapper = props => shallow(<Sidebar file={{ id: 'id' }} {...props} />);
+    const historyMock = {
+        listen: jest.fn(() => () => {}),
+        push: jest.fn(),
+    };
+    const locationMock = {
+        pathname: '/',
+    };
+    const getWrapper = props =>
+        shallow(<Sidebar file={{ id: 'id' }} history={historyMock} location={locationMock} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();

@@ -49,20 +49,16 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     }
 
     componentDidUpdate({ versionId: prevVersionId }: Props) {
-        const { onVersionChange, versionId } = this.props;
+        const { versionId } = this.props;
 
-        // Forward the current version id that is passed in via the wrapping route
-        if (prevVersionId !== versionId) {
-            onVersionChange(this.findVersion(versionId), {
-                updateVersionToCurrent: this.updateVersionToCurrent,
-                currentVersionId: this.getCurrentVersionId(),
-            });
+        if (versionId !== prevVersionId) {
+            this.verifyVersion();
         }
     }
 
     componentWillUnmount() {
         // Reset the current version id since the wrapping route is no longer active
-        this.props.onVersionChange();
+        this.props.onVersionChange(null);
     }
 
     handleActionDelete = (versionId: string): void => {
@@ -132,11 +128,14 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         const versionsWithPermissions = versionsApi.addPermissions(versionsWithCurrent, fileResponse);
         const { entries: versions } = versionsApi.sortVersions(versionsWithPermissions) || {};
 
-        this.setState({
-            error: undefined,
-            isLoading: false,
-            versions,
-        });
+        this.setState(
+            {
+                error: undefined,
+                isLoading: false,
+                versions,
+            },
+            this.verifyVersion,
+        );
 
         return [fileResponse, versionsResponse];
     };
@@ -248,8 +247,21 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     updateVersionToCurrent = (): void => {
-        const versionId = this.getCurrentVersionId();
-        this.updateVersion(versionId);
+        this.updateVersion(this.getCurrentVersionId());
+    };
+
+    verifyVersion = () => {
+        const { onVersionChange, versionId } = this.props;
+        const selectedVersion = this.findVersion(versionId);
+
+        if (selectedVersion) {
+            onVersionChange(selectedVersion, {
+                currentVersionId: this.getCurrentVersionId(),
+                updateVersionToCurrent: this.updateVersionToCurrent,
+            });
+        } else {
+            this.updateVersionToCurrent();
+        }
     };
 
     render() {

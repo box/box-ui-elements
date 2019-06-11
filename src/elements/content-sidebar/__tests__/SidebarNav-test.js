@@ -42,7 +42,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
     test('should render activity tab', () => {
         const props = {
-            hasActivityFeed: true,
+            hasActivity: true,
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(IconMagicWand)).toHaveLength(0);
@@ -64,7 +64,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
     test('should have multiple tabs', () => {
         const props = {
-            hasActivityFeed: true,
+            hasActivity: true,
             hasMetadata: true,
             hasSkills: true,
         };

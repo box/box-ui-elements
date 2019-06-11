@@ -15,6 +15,7 @@ import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
+import type { RouterHistory } from 'react-router-dom';
 import { decode } from '../../utils/keys';
 import makeResponsive from '../common/makeResponsive';
 import Internationalize from '../common/Internationalize';
@@ -65,6 +66,7 @@ type Props = {
     fileOptions?: Object,
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
+    history?: RouterHistory,
     isLarge: boolean,
     language: string,
     logoUrl?: string,
@@ -350,14 +352,16 @@ class ContentPreview extends PureComponent<Props, State> {
         const { file: prevFile, selectedVersion: prevSelectedVersion }: State = prevState;
         const prevSelectedVersionId = getProp(prevSelectedVersion, 'id');
         const selectedVersionId = getProp(selectedVersion, 'id');
-        const versionPath = 'file_version.id';
-        const prevFileVersionId = getProp(prevFile, versionPath);
-        const fileVersionId = getProp(file, versionPath);
+        const prevFileVersionId = getProp(prevFile, 'file_version.id');
+        const fileVersionId = getProp(file, 'file_version.id');
         let loadPreview = false;
 
         if (selectedVersionId !== prevSelectedVersionId) {
+            const isPreviousCurrent = fileVersionId === prevSelectedVersionId || !prevSelectedVersionId;
+            const isSelectedCurrent = fileVersionId === selectedVersionId || !selectedVersionId;
+
             // Load preview if the user has selected a non-current version of the file
-            loadPreview = !!selectedVersionId || prevSelectedVersionId !== fileVersionId;
+            loadPreview = !isPreviousCurrent || !isSelectedCurrent;
         } else if (fileVersionId && prevFileVersionId) {
             // Load preview if the file's current version ID has changed
             loadPreview = fileVersionId !== prevFileVersionId;
@@ -1088,6 +1092,7 @@ class ContentPreview extends PureComponent<Props, State> {
             contentSidebarProps,
             contentOpenWithProps,
             hasHeader,
+            history,
             onClose,
             measureRef,
             sharedLink,
@@ -1172,6 +1177,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 fileId={currentFileId}
                                 getPreview={this.getPreview}
                                 getViewer={this.getViewer}
+                                history={history}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}

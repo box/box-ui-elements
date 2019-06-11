@@ -874,12 +874,6 @@ type AdditionalSidebarTab = {
 
 type Alignment = 'left' | 'right';
 
-type SidebarView =
-    | typeof SIDEBAR_VIEW_SKILLS
-    | typeof SIDEBAR_VIEW_DETAILS
-    | typeof SIDEBAR_VIEW_METADATA
-    | typeof SIDEBAR_VIEW_ACTIVITY;
-
 type FileSystemFileEntry = {
     createReader: Function,
     file: Function,

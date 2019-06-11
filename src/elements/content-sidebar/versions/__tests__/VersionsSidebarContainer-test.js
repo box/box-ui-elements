@@ -76,7 +76,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             wrapper.unmount();
 
-            expect(onVersionChange).toBeCalledWith();
+            expect(onVersionChange).toBeCalledWith(null);
         });
     });
 
@@ -164,6 +164,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     describe('handleFetchSuccess', () => {
         test('should set state with the updated versions', () => {
             const wrapper = getWrapper();
+            const instance = wrapper.instance();
             const file = { id: '12345', permissions: {} };
             const version = { id: '123', permissions: {} };
             const versions = { entries: [version], total_count: 1 };
@@ -172,8 +173,10 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             versionsAPI.addPermissions.mockReturnValueOnce(versions);
             versionsAPI.sortVersions.mockReturnValueOnce(versions);
 
-            wrapper.instance().handleFetchSuccess([file, versions]);
+            instance.verifyVersion = jest.fn();
+            instance.handleFetchSuccess([file, versions]);
 
+            expect(instance.verifyVersion).toBeCalled();
             expect(versionsAPI.addCurrentVersion).toBeCalledWith(versions, file);
             expect(versionsAPI.addPermissions).toBeCalledWith(versions, file);
             expect(versionsAPI.sortVersions).toBeCalledWith(versions);

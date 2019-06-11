@@ -8,11 +8,12 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
-import { MemoryRouter } from 'react-router-dom';
+import type { RouterHistory } from 'react-router-dom';
 import API from '../../api';
 import APIContext from '../common/api-context';
 import Internationalize from '../common/Internationalize';
 import Sidebar from './Sidebar';
+import SidebarRouter from './SidebarRouter';
 import SidebarUtils from './SidebarUtils';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEBAR } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
@@ -38,7 +39,7 @@ type Props = {
     className: string,
     clientName: string,
     currentUser?: User,
-    defaultView?: SidebarView,
+    defaultView: string,
     detailsSidebarProps: DetailsSidebarProps,
     features: FeatureConfig,
     fileId?: string,
@@ -48,6 +49,7 @@ type Props = {
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
+    history?: RouterHistory,
     isLarge?: boolean,
     language?: string,
     messages?: StringMap,
@@ -66,7 +68,6 @@ type State = {
     file?: BoxItem,
     isLoading: boolean,
     metadataEditors?: Array<MetadataEditor>,
-    view?: SidebarView,
 };
 
 const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
@@ -85,6 +86,7 @@ class ContentSidebar extends React.Component<Props, State> {
         apiHost: DEFAULT_HOSTNAME_API,
         className: '',
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
+        defaultView: '',
         detailsSidebarProps: {},
         getPreview: noop,
         getViewer: noop,
@@ -299,6 +301,7 @@ class ContentSidebar extends React.Component<Props, State> {
             hasActivityFeed,
             hasMetadata,
             hasSkills,
+            history,
             isLarge,
             language,
             messages,
@@ -307,6 +310,7 @@ class ContentSidebar extends React.Component<Props, State> {
             onVersionHistoryClick,
         }: Props = this.props;
         const { file, isLoading, metadataEditors }: State = this.state;
+        const initialPath = defaultView.charAt(0) === '/' ? defaultView : `/${defaultView}`;
 
         if (!file || !fileId || !SidebarUtils.shouldRenderSidebar(this.props, file, metadataEditors)) {
             return null;
@@ -314,8 +318,8 @@ class ContentSidebar extends React.Component<Props, State> {
 
         return (
             <Internationalize language={language} messages={messages}>
-                <MemoryRouter initialEntries={[`/${defaultView || ''}`]}>
-                    <APIContext.Provider value={(this.api: any)}>
+                <APIContext.Provider value={(this.api: any)}>
+                    <SidebarRouter history={history} initialEntries={[initialPath]}>
                         <Sidebar
                             activitySidebarProps={activitySidebarProps}
                             additionalTabs={additionalTabs}
@@ -337,8 +341,8 @@ class ContentSidebar extends React.Component<Props, State> {
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
                         />
-                    </APIContext.Provider>
-                </MemoryRouter>
+                    </SidebarRouter>
+                </APIContext.Provider>
             </Internationalize>
         );
     }
