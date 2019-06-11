@@ -45,7 +45,7 @@ type ExternalProps = {
     hasRetentionPolicy?: boolean,
     hasVersions?: boolean,
     onAccessStatsClick?: Function,
-    onClassificationClick?: Function,
+    onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
     retentionPolicy?: Object,

@@ -19,7 +19,6 @@ type Props = {
     hasClassification: boolean,
     hasRetentionPolicy: boolean,
     isLoading: boolean,
-    onClassificationClick: ?Function,
     onDescriptionChange: Function,
     onRetentionPolicyExtendClick?: Function,
     retentionPolicy?: Object,
