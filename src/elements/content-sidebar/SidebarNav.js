@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import IconMagicWand from '../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../icons/general/IconMetadataThick';
 import IconDocInfo from '../../icons/general/IconDocInfo';
@@ -25,28 +25,29 @@ import './SidebarNav.scss';
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
     fileId: string,
-    hasActivityFeed: boolean,
+    hasActivity: boolean,
     hasAdditionalTabs: boolean,
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
-};
+} & InjectIntlProvidedProps;
 
 const SidebarNav = ({
     additionalTabs,
     fileId,
-    hasActivityFeed,
+    hasActivity,
     hasAdditionalTabs,
     hasDetails,
     hasMetadata,
     hasSkills,
+    intl,
     isOpen,
     onNavigate,
 }: Props) => (
-    <nav>
-        {hasActivityFeed && (
+    <div aria-label={intl.formatMessage(messages.sidebarNavLabel)} role="tablist">
+        {hasActivity && (
             <SidebarNavButton
                 interactionTarget={SIDEBAR_NAV_TARGETS.ACTIVITY}
                 isOpen={isOpen}
@@ -91,7 +92,7 @@ const SidebarNav = ({
             </SidebarNavButton>
         )}
         {hasAdditionalTabs && <AdditionalTabs key={fileId} tabs={additionalTabs} />}
-    </nav>
+    </div>
 );
 
-export default SidebarNav;
+export default injectIntl(SidebarNav);

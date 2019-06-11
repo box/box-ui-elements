@@ -14,6 +14,7 @@ const file = {
 
 describe('elements/content-sidebar/ContentSidebar', () => {
     let rootElement;
+
     const getWrapper = (props = {}) =>
         mount(<ContentSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, {
             attachTo: rootElement,
@@ -23,6 +24,9 @@ describe('elements/content-sidebar/ContentSidebar', () => {
         SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
         rootElement = document.createElement('div');
         document.body.appendChild(rootElement);
+
+        // Prevent componentDidMount from triggering API calls
+        ContentSidebar.prototype.componentDidMount = jest.fn();
     });
 
     afterEach(() => {
@@ -63,9 +67,9 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             const instance = wrapper.instance();
             const newProps = { fileId: '123' };
 
+            instance.fetchFile = jest.fn();
             instance.setState({ view: 'activityFeed' });
             instance.setState = jest.fn();
-            instance.fetchFile = jest.fn();
 
             instance.componentDidUpdate(newProps);
 

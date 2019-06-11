@@ -495,6 +495,50 @@ class Feed extends Base {
     };
 
     /**
+     * Updates a task in the new API
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {string} task - The update task payload object
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    updateTaskNew = (
+        file: BoxItem,
+        task: TaskUpdatePayload,
+        successCallback: () => void = noop,
+        errorCallback: ErrorCallback = noop,
+    ) => {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.id = file.id;
+        this.errorCallback = errorCallback;
+        this.tasksNewAPI = new TasksNewAPI(this.options);
+        this.updateFeedItem({ isPending: true }, task.id);
+        this.tasksNewAPI.updateTask({
+            file,
+            task,
+            successCallback: (taskData: Task) => {
+                this.updateFeedItem(
+                    {
+                        ...taskData,
+                        isPending: false,
+                    },
+                    task.id,
+                );
+                if (!this.isDestroyed()) {
+                    successCallback();
+                }
+            },
+            errorCallback: (e: ElementsXhrError, code: string) => {
+                this.feedErrorCallback(false, e, code);
+            },
+        });
+    };
+
+    /**
      * Update task success callback
      *
      * @param {Object} task - The updated task
@@ -999,6 +1043,7 @@ class Feed extends Base {
             task,
             successCallback: this.deleteFeedItem.bind(this, task.id, successCallback),
             errorCallback: (e: ElementsXhrError, code: string) => {
+                this.updateFeedItem(this.createFeedError(messages.taskDeleteErrorMessage), task.id);
                 this.feedErrorCallback(true, e, code);
             },
         });

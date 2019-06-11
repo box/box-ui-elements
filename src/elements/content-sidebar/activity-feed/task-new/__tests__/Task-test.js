@@ -76,7 +76,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
 
     test('should show assignment status badges for each assignee', () => {
         const wrapper = mount(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
-        expect(wrapper.find('[data-testid="task-assignment-status"]')).toHaveLength(2);
+        expect(wrapper.find('[data-testid="avatar-group-avatar-container"]')).toHaveLength(2);
     });
 
     test('should not show due date container if not set', () => {
@@ -108,7 +108,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 status="NOT_STARTED"
             />,
         );
-        expect(incompleteWrapper.find('.bcs-task-overdue')).toHaveLength(1);
+        expect(incompleteWrapper.find('.bcs-is-taskOverdue')).toHaveLength(1);
     });
 
     test('due date should not have overdue class if task is complete and due date is in past', () => {
@@ -122,7 +122,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 status="COMPLETED"
             />,
         );
-        expect(completeWrapper.find('.bcs-task-overdue')).toHaveLength(0);
+        expect(completeWrapper.find('.bcs-is-taskOverdue')).toHaveLength(0);
     });
 
     test('should add pending class for isPending prop', () => {

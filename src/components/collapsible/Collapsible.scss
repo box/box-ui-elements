@@ -6,7 +6,6 @@
 
     .collapsible-card-header {
         align-items: center;
-        background-color: $white;
         border-radius: $bdl-border-radius-size;
         display: flex;
         flex-direction: row;
@@ -51,6 +50,10 @@
 
     &.is-bordered {
         border: 1px solid $eees;
+
+        .collapsible-card-header {
+            background-color: $white;
+        }
 
         .btn-plain.collapsible-card-title,
         .collapsible-card-content {

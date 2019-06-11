@@ -67,7 +67,12 @@ export default (
     return (
         <div className="bce-more-options">
             <DropdownMenu constrainToScrollParent isRightAligned>
-                <Button className="bce-btn-more-options" onFocus={onFocus} type="button">
+                <Button
+                    className="bce-btn-more-options"
+                    data-testid="bce-btn-more-options"
+                    onFocus={onFocus}
+                    type="button"
+                >
                     ···
                 </Button>
                 <Menu>

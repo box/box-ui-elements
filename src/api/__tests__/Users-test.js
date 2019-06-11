@@ -29,6 +29,7 @@ describe('api/Users', () => {
             const url2 = await users.getAvatarUrlWithAccessToken('foo');
             expect(url1).toEqual(url2);
             expect(url1.startsWith('https://api.box.com/2.0/users/foo/avatar?access_token=')).toBe(true);
+            expect(url1.indexOf('pic_type') !== -1).toBe(true);
         });
 
         test('should not return cached avatar url if called with another id', async () => {

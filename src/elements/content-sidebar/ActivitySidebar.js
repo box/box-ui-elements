@@ -50,7 +50,7 @@ type Props = {
 
 type State = {
     activityFeedError?: Errors,
-    approverSelectorContacts?: SelectorItems,
+    approverSelectorContacts: SelectorItems,
     currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
@@ -191,9 +191,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             // need to load the pending item
             this.fetchFeedItems();
         },
-        updateTask: ({ text, id }: { id: string, text: string }): void => {
-            const { file, api } = this.props;
-            api.getFeedAPI(false).updateTask(file, id, text, this.feedSuccessCallback, this.feedErrorCallback);
+        updateTask: (task: TaskUpdatePayload): void => {
+            const { file, api, onTaskUpdate = noop } = this.props;
+            api.getFeedAPI(false).updateTaskNew(
+                file,
+                task,
+                () => {
+                    this.feedSuccessCallback();
+                    onTaskUpdate();
+                },
+                this.feedErrorCallback,
+            );
 
             // need to load the pending item
             this.fetchFeedItems();
@@ -569,16 +577,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         } = this;
         const props = {
             isDisabled,
-            createTask,
-            getApproverWithQuery,
-            approverSelectorContacts,
-            getAvatarUrl,
             feedbackUrl: getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || '',
             onTaskModalClose,
         };
+        const taskFormProps = {
+            approverSelectorContacts,
+            createTask,
+            getApproverWithQuery,
+            getAvatarUrl,
+        };
         return (
             <FeatureFlag feature="activityFeed.tasks.newApi">
-                <AddTaskButton {...props} />
+                <AddTaskButton {...props} taskFormProps={taskFormProps} />
             </FeatureFlag>
         );
     };

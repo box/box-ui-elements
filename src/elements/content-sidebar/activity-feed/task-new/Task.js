@@ -14,12 +14,13 @@ import {
     TASK_NEW_IN_PROGRESS,
     TASK_NEW_COMPLETED,
     TASK_TYPE_APPROVAL,
+    COMMENT_TYPE_TASK,
 } from '../../../../constants';
 import Comment from '../comment';
 import TaskActions from './TaskActions';
 import TaskDueDate from './TaskDueDate';
-import Status from './TaskStatus';
-import Assignees from './Assignees';
+import TaskStatus from './TaskStatus';
+import AvatarGroup from './AvatarGroup';
 import './Task.scss';
 
 type Props = {|
@@ -116,7 +117,6 @@ const Task = ({
                     created_by={created_by.target}
                     currentUser={currentUser}
                     id={id}
-                    inlineDeleteMessage={messages.taskDeletePrompt}
                     isPending={isPending}
                     onDelete={onDelete}
                     onEdit={onEdit}
@@ -124,6 +124,7 @@ const Task = ({
                     tagged_message={description}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
+                    type={COMMENT_TYPE_TASK}
                     getAvatarUrl={getAvatarUrl}
                     getUserProfileUrl={getUserProfileUrl}
                     mentionSelectorContacts={mentionSelectorContacts}
@@ -139,10 +140,10 @@ const Task = ({
                 />
                 <div className="bcs-task-content bcs-task-status-container">
                     {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
-                    <Status status={status} />
+                    <TaskStatus status={status} />
                 </div>
                 <div className="bcs-task-content">
-                    <Assignees maxAvatars={3} assignees={assigned_to} getAvatarUrl={getAvatarUrl} />
+                    <AvatarGroup getAvatarUrl={getAvatarUrl} maxAvatars={3} users={assigned_to} />
                 </div>
                 <div className="bcs-task-content">
                     {currentUserAssignment && shouldShowActions && (

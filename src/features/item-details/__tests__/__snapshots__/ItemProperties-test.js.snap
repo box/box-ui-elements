@@ -5,7 +5,6 @@ exports[`features/item-details/ItemProperties should not render properties when 
   className="item-properties"
 >
   <RetentionPolicy />
-  <ClassificationProperty />
 </dl>
 `;
 
@@ -14,11 +13,6 @@ exports[`features/item-details/ItemProperties should pass classification props t
   className="item-properties"
 >
   <RetentionPolicy />
-  <ClassificationProperty
-    openModal={[Function]}
-    tooltip="tooltip"
-    value="value"
-  />
 </dl>
 `;
 
@@ -45,7 +39,6 @@ exports[`features/item-details/ItemProperties should render editable description
     />
   </dd>
   <RetentionPolicy />
-  <ClassificationProperty />
 </dl>
 `;
 
@@ -72,7 +65,6 @@ exports[`features/item-details/ItemProperties should render editable description
     />
   </dd>
   <RetentionPolicy />
-  <ClassificationProperty />
 </dl>
 `;
 
@@ -92,7 +84,6 @@ exports[`features/item-details/ItemProperties should render editable url when ur
     />
   </dd>
   <RetentionPolicy />
-  <ClassificationProperty />
 </dl>
 `;
 
@@ -190,7 +181,6 @@ testing this link http://box.com"
     />
   </dd>
   <RetentionPolicy />
-  <ClassificationProperty />
 </dl>
 `;
 
@@ -207,6 +197,5 @@ exports[`features/item-details/ItemProperties should render readonly url when on
     box.com
   </dd>
   <RetentionPolicy />
-  <ClassificationProperty />
 </dl>
 `;

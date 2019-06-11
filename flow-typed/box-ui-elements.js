@@ -46,6 +46,7 @@ import {
     SIZE_LARGE,
     FIELD_DATE,
     FIELD_NAME,
+    FIELD_SIZE,
     FIELD_RELEVANCE,
     DEFAULT_VIEW_RECENTS,
     DEFAULT_VIEW_FILES,
@@ -120,7 +121,7 @@ type View =
     | typeof VIEW_UPLOAD_EMPTY
     | typeof VIEW_UPLOAD_IN_PROGRESS
     | typeof VIEW_UPLOAD_SUCCESS;
-type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE;
+type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE | typeof FIELD_SIZE;
 type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
 type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
@@ -710,7 +711,9 @@ type TaskLinkCollection = MarkerPaginatedCollection<TaskLink>;
 // See https://github.com/facebook/flow/issues/7574
 // This is currently *not* enforcing the constant types
 // type TaskType = typeof TASK_TYPE_GENERAL | typeof TASK_TYPE_APPROVAL;
+// type TaskEditMode = typeof TASK_EDIT_MODE_CREATE | typeof TASK_EDIT_MODE_EDIT;
 type TaskType = 'GENERAL' | 'APPROVAL';
+type TaskEditMode = 'CREATE' | 'EDIT';
 
 type TaskNew = {|
     assigned_to: TaskAssigneeCollection,
@@ -739,6 +742,12 @@ type TaskPayload = {
     description: string,
     due_at?: ?string,
     task_type: TaskType,
+};
+
+type TaskUpdatePayload = {
+    description: string,
+    due_at?: ?string,
+    id: string,
 };
 
 /* New Task Types END */
@@ -871,12 +880,6 @@ type AdditionalSidebarTab = {
 
 type Alignment = 'left' | 'right';
 
-type SidebarView =
-    | typeof SIDEBAR_VIEW_SKILLS
-    | typeof SIDEBAR_VIEW_DETAILS
-    | typeof SIDEBAR_VIEW_METADATA
-    | typeof SIDEBAR_VIEW_ACTIVITY;
-
 type FileSystemFileEntry = {
     createReader: Function,
     file: Function,
@@ -939,8 +942,8 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    description: ?string,
-    type: ?string,
+    advisoryMessage?: string,
+    name: string,
 };
 
 type MetricType =

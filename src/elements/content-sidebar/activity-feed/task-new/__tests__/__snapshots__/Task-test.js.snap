@@ -26,12 +26,6 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         }
       }
       id="123125"
-      inlineDeleteMessage={
-        Object {
-          "defaultMessage": "Delete task?",
-          "id": "be.taskDeletePrompt",
-        }
-      }
       onDelete={[MockFunction]}
       onEdit={[MockFunction]}
       permissions={
@@ -44,6 +38,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         }
       }
       tagged_message="This is where we tell each other what we need to do"
+      type="task"
       userHeadlineRenderer={[Function]}
     />
     <div
@@ -56,8 +51,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     <div
       className="bcs-task-content"
     >
-      <Assignees
-        assignees={
+      <AvatarGroup
+        maxAvatars={3}
+        users={
           Object {
             "entries": Array [
               Object {
@@ -95,7 +91,6 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
             "next_marker": null,
           }
         }
-        maxAvatars={3}
       />
     </div>
     <div

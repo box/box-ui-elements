@@ -29,12 +29,16 @@ const StatusIcon = ({ status, ...rest }: { status: TaskCollabStatus }) => {
     }
 };
 
-const AssignmentStatus = React.memo<Props>(({ user, status, getAvatarUrl, className, ...rest }: Props) => (
-    <div className={classNames('bcs-task-assignment-status', className)} data-testid="task-assignment-status" {...rest}>
-        <Avatar className="bcs-task-assignment-avatar" user={user} getAvatarUrl={getAvatarUrl} />
+const AvatarGroupAvatar = React.memo<Props>(({ user, status, getAvatarUrl, className, ...rest }: Props) => (
+    <div
+        className={classNames('bcs-AvatarGroup-avatarContainer', className)}
+        data-testid="avatar-group-avatar-container"
+        {...rest}
+    >
+        <Avatar className="bcs-AvatarGroup-avatar" user={user} getAvatarUrl={getAvatarUrl} />
         <StatusIcon
             status={status}
-            className={`bcs-task-assignment-status-icon ${camelCase(status)}`}
+            className={`bcs-AvatarGroup-statusIcon ${camelCase(status)}`}
             height={12}
             width={12}
             title={<FormattedMessage {...messages.completedAssignment} />}
@@ -42,4 +46,4 @@ const AssignmentStatus = React.memo<Props>(({ user, status, getAvatarUrl, classN
     </div>
 ));
 
-export default AssignmentStatus;
+export default AvatarGroupAvatar;

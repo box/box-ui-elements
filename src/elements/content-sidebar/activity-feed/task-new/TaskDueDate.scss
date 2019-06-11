@@ -1,0 +1,10 @@
+@import '../../../common/variables';
+
+.bcs-TaskDueDate {
+    color: $bdl-neutral-02;
+    font-weight: bold;
+
+    &.bcs-is-taskOverdue {
+        color: $bdl-watermelon-red;
+    }
+}

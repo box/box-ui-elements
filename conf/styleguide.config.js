@@ -201,9 +201,7 @@ const allSections = [
     {
         name: 'Features',
         components: () => [
-            '../src/features/activity-feed/activity-feed/ActivityFeed.js',
-            '../src/features/in-app-message/create-message-form/CreateMessageForm.js',
-            '../src/features/in-app-message/targeting-expression-editor/TargetingExpressionEditor.js',
+            '../src/features/classification/Classification.js',
             '../src/features/invite-collaborators-modal/InviteCollaboratorsModal.js',
             '../src/features/left-sidebar/LeftSidebar.js',
             '../src/features/header-flyout/HeaderFlyout.js',

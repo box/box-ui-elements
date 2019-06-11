@@ -362,6 +362,14 @@ export const TASK_NEW_REJECTED: 'REJECTED' = 'REJECTED';
 export const TASK_TYPE_GENERAL: 'GENERAL' = 'GENERAL';
 export const TASK_TYPE_APPROVAL: 'APPROVAL' = 'APPROVAL';
 
+/* ----------------- Task Edit modes ---------------- */
+export const TASK_EDIT_MODE_CREATE: 'CREATE' = 'CREATE';
+export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';
+
+/* ------------------ Comment types ----------------- */
+export const COMMENT_TYPE_DEFAULT: 'comment' = 'comment';
+export const COMMENT_TYPE_TASK: 'task' = 'task';
+
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {
     arrowDown: 'ArrowDown',
