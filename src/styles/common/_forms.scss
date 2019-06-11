@@ -222,7 +222,12 @@ textarea {
     position: absolute;
     right: 11px;
     top: 15px;
+    transition: transform $bdl-transition-duration-200ms;
     width: 0;
+}
+
+.select-container .select-button[aria-expanded='true']::before {
+    transform: rotateZ(180deg);
 }
 
 .select-container .select-button {
