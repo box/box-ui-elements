@@ -1174,6 +1174,8 @@ class ContentPicker extends Component<Props, State> {
                             onCreate={this.createFolder}
                             onItemClick={this.fetchFolder}
                             onSortChange={this.sort}
+                            onGridViewSwitch={() => {}}
+                            columnCount={0}
                         />
                         <Content
                             view={view}

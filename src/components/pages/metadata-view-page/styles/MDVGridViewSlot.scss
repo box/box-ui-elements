@@ -1,0 +1,15 @@
+@import '~box-ui-elements/es/styles/variables';
+@import '~styles/variables';
+
+.MDVGridViewSlot {
+    border: 1px solid $efive;
+    margin: 20px 0 0;
+    overflow: hidden;
+    padding: 15px;
+    white-space: normal;
+}
+
+.MDVGridViewSlot-blank {
+    border: none;
+    box-shadow: none;
+}

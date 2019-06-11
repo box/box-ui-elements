@@ -13,11 +13,13 @@ import './SubHeader.scss';
 type Props = {
     canCreateNewFolder: boolean,
     canUpload: boolean,
+    columnCount: number,
     currentCollection: Collection,
     isSmall: boolean,
     onCreate: Function,
-    onGridViewSwitch: Function,
+    onGridViewSwitch?: Function,
     onItemClick: Function,
+    onResize?: Function,
     onSortChange: Function,
     onUpload: Function,
     rootId: string,
@@ -32,10 +34,12 @@ const SubHeader = ({
     onSortChange,
     currentCollection,
     onGridViewSwitch,
+    onResize,
     onUpload,
     onCreate,
     canUpload,
     canCreateNewFolder,
+    columnCount,
     view,
     isSmall,
 }: Props) => (
@@ -57,6 +61,8 @@ const SubHeader = ({
             onUpload={onUpload}
             view={view}
             onGridViewSwitch={onGridViewSwitch}
+            onResize={onResize}
+            columnCount={columnCount}
         />
     </div>
 );

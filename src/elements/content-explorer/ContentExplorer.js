@@ -9,9 +9,12 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
+import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
+import MDVGridView from '../../components/pages/metadata-view-page/components/MDVGridView';
+import { getIcon } from '../common/item/iconCellRenderer';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -26,7 +29,7 @@ import PreviewDialog from './PreviewDialog';
 import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-import Content from './Content';
+// import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
@@ -58,6 +61,8 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
+
+const MAX_GRID_VIEW_COLUMNS = 5;
 
 type Props = {
     apiHost: string,
@@ -106,6 +111,7 @@ type Props = {
 };
 
 type State = {
+    columnCount: number,
     currentCollection: Collection,
     currentOffset: number,
     currentPageSize: number,
@@ -237,6 +243,7 @@ class ContentExplorer extends Component<Props, State> {
             isLoading: false,
             errorCode: '',
             focusedRow: 0,
+            columnCount: 1,
         };
     }
 
@@ -1207,6 +1214,21 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({ currentOffset: newOffset }, this.refreshCollection);
     };
 
+    slotRenderer = (slotIndex: number) => {
+        const { currentCollection } = this.state;
+
+        return (
+            <div>
+                <div> {currentCollection.items ? getIcon(32, currentCollection.items[slotIndex]) : null} </div>
+                <div> {currentCollection.items ? currentCollection.items[slotIndex].name : null} </div>
+            </div>
+        );
+    };
+
+    onResize = (newViewSize: number) => {
+        this.setState({ columnCount: newViewSize });
+    };
+
     /**
      * Renders the file picker
      *
@@ -1236,7 +1258,7 @@ class ContentExplorer extends Component<Props, State> {
             staticHost,
             uploadHost,
             isSmall,
-            isMedium,
+            //       isMedium,
             isTouch,
             className,
             measureRef,
@@ -1255,7 +1277,7 @@ class ContentExplorer extends Component<Props, State> {
             currentPageSize,
             searchQuery,
             isDeleteModalOpen,
-            isGridView,
+            //  isGridView,
             isRenameModalOpen,
             isShareModalOpen,
             isUploadModalOpen,
@@ -1263,9 +1285,12 @@ class ContentExplorer extends Component<Props, State> {
             isCreateFolderModalOpen,
             selected,
             isLoading,
+            //  focusedRow,
             errorCode,
-            focusedRow,
+            columnCount,
         }: State = this.state;
+
+        // console.log(currentCollection);
 
         const { id, offset, permissions, totalCount }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
@@ -1299,8 +1324,21 @@ class ContentExplorer extends Component<Props, State> {
                             onItemClick={this.fetchFolder}
                             onSortChange={this.sort}
                             onGridViewSwitch={this.switchGridView}
+                            onResize={this.onResize}
+                            columnCount={columnCount}
                         />
-                        <Content
+                        <AutoSizer>
+                            {({ height, width }) => (
+                                <MDVGridView
+                                    columnCount={MAX_GRID_VIEW_COLUMNS - columnCount + 1}
+                                    count={currentCollection.items ? currentCollection.items.length : 0}
+                                    height={height}
+                                    slotRenderer={this.slotRenderer}
+                                    width={width}
+                                />
+                            )}
+                        </AutoSizer>
+                        {/* <Content
                             view={view}
                             rootId={rootFolderId}
                             isSmall={isSmall}
@@ -1325,7 +1363,7 @@ class ContentExplorer extends Component<Props, State> {
                             onItemPreview={this.preview}
                             onSortChange={this.sort}
                             isGridView={isGridView}
-                        />
+                        /> */}
                         <Footer>
                             <Pagination
                                 offset={offset}
