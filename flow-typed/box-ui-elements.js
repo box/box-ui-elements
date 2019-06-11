@@ -711,7 +711,9 @@ type TaskLinkCollection = MarkerPaginatedCollection<TaskLink>;
 // See https://github.com/facebook/flow/issues/7574
 // This is currently *not* enforcing the constant types
 // type TaskType = typeof TASK_TYPE_GENERAL | typeof TASK_TYPE_APPROVAL;
+// type TaskEditMode = typeof TASK_EDIT_MODE_CREATE | typeof TASK_EDIT_MODE_EDIT;
 type TaskType = 'GENERAL' | 'APPROVAL';
+type TaskEditMode = 'CREATE' | 'EDIT';
 
 type TaskNew = {|
     assigned_to: TaskAssigneeCollection,

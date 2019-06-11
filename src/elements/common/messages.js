@@ -938,6 +938,16 @@ const messages = defineMessages({
         defaultMessage: 'Create Approval Task',
         description: 'title for approval task popup',
     },
+    tasksEditApprovalTaskFormTitle: {
+        id: 'be.tasks.editTask.approval.title',
+        defaultMessage: 'Edit Approval Task',
+        description: 'title for when editing an existing approval task',
+    },
+    tasksEditGeneralTaskFormTitle: {
+        id: 'be.tasks.editTask.general.title',
+        defaultMessage: 'Edit General Task',
+        description: 'modal title for when editing an existing general task',
+    },
     tasksAddTaskFormSelectAssigneesLabel: {
         id: 'be.tasks.addTaskForm.selectAssigneesLabel',
         defaultMessage: 'Select Assignees',

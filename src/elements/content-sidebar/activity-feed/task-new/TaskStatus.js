@@ -11,6 +11,8 @@ import {
 } from '../../../../constants';
 import messages from '../../../common/messages';
 
+import './TaskStatus.scss';
+
 type Props = {|
     status: TaskStatus,
 |};
@@ -28,13 +30,13 @@ const Status = React.memo<Props>(({ status }: Props) => (
         {...messages.tasksFeedStatusLabel}
         values={{
             taskStatus: (
-                <span className={`bcs-task-status-message ${camelCase(status)}`}>
+                <span className={`bcs-TaskStatus-message ${camelCase(status)}`}>
                     <FormattedMessage {...statusMessageKeyMap[status]} />
                 </span>
             ),
         }}
     >
-        {(...msg: Array<React.Node>): React.Node => <div className="bcs-task-status">{msg}</div>}
+        {(...msg: Array<React.Node>): React.Node => <div className="bcs-TaskStatus">{msg}</div>}
     </FormattedMessage>
 ));
 

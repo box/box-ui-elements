@@ -19,7 +19,7 @@ import {
 import Comment from '../comment';
 import TaskActions from './TaskActions';
 import TaskDueDate from './TaskDueDate';
-import Status from './TaskStatus';
+import TaskStatus from './TaskStatus';
 import AvatarGroup from './AvatarGroup';
 import './Task.scss';
 
@@ -140,7 +140,7 @@ const Task = ({
                 />
                 <div className="bcs-task-content bcs-task-status-container">
                     {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
-                    <Status status={status} />
+                    <TaskStatus status={status} />
                 </div>
                 <div className="bcs-task-content">
                     <AvatarGroup getAvatarUrl={getAvatarUrl} maxAvatars={3} users={assigned_to} />
