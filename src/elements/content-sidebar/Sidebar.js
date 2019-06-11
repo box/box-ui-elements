@@ -84,7 +84,7 @@ class Sidebar extends React.Component<Props, State> {
         const { fileId, history, isLarge, location }: Props = this.props;
         const { fileId: prevFileId, isLarge: prevIsLarge, location: prevLocation }: Props = prevProps;
         const { isDirty, isOpen }: State = this.state;
-        const { state = {} } = location;
+        const { state: locationState = {} } = location;
         const isForcedSet = this.isForcedSet();
 
         // User navigated to a different file without ever navigating to a tab
@@ -93,7 +93,7 @@ class Sidebar extends React.Component<Props, State> {
         }
 
         // User navigated to a different route or tab for the first time this session
-        if (!isDirty && location !== prevLocation && !state.silent) {
+        if (!isDirty && location !== prevLocation && !locationState.silent) {
             this.setState({ isDirty: true });
         }
 

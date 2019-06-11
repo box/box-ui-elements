@@ -12,15 +12,7 @@ jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
 describe('elements/content-sidebar/Sidebar', () => {
-    const historyMock = {
-        listen: jest.fn(() => () => {}),
-        push: jest.fn(),
-    };
-    const locationMock = {
-        pathname: '/',
-    };
-    const getWrapper = props =>
-        shallow(<Sidebar file={{ id: 'id' }} history={historyMock} location={locationMock} {...props} />);
+    const getWrapper = props => shallow(<Sidebar file={{ id: 'id' }} location={{ pathname: '/' }} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();
@@ -42,6 +34,26 @@ describe('elements/content-sidebar/Sidebar', () => {
             wrapper.setProps({ isLarge: false });
 
             expect(wrapper.state('isOpen')).toEqual(false);
+        });
+
+        test('should set isDirty if a user-initiated location change occurred', () => {
+            const wrapper = getWrapper({ location: { pathname: '/activity' } });
+
+            expect(wrapper.state('isDirty')).toBe(false);
+
+            wrapper.setProps({ location: { pathname: '/details' } });
+
+            expect(wrapper.state('isDirty')).toBe(true);
+        });
+
+        test('should not set isDirty if an app-initiated location change occurred', () => {
+            const wrapper = getWrapper({ location: { pathname: '/activity' } });
+
+            expect(wrapper.state('isDirty')).toBe(false);
+
+            wrapper.setProps({ location: { pathname: '/details', state: { silent: true } } });
+
+            expect(wrapper.state('isDirty')).toBe(false);
         });
     });
 
