@@ -758,6 +758,8 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
+        console.log('select called');
+        console.log(item);
         const {
             selected,
             currentCollection: { items = [] },
@@ -1216,11 +1218,16 @@ class ContentExplorer extends Component<Props, State> {
 
     slotRenderer = (slotIndex: number) => {
         const { currentCollection } = this.state;
+        const item: ?BoxItem = currentCollection.items ? currentCollection.items[slotIndex] : null;
+
+        if (!item) {
+            return <div />;
+        }
 
         return (
             <div>
-                <div> {currentCollection.items ? getIcon(32, currentCollection.items[slotIndex]) : null} </div>
-                <div> {currentCollection.items ? currentCollection.items[slotIndex].name : null} </div>
+                <div> {getIcon(32, item)} </div>
+                <div> {item.name} </div>
             </div>
         );
     };
@@ -1335,6 +1342,8 @@ class ContentExplorer extends Component<Props, State> {
                                     height={height}
                                     slotRenderer={this.slotRenderer}
                                     width={width}
+                                    onItemSelect={this.onItemClick}
+                                    currentCollection={currentCollection}
                                 />
                             )}
                         </AutoSizer>

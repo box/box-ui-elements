@@ -6,12 +6,16 @@ type Props = {
     slotRenderer: ?(slotIndex: number) => React.Element<any>,
 };
 
-function MDVGridViewSlot({ slotIndex, slotRenderer }: Props) {
+function MDVGridViewSlot({ slotIndex, slotRenderer, ...rest }: Props) {
     if (!slotRenderer) {
-        return <div className="MDVGridViewItem-blank" />;
+        return <div className="MDVGridViewSlot MDVGridViewSlot-blank" />;
     }
 
-    return <div className="MDVGridViewSlot">{slotRenderer(slotIndex)}</div>;
+    return (
+        <div className="MDVGridViewSlot" {...rest}>
+            {slotRenderer(slotIndex)}
+        </div>
+    );
 }
 
 export default MDVGridViewSlot;
