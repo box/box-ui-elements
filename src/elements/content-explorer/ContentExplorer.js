@@ -9,11 +9,9 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
-import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
-import MDVGridView from '../../components/pages/metadata-view-page/components/MDVGridView';
 import { getIcon } from '../common/item/iconCellRenderer';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
@@ -29,7 +27,7 @@ import PreviewDialog from './PreviewDialog';
 import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-// import Content from './Content';
+import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
@@ -1265,7 +1263,7 @@ class ContentExplorer extends Component<Props, State> {
             staticHost,
             uploadHost,
             isSmall,
-            //       isMedium,
+            isMedium,
             isTouch,
             className,
             measureRef,
@@ -1284,7 +1282,7 @@ class ContentExplorer extends Component<Props, State> {
             currentPageSize,
             searchQuery,
             isDeleteModalOpen,
-            //  isGridView,
+            isGridView,
             isRenameModalOpen,
             isShareModalOpen,
             isUploadModalOpen,
@@ -1292,7 +1290,7 @@ class ContentExplorer extends Component<Props, State> {
             isCreateFolderModalOpen,
             selected,
             isLoading,
-            //  focusedRow,
+            focusedRow,
             errorCode,
             columnCount,
         }: State = this.state;
@@ -1333,21 +1331,9 @@ class ContentExplorer extends Component<Props, State> {
                             onGridViewSwitch={this.switchGridView}
                             onResize={this.onResize}
                             columnCount={columnCount}
+                            isGridView={isGridView}
                         />
-                        <AutoSizer>
-                            {({ height, width }) => (
-                                <MDVGridView
-                                    columnCount={MAX_GRID_VIEW_COLUMNS - columnCount + 1}
-                                    count={currentCollection.items ? currentCollection.items.length : 0}
-                                    height={height}
-                                    slotRenderer={this.slotRenderer}
-                                    width={width}
-                                    onItemSelect={this.onItemClick}
-                                    currentCollection={currentCollection}
-                                />
-                            )}
-                        </AutoSizer>
-                        {/* <Content
+                        <Content
                             view={view}
                             rootId={rootFolderId}
                             isSmall={isSmall}
@@ -1372,7 +1358,10 @@ class ContentExplorer extends Component<Props, State> {
                             onItemPreview={this.preview}
                             onSortChange={this.sort}
                             isGridView={isGridView}
-                        /> */}
+                            columnCount={MAX_GRID_VIEW_COLUMNS - columnCount + 1}
+                            count={currentCollection.items ? currentCollection.items.length : 0}
+                            slotRenderer={this.slotRenderer}
+                        />
                         <Footer>
                             <Pagination
                                 offset={offset}

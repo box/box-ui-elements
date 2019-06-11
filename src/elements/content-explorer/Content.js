@@ -5,8 +5,10 @@
  */
 
 import React from 'react';
+import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
+import MDVGridView from '../../components/pages/metadata-view-page/components/MDVGridView';
 import ItemList from './ItemList';
 import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
 import './Content.scss';
@@ -29,6 +31,8 @@ type Props = {
     canPreview: boolean,
     canRename: boolean,
     canShare: boolean,
+    columnCount: number,
+    count: number,
     currentCollection: Collection,
     focusedRow: number,
     isGridView: boolean,
@@ -45,6 +49,7 @@ type Props = {
     onSortChange: Function,
     rootElement?: HTMLElement,
     rootId: string,
+    slotRenderer: Function,
     tableRef: Function,
     view: View,
 };
@@ -73,41 +78,67 @@ const Content = ({
     onItemPreview,
     onSortChange,
     isGridView,
-}: Props) => (
-    <div className="bce-content">
-        {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
-            <ProgressBar percent={currentCollection.percentLoaded} />
-        )}
-        {isEmpty(view, currentCollection) ? (
-            <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
-        ) : (
-            <ItemList
-                view={view}
-                isSmall={isSmall}
-                isMedium={isMedium}
-                isTouch={isTouch}
-                rootId={rootId}
-                rootElement={rootElement}
-                focusedRow={focusedRow}
-                currentCollection={currentCollection}
-                tableRef={tableRef}
-                canShare={canShare}
-                canPreview={canPreview}
-                canDelete={canDelete}
-                canRename={canRename}
-                canDownload={canDownload}
-                onItemClick={onItemClick}
-                onItemSelect={onItemSelect}
-                onItemDelete={onItemDelete}
-                onItemDownload={onItemDownload}
-                onItemRename={onItemRename}
-                onItemShare={onItemShare}
-                onItemPreview={onItemPreview}
-                onSortChange={onSortChange}
-            />
-        )}
-        {isGridView ? <div> This is grid view </div> : null}
-    </div>
-);
+    slotRenderer,
+    columnCount,
+    count,
+}: Props) => {
+    const gridView = (
+        <AutoSizer>
+            {({ height, width }) => (
+                <MDVGridView
+                    height={height}
+                    width={width}
+                    currentCollection={currentCollection}
+                    slotRenderer={slotRenderer}
+                    count={count}
+                    columnCount={columnCount}
+                    onItemSelect={onItemClick}
+                />
+            )}
+        </AutoSizer>
+    );
+
+    const listView = (
+        <ItemList
+            view={view}
+            isSmall={isSmall}
+            isMedium={isMedium}
+            isTouch={isTouch}
+            rootId={rootId}
+            rootElement={rootElement}
+            focusedRow={focusedRow}
+            currentCollection={currentCollection}
+            tableRef={tableRef}
+            canShare={canShare}
+            canPreview={canPreview}
+            canDelete={canDelete}
+            canRename={canRename}
+            canDownload={canDownload}
+            onItemClick={onItemClick}
+            onItemSelect={onItemSelect}
+            onItemDelete={onItemDelete}
+            onItemDownload={onItemDownload}
+            onItemRename={onItemRename}
+            onItemShare={onItemShare}
+            onItemPreview={onItemPreview}
+            onSortChange={onSortChange}
+        />
+    );
+
+    const content = isGridView ? gridView : listView;
+
+    return (
+        <div className="bce-content">
+            {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
+                <ProgressBar percent={currentCollection.percentLoaded} />
+            )}
+            {isEmpty(view, currentCollection) ? (
+                <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
+            ) : (
+                content
+            )}
+        </div>
+    );
+};
 
 export default Content;

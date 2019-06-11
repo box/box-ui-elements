@@ -15,6 +15,7 @@ type Props = {
     canUpload: boolean,
     columnCount: number,
     currentCollection: Collection,
+    isGridView: boolean,
     isSmall: boolean,
     onCreate: Function,
     onGridViewSwitch?: Function,
@@ -42,6 +43,7 @@ const SubHeader = ({
     columnCount,
     view,
     isSmall,
+    isGridView,
 }: Props) => (
     <div className="be-sub-header" data-testid="be-sub-header">
         <SubHeaderLeft
@@ -63,6 +65,7 @@ const SubHeader = ({
             onGridViewSwitch={onGridViewSwitch}
             onResize={onResize}
             columnCount={columnCount}
+            isGridView={isGridView}
         />
     </div>
 );

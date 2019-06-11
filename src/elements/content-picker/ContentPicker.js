@@ -1176,6 +1176,7 @@ class ContentPicker extends Component<Props, State> {
                             onSortChange={this.sort}
                             onGridViewSwitch={() => {}}
                             columnCount={0}
+                            isGridView={false}
                         />
                         <Content
                             view={view}

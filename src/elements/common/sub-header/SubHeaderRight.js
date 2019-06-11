@@ -9,6 +9,7 @@ import Sort from './Sort';
 import Add from './Add';
 import Button from '../../../components/button/Button';
 import IconGridViewInverted from '../../../icons/general/IconGridViewInverted';
+import IconGridView from '../../../icons/general/IconGridView';
 import GridViewSlider from '../../../components/core/item-list/components/GridViewSlider';
 import { VIEW_FOLDER } from '../../../constants';
 import './SubHeaderRight.scss';
@@ -18,6 +19,7 @@ type Props = {
     canUpload: boolean,
     columnCount: number,
     currentCollection: Collection,
+    isGridView: boolean,
     onCreate: Function,
     onGridViewSwitch: Function,
     onResize: Function,
@@ -37,6 +39,7 @@ const SubHeaderRight = ({
     onSortChange,
     onResize,
     columnCount,
+    isGridView,
 }: Props) => {
     const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
     const isFolder: boolean = view === VIEW_FOLDER;
@@ -57,10 +60,8 @@ const SubHeaderRight = ({
                     showUpload={canUpload}
                 />
             )}
-            <GridViewSlider onResize={onResize} viewSize={columnCount} />
-            <Button onClick={onGridViewSwitch}>
-                <IconGridViewInverted />
-            </Button>
+            {isGridView ? <GridViewSlider onResize={onResize} viewSize={columnCount} /> : null}
+            <Button onClick={onGridViewSwitch}>{isGridView ? <IconGridView /> : <IconGridViewInverted />}</Button>
         </div>
     );
 };
