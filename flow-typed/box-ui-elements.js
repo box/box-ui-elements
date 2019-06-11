@@ -942,8 +942,8 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    description: ?string,
-    type: ?string,
+    advisoryMessage?: string,
+    name: string,
 };
 
 type MetricType =

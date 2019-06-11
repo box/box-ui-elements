@@ -846,7 +846,7 @@ const messages = defineMessages({
     editLabel: {
         id: 'be.editLabel',
         defaultMessage: 'Edit',
-        description: 'Aria label for button to edit a comment or task',
+        description: 'Label for an edit action',
     },
     getVersionInfo: {
         id: 'be.getVersionInfo',

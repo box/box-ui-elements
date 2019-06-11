@@ -85,6 +85,7 @@
                         hasAccessStats: true,
                         hasVersions: true,
                         hasNotices: true,
+                        hasClassification: true,
                         onAccessStatsClick: () => {
                             alert('Hello, world!');
                         },
@@ -110,6 +111,12 @@
                         hasVersions: true,
                         hasAccessStats: true,
                         hasClassification: true,
+                        classification: {
+                            advisoryMessage:
+                                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                            name: 'confidential',
+                        },
+                        onClassificationClick: () => alert('edit classification'),
                     },
                     hasActivityFeed: true,
                     hasSkills: true,
@@ -126,10 +133,8 @@
                         bannerPolicy: {
                             body: 'classification tooltip',
                         },
-                        onClassificationClick: refreshFn => {
-                            console.log('refreshing');
-                            refreshFn();
-                        },
+                        hasClassification: true,
+                        onClassificationClick: () => alert('edit classification'),
                     },
                     hasSkills: true,
                     hasActivityFeed: true,

@@ -59,32 +59,6 @@ Show retentionPolicy:
 />
 ```
 
-Add classification:
-
-```js
-<ItemProperties
-  classificationProps={{
-    openModal: () => {
-      alert('Classification Modal');
-    },
-  }}
-/>
-```
-
-Edit classification:
-
-```js
-<ItemProperties
-  classificationProps={{
-    openModal: () => {
-      alert('Classification Modal');
-    },
-    tooltip: 'This document contains sensitive information',
-    value: 'Confidential',
-  }}
-/>
-```
-
 Editable url:
 
 ```js
