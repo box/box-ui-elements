@@ -50,22 +50,21 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     });
 
     describe('componentDidUpdate', () => {
-        test('should forward version changes to the parent component', () => {
+        test('should verify the selected version id exists when it changes', () => {
             const onVersionChange = jest.fn();
             const wrapper = getWrapper({ onVersionChange });
+            const instance = wrapper.instance();
             const version = { id: '12345' };
             const currentVersion = { id: '54321' };
+
+            instance.verifyVersion = jest.fn();
 
             wrapper.setState({
                 versions: [currentVersion, version],
             });
-
             wrapper.setProps({ versionId: '12345' });
 
-            expect(onVersionChange).toHaveBeenCalledWith(version, {
-                updateVersionToCurrent: expect.any(Function),
-                currentVersionId: currentVersion.id,
-            });
+            expect(instance.verifyVersion).toHaveBeenCalled();
         });
     });
 
@@ -76,7 +75,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             wrapper.unmount();
 
-            expect(onVersionChange).toBeCalledWith();
+            expect(onVersionChange).toBeCalledWith(null);
         });
     });
 
@@ -164,6 +163,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     describe('handleFetchSuccess', () => {
         test('should set state with the updated versions', () => {
             const wrapper = getWrapper();
+            const instance = wrapper.instance();
             const file = { id: '12345', permissions: {} };
             const version = { id: '123', permissions: {} };
             const versions = { entries: [version], total_count: 1 };
@@ -172,8 +172,10 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             versionsAPI.addPermissions.mockReturnValueOnce(versions);
             versionsAPI.sortVersions.mockReturnValueOnce(versions);
 
-            wrapper.instance().handleFetchSuccess([file, versions]);
+            instance.verifyVersion = jest.fn();
+            instance.handleFetchSuccess([file, versions]);
 
+            expect(instance.verifyVersion).toBeCalled();
             expect(versionsAPI.addCurrentVersion).toBeCalledWith(versions, file);
             expect(versionsAPI.addPermissions).toBeCalledWith(versions, file);
             expect(versionsAPI.sortVersions).toBeCalledWith(versions);
@@ -309,6 +311,40 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 successCallback: expect.any(Function),
                 versionId: '123',
             });
+        });
+    });
+
+    describe('verifyVersion', () => {
+        const onVersionChange = jest.fn();
+        const versions = [
+            { id: '123', name: 'Version 1' },
+            { id: '456', name: 'Version 2' },
+            { id: '789', name: 'Version 3' },
+        ];
+
+        test('should emit an onVersionChange event if the passed version is available', () => {
+            const wrapper = getWrapper({ onVersionChange, versionId: '456' });
+
+            wrapper.setState({ versions });
+            wrapper.instance().verifyVersion();
+
+            expect(onVersionChange).toHaveBeenCalledWith(versions[1], {
+                currentVersionId: versions[0].id,
+                updateVersionToCurrent: wrapper.instance().updateVersionToCurrent,
+            });
+        });
+
+        test('should reset the selected version if the passed version is not available', () => {
+            const wrapper = getWrapper({ onVersionChange, versionId: '99999' });
+            const instance = wrapper.instance();
+
+            instance.updateVersionToCurrent = jest.fn();
+
+            wrapper.setState({ versions });
+            instance.verifyVersion();
+
+            expect(onVersionChange).not.toHaveBeenCalled();
+            expect(instance.updateVersionToCurrent).toHaveBeenCalled();
         });
     });
 
