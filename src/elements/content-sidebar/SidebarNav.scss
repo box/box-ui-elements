@@ -1,7 +1,17 @@
 @import '../common/variables';
 
 .bcs {
-    nav {
+    .bcs-SidebarNav {
         border-left: 1px solid $off-white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .bcs-SidebarNav-toggle {
+        align-items: center;
+        display: flex;
+        height: 60px;
+        justify-content: center;
     }
 }
