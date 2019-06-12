@@ -30,6 +30,7 @@ const OfficeDesktopIcon = ({ className, dimension = 30, extension, title }: Prop
         case 'xls':
         case 'xlsx':
         case 'xlsm':
+        case 'xlsb':
             Component = IconExcelDesktop;
             break;
         // no default
