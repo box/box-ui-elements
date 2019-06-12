@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 
-import Task from '..';
+import { TaskComponent as Task } from '..';
 
 const allHandlers = {
     tasks: {
@@ -212,7 +212,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const wrapper = shallow(
             <Task
                 {...task}
-                permissions={{ can_delete: false, can_update: false }}
+                permissions={{ can_delete: false, can_update: true }}
                 currentUser={otherUser}
                 approverSelectorContacts={approverSelectorContacts}
                 handlers={allHandlers}
@@ -223,10 +223,11 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         expect(wrapper.find('Comment').getElements()[0].props.permissions.can_delete).toBe(false);
     });
 
-    test('should not allow user to edit if they are not the task creator', () => {
+    test('should not allow user to edit if the permissions do not allow it', () => {
         const wrapper = mount(
             <Task
                 {...task}
+                permissions={{ can_delete: true, can_update: false }}
                 currentUser={otherUser}
                 approverSelectorContacts={approverSelectorContacts}
                 handlers={allHandlers}

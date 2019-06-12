@@ -13,10 +13,10 @@ type TaskModalProps = {
     editMode?: TaskEditMode,
     error: ?ElementsXhrError,
     feedbackUrl: string,
-    handleCreateError: (e: ElementsXhrError) => void,
-    handleCreateSuccess: () => void,
-    handleModalClose: () => void,
     isTaskFormOpen: boolean,
+    onCreateError: (e: ElementsXhrError) => void,
+    onCreateSuccess: () => void,
+    onModalClose: () => void,
     taskFormProps: TaskFormProps,
     taskType: TaskType,
 };
@@ -41,9 +41,9 @@ const TaskModal = (props: TaskModalProps) => {
     const {
         editMode = TASK_EDIT_MODE_CREATE,
         error,
-        handleCreateError,
-        handleCreateSuccess,
-        handleModalClose,
+        onCreateError,
+        onCreateSuccess,
+        onModalClose,
         taskType,
         feedbackUrl,
         isTaskFormOpen,
@@ -57,7 +57,7 @@ const TaskModal = (props: TaskModalProps) => {
             data-testid="create-task-modal"
             focusElementSelector={focusTargetSelector}
             isOpen={isTaskFormOpen}
-            onRequestClose={handleModalClose}
+            onRequestClose={onModalClose}
             title={
                 <React.Fragment>
                     <FormattedMessage {...getMessageForModalTitle(taskType, editMode)} />
@@ -67,10 +67,11 @@ const TaskModal = (props: TaskModalProps) => {
         >
             <div className="be">
                 <TaskForm
+                    editMode={editMode}
                     error={error}
-                    onCancel={handleModalClose}
-                    onCreateSuccess={handleCreateSuccess}
-                    onCreateError={handleCreateError}
+                    onCancel={onModalClose}
+                    onCreateSuccess={onCreateSuccess}
+                    onCreateError={onCreateError}
                     taskType={taskType}
                     {...taskFormProps}
                 />

@@ -585,6 +585,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             createTask,
             getApproverWithQuery,
             getAvatarUrl,
+            message: '',
         };
         return (
             <FeatureFlag feature="activityFeed.tasks.newApi">

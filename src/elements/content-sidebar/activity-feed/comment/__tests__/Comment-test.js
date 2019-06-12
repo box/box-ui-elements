@@ -192,6 +192,43 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.state('isInputOpen')).toBe(false);
     });
 
+    test('should handle custom edit click handling if edit permissions exist and the handler is defined', () => {
+        const comment = {
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
+            permissions: { can_edit: true },
+            onEditClick: jest.fn(),
+        };
+        const wrapper = mount(
+            <Comment
+                id="123"
+                {...comment}
+                approverSelectorContacts={approverSelectorContacts}
+                currentUser={currentUser}
+                handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
+                onEdit={jest.fn()}
+            />,
+        );
+
+        const instance = wrapper.instance();
+
+        expect(wrapper.find('CommentMenu').length).toEqual(2);
+        expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
+        expect(wrapper.find('CommentText').length).toEqual(1);
+        expect(wrapper.state('isEditing')).toBe(false);
+
+        expect(wrapper.state('isEditing')).toBe(false);
+        instance.handleEditClick();
+        wrapper.update();
+        expect(wrapper.find('CommentText').length).toEqual(1);
+        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isInputOpen')).toBe(false);
+
+        expect(comment.onEditClick).toHaveBeenCalledTimes(1);
+    });
+
     test('should render an error when one is defined', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
