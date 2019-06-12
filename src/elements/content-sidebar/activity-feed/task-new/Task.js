@@ -67,7 +67,7 @@ const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
 
 class Task extends React.Component<Props, State> {
     state = {
-        modalError: null,
+        modalError: undefined,
         isEditing: false,
     };
 
@@ -83,8 +83,8 @@ class Task extends React.Component<Props, State> {
         this.setState({ isEditing: false });
     };
 
-    handleCreateError = (e: ElementsXhrError) => {
-        this.setState({ modalError: e });
+    handleCreateError = (error: ElementsXhrError) => {
+        this.setState({ modalError: error });
     };
 
     getUsersFromTask = (): SelectorItems => {
@@ -93,14 +93,14 @@ class Task extends React.Component<Props, State> {
         return (
             assigned_to &&
             assigned_to.entries.map(taskCollab => {
-                const retVal = {
+                const newSelectorItem: SelectorItem = {
                     ...taskCollab.target,
                     item: {},
                     value: taskCollab.target.id,
                     text: taskCollab.target.name,
                 };
 
-                return retVal;
+                return newSelectorItem;
             })
         );
     };
@@ -175,7 +175,7 @@ class Task extends React.Component<Props, State> {
                         isPending={isPending}
                         onDelete={onDelete}
                         onEdit={onEdit}
-                        handleEditClick={this.handleEditClick}
+                        onEditClick={this.handleEditClick}
                         permissions={taskPermissions}
                         tagged_message={description}
                         translatedTaggedMessage={translatedTaggedMessage}
@@ -228,12 +228,12 @@ class Task extends React.Component<Props, State> {
                     editMode={TASK_EDIT_MODE_EDIT}
                     error={modalError}
                     feedbackUrl={getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || ''}
-                    handleCreateError={this.handleCreateError}
-                    handleCreateSuccess={this.handleCreateSuccess}
-                    handleModalClose={this.handleModalClose}
+                    onCreateError={this.handleCreateError}
+                    onCreateSuccess={this.handleCreateSuccess}
+                    onModalClose={this.handleModalClose}
                     isTaskFormOpen={isEditing}
                     taskFormProps={{
-                        approverSelectorContacts: this.getUsersFromTask() || [],
+                        approverSelectorContacts: this.getUsersFromTask(),
                         getAvatarUrl,
                         createTask: () => {},
                         dueDate: due_at,

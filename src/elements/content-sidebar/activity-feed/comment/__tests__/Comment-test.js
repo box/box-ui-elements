@@ -198,7 +198,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
             permissions: { can_edit: true },
-            handleEditClick: jest.fn(),
+            onEditClick: jest.fn(),
         };
         const wrapper = mount(
             <Comment
@@ -226,7 +226,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
 
-        expect(comment.handleEditClick).toHaveBeenCalledTimes(1);
+        expect(comment.onEditClick).toHaveBeenCalledTimes(1);
     });
 
     test('should render an error when one is defined', () => {

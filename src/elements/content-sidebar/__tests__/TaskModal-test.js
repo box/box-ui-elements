@@ -7,9 +7,9 @@ describe('elements/content-sidebar/TaskModal', () => {
         return shallow(
             <TaskModal
                 feedbackUrl="http://example.dentist/"
-                handleCreateError={jest.fn()}
-                handleCreateSuccess={jest.fn()}
-                handleModalClose={jest.fn()}
+                onCreateError={jest.fn()}
+                onCreateSuccess={jest.fn()}
+                onModalClose={jest.fn()}
                 isTaskFormOpen
                 taskFormProps={{
                     approverSelectorContacts: null,

@@ -38,7 +38,6 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
-    handleEditClick?: () => void,
     id: string,
     isDisabled?: boolean,
     isPending?: boolean,
@@ -47,6 +46,7 @@ type Props = {
     modified_at?: string | number,
     onDelete?: Function,
     onEdit?: Function,
+    onEditClick?: () => void,
     permissions?: BoxItemPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -89,12 +89,12 @@ class Comment extends React.Component<Props, State> {
     };
 
     handleEditClick = (): void => {
-        const { handleEditClick } = this.props;
+        const { onEditClick } = this.props;
 
-        if (!handleEditClick) {
-            this.setState({ isEditing: true, isInputOpen: true });
+        if (onEditClick) {
+            onEditClick();
         } else {
-            handleEditClick();
+            this.setState({ isEditing: true, isInputOpen: true });
         }
     };
 
