@@ -13,12 +13,8 @@
             margin-bottom: 0;
         }
     }
+}
 
-    .bcs-details-content {
-        @include bcs-SidebarSection;
-    }
-
-    .bcs-details-content:empty {
-        margin: 0;
-    }
+.bcs-DetailsSidebar-notices {
+    @include bcs-SidebarSection;
 }

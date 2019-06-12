@@ -1,6 +1,8 @@
 // @flow
 // File auto-generated
 
+export const white = '#fff'; // white
+export const black = '#000'; // black
 export const bdlBoxBlue = '#0061d5'; // bdl-box-blue
 export const bdlBoxBlue50 = '#619de5'; // bdl-box-blue-50
 export const bdlBoxBlue05 = '#f2f7fd'; // bdl-box-blue-05
@@ -32,8 +34,6 @@ export const boxBlue = '#0061d5'; // box-blue
 export const primaryColor = '#0061d5'; // primary-color
 export const korayIng = '#2a62b9'; // koray-ing
 export const pictonBlue = '#3392ec'; // picton-blue
-export const white = '#fff'; // white
-export const black = '#000'; // black
 export const hoverBlueBackground = '#f6fafd'; // hover-blue-background
 export const hoverBlueBorder = '#d9e3e9'; // hover-blue-border
 export const selectedBlueBackground = '#ecf4fc'; // selected-blue-background
@@ -92,3 +92,4 @@ export const overlayZIndex = '190'; // overlay-z-index
 export const tooltipZIndex = '190'; // tooltip-z-index
 export const bdlLineHeight = '20px'; // bdl-line-height
 export const bdlBorderRadiusSize = '4px'; // bdl-border-radius-size
+export const bdlTransitionDuration200Ms = '0.2s'; // bdl-transition-duration-200ms
