@@ -101,7 +101,7 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
   title={
     <React.Fragment>
       <FormattedMessage
-        defaultMessage="Edit Approval Task"
+        defaultMessage="Modify Approval Task"
         id="be.tasks.editTask.approval.title"
       />
       <BetaFeedbackBadge
@@ -187,7 +187,7 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode E
   title={
     <React.Fragment>
       <FormattedMessage
-        defaultMessage="Edit General Task"
+        defaultMessage="Modify General Task"
         id="be.tasks.editTask.general.title"
       />
       <BetaFeedbackBadge
