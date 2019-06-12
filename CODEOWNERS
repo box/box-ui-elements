@@ -28,5 +28,8 @@
 /flow-typed/                                @box/ui-elements-extended
 /i18n/                                      @box/webapp
 
-# Element Experiences
-/src/elements/content-sidebar/activity-feed/task-new/ @box/ui-elements-extended @box/ui-elements
+# Features
+/src/elements/content-sidebar/activity-feed/task-new/  @box/collab @box/ui-elements-extended @box/ui-elements
+/src/elements/content-sidebar/activity-feed/task/      @box/collab @box/ui-elements-extended @box/ui-elements
+/src/elements/content-sidebar/activity-feed/comment/   @box/collab @box/ui-elements-extended @box/ui-elements
+/src/api/tasks/                                        @box/collab @box/ui-elements-extended @box/ui-elements
