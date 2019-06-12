@@ -1,4 +1,6 @@
 {
+    "white": "#fff",
+    "black": "#000",
     "bdl-box-blue": "#0061d5",
     "bdl-box-blue-50": "#619de5",
     "bdl-box-blue-05": "#f2f7fd",
@@ -30,8 +32,6 @@
     "primary-color": "#0061d5",
     "koray-ing": "#2a62b9",
     "picton-blue": "#3392ec",
-    "white": "#fff",
-    "black": "#000",
     "hover-blue-background": "#f6fafd",
     "hover-blue-border": "#d9e3e9",
     "selected-blue-background": "#ecf4fc",
@@ -89,5 +89,6 @@
     "overlay-z-index": "190",
     "tooltip-z-index": "190",
     "bdl-line-height": "20px",
-    "bdl-border-radius-size": "4px"
+    "bdl-border-radius-size": "4px",
+    "bdl-transition-duration-200ms": "0.2s"
 }
