@@ -23,6 +23,7 @@ import IconGlobe from '../../icons/general/IconGlobe';
 import ContactsField from './ContactsField';
 import messages from './messages';
 import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
+import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
     cancelButtonProps?: Object,
@@ -43,7 +44,7 @@ type Props = {
     onContactAdd?: Function,
     onContactInput?: Function,
     onContactRemove?: Function,
-    onPillCreate?: Function,
+    onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     onRequestClose: Function,
     onSubmit: Function,
     openInviteCollaboratorsSection?: Function,

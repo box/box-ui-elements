@@ -17,6 +17,7 @@ import commonMessages from '../../common/messages';
 
 import messages from './messages';
 import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
+import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
     disabled: boolean,
@@ -28,7 +29,7 @@ type Props = {
     onContactAdd: Function,
     onContactRemove: Function,
     onInput?: Function,
-    onPillCreate?: Function,
+    onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     selectedContacts: Array<Contact>,
     suggestedCollaborators?: suggestedCollaboratorsType,
     validateForError: Function,

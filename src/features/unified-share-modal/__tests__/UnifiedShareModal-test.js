@@ -643,16 +643,16 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             },
         ];
 
-        test('should not retrieve emails if it is a select dropdown case where there is only one pill with id', async () => {
-            const pills = [{ id: 123 }];
+        test('should not retrieve emails if all the pills are select type', async () => {
+            const pills = [{ id: 123 }, { id: 456 }];
             const getContactsByEmail = jest.fn();
             const wrapper = getWrapper({ getContactsByEmail });
-            await wrapper.instance().onPillCreate(pills);
+            await wrapper.instance().onPillCreate('test', pills);
             expect(getContactsByEmail).not.toHaveBeenCalled();
         });
 
-        test('should retrieve emails and set the state for invite collabs contacts', async () => {
-            const pills = [{ displayText, text, value }];
+        test('should retrieve emails and set the state for invite collabs contacts when the pills are mixed of selectType and contactType', async () => {
+            const pills = [{ displayText, text, value }, { id: 123 }];
             const state = {
                 inviteCollabsContacts,
             };
@@ -678,7 +678,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             ];
             const wrapper = getWrapper({ getContactsByEmail });
             wrapper.setState(state);
-            await wrapper.instance().onPillCreate('inviteCollabsContacts')(pills);
+            await wrapper.instance().onPillCreate('inviteCollabsContacts', pills);
             const newSelectedContacts = wrapper.state('inviteCollabsContacts');
             expect(newSelectedContacts).toEqual(expectedSelectedContacts);
         });
@@ -710,7 +710,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             ];
             const wrapper = getWrapper({ getContactsByEmail });
             wrapper.setState(state);
-            await wrapper.instance().onPillCreate('emailSharedLinkContacts')(pills);
+            await wrapper.instance().onPillCreate('emailSharedLinkContacts', pills);
             const newSelectedContacts = wrapper.state('emailSharedLinkContacts');
             expect(newSelectedContacts).toEqual(expectedSelectedContacts);
         });
