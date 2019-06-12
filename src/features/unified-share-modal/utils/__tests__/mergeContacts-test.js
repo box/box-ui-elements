@@ -3,7 +3,7 @@ import mergeContacts from '../mergeContacts';
 describe('features/unified-share-modal/utils/mergeContacts', () => {
     const email = 'dev@box.com';
     const displayText = email;
-    const id = 'not-previously-collaborated';
+    const id = email;
     const isExternalUser = true;
     const name = 'dev';
     const text = email;

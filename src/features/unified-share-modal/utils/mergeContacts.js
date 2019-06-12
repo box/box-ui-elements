@@ -16,7 +16,7 @@ const mergeContacts = (existingContacts: Array<Contact>, fetchedContacts: Object
         return (
             (contact.value && contactsMap[contact.value]) || {
                 email: String(contact.value),
-                id: 'not-previously-collaborated',
+                id: String(contact.value),
                 isExternalUser: true,
                 text: String(contact.value),
                 type: 'user',
