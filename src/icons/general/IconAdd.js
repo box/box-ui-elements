@@ -12,13 +12,19 @@ type Props = {
     width?: number,
 };
 
-const IconAdd = ({ className = '', color = '#222', height = 24, title, width = 24 }: Props) => (
-    <AccessibleSVG className={`icon-add ${className}`} height={height} title={title} viewBox="0 0 12 12" width={width}>
+const IconAdd = ({ className = '', color = '#222', height = 16, title, width = 16 }: Props) => (
+    <AccessibleSVG
+        className={`bdl-IconAdd ${className}`}
+        height={height}
+        title={title}
+        viewBox="0 0 16 16"
+        width={width}
+    >
         <path
             className="fill-color"
-            d="M7,5 L11.5,5 C11.7761424,5 12,5.22385763 12,5.5 L12,6.5 C12,6.77614237 11.7761424,7 11.5,7 L7,7 L7,11.5 C7,11.7761424 6.77614237,12 6.5,12 L5.5,12 C5.22385763,12 5,11.7761424 5,11.5 L5,7 L0.5,7 C0.22385763,7 0,6.77614237 0,6.5 L0,5.5 C0,5.22385763 0.22385763,5 0.5,5 L5,5 L5,0.5 C5,0.22385763 5.22385763,0 5.5,0 L6.5,0 C6.77614237,0 7,0.22385763 7,0.5 L7,5 Z"
+            d="M9 7h4.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H9v4.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5V9H2.5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5H7V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5V7z"
             fill={color}
-            fillRule="evenodd"
+            fillRule="nonzero"
         />
     </AccessibleSVG>
 );
