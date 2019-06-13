@@ -9,6 +9,13 @@ green=$"\e[1;32m"
 blue=$"\e[1;34m"
 end=$"\e[0m\n"
 
+check_uncommitted_files() {
+    if [[ $(git status --porcelain 2>/dev/null| egrep "^(M| M)") != "" ]] ; then
+        printf "${red}Your branch has uncommitted files!${end}"
+        return 1
+    fi
+}
+
 # commit updated translations if any
 check_and_commit_updated_translations() {
     if ! git diff --quiet HEAD $PROPERTIES; then
@@ -54,6 +61,8 @@ prepush() {
     printf "${blue}Building all sources, this will update i18n/json${end}"
     printf "${blue}-------------------------------------------------------------${end}"
     yarn build:prod:es || exit 1
+
+    check_uncommitted_files || exit 1
 
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Building bundles again, this will update en-US.properties${end}"
