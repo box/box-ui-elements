@@ -791,7 +791,7 @@ const messages = defineMessages({
     taskUpdateErrorMessage: {
         id: 'be.taskEditErrorMessage',
         description: 'Error message when a task edit fails',
-        defaultMessage: 'An error occurred while updating this task. Please try again.',
+        defaultMessage: 'An error occurred while modifying this task. Please try again.',
     },
     taskActionErrorTitle: {
         id: 'be.taskActionErrorTitle',
