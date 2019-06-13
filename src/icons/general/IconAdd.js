@@ -12,17 +12,17 @@ type Props = {
     width?: number,
 };
 
-const IconAdd = ({ className = '', color = '#222', height = 16, title, width = 16 }: Props) => (
+const IconAdd = ({ className = '', color = '#222', height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
         className={`bdl-IconAdd ${className}`}
         height={height}
         title={title}
-        viewBox="0 0 16 16"
+        viewBox="0 0 32 32"
         width={width}
     >
         <path
             className="fill-color"
-            d="M9 7h4.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H9v4.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5V9H2.5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5H7V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5V7z"
+            d="M18 14h9a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-9v9a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-9H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h9V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v9z"
             fill={color}
             fillRule="nonzero"
         />
