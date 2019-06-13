@@ -202,40 +202,58 @@ class File extends Item {
         }
     }
 
-    async getFileThumbnail(
-        item: BoxItem,
-        fileType: string,
-        dimensions: string,
-        successCallback: Function,
-    ): Promise<void> {
+    /**
+     * Get the thumbnail url for a given BoxItem.
+     *
+     * @param {BoxItem} item - item whose thumbnail should be fetched
+     * @param {string} dimensions - desired dimensions of thumbnail. Acceptable dimensions
+     * for a jpg are: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048".
+     * @param {Function} successCallback - function to call with thumbnailUrl
+     * @return {Promise<void>}
+     */
+    async getFileThumbnail(item: BoxItem, dimensions: string, successCallback: Function): Promise<void> {
         if (this.isDestroyed()) {
             return;
         }
+
+        // TODO: implement cache for recently fetched thumbnails
+
         const { id } = item;
         const newUrl = `${this.getUrl(id)}?fields=representations`;
-        const access_token = 'S8wjvjOL9GEK5VtXsQNVMOwSrx1g55oC';
+
+        const access_token = this.xhr.token;
+        if (!access_token) {
+            return;
+        }
 
         const xhrOptions: Object = {
             url: newUrl,
-            headers: { 'X-Rep-Hints': `[${fileType}?dimensions=${dimensions}]` },
+            headers: {
+                // API will return first representation it finds, so 1024x1024 png is the final fallback.
+                'X-Rep-Hints': `[jpg?dimensions=${dimensions},png?dimensions=${dimensions},png?dimensions=1024x1024]`,
+            },
         };
         this.successCallback = successCallback;
 
         try {
-            const reponse = await this.xhr.get(xhrOptions).then(async response => {
-                if (!response.data.representations.entries.length) {
-                    return '';
+            const thumbnailUrl = await this.xhr.get(xhrOptions).then(async response => {
+                const entries = response.data.representations.entries;
+
+                if (!entries.length) {
+                    return null;
                 }
-                const thumbnailLink = response.data.representations.entries[0].content.url_template.replace(
-                    '{+asset_path}',
-                    '',
-                );
-                const imageUrl = `${thumbnailLink}?access_token=${access_token}`;
-                return imageUrl;
+
+                // if unable to fetch jpg thumbnail, grab png of first page of file.
+                // Asset path for thumbnail is simply empty string.
+                const asset_path = entries[0].representation === 'jpg' ? '' : '1.png';
+
+                const thumbnailLink = entries[0].content.url_template.replace('{+asset_path}', asset_path);
+
+                // use token in URL for authorization
+                return `${thumbnailLink}?access_token=${access_token}`;
             });
-            this.successHandler(reponse);
+            this.successHandler(thumbnailUrl);
         } catch (e) {
-            console.log(e);
             this.errorHandler(e);
         }
     }

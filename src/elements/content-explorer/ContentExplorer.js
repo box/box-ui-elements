@@ -129,7 +129,7 @@ type State = {
     selected?: BoxItem,
     sortBy: SortBy,
     sortDirection: SortDirection,
-    thumbnailURL: Array<string>,
+    thumbnailUrls: Array<string>,
     view: View,
 };
 
@@ -244,7 +244,7 @@ class ContentExplorer extends Component<Props, State> {
             errorCode: '',
             focusedRow: 0,
             columnCount: 1,
-            thumbnailURL: [],
+            thumbnailUrls: [],
         };
     }
 
@@ -388,6 +388,41 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Call Box Representations API to fetch thumbnails of all files in collection.
+     * The thumbnailUrls array in state will be populated with urls to thumbnails.
+     * If a thumbnail could not be found, that item's entry in thumbnailUrls will be null.
+     *
+     * @private
+     * @param {Object} collection - item collection object
+     * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
+     * @return {void}
+     */
+    fetchThumbnailUrls(collection: Collection, dimensions: string): void {
+        const { items = [] } = collection;
+        if (!items) {
+            return;
+        }
+
+        const thumbnailArray = Array(items.length).fill(null);
+
+        const loop = async () => {
+            // using for loop instead of items.forEach() to get desired await functionality
+            // TODO: find a better way to do this. Without using await, all requests except final
+            // one were cancelled.
+            for (let i = 0; i < items.length; i += 1) {
+                const item = items[i];
+                // eslint-disable-next-line no-await-in-loop
+                await this.api.getFileAPI().getFileThumbnail(item, dimensions, thumbnailUrl => {
+                    thumbnailArray[i] = thumbnailUrl;
+                    this.setState({ thumbnailUrls: [...thumbnailArray] });
+                });
+            }
+            console.log(thumbnailArray);
+        };
+        loop();
+    }
+
+    /**
      * Folder fetch success callback
      *
      * @private
@@ -398,34 +433,10 @@ class ContentExplorer extends Component<Props, State> {
     fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
+
         console.log(collection);
 
-        const thumbnailArray = [];
-        if (collection.items) {
-            for (let i = 0; i < collection.items.length; i += 1) {
-                thumbnailArray.push('');
-            }
-        }
-        const fileType = 'jpg';
-        const dimensions = '1024x1024';
-
-        const loop = async () => {
-            for (let i = 0; i < 25; i += 1) {
-                let item;
-                if (collection.items) {
-                    item = collection.items[i];
-                }
-                if (item) {
-                    // TODO: find a better way to do this
-                    // eslint-disable-next-line no-await-in-loop
-                    await this.api.getFileAPI().getFileThumbnail(item, fileType, dimensions, response => {
-                        thumbnailArray[i] = response;
-                        this.setState({ thumbnailURL: [...thumbnailArray] });
-                    });
-                }
-            }
-        };
-        loop();
+        this.fetchThumbnailUrls(collection, '1024x1024');
 
         // New folder state
         const newState = {
@@ -1251,18 +1262,49 @@ class ContentExplorer extends Component<Props, State> {
             return <div />;
         }
 
-        const style2 = { maxWidth: '100%', maxHeight: '256' };
+        const url = this.state.thumbnailUrls[slotIndex];
+
+        // TODO: sort out these styles and put them in classes. Likely move over and adjust
+        // similar components from EUA.
+        const itemThumbnail = {
+            paddingBottom: '65%',
+            position: 'relative',
+        };
+
+        const itemIcon = {
+            bottom: '0',
+            left: '0',
+            margin: 'auto',
+            position: 'absolute',
+            right: '0',
+            top: '0',
+            width: '50%',
+            height: '50%',
+        };
+
+        const postLoadThumbnail = {
+            bottom: '0',
+            left: '0',
+            margin: 'auto',
+            position: 'absolute',
+            right: '0',
+            top: '0',
+            width: '100%',
+            backgroundImage: `url("${url}")`,
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+        };
+
+        // TODO: remove inline styles from JSX, and use classes and components instead.
         return (
-            <div style={{ height: 320 }}>
-                <div>
-                    {this.state.thumbnailURL[slotIndex] ? (
-                        <img src={this.state.thumbnailURL[slotIndex]} style={style2} alt="thumbnail" />
-                    ) : (
-                        getIcon(256, item)
-                    )}
+            <div>
+                <div style={itemThumbnail}>
+                    {url ? <div style={postLoadThumbnail} /> : <div style={itemIcon}> {getIcon(64, item)} </div>}
                 </div>
-                <div> {item.name} </div>
-                <div> {getSize(item.size)} </div>
+                <div>
+                    <div> {item.name} </div>
+                    <div> {getSize(item.size)} </div>
+                </div>
             </div>
         );
     };
