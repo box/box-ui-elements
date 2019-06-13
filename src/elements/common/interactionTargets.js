@@ -3,6 +3,7 @@ export const SIDEBAR_NAV_TARGETS = {
     DETAILS: 'sidebardetails',
     SKILLS: 'sidebarskills',
     METADATA: 'sidebarmetadata',
+    TOGGLE: 'sidebartoggle',
 };
 
 export const SECTION_TARGETS = {

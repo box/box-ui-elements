@@ -19,6 +19,7 @@
 # Root
 /*.*                                        @box/ui-elements-extended
 /.*                                         @box/ui-elements-extended
+/.mergify.yml                               @box/ui-elements
 /CODEOWNERS                                 @box/ui-elements
 /LICENSE                                    @box/ui-elements
 /THIRD_PARTY_LICENSES                       @box/ui-elements
