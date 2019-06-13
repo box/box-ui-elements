@@ -1,7 +1,7 @@
 ### Examples
 **Open**
 ```js
-<SidebarToggleButton isOpen={true}/>
+<SidebarToggleButton isOpen/>
 ```
 **Closed**
 ```js
@@ -9,6 +9,6 @@
 ```
 **When sidebar is on the left, change the direction**
 ```js
-<SidebarToggleButton direction="left" isOpen={true}/>
+<SidebarToggleButton direction="left" isOpen/>
 ```
 
