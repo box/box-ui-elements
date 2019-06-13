@@ -28,6 +28,7 @@ import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
+import getSize from '../../utils/size';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
@@ -128,6 +129,7 @@ type State = {
     selected?: BoxItem,
     sortBy: SortBy,
     sortDirection: SortDirection,
+    thumbnailURL: Array<string>,
     view: View,
 };
 
@@ -242,6 +244,7 @@ class ContentExplorer extends Component<Props, State> {
             errorCode: '',
             focusedRow: 0,
             columnCount: 1,
+            thumbnailURL: [],
         };
     }
 
@@ -395,6 +398,34 @@ class ContentExplorer extends Component<Props, State> {
     fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
+        console.log(collection);
+
+        const thumbnailArray = [];
+        if (collection.items) {
+            for (let i = 0; i < collection.items.length; i += 1) {
+                thumbnailArray.push('');
+            }
+        }
+        const fileType = 'jpg';
+        const dimensions = '1024x1024';
+
+        const loop = async () => {
+            for (let i = 0; i < 25; i += 1) {
+                let item;
+                if (collection.items) {
+                    item = collection.items[i];
+                }
+                if (item) {
+                    // TODO: find a better way to do this
+                    // eslint-disable-next-line no-await-in-loop
+                    await this.api.getFileAPI().getFileThumbnail(item, fileType, dimensions, response => {
+                        thumbnailArray[i] = response;
+                        this.setState({ thumbnailURL: [...thumbnailArray] });
+                    });
+                }
+            }
+        };
+        loop();
 
         // New folder state
         const newState = {
@@ -756,8 +787,6 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
-        console.log('select called');
-        console.log(item);
         const {
             selected,
             currentCollection: { items = [] },
@@ -1222,10 +1251,18 @@ class ContentExplorer extends Component<Props, State> {
             return <div />;
         }
 
+        const style2 = { maxWidth: '100%', maxHeight: '256' };
         return (
-            <div>
-                <div> {getIcon(32, item)} </div>
+            <div style={{ height: 320 }}>
+                <div>
+                    {this.state.thumbnailURL[slotIndex] ? (
+                        <img src={this.state.thumbnailURL[slotIndex]} style={style2} alt="thumbnail" />
+                    ) : (
+                        getIcon(256, item)
+                    )}
+                </div>
                 <div> {item.name} </div>
+                <div> {getSize(item.size)} </div>
             </div>
         );
     };

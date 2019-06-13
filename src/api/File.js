@@ -196,8 +196,46 @@ class File extends Item {
                 cache.set(key, dataWithMissingFields);
             }
 
-            this.successHandler(cache.get(key));
+            this.successHandler(data);
         } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    async getFileThumbnail(
+        item: BoxItem,
+        fileType: string,
+        dimensions: string,
+        successCallback: Function,
+    ): Promise<void> {
+        if (this.isDestroyed()) {
+            return;
+        }
+        const { id } = item;
+        const newUrl = `${this.getUrl(id)}?fields=representations`;
+        const access_token = 'S8wjvjOL9GEK5VtXsQNVMOwSrx1g55oC';
+
+        const xhrOptions: Object = {
+            url: newUrl,
+            headers: { 'X-Rep-Hints': `[${fileType}?dimensions=${dimensions}]` },
+        };
+        this.successCallback = successCallback;
+
+        try {
+            const reponse = await this.xhr.get(xhrOptions).then(async response => {
+                if (!response.data.representations.entries.length) {
+                    return '';
+                }
+                const thumbnailLink = response.data.representations.entries[0].content.url_template.replace(
+                    '{+asset_path}',
+                    '',
+                );
+                const imageUrl = `${thumbnailLink}?access_token=${access_token}`;
+                return imageUrl;
+            });
+            this.successHandler(reponse);
+        } catch (e) {
+            console.log(e);
             this.errorHandler(e);
         }
     }

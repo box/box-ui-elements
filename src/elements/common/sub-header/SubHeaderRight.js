@@ -48,6 +48,8 @@ const SubHeaderRight = ({
 
     return (
         <div className="be-sub-header-right">
+            {isGridView ? <GridViewSlider onResize={onResize} viewSize={columnCount} /> : null}
+            <Button onClick={onGridViewSwitch}>{isGridView ? <IconGridView /> : <IconGridViewInverted />}</Button>
             {showSort && !!sortBy && !!sortDirection && (
                 <Sort onSortChange={onSortChange} sortBy={sortBy} sortDirection={sortDirection} />
             )}
@@ -60,8 +62,6 @@ const SubHeaderRight = ({
                     showUpload={canUpload}
                 />
             )}
-            {isGridView ? <GridViewSlider onResize={onResize} viewSize={columnCount} /> : null}
-            <Button onClick={onGridViewSwitch}>{isGridView ? <IconGridView /> : <IconGridViewInverted />}</Button>
         </div>
     );
 };
