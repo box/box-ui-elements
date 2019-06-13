@@ -417,7 +417,7 @@ class ContentExplorer extends Component<Props, State> {
                     this.setState({ thumbnailUrls: [...thumbnailArray] });
                 });
             }
-            console.log(thumbnailArray);
+            // console.log(thumbnailArray);
         };
         loop();
     }
@@ -434,7 +434,7 @@ class ContentExplorer extends Component<Props, State> {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
 
-        console.log(collection);
+        // console.log(collection);
 
         this.fetchThumbnailUrls(collection, '1024x1024');
 
