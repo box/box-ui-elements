@@ -533,6 +533,7 @@ class Feed extends Base {
                 }
             },
             errorCallback: (e: ElementsXhrError, code: string) => {
+                this.updateFeedItem({ isPending: false }, task.id);
                 this.feedErrorCallback(false, e, code);
             },
         });

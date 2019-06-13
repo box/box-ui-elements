@@ -14,9 +14,9 @@ type TaskModalProps = {
     error: ?ElementsXhrError,
     feedbackUrl: string,
     isTaskFormOpen: boolean,
-    onCreateError: (e: ElementsXhrError) => void,
-    onCreateSuccess: () => void,
     onModalClose: () => void,
+    onSubmitError: (e: ElementsXhrError) => void,
+    onSubmitSuccess: () => void,
     taskFormProps: TaskFormProps,
     taskType: TaskType,
 };
@@ -41,8 +41,8 @@ const TaskModal = (props: TaskModalProps) => {
     const {
         editMode = TASK_EDIT_MODE_CREATE,
         error,
-        onCreateError,
-        onCreateSuccess,
+        onSubmitError,
+        onSubmitSuccess,
         onModalClose,
         taskType,
         feedbackUrl,
@@ -70,8 +70,8 @@ const TaskModal = (props: TaskModalProps) => {
                     editMode={editMode}
                     error={error}
                     onCancel={onModalClose}
-                    onCreateSuccess={onCreateSuccess}
-                    onCreateError={onCreateError}
+                    onSubmitError={onSubmitError}
+                    onSubmitSuccess={onSubmitSuccess}
                     taskType={taskType}
                     {...taskFormProps}
                 />
