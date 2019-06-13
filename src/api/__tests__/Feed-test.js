@@ -693,6 +693,29 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('updateTaskNew()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.updateTaskNew({})).toThrow(fileError);
+        });
+
+        test('should call the new task api and if successful, the success callback', () => {
+            const successCallback = jest.fn();
+            const task = {
+                id: '1',
+                description: 'updated description',
+            };
+            feed.updateTaskNew(file, task, successCallback, jest.fn());
+            expect(feed.id).toBe(file.id);
+            expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
+        });
+    });
+
     describe('updateTaskSuccessCallback()', () => {
         let successCb;
         beforeEach(() => {

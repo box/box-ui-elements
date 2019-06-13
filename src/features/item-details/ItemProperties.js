@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import uniqueid from 'lodash/uniqueId';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import ClassificationProperty from '../classification/ClassificationProperty';
-
 import EditableDescription from './EditableDescription';
 import EditableURL from './EditableURL';
 import RetentionPolicy from './RetentionPolicy';
@@ -22,7 +20,6 @@ const datetimeOptions = {
 };
 
 const ItemProperties = ({
-    classificationProps = {},
     createdAt,
     description,
     descriptionTextareaProps = {},
@@ -114,21 +111,11 @@ const ItemProperties = ({
                 </React.Fragment>
             ) : null}
             <RetentionPolicy {...retentionPolicyProps} />
-            <ClassificationProperty {...classificationProps} />
         </dl>
     );
 };
 
 ItemProperties.propTypes = {
-    /** props for the ClassificationProperty component */
-    classificationProps: PropTypes.shape({
-        /** function that opens the classification modal, should only be set if user can edit classification */
-        openModal: PropTypes.func,
-        /** the tooltip to show for the banner policy body if it exists */
-        tooltip: PropTypes.string,
-        /** the classification value shown as a badge if an item has classification */
-        value: PropTypes.string,
-    }),
     /** the datetime this item was created, accepts any value that can be passed to the Date() constructor */
     createdAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** a description for the item */

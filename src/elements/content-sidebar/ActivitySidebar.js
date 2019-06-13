@@ -191,9 +191,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             // need to load the pending item
             this.fetchFeedItems();
         },
-        updateTask: ({ text, id }: { id: string, text: string }): void => {
-            const { file, api } = this.props;
-            api.getFeedAPI(false).updateTask(file, id, text, this.feedSuccessCallback, this.feedErrorCallback);
+        updateTask: (task: TaskUpdatePayload): void => {
+            const { file, api, onTaskUpdate = noop } = this.props;
+            api.getFeedAPI(false).updateTaskNew(
+                file,
+                task,
+                () => {
+                    this.feedSuccessCallback();
+                    onTaskUpdate();
+                },
+                this.feedErrorCallback,
+            );
 
             // need to load the pending item
             this.fetchFeedItems();
@@ -577,6 +585,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             createTask,
             getApproverWithQuery,
             getAvatarUrl,
+            message: '',
         };
         return (
             <FeatureFlag feature="activityFeed.tasks.newApi">

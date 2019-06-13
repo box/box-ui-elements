@@ -1,23 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/classification/Classification should render default component in yellow and inline advisory message 1`] = `
+exports[`features/classification/Classification should render a classified badge with advisory message in tooltip 1`] = `
 <article
-  className="bdl-Classification"
+  className="bdl-Classification "
 >
-  <Tooltip
-    constrainToScrollParent={false}
-    constrainToWindow={true}
-    isDisabled={true}
-    position="bottom-center"
-    text="fubar"
-    theme="default"
-  >
-    <h1
-      className="bdl-Classification-badge"
-    >
-      Confidential
-    </h1>
-  </Tooltip>
+  <ClassifiedBadge
+    name="Confidential"
+    tooltipText="fubar"
+  />
+</article>
+`;
+
+exports[`features/classification/Classification should render a classified badge with an inline advisory message 1`] = `
+<article
+  className="bdl-Classification "
+>
+  <ClassifiedBadge
+    name="Confidential"
+  />
   <p
     className="bdl-Classification-advisoryMessage"
   >
@@ -26,43 +26,35 @@ exports[`features/classification/Classification should render default component 
 </article>
 `;
 
-exports[`features/classification/Classification should render default component in yellow with no advisory message 1`] = `
+exports[`features/classification/Classification should render a classified badge with no advisory message 1`] = `
 <article
-  className="bdl-Classification"
+  className="bdl-Classification "
 >
-  <Tooltip
-    constrainToScrollParent={false}
-    constrainToWindow={true}
-    isDisabled={true}
-    position="bottom-center"
-    theme="default"
-  >
-    <h1
-      className="bdl-Classification-badge"
-    >
-      Confidential
-    </h1>
-  </Tooltip>
+  <ClassifiedBadge
+    name="Confidential"
+  />
 </article>
 `;
 
-exports[`features/classification/Classification should render inline advisory message in tooltip when specified 1`] = `
+exports[`features/classification/Classification should render add classification badge 1`] = `
 <article
-  className="bdl-Classification"
+  className="bdl-Classification "
 >
-  <Tooltip
-    constrainToScrollParent={false}
-    constrainToWindow={true}
-    isDisabled={false}
-    position="bottom-center"
-    text="fubar"
-    theme="default"
+  <AddClassificationBadge />
+</article>
+`;
+
+exports[`features/classification/Classification should render not classified message 1`] = `
+<article
+  className="bdl-Classification "
+>
+  <span
+    className="bdl-Classification-missingMessage"
   >
-    <h1
-      className="bdl-Classification-badge"
-    >
-      Confidential
-    </h1>
-  </Tooltip>
+    <FormattedMessage
+      defaultMessage="Not classified"
+      id="boxui.classification.missing"
+    />
+  </span>
 </article>
 `;

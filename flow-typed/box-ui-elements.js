@@ -744,6 +744,12 @@ type TaskPayload = {
     task_type: TaskType,
 };
 
+type TaskUpdatePayload = {
+    description: string,
+    due_at?: ?string,
+    id: string,
+};
+
 /* New Task Types END */
 
 type Comment = {
@@ -874,12 +880,6 @@ type AdditionalSidebarTab = {
 
 type Alignment = 'left' | 'right';
 
-type SidebarView =
-    | typeof SIDEBAR_VIEW_SKILLS
-    | typeof SIDEBAR_VIEW_DETAILS
-    | typeof SIDEBAR_VIEW_METADATA
-    | typeof SIDEBAR_VIEW_ACTIVITY;
-
 type FileSystemFileEntry = {
     createReader: Function,
     file: Function,
@@ -942,8 +942,8 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    description: ?string,
-    type: ?string,
+    advisoryMessage?: string,
+    name: string,
 };
 
 type MetricType =

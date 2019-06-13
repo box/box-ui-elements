@@ -9,6 +9,7 @@ import VersionHistoryLink from '../../features/item-details/VersionHistoryLink';
 
 import { DETAILS_TARGETS } from '../common/interactionTargets';
 import { isBoxNote } from '../../utils/file';
+import './SidebarVersions.scss';
 
 type Props = {
     file: BoxItem,
@@ -26,6 +27,7 @@ const SidebarVersions = ({ onVersionHistoryClick, file }: Props) => {
 
     return (
         <VersionHistoryLink
+            className="bcs-SidebarVersions"
             data-resin-target={DETAILS_TARGETS.VERSION_HISTORY}
             data-testid={DETAILS_TARGETS.VERSION_HISTORY}
             onClick={onVersionHistoryClick}

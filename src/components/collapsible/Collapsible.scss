@@ -6,7 +6,6 @@
 
     .collapsible-card-header {
         align-items: center;
-        background-color: $white;
         border-radius: $bdl-border-radius-size;
         display: flex;
         flex-direction: row;
@@ -29,6 +28,7 @@
     .collapsible-card-header-caret {
         position: absolute;
         right: 0;
+        transition: transform $bdl-transition-duration-200ms;
     }
 
     .btn-plain.collapsible-card-title {
@@ -44,8 +44,16 @@
         padding: 10px 0;
     }
 
+    &.is-open .collapsible-card-header-caret {
+        transform: rotateZ(180deg);
+    }
+
     &.is-bordered {
         border: 1px solid $eees;
+
+        .collapsible-card-header {
+            background-color: $white;
+        }
 
         .btn-plain.collapsible-card-title,
         .collapsible-card-content {

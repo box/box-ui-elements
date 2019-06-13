@@ -6,7 +6,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
   status="NOT_STARTED"
 >
   <div
-    className="bcs-task-due-date bcs-task-overdue"
+    className="bcs-TaskDueDate bcs-is-taskOverdue"
     data-testid="task-due-date"
   >
     <FormattedMessage

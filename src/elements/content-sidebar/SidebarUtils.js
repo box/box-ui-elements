@@ -139,7 +139,7 @@ class SidebarUtils {
      * @param {string} view - the view name
      * @return {React.Node} - the node to render
      */
-    static getTitleForView(view: SidebarView): React.Node {
+    static getTitleForView(view: string): React.Node {
         switch (view) {
             case SIDEBAR_VIEW_SKILLS:
                 return <FormattedMessage {...messages.sidebarSkillsTitle} />;
@@ -161,7 +161,7 @@ class SidebarUtils {
      * @param {String} markName -  the name to be used by performance.mark
      * @return {Function} - a function which will resolve the module to load
      */
-    static getLoaderForView(view: SidebarView, markName: string): Promise<any> {
+    static getLoaderForView(view: string, markName: string): Promise<any> {
         mark(markName);
         let importFn;
         switch (view) {
@@ -195,7 +195,7 @@ class SidebarUtils {
      * @param {Object} props - additional props
      * @return {React.Node} - the node to render
      */
-    static getAsyncSidebarContent(view: SidebarView, markName: string, props: Object = {}) {
+    static getAsyncSidebarContent(view: string, markName: string, props: Object = {}) {
         return AsyncLoad({
             errorComponent: SidebarLoadingError,
             fallback: <SidebarLoading title={this.getTitleForView(view)} />,

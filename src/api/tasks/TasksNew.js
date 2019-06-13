@@ -57,7 +57,7 @@ class TasksNew extends TasksBase {
         errorCallback: ElementsErrorCallback,
         file: BoxItem,
         successCallback: Function,
-        task: { id: string },
+        task: TaskUpdatePayload,
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_TASK;
 

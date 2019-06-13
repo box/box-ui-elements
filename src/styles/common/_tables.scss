@@ -1,3 +1,5 @@
+@import '../variables';
+
 /**************************************
  * Tables
  **************************************/
@@ -186,7 +188,7 @@
         path {
             transform: rotate(0deg);
             transform-origin: 50% 50%;
-            transition: transform .25s;
+            transition: transform $bdl-transition-duration-200ms;
         }
     }
 }

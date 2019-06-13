@@ -32,7 +32,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   }
 >
   <div
-    className="bcs-details-content"
+    className="bcs-DetailsSidebar-notices"
   >
     <SidebarNotices
       file={
@@ -43,6 +43,21 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
       }
     />
   </div>
+  <SidebarClassification
+    classification={
+      Object {
+        "advisoryMessage": "message",
+        "name": "name",
+      }
+    }
+    file={
+      Object {
+        "description": "bar",
+        "id": "foo",
+      }
+    }
+    onEdit={[Function]}
+  />
   <SidebarAccessStats
     file={
       Object {
@@ -62,18 +77,14 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
       />
     }
   >
-    <div
-      className="bcs-details-content"
-    >
-      <SidebarVersions
-        file={
-          Object {
-            "description": "bar",
-            "id": "foo",
-          }
+    <SidebarVersions
+      file={
+        Object {
+          "description": "bar",
+          "id": "foo",
         }
-      />
-    </div>
+      }
+    />
     <SidebarFileProperties
       file={
         Object {
@@ -81,10 +92,8 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
           "id": "foo",
         }
       }
-      hasClassification={true}
       hasRetentionPolicy={true}
       isLoading={false}
-      onClassificationClick={[Function]}
       onDescriptionChange={[Function]}
     />
   </SidebarSection>
@@ -102,7 +111,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   }
 >
   <div
-    className="bcs-details-content"
+    className="bcs-DetailsSidebar-notices"
   >
     <SidebarNotices
       file={
@@ -144,10 +153,8 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
           "id": "foo",
         }
       }
-      hasClassification={false}
       hasRetentionPolicy={false}
       isLoading={false}
-      onClassificationClick={[Function]}
       onDescriptionChange={[Function]}
     />
   </SidebarSection>
