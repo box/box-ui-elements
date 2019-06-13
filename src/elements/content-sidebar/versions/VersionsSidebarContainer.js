@@ -121,10 +121,19 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         });
     };
 
-    handleFetchSuccess = ([fileResponse, versionsResponse]): [BoxItem, FileVersions] => {
+    handleFetchSuccess = ([fileResponse, versionsResponse, currentVersionResponse]): [
+        BoxItem,
+        FileVersions,
+        FileVersions,
+    ] => {
         const { api } = this.props;
         const versionsApi = api.getVersionsAPI(false);
-        const versionsWithCurrent = versionsApi.addCurrentVersion(versionsResponse, fileResponse);
+
+        const versionsWithCurrent = {
+            entries: [...versionsResponse.entries, ...currentVersionResponse.entries],
+            total_count: versionsResponse.total_count + 1,
+        };
+
         const versionsWithPermissions = versionsApi.addPermissions(versionsWithCurrent, fileResponse);
         const { entries: versions } = versionsApi.sortVersions(versionsWithPermissions) || {};
 
@@ -137,7 +146,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
             this.verifyVersion,
         );
 
-        return [fileResponse, versionsResponse];
+        return [fileResponse, versionsResponse, currentVersionResponse];
     };
 
     handlePromoteSuccess = ([file]: [BoxItem, FileVersions]): void => {
@@ -150,6 +159,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     fetchData = (): Promise<any> => {
         return Promise.all([this.fetchFile(), this.fetchVersions()])
+            .then(this.fetchCurrentVersion)
             .then(this.handleFetchSuccess)
             .catch(this.handleFetchError);
     };
@@ -183,6 +193,26 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         const { api, fileId } = this.props;
 
         return new Promise((resolve, reject) => api.getVersionsAPI(false).getVersions(fileId, resolve, reject));
+    };
+
+    fetchCurrentVersion = ([fileResponse, versionsResponse]): Promise<[BoxItem, FileVersions, FileVersions]> => {
+        const { api, fileId } = this.props;
+        const { file_version = {} } = fileResponse;
+
+        return new Promise((resolve, reject) =>
+            api.getVersionsAPI(false).getCurrentVersion(
+                fileId,
+                file_version.id,
+                (currentVersionResponse: BoxItemVersion) => {
+                    resolve([
+                        fileResponse,
+                        versionsResponse,
+                        api.getVersionsAPI(false).decorateCurrentVersion(currentVersionResponse, fileResponse),
+                    ]);
+                },
+                reject,
+            ),
+        );
     };
 
     findVersion = (versionId: ?string): ?BoxItemVersion => {

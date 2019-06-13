@@ -106,28 +106,6 @@ describe('api/Versions', () => {
         });
     });
 
-    describe('addCurrentVersion()', () => {
-        test('should append the current version', () => {
-            const fileWithoutRestoredVersion = {
-                ...file,
-                restored_from: null,
-            };
-            const versionsWithCurrent = versions.addCurrentVersion(response, fileWithoutRestoredVersion);
-
-            expect(versionsWithCurrent.entries.length).toBe(response.entries.length + 1);
-            expect(versionsWithCurrent.entries.pop().id).toBe(file.file_version.id);
-        });
-
-        test('should append the current version as restored type', () => {
-            const versionsWithRestore = versions.addCurrentVersion(response, file);
-            expect(versionsWithRestore.entries.length).toBe(response.entries.length + 1);
-
-            const restoredVersion = versionsWithRestore.entries.pop();
-            expect(restoredVersion.action).toBe('restore');
-            expect(restoredVersion.created_at).toBe(file.modified_at);
-        });
-    });
-
     describe('addPermissions()', () => {
         test.each([true, false])('should decorate versions with can_upload permission from parent file', canUpload => {
             const fileWithPermissions = {

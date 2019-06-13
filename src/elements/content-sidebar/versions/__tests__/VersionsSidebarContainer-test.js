@@ -167,13 +167,14 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             const file = { id: '12345', permissions: {} };
             const version = { id: '123', permissions: {} };
             const versions = { entries: [version], total_count: 1 };
+            const currentVersion = { entries: [{ id: '321', permissions: {} }], total_count: 1 };
 
             versionsAPI.addCurrentVersion.mockReturnValueOnce(versions);
             versionsAPI.addPermissions.mockReturnValueOnce(versions);
             versionsAPI.sortVersions.mockReturnValueOnce(versions);
 
             instance.verifyVersion = jest.fn();
-            instance.handleFetchSuccess([file, versions]);
+            instance.handleFetchSuccess([file, versions, currentVersion]);
 
             expect(instance.verifyVersion).toBeCalled();
             expect(versionsAPI.addCurrentVersion).toBeCalledWith(versions, file);

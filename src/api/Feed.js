@@ -91,6 +91,11 @@ class Feed extends Base {
     id: string;
 
     /**
+     * @property {string}
+     */
+    versionId: string;
+
+    /**
      * @property {boolean}
      */
     hasError: boolean;
@@ -158,7 +163,7 @@ class Feed extends Base {
         shouldShowNewTasks?: boolean = false, // TODO: could the class understand feature flips natively instead?
         shouldShowAppActivity?: boolean = false,
     ): void {
-        const { id, permissions = {} } = file;
+        const { id, permissions = {}, file_version = {} } = file;
         const cachedItems = this.getCachedItems(id);
         if (cachedItems) {
             const { hasError, items } = cachedItems;
@@ -174,27 +179,28 @@ class Feed extends Base {
         }
 
         this.id = id;
+        this.versionId = file_version.id;
         this.hasError = false;
         this.errorCallback = onError;
         const versionsPromise = this.fetchVersions();
+        const currentVersionPromise = this.fetchCurrentVersion(file);
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = shouldShowNewTasks ? this.fetchTasksNew() : this.fetchTasks();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
-        Promise.all([versionsPromise, commentsPromise, tasksPromise, appActivityPromise]).then(feedItems => {
-            const versions: ?FileVersions = feedItems[0];
-            const versionsWithRestoredVersion = this.versionsAPI.addCurrentVersion(versions, file);
-            const unsortedFeedItems = [versionsWithRestoredVersion, ...feedItems.slice(1)];
-            const sortedFeedItems = sortFeedItems(...unsortedFeedItems);
-            if (!this.isDestroyed()) {
-                this.setCachedItems(id, sortedFeedItems);
-                if (this.hasError) {
-                    errorCallback(sortedFeedItems);
-                } else {
-                    successCallback(sortedFeedItems);
+        Promise.all([versionsPromise, currentVersionPromise, commentsPromise, tasksPromise, appActivityPromise]).then(
+            feedItems => {
+                const sortedFeedItems = sortFeedItems(...feedItems);
+                if (!this.isDestroyed()) {
+                    this.setCachedItems(id, sortedFeedItems);
+                    if (this.hasError) {
+                        errorCallback(sortedFeedItems);
+                    } else {
+                        successCallback(sortedFeedItems);
+                    }
                 }
-            }
-        });
+            },
+        );
     }
 
     /**
@@ -225,6 +231,24 @@ class Feed extends Base {
 
         return new Promise(resolve => {
             this.versionsAPI.getVersions(this.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
+        });
+    }
+
+    /**
+     * Fetches the current version for a file
+     *
+     * @return {Promise} - the file versions
+     */
+    fetchCurrentVersion(file: BoxItem): Promise<?FileVersions> {
+        this.versionsAPI = new VersionsAPI(this.options);
+
+        return new Promise(resolve => {
+            this.versionsAPI.getCurrentVersion(
+                this.id,
+                this.versionId,
+                currentVersion => resolve(this.versionsAPI.decorateCurrentVersion(currentVersion, file)),
+                this.fetchFeedItemErrorCallback.bind(this, resolve),
+            );
         });
     }
 
