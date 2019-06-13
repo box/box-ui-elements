@@ -267,124 +267,6 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
         });
     });
 
-    describe('updateInviteCollabsContacts', () => {
-        test('should set isExternalUserIninviteCollabsContacts to true if the invited collabs include at least one external user', () => {
-            const contacts = [
-                {
-                    email: 'x@example.com',
-                    id: '12345',
-                    isExternalUser: false,
-                    name: 'X User',
-                    type: 'group',
-                },
-                {
-                    email: 'y@example.com',
-                    id: '23456',
-                    isExternalUser: true,
-                    name: 'Y User',
-                    type: 'user',
-                },
-                {
-                    email: 'z@example.com',
-                    id: '34567',
-                    isExternalUser: false,
-                    name: 'Z User',
-                    type: 'user',
-                },
-            ];
-
-            const wrapper = getWrapper();
-            wrapper.setState({ isExternalUserIninviteCollabsContacts: false });
-            wrapper.instance().updateInviteCollabsContacts(contacts);
-
-            expect(wrapper.state('isExternalUserIninviteCollabsContacts')).toBe(true);
-        });
-
-        test('should not set isExternalUserIninviteCollabsContacts to true if the invited collabs does not include any external user', () => {
-            const contacts = [
-                {
-                    email: 'x@example.com',
-                    id: '12345',
-                    isExternalUser: false,
-                    name: 'X User',
-                    type: 'group',
-                },
-                {
-                    email: 'z@example.com',
-                    id: '34567',
-                    isExternalUser: false,
-                    name: 'Z User',
-                    type: 'user',
-                },
-            ];
-
-            const wrapper = getWrapper();
-            wrapper.setState({ isExternalUserIninviteCollabsContacts: false });
-            wrapper.instance().updateInviteCollabsContacts(contacts);
-
-            expect(wrapper.state('isExternalUserIninviteCollabsContacts')).toBe(false);
-        });
-    });
-
-    describe('updateEmailSharedLinkContacts', () => {
-        test('should set isExternalUserInEmailSharedLinkContacts to true if the Email Shared Link contacts include at least one external user', () => {
-            const contacts = [
-                {
-                    email: 'x@example.com',
-                    id: '12345',
-                    isExternalUser: false,
-                    name: 'X User',
-                    type: 'group',
-                },
-                {
-                    email: 'y@example.com',
-                    id: '23456',
-                    isExternalUser: true,
-                    name: 'Y User',
-                    type: 'user',
-                },
-                {
-                    email: 'z@example.com',
-                    id: '34567',
-                    isExternalUser: false,
-                    name: 'Z User',
-                    type: 'user',
-                },
-            ];
-
-            const wrapper = getWrapper();
-            wrapper.setState({ isExternalUserInEmailSharedLinkContacts: false });
-            wrapper.instance().updateEmailSharedLinkContacts(contacts);
-
-            expect(wrapper.state('isExternalUserInEmailSharedLinkContacts')).toBe(true);
-        });
-
-        test('should not set isExternalUserInEmailSharedLinkContacts to true if the Email Shared Link contacts does not include any external user', () => {
-            const contacts = [
-                {
-                    email: 'x@example.com',
-                    id: '12345',
-                    isExternalUser: false,
-                    name: 'X User',
-                    type: 'group',
-                },
-                {
-                    email: 'z@example.com',
-                    id: '34567',
-                    isExternalUser: false,
-                    name: 'Z User',
-                    type: 'user',
-                },
-            ];
-
-            const wrapper = getWrapper();
-            wrapper.setState({ isExternalUserInEmailSharedLinkContacts: false });
-            wrapper.instance().updateEmailSharedLinkContacts(contacts);
-
-            expect(wrapper.state('isExternalUserInEmailSharedLinkContacts')).toBe(false);
-        });
-    });
-
     describe('getInitialData()', () => {
         test('getInitialData is not called when item.type is null', () => {
             const getInitialDataStub = jest.fn();
@@ -736,6 +618,209 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             wrapper.setState({ sharedLinkLoaded: true });
 
             expect(wrapper.instance().shouldAutoFocusSharedLink()).toBe(true);
+        });
+    });
+
+    describe('onPillCreate()', () => {
+        const email = 'dev@box.com';
+        const displayText = email;
+        const name = 'dev';
+        const text = name;
+        const id = 123;
+        const type = 'user';
+        const isExternalUser = true;
+        const value = email;
+        const inviteCollabsContacts = [
+            {
+                displayText: email,
+                value: email,
+            },
+        ];
+        const emailSharedLinkContacts = [
+            {
+                displayText: email,
+                value: email,
+            },
+        ];
+
+        test('should not retrieve emails if all the pills are select type', async () => {
+            const pills = [{ id: 123 }, { id: 456 }];
+            const getContactsByEmail = jest.fn();
+            const wrapper = getWrapper({ getContactsByEmail });
+            await wrapper.instance().onPillCreate('test', pills);
+            expect(getContactsByEmail).not.toHaveBeenCalled();
+        });
+
+        test('should retrieve emails and set the state for invite collabs contacts when the pills are mixed of selectType and contactType', async () => {
+            const pills = [{ displayText, text, value }, { id: 123 }];
+            const state = {
+                inviteCollabsContacts,
+            };
+            const getContactsByEmail = jest.fn().mockResolvedValue({
+                [email]: {
+                    email,
+                    id,
+                    isExternalUser,
+                    name,
+                    type,
+                },
+            });
+            const expectedSelectedContacts = [
+                {
+                    email,
+                    id,
+                    isExternalUser,
+                    name,
+                    text,
+                    type,
+                    value,
+                },
+            ];
+            const wrapper = getWrapper({ getContactsByEmail });
+            wrapper.setState(state);
+            await wrapper.instance().onPillCreate('inviteCollabsContacts', pills);
+            const newSelectedContacts = wrapper.state('inviteCollabsContacts');
+            expect(newSelectedContacts).toEqual(expectedSelectedContacts);
+        });
+
+        test('should retrieve emails and set the state for email shared link contacts', async () => {
+            const pills = [{ displayText, text, value }];
+            const state = {
+                emailSharedLinkContacts,
+            };
+            const getContactsByEmail = jest.fn().mockResolvedValue({
+                [email]: {
+                    email,
+                    id,
+                    isExternalUser,
+                    name,
+                    type,
+                },
+            });
+            const expectedSelectedContacts = [
+                {
+                    email,
+                    id,
+                    isExternalUser,
+                    name,
+                    text,
+                    type,
+                    value,
+                },
+            ];
+            const wrapper = getWrapper({ getContactsByEmail });
+            wrapper.setState(state);
+            await wrapper.instance().onPillCreate('emailSharedLinkContacts', pills);
+            const newSelectedContacts = wrapper.state('emailSharedLinkContacts');
+            expect(newSelectedContacts).toEqual(expectedSelectedContacts);
+        });
+    });
+
+    describe('hasExternalContact()', () => {
+        test('should return true if the invited collabs include at least one external user', () => {
+            const contacts = [
+                {
+                    email: 'x@example.com',
+                    id: '12345',
+                    isExternalUser: false,
+                    name: 'X User',
+                    type: 'group',
+                },
+                {
+                    email: 'y@example.com',
+                    id: '23456',
+                    isExternalUser: true,
+                    name: 'Y User',
+                    type: 'user',
+                },
+                {
+                    email: 'z@example.com',
+                    id: '34567',
+                    isExternalUser: false,
+                    name: 'Z User',
+                    type: 'user',
+                },
+            ];
+
+            const wrapper = getWrapper();
+            wrapper.setState({ inviteCollabsContacts: contacts });
+            expect(wrapper.instance().hasExternalContact('inviteCollabsContacts')).toBe(true);
+        });
+
+        test('should return false if the invited collabs does not include any external user', () => {
+            const contacts = [
+                {
+                    email: 'x@example.com',
+                    id: '12345',
+                    isExternalUser: false,
+                    name: 'X User',
+                    type: 'group',
+                },
+                {
+                    email: 'z@example.com',
+                    id: '34567',
+                    isExternalUser: false,
+                    name: 'Z User',
+                    type: 'user',
+                },
+            ];
+
+            const wrapper = getWrapper();
+            wrapper.setState({ inviteCollabsContacts: contacts });
+            expect(wrapper.instance().hasExternalContact('inviteCollabsContacts')).toBe(false);
+        });
+
+        test('should return true if the Email Shared Link contacts include at least one external user', () => {
+            const contacts = [
+                {
+                    email: 'x@example.com',
+                    id: '12345',
+                    isExternalUser: false,
+                    name: 'X User',
+                    type: 'group',
+                },
+                {
+                    email: 'y@example.com',
+                    id: '23456',
+                    isExternalUser: true,
+                    name: 'Y User',
+                    type: 'user',
+                },
+                {
+                    email: 'z@example.com',
+                    id: '34567',
+                    isExternalUser: false,
+                    name: 'Z User',
+                    type: 'user',
+                },
+            ];
+
+            const wrapper = getWrapper();
+            wrapper.setState({ emailSharedLinkContacts: contacts });
+            expect(wrapper.instance().hasExternalContact('emailSharedLinkContacts')).toBe(true);
+        });
+
+        test('should not set isExternalUserInEmailSharedLinkContacts to true if the Email Shared Link contacts does not include any external user', () => {
+            const contacts = [
+                {
+                    email: 'x@example.com',
+                    id: '12345',
+                    isExternalUser: false,
+                    name: 'X User',
+                    type: 'group',
+                },
+                {
+                    email: 'z@example.com',
+                    id: '34567',
+                    isExternalUser: false,
+                    name: 'Z User',
+                    type: 'user',
+                },
+            ];
+
+            const wrapper = getWrapper();
+            wrapper.setState({ emailSharedLinkContacts: contacts });
+            expect(wrapper.instance().hasExternalContact('emailSharedLinkContacts')).toBe(false);
         });
     });
 });
