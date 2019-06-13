@@ -12,6 +12,7 @@
 .github
 .gitignore
 .idea
+.mergify.yml
 .npmignore
 .npmrc
 .nvmrc
