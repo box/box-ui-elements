@@ -36,6 +36,7 @@ const SidebarToggleButton = ({
     const classes = classNames(className, 'bdl-SidebarToggleButton', {
         'bdl-is-collapsed': isCollapsed,
     });
+    const tooltipPosition = direction === DIRECTION_LEFT ? 'middle-right' : 'middle-left';
 
     const renderButton = () => {
         if (direction === DIRECTION_LEFT) {
@@ -45,7 +46,7 @@ const SidebarToggleButton = ({
     };
 
     return (
-        <Tooltip position="middle-left" text={intlText}>
+        <Tooltip position={tooltipPosition} text={intlText}>
             <PlainButton aria-label={intlText} className={classes} onClick={onClick} type="button" {...rest}>
                 {renderButton()}
             </PlainButton>

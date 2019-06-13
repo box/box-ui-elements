@@ -51,7 +51,8 @@ const SidebarNav = ({
         <div className="bcs-SidebarNav-tabs">
             {hasActivity && (
                 <SidebarNavButton
-                    interactionTarget={SIDEBAR_NAV_TARGETS.ACTIVITY}
+                    data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
+                    data-testid="sidebaractivity"
                     isOpen={isOpen}
                     sidebarView={SIDEBAR_VIEW_ACTIVITY}
                     onNavigate={onNavigate}
@@ -62,7 +63,8 @@ const SidebarNav = ({
             )}
             {hasDetails && (
                 <SidebarNavButton
-                    interactionTarget={SIDEBAR_NAV_TARGETS.DETAILS}
+                    data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
+                    data-testid="sidebardetails"
                     isOpen={isOpen}
                     sidebarView={SIDEBAR_VIEW_DETAILS}
                     onNavigate={onNavigate}
@@ -73,7 +75,8 @@ const SidebarNav = ({
             )}
             {hasSkills && (
                 <SidebarNavButton
-                    interactionTarget={SIDEBAR_NAV_TARGETS.SKILLS}
+                    data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
+                    data-testid="sidebarskills"
                     isOpen={isOpen}
                     sidebarView={SIDEBAR_VIEW_SKILLS}
                     onNavigate={onNavigate}
@@ -84,7 +87,8 @@ const SidebarNav = ({
             )}
             {hasMetadata && (
                 <SidebarNavButton
-                    interactionTarget={SIDEBAR_NAV_TARGETS.METADATA}
+                    data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
+                    data-testid="sidebarmetadata"
                     isOpen={isOpen}
                     sidebarView={SIDEBAR_VIEW_METADATA}
                     onNavigate={onNavigate}
@@ -98,7 +102,7 @@ const SidebarNav = ({
         <div className="bcs-SidebarNav-footer">
             <SidebarToggleButton
                 data-resin-target={SIDEBAR_NAV_TARGETS.TOGGLE}
-                data-testid={SIDEBAR_NAV_TARGETS.TOGGLE}
+                data-testid="sidebartoggle"
                 isOpen={isOpen}
                 onClick={event => {
                     if (onNavigate) {

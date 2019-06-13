@@ -114,12 +114,12 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
-      position="middle-left"
+      position="middle-right"
       text="Show Sidebar"
       theme="default"
     >
       <TetherComponent
-        attachment="middle right"
+        attachment="middle left"
         bodyElement={<body />}
         classPrefix="tooltip"
         constraints={
@@ -133,7 +133,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         enabled={false}
         renderElementTag="div"
         renderElementTo={null}
-        targetAttachment="middle left"
+        targetAttachment="middle right"
       >
         <PlainButton
           aria-label="Show Sidebar"
@@ -211,12 +211,12 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
-      position="middle-left"
+      position="middle-right"
       text="Hide Sidebar"
       theme="default"
     >
       <TetherComponent
-        attachment="middle right"
+        attachment="middle left"
         bodyElement={<body />}
         classPrefix="tooltip"
         constraints={
@@ -230,7 +230,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         enabled={false}
         renderElementTag="div"
         renderElementTo={null}
-        targetAttachment="middle left"
+        targetAttachment="middle right"
       >
         <PlainButton
           aria-label="Hide Sidebar"
