@@ -35,7 +35,7 @@ const SidebarToggleButton = ({
     const intlText = intl.formatMessage(intlMessage);
     const classes = classNames(
         {
-            [`${className}`]: !!className,
+            [className]: !!className,
         },
         'bdl-SidebarToggleButton',
         {
