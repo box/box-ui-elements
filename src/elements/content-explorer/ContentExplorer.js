@@ -436,7 +436,7 @@ class ContentExplorer extends Component<Props, State> {
 
         // console.log(collection);
 
-        // this.fetchThumbnailUrls(collection, '1024x1024');
+        this.fetchThumbnailUrls(collection, '1024x1024');
 
         // New folder state
         const newState = {

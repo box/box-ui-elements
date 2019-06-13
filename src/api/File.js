@@ -196,7 +196,7 @@ class File extends Item {
                 cache.set(key, dataWithMissingFields);
             }
 
-            this.successHandler(data);
+            this.successHandler(cache.get(key));
         } catch (e) {
             this.errorHandler(e);
         }
