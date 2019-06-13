@@ -33,15 +33,9 @@ const SidebarToggleButton = ({
     const isCollapsed = !isOpen ? 'collapsed' : '';
     const intlMessage = isOpen ? messages.sidebarHide : messages.sidebarShow;
     const intlText = intl.formatMessage(intlMessage);
-    const classes = classNames(
-        {
-            [className]: !!className,
-        },
-        'bdl-SidebarToggleButton',
-        {
-            'bdl-is-collapsed': isCollapsed,
-        },
-    );
+    const classes = classNames(className, 'bdl-SidebarToggleButton', {
+        'bdl-is-collapsed': isCollapsed,
+    });
 
     const renderButton = () => {
         if (direction === DIRECTION_LEFT) {

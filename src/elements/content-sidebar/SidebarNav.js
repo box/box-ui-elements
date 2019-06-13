@@ -97,6 +97,8 @@ const SidebarNav = ({
         </div>
         <div className="bcs-SidebarNav-footer">
             <SidebarToggleButton
+                data-resin-target={SIDEBAR_NAV_TARGETS.TOGGLE}
+                data-testid={SIDEBAR_NAV_TARGETS.TOGGLE}
                 isOpen={isOpen}
                 onClick={event => {
                     if (onNavigate) {

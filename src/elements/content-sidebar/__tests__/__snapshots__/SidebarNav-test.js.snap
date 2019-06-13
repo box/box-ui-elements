@@ -135,9 +135,13 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
       className="bcs-SidebarNav-footer"
     >
       <SidebarToggleButton
+        data-resin-target="sidebartoggle"
+        data-testid="sidebartoggle"
         onClick={[Function]}
       >
         <SidebarToggleButton
+          data-resin-target="sidebartoggle"
+          data-testid="sidebartoggle"
           intl={
             Object {
               "formatDate": [Function],
@@ -174,6 +178,8 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
               <PlainButton
                 aria-label="Show Sidebar"
                 className="bdl-SidebarToggleButton bdl-is-collapsed"
+                data-resin-target="sidebartoggle"
+                data-testid="sidebartoggle"
                 key=".0"
                 onBlur={[Function]}
                 onClick={[Function]}
@@ -187,6 +193,8 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
                 <button
                   aria-label="Show Sidebar"
                   className="btn-plain bdl-SidebarToggleButton bdl-is-collapsed"
+                  data-resin-target="sidebartoggle"
+                  data-testid="sidebartoggle"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}

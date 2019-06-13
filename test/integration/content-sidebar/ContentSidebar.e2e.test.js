@@ -42,6 +42,32 @@ describe('ContentSidebar', () => {
             cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
             cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
         });
+
+        it('should toggle sidebar content when a user clicks the toggle sidebar button', () => {
+            cy.getByTestId('bcs-content').should('exist');
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
+
+            cy.getByTestId('sidebartoggle').click();
+            cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
+            cy.getByTestId('bcs-content').should('not.exist');
+
+            cy.getByTestId('sidebartoggle').click();
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
+            cy.getByTestId('bcs-content').should('exist');
+        });
+
+        it('should toggle sidebar content when using a combination of toggle sidebar button and sidebar tab', () => {
+            cy.getByTestId('bcs-content').should('exist');
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
+
+            cy.getByTestId('sidebartoggle').click();
+            cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
+            cy.getByTestId('bcs-content').should('not.exist');
+
+            cy.getByTestId('sidebaractivity').click();
+            cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
+            cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
+        });
     });
 
     describe('version history', () => {
