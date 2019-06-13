@@ -211,4 +211,34 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             expect(wrapper.state('approvers')).toEqual([{ value: 234 }]);
         });
     });
+
+    describe('handleSubmitError()', () => {
+        test('should call onSubmitError prop and unset isLoading state', () => {
+            const errorMock = { foo: 'bar' };
+            const onSubmitErrorMock = jest.fn();
+            const wrapper = render({ onSubmitError: onSubmitErrorMock });
+            wrapper.setState({ isLoading: true });
+            wrapper.instance().handleSubmitError(errorMock);
+
+            expect(wrapper.state('isLoading')).toEqual(false);
+            expect(onSubmitErrorMock).toHaveBeenCalledWith(errorMock);
+        });
+    });
+
+    describe('handleSubmitSuccess()', () => {
+        test('should call onSubmitSuccess prop, clearForm and unset isLoading state', () => {
+            const onSubmitSuccessMock = jest.fn();
+            const clearFormMock = jest.fn();
+
+            const wrapper = render({ onSubmitSuccess: onSubmitSuccessMock });
+            wrapper.setState({ isLoading: true });
+            wrapper.instance().clearForm = clearFormMock;
+
+            wrapper.instance().handleSubmitSuccess();
+
+            expect(wrapper.state('isLoading')).toEqual(false);
+            expect(onSubmitSuccessMock).toHaveBeenCalled();
+            expect(clearFormMock).toHaveBeenCalled();
+        });
+    });
 });
