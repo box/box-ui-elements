@@ -8,10 +8,17 @@
         justify-content: space-between;
     }
 
-    .bcs-SidebarNav-toggle {
+    .bcs-SidebarNav-footer {
         align-items: center;
         display: flex;
         height: 60px;
         justify-content: center;
+
+        // Need to add these overriding styles because there is a specificity issue with .btn-plain
+        .btn-plain.bdl-SidebarToggleButton {
+            height: 24px;
+            margin: 0 3px;
+            padding: 4px;
+        }
     }
 }

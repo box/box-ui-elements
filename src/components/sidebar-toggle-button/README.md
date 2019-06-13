@@ -1,12 +1,14 @@
 ### Examples
 **Open**
 ```js
-const isOpen = true;
-<SidebarToggleButton isOpen={isOpen}/>
+<SidebarToggleButton isOpen={true}/>
 ```
 **Closed**
 ```js
-const isOpen = true;
-<SidebarToggleButton isOpen={isOpen}/>
+<SidebarToggleButton isOpen={false}/>
+```
+**When sidebar is on the left, change the direction**
+```js
+<SidebarToggleButton direction="left" isOpen={true}/>
 ```
 

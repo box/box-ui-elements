@@ -95,7 +95,7 @@ const SidebarNav = ({
             )}
             {hasAdditionalTabs && <AdditionalTabs key={fileId} tabs={additionalTabs} />}
         </div>
-        <div className="bcs-SidebarNav-toggle">
+        <div className="bcs-SidebarNav-footer">
             <SidebarToggleButton
                 isOpen={isOpen}
                 onClick={event => {

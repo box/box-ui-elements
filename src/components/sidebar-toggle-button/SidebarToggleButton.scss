@@ -1,11 +1,7 @@
 @import '../../styles/variables';
 
-.bdl-SidebarToggleButton,
-.bdl-SidebarToggleButton:hover,
-.bdl-SidebarToggleButton:active,
-.bdl-SidebarToggleButton:focus {
+.bdl-SidebarToggleButton {
     border-radius: $bdl-border-radius-size;
-    height: 24px;
     margin: 0 3px;
     padding: 4px;
 

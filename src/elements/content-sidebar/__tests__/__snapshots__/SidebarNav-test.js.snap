@@ -132,7 +132,7 @@ exports[`elements/content-sidebar/SidebarNav should render the additional tabs l
       </AdditionalTabs>
     </div>
     <div
-      className="bcs-SidebarNav-toggle"
+      className="bcs-SidebarNav-footer"
     >
       <SidebarToggleButton
         onClick={[Function]}
