@@ -225,26 +225,26 @@ class ContentExplorer extends Component<Props, State> {
         this.id = uniqueid('bce_');
 
         this.state = {
-            sortBy,
-            sortDirection,
-            rootName: '',
+            columnCount: 5,
             currentCollection: {},
             currentOffset: initialPageSize * (initialPage - 1),
             currentPageSize: initialPageSize,
-            searchQuery: '',
-            view: VIEW_FOLDER,
-            isDeleteModalOpen: false,
-            isGridView: false,
-            isRenameModalOpen: false,
-            isCreateFolderModalOpen: false,
-            isShareModalOpen: false,
-            isUploadModalOpen: false,
-            isPreviewModalOpen: false,
-            isLoading: false,
             errorCode: '',
             focusedRow: 0,
-            columnCount: 1,
+            isCreateFolderModalOpen: false,
+            isDeleteModalOpen: false,
+            isGridView: false,
+            isLoading: false,
+            isPreviewModalOpen: false,
+            isRenameModalOpen: false,
+            isShareModalOpen: false,
+            isUploadModalOpen: false,
+            rootName: '',
+            searchQuery: '',
+            sortBy,
+            sortDirection,
             thumbnailUrls: [],
+            view: VIEW_FOLDER,
         };
     }
 
@@ -406,9 +406,8 @@ class ContentExplorer extends Component<Props, State> {
         const thumbnailArray = Array(items.length).fill(null);
 
         // using for loop instead of items.forEach() to get desired await functionality
-        // TODO: find a better way to do this. Without using await, all requests except final
-        // one were cancelled.  Need to find a cleaner wait of spacing out requests to ensure
-        // they are not cancelled.
+        // TODO: This is bad. Find a better way to do this. Without using await, all requests except final
+        // one were cancelled.  Need to find a cleaner to make sure no requests get cancelled.
         for (let i = 0; i < items.length; i += 1) {
             const item = items[i];
             // eslint-disable-next-line no-await-in-loop
@@ -432,8 +431,9 @@ class ContentExplorer extends Component<Props, State> {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
 
-        // console.log(collection);
-
+        // fetch thumbnails whenever the API fetches a new folder
+        // TODO: optimize to not fetch thumbnails if the API just fetched the
+        // folder that is already being displayed
         this.fetchThumbnailUrls(collection, '1024x1024');
 
         // New folder state
@@ -1253,8 +1253,6 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     slotRenderer = (slotIndex: number) => {
-        console.log(`called slotRender for ${slotIndex}`);
-
         const { currentCollection } = this.state;
         const item: ?BoxItem = currentCollection.items ? currentCollection.items[slotIndex] : null;
 
@@ -1309,7 +1307,10 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     onResize = (newViewSize: number) => {
-        this.setState({ columnCount: newViewSize });
+        // need to do this calculation since lowest value of grid view slider
+        // means highest number of columns
+        const columnCount = MAX_GRID_VIEW_COLUMNS - newViewSize + 1;
+        this.setState({ columnCount });
     };
 
     /**
@@ -1373,7 +1374,7 @@ class ContentExplorer extends Component<Props, State> {
             columnCount,
         }: State = this.state;
 
-        // console.log(currentCollection);
+        // console.log(`columnCount: ${columnCount}`);
 
         const { id, offset, permissions, totalCount }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
@@ -1436,7 +1437,7 @@ class ContentExplorer extends Component<Props, State> {
                             onItemPreview={this.preview}
                             onSortChange={this.sort}
                             isGridView={isGridView}
-                            columnCount={MAX_GRID_VIEW_COLUMNS - columnCount + 1}
+                            columnCount={columnCount}
                             count={currentCollection.items ? currentCollection.items.length : 0}
                             slotRenderer={this.slotRenderer}
                         />

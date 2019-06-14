@@ -55,44 +55,44 @@ type Props = {
 };
 
 const Content = ({
-    view,
-    isSmall,
-    isMedium,
-    isTouch,
-    rootId,
-    rootElement,
-    currentCollection,
-    tableRef,
-    focusedRow,
-    canDownload,
     canDelete,
+    canDownload,
+    canPreview,
     canRename,
     canShare,
-    canPreview,
-    onItemClick,
-    onItemSelect,
-    onItemDelete,
-    onItemDownload,
-    onItemRename,
-    onItemShare,
-    onItemPreview,
-    onSortChange,
-    isGridView,
-    slotRenderer,
     columnCount,
     count,
+    currentCollection,
+    focusedRow,
+    isGridView,
+    isMedium,
+    isSmall,
+    isTouch,
+    onItemClick,
+    onItemDelete,
+    onItemDownload,
+    onItemPreview,
+    onItemRename,
+    onItemSelect,
+    onItemShare,
+    onSortChange,
+    rootElement,
+    rootId,
+    slotRenderer,
+    tableRef,
+    view,
 }: Props) => {
     const gridView = (
         <AutoSizer>
             {({ height, width }) => (
                 <MDVGridView
-                    height={height}
-                    width={width}
-                    currentCollection={currentCollection}
-                    slotRenderer={slotRenderer}
-                    count={count}
                     columnCount={columnCount}
+                    count={count}
+                    currentCollection={currentCollection}
+                    height={height}
                     onItemSelect={onItemClick}
+                    slotRenderer={slotRenderer}
+                    width={width}
                 />
             )}
         </AutoSizer>
@@ -100,28 +100,28 @@ const Content = ({
 
     const listView = (
         <ItemList
-            view={view}
-            isSmall={isSmall}
-            isMedium={isMedium}
-            isTouch={isTouch}
-            rootId={rootId}
-            rootElement={rootElement}
-            focusedRow={focusedRow}
-            currentCollection={currentCollection}
-            tableRef={tableRef}
-            canShare={canShare}
-            canPreview={canPreview}
             canDelete={canDelete}
-            canRename={canRename}
             canDownload={canDownload}
+            canPreview={canPreview}
+            canRename={canRename}
+            canShare={canShare}
+            currentCollection={currentCollection}
+            focusedRow={focusedRow}
+            isMedium={isMedium}
+            isSmall={isSmall}
+            isTouch={isTouch}
             onItemClick={onItemClick}
-            onItemSelect={onItemSelect}
             onItemDelete={onItemDelete}
             onItemDownload={onItemDownload}
-            onItemRename={onItemRename}
-            onItemShare={onItemShare}
             onItemPreview={onItemPreview}
+            onItemRename={onItemRename}
+            onItemSelect={onItemSelect}
+            onItemShare={onItemShare}
             onSortChange={onSortChange}
+            rootId={rootId}
+            rootElement={rootElement}
+            tableRef={tableRef}
+            view={view}
         />
     );
 

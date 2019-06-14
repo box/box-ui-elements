@@ -29,17 +29,17 @@ type Props = {
 };
 
 const SubHeaderRight = ({
-    view,
-    onUpload,
-    onCreate,
-    canUpload,
     canCreateNewFolder,
-    currentCollection,
-    onGridViewSwitch,
-    onSortChange,
-    onResize,
+    canUpload,
     columnCount,
+    currentCollection,
     isGridView,
+    onCreate,
+    onGridViewSwitch,
+    onResize,
+    onSortChange,
+    onUpload,
+    view,
 }: Props) => {
     const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
     const isFolder: boolean = view === VIEW_FOLDER;
@@ -48,7 +48,7 @@ const SubHeaderRight = ({
 
     return (
         <div className="be-sub-header-right">
-            {isGridView ? <GridViewSlider onResize={onResize} viewSize={columnCount} /> : null}
+            {isGridView ? <GridViewSlider onResize={onResize} columnCount={columnCount} /> : null}
             <Button onClick={onGridViewSwitch}>{isGridView ? <IconGridView /> : <IconGridViewInverted />}</Button>
             {showSort && !!sortBy && !!sortDirection && (
                 <Sort onSortChange={onSortChange} sortBy={sortBy} sortDirection={sortDirection} />

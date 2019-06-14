@@ -8,8 +8,8 @@ import IconMinusThin from '../../../../icons/general/IconMinusThin';
 import PlainButton from '../../../plain-button/PlainButton';
 
 type Props = {
+    columnCount: number,
     onResize: Function,
-    viewSize: number,
 };
 
 // const { formatMessage } = intl;
@@ -17,7 +17,8 @@ const RANGE_MAX = 5;
 const RANGE_MIN = 1;
 const RANGE_STEP = 2;
 
-function GridViewSlider({ onResize, viewSize }: Props) {
+function GridViewSlider({ onResize, columnCount }: Props) {
+    const viewSize = RANGE_MAX - columnCount + 1;
     return (
         <span className="grid-size-container">
             <PlainButton
