@@ -35,8 +35,8 @@ exports[`elements/content-sidebar/TaskModal render should render a default compo
       editMode="CREATE"
       getAvatarUrl={[MockFunction]}
       onCancel={[MockFunction]}
-      onCreateError={[MockFunction]}
-      onCreateSuccess={[MockFunction]}
+      onSubmitError={[MockFunction]}
+      onSubmitSuccess={[MockFunction]}
     />
   </div>
 </Modal>
@@ -77,8 +77,8 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
       editMode="CREATE"
       getAvatarUrl={[MockFunction]}
       onCancel={[MockFunction]}
-      onCreateError={[MockFunction]}
-      onCreateSuccess={[MockFunction]}
+      onSubmitError={[MockFunction]}
+      onSubmitSuccess={[MockFunction]}
       taskType="APPROVAL"
     />
   </div>
@@ -120,8 +120,8 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
       editMode="EDIT"
       getAvatarUrl={[MockFunction]}
       onCancel={[MockFunction]}
-      onCreateError={[MockFunction]}
-      onCreateSuccess={[MockFunction]}
+      onSubmitError={[MockFunction]}
+      onSubmitSuccess={[MockFunction]}
       taskType="APPROVAL"
     />
   </div>
@@ -163,8 +163,8 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode C
       editMode="CREATE"
       getAvatarUrl={[MockFunction]}
       onCancel={[MockFunction]}
-      onCreateError={[MockFunction]}
-      onCreateSuccess={[MockFunction]}
+      onSubmitError={[MockFunction]}
+      onSubmitSuccess={[MockFunction]}
       taskType="GENERAL"
     />
   </div>
@@ -206,8 +206,8 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode E
       editMode="EDIT"
       getAvatarUrl={[MockFunction]}
       onCancel={[MockFunction]}
-      onCreateError={[MockFunction]}
-      onCreateSuccess={[MockFunction]}
+      onSubmitError={[MockFunction]}
+      onSubmitSuccess={[MockFunction]}
       taskType="GENERAL"
     />
   </div>

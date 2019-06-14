@@ -79,11 +79,11 @@ class Task extends React.Component<Props, State> {
         this.setState({ isEditing: false });
     };
 
-    handleCreateSuccess = () => {
+    handleSubmitSuccess = () => {
         this.setState({ isEditing: false });
     };
 
-    handleCreateError = (error: ElementsXhrError) => {
+    handleSubmitError = (error: ElementsXhrError) => {
         this.setState({ modalError: error });
     };
 
@@ -228,14 +228,16 @@ class Task extends React.Component<Props, State> {
                     editMode={TASK_EDIT_MODE_EDIT}
                     error={modalError}
                     feedbackUrl={getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || ''}
-                    onCreateError={this.handleCreateError}
-                    onCreateSuccess={this.handleCreateSuccess}
+                    onSubmitError={this.handleSubmitError}
+                    onSubmitSuccess={this.handleSubmitSuccess}
                     onModalClose={this.handleModalClose}
                     isTaskFormOpen={isEditing}
                     taskFormProps={{
-                        approverSelectorContacts: this.getUsersFromTask(),
+                        id,
+                        approverSelectorContacts: this.getUsersFromTask() || [],
                         getAvatarUrl,
                         createTask: () => {},
+                        editTask: onEdit,
                         dueDate: due_at,
                         message: description,
                     }}

@@ -109,9 +109,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     editMode="EDIT"
     feedbackUrl=""
     isTaskFormOpen={false}
-    onCreateError={[Function]}
-    onCreateSuccess={[Function]}
     onModalClose={[Function]}
+    onSubmitError={[Function]}
+    onSubmitSuccess={[Function]}
     taskFormProps={
       Object {
         "approverSelectorContacts": Array [
@@ -134,7 +134,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         ],
         "createTask": [Function],
         "dueDate": null,
+        "editTask": [MockFunction],
         "getAvatarUrl": undefined,
+        "id": "123125",
         "message": "This is where we tell each other what we need to do",
       }
     }
