@@ -1,5 +1,5 @@
 [ignore]
-<PROJECT_ROOT>/conf/
+<PROJECT_ROOT>/scripts/
 <PROJECT_ROOT>/es/
 <PROJECT_ROOT>/.*/dist/.*
 <PROJECT_ROOT>/reports/
