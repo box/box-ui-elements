@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import { isActivateKey, isLeftClick } from '../../../utils/dom';
+import { isActivateKey, isLeftClick, scrollIntoView } from '../../../utils/dom';
 import { KEYS } from '../../../constants';
 
 type Props = {
@@ -20,16 +20,28 @@ type Props = {
 class VersionsItemButton extends React.Component<Props> {
     buttonRef: ?HTMLDivElement;
 
+    componentDidMount() {
+        this.setScroll();
+    }
+
     componentDidUpdate({ isSelected: prevIsSelected }: Props) {
         const { isSelected } = this.props;
 
-        if (this.buttonRef && isSelected && isSelected !== prevIsSelected) {
-            this.buttonRef.focus();
+        if (isSelected !== prevIsSelected) {
+            this.setScroll();
         }
     }
 
     setButtonRef = (buttonRef: ?HTMLDivElement): void => {
         this.buttonRef = buttonRef;
+    };
+
+    setScroll = () => {
+        const { isSelected } = this.props;
+
+        if (this.buttonRef && isSelected) {
+            scrollIntoView(this.buttonRef);
+        }
     };
 
     render() {
