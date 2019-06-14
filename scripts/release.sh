@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./conf/cut_release.sh
+source ./scripts/cut_release.sh
 
 # Execute this entire script
 if ! push_new_release; then

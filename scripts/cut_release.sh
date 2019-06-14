@@ -16,7 +16,7 @@ NPM_PUBLIC_REGISTRY_REGEX="^https://registry\.npmjs\.org/$"
 NPM_PUBLIC_REGISTRY="https://registry.npmjs.org"
 
 check_release_scripts_changed() {
-    if [[ $(git diff --shortstat HEAD..release/master conf  2> /dev/null | tail -n1) != "" ]] ; then
+    if [[ $(git diff --shortstat HEAD..release/master scripts  2> /dev/null | tail -n1) != "" ]] ; then
         printf "${red}Build scripts have changed, aborting! Run release command from master.${end}"
         return 1
     fi

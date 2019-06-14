@@ -23,7 +23,7 @@
 /CODEOWNERS                                 @box/ui-elements
 /LICENSE                                    @box/ui-elements
 /THIRD_PARTY_LICENSES                       @box/ui-elements
-/conf/                                      @box/ui-elements-extended
+/scripts/                                   @box/ui-elements-extended
 /examples/                                  @box/webapp
 /flow/                                      @box/ui-elements-extended
 /flow-typed/                                @box/ui-elements-extended
