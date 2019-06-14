@@ -6,7 +6,7 @@ describe('icons/general/IconAdd', () => {
     test('should correctly render default icon', () => {
         const wrapper = shallow(<IconAdd />);
 
-        expect(wrapper.hasClass('icon-add')).toEqual(true);
+        expect(wrapper.hasClass('bdl-IconAdd')).toEqual(true);
     });
 
     test('should correctly render icon with specified color', () => {
