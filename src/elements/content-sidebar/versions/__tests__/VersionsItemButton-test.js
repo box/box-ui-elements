@@ -1,10 +1,74 @@
 import * as React from 'react';
 import { shallow } from 'enzyme/build';
 import VersionsItemButton from '../VersionsItemButton';
+import { scrollIntoView } from '../../../../utils/dom';
+
+jest.mock('../../../../utils/dom', () => ({
+    ...jest.requireActual('../../../../utils/dom'),
+    scrollIntoView: jest.fn(),
+}));
 
 describe('elements/content-sidebar/versions/VersionsItemButton', () => {
     const getMount = (props = {}) => mount(<VersionsItemButton {...props}>Test</VersionsItemButton>);
     const getShallow = (props = {}) => shallow(<VersionsItemButton {...props}>Test</VersionsItemButton>);
+
+    describe('componentDidUpdate', () => {
+        test('should call setScroll if the selected state changed', () => {
+            const wrapper = getShallow({ isSelected: false });
+            const instance = wrapper.instance();
+            instance.setScroll = jest.fn();
+
+            wrapper.setProps({ isSelected: false });
+            expect(instance.setScroll).not.toHaveBeenCalled();
+
+            wrapper.setProps({ isSelected: true });
+            expect(instance.setScroll).toHaveBeenCalled();
+        });
+    });
+
+    describe('onKeyPress', () => {
+        test('calls onActivate event handler', () => {
+            const activateHandler = jest.fn();
+            const preventDefault = jest.fn();
+            const button = getMount({ onActivate: activateHandler });
+
+            button.simulate('keyPress', {
+                key: 'Enter',
+            });
+
+            button.simulate('keyPress', {
+                key: ' ',
+                preventDefault,
+            });
+
+            expect(activateHandler).toBeCalledTimes(2);
+            expect(preventDefault).toBeCalledTimes(1);
+        });
+
+        test('does not call onActivate event handler on invalid keypress', () => {
+            const activateHandler = jest.fn();
+            const button = getMount({ onActivate: activateHandler });
+
+            button.simulate('keyPress', {
+                key: 'Ctrl',
+            });
+
+            expect(activateHandler).not.toBeCalled();
+        });
+    });
+
+    describe.only('setScroll', () => {
+        test('should scroll into view if the button is selected', () => {
+            const wrapper = getMount({ isSelected: false });
+
+            wrapper.instance().setScroll();
+            expect(scrollIntoView).toHaveBeenCalledTimes(0);
+
+            wrapper.setProps({ isSelected: true });
+            wrapper.instance().setScroll();
+            expect(scrollIntoView).toHaveBeenCalledTimes(2); // Called once by componentDidUpdate, once manually
+        });
+    });
 
     describe('render', () => {
         test('should render in enabled state correctly', () => {
@@ -37,37 +101,6 @@ describe('elements/content-sidebar/versions/VersionsItemButton', () => {
 
             expect(wrapper.prop('className')).toContain('bcs-is-selected');
             expect(wrapper).toMatchSnapshot();
-        });
-    });
-
-    describe('onKeyPress', () => {
-        test('calls onActivate event handler', () => {
-            const activateHandler = jest.fn();
-            const preventDefault = jest.fn();
-            const button = getMount({ onActivate: activateHandler });
-
-            button.simulate('keyPress', {
-                key: 'Enter',
-            });
-
-            button.simulate('keyPress', {
-                key: ' ',
-                preventDefault,
-            });
-
-            expect(activateHandler).toBeCalledTimes(2);
-            expect(preventDefault).toBeCalledTimes(1);
-        });
-
-        test('does not call onActivate event handler on invalid keypress', () => {
-            const activateHandler = jest.fn();
-            const button = getMount({ onActivate: activateHandler });
-
-            button.simulate('keyPress', {
-                key: 'Ctrl',
-            });
-
-            expect(activateHandler).not.toBeCalled();
         });
     });
 });
