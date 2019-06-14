@@ -34,9 +34,11 @@ import './Task.scss';
 type Props = {|
     ...TaskNew,
     api: API,
+    approverSelectorContacts: SelectorItems,
     currentUser: User,
     error?: ActionItemError,
     features?: FeatureConfig,
+    getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -105,24 +107,6 @@ class Task extends React.Component<Props, State> {
         this.setState({ modalError: error });
     };
 
-    getUsersFromTask = (): SelectorItems => {
-        const { assigned_to } = this.state;
-
-        return (
-            assigned_to &&
-            assigned_to.entries.map(taskCollab => {
-                const newSelectorItem: SelectorItem = {
-                    ...taskCollab.target,
-                    item: {},
-                    value: taskCollab.target.id,
-                    text: taskCollab.target.name,
-                };
-
-                return newSelectorItem;
-            })
-        );
-    };
-
     fetchTaskCollaborators = (): Promise<any> => {
         const { id, api, task_links } = this.props;
         const { entries } = task_links;
@@ -165,12 +149,14 @@ class Task extends React.Component<Props, State> {
 
     render() {
         const {
+            approverSelectorContacts,
             created_at,
             created_by,
             currentUser,
             due_at,
             error,
             features,
+            getApproverWithQuery,
             getAvatarUrl,
             getMentionWithQuery,
             getUserProfileUrl,
@@ -297,7 +283,9 @@ class Task extends React.Component<Props, State> {
                     isTaskFormOpen={isEditing}
                     taskFormProps={{
                         id,
-                        approverSelectorContacts: this.getUsersFromTask() || [],
+                        approvers: assigned_to.entries,
+                        approverSelectorContacts,
+                        getApproverWithQuery,
                         getAvatarUrl,
                         createTask: () => {},
                         editTask: onEdit,
