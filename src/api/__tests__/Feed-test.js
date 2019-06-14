@@ -319,6 +319,12 @@ describe('api/Feed', () => {
         modified_by: { name: 'Akon', id: 11 },
     };
 
+    const current_version = {
+        action: 'restore',
+        type: 'file_version',
+        id: '123',
+    };
+
     const deleted_version = {
         action: 'delete',
         type: 'file_version',
@@ -332,6 +338,11 @@ describe('api/Feed', () => {
     const versions = {
         total_count: 1,
         entries: [first_version, deleted_version],
+    };
+
+    const versionsWithCurrent = {
+        total_count: 3,
+        entries: [current_version, first_version, deleted_version],
     };
 
     const appActivities = {
@@ -417,12 +428,18 @@ describe('api/Feed', () => {
     });
 
     describe('feedItems()', () => {
-        const sortedItems = [...versions.entries, ...tasks.entries, ...comments.entries, ...appActivities.entries];
+        const sortedItems = [
+            ...versionsWithCurrent.entries,
+            ...tasks.entries,
+            ...comments.entries,
+            ...appActivities.entries,
+        ];
         let successCb;
         let errorCb;
 
         beforeEach(() => {
             feed.fetchVersions = jest.fn().mockResolvedValue(versions);
+            feed.fetchCurrentVersion = jest.fn().mockResolvedValue(current_version);
             feed.fetchTasks = jest.fn().mockResolvedValue(tasks);
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasksNew);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
@@ -444,7 +461,13 @@ describe('api/Feed', () => {
         test('should get feed items, sort, save to cache, and call the success callback', done => {
             feed.feedItems(file, false, successCb, errorCb, jest.fn(), false, true);
             setImmediate(() => {
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versions, comments, tasks, appActivities);
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(
+                    versions,
+                    current_version,
+                    comments,
+                    tasks,
+                    appActivities,
+                );
                 expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
                 expect(successCb).toHaveBeenCalledWith(sortedItems);
                 done();

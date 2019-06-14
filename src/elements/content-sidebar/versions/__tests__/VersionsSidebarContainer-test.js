@@ -168,21 +168,21 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             const version = { id: '123', permissions: {} };
             const versions = { entries: [version], total_count: 1 };
             const currentVersion = { entries: [{ id: '321', permissions: {} }], total_count: 1 };
+            const versionsWithCurrent = { entries: [version, ...currentVersion.entries], total_count: 2 };
 
-            versionsAPI.addCurrentVersion.mockReturnValueOnce(versions);
-            versionsAPI.addPermissions.mockReturnValueOnce(versions);
-            versionsAPI.sortVersions.mockReturnValueOnce(versions);
+            versionsAPI.addCurrentVersion.mockReturnValueOnce(versionsWithCurrent);
+            versionsAPI.addPermissions.mockReturnValueOnce(versionsWithCurrent);
+            versionsAPI.sortVersions.mockReturnValueOnce(versionsWithCurrent);
 
             instance.verifyVersion = jest.fn();
             instance.handleFetchSuccess([file, versions, currentVersion]);
 
             expect(instance.verifyVersion).toBeCalled();
-            expect(versionsAPI.addCurrentVersion).toBeCalledWith(versions, file);
-            expect(versionsAPI.addPermissions).toBeCalledWith(versions, file);
-            expect(versionsAPI.sortVersions).toBeCalledWith(versions);
+            expect(versionsAPI.addPermissions).toBeCalledWith(versionsWithCurrent, file);
+            expect(versionsAPI.sortVersions).toBeCalledWith(versionsWithCurrent);
             expect(wrapper.state('error')).toBeUndefined();
             expect(wrapper.state('isLoading')).toBe(false);
-            expect(wrapper.state('versions')).toBe(versions.entries);
+            expect(wrapper.state('versions')).toBe(versionsWithCurrent.entries);
         });
     });
 
