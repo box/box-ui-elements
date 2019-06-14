@@ -29,6 +29,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
     >
       This is an error
     </InlineError>
+    <VersionsList />
   </LoadingIndicatorWrapper>
 </SidebarContent>
 `;
