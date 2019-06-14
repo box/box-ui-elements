@@ -39,11 +39,8 @@ const VersionsSidebar = ({ error, isLoading, parentName, ...rest }: Props) => (
         }
     >
         <LoadingIndicatorWrapper className="bcs-Versions-content" crawlerPosition="top" isLoading={isLoading}>
-            {error ? (
-                <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
-            ) : (
-                <VersionsList isLoading={isLoading} {...rest} />
-            )}
+            {error && <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>}
+            <VersionsList isLoading={isLoading} {...rest} />
         </LoadingIndicatorWrapper>
     </SidebarContent>
 );
