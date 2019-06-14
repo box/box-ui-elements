@@ -80,7 +80,7 @@ class SelectorDropdown extends React.Component<Props, State> {
     setActiveItemID = (id: string | null) => {
         const itemEl = id ? document.getElementById(id) : null;
         this.setState({ activeItemID: id });
-        scrollIntoView(itemEl);
+        scrollIntoView(itemEl, { block: 'nearest' });
     };
 
     listboxID: string;
