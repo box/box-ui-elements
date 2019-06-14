@@ -84,3 +84,7 @@ export const overlayZIndex = '190'; // overlay-z-index
 export const tooltipZIndex = '190'; // tooltip-z-index
 export const bdlLineHeight = '20px'; // bdl-line-height
 export const bdlBorderRadiusSize = '4px'; // bdl-border-radius-size
+export const headerHeight = '56px'; // header-height
+export const actionbarHeight = '60px'; // actionbar-height
+export const actionbarFiltersHeight = '26px'; // actionbar-filters-height
+export const tableHeaderHeight = '40px'; // table-header-height

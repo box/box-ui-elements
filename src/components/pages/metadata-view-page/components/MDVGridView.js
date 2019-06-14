@@ -56,6 +56,7 @@ class GridView extends React.Component<Props, State> {
     }
 
     cellRenderer = ({ dataKey, parent, rowIndex }: TableCellRendererParams) => {
+        console.log(`cellRenderer called with \ndataKey: ${dataKey}\nparent: ${parent}\nrowIndex: ${rowIndex}`);
         const { columnCount, count, slotRenderer, onItemSelect, currentCollection } = this.props;
         const contents = [];
 

@@ -397,7 +397,7 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
      * @return {void}
      */
-    fetchThumbnailUrls(collection: Collection, dimensions: string): void {
+    async fetchThumbnailUrls(collection: Collection, dimensions: string): Promise<void> {
         const { items = [] } = collection;
         if (!items) {
             return;
@@ -405,21 +405,19 @@ class ContentExplorer extends Component<Props, State> {
 
         const thumbnailArray = Array(items.length).fill(null);
 
-        const loop = async () => {
-            // using for loop instead of items.forEach() to get desired await functionality
-            // TODO: find a better way to do this. Without using await, all requests except final
-            // one were cancelled.
-            for (let i = 0; i < items.length; i += 1) {
-                const item = items[i];
-                // eslint-disable-next-line no-await-in-loop
-                await this.api.getFileAPI().getFileThumbnail(item, dimensions, thumbnailUrl => {
-                    thumbnailArray[i] = thumbnailUrl;
-                    this.setState({ thumbnailUrls: [...thumbnailArray] });
-                });
-            }
-            // console.log(thumbnailArray);
-        };
-        loop();
+        // using for loop instead of items.forEach() to get desired await functionality
+        // TODO: find a better way to do this. Without using await, all requests except final
+        // one were cancelled.  Need to find a cleaner wait of spacing out requests to ensure
+        // they are not cancelled.
+        for (let i = 0; i < items.length; i += 1) {
+            const item = items[i];
+            // eslint-disable-next-line no-await-in-loop
+            await this.api.getFileAPI().getFileThumbnail(item, dimensions, thumbnailUrl => {
+                thumbnailArray[i] = thumbnailUrl;
+                this.setState({ thumbnailUrls: [...thumbnailArray] });
+            });
+        }
+        // console.log(thumbnailArray);
     }
 
     /**
@@ -1255,13 +1253,14 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     slotRenderer = (slotIndex: number) => {
+        console.log(`called slotRender for ${slotIndex}`);
+
         const { currentCollection } = this.state;
         const item: ?BoxItem = currentCollection.items ? currentCollection.items[slotIndex] : null;
 
         if (!item) {
             return <div />;
         }
-
         const url = this.state.thumbnailUrls[slotIndex];
 
         // TODO: sort out these styles and put them in classes. Likely move over and adjust

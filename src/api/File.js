@@ -203,12 +203,15 @@ class File extends Item {
     }
 
     /**
-     * Get the thumbnail url for a given BoxItem.
+     * Get the thumbnail url for a given BoxItem.  The function will attempt
+     * to fetch a jpg thumbnail of the given dimensions.  If this fails, the function
+     * will attempt to fectch a 1024x1024 png of the first page of the file as a fallback.
      *
      * @param {BoxItem} item - item whose thumbnail should be fetched
      * @param {string} dimensions - desired dimensions of thumbnail. Acceptable dimensions
      * for a jpg are: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048".
-     * @param {Function} successCallback - function to call with thumbnailUrl
+     * @param {Function} successCallback - function to call with the thumbnail url. The thumbnail
+     * url will be null if one could not be fetched.
      * @return {Promise<void>}
      */
     async getFileThumbnail(item: BoxItem, dimensions: string, successCallback: Function): Promise<void> {
@@ -229,8 +232,8 @@ class File extends Item {
         const xhrOptions: Object = {
             url: newUrl,
             headers: {
-                // API will return first representation it finds, so 1024x1024 png is the final fallback.
-                'X-Rep-Hints': `[jpg?dimensions=${dimensions},png?dimensions=${dimensions},png?dimensions=1024x1024]`,
+                // API will return first representation it finds, so 1024x1024 png is fallback.
+                'X-Rep-Hints': `[jpg?dimensions=${dimensions},png?dimensions=1024x1024]`,
             },
         };
         this.successCallback = successCallback;
