@@ -6,5 +6,5 @@
 !THIRD_PARTY_LICENSES
 !.gitignore
 !build
-!conf
+!scripts
 !i18n
