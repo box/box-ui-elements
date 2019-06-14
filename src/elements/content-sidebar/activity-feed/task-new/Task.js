@@ -4,6 +4,7 @@ import noop from 'lodash/noop';
 import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
+import { withAPIContext } from 'elements/common/api-context';
 import messages from '../../../common/messages';
 import CommentInlineError from '../comment/CommentInlineError';
 import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
@@ -30,6 +31,7 @@ import './Task.scss';
 
 type Props = {|
     ...TaskNew,
+    api: API,
     currentUser: User,
     error?: ActionItemError,
     features?: FeatureConfig,
@@ -47,7 +49,9 @@ type Props = {|
 |};
 
 type State = {
+    assigned_to: ?TaskAssigneeCollection,
     isEditing: boolean,
+    isLoading: boolean,
     modalError: ?ElementsXhrError,
 };
 
@@ -67,12 +71,24 @@ const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
 
 class Task extends React.Component<Props, State> {
     state = {
+        assigned_to: null,
         modalError: undefined,
         isEditing: false,
     };
 
+    componentDidMount() {
+        const { assigned_to, id } = this.props;
+
+        if (assigned_to.next_marker) {
+            const collaborators = api.getTaskCollaborators(() => {}, file, () => {}, { id });
+        } else {
+            this.setState({ assigned_to });
+        }
+    }
+
     handleEditClick = (): void => {
         this.setState({ isEditing: true });
+        // SHZ : Determine if we need to fetch all the assignees here ?
     };
 
     handleModalClose = () => {
@@ -87,8 +103,16 @@ class Task extends React.Component<Props, State> {
         this.setState({ modalError: error });
     };
 
+    handleTaskCollaboratorSuccess = () => {
+        this.setState({ isLoading: false });
+    };
+
+    handleTaskCollaboratorError = (error: ElementsXhrError) => {
+        this.setState({ isLoading: false, modalError: error });
+    };
+
     getUsersFromTask = (): SelectorItems => {
-        const { assigned_to } = this.props;
+        const { assigned_to } = this.state;
 
         return (
             assigned_to &&
@@ -249,4 +273,4 @@ class Task extends React.Component<Props, State> {
 }
 
 export { Task as TaskComponent };
-export default flow([withFeatureConsumer])(Task);
+export default flow([withFeatureConsumer, withAPIContext])(Task);

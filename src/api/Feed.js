@@ -858,7 +858,7 @@ class Feed extends Base {
         this.errorCallback = errorCallback;
 
         try {
-            const taskLink = await this.createTaskLink(file, task);
+            // const taskLink = await this.createTaskLink(file, task);
             const taskAssignments: Array<TaskCollabAssignee> = await Promise.all(
                 assignees.map((assignee: SelectorItem) => {
                     return this.createTaskCollaborator(file, task, assignee);
@@ -1258,6 +1258,32 @@ class Feed extends Base {
         if (cachedItems) {
             const updatedFeedItems = cachedItems.items.map((item: FeedItem) => {
                 if (item.id === id) {
+                    return {
+                        ...item,
+                        ...updates,
+                    };
+                }
+
+                return item;
+            });
+
+            this.setCachedItems(this.id, updatedFeedItems);
+            return updatedFeedItems;
+        }
+
+        return null;
+    };
+
+    updateTaskItem = (updates: Object, id: string): ?FeedItems => {
+        if (!this.id) {
+            throw getBadItemError();
+        }
+
+        const cachedItems = this.getCachedItems(this.id);
+        if (cachedItems) {
+            const updatedFeedItems = cachedItems.items.map((item: FeedItem) => {
+                if (item.id === id) {
+                    const assigned_to = {};
                     return {
                         ...item,
                         ...updates,
