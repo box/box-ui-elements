@@ -3,6 +3,8 @@
 exports[`elements/content-sidebar/versions/VersionsSidebar render should show an inline error if the prop is provided 1`] = `
 <SidebarContent
   className="bcs-Versions"
+  data-resin-component="preview"
+  data-resin-feature="versions"
   title={
     <React.Fragment>
       <BackButton
@@ -37,6 +39,8 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
 exports[`elements/content-sidebar/versions/VersionsSidebar render should show the versions list if no error prop is provided 1`] = `
 <SidebarContent
   className="bcs-Versions"
+  data-resin-component="preview"
+  data-resin-feature="versions"
   title={
     <React.Fragment>
       <BackButton

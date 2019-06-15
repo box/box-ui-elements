@@ -1,5 +1,5 @@
 .bcs-SidebarVersions {
-    &.lnk {
+    &:not(:empty) {
         margin-bottom: 20px;
     }
 }

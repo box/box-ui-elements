@@ -1,15 +1,5 @@
 @import '../../common/variables';
 
-.bcs-VersionsItemActions-item {
-    .fill-color {
-        fill: $fours;
-    }
-
-    .stroke-color {
-        stroke: $fours;
-    }
-}
-
 .bcs-VersionsItemActions-toggle {
     align-items: center;
     align-self: flex-start;
@@ -23,12 +13,12 @@
 
     &:focus,
     &:hover {
-        background-color: $off-white;
-        fill: $fours;
+        background-color: $bdl-gray-10;
+        fill: $bdl-gray;
     }
 
     .fill-color {
-        fill: $nines;
+        fill: $bdl-gray-50;
     }
 
     .icon-clock-past {

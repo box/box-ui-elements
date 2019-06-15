@@ -15,8 +15,8 @@ type Props = {
     title: React.Node,
 };
 
-const SidebarContent = ({ actions, children, className, title }: Props) => (
-    <div className={classNames('bcs-content', className)} data-testid="bcs-content">
+const SidebarContent = ({ actions, children, className, title, ...rest }: Props) => (
+    <div className={classNames('bcs-content', className)} data-testid="bcs-content" {...rest}>
         <div className="bcs-content-header">
             <h3 className="bcs-title">{title}</h3>
             {actions}

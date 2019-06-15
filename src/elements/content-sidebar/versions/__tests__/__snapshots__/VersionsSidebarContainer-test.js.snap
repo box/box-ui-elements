@@ -2,6 +2,7 @@
 
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer render should match its snapshot 1`] = `
 <VersionsSidebar
+  fileId="12345"
   isLoading={true}
   onDelete={[Function]}
   onDownload={[Function]}

@@ -13,6 +13,7 @@ import type { VersionActionCallback } from './Versions';
 import './VersionsList.scss';
 
 type Props = {
+    fileId: string,
     isLoading: boolean,
     onDelete: VersionActionCallback,
     onDownload: VersionActionCallback,

@@ -1,0 +1,15 @@
+@import '../../common/variables';
+
+.bcs-VersionsItemAction {
+    .fill-color {
+        fill: $bdl-gray;
+    }
+
+    .stroke-color {
+        stroke: $bdl-gray;
+    }
+}
+
+.bcs-VersionsItemAction-button {
+    width: 100%;
+}

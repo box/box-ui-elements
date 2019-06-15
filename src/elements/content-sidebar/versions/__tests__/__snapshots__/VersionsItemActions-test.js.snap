@@ -4,32 +4,38 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
 <DropdownMenu
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={true}
   onMenuClose={[Function]}
 >
   <PlainButton
     className="bcs-VersionsItemActions-toggle"
+    data-resin-iscurrent={false}
+    data-resin-target="overflow"
     onClick={[Function]}
+    type="button"
   >
     <IconEllipsis
       height={4}
-      title={
-        <FormattedMessage
-          defaultMessage="Toggle"
-          id="be.sidebarVersions.toggle"
-        />
-      }
       width={14}
     />
+    <FormattedMessage
+      defaultMessage="Toggle"
+      id="be.sidebarVersions.toggle"
+    >
+      <Component />
+    </FormattedMessage>
   </PlainButton>
   <Menu
-    className=""
+    className="bcs-VersionsItemActions-menu"
+    data-resin-component="preview"
+    data-resin-feature="versions"
     isHidden={false}
     isSubmenu={false}
   >
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    <VersionsItemAction
+      action="preview"
+      isCurrent={false}
     >
       <IconOpenWith
         height={12}
@@ -39,9 +45,10 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Preview"
         id="be.sidebarVersions.preview"
       />
-    </MenuItem>
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    </VersionsItemAction>
+    <VersionsItemAction
+      action="download"
+      isCurrent={false}
     >
       <IconDownload
         height={12}
@@ -51,9 +58,10 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Download"
         id="be.sidebarVersions.download"
       />
-    </MenuItem>
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    </VersionsItemAction>
+    <VersionsItemAction
+      action="promote"
+      isCurrent={false}
     >
       <IconUpload
         height={12}
@@ -63,9 +71,10 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Make Current"
         id="be.sidebarVersions.promote"
       />
-    </MenuItem>
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    </VersionsItemAction>
+    <VersionsItemAction
+      action="remove"
+      isCurrent={false}
     >
       <IconTrash
         height={12}
@@ -75,7 +84,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Delete"
         id="be.sidebarVersions.delete"
       />
-    </MenuItem>
+    </VersionsItemAction>
   </Menu>
 </DropdownMenu>
 `;
@@ -84,32 +93,38 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
 <DropdownMenu
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={true}
   onMenuClose={[Function]}
 >
   <PlainButton
     className="bcs-VersionsItemActions-toggle"
+    data-resin-iscurrent={false}
+    data-resin-target="overflow"
     onClick={[Function]}
+    type="button"
   >
     <IconEllipsis
       height={4}
-      title={
-        <FormattedMessage
-          defaultMessage="Toggle"
-          id="be.sidebarVersions.toggle"
-        />
-      }
       width={14}
     />
+    <FormattedMessage
+      defaultMessage="Toggle"
+      id="be.sidebarVersions.toggle"
+    >
+      <Component />
+    </FormattedMessage>
   </PlainButton>
   <Menu
-    className=""
+    className="bcs-VersionsItemActions-menu"
+    data-resin-component="preview"
+    data-resin-feature="versions"
     isHidden={false}
     isSubmenu={false}
   >
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    <VersionsItemAction
+      action="preview"
+      isCurrent={false}
     >
       <IconOpenWith
         height={12}
@@ -119,9 +134,10 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Preview"
         id="be.sidebarVersions.preview"
       />
-    </MenuItem>
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    </VersionsItemAction>
+    <VersionsItemAction
+      action="download"
+      isCurrent={false}
     >
       <IconDownload
         height={12}
@@ -131,9 +147,10 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Download"
         id="be.sidebarVersions.download"
       />
-    </MenuItem>
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    </VersionsItemAction>
+    <VersionsItemAction
+      action="remove"
+      isCurrent={false}
     >
       <IconTrash
         height={12}
@@ -143,7 +160,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Delete"
         id="be.sidebarVersions.delete"
       />
-    </MenuItem>
+    </VersionsItemAction>
   </Menu>
 </DropdownMenu>
 `;
@@ -152,32 +169,38 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
 <DropdownMenu
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={true}
   onMenuClose={[Function]}
 >
   <PlainButton
     className="bcs-VersionsItemActions-toggle"
+    data-resin-iscurrent={false}
+    data-resin-target="overflow"
     onClick={[Function]}
+    type="button"
   >
     <IconEllipsis
       height={4}
-      title={
-        <FormattedMessage
-          defaultMessage="Toggle"
-          id="be.sidebarVersions.toggle"
-        />
-      }
       width={14}
     />
+    <FormattedMessage
+      defaultMessage="Toggle"
+      id="be.sidebarVersions.toggle"
+    >
+      <Component />
+    </FormattedMessage>
   </PlainButton>
   <Menu
-    className=""
+    className="bcs-VersionsItemActions-menu"
+    data-resin-component="preview"
+    data-resin-feature="versions"
     isHidden={false}
     isSubmenu={false}
   >
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    <VersionsItemAction
+      action="download"
+      isCurrent={false}
     >
       <IconDownload
         height={12}
@@ -187,9 +210,10 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Download"
         id="be.sidebarVersions.download"
       />
-    </MenuItem>
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    </VersionsItemAction>
+    <VersionsItemAction
+      action="remove"
+      isCurrent={false}
     >
       <IconTrash
         height={12}
@@ -199,7 +223,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Delete"
         id="be.sidebarVersions.delete"
       />
-    </MenuItem>
+    </VersionsItemAction>
   </Menu>
 </DropdownMenu>
 `;
@@ -208,32 +232,38 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
 <DropdownMenu
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={true}
   onMenuClose={[Function]}
 >
   <PlainButton
     className="bcs-VersionsItemActions-toggle"
+    data-resin-iscurrent={false}
+    data-resin-target="overflow"
     onClick={[Function]}
+    type="button"
   >
     <IconEllipsis
       height={4}
-      title={
-        <FormattedMessage
-          defaultMessage="Toggle"
-          id="be.sidebarVersions.toggle"
-        />
-      }
       width={14}
     />
+    <FormattedMessage
+      defaultMessage="Toggle"
+      id="be.sidebarVersions.toggle"
+    >
+      <Component />
+    </FormattedMessage>
   </PlainButton>
   <Menu
-    className=""
+    className="bcs-VersionsItemActions-menu"
+    data-resin-component="preview"
+    data-resin-feature="versions"
     isHidden={false}
     isSubmenu={false}
   >
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    <VersionsItemAction
+      action="remove"
+      isCurrent={false}
     >
       <IconTrash
         height={12}
@@ -243,7 +273,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Delete"
         id="be.sidebarVersions.delete"
       />
-    </MenuItem>
+    </VersionsItemAction>
   </Menu>
 </DropdownMenu>
 `;
@@ -252,32 +282,38 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
 <DropdownMenu
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={true}
   onMenuClose={[Function]}
 >
   <PlainButton
     className="bcs-VersionsItemActions-toggle"
+    data-resin-iscurrent={false}
+    data-resin-target="overflow"
     onClick={[Function]}
+    type="button"
   >
     <IconEllipsis
       height={4}
-      title={
-        <FormattedMessage
-          defaultMessage="Toggle"
-          id="be.sidebarVersions.toggle"
-        />
-      }
       width={14}
     />
+    <FormattedMessage
+      defaultMessage="Toggle"
+      id="be.sidebarVersions.toggle"
+    >
+      <Component />
+    </FormattedMessage>
   </PlainButton>
   <Menu
-    className=""
+    className="bcs-VersionsItemActions-menu"
+    data-resin-component="preview"
+    data-resin-feature="versions"
     isHidden={false}
     isSubmenu={false}
   >
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    <VersionsItemAction
+      action="download"
+      isCurrent={false}
     >
       <IconDownload
         height={12}
@@ -287,7 +323,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Download"
         id="be.sidebarVersions.download"
       />
-    </MenuItem>
+    </VersionsItemAction>
   </Menu>
 </DropdownMenu>
 `;
@@ -296,32 +332,38 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
 <DropdownMenu
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={true}
   onMenuClose={[Function]}
 >
   <PlainButton
     className="bcs-VersionsItemActions-toggle"
+    data-resin-iscurrent={false}
+    data-resin-target="overflow"
     onClick={[Function]}
+    type="button"
   >
     <IconEllipsis
       height={4}
-      title={
-        <FormattedMessage
-          defaultMessage="Toggle"
-          id="be.sidebarVersions.toggle"
-        />
-      }
       width={14}
     />
+    <FormattedMessage
+      defaultMessage="Toggle"
+      id="be.sidebarVersions.toggle"
+    >
+      <Component />
+    </FormattedMessage>
   </PlainButton>
   <Menu
-    className=""
+    className="bcs-VersionsItemActions-menu"
+    data-resin-component="preview"
+    data-resin-feature="versions"
     isHidden={false}
     isSubmenu={false}
   >
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    <VersionsItemAction
+      action="preview"
+      isCurrent={false}
     >
       <IconOpenWith
         height={12}
@@ -331,7 +373,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Preview"
         id="be.sidebarVersions.preview"
       />
-    </MenuItem>
+    </VersionsItemAction>
   </Menu>
 </DropdownMenu>
 `;
@@ -340,32 +382,38 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
 <DropdownMenu
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isRightAligned={true}
   onMenuClose={[Function]}
 >
   <PlainButton
     className="bcs-VersionsItemActions-toggle"
+    data-resin-iscurrent={false}
+    data-resin-target="overflow"
     onClick={[Function]}
+    type="button"
   >
     <IconEllipsis
       height={4}
-      title={
-        <FormattedMessage
-          defaultMessage="Toggle"
-          id="be.sidebarVersions.toggle"
-        />
-      }
       width={14}
     />
+    <FormattedMessage
+      defaultMessage="Toggle"
+      id="be.sidebarVersions.toggle"
+    >
+      <Component />
+    </FormattedMessage>
   </PlainButton>
   <Menu
-    className=""
+    className="bcs-VersionsItemActions-menu"
+    data-resin-component="preview"
+    data-resin-feature="versions"
     isHidden={false}
     isSubmenu={false}
   >
-    <MenuItem
-      className="bcs-VersionsItemActions-item"
+    <VersionsItemAction
+      action="promote"
+      isCurrent={false}
     >
       <IconUpload
         height={12}
@@ -375,7 +423,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         defaultMessage="Make Current"
         id="be.sidebarVersions.promote"
       />
-    </MenuItem>
+    </VersionsItemAction>
   </Menu>
 </DropdownMenu>
 `;
