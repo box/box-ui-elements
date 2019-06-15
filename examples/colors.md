@@ -1,107 +1,134 @@
-**Box brand blues**
+**Box/Primary Blues**
 
 ```
 <div className="palette">
     <div className="swatch-container">
         <div className="swatch box-blue" />
-        <label>#0061D5 - Box Blue</label>
+        <label>#0061D5 - box-blue</label>
     </div>
     <div className="swatch-container">
-        <div className="swatch koray-ing" />
-        <label>#2A62B9 - Koray-ing</label>
-    </div>
-</div>
-```
-
-**Secondary Colors**
-
-```
-<div className="palette">
-    <div className="swatch-container">
-        <div className="swatch dusty-plum" />
-        <label>#9B59B6 - Dusty Plum</label>
+        <div className="swatch box-blue-50" />
+        <label>#619de5 - box-blue-50</label>
     </div>
     <div className="swatch-container">
-        <div className="swatch sad-sunjin" />
-        <label>#72388F - Sad Sunjin</label>
-    </div>
-    <div className="swatch-container">
-        <div className="swatch thats-mint" />
-        <label>#26C281 - That’s Mint</label>
-    </div>
-    <div className="swatch-container">
-        <div className="swatch shady-acres" />
-        <label>#15AA61 - Shady Acres</label>
-    </div>
-    <div className="swatch-container">
-        <div className="swatch lemon-meringue" />
-        <label>#FFD522 - Lemon Meringue</label>
-    </div>
-    <div className="swatch-container">
-        <div className="swatch dehydrated" />
-        <label>#F5B31B - Dehydrated</label>
-    </div>
-    <div className="swatch-container">
-        <div className="swatch mad-max" />
-        <label>#F39C12 - Mad Max</label>
-    </div>
-    <div className="swatch-container">
-        <div className="swatch ayers-rock" />
-        <label>#E06E2B - Ayers Rock</label>
-    </div>
-    <div className="swatch-container">
-        <div className="swatch great-balls-of-fire" />
-        <label>#ED3757 - Great Balls of Fire</label>
-    </div>
-    <div className="swatch-container">
-        <div className="swatch king-crimson" />
-        <label>#C82341 - King Crimson</label>
-    </div>
-    <div className="swatch-container">
-        <div className="swatch amaranth" />
-        <label>#ED3757 - Amaranth</label>
+        <div className="swatch box-blue-05" />
+        <label>#f2f7fd- box-blue-05</label>
     </div>
 </div>
 ```
 
-**Tinted Grays**
+**Box/Primary Grays**
 
 ```
 <div className="palette">
     <div className="swatch-container">
-        <div className="swatch fnine" />
-        <label>#F9F9F9 - F Nine</label>
+        <div className="swatch gray" />
+        <label>#222 - gray</label>
     </div>
     <div className="swatch-container">
-        <div className="swatch sf-fog" />
-        <label>#BDC3C7 - SF Fog</label>
+        <div className="swatch gray-62" />
+        <label>#767676 - gray-62</label>
     </div>
     <div className="swatch-container">
-        <div className="swatch storms-a-comin" />
-        <label>#737F8B - Storms a Comin’</label>
+        <div className="swatch gray-50" />
+        <label>#909090 - gray-50</label>
     </div>
     <div className="swatch-container">
-        <div className="swatch blue-steel" />
-        <label>#2C3E50 - Blue Steel</label>
+        <div className="swatch gray-20" />
+        <label>#d3d3d3 - gray-20</label>
+    </div>
+    <div className="swatch-container">
+        <div className="swatch gray-10" />
+        <label>#e8e8e8 - gray-10</label>
+    </div>
+    <div className="swatch-container">
+        <div className="swatch gray-05" />
+        <label>#f4f4f4 - gray-05</label>
+    </div>
+    <div className="swatch-container">
+        <div className="swatch gray-02" />
+        <label>#fbfbfb - gray-02</label>
     </div>
 </div>
 ```
 
-**Neutral Grays**
+**Dark Blues**
 
 ```
 <div className="palette">
     <div className="swatch-container">
-        <div className="swatch downtown-grey" />
-        <label>#999EA4 - Downtown Grey</label>
+        <div className="swatch dark-blue" />
+        <label>#003c84 - dark-blue</label>
+    </div>
+</div>
+```
+
+**Light Blues**
+
+```
+<div className="palette">
+    <div className="swatch-container">
+        <div className="swatch light-blue" />
+        <label>#2486fc - light-blue</label>
+    </div>
+</div>
+```
+
+**Yelloranges**
+
+```
+<div className="palette">
+    <div className="swatch-container">
+        <div className="swatch yellorange" />
+        <label>#f5b31b - yellorange</label>
     </div>
     <div className="swatch-container">
-        <div className="swatch tendemob-grey" />
-        <label>#64686D - Tendemob Grey</label>
+        <div className="swatch yellorange-10" />
+        <label>#fef7e8 - yellorange-10</label>
     </div>
+</div>
+```
+
+**Green Lights**
+
+```
+<div className="palette">
     <div className="swatch-container">
-        <div className="swatch sunset-grey" />
-        <label>#464A4F - Sunset Grey</label>
+        <div className="swatch green-light" />
+        <label>#26c281 - green-light</label>
+    </div>
+</div>
+```
+
+**Grimaces**
+
+```
+<div className="palette">
+    <div className="swatch-container">
+        <div className="swatch grimace" />
+        <label>#4826c2 - grimace</label>
+    </div>
+</div>
+```
+
+**Purple Rains**
+
+```
+<div className="palette">
+    <div className="swatch-container">
+        <div className="swatch purple-rain" />
+        <label>#9f3fed - purple-rain</label>
+    </div>
+</div>
+```
+
+**Watermelon Reds**
+
+```
+<div className="palette">
+    <div className="swatch-container">
+        <div className="swatch watermelon-red" />
+        <label>#ed3757 - watermelon-red</label>
     </div>
 </div>
 ```
