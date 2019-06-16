@@ -33,7 +33,7 @@ Object.keys(colors).forEach(colorKey => {
               <div className="swatch-container">
                 <div className="swatch" style={{ backgroundColor: color[1] }} />
                 <label>
-                  {color[1]} - ${color[0]}
+                  {color[1]} - ${color[0].toLowerCase()}
                 </label>
               </div>
             );
@@ -42,5 +42,23 @@ Object.keys(colors).forEach(colorKey => {
       </div>
     );
   })}
+  <div>
+    <h4>White</h4>
+    <div className="palette">
+      <div className="swatch-container">
+        <div className="swatch" style={{ backgroundColor: '#fff' }} />
+        <label>#fff - $white</label>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h4>black</h4>
+    <div className="palette">
+      <div className="swatch-container">
+        <div className="swatch" style={{ backgroundColor: '#000' }} />
+        <label>#000 - $black</label>
+      </div>
+    </div>
+  </div>
 </div>;
 ```
