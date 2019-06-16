@@ -52,7 +52,7 @@ Object.keys(colors).forEach(colorKey => {
     </div>
   </div>
   <div>
-    <h4>black</h4>
+    <h4>Black</h4>
     <div className="palette">
       <div className="swatch-container">
         <div className="swatch" style={{ backgroundColor: '#000' }} />
