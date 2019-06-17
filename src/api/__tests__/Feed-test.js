@@ -552,6 +552,7 @@ describe('api/Feed', () => {
 
     describe('fetchComments()', () => {
         beforeEach(() => {
+            feed.file = file;
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
 
@@ -564,6 +565,7 @@ describe('api/Feed', () => {
 
     describe('fetchVersions()', () => {
         beforeEach(() => {
+            feed.file = file;
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
 
@@ -576,6 +578,7 @@ describe('api/Feed', () => {
 
     describe('fetchTasks()', () => {
         beforeEach(() => {
+            feed.file = file;
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
 
@@ -588,6 +591,7 @@ describe('api/Feed', () => {
 
     describe('fetchAppActivity()', () => {
         beforeEach(() => {
+            feed.file = file;
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
 
@@ -600,6 +604,7 @@ describe('api/Feed', () => {
 
     describe('fetchTasksNew()', () => {
         beforeEach(() => {
+            feed.file = file;
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
 
@@ -629,6 +634,7 @@ describe('api/Feed', () => {
 
     describe('updateTaskAssignmentSuccessCallback()', () => {
         beforeEach(() => {
+            feed.file = file;
             feed.getCachedItems = jest.fn().mockReturnValue({
                 hasError: false,
                 items: feedItems,
@@ -732,7 +738,7 @@ describe('api/Feed', () => {
                 description: 'updated description',
             };
             feed.updateTaskNew(file, task, successCallback, jest.fn());
-            expect(feed.id).toBe(file.id);
+            expect(feed.file.id).toBe(file.id);
             expect(feed.tasksNewAPI.updateTask).toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(successCallback).toBeCalled();
@@ -837,6 +843,7 @@ describe('api/Feed', () => {
         });
 
         test('should call the success callback', done => {
+            feed.file = file;
             feed.createTaskAssignment = jest.fn().mockResolvedValue('foo');
             feed.createTaskSuccessCallback(file, 'generated', tasks.entries[0], assignees, successCb, errorCb);
             setImmediate(() => {
@@ -848,6 +855,7 @@ describe('api/Feed', () => {
         });
 
         test('should call the error callback', done => {
+            feed.file = file;
             feed.createTaskAssignment = jest.fn().mockRejectedValue('bar');
             feed.createTaskSuccessCallback(file, 'generated', tasks.entries[0], assignees, successCb, errorCb);
             setImmediate(() => {
@@ -933,7 +941,7 @@ describe('api/Feed', () => {
 
         test('should call the task assignment api and if successful, resolve', done => {
             const promise = feed.createTaskAssignment(file, tasks.entries[0], 'foo', errorCb);
-            expect(feed.id).toBe(file.id);
+            expect(feed.file.id).toBe(file.id);
             expect(promise instanceof Promise).toBeTruthy();
             expect(feed.taskAssignmentsAPI[0].createTaskAssignment).toBeCalled();
             promise.then(() => {
@@ -954,7 +962,7 @@ describe('api/Feed', () => {
 
         test('should call the comments api and if successful, the success callback', () => {
             feed.deleteTask(file, '1');
-            expect(feed.id).toBe(file.id);
+            expect(feed.file.id).toBe(file.id);
             expect(feed.tasksAPI.deleteTask).toBeCalled();
             expect(feed.deleteFeedItem).toBeCalled();
         });
@@ -972,7 +980,7 @@ describe('api/Feed', () => {
 
         test('should call the new task api and if successful, the success callback', () => {
             feed.deleteTaskNew(file, { id: '1' });
-            expect(feed.id).toBe(file.id);
+            expect(feed.file.id).toBe(file.id);
             expect(feed.tasksNewAPI.deleteTask).toBeCalled();
             expect(feed.deleteFeedItem).toBeCalled();
         });
@@ -983,7 +991,7 @@ describe('api/Feed', () => {
         const feedItemId = feedItems[0].id;
         beforeEach(() => {
             feed.setCachedItems = jest.fn();
-            feed.id = file.id;
+            feed.file = file;
             successCb = jest.fn();
         });
 
@@ -1056,6 +1064,7 @@ describe('api/Feed', () => {
             },
         };
         beforeEach(() => {
+            feed.file = file;
             feed.appendAssignmentsToTask = jest.fn().mockReturnValue(tasksEntriesWithAssignments);
             feed.errorCallback = jest.fn();
         });
@@ -1136,6 +1145,7 @@ describe('api/Feed', () => {
         };
 
         beforeEach(() => {
+            feed.file = file;
             feed.setCachedItems = jest.fn();
         });
         test('should create an item and add it to the feed with empty cache', () => {
@@ -1242,11 +1252,12 @@ describe('api/Feed', () => {
         });
 
         test('should throw if no file id', () => {
+            feed.file = {};
             expect(() => feed.updateFeedItem({}, id)).toThrow(fileError);
         });
 
         test('should update the cache with the updated item', () => {
-            feed.id = file.id;
+            feed.file = file;
             const updatedFeedItems = feed.updateFeedItem(updates, id);
             expect(updatedFeedItems).not.toBeNull();
             expect(feed.setCachedItems).toBeCalledWith(file.id, updatedFeedItems);

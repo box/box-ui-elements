@@ -133,7 +133,6 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
             entries: [...versionsResponse.entries, ...currentVersionResponse.entries],
             total_count: versionsResponse.total_count + 1,
         };
-
         const versionsWithPermissions = versionsApi.addPermissions(versionsWithCurrent, fileResponse);
         const { entries: versions } = versionsApi.sortVersions(versionsWithPermissions) || {};
 
