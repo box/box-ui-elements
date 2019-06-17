@@ -12,7 +12,7 @@ function MDVGridViewSlot({ slotIndex, slotRenderer, ...rest }: Props) {
     }
 
     return (
-        <div className="MDVGridViewSlot" {...rest}>
+        <div className="MDVGridViewSlot bce-item-row" {...rest}>
             {slotRenderer(slotIndex)}
         </div>
     );

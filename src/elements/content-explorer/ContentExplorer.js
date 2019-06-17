@@ -29,6 +29,7 @@ import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import getSize from '../../utils/size';
+import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
@@ -404,6 +405,7 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         const thumbnailArray = Array(items.length).fill(null);
+        const fileAPI = this.api.getFileAPI();
 
         // using for loop instead of items.forEach() to get desired await functionality
         // TODO: This is bad. Find a better way to do this. Without using await, all requests except final
@@ -411,7 +413,7 @@ class ContentExplorer extends Component<Props, State> {
         for (let i = 0; i < items.length; i += 1) {
             const item = items[i];
             // eslint-disable-next-line no-await-in-loop
-            await this.api.getFileAPI().getFileThumbnail(item, dimensions, thumbnailUrl => {
+            await fileAPI.getFileThumbnail(item, dimensions, thumbnailUrl => {
                 thumbnailArray[i] = thumbnailUrl;
                 this.setState({ thumbnailUrls: [...thumbnailArray] });
             });
@@ -435,7 +437,7 @@ class ContentExplorer extends Component<Props, State> {
         // TODO: optimize to not fetch thumbnails if the API just fetched the
         // folder that is already being displayed
         this.fetchThumbnailUrls(collection, '1024x1024');
-
+        console.log(collection);
         // New folder state
         const newState = {
             selected: undefined,
@@ -522,6 +524,8 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     onItemClick = (item: BoxItem | string) => {
+        console.log('onItemClick called');
+
         // If the id was passed in, just use that
         if (typeof item === 'string') {
             this.fetchFolder(item);
@@ -796,6 +800,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
+        console.log('select called');
         const {
             selected,
             currentCollection: { items = [] },
@@ -1254,12 +1259,28 @@ class ContentExplorer extends Component<Props, State> {
 
     slotRenderer = (slotIndex: number) => {
         const { currentCollection } = this.state;
+        const { canPreview, canShare, canDownload, canDelete, canRename, isSmall } = this.props;
         const item: ?BoxItem = currentCollection.items ? currentCollection.items[slotIndex] : null;
 
         if (!item) {
             return <div />;
         }
         const url = this.state.thumbnailUrls[slotIndex];
+
+        const moreOptionsCell = moreOptionsCellRenderer(
+            canPreview,
+            canShare,
+            canDownload,
+            canDelete,
+            canRename,
+            this.select,
+            this.delete,
+            this.download,
+            this.rename,
+            this.share,
+            this.preview,
+            isSmall,
+        );
 
         // TODO: sort out these styles and put them in classes.
         const itemThumbnail = {
@@ -1301,6 +1322,7 @@ class ContentExplorer extends Component<Props, State> {
                     <div> {item.name} </div>
                     <div> {getSize(item.size)} </div>
                 </div>
+                {item && moreOptionsCell({ rowData: item })}
             </div>
         );
     };

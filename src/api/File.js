@@ -239,23 +239,28 @@ class File extends Item {
         this.successCallback = successCallback;
 
         try {
-            const thumbnailUrl = await this.xhr.get(xhrOptions).then(async response => {
-                const entries = response.data.representations.entries;
+            // no need to make api call since folders do not have thumbnails
+            if (item.type === 'folder') {
+                this.successHandler(null);
+            } else {
+                const thumbnailUrl = await this.xhr.get(xhrOptions).then(async response => {
+                    const entries = response.data.representations.entries;
 
-                if (!entries.length) {
-                    return null;
-                }
+                    if (!entries.length) {
+                        return null;
+                    }
 
-                // if unable to fetch jpg thumbnail, grab png of first page of file.
-                // Asset path for thumbnail is simply empty string.
-                const asset_path = entries[0].representation === 'jpg' ? '' : '1.png';
+                    // if unable to fetch jpg thumbnail, grab png of first page of file.
+                    // Asset path for thumbnail is simply empty string.
+                    const asset_path = entries[0].representation === 'jpg' ? '' : '1.png';
 
-                const thumbnailLink = entries[0].content.url_template.replace('{+asset_path}', asset_path);
+                    const thumbnailLink = entries[0].content.url_template.replace('{+asset_path}', asset_path);
 
-                // use token in URL for authorization
-                return `${thumbnailLink}?access_token=${access_token}`;
-            });
-            this.successHandler(thumbnailUrl);
+                    // use token in URL for authorization
+                    return `${thumbnailLink}?access_token=${access_token}`;
+                });
+                this.successHandler(thumbnailUrl);
+            }
         } catch (e) {
             this.errorHandler(e);
         }

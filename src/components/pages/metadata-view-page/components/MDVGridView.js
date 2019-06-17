@@ -25,7 +25,7 @@ type Props = {
     count: number,
     currentCollection: Collection,
     height: number,
-    onItemSelect: (item: BoxItem, callback: Function) => void,
+    onItemClick: Function,
     slotRenderer: (slotIndex: number) => React.Element<any>,
     width: number,
 };
@@ -56,7 +56,7 @@ class GridView extends React.Component<Props, State> {
     }
 
     cellRenderer = ({ dataKey, parent, rowIndex }: TableCellRendererParams) => {
-        const { columnCount, count, slotRenderer, onItemSelect, currentCollection } = this.props;
+        const { columnCount, count, slotRenderer, onItemClick, currentCollection } = this.props;
         const contents = [];
 
         const startingIndex = rowIndex * columnCount;
@@ -78,7 +78,7 @@ class GridView extends React.Component<Props, State> {
                     key={key}
                     onClick={() => {
                         if (currentCollection.items) {
-                            onItemSelect(currentCollection.items[slotIndex]);
+                            onItemClick(currentCollection.items[slotIndex]);
                         }
                     }}
                     slotIndex={slotIndex}

@@ -90,9 +90,21 @@ const Content = ({
                     count={count}
                     currentCollection={currentCollection}
                     height={height}
-                    onItemSelect={onItemClick}
                     slotRenderer={slotRenderer}
                     width={width}
+                    canPreview={canPreview}
+                    canShare={canShare}
+                    canDownload={canDownload}
+                    canDelete={canDelete}
+                    canRename={canRename}
+                    onItemClick={onItemClick}
+                    onItemSelect={onItemSelect}
+                    onItemDelete={onItemDelete}
+                    onItemDownload={onItemDownload}
+                    onItemRename={onItemRename}
+                    onItemShare={onItemShare}
+                    onItemPreview={onItemPreview}
+                    isSmall={isSmall}
                 />
             )}
         </AutoSizer>
