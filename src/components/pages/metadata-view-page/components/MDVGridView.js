@@ -71,7 +71,7 @@ class GridView extends React.Component<Props, State> {
             } else {
                 key = uniqueId('MDVGridViewSlot');
             }
-            console.log(`slotIndex: ${slotIndex}\t key: ${key}`);
+            // console.log(`slotIndex: ${slotIndex}\t key: ${key}`);
 
             contents.push(
                 <MDVGridViewSlot
