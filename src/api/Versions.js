@@ -226,16 +226,17 @@ class Versions extends OffsetBasedAPI {
      * @param {BoxItem} file - a box file
      * @returns {FileVersions} - a FileVersions object containing the decorated current version
      */
-    decorateCurrentVersion(version: BoxItemVersion, file: BoxItem): FileVersions {
+    decorateCurrentVersion(currentVersion: BoxItemVersion, versions: FileVersions, file: BoxItem): FileVersions {
         const restoredFromId = getProp(file, 'restored_from.id');
-        const isRestoredVersion = !!restoredFromId;
+        const restoredVersion = versions.entries.find(version => version.id === restoredFromId);
 
-        if (isRestoredVersion) {
-            version.action = VERSION_RESTORE_ACTION;
-            version.version_restored = version.version_number;
+        if (restoredVersion) {
+            currentVersion.action = VERSION_RESTORE_ACTION;
+            currentVersion.version_restored = restoredVersion.version_number;
         }
 
-        return { entries: [version], total_count: 1 };
+        // Wrap the current version as a FileVersions object to make merging with the feed easier
+        return { entries: [currentVersion], total_count: 1 };
     }
 
     /**

@@ -447,6 +447,7 @@ describe('api/Feed', () => {
             feed.setCachedItems = jest.fn();
             feed.versionsAPI = {
                 getCurrentVersion: jest.fn().mockReturnValue(versions),
+                decorateCurrentVersion: jest.fn().mockReturnValue(current_version),
             };
             successCb = jest.fn();
             errorCb = jest.fn();

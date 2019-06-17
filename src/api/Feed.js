@@ -183,8 +183,12 @@ class Feed extends Base {
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
         Promise.all([versionsPromise, currentVersionPromise, commentsPromise, tasksPromise, appActivityPromise]).then(
-            feedItems => {
-                const sortedFeedItems = sortFeedItems(...feedItems);
+            ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                const decoratedVersion =
+                    currentVersion && versions
+                        ? this.versionsAPI.decorateCurrentVersion(currentVersion, versions, this.file)
+                        : null;
+                const sortedFeedItems = sortFeedItems(versions, decoratedVersion, ...feedItems);
                 if (!this.isDestroyed()) {
                     this.setCachedItems(id, sortedFeedItems);
                     if (this.hasError) {
@@ -233,7 +237,7 @@ class Feed extends Base {
      *
      * @return {Promise} - the file versions
      */
-    fetchCurrentVersion(): Promise<?FileVersions> {
+    fetchCurrentVersion(): Promise<?BoxItemVersion> {
         this.versionsAPI = new VersionsAPI(this.options);
 
         return new Promise(resolve => {
@@ -245,11 +249,8 @@ class Feed extends Base {
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
             );
-        }).then(this.decorateCurrentVersion);
+        });
     }
-
-    decorateCurrentVersion = (version: BoxItemVersion): Promise<FileVersions> =>
-        new Promise(resolve => resolve(this.versionsAPI.decorateCurrentVersion(version, this.file)));
 
     /**
      * Fetches the tasks for a file

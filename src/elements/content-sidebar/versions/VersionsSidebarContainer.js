@@ -129,7 +129,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         const { api } = this.props;
         const versionsApi = api.getVersionsAPI(false);
 
-        const versionsWithCurrent = {
+        const versionsWithCurrent: FileVersions = {
             entries: [...versionsResponse.entries, ...currentVersionResponse.entries],
             total_count: versionsResponse.total_count + 1,
         };
@@ -206,7 +206,9 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                     resolve([
                         fileResponse,
                         versionsResponse,
-                        api.getVersionsAPI(false).decorateCurrentVersion(currentVersionResponse, fileResponse),
+                        api
+                            .getVersionsAPI(false)
+                            .decorateCurrentVersion(currentVersionResponse, versionsResponse, fileResponse),
                     ]);
                 },
                 reject,
