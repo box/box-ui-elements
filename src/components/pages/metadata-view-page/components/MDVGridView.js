@@ -26,6 +26,7 @@ type Props = {
     currentCollection: Collection,
     height: number,
     onItemClick: Function,
+    onItemSelect: Function,
     slotRenderer: (slotIndex: number) => React.Element<any>,
     width: number,
 };
@@ -56,7 +57,7 @@ class GridView extends React.Component<Props, State> {
     }
 
     cellRenderer = ({ dataKey, parent, rowIndex }: TableCellRendererParams) => {
-        const { columnCount, count, slotRenderer, onItemClick, currentCollection } = this.props;
+        const { columnCount, count, currentCollection, slotRenderer, onItemSelect } = this.props;
         const contents = [];
 
         const startingIndex = rowIndex * columnCount;
@@ -66,8 +67,10 @@ class GridView extends React.Component<Props, State> {
             // on every 1px scroll, so using improper key would lead to image flickering in each
             // card of the grid view when scrolling.
             let key;
+            let item = null;
             if (currentCollection.items && currentCollection.items[slotIndex]) {
                 key = currentCollection.items[slotIndex].id;
+                item = currentCollection.items[slotIndex];
             } else {
                 key = uniqueId('MDVGridViewSlot');
             }
@@ -76,13 +79,10 @@ class GridView extends React.Component<Props, State> {
             contents.push(
                 <MDVGridViewSlot
                     key={key}
-                    onClick={() => {
-                        if (currentCollection.items) {
-                            onItemClick(currentCollection.items[slotIndex]);
-                        }
-                    }}
                     slotIndex={slotIndex}
                     slotRenderer={slotIndex < count ? slotRenderer : null}
+                    item={item}
+                    onItemSelect={onItemSelect}
                 />,
             );
         }

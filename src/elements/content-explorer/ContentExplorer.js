@@ -30,6 +30,7 @@ import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import getSize from '../../utils/size';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
+import dateCellRenderer from './dateCellRenderer';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
@@ -1282,6 +1283,8 @@ class ContentExplorer extends Component<Props, State> {
             isSmall,
         );
 
+        const dateCell = dateCellRenderer();
+
         // TODO: sort out these styles and put them in classes.
         const itemThumbnail = {
             paddingBottom: '65%',
@@ -1312,19 +1315,28 @@ class ContentExplorer extends Component<Props, State> {
             backgroundRepeat: 'no-repeat',
         };
 
+        const onClick = () => {
+            this.onItemClick(item);
+        };
+
         // TODO: remove inline styles from JSX, and use classes and components instead.
+        /* eslint-disable jsx-a11y/no-static-element-interactions */
+        /* eslint-disable jsx-a11y/click-events-have-key-events */
         return (
             <div>
-                <div style={itemThumbnail}>
+                <div onClick={onClick} style={itemThumbnail}>
                     {url ? <div style={postLoadThumbnail} /> : <div style={itemIcon}> {getIcon(64, item)} </div>}
                 </div>
                 <div>
-                    <div> {item.name} </div>
+                    <div onClick={onClick}>{item.name}</div>
                     <div> {getSize(item.size)} </div>
+                    {item && dateCell({ dataKey: '', rowData: item })}
                 </div>
                 {item && moreOptionsCell({ rowData: item })}
             </div>
         );
+        /* eslint-enable jsx-a11y/no-static-element-interactions */
+        /* eslint-enable jsx-a11y/click-events-have-key-events */
     };
 
     onResize = (newViewSize: number) => {
