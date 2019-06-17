@@ -1261,8 +1261,7 @@ class ContentExplorer extends Component<Props, State> {
         }
         const url = this.state.thumbnailUrls[slotIndex];
 
-        // TODO: sort out these styles and put them in classes. Likely move over and adjust
-        // similar components from EUA.
+        // TODO: sort out these styles and put them in classes.
         const itemThumbnail = {
             paddingBottom: '65%',
             position: 'relative',

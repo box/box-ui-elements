@@ -48,7 +48,7 @@ const SubHeaderRight = ({
 
     return (
         <div className="be-sub-header-right">
-            {isGridView ? <GridViewSlider onResize={onResize} columnCount={columnCount} /> : null}
+            {isGridView && <GridViewSlider onResize={onResize} columnCount={columnCount} />}
             <Button onClick={onGridViewSwitch}>{isGridView ? <IconGridView /> : <IconGridViewInverted />}</Button>
             {showSort && !!sortBy && !!sortDirection && (
                 <Sort onSortChange={onSortChange} sortBy={sortBy} sortDirection={sortDirection} />

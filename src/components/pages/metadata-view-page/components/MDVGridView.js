@@ -56,14 +56,22 @@ class GridView extends React.Component<Props, State> {
     }
 
     cellRenderer = ({ dataKey, parent, rowIndex }: TableCellRendererParams) => {
-        // console.log(`cellRenderer called with \ndataKey: ${dataKey}\nparent: ${parent}\nrowIndex: ${rowIndex}`);
         const { columnCount, count, slotRenderer, onItemSelect, currentCollection } = this.props;
         const contents = [];
 
         const startingIndex = rowIndex * columnCount;
 
         for (let slotIndex = startingIndex; slotIndex < startingIndex + columnCount; slotIndex += 1) {
-            const key = uniqueId('MDVGridViewSlot');
+            // using item's id as key is important for renrendering.  React Virtualized Table rerenders
+            // on every 1px scroll, so using improper key would lead to image flickering in each
+            // card of the grid view when scrolling.
+            let key;
+            if (currentCollection.items && currentCollection.items[slotIndex]) {
+                key = currentCollection.items[slotIndex].id;
+            } else {
+                key = uniqueId('MDVGridViewSlot');
+            }
+            console.log(`slotIndex: ${slotIndex}\t key: ${key}`);
 
             contents.push(
                 <MDVGridViewSlot
