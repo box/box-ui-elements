@@ -49,7 +49,7 @@ type Props = {|
 |};
 
 type State = {
-    assigned_to: ?TaskAssigneeCollection,
+    assigned_to: TaskAssigneeCollection,
     isEditing: boolean,
     isLoading: boolean,
     modalError: ?ElementsXhrError,
@@ -71,24 +71,20 @@ const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
 
 class Task extends React.Component<Props, State> {
     state = {
-        assigned_to: null,
+        assigned_to: this.props.assigned_to,
         modalError: undefined,
         isEditing: false,
+        isLoading: false,
     };
 
-    componentDidMount() {
-        const { assigned_to, id } = this.props;
+    handleEditClick = async (): void => {
+        const { assigned_to } = this.state;
 
-        if (assigned_to.next_marker) {
-            const collaborators = api.getTaskCollaborators(() => {}, file, () => {}, { id });
-        } else {
-            this.setState({ assigned_to });
+        if(assigned_to.next_marker) {
+            await this.fetchTaskCollaborators();
         }
-    }
-
-    handleEditClick = (): void => {
         this.setState({ isEditing: true });
-        // SHZ : Determine if we need to fetch all the assignees here ?
+
     };
 
     handleModalClose = () => {
@@ -103,11 +99,15 @@ class Task extends React.Component<Props, State> {
         this.setState({ modalError: error });
     };
 
-    handleTaskCollaboratorSuccess = () => {
-        this.setState({ isLoading: false });
+    handleTaskCollaboratorSuccess = (assigned_to: TaskAssigneeCollection) => {
+        this.setState({
+            assigned_to,
+            isLoading: false,
+        });
     };
 
     handleTaskCollaboratorError = (error: ElementsXhrError) => {
+        // TODO:
         this.setState({ isLoading: false, modalError: error });
     };
 
@@ -115,7 +115,7 @@ class Task extends React.Component<Props, State> {
         const { assigned_to } = this.state;
 
         return (
-            assigned_to &&
+            assigned_to && assigned_to.entries &&
             assigned_to.entries.map(taskCollab => {
                 const newSelectorItem: SelectorItem = {
                     ...taskCollab.target,
@@ -129,9 +129,26 @@ class Task extends React.Component<Props, State> {
         );
     };
 
+    fetchTaskCollaborators = async () => {
+        const { assigned_to, id, api, task_links } = this.props;
+        const { entries } = task_links;
+        let fileId;
+
+        if (entries[0].target) {
+            fileId = entries[0].target.id;
+        }
+        this.setState({ isLoading: true });
+
+        return api.getTaskCollaboratorsAPI(false).getTaskCollaborators({
+            errorCallback: this.handleTaskCollaboratorError,
+            file: { id: fileId },
+            successCallback :this.handleTaskCollaboratorSuccess,
+            task: { id },
+        });
+    }
+
     render() {
         const {
-            assigned_to,
             created_at,
             created_by,
             currentUser,
@@ -155,7 +172,7 @@ class Task extends React.Component<Props, State> {
             translations,
         } = this.props;
 
-        const { modalError, isEditing } = this.state;
+        const { assigned_to, modalError, isEditing } = this.state;
 
         const taskPermissions = {
             ...permissions,
