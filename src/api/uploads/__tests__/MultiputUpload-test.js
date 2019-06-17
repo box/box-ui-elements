@@ -648,6 +648,7 @@ describe('api/uploads/MultiputUpload', () => {
     describe('processNextParts()', () => {
         beforeEach(() => {
             multiputUploadTest.parts = ['part1'];
+            multiputUploadTest.commitSession = jest.fn();
         });
 
         test('should call failSessionIfFileChangeDetected and return when it returns true', () => {
@@ -698,6 +699,75 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.processNextParts();
             expect(multiputUploadTest.updateFirstUnuploadedPartIndex).toHaveBeenCalled();
             expect(multiputUploadTest.uploadNextPart).toHaveBeenCalledTimes(2);
+        });
+
+        test('should commit the session if all parts have been uploaded', () => {
+            multiputUploadTest.failSessionIfFileChangeDetected = jest.fn().mockReturnValueOnce(false);
+            multiputUploadTest.commitSession = jest.fn();
+            multiputUploadTest.updateFirstUnuploadedPartIndex = jest.fn();
+            multiputUploadTest.uploadNextPart = jest.fn();
+            multiputUploadTest.numPartsUploaded = 1;
+            multiputUploadTest.fileSha1 = 'abc';
+
+            // Execute
+            multiputUploadTest.processNextParts();
+            expect(multiputUploadTest.failSessionIfFileChangeDetected).toHaveBeenCalled();
+            expect(multiputUploadTest.commitSession).toHaveBeenCalled();
+            expect(multiputUploadTest.updateFirstUnuploadedPartIndex).not.toHaveBeenCalled();
+            expect(multiputUploadTest.uploadNextPart).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('onWorkerMessage()', () => {
+        beforeEach(() => {
+            multiputUploadTest.isDestroyed = jest.fn();
+            multiputUploadTest.processNextParts = jest.fn();
+            multiputUploadTest.sha1Worker = { terminate: jest.fn() };
+            multiputUploadTest.sessionErrorHandler = jest.fn();
+        });
+
+        test('should return if destroyed', () => {
+            multiputUploadTest.isDestroyed.mockReturnValueOnce(true);
+
+            multiputUploadTest.onWorkerMessage();
+
+            expect(multiputUploadTest.processNextParts).not.toHaveBeenCalled();
+            expect(multiputUploadTest.sha1Worker.terminate).not.toHaveBeenCalled();
+            expect(multiputUploadTest.sessionErrorHandler).not.toHaveBeenCalled();
+        });
+
+        test('should call sessionErrorHandler if event type is error', () => {
+            multiputUploadTest.isDestroyed.mockReturnValueOnce(false);
+
+            multiputUploadTest.onWorkerMessage({ data: { type: 'error' } });
+
+            expect(multiputUploadTest.processNextParts).not.toHaveBeenCalled();
+            expect(multiputUploadTest.sha1Worker.terminate).not.toHaveBeenCalled();
+            expect(multiputUploadTest.sessionErrorHandler).toHaveBeenCalled();
+        });
+
+        test('should update the related variables after a part is done computing', () => {
+            multiputUploadTest.isDestroyed.mockReturnValueOnce(false);
+            multiputUploadTest.numPartsDigestComputing = 1;
+            multiputUploadTest.parts = [{ timing: { fileDigestTime: 0 } }];
+
+            multiputUploadTest.onWorkerMessage({ data: { type: 'partDone', duration: 10, part: { index: 0 } } });
+
+            expect(multiputUploadTest.processNextParts).toHaveBeenCalled();
+            expect(multiputUploadTest.sha1Worker.terminate).not.toHaveBeenCalled();
+            expect(multiputUploadTest.sessionErrorHandler).not.toHaveBeenCalled();
+            expect(multiputUploadTest.numPartsDigestComputing).toEqual(0);
+            expect(multiputUploadTest.parts[0]).toEqual({ timing: { fileDigestTime: 10 } });
+        });
+
+        test('should terminate the sha1Worker if the event type is done', () => {
+            multiputUploadTest.isDestroyed.mockReturnValueOnce(false);
+
+            multiputUploadTest.onWorkerMessage({ data: { type: 'done', sha1: 'abc' } });
+
+            expect(multiputUploadTest.processNextParts).toHaveBeenCalled();
+            expect(multiputUploadTest.sha1Worker.terminate).toHaveBeenCalled();
+            expect(multiputUploadTest.sessionErrorHandler).not.toHaveBeenCalled();
         });
     });
 });
