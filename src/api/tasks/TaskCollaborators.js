@@ -16,7 +16,7 @@ import {
 
 class TaskCollaborators extends TasksBase {
     getUrlForTaskCollaborators(taskId: string): string {
-        return `${this.getBaseApiUrl()}/undoc/tasks/${taskId}/task_collaborators?limit=${API_PAGE_LIMIT}`;
+        return `${this.getBaseApiUrl()}/undoc/tasks/${taskId}/task_collaborators?role=ASSIGNEE&limit=${API_PAGE_LIMIT}`;
     }
 
     getUrlForTaskCollaboratorCreate(): string {

@@ -4,11 +4,13 @@ import noop from 'lodash/noop';
 import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import { withAPIContext } from 'elements/common/api-context';
 import messages from '../../../common/messages';
 import CommentInlineError from '../comment/CommentInlineError';
 import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../../../icons/two-toned/IconTaskGeneral';
+import { withAPIContext } from '../../../common/api-context';
+
+import API from '../../../../api/APIFactory';
 import {
     TASK_NEW_APPROVED,
     TASK_NEW_REJECTED,
@@ -52,6 +54,7 @@ type State = {
     assigned_to: TaskAssigneeCollection,
     isEditing: boolean,
     isLoading: boolean,
+    loadCollabError: ?ActionItemError,
     modalError: ?ElementsXhrError,
 };
 
@@ -71,20 +74,23 @@ const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
 
 class Task extends React.Component<Props, State> {
     state = {
+        loadCollabError: undefined,
         assigned_to: this.props.assigned_to,
         modalError: undefined,
         isEditing: false,
         isLoading: false,
     };
 
-    handleEditClick = async (): void => {
+    handleEditClick = async () => {
         const { assigned_to } = this.state;
 
-        if(assigned_to.next_marker) {
-            await this.fetchTaskCollaborators();
+        if (assigned_to.next_marker) {
+            this.fetchTaskCollaborators().then(() => {
+                this.setState({ isEditing: true });
+            });
+        } else {
+            this.setState({ isEditing: true });
         }
-        this.setState({ isEditing: true });
-
     };
 
     handleModalClose = () => {
@@ -99,23 +105,12 @@ class Task extends React.Component<Props, State> {
         this.setState({ modalError: error });
     };
 
-    handleTaskCollaboratorSuccess = (assigned_to: TaskAssigneeCollection) => {
-        this.setState({
-            assigned_to,
-            isLoading: false,
-        });
-    };
-
-    handleTaskCollaboratorError = (error: ElementsXhrError) => {
-        // TODO:
-        this.setState({ isLoading: false, modalError: error });
-    };
-
     getUsersFromTask = (): SelectorItems => {
         const { assigned_to } = this.state;
 
         return (
-            assigned_to && assigned_to.entries &&
+            assigned_to &&
+            assigned_to.entries &&
             assigned_to.entries.map(taskCollab => {
                 const newSelectorItem: SelectorItem = {
                     ...taskCollab.target,
@@ -130,7 +125,7 @@ class Task extends React.Component<Props, State> {
     };
 
     fetchTaskCollaborators = async () => {
-        const { assigned_to, id, api, task_links } = this.props;
+        const { id, api, task_links } = this.props;
         const { entries } = task_links;
         let fileId;
 
@@ -139,13 +134,30 @@ class Task extends React.Component<Props, State> {
         }
         this.setState({ isLoading: true });
 
-        return api.getTaskCollaboratorsAPI(false).getTaskCollaborators({
-            errorCallback: this.handleTaskCollaboratorError,
-            file: { id: fileId },
-            successCallback :this.handleTaskCollaboratorSuccess,
-            task: { id },
+        return new Promise((resolve, reject) => {
+            api.getTaskCollaboratorsAPI(false).getTaskCollaborators({
+                task: { id },
+                file: { id: fileId },
+                errorCallback: () => {
+                    const { errorOccured, taskCollaboratorLoadErrorMessage } = messages;
+
+                    this.setState(
+                        {
+                            isLoading: false,
+                            loadCollabError: {
+                                message: taskCollaboratorLoadErrorMessage,
+                                title: errorOccured,
+                            },
+                        },
+                        reject,
+                    );
+                },
+                successCallback: assigned_to => {
+                    this.setState({ assigned_to, isLoading: false }, resolve);
+                },
+            });
         });
-    }
+    };
 
     render() {
         const {
@@ -172,7 +184,7 @@ class Task extends React.Component<Props, State> {
             translations,
         } = this.props;
 
-        const { assigned_to, modalError, isEditing } = this.state;
+        const { assigned_to, modalError, isEditing, isLoading, loadCollabError } = this.state;
 
         const taskPermissions = {
             ...permissions,
@@ -192,13 +204,14 @@ class Task extends React.Component<Props, State> {
             (status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
 
         const TaskTypeIcon = task_type === TASK_TYPE_APPROVAL ? IconTaskApproval : IconTaskGeneral;
+        const inlineError = loadCollabError || error;
 
         return (
             <div className="bcs-task-container">
-                {error ? <CommentInlineError {...error} /> : null}
+                {inlineError ? <CommentInlineError {...inlineError} /> : null}
                 <div
                     className={classNames('bcs-task', {
-                        'bcs-is-pending': isPending || error,
+                        'bcs-is-pending': isPending || isLoading,
                     })}
                     data-testid="task-card"
                 >
