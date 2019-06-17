@@ -129,7 +129,7 @@ describe('api/TaskCollaborators', () => {
 
                 expect(taskCollaborators.get).toBeCalledWith({
                     id: FILE_ID,
-                    url: `${BASE_URL}/undoc/tasks/${taskId}/task_collaborators?limit=${API_PAGE_LIMIT}`,
+                    url: `${BASE_URL}/undoc/tasks/${taskId}/task_collaborators?role=ASSIGNEE&limit=${API_PAGE_LIMIT}`,
                     successCallback,
                     errorCallback,
                 });
