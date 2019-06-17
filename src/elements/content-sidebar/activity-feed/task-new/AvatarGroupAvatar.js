@@ -8,6 +8,8 @@ import IconReject from '../../../../icons/general/IconRejected';
 import Avatar from '../Avatar';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
 import messages from '../../../common/messages';
+import type { TaskCollabStatus } from './flowTypes';
+import type { UserMini } from '../../../../common/flowTypes';
 
 type Props = {
     className?: string,

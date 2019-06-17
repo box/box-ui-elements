@@ -12,6 +12,7 @@ import {
     ERROR_CODE_FETCH_TASKS,
     API_PAGE_LIMIT,
 } from '../../constants';
+import type { TaskUpdatePayload } from '../flowTypes';
 
 class TasksNew extends TasksBase {
     getUrlForFileTasks(id: string): string {

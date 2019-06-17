@@ -11,6 +11,9 @@ import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_
 
 import './AssigneeList.scss';
 
+import type { TaskAssigneeCollection } from './flowTypes';
+import type { ISODate } from '../../../../common/flowTypes';
+
 const DEFAULT_ASSIGNEES_SHOWN = 3;
 const TASKS_PAGE_SIZE = 20; // service does not return the page size to the client at the moment
 
