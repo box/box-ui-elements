@@ -184,11 +184,8 @@ class Feed extends Base {
 
         Promise.all([versionsPromise, currentVersionPromise, commentsPromise, tasksPromise, appActivityPromise]).then(
             ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-                const decoratedVersion =
-                    currentVersion && versions
-                        ? this.versionsAPI.decorateCurrentVersion(currentVersion, versions, this.file)
-                        : null;
-                const sortedFeedItems = sortFeedItems(versions, decoratedVersion, ...feedItems);
+                const versionsWithCurrent = this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file);
+                const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
                 if (!this.isDestroyed()) {
                     this.setCachedItems(id, sortedFeedItems);
                     if (this.hasError) {
