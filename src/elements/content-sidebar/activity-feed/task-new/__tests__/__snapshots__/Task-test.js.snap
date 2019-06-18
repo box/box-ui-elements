@@ -54,6 +54,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     >
       <AssigneeList
         initialAssigneeCount={3}
+        onExpand={[Function]}
         users={
           Object {
             "entries": Array [
