@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+import PlainButton from '../../../components/plain-button';
 import { scrollIntoView } from '../../../utils/dom';
 import './VersionsItemButton.scss';
 
@@ -25,7 +26,7 @@ class VersionsItemButton extends React.Component<Props> {
         isSelected: false,
     };
 
-    buttonRef: { current: null | ?HTMLButtonElement } = React.createRef();
+    buttonRef: ?HTMLButtonElement;
 
     componentDidMount() {
         this.setScroll();
@@ -39,12 +40,15 @@ class VersionsItemButton extends React.Component<Props> {
         }
     }
 
+    setButtonRef = (buttonRef: ?HTMLButtonElement): void => {
+        this.buttonRef = buttonRef;
+    };
+
     setScroll = () => {
         const { isSelected } = this.props;
-        const { current: buttonRef } = this.buttonRef;
 
-        if (buttonRef && isSelected) {
-            scrollIntoView(buttonRef);
+        if (this.buttonRef && isSelected) {
+            scrollIntoView(this.buttonRef);
         }
     };
 
@@ -56,26 +60,20 @@ class VersionsItemButton extends React.Component<Props> {
         });
 
         return (
-            <button
+            <PlainButton
                 aria-disabled={isDisabled}
                 className={buttonClassName}
                 data-resin-iscurrent={isCurrent}
                 data-resin-itemid={fileId}
                 data-resin-target="select"
                 data-testid="versions-item-button"
-                onClick={event => {
-                    if (isDisabled) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    } else {
-                        onClick(event);
-                    }
-                }}
-                ref={this.buttonRef}
+                getDOMRef={this.setButtonRef}
+                isDisabled={isDisabled}
+                onClick={onClick}
                 type="button"
             >
                 {children}
-            </button>
+            </PlainButton>
         );
     }
 }

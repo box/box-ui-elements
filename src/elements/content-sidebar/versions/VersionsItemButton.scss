@@ -2,11 +2,9 @@
 
 .bcs-VersionsItemButton {
     align-items: flex-start;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 4px;
+    background-color: transparent;
+    border-radius: $bdl-border-radius-size;
     color: $bdl-gray;
-    cursor: pointer;
     display: flex;
     font-size: 100%;
     line-height: 20px;
@@ -14,6 +12,12 @@
     text-align: left;
     transition: background-color 50ms ease-in, border 50ms ease-in;
     width: 100%;
+
+    &,
+    &:hover,
+    &:focus {
+        border: 1px solid transparent; // Override plain button styles
+    }
 
     &:hover,
     &:focus {

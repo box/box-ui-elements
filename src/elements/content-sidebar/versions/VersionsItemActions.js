@@ -21,10 +21,10 @@ import './VersionsItemActions.scss';
 
 type Props = {
     fileId: string,
-    isCurrent: boolean,
-    isDeleted: boolean,
-    isDownloadable: boolean,
-    isSelected: boolean,
+    isCurrent?: boolean,
+    isDeleted?: boolean,
+    isDownloadable?: boolean,
+    isSelected?: boolean,
     onDelete?: () => void,
     onDownload?: () => void,
     onPreview?: () => void,
