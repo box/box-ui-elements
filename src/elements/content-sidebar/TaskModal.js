@@ -16,7 +16,7 @@ type TaskModalProps = {
     isTaskFormOpen: boolean,
     onModalClose: () => void,
     onSubmitError: (e: ElementsXhrError) => void,
-    onSubmitSuccess: () => void,
+    onSubmitSuccess: () => any,
     taskFormProps: TaskFormProps,
     taskType: TaskType,
 };

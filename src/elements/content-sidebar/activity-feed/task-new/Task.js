@@ -8,6 +8,9 @@ import messages from '../../../common/messages';
 import CommentInlineError from '../comment/CommentInlineError';
 import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../../../icons/two-toned/IconTaskGeneral';
+import { withAPIContext } from '../../../common/api-context';
+
+import API from '../../../../api/APIFactory';
 import {
     TASK_NEW_APPROVED,
     TASK_NEW_REJECTED,
@@ -30,6 +33,7 @@ import './Task.scss';
 
 type Props = {|
     ...TaskNew,
+    api: API,
     currentUser: User,
     error?: ActionItemError,
     features?: FeatureConfig,
@@ -47,7 +51,10 @@ type Props = {|
 |};
 
 type State = {
+    assigned_to: TaskAssigneeCollection,
     isEditing: boolean,
+    isLoading: boolean,
+    loadCollabError: ?ActionItemError,
     modalError: ?ElementsXhrError,
 };
 
@@ -67,12 +74,23 @@ const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
 
 class Task extends React.Component<Props, State> {
     state = {
+        loadCollabError: undefined,
+        assigned_to: this.props.assigned_to,
         modalError: undefined,
         isEditing: false,
+        isLoading: false,
     };
 
-    handleEditClick = (): void => {
-        this.setState({ isEditing: true });
+    handleEditClick = async () => {
+        const { assigned_to } = this.state;
+
+        if (assigned_to.next_marker) {
+            this.fetchTaskCollaborators().then(() => {
+                this.setState({ isEditing: true });
+            });
+        } else {
+            this.setState({ isEditing: true });
+        }
     };
 
     handleModalClose = () => {
@@ -88,7 +106,7 @@ class Task extends React.Component<Props, State> {
     };
 
     getUsersFromTask = (): SelectorItems => {
-        const { assigned_to } = this.props;
+        const { assigned_to } = this.state;
 
         return (
             assigned_to &&
@@ -105,9 +123,48 @@ class Task extends React.Component<Props, State> {
         );
     };
 
+    fetchTaskCollaborators = (): Promise<any> => {
+        const { id, api, task_links } = this.props;
+        const { entries } = task_links;
+        let fileId = '';
+
+        if (entries[0] && entries[0].target) {
+            fileId = entries[0].target.id;
+        }
+
+        if (!fileId) {
+            return Promise.reject();
+        }
+
+        this.setState({ isLoading: true });
+
+        return new Promise((resolve, reject) => {
+            api.getTaskCollaboratorsAPI(false).getTaskCollaborators({
+                task: { id },
+                file: { id: fileId },
+                errorCallback: () => {
+                    const { errorOccured, taskCollaboratorLoadErrorMessage } = messages;
+
+                    this.setState(
+                        {
+                            isLoading: false,
+                            loadCollabError: {
+                                message: taskCollaboratorLoadErrorMessage,
+                                title: errorOccured,
+                            },
+                        },
+                        reject,
+                    );
+                },
+                successCallback: assigned_to => {
+                    this.setState({ assigned_to, isLoading: false }, resolve);
+                },
+            });
+        });
+    };
+
     render() {
         const {
-            assigned_to,
             created_at,
             created_by,
             currentUser,
@@ -131,7 +188,7 @@ class Task extends React.Component<Props, State> {
             translations,
         } = this.props;
 
-        const { modalError, isEditing } = this.state;
+        const { assigned_to, modalError, isEditing, isLoading, loadCollabError } = this.state;
 
         const taskPermissions = {
             ...permissions,
@@ -151,13 +208,14 @@ class Task extends React.Component<Props, State> {
             (status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
 
         const TaskTypeIcon = task_type === TASK_TYPE_APPROVAL ? IconTaskApproval : IconTaskGeneral;
+        const inlineError = loadCollabError || error;
 
         return (
             <div className="bcs-task-container">
-                {error ? <CommentInlineError {...error} /> : null}
+                {inlineError ? <CommentInlineError {...inlineError} /> : null}
                 <div
                     className={classNames('bcs-task', {
-                        'bcs-is-pending': isPending || error,
+                        'bcs-is-pending': isPending || isLoading,
                     })}
                     data-testid="task-card"
                 >
@@ -249,4 +307,4 @@ class Task extends React.Component<Props, State> {
 }
 
 export { Task as TaskComponent };
-export default flow([withFeatureConsumer])(Task);
+export default flow([withFeatureConsumer, withAPIContext])(Task);
