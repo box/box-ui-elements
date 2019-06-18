@@ -77,24 +77,14 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
             expect(expandBtn.find('FormattedMessage').prop('values')).toEqual({ additionalAssigneeCount: '1' });
         });
 
-        [
-            {
-                numAssignees: 20,
-                next_marker: null,
-                overflowValue: '17',
-            },
-            {
-                numAssignees: 25,
-                next_marker: 'abc',
-                overflowValue: '17+',
-            },
-            {
-                numAssignees: 25,
-                next_marker: null,
-                overflowValue: '17+',
-            },
-        ].forEach(({ numAssignees, next_marker, overflowValue }) => {
-            test('should show correct overflow when there are more assignees and another page of results', () => {
+        test.each`
+            numAssignees | next_marker | overflowValue
+            ${20}        | ${null}     | ${'17'}
+            ${20}        | ${'abc'}    | ${'17+'}
+            ${25}        | ${null}     | ${'17+'}
+        `(
+            'should show $overflowValue when there are more assignees and/or another page of results',
+            ({ numAssignees, next_marker, overflowValue }) => {
                 const initialCount = 3;
                 const pageSize = 20;
                 const paginatedAssignees = {
@@ -126,8 +116,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
                 expect(expandBtn.find('FormattedMessage').prop('values')).toEqual({
                     additionalAssigneeCount: overflowValue,
                 });
-            });
-        });
+            },
+        );
 
         test('should show not show overflow icon when there are fewer assignees than initialAssigneeCount', () => {
             const initialCount = 3;
