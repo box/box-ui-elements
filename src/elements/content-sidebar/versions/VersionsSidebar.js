@@ -18,6 +18,7 @@ import './VersionsSidebar.scss';
 
 type Props = {
     error?: string,
+    fileId: string,
     isLoading: boolean,
     onDelete: VersionActionCallback,
     onDownload: VersionActionCallback,
@@ -31,6 +32,8 @@ type Props = {
 const VersionsSidebar = ({ error, isLoading, parentName, ...rest }: Props) => (
     <SidebarContent
         className="bcs-Versions"
+        data-resin-component="preview"
+        data-resin-feature="versions"
         title={
             <React.Fragment>
                 <BackButton path={`/${parentName}`} />

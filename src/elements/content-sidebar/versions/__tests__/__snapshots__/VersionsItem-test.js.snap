@@ -4,6 +4,12 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
 <div
   className="bcs-VersionsItem-log"
   data-testid="bcs-VersionsItem-log"
+  title={
+    <FormattedMessage
+      defaultMessage="Unknown"
+      id="be.sidebarVersions.versionUserUnknown"
+    />
+  }
 >
   <FormattedMessage
     defaultMessage="Uploaded by {name}"
@@ -24,6 +30,12 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
 <div
   className="bcs-VersionsItem-log"
   data-testid="bcs-VersionsItem-log"
+  title={
+    <FormattedMessage
+      defaultMessage="Unknown"
+      id="be.sidebarVersions.versionUserUnknown"
+    />
+  }
 >
   <FormattedMessage
     defaultMessage="Uploaded by {name}"
@@ -41,60 +53,69 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
 `;
 
 exports[`elements/content-sidebar/versions/VersionsItem render should render a deleted version correctly 1`] = `
-<VersionsItemButton
+<div
   className="bcs-VersionsItem"
-  isDisabled={true}
-  onActivate={[Function]}
 >
-  <div
-    className="bcs-VersionsItem-badge"
-  >
-    <VersionsItemBadge
-      isDisabled={true}
-      versionNumber={1}
-    />
-  </div>
-  <div
-    className="bcs-VersionsItem-details"
+  <VersionsItemButton
+    fileId="123"
+    isCurrent={false}
+    isDisabled={true}
+    isSelected={false}
+    onClick={[Function]}
   >
     <div
-      className="bcs-VersionsItem-log"
-      data-testid="bcs-VersionsItem-log"
+      className="bcs-VersionsItem-badge"
     >
-      <FormattedMessage
-        defaultMessage="Deleted by {name}"
-        id="be.sidebarVersions.deletedBy"
-        values={
-          Object {
-            "name": "Test User",
-          }
-        }
+      <VersionsItemBadge
+        isDisabled={true}
+        versionNumber={1}
       />
     </div>
     <div
-      className="bcs-VersionsItem-info"
+      className="bcs-VersionsItem-details"
     >
-      <time
-        className="bcs-VersionsItem-date"
-        dateTime={2019-03-01T08:00:00.000Z}
+      <div
+        className="bcs-VersionsItem-log"
+        data-testid="bcs-VersionsItem-log"
+        title="Test User"
       >
-        <ReadableTime
-          alwaysShowTime={true}
-          relativeThreshold={300000}
-          timestamp={1551427200000}
+        <FormattedMessage
+          defaultMessage="Deleted by {name}"
+          id="be.sidebarVersions.deletedBy"
+          values={
+            Object {
+              "name": "Test User",
+            }
+          }
         />
-      </time>
-      <span
-        className="bcs-VersionsItem-size"
-        title="10 KB"
+      </div>
+      <div
+        className="bcs-VersionsItem-info"
       >
-        10 KB
-      </span>
+        <time
+          className="bcs-VersionsItem-date"
+          dateTime={2019-03-01T08:00:00.000Z}
+        >
+          <ReadableTime
+            alwaysShowTime={true}
+            relativeThreshold={300000}
+            timestamp={1551427200000}
+          />
+        </time>
+        <span
+          className="bcs-VersionsItem-size"
+        >
+          10 KB
+        </span>
+      </div>
     </div>
-  </div>
+  </VersionsItemButton>
   <VersionsItemActions
+    fileId="123"
+    isCurrent={false}
     isDeleted={true}
     isDownloadable={false}
+    isSelected={false}
     onDelete={[Function]}
     onDownload={[Function]}
     onPreview={[Function]}
@@ -107,64 +128,73 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
       }
     }
   />
-</VersionsItemButton>
+</div>
 `;
 
 exports[`elements/content-sidebar/versions/VersionsItem render should render an uploaded version correctly 1`] = `
-<VersionsItemButton
+<div
   className="bcs-VersionsItem"
-  isDisabled={false}
-  onActivate={[Function]}
 >
-  <div
-    className="bcs-VersionsItem-badge"
-  >
-    <VersionsItemBadge
-      isDisabled={false}
-      versionNumber={1}
-    />
-  </div>
-  <div
-    className="bcs-VersionsItem-details"
+  <VersionsItemButton
+    fileId="123"
+    isCurrent={false}
+    isDisabled={false}
+    isSelected={false}
+    onClick={[Function]}
   >
     <div
-      className="bcs-VersionsItem-log"
-      data-testid="bcs-VersionsItem-log"
+      className="bcs-VersionsItem-badge"
     >
-      <FormattedMessage
-        defaultMessage="Uploaded by {name}"
-        id="be.sidebarVersions.uploadedBy"
-        values={
-          Object {
-            "name": "Test User",
-          }
-        }
+      <VersionsItemBadge
+        isDisabled={false}
+        versionNumber={1}
       />
     </div>
     <div
-      className="bcs-VersionsItem-info"
+      className="bcs-VersionsItem-details"
     >
-      <time
-        className="bcs-VersionsItem-date"
-        dateTime={2019-03-01T08:00:00.000Z}
+      <div
+        className="bcs-VersionsItem-log"
+        data-testid="bcs-VersionsItem-log"
+        title="Test User"
       >
-        <ReadableTime
-          alwaysShowTime={true}
-          relativeThreshold={300000}
-          timestamp={1551427200000}
+        <FormattedMessage
+          defaultMessage="Uploaded by {name}"
+          id="be.sidebarVersions.uploadedBy"
+          values={
+            Object {
+              "name": "Test User",
+            }
+          }
         />
-      </time>
-      <span
-        className="bcs-VersionsItem-size"
-        title="10 KB"
+      </div>
+      <div
+        className="bcs-VersionsItem-info"
       >
-        10 KB
-      </span>
+        <time
+          className="bcs-VersionsItem-date"
+          dateTime={2019-03-01T08:00:00.000Z}
+        >
+          <ReadableTime
+            alwaysShowTime={true}
+            relativeThreshold={300000}
+            timestamp={1551427200000}
+          />
+        </time>
+        <span
+          className="bcs-VersionsItem-size"
+        >
+          10 KB
+        </span>
+      </div>
     </div>
-  </div>
+  </VersionsItemButton>
   <VersionsItemActions
+    fileId="123"
+    isCurrent={false}
     isDeleted={false}
     isDownloadable={false}
+    isSelected={false}
     onDelete={[Function]}
     onDownload={[Function]}
     onPreview={[Function]}
@@ -177,5 +207,5 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
       }
     }
   />
-</VersionsItemButton>
+</div>
 `;

@@ -1,0 +1,37 @@
+@import '../../common/variables';
+
+.bcs-VersionsItemButton {
+    align-items: flex-start;
+    background-color: transparent;
+    border-radius: $bdl-border-radius-size;
+    color: $bdl-gray;
+    display: flex;
+    font-size: 100%;
+    line-height: 20px;
+    outline: none;
+    text-align: left;
+    transition: background-color 50ms ease-in, border 50ms ease-in;
+    width: 100%;
+
+    &,
+    &:hover,
+    &:focus {
+        border: 1px solid transparent; // Override plain button styles
+    }
+
+    &:hover,
+    &:focus {
+        border-color: $bdl-gray-50;
+    }
+
+    &.bcs-is-disabled {
+        border-color: transparent;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    &.bcs-is-selected {
+        background-color: $hover-blue-background;
+        border-color: $bdl-box-blue;
+    }
+}

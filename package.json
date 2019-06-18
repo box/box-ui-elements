@@ -98,7 +98,6 @@
     "husky": {
         "hooks": {
             "pre-commit": "lint-staged",
-            "pre-push": "./scripts/prepush.sh",
             "commit-msg": "commitlint -e"
         }
     },
