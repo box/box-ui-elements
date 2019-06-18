@@ -110,7 +110,6 @@ class Task extends React.Component<Props, State> {
 
         return (
             assigned_to &&
-            assigned_to.entries &&
             assigned_to.entries.map(taskCollab => {
                 const newSelectorItem: SelectorItem = {
                     ...taskCollab.target,
