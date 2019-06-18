@@ -18,6 +18,8 @@ jest.mock('../../../../utils/iframe', () => ({
     default: jest.fn(),
 }));
 
+const versions = [{ id: '123', name: 'Version 1' }, { id: '456', name: 'Version 2' }, { id: '789', name: 'Version 3' }];
+
 describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     const defaultId = '12345';
     const fileAPI = {
@@ -249,7 +251,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                     id: fileVersionId,
                 },
             };
-            const versions = 'versions';
+
             versionsAPI.getCurrentVersion.mockResolvedValueOnce();
 
             const wrapper = getWrapper();
@@ -288,11 +290,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should return the version stored in state if available', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            const versions = [
-                { id: '123', name: 'Version 1' },
-                { id: '456', name: 'Version 2' },
-                { id: '789', name: 'Version 3' },
-            ];
 
             wrapper.setState({ versions });
 
@@ -341,11 +338,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
     describe('verifyVersion', () => {
         const onVersionChange = jest.fn();
-        const versions = [
-            { id: '123', name: 'Version 1' },
-            { id: '456', name: 'Version 2' },
-            { id: '789', name: 'Version 3' },
-        ];
 
         test('should emit an onVersionChange event if the passed version is available', () => {
             const wrapper = getWrapper({ onVersionChange, versionId: '456' });

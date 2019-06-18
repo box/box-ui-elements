@@ -239,11 +239,9 @@ jest.mock('../Comments', () =>
 );
 
 jest.mock('../Versions', () => {
-    const version = mockFirstVersion;
-    const currentVersion = mockCurrentVersion;
     return jest.fn().mockImplementation(() => ({
-        getVersions: jest.fn().mockReturnValue(version),
-        getCurrentVersion: jest.fn().mockReturnValue(currentVersion),
+        getVersions: jest.fn(() => mockFirstVersion),
+        getCurrentVersion: jest.fn(() => mockCurrentVersion),
     }));
 });
 

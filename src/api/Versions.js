@@ -220,7 +220,7 @@ class Versions extends OffsetBasedAPI {
     }
 
     /**
-     * Decorates the current version as a FileVersions with restored information
+     * Decorates the current version and adds it to an existing FileVersions object
      *
      * @param {BoxItemVersion} version - a box version
      * @param {BoxItem} file - a box file
