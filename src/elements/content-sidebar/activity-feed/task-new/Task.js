@@ -123,14 +123,19 @@ class Task extends React.Component<Props, State> {
         );
     };
 
-    fetchTaskCollaborators = async () => {
+    fetchTaskCollaborators = (): Promise<any> => {
         const { id, api, task_links } = this.props;
         const { entries } = task_links;
-        let fileId;
+        let fileId = '';
 
-        if (entries[0].target) {
+        if (entries[0] && entries[0].target) {
             fileId = entries[0].target.id;
         }
+
+        if (!fileId) {
+            return Promise.reject();
+        }
+
         this.setState({ isLoading: true });
 
         return new Promise((resolve, reject) => {
