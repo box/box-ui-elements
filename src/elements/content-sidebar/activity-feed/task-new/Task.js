@@ -25,7 +25,7 @@ import Comment from '../comment';
 import TaskActions from './TaskActions';
 import TaskDueDate from './TaskDueDate';
 import TaskStatus from './TaskStatus';
-import AvatarGroup from './AvatarGroup';
+import AssigneeList from './AssigneeList';
 import TaskModal from '../../TaskModal';
 import { withFeatureConsumer, getFeatureConfig } from '../../../common/feature-checking';
 
@@ -257,7 +257,12 @@ class Task extends React.Component<Props, State> {
                         <TaskStatus status={status} />
                     </div>
                     <div className="bcs-task-content">
-                        <AvatarGroup getAvatarUrl={getAvatarUrl} maxAvatars={3} users={assigned_to} />
+                        <AssigneeList
+                            onExpand={this.fetchTaskCollaborators}
+                            getAvatarUrl={getAvatarUrl}
+                            initialAssigneeCount={3}
+                            users={assigned_to}
+                        />
                     </div>
                     <div className="bcs-task-content">
                         {currentUserAssignment && shouldShowActions && (

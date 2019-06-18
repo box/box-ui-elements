@@ -479,7 +479,7 @@ class APIFactory {
      * API for taskCollaborators
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {TasksAPI} TaskCollaboratorsAPI instance
+     * @return {TaskCollaboratorsAPI} TaskCollaboratorsAPI instance
      */
     getTaskCollaboratorsAPI(shouldDestroy: boolean): TaskCollaboratorsAPI {
         if (shouldDestroy) {

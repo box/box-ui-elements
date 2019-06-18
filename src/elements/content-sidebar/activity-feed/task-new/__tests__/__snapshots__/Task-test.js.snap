@@ -52,8 +52,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     <div
       className="bcs-task-content"
     >
-      <AvatarGroup
-        maxAvatars={3}
+      <AssigneeList
+        initialAssigneeCount={3}
+        onExpand={[Function]}
         users={
           Object {
             "entries": Array [
