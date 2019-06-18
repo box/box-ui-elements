@@ -1097,24 +1097,26 @@ class Feed extends Base {
      * @param {Array} tasksWithoutAssignments - Box tasks
      * @return {Promise}
      */
-    fetchTaskAssignments(tasksWithoutAssignments: Tasks): Promise<?Tasks> {
-        const { entries } = tasksWithoutAssignments;
-        const assignmentPromises = entries.map(
-            (task: Task) =>
-                new Promise(resolve => {
-                    const tasksAPI = new TasksAPI(this.options);
-                    this.taskAssignmentsAPI.push(tasksAPI);
-                    tasksAPI.getAssignments(
-                        this.id,
-                        task.id,
-                        (assignments: TaskAssignments) => {
-                            const formattedTask = this.appendAssignmentsToTask(task, assignments.entries);
-                            resolve(formattedTask);
-                        },
-                        this.fetchFeedItemErrorCallback.bind(this, resolve),
-                    );
-                }),
-        );
+    fetchTaskAssignments(tasks: Tasks): Promise<?Tasks> {
+        const { entries } = tasks;
+        const assignmentPromises = entries
+            .filter(entry => entry.task_assignment_collection && entry.task_assignment_collection.total_count > 0)
+            .map(
+                (task: Task) =>
+                    new Promise(resolve => {
+                        const tasksAPI = new TasksAPI(this.options);
+                        this.taskAssignmentsAPI.push(tasksAPI);
+                        tasksAPI.getAssignments(
+                            this.id,
+                            task.id,
+                            (assignments: TaskAssignments) => {
+                                const formattedTask = this.appendAssignmentsToTask(task, assignments.entries);
+                                resolve(formattedTask);
+                            },
+                            this.fetchFeedItemErrorCallback.bind(this, resolve),
+                        );
+                    }),
+            );
 
         const formattedTasks: Tasks = { total_count: 0, entries: [] };
         return Promise.all(assignmentPromises).then(

@@ -271,7 +271,7 @@ describe('api/Feed', () => {
         ],
     };
     const tasks = {
-        total_count: 1,
+        total_count: 2,
         entries: [
             {
                 type: 'task',
@@ -284,6 +284,19 @@ describe('api/Feed', () => {
                 task_assignment_collection: {
                     entries: [{ assigned_to: { name: 'Akon', id: 11 } }],
                     total_count: 1,
+                },
+            },
+            {
+                type: 'task',
+                id: '5555',
+                created_at: 'Thu Sep 25 33658 19:45:39 GMT-0600 (CST)',
+                modified_at: 'Thu Sep 25 33658 19:46:39 GMT-0600 (CST)',
+                tagged_message: 'test',
+                modified_by: { name: 'Ronaldo', id: 7 },
+                dueAt: 1234567891,
+                task_assignment_collection: {
+                    entries: [],
+                    total_count: 0,
                 },
             },
         ],
@@ -1032,17 +1045,20 @@ describe('api/Feed', () => {
                 ...taskAssignments,
             },
         };
+        const tasksWithAssignments = tasks.entries.filter(
+            entry => entry.task_assignment_collection && entry.task_assignment_collection.total_count > 0,
+        );
         beforeEach(() => {
             feed.appendAssignmentsToTask = jest.fn().mockReturnValue(tasksEntriesWithAssignments);
             feed.errorCallback = jest.fn();
         });
 
-        test('should fetch the task assignments', done => {
-            feed.fetchTaskAssignments(tasks).then(tasksWithAssignments => {
-                expect(feed.taskAssignmentsAPI.pop().getAssignments).toHaveBeenCalledTimes(tasks.entries.length);
-                expect(feed.appendAssignmentsToTask).toHaveBeenCalledTimes(tasks.entries.length);
-                expect(tasksWithAssignments).toEqual({
-                    ...tasks,
+        test('should fetch the task assignments only when they exist', done => {
+            feed.fetchTaskAssignments(tasks).then(task => {
+                expect(feed.taskAssignmentsAPI.pop().getAssignments).toHaveBeenCalledTimes(tasksWithAssignments.length);
+                expect(feed.appendAssignmentsToTask).toHaveBeenCalledTimes(tasksWithAssignments.length);
+                expect(task).toEqual({
+                    total_count: tasksWithAssignments.length,
                     entries: [tasksEntriesWithAssignments],
                 });
 
