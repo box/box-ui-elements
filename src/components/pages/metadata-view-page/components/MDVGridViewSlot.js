@@ -17,7 +17,6 @@ function MDVGridViewSlot({ item, onItemSelect, slotIndex, slotRenderer, ...rest 
     });
 
     const onClick = () => {
-        console.log('MDVGridViewSlot clicked');
         onItemSelect(item);
     };
 

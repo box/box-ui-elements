@@ -244,9 +244,10 @@ class File extends Item {
                 this.successHandler(null);
             } else {
                 const thumbnailUrl = await this.xhr.get(xhrOptions).then(async response => {
+                    console.log(response);
                     const entries = response.data.representations.entries;
 
-                    if (!entries.length) {
+                    if (!entries.length || entries[0].status.state !== 'success') {
                         return null;
                     }
 

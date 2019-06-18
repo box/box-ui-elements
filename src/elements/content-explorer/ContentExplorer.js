@@ -31,6 +31,7 @@ import Content from './Content';
 import getSize from '../../utils/size';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import dateCellRenderer from './dateCellRenderer';
+import nameCellRenderer from '../common/item/nameCellRenderer';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
@@ -396,11 +397,12 @@ class ContentExplorer extends Component<Props, State> {
      *
      * @private
      * @param {Object} collection - item collection object
-     * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
+     * @param {string} dimensions - desired dimensions of thumbnail. Acceptable dimensions
+     * for a jpg are: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048".
      * @return {void}
      */
     async fetchThumbnailUrls(collection: Collection, dimensions: string): Promise<void> {
-        const { items = [] } = collection;
+        const { items } = collection;
         if (!items) {
             return;
         }
@@ -438,7 +440,7 @@ class ContentExplorer extends Component<Props, State> {
         // TODO: optimize to not fetch thumbnails if the API just fetched the
         // folder that is already being displayed
         this.fetchThumbnailUrls(collection, '1024x1024');
-        console.log(collection);
+        // console.log(collection);
         // New folder state
         const newState = {
             selected: undefined,
@@ -525,7 +527,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     onItemClick = (item: BoxItem | string) => {
-        console.log('onItemClick called');
+        // console.log('onItemClick called');
 
         // If the id was passed in, just use that
         if (typeof item === 'string') {
@@ -557,7 +559,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     searchSuccessCallback = (collection: Collection) => {
         const { currentCollection }: State = this.state;
-
+        this.fetchThumbnailUrls(collection, '1024x1024');
         // Unselect any rows that were selected
         this.unselect();
 
@@ -801,7 +803,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
-        console.log('select called');
+        // console.log('select called');
         const {
             selected,
             currentCollection: { items = [] },
@@ -1259,8 +1261,8 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     slotRenderer = (slotIndex: number) => {
-        const { currentCollection } = this.state;
-        const { canPreview, canShare, canDownload, canDelete, canRename, isSmall } = this.props;
+        const { currentCollection, view } = this.state;
+        const { canPreview, canShare, canDownload, canDelete, canRename, isSmall, isTouch, rootFolderId } = this.props;
         const item: ?BoxItem = currentCollection.items ? currentCollection.items[slotIndex] : null;
 
         if (!item) {
@@ -1283,10 +1285,21 @@ class ContentExplorer extends Component<Props, State> {
             isSmall,
         );
 
+        const nameCell = nameCellRenderer(
+            rootFolderId,
+            view,
+            this.onItemClick,
+            this.select,
+            canPreview,
+            isSmall, // shows details if false
+            isTouch,
+        );
+
         const dateCell = dateCellRenderer();
 
         // TODO: sort out these styles and put them in classes.
         const itemThumbnail = {
+            marginBottom: '10px',
             paddingBottom: '65%',
             position: 'relative',
         };
@@ -1300,6 +1313,7 @@ class ContentExplorer extends Component<Props, State> {
             top: '0',
             width: '50%',
             height: '50%',
+            textAlign: 'center',
         };
 
         const postLoadThumbnail = {
@@ -1313,6 +1327,7 @@ class ContentExplorer extends Component<Props, State> {
             backgroundImage: `url("${url}")`,
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center center',
         };
 
         const onClick = () => {
@@ -1325,10 +1340,11 @@ class ContentExplorer extends Component<Props, State> {
         return (
             <div>
                 <div onClick={onClick} style={itemThumbnail}>
-                    {url ? <div style={postLoadThumbnail} /> : <div style={itemIcon}> {getIcon(64, item)} </div>}
+                    {url ? <div style={postLoadThumbnail} /> : <div style={itemIcon}> {getIcon(128, item)} </div>}
                 </div>
                 <div>
-                    <div onClick={onClick}>{item.name}</div>
+                    {/* <div onClick={onClick}>{item.name}</div> */}
+                    {item && nameCell({ rowData: item })}
                     <div> {getSize(item.size)} </div>
                     {item && dateCell({ dataKey: '', rowData: item })}
                 </div>
