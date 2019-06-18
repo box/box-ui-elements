@@ -286,10 +286,11 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { parentName } = this.props;
+        const { fileId, parentName } = this.props;
 
         return (
             <VersionsSidebar
+                fileId={fileId}
                 onDelete={this.handleActionDelete}
                 onDownload={this.handleActionDownload}
                 onPreview={this.handleActionPreview}

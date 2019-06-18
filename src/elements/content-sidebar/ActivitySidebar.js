@@ -191,17 +191,24 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             // need to load the pending item
             this.fetchFeedItems();
         },
-        updateTask: (task: TaskUpdatePayload): void => {
+        updateTask: (task: TaskUpdatePayload, onSuccess: ?Function, onError: ?Function): void => {
             const { file, api, onTaskUpdate = noop } = this.props;
-            api.getFeedAPI(false).updateTaskNew(
-                file,
-                task,
-                () => {
-                    this.feedSuccessCallback();
-                    onTaskUpdate();
-                },
-                this.feedErrorCallback,
-            );
+            const successCallback = () => {
+                this.feedSuccessCallback();
+                onTaskUpdate();
+
+                if (onSuccess) {
+                    onSuccess();
+                }
+            };
+            const errorCallback = (e, code) => {
+                if (onError) {
+                    onError(e, code);
+                }
+                this.feedErrorCallback(e, code);
+            };
+
+            api.getFeedAPI(false).updateTaskNew(file, task, successCallback, errorCallback);
 
             // need to load the pending item
             this.fetchFeedItems();
@@ -585,6 +592,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             createTask,
             getApproverWithQuery,
             getAvatarUrl,
+            id: '',
             message: '',
         };
         return (

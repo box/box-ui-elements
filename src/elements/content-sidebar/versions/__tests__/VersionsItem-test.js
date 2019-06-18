@@ -4,9 +4,15 @@ import VersionsItem from '../VersionsItem';
 import VersionsItemButton from '../VersionsItemButton';
 import { ReadableTime } from '../../../../components/time';
 
+jest.mock('../../../../utils/dom', () => ({
+    ...jest.requireActual('../../../../utils/dom'),
+    scrollIntoView: jest.fn(),
+}));
+
 describe('elements/content-sidebar/versions/VersionsItem', () => {
     const defaults = {
         id: '12345',
+        action: 'upload',
         created_at: new Date('2019-03-01T00:00:00'),
         modified_at: new Date('2019-03-01T00:00:00'),
         modified_by: { name: 'Test User', id: 10 },
@@ -21,17 +27,21 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         ...defaults,
         ...overrides,
     });
-    const getWrapper = (props = {}) => shallow(<VersionsItem {...props} />);
+    const getWrapper = (props = {}) => shallow(<VersionsItem fileId="123" version={defaults} {...props} />);
 
     describe('render', () => {
         test('should render an uploaded version correctly', () => {
             const wrapper = getWrapper({
                 version: getVersion({ action: 'upload' }),
             });
-            const button = wrapper.closest(VersionsItemButton);
 
-            expect(button.prop('isDisabled')).toBe(false);
-            expect(wrapper.closest(ReadableTime)).toBeTruthy();
+            expect(
+                wrapper
+                    .find(VersionsItemButton)
+                    .first()
+                    .prop('isDisabled'),
+            ).toBe(false);
+            expect(wrapper.find(ReadableTime)).toBeTruthy();
             expect(wrapper).toMatchSnapshot();
         });
 
@@ -39,10 +49,14 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             const wrapper = getWrapper({
                 version: getVersion({ action: 'delete' }),
             });
-            const button = wrapper.closest(VersionsItemButton);
 
-            expect(button.prop('isDisabled')).toBe(true);
-            expect(wrapper.closest(ReadableTime)).toBeTruthy();
+            expect(
+                wrapper
+                    .find(VersionsItemButton)
+                    .first()
+                    .prop('isDisabled'),
+            ).toBe(true);
+            expect(wrapper.find(ReadableTime)).toBeTruthy();
             expect(wrapper).toMatchSnapshot();
         });
 
@@ -51,9 +65,13 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
                 isSelected: true,
                 version: getVersion({ action: 'upload' }),
             });
-            const button = wrapper.closest(VersionsItemButton);
 
-            expect(button.prop('isSelected')).toBe(true);
+            expect(
+                wrapper
+                    .find(VersionsItemButton)
+                    .first()
+                    .prop('isSelected'),
+            ).toBe(true);
         });
 
         test.each`

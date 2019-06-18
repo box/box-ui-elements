@@ -1,36 +1,26 @@
 @import '../../common/variables';
 
 .bcs-VersionsItem {
-    align-items: flex-start;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    color: $twos;
-    cursor: pointer;
-    display: flex;
-    font-size: 100%;
-    line-height: 20px;
-    outline: none;
-    padding: 15px 10px;
+    $bcs-VersionsItemButton-horizontal: 10px;
+    $bcs-VersionsItemButton-vertical: 15px;
+
     position: relative;
-    text-align: left;
-    transition: background-color 50ms ease-in, border 50ms ease-in;
-    width: 100%;
 
-    &:hover,
-    &:focus {
-        border-color: $nines;
+    .bcs-VersionsItemButton {
+        padding: $bcs-VersionsItemButton-vertical $bcs-VersionsItemButton-horizontal;
     }
 
-    &.bcs-is-disabled {
-        border-color: transparent;
-        cursor: default;
-        pointer-events: none;
+    .bcs-VersionsItemActions {
+        .aria-menu {
+            padding-bottom: 8px;
+            padding-top: 8px;
+        }
     }
 
-    &.bcs-is-selected {
-        background-color: $hover-blue-background;
-        border-color: $primary-color;
+    .bcs-VersionsItemActions-toggle {
+        position: absolute;
+        right: $bcs-VersionsItemButton-horizontal;
+        top: $bcs-VersionsItemButton-vertical;
     }
 }
 
@@ -40,7 +30,7 @@
 }
 
 .bcs-VersionsItem-current {
-    color: $primary-color;
+    color: $bdl-box-blue;
     font-weight: bold;
 }
 
@@ -51,12 +41,13 @@
 
 .bcs-VersionsItem-info {
     align-items: center;
-    color: $seventy-sixers;
+    color: $bdl-gray-62;
     display: flex;
     white-space: nowrap;
 }
 
 .bcs-VersionsItem-log {
+    margin-right: 35px; // Avoid flowing under action toggle button
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

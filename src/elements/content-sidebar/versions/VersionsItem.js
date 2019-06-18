@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import getProp from 'lodash/get';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
@@ -18,6 +18,7 @@ import { VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION, VERSION_UPLOAD_ACTION } 
 import './VersionsItem.scss';
 
 type Props = {
+    fileId: string,
     isCurrent: boolean,
     isSelected: boolean,
     onDelete?: VersionActionCallback,
@@ -38,8 +39,9 @@ const FIVE_MINUTES_MS = 5 * 60 * 1000;
 const getActionMessage = action => ACTION_MAP[action] || ACTION_MAP[VERSION_UPLOAD_ACTION];
 
 const VersionsItem = ({
-    isCurrent,
-    isSelected,
+    fileId,
+    isCurrent = false,
+    isSelected = false,
     onDelete,
     onDownload,
     onPreview,
@@ -74,47 +76,48 @@ const VersionsItem = ({
     };
 
     return (
-        <VersionsItemButton
-            className="bcs-VersionsItem"
-            isDisabled={isDisabled}
-            isSelected={isSelected}
-            onActivate={handleAction(onPreview)}
-        >
-            <div className="bcs-VersionsItem-badge">
-                <VersionsItemBadge isDisabled={isDeleted} versionNumber={versionNumber} />
-            </div>
+        <div className="bcs-VersionsItem">
+            <VersionsItemButton
+                fileId={fileId}
+                isCurrent={isCurrent}
+                isDisabled={isDisabled}
+                isSelected={isSelected}
+                onClick={handleAction(onPreview)}
+            >
+                <div className="bcs-VersionsItem-badge">
+                    <VersionsItemBadge isDisabled={isDeleted} versionNumber={versionNumber} />
+                </div>
 
-            <div className="bcs-VersionsItem-details">
-                {isCurrent && (
-                    <div className="bcs-VersionsItem-current">
-                        <FormattedMessage {...messages.versionCurrent} />
+                <div className="bcs-VersionsItem-details">
+                    {isCurrent && (
+                        <div className="bcs-VersionsItem-current">
+                            <FormattedMessage {...messages.versionCurrent} />
+                        </div>
+                    )}
+                    <div className="bcs-VersionsItem-log" data-testid="bcs-VersionsItem-log" title={versionUserName}>
+                        <FormattedMessage {...getActionMessage(action)} values={{ name: versionUserName }} />
                     </div>
-                )}
-                <div className="bcs-VersionsItem-log" data-testid="bcs-VersionsItem-log">
-                    <FormattedMessage {...getActionMessage(action)} values={{ name: versionUserName }} />
+                    <div className="bcs-VersionsItem-info">
+                        {versionTimestamp && (
+                            <time className="bcs-VersionsItem-date" dateTime={createdAt}>
+                                <ReadableTime
+                                    alwaysShowTime
+                                    relativeThreshold={FIVE_MINUTES_MS}
+                                    timestamp={versionTimestamp}
+                                />
+                            </time>
+                        )}
+                        {!!size && <span className="bcs-VersionsItem-size">{versionSize}</span>}
+                    </div>
                 </div>
-                <div className="bcs-VersionsItem-info">
-                    {versionTimestamp && (
-                        <time className="bcs-VersionsItem-date" dateTime={createdAt}>
-                            <ReadableTime
-                                alwaysShowTime
-                                relativeThreshold={FIVE_MINUTES_MS}
-                                timestamp={versionTimestamp}
-                            />
-                        </time>
-                    )}
-                    {!!size && (
-                        <span className="bcs-VersionsItem-size" title={versionSize}>
-                            {versionSize}
-                        </span>
-                    )}
-                </div>
-            </div>
+            </VersionsItemButton>
 
             <VersionsItemActions
+                fileId={fileId}
                 isCurrent={isCurrent}
                 isDeleted={isDeleted}
                 isDownloadable={isDownloadable}
+                isSelected={isSelected}
                 onDelete={handleAction(onDelete)}
                 onDownload={handleAction(onDownload)}
                 onPreview={handleAction(onPreview)}
@@ -122,8 +125,7 @@ const VersionsItem = ({
                 onRestore={handleAction(onRestore)}
                 permissions={permissions}
             />
-        </VersionsItemButton>
+        </div>
     );
 };
-
 export default VersionsItem;

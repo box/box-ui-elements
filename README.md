@@ -1,6 +1,7 @@
 [![Project Status](https://img.shields.io/badge/status-active-brightgreen.svg)](http://opensource.box.com/badges)
 [![build status](https://travis-ci.com/box/box-ui-elements.svg?branch=master)](https://travis-ci.com/box/box-ui-elements)
 [![Styled With Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Mergify Status](https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/box/box-ui-elements&style=flat)](https://mergify.io)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 <a href="https://www.npmjs.com/package/box-ui-elements">

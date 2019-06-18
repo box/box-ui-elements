@@ -36,9 +36,9 @@ class AddTaskButton extends React.Component<Props, State> {
         this.setState({ isTaskFormOpen: false, error: null });
     };
 
-    handleCreateSuccess = () => this.setState({ isTaskFormOpen: false, error: null });
+    handleSubmitSuccess = () => this.setState({ isTaskFormOpen: false, error: null });
 
-    handleCreateError = (e: ElementsXhrError) => this.setState({ error: e });
+    handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
 
     render() {
         const { isDisabled, feedbackUrl, taskFormProps } = this.props;
@@ -50,8 +50,8 @@ class AddTaskButton extends React.Component<Props, State> {
                 <TaskModal
                     error={error}
                     feedbackUrl={feedbackUrl}
-                    onCreateError={this.handleCreateError}
-                    onCreateSuccess={this.handleCreateSuccess}
+                    onSubmitError={this.handleSubmitError}
+                    onSubmitSuccess={this.handleSubmitSuccess}
                     onModalClose={this.handleModalClose}
                     isTaskFormOpen={isTaskFormOpen}
                     taskFormProps={taskFormProps}
