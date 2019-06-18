@@ -243,7 +243,6 @@ class Versions extends OffsetBasedAPI {
             currentVersion.version_restored = restoredVersion.version_number;
         }
 
-        // Wrap the current version as a FileVersions object to make merging with the feed easier
         return { entries: [...versions.entries, currentVersion], total_count: versions.total_count + 1 };
     }
 

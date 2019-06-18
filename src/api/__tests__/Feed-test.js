@@ -61,6 +61,42 @@ const mockTaskNew = {
     status: TASK_NEW_NOT_STARTED,
 };
 
+const mockFirstVersion = {
+    action: 'upload',
+    type: 'file_version',
+    id: 123,
+    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+    trashed_at: 1234567891,
+    modified_at: 1234567891,
+    modified_by: { name: 'Akon', id: 11 },
+};
+
+const mockCurrentVersion = {
+    action: 'restore',
+    type: 'file_version',
+    id: '123',
+};
+
+const deleted_version = {
+    action: 'delete',
+    type: 'file_version',
+    id: 234,
+    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+    trashed_at: 1234567891,
+    modified_at: 1234567891,
+    modified_by: { name: 'Akon', id: 11 },
+};
+
+const versions = {
+    total_count: 1,
+    entries: [mockFirstVersion, deleted_version],
+};
+
+const versionsWithCurrent = {
+    total_count: 3,
+    entries: [mockCurrentVersion, mockFirstVersion, deleted_version],
+};
+
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 jest.mock('../tasks/Tasks', () => {
@@ -202,24 +238,14 @@ jest.mock('../Comments', () =>
     })),
 );
 
-jest.mock('../Versions', () =>
-    jest.fn().mockImplementation(() => ({
-        getVersions: jest.fn().mockReturnValue({
-            total_count: 1,
-            entries: [
-                {
-                    action: 'upload',
-                    type: 'file_version',
-                    id: 123,
-                    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-                    trashed_at: 1234567891,
-                    modified_at: 1234567891,
-                    modified_by: { name: 'Akon', id: 11 },
-                },
-            ],
-        }),
-    })),
-);
+jest.mock('../Versions', () => {
+    const version = mockFirstVersion;
+    const currentVersion = mockCurrentVersion;
+    return jest.fn().mockImplementation(() => ({
+        getVersions: jest.fn().mockReturnValue(version),
+        getCurrentVersion: jest.fn().mockReturnValue(currentVersion),
+    }));
+});
 
 const MOCK_APP_ACTIVITY_ITEM = {
     activity_template: {
@@ -309,41 +335,6 @@ describe('api/Feed', () => {
         limit: 1000,
         next_marker: null,
     };
-    const first_version = {
-        action: 'upload',
-        type: 'file_version',
-        id: 123,
-        created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-        trashed_at: 1234567891,
-        modified_at: 1234567891,
-        modified_by: { name: 'Akon', id: 11 },
-    };
-
-    const current_version = {
-        action: 'restore',
-        type: 'file_version',
-        id: '123',
-    };
-
-    const deleted_version = {
-        action: 'delete',
-        type: 'file_version',
-        id: 234,
-        created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-        trashed_at: 1234567891,
-        modified_at: 1234567891,
-        modified_by: { name: 'Akon', id: 11 },
-    };
-
-    const versions = {
-        total_count: 1,
-        entries: [first_version, deleted_version],
-    };
-
-    const versionsWithCurrent = {
-        total_count: 3,
-        entries: [current_version, first_version, deleted_version],
-    };
 
     const appActivities = {
         total_count: 1,
@@ -363,8 +354,8 @@ describe('api/Feed', () => {
             id: 987,
         },
         restored_from: {
-            id: first_version.id,
-            type: first_version.type,
+            id: mockFirstVersion.id,
+            type: mockFirstVersion.type,
         },
     };
 
@@ -439,7 +430,7 @@ describe('api/Feed', () => {
 
         beforeEach(() => {
             feed.fetchVersions = jest.fn().mockResolvedValue(versions);
-            feed.fetchCurrentVersion = jest.fn().mockResolvedValue(current_version);
+            feed.fetchCurrentVersion = jest.fn().mockResolvedValue(mockCurrentVersion);
             feed.fetchTasks = jest.fn().mockResolvedValue(tasks);
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasksNew);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
@@ -462,6 +453,7 @@ describe('api/Feed', () => {
         test('should get feed items, sort, save to cache, and call the success callback', done => {
             feed.feedItems(file, false, successCb, errorCb, jest.fn(), false, true);
             setImmediate(() => {
+                expect(feed.versionsAPI.addCurrentVersion).toHaveBeenCalledWith(mockCurrentVersion, versions, file);
                 expect(sorter.sortFeedItems).toHaveBeenCalledWith(versionsWithCurrent, comments, tasks, appActivities);
                 expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
                 expect(successCb).toHaveBeenCalledWith(sortedItems);
@@ -558,55 +550,50 @@ describe('api/Feed', () => {
         });
     });
 
-    describe('fetchVersions()', () => {
+    describe('Fetching Base Items', () => {
         beforeEach(() => {
             feed.file = file;
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
 
-        test('should return a promise and call the versions api', () => {
-            const versionItems = feed.fetchVersions();
-            expect(versionItems instanceof Promise).toBeTruthy();
-            expect(feed.versionsAPI.getVersions).toBeCalled();
-        });
-    });
-
-    describe('fetchTasks()', () => {
-        beforeEach(() => {
-            feed.file = file;
-            feed.fetchFeedItemErrorCallback = jest.fn();
+        describe('fetchVersions()', () => {
+            test('should return a promise and call the versions api', () => {
+                const versionItems = feed.fetchVersions();
+                expect(versionItems instanceof Promise).toBeTruthy();
+                expect(feed.versionsAPI.getVersions).toBeCalled();
+            });
         });
 
-        test('should return a promise and call the tasks api', () => {
-            const taskItems = feed.fetchTasks();
-            expect(taskItems instanceof Promise).toBeTruthy();
-            expect(feed.tasksAPI.getTasks).toBeCalled();
-        });
-    });
-
-    describe('fetchAppActivity()', () => {
-        beforeEach(() => {
-            feed.file = file;
-            feed.fetchFeedItemErrorCallback = jest.fn();
+        describe('fetchCurrentVersion()', () => {
+            test('should return a promise and call the versions api', () => {
+                const currentVersion = feed.fetchCurrentVersion();
+                expect(currentVersion instanceof Promise).toBeTruthy();
+                expect(feed.versionsAPI.getCurrentVersion).toBeCalled();
+            });
         });
 
-        test('should return a promise and call the app activity api', () => {
-            const activityItems = feed.fetchAppActivity();
-            expect(activityItems instanceof Promise).toBeTruthy();
-            expect(feed.appActivityAPI.getAppActivity).toBeCalled();
-        });
-    });
-
-    describe('fetchTasksNew()', () => {
-        beforeEach(() => {
-            feed.file = file;
-            feed.fetchFeedItemErrorCallback = jest.fn();
+        describe('fetchTasks()', () => {
+            test('should return a promise and call the tasks api', () => {
+                const taskItems = feed.fetchTasks();
+                expect(taskItems instanceof Promise).toBeTruthy();
+                expect(feed.tasksAPI.getTasks).toBeCalled();
+            });
         });
 
-        test('should return a promise and call the tasks api', () => {
-            const taskItems = feed.fetchTasksNew();
-            expect(taskItems instanceof Promise).toBeTruthy();
-            expect(feed.tasksNewAPI.getTasksForFile).toBeCalled();
+        describe('fetchAppActivity()', () => {
+            test('should return a promise and call the app activity api', () => {
+                const activityItems = feed.fetchAppActivity();
+                expect(activityItems instanceof Promise).toBeTruthy();
+                expect(feed.appActivityAPI.getAppActivity).toBeCalled();
+            });
+        });
+
+        describe('fetchTasksNew()', () => {
+            test('should return a promise and call the tasks api', () => {
+                const taskItems = feed.fetchTasksNew();
+                expect(taskItems instanceof Promise).toBeTruthy();
+                expect(feed.tasksNewAPI.getTasksForFile).toBeCalled();
+            });
         });
     });
 

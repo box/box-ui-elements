@@ -29,6 +29,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         addPermissions: jest.fn(),
         deleteVersion: jest.fn(),
         getVersions: jest.fn(),
+        getCurrentVersion: jest.fn(),
         promoteVersion: jest.fn(),
         restoreVersion: jest.fn(),
         sortVersions: jest.fn(),
@@ -229,13 +230,38 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
-    describe('fetchVersion', () => {
+    describe('fetchVersions', () => {
         test('should call getVersions', () => {
             const wrapper = getWrapper();
             const versionsPromise = wrapper.instance().fetchVersions();
 
             expect(versionsPromise).toBeInstanceOf(Promise);
             expect(versionsAPI.getVersions).toBeCalledWith(defaultId, expect.any(Function), expect.any(Function));
+        });
+    });
+
+    describe('fetchVersionCurrent', () => {
+        const fileVersionId = '1234';
+        test('should get the current version and add it to the versions response', () => {
+            const file = {
+                id: defaultId,
+                file_version: {
+                    id: fileVersionId,
+                },
+            };
+            const versions = 'versions';
+            versionsAPI.getCurrentVersion.mockResolvedValueOnce();
+
+            const wrapper = getWrapper();
+            const currentVersionsPromise = wrapper.instance().fetchVersionCurrent([file, versions]);
+
+            expect(currentVersionsPromise).toBeInstanceOf(Promise);
+            expect(versionsAPI.getCurrentVersion).toBeCalledWith(
+                defaultId,
+                fileVersionId,
+                expect.any(Function),
+                expect.any(Function),
+            );
         });
     });
 
