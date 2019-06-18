@@ -6,19 +6,27 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import { isActivateKey, isLeftClick, scrollIntoView } from '../../../utils/dom';
-import { KEYS } from '../../../constants';
+import PlainButton from '../../../components/plain-button';
+import { scrollIntoView } from '../../../utils/dom';
+import './VersionsItemButton.scss';
 
 type Props = {
     children: React.Node,
-    className: string,
+    fileId: string,
+    isCurrent: boolean,
     isDisabled: boolean,
     isSelected: boolean,
-    onActivate: (event: SyntheticMouseEvent<HTMLDivElement> | SyntheticKeyboardEvent<HTMLDivElement>) => void,
+    onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
 class VersionsItemButton extends React.Component<Props> {
-    buttonRef: ?HTMLDivElement;
+    static defaultProps = {
+        isCurrent: false,
+        isDisabled: false,
+        isSelected: false,
+    };
+
+    buttonRef: ?HTMLButtonElement;
 
     componentDidMount() {
         this.setScroll();
@@ -32,7 +40,7 @@ class VersionsItemButton extends React.Component<Props> {
         }
     }
 
-    setButtonRef = (buttonRef: ?HTMLDivElement): void => {
+    setButtonRef = (buttonRef: ?HTMLButtonElement): void => {
         this.buttonRef = buttonRef;
     };
 
@@ -45,38 +53,27 @@ class VersionsItemButton extends React.Component<Props> {
     };
 
     render() {
-        const { children, className, isDisabled, isSelected, onActivate } = this.props;
-        const buttonClassName = classNames(className, {
+        const { children, fileId, isCurrent, isDisabled, isSelected, onClick } = this.props;
+        const buttonClassName = classNames('bcs-VersionsItemButton', {
             'bcs-is-disabled': isDisabled,
             'bcs-is-selected': isSelected,
         });
 
         return (
-            <div
+            <PlainButton
                 aria-disabled={isDisabled}
                 className={buttonClassName}
-                data-resin-target="versions-item-button"
+                data-resin-iscurrent={isCurrent}
+                data-resin-itemid={fileId}
+                data-resin-target="select"
                 data-testid="versions-item-button"
-                onClick={event => {
-                    if (isLeftClick(event)) {
-                        onActivate(event);
-                    }
-                }}
-                onKeyPress={event => {
-                    if (isActivateKey(event)) {
-                        if (event.key === KEYS.space) {
-                            event.preventDefault(); // Prevent scroll on space key press
-                        }
-
-                        onActivate(event);
-                    }
-                }}
-                ref={this.setButtonRef}
-                role="button"
-                tabIndex="0"
+                getDOMRef={this.setButtonRef}
+                isDisabled={isDisabled}
+                onClick={onClick}
+                type="button"
             >
                 {children}
-            </div>
+            </PlainButton>
         );
     }
 }

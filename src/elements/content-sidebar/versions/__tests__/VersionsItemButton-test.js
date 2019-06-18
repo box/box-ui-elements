@@ -26,38 +26,7 @@ describe('elements/content-sidebar/versions/VersionsItemButton', () => {
         });
     });
 
-    describe('onKeyPress', () => {
-        test('calls onActivate event handler', () => {
-            const activateHandler = jest.fn();
-            const preventDefault = jest.fn();
-            const button = getMount({ onActivate: activateHandler });
-
-            button.simulate('keyPress', {
-                key: 'Enter',
-            });
-
-            button.simulate('keyPress', {
-                key: ' ',
-                preventDefault,
-            });
-
-            expect(activateHandler).toBeCalledTimes(2);
-            expect(preventDefault).toBeCalledTimes(1);
-        });
-
-        test('does not call onActivate event handler on invalid keypress', () => {
-            const activateHandler = jest.fn();
-            const button = getMount({ onActivate: activateHandler });
-
-            button.simulate('keyPress', {
-                key: 'Ctrl',
-            });
-
-            expect(activateHandler).not.toBeCalled();
-        });
-    });
-
-    describe.only('setScroll', () => {
+    describe('setScroll', () => {
         test('should scroll into view if the button is selected', () => {
             const wrapper = getMount({ isSelected: false });
 
