@@ -1,0 +1,7 @@
+@import '~styles/sizes.media';
+
+@include single-column-size {
+    .table .second-column {
+        display: none;
+    }
+}
