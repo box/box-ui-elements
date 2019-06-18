@@ -260,7 +260,7 @@ class Task extends React.Component<Props, State> {
                         <AssigneeList
                             onExpand={this.fetchTaskCollaborators}
                             getAvatarUrl={getAvatarUrl}
-                            minAssignees={3}
+                            initialAssigneeCount={3}
                             users={assigned_to}
                         />
                     </div>

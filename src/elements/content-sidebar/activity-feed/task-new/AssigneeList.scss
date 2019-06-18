@@ -6,12 +6,6 @@ $avatar-size: 28px;
 .bcs-AssigneeList-list {
     margin: 0;
     padding: 0;
-    width: 280px;
-}
-
-.bcs-AssigneeList-listTitle {
-    font-size: 15px;
-    margin: 0 0 12px 0;
 }
 
 .bcs-AssigneeList-listItem {
@@ -41,14 +35,6 @@ $avatar-size: 28px;
 
 .bcs-AssigneeList-listItemStatus {
     color: $bdl-neutral-02;
-}
-
-.bcs-AssigneeList-tooltip {
-    text-align: center;
-
-    .bcs-AssigneeList-detailsName {
-        font-weight: bold;
-    }
 }
 
 .lnk.bcs-AssigneeList-expandBtn {

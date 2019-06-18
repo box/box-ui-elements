@@ -11,12 +11,12 @@ import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_
 
 import './AssigneeList.scss';
 
-const MIN_ASSIGNEES_SHOWN = 3;
+const DEFAULT_ASSIGNEES_SHOWN = 3;
 const TASKS_PAGE_SIZE = 20; // service does not return the page size to the client at the moment
 
 type Props = {|
     getAvatarUrl: GetAvatarUrlCallback,
-    minAssignees: number,
+    initialAssigneeCount: number,
     onExpand: Function,
     users: TaskAssigneeCollection,
 |} & InjectIntlProvidedProps;
@@ -56,7 +56,7 @@ class AssigneeList extends React.Component<Props, State> {
     };
 
     static defaultProps = {
-        minAssignees: MIN_ASSIGNEES_SHOWN,
+        initialAssigneeCount: DEFAULT_ASSIGNEES_SHOWN,
         users: {},
     };
 
@@ -69,11 +69,11 @@ class AssigneeList extends React.Component<Props, State> {
     };
 
     showMoreAssignees = async () => {
-        const { users } = this.props;
+        const { users, onExpand } = this.props;
 
         if (users.next_marker) {
             try {
-                await this.props.onExpand();
+                await onExpand();
             } catch (err) {
                 // do nothing
             }
@@ -85,17 +85,17 @@ class AssigneeList extends React.Component<Props, State> {
     };
 
     render() {
-        const { minAssignees, users, getAvatarUrl } = this.props;
+        const { initialAssigneeCount, users, getAvatarUrl } = this.props;
         const { isCollapsed } = this.state;
         const { entries = [], next_marker } = users;
         const entryCount = entries.length;
-        const hiddenAssigneeCount = Math.max(0, entryCount - minAssignees);
-        const numVisibleAssignees = isCollapsed ? minAssignees : entryCount;
+        const hiddenAssigneeCount = Math.max(0, entryCount - initialAssigneeCount);
+        const numVisibleAssignees = isCollapsed ? initialAssigneeCount : entryCount;
         const visibleUsers = entries
             .slice(0, numVisibleAssignees)
             .map(({ id, target, status, completed_at: completedAt }) => {
                 return (
-                    <li key={id} className="bcs-AssigneeList-listItem">
+                    <li key={id} className="bcs-AssigneeList-listItem" data-testid="assignee-list-item">
                         <AvatarGroupAvatar
                             status={status}
                             className="bcs-AssigneeList-listItemAvatar"
@@ -112,7 +112,7 @@ class AssigneeList extends React.Component<Props, State> {
                 );
             });
 
-        const maxAdditionalAssignees = TASKS_PAGE_SIZE - minAssignees;
+        const maxAdditionalAssignees = TASKS_PAGE_SIZE - initialAssigneeCount;
         const hasMoreAssigneesThanPageSize = hiddenAssigneeCount > maxAdditionalAssignees || next_marker;
         const additionalAssigneeCount = hasMoreAssigneesThanPageSize
             ? `${maxAdditionalAssignees}+`

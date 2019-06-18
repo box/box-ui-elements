@@ -53,8 +53,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       className="bcs-task-content"
     >
       <AssigneeList
-        minAssignees={3}
-        onExpand={[Function]}
+        initialAssigneeCount={3}
         users={
           Object {
             "entries": Array [

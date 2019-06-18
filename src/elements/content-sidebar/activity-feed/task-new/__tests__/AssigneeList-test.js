@@ -44,28 +44,28 @@ const onExpand = jest.fn(() => {});
 
 describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
     describe('render()', () => {
-        test('should render avatars for each assignee up to minAssignees', () => {
-            const max = 2;
+        test('should render avatars for each assignee up to initialAssigneeCount', () => {
+            const initialCount = 2;
             const wrapper = shallow(
                 <AssigneeList
                     onExpand={onExpand}
                     users={assignees}
-                    minAssignees={max}
+                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
-            const assigneeList = global.queryAllByTestId(wrapper.dive(), 'task-assignee-list');
+            const assigneeList = global.queryAllByTestId(wrapper.dive(), 'assignee-list-item');
 
-            expect(assigneeList.children()).toHaveLength(2);
+            expect(assigneeList).toHaveLength(2);
         });
 
-        test('should show expand button with N additional assignees when there are more assignees than minAssignees', () => {
-            const max = 2;
+        test('should show expand button with N additional assignees when there are more assignees than initialAssigneeCount', () => {
+            const initialCount = 2;
             const wrapper = shallow(
                 <AssigneeList
                     onExpand={onExpand}
                     users={assignees}
-                    minAssignees={max}
+                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
@@ -77,45 +77,65 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
             expect(expandBtn.find('FormattedMessage').prop('values')).toEqual({ additionalAssigneeCount: '1' });
         });
 
-        test('should show 17+ overflow when there are more assignees and another page of results', () => {
-            const max = 3;
-            const pageSize = 20;
-            const paginatedAssignees = {
-                entries: Array(30).fill({
-                    id: '0001',
-                    target: {
-                        type: 'user',
-                        id: '111',
-                        name: 'AL',
-                    },
-                    status: TASK_NEW_REJECTED,
-                }),
+        [
+            {
+                numAssignees: 20,
+                next_marker: null,
+                overflowValue: '17',
+            },
+            {
+                numAssignees: 25,
                 next_marker: 'abc',
-                limit: pageSize,
-            };
-            const wrapper = shallow(
-                <AssigneeList
-                    onExpand={onExpand}
-                    users={paginatedAssignees}
-                    minAssignees={max}
-                    getAvatarUrl={mockGetAvatarUrl}
-                />,
-            );
-            const expandBtn = global.queryAllByTestId(wrapper.dive(), 'show-more-assignees');
-            const hideBtn = global.queryAllByTestId(wrapper.dive(), 'show-less-assignees');
+                overflowValue: '17+',
+            },
+            {
+                numAssignees: 25,
+                next_marker: null,
+                overflowValue: '17+',
+            },
+        ].forEach(({ numAssignees, next_marker, overflowValue }) => {
+            test('should show correct overflow when there are more assignees and another page of results', () => {
+                const initialCount = 3;
+                const pageSize = 20;
+                const paginatedAssignees = {
+                    entries: Array(numAssignees).fill({
+                        id: '0001',
+                        target: {
+                            type: 'user',
+                            id: '111',
+                            name: 'AL',
+                        },
+                        status: TASK_NEW_REJECTED,
+                    }),
+                    next_marker,
+                    limit: pageSize,
+                };
+                const wrapper = shallow(
+                    <AssigneeList
+                        onExpand={onExpand}
+                        users={paginatedAssignees}
+                        initialAssigneeCount={initialCount}
+                        getAvatarUrl={mockGetAvatarUrl}
+                    />,
+                );
+                const expandBtn = global.queryAllByTestId(wrapper.dive(), 'show-more-assignees');
+                const hideBtn = global.queryAllByTestId(wrapper.dive(), 'show-less-assignees');
 
-            expect(expandBtn).toHaveLength(1);
-            expect(hideBtn).toHaveLength(0);
-            expect(expandBtn.find('FormattedMessage').prop('values')).toEqual({ additionalAssigneeCount: '17+' });
+                expect(expandBtn).toHaveLength(1);
+                expect(hideBtn).toHaveLength(0);
+                expect(expandBtn.find('FormattedMessage').prop('values')).toEqual({
+                    additionalAssigneeCount: overflowValue,
+                });
+            });
         });
 
-        test('should show not show overflow icon when there are fewer assignees than minAssignees', () => {
-            const max = 3;
+        test('should show not show overflow icon when there are fewer assignees than initialAssigneeCount', () => {
+            const initialCount = 3;
             const wrapper = shallow(
                 <AssigneeList
                     onExpand={onExpand}
                     users={assignees}
-                    minAssignees={max}
+                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
@@ -124,29 +144,29 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
         });
 
         test('should open assignee list when expand button is clicked', () => {
-            const max = 2;
+            const initialCount = 2;
             const wrapper = mount(
                 <AssigneeList
                     onExpand={onExpand}
                     users={assignees}
-                    minAssignees={max}
+                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
             const expandBtn = global.queryAllByTestId(wrapper, 'show-more-assignees').first();
             expandBtn.simulate('click');
 
-            const assigneeList = global.queryAllByTestId(wrapper, 'task-assignee-list');
-            expect(assigneeList.children()).toHaveLength(3);
+            const assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
+            expect(assigneeList).toHaveLength(3);
         });
 
         test('should hide assignee list when hide button is clicked', () => {
-            const max = 2;
+            const initialCount = 2;
             const wrapper = mount(
                 <AssigneeList
                     onExpand={onExpand}
                     users={assignees}
-                    minAssignees={max}
+                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
@@ -154,26 +174,26 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
             const expandBtn = global.queryAllByTestId(wrapper, 'show-more-assignees').first();
             expandBtn.simulate('click');
 
-            let assigneeList = global.queryAllByTestId(wrapper, 'task-assignee-list');
-            expect(assigneeList.children()).toHaveLength(3);
+            let assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
+            expect(assigneeList).toHaveLength(3);
 
             const hideBtn = global.queryAllByTestId(wrapper, 'show-less-assignees').first();
             hideBtn.simulate('click');
 
-            assigneeList = global.queryAllByTestId(wrapper, 'task-assignee-list');
-            expect(assigneeList.children()).toHaveLength(2);
+            assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
+            expect(assigneeList).toHaveLength(2);
 
             expect(onExpand).not.toHaveBeenCalled();
         });
 
         test('should call onExpand when marker is present in user list', () => {
-            const max = 2;
+            const initialCount = 2;
             assignees.next_marker = 'abc';
             const wrapper = mount(
                 <AssigneeList
                     onExpand={onExpand}
                     users={assignees}
-                    minAssignees={max}
+                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
