@@ -132,7 +132,6 @@ type State = {
     selected?: BoxItem,
     sortBy: SortBy,
     sortDirection: SortDirection,
-    thumbnailUrls: Array<string>,
     view: View,
 };
 
@@ -228,7 +227,7 @@ class ContentExplorer extends Component<Props, State> {
         this.id = uniqueid('bce_');
 
         this.state = {
-            columnCount: 5,
+            columnCount: MAX_GRID_VIEW_COLUMNS,
             currentCollection: {},
             currentOffset: initialPageSize * (initialPage - 1),
             currentPageSize: initialPageSize,
@@ -246,7 +245,6 @@ class ContentExplorer extends Component<Props, State> {
             searchQuery: '',
             sortBy,
             sortDirection,
-            thumbnailUrls: [],
             view: VIEW_FOLDER,
         };
     }
@@ -396,32 +394,32 @@ class ContentExplorer extends Component<Props, State> {
      * If a thumbnail could not be found, that item's entry in thumbnailUrls will be null.
      *
      * @private
-     * @param {Object} collection - item collection object
+     * @param {Array<BoxItem>} items - item collection object
      * @param {string} dimensions - desired dimensions of thumbnail. Acceptable dimensions
      * for a jpg are: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048".
-     * @return {void}
+     * @return {Promise<void>}
      */
-    async fetchThumbnailUrls(collection: Collection, dimensions: string): Promise<void> {
-        const { items } = collection;
-        if (!items) {
-            return;
-        }
-
-        const thumbnailArray = Array(items.length).fill(null);
+    async fetchThumbnailUrls(items: Array<BoxItem>, dimensions: string): Promise<void> {
         const fileAPI = this.api.getFileAPI();
 
-        // using for loop instead of items.forEach() to get desired await functionality
-        // TODO: This is bad. Find a better way to do this. Without using await, all requests except final
-        // one were cancelled.  Need to find a cleaner to make sure no requests get cancelled.
-        for (let i = 0; i < items.length; i += 1) {
-            const item = items[i];
-            // eslint-disable-next-line no-await-in-loop
-            await fileAPI.getFileThumbnail(item, dimensions, thumbnailUrl => {
-                thumbnailArray[i] = thumbnailUrl;
-                this.setState({ thumbnailUrls: [...thumbnailArray] });
+        // not using Promise.all since thumbnails should load one at a time
+        items.forEach((item, index) => {
+            return new Promise(resolve => {
+                fileAPI.getFileThumbnail(
+                    item,
+                    dimensions,
+                    resolve,
+                    // TODO: assign appropriate error callback
+                    noop,
+                );
+            }).then(data => {
+                const currentCollection = { ...this.state.currentCollection };
+                if (currentCollection.items) {
+                    currentCollection.items[index].thumbnailUrl = data;
+                    this.setState({ currentCollection });
+                }
             });
-        }
-        // console.log(thumbnailArray);
+        });
     }
 
     /**
@@ -434,13 +432,14 @@ class ContentExplorer extends Component<Props, State> {
      */
     fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { onNavigate, rootFolderId }: Props = this.props;
-        const { id, name, boxItem }: Collection = collection;
+        const { boxItem, id, items, name }: Collection = collection;
 
-        // fetch thumbnails whenever the API fetches a new folder
         // TODO: optimize to not fetch thumbnails if the API just fetched the
         // folder that is already being displayed
-        this.fetchThumbnailUrls(collection, '1024x1024');
-        // console.log(collection);
+
+        if (items) {
+            this.fetchThumbnailUrls(items, '1024x1024');
+        }
         // New folder state
         const newState = {
             selected: undefined,
@@ -559,7 +558,12 @@ class ContentExplorer extends Component<Props, State> {
      */
     searchSuccessCallback = (collection: Collection) => {
         const { currentCollection }: State = this.state;
-        this.fetchThumbnailUrls(collection, '1024x1024');
+        const { items } = currentCollection;
+
+        if (items) {
+            this.fetchThumbnailUrls(items, '1024x1024');
+        }
+
         // Unselect any rows that were selected
         this.unselect();
 
@@ -1262,13 +1266,15 @@ class ContentExplorer extends Component<Props, State> {
 
     slotRenderer = (slotIndex: number) => {
         const { currentCollection, view } = this.state;
+        const { items } = currentCollection;
         const { canPreview, canShare, canDownload, canDelete, canRename, isSmall, isTouch, rootFolderId } = this.props;
-        const item: ?BoxItem = currentCollection.items ? currentCollection.items[slotIndex] : null;
+        const item: ?BoxItem = items ? items[slotIndex] : null;
 
-        if (!item) {
+        if (!items || !item) {
             return <div />;
         }
-        const url = this.state.thumbnailUrls[slotIndex];
+
+        const url = items[slotIndex].thumbnailUrl ? items[slotIndex].thumbnailUrl : null;
 
         const moreOptionsCell = moreOptionsCellRenderer(
             canPreview,
@@ -1316,19 +1322,22 @@ class ContentExplorer extends Component<Props, State> {
             textAlign: 'center',
         };
 
-        const postLoadThumbnail = {
-            bottom: '0',
-            left: '0',
-            margin: 'auto',
-            position: 'absolute',
-            right: '0',
-            top: '0',
-            width: '100%',
-            backgroundImage: `url("${url}")`,
-            backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center center',
-        };
+        let postLoadThumbnail = {};
+        if (url) {
+            postLoadThumbnail = {
+                bottom: '0',
+                left: '0',
+                margin: 'auto',
+                position: 'absolute',
+                right: '0',
+                top: '0',
+                width: '100%',
+                backgroundImage: `url("${url}")`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center center',
+            };
+        }
 
         const onClick = () => {
             this.onItemClick(item);
@@ -1343,7 +1352,6 @@ class ContentExplorer extends Component<Props, State> {
                     {url ? <div style={postLoadThumbnail} /> : <div style={itemIcon}> {getIcon(128, item)} </div>}
                 </div>
                 <div>
-                    {/* <div onClick={onClick}>{item.name}</div> */}
                     {item && nameCell({ rowData: item })}
                     <div> {getSize(item.size)} </div>
                     {item && dateCell({ dataKey: '', rowData: item })}

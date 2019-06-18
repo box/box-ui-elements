@@ -15,6 +15,7 @@ import {
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_EXTENSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
+    FIELD_REPRESENTATIONS,
     X_REP_HINTS,
 } from '../constants';
 import Item from './Item';
@@ -212,17 +213,31 @@ class File extends Item {
      * for a jpg are: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048".
      * @param {Function} successCallback - function to call with the thumbnail url. The thumbnail
      * url will be null if one could not be fetched.
-     * @return {Promise<void>}
+     * @param {Function} errorCallback - Function to call with errors
+     * @return {void}
      */
-    async getFileThumbnail(item: BoxItem, dimensions: string, successCallback: Function): Promise<void> {
+    getFileThumbnail(
+        item: BoxItem,
+        dimensions: string,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): void {
         if (this.isDestroyed()) {
             return;
+        }
+
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        // no need to make api call since folders do not have thumbnails
+        if (item.type === 'folder') {
+            this.successHandler(null);
         }
 
         // TODO: implement cache for recently fetched thumbnails
 
         const { id } = item;
-        const newUrl = `${this.getUrl(id)}?fields=representations`;
+        const newUrl = this.getUrl(id);
 
         const access_token = this.xhr.token;
         if (!access_token) {
@@ -235,16 +250,14 @@ class File extends Item {
                 // API will return first representation it finds, so 1024x1024 png is fallback.
                 'X-Rep-Hints': `[jpg?dimensions=${dimensions},png?dimensions=1024x1024]`,
             },
+            params: {
+                fields: FIELD_REPRESENTATIONS,
+            },
         };
-        this.successCallback = successCallback;
-
         try {
-            // no need to make api call since folders do not have thumbnails
-            if (item.type === 'folder') {
-                this.successHandler(null);
-            } else {
-                const thumbnailUrl = await this.xhr.get(xhrOptions).then(async response => {
-                    console.log(response);
+            this.xhr
+                .get(xhrOptions)
+                .then(response => {
                     const entries = response.data.representations.entries;
 
                     if (!entries.length || entries[0].status.state !== 'success') {
@@ -259,9 +272,14 @@ class File extends Item {
 
                     // use token in URL for authorization
                     return `${thumbnailLink}?access_token=${access_token}`;
+                })
+                .then(thumbnailUrl => {
+                    // TODO: Calling this.successHandler(thumbnailUrl) leads to no thumbnails loading.
+                    // Investigate this.
+                    if (!this.isDestroyed() && typeof this.successCallback === 'function') {
+                        successCallback(thumbnailUrl);
+                    }
                 });
-                this.successHandler(thumbnailUrl);
-            }
         } catch (e) {
             this.errorHandler(e);
         }
