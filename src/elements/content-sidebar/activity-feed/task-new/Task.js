@@ -54,6 +54,7 @@ type Props = {|
 
 type State = {
     assigned_to: TaskAssigneeCollection,
+    isAssigneeListOpen: boolean,
     isEditing: boolean,
     isLoading: boolean,
     loadCollabError: ?ActionItemError,
@@ -175,7 +176,7 @@ class Task extends React.Component<Props, State> {
         });
     };
 
-    handleTaskAction = (taskId, assignmentId, taskStatus) => {
+    handleTaskAction = (taskId: string, assignmentId: string, taskStatus: string) => {
         const { onAssignmentUpdate } = this.props;
 
         onAssignmentUpdate(taskId, assignmentId, taskStatus);
