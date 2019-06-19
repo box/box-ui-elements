@@ -1,5 +1,6 @@
 *~
 *~~bak
+.circleci
 .conventional-changelog-lintrc
 .DS_Store
 .editorconfig
