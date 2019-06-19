@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import IconTrash from '../../../../icons/general/IconTrash';
 import IconEllipsis from '../../../../icons/general/IconEllipsis';
@@ -23,7 +23,7 @@ type Props = {
     onEditClick?: Function,
     permissions?: BoxItemPermission,
     type: typeof COMMENT_TYPE_DEFAULT | typeof COMMENT_TYPE_TASK,
-} & InjectIntlProvidedProps;
+};
 
 const CommentMenu = (props: Props) => {
     const { isDisabled, onDeleteClick, onEditClick, permissions = {}, type } = props;
@@ -62,5 +62,4 @@ const CommentMenu = (props: Props) => {
     );
 };
 
-export { CommentMenu as CommentMenuBase };
-export default injectIntl(CommentMenu);
+export default CommentMenu;
