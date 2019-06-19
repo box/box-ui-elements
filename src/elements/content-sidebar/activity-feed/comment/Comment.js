@@ -46,7 +46,7 @@ type Props = {
     modified_at?: string | number,
     onDelete?: Function,
     onEdit?: Function,
-    onEditClick?: () => void,
+    onEditClick?: () => any,
     permissions?: BoxItemPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,

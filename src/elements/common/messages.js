@@ -818,6 +818,22 @@ const messages = defineMessages({
         description: 'Error message when a task deletion fails',
         defaultMessage: 'There was an error while deleting this task. Please refresh the page and try again.',
     },
+    taskCollaboratorLoadErrorMessage: {
+        id: 'be.taskCollaboratorLoadErrorMessage',
+        description: 'Error message when we failed to load the collaborators when user tries to edit a task',
+        defaultMessage: 'An error has occurred while loading collaborators for this task. Please try again.',
+    },
+    taskShowMoreAssignees: {
+        id: 'be.taskShowMoreAssignees',
+        description:
+            'Button name to expand task assignee list, additionalAssigneeCount is the number of additional task assignees that can be shown.',
+        defaultMessage: 'Show {additionalAssigneeCount} More',
+    },
+    taskShowLessAssignees: {
+        id: 'be.taskShowLessAssignees',
+        description: 'Button name to hide task assignee list',
+        defaultMessage: 'Show Less',
+    },
     completedAssignment: {
         id: 'be.completedAssignment',
         defaultMessage: 'Completed',
