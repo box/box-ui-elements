@@ -55,7 +55,7 @@ const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: Re
 
                             if (!event.defaultPrevented && isLeftClick(event)) {
                                 const method = replace ? history.replace : history.push;
-                                method(path);
+                                method(to);
                             }
                         }}
                         ref={ref}
