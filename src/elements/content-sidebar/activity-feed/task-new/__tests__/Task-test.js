@@ -281,7 +281,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         expect(instance.fetchTaskCollaborators).toBeCalled();
     });
 
-    test('should open assignee list when expand button is clicked', () => {
+    test('should be able to toggle expanded state', () => {
         const COUNT = 30;
         const INITIAL_DISPLAY_COUNT = 3;
         let assigneeList;
@@ -322,7 +322,10 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
 
         assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
         expect(assigneeList).toHaveLength(COUNT);
-    });
 
-    test('should hide assignee list when hide button is clicked', () => {});
+        const collapseBtn = global.queryAllByTestId(wrapper, 'show-less-assignees').first();
+        collapseBtn.simulate('click');
+
+        expect(assigneeList).toHaveLength(INITIAL_DISPLAY_COUNT);
+    });
 });
