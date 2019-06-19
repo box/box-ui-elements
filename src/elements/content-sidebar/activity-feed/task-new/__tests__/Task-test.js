@@ -287,8 +287,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             ...task,
             assigned_to: {
                 next_marker: null,
-                entries: Array(COUNT).fill({
-                    id: 'current-user-assignment-id',
+                entries: Array.from({ length: COUNT }, (_, idx) => ({
+                    id: `current-user-assignment-id-${idx}`,
                     target: currentUser,
                     status: 'NOT_STARTED',
                     role: 'ASSIGNEE',
@@ -297,7 +297,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                         can_delete: true,
                     },
                     type: 'task_collaborator',
-                }),
+                })),
             },
         };
 

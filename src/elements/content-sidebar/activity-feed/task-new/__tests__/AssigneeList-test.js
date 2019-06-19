@@ -57,7 +57,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
                     getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
-            const assigneeList = global.queryAllByTestId(wrapper.dive(), 'assignee-list-item');
+            const assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
 
             expect(assigneeList).toHaveLength(2);
         });
@@ -72,8 +72,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
                     getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
-            const expandBtn = global.queryAllByTestId(wrapper.dive(), 'show-more-assignees');
-            const hideBtn = global.queryAllByTestId(wrapper.dive(), 'show-less-assignees');
+            const expandBtn = global.queryAllByTestId(wrapper, 'show-more-assignees');
+            const hideBtn = global.queryAllByTestId(wrapper, 'show-less-assignees');
 
             expect(expandBtn).toHaveLength(1);
             expect(hideBtn).toHaveLength(0);
@@ -113,8 +113,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
                         isOpen={false}
                     />,
                 );
-                const expandBtn = global.queryAllByTestId(wrapper.dive(), 'show-more-assignees');
-                const hideBtn = global.queryAllByTestId(wrapper.dive(), 'show-less-assignees');
+                const expandBtn = global.queryAllByTestId(wrapper, 'show-more-assignees');
+                const hideBtn = global.queryAllByTestId(wrapper, 'show-less-assignees');
 
                 expect(expandBtn).toHaveLength(1);
                 expect(hideBtn).toHaveLength(0);
@@ -136,8 +136,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
                     getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
-            expect(global.queryAllByTestId(wrapper.dive(), 'show-more-assignees')).toHaveLength(0);
-            expect(global.queryAllByTestId(wrapper.dive(), 'show-less-assignees')).toHaveLength(0);
+            expect(global.queryAllByTestId(wrapper, 'show-more-assignees')).toHaveLength(0);
+            expect(global.queryAllByTestId(wrapper, 'show-less-assignees')).toHaveLength(0);
         });
 
         test('should call onExpand when expand button is clicked', () => {

@@ -262,7 +262,7 @@ class Task extends React.Component<Props, State> {
                             onExpand={this.handleAssigneeListExpand}
                             getAvatarUrl={getAvatarUrl}
                             initialAssigneeCount={3}
-                            users={assignedToFull}
+                            users={isAssigneeListOpen ? assignedToFull : assigned_to}
                         />
                     </div>
                     <div className="bcs-task-content">
