@@ -234,7 +234,7 @@ class TaskForm extends React.Component<Props, State> {
         const taskErrorMessage = isCreateEditMode ? messages.taskCreateErrorMessage : messages.taskUpdateErrorMessage;
 
         return (
-            <div className={inputContainerClassNames}>
+            <div className={inputContainerClassNames} data-resin-component="taskform">
                 <div className="bcs-task-input-form-container">
                     {error ? (
                         <InlineError title={<FormattedMessage {...messages.taskCreateErrorTitle} />}>
