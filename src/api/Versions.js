@@ -11,6 +11,7 @@ import {
     DEFAULT_FETCH_END,
     DEFAULT_FETCH_START,
     ERROR_CODE_DELETE_VERSION,
+    ERROR_CODE_FETCH_CURRENT_VERSION,
     ERROR_CODE_FETCH_VERSIONS,
     ERROR_CODE_PROMOTE_VERSION,
     ERROR_CODE_RESTORE_VERSION,
@@ -97,59 +98,6 @@ class Versions extends OffsetBasedAPI {
 
         this.successCallback({ ...data, entries: data.entries.map(this.format) });
     };
-
-    /**
-     * Helper to add the current version from the file object, which may be a restore
-     *
-     * @param {FileVersions} versions - API returned file versions for this file
-     * @param {BoxItem} file - The parent file object
-     * @return {FileVersions} modified versions array including the current/restored version
-     */
-    addCurrentVersion(versions: ?FileVersions, file: BoxItem): ?FileVersions {
-        const { file_version } = file;
-
-        if (!file_version || !versions) {
-            return versions;
-        }
-
-        const { entries, total_count } = versions;
-        const {
-            extension,
-            is_download_available,
-            modified_at,
-            modified_by,
-            name,
-            permissions,
-            size,
-            version_number,
-        } = file;
-        const currentVersion: BoxItemVersion = {
-            ...file_version,
-            action: VERSION_UPLOAD_ACTION,
-            created_at: modified_at,
-            extension,
-            is_download_available,
-            modified_at,
-            modified_by,
-            permissions,
-            name,
-            size,
-            version_number,
-        };
-        const restoredFromId = getProp(file, 'restored_from.id');
-        const restoredVersion =
-            restoredFromId && entries.find((version: BoxItemVersion) => version.id === restoredFromId);
-
-        if (restoredVersion) {
-            currentVersion.action = VERSION_RESTORE_ACTION;
-            currentVersion.version_restored = restoredVersion.version_number;
-        }
-
-        return {
-            entries: [...entries, currentVersion],
-            total_count: total_count + 1,
-        };
-    }
 
     /**
      * Helper to add associated permissions from the file to the version objects
@@ -240,6 +188,62 @@ class Versions extends OffsetBasedAPI {
     ): void {
         this.errorCode = ERROR_CODE_FETCH_VERSIONS;
         this.offsetGet(fileId, successCallback, errorCallback, offset, limit, fields, shouldFetchAll);
+    }
+
+    /**
+     * API for fetching the current version for a file
+     *
+     * @param {string} fileId - a box file id
+     * @param {string} fileVersionId - a box file version id
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @returns {void}
+     */
+    getCurrentVersion(
+        fileId: string,
+        fileVersionId: string,
+        successCallback: BoxItemVersion => void,
+        errorCallback: ElementsErrorCallback,
+    ): void {
+        this.errorCode = ERROR_CODE_FETCH_CURRENT_VERSION;
+        this.get({
+            id: fileId,
+            successCallback,
+            errorCallback,
+            url: this.getVersionUrl(fileId, fileVersionId),
+            requestData: {
+                params: {
+                    fields: FILE_VERSIONS_FIELDS_TO_FETCH.toString(),
+                },
+            },
+        });
+    }
+
+    /**
+     * Decorates the current version and adds it to an existing FileVersions object
+     *
+     * @param {BoxItemVersion} version - a box version
+     * @param {BoxItem} file - a box file
+     * @returns {FileVersions} - a FileVersions object containing the decorated current version
+     */
+    addCurrentVersion(currentVersion: ?BoxItemVersion, versions: ?FileVersions, file: BoxItem): FileVersions {
+        if (!currentVersion) {
+            return versions || { entries: [], total_count: 0 };
+        }
+
+        if (!versions) {
+            return { entries: [currentVersion], total_count: 1 };
+        }
+
+        const restoredFromId = getProp(file, 'restored_from.id');
+        const restoredVersion = versions.entries.find(version => version.id === restoredFromId);
+
+        if (restoredVersion) {
+            currentVersion.action = VERSION_RESTORE_ACTION;
+            currentVersion.version_restored = restoredVersion.version_number;
+        }
+
+        return { entries: [...versions.entries, currentVersion], total_count: versions.total_count + 1 };
     }
 
     /**

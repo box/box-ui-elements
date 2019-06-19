@@ -124,8 +124,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     handleFetchSuccess = ([fileResponse, versionsResponse]): [BoxItem, FileVersions] => {
         const { api } = this.props;
         const versionsApi = api.getVersionsAPI(false);
-        const versionsWithCurrent = versionsApi.addCurrentVersion(versionsResponse, fileResponse);
-        const versionsWithPermissions = versionsApi.addPermissions(versionsWithCurrent, fileResponse);
+        const versionsWithPermissions = versionsApi.addPermissions(versionsResponse, fileResponse);
         const { entries: versions } = versionsApi.sortVersions(versionsWithPermissions) || {};
 
         this.setState(
@@ -150,6 +149,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     fetchData = (): Promise<any> => {
         return Promise.all([this.fetchFile(), this.fetchVersions()])
+            .then(this.fetchVersionCurrent)
             .then(this.handleFetchSuccess)
             .catch(this.handleFetchError);
     };
@@ -183,6 +183,27 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         const { api, fileId } = this.props;
 
         return new Promise((resolve, reject) => api.getVersionsAPI(false).getVersions(fileId, resolve, reject));
+    };
+
+    fetchVersionCurrent = ([fileResponse, versionsResponse]): Promise<[BoxItem, FileVersions]> => {
+        const { api, fileId } = this.props;
+        const { file_version = {} } = fileResponse;
+
+        return new Promise((resolve, reject) =>
+            api.getVersionsAPI(false).getCurrentVersion(
+                fileId,
+                file_version.id,
+                (currentVersionResponse: BoxItemVersion) => {
+                    resolve([
+                        fileResponse,
+                        api
+                            .getVersionsAPI(false)
+                            .addCurrentVersion(currentVersionResponse, versionsResponse, fileResponse),
+                    ]);
+                },
+                reject,
+            ),
+        );
     };
 
     findVersion = (versionId: ?string): ?BoxItemVersion => {
