@@ -15,7 +15,6 @@ type Props = {
     'data-testid'?: string,
     children: React.Node,
     isOpen?: boolean,
-    onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
     sidebarView: string,
     tooltip: React.Node,
 };
@@ -25,7 +24,6 @@ const SidebarNavButton = ({
     'data-resin-target': dataResinTarget,
     'data-testid': dataTestId,
     isOpen,
-    onNavigate,
     sidebarView,
     tooltip,
 }: Props) => {
@@ -37,6 +35,7 @@ const SidebarNavButton = ({
                 const isMatch = !!match;
                 const isActive = () => isMatch && !!isOpen;
                 const isToggle = isMatch && match.isExact;
+                const sidebarState = { open: isToggle ? !isOpen : true };
 
                 return (
                     <Tooltip position="middle-left" text={tooltip}>
@@ -47,14 +46,12 @@ const SidebarNavButton = ({
                             data-resin-target={dataResinTarget}
                             data-testid={dataTestId}
                             isActive={isActive}
-                            onClick={event => {
-                                if (onNavigate) {
-                                    onNavigate(event, { isToggle });
-                                }
-                            }}
                             replace={isToggle}
                             role="tab"
-                            to={sidebarPath}
+                            to={{
+                                pathname: sidebarPath,
+                                state: sidebarState,
+                            }}
                             type="button"
                         >
                             {children}
