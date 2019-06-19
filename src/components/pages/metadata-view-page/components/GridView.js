@@ -6,10 +6,10 @@ import uniqueId from 'lodash/uniqueId';
 
 import BaseTable from '../../../core/table/components/BaseTable';
 
-import MDVGridViewSlot from './MDVGridViewSlot';
+import GridViewSlot from './GridViewSlot';
 
-import '../styles/MDVGridView.scss';
-import '../styles/MDVGridViewSlot.scss';
+import '../styles/GridView.scss';
+import '../styles/GridViewSlot.scss';
 
 type TableCellRendererParams = {
     cellData: ?any,
@@ -72,11 +72,11 @@ class GridView extends React.Component<Props, State> {
                 key = currentCollection.items[slotIndex].id;
                 item = currentCollection.items[slotIndex];
             } else {
-                key = uniqueId('MDVGridViewSlot');
+                key = uniqueId('GridViewSlot');
             }
 
             contents.push(
-                <MDVGridViewSlot
+                <GridViewSlot
                     key={key}
                     slotIndex={slotIndex}
                     slotRenderer={slotIndex < count ? slotRenderer : null}
@@ -88,7 +88,7 @@ class GridView extends React.Component<Props, State> {
 
         return (
             <CellMeasurer key={dataKey} cache={this.cache} columnIndex={0} parent={parent} rowIndex={rowIndex}>
-                <div className="MDVGridView-row">{contents}</div>
+                <div className="GridView-row">{contents}</div>
             </CellMeasurer>
         );
     };
@@ -103,7 +103,7 @@ class GridView extends React.Component<Props, State> {
 
         return (
             <BaseTable
-                className={`MDVGridView MDVGridView--columns-${columnCount}`}
+                className={`GridView GridView--columns-${columnCount}`}
                 deferredMeasurementCache={this.cache}
                 disableHeader
                 height={height}

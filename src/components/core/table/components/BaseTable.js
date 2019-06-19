@@ -2,10 +2,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import Table from 'react-virtualized/dist/es/Table';
-import 'react-virtualized/styles.css';
-
 import pure from '../../pure-component';
-
+import 'react-virtualized/styles.css';
 import '../styles/Table.scss';
 
 type Props = {

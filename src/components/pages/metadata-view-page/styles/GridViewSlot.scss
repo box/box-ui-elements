@@ -1,7 +1,7 @@
 @import '~box-ui-elements/es/styles/variables';
 @import '~styles/variables';
 
-.MDVGridViewSlot {
+.GridViewSlot {
     border: 1px solid $efive;
     margin: 20px 0 0;
     overflow: hidden;
@@ -9,7 +9,7 @@
     white-space: normal;
 }
 
-.MDVGridViewSlot-blank {
+.GridViewSlot-blank {
     border: none;
     box-shadow: none;
 }

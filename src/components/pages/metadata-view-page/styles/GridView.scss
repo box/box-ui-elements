@@ -5,26 +5,26 @@ $columns1prct: 100%;
 $columns3prct: calc(33.3333% - 6.6666px); /* 100%/3 - 20px/3 */
 $columns5prct: calc(20% - 8px); /* 100%/5 - 40px/5 */
 
-.MDVGridView {
+.GridView {
     // margin: 20px 0 0;
     padding: 0 5px;
 
-    .MDVGridView-row {
+    .GridView-row {
         display: flex;
         justify-content: space-between;
     }
 
-    &.MDVGridView--columns-1 .MDVGridViewSlot {
+    &.GridView--columns-1 .GridViewSlot {
         flex-basis: $columns1prct;
         max-width: $columns1prct;
     }
 
-    &.MDVGridView--columns-3 .MDVGridViewSlot {
+    &.GridView--columns-3 .GridViewSlot {
         flex-basis: $columns3prct;
         max-width: $columns3prct;
     }
 
-    &.MDVGridView--columns-5 .MDVGridViewSlot {
+    &.GridView--columns-5 .GridViewSlot {
         flex-basis: $columns5prct;
         max-width: $columns5prct;
     }
