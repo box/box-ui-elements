@@ -86,9 +86,9 @@ class Feed extends Base {
     taskLinksAPI: TaskLinksAPI[];
 
     /**
-     * @property {string}
+     * @property {BoxItem}
      */
-    id: string;
+    file: BoxItem;
 
     /**
      * @property {boolean}
@@ -173,28 +173,29 @@ class Feed extends Base {
             }
         }
 
-        this.id = id;
+        this.file = file;
         this.hasError = false;
         this.errorCallback = onError;
         const versionsPromise = this.fetchVersions();
+        const currentVersionPromise = this.fetchCurrentVersion();
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = shouldShowNewTasks ? this.fetchTasksNew() : this.fetchTasks();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
-        Promise.all([versionsPromise, commentsPromise, tasksPromise, appActivityPromise]).then(feedItems => {
-            const versions: ?FileVersions = feedItems[0];
-            const versionsWithRestoredVersion = this.versionsAPI.addCurrentVersion(versions, file);
-            const unsortedFeedItems = [versionsWithRestoredVersion, ...feedItems.slice(1)];
-            const sortedFeedItems = sortFeedItems(...unsortedFeedItems);
-            if (!this.isDestroyed()) {
-                this.setCachedItems(id, sortedFeedItems);
-                if (this.hasError) {
-                    errorCallback(sortedFeedItems);
-                } else {
-                    successCallback(sortedFeedItems);
+        Promise.all([versionsPromise, currentVersionPromise, commentsPromise, tasksPromise, appActivityPromise]).then(
+            ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                const versionsWithCurrent = this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file);
+                const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
+                if (!this.isDestroyed()) {
+                    this.setCachedItems(id, sortedFeedItems);
+                    if (this.hasError) {
+                        errorCallback(sortedFeedItems);
+                    } else {
+                        successCallback(sortedFeedItems);
+                    }
                 }
-            }
-        });
+            },
+        );
     }
 
     /**
@@ -207,7 +208,7 @@ class Feed extends Base {
         this.commentsAPI = new CommentsAPI(this.options);
         return new Promise(resolve => {
             this.commentsAPI.getComments(
-                this.id,
+                this.file.id,
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
@@ -224,7 +225,26 @@ class Feed extends Base {
         this.versionsAPI = new VersionsAPI(this.options);
 
         return new Promise(resolve => {
-            this.versionsAPI.getVersions(this.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
+            this.versionsAPI.getVersions(this.file.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
+        });
+    }
+
+    /**
+     * Fetches the current version for a file
+     *
+     * @return {Promise} - the file versions
+     */
+    fetchCurrentVersion(): Promise<?BoxItemVersion> {
+        this.versionsAPI = new VersionsAPI(this.options);
+
+        return new Promise(resolve => {
+            const { file_version = {} } = this.file;
+            this.versionsAPI.getCurrentVersion(
+                this.file.id,
+                file_version.id,
+                resolve,
+                this.fetchFeedItemErrorCallback.bind(this, resolve),
+            );
         });
     }
 
@@ -238,7 +258,7 @@ class Feed extends Base {
 
         return new Promise(resolve => {
             this.tasksAPI.getTasks(
-                this.id,
+                this.file.id,
                 tasks => {
                     this.fetchTaskAssignments(tasks).then(resolve);
                 },
@@ -257,7 +277,7 @@ class Feed extends Base {
 
         return new Promise(resolve => {
             this.tasksNewAPI.getTasksForFile({
-                file: { id: this.id },
+                file: { id: this.file.id },
                 successCallback: resolve,
                 errorCallback: (err, code) => this.fetchFeedItemErrorCallback(resolve, err, code),
             });
@@ -303,7 +323,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, taskId);
         const assignmentAPI = new TaskAssignmentsAPI(this.options);
@@ -334,7 +354,7 @@ class Feed extends Base {
         updatedAssignment: TaskAssignment,
         successCallback: Function,
     ): void => {
-        const cachedItems = this.getCachedItems(this.id);
+        const cachedItems = this.getCachedItems(this.file.id);
         if (cachedItems) {
             // $FlowFixMe
             const task: ?Task = cachedItems.items.find(item => item.type === TASK && item.id === taskId);
@@ -389,7 +409,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, taskId);
         const collaboratorsApi = new TaskCollaboratorsAPI(this.options);
@@ -476,7 +496,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, taskId);
         this.tasksAPI = new TasksAPI(this.options);
@@ -513,7 +533,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.updateFeedItem({ isPending: true }, task.id);
@@ -582,7 +602,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, commentId);
 
@@ -681,7 +701,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         const uuid = uniqueId('task_');
         let dueAtString;
@@ -709,7 +729,7 @@ class Feed extends Base {
             },
             type: TASK,
         };
-        this.addPendingItem(this.id, currentUser, task);
+        this.addPendingItem(this.file.id, currentUser, task);
         this.tasksAPI = new TasksAPI(this.options);
         this.tasksAPI.createTask({
             file,
@@ -751,7 +771,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         const uuid = uniqueId('task_');
         let dueAtString;
@@ -824,7 +844,7 @@ class Feed extends Base {
             file,
             task: taskPayload,
             successCallback: (taskData: Task) => {
-                this.addPendingItem(this.id, currentUser, pendingTask);
+                this.addPendingItem(this.file.id, currentUser, pendingTask);
                 this.createTaskNewSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
             },
             errorCallback: (e: ElementsXhrError, code: string) => {
@@ -902,7 +922,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         return new Promise((resolve, reject) => {
             const taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
             this.taskAssignmentsAPI.push(taskAssignmentsAPI);
@@ -937,7 +957,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         return new Promise((resolve, reject) => {
             const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
             this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
@@ -967,7 +987,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         return new Promise((resolve, reject) => {
             const taskLinksAPI = new TaskLinksAPI(this.options);
             this.taskLinksAPI.push(taskLinksAPI);
@@ -1000,7 +1020,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.tasksAPI = new TasksAPI(this.options);
         this.updateFeedItem({ isPending: true }, taskId);
@@ -1034,7 +1054,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.updateFeedItem({ isPending: true }, task.id);
@@ -1057,10 +1077,10 @@ class Feed extends Base {
      * @param {Function} successCallback - function to be called after the delete
      */
     deleteFeedItem = (id: string, successCallback: Function = noop) => {
-        const cachedItems = this.getCachedItems(this.id);
+        const cachedItems = this.getCachedItems(this.file.id);
         if (cachedItems) {
             const feedItems = cachedItems.items.filter(feedItem => feedItem.id !== id);
-            this.setCachedItems(this.id, feedItems);
+            this.setCachedItems(this.file.id, feedItems);
 
             if (!this.isDestroyed()) {
                 successCallback(id);
@@ -1105,7 +1125,7 @@ class Feed extends Base {
                     const tasksAPI = new TasksAPI(this.options);
                     this.taskAssignmentsAPI.push(tasksAPI);
                     tasksAPI.getAssignments(
-                        this.id,
+                        this.file.id,
                         task.id,
                         (assignments: TaskAssignments) => {
                             const formattedTask = this.appendAssignmentsToTask(task, assignments.entries);
@@ -1179,7 +1199,7 @@ class Feed extends Base {
             isPending: true,
             ...itemBase,
         };
-        const cachedItems = this.getCachedItems(this.id);
+        const cachedItems = this.getCachedItems(this.file.id);
         const feedItems = cachedItems ? cachedItems.items : [];
         const feedItemsWithPendingItem = [...feedItems, pendingFeedItem];
         this.setCachedItems(id, feedItemsWithPendingItem);
@@ -1250,11 +1270,11 @@ class Feed extends Base {
      * @return {void}
      */
     updateFeedItem = (updates: Object, id: string): ?FeedItems => {
-        if (!this.id) {
+        if (!this.file.id) {
             throw getBadItemError();
         }
 
-        const cachedItems = this.getCachedItems(this.id);
+        const cachedItems = this.getCachedItems(this.file.id);
         if (cachedItems) {
             const updatedFeedItems = cachedItems.items.map((item: FeedItem) => {
                 if (item.id === id) {
@@ -1267,7 +1287,7 @@ class Feed extends Base {
                 return item;
             });
 
-            this.setCachedItems(this.id, updatedFeedItems);
+            this.setCachedItems(this.file.id, updatedFeedItems);
             return updatedFeedItems;
         }
 
@@ -1304,9 +1324,9 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
-        this.addPendingItem(this.id, currentUser, commentData);
+        this.addPendingItem(this.file.id, currentUser, commentData);
 
         const message = {};
         if (hasMention) {
@@ -1366,7 +1386,7 @@ class Feed extends Base {
 
         return new Promise(resolve => {
             this.appActivityAPI.getAppActivity(
-                this.id,
+                this.file.id,
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
@@ -1396,7 +1416,7 @@ class Feed extends Base {
 
         this.appActivityAPI = new AppActivityAPI(this.options);
 
-        this.id = id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, appActivityId);
 
