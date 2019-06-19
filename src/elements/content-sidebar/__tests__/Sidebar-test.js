@@ -26,24 +26,18 @@ describe('elements/content-sidebar/Sidebar', () => {
             }));
         });
 
-        test('should set isOpen if isLarge prop has changed', () => {
-            const wrapper = getWrapper({ isLarge: true });
-
-            expect(wrapper.state('isOpen')).toEqual(true);
-
-            wrapper.setProps({ isLarge: false });
-
-            expect(wrapper.state('isOpen')).toEqual(false);
-        });
-
-        test('should set isDirty if a user-initiated location change occurred', () => {
+        test('should update if a user-initiated location change occurred', () => {
             const wrapper = getWrapper({ location: { pathname: '/activity' } });
+            const instance = wrapper.instance();
+            instance.setForcedByLocation = jest.fn();
 
             expect(wrapper.state('isDirty')).toBe(false);
+            expect(instance.setForcedByLocation).not.toHaveBeenCalled();
 
             wrapper.setProps({ location: { pathname: '/details' } });
 
             expect(wrapper.state('isDirty')).toBe(true);
+            expect(instance.setForcedByLocation).toHaveBeenCalled();
         });
 
         test('should not set isDirty if an app-initiated location change occurred', () => {
@@ -54,6 +48,24 @@ describe('elements/content-sidebar/Sidebar', () => {
             wrapper.setProps({ location: { pathname: '/details', state: { silent: true } } });
 
             expect(wrapper.state('isDirty')).toBe(false);
+        });
+
+        test('should set the forced open state if the location state is present', () => {
+            const wrapper = getWrapper({ location: { pathname: '/' } });
+            const instance = wrapper.instance();
+            instance.isForced = jest.fn();
+
+            wrapper.setProps({ location: { pathname: '/details' } });
+            expect(instance.isForced).toHaveBeenCalledWith(); // Getter for render
+
+            wrapper.setProps({ location: { pathname: '/details/inner', state: { open: true, silent: true } } });
+            expect(instance.isForced).toHaveBeenCalledWith(); // Getter for render
+
+            wrapper.setProps({ location: { pathname: '/', state: { open: true } } });
+            expect(instance.isForced).toHaveBeenCalledWith(true);
+
+            wrapper.setProps({ location: { pathname: '/', state: { open: false } } });
+            expect(instance.isForced).toHaveBeenCalledWith(false);
         });
     });
 
