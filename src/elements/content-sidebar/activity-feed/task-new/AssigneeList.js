@@ -1,8 +1,6 @@
 // @flow strict
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
-import uniqueId from 'lodash/uniqueId';
+import { FormattedMessage } from 'react-intl';
 import PlainButton from '../../../../components/plain-button';
 import ReadableTime from '../../../../components/time/ReadableTime';
 import messages from '../../../common/messages';
@@ -21,7 +19,7 @@ type Props = {|
     onCollapse: Function,
     onExpand: Function,
     users: TaskAssigneeCollection,
-|} & InjectIntlProvidedProps;
+|};
 
 const statusMessages = {
     [TASK_NEW_APPROVED]: messages.tasksFeedStatusApproved,
@@ -48,86 +46,77 @@ const AvatarDetails = React.memo(({ user, status, completedAt, className }) => {
     );
 });
 
-class AssigneeList extends React.Component<Props> {
-    static defaultProps = {
-        initialAssigneeCount: DEFAULT_ASSIGNEES_SHOWN,
-        users: {},
-    };
+function AssigneeList(props: Props) {
+    const {
+        initialAssigneeCount = DEFAULT_ASSIGNEES_SHOWN,
+        users = {},
+        getAvatarUrl,
+        isOpen,
+        onCollapse,
+        onExpand,
+    } = props;
+    const { entries = [], next_marker } = users;
+    const entryCount = entries.length;
+    const hiddenAssigneeCount = Math.max(0, entryCount - initialAssigneeCount);
+    const numVisibleAssignees = isOpen ? entryCount : initialAssigneeCount;
+    const visibleUsers = entries
+        .slice(0, numVisibleAssignees)
+        .map(({ id, target, status, completed_at: completedAt }) => {
+            return (
+                <li key={id} className="bcs-AssigneeList-listItem" data-testid="assignee-list-item">
+                    <AvatarGroupAvatar
+                        status={status}
+                        className="bcs-AssigneeList-listItemAvatar"
+                        user={target}
+                        getAvatarUrl={getAvatarUrl}
+                    />
+                    <AvatarDetails
+                        className="bcs-AssigneeList-listItemDetails"
+                        user={target}
+                        status={status}
+                        completedAt={completedAt}
+                    />
+                </li>
+            );
+        });
 
-    listTitleId = uniqueId('assignee-list-title-');
+    const maxAdditionalAssignees = TASKS_PAGE_SIZE - initialAssigneeCount;
+    const hasMoreAssigneesThanPageSize = hiddenAssigneeCount > maxAdditionalAssignees || next_marker;
+    const additionalAssigneeCount = hasMoreAssigneesThanPageSize
+        ? `${maxAdditionalAssignees}+`
+        : `${hiddenAssigneeCount}`;
 
-    render() {
-        const { initialAssigneeCount, users, getAvatarUrl, isOpen } = this.props;
-        const { entries = [], next_marker } = users;
-        const entryCount = entries.length;
-        const hiddenAssigneeCount = Math.max(0, entryCount - initialAssigneeCount);
-        const numVisibleAssignees = !isOpen ? initialAssigneeCount : entryCount;
-        const visibleUsers = entries
-            .slice(0, numVisibleAssignees)
-            .map(({ id, target, status, completed_at: completedAt }) => {
-                return (
-                    <li key={id} className="bcs-AssigneeList-listItem" data-testid="assignee-list-item">
-                        <AvatarGroupAvatar
-                            status={status}
-                            className="bcs-AssigneeList-listItemAvatar"
-                            user={target}
-                            getAvatarUrl={getAvatarUrl}
-                        />
-                        <AvatarDetails
-                            className="bcs-AssigneeList-listItemDetails"
-                            user={target}
-                            status={status}
-                            completedAt={completedAt}
-                        />
-                    </li>
-                );
-            });
-
-        const maxAdditionalAssignees = TASKS_PAGE_SIZE - initialAssigneeCount;
-        const hasMoreAssigneesThanPageSize = hiddenAssigneeCount > maxAdditionalAssignees || next_marker;
-        const additionalAssigneeCount = hasMoreAssigneesThanPageSize
-            ? `${maxAdditionalAssignees}+`
-            : `${hiddenAssigneeCount}`;
-
-        return (
-            <div>
-                <ul
-                    className="bcs-AssigneeList-list"
-                    data-testid="task-assignee-list"
-                    arial-labelledby={this.listTitleId}
-                >
-                    {visibleUsers}
-                </ul>
-                {!isOpen && hiddenAssigneeCount > 0 && (
-                    <span>
-                        <PlainButton
-                            data-resin-target="showmorebtn"
-                            data-testid="show-more-assignees"
-                            onClick={this.props.onExpand}
-                            className="lnk bcs-AssigneeList-expandBtn"
-                        >
-                            <FormattedMessage
-                                {...messages.taskShowMoreAssignees}
-                                values={{ additionalAssigneeCount }}
-                            />
-                        </PlainButton>
-                    </span>
-                )}
-                {isOpen && (
-                    <span>
-                        <PlainButton
-                            data-resin-target="showlessbtn"
-                            data-testid="show-less-assignees"
-                            onClick={this.props.onCollapse}
-                            className="lnk bcs-AssigneeList-expandBtn"
-                        >
-                            <FormattedMessage {...messages.taskShowLessAssignees} />
-                        </PlainButton>
-                    </span>
-                )}
-            </div>
-        );
-    }
+    return (
+        <div>
+            <ul className="bcs-AssigneeList-list" data-testid="task-assignee-list">
+                {visibleUsers}
+            </ul>
+            {!isOpen && hiddenAssigneeCount > 0 && (
+                <span>
+                    <PlainButton
+                        data-resin-target="showmorebtn"
+                        data-testid="show-more-assignees"
+                        onClick={onExpand}
+                        className="lnk bcs-AssigneeList-expandBtn"
+                    >
+                        <FormattedMessage {...messages.taskShowMoreAssignees} values={{ additionalAssigneeCount }} />
+                    </PlainButton>
+                </span>
+            )}
+            {isOpen && (
+                <span>
+                    <PlainButton
+                        data-resin-target="showlessbtn"
+                        data-testid="show-less-assignees"
+                        onClick={onCollapse}
+                        className="lnk bcs-AssigneeList-expandBtn"
+                    >
+                        <FormattedMessage {...messages.taskShowLessAssignees} />
+                    </PlainButton>
+                </span>
+            )}
+        </div>
+    );
 }
 
-export default injectIntl(AssigneeList);
+export default AssigneeList;
