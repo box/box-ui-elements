@@ -9,8 +9,8 @@ green=$"\e[1;32m"
 blue=$"\e[1;34m"
 end=$"\e[0m\n"
 
-check_uncommitted_files_ignoring_package_json() {
-    if [[ $(git status --porcelain | sed s/^...//) != "package.json" ]] ; then
+check_uncommitted_files() {
+    if [[ $(git status --porcelain 2>/dev/null| egrep "^(M| M)") != "" ]] ; then
         printf "${red}Your branch has uncommitted files!${end}"
         return 1
     fi
@@ -62,7 +62,7 @@ prepush() {
     printf "${blue}-------------------------------------------------------------${end}"
     yarn build:prod:es || exit 1
 
-    check_uncommitted_files_ignoring_package_json || exit 1
+    check_uncommitted_files || exit 1
 
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Building bundles again, this will update en-US.properties${end}"
