@@ -164,6 +164,7 @@
         "circular-dependency-plugin": "^5.0.2",
         "classnames": "^2.2.6",
         "color": "^3.0.0",
+        "commitlint-circle": "^1.0.0",
         "conventional-changelog": "^2.0.3",
         "conventional-changelog-cli": "^2.0.5",
         "conventional-github-releaser": "^3.1.2",

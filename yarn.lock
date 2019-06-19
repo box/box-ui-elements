@@ -1466,7 +1466,7 @@
     node-fetch "^2.3.0"
     universal-user-agent "^2.0.1"
 
-"@octokit/rest@^15.2.6":
+"@octokit/rest@^15.2.6", "@octokit/rest@^15.9.4":
   version "15.18.1"
   resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-15.18.1.tgz#ec7fb0f8775ef64dc095fae6635411d3fbff9b62"
   integrity sha512-g2tecjp2TEtYV8bKAFvfQtu+W29HM7ektmWmw8zrMy9/XCKDEYRErR2YvvhN9+IxkLC4O3lDqYP4b6WgsL6Utw==
@@ -4248,6 +4248,15 @@ commander@~2.17.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
   integrity sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
+
+commitlint-circle@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/commitlint-circle/-/commitlint-circle-1.0.0.tgz#87d529e8cdbff8ea1edfc75720900057de28582c"
+  integrity sha512-YuwyQLM0NnbWN0Rt1dloQiw8kMcZGr1QVhyecYkV0pR1YOmc4QHwIM+c/2E7VxU8lzbI2gW0/2fRvOLAXJi5mQ==
+  dependencies:
+    "@octokit/rest" "^15.9.4"
+    execa "^0.10.0"
+    tslib "^1.9.3"
 
 common-dir@^2.0.2:
   version "2.0.2"
