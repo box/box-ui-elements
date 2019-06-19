@@ -81,6 +81,34 @@ class Task extends React.Component<Props, State> {
         modalError: undefined,
         isEditing: false,
         isLoading: false,
+        isAssigneeListOpen: false,
+    };
+
+    componentDidUpdate(prevProps: Props) {
+        // reset state to props assigned_to
+        const { assigned_to } = this.props;
+        const { assigned_to: prevAssignedTo } = prevProps;
+        if (prevAssignedTo !== assigned_to) {
+            this.setState({
+                assigned_to,
+            });
+        }
+    }
+
+    handleShowMoreAssignees = () => {
+        const { assigned_to } = this.state;
+
+        if (assigned_to.next_marker) {
+            this.fetchTaskCollaborators().then(() => {
+                this.setState({ isAssigneeListOpen: true });
+            });
+        } else {
+            this.setState({ isAssigneeListOpen: true });
+        }
+    };
+
+    handleShowLessAssignees = () => {
+        this.setState({ isAssigneeListOpen: false });
     };
 
     handleEditClick = async () => {
@@ -147,6 +175,13 @@ class Task extends React.Component<Props, State> {
         });
     };
 
+    handleTaskAction = (taskId, assignmentId, taskStatus) => {
+        const { onAssignmentUpdate } = this.props;
+
+        onAssignmentUpdate(taskId, assignmentId, taskStatus);
+        this.setState({ isAssigneeListOpen: false });
+    };
+
     render() {
         const {
             approverSelectorContacts,
@@ -164,7 +199,6 @@ class Task extends React.Component<Props, State> {
             isPending,
             mentionSelectorContacts,
             description,
-            onAssignmentUpdate = noop,
             onDelete,
             onEdit,
             permissions,
@@ -174,7 +208,7 @@ class Task extends React.Component<Props, State> {
             translations,
         } = this.props;
 
-        const { assigned_to, modalError, isEditing, isLoading, loadCollabError } = this.state;
+        const { assigned_to, modalError, isEditing, isLoading, loadCollabError, isAssigneeListOpen } = this.state;
 
         const taskPermissions = {
             ...permissions,
@@ -244,7 +278,9 @@ class Task extends React.Component<Props, State> {
                     </div>
                     <div className="bcs-task-content">
                         <AssigneeList
-                            onExpand={this.fetchTaskCollaborators}
+                            isOpen={isAssigneeListOpen}
+                            onCollapse={this.handleShowLessAssignees}
+                            onExpand={this.handleShowMoreAssignees}
                             getAvatarUrl={getAvatarUrl}
                             initialAssigneeCount={3}
                             users={assigned_to}
@@ -257,17 +293,19 @@ class Task extends React.Component<Props, State> {
                                 onTaskApproval={
                                     isPending
                                         ? noop
-                                        : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_APPROVED)
+                                        : () => {
+                                              this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_APPROVED);
+                                          }
                                 }
                                 onTaskReject={
                                     isPending
                                         ? noop
-                                        : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_REJECTED)
+                                        : () => this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_REJECTED)
                                 }
                                 onTaskComplete={
                                     isPending
                                         ? noop
-                                        : () => onAssignmentUpdate(id, currentUserAssignment.id, TASK_NEW_COMPLETED)
+                                        : () => this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_COMPLETED)
                                 }
                             />
                         )}

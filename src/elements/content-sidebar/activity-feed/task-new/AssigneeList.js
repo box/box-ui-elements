@@ -17,13 +17,11 @@ const TASKS_PAGE_SIZE = 20; // service does not return the page size to the clie
 type Props = {|
     getAvatarUrl: GetAvatarUrlCallback,
     initialAssigneeCount: number,
+    isOpen: boolean,
+    onCollapse: Function,
     onExpand: Function,
     users: TaskAssigneeCollection,
 |} & InjectIntlProvidedProps;
-
-type State = {
-    isCollapsed: boolean,
-};
 
 const statusMessages = {
     [TASK_NEW_APPROVED]: messages.tasksFeedStatusApproved,
@@ -50,11 +48,7 @@ const AvatarDetails = React.memo(({ user, status, completedAt, className }) => {
     );
 });
 
-class AssigneeList extends React.Component<Props, State> {
-    state = {
-        isCollapsed: true,
-    };
-
+class AssigneeList extends React.Component<Props> {
     static defaultProps = {
         initialAssigneeCount: DEFAULT_ASSIGNEES_SHOWN,
         users: {},
@@ -62,35 +56,12 @@ class AssigneeList extends React.Component<Props, State> {
 
     listTitleId = uniqueId('assignee-list-title-');
 
-    showLessAssignees = () => {
-        this.setState({
-            isCollapsed: true,
-        });
-    };
-
-    showMoreAssignees = async () => {
-        const { users, onExpand } = this.props;
-
-        if (users.next_marker) {
-            try {
-                await onExpand();
-            } catch (err) {
-                // do nothing
-            }
-        }
-
-        this.setState({
-            isCollapsed: false,
-        });
-    };
-
     render() {
-        const { initialAssigneeCount, users, getAvatarUrl } = this.props;
-        const { isCollapsed } = this.state;
+        const { initialAssigneeCount, users, getAvatarUrl, isOpen } = this.props;
         const { entries = [], next_marker } = users;
         const entryCount = entries.length;
         const hiddenAssigneeCount = Math.max(0, entryCount - initialAssigneeCount);
-        const numVisibleAssignees = isCollapsed ? initialAssigneeCount : entryCount;
+        const numVisibleAssignees = !isOpen ? initialAssigneeCount : entryCount;
         const visibleUsers = entries
             .slice(0, numVisibleAssignees)
             .map(({ id, target, status, completed_at: completedAt }) => {
@@ -127,12 +98,12 @@ class AssigneeList extends React.Component<Props, State> {
                 >
                     {visibleUsers}
                 </ul>
-                {isCollapsed && hiddenAssigneeCount > 0 && (
+                {!isOpen && hiddenAssigneeCount > 0 && (
                     <span>
                         <PlainButton
                             data-resin-target="showmorebtn"
                             data-testid="show-more-assignees"
-                            onClick={this.showMoreAssignees}
+                            onClick={this.props.onExpand}
                             className="lnk bcs-AssigneeList-expandBtn"
                         >
                             <FormattedMessage
@@ -142,12 +113,12 @@ class AssigneeList extends React.Component<Props, State> {
                         </PlainButton>
                     </span>
                 )}
-                {!isCollapsed && (
+                {isOpen && (
                     <span>
                         <PlainButton
                             data-resin-target="showlessbtn"
                             data-testid="show-less-assignees"
-                            onClick={this.showLessAssignees}
+                            onClick={this.props.onCollapse}
                             className="lnk bcs-AssigneeList-expandBtn"
                         >
                             <FormattedMessage {...messages.taskShowLessAssignees} />
