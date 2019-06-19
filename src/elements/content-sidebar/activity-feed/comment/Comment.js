@@ -57,8 +57,8 @@ type Props = {
 
 type State = {
     isConfirming: boolean,
-    isEditing?: boolean,
-    isInputOpen?: boolean,
+    isEditing: boolean,
+    isInputOpen: boolean,
 };
 
 class Comment extends React.Component<Props, State> {
