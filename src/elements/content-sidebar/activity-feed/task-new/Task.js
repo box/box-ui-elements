@@ -102,7 +102,7 @@ class Task extends React.Component<Props, State> {
         if (assigned_to.next_marker) {
             this.fetchTaskCollaborators().then(() => {
                 this.setState({ isAssigneeListOpen: true });
-            });
+            }, noop);
         } else {
             this.setState({ isAssigneeListOpen: true });
         }
