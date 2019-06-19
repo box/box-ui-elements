@@ -1,12 +1,15 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
+import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
+import AdditionalTabs from '../additional-tabs';
+import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading';
+import IconChatRound from '../../../icons/general/IconChatRound';
+import IconDocInfo from '../../../icons/general/IconDocInfo';
 import IconMagicWand from '../../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../../icons/general/IconMetadataThick';
-import IconDocInfo from '../../../icons/general/IconDocInfo';
-import IconChatRound from '../../../icons/general/IconChatRound';
-import SidebarNavButton from '../SidebarNavButton';
 import SidebarNav from '../SidebarNav';
+import SidebarNavButton from '../SidebarNavButton';
 
 describe('elements/content-sidebar/SidebarNav', () => {
     const getWrapper = (props, active = '') =>
@@ -78,10 +81,12 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
     test('should render the additional tabs loading state', () => {
         const props = {
-            hasAdditionalTabs: true,
             additionalTabs: [],
+            hasAdditionalTabs: true,
         };
         const wrapper = getWrapper(props);
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AdditionalTabs)).toHaveLength(1);
+        expect(wrapper.find(AdditionalTabsLoading)).toHaveLength(1);
+        expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(5);
     });
 });
