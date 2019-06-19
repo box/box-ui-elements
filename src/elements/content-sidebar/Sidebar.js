@@ -7,6 +7,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import flow from 'lodash/flow';
+import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
@@ -48,7 +49,6 @@ type Props = {
 
 type State = {
     isDirty: boolean,
-    isOpen: boolean, // Local isOpen state consists of stored forced state (if any) and responsive adjustments
 };
 
 export const SIDEBAR_FORCE_KEY: 'bcs.force' = 'bcs.force';
@@ -56,67 +56,43 @@ export const SIDEBAR_FORCE_VALUE_CLOSED: 'closed' = 'closed';
 export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 
 class Sidebar extends React.Component<Props, State> {
-    id: string = uniqueid('bcs_');
-
-    props: Props;
-
-    state: State;
-
-    store: LocalStore = new LocalStore();
-
     static defaultProps = {
         isLarge: true,
         isLoading: false,
     };
 
+    id: string = uniqueid('bcs_');
+
+    props: Props;
+
+    state: State = {
+        isDirty: false,
+    };
+
+    store: LocalStore = new LocalStore();
+
     constructor(props: Props) {
         super(props);
 
-        const { isLarge } = this.props;
-
-        this.state = {
-            isDirty: false,
-            isOpen: this.isForcedSet() ? this.isForcedOpen() : !!isLarge,
-        };
+        this.setForcedByLocation();
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { fileId, history, isLarge, location }: Props = this.props;
-        const { fileId: prevFileId, isLarge: prevIsLarge, location: prevLocation }: Props = prevProps;
-        const { isDirty, isOpen }: State = this.state;
-        const { state: locationState = {} } = location;
-        const isForcedSet = this.isForcedSet();
+        const { fileId, history, location }: Props = this.props;
+        const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
+        const { isDirty }: State = this.state;
 
-        // User navigated to a different file without ever navigating to a tab
+        // User navigated to a different file without ever navigating the sidebar
         if (!isDirty && fileId !== prevFileId && location.pathname !== '/') {
             history.replace({ pathname: '/', state: { silent: true } });
         }
 
-        // User navigated to a different route or tab for the first time this session
-        if (!isDirty && location !== prevLocation && !locationState.silent) {
+        // User navigated or toggled the sidebar intentionally, internally or externally
+        if (location !== prevLocation && !this.getLocationState('silent')) {
+            this.setForcedByLocation();
             this.setState({ isDirty: true });
         }
-
-        // User resized their viewport without ever toggling the sidebar open/closed
-        if (!isForcedSet && isLarge !== prevIsLarge && isLarge !== isOpen) {
-            this.setState({ isOpen: isLarge });
-        }
     }
-
-    /**
-     * Handle sidebar navigation events
-     *
-     * @param {SyntheticEvent} event - The event
-     * @param {NavigateOptions} options - The navigation options
-     * @return {void}
-     */
-    handleNavigation = (event: SyntheticEvent<>, { isToggle }: NavigateOptions): void => {
-        const { isOpen }: State = this.state;
-
-        // Persist user preference for all future sessions in this browser
-        this.isForced(isToggle ? !isOpen : true);
-        this.setState({ isOpen: this.isForcedOpen() });
-    };
 
     /**
      * Handle version history click
@@ -137,6 +113,22 @@ class Sidebar extends React.Component<Props, State> {
     };
 
     /**
+     * Getter for location state properties.
+     *
+     * NOTE: Each location on the history stack has its own optional state object that is wholly separate from
+     * this component's internal state. Values on the location state object can persist even between refreshes
+     * when using certain history contexts, such as BrowserHistory.
+     *
+     * @param key - Optionally get a specific key value from state
+     * @returns {any} - The location state or state key value
+     */
+    getLocationState(key?: string): any {
+        const { location } = this.props;
+        const { state: locationState = {} } = location;
+        return getProp(locationState, key);
+    }
+
+    /**
      * Getter/setter for sidebar forced state
      *
      * @param isOpen - Optionally set the sidebar to open/closed
@@ -155,7 +147,7 @@ class Sidebar extends React.Component<Props, State> {
      * @returns {boolean} - True if the sidebar has been forced open
      */
     isForcedOpen(): boolean {
-        return this.isForced() !== SIDEBAR_FORCE_VALUE_CLOSED;
+        return this.isForced() === SIDEBAR_FORCE_VALUE_OPEN;
     }
 
     /**
@@ -164,6 +156,17 @@ class Sidebar extends React.Component<Props, State> {
      */
     isForcedSet(): boolean {
         return this.isForced() !== null;
+    }
+
+    /**
+     * Helper to set the local store open state based on the location open state, if defined
+     */
+    setForcedByLocation(): void {
+        const isLocationOpen: ?boolean = this.getLocationState('open');
+
+        if (isLocationOpen !== undefined && isLocationOpen !== null) {
+            this.isForced(isLocationOpen);
+        }
     }
 
     render() {
@@ -179,13 +182,14 @@ class Sidebar extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasAdditionalTabs,
+            isLarge,
             isLoading,
             metadataEditors,
             metadataSidebarProps,
             onVersionChange,
         }: Props = this.props;
 
-        const { isOpen } = this.state;
+        const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isLarge;
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
@@ -213,7 +217,6 @@ class Sidebar extends React.Component<Props, State> {
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
                             isOpen={isOpen}
-                            onNavigate={this.handleNavigation}
                         />
                         <SidebarPanels
                             activitySidebarProps={activitySidebarProps}
