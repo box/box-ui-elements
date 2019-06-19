@@ -404,7 +404,7 @@ class ContentExplorer extends Component<Props, State> {
 
         // not using Promise.all since thumbnails should load one at a time
         items.forEach((item, index) => {
-            return new Promise(resolve => {
+            new Promise(resolve => {
                 fileAPI.getFileThumbnail(
                     item,
                     dimensions,
