@@ -14,7 +14,9 @@ import Keywords from '../keywords';
 import withErrorHandling from '../../withErrorHandling';
 
 type Props = {
+    approverSelectorContacts?: SelectorItems,
     currentUser?: User,
+    getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -30,6 +32,7 @@ type Props = {
 };
 
 const ActiveState = ({
+    approverSelectorContacts,
     currentUser,
     items,
     onAppActivityDelete,
@@ -39,6 +42,7 @@ const ActiveState = ({
     onTaskAssignmentUpdate,
     onVersionInfo,
     translations,
+    getApproverWithQuery,
     getAvatarUrl,
     getUserProfileUrl,
     getMentionWithQuery,
@@ -102,7 +106,9 @@ const ActiveState = ({
                                 <li className="bcs-activity-feed-task-new" data-testid="task">
                                     <TaskNew
                                         {...item}
+                                        approverSelectorContacts={approverSelectorContacts}
                                         currentUser={currentUser}
+                                        getApproverWithQuery={getApproverWithQuery}
                                         getAvatarUrl={getAvatarUrl}
                                         getMentionWithQuery={getMentionWithQuery}
                                         getUserProfileUrl={getUserProfileUrl}

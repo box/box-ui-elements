@@ -98,6 +98,7 @@
     "husky": {
         "hooks": {
             "pre-commit": "lint-staged",
+            "pre-push": "./scripts/prepush.sh",
             "commit-msg": "commitlint -e"
         }
     },
@@ -195,7 +196,7 @@
         "flow-typed": "^2.5.1",
         "form-serialize": "^0.7.2",
         "formik": "^1.5.4",
-        "husky": "^1.1.2",
+        "husky": "^2.4.1",
         "ilib-tree-node": "^1.2.0",
         "immutable": "^3.7.4",
         "intl": "^1.2.5",

@@ -745,9 +745,11 @@ type TaskPayload = {
 };
 
 type TaskUpdatePayload = {
+    addedAssignees: SelectorItems,
     description: string,
     due_at?: ?string,
     id: string,
+    removedAssignees: Array<TaskCollabAssignee>,
 };
 
 /* New Task Types END */

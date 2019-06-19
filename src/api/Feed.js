@@ -22,6 +22,7 @@ import AppActivityAPI from './AppActivity';
 import {
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_CREATE_TASK_ASSIGNMENT,
+    ERROR_CODE_UPDATE_TASK,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_INCOMPLETE,
@@ -537,26 +538,40 @@ class Feed extends Base {
         this.errorCallback = errorCallback;
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.updateFeedItem({ isPending: true }, task.id);
-        this.tasksNewAPI.updateTask({
-            file,
-            task,
-            successCallback: (taskData: Task) => {
-                this.updateFeedItem(
-                    {
-                        ...taskData,
-                        isPending: false,
-                    },
-                    task.id,
+
+        Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)))
+            .then(() => {
+                return Promise.all(
+                    task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
                 );
-                if (!this.isDestroyed()) {
-                    successCallback();
-                }
-            },
-            errorCallback: (e: ElementsXhrError, code: string) => {
+            })
+            .then(() => {
+                this.tasksNewAPI.updateTask({
+                    file,
+                    task,
+                    successCallback: (taskData: Task) => {
+                        this.updateFeedItem(
+                            {
+                                ...taskData,
+                                isPending: false,
+                            },
+                            task.id,
+                        );
+
+                        if (!this.isDestroyed()) {
+                            successCallback();
+                        }
+                    },
+                    errorCallback: (e: ElementsXhrError) => {
+                        this.updateFeedItem({ isPending: false }, task.id);
+                        this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
+                    },
+                });
+            })
+            .catch((e: ElementsXhrError) => {
                 this.updateFeedItem({ isPending: false }, task.id);
-                this.feedErrorCallback(false, e, code);
-            },
-        });
+                this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
+            });
     };
 
     /**
@@ -947,12 +962,16 @@ class Feed extends Base {
      * Creates a task collaborator via the API.
      *
      * @param {BoxItem} file - The file to which the task is assigned
-     * @param {Task} task - The newly created task from the API
+     * @param {Task|TaskUpdatePayload} task - The newly created or existing task from the API
      * @param {SelectorItem} assignee - The user assigned to this task
      * @param {Function} errorCallback - Task create error callback
-     * @return {Promise<TaskAssignment}
+     * @return {Promise<TaskAssignment>}
      */
-    createTaskCollaborator(file: BoxItem, task: Task, assignee: SelectorItem): Promise<TaskCollabAssignee> {
+    createTaskCollaborator(
+        file: BoxItem,
+        task: Task | TaskUpdatePayload,
+        assignee: SelectorItem,
+    ): Promise<TaskCollabAssignee> {
         if (!file.id) {
             throw getBadItemError();
         }
@@ -966,6 +985,41 @@ class Feed extends Base {
                 file,
                 task,
                 user: assignee,
+                successCallback: resolve,
+                errorCallback: (e: ElementsXhrError) => {
+                    reject(e);
+                },
+            });
+        });
+    }
+
+    /**
+     * Deletes a task collaborator via the API.
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Task|TaskUpdatePayload} task - The newly deleted or existing task from the API
+     * @param {TaskCollabAssignee} assignee - The user assigned to this task
+     * @param {Function} errorCallback - Task delete error callback
+     * @return {Promise<TaskAssignment>}
+     */
+    deleteTaskCollaborator(
+        file: BoxItem,
+        task: Task | TaskUpdatePayload,
+        assignee: TaskCollabAssignee,
+    ): Promise<TaskCollabAssignee> {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file.id = file.id;
+        return new Promise((resolve, reject) => {
+            const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
+            this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
+
+            taskCollaboratorsAPI.deleteTaskCollaborator({
+                file,
+                task,
+                taskCollaborator: { id: assignee.id },
                 successCallback: resolve,
                 errorCallback: (e: ElementsXhrError) => {
                     reject(e);
