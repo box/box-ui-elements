@@ -1,6 +1,12 @@
-@import '~box-ui-elements/es/styles/variables';
-@import '~components/in-app-messenger/variables';
-@import '~styles/variables';
+@import '../../../../elements/common/variables';
+@import './InAppMessenger';
+@import '../../../../styles/variables';
+
+// Grid View
+$header-height: 56px;
+$actionbar-height: 60px;
+$actionbar-filters-height: 26px;
+$table-header-height: 40px;
 
 .table-header {
     border-bottom: 1px solid $off-white;
