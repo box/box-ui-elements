@@ -2,6 +2,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
+import get from 'lodash/get';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import messages from '../../../common/messages';
@@ -53,7 +54,8 @@ type Props = {|
 |};
 
 type State = {
-    assigned_to: TaskAssigneeCollection,
+    // the complete list of assignees (when task.assigned_to is truncated)
+    assignedToFull: TaskAssigneeCollection,
     isAssigneeListOpen: boolean,
     isEditing: boolean,
     isLoading: boolean,
@@ -78,50 +80,27 @@ const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
 class Task extends React.Component<Props, State> {
     state = {
         loadCollabError: undefined,
-        assigned_to: this.props.assigned_to,
+        assignedToFull: this.props.assigned_to,
         modalError: undefined,
         isEditing: false,
         isLoading: false,
         isAssigneeListOpen: false,
     };
 
-    componentDidUpdate(prevProps: Props) {
-        // reset state to props assigned_to
-        const { assigned_to } = this.props;
-        const { assigned_to: prevAssignedTo } = prevProps;
-        if (prevAssignedTo !== assigned_to) {
-            this.setState({
-                assigned_to,
-            });
-        }
-    }
-
-    handleShowMoreAssignees = () => {
-        const { assigned_to } = this.state;
-
-        if (assigned_to.next_marker) {
-            this.fetchTaskCollaborators().then(() => {
-                this.setState({ isAssigneeListOpen: true });
-            }, noop);
-        } else {
+    handleAssigneeListExpand = () => {
+        this.getAllTaskCollaborators(() => {
             this.setState({ isAssigneeListOpen: true });
-        }
+        });
     };
 
-    handleShowLessAssignees = () => {
+    handleAssigneeListCollapse = () => {
         this.setState({ isAssigneeListOpen: false });
     };
 
-    handleEditClick = async () => {
-        const { assigned_to } = this.state;
-
-        if (assigned_to.next_marker) {
-            this.fetchTaskCollaborators().then(() => {
-                this.setState({ isEditing: true });
-            });
-        } else {
+    handleEditClick = () => {
+        this.getAllTaskCollaborators(() => {
             this.setState({ isEditing: true });
-        }
+        });
     };
 
     handleModalClose = () => {
@@ -136,56 +115,55 @@ class Task extends React.Component<Props, State> {
         this.setState({ modalError: error });
     };
 
-    fetchTaskCollaborators = (): Promise<any> => {
-        const { id, api, task_links } = this.props;
-        const { entries } = task_links;
-        let fileId = '';
+    getAllTaskCollaborators = (onSuccess: () => any) => {
+        const { id, api, task_links, assigned_to } = this.props;
+        const { errorOccured, taskCollaboratorLoadErrorMessage } = messages;
 
-        if (entries[0] && entries[0].target) {
-            fileId = entries[0].target.id;
+        // skip fetch when there are no additional collaborators
+        if (!assigned_to.next_marker) {
+            this.setState({ assignedToFull: assigned_to });
+            onSuccess();
+            return;
         }
 
+        // fileid is required for api calls, check for presence
+        const fileId = get(task_links, 'entries[0].target.id');
         if (!fileId) {
-            return Promise.reject();
+            return;
         }
 
         this.setState({ isLoading: true });
-
-        return new Promise((resolve, reject) => {
-            api.getTaskCollaboratorsAPI(false).getTaskCollaborators({
-                task: { id },
-                file: { id: fileId },
-                errorCallback: () => {
-                    const { errorOccured, taskCollaboratorLoadErrorMessage } = messages;
-
-                    this.setState(
-                        {
-                            isLoading: false,
-                            loadCollabError: {
-                                message: taskCollaboratorLoadErrorMessage,
-                                title: errorOccured,
-                            },
-                        },
-                        reject,
-                    );
-                },
-                successCallback: assigned_to => {
-                    this.setState({ assigned_to, isLoading: false }, resolve);
-                },
-            });
+        api.getTaskCollaboratorsAPI(false).getTaskCollaborators({
+            task: { id },
+            file: { id: fileId },
+            errorCallback: () => {
+                this.setState({
+                    isLoading: false,
+                    loadCollabError: {
+                        message: taskCollaboratorLoadErrorMessage,
+                        title: errorOccured,
+                    },
+                });
+            },
+            successCallback: assignedToFull => {
+                this.setState({ assignedToFull, isLoading: false });
+                onSuccess();
+            },
         });
     };
 
     handleTaskAction = (taskId: string, assignmentId: string, taskStatus: string) => {
         const { onAssignmentUpdate } = this.props;
 
-        onAssignmentUpdate(taskId, assignmentId, taskStatus);
         this.setState({ isAssigneeListOpen: false });
+
+        onAssignmentUpdate(taskId, assignmentId, taskStatus);
     };
 
     render() {
         const {
             approverSelectorContacts,
+            assigned_to,
             created_at,
             created_by,
             currentUser,
@@ -209,7 +187,7 @@ class Task extends React.Component<Props, State> {
             translations,
         } = this.props;
 
-        const { assigned_to, modalError, isEditing, isLoading, loadCollabError, isAssigneeListOpen } = this.state;
+        const { assignedToFull, modalError, isEditing, isLoading, loadCollabError, isAssigneeListOpen } = this.state;
 
         const taskPermissions = {
             ...permissions,
@@ -280,11 +258,11 @@ class Task extends React.Component<Props, State> {
                     <div className="bcs-task-content">
                         <AssigneeList
                             isOpen={isAssigneeListOpen}
-                            onCollapse={this.handleShowLessAssignees}
-                            onExpand={this.handleShowMoreAssignees}
+                            onCollapse={this.handleAssigneeListCollapse}
+                            onExpand={this.handleAssigneeListExpand}
                             getAvatarUrl={getAvatarUrl}
                             initialAssigneeCount={3}
-                            users={assigned_to}
+                            users={assignedToFull}
                         />
                     </div>
                     <div className="bcs-task-content">
@@ -322,7 +300,7 @@ class Task extends React.Component<Props, State> {
                     isTaskFormOpen={isEditing}
                     taskFormProps={{
                         id,
-                        approvers: assigned_to.entries,
+                        approvers: assignedToFull.entries,
                         approverSelectorContacts,
                         getApproverWithQuery,
                         getAvatarUrl,

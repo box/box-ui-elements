@@ -252,7 +252,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         expect(wrapper.find('CommentInlineError')).toHaveLength(1);
     });
 
-    test('should call fetchTaskCollaborators on modal open if there is a next_marker', async () => {
+    test('should call getAllTaskCollaborators on modal open if there is a next_marker', async () => {
         const taskWithMarker = {
             ...task,
             assigned_to: {
@@ -271,14 +271,11 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
         const instance = wrapper.instance();
-        instance.fetchTaskCollaborators = jest
-            .fn()
-            .mockRejectedValueOnce()
-            .mockResolvedValueOnce({});
+        instance.getAllTaskCollaborators = jest.fn();
 
         await instance.handleEditClick();
 
-        expect(instance.fetchTaskCollaborators).toBeCalled();
+        expect(instance.getAllTaskCollaborators).toBeCalled();
     });
 
     test('should be able to toggle expanded state', () => {
@@ -326,6 +323,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const collapseBtn = global.queryAllByTestId(wrapper, 'show-less-assignees').first();
         collapseBtn.simulate('click');
 
+        assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
         expect(assigneeList).toHaveLength(INITIAL_DISPLAY_COUNT);
     });
 });
