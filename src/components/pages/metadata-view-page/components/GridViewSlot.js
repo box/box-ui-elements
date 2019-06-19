@@ -8,10 +8,10 @@ type Props = {
 
 function GridViewSlot({ slotIndex, slotRenderer }: Props) {
     if (!slotRenderer) {
-        return <div className="GridViewSlot-blank" />;
+        return <div className="bdl-GridViewSlot-blank" />;
     }
 
-    return <div className="GridViewSlot">{slotRenderer(slotIndex)}</div>;
+    return <div className="bdl-GridViewSlot">{slotRenderer(slotIndex)}</div>;
 }
 
 export default GridViewSlot;

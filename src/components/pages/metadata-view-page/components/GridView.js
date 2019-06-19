@@ -72,7 +72,7 @@ class GridView extends React.Component<Props, State> {
                 key = currentCollection.items[slotIndex].id;
                 item = currentCollection.items[slotIndex];
             } else {
-                key = uniqueId('GridViewSlot');
+                key = uniqueId('bdl-GridViewSlot');
             }
 
             contents.push(
@@ -88,7 +88,7 @@ class GridView extends React.Component<Props, State> {
 
         return (
             <CellMeasurer key={dataKey} cache={this.cache} columnIndex={0} parent={parent} rowIndex={rowIndex}>
-                <div className="GridView-row">{contents}</div>
+                <div className="bdl-GridView-row">{contents}</div>
             </CellMeasurer>
         );
     };
@@ -103,7 +103,7 @@ class GridView extends React.Component<Props, State> {
 
         return (
             <BaseTable
-                className={`GridView GridView--columns-${columnCount}`}
+                className={`bdl-GridView bdl-GridView--columns-${columnCount}`}
                 deferredMeasurementCache={this.cache}
                 disableHeader
                 height={height}
