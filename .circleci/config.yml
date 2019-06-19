@@ -1,0 +1,101 @@
+
+aliases:
+  - &yarn |
+    yarn install --non-interactive --frozen-lockfile --cache-folder ~/.cache/yarn
+
+  - &clean |
+    yarn clean
+
+  - &i18n |
+    yarn build:i18n
+
+  - &restore-yarn-cache
+    keys:
+      - yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      # Fallback in case checksum fails
+      - yarn-{{ .Branch }}-
+
+  - &save-yarn-cache
+    paths:
+      - node_modules
+      - ~/.cache/yarn
+      - ~/.cache/Cypress
+    key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+  - &filter-only-master
+    branches:
+      only:
+        - master
+
+defaults: &defaults
+  working_directory: ~/buie
+  docker:
+    - image: circleci/node:10
+  resource_class: large
+
+version: 2
+jobs:
+  babel-build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run: *clean
+      - run: *i18n
+      - run:
+          name: Babel build
+          command: yarn build:ci:es
+
+  webpack-build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run: *clean
+      - run: *i18n
+      - run:
+          name: Webpack build
+          command: yarn build:ci:dist
+
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run: *clean
+      - run: *i18n
+      - run:
+          name: Code Lint
+          command: yarn lint
+      - run:
+          name: Flow
+          command: yarn flow check
+
+  tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run:
+          name: Unit tests
+          command: yarn test --maxWorkers=2
+      - run:
+          name: E2E tests
+          command: yarn test:e2e
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - lint
+      - tests
+      - babel-build
+      - webpack-build
