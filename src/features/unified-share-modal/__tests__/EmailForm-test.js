@@ -4,7 +4,6 @@ import CollaboratorAvatars from '../../collaborator-avatars/CollaboratorAvatars'
 import commonMessages from '../../../common/messages';
 
 import { EmailFormBase as EmailForm } from '../EmailForm';
-import messages from '../messages';
 
 describe('features/unified-share-modal/EmailForm', () => {
     const expectedContacts = [
@@ -66,6 +65,19 @@ describe('features/unified-share-modal/EmailForm', () => {
             expect(updateSelectedContacts).toHaveBeenCalledWith(contactsToAdd);
             expect(onContactAdd).toBeCalled();
         });
+
+        test('should set error when contact limit reached', () => {
+            const wrapper = getWrapper({
+                contactLimit: 1,
+                intl: {
+                    formatMessage: jest.fn().mockReturnValue('contact limit reached'),
+                },
+            });
+
+            const contactsToAdd = [expectedContacts[1], expectedContacts[2]];
+            wrapper.instance().handleContactAdd(contactsToAdd);
+            expect(wrapper.state('contactsFieldError')).toBe('contact limit reached');
+        });
     });
 
     describe('handleContactRemove()', () => {
@@ -84,21 +96,17 @@ describe('features/unified-share-modal/EmailForm', () => {
             expect(onContactRemove).toBeCalled();
             expect(updateSelectedContacts).toHaveBeenCalledWith([]);
         });
-    });
 
-    describe('handleContactInput()', () => {
-        test('should reset the error', () => {
-            const onContactInput = jest.fn();
-            const wrapper = getWrapper({ onContactInput });
-
-            wrapper.setState({
-                contactsFieldError: 'Error',
+        test('should set error when contact limit reached', () => {
+            const wrapper = getWrapper({
+                contactLimit: 1,
+                contactsFieldError: 'contact limit reached',
+                selectedContacts: [expectedContacts[1], expectedContacts[2]],
             });
 
-            wrapper.instance().handleContactInput();
+            wrapper.instance().handleContactRemove(expectedContacts[1], 0);
 
-            expect(wrapper.state('contactsFieldError')).toEqual('');
-            expect(onContactInput).toBeCalled();
+            expect(wrapper.state('contactsFieldError')).toBe('');
         });
     });
 
@@ -160,12 +168,15 @@ describe('features/unified-share-modal/EmailForm', () => {
             const onSubmitSpy = jest.fn();
             const wrapper = getWrapper({
                 sendInvites: onSubmitSpy,
+                intl: {
+                    formatMessage: () => 'error',
+                },
             });
             const event = { preventDefault: jest.fn() };
 
             wrapper.instance().handleSubmit(event);
 
-            expect(intl.formatMessage).toHaveBeenCalledWith(messages.enterAtLeastOneEmailError);
+            expect(wrapper.state('contactsFieldError')).toEqual('error');
             expect(onSubmitSpy).not.toHaveBeenCalled();
         });
 

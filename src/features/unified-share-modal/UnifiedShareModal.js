@@ -58,6 +58,8 @@ type Props = {
     collaborationRestrictionWarning: React.Node,
     /** List of existing collaborators */
     collaboratorsList?: collaboratorsListType,
+    /** Used to limit the number of contacts that can be added in the contacts field */
+    contactLimit?: number,
     /** User ID of currently logged in user */
     currentUserID: string,
     /** Whether the modal should focus the shared link after the URL is resolved */
@@ -454,6 +456,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
         const {
             canInvite,
             collaborationRestrictionWarning,
+            contactLimit,
             getCollaboratorContacts,
             item,
             sendInvitesError,
@@ -519,6 +522,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                 >
                     <div className="invite-collaborator-container">
                         <EmailForm
+                            contactLimit={contactLimit}
                             contactsFieldAvatars={avatars}
                             contactsFieldDisabledTooltip={contactsFieldDisabledTooltip}
                             contactsFieldLabel={<FormattedMessage {...messages.inviteFieldLabel} />}
