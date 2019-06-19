@@ -711,14 +711,135 @@ describe('api/Feed', () => {
             expect(() => feed.updateTaskNew({})).toThrow(fileError);
         });
 
-        test('should call the new task api and if successful, the success callback', () => {
+        test('should call the error handling when unable to create new task collaborator', async () => {
+            const mockErrorCallback = jest.fn();
+            feed.createTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
+
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [
+                    {
+                        type: 'user',
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                    },
+                ],
+                removedAssignees: [
+                    {
+                        type: 'task_collaborator',
+                        id: '19283765',
+                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
+                        role: 'ASSIGNEE',
+                        permissions: {
+                            can_delete: true,
+                            can_update: true,
+                        },
+                        status: 'incomplete',
+                    },
+                ],
+            };
+
+            feed.updateTaskNew(file, task, jest.fn(), mockErrorCallback);
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(mockErrorCallback).toBeCalled();
+        });
+
+        test('should call the error handling when unable to delete existing task collaborator', async () => {
+            const mockErrorCallback = jest.fn();
+            feed.deleteTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
+
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [
+                    {
+                        type: 'user',
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                    },
+                ],
+                removedAssignees: [
+                    {
+                        type: 'task_collaborator',
+                        id: '19283765',
+                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
+                        role: 'ASSIGNEE',
+                        permissions: {
+                            can_delete: true,
+                            can_update: true,
+                        },
+                        status: 'incomplete',
+                    },
+                ],
+            };
+
+            feed.updateTaskNew(file, task, jest.fn(), mockErrorCallback);
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(mockErrorCallback).toBeCalled();
+        });
+
+        test('should call the new task api and if successful, the success callback', async () => {
             const successCallback = jest.fn();
             const task = {
                 id: '1',
                 description: 'updated description',
+                addedAssignees: [],
+                removedAssignees: [],
             };
             feed.updateTaskNew(file, task, successCallback, jest.fn());
             expect(feed.file.id).toBe(file.id);
+
+            // push a new promise to trigger the promises in updateTaskNew
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
+        });
+
+        test('should call the appropriate new task APIs when adding new assignees', async () => {
+            const successCallback = jest.fn();
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [
+                    {
+                        type: 'user',
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                    },
+                ],
+                removedAssignees: [
+                    {
+                        type: 'task_collaborator',
+                        id: '19283765',
+                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
+                        role: 'ASSIGNEE',
+                        permissions: {
+                            can_delete: true,
+                            can_update: true,
+                        },
+                        status: 'incomplete',
+                    },
+                ],
+            };
+
+            feed.updateTaskNew(file, task, successCallback, jest.fn());
+
+            await new Promise(r => setTimeout(r, 0));
+
             expect(feed.tasksNewAPI.updateTask).toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(successCallback).toBeCalled();

@@ -193,19 +193,20 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         },
         updateTask: (task: TaskUpdatePayload, onSuccess: ?Function, onError: ?Function): void => {
             const { file, api, onTaskUpdate = noop } = this.props;
-            const successCallback = () => {
-                this.feedSuccessCallback();
-                onTaskUpdate();
-
-                if (onSuccess) {
-                    onSuccess();
-                }
-            };
             const errorCallback = (e, code) => {
                 if (onError) {
                     onError(e, code);
                 }
                 this.feedErrorCallback(e, code);
+            };
+            const successCallback = () => {
+                this.feedSuccessCallback();
+
+                if (onSuccess) {
+                    onSuccess();
+                }
+
+                onTaskUpdate();
             };
 
             api.getFeedAPI(false).updateTaskNew(file, task, successCallback, errorCallback);
@@ -594,6 +595,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getAvatarUrl,
             id: '',
             message: '',
+            approvers: [],
         };
         return (
             <FeatureFlag feature="activityFeed.tasks.newApi">

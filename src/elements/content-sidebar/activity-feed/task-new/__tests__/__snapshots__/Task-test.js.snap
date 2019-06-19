@@ -115,27 +115,43 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     onSubmitSuccess={[Function]}
     taskFormProps={
       Object {
-        "approverSelectorContacts": Array [
+        "approverSelectorContacts": undefined,
+        "approvers": Array [
           Object {
-            "id": "1",
-            "item": Object {},
-            "name": "Jake Thomas",
-            "text": "Jake Thomas",
-            "type": "user",
-            "value": "1",
+            "id": "current-user-assignment-id",
+            "permissions": Object {
+              "can_delete": true,
+              "can_update": true,
+            },
+            "role": "ASSIGNEE",
+            "status": "NOT_STARTED",
+            "target": Object {
+              "id": "1",
+              "name": "Jake Thomas",
+              "type": "user",
+            },
+            "type": "task_collaborator",
           },
           Object {
-            "id": "3",
-            "item": Object {},
-            "name": "Patrick Paul",
-            "text": "Patrick Paul",
-            "type": "user",
-            "value": "3",
+            "id": "other-user-assignment-id",
+            "permissions": Object {
+              "can_delete": true,
+              "can_update": true,
+            },
+            "role": "ASSIGNEE",
+            "status": "COMPLETED",
+            "target": Object {
+              "id": "3",
+              "name": "Patrick Paul",
+              "type": "user",
+            },
+            "type": "task_collaborator",
           },
         ],
         "createTask": [Function],
         "dueDate": null,
         "editTask": [MockFunction],
+        "getApproverWithQuery": undefined,
         "getAvatarUrl": undefined,
         "id": "123125",
         "message": "This is where we tell each other what we need to do",

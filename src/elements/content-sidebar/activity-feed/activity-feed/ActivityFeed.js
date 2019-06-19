@@ -194,6 +194,8 @@ class ActivityFeed extends React.Component<Props, State> {
                             getUserProfileUrl={getUserProfileUrl}
                             mentionSelectorContacts={mentionSelectorContacts}
                             getMentionWithQuery={getMentionWithQuery}
+                            approverSelectorContacts={approverSelectorContacts}
+                            getApproverWithQuery={getApproverWithQuery}
                         />
                     )}
                 </div>
