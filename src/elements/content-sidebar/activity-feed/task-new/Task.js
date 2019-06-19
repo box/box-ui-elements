@@ -98,7 +98,7 @@ class Task extends React.Component<Props, State> {
 
     handleModalClose = () => {
         const { onModalClose } = this.props;
-        this.setState({ isEditing: false, modalError: null });
+        this.setState({ isEditing: false, modalError: undefined });
 
         if (onModalClose) {
             onModalClose();

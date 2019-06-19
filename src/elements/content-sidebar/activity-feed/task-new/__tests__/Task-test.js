@@ -285,4 +285,15 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
 
         expect(instance.fetchTaskCollaborators).toBeCalled();
     });
+
+    test('should call onModalClose prop when modal is closed', () => {
+        const onModalClose = jest.fn();
+
+        const wrapper = mount(<Task {...task} currentUser={currentUser} onModalClose={onModalClose} />);
+
+        const instance = wrapper.instance();
+        instance.handleModalClose();
+
+        expect(onModalClose).toBeCalled();
+    });
 });
