@@ -10,10 +10,10 @@ import IconMagicWand from '../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../icons/general/IconMetadataThick';
 import IconDocInfo from '../../icons/general/IconDocInfo';
 import IconChatRound from '../../icons/general/IconChatRound';
-import SidebarToggleButton from '../../components/sidebar-toggle-button';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import SidebarNavButton from './SidebarNavButton';
+import SidebarToggle from './SidebarToggle';
 import AdditionalTabs from './additional-tabs';
 import {
     SIDEBAR_VIEW_SKILLS,
@@ -100,16 +100,7 @@ const SidebarNav = ({
             {hasAdditionalTabs && <AdditionalTabs key={fileId} tabs={additionalTabs} />}
         </div>
         <div className="bcs-SidebarNav-footer">
-            <SidebarToggleButton
-                data-resin-target={SIDEBAR_NAV_TARGETS.TOGGLE}
-                data-testid="sidebartoggle"
-                isOpen={isOpen}
-                onClick={event => {
-                    if (onNavigate) {
-                        onNavigate(event, { isToggle: true });
-                    }
-                }}
-            />
+            <SidebarToggle isOpen={isOpen} />
         </div>
     </div>
 );
