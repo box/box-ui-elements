@@ -10,10 +10,9 @@ import {
     TASK_NEW_IN_PROGRESS,
 } from '../../../../constants';
 import messages from '../../../common/messages';
+import type { TaskStatus } from '../../../../common/types/tasks';
 
 import './TaskStatus.scss';
-
-import type { TaskStatus } from '../../../../common/types/tasks';
 
 type Props = {|
     status: TaskStatus,

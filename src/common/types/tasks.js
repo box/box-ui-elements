@@ -1,5 +1,5 @@
 // @flow
-import type { FileMini, FolderMini, ISODate, UserMini } from './core';
+import type { FileMini, FolderMini, ISODate, UserMini, MarkerPaginatedCollection } from './core';
 
 type ID = string;
 
@@ -46,12 +46,6 @@ type TaskLink = {|
     task?: TaskMini,
     type: 'task_link',
 |};
-
-type MarkerPaginatedCollection<T> = {
-    entries: T[],
-    limit: number,
-    next_marker: ?string,
-};
 
 type TaskAssigneeCollection = MarkerPaginatedCollection<TaskCollabAssignee>;
 

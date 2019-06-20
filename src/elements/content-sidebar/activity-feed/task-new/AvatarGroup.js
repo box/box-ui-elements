@@ -10,11 +10,10 @@ import ReadableTime from '../../../../components/time/ReadableTime';
 import messages from '../../../common/messages';
 import AvatarGroupAvatar from './AvatarGroupAvatar';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
-
-import './AvatarGroup.scss';
-
 import type { TaskAssigneeCollection } from '../../../../common/types/tasks';
 import type { ISODate } from '../../../../common/types/core';
+
+import './AvatarGroup.scss';
 
 const MAX_AVATARS = 3;
 

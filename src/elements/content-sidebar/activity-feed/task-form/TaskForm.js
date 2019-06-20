@@ -19,10 +19,9 @@ import InlineError from '../../../../components/inline-error/InlineError';
 import { TASK_EDIT_MODE_CREATE, TASK_EDIT_MODE_EDIT } from '../../../../constants';
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
+import type { TaskCollabAssignee, TaskType, TaskEditMode, TaskUpdatePayload } from '../../../../common/types/tasks';
 
 import './TaskForm.scss';
-
-import type { TaskCollabAssignee, TaskType, TaskEditMode, TaskUpdatePayload } from '../../../../common/types/tasks';
 
 type TaskFormProps = {|
     error?: any,
