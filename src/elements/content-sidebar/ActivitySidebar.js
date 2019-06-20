@@ -647,6 +647,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onTaskCreate={this.createTask}
                     onTaskDelete={deleteTask}
                     onTaskUpdate={updateTask}
+                    onTaskModalClose={this.onTaskModalClose}
                     onTaskAssignmentUpdate={updateTaskAssignment}
                     getApproverWithQuery={this.getApproverWithQuery}
                     getMentionWithQuery={this.getMentionWithQuery}

@@ -54,6 +54,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     >
       <AssigneeList
         initialAssigneeCount={3}
+        isOpen={false}
+        onCollapse={[Function]}
         onExpand={[Function]}
         users={
           Object {

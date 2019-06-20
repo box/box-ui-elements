@@ -319,7 +319,11 @@ class LeftSidebar extends React.Component<Props, State> {
 
         // Check for menu items on links so we don't double-highlight groups
         return canReceiveDrop && !props.menuItems ? (
-            <LeftSidebarDropWrapper isDragging={leftSidebarProps.isDragging} dropTargetRef={dropTargetRef}>
+            <LeftSidebarDropWrapper
+                isDragging={leftSidebarProps.isDragging}
+                dropTargetRef={dropTargetRef}
+                key={`link-${id}`}
+            >
                 {builtLink}
             </LeftSidebarDropWrapper>
         ) : (
