@@ -241,7 +241,7 @@ const menuItems = [
     selected: false,
     showTooltip: true,
     iconComponent: IconFavorites,
-    showLoadingIndicator: true,
+    showLoadingIndicator: false,
     onToggleCollapse: onToggleCollapse,
     collapsed: state.collapsed.favorites,
     placeholder: 'Drag items here for quick access',
