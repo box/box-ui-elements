@@ -17,7 +17,7 @@ import IconMail from '../../icons/general/IconMail';
 import IconClock from '../../icons/general/IconClock';
 import IconGlobe from '../../icons/general/IconGlobe';
 import { amaranth } from '../../styles/variables';
-import type { itemType as ItemType } from '../../common/box-types';
+import type { ItemType } from '../../common/types/core';
 import { isBoxNote } from '../../utils/file';
 
 import convertToBoxItem from './utils/item';

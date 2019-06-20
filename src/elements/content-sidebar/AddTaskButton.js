@@ -4,6 +4,7 @@ import AddTaskMenu from './AddTaskMenu';
 import TaskModal from './TaskModal';
 import { TASK_TYPE_APPROVAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
+import type { TaskType } from '../../common/types/tasks';
 
 type Props = {|
     feedbackUrl: string,

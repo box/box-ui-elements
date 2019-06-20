@@ -9,7 +9,7 @@ jest.mock('../../../common/nav-button', () => ({
 }));
 
 describe('elements/content-sidebar/versions/VersionsSidebar', () => {
-    const getWrapper = (props = {}) => shallow(<VersionsSidebar {...props} />);
+    const getWrapper = (props = {}) => shallow(<VersionsSidebar parentName="activity" {...props} />);
 
     describe('render', () => {
         test('should show the versions list if no error prop is provided', () => {
