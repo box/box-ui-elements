@@ -8,6 +8,7 @@ import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
 import { TASK_EDIT_MODE_CREATE, TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
+import type { TaskType, TaskEditMode } from '../../common/types/tasks';
 
 type TaskModalProps = {
     editMode?: TaskEditMode,

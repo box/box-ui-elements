@@ -6,6 +6,7 @@ import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import messages from '../../../common/messages';
 import Button from '../../../../components/button';
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../../../constants';
+import type { TaskType } from '../../../../common/types/tasks';
 
 type Props = {|
     onTaskApproval: Function,

@@ -17,7 +17,7 @@ import InlineNotice from '../../components/inline-notice';
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import commonMessages from '../../common/messages';
 import { emailValidator } from '../../utils/validators';
-import type { inlineNoticeType } from '../../common/box-types';
+import type { InlineNoticeType } from '../../common/types/core';
 import IconGlobe from '../../icons/general/IconGlobe';
 
 import ContactsField from './ContactsField';
@@ -34,7 +34,7 @@ type Props = {
     getContacts: (query: string) => Promise<Array<Contact>>,
     inlineNotice: {
         content: React.Node,
-        type: inlineNoticeType,
+        type: InlineNoticeType,
     },
     intl: IntlShape,
     isContactsFieldEnabled: boolean,

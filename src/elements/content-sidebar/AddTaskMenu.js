@@ -10,6 +10,7 @@ import IconTaskApproval from '../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../icons/two-toned/IconTaskGeneral';
 import messages from '../common/messages';
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
+import type { TaskType } from '../../common/types/tasks';
 
 import './AddTaskMenu.scss';
 

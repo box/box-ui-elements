@@ -22,6 +22,7 @@ import SidebarContent from './SidebarContent';
 import AddTaskButton from './AddTaskButton';
 import SidebarUtils from './SidebarUtils';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, SIDEBAR_VIEW_ACTIVITY } from '../../constants';
+import type { TaskType, TaskNew, TaskUpdatePayload } from '../../common/types/tasks';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {

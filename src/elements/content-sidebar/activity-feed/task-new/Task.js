@@ -10,7 +10,6 @@ import CommentInlineError from '../comment/CommentInlineError';
 import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../../../icons/two-toned/IconTaskGeneral';
 import { withAPIContext } from '../../../common/api-context';
-
 import API from '../../../../api/APIFactory';
 import {
     TASK_NEW_APPROVED,
@@ -29,6 +28,7 @@ import TaskStatus from './TaskStatus';
 import AssigneeList from './AssigneeList';
 import TaskModal from '../../TaskModal';
 import { withFeatureConsumer, getFeatureConfig } from '../../../common/feature-checking';
+import type { TaskAssigneeCollection, TaskNew, TaskType } from '../../../../common/types/tasks';
 
 import './Task.scss';
 

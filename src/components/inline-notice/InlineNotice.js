@@ -1,12 +1,12 @@
 // @flow
 import * as React from 'react';
 
-import type { inlineNoticeType } from '../../common/box-types';
+import type { InlineNoticeType } from '../../common/types/core';
 
 type Props = {
     children: React.Node,
     className?: string,
-    type?: inlineNoticeType,
+    type?: InlineNoticeType,
 };
 
 const InlineNotice = ({ children, className = '', type = 'warning' }: Props) => (
