@@ -1,5 +1,5 @@
 // @flow
-import type { ItemType } from '../../common/flowTypes';
+import type { ItemType } from '../../common/types/core';
 import * as constants from './constants';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types

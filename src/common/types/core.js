@@ -1,5 +1,5 @@
 // @flow
-import { ITEM_TYPE_FOLDER, ITEM_TYPE_FILE, ITEM_TYPE_WEBLINK } from './constants';
+import { ITEM_TYPE_FOLDER, ITEM_TYPE_FILE, ITEM_TYPE_WEBLINK } from '../constants';
 
 type InlineNoticeType = 'warning' | 'error' | 'success' | 'info';
 type ItemType = typeof ITEM_TYPE_FOLDER | typeof ITEM_TYPE_FILE | typeof ITEM_TYPE_WEBLINK;

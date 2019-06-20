@@ -22,8 +22,7 @@ import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactio
 
 import './TaskForm.scss';
 
-import type { TaskCollabAssignee, TaskType, TaskEditMode } from '../task-new/flowTypes';
-import type { TaskUpdatePayload } from '../../../../api/flowTypes';
+import type { TaskCollabAssignee, TaskType, TaskEditMode, TaskUpdatePayload } from '../../../../common/types/tasks';
 
 type TaskFormProps = {|
     error?: any,

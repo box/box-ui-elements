@@ -1,5 +1,5 @@
 // @flow
-import type { FileMini, FolderMini, ISODate, UserMini } from '../../../../common/flowTypes';
+import type { FileMini, FolderMini, ISODate, UserMini } from './core';
 
 type ID = string;
 
@@ -83,6 +83,20 @@ type TaskNew = {|
     type: 'task',
 |};
 
+type TaskPayload = {
+    description: string,
+    due_at?: ?string,
+    task_type: TaskType,
+};
+
+type TaskUpdatePayload = {
+    addedAssignees: SelectorItems,
+    description: string,
+    due_at?: ?string,
+    id: string,
+    removedAssignees: Array<TaskCollabAssignee>,
+};
+
 export type {
     TaskCollabStatus,
     TaskStatus,
@@ -92,4 +106,6 @@ export type {
     TaskType,
     TaskEditMode,
     TaskNew,
+    TaskPayload,
+    TaskUpdatePayload,
 };

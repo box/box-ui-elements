@@ -38,8 +38,9 @@ import type {
     TaskLink,
     TaskNew,
     TaskType,
-} from '../elements/content-sidebar/activity-feed/task-new/flowTypes';
-import type { TaskPayload, TaskUpdatePayload } from './flowTypes';
+    TaskPayload,
+    TaskUpdatePayload,
+} from '../common/types/tasks';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 const TASK = 'task';

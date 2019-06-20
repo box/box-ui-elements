@@ -18,7 +18,7 @@ import type { ContentSidebarProps } from '../src/elements/content-sidebar';
 import type { ContentOpenWithProps } from '../src/elements/content-open-with';
 import type { ContentPreviewProps } from '../src/elements/content-preview';
 import type { FeatureConfig } from '../src/elements/common/feature-checking';
-import type { TaskNew } from '../src/elements/content-sidebar/activity-feed/task-new/flowTypes';
+import type { TaskNew } from '../src/common/types/tasks';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,

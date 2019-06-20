@@ -13,8 +13,8 @@ import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_
 
 import './AvatarGroup.scss';
 
-import type { TaskAssigneeCollection } from './flowTypes';
-import type { ISODate } from '../../../../common/flowTypes';
+import type { TaskAssigneeCollection } from '../../../../common/types/tasks';
+import type { ISODate } from '../../../../common/types/core';
 
 const MAX_AVATARS = 3;
 

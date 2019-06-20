@@ -13,7 +13,7 @@ import messages from '../../../common/messages';
 
 import './TaskStatus.scss';
 
-import type { TaskStatus } from './flowTypes';
+import type { TaskStatus } from '../../../../common/types/tasks';
 
 type Props = {|
     status: TaskStatus,

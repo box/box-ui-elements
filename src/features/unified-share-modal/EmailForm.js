@@ -17,7 +17,7 @@ import InlineNotice from '../../components/inline-notice';
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import commonMessages from '../../common/messages';
 import { emailValidator } from '../../utils/validators';
-import type { InlineNoticeType } from '../../common/flowTypes';
+import type { InlineNoticeType } from '../../common/types/core';
 import IconGlobe from '../../icons/general/IconGlobe';
 
 import ContactsField from './ContactsField';

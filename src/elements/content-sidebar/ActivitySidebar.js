@@ -23,8 +23,7 @@ import AddTaskButton from './AddTaskButton';
 import SidebarUtils from './SidebarUtils';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, SIDEBAR_VIEW_ACTIVITY } from '../../constants';
 import './ActivitySidebar.scss';
-import type { TaskType, TaskNew } from './activity-feed/task-new/flowTypes';
-import type { TaskUpdatePayload } from '../../api/flowTypes';
+import type { TaskType, TaskNew, TaskUpdatePayload } from '../../common/types/tasks';
 
 type ExternalProps = {
     currentUser?: User,

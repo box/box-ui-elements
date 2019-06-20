@@ -31,7 +31,7 @@ import { withFeatureConsumer, getFeatureConfig } from '../../../common/feature-c
 
 import './Task.scss';
 
-import type { TaskAssigneeCollection, TaskNew, TaskType } from './flowTypes';
+import type { TaskAssigneeCollection, TaskNew, TaskType } from '../../../../common/types/tasks';
 
 type Props = {|
     ...TaskNew,
