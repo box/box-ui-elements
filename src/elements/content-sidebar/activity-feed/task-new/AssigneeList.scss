@@ -1,7 +1,7 @@
 @import '../../../common/variables';
 @import './mixins';
 
-$avatar-size: 28px;
+$bcs-AssigneeList-avatar-size: 28px;
 
 .bcs-AssigneeList-list {
     margin: 0;
@@ -13,20 +13,17 @@ $avatar-size: 28px;
     display: flex;
     margin: 6px 0 0 0;
     padding: 3px 0;
+}
 
-    .bcs-AssigneeList-detailsStatus {
-        color: $bdl-neutral-02;
-        font-size: 12px;
-    }
+.bcs-AssigneeList-detailsStatus {
+    color: $bdl-neutral-02;
+    font-size: 12px;
 }
 
 .bcs-AssigneeList-listItemAvatar {
+    height: $bcs-AssigneeList-avatar-size;
     margin-right: 10px;
-
-    .bcs-AvatarGroup-avatar {
-        height: $avatar-size;
-        width: $avatar-size;
-    }
+    width: $bcs-AssigneeList-avatar-size;
 }
 
 .bcs-AssigneeList-listItemDetails {
@@ -37,18 +34,7 @@ $avatar-size: 28px;
     color: $bdl-neutral-02;
 }
 
-.lnk.bcs-AssigneeList-expandBtn {
-    margin-left: $avatar-size + 10px;
-    margin-top: 5px;
-}
-
-.bcs-AssigneeList-statusIcon {
-    @include avatar-badge-icon;
-}
-
-.bcs-AvatarGroup-avatarContainer {
-    display: inline-block;
-    height: $avatar-size;
-    position: relative;
-    width: $avatar-size;
+.bcs-AssigneeList-expandBtn {
+    color: $bdl-box-blue;
+    margin-left: $bcs-AssigneeList-avatar-size + 10px;
 }
