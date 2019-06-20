@@ -2,10 +2,10 @@
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly render task 1`] = `
 <div
-  className="bcs-task-container"
+  className="bcs-Task"
 >
   <div
-    className="bcs-task"
+    className="bcs-Task-body"
     data-testid="task-card"
   >
     <Comment
@@ -43,69 +43,73 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       userHeadlineRenderer={[Function]}
     />
     <div
-      className="bcs-task-content bcs-task-status-container"
+      className="bcs-Task-content"
     >
-      <Component
-        status="NOT_STARTED"
-      />
-    </div>
-    <div
-      className="bcs-task-content"
-    >
-      <AssigneeList
-        initialAssigneeCount={3}
-        isOpen={false}
-        onCollapse={[Function]}
-        onExpand={[Function]}
-        users={
-          Object {
-            "entries": Array [
-              Object {
-                "id": "current-user-assignment-id",
-                "permissions": Object {
-                  "can_delete": true,
-                  "can_update": true,
+      <div
+        className="bcs-Task-statusContainer"
+      >
+        <Component
+          status="NOT_STARTED"
+        />
+      </div>
+      <div
+        className="bcs-Task-assigneeListContainer"
+      >
+        <AssigneeList
+          initialAssigneeCount={3}
+          isOpen={false}
+          onCollapse={[Function]}
+          onExpand={[Function]}
+          users={
+            Object {
+              "entries": Array [
+                Object {
+                  "id": "current-user-assignment-id",
+                  "permissions": Object {
+                    "can_delete": true,
+                    "can_update": true,
+                  },
+                  "role": "ASSIGNEE",
+                  "status": "NOT_STARTED",
+                  "target": Object {
+                    "id": "1",
+                    "name": "Jake Thomas",
+                    "type": "user",
+                  },
+                  "type": "task_collaborator",
                 },
-                "role": "ASSIGNEE",
-                "status": "NOT_STARTED",
-                "target": Object {
-                  "id": "1",
-                  "name": "Jake Thomas",
-                  "type": "user",
+                Object {
+                  "id": "other-user-assignment-id",
+                  "permissions": Object {
+                    "can_delete": true,
+                    "can_update": true,
+                  },
+                  "role": "ASSIGNEE",
+                  "status": "COMPLETED",
+                  "target": Object {
+                    "id": "3",
+                    "name": "Patrick Paul",
+                    "type": "user",
+                  },
+                  "type": "task_collaborator",
                 },
-                "type": "task_collaborator",
-              },
-              Object {
-                "id": "other-user-assignment-id",
-                "permissions": Object {
-                  "can_delete": true,
-                  "can_update": true,
-                },
-                "role": "ASSIGNEE",
-                "status": "COMPLETED",
-                "target": Object {
-                  "id": "3",
-                  "name": "Patrick Paul",
-                  "type": "user",
-                },
-                "type": "task_collaborator",
-              },
-            ],
-            "limit": 10,
-            "next_marker": null,
+              ],
+              "limit": 10,
+              "next_marker": null,
+            }
           }
-        }
-      />
-    </div>
-    <div
-      className="bcs-task-content"
-    >
-      <TaskActions
-        onTaskApproval={[Function]}
-        onTaskComplete={[Function]}
-        onTaskReject={[Function]}
-        taskType="GENERAL"
-      />
+        />
+      </div>
+      <div
+        className="bcs-Task-actionsContainer"
+      >
+        <TaskActions
+          onTaskApproval={[Function]}
+          onTaskComplete={[Function]}
+          onTaskReject={[Function]}
+          taskType="GENERAL"
+        />
+      </div>
     </div>
   </div>
   <TaskModal
