@@ -1264,6 +1264,11 @@ const messages = defineMessages({
         description: 'Label for back button',
         defaultMessage: 'Back',
     },
+    priorCollaborator: {
+        id: 'be.priorCollaborator',
+        description: 'Label for previously deleted user',
+        defaultMessage: 'A prior collaborator',
+    },
 });
 
 export default messages;
