@@ -51,14 +51,14 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
-    type?: typeof COMMENT_TYPE_DEFAULT | typeof COMMENT_TYPE_TASK,
+    type: typeof COMMENT_TYPE_DEFAULT | typeof COMMENT_TYPE_TASK,
     userHeadlineRenderer?: React.Node => React.Element<typeof FormattedMessage>,
 };
 
 type State = {
-    isConfirming?: boolean,
-    isEditing?: boolean,
-    isInputOpen?: boolean,
+    isConfirming: boolean,
+    isEditing: boolean,
+    isInputOpen: boolean,
 };
 
 class Comment extends React.Component<Props, State> {

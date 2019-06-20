@@ -173,7 +173,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         const instance = wrapper.instance();
 
-        expect(wrapper.find('CommentMenu').length).toEqual(2);
+        expect(wrapper.find('CommentMenu').length).toEqual(1);
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
@@ -214,7 +214,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         const instance = wrapper.instance();
 
-        expect(wrapper.find('CommentMenu').length).toEqual(2);
+        expect(wrapper.find('CommentMenu').length).toEqual(1);
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
@@ -309,7 +309,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             />,
         );
 
-        expect(wrapper.find('CommentMenu').length).toEqual(2);
+        expect(wrapper.find('CommentMenu').length).toEqual(1);
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
@@ -319,7 +319,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         wrapper.instance().handleEditClick();
         wrapper.update();
         expect(wrapper.state('isEditing')).toBe(true);
-        expect(wrapper.find('CommentMenu').length).toEqual(2);
+        expect(wrapper.find('CommentMenu').length).toEqual(1);
         expect(wrapper.find('UserLink').length).toEqual(1);
     });
 
