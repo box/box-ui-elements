@@ -8,7 +8,8 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
   title={
     <React.Fragment>
       <BackButton
-        path="/undefined"
+        data-resin-target="back"
+        to="/activity"
       />
       <FormattedMessage
         defaultMessage="Version History"
@@ -44,7 +45,8 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show th
   title={
     <React.Fragment>
       <BackButton
-        path="/undefined"
+        data-resin-target="back"
+        to="/activity"
       />
       <FormattedMessage
         defaultMessage="Version History"
