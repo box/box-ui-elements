@@ -1,0 +1,15 @@
+@import '../../elements/common/variables';
+@import '../../styles/variables';
+
+.bdl-GridViewSlot {
+    border: 1px solid $efive;
+    margin: 20px 0 0;
+    overflow: hidden;
+    padding: 15px;
+    white-space: normal;
+}
+
+.bdl-GridViewSlot-blank {
+    border: none;
+    box-shadow: none;
+}
