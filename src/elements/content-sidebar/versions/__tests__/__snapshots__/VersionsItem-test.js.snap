@@ -68,7 +68,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
     >
       <VersionsItemBadge
         isDisabled={true}
-        versionNumber={1}
+        versionNumber="1"
       />
     </div>
     <div
@@ -147,7 +147,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
     >
       <VersionsItemBadge
         isDisabled={false}
-        versionNumber={1}
+        versionNumber="1"
       />
     </div>
     <div

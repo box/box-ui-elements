@@ -12,6 +12,8 @@ import './VersionsList.scss';
 type Props = {
     currentId: string,
     fileId: string,
+    versionCount: number,
+    versionLimit: number,
     versions: Array<BoxItemVersion>,
 };
 
