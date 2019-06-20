@@ -92,24 +92,24 @@ function AssigneeList(props: Props) {
                 {visibleUsers}
             </ul>
             {!isOpen && hiddenAssigneeCount > 0 && (
-                <span>
+                <span className="bcs-AssigneeList-expandBtn">
                     <PlainButton
                         data-resin-target="showmorebtn"
                         data-testid="show-more-assignees"
                         onClick={onExpand}
-                        className="lnk bcs-AssigneeList-expandBtn"
+                        className="lnk"
                     >
                         <FormattedMessage {...messages.taskShowMoreAssignees} values={{ additionalAssigneeCount }} />
                     </PlainButton>
                 </span>
             )}
             {isOpen && (
-                <span>
+                <span className="bcs-AssigneeList-expandBtn">
                     <PlainButton
                         data-resin-target="showlessbtn"
                         data-testid="show-less-assignees"
                         onClick={onCollapse}
-                        className="lnk bcs-AssigneeList-expandBtn"
+                        className="lnk"
                     >
                         <FormattedMessage {...messages.taskShowLessAssignees} />
                     </PlainButton>
