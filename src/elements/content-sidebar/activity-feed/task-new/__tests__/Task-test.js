@@ -202,7 +202,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
 
-        const checkButton = wrapper.find('.bcs-task-check-btn').hostNodes();
+        const checkButton = wrapper.find('[data-testid="complete-task"]').hostNodes();
         checkButton.simulate('click');
 
         expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 'current-user-assignment-id', 'COMPLETED');

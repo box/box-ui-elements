@@ -89,12 +89,12 @@ function AssigneeList(props: Props) {
         : `${hiddenAssigneeCount}`;
 
     return (
-        <div>
+        <div className="bcs-AssigneeList">
             <ul className="bcs-AssigneeList-list" data-testid="task-assignee-list">
                 {visibleUsers}
             </ul>
             {!isOpen && hiddenAssigneeCount > 0 && (
-                <span className="bcs-AssigneeList-expandBtn">
+                <div className="bcs-AssigneeList-toggleBtn">
                     <PlainButton
                         data-resin-target="showmorebtn"
                         data-testid="show-more-assignees"
@@ -103,10 +103,10 @@ function AssigneeList(props: Props) {
                     >
                         <FormattedMessage {...messages.taskShowMoreAssignees} values={{ additionalAssigneeCount }} />
                     </PlainButton>
-                </span>
+                </div>
             )}
             {isOpen && (
-                <span className="bcs-AssigneeList-expandBtn">
+                <div className="bcs-AssigneeList-toggleBtn">
                     <PlainButton
                         data-resin-target="showlessbtn"
                         data-testid="show-less-assignees"
@@ -115,7 +115,7 @@ function AssigneeList(props: Props) {
                     >
                         <FormattedMessage {...messages.taskShowLessAssignees} />
                     </PlainButton>
-                </span>
+                </div>
             )}
         </div>
     );
