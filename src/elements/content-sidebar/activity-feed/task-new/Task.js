@@ -216,19 +216,19 @@ class Task extends React.Component<Props, State> {
         const inlineError = loadCollabError || error;
 
         return (
-            <div className="bcs-task-container">
+            <div className="bcs-Task">
                 {inlineError ? <CommentInlineError {...inlineError} /> : null}
                 <div
-                    className={classNames('bcs-task', {
+                    className={classNames('bcs-Task-body', {
                         'bcs-is-pending': isPending || isLoading,
                     })}
                     data-testid="task-card"
                 >
                     <Comment
                         avatarRenderer={avatar => (
-                            <div className="bcs-task-avatar">
+                            <div className="bcs-Task-avatar">
                                 {avatar}
-                                <TaskTypeIcon width={20} height={20} className="bcs-task-avatar-badge" />
+                                <TaskTypeIcon width={20} height={20} className="bcs-Task-avatarBadge" />
                             </div>
                         )}
                         created_at={created_at}
@@ -257,42 +257,54 @@ class Task extends React.Component<Props, State> {
                             );
                         }}
                     />
-                    <div className="bcs-task-content bcs-task-status-container">
-                        {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
-                        <TaskStatus status={status} />
-                    </div>
-                    <div className="bcs-task-content">
-                        <AssigneeList
-                            isOpen={isAssigneeListOpen}
-                            onCollapse={this.handleAssigneeListCollapse}
-                            onExpand={this.handleAssigneeListExpand}
-                            getAvatarUrl={getAvatarUrl}
-                            initialAssigneeCount={3}
-                            users={isAssigneeListOpen ? assignedToFull : assigned_to}
-                        />
-                    </div>
-                    <div className="bcs-task-content">
-                        {currentUserAssignment && shouldShowActions && (
-                            <TaskActions
-                                taskType={task_type}
-                                onTaskApproval={
-                                    isPending
-                                        ? noop
-                                        : () => {
-                                              this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_APPROVED);
-                                          }
-                                }
-                                onTaskReject={
-                                    isPending
-                                        ? noop
-                                        : () => this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_REJECTED)
-                                }
-                                onTaskComplete={
-                                    isPending
-                                        ? noop
-                                        : () => this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_COMPLETED)
-                                }
+                    <div className="bcs-Task-content">
+                        <div className="bcs-Task-statusContainer">
+                            {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
+                            <TaskStatus status={status} />
+                        </div>
+                        <div className="bcs-Task-assigneeListContainer">
+                            <AssigneeList
+                                isOpen={isAssigneeListOpen}
+                                onCollapse={this.handleAssigneeListCollapse}
+                                onExpand={this.handleAssigneeListExpand}
+                                getAvatarUrl={getAvatarUrl}
+                                initialAssigneeCount={3}
+                                users={isAssigneeListOpen ? assignedToFull : assigned_to}
                             />
+                        </div>
+                        {currentUserAssignment && shouldShowActions && (
+                            <div className="bcs-Task-actionsContainer">
+                                <TaskActions
+                                    taskType={task_type}
+                                    onTaskApproval={
+                                        isPending
+                                            ? noop
+                                            : () => {
+                                                  this.handleTaskAction(
+                                                      id,
+                                                      currentUserAssignment.id,
+                                                      TASK_NEW_APPROVED,
+                                                  );
+                                              }
+                                    }
+                                    onTaskReject={
+                                        isPending
+                                            ? noop
+                                            : () =>
+                                                  this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_REJECTED)
+                                    }
+                                    onTaskComplete={
+                                        isPending
+                                            ? noop
+                                            : () =>
+                                                  this.handleTaskAction(
+                                                      id,
+                                                      currentUserAssignment.id,
+                                                      TASK_NEW_COMPLETED,
+                                                  )
+                                    }
+                                />
+                            </div>
                         )}
                     </div>
                 </div>

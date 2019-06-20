@@ -7,6 +7,8 @@ import messages from '../../../common/messages';
 import Button from '../../../../components/button';
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../../../constants';
 
+import './TaskActions.scss';
+
 type Props = {|
     onTaskApproval: Function,
     onTaskComplete: Function,
@@ -20,7 +22,7 @@ const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }:
         action = (
             <React.Fragment>
                 <Button
-                    className="bcs-task-action-button bcs-task-check-btn"
+                    className="bcs-TaskActions-button"
                     data-testid="approve-task"
                     onClick={onTaskApproval}
                     data-resin-target={ACTIVITY_TARGETS.TASK_APPROVE}
@@ -28,7 +30,7 @@ const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }:
                     <FormattedMessage {...messages.tasksFeedApproveAction} />
                 </Button>
                 <Button
-                    className="bcs-task-action-button bcs-task-x-btn"
+                    className="bcs-TaskActions-button"
                     data-testid="reject-task"
                     onClick={onTaskReject}
                     data-resin-target={ACTIVITY_TARGETS.TASK_REJECT}
@@ -40,7 +42,7 @@ const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }:
     } else if (taskType === TASK_TYPE_GENERAL) {
         action = (
             <Button
-                className="bcs-task-action-button bcs-task-check-btn"
+                className="bcs-TaskActions-button"
                 data-testid="complete-task"
                 onClick={onTaskComplete}
                 data-resin-target={ACTIVITY_TARGETS.TASK_COMPLETE}
@@ -49,7 +51,7 @@ const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }:
             </Button>
         );
     }
-    return <div className="bcs-task-pending-assignment bcs-task-assignment-actions">{action}</div>;
+    return <div className="bcs-TaskActions">{action}</div>;
 };
 
 export default TaskActions;
