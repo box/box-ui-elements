@@ -49,6 +49,7 @@ type Props = {|
     onAssignmentUpdate: Function,
     onDelete?: Function,
     onEdit?: Function,
+    onModalClose?: Function,
     translatedTaggedMessage?: string,
     translations?: Translations,
 |};
@@ -104,7 +105,12 @@ class Task extends React.Component<Props, State> {
     };
 
     handleModalClose = () => {
-        this.setState({ isEditing: false });
+        const { onModalClose } = this.props;
+        this.setState({ isEditing: false, modalError: undefined });
+
+        if (onModalClose) {
+            onModalClose();
+        }
     };
 
     handleSubmitSuccess = () => {
