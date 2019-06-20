@@ -46,9 +46,12 @@
         position: relative;
 
         .nav-list-collapse {
-            height: calc(100% - 6px);
-            margin: 3px 5px;
-            padding: 3px 7px;
+            align-items: center;
+            display: flex;
+            height: calc(100% - 10px);
+            justify-content: center;
+            margin: 5px;
+            padding: 0 5px;
             position: absolute;
             right: 0;
 
