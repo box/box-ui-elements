@@ -2,10 +2,10 @@
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly render task 1`] = `
 <div
-  className="bcs-task-container"
+  className="bcs-Task"
 >
   <div
-    className="bcs-task"
+    className="bcs-Task-body"
     data-testid="task-card"
   >
     <Comment
@@ -28,12 +28,13 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       id="123125"
       onDelete={[MockFunction]}
       onEdit={[MockFunction]}
+      onEditClick={[Function]}
       permissions={
         Object {
           "can_create_task_collaborator": true,
           "can_create_task_link": true,
           "can_delete": true,
-          "can_edit": false,
+          "can_edit": true,
           "can_update": true,
         }
       }
@@ -42,67 +43,127 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       userHeadlineRenderer={[Function]}
     />
     <div
-      className="bcs-task-content bcs-task-status-container"
+      className="bcs-Task-content"
     >
-      <Component
-        status="NOT_STARTED"
-      />
-    </div>
-    <div
-      className="bcs-task-content"
-    >
-      <AvatarGroup
-        maxAvatars={3}
-        users={
-          Object {
-            "entries": Array [
-              Object {
-                "id": "current-user-assignment-id",
-                "permissions": Object {
-                  "can_delete": true,
-                  "can_update": true,
+      <div
+        className="bcs-Task-statusContainer"
+      >
+        <Component
+          status="NOT_STARTED"
+        />
+      </div>
+      <div
+        className="bcs-Task-assigneeListContainer"
+      >
+        <AssigneeList
+          initialAssigneeCount={3}
+          isOpen={false}
+          onCollapse={[Function]}
+          onExpand={[Function]}
+          users={
+            Object {
+              "entries": Array [
+                Object {
+                  "id": "current-user-assignment-id",
+                  "permissions": Object {
+                    "can_delete": true,
+                    "can_update": true,
+                  },
+                  "role": "ASSIGNEE",
+                  "status": "NOT_STARTED",
+                  "target": Object {
+                    "id": "1",
+                    "name": "Jake Thomas",
+                    "type": "user",
+                  },
+                  "type": "task_collaborator",
                 },
-                "role": "ASSIGNEE",
-                "status": "NOT_STARTED",
-                "target": Object {
-                  "id": "1",
-                  "name": "Jake Thomas",
-                  "type": "user",
+                Object {
+                  "id": "other-user-assignment-id",
+                  "permissions": Object {
+                    "can_delete": true,
+                    "can_update": true,
+                  },
+                  "role": "ASSIGNEE",
+                  "status": "COMPLETED",
+                  "target": Object {
+                    "id": "3",
+                    "name": "Patrick Paul",
+                    "type": "user",
+                  },
+                  "type": "task_collaborator",
                 },
-                "type": "task_collaborator",
-              },
-              Object {
-                "id": "other-user-assignment-id",
-                "permissions": Object {
-                  "can_delete": true,
-                  "can_update": true,
-                },
-                "role": "ASSIGNEE",
-                "status": "COMPLETED",
-                "target": Object {
-                  "id": "3",
-                  "name": "Patrick Paul",
-                  "type": "user",
-                },
-                "type": "task_collaborator",
-              },
-            ],
-            "limit": 10,
-            "next_marker": null,
+              ],
+              "limit": 10,
+              "next_marker": null,
+            }
           }
-        }
-      />
-    </div>
-    <div
-      className="bcs-task-content"
-    >
-      <TaskActions
-        onTaskApproval={[Function]}
-        onTaskComplete={[Function]}
-        onTaskReject={[Function]}
-        taskType="GENERAL"
-      />
+        />
+      </div>
+      <div
+        className="bcs-Task-actionsContainer"
+      >
+        <TaskActions
+          onTaskApproval={[Function]}
+          onTaskComplete={[Function]}
+          onTaskReject={[Function]}
+          taskType="GENERAL"
+        />
+      </div>
     </div>
   </div>
+  <TaskModal
+    editMode="EDIT"
+    feedbackUrl=""
+    isTaskFormOpen={false}
+    onModalClose={[Function]}
+    onSubmitError={[Function]}
+    onSubmitSuccess={[Function]}
+    taskFormProps={
+      Object {
+        "approverSelectorContacts": undefined,
+        "approvers": Array [
+          Object {
+            "id": "current-user-assignment-id",
+            "permissions": Object {
+              "can_delete": true,
+              "can_update": true,
+            },
+            "role": "ASSIGNEE",
+            "status": "NOT_STARTED",
+            "target": Object {
+              "id": "1",
+              "name": "Jake Thomas",
+              "type": "user",
+            },
+            "type": "task_collaborator",
+          },
+          Object {
+            "id": "other-user-assignment-id",
+            "permissions": Object {
+              "can_delete": true,
+              "can_update": true,
+            },
+            "role": "ASSIGNEE",
+            "status": "COMPLETED",
+            "target": Object {
+              "id": "3",
+              "name": "Patrick Paul",
+              "type": "user",
+            },
+            "type": "task_collaborator",
+          },
+        ],
+        "createTask": [Function],
+        "dueDate": null,
+        "editTask": [MockFunction],
+        "getApproverWithQuery": undefined,
+        "getAvatarUrl": undefined,
+        "id": "123125",
+        "message": "This is where we tell each other what we need to do",
+      }
+    }
+    taskType="GENERAL"
+  />
 </div>
 `;

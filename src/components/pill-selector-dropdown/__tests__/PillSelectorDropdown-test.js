@@ -11,6 +11,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     const onInputStub = sandbox.stub();
     const onRemoveStub = sandbox.stub();
     const onSelectStub = sandbox.stub();
+    const onPillCreateStub = sandbox.stub();
     const OptionRecord = Record({
         text: '',
         value: '',
@@ -178,11 +179,12 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     });
 
     describe('addPillsFromInput', () => {
-        test('should not call onSelect if allowCustomPills prop is not provided', () => {
+        test('should not call onSelect and onPillCreate if allowCustomPills prop is not provided', () => {
             const wrapper = shallow(
                 <PillSelectorDropdown
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
                     onSelect={sandbox.mock().never()}
                 />,
             );
@@ -192,7 +194,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             instance.addPillsFromInput();
         });
 
-        test('should "select" each pill, reset inputValue, and not call props.validateForError if valid pills exist', () => {
+        test('should "select" each pill, create a user pill, reset inputValue, and not call props.validateForError if valid pills exist', () => {
             const pills = [
                 { text: 'value1', value: 'value1' },
                 { text: 'value2', value: 'value2' },
@@ -206,6 +208,10 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                         .once()
                         .withExactArgs('')}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox
+                        .mock()
+                        .once()
+                        .withExactArgs(pills)}
                     onSelect={sandbox
                         .mock()
                         .once()
@@ -234,6 +240,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                     allowCustomPills
                     onInput={sandbox.mock().never()}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
                     onSelect={sandbox.mock().never()}
                     selectedOptions={selectedOptions}
                     validateForError={sandbox.mock()}
@@ -259,6 +266,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                     allowCustomPills
                     onInput={sandbox.mock().never()}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
                     onSelect={sandbox.mock().never()}
                     selectedOptions={selectedOptions}
                     validateForError={sandbox.mock()}
@@ -284,6 +292,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                     allowCustomPills
                     onInput={sandbox.mock().never()}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
                     onSelect={sandbox.mock().never()}
                     selectedOptions={selectedOptions}
                     validateForError={sandbox.mock().never()}
@@ -380,6 +389,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 <PillSelectorDropdown
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
+                    onPillCreate={onPillCreateStub}
                     onSelect={onSelectStub}
                     selectorOptions={options}
                 />,
@@ -390,6 +400,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             instance.handleSelect(1, event);
 
             expect(onSelectStub.calledWith([option], event)).toBe(true);
+            expect(onPillCreateStub.calledWith([option])).toBe(true);
         });
 
         test('should call onSelect() with immutable option and event when called', () => {
@@ -399,6 +410,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 <PillSelectorDropdown
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
+                    onPillCreate={onPillCreateStub}
                     onSelect={onSelectStub}
                     selectorOptions={options}
                 />,
@@ -409,6 +421,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             instance.handleSelect(1, event);
 
             expect(onSelectStub.calledWith([option], event)).toBe(true);
+            expect(onPillCreateStub.calledWith([option])).toBe(true);
         });
 
         test('should call handleInput() with empty string value when called', () => {

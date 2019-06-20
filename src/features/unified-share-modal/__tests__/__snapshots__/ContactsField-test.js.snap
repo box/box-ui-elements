@@ -21,6 +21,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   }
   onBlur={[Function]}
   onInput={[Function]}
+  onPillCreate={[Function]}
   onRemove={[MockFunction]}
   onSelect={[MockFunction]}
   parseItems={[Function]}
@@ -169,6 +170,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
   }
   onBlur={[Function]}
   onInput={[Function]}
+  onPillCreate={[Function]}
   onRemove={[MockFunction]}
   onSelect={[MockFunction]}
   parseItems={[Function]}

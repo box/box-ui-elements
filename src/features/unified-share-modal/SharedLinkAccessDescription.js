@@ -2,7 +2,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import type { itemType as ItemType } from '../../common/box-types';
+import type { ItemType } from '../../common/types/core';
 
 import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from './constants';
 import type { accessLevelType } from './flowTypes';

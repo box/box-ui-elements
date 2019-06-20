@@ -16,9 +16,10 @@ import PillSelectorDropdown from '../../../../components/pill-selector-dropdown/
 import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import InlineError from '../../../../components/inline-error/InlineError';
-
+import { TASK_EDIT_MODE_CREATE, TASK_EDIT_MODE_EDIT } from '../../../../constants';
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
+import type { TaskCollabAssignee, TaskType, TaskEditMode, TaskUpdatePayload } from '../../../../common/types/tasks';
 
 import './TaskForm.scss';
 
@@ -26,12 +27,20 @@ type TaskFormProps = {|
     error?: any,
     isDisabled?: boolean,
     onCancel: () => any,
-    onCreateError: (e: ElementsXhrError) => any,
-    onCreateSuccess: () => any,
+    onSubmitError: (e: ElementsXhrError) => any,
+    onSubmitSuccess: () => any,
     taskType: TaskType,
 |};
 
+type TaskFormFieldProps = {|
+    approvers: Array<TaskCollabAssignee>,
+    dueDate?: ?string,
+    id: string,
+    message: string,
+|};
+
 type TaskFormConsumerProps = {|
+    ...TaskFormFieldProps,
     approverSelectorContacts: SelectorItems,
     className?: string,
     createTask: (
@@ -42,6 +51,8 @@ type TaskFormConsumerProps = {|
         onSuccess: ?Function,
         onError: ?Function,
     ) => any,
+    editMode?: TaskEditMode,
+    editTask?: (task: TaskUpdatePayload, onSuccess: ?Function, onError: ?Function) => any,
     getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
 |};
@@ -51,27 +62,47 @@ type Props = TaskFormProps & TaskFormConsumerProps & InjectIntlProvidedProps;
 type TaskFormFieldName = 'taskName' | 'taskAssignees' | 'taskDueDate';
 
 type State = {|
-    approvers: SelectorItems,
-    dueDate: ?Date,
+    approvers: Array<TaskCollabAssignee>,
+    dueDate?: ?Date,
     formValidityState: { [key: TaskFormFieldName]: ?{ code: string, message: string } },
+    id: string,
     isLoading: boolean,
     isValid: ?boolean,
     message: string,
 |};
 
+function convertAssigneesToSelectorItems(approvers: Array<TaskCollabAssignee>): SelectorItems {
+    return approvers.map(({ target }) => {
+        const newSelectorItem: SelectorItem = {
+            ...target,
+            item: {},
+            value: target.id,
+            text: target.name,
+        };
+
+        return newSelectorItem;
+    });
+}
+
 class TaskForm extends React.Component<Props, State> {
     static defaultProps = {
+        approvers: [],
         approverSelectorContacts: [],
+        editMode: TASK_EDIT_MODE_CREATE,
+        id: '',
+        message: '',
     };
 
     state = this.getInitialFormState();
 
     getInitialFormState() {
+        const { dueDate, id, message, approvers } = this.props;
         return {
-            approvers: [],
-            dueDate: null,
+            id,
+            approvers,
+            dueDate: dueDate ? new Date(dueDate) : null,
             formValidityState: {},
-            message: '',
+            message,
             isLoading: false,
             isValid: null,
         };
@@ -115,31 +146,60 @@ class TaskForm extends React.Component<Props, State> {
         this.validateForm();
     };
 
-    handleCreateSuccess = () => {
-        const { onCreateSuccess } = this.props;
-        if (onCreateSuccess) {
-            onCreateSuccess();
+    handleSubmitSuccess = () => {
+        const { onSubmitSuccess } = this.props;
+        if (onSubmitSuccess) {
+            onSubmitSuccess();
         }
 
         this.clearForm();
         this.setState({ isLoading: false });
     };
 
-    handleCreateError = (e: ElementsXhrError) => {
-        const { onCreateError } = this.props;
-        onCreateError(e);
+    handleSubmitError = (e: ElementsXhrError) => {
+        const { onSubmitError } = this.props;
+        onSubmitError(e);
         this.setState({ isLoading: false });
     };
 
     handleValidSubmit = (): void => {
-        const { createTask, taskType } = this.props;
-        const { message, approvers, dueDate, isValid } = this.state;
+        const { id, createTask, approvers, editTask, editMode, taskType } = this.props;
+        const { message, approvers: currentApprovers, dueDate, isValid } = this.state;
         const dueDateString = dueDate && dueDate.toISOString();
 
         if (!isValid) return;
 
         this.setState({ isLoading: true });
-        createTask(message, approvers, taskType, dueDateString, this.handleCreateSuccess, this.handleCreateError);
+
+        if (editMode === TASK_EDIT_MODE_EDIT && editTask) {
+            // Added assignees are the ones in state that weren't in the prop
+            // Assignees to remove are the ones in the prop that cannot be found in state
+            const approverIds = approvers.map(approver => approver.id);
+            const currentApproverIds = currentApprovers.map(currentApprover => currentApprover.id);
+
+            editTask(
+                {
+                    id,
+                    description: message,
+                    due_at: dueDateString,
+                    addedAssignees: convertAssigneesToSelectorItems(
+                        currentApprovers.filter(currentApprover => approverIds.indexOf(currentApprover.id) === -1),
+                    ),
+                    removedAssignees: approvers.filter(approver => currentApproverIds.indexOf(approver.id) === -1),
+                },
+                this.handleSubmitSuccess,
+                this.handleSubmitError,
+            );
+        } else {
+            createTask(
+                message,
+                convertAssigneesToSelectorItems(currentApprovers),
+                taskType,
+                dueDateString,
+                this.handleSubmitSuccess,
+                this.handleSubmitError,
+            );
+        }
     };
 
     handleDueDateChange = (date: ?string): void => {
@@ -152,6 +212,7 @@ class TaskForm extends React.Component<Props, State> {
         }
 
         this.setState({ dueDate: dateValue });
+        this.validateForm('taskDueDate');
     };
 
     handleApproverSelectorInput = (value: any): void => {
@@ -159,8 +220,26 @@ class TaskForm extends React.Component<Props, State> {
         getApproverWithQuery(value);
     };
 
-    handleApproverSelectorSelect = (pills: any): void => {
-        this.setState({ approvers: this.state.approvers.concat(pills) });
+    handleApproverSelectorSelect = (pills: Array<any>): void => {
+        this.setState({
+            approvers: this.state.approvers.concat(
+                pills.map(pill => {
+                    return {
+                        id: '',
+                        target: {
+                            id: pill.id,
+                            name: pill.text,
+                            type: 'user',
+                        },
+                        role: 'ASSIGNEE',
+                        type: 'task_collaborator',
+                        status: 'NOT_STARTED',
+                        permissions: { can_delete: false, can_update: false },
+                    };
+                }),
+            ),
+        });
+
         this.validateForm('taskAssignees');
     };
 
@@ -182,26 +261,34 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     render() {
-        const { approverSelectorContacts, className, error, isDisabled, intl } = this.props;
+        const { approverSelectorContacts, className, error, isDisabled, intl, editMode } = this.props;
         const { dueDate, approvers, message, formValidityState, isLoading, isValid } = this.state;
         const inputContainerClassNames = classNames('bcs-task-input-container', 'bcs-task-input-is-open', className);
+        const isCreateEditMode = editMode === TASK_EDIT_MODE_CREATE;
+        const renderApprovers = convertAssigneesToSelectorItems(approvers);
 
         // filter out selected approvers
         // map to datalist item format
         const approverOptions = approverSelectorContacts
-            .filter(({ id }) => !approvers.find(({ value }) => value === id))
+            .filter(({ id }) => !renderApprovers.find(({ value }) => value === id))
             .map(({ id, item }) => ({ ...item, text: item.name, value: id }));
 
         const pillSelectorOverlayClasses = classNames({
             scrollable: approverOptions.length > 4,
         });
 
+        const submitButtonMessage = isCreateEditMode
+            ? messages.tasksAddTaskFormSubmitLabel
+            : messages.tasksEditTaskFormSubmitLabel;
+
+        const taskErrorMessage = isCreateEditMode ? messages.taskCreateErrorMessage : messages.taskUpdateErrorMessage;
+
         return (
-            <div className={inputContainerClassNames}>
+            <div className={inputContainerClassNames} data-resin-component="taskform">
                 <div className="bcs-task-input-form-container">
                     {error ? (
                         <InlineError title={<FormattedMessage {...messages.taskCreateErrorTitle} />}>
-                            <FormattedMessage {...messages.taskCreateErrorMessage} />
+                            <FormattedMessage {...taskErrorMessage} />
                         </InlineError>
                     ) : null}
                     <Form
@@ -222,7 +309,7 @@ class TaskForm extends React.Component<Props, State> {
                             onRemove={this.handleApproverSelectorRemove}
                             onSelect={this.handleApproverSelectorSelect}
                             placeholder={intl.formatMessage(messages.approvalAddAssignee)}
-                            selectedOptions={approvers}
+                            selectedOptions={renderApprovers}
                             selectorOptions={approverOptions}
                             validateForError={() => this.validateForm('taskAssignees')}
                         >
@@ -283,7 +370,7 @@ class TaskForm extends React.Component<Props, State> {
                                 isDisabled={!isValid || isLoading}
                                 isLoading={isLoading}
                             >
-                                <FormattedMessage {...messages.tasksAddTaskFormSubmitLabel} />
+                                <FormattedMessage {...submitButtonMessage} />
                             </PrimaryButton>
                         </div>
                     </Form>

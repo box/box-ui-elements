@@ -17,12 +17,13 @@ import InlineNotice from '../../components/inline-notice';
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import commonMessages from '../../common/messages';
 import { emailValidator } from '../../utils/validators';
-import type { inlineNoticeType } from '../../common/box-types';
+import type { InlineNoticeType } from '../../common/types/core';
 import IconGlobe from '../../icons/general/IconGlobe';
 
 import ContactsField from './ContactsField';
 import messages from './messages';
 import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
+import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
     cancelButtonProps?: Object,
@@ -33,7 +34,7 @@ type Props = {
     getContacts: (query: string) => Promise<Array<Contact>>,
     inlineNotice: {
         content: React.Node,
-        type: inlineNoticeType,
+        type: InlineNoticeType,
     },
     intl: IntlShape,
     isContactsFieldEnabled: boolean,
@@ -43,6 +44,7 @@ type Props = {
     onContactAdd?: Function,
     onContactInput?: Function,
     onContactRemove?: Function,
+    onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     onRequestClose: Function,
     onSubmit: Function,
     openInviteCollaboratorsSection?: Function,
@@ -217,6 +219,7 @@ class EmailForm extends React.Component<Props, State> {
             intl,
             isExpanded,
             messageProps,
+            onPillCreate,
             sendButtonProps,
             showEnterEmailsCallout,
             selectedContacts,
@@ -243,6 +246,7 @@ class EmailForm extends React.Component<Props, State> {
                         onContactAdd={this.handleContactAdd}
                         onContactRemove={this.handleContactRemove}
                         onInput={this.handleContactInput}
+                        onPillCreate={onPillCreate}
                         selectedContacts={selectedContacts}
                         suggestedCollaborators={suggestedCollaborators}
                         validateForError={this.validateContactField}

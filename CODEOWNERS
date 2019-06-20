@@ -19,14 +19,19 @@
 # Root
 /*.*                                        @box/ui-elements-extended
 /.*                                         @box/ui-elements-extended
+/.mergify.yml                               @box/ui-elements
 /CODEOWNERS                                 @box/ui-elements
 /LICENSE                                    @box/ui-elements
 /THIRD_PARTY_LICENSES                       @box/ui-elements
-/conf/                                      @box/ui-elements-extended
+/scripts/                                   @box/ui-elements-extended
 /examples/                                  @box/webapp
 /flow/                                      @box/ui-elements-extended
 /flow-typed/                                @box/ui-elements-extended
 /i18n/                                      @box/webapp
 
-# Element Experiences
-/src/elements/content-sidebar/activity-feed/task-new/ @box/ui-elements-extended @box/ui-elements
+# Features
+/src/elements/content-sidebar/activity-feed/task-new/   @box/collab @box/ui-elements-extended
+/src/elements/content-sidebar/activity-feed/task-form/  @box/collab @box/ui-elements-extended
+/src/elements/content-sidebar/activity-feed/task/       @box/collab @box/ui-elements-extended
+/src/elements/content-sidebar/activity-feed/comment/    @box/collab @box/ui-elements-extended
+/src/api/tasks/                                         @box/collab @box/ui-elements-extended

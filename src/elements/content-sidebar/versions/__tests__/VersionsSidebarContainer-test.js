@@ -18,6 +18,8 @@ jest.mock('../../../../utils/iframe', () => ({
     default: jest.fn(),
 }));
 
+const versions = [{ id: '123', name: 'Version 1' }, { id: '456', name: 'Version 2' }, { id: '789', name: 'Version 3' }];
+
 describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     const defaultId = '12345';
     const fileAPI = {
@@ -29,6 +31,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         addPermissions: jest.fn(),
         deleteVersion: jest.fn(),
         getVersions: jest.fn(),
+        getCurrentVersion: jest.fn(),
         promoteVersion: jest.fn(),
         restoreVersion: jest.fn(),
         sortVersions: jest.fn(),
@@ -166,22 +169,21 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             const instance = wrapper.instance();
             const file = { id: '12345', permissions: {} };
             const version = { id: '123', permissions: {} };
-            const versions = { entries: [version], total_count: 1 };
+            const currentVersion = { entries: [{ id: '321', permissions: {} }], total_count: 1 };
+            const versionsWithCurrent = { entries: [version, ...currentVersion.entries], total_count: 2 };
 
-            versionsAPI.addCurrentVersion.mockReturnValueOnce(versions);
-            versionsAPI.addPermissions.mockReturnValueOnce(versions);
-            versionsAPI.sortVersions.mockReturnValueOnce(versions);
+            versionsAPI.addPermissions.mockReturnValueOnce(versionsWithCurrent);
+            versionsAPI.sortVersions.mockReturnValueOnce(versionsWithCurrent);
 
             instance.verifyVersion = jest.fn();
-            instance.handleFetchSuccess([file, versions]);
+            instance.handleFetchSuccess([file, versionsWithCurrent]);
 
             expect(instance.verifyVersion).toBeCalled();
-            expect(versionsAPI.addCurrentVersion).toBeCalledWith(versions, file);
-            expect(versionsAPI.addPermissions).toBeCalledWith(versions, file);
-            expect(versionsAPI.sortVersions).toBeCalledWith(versions);
+            expect(versionsAPI.addPermissions).toBeCalledWith(versionsWithCurrent, file);
+            expect(versionsAPI.sortVersions).toBeCalledWith(versionsWithCurrent);
             expect(wrapper.state('error')).toBeUndefined();
             expect(wrapper.state('isLoading')).toBe(false);
-            expect(wrapper.state('versions')).toBe(versions.entries);
+            expect(wrapper.state('versions')).toBe(versionsWithCurrent.entries);
         });
     });
 
@@ -230,13 +232,38 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
-    describe('fetchVersion', () => {
+    describe('fetchVersions', () => {
         test('should call getVersions', () => {
             const wrapper = getWrapper();
             const versionsPromise = wrapper.instance().fetchVersions();
 
             expect(versionsPromise).toBeInstanceOf(Promise);
             expect(versionsAPI.getVersions).toBeCalledWith(defaultId, expect.any(Function), expect.any(Function));
+        });
+    });
+
+    describe('fetchVersionCurrent', () => {
+        const fileVersionId = '1234';
+        test('should get the current version and add it to the versions response', () => {
+            const file = {
+                id: defaultId,
+                file_version: {
+                    id: fileVersionId,
+                },
+            };
+
+            versionsAPI.getCurrentVersion.mockResolvedValueOnce();
+
+            const wrapper = getWrapper();
+            const currentVersionsPromise = wrapper.instance().fetchVersionCurrent([file, versions]);
+
+            expect(currentVersionsPromise).toBeInstanceOf(Promise);
+            expect(versionsAPI.getCurrentVersion).toBeCalledWith(
+                defaultId,
+                fileVersionId,
+                expect.any(Function),
+                expect.any(Function),
+            );
         });
     });
 
@@ -263,11 +290,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should return the version stored in state if available', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            const versions = [
-                { id: '123', name: 'Version 1' },
-                { id: '456', name: 'Version 2' },
-                { id: '789', name: 'Version 3' },
-            ];
 
             wrapper.setState({ versions });
 
@@ -316,11 +338,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
     describe('verifyVersion', () => {
         const onVersionChange = jest.fn();
-        const versions = [
-            { id: '123', name: 'Version 1' },
-            { id: '456', name: 'Version 2' },
-            { id: '789', name: 'Version 3' },
-        ];
 
         test('should emit an onVersionChange event if the passed version is available', () => {
             const wrapper = getWrapper({ onVersionChange, versionId: '456' });

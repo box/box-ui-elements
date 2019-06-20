@@ -31,6 +31,7 @@ type Props = {
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
+    onTaskModalClose?: Function,
     onTaskUpdate?: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
@@ -155,6 +156,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onTaskDelete,
             onTaskUpdate,
             onTaskAssignmentUpdate,
+            onTaskModalClose,
             feedItems,
         } = this.props;
         const { isInputOpen } = this.state;
@@ -188,12 +190,15 @@ class ActivityFeed extends React.Component<Props, State> {
                             // but you must at least be able to comment to do these operations.
                             onTaskDelete={hasCommentPermission ? onTaskDelete : noop}
                             onTaskEdit={hasCommentPermission ? onTaskUpdate : noop}
+                            onTaskModalClose={onTaskModalClose}
                             onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
                             getUserProfileUrl={getUserProfileUrl}
                             mentionSelectorContacts={mentionSelectorContacts}
                             getMentionWithQuery={getMentionWithQuery}
+                            approverSelectorContacts={approverSelectorContacts}
+                            getApproverWithQuery={getApproverWithQuery}
                         />
                     )}
                 </div>

@@ -15,7 +15,7 @@ exports[`features/beta-feedback/BetaFeedbackBadge should render component with t
     />
   </span>
   <Link
-    aria-labelledBy="bdl-HeaderFeedbackBadge-ariaLabel"
+    aria-labelledby="bdl-HeaderFeedbackBadge-ariaLabel"
     className=""
     target="_blank"
   >
@@ -56,7 +56,7 @@ exports[`features/beta-feedback/BetaFeedbackBadge should render default componen
     />
   </span>
   <Link
-    aria-labelledBy="bdl-HeaderFeedbackBadge-ariaLabel"
+    aria-labelledby="bdl-HeaderFeedbackBadge-ariaLabel"
     className=""
     href="http://example.org/"
     target="_blank"

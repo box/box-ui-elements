@@ -82,8 +82,6 @@ class MultiputUpload extends BaseMultiput {
 
     commitSessionTimeout: TimeoutID;
 
-    partsUploaded: number;
-
     /**
      * [constructor]
      *
@@ -565,9 +563,7 @@ class MultiputUpload extends BaseMultiput {
         } else if (data.type === 'done') {
             this.fileSha1 = hexToBase64(data.sha1);
             this.sha1Worker.terminate();
-            if (this.partsUploaded === this.parts.length) {
-                this.commitSession();
-            }
+            this.processNextParts();
         } else if (data.type === 'error') {
             this.sessionErrorHandler(null, LOG_EVENT_TYPE_WEB_WORKER_ERROR, JSON.stringify(data));
         }

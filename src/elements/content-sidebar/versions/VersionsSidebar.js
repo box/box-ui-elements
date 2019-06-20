@@ -18,6 +18,7 @@ import './VersionsSidebar.scss';
 
 type Props = {
     error?: string,
+    fileId: string,
     isLoading: boolean,
     onDelete: VersionActionCallback,
     onDownload: VersionActionCallback,
@@ -31,19 +32,18 @@ type Props = {
 const VersionsSidebar = ({ error, isLoading, parentName, ...rest }: Props) => (
     <SidebarContent
         className="bcs-Versions"
+        data-resin-component="preview"
+        data-resin-feature="versions"
         title={
             <React.Fragment>
-                <BackButton path={`/${parentName}`} />
+                <BackButton data-resin-target="back" to={`/${parentName}`} />
                 <FormattedMessage {...messages.versionsTitle} />
             </React.Fragment>
         }
     >
         <LoadingIndicatorWrapper className="bcs-Versions-content" crawlerPosition="top" isLoading={isLoading}>
-            {error ? (
-                <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>
-            ) : (
-                <VersionsList isLoading={isLoading} {...rest} />
-            )}
+            {error && <InlineError title={<FormattedMessage {...messagesCommon.error} />}>{error}</InlineError>}
+            <VersionsList isLoading={isLoading} {...rest} />
         </LoadingIndicatorWrapper>
     </SidebarContent>
 );

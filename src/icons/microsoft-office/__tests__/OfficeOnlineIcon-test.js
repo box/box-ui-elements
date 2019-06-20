@@ -27,11 +27,15 @@ describe('icons/microsoft-office/OfficeOnlineIcon', () => {
             component: 'IconExcelOnline',
         },
         {
-            extension: 'xlsm',
+            extension: 'xlsx',
             component: 'IconExcelOnline',
         },
         {
             extension: 'xlsm',
+            component: 'IconExcelOnline',
+        },
+        {
+            extension: 'xlsb',
             component: 'IconExcelOnline',
         },
     ].forEach(({ extension, component }) => {

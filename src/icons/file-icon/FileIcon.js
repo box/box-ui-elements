@@ -133,7 +133,7 @@ const EXTENSIONS = {
     ]),
     IconFileDocument: mirror(['csv', 'dot', 'dotx', 'msg', 'odt', 'rtf', 'tsv', 'wpd', 'xhtml', 'xml', 'xsd', 'xsl']),
     IconFileDwg: mirror(['dwg', 'dwgzip']),
-    IconFileExcelSpreadsheet: mirror(['xls', 'xlsx', 'xlsm']),
+    IconFileExcelSpreadsheet: mirror(['xls', 'xlsx', 'xlsm', 'xlsb']),
     IconFileGoogleDocs: mirror(['gdoc']),
     IconFileGoogleSheets: mirror(['gsheet']),
     IconFileGoogleSlides: mirror(['gslide', 'gslides']),

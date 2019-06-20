@@ -9,6 +9,8 @@ import Label from '../label';
 import SelectorDropdown from '../selector-dropdown';
 
 import PillSelector from './PillSelector';
+import type { contactType as Contact } from '../../features/unified-share-modal/flowTypes';
+import type { SelectOptionProp } from '../select-field/props';
 import type { Option, OptionValue, SelectedOptions, SuggestedPillsFilter } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
@@ -36,6 +38,8 @@ type Props = {
     onBlur: (event: SyntheticInputEvent<HTMLInputElement>) => void,
     /** Should update selectorOptions based on the given input value */
     onInput: Function,
+    /** Called when creating pills */
+    onPillCreate: (pills: Array<SelectOptionProp | Contact>) => void,
     /** Should update selectedOptions given the option and index to remove */
     onRemove: Function,
     /** Should update selectedOptions given an array of pills and the event */
@@ -78,6 +82,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         inputProps: {},
         label: '',
         onBlur: noop,
+        onPillCreate: noop,
         placeholder: '',
         selectedOptions: [],
         selectorOptions: [],
@@ -107,7 +112,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     };
 
     addPillsFromInput = () => {
-        const { allowCustomPills, onInput, onSelect, selectedOptions, validateForError } = this.props;
+        const { allowCustomPills, onInput, onPillCreate, onSelect, selectedOptions, validateForError } = this.props;
         const { inputValue } = this.state;
 
         // Do nothing if custom pills are not allowed
@@ -121,6 +126,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         // "Select" the pills
         if (pills.length > 0) {
             onSelect(pills);
+            onPillCreate(pills);
 
             // Reset inputValue
             this.setState({ inputValue: '' });
@@ -166,12 +172,13 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     };
 
     handleSelect = (index: number, event: SyntheticEvent<>) => {
-        const { onSelect, selectorOptions } = this.props;
+        const { onPillCreate, onSelect, selectorOptions } = this.props;
         const selectedOption =
             // $FlowFixMe
             typeof selectorOptions.get === 'function' ? selectorOptions.get(index) : selectorOptions[index];
 
         onSelect([selectedOption], event);
+        onPillCreate([selectedOption]);
 
         this.handleInput({ target: { value: '' } });
     };

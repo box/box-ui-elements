@@ -8,15 +8,16 @@ import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
 import { TASK_EDIT_MODE_CREATE, TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
+import type { TaskType, TaskEditMode } from '../../common/types/tasks';
 
 type TaskModalProps = {
     editMode?: TaskEditMode,
     error: ?ElementsXhrError,
     feedbackUrl: string,
-    handleCreateError: (e: ElementsXhrError) => void,
-    handleCreateSuccess: () => void,
-    handleModalClose: () => void,
     isTaskFormOpen: boolean,
+    onModalClose: () => void,
+    onSubmitError: (e: ElementsXhrError) => void,
+    onSubmitSuccess: () => any,
     taskFormProps: TaskFormProps,
     taskType: TaskType,
 };
@@ -41,9 +42,9 @@ const TaskModal = (props: TaskModalProps) => {
     const {
         editMode = TASK_EDIT_MODE_CREATE,
         error,
-        handleCreateError,
-        handleCreateSuccess,
-        handleModalClose,
+        onSubmitError,
+        onSubmitSuccess,
+        onModalClose,
         taskType,
         feedbackUrl,
         isTaskFormOpen,
@@ -57,7 +58,7 @@ const TaskModal = (props: TaskModalProps) => {
             data-testid="create-task-modal"
             focusElementSelector={focusTargetSelector}
             isOpen={isTaskFormOpen}
-            onRequestClose={handleModalClose}
+            onRequestClose={onModalClose}
             title={
                 <React.Fragment>
                     <FormattedMessage {...getMessageForModalTitle(taskType, editMode)} />
@@ -67,10 +68,11 @@ const TaskModal = (props: TaskModalProps) => {
         >
             <div className="be">
                 <TaskForm
+                    editMode={editMode}
                     error={error}
-                    onCancel={handleModalClose}
-                    onCreateSuccess={handleCreateSuccess}
-                    onCreateError={handleCreateError}
+                    onCancel={onModalClose}
+                    onSubmitError={onSubmitError}
+                    onSubmitSuccess={onSubmitSuccess}
                     taskType={taskType}
                     {...taskFormProps}
                 />

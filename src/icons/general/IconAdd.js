@@ -2,6 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
+import { bdlGray } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -12,20 +13,19 @@ type Props = {
     width?: number,
 };
 
-const IconAdd = ({ className = '', color = '#000000', height = 24, title, width = 24 }: Props) => (
+const IconAdd = ({ className = '', color = bdlGray, height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
-        className={`icon-add ${className}`}
+        className={`bdl-IconAdd ${className}`}
         height={height}
         title={title}
-        viewBox="-603 389 16 16"
+        viewBox="0 0 32 32"
         width={width}
     >
         <path
             className="fill-color"
-            d="M-593 395.5v-4c0-.8-.7-1.5-1.5-1.5s-1.5.7-1.5 1.5v4h-4c-.8 0-1.5.7-1.5 1.5s.7
-                    1.5 1.5 1.5h4v4c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5v-4h4c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5h-4z"
+            d="M18 14h9a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-9v9a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-9H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h9V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v9z"
             fill={color}
-            fillRule="evenodd"
+            fillRule="nonzero"
         />
     </AccessibleSVG>
 );

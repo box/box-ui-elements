@@ -22,6 +22,7 @@ import SidebarContent from './SidebarContent';
 import AddTaskButton from './AddTaskButton';
 import SidebarUtils from './SidebarUtils';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, SIDEBAR_VIEW_ACTIVITY } from '../../constants';
+import type { TaskType, TaskNew, TaskUpdatePayload } from '../../common/types/tasks';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {
@@ -191,17 +192,25 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             // need to load the pending item
             this.fetchFeedItems();
         },
-        updateTask: (task: TaskUpdatePayload): void => {
+        updateTask: (task: TaskUpdatePayload, onSuccess: ?Function, onError: ?Function): void => {
             const { file, api, onTaskUpdate = noop } = this.props;
-            api.getFeedAPI(false).updateTaskNew(
-                file,
-                task,
-                () => {
-                    this.feedSuccessCallback();
-                    onTaskUpdate();
-                },
-                this.feedErrorCallback,
-            );
+            const errorCallback = (e, code) => {
+                if (onError) {
+                    onError(e, code);
+                }
+                this.feedErrorCallback(e, code);
+            };
+            const successCallback = () => {
+                this.feedSuccessCallback();
+
+                if (onSuccess) {
+                    onSuccess();
+                }
+
+                onTaskUpdate();
+            };
+
+            api.getFeedAPI(false).updateTaskNew(file, task, successCallback, errorCallback);
 
             // need to load the pending item
             this.fetchFeedItems();
@@ -585,6 +594,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             createTask,
             getApproverWithQuery,
             getAvatarUrl,
+            id: '',
+            message: '',
+            approvers: [],
         };
         return (
             <FeatureFlag feature="activityFeed.tasks.newApi">
@@ -635,6 +647,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onTaskCreate={this.createTask}
                     onTaskDelete={deleteTask}
                     onTaskUpdate={updateTask}
+                    onTaskModalClose={this.onTaskModalClose}
                     onTaskAssignmentUpdate={updateTaskAssignment}
                     getApproverWithQuery={this.getApproverWithQuery}
                     getMentionWithQuery={this.getMentionWithQuery}

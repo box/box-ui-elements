@@ -117,6 +117,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -221,6 +222,7 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
         isContactsFieldEnabled={true}
         isExpanded={true}
         isExternalUserSelected={false}
+        onPillCreate={[Function]}
         onRequestClose={[Function]}
         onSubmit={[Function]}
         selectedContacts={Array []}
@@ -349,6 +351,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -525,6 +528,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -701,6 +705,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -881,6 +886,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -1057,6 +1063,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -1233,6 +1240,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={true}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -1381,6 +1389,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -1558,6 +1567,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -1735,6 +1745,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -1912,6 +1923,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={true}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -2123,6 +2135,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -2303,6 +2316,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -2483,6 +2497,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -2660,6 +2675,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={false}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -2837,6 +2853,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={true}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
@@ -2985,6 +3002,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             isExpanded={true}
             isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}

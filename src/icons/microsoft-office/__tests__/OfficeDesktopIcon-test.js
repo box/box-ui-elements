@@ -34,6 +34,10 @@ describe('icons/microsoft-office/OfficeDesktopIcon', () => {
             extension: 'xlsm',
             component: 'IconExcelDesktop',
         },
+        {
+            extension: 'xlsb',
+            component: 'IconExcelDesktop',
+        },
     ].forEach(({ extension, component }) => {
         test('should correctly render default icon', () => {
             const wrapper = getWrapper({ extension });

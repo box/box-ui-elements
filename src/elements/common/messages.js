@@ -791,7 +791,7 @@ const messages = defineMessages({
     taskUpdateErrorMessage: {
         id: 'be.taskEditErrorMessage',
         description: 'Error message when a task edit fails',
-        defaultMessage: 'There was an error updating this task.',
+        defaultMessage: 'An error occurred while modifying this task. Please try again.',
     },
     taskActionErrorTitle: {
         id: 'be.taskActionErrorTitle',
@@ -817,6 +817,22 @@ const messages = defineMessages({
         id: 'be.taskDeleteErrorMessage',
         description: 'Error message when a task deletion fails',
         defaultMessage: 'There was an error while deleting this task. Please refresh the page and try again.',
+    },
+    taskCollaboratorLoadErrorMessage: {
+        id: 'be.taskCollaboratorLoadErrorMessage',
+        description: 'Error message when we failed to load the collaborators when user tries to edit a task',
+        defaultMessage: 'An error has occurred while loading collaborators for this task. Please try again.',
+    },
+    taskShowMoreAssignees: {
+        id: 'be.taskShowMoreAssignees',
+        description:
+            'Button name to expand task assignee list, additionalAssigneeCount is the number of additional task assignees that can be shown.',
+        defaultMessage: 'Show {additionalAssigneeCount} More',
+    },
+    taskShowLessAssignees: {
+        id: 'be.taskShowLessAssignees',
+        description: 'Button name to hide task assignee list',
+        defaultMessage: 'Show Less',
     },
     completedAssignment: {
         id: 'be.completedAssignment',
@@ -940,12 +956,12 @@ const messages = defineMessages({
     },
     tasksEditApprovalTaskFormTitle: {
         id: 'be.tasks.editTask.approval.title',
-        defaultMessage: 'Edit Approval Task',
+        defaultMessage: 'Modify Approval Task',
         description: 'title for when editing an existing approval task',
     },
     tasksEditGeneralTaskFormTitle: {
         id: 'be.tasks.editTask.general.title',
-        defaultMessage: 'Edit General Task',
+        defaultMessage: 'Modify General Task',
         description: 'modal title for when editing an existing general task',
     },
     tasksAddTaskFormSelectAssigneesLabel: {
@@ -965,8 +981,13 @@ const messages = defineMessages({
     },
     tasksAddTaskFormSubmitLabel: {
         id: 'be.tasks.addTaskForm.submit',
-        defaultMessage: 'Add Task',
-        description: 'label for create button in create task popup',
+        defaultMessage: 'Create',
+        description: 'label for create button in create task modal in create mode',
+    },
+    tasksEditTaskFormSubmitLabel: {
+        id: 'be.tasks.editTaskForm.submit',
+        defaultMessage: 'Update',
+        description: 'label for edit button in create task modal in edit mode',
     },
     tasksAddTaskFormCancelLabel: {
         id: 'be.tasks.addTaskForm.cancel',
