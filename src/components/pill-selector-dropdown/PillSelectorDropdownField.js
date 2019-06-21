@@ -16,7 +16,7 @@ type Props = FieldProps & {
     /** Given options, renders the dropdown list. Defaults to defaultDropdownRenderer. */
     dropdownRenderer: (options: Array<Option>) => React.Node,
     /** Function to parse user input into an array of items. Defaults to CSV parser. */
-    inputParser?: (inputValue: string) => Array<Option>,
+    inputParser?: (inputValue: string, options: Array<Option>, selectedOptions: Array<Option>) => Array<Option>,
     /** If true, the user can add pills not included in the dropdown options. Defaults to true. */
     isCustomInputAllowed: boolean,
     /** If true, the input control is disabled so no more input can be made. Defaults to false. */
@@ -27,6 +27,8 @@ type Props = FieldProps & {
     options: Array<Option>,
     /** Called to check if pill text is valid. The text is passed in. */
     placeholder: string,
+    /** Determines whether or not copy pasted text is cleared when it does not result in new pills being added */
+    shouldClearUnmatchedInput: boolean,
     /** A placeholder to show in the input when there are no pills. */
     validator?: (option: Option | OptionValue) => boolean,
 };
@@ -42,6 +44,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         isCustomInputAllowed: true,
         isDisabled: false,
         options: [],
+        shouldClearUnmatchedInput: false,
     };
 
     state = { inputText: '' };
@@ -85,6 +88,16 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         onChange(this.createFakeEventTarget(name, options));
     };
 
+    handleParseItems = (inputValue: string): ?Array<Option> => {
+        const { field, inputParser, options } = this.props;
+        const { value: selectedOptions } = field;
+
+        if (inputParser) {
+            return inputParser(inputValue, options, selectedOptions);
+        }
+        return null;
+    };
+
     render() {
         const { inputText } = this.state;
         const {
@@ -93,12 +106,13 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
             dropdownRenderer,
             field,
             form,
-            inputParser,
             isCustomInputAllowed,
             isDisabled,
+            inputParser,
             label,
             options,
             placeholder,
+            shouldClearUnmatchedInput,
             validator,
         } = this.props;
         const { name, value = [] }: { name: string, value: Array<Option> } = field;
@@ -107,6 +121,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         const error = isTouched ? getProp(errors, name) : null;
         const filteredOptions: Array<Option> = dropdownFilter(options, value, inputText);
         const inputProps = { name }; // so that events generated have event.target.name
+        const parseItems = inputParser ? this.handleParseItems : null;
 
         return (
             <PillSelectorDropdown
@@ -121,10 +136,12 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
                 onInput={this.handleInput}
                 onRemove={this.handleRemove}
                 onSelect={this.handleSelect}
-                parseItems={inputParser}
+                parseItems={parseItems}
                 placeholder={placeholder}
                 selectedOptions={value}
                 selectorOptions={filteredOptions}
+                shouldClearUnmatchedInput={shouldClearUnmatchedInput}
+                shouldSetActiveItemOnOpen
                 validator={validator}
             >
                 {dropdownRenderer(filteredOptions)}

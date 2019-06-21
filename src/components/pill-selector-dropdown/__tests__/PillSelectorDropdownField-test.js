@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import PillSelectorDropdown from '../PillSelectorDropdown';
 import PillSelectorDropdownField from '../PillSelectorDropdownField';
 
 describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
@@ -147,6 +148,40 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
             instance.forceUpdate();
             wrapper.prop('onRemove')();
             expect(instance.handleRemove).toHaveBeenCalled();
+        });
+    });
+
+    describe('handleParseItems()', () => {
+        test('should set parseItems prop to null when inputParser is not provided', () => {
+            const inputParser = () => {};
+            const wrapper = getWrapper();
+
+            wrapper.setProps({ inputParser });
+            expect(wrapper.find(PillSelectorDropdown).props().parseItems).toBe(wrapper.instance().handleParseItems);
+
+            wrapper.setProps({ inputParser: null });
+            expect(wrapper.find(PillSelectorDropdown).props().parseItems).toBeNull();
+        });
+
+        test('should call inputParser with inputValue, options and selectedOptions', () => {
+            const inputParser = jest.fn();
+            const options = [
+                {
+                    displayText: 'displayText1',
+                    value: 'value1',
+                },
+                {
+                    displayText: 'displayText2',
+                    value: 'value2',
+                },
+            ];
+            const field = { value: [options[0]] };
+            const wrapper = getWrapper({ inputParser, options, field });
+
+            wrapper.instance().handleParseItems('abc');
+
+            expect(inputParser).toHaveBeenCalledTimes(1);
+            expect(inputParser).toHaveBeenCalledWith('abc', options, field.value);
         });
     });
 

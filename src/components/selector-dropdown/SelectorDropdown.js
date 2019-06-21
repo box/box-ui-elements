@@ -33,6 +33,8 @@ type Props = {
     selector: React.Element<any>,
     /** Component containing an input text field and takes `inputProps` to spread onto the input element */
     shouldScroll?: boolean,
+    /** Determines whether or not the first item is highlighted automatically when the dropdown opens */
+    shouldSetActiveItemOnOpen?: boolean,
     /** Boolean to indicate whether the dropdown should scroll */
     title?: React.Node,
 };
@@ -59,8 +61,17 @@ class SelectorDropdown extends React.Component<Props, State> {
     }
 
     componentWillReceiveProps(nextProps: Props) {
+        const { shouldSetActiveItemOnOpen } = this.props;
+
         if (this.haveChildrenChanged(nextProps.children)) {
-            this.resetActiveItem();
+            // For UX purposes filtering the items is equivalent
+            // to re-opening the dropdown. In such cases we highlight
+            // the first item when configured to do so
+            if (shouldSetActiveItemOnOpen) {
+                this.setActiveItem(0);
+            } else {
+                this.resetActiveItem();
+            }
         }
     }
 
@@ -80,7 +91,7 @@ class SelectorDropdown extends React.Component<Props, State> {
     setActiveItemID = (id: string | null) => {
         const itemEl = id ? document.getElementById(id) : null;
         this.setState({ activeItemID: id });
-        scrollIntoView(itemEl, { block: 'nearest' });
+        scrollIntoView(itemEl, { block: 'nearest', boundary: null });
     };
 
     listboxID: string;
@@ -193,6 +204,11 @@ class SelectorDropdown extends React.Component<Props, State> {
 
     openDropdown = () => {
         if (!this.state.shouldOpen) {
+            const { shouldSetActiveItemOnOpen } = this.props;
+
+            if (shouldSetActiveItemOnOpen) {
+                this.setActiveItem(0);
+            }
             this.setState({ shouldOpen: true });
             document.addEventListener('click', this.handleDocumentClick, true);
         }
