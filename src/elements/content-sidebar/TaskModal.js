@@ -47,7 +47,6 @@ const TaskModal = (props: TaskModalProps) => {
         isTaskFormOpen,
         taskFormProps,
     } = props;
-    // CSS selector for first form element
     // Note: Modal throws an error if this fails to find an element!
     return (
         <Modal
