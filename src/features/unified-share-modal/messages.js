@@ -17,6 +17,12 @@ const messages = defineMessages({
         description: 'Error message when user tries to send Shared Link as email without entering any recipients',
         id: 'boxui.unifiedShare.enterAtLeastOneEmail',
     },
+    contactsExceedLimitError: {
+        defaultMessage:
+            'Oops! The maximum number of collaborators that can be added at once is {maxContacts} collaborators. Please try again by splitting your invitations into batches.',
+        description: 'Error message when more than the maximum number of contacts is entered',
+        id: 'boxui.unifiedShare.contactsExceedLimitError',
+    },
     enterEmailAddressesCalloutText: {
         defaultMessage: 'Share this item with coworkers by entering their email addresses',
         description:
