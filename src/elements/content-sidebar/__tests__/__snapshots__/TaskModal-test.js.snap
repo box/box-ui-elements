@@ -14,16 +14,10 @@ exports[`elements/content-sidebar/TaskModal render should render a default compo
     }
   }
   title={
-    <React.Fragment>
-      <FormattedMessage
-        defaultMessage="Create Approval Task"
-        id="be.tasks.createTask.approval.title"
-      />
-      <BetaFeedbackBadge
-        formUrl="http://example.dentist/"
-        tooltip={true}
-      />
-    </React.Fragment>
+    <FormattedMessage
+      defaultMessage="Create Approval Task"
+      id="be.tasks.createTask.approval.title"
+    />
   }
 >
   <div
@@ -56,16 +50,10 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
     }
   }
   title={
-    <React.Fragment>
-      <FormattedMessage
-        defaultMessage="Create Approval Task"
-        id="be.tasks.createTask.approval.title"
-      />
-      <BetaFeedbackBadge
-        formUrl="http://example.dentist/"
-        tooltip={true}
-      />
-    </React.Fragment>
+    <FormattedMessage
+      defaultMessage="Create Approval Task"
+      id="be.tasks.createTask.approval.title"
+    />
   }
 >
   <div
@@ -99,16 +87,10 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
     }
   }
   title={
-    <React.Fragment>
-      <FormattedMessage
-        defaultMessage="Modify Approval Task"
-        id="be.tasks.editTask.approval.title"
-      />
-      <BetaFeedbackBadge
-        formUrl="http://example.dentist/"
-        tooltip={true}
-      />
-    </React.Fragment>
+    <FormattedMessage
+      defaultMessage="Modify Approval Task"
+      id="be.tasks.editTask.approval.title"
+    />
   }
 >
   <div
@@ -142,16 +124,10 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode C
     }
   }
   title={
-    <React.Fragment>
-      <FormattedMessage
-        defaultMessage="Create General Task"
-        id="be.tasks.createTask.general.title"
-      />
-      <BetaFeedbackBadge
-        formUrl="http://example.dentist/"
-        tooltip={true}
-      />
-    </React.Fragment>
+    <FormattedMessage
+      defaultMessage="Create General Task"
+      id="be.tasks.createTask.general.title"
+    />
   }
 >
   <div
@@ -185,16 +161,10 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode E
     }
   }
   title={
-    <React.Fragment>
-      <FormattedMessage
-        defaultMessage="Modify General Task"
-        id="be.tasks.editTask.general.title"
-      />
-      <BetaFeedbackBadge
-        formUrl="http://example.dentist/"
-        tooltip={true}
-      />
-    </React.Fragment>
+    <FormattedMessage
+      defaultMessage="Modify General Task"
+      id="be.tasks.editTask.general.title"
+    />
   }
 >
   <div

@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor } from 'react-intl';
-import BetaFeedbackBadge from '../../features/beta-feedback';
 import Modal from '../../components/modal/Modal';
 import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
@@ -13,7 +12,6 @@ import type { TaskType, TaskEditMode } from '../../common/types/tasks';
 type TaskModalProps = {
     editMode?: TaskEditMode,
     error: ?ElementsXhrError,
-    feedbackUrl: string,
     isTaskFormOpen: boolean,
     onModalClose: () => void,
     onSubmitError: (e: ElementsXhrError) => void,
@@ -46,7 +44,6 @@ const TaskModal = (props: TaskModalProps) => {
         onSubmitSuccess,
         onModalClose,
         taskType,
-        feedbackUrl,
         isTaskFormOpen,
         taskFormProps,
     } = props;
@@ -59,12 +56,7 @@ const TaskModal = (props: TaskModalProps) => {
             focusElementSelector={focusTargetSelector}
             isOpen={isTaskFormOpen}
             onRequestClose={onModalClose}
-            title={
-                <React.Fragment>
-                    <FormattedMessage {...getMessageForModalTitle(taskType, editMode)} />
-                    <BetaFeedbackBadge tooltip formUrl={feedbackUrl} />
-                </React.Fragment>
-            }
+            title={<FormattedMessage {...getMessageForModalTitle(taskType, editMode)} />}
         >
             <div className="be">
                 <TaskForm

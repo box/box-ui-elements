@@ -7,7 +7,6 @@ import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
 import type { TaskType } from '../../common/types/tasks';
 
 type Props = {|
-    feedbackUrl: string,
     isDisabled: boolean,
     onTaskModalClose: () => void,
     taskFormProps: TaskFormProps,
@@ -42,7 +41,7 @@ class AddTaskButton extends React.Component<Props, State> {
     handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
 
     render() {
-        const { isDisabled, feedbackUrl, taskFormProps } = this.props;
+        const { isDisabled, taskFormProps } = this.props;
         const { isTaskFormOpen, taskType, error } = this.state;
 
         return (
@@ -50,7 +49,6 @@ class AddTaskButton extends React.Component<Props, State> {
                 <AddTaskMenu isDisabled={isDisabled} onMenuItemClick={this.handleClickMenuItem} />
                 <TaskModal
                     error={error}
-                    feedbackUrl={feedbackUrl}
                     onSubmitError={this.handleSubmitError}
                     onSubmitSuccess={this.handleSubmitSuccess}
                     onModalClose={this.handleModalClose}
