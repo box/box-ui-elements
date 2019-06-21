@@ -1264,6 +1264,12 @@ const messages = defineMessages({
         description: 'Label for back button',
         defaultMessage: 'Back',
     },
+    priorCollaborator: {
+        id: 'be.priorCollaborator',
+        description:
+            'If a user has been deleted, we call the user "a prior collaborator" - meaning someone who used to be able to collaborate on the content.',
+        defaultMessage: 'A Prior Collaborator',
+    },
 });
 
 export default messages;
