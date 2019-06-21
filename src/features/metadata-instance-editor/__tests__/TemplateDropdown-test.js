@@ -227,4 +227,26 @@ describe('features/metadata-instance-editor/fields/', () => {
         expect(wrapper).toMatchSnapshot();
         expect(wrapper.containsMatchingElement(<Button />)).toEqual(true);
     });
+
+    test('onOpen()', () => {
+        const onMenuToggle = jest.fn();
+        const wrapper = getWrapper({ onMenuToggle, templates: [], usedTemplates: [] });
+
+        wrapper.instance().onOpen();
+
+        expect(onMenuToggle).toHaveBeenCalledWith(true);
+        expect(wrapper.state('isDropdownOpen')).toBe(true);
+        expect(wrapper.state('filterText')).toBe('');
+        expect(wrapper.state('templates')).toEqual([]);
+    });
+
+    test('onClose()', () => {
+        const onMenuToggle = jest.fn();
+        const wrapper = getWrapper({ onMenuToggle, templates: [], usedTemplates: [] });
+
+        wrapper.instance().onClose();
+
+        expect(onMenuToggle).toHaveBeenCalledWith(false);
+        expect(wrapper.state('isDropdownOpen')).toBe(false);
+    });
 });
