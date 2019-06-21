@@ -103,3 +103,15 @@
         }
     }
 }
+
+.bdl-grid-item {
+    &:hover,
+    &:focus,
+    &.bdl-grid-item-selected {
+        border-color: $bdl-light-blue;
+    }
+
+    &:active {
+        border-color: $bdl-yellorange;
+    }
+}

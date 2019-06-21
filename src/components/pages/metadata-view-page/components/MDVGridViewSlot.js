@@ -12,8 +12,8 @@ type Props = {
 function MDVGridViewSlot({ item, onItemSelect, slotIndex, slotRenderer, ...rest }: Props) {
     // TODO: make classes for bce-grid-item and bce-grid-item-selected,
     // instead of reusing bce-item-row classes
-    const slotClassName = className('bce-item-row', {
-        'bce-item-row-selected': item ? item.selected : false,
+    const slotClassName = className('bdl-grid-item', {
+        'bdl-grid-item-selected': item ? item.selected : false,
     });
 
     const onClick = () => {

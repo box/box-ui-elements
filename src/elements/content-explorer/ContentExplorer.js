@@ -64,7 +64,7 @@ import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
 
-const MAX_GRID_VIEW_COLUMNS = 5;
+const MAX_GRID_VIEW_COLUMNS = 7;
 
 type Props = {
     apiHost: string,
@@ -225,6 +225,8 @@ class ContentExplorer extends Component<Props, State> {
         });
 
         this.id = uniqueid('bce_');
+
+        this.contentExplorerRef = React.createRef();
 
         this.state = {
             columnCount: MAX_GRID_VIEW_COLUMNS,
@@ -1370,6 +1372,23 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({ columnCount });
     };
 
+    getMaxColumns = () => {
+        const ref = this.contentExplorerRef;
+        if (ref.current) {
+            const clientWidth = ref.current.clientWidth;
+            if (clientWidth < 700) {
+                return 1;
+            }
+            if (clientWidth < 1400) {
+                return 3;
+            }
+            if (clientWidth < 1700) {
+                return 5;
+            }
+        }
+        return 7;
+    };
+
     /**
      * Renders the file picker
      *
@@ -1439,12 +1458,19 @@ class ContentExplorer extends Component<Props, State> {
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
 
+        const maxColumns = this.getMaxColumns();
+        // console.log(this.myRef);
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef}>
-                    <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
+                    <div
+                        className="be-app-element"
+                        onKeyDown={this.onKeyDown}
+                        ref={this.contentExplorerRef}
+                        tabIndex={0}
+                    >
                         <Header
                             view={view}
                             isSmall={isSmall}
@@ -1494,7 +1520,7 @@ class ContentExplorer extends Component<Props, State> {
                             onItemPreview={this.preview}
                             onSortChange={this.sort}
                             isGridView={isGridView}
-                            columnCount={columnCount}
+                            columnCount={columnCount > maxColumns ? maxColumns : columnCount}
                             count={currentCollection.items ? currentCollection.items.length : 0}
                             slotRenderer={this.slotRenderer}
                         />

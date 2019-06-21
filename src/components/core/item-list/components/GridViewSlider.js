@@ -9,7 +9,7 @@ type Props = {
     onResize: Function,
 };
 
-const RANGE_MAX = 5;
+const RANGE_MAX = 7;
 const RANGE_MIN = 1;
 const RANGE_STEP = 2;
 
