@@ -262,7 +262,7 @@ class TaskForm extends React.Component<Props, State> {
 
     render() {
         const { approverSelectorContacts, className, error, isDisabled, intl, editMode } = this.props;
-        const { dueDate, approvers, message, formValidityState, isLoading, isValid } = this.state;
+        const { dueDate, approvers, message, formValidityState, isLoading } = this.state;
         const inputContainerClassNames = classNames('bcs-task-input-container', 'bcs-task-input-is-open', className);
         const isCreateEditMode = editMode === TASK_EDIT_MODE_CREATE;
         const renderApprovers = convertAssigneesToSelectorItems(approvers);
@@ -367,7 +367,7 @@ class TaskForm extends React.Component<Props, State> {
                                 className="bcs-task-input-submit-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
                                 data-testid="task-form-submit-button"
-                                isDisabled={!isValid || isLoading}
+                                isDisabled={isLoading}
                                 isLoading={isLoading}
                             >
                                 <FormattedMessage {...submitButtonMessage} />

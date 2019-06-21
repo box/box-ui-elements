@@ -121,7 +121,6 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         submitButton.simulate('click');
 
         expect(createTaskSpy).not.toHaveBeenCalled();
-        expect(submitButton.props()['aria-disabled']).toBe(true);
     });
 
     test('should filter out already-assigned users from assignment dropdown options', () => {
