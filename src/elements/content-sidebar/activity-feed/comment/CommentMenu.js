@@ -11,6 +11,7 @@ import DropdownMenu from '../../../../components/dropdown-menu';
 import { Menu, MenuItem } from '../../../../components/menu';
 
 import messages from '../../../common/messages';
+import commentMessages from './messages';
 import deleteMessages from '../inline-delete/messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { fours, nines } from '../../../../styles/variables';
@@ -28,8 +29,8 @@ type Props = {
 const CommentMenu = (props: Props) => {
     const { isDisabled, onDeleteClick, onEditClick, permissions = {}, type } = props;
     const isTaskComment = type === COMMENT_TYPE_TASK;
-    const editLabel = isTaskComment ? messages.taskEditMenuItem : messages.editLabel;
-    const deleteLabel = isTaskComment ? messages.taskDeleteMenuItem : deleteMessages.deleteLabel;
+    const editLabel = isTaskComment ? commentMessages.taskEditMenuItem : messages.editLabel;
+    const deleteLabel = isTaskComment ? commentMessages.taskDeleteMenuItem : deleteMessages.deleteLabel;
 
     return (
         <DropdownMenu className="bcs-comment-menu-container" constrainToScrollParent isRightAligned>

@@ -9,7 +9,7 @@ import {
     TASK_NEW_NOT_STARTED,
     TASK_NEW_IN_PROGRESS,
 } from '../../../../constants';
-import messages from '../../../common/messages';
+import messages from './messages';
 import type { TaskStatus } from '../../../../common/types/tasks';
 
 import './TaskStatus.scss';

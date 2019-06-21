@@ -16,6 +16,7 @@ import { Overlay } from '../../../../components/flyout';
 import PrimaryButton from '../../../../components/primary-button';
 import Button from '../../../../components/button';
 import messages from '../../../common/messages';
+import activityFeedMessages from '../messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 import CommentMenu from './CommentMenu';
@@ -161,7 +162,7 @@ class Comment extends React.Component<Props, State> {
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
         const deleteConfirmMessage =
-            type === COMMENT_TYPE_DEFAULT ? messages.commentDeletePrompt : messages.taskDeletePrompt;
+            type === COMMENT_TYPE_DEFAULT ? messages.commentDeletePrompt : activityFeedMessages.taskDeletePrompt;
 
         return (
             <div className="bcs-comment-container">

@@ -3,7 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
-import messages from '../../../common/messages';
+import messages from './messages';
 import { ReadableTime } from '../../../../components/time';
 
 import { TASK_NEW_NOT_STARTED } from '../../../../constants';

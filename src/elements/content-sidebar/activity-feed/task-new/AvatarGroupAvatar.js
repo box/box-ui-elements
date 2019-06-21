@@ -7,7 +7,7 @@ import IconComplete from '../../../../icons/general/IconVerified';
 import IconReject from '../../../../icons/general/IconRejected';
 import Avatar from '../Avatar';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
-import messages from '../../../common/messages';
+import messages from './messages';
 import type { TaskCollabStatus } from '../../../../common/types/tasks';
 import type { UserMini } from '../../../../common/types/core';
 
@@ -45,7 +45,7 @@ const AvatarGroupAvatar = React.memo<Props>(({ user, status, getAvatarUrl, class
             className={`bcs-AvatarGroupAvatar-statusIcon ${camelCase(status)}`}
             height={12}
             width={12}
-            title={<FormattedMessage {...messages.completedAssignment} />}
+            title={<FormattedMessage {...messages.taskAssignmentCompleted} />}
         />
     </div>
 ));

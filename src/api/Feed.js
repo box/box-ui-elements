@@ -9,6 +9,7 @@ import omit from 'lodash/omit';
 import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
 import messages from '../elements/common/messages';
+import apiMessages from './messages';
 import { sortFeedItems } from '../utils/sorter';
 import Base from './Base';
 import CommentsAPI from './Comments';
@@ -432,18 +433,18 @@ class Feed extends Base {
             let errorMessage;
             switch (taskCollaboratorStatus) {
                 case TASK_NEW_APPROVED:
-                    errorMessage = messages.taskApproveErrorMessage;
+                    errorMessage = apiMessages.taskApproveErrorMessage;
                     break;
                 case TASK_NEW_COMPLETED:
-                    errorMessage = messages.taskCompleteErrorMessage;
+                    errorMessage = apiMessages.taskCompleteErrorMessage;
                     break;
                 case TASK_NEW_REJECTED:
-                    errorMessage = messages.taskRejectErrorMessage;
+                    errorMessage = apiMessages.taskRejectErrorMessage;
                     break;
                 default:
-                    errorMessage = messages.taskCompleteErrorMessage;
+                    errorMessage = apiMessages.taskCompleteErrorMessage;
             }
-            this.updateFeedItem(this.createFeedError(errorMessage, messages.taskActionErrorTitle), taskId);
+            this.updateFeedItem(this.createFeedError(errorMessage, apiMessages.taskActionErrorTitle), taskId);
             this.feedErrorCallback(true, e, code);
         };
         collaboratorsApi.updateTaskCollaborator({
@@ -763,7 +764,7 @@ class Feed extends Base {
                 this.createTaskSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
             },
             errorCallback: (e: ElementsXhrError, code: string) => {
-                this.updateFeedItem(this.createFeedError(messages.taskCreateErrorMessage), uuid);
+                this.updateFeedItem(this.createFeedError(apiMessages.taskCreateErrorMessage), uuid);
                 this.feedErrorCallback(false, e, code);
             },
         });
@@ -1127,7 +1128,7 @@ class Feed extends Base {
             task,
             successCallback: this.deleteFeedItem.bind(this, task.id, successCallback),
             errorCallback: (e: ElementsXhrError, code: string) => {
-                this.updateFeedItem(this.createFeedError(messages.taskDeleteErrorMessage), task.id);
+                this.updateFeedItem(this.createFeedError(apiMessages.taskDeleteErrorMessage), task.id);
                 this.feedErrorCallback(true, e, code);
             },
         });
