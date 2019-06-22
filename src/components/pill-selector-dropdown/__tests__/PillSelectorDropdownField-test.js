@@ -1,8 +1,10 @@
 // @flow
 
 import React from 'react';
-import PillSelectorDropdown from '../PillSelectorDropdown';
+import mapInputValuesToOptions from '../mapInputValuesToOptions';
 import PillSelectorDropdownField from '../PillSelectorDropdownField';
+
+jest.mock('../mapInputValuesToOptions', () => jest.fn());
 
 describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
     const getWrapper = props => shallow(<PillSelectorDropdownField field={{}} form={{}} {...props} />);
@@ -152,29 +154,29 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
     });
 
     describe('handleParseItems()', () => {
-        test('should set parseItems prop to null when inputParser is not provided', () => {
-            const inputParser = () => {};
-            const wrapper = getWrapper();
+        const options = [
+            {
+                displayText: 'displayText1',
+                value: 'value1',
+            },
+            {
+                displayText: 'displayText2',
+                value: 'value2',
+            },
+        ];
 
-            wrapper.setProps({ inputParser });
-            expect(wrapper.find(PillSelectorDropdown).props().parseItems).toBe(wrapper.instance().handleParseItems);
+        test('should call default parser when inputParser is not provided', () => {
+            const field = { value: [options[0]] };
+            const wrapper = getWrapper({ inputParser: null, options, field });
 
-            wrapper.setProps({ inputParser: null });
-            expect(wrapper.find(PillSelectorDropdown).props().parseItems).toBeNull();
+            wrapper.instance().handleParseItems('abc');
+
+            expect(mapInputValuesToOptions).toHaveBeenCalledTimes(1);
+            expect(mapInputValuesToOptions).toHaveBeenCalledWith('abc', options, field.value);
         });
 
         test('should call inputParser with inputValue, options and selectedOptions', () => {
             const inputParser = jest.fn();
-            const options = [
-                {
-                    displayText: 'displayText1',
-                    value: 'value1',
-                },
-                {
-                    displayText: 'displayText2',
-                    value: 'value2',
-                },
-            ];
             const field = { value: [options[0]] };
             const wrapper = getWrapper({ inputParser, options, field });
 

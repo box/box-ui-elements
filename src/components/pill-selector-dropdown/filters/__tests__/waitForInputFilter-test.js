@@ -1,7 +1,7 @@
 // @flow
 import waitForInputFilter from '../waitForInputFilter';
 
-describe('components/pill-selector-dropdown/waitForInputFilter', () => {
+describe('components/pill-selector-dropdown/filters/waitForInputFilter', () => {
     const options = [
         { displayText: 'value1', value: 'value1' },
         { displayText: 'value11', value: 'value11' },

@@ -125,7 +125,6 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     addPillsFromInput = () => {
         const {
             allowCustomPills,
-            onInput,
             onPillCreate,
             onSelect,
             selectedOptions,
@@ -147,9 +146,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             onSelect(pills);
             onPillCreate(pills);
 
-            // Reset inputValue
-            this.setState({ inputValue: '' });
-            onInput('');
+            this.resetInputValue();
         } else {
             if (validateForError && (inputValue !== '' || selectedOptions.length === 0)) {
                 /**
@@ -159,8 +156,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                 validateForError(inputValue);
             }
             if (shouldClearUnmatchedInput) {
-                this.setState({ inputValue: '' });
-                onInput('');
+                this.resetInputValue();
             }
         }
     };
@@ -214,6 +210,13 @@ class PillSelectorDropdown extends React.Component<Props, State> {
 
     handleCompositionEnd = () => {
         this.setState({ isInCompositionMode: false });
+    };
+
+    resetInputValue = () => {
+        const { onInput } = this.props;
+
+        this.setState({ inputValue: '' });
+        onInput('');
     };
 
     render() {

@@ -5,14 +5,15 @@ import type { FieldProps } from 'formik';
 
 import PillSelectorDropdown from './PillSelectorDropdown';
 import defaultDropdownRenderer from './defaultDropdownRenderer';
-import defaultDropdownFilter from './defaultDropdownFilter';
+import defaultDropdownFilter from './filters/defaultDropdownFilter';
+import mapInputValuesToOptions from './mapInputValuesToOptions';
 import type { Option, OptionValue } from './flowTypes';
 
 type Props = FieldProps & {
     /** CSS class for the component. */
     className?: string,
     /** Given selected values and input text, returns a list of filtered options. Defaults to defaultDropdownFilter. */
-    dropdownFilter: (options: Array<Option>, selectedValues: Array<Option>, inputText: string) => Array<Option>,
+    dropdownFilter?: (options: Array<Option>, selectedValues: Array<Option>, inputText: string) => Array<Option>,
     /** Given options, renders the dropdown list. Defaults to defaultDropdownRenderer. */
     dropdownRenderer: (options: Array<Option>) => React.Node,
     /** Function to parse user input into an array of items. Defaults to CSV parser. */
@@ -95,7 +96,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         if (inputParser) {
             return inputParser(inputValue, options, selectedOptions);
         }
-        return null;
+        return mapInputValuesToOptions(inputValue, options, selectedOptions);
     };
 
     render() {
@@ -108,7 +109,6 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
             form,
             isCustomInputAllowed,
             isDisabled,
-            inputParser,
             label,
             options,
             placeholder,
@@ -121,7 +121,6 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         const error = isTouched ? getProp(errors, name) : null;
         const filteredOptions: Array<Option> = dropdownFilter(options, value, inputText);
         const inputProps = { name }; // so that events generated have event.target.name
-        const parseItems = inputParser ? this.handleParseItems : null;
 
         return (
             <PillSelectorDropdown
@@ -136,7 +135,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
                 onInput={this.handleInput}
                 onRemove={this.handleRemove}
                 onSelect={this.handleSelect}
-                parseItems={parseItems}
+                parseItems={this.handleParseItems}
                 placeholder={placeholder}
                 selectedOptions={value}
                 selectorOptions={filteredOptions}

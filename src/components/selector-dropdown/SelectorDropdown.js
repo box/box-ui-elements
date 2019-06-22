@@ -15,27 +15,27 @@ function stopDefaultEvent(event) {
 }
 
 type Props = {
-    /** Options to keep the results always open */
-    children?: React.Node,
     /** Options to render in the dropdown filtered based on the input text */
+    children?: React.Node,
+    /** CSS class for the wrapper div */
     className?: string,
     /** Index at which to insert the divider */
     dividerIndex?: number,
-    /** CSS class for the wrapper div */
+    /** Options to keep the results always open */
     isAlwaysOpen?: boolean,
-    /** Optional title text that will be rendered above the list */
-    onEnter?: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void,
     /** Function called on keyboard "Enter" event only if enter does not trigger selection */
+    onEnter?: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void,
+    /** Function called with the index of the selected option and the event (selected by keyboard or click) */
     onSelect?: Function,
     /** Optional title of the overlay */
     overlayTitle?: string,
-    /** Function called with the index of the selected option and the event (selected by keyboard or click) */
-    selector: React.Element<any>,
     /** Component containing an input text field and takes `inputProps` to spread onto the input element */
+    selector: React.Element<any>,
+    /** Boolean to indicate whether the dropdown should scroll */
     shouldScroll?: boolean,
     /** Determines whether or not the first item is highlighted automatically when the dropdown opens */
     shouldSetActiveItemOnOpen?: boolean,
-    /** Boolean to indicate whether the dropdown should scroll */
+    /** Optional title text that will be rendered above the list */
     title?: React.Node,
 };
 
@@ -60,7 +60,7 @@ class SelectorDropdown extends React.Component<Props, State> {
         this.selectorDropdownRef = React.createRef();
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { shouldSetActiveItemOnOpen } = this.props;
 
         if (this.haveChildrenChanged(nextProps.children)) {
@@ -90,8 +90,10 @@ class SelectorDropdown extends React.Component<Props, State> {
 
     setActiveItemID = (id: string | null) => {
         const itemEl = id ? document.getElementById(id) : null;
-        this.setState({ activeItemID: id });
-        scrollIntoView(itemEl, { block: 'nearest', boundary: null });
+
+        this.setState({ activeItemID: id }, () => {
+            scrollIntoView(itemEl, { block: 'nearest', boundary: null });
+        });
     };
 
     listboxID: string;

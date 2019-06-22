@@ -12,7 +12,7 @@ import type { Option } from './flowTypes';
 // property. If a token does not match displayText, the parser will also try to match
 // the string representation of the value property. This last match is useful for country
 // codes and other similar use cases.
-function mapInputValuesToOptionsParser(
+function mapInputValuesToOptions(
     inputValue: string,
     options: Array<Option>,
     selectedOptions: Array<Option>,
@@ -47,4 +47,4 @@ function mapInputValuesToOptionsParser(
     return mappedOptions;
 }
 
-export default mapInputValuesToOptionsParser;
+export default mapInputValuesToOptions;

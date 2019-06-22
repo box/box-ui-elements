@@ -17,7 +17,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   onPillCreate={[Function]}
   onRemove={[Function]}
   onSelect={[Function]}
-  parseItems={null}
+  parseItems={[Function]}
   placeholder=""
   selectedOptions={Array []}
   selectorOptions={
@@ -75,7 +75,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   onPillCreate={[Function]}
   onRemove={[Function]}
   onSelect={[Function]}
-  parseItems={null}
+  parseItems={[Function]}
   placeholder=""
   selectedOptions={Array []}
   selectorOptions={Array []}
@@ -102,7 +102,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   onPillCreate={[Function]}
   onRemove={[Function]}
   onSelect={[Function]}
-  parseItems={null}
+  parseItems={[Function]}
   placeholder=""
   selectedOptions={Array []}
   selectorOptions={Array []}
