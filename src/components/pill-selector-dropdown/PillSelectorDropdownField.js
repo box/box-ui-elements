@@ -40,7 +40,6 @@ type State = {
 
 class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     static defaultProps = {
-        dropdownFilter: defaultDropdownFilter,
         dropdownRenderer: defaultDropdownRenderer,
         isCustomInputAllowed: true,
         isDisabled: false,
@@ -119,7 +118,8 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         const { errors, touched } = form;
         const isTouched = getProp(touched, name);
         const error = isTouched ? getProp(errors, name) : null;
-        const filteredOptions: Array<Option> = dropdownFilter(options, value, inputText);
+        const filterDropdownOptions = dropdownFilter || defaultDropdownFilter;
+        const filteredOptions: Array<Option> = filterDropdownOptions(options, value, inputText);
         const inputProps = { name }; // so that events generated have event.target.name
 
         return (
