@@ -176,7 +176,7 @@ class TaskForm extends React.Component<Props, State> {
             'data-resin-numassigneesremoved': removedAssignees.length,
             'data-resin-assigneesadded': addedAssignees.map(assignee => assignee.target.id),
             'data-resin-assigneesremoved': removedAssignees.map(assignee => assignee.target.id),
-            'data-resin-duedate': dueDate,
+            'data-resin-duedate': dueDate && dueDate.getTime(),
         };
     };
 

@@ -16,7 +16,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
         123,
       ]
     }
-    data-resin-duedate={2019-04-12T00:00:00.000Z}
+    data-resin-duedate={1555027200000}
     data-resin-isediting={true}
     data-resin-numassigneesadded={1}
     data-resin-numassigneesremoved={1}
@@ -39,7 +39,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
           123,
         ]
       }
-      data-resin-duedate={2019-04-12T00:00:00.000Z}
+      data-resin-duedate={1555027200000}
       data-resin-isediting={true}
       data-resin-numassigneesadded={1}
       data-resin-numassigneesremoved={1}
@@ -73,7 +73,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
         123,
       ]
     }
-    data-resin-duedate={2019-04-12T00:00:00.000Z}
+    data-resin-duedate={1555027200000}
     data-resin-isediting={true}
     data-resin-numassigneesadded={1}
     data-resin-numassigneesremoved={1}
@@ -95,7 +95,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
           123,
         ]
       }
-      data-resin-duedate={2019-04-12T00:00:00.000Z}
+      data-resin-duedate={1555027200000}
       data-resin-isediting={true}
       data-resin-numassigneesadded={1}
       data-resin-numassigneesremoved={1}
@@ -117,7 +117,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
             123,
           ]
         }
-        data-resin-duedate={2019-04-12T00:00:00.000Z}
+        data-resin-duedate={1555027200000}
         data-resin-isediting={true}
         data-resin-numassigneesadded={1}
         data-resin-numassigneesremoved={1}
