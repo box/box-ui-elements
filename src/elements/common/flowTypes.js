@@ -1,4 +1,7 @@
 // @flow
+import { VIEW_MODE_GRID, VIEW_MODE_LIST } from '../../constants';
+
+type ViewMode = typeof VIEW_MODE_GRID | typeof VIEW_MODE_LIST;
 
 type ErrorType = {
     code: string,
@@ -7,5 +10,5 @@ type ErrorType = {
     message?: string,
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export type { ErrorType };
+export type { ViewMode };
