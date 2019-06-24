@@ -14,7 +14,7 @@ exports[`icons/badges/MetadataActiveBadge should correctly render icon with spec
     <circle
       cx="8"
       cy="8"
-      fill="#D9E7F9"
+      fill="none"
       r="7.5"
       stroke="#4D91E2"
     />
