@@ -36,6 +36,7 @@ export default (
     onItemRename: Function,
     onItemShare: Function,
     onItemPreview: Function,
+    onItemPreviewInNewWindow: Function,
     isSmall: boolean,
 ) => ({ rowData }: { rowData: BoxItem }) => {
     const onFocus = () => onItemSelect(rowData);
@@ -44,6 +45,7 @@ export default (
     const onRename = () => onItemRename(rowData);
     const onShare = () => onItemShare(rowData);
     const onPreview = () => onItemPreview(rowData);
+    const onPreviewInNewWindow = () => onItemPreviewInNewWindow(rowData);
 
     const { permissions, type } = rowData;
 
@@ -76,6 +78,11 @@ export default (
                     ···
                 </Button>
                 <Menu>
+                    {allowPreview ? (
+                        <MenuItem onClick={onPreviewInNewWindow}>
+                            <FormattedMessage {...messages.previewInNewWindow} />
+                        </MenuItem>
+                    ) : null}
                     {allowPreview ? (
                         <MenuItem onClick={onPreview}>
                             <FormattedMessage {...messages.preview} />

@@ -27,6 +27,11 @@ const messages = defineMessages({
         description: 'Generic error label.',
         defaultMessage: 'Error',
     },
+    previewInNewWindow: {
+        id: 'be.preview.in.new.window',
+        description: 'Label for preview action.',
+        defaultMessage: 'Preview in new window',
+    },
     preview: {
         id: 'be.preview',
         description: 'Label for preview action.',

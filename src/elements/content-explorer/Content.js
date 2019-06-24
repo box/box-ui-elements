@@ -38,6 +38,7 @@ type Props = {
     onItemDelete: Function,
     onItemDownload: Function,
     onItemPreview: Function,
+    onItemPreviewInNewWindow: Function,
     onItemRename: Function,
     onItemSelect: Function,
     onItemShare: Function,
@@ -70,6 +71,7 @@ const Content = ({
     onItemRename,
     onItemShare,
     onItemPreview,
+    onItemPreviewInNewWindow,
     onSortChange,
 }: Props) => (
     <div className="bce-content">
@@ -101,6 +103,7 @@ const Content = ({
                 onItemRename={onItemRename}
                 onItemShare={onItemShare}
                 onItemPreview={onItemPreview}
+                onItemPreviewInNewWindow={onItemPreviewInNewWindow}
                 onSortChange={onSortChange}
             />
         )}

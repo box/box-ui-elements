@@ -36,6 +36,7 @@ type Props = {
     onItemDelete: Function,
     onItemDownload: Function,
     onItemPreview: Function,
+    onItemPreviewInNewWindow: Function,
     onItemRename: Function,
     onItemSelect: Function,
     onItemShare: Function,
@@ -65,6 +66,7 @@ const ItemList = ({
     onItemRename,
     onItemShare,
     onItemPreview,
+    onItemPreviewInNewWindow,
     onSortChange,
     currentCollection,
     tableRef,
@@ -95,6 +97,7 @@ const ItemList = ({
         onItemRename,
         onItemShare,
         onItemPreview,
+        onItemPreviewInNewWindow,
         isSmall,
     );
     const isRecents: boolean = view === VIEW_RECENTS;

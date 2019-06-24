@@ -809,6 +809,21 @@ class ContentExplorer extends Component<Props, State> {
         this.select(item, this.previewCallback);
     };
 
+    previewInNewWindow = (item: BoxItem): void => {
+        const { type, id }: BoxItem = item;
+        if (type !== TYPE_FILE) {
+            return;
+        }
+
+        // Fetch the embed link using file API
+        this.api
+            .getFileAPI()
+            .getFile(id, response => window.open(response.expiring_embed_link.url), this.errorCallback, {
+                forceFetch: true,
+                fields: ['expiring_embed_link'],
+            });
+    };
+
     /**
      * Previews a file
      *
@@ -1335,6 +1350,7 @@ class ContentExplorer extends Component<Props, State> {
                             onItemRename={this.rename}
                             onItemShare={this.share}
                             onItemPreview={this.preview}
+                            onItemPreviewInNewWindow={this.previewInNewWindow}
                             onSortChange={this.sort}
                         />
                         <Footer>
