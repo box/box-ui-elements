@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import type { FieldProps } from 'formik';
 
 import PillSelectorDropdown from './PillSelectorDropdown';
@@ -94,8 +95,9 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     handleParseItems = (inputValue: string): ?Array<Option> => {
         const { field, inputParser, options } = this.props;
         const { value: selectedOptions } = field;
+        const parseItems = inputParser || noop;
 
-        return inputParser(inputValue, options, selectedOptions);
+        return parseItems(inputValue, options, selectedOptions);
     };
 
     render() {
