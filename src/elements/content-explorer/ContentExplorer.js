@@ -135,6 +135,8 @@ type State = {
     view: View,
 };
 
+type refType<T> = { current: null | T };
+
 class ContentExplorer extends Component<Props, State> {
     id: string;
 
@@ -145,6 +147,8 @@ class ContentExplorer extends Component<Props, State> {
     props: Props;
 
     table: any;
+
+    contentExplorerRef: refType<HTMLElement>;
 
     rootElement: HTMLElement;
 
