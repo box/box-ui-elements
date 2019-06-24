@@ -14,7 +14,7 @@ exports[`icons/badges/MetadataDefaultBadge should correctly render icon with spe
     <circle
       cx="8"
       cy="8"
-      fill="#e8e8e8"
+      fill="none"
       r="7.5"
       stroke="#767676"
     />
