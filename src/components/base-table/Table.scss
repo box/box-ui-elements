@@ -1,5 +1,4 @@
 @import '../../elements/common/variables';
-@import './InAppMessenger';
 @import '../../styles/variables';
 
 // Grid View
@@ -24,10 +23,6 @@ $table-header-height: 40px;
             position: fixed;
             top: $header-height + $actionbar-height;
             z-index: 1;
-
-            #{$in-app-messenger-banner-selector} & {
-                @include in-app-messenger-banner-mixin($header-height + $actionbar-height);
-            }
         }
 
         .table-body {
@@ -48,10 +43,6 @@ $table-header-height: 40px;
     &.has-filters {
         .table-header {
             top: $header-height + $actionbar-height + $actionbar-filters-height;
-
-            #{$in-app-messenger-banner-selector} & {
-                @include in-app-messenger-banner-mixin($header-height + $actionbar-height + $actionbar-filters-height);
-            }
         }
 
         .table-body {
