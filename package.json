@@ -150,7 +150,7 @@
         "@commitlint/travis-cli": "^7.2.1",
         "@hapi/address": "^2.0.0",
         "autoprefixer": "^9.4.8",
-        "axios": "^0.19.0",
+        "axios": "0.18.1",
         "babel-core": "^7.0.0-bridge.0",
         "babel-eslint": "^10.0.1",
         "babel-jest": "^24.5.0",
@@ -262,7 +262,7 @@
     },
     "peerDependencies": {
         "@hapi/address": "^2.0.0",
-        "axios": "^0.19.0",
+        "axios": "^0.18.1",
         "classnames": "^2.2.5",
         "draft-js": "^0.10.1",
         "filesize": "^4.1.2",
