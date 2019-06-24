@@ -43,6 +43,7 @@ type State = {
 class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     static defaultProps = {
         dropdownRenderer: defaultDropdownRenderer,
+        inputParser: mapInputValuesToOptions,
         isCustomInputAllowed: true,
         isDisabled: false,
         options: [],
@@ -94,10 +95,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         const { field, inputParser, options } = this.props;
         const { value: selectedOptions } = field;
 
-        if (inputParser) {
-            return inputParser(inputValue, options, selectedOptions);
-        }
-        return mapInputValuesToOptions(inputValue, options, selectedOptions);
+        return inputParser(inputValue, options, selectedOptions);
     };
 
     render() {

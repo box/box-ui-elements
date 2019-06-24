@@ -167,7 +167,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
         test('should call default parser when inputParser is not provided', () => {
             const field = { value: [options[0]] };
-            const wrapper = getWrapper({ inputParser: null, options, field });
+            const wrapper = getWrapper({ inputParser: undefined, options, field });
 
             wrapper.instance().handleParseItems('abc');
 
