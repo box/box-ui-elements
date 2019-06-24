@@ -28,6 +28,8 @@ type Props = {
     disabled: boolean,
     /** Index at which to insert a divider */
     dividerIndex?: number,
+    /** A CSS selector matching the element to use as a boundary when auto-scrolling dropdown elements into view. When not provided, boundary will be determined by scrollIntoView utility function */
+    dropdownScrollBoundarySelector?: string,
     /** Error message */
     error?: React.Node,
     /** Passed in by `SelectorDropdown` for accessibility */
@@ -226,6 +228,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             className,
             disabled,
             dividerIndex,
+            dropdownScrollBoundarySelector,
             error,
             inputProps,
             label,
@@ -248,6 +251,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                 onEnter={this.handleEnter}
                 onSelect={this.handleSelect}
                 overlayTitle={overlayTitle}
+                scrollBoundarySelector={dropdownScrollBoundarySelector}
                 shouldSetActiveItemOnOpen={shouldSetActiveItemOnOpen}
                 selector={
                     <Label text={label}>

@@ -16,6 +16,8 @@ type Props = FieldProps & {
     dropdownFilter?: (options: Array<Option>, selectedValues: Array<Option>, inputText: string) => Array<Option>,
     /** Given options, renders the dropdown list. Defaults to defaultDropdownRenderer. */
     dropdownRenderer: (options: Array<Option>) => React.Node,
+    /** A CSS selector matching the element to use as a boundary when auto-scrolling dropdown elements into view. When not provided, boundary will be determined by scrollIntoView utility function */
+    dropdownScrollBoundarySelector?: string,
     /** Function to parse user input into an array of items. Defaults to CSV parser. */
     inputParser?: (inputValue: string, options: Array<Option>, selectedOptions: Array<Option>) => Array<Option>,
     /** If true, the user can add pills not included in the dropdown options. Defaults to true. */
@@ -104,6 +106,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
             className,
             dropdownFilter,
             dropdownRenderer,
+            dropdownScrollBoundarySelector,
             field,
             form,
             isCustomInputAllowed,
@@ -128,6 +131,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
                 allowInvalidPills
                 className={className}
                 disabled={isDisabled}
+                dropdownScrollBoundarySelector={dropdownScrollBoundarySelector}
                 inputProps={inputProps}
                 label={label}
                 error={error}

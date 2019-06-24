@@ -29,6 +29,8 @@ type Props = {
     onSelect?: Function,
     /** Optional title of the overlay */
     overlayTitle?: string,
+    /** A CSS selector matching the element to use as a boundary when auto-scrolling dropdown elements into view. When not provided, boundary will be determined by scrollIntoView utility function */
+    scrollBoundarySelector?: string,
     /** Component containing an input text field and takes `inputProps` to spread onto the input element */
     selector: React.Element<any>,
     /** Boolean to indicate whether the dropdown should scroll */
@@ -89,10 +91,21 @@ class SelectorDropdown extends React.Component<Props, State> {
     };
 
     setActiveItemID = (id: string | null) => {
+        const { scrollBoundarySelector } = this.props;
         const itemEl = id ? document.getElementById(id) : null;
 
+        const scrollOptions = {
+            block: 'nearest',
+        };
+
+        // Allow null in case we want to clear the default
+        // boundary from scrollIntoView
+        if (typeof scrollBoundarySelector !== 'undefined') {
+            scrollOptions.boundary = document.querySelector(scrollBoundarySelector);
+        }
+
         this.setState({ activeItemID: id }, () => {
-            scrollIntoView(itemEl, { block: 'nearest', boundary: null });
+            scrollIntoView(itemEl, scrollOptions);
         });
     };
 
