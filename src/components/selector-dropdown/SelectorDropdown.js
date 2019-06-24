@@ -94,7 +94,7 @@ class SelectorDropdown extends React.Component<Props, State> {
         const { scrollBoundarySelector } = this.props;
         const itemEl = id ? document.getElementById(id) : null;
 
-        const scrollOptions = {
+        const scrollOptions: Object = {
             block: 'nearest',
         };
 
