@@ -1,0 +1,311 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-explorer/ContentExplorer render() should render correctly with default props 1`] = `
+<ContentExplorer
+  apiHost="https://api.box.com"
+  appHost="https://app.box.com"
+  autoFocus={false}
+  canCreateNewFolder={true}
+  canDelete={true}
+  canDownload={true}
+  canPreview={true}
+  canRename={true}
+  canSetShareAccess={true}
+  canShare={true}
+  canUpload={true}
+  className=""
+  contentPreviewProps={
+    Object {
+      "contentSidebarProps": Object {},
+    }
+  }
+  defaultView="files"
+  initialPage={1}
+  initialPageSize={50}
+  onCreate={[Function]}
+  onDelete={[Function]}
+  onDownload={[Function]}
+  onNavigate={[Function]}
+  onPreview={[Function]}
+  onRename={[Function]}
+  onSelect={[Function]}
+  onUpload={[Function]}
+  rootFolderId="0"
+  sortBy="name"
+  sortDirection="ASC"
+  staticHost="https://cdn01.boxcdn.net"
+  uploadHost="https://upload.box.com"
+>
+  <Internationalize>
+    <div
+      className="be bce"
+      data-testid="content-explorer"
+      id="bce_2"
+    >
+      <div
+        className="be-app-element"
+        onKeyDown={[Function]}
+        tabIndex={0}
+      >
+        <mock-header
+          onSearch={[Function]}
+          searchQuery=""
+          view="folder"
+        />
+        <mock-subheader
+          canCreateNewFolder={false}
+          canUpload={false}
+          currentCollection={
+            Object {
+              "percentLoaded": 0,
+            }
+          }
+          isGridView={false}
+          onCreate={[Function]}
+          onGridViewSwitch={[Function]}
+          onItemClick={[Function]}
+          onSortChange={[Function]}
+          onUpload={[Function]}
+          rootId="0"
+          rootName=""
+          view="folder"
+        />
+        <mock-content
+          canDelete={true}
+          canDownload={true}
+          canPreview={true}
+          canRename={true}
+          canSetShareAccess={true}
+          canShare={true}
+          currentCollection={
+            Object {
+              "percentLoaded": 0,
+            }
+          }
+          focusedRow={0}
+          isGridView={false}
+          onItemClick={[Function]}
+          onItemDelete={[Function]}
+          onItemDownload={[Function]}
+          onItemPreview={[Function]}
+          onItemRename={[Function]}
+          onItemSelect={[Function]}
+          onItemShare={[Function]}
+          onSortChange={[Function]}
+          rootElement={
+            <div
+              class="be bce"
+              data-testid="content-explorer"
+              id="bce_2"
+            >
+              <div
+                class="be-app-element"
+                tabindex="0"
+              >
+                <mock-header
+                  searchquery=""
+                  view="folder"
+                />
+                <mock-subheader
+                  cancreatenewfolder="false"
+                  canupload="false"
+                  currentcollection="[object Object]"
+                  isgridview="false"
+                  rootid="0"
+                  rootname=""
+                  view="folder"
+                />
+                <mock-content
+                  candelete="true"
+                  candownload="true"
+                  canpreview="true"
+                  canrename="true"
+                  cansetshareaccess="true"
+                  canshare="true"
+                  currentcollection="[object Object]"
+                  focusedrow="0"
+                  isgridview="false"
+                  rootelement="[object HTMLDivElement]"
+                  rootid="0"
+                  view="folder"
+                />
+                <footer
+                  class="bce-footer"
+                />
+              </div>
+            </div>
+          }
+          rootId="0"
+          tableRef={[Function]}
+          view="folder"
+        />
+        <Footer>
+          <footer
+            className="bce-footer"
+          >
+            <Pagination
+              onChange={[Function]}
+              pageSize={50}
+            />
+          </footer>
+        </Footer>
+      </div>
+    </div>
+  </Internationalize>
+</ContentExplorer>
+`;
+
+exports[`elements/content-explorer/ContentExplorer render() should render correctly with no permissions 1`] = `
+<ContentExplorer
+  apiHost="https://api.box.com"
+  appHost="https://app.box.com"
+  autoFocus={false}
+  canCreateNewFolder={false}
+  canDelete={false}
+  canDownload={false}
+  canPreview={false}
+  canRename={false}
+  canSetShareAccess={false}
+  canShare={false}
+  canUpload={false}
+  className=""
+  contentPreviewProps={
+    Object {
+      "contentSidebarProps": Object {},
+    }
+  }
+  defaultView="files"
+  initialPage={1}
+  initialPageSize={50}
+  onCreate={[Function]}
+  onDelete={[Function]}
+  onDownload={[Function]}
+  onNavigate={[Function]}
+  onPreview={[Function]}
+  onRename={[Function]}
+  onSelect={[Function]}
+  onUpload={[Function]}
+  rootFolderId="0"
+  sortBy="name"
+  sortDirection="ASC"
+  staticHost="https://cdn01.boxcdn.net"
+  uploadHost="https://upload.box.com"
+>
+  <Internationalize>
+    <div
+      className="be bce"
+      data-testid="content-explorer"
+      id="bce_3"
+    >
+      <div
+        className="be-app-element"
+        onKeyDown={[Function]}
+        tabIndex={0}
+      >
+        <mock-header
+          onSearch={[Function]}
+          searchQuery=""
+          view="folder"
+        />
+        <mock-subheader
+          canCreateNewFolder={false}
+          canUpload={false}
+          currentCollection={
+            Object {
+              "percentLoaded": 0,
+            }
+          }
+          isGridView={false}
+          onCreate={[Function]}
+          onGridViewSwitch={[Function]}
+          onItemClick={[Function]}
+          onSortChange={[Function]}
+          onUpload={[Function]}
+          rootId="0"
+          rootName=""
+          view="folder"
+        />
+        <mock-content
+          canDelete={false}
+          canDownload={false}
+          canPreview={false}
+          canRename={false}
+          canSetShareAccess={false}
+          canShare={false}
+          currentCollection={
+            Object {
+              "percentLoaded": 0,
+            }
+          }
+          focusedRow={0}
+          isGridView={false}
+          onItemClick={[Function]}
+          onItemDelete={[Function]}
+          onItemDownload={[Function]}
+          onItemPreview={[Function]}
+          onItemRename={[Function]}
+          onItemSelect={[Function]}
+          onItemShare={[Function]}
+          onSortChange={[Function]}
+          rootElement={
+            <div
+              class="be bce"
+              data-testid="content-explorer"
+              id="bce_3"
+            >
+              <div
+                class="be-app-element"
+                tabindex="0"
+              >
+                <mock-header
+                  searchquery=""
+                  view="folder"
+                />
+                <mock-subheader
+                  cancreatenewfolder="false"
+                  canupload="false"
+                  currentcollection="[object Object]"
+                  isgridview="false"
+                  rootid="0"
+                  rootname=""
+                  view="folder"
+                />
+                <mock-content
+                  candelete="false"
+                  candownload="false"
+                  canpreview="false"
+                  canrename="false"
+                  cansetshareaccess="false"
+                  canshare="false"
+                  currentcollection="[object Object]"
+                  focusedrow="0"
+                  isgridview="false"
+                  rootelement="[object HTMLDivElement]"
+                  rootid="0"
+                  view="folder"
+                />
+                <footer
+                  class="bce-footer"
+                />
+              </div>
+            </div>
+          }
+          rootId="0"
+          tableRef={[Function]}
+          view="folder"
+        />
+        <Footer>
+          <footer
+            className="bce-footer"
+          >
+            <Pagination
+              onChange={[Function]}
+              pageSize={50}
+            />
+          </footer>
+        </Footer>
+      </div>
+    </div>
+  </Internationalize>
+</ContentExplorer>
+`;

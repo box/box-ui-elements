@@ -21,7 +21,7 @@
             .explorer3,
             .explorer4 {
                 width: 100%;
-                height: 600px;
+                height: 900px;
                 overflow: auto;
                 margin-bottom: 100px;
             }
@@ -78,6 +78,13 @@
                 const { ContentExplorer } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
+                const features = {
+                    contentExplorer: {
+                        gridView: {
+                            buttonVisible: true,
+                        },
+                    },
+                };
 
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
@@ -139,21 +146,24 @@
                             onError: error => console.log(error),
                         },
                     },
+                    features,
                 });
 
-                const explorer2 = new ContentExplorer();
-                document.querySelector('.explorer2').innerHTML = '';
-                explorer2.show(folderId, token, {
-                    container: '.explorer2',
-                    canCreateNewFolder: false,
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
-                });
+                // const explorer2 = new ContentExplorer();
+                // document.querySelector('.explorer2').innerHTML = '';
+                // explorer2.show(folderId, token, {
+                //     container: '.explorer2',
+                //     canCreateNewFolder: false,
+                //     features,
+                //     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
+                // });
 
                 const explorer3 = new ContentExplorer();
                 document.querySelector('.explorer3').innerHTML = '';
                 explorer3.show(folderId, token, {
                     container: '.explorer3',
                     canUpload: false,
+                    features,
                     logoUrl: 'box',
                 });
 
