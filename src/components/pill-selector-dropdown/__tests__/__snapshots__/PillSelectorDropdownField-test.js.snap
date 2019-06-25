@@ -17,6 +17,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   onPillCreate={[Function]}
   onRemove={[Function]}
   onSelect={[Function]}
+  parseItems={[Function]}
   placeholder=""
   selectedOptions={Array []}
   selectorOptions={
@@ -35,6 +36,8 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
       },
     ]
   }
+  shouldClearUnmatchedInput={false}
+  shouldSetActiveItemOnOpen={true}
   validator={[Function]}
 >
   <DatalistItem
@@ -72,9 +75,12 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   onPillCreate={[Function]}
   onRemove={[Function]}
   onSelect={[Function]}
+  parseItems={[Function]}
   placeholder=""
   selectedOptions={Array []}
   selectorOptions={Array []}
+  shouldClearUnmatchedInput={false}
+  shouldSetActiveItemOnOpen={true}
   validator={[Function]}
 />
 `;
@@ -96,9 +102,12 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   onPillCreate={[Function]}
   onRemove={[Function]}
   onSelect={[Function]}
+  parseItems={[Function]}
   placeholder=""
   selectedOptions={Array []}
   selectorOptions={Array []}
+  shouldClearUnmatchedInput={false}
+  shouldSetActiveItemOnOpen={true}
   validator={[Function]}
 />
 `;

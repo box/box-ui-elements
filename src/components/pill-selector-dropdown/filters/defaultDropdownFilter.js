@@ -1,6 +1,6 @@
 // @flow
 import isEqual from 'lodash/isEqual';
-import type { Option } from './flowTypes';
+import type { Option } from '../flowTypes';
 
 type Filter = (option: Option) => boolean;
 
