@@ -5,6 +5,8 @@ $bcs-AvatarGroupAvatar-avatar-size: 32px;
 
 .bcs-AvatarGroupAvatar {
     display: inline-block;
+    flex-grow: 0;
+    flex-shrink: 0;
     height: $bcs-AvatarGroupAvatar-avatar-size;
     position: relative;
     width: $bcs-AvatarGroupAvatar-avatar-size;
