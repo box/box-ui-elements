@@ -7,7 +7,6 @@ import uniqueId from 'lodash/uniqueId';
 import GridViewSlot from './GridViewSlot';
 
 import 'react-virtualized/styles.css';
-import '../virtualized-table/Table.scss';
 import './GridView.scss';
 import './GridViewSlot.scss';
 
@@ -103,7 +102,7 @@ class GridView extends React.Component<Props, State> {
 
         return (
             <Table
-                className={classNames('table', 'bdl-GridView', `bdl-GridView--columns-${columnCount}`)}
+                className={classNames('bdl-GridView', `bdl-GridView--columns-${columnCount}`)}
                 deferredMeasurementCache={this.cache}
                 disableHeader
                 height={height}
@@ -111,8 +110,8 @@ class GridView extends React.Component<Props, State> {
                 rowGetter={this.rowGetter}
                 rowHeight={this.cache.rowHeight}
                 width={width}
-                gridClassName="table-body"
-                rowClassName="table-row"
+                gridClassName="bdl-GridViw-body"
+                rowClassName="bdl-GridView-tableRow"
                 sortDirection="ASC"
                 tabIndex={null}
             >
