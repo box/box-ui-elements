@@ -7,6 +7,7 @@ slotRenderer = (slotIndex: number) => {
         const { currentCollection } = this.state;
         const { items } = currentCollection;
         return (<div> {items[slotIndex].name} </div>);
+}
 ```
 
 ### Examples
