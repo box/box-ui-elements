@@ -35,7 +35,20 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             createTask: createTaskSpy,
         });
 
-        const approvers = [{ text: 'user one', value: '123' }];
+        const approvers = [
+            {
+                id: '',
+                target: {
+                    id: 123,
+                    name: 'abc',
+                    type: 'user',
+                },
+                role: 'ASSIGNEE',
+                type: 'task_collaborator',
+                status: 'NOT_STARTED',
+                permissions: { can_delete: false, can_update: false },
+            },
+        ];
         const message = 'hey';
         const dueDate = new Date('2019-04-12');
 
@@ -83,7 +96,7 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         });
 
         expect(editTaskMock).toHaveBeenCalledWith(
-            { id, description, due_at: null },
+            { addedAssignees: [], removedAssignees: [], id, description, due_at: null },
             instance.handleSubmitSuccess,
             instance.handleSubmitError,
         );
@@ -108,7 +121,6 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         submitButton.simulate('click');
 
         expect(createTaskSpy).not.toHaveBeenCalled();
-        expect(submitButton.props()['aria-disabled']).toBe(true);
     });
 
     test('should filter out already-assigned users from assignment dropdown options', () => {
@@ -120,7 +132,20 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             createTask: jest.fn(),
         });
         wrapper.setState({
-            approvers: [{ text: 'name', value: 123 }],
+            approvers: [
+                {
+                    id: '',
+                    target: {
+                        id: 123,
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+            ],
         });
         expect(wrapper.find('PillSelectorDropdown').prop('selectorOptions').length).toBe(1);
     });
@@ -196,19 +221,74 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
 
     describe('handleApproverSelectorSelect()', () => {
         test('should update approvers when called', () => {
+            const approver = {
+                id: '',
+                target: {
+                    id: 123,
+                    name: 'abc',
+                    type: 'user',
+                },
+                role: 'ASSIGNEE',
+                type: 'task_collaborator',
+                status: 'NOT_STARTED',
+                permissions: { can_delete: false, can_update: false },
+            };
+            const newApprover = {
+                id: 234,
+                text: 'bcd',
+            };
+            const expectedNewApprover = {
+                id: '',
+                target: {
+                    id: 234,
+                    name: 'bcd',
+                    type: 'user',
+                },
+                role: 'ASSIGNEE',
+                type: 'task_collaborator',
+                status: 'NOT_STARTED',
+                permissions: { can_delete: false, can_update: false },
+            };
             const wrapper = render();
-            wrapper.setState({ approvers: [{ value: 123 }] });
-            wrapper.instance().handleApproverSelectorSelect([{ value: 234 }]);
-            expect(wrapper.state('approvers')).toEqual([{ value: 123 }, { value: 234 }]);
+            wrapper.setState({ approvers: [approver] });
+            wrapper.instance().handleApproverSelectorSelect([newApprover]);
+            expect(wrapper.state('approvers')).toEqual([approver, expectedNewApprover]);
         });
     });
 
     describe('handleApproverSelectorRemove()', () => {
         test('should update approvers when called', () => {
+            const approvers = [
+                {
+                    id: '',
+                    target: {
+                        id: 123,
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+                {
+                    id: '',
+                    target: {
+                        id: 234,
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+            ];
             const wrapper = render();
-            wrapper.setState({ approvers: [{ value: 123 }, { value: 234 }] });
-            wrapper.instance().handleApproverSelectorRemove({ value: 123 }, 0);
-            expect(wrapper.state('approvers')).toEqual([{ value: 234 }]);
+
+            wrapper.setState({ approvers });
+            wrapper.instance().handleApproverSelectorRemove(approvers[0], 0);
+            expect(wrapper.state('approvers')).toEqual([approvers[1]]);
         });
     });
 
@@ -239,6 +319,54 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             expect(wrapper.state('isLoading')).toEqual(false);
             expect(onSubmitSuccessMock).toHaveBeenCalled();
             expect(clearFormMock).toHaveBeenCalled();
+        });
+    });
+
+    describe('addResinInfo()', () => {
+        test('should set assignee added and removed information correctly', () => {
+            const approvers = [
+                {
+                    id: '123',
+                    target: {
+                        id: 123,
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+                {
+                    id: '234',
+                    target: {
+                        id: 234,
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+            ];
+            const newApprover = {
+                id: 456,
+                text: 'bcd',
+            };
+            const dueDate = new Date('2019-04-12');
+
+            const wrapper = render({ id: 12345678, editMode: TASK_EDIT_MODE_EDIT, approvers });
+            wrapper.setState({ dueDate });
+
+            // add approver
+            wrapper.instance().handleApproverSelectorSelect([newApprover]);
+
+            // remove approver
+            wrapper.instance().handleApproverSelectorRemove(approvers[0], 0);
+
+            wrapper.mount();
+            expect(wrapper.find('.bcs-task-input-controls')).toMatchSnapshot();
         });
     });
 });

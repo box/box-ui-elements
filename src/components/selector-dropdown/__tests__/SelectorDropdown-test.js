@@ -517,9 +517,25 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
         ].forEach(({ children, nextChildren }) => {
             test('should call resetActiveItem() when children have changed', () => {
                 const wrapper = renderDropdownWithChildren(children);
-                const instance = wrapper.instance();
+                const instanceMock = sandbox.mock(wrapper.instance());
 
-                sandbox.mock(instance).expects('resetActiveItem');
+                instanceMock.expects('resetActiveItem');
+                instanceMock.expects('setActiveItem').never();
+
+                wrapper.setProps({
+                    children: Children.map(nextChildren, item => <li key={item}>{item}</li>),
+                });
+            });
+
+            test('should call setActiveItem() with index 0 when children have changed and shouldSetActiveItemOnOpen is set to true', () => {
+                const wrapper = renderDropdownWithChildren(children, { shouldSetActiveItemOnOpen: true });
+                const instanceMock = sandbox.mock(wrapper.instance());
+
+                instanceMock.expects('resetActiveItem').never();
+                instanceMock
+                    .expects('setActiveItem')
+                    .once()
+                    .withArgs(0);
 
                 wrapper.setProps({
                     children: Children.map(nextChildren, item => <li key={item}>{item}</li>),
@@ -658,6 +674,24 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const instance = wrapper.instance();
             instance.openDropdown();
             expect(document.addEventListener.mock.calls.length).toBe(1);
+        });
+
+        test('should activate first item when dropdown is opened and shouldSetActiveItemOnOpen is set to true', () => {
+            const setActiveItem = jest.fn();
+            const wrapper = renderEmptyDropdown();
+            const instance = wrapper.instance();
+            instance.setActiveItem = setActiveItem;
+
+            wrapper.setProps({ shouldSetActiveItemOnOpen: false });
+            instance.openDropdown();
+            expect(setActiveItem).toHaveBeenCalledTimes(0);
+
+            instance.closeDropdown();
+
+            wrapper.setProps({ shouldSetActiveItemOnOpen: true });
+            instance.openDropdown();
+            expect(setActiveItem).toHaveBeenCalledWith(0);
+            expect(setActiveItem).toHaveBeenCalledTimes(1);
         });
     });
 

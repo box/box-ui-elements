@@ -202,7 +202,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
 
-        const checkButton = wrapper.find('.bcs-task-check-btn').hostNodes();
+        const checkButton = wrapper.find('[data-testid="complete-task"]').hostNodes();
         checkButton.simulate('click');
 
         expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 'current-user-assignment-id', 'COMPLETED');
@@ -250,5 +250,91 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         );
 
         expect(wrapper.find('CommentInlineError')).toHaveLength(1);
+    });
+
+    test('should call getAllTaskCollaborators on modal open if there is a next_marker', async () => {
+        const taskWithMarker = {
+            ...task,
+            assigned_to: {
+                next_marker: 'foo',
+                entries: [],
+            },
+        };
+
+        const wrapper = mount(
+            <Task
+                {...taskWithMarker}
+                currentUser={currentUser}
+                error={{ title: 'blah', message: 'blah' }}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+            />,
+        );
+        const instance = wrapper.instance();
+        instance.getAllTaskCollaborators = jest.fn();
+
+        await instance.handleEditClick();
+
+        expect(instance.getAllTaskCollaborators).toBeCalled();
+    });
+
+    test('should be able to toggle expanded state', () => {
+        const COUNT = 30;
+        const INITIAL_DISPLAY_COUNT = 3;
+        let assigneeList;
+
+        const taskWithThirtyAssignees = {
+            ...task,
+            assigned_to: {
+                next_marker: null,
+                entries: Array.from({ length: COUNT }, (_, idx) => ({
+                    id: `current-user-assignment-id-${idx}`,
+                    target: currentUser,
+                    status: 'NOT_STARTED',
+                    role: 'ASSIGNEE',
+                    permissions: {
+                        can_update: true,
+                        can_delete: true,
+                    },
+                    type: 'task_collaborator',
+                })),
+            },
+        };
+
+        const wrapper = mount(
+            <Task
+                currentUser={currentUser}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+                {...taskWithThirtyAssignees}
+                due_at={new Date() + 1000}
+            />,
+        );
+
+        assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
+        expect(assigneeList).toHaveLength(INITIAL_DISPLAY_COUNT);
+
+        const expandBtn = global.queryAllByTestId(wrapper, 'show-more-assignees').first();
+        expandBtn.simulate('click');
+
+        assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
+        expect(assigneeList).toHaveLength(COUNT);
+
+        const collapseBtn = global.queryAllByTestId(wrapper, 'show-less-assignees').first();
+        collapseBtn.simulate('click');
+
+        assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
+        expect(assigneeList).toHaveLength(INITIAL_DISPLAY_COUNT);
+    });
+
+    test('should call onModalClose prop when modal is closed', () => {
+        const onModalClose = jest.fn();
+
+        const wrapper = mount(<Task {...task} currentUser={currentUser} onModalClose={onModalClose} />);
+
+        const instance = wrapper.instance();
+        instance.handleModalClose();
+
+        expect(onModalClose).toBeCalled();
     });
 });

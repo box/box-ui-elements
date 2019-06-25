@@ -50,6 +50,8 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
     placeholder=""
     selectedOptions={Array []}
     selectorOptions={Array []}
+    shouldClearUnmatchedInput={false}
+    shouldSetActiveItemOnOpen={false}
     validateForError={[Function]}
     validator={[Function]}
   />

@@ -2,21 +2,20 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor } from 'react-intl';
-import BetaFeedbackBadge from '../../features/beta-feedback';
 import Modal from '../../components/modal/Modal';
 import TaskForm from './activity-feed/task-form';
 import messages from '../common/messages';
 import { TASK_EDIT_MODE_CREATE, TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
+import type { TaskType, TaskEditMode } from '../../common/types/tasks';
 
 type TaskModalProps = {
     editMode?: TaskEditMode,
     error: ?ElementsXhrError,
-    feedbackUrl: string,
     isTaskFormOpen: boolean,
     onModalClose: () => void,
     onSubmitError: (e: ElementsXhrError) => void,
-    onSubmitSuccess: () => void,
+    onSubmitSuccess: () => any,
     taskFormProps: TaskFormProps,
     taskType: TaskType,
 };
@@ -45,11 +44,9 @@ const TaskModal = (props: TaskModalProps) => {
         onSubmitSuccess,
         onModalClose,
         taskType,
-        feedbackUrl,
         isTaskFormOpen,
         taskFormProps,
     } = props;
-    // CSS selector for first form element
     // Note: Modal throws an error if this fails to find an element!
     return (
         <Modal
@@ -58,12 +55,7 @@ const TaskModal = (props: TaskModalProps) => {
             focusElementSelector={focusTargetSelector}
             isOpen={isTaskFormOpen}
             onRequestClose={onModalClose}
-            title={
-                <React.Fragment>
-                    <FormattedMessage {...getMessageForModalTitle(taskType, editMode)} />
-                    <BetaFeedbackBadge tooltip formUrl={feedbackUrl} />
-                </React.Fragment>
-            }
+            title={<FormattedMessage {...getMessageForModalTitle(taskType, editMode)} />}
         >
             <div className="be">
                 <TaskForm

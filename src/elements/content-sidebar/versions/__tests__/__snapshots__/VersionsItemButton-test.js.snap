@@ -1,46 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/versions/VersionsItemButton render should render in disabled state correctly 1`] = `
-<div
+<PlainButton
   aria-disabled={true}
-  className="bcs-is-disabled"
-  data-resin-target="versions-item-button"
+  className="bcs-VersionsItemButton bcs-is-disabled"
+  data-resin-iscurrent={false}
+  data-resin-target="select"
   data-testid="versions-item-button"
-  onClick={[Function]}
-  onKeyPress={[Function]}
-  role="button"
-  tabIndex="0"
+  getDOMRef={[Function]}
+  isDisabled={true}
+  type="button"
 >
   Test
-</div>
+</PlainButton>
 `;
 
 exports[`elements/content-sidebar/versions/VersionsItemButton render should render in enabled state correctly 1`] = `
-<div
+<PlainButton
   aria-disabled={false}
-  className=""
-  data-resin-target="versions-item-button"
+  className="bcs-VersionsItemButton"
+  data-resin-iscurrent={false}
+  data-resin-target="select"
   data-testid="versions-item-button"
-  onClick={[Function]}
-  onKeyPress={[Function]}
-  role="button"
-  tabIndex="0"
+  getDOMRef={[Function]}
+  isDisabled={false}
+  type="button"
 >
   Test
-</div>
+</PlainButton>
 `;
 
 exports[`elements/content-sidebar/versions/VersionsItemButton render should render in enabled state correctly 2`] = `
-<div
+<PlainButton
   aria-disabled={false}
-  className="bcs-is-selected"
-  data-resin-target="versions-item-button"
+  className="bcs-VersionsItemButton bcs-is-selected"
+  data-resin-iscurrent={false}
+  data-resin-target="select"
   data-testid="versions-item-button"
-  onClick={[Function]}
-  onKeyPress={[Function]}
-  role="button"
-  tabIndex="0"
+  getDOMRef={[Function]}
+  isDisabled={false}
+  type="button"
 >
   Test
-</div>
+</PlainButton>
 `;

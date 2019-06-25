@@ -1,16 +1,24 @@
 import Versions from '../Versions';
-import { PERMISSION_CAN_DELETE, PERMISSION_CAN_UPLOAD } from '../../constants';
+import { PERMISSION_CAN_DELETE, PERMISSION_CAN_UPLOAD, VERSION_RESTORE_ACTION } from '../../constants';
 import { FILE_VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
 
 let versions;
 
 describe('api/Versions', () => {
+    const currentVersion = {
+        id: 123,
+        created_at: '2018-10-02T13:00:24-07:00',
+        modified_at: '2018-10-02T13:00:24-07:00',
+        modified_by: { name: 'FooBar', id: 11 },
+        version_number: '4',
+    };
+
     const firstVersion = {
         id: 123,
         created_at: '2018-10-02T13:01:24-07:00',
         modified_at: '2018-10-02T13:01:24-07:00',
         modified_by: { name: 'Foo', id: 10 },
-        version_number: '1',
+        version_number: '2',
     };
     const deleteVersion = {
         id: 456,
@@ -30,6 +38,9 @@ describe('api/Versions', () => {
         trashed_at: null,
         version_number: '3',
     };
+
+    const nonCurrentVersions = { entries: [firstVersion, deleteVersion, restoreVersion], total_count: 3 };
+
     const file = {
         id: '12345',
         modified_at: 1111111111,
@@ -103,28 +114,6 @@ describe('api/Versions', () => {
 
             versions.successHandler(response);
             expect(versions.successCallback).toBeCalledWith(formattedResponse);
-        });
-    });
-
-    describe('addCurrentVersion()', () => {
-        test('should append the current version', () => {
-            const fileWithoutRestoredVersion = {
-                ...file,
-                restored_from: null,
-            };
-            const versionsWithCurrent = versions.addCurrentVersion(response, fileWithoutRestoredVersion);
-
-            expect(versionsWithCurrent.entries.length).toBe(response.entries.length + 1);
-            expect(versionsWithCurrent.entries.pop().id).toBe(file.file_version.id);
-        });
-
-        test('should append the current version as restored type', () => {
-            const versionsWithRestore = versions.addCurrentVersion(response, file);
-            expect(versionsWithRestore.entries.length).toBe(response.entries.length + 1);
-
-            const restoredVersion = versionsWithRestore.entries.pop();
-            expect(restoredVersion.action).toBe('restore');
-            expect(restoredVersion.created_at).toBe(file.modified_at);
         });
     });
 
@@ -209,6 +198,46 @@ describe('api/Versions', () => {
                     FILE_VERSIONS_FIELDS_TO_FETCH,
                     true,
                 );
+            });
+        });
+
+        describe('getCurrentVersion()', () => {
+            test('should return the current version information', () => {
+                const url = 'https://box.com/api/file/fileID/versions';
+                versions.getVersionUrl = jest.fn().mockReturnValue(url);
+
+                versions.getCurrentVersion(fileId, file.file_version.id, successCallback, errorCallback);
+
+                expect(versions.get).toBeCalledWith({
+                    id: fileId,
+                    successCallback,
+                    errorCallback,
+                    url,
+                    requestData: {
+                        params: {
+                            fields: FILE_VERSIONS_FIELDS_TO_FETCH.toString(),
+                        },
+                    },
+                });
+            });
+        });
+
+        describe('addCurrentVersion()', () => {
+            test('should return the other versions if no current version is provided', () => {
+                const result = versions.addCurrentVersion(null, nonCurrentVersions, file);
+                expect(result).toEqual(nonCurrentVersions);
+            });
+            test('should return the current version if no other versions are provided', () => {
+                const result = versions.addCurrentVersion(currentVersion, null, file);
+                expect(result).toEqual({ entries: [currentVersion], total_count: 1 });
+            });
+            test('should return all versions with restored info added to the current version', () => {
+                const result = versions.addCurrentVersion(currentVersion, nonCurrentVersions, file);
+                expect(result.total_count).toEqual(nonCurrentVersions.entries.length + 1);
+
+                const resultCurrentVersion = result.entries.pop();
+                expect(resultCurrentVersion.action).toEqual(VERSION_RESTORE_ACTION);
+                expect(resultCurrentVersion.version_restored).toEqual(firstVersion.version_number);
             });
         });
 

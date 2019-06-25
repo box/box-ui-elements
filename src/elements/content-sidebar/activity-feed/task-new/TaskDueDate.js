@@ -8,6 +8,9 @@ import { ReadableTime } from '../../../../components/time';
 
 import { TASK_NEW_NOT_STARTED } from '../../../../constants';
 
+import type { TaskStatus } from '../../../../common/types/tasks';
+import type { ISODate } from '../../../../common/types/core';
+
 import './TaskDueDate.scss';
 
 type Props = {

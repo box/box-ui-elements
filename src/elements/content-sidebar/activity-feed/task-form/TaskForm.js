@@ -17,9 +17,9 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import InlineError from '../../../../components/inline-error/InlineError';
 import { TASK_EDIT_MODE_CREATE, TASK_EDIT_MODE_EDIT } from '../../../../constants';
-
 import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
+import type { TaskCollabAssignee, TaskType, TaskEditMode, TaskUpdatePayload } from '../../../../common/types/tasks';
 
 import './TaskForm.scss';
 
@@ -33,7 +33,7 @@ type TaskFormProps = {|
 |};
 
 type TaskFormFieldProps = {|
-    approverSelectorContacts: SelectorItems,
+    approvers: Array<TaskCollabAssignee>,
     dueDate?: ?string,
     id: string,
     message: string,
@@ -41,6 +41,7 @@ type TaskFormFieldProps = {|
 
 type TaskFormConsumerProps = {|
     ...TaskFormFieldProps,
+    approverSelectorContacts: SelectorItems,
     className?: string,
     createTask: (
         text: string,
@@ -61,7 +62,7 @@ type Props = TaskFormProps & TaskFormConsumerProps & InjectIntlProvidedProps;
 type TaskFormFieldName = 'taskName' | 'taskAssignees' | 'taskDueDate';
 
 type State = {|
-    approvers: SelectorItems,
+    approvers: Array<TaskCollabAssignee>,
     dueDate?: ?Date,
     formValidityState: { [key: TaskFormFieldName]: ?{ code: string, message: string } },
     id: string,
@@ -70,8 +71,22 @@ type State = {|
     message: string,
 |};
 
+function convertAssigneesToSelectorItems(approvers: Array<TaskCollabAssignee>): SelectorItems {
+    return approvers.map(({ target }) => {
+        const newSelectorItem: SelectorItem = {
+            ...target,
+            item: {},
+            value: target.id,
+            text: target.name,
+        };
+
+        return newSelectorItem;
+    });
+}
+
 class TaskForm extends React.Component<Props, State> {
     static defaultProps = {
+        approvers: [],
         approverSelectorContacts: [],
         editMode: TASK_EDIT_MODE_CREATE,
         id: '',
@@ -81,10 +96,10 @@ class TaskForm extends React.Component<Props, State> {
     state = this.getInitialFormState();
 
     getInitialFormState() {
-        const { dueDate, approverSelectorContacts, id, message } = this.props;
+        const { dueDate, id, message, approvers } = this.props;
         return {
             id,
-            approvers: approverSelectorContacts,
+            approvers,
             dueDate: dueDate ? new Date(dueDate) : null,
             formValidityState: {},
             message,
@@ -147,9 +162,43 @@ class TaskForm extends React.Component<Props, State> {
         this.setState({ isLoading: false });
     };
 
+    addResinInfo = (): Object => {
+        const { id, taskType, editMode } = this.props;
+        const { dueDate } = this.state;
+        const addedAssignees = this.getAddedAssignees();
+        const removedAssignees = this.getRemovedAssignees();
+
+        return {
+            'data-resin-taskid': id,
+            'data-resin-tasktype': taskType,
+            'data-resin-isediting': editMode === TASK_EDIT_MODE_EDIT,
+            'data-resin-numassigneesadded': addedAssignees.length,
+            'data-resin-numassigneesremoved': removedAssignees.length,
+            'data-resin-assigneesadded': addedAssignees.map(assignee => assignee.target.id),
+            'data-resin-assigneesremoved': removedAssignees.map(assignee => assignee.target.id),
+            'data-resin-duedate': dueDate && dueDate.getTime(),
+        };
+    };
+
+    getAddedAssignees = (): Array<TaskCollabAssignee> => {
+        // Added assignees are the ones in state that weren't in the prop
+        const { approvers } = this.props;
+        const { approvers: currentApprovers } = this.state;
+        const approverIds = approvers.map(approver => approver.id);
+        return currentApprovers.filter(currentApprover => approverIds.indexOf(currentApprover.id) === -1);
+    };
+
+    getRemovedAssignees = (): Array<TaskCollabAssignee> => {
+        // Assignees to remove are the ones in the prop that cannot be found in state
+        const { approvers } = this.props;
+        const { approvers: currentApprovers } = this.state;
+        const currentApproverIds = currentApprovers.map(currentApprover => currentApprover.id);
+        return approvers.filter(approver => currentApproverIds.indexOf(approver.id) === -1);
+    };
+
     handleValidSubmit = (): void => {
         const { id, createTask, editTask, editMode, taskType } = this.props;
-        const { message, approvers, dueDate, isValid } = this.state;
+        const { message, approvers: currentApprovers, dueDate, isValid } = this.state;
         const dueDateString = dueDate && dueDate.toISOString();
 
         if (!isValid) return;
@@ -162,12 +211,21 @@ class TaskForm extends React.Component<Props, State> {
                     id,
                     description: message,
                     due_at: dueDateString,
+                    addedAssignees: convertAssigneesToSelectorItems(this.getAddedAssignees()),
+                    removedAssignees: this.getRemovedAssignees(),
                 },
                 this.handleSubmitSuccess,
                 this.handleSubmitError,
             );
         } else {
-            createTask(message, approvers, taskType, dueDateString, this.handleSubmitSuccess, this.handleSubmitError);
+            createTask(
+                message,
+                convertAssigneesToSelectorItems(currentApprovers),
+                taskType,
+                dueDateString,
+                this.handleSubmitSuccess,
+                this.handleSubmitError,
+            );
         }
     };
 
@@ -189,8 +247,26 @@ class TaskForm extends React.Component<Props, State> {
         getApproverWithQuery(value);
     };
 
-    handleApproverSelectorSelect = (pills: any): void => {
-        this.setState({ approvers: this.state.approvers.concat(pills) });
+    handleApproverSelectorSelect = (pills: Array<any>): void => {
+        this.setState({
+            approvers: this.state.approvers.concat(
+                pills.map(pill => {
+                    return {
+                        id: '',
+                        target: {
+                            id: pill.id,
+                            name: pill.text,
+                            type: 'user',
+                        },
+                        role: 'ASSIGNEE',
+                        type: 'task_collaborator',
+                        status: 'NOT_STARTED',
+                        permissions: { can_delete: false, can_update: false },
+                    };
+                }),
+            ),
+        });
+
         this.validateForm('taskAssignees');
     };
 
@@ -213,14 +289,15 @@ class TaskForm extends React.Component<Props, State> {
 
     render() {
         const { approverSelectorContacts, className, error, isDisabled, intl, editMode } = this.props;
-        const { dueDate, approvers, message, formValidityState, isLoading, isValid } = this.state;
+        const { dueDate, approvers, message, formValidityState, isLoading } = this.state;
         const inputContainerClassNames = classNames('bcs-task-input-container', 'bcs-task-input-is-open', className);
         const isCreateEditMode = editMode === TASK_EDIT_MODE_CREATE;
+        const renderApprovers = convertAssigneesToSelectorItems(approvers);
 
         // filter out selected approvers
         // map to datalist item format
         const approverOptions = approverSelectorContacts
-            .filter(({ id }) => !approvers.find(({ value }) => value === id))
+            .filter(({ id }) => !renderApprovers.find(({ value }) => value === id))
             .map(({ id, item }) => ({ ...item, text: item.name, value: id }));
 
         const pillSelectorOverlayClasses = classNames({
@@ -234,7 +311,7 @@ class TaskForm extends React.Component<Props, State> {
         const taskErrorMessage = isCreateEditMode ? messages.taskCreateErrorMessage : messages.taskUpdateErrorMessage;
 
         return (
-            <div className={inputContainerClassNames}>
+            <div className={inputContainerClassNames} data-resin-component="taskform">
                 <div className="bcs-task-input-form-container">
                     {error ? (
                         <InlineError title={<FormattedMessage {...messages.taskCreateErrorTitle} />}>
@@ -249,7 +326,7 @@ class TaskForm extends React.Component<Props, State> {
                         <PillSelectorDropdown
                             className={pillSelectorOverlayClasses}
                             error={this.getErrorByFieldname('taskAssignees')}
-                            disabled={isLoading || !isCreateEditMode}
+                            disabled={isLoading}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
@@ -259,7 +336,7 @@ class TaskForm extends React.Component<Props, State> {
                             onRemove={this.handleApproverSelectorRemove}
                             onSelect={this.handleApproverSelectorSelect}
                             placeholder={intl.formatMessage(messages.approvalAddAssignee)}
-                            selectedOptions={approvers}
+                            selectedOptions={renderApprovers}
                             selectorOptions={approverOptions}
                             validateForError={() => this.validateForm('taskAssignees')}
                         >
@@ -310,6 +387,7 @@ class TaskForm extends React.Component<Props, State> {
                                 onClick={this.handleCancelClick}
                                 isDisabled={isLoading}
                                 type="button"
+                                {...this.addResinInfo()}
                             >
                                 <FormattedMessage {...messages.tasksAddTaskFormCancelLabel} />
                             </Button>
@@ -317,8 +395,9 @@ class TaskForm extends React.Component<Props, State> {
                                 className="bcs-task-input-submit-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
                                 data-testid="task-form-submit-button"
-                                isDisabled={!isValid || isLoading}
+                                isDisabled={isLoading}
                                 isLoading={isLoading}
+                                {...this.addResinInfo()}
                             >
                                 <FormattedMessage {...submitButtonMessage} />
                             </PrimaryButton>

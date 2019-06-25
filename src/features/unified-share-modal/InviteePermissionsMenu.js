@@ -8,7 +8,7 @@ import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
 import { Menu, SelectMenuItem } from '../../components/menu';
 import Tooltip from '../../components/tooltip';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
-import type { itemType as ItemType } from '../../common/box-types';
+import type { ItemType } from '../../common/types/core';
 
 import getDefaultPermissionLevel from './utils/defaultPermissionLevel';
 import InviteePermissionsLabel from './InviteePermissionsLabel';

@@ -5,30 +5,35 @@
  */
 
 import * as React from 'react';
+import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { withRouter } from 'react-router-dom';
-import type { RouterHistory } from 'react-router-dom';
+import { Route, type Location } from 'react-router-dom';
 import IconNavigateLeft from '../../../icons/general/IconNavigateLeft';
 import messages from '../messages';
 import PlainButton from '../../../components/plain-button';
 import './BackButton.scss';
 
 type Props = {
-    history: RouterHistory,
-    path?: string,
+    className?: string,
+    to?: Location,
 };
 
-const BackButton = ({ history, path }: Props) => (
-    <PlainButton
-        className="bdl-BackButton"
-        onClick={() => (path ? history.push(path) : history.goBack())}
-        type="button"
-    >
-        <IconNavigateLeft height={24} width={24} />
-        <span className="accessibility-hidden">
-            <FormattedMessage {...messages.back} />
-        </span>
-    </PlainButton>
+const BackButton = ({ className, to, ...rest }: Props) => (
+    <Route>
+        {({ history }) => (
+            <PlainButton
+                className={classNames('bdl-BackButton', className)}
+                onClick={() => (to ? history.push(to) : history.goBack())}
+                type="button"
+                {...rest}
+            >
+                <IconNavigateLeft height={24} width={24} />
+                <span className="accessibility-hidden">
+                    <FormattedMessage {...messages.back} />
+                </span>
+            </PlainButton>
+        )}
+    </Route>
 );
 
-export default withRouter(BackButton);
+export default BackButton;

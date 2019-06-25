@@ -30,7 +30,8 @@
 /i18n/                                      @box/webapp
 
 # Features
-/src/elements/content-sidebar/activity-feed/task-new/  @box/collab @box/ui-elements-extended @box/ui-elements
-/src/elements/content-sidebar/activity-feed/task/      @box/collab @box/ui-elements-extended @box/ui-elements
-/src/elements/content-sidebar/activity-feed/comment/   @box/collab @box/ui-elements-extended @box/ui-elements
-/src/api/tasks/                                        @box/collab @box/ui-elements-extended @box/ui-elements
+/src/elements/content-sidebar/activity-feed/task-new/   @box/collab @box/ui-elements-extended
+/src/elements/content-sidebar/activity-feed/task-form/  @box/collab @box/ui-elements-extended
+/src/elements/content-sidebar/activity-feed/task/       @box/collab @box/ui-elements-extended
+/src/elements/content-sidebar/activity-feed/comment/    @box/collab @box/ui-elements-extended
+/src/api/tasks/                                         @box/collab @box/ui-elements-extended

@@ -1,5 +1,5 @@
 // @flow
-import type { itemType } from '../../common/box-types';
+import type { ItemType } from '../../common/types/core';
 import * as constants from './constants';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
@@ -55,7 +55,7 @@ export type item = {
     hideCollaborators: boolean,
     id: number,
     name: string,
-    type: itemType,
+    type: ItemType,
     typedID: string,
 };
 

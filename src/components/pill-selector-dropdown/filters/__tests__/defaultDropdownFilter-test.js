@@ -1,6 +1,6 @@
 import defaultDropdownFilter from '../defaultDropdownFilter';
 
-describe('components/pill-selector-dropdown/defaultDropdownFilter', () => {
+describe('components/pill-selector-dropdown/filters/defaultDropdownFilter', () => {
     const options = [
         { displayText: 'value1', value: 'value1' },
         { displayText: 'value11', value: 'value11' },
