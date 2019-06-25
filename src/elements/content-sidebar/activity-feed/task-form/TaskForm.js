@@ -162,8 +162,42 @@ class TaskForm extends React.Component<Props, State> {
         this.setState({ isLoading: false });
     };
 
+    addResinInfo = (): Object => {
+        const { id, taskType, editMode } = this.props;
+        const { dueDate } = this.state;
+        const addedAssignees = this.getAddedAssignees();
+        const removedAssignees = this.getRemovedAssignees();
+
+        return {
+            'data-resin-taskid': id,
+            'data-resin-tasktype': taskType,
+            'data-resin-isediting': editMode === TASK_EDIT_MODE_EDIT,
+            'data-resin-numassigneesadded': addedAssignees.length,
+            'data-resin-numassigneesremoved': removedAssignees.length,
+            'data-resin-assigneesadded': addedAssignees.map(assignee => assignee.target.id),
+            'data-resin-assigneesremoved': removedAssignees.map(assignee => assignee.target.id),
+            'data-resin-duedate': dueDate && dueDate.getTime(),
+        };
+    };
+
+    getAddedAssignees = (): Array<TaskCollabAssignee> => {
+        // Added assignees are the ones in state that weren't in the prop
+        const { approvers } = this.props;
+        const { approvers: currentApprovers } = this.state;
+        const approverIds = approvers.map(approver => approver.id);
+        return currentApprovers.filter(currentApprover => approverIds.indexOf(currentApprover.id) === -1);
+    };
+
+    getRemovedAssignees = (): Array<TaskCollabAssignee> => {
+        // Assignees to remove are the ones in the prop that cannot be found in state
+        const { approvers } = this.props;
+        const { approvers: currentApprovers } = this.state;
+        const currentApproverIds = currentApprovers.map(currentApprover => currentApprover.id);
+        return approvers.filter(approver => currentApproverIds.indexOf(approver.id) === -1);
+    };
+
     handleValidSubmit = (): void => {
-        const { id, createTask, approvers, editTask, editMode, taskType } = this.props;
+        const { id, createTask, editTask, editMode, taskType } = this.props;
         const { message, approvers: currentApprovers, dueDate, isValid } = this.state;
         const dueDateString = dueDate && dueDate.toISOString();
 
@@ -172,20 +206,13 @@ class TaskForm extends React.Component<Props, State> {
         this.setState({ isLoading: true });
 
         if (editMode === TASK_EDIT_MODE_EDIT && editTask) {
-            // Added assignees are the ones in state that weren't in the prop
-            // Assignees to remove are the ones in the prop that cannot be found in state
-            const approverIds = approvers.map(approver => approver.id);
-            const currentApproverIds = currentApprovers.map(currentApprover => currentApprover.id);
-
             editTask(
                 {
                     id,
                     description: message,
                     due_at: dueDateString,
-                    addedAssignees: convertAssigneesToSelectorItems(
-                        currentApprovers.filter(currentApprover => approverIds.indexOf(currentApprover.id) === -1),
-                    ),
-                    removedAssignees: approvers.filter(approver => currentApproverIds.indexOf(approver.id) === -1),
+                    addedAssignees: convertAssigneesToSelectorItems(this.getAddedAssignees()),
+                    removedAssignees: this.getRemovedAssignees(),
                 },
                 this.handleSubmitSuccess,
                 this.handleSubmitError,
@@ -360,6 +387,7 @@ class TaskForm extends React.Component<Props, State> {
                                 onClick={this.handleCancelClick}
                                 isDisabled={isLoading}
                                 type="button"
+                                {...this.addResinInfo()}
                             >
                                 <FormattedMessage {...messages.tasksAddTaskFormCancelLabel} />
                             </Button>
@@ -369,6 +397,7 @@ class TaskForm extends React.Component<Props, State> {
                                 data-testid="task-form-submit-button"
                                 isDisabled={isLoading}
                                 isLoading={isLoading}
+                                {...this.addResinInfo()}
                             >
                                 <FormattedMessage {...submitButtonMessage} />
                             </PrimaryButton>

@@ -321,4 +321,52 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             expect(clearFormMock).toHaveBeenCalled();
         });
     });
+
+    describe('addResinInfo()', () => {
+        test('should set assignee added and removed information correctly', () => {
+            const approvers = [
+                {
+                    id: '123',
+                    target: {
+                        id: 123,
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+                {
+                    id: '234',
+                    target: {
+                        id: 234,
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+            ];
+            const newApprover = {
+                id: 456,
+                text: 'bcd',
+            };
+            const dueDate = new Date('2019-04-12');
+
+            const wrapper = render({ id: 12345678, editMode: TASK_EDIT_MODE_EDIT, approvers });
+            wrapper.setState({ dueDate });
+
+            // add approver
+            wrapper.instance().handleApproverSelectorSelect([newApprover]);
+
+            // remove approver
+            wrapper.instance().handleApproverSelectorRemove(approvers[0], 0);
+
+            wrapper.mount();
+            expect(wrapper.find('.bcs-task-input-controls')).toMatchSnapshot();
+        });
+    });
 });
