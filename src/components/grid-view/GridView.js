@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
-import { Column } from 'react-virtualized/dist/es/Table';
+import Table, { Column } from 'react-virtualized/dist/es/Table';
 import uniqueId from 'lodash/uniqueId';
-
-import VirtualizedTable from '../virtualized-table/VirtualizedTable';
-
 import GridViewSlot from './GridViewSlot';
 
+import 'react-virtualized/styles.css';
+import '../virtualized-table/Table.scss';
 import './GridView.scss';
 import './GridViewSlot.scss';
 
@@ -102,8 +102,8 @@ class GridView extends React.Component<Props, State> {
         const rowCount = Math.ceil(count / columnCount);
 
         return (
-            <VirtualizedTable
-                className={`bdl-GridView bdl-GridView--columns-${columnCount}`}
+            <Table
+                className={classNames('table', 'bdl-GridView', `bdl-GridView--columns-${columnCount}`)}
                 deferredMeasurementCache={this.cache}
                 disableHeader
                 height={height}
@@ -111,9 +111,13 @@ class GridView extends React.Component<Props, State> {
                 rowGetter={this.rowGetter}
                 rowHeight={this.cache.rowHeight}
                 width={width}
+                gridClassName="table-body"
+                rowClassName="table-row"
+                sortDirection="ASC"
+                tabIndex={null}
             >
                 <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />
-            </VirtualizedTable>
+            </Table>
         );
     }
 }
