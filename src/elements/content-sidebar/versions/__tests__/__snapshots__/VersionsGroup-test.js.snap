@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/versions/VersionsGroup render should match its snapshot when group is PRIOR_MONTH 1`] = `
+<section
+  className="bcs-VersionsGroup"
+>
+  <h1
+    className="bcs-VersionsGroup-heading"
+  >
+    <FormattedDate
+      month="long"
+      value="2019-06-20T20:00:00.000Z"
+    />
+  </h1>
+  <VersionsList
+    versions={
+      Array [
+        Object {
+          "created_at": "2019-06-20T20:00:00.000Z",
+        },
+      ]
+    }
+  />
+</section>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsGroup render should match its snapshot when group is PRIOR_WEEK 1`] = `
+<section
+  className="bcs-VersionsGroup"
+>
+  <h1
+    className="bcs-VersionsGroup-heading"
+  >
+    <FormattedMessage
+      defaultMessage="Last Week"
+      id="be.sidebarVersions.priorWeek"
+    />
+  </h1>
+  <VersionsList
+    versions={
+      Array [
+        Object {
+          "created_at": "2019-06-20T20:00:00.000Z",
+        },
+      ]
+    }
+  />
+</section>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsGroup render should match its snapshot when group is PRIOR_YEAR 1`] = `
+<section
+  className="bcs-VersionsGroup"
+>
+  <h1
+    className="bcs-VersionsGroup-heading"
+  >
+    <FormattedDate
+      value="2019-06-20T20:00:00.000Z"
+      year="numeric"
+    />
+  </h1>
+  <VersionsList
+    versions={
+      Array [
+        Object {
+          "created_at": "2019-06-20T20:00:00.000Z",
+        },
+      ]
+    }
+  />
+</section>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsGroup render should match its snapshot when group is THIS_MONTH 1`] = `
+<section
+  className="bcs-VersionsGroup"
+>
+  <h1
+    className="bcs-VersionsGroup-heading"
+  >
+    <FormattedMessage
+      defaultMessage="This Month"
+      id="be.sidebarVersions.thisMonth"
+    />
+  </h1>
+  <VersionsList
+    versions={
+      Array [
+        Object {
+          "created_at": "2019-06-20T20:00:00.000Z",
+        },
+      ]
+    }
+  />
+</section>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsGroup render should match its snapshot when group is TODAY 1`] = `
+<section
+  className="bcs-VersionsGroup"
+>
+  <h1
+    className="bcs-VersionsGroup-heading"
+  >
+    <FormattedMessage
+      defaultMessage="Today"
+      id="be.sidebarVersions.today"
+    />
+  </h1>
+  <VersionsList
+    versions={
+      Array [
+        Object {
+          "created_at": "2019-06-20T20:00:00.000Z",
+        },
+      ]
+    }
+  />
+</section>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsGroup render should match its snapshot when group is WEEKDAY 1`] = `
+<section
+  className="bcs-VersionsGroup"
+>
+  <h1
+    className="bcs-VersionsGroup-heading"
+  >
+    <FormattedDate
+      value="2019-06-20T20:00:00.000Z"
+      weekday="long"
+    />
+  </h1>
+  <VersionsList
+    versions={
+      Array [
+        Object {
+          "created_at": "2019-06-20T20:00:00.000Z",
+        },
+      ]
+    }
+  />
+</section>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsGroup render should match its snapshot when group is YESTERDAY 1`] = `
+<section
+  className="bcs-VersionsGroup"
+>
+  <h1
+    className="bcs-VersionsGroup-heading"
+  >
+    <FormattedMessage
+      defaultMessage="Yesterday"
+      id="be.sidebarVersions.yesterday"
+    />
+  </h1>
+  <VersionsList
+    versions={
+      Array [
+        Object {
+          "created_at": "2019-06-20T20:00:00.000Z",
+        },
+      ]
+    }
+  />
+</section>
+`;
