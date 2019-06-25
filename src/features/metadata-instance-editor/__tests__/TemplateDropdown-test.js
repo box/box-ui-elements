@@ -229,24 +229,24 @@ describe('features/metadata-instance-editor/fields/', () => {
     });
 
     test('onOpen()', () => {
-        const onMenuToggle = jest.fn();
-        const wrapper = getWrapper({ onMenuToggle, templates: [], usedTemplates: [] });
+        const onDropdownToggle = jest.fn();
+        const wrapper = getWrapper({ onDropdownToggle, templates: [], usedTemplates: [] });
 
         wrapper.instance().onOpen();
 
-        expect(onMenuToggle).toHaveBeenCalledWith(true);
+        expect(onDropdownToggle).toHaveBeenCalledWith(true);
         expect(wrapper.state('isDropdownOpen')).toBe(true);
         expect(wrapper.state('filterText')).toBe('');
         expect(wrapper.state('templates')).toEqual([]);
     });
 
     test('onClose()', () => {
-        const onMenuToggle = jest.fn();
-        const wrapper = getWrapper({ onMenuToggle, templates: [], usedTemplates: [] });
+        const onDropdownToggle = jest.fn();
+        const wrapper = getWrapper({ onDropdownToggle, templates: [], usedTemplates: [] });
 
         wrapper.instance().onClose();
 
-        expect(onMenuToggle).toHaveBeenCalledWith(false);
+        expect(onDropdownToggle).toHaveBeenCalledWith(false);
         expect(wrapper.state('isDropdownOpen')).toBe(false);
     });
 });
