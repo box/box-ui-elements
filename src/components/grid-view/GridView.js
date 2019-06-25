@@ -4,7 +4,7 @@ import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellM
 import { Column } from 'react-virtualized/dist/es/Table';
 import uniqueId from 'lodash/uniqueId';
 
-import BaseTable from '../base-table/BaseTable';
+import VirtualizedTable from '../virtualized-table/VirtualizedTable';
 
 import GridViewSlot from './GridViewSlot';
 
@@ -102,7 +102,7 @@ class GridView extends React.Component<Props, State> {
         const rowCount = Math.ceil(count / columnCount);
 
         return (
-            <BaseTable
+            <VirtualizedTable
                 className={`bdl-GridView bdl-GridView--columns-${columnCount}`}
                 deferredMeasurementCache={this.cache}
                 disableHeader
@@ -113,7 +113,7 @@ class GridView extends React.Component<Props, State> {
                 width={width}
             >
                 <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />
-            </BaseTable>
+            </VirtualizedTable>
         );
     }
 }

@@ -28,7 +28,7 @@ type Props = {
     width: number,
 };
 
-const BaseTable = pure(
+const VirtualizedTable = pure(
     ({
         autoHeight = false,
         children,
@@ -93,5 +93,5 @@ const BaseTable = pure(
     },
 );
 
-BaseTable.displayName = 'BaseTable';
-export default BaseTable;
+VirtualizedTable.displayName = 'VirtualizedTable';
+export default VirtualizedTable;
