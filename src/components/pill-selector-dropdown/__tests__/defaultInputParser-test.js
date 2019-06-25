@@ -1,6 +1,6 @@
-import mapInputValuesToOptions from '../mapInputValuesToOptions';
+import defaultInputParser from '../defaultInputParser';
 
-describe('components/pill-selector-dropdown/mapInputValuesToOptions', () => {
+describe('components/pill-selector-dropdown/defaultInputParser', () => {
     let options;
 
     beforeEach(() => {
@@ -26,7 +26,7 @@ describe('components/pill-selector-dropdown/mapInputValuesToOptions', () => {
 
     test('should replace manual input tokens with matching options when available', () => {
         const inputValue = 'China,japan,no match';
-        const mappedOptions = mapInputValuesToOptions(inputValue, options, []);
+        const mappedOptions = defaultInputParser(inputValue, options, []);
 
         expect(mappedOptions).toStrictEqual([
             {
@@ -48,7 +48,7 @@ describe('components/pill-selector-dropdown/mapInputValuesToOptions', () => {
         let mappedOptions;
         let inputValue = 'Korea';
 
-        mappedOptions = mapInputValuesToOptions(inputValue, options, []);
+        mappedOptions = defaultInputParser(inputValue, options, []);
         expect(mappedOptions).toEqual([
             {
                 value: 'Korea',
@@ -57,7 +57,7 @@ describe('components/pill-selector-dropdown/mapInputValuesToOptions', () => {
         ]);
 
         inputValue = 'jApAn';
-        mappedOptions = mapInputValuesToOptions(inputValue, options, []);
+        mappedOptions = defaultInputParser(inputValue, options, []);
         expect(mappedOptions).toStrictEqual([
             {
                 value: 'JP',
@@ -68,7 +68,7 @@ describe('components/pill-selector-dropdown/mapInputValuesToOptions', () => {
 
     test('should map manual input items that have an exact, case insensitive match with option values', () => {
         const inputValue = 'cn,jp';
-        const mappedOptions = mapInputValuesToOptions(inputValue, options, []);
+        const mappedOptions = defaultInputParser(inputValue, options, []);
 
         expect(mappedOptions).toEqual([
             {
@@ -84,7 +84,7 @@ describe('components/pill-selector-dropdown/mapInputValuesToOptions', () => {
 
     test('should match equivalent item names without comma', () => {
         const inputValue = 'Korea Republic of';
-        const mappedOptions = mapInputValuesToOptions(inputValue, options, []);
+        const mappedOptions = defaultInputParser(inputValue, options, []);
 
         expect(mappedOptions).toEqual([
             {
@@ -96,7 +96,7 @@ describe('components/pill-selector-dropdown/mapInputValuesToOptions', () => {
 
     test('should match equivalent item names without whitespace', () => {
         const inputValue = 'americansamoa';
-        const mappedOptions = mapInputValuesToOptions(inputValue, options, []);
+        const mappedOptions = defaultInputParser(inputValue, options, []);
 
         expect(mappedOptions).toEqual([
             {
@@ -108,7 +108,7 @@ describe('components/pill-selector-dropdown/mapInputValuesToOptions', () => {
 
     test('should filter out duplicate entries', () => {
         const inputValue = 'japan,Japan';
-        const mappedOptions = mapInputValuesToOptions(inputValue, options, []);
+        const mappedOptions = defaultInputParser(inputValue, options, []);
 
         expect(mappedOptions).toEqual([
             {
@@ -130,7 +130,7 @@ describe('components/pill-selector-dropdown/mapInputValuesToOptions', () => {
                 displayText: 'Japan',
             },
         ];
-        const mappedOptions = mapInputValuesToOptions(inputValue, options, selectedOptions);
+        const mappedOptions = defaultInputParser(inputValue, options, selectedOptions);
 
         expect(mappedOptions).toEqual([
             {

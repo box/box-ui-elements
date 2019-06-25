@@ -7,7 +7,7 @@ import type { FieldProps } from 'formik';
 import PillSelectorDropdown from './PillSelectorDropdown';
 import defaultDropdownRenderer from './defaultDropdownRenderer';
 import defaultDropdownFilter from './filters/defaultDropdownFilter';
-import mapInputValuesToOptions from './mapInputValuesToOptions';
+import defaultInputParser from './defaultInputParser';
 import type { Option, OptionValue } from './flowTypes';
 
 type Props = FieldProps & {
@@ -44,7 +44,7 @@ type State = {
 class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     static defaultProps = {
         dropdownRenderer: defaultDropdownRenderer,
-        inputParser: mapInputValuesToOptions,
+        inputParser: defaultInputParser,
         isCustomInputAllowed: true,
         isDisabled: false,
         options: [],

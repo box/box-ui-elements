@@ -12,11 +12,7 @@ import type { Option } from './flowTypes';
 // property. If a token does not match displayText, the parser will also try to match
 // the string representation of the value property. This last match is useful for country
 // codes and other similar use cases.
-function mapInputValuesToOptions(
-    inputValue: string,
-    options: Array<Option>,
-    selectedOptions: Array<Option>,
-): Array<Option> {
+function defaultInputParser(inputValue: string, options: Array<Option>, selectedOptions: Array<Option>): Array<Option> {
     let mappedOptions;
     const inputTokens = parseCSV(inputValue);
 
@@ -47,4 +43,4 @@ function mapInputValuesToOptions(
     return mappedOptions;
 }
 
-export default mapInputValuesToOptions;
+export default defaultInputParser;

@@ -1,10 +1,10 @@
 // @flow
 
 import React from 'react';
-import mapInputValuesToOptions from '../mapInputValuesToOptions';
+import defaultInputParser from '../defaultInputParser';
 import PillSelectorDropdownField from '../PillSelectorDropdownField';
 
-jest.mock('../mapInputValuesToOptions', () => jest.fn());
+jest.mock('../defaultInputParser', () => jest.fn());
 
 describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
     const getWrapper = props => shallow(<PillSelectorDropdownField field={{}} form={{}} {...props} />);
@@ -171,8 +171,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
             wrapper.instance().handleParseItems('abc');
 
-            expect(mapInputValuesToOptions).toHaveBeenCalledTimes(1);
-            expect(mapInputValuesToOptions).toHaveBeenCalledWith('abc', options, field.value);
+            expect(defaultInputParser).toHaveBeenCalledTimes(1);
+            expect(defaultInputParser).toHaveBeenCalledWith('abc', options, field.value);
         });
 
         test('should call inputParser with inputValue, options and selectedOptions', () => {
