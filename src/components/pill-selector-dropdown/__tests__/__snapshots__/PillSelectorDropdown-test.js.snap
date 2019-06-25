@@ -28,5 +28,6 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should 
       />
     </Label>
   }
+  shouldSetActiveItemOnOpen={false}
 />
 `;

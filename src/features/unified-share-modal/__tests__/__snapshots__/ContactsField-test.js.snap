@@ -95,6 +95,8 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       },
     ]
   }
+  shouldClearUnmatchedInput={false}
+  shouldSetActiveItemOnOpen={false}
   validateForError={[MockFunction]}
   validator={[MockFunction]}
 >
@@ -204,6 +206,8 @@ exports[`features/unified-share-modal/ContactsField render should render default
     ]
   }
   selectorOptions={Array []}
+  shouldClearUnmatchedInput={false}
+  shouldSetActiveItemOnOpen={false}
   validateForError={[MockFunction]}
   validator={[MockFunction]}
 />

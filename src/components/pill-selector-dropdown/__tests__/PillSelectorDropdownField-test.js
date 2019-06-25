@@ -1,7 +1,10 @@
 // @flow
 
 import React from 'react';
+import defaultInputParser from '../defaultInputParser';
 import PillSelectorDropdownField from '../PillSelectorDropdownField';
+
+jest.mock('../defaultInputParser', () => jest.fn());
 
 describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
     const getWrapper = props => shallow(<PillSelectorDropdownField field={{}} form={{}} {...props} />);
@@ -147,6 +150,40 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
             instance.forceUpdate();
             wrapper.prop('onRemove')();
             expect(instance.handleRemove).toHaveBeenCalled();
+        });
+    });
+
+    describe('handleParseItems()', () => {
+        const options = [
+            {
+                displayText: 'displayText1',
+                value: 'value1',
+            },
+            {
+                displayText: 'displayText2',
+                value: 'value2',
+            },
+        ];
+
+        test('should call default parser when inputParser is not provided', () => {
+            const field = { value: [options[0]] };
+            const wrapper = getWrapper({ inputParser: undefined, options, field });
+
+            wrapper.instance().handleParseItems('abc');
+
+            expect(defaultInputParser).toHaveBeenCalledTimes(1);
+            expect(defaultInputParser).toHaveBeenCalledWith('abc', options, field.value);
+        });
+
+        test('should call inputParser with inputValue, options and selectedOptions', () => {
+            const inputParser = jest.fn();
+            const field = { value: [options[0]] };
+            const wrapper = getWrapper({ inputParser, options, field });
+
+            wrapper.instance().handleParseItems('abc');
+
+            expect(inputParser).toHaveBeenCalledTimes(1);
+            expect(inputParser).toHaveBeenCalledWith('abc', options, field.value);
         });
     });
 

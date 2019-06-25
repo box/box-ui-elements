@@ -176,6 +176,49 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 { displayText: 'hello@gmail.com', text: 'hello@gmail.com', value: 'hello@gmail.com' },
             ]);
         });
+
+        test('should not map pills to options when custom parser returns array of objects', () => {
+            const wrapper = shallow(
+                <PillSelectorDropdown
+                    allowInvalidPills
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    onSelect={onSelectStub}
+                />,
+            );
+            wrapper.setState({ inputValue: 'a,b' });
+
+            const { parsePills } = wrapper.instance();
+            const stringParser = input => input.split(',');
+            const optionParser = input =>
+                input.split(',').map(token => ({
+                    customProp: token,
+                }));
+
+            wrapper.setProps({ parseItems: stringParser });
+            expect(parsePills()).toStrictEqual([
+                {
+                    displayText: 'a',
+                    text: 'a',
+                    value: 'a',
+                },
+                {
+                    displayText: 'b',
+                    text: 'b',
+                    value: 'b',
+                },
+            ]);
+
+            wrapper.setProps({ parseItems: optionParser });
+            expect(parsePills()).toStrictEqual([
+                {
+                    customProp: 'a',
+                },
+                {
+                    customProp: 'b',
+                },
+            ]);
+        });
     });
 
     describe('addPillsFromInput', () => {
@@ -308,6 +351,33 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 .returns(pills);
 
             instance.addPillsFromInput();
+        });
+
+        test('should clear unmatched input after attempting to add pills when shouldClearUnmatchedInput is set to true', () => {
+            const wrapper = shallow(
+                <PillSelectorDropdown
+                    allowCustomPills
+                    onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
+                    onSelect={sandbox.mock().never()}
+                />,
+            );
+            const onInput = jest.fn();
+            const { addPillsFromInput } = wrapper.instance();
+
+            wrapper.setProps({ onInput, parseItems: () => [] });
+            wrapper.setState({ inputValue: 'abc' });
+
+            wrapper.setProps({ shouldClearUnmatchedInput: false });
+            addPillsFromInput();
+            expect(wrapper.state().inputValue).toBe('abc');
+            expect(onInput).toHaveBeenCalledTimes(0);
+
+            wrapper.setProps({ shouldClearUnmatchedInput: true });
+            addPillsFromInput();
+            expect(wrapper.state().inputValue).toBe('');
+            expect(onInput).toHaveBeenCalledWith('');
+            expect(onInput).toHaveBeenCalledTimes(1);
         });
     });
 

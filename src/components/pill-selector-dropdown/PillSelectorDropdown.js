@@ -28,6 +28,8 @@ type Props = {
     disabled: boolean,
     /** Index at which to insert a divider */
     dividerIndex?: number,
+    /** A CSS selector matching the element to use as a boundary when auto-scrolling dropdown elements into view. When not provided, boundary will be determined by scrollIntoView utility function */
+    dropdownScrollBoundarySelector?: string,
     /** Error message */
     error?: React.Node,
     /** Passed in by `SelectorDropdown` for accessibility */
@@ -56,6 +58,10 @@ type Props = {
     selectedOptions: SelectedOptions,
     /** Array or Immutable list with data for the dropdown options to select */
     selectorOptions: Array<Object> | List<Object>,
+    /** Determines whether or not input text is cleared automatically when it does not result in new pills being added */
+    shouldClearUnmatchedInput?: boolean,
+    /** Determines whether or not the first item is highlighted automatically when the dropdown opens */
+    shouldSetActiveItemOnOpen?: boolean,
     /** Array of suggested collaborators */
     suggestedPillsData?: Array<Object>,
     /** String decribes the datapoint to filter by so that items in the form are not shown in suggestions. */
@@ -86,6 +92,8 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         placeholder: '',
         selectedOptions: [],
         selectorOptions: [],
+        shouldClearUnmatchedInput: false,
+        shouldSetActiveItemOnOpen: false,
         validator: () => true,
     };
 
@@ -104,15 +112,27 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             pills = pills.filter(pill => validator(pill));
         }
 
-        return pills.map(pill => ({
-            displayText: pill,
-            text: pill, // deprecated, left for backwards compatibility
-            value: pill,
-        }));
+        const normalizedPills = pills.map(pill =>
+            typeof pill === 'string'
+                ? {
+                      displayText: pill,
+                      text: pill, // deprecated, left for backwards compatibility
+                      value: pill,
+                  }
+                : pill,
+        );
+        return normalizedPills;
     };
 
     addPillsFromInput = () => {
-        const { allowCustomPills, onInput, onPillCreate, onSelect, selectedOptions, validateForError } = this.props;
+        const {
+            allowCustomPills,
+            onPillCreate,
+            onSelect,
+            selectedOptions,
+            shouldClearUnmatchedInput,
+            validateForError,
+        } = this.props;
         const { inputValue } = this.state;
 
         // Do nothing if custom pills are not allowed
@@ -128,15 +148,18 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             onSelect(pills);
             onPillCreate(pills);
 
-            // Reset inputValue
-            this.setState({ inputValue: '' });
-            onInput('');
-        } else if (validateForError && (inputValue !== '' || selectedOptions.length === 0)) {
-            /**
-             * If no pills were added, but an inputValue exists or
-             * there are no pills selected, check for errors
-             */
-            validateForError(inputValue);
+            this.resetInputValue();
+        } else {
+            if (validateForError && (inputValue !== '' || selectedOptions.length === 0)) {
+                /**
+                 * If no pills were added, but an inputValue exists or
+                 * there are no pills selected, check for errors
+                 */
+                validateForError(inputValue);
+            }
+            if (shouldClearUnmatchedInput) {
+                this.resetInputValue();
+            }
         }
     };
 
@@ -191,6 +214,13 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         this.setState({ isInCompositionMode: false });
     };
 
+    resetInputValue = () => {
+        const { onInput } = this.props;
+
+        this.setState({ inputValue: '' });
+        onInput('');
+    };
+
     render() {
         const {
             allowInvalidPills,
@@ -198,6 +228,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             className,
             disabled,
             dividerIndex,
+            dropdownScrollBoundarySelector,
             error,
             inputProps,
             label,
@@ -209,6 +240,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
+            shouldSetActiveItemOnOpen,
             validator,
         } = this.props;
 
@@ -219,6 +251,8 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                 onEnter={this.handleEnter}
                 onSelect={this.handleSelect}
                 overlayTitle={overlayTitle}
+                scrollBoundarySelector={dropdownScrollBoundarySelector}
+                shouldSetActiveItemOnOpen={shouldSetActiveItemOnOpen}
                 selector={
                     <Label text={label}>
                         <PillSelector
