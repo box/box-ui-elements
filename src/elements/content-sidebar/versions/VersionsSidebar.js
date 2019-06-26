@@ -20,6 +20,8 @@ type Props = {
     fileId: string,
     isLoading: boolean,
     parentName: string,
+    versionCount: number,
+    versionLimit: number,
     versions: Array<BoxItemVersion>,
 };
 
