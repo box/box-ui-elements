@@ -1,14 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/versions/VersionsList render should match its snapshot 1`] = `
-<div
-  className="bcs-VersionsList bcs-is-empty"
->
-  <FormattedMessage
-    defaultMessage="No prior versions are available for this file."
-    id="be.sidebarVersions.empty"
-  />
-</div>
+<ul
+  className="bcs-VersionsList"
+/>
 `;
 
 exports[`elements/content-sidebar/versions/VersionsList render should match its snapshot 2`] = `

@@ -32,6 +32,15 @@ const ISO8601_MEDIUM_FMT: 6 = 6;
 const ISO8601_LONG_FMT: 7 = 7;
 
 /**
+ * Helper to normalize a date value to a date object
+ * @param dateValue - Date number, string, or object
+ * @returns {date} the normalized date object
+ */
+function convertToDate(dateValue: number | string | Date): Date {
+    return dateValue instanceof Date ? dateValue : new Date(dateValue);
+}
+
+/**
  * Converts an integer value in seconds to milliseconds.
  * @param {number} seconds - The value in seconds
  * @returns {number} the value in milliseconds
@@ -42,44 +51,47 @@ function convertToMs(seconds: number): number {
 
 /**
  * Checks whether the given date value (in unix milliseconds) is today.
- * @param {number|Date} dateValue - Date object or integer representing the number of milliseconds since 1/1/1970 UTC
+ * @param {number|string|Date} dateValue - Date object or integer representing the number of milliseconds since 1/1/1970 UTC
  * @returns {boolean} whether the given value is today
  */
-function isToday(dateValue: number | Date): boolean {
-    const currentDate = new Date();
-    const date = dateValue instanceof Date ? dateValue : new Date(dateValue);
-    return currentDate.toDateString() === date.toDateString();
+function isToday(dateValue: number | string | Date): boolean {
+    return new Date().toDateString() === convertToDate(dateValue).toDateString();
 }
 
 /**
  * Checks whether the given date value (in unix milliseconds) is yesterday.
- * @param {number} dateValue - Date object or integer or representing the number of milliseconds since 1/1/1970 UTC
- * @returns {boolean} wether the given value is yesterday
+ * @param {number|string|Date} dateValue - Date object or integer or representing the number of milliseconds since 1/1/1970 UTC
+ * @returns {boolean} whether the given value is yesterday
  */
-function isYesterday(dateValue: number | Date): boolean {
-    const date = dateValue instanceof Date ? dateValue.getTime() : dateValue;
-    return isToday(date + MILLISECONDS_PER_DAY);
+function isYesterday(dateValue: number | string | Date): boolean {
+    return isToday(convertToDate(dateValue).getTime() + MILLISECONDS_PER_DAY);
 }
 
 /**
  * Checks whether the given date value (in unix milliseconds) is tomorrow.
- * @param {number} dateValue - Date object or integer or representing the number of milliseconds since 1/1/1970 UTC
+ * @param {number|string|Date} dateValue - Date object or integer or representing the number of milliseconds since 1/1/1970 UTC
  * @returns {boolean} whether the given value is tomorrow
  */
-function isTomorrow(dateValue: number | Date): boolean {
-    const date = dateValue instanceof Date ? dateValue.getTime() : dateValue;
-    return isToday(date - MILLISECONDS_PER_DAY);
+function isTomorrow(dateValue: number | string | Date): boolean {
+    return isToday(convertToDate(dateValue).getTime() - MILLISECONDS_PER_DAY);
+}
+
+/**
+ * Checks whether the given date value (in unix milliseconds) is in the current month.
+ * @param {number|string|Date} dateValue - Date object or integer representing the number of milliseconds since 1/1/1970 UTC
+ * @returns {boolean} whether the given value is in the current month
+ */
+function isCurrentMonth(dateValue: number | string | Date): boolean {
+    return new Date().getMonth() === convertToDate(dateValue).getMonth();
 }
 
 /**
  * Checks whether the given date value (in unix milliseconds) is in the current year.
- * @param {number|Date} dateValue - Date object or integer representing the number of milliseconds since 1/1/1970 UTC
+ * @param {number|string|Date} dateValue - Date object or integer representing the number of milliseconds since 1/1/1970 UTC
  * @returns {boolean} whether the given value is in the current year
  */
-function isCurrentYear(dateValue: number | Date): boolean {
-    const currentDate = new Date();
-    const date = dateValue instanceof Date ? dateValue : new Date(dateValue);
-    return currentDate.getFullYear() === date.getFullYear();
+function isCurrentYear(dateValue: number | string | Date): boolean {
+    return new Date().getFullYear() === convertToDate(dateValue).getFullYear();
 }
 
 /**
@@ -227,6 +239,7 @@ function convertISOStringToUTCDate(isoString: string): Date {
 }
 
 export {
+    convertToDate,
     convertToMs,
     convertDateToUnixMidnightTime,
     convertISOStringToUTCDate,
@@ -235,6 +248,7 @@ export {
     isTomorrow,
     isValidDate,
     isYesterday,
+    isCurrentMonth,
     isCurrentYear,
     formatTime,
     addTime,
