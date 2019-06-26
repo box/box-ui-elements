@@ -30,13 +30,11 @@ type Props = {
     width: number,
 };
 
-type State = {};
-
 type RowGetterParams = {
     index: number,
 };
 
-class GridView extends React.Component<Props, State> {
+class GridView extends React.Component<Props> {
     cache = new CellMeasurerCache({
         defaultHeight: 300,
         defaultWidth: 400,
@@ -110,10 +108,9 @@ class GridView extends React.Component<Props, State> {
                 rowGetter={this.rowGetter}
                 rowHeight={this.cache.rowHeight}
                 width={width}
-                gridClassName="bdl-GridViw-body"
+                gridClassName="bdl-GridView-body"
                 rowClassName="bdl-GridView-tableRow"
                 sortDirection="ASC"
-                tabIndex={null}
             >
                 <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />
             </Table>
