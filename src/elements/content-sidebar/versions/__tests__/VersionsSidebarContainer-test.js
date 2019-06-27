@@ -158,6 +158,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             expect(wrapper.state()).toEqual({
                 error: message,
                 isLoading: false,
+                isWatermarked: false,
                 versionCount: 0,
                 versionLimit: Infinity,
                 versions: [],
@@ -166,16 +167,24 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     });
 
     describe('handleFetchSuccess', () => {
-        test('should set state with the updated versions', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            const file = { id: '12345', permissions: {}, version_limit: 10 };
-            const version = { id: '123', permissions: {} };
-            const currentVersion = { entries: [{ id: '321', permissions: {} }], total_count: 1 };
-            const versionsWithCurrent = { entries: [version, ...currentVersion.entries], total_count: 2 };
+        let file;
+        let version;
+        let currentVersion;
+        let versionsWithCurrent;
+
+        beforeEach(() => {
+            file = { id: '12345', permissions: {}, version_limit: 10 };
+            version = { id: '123', permissions: {} };
+            currentVersion = { entries: [{ id: '321', permissions: {} }], total_count: 1 };
+            versionsWithCurrent = { entries: [version, ...currentVersion.entries], total_count: 2 };
 
             versionsAPI.addPermissions.mockReturnValueOnce(versionsWithCurrent);
             versionsAPI.sortVersions.mockReturnValueOnce(versionsWithCurrent);
+        });
+
+        test('should set state with the updated versions', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
 
             instance.verifyVersion = jest.fn();
             instance.handleFetchSuccess([file, versionsWithCurrent]);
@@ -183,10 +192,25 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             expect(instance.verifyVersion).toBeCalled();
             expect(versionsAPI.addPermissions).toBeCalledWith(versionsWithCurrent, file);
             expect(versionsAPI.sortVersions).toBeCalledWith(versionsWithCurrent);
-            expect(wrapper.state('error')).toBeUndefined();
-            expect(wrapper.state('isLoading')).toBe(false);
-            expect(wrapper.state('versionLimit')).toBe(10);
+            expect(wrapper.state()).toMatchObject({
+                error: undefined,
+                isLoading: false,
+                isWatermarked: false,
+                versionCount: 2,
+                versionLimit: 10,
+            });
             expect(wrapper.state('versions')).toBe(versionsWithCurrent.entries);
+        });
+
+        test('should set state with isWatermarked if file is watermarked', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const testFile = { ...file, watermark_info: { is_watermarked: true } };
+
+            instance.verifyVersion = jest.fn();
+            instance.handleFetchSuccess([testFile, versionsWithCurrent]);
+
+            expect(wrapper.state('isWatermarked')).toBe(true);
         });
     });
 
