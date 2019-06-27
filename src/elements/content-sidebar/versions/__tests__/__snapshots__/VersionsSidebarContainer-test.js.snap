@@ -4,6 +4,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer render shoul
 <VersionsSidebar
   fileId="12345"
   isLoading={true}
+  isWatermarked={false}
   onDelete={[Function]}
   onDownload={[Function]}
   onPreview={[Function]}
