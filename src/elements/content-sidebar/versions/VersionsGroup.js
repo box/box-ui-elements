@@ -14,7 +14,9 @@ import './VersionsGroup.scss';
 type Props = {
     currentId: string,
     fileId: string,
+    versionCount: number,
     versionGroup: string,
+    versionLimit: number,
     versions: Array<BoxItemVersion>,
 };
 
