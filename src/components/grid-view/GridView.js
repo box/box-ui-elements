@@ -21,7 +21,6 @@ type TableCellRendererParams = {
 
 type Props = {
     columnCount: number,
-    count: number,
     currentCollection: Collection,
     height: number,
     onItemClick: Function,
@@ -54,7 +53,8 @@ class GridView extends React.Component<Props> {
     }
 
     cellRenderer = ({ dataKey, parent, rowIndex }: TableCellRendererParams) => {
-        const { columnCount, count, currentCollection, slotRenderer, onItemSelect } = this.props;
+        const { columnCount, currentCollection, slotRenderer, onItemSelect } = this.props;
+        const count = currentCollection.items ? currentCollection.items.length : 0;
         const contents = [];
 
         const startingIndex = rowIndex * columnCount;
@@ -95,7 +95,8 @@ class GridView extends React.Component<Props> {
     };
 
     render() {
-        const { columnCount, count, height, width } = this.props;
+        const { columnCount, currentCollection, height, width } = this.props;
+        const count = currentCollection.items ? currentCollection.items.length : 0;
         const rowCount = Math.ceil(count / columnCount);
 
         return (

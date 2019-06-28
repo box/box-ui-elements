@@ -8,7 +8,6 @@ describe('components/grid-view/GridView', () => {
         const wrapper = shallow(
             <GridView
                 columnCount={5}
-                count={collection.items.length}
                 currentCollection={collection}
                 height={600}
                 onItemClick={() => {}}
