@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
-import { Column } from 'react-virtualized/dist/es/Table';
+import Table, { Column } from 'react-virtualized/dist/es/Table';
 import uniqueId from 'lodash/uniqueId';
-
-import VirtualizedTable from '../virtualized-table/VirtualizedTable';
-
+import getProp from 'lodash/get';
 import GridViewSlot from './GridViewSlot';
 
+import 'react-virtualized/styles.css';
 import './GridView.scss';
 import './GridViewSlot.scss';
 
@@ -22,7 +22,6 @@ type TableCellRendererParams = {
 
 type Props = {
     columnCount: number,
-    count: number,
     currentCollection: Collection,
     height: number,
     onItemClick: Function,
@@ -31,13 +30,11 @@ type Props = {
     width: number,
 };
 
-type State = {};
-
 type RowGetterParams = {
     index: number,
 };
 
-class GridView extends React.Component<Props, State> {
+class GridView extends React.Component<Props> {
     cache = new CellMeasurerCache({
         defaultHeight: 300,
         defaultWidth: 400,
@@ -57,7 +54,8 @@ class GridView extends React.Component<Props, State> {
     }
 
     cellRenderer = ({ dataKey, parent, rowIndex }: TableCellRendererParams) => {
-        const { columnCount, count, currentCollection, slotRenderer, onItemSelect } = this.props;
+        const { columnCount, currentCollection, slotRenderer, onItemSelect } = this.props;
+        const count = getProp(currentCollection, 'items.length', 0);
         const contents = [];
 
         const startingIndex = rowIndex * columnCount;
@@ -98,12 +96,13 @@ class GridView extends React.Component<Props, State> {
     };
 
     render() {
-        const { columnCount, count, height, width } = this.props;
+        const { columnCount, currentCollection, height, width } = this.props;
+        const count = getProp(currentCollection, 'items.length', 0);
         const rowCount = Math.ceil(count / columnCount);
 
         return (
-            <VirtualizedTable
-                className={`bdl-GridView bdl-GridView--columns-${columnCount}`}
+            <Table
+                className={classNames('bdl-GridView', `bdl-GridView--columns-${columnCount}`)}
                 deferredMeasurementCache={this.cache}
                 disableHeader
                 height={height}
@@ -111,9 +110,12 @@ class GridView extends React.Component<Props, State> {
                 rowGetter={this.rowGetter}
                 rowHeight={this.cache.rowHeight}
                 width={width}
+                gridClassName="bdl-GridView-body"
+                rowClassName="bdl-GridView-tableRow"
+                sortDirection="ASC"
             >
                 <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />
-            </VirtualizedTable>
+            </Table>
         );
     }
 }
