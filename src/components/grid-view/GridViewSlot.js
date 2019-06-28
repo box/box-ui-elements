@@ -8,7 +8,7 @@ type Props = {
 
 function GridViewSlot({ slotIndex, slotRenderer }: Props) {
     if (!slotRenderer) {
-        return <div className="bdl-GridViewSlot-blank" />;
+        return <div className="bdl-GridViewSlot--blank" />;
     }
 
     return <div className="bdl-GridViewSlot">{slotRenderer(slotIndex)}</div>;
