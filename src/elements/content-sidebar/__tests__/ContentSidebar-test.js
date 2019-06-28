@@ -201,7 +201,7 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             instance.fetchMetadata();
 
             expect(SidebarUtils.canHaveMetadataSidebar).toBeCalledWith(instance.props);
-            expect(getMetadataAPI).toBeCalledWith(true);
+            expect(getMetadataAPI).toBeCalledWith(false);
             expect(getMetadata).toBeCalledWith(file, instance.fetchMetadataSuccessCallback, noop, false);
         });
 
