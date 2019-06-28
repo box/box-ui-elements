@@ -67,8 +67,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
       className="bcs-VersionsItem-badge"
     >
       <VersionsItemBadge
-        isDisabled={true}
-        versionNumber={1}
+        versionNumber="1"
       />
     </div>
     <div
@@ -146,8 +145,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
       className="bcs-VersionsItem-badge"
     >
       <VersionsItemBadge
-        isDisabled={false}
-        versionNumber={1}
+        versionNumber="1"
       />
     </div>
     <div

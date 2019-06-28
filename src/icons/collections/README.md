@@ -5,6 +5,8 @@ const IconsExample = require('../../../examples/src/IconsExample').default;
 const IconCollections = require('./IconCollections').default;
 const IconCollectionsFilled = require('./IconCollectionsFilled').default;
 const IconCollectionsAdd = require('./IconCollectionsAdd').default;
+const IconCollectionsStar = require('./IconCollectionsStar').default;
+const IconCollectionsBolt = require('./IconCollectionsBolt').default;
 
 const icons = [
     {
@@ -18,6 +20,14 @@ const icons = [
     {
         name: 'IconCollectionsAdd',
         component: IconCollectionsAdd,
+    },
+     {
+        name: 'IconCollectionsStar',
+        component: IconCollectionsStar,
+    },
+     {
+        name: 'IconCollectionsBolt',
+        component: IconCollectionsBolt,
     },
 ];
 

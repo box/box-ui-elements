@@ -28,6 +28,15 @@
         border-color: transparent;
         cursor: default;
         pointer-events: none;
+
+        .bcs-VersionsItemBadge {
+            background-color: $bdl-gray-05;
+        }
+
+        .bcs-VersionsItemBadge,
+        .bcs-VersionsItem-current {
+            color: inherit;
+        }
     }
 
     &.bcs-is-selected {

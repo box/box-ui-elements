@@ -108,6 +108,7 @@ export const FIELD_WATERMARK_INFO = 'watermark_info';
 export const FIELD_AUTHENTICATED_DOWNLOAD_URL = 'authenticated_download_url';
 export const FIELD_FILE_VERSION = 'file_version';
 export const FIELD_IS_DOWNLOAD_AVAILABLE = 'is_download_available';
+export const FIELD_VERSION_LIMIT = 'version_limit';
 export const FIELD_VERSION_NUMBER = 'version_number';
 export const FIELD_METADATA = 'metadata';
 export const FIELD_METADATA_SKILLS = `${FIELD_METADATA}.${METADATA_SCOPE_GLOBAL}.${METADATA_TEMPLATE_SKILLS}`;

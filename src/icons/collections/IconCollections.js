@@ -9,24 +9,14 @@ type Props = {
     className?: string,
     color?: string,
     height?: number,
-    selected?: boolean,
     /** A text-only string describing the icon if it's not purely decorative for accessibility */
     title?: string | React.Element<any>,
     width?: number,
 };
 
-const IconCollections = ({
-    className = '',
-    color = bdlNeutral03,
-    height = 32,
-    selected = false,
-    title,
-    width = 32,
-}: Props) => (
+const IconCollections = ({ className = '', color = bdlNeutral03, height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
-        className={classNames('bdl-IconCollections', className, {
-            'is-selected': selected,
-        })}
+        className={classNames('bdl-IconCollections', className)}
         height={height}
         title={title}
         viewBox="0 0 32 32"

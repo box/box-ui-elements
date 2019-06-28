@@ -19,14 +19,17 @@ import './VersionsItem.scss';
 
 type Props = {
     fileId: string,
-    isCurrent: boolean,
-    isSelected: boolean,
+    isCurrent?: boolean,
+    isSelected?: boolean,
+    isWatermarked?: boolean,
     onDelete?: VersionActionCallback,
     onDownload?: VersionActionCallback,
     onPreview?: VersionActionCallback,
     onPromote?: VersionActionCallback,
     onRestore?: VersionActionCallback,
     version: BoxItemVersion,
+    versionCount: number,
+    versionLimit: number,
 };
 
 const ACTION_MAP = {
@@ -42,12 +45,15 @@ const VersionsItem = ({
     fileId,
     isCurrent = false,
     isSelected = false,
+    isWatermarked = false,
     onDelete,
     onDownload,
     onPreview,
     onPromote,
     onRestore,
     version,
+    versionCount,
+    versionLimit,
 }: Props) => {
     const {
         action = VERSION_UPLOAD_ACTION,
@@ -59,14 +65,18 @@ const VersionsItem = ({
         size,
         version_number: versionNumber,
     } = version;
-    const isDeleted = action === VERSION_DELETE_ACTION;
-    const isDisabled = isDeleted || !permissions.can_preview;
-    const isDownloadable = !!is_download_available;
-
     // Version info helpers
     const versionSize = sizeUtil(size);
     const versionTimestamp = createdAt && new Date(createdAt).getTime();
     const versionUserName = getProp(modifiedBy, 'name', <FormattedMessage {...messages.versionUserUnknown} />);
+    const versionInteger = versionNumber ? parseInt(versionNumber, 10) : 1;
+
+    // Version state helpers
+    const isLimited = versionCount - versionInteger >= versionLimit;
+    const isDeleted = action === VERSION_DELETE_ACTION;
+    const isRestricted = isWatermarked && !isCurrent && !permissions.can_download;
+    const isDownloadable = !!is_download_available;
+    const isPreviewable = !isDeleted && !isLimited && !isRestricted && permissions.can_preview;
 
     // Version action helper
     const handleAction = (handler?: VersionActionCallback) => (): void => {
@@ -80,12 +90,12 @@ const VersionsItem = ({
             <VersionsItemButton
                 fileId={fileId}
                 isCurrent={isCurrent}
-                isDisabled={isDisabled}
+                isDisabled={!isPreviewable}
                 isSelected={isSelected}
                 onClick={handleAction(onPreview)}
             >
                 <div className="bcs-VersionsItem-badge">
-                    <VersionsItemBadge isDisabled={isDeleted} versionNumber={versionNumber} />
+                    <VersionsItemBadge versionNumber={versionNumber} />
                 </div>
 
                 <div className="bcs-VersionsItem-details">
@@ -94,6 +104,7 @@ const VersionsItem = ({
                             <FormattedMessage {...messages.versionCurrent} />
                         </div>
                     )}
+
                     <div className="bcs-VersionsItem-log" data-testid="bcs-VersionsItem-log" title={versionUserName}>
                         <FormattedMessage {...getActionMessage(action)} values={{ name: versionUserName }} />
                     </div>
@@ -109,22 +120,30 @@ const VersionsItem = ({
                         )}
                         {!!size && <span className="bcs-VersionsItem-size">{versionSize}</span>}
                     </div>
+
+                    {isLimited && (
+                        <div className="bcs-VersionsItem-footer">
+                            <FormattedMessage {...messages.versionLimitExceeded} values={{ versionLimit }} />
+                        </div>
+                    )}
                 </div>
             </VersionsItemButton>
 
-            <VersionsItemActions
-                fileId={fileId}
-                isCurrent={isCurrent}
-                isDeleted={isDeleted}
-                isDownloadable={isDownloadable}
-                isSelected={isSelected}
-                onDelete={handleAction(onDelete)}
-                onDownload={handleAction(onDownload)}
-                onPreview={handleAction(onPreview)}
-                onPromote={handleAction(onPromote)}
-                onRestore={handleAction(onRestore)}
-                permissions={permissions}
-            />
+            {!isLimited && !isRestricted && (
+                <VersionsItemActions
+                    fileId={fileId}
+                    isCurrent={isCurrent}
+                    isDeleted={isDeleted}
+                    isDownloadable={isDownloadable}
+                    isSelected={isSelected}
+                    onDelete={handleAction(onDelete)}
+                    onDownload={handleAction(onDownload)}
+                    onPreview={handleAction(onPreview)}
+                    onPromote={handleAction(onPromote)}
+                    onRestore={handleAction(onRestore)}
+                    permissions={permissions}
+                />
+            )}
         </div>
     );
 };

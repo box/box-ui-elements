@@ -399,6 +399,7 @@ type BoxItem = {
     size?: number,
     type?: ItemType,
     url?: string,
+    version_limit?: ?number,
     version_number?: string,
 };
 

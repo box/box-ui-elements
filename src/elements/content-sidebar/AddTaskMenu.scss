@@ -14,14 +14,12 @@ $bcs-AddTaskMenu-width: 256px;
     white-space: normal;
 }
 
-.bcs-AddTaskMenu-icon {
-    margin-right: 4px;
-}
-
 .bcs-AddTaskMenu-title {
-    color: $bdl-neutral-01;
+    font-weight: 700;
 }
 
 .bcs-AddTaskMenu-description {
-    color: $bdl-neutral-02;
+    color: $bdl-gray-62;
+    font-size: 11px;
+    line-height: 14px;
 }
