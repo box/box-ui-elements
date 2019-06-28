@@ -6,6 +6,7 @@
 
 import React from 'react';
 import flow from 'lodash/flow';
+import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { generatePath, withRouter } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
@@ -28,6 +29,7 @@ type Props = {
 type State = {
     error?: string,
     isLoading: boolean,
+    isWatermarked: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
@@ -43,6 +45,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     state: State = {
         isLoading: true,
+        isWatermarked: false,
         versionCount: Infinity,
         versionLimit: Infinity,
         versions: [],
@@ -121,6 +124,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState({
             error: message,
             isLoading: false,
+            isWatermarked: false,
             versionCount: 0,
             versions: [],
         });
@@ -129,6 +133,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     handleFetchSuccess = ([fileResponse, versionsResponse]): [BoxItem, FileVersions] => {
         const { api } = this.props;
         const { version_limit } = fileResponse;
+        const isWatermarked = getProp(fileResponse, 'watermark_info.is_watermarked', false);
         const versionLimit = version_limit !== null && version_limit !== undefined ? version_limit : Infinity;
         const versionsApi = api.getVersionsAPI(false);
         const versionsWithPermissions = versionsApi.addPermissions(versionsResponse, fileResponse);
@@ -138,6 +143,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
             {
                 error: undefined,
                 isLoading: false,
+                isWatermarked,
                 versionCount: totalCount,
                 versionLimit,
 
