@@ -21,7 +21,6 @@ type Props = {
     fileId: string,
     isCurrent?: boolean,
     isSelected?: boolean,
-    isWatermarked?: boolean,
     onDelete?: VersionActionCallback,
     onDownload?: VersionActionCallback,
     onPreview?: VersionActionCallback,
@@ -45,7 +44,6 @@ const VersionsItem = ({
     fileId,
     isCurrent = false,
     isSelected = false,
-    isWatermarked = false,
     onDelete,
     onDownload,
     onPreview,
@@ -74,9 +72,8 @@ const VersionsItem = ({
     // Version state helpers
     const isLimited = versionCount - versionInteger >= versionLimit;
     const isDeleted = action === VERSION_DELETE_ACTION;
-    const isRestricted = isWatermarked && !isCurrent && !permissions.can_download;
     const isDownloadable = !!is_download_available;
-    const isPreviewable = !isDeleted && !isLimited && !isRestricted && permissions.can_preview;
+    const isPreviewable = !isDeleted && !isLimited && permissions.can_preview;
 
     // Version action helper
     const handleAction = (handler?: VersionActionCallback) => (): void => {
@@ -129,7 +126,7 @@ const VersionsItem = ({
                 </div>
             </VersionsItemButton>
 
-            {!isLimited && !isRestricted && (
+            {!isLimited && (
                 <VersionsItemActions
                     fileId={fileId}
                     isCurrent={isCurrent}
