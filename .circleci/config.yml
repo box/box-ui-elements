@@ -21,11 +21,6 @@ aliases:
       - ~/.cache/Cypress
     key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
-  - &filter-only-master
-    branches:
-      only:
-        - master
-
 defaults: &defaults
   working_directory: ~/buie
   docker:
@@ -34,7 +29,7 @@ defaults: &defaults
 
 version: 2
 jobs:
-  babel-build:
+  build:
     <<: *defaults
     steps:
       - checkout
@@ -46,16 +41,6 @@ jobs:
       - run:
           name: Babel build
           command: yarn build:ci:es
-
-  webpack-build:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore-cache: *restore-yarn-cache
-      - run: *yarn
-      - save-cache: *save-yarn-cache
-      - run: *clean
-      - run: *i18n
       - run:
           name: Webpack build
           command: yarn build:ci:dist
@@ -92,13 +77,8 @@ jobs:
 
 workflows:
   version: 2
-  build:
+  lint_test_build:
     jobs:
-      - lint:
-          filters: *filter-only-master
-      - unit-tests:
-          filters: *filter-only-master
-      - babel-build:
-          filters: *filter-only-master
-      - webpack-build:
-          filters: *filter-only-master
+      - lint
+      - unit-tests
+      - build
