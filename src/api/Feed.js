@@ -32,6 +32,15 @@ import {
     TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
 } from '../constants';
+import type {
+    TaskCollabAssignee,
+    TaskCollabStatus,
+    TaskLink,
+    TaskNew,
+    TaskType,
+    TaskPayload,
+    TaskUpdatePayload,
+} from '../common/types/tasks';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 const TASK = 'task';

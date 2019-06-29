@@ -1,14 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsItemBadge render should add a disabled class if isDisabled is true 1`] = `
-<div
-  aria-label="Version number 1"
-  class="bcs-VersionsItemBadge bcs-is-disabled"
->
-  <div />
-</div>
-`;
-
 exports[`elements/content-sidebar/versions/VersionsItemBadge render should match its snapshot 1`] = `
 <div
   aria-label="Version number 1"

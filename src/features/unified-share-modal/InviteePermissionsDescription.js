@@ -2,7 +2,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import type { itemType as ItemType } from '../../common/box-types';
+import type { ItemType } from '../../common/types/core';
 
 import { EDITOR, CO_OWNER, PREVIEWER, PREVIEWER_UPLOADER, VIEWER, VIEWER_UPLOADER, UPLOADER } from './constants';
 import messages from './messages';

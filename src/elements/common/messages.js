@@ -827,7 +827,13 @@ const messages = defineMessages({
         id: 'be.taskShowMoreAssignees',
         description:
             'Button name to expand task assignee list, additionalAssigneeCount is the number of additional task assignees that can be shown.',
-        defaultMessage: 'Show {additionalAssigneeCount} More',
+        defaultMessage: '{additionalAssigneeCount, plural, one {Show # More} other {Show # More}}',
+    },
+    taskShowMoreAssigneesOverflow: {
+        id: 'be.taskShowMoreAssigneesOverflow',
+        description:
+            'Button name to expand task assignee list, when there is an unknown number of assignees beyond additionalAssigneeCount.',
+        defaultMessage: '{additionalAssigneeCount, plural, one {Show #+ More} other {Show #+ More}}',
     },
     taskShowLessAssignees: {
         id: 'be.taskShowLessAssignees',
@@ -1263,6 +1269,12 @@ const messages = defineMessages({
         id: 'be.back',
         description: 'Label for back button',
         defaultMessage: 'Back',
+    },
+    priorCollaborator: {
+        id: 'be.priorCollaborator',
+        description:
+            'If a user has been deleted, we call the user "a prior collaborator" - meaning someone who used to be able to collaborate on the content.',
+        defaultMessage: 'A Prior Collaborator',
     },
 });
 

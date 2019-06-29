@@ -10,6 +10,7 @@ import IconTaskApproval from '../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../icons/two-toned/IconTaskGeneral';
 import messages from '../common/messages';
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
+import type { TaskType } from '../../common/types/tasks';
 
 import './AddTaskMenu.scss';
 
@@ -28,7 +29,7 @@ const AddTaskMenu = (props: Props) => (
         <Menu className="bcs-AddTaskMenu">
             <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_GENERAL)}>
                 <div className="bcs-AddTaskMenu-icon">
-                    <IconTaskGeneral />
+                    <IconTaskGeneral width={30} height={30} />
                 </div>
                 <div>
                     <div className="bcs-AddTaskMenu-title">
@@ -41,7 +42,7 @@ const AddTaskMenu = (props: Props) => (
             </MenuItem>
             <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}>
                 <div className="bcs-AddTaskMenu-icon">
-                    <IconTaskApproval />
+                    <IconTaskApproval width={30} height={30} />
                 </div>
                 <div>
                     <div className="bcs-AddTaskMenu-title">

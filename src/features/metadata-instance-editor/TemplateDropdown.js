@@ -24,6 +24,7 @@ type Props = {
     intl: any,
     isDropdownBusy?: boolean,
     onAdd: (template: MetadataTemplate) => void,
+    onDropdownToggle?: (isDropdownOpen: boolean) => void,
     templates: Array<MetadataTemplate>,
     title?: React.Node,
     usedTemplates: Array<MetadataTemplate>,
@@ -208,7 +209,11 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
     };
 
     onOpen = () => {
-        const { templates, usedTemplates } = this.props;
+        const { onDropdownToggle, templates, usedTemplates } = this.props;
+
+        if (onDropdownToggle) {
+            onDropdownToggle(true);
+        }
 
         this.setState({
             isDropdownOpen: true,
@@ -218,6 +223,12 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
     };
 
     onClose = () => {
+        const { onDropdownToggle } = this.props;
+
+        if (onDropdownToggle) {
+            onDropdownToggle(false);
+        }
+
         this.setState({ isDropdownOpen: false });
     };
 

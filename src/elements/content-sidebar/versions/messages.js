@@ -6,6 +6,26 @@ const messages = defineMessages({
         description: 'Message to display when no versions are available',
         defaultMessage: 'No prior versions are available for this file.',
     },
+    versionsPriorWeek: {
+        id: 'be.sidebarVersions.priorWeek',
+        description: 'Header to display for group of versions created in the prior week',
+        defaultMessage: 'Last Week',
+    },
+    versionsThisMonth: {
+        id: 'be.sidebarVersions.thisMonth',
+        description: 'Header to display for group of versions created in the current month',
+        defaultMessage: 'This Month',
+    },
+    versionsToday: {
+        id: 'be.sidebarVersions.today',
+        description: 'Header to display for group of versions created yesterday',
+        defaultMessage: 'Today',
+    },
+    versionsYesterday: {
+        id: 'be.sidebarVersions.yesterday',
+        description: 'Header to display for group of versions created today',
+        defaultMessage: 'Yesterday',
+    },
     versionsTitle: {
         id: 'be.sidebarVersions.title',
         description: 'Title for the preview versions sidebar',
@@ -43,7 +63,7 @@ const messages = defineMessages({
     },
     versionActionToggle: {
         id: 'be.sidebarVersions.toggle',
-        defaultMessage: 'Toggle',
+        defaultMessage: 'Toggle Actions Menu',
         description: 'Label for the version actions dropdown menu toggle button.',
     },
     versionDeletedBy: {
@@ -51,15 +71,21 @@ const messages = defineMessages({
         defaultMessage: 'Deleted by { name }',
         description: 'Message displayed for a deleted version. {name} is the user who performed the action.',
     },
+    versionLimitExceeded: {
+        id: 'be.sidebarVersions.versionLimitExceeded',
+        defaultMessage:
+            'You are limited to the last {versionLimit, number} {versionLimit, plural, one {version} other {versions}}.',
+        description: "Text displayed if a version exceeds the user's maximum allowed version count",
+    },
     versionNumberBadge: {
+        id: 'be.sidebarVersions.versionNumberBadge',
         defaultMessage: 'V{versionNumber}',
         description: 'Text to display in the version badge.',
-        id: 'be.sidebarVersions.versionNumberBadge',
     },
     versionNumberLabel: {
+        id: 'be.sidebarVersions.versionNumberLabel',
         defaultMessage: 'Version number {versionNumber}',
         description: 'Label given to the version badge for screen readers.',
-        id: 'be.sidebarVersions.versionNumberLabel',
     },
     versionRestoredBy: {
         id: 'be.sidebarVersions.restoredBy',

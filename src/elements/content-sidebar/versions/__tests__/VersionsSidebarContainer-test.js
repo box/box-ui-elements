@@ -158,22 +158,32 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             expect(wrapper.state()).toEqual({
                 error: message,
                 isLoading: false,
+                versionCount: 0,
+                versionLimit: Infinity,
                 versions: [],
             });
         });
     });
 
     describe('handleFetchSuccess', () => {
-        test('should set state with the updated versions', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            const file = { id: '12345', permissions: {} };
-            const version = { id: '123', permissions: {} };
-            const currentVersion = { entries: [{ id: '321', permissions: {} }], total_count: 1 };
-            const versionsWithCurrent = { entries: [version, ...currentVersion.entries], total_count: 2 };
+        let file;
+        let version;
+        let currentVersion;
+        let versionsWithCurrent;
+
+        beforeEach(() => {
+            file = { id: '12345', permissions: {}, version_limit: 10 };
+            version = { id: '123', permissions: {} };
+            currentVersion = { entries: [{ id: '321', permissions: {} }], total_count: 1 };
+            versionsWithCurrent = { entries: [version, ...currentVersion.entries], total_count: 2 };
 
             versionsAPI.addPermissions.mockReturnValueOnce(versionsWithCurrent);
             versionsAPI.sortVersions.mockReturnValueOnce(versionsWithCurrent);
+        });
+
+        test('should set state with the updated versions', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
 
             instance.verifyVersion = jest.fn();
             instance.handleFetchSuccess([file, versionsWithCurrent]);
@@ -181,8 +191,12 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             expect(instance.verifyVersion).toBeCalled();
             expect(versionsAPI.addPermissions).toBeCalledWith(versionsWithCurrent, file);
             expect(versionsAPI.sortVersions).toBeCalledWith(versionsWithCurrent);
-            expect(wrapper.state('error')).toBeUndefined();
-            expect(wrapper.state('isLoading')).toBe(false);
+            expect(wrapper.state()).toMatchObject({
+                error: undefined,
+                isLoading: false,
+                versionCount: 2,
+                versionLimit: 10,
+            });
             expect(wrapper.state('versions')).toBe(versionsWithCurrent.entries);
         });
     });

@@ -8,7 +8,8 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
   title={
     <React.Fragment>
       <BackButton
-        path="/undefined"
+        data-resin-target="back"
+        to="/activity"
       />
       <FormattedMessage
         defaultMessage="Version History"
@@ -31,7 +32,14 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
     >
       This is an error
     </InlineError>
-    <VersionsList />
+    <div
+      className="bcs-Versions-empty"
+    >
+      <FormattedMessage
+        defaultMessage="No prior versions are available for this file."
+        id="be.sidebarVersions.empty"
+      />
+    </div>
   </LoadingIndicatorWrapper>
 </SidebarContent>
 `;
@@ -44,7 +52,8 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show th
   title={
     <React.Fragment>
       <BackButton
-        path="/undefined"
+        data-resin-target="back"
+        to="/activity"
       />
       <FormattedMessage
         defaultMessage="Version History"
@@ -57,9 +66,25 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show th
     className="bcs-Versions-content"
     crawlerPosition="top"
   >
-    <VersionsList
-      versions={Array []}
-    />
+    <ul
+      className="bcs-Versions-menu"
+    >
+      <li
+        className="bcs-Versions-menu-item"
+        key="TODAY"
+      >
+        <VersionsGroup
+          versionGroup="TODAY"
+          versions={
+            Array [
+              Object {
+                "created_at": "2019-06-20T20:00:00.000Z",
+              },
+            ]
+          }
+        />
+      </li>
+    </ul>
   </LoadingIndicatorWrapper>
 </SidebarContent>
 `;

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import IconTrash from '../../../../icons/general/IconTrash';
 import IconEllipsis from '../../../../icons/general/IconEllipsis';
@@ -23,10 +23,10 @@ type Props = {
     onEditClick?: Function,
     permissions?: BoxItemPermission,
     type: typeof COMMENT_TYPE_DEFAULT | typeof COMMENT_TYPE_TASK,
-} & InjectIntlProvidedProps;
+};
 
 const CommentMenu = (props: Props) => {
-    const { intl, isDisabled, onDeleteClick, onEditClick, permissions = {}, type } = props;
+    const { isDisabled, onDeleteClick, onEditClick, permissions = {}, type } = props;
     const isTaskComment = type === COMMENT_TYPE_TASK;
     const editLabel = isTaskComment ? messages.taskEditMenuItem : messages.editLabel;
     const deleteLabel = isTaskComment ? messages.taskDeleteMenuItem : deleteMessages.deleteLabel;
@@ -39,7 +39,6 @@ const CommentMenu = (props: Props) => {
             <Menu>
                 {!!onEditClick && !!permissions.can_edit && isTaskComment && (
                     <MenuItem
-                        aria-label={intl.formatMessage(editLabel)}
                         className="bcs-comment-menu-edit"
                         data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
                         onClick={onEditClick}
@@ -50,7 +49,6 @@ const CommentMenu = (props: Props) => {
                 )}
                 {!!onDeleteClick && !!permissions.can_delete && (
                     <MenuItem
-                        aria-label={intl.formatMessage(deleteMessages.deleteLabel)}
                         className="bcs-comment-menu-delete"
                         data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
                         onClick={onDeleteClick}
@@ -64,5 +62,4 @@ const CommentMenu = (props: Props) => {
     );
 };
 
-export { CommentMenu as CommentMenuBase };
-export default injectIntl(CommentMenu);
+export default CommentMenu;

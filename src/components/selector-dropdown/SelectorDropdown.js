@@ -15,25 +15,29 @@ function stopDefaultEvent(event) {
 }
 
 type Props = {
-    /** Options to keep the results always open */
-    children?: React.Node,
     /** Options to render in the dropdown filtered based on the input text */
+    children?: React.Node,
+    /** CSS class for the wrapper div */
     className?: string,
     /** Index at which to insert the divider */
     dividerIndex?: number,
-    /** CSS class for the wrapper div */
+    /** Options to keep the results always open */
     isAlwaysOpen?: boolean,
-    /** Optional title text that will be rendered above the list */
-    onEnter?: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void,
     /** Function called on keyboard "Enter" event only if enter does not trigger selection */
+    onEnter?: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void,
+    /** Function called with the index of the selected option and the event (selected by keyboard or click) */
     onSelect?: Function,
     /** Optional title of the overlay */
     overlayTitle?: string,
-    /** Function called with the index of the selected option and the event (selected by keyboard or click) */
-    selector: React.Element<any>,
+    /** A CSS selector matching the element to use as a boundary when auto-scrolling dropdown elements into view. When not provided, boundary will be determined by scrollIntoView utility function */
+    scrollBoundarySelector?: string,
     /** Component containing an input text field and takes `inputProps` to spread onto the input element */
-    shouldScroll?: boolean,
+    selector: React.Element<any>,
     /** Boolean to indicate whether the dropdown should scroll */
+    shouldScroll?: boolean,
+    /** Determines whether or not the first item is highlighted automatically when the dropdown opens */
+    shouldSetActiveItemOnOpen?: boolean,
+    /** Optional title text that will be rendered above the list */
     title?: React.Node,
 };
 
@@ -58,9 +62,18 @@ class SelectorDropdown extends React.Component<Props, State> {
         this.selectorDropdownRef = React.createRef();
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
+        const { shouldSetActiveItemOnOpen } = this.props;
+
         if (this.haveChildrenChanged(nextProps.children)) {
-            this.resetActiveItem();
+            // For UX purposes filtering the items is equivalent
+            // to re-opening the dropdown. In such cases we highlight
+            // the first item when configured to do so
+            if (shouldSetActiveItemOnOpen) {
+                this.setActiveItem(0);
+            } else {
+                this.resetActiveItem();
+            }
         }
     }
 
@@ -78,9 +91,22 @@ class SelectorDropdown extends React.Component<Props, State> {
     };
 
     setActiveItemID = (id: string | null) => {
+        const { scrollBoundarySelector } = this.props;
         const itemEl = id ? document.getElementById(id) : null;
-        this.setState({ activeItemID: id });
-        scrollIntoView(itemEl, { block: 'nearest' });
+
+        const scrollOptions: Object = {
+            block: 'nearest',
+        };
+
+        // Allow null in case we want to clear the default
+        // boundary from scrollIntoView
+        if (typeof scrollBoundarySelector !== 'undefined') {
+            scrollOptions.boundary = document.querySelector(scrollBoundarySelector);
+        }
+
+        this.setState({ activeItemID: id }, () => {
+            scrollIntoView(itemEl, scrollOptions);
+        });
     };
 
     listboxID: string;
@@ -193,6 +219,11 @@ class SelectorDropdown extends React.Component<Props, State> {
 
     openDropdown = () => {
         if (!this.state.shouldOpen) {
+            const { shouldSetActiveItemOnOpen } = this.props;
+
+            if (shouldSetActiveItemOnOpen) {
+                this.setActiveItem(0);
+            }
             this.setState({ shouldOpen: true });
             document.addEventListener('click', this.handleDocumentClick, true);
         }

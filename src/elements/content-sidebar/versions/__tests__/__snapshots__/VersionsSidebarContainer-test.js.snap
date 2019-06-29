@@ -10,6 +10,8 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer render shoul
   onPromote={[Function]}
   onRestore={[Function]}
   parentName="activity"
+  versionCount={Infinity}
+  versionLimit={Infinity}
   versions={Array []}
 />
 `;

@@ -1,39 +1,11 @@
 @import '../../../common/variables';
 @import './mixins';
 
-$card-left-offset: 40px;
+$bcs-task-grid: 4px;
+$bcs-task-left-offset: 10 * $bcs-task-grid;
 
-.bcs-task {
-    opacity: 1;
-    transition: opacity .33s;
-
-    &.bcs-is-pending {
-        opacity: .4;
-    }
-
-    .bcs-task-content {
-        margin-left: $card-left-offset;
-    }
-
-    .bcs-task-avatar {
-        height: 100%;
-        position: relative;
-    }
-
-    .bcs-task-avatar-badge {
-        @include avatar-badge-icon;
-
-        right: 4px;
-    }
-
-    .bcs-task-status-container {
-        margin-top: 8px;
-    }
-
-    .bcs-task-pending-assignment {
-        margin-top: 5px;
-    }
-
+// Comment overrides
+.bcs-Task {
     .bcs-comment {
         .bcs-comment-user-name {
             margin-right: 0;
@@ -43,8 +15,41 @@ $card-left-offset: 40px;
             }
         }
     }
+}
 
-    button:first-of-type.bcs-task-action-button {
-        margin-left: 0;
+.bcs-Task-body {
+    opacity: 1;
+    transition: opacity .33s;
+
+    &.bcs-is-pending {
+        opacity: .4;
     }
+}
+
+.bcs-Task-content {
+    margin-left: $bcs-task-left-offset;
+}
+
+.bcs-Task-avatar {
+    height: 100%;
+    position: relative;
+}
+
+.bcs-Task-avatarBadge {
+    @include avatar-badge-icon;
+
+    border-width: 2px;
+    right: $bcs-task-grid;
+}
+
+.bcs-Task-statusContainer {
+    margin-top: 2 * $bcs-task-grid;
+}
+
+.bcs-Task-assigneeListContainer {
+    margin-top: $bcs-task-grid;
+}
+
+.bcs-Task-actionsContainer {
+    margin-top: 5 * $bcs-task-grid;
 }
