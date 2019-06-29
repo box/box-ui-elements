@@ -31,4 +31,5 @@ module.name_mapper='draft-js/EditorState' -> '<PROJECT_ROOT>/flow/DraftJSFlowStu
 module.name_mapper='draft-js/CompositeDecorator' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.js.flow'
 module.name_mapper='draft-js/Modifier' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.js.flow'
 module.name_mapper='react-measure' -> '<PROJECT_ROOT>/flow/ReactMeasure.js.flow'
+server.max_workers=1
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
