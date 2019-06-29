@@ -61,7 +61,6 @@ function AssigneeList(props: Props) {
     } = props;
     const { entries = [], next_marker } = users;
     const entryCount = entries.length;
-    const hiddenAssigneeCount = Math.max(0, entryCount - initialAssigneeCount);
     const numVisibleAssignees = isOpen ? entryCount : initialAssigneeCount;
     const visibleUsers = entries
         .slice(0, numVisibleAssignees)
@@ -84,11 +83,12 @@ function AssigneeList(props: Props) {
             );
         });
 
+    const hiddenAssigneeCount = Math.max(0, entryCount - initialAssigneeCount);
     const maxAdditionalAssignees = TASKS_PAGE_SIZE - initialAssigneeCount;
     const hasMoreAssigneesThanPageSize = hiddenAssigneeCount > maxAdditionalAssignees || next_marker;
-    const additionalAssigneeCount = hasMoreAssigneesThanPageSize
-        ? `${maxAdditionalAssignees}+`
-        : `${hiddenAssigneeCount}`;
+    const additionalAssigneeMessage = hasMoreAssigneesThanPageSize
+        ? messages.taskShowMoreAssigneesOverflow
+        : messages.taskShowMoreAssignees;
 
     return (
         <div className="bcs-AssigneeList">
@@ -103,7 +103,14 @@ function AssigneeList(props: Props) {
                         onClick={onExpand}
                         className="lnk"
                     >
-                        <FormattedMessage {...messages.taskShowMoreAssignees} values={{ additionalAssigneeCount }} />
+                        <FormattedMessage
+                            {...additionalAssigneeMessage}
+                            values={{
+                                additionalAssigneeCount: hasMoreAssigneesThanPageSize
+                                    ? maxAdditionalAssignees
+                                    : hiddenAssigneeCount,
+                            }}
+                        />
                     </PlainButton>
                 </div>
             )}
