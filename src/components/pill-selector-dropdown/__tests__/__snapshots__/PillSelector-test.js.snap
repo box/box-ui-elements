@@ -16,8 +16,6 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
     onClick={[Function]}
     onFocus={[Function]}
     onKeyDown={[Function]}
-    role="button"
-    tabIndex={0}
   >
     <span
       aria-hidden="true"
@@ -25,13 +23,12 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
       onBlur={[Function]}
       tabIndex={-1}
     />
-    <input
+    <textarea
       autoComplete="off"
       className="pill-selector-input"
       disabled={true}
       onInput={[Function]}
       placeholder=""
-      type="text"
     />
     <SuggestedPillsRow
       selectedPillsValues={Array []}
