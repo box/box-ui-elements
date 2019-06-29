@@ -1,0 +1,105 @@
+
+aliases:
+  - &yarn |
+    yarn install --non-interactive --frozen-lockfile --cache-folder ~/.cache/yarn
+
+  - &clean |
+    yarn clean
+
+  - &i18n |
+    yarn build:i18n
+
+  - &restore-yarn-cache
+    keys:
+      - yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+
+  - &save-yarn-cache
+    paths:
+      - node_modules
+      - ~/.npm
+      - ~/.cache/yarn
+      - ~/.cache/Cypress
+    key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+
+  - &filter-only-master
+    branches:
+      only:
+        - master
+
+defaults: &defaults
+  working_directory: ~/buie
+  docker:
+    - image: circleci/node:10
+  resource_class: large
+
+
+version: 2
+jobs:
+  babel-build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run: *clean
+      - run: *i18n
+      - run:
+          name: Babel build
+          command: yarn build:ci:es
+
+  webpack-build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run: *clean
+      - run: *i18n
+      - run:
+          name: Webpack build
+          command: yarn build:ci:dist
+
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run: *clean
+      - run: *i18n
+      - run:
+          name: Commit Lint
+          command: yarn commitlint-circle
+      - run:
+          name: Code Lint
+          command: yarn lint
+      - run:
+          name: Flow
+          command: yarn flow check
+
+  unit-tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run:
+          name: Unit tests
+          command: yarn test --maxWorkers=2
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - lint:
+          filters: *filter-only-master
+      - unit-tests:
+          filters: *filter-only-master
+      - babel-build:
+          filters: *filter-only-master
+      - webpack-build:
+          filters: *filter-only-master
