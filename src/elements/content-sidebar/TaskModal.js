@@ -34,7 +34,7 @@ function getMessageForModalTitle(taskType: TaskType, mode: TaskEditMode): Messag
     }
 }
 
-const focusTargetSelector: string = '.task-modal input';
+const focusTargetSelector: string = '.task-modal textarea, .task-modal input';
 
 const TaskModal = (props: TaskModalProps) => {
     const {
