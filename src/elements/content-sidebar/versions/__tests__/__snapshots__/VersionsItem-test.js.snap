@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if null is provided for modified_by 1`] = `
+exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if modified_by is null 1`] = `
 <div
   className="bcs-VersionsItem-log"
   data-testid="bcs-VersionsItem-log"
@@ -26,7 +26,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
 </div>
 `;
 
-exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if undefined is provided for modified_by 1`] = `
+exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if modified_by is undefined 1`] = `
 <div
   className="bcs-VersionsItem-log"
   data-testid="bcs-VersionsItem-log"
@@ -52,7 +52,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should default to
 </div>
 `;
 
-exports[`elements/content-sidebar/versions/VersionsItem render should render a deleted version correctly 1`] = `
+exports[`elements/content-sidebar/versions/VersionsItem render should show actions correctly when the version's action is delete 1`] = `
 <div
   className="bcs-VersionsItem"
 >
@@ -112,25 +112,95 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render a d
   <VersionsItemActions
     fileId="123"
     isCurrent={false}
-    isDeleted={true}
-    isDownloadable={false}
-    isSelected={false}
     onDelete={[Function]}
     onDownload={[Function]}
     onPreview={[Function]}
     onPromote={[Function]}
     onRestore={[Function]}
-    permissions={
-      Object {
-        "can_delete": true,
-        "can_preview": true,
-      }
-    }
+    showDelete={false}
+    showDownload={false}
+    showPreview={false}
+    showPromote={false}
+    showRestore={true}
   />
 </div>
 `;
 
-exports[`elements/content-sidebar/versions/VersionsItem render should render an uploaded version correctly 1`] = `
+exports[`elements/content-sidebar/versions/VersionsItem render should show actions correctly when the version's action is restore 1`] = `
+<div
+  className="bcs-VersionsItem"
+>
+  <VersionsItemButton
+    fileId="123"
+    isCurrent={false}
+    isDisabled={false}
+    isSelected={false}
+    onClick={[Function]}
+  >
+    <div
+      className="bcs-VersionsItem-badge"
+    >
+      <VersionsItemBadge
+        versionNumber="1"
+      />
+    </div>
+    <div
+      className="bcs-VersionsItem-details"
+    >
+      <div
+        className="bcs-VersionsItem-log"
+        data-testid="bcs-VersionsItem-log"
+        title="Test User"
+      >
+        <FormattedMessage
+          defaultMessage="Restored by {name}"
+          id="be.sidebarVersions.restoredBy"
+          values={
+            Object {
+              "name": "Test User",
+            }
+          }
+        />
+      </div>
+      <div
+        className="bcs-VersionsItem-info"
+      >
+        <time
+          className="bcs-VersionsItem-date"
+          dateTime={2019-03-01T08:00:00.000Z}
+        >
+          <ReadableTime
+            alwaysShowTime={true}
+            relativeThreshold={300000}
+            timestamp={1551427200000}
+          />
+        </time>
+        <span
+          className="bcs-VersionsItem-size"
+        >
+          10 KB
+        </span>
+      </div>
+    </div>
+  </VersionsItemButton>
+  <VersionsItemActions
+    fileId="123"
+    isCurrent={false}
+    onDelete={[Function]}
+    onDownload={[Function]}
+    onPreview={[Function]}
+    onPromote={[Function]}
+    onRestore={[Function]}
+    showDelete={true}
+    showDownload={true}
+    showPreview={true}
+    showPromote={true}
+    showRestore={false}
+  />
+</div>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItem render should show actions correctly when the version's action is upload 1`] = `
 <div
   className="bcs-VersionsItem"
 >
@@ -190,20 +260,16 @@ exports[`elements/content-sidebar/versions/VersionsItem render should render an 
   <VersionsItemActions
     fileId="123"
     isCurrent={false}
-    isDeleted={false}
-    isDownloadable={false}
-    isSelected={false}
     onDelete={[Function]}
     onDownload={[Function]}
     onPreview={[Function]}
     onPromote={[Function]}
     onRestore={[Function]}
-    permissions={
-      Object {
-        "can_delete": true,
-        "can_preview": true,
-      }
-    }
+    showDelete={true}
+    showDownload={true}
+    showPreview={true}
+    showPromote={true}
+    showRestore={false}
   />
 </div>
 `;

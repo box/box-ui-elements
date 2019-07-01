@@ -114,7 +114,7 @@ class TaskForm extends React.Component<Props, State> {
             const { approvers, message } = state;
             const assigneeFieldError = {
                 code: 'required',
-                message: intl.formatMessage(commonMessages.invalidUserError),
+                message: intl.formatMessage(commonMessages.requiredFieldError),
             };
             const messageFieldError = {
                 code: 'required',

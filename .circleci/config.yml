@@ -32,7 +32,6 @@ defaults: &defaults
     - image: circleci/node:10
   resource_class: large
 
-
 version: 2
 jobs:
   babel-build:

@@ -22,15 +22,16 @@ import './VersionsItemActions.scss';
 type Props = {
     fileId: string,
     isCurrent?: boolean,
-    isDeleted?: boolean,
-    isDownloadable?: boolean,
-    isSelected?: boolean,
     onDelete?: () => void,
     onDownload?: () => void,
     onPreview?: () => void,
     onPromote?: () => void,
     onRestore?: () => void,
-    permissions: BoxItemVersionPermission,
+    showDelete?: boolean,
+    showDownload?: boolean,
+    showPreview?: boolean,
+    showPromote?: boolean,
+    showRestore?: boolean,
 };
 
 const ICON_SIZE = { height: 12, width: 12 };
@@ -46,23 +47,17 @@ const handleToggleClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
 const VersionsItemActions = ({
     fileId,
     isCurrent = false,
-    isDeleted = false,
-    isDownloadable = false,
-    isSelected = false,
     onDelete,
     onDownload,
     onPreview,
     onPromote,
     onRestore,
-    permissions,
+    showDelete = false,
+    showDownload = false,
+    showPreview = false,
+    showPromote = false,
+    showRestore = false,
 }: Props) => {
-    const { can_delete, can_download, can_preview, can_upload } = permissions;
-    const showDelete = can_delete && !isDeleted && !isCurrent;
-    const showDownload = can_download && !isDeleted && isDownloadable;
-    const showPreview = can_preview && !isDeleted && !isSelected;
-    const showPromote = can_upload && !isDeleted && !isCurrent;
-    const showRestore = can_delete && isDeleted;
-
     if (!showDelete && !showDownload && !showPreview && !showPromote && !showRestore) {
         return null;
     }
