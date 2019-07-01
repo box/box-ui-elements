@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_NOT_STARTED } from '../../../../../constants';
+import messages from '../../../../common/messages';
 
 import AssigneeList from '../AssigneeList';
 
@@ -77,17 +78,17 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
 
             expect(expandBtn).toHaveLength(1);
             expect(hideBtn).toHaveLength(0);
-            expect(expandBtn.find('FormattedMessage').prop('values')).toEqual({ additionalAssigneeCount: '1' });
+            expect(expandBtn.find('FormattedMessage').prop('values')).toEqual({ additionalAssigneeCount: 1 });
         });
 
         test.each`
-            numAssignees | next_marker | overflowValue
-            ${20}        | ${null}     | ${'17'}
-            ${20}        | ${'abc'}    | ${'17+'}
-            ${25}        | ${null}     | ${'17+'}
+            numAssignees | next_marker | count | messageId
+            ${20}        | ${null}     | ${17} | ${messages.taskShowMoreAssignees.id}
+            ${20}        | ${'abc'}    | ${17} | ${messages.taskShowMoreAssigneesOverflow.id}
+            ${25}        | ${null}     | ${17} | ${messages.taskShowMoreAssigneesOverflow.id}
         `(
-            'should show $overflowValue when there are more assignees and/or another page of results',
-            ({ numAssignees, next_marker, overflowValue }) => {
+            'should show overflow message (N+) when there are more assignees and/or another page of results',
+            ({ numAssignees, next_marker, count, messageId }) => {
                 const initialCount = 3;
                 const pageSize = 20;
                 const paginatedAssignees = {
@@ -118,9 +119,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
 
                 expect(expandBtn).toHaveLength(1);
                 expect(hideBtn).toHaveLength(0);
-                expect(expandBtn.find('FormattedMessage').prop('values')).toEqual({
-                    additionalAssigneeCount: overflowValue,
-                });
+                expect(expandBtn.find('FormattedMessage').prop('id')).toEqual(messageId);
+                expect(expandBtn.find('FormattedMessage').prop('values')).toEqual({ additionalAssigneeCount: count });
             },
         );
 
