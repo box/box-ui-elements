@@ -67,7 +67,7 @@ type Props = {
     /** Handler function for when the user types into invite collaborators field to fetch contacts. */
     getCollaboratorContacts: (query: string) => Promise<Array<Contact>>,
     /** Handler function that gets contacts by a list of emails */
-    getContactsByEmail?: ({ emails: Array<string>, itemTypedID: string }) => Promise<Object>,
+    getContactsByEmail?: ({ emails: Array<string>, itemTypedID?: string }) => Promise<Object>,
     /** Handler function for getting intial data for modal */
     getInitialData: Function,
     /** Handler function for when the user types into email shared link field to fetch contacts. */
@@ -340,15 +340,12 @@ class UnifiedShareModal extends React.Component<Props, State> {
             return;
         }
 
-        const {
-            getContactsByEmail,
-            item: { typedID: itemTypedID },
-        } = this.props;
+        const { getContactsByEmail } = this.props;
 
         if (getContactsByEmail) {
             const emails = pills.map(pill => pill.value);
             // $FlowFixMe
-            getContactsByEmail({ emails, itemTypedID }).then((contacts: Object) => {
+            getContactsByEmail({ emails }).then((contacts: Object) => {
                 if (type === INVITE_COLLABS_CONTACTS_TYPE) {
                     this.setState(prevState => ({
                         inviteCollabsContacts: mergeContacts(prevState.inviteCollabsContacts, contacts),
