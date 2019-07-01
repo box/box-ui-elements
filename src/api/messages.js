@@ -7,6 +7,21 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    commentCreateErrorMessage: {
+        id: 'be.api.commentCreateErrorMessage',
+        description: 'Error message when a comment creation fails',
+        defaultMessage: 'There was an error creating this comment.',
+    },
+    commentCreateConflictMessage: {
+        id: 'be.api.commentCreateConflictMessage',
+        description: 'Error message when a comment creation fails due to a conflict',
+        defaultMessage: 'This comment already exists.',
+    },
+    commentDeleteErrorMessage: {
+        id: 'be.api.commentDeleteErrorMessage',
+        description: 'Error message when a comment deletion fails',
+        defaultMessage: 'There was an error deleting this comment.',
+    },
     taskActionErrorTitle: {
         id: 'be.api.taskActionErrorTitle',
         description: 'Title shown when an error occurs performing an action on a task',

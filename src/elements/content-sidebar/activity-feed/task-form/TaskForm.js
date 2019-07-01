@@ -8,9 +8,9 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import commonMessages from '../../../../common/messages';
-import messages from '../../../common/messages';
-import taskFormMessages from './messages';
+import messages from './messages';
 import apiMessages from '../../../../api/messages';
+import approvalCommentFormMessages from '../approval-comment-form/messages';
 import Form from '../../../../components/form-elements/form/Form';
 import ContactDatalistItem from '../../../../components/contact-datalist-item/ContactDatalistItem';
 import TextArea from '../../../../components/text-area';
@@ -307,18 +307,18 @@ class TaskForm extends React.Component<Props, State> {
         });
 
         const submitButtonMessage = isCreateEditMode
-            ? taskFormMessages.tasksAddTaskFormSubmitLabel
-            : taskFormMessages.tasksEditTaskFormSubmitLabel;
+            ? messages.tasksAddTaskFormSubmitLabel
+            : messages.tasksEditTaskFormSubmitLabel;
 
         const taskErrorMessage = isCreateEditMode
             ? apiMessages.taskCreateErrorMessage
-            : taskFormMessages.taskUpdateErrorMessage;
+            : messages.taskUpdateErrorMessage;
 
         return (
             <div className={inputContainerClassNames} data-resin-component="taskform">
                 <div className="bcs-task-input-form-container">
                     {error ? (
-                        <InlineError title={<FormattedMessage {...taskFormMessages.taskCreateErrorTitle} />}>
+                        <InlineError title={<FormattedMessage {...messages.taskCreateErrorTitle} />}>
                             <FormattedMessage {...taskErrorMessage} />
                         </InlineError>
                     ) : null}
@@ -333,13 +333,13 @@ class TaskForm extends React.Component<Props, State> {
                             disabled={isLoading}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
-                            label={<FormattedMessage {...taskFormMessages.tasksAddTaskFormSelectAssigneesLabel} />}
+                            label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
                             name="taskAssignees"
                             onBlur={() => this.validateForm('taskAssignees')}
                             onInput={this.handleApproverSelectorInput}
                             onRemove={this.handleApproverSelectorRemove}
                             onSelect={this.handleApproverSelectorSelect}
-                            placeholder={intl.formatMessage(messages.approvalAddAssignee)}
+                            placeholder={intl.formatMessage(approvalCommentFormMessages.approvalAddAssignee)}
                             selectedOptions={renderApprovers}
                             selectorOptions={approverOptions}
                             validateForError={() => this.validateForm('taskAssignees')}
@@ -359,11 +359,11 @@ class TaskForm extends React.Component<Props, State> {
                             disabled={isDisabled || isLoading}
                             error={this.getErrorByFieldname('taskName')}
                             isRequired
-                            label={<FormattedMessage {...taskFormMessages.tasksAddTaskFormMessageLabel} />}
+                            label={<FormattedMessage {...messages.tasksAddTaskFormMessageLabel} />}
                             name="taskName"
                             onBlur={() => this.validateForm('taskName')}
                             onChange={this.handleChangeMessage}
-                            placeholder={intl.formatMessage(messages.commentWrite)}
+                            placeholder={intl.formatMessage(approvalCommentFormMessages.commentWrite)}
                             value={message}
                         />
                         <DatePicker
@@ -376,11 +376,11 @@ class TaskForm extends React.Component<Props, State> {
                             isDisabled={isLoading}
                             isRequired={false}
                             isTextInputAllowed
-                            label={<FormattedMessage {...taskFormMessages.tasksAddTaskFormDueDateLabel} />}
+                            label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
                             minDate={new Date()}
                             name="taskDueDate"
                             onChange={this.handleDueDateChange}
-                            placeholder={intl.formatMessage(messages.approvalSelectDate)}
+                            placeholder={intl.formatMessage(approvalCommentFormMessages.approvalSelectDate)}
                             value={dueDate || undefined}
                         />
                         <div className="bcs-task-input-controls">
@@ -393,7 +393,7 @@ class TaskForm extends React.Component<Props, State> {
                                 type="button"
                                 {...this.addResinInfo()}
                             >
-                                <FormattedMessage {...taskFormMessages.tasksAddTaskFormCancelLabel} />
+                                <FormattedMessage {...messages.tasksAddTaskFormCancelLabel} />
                             </Button>
                             <PrimaryButton
                                 className="bcs-task-input-submit-btn"

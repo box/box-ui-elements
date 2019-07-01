@@ -8,8 +8,8 @@ import noop from 'lodash/noop';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-import taskMessages from './messages';
-import activityFeedMessages from '../messages';
+import messages from './messages';
+import commentMessages from '../comment/messages';
 import { fillUserPlaceholder } from '../../../../utils/fields';
 import Comment from '../comment';
 import CompletedAssignment from './CompletedAssignment';
@@ -92,7 +92,7 @@ class Task extends React.Component<Props> {
                     currentUser={currentUser}
                     error={error}
                     id={id}
-                    inlineDeleteMessage={activityFeedMessages.taskDeletePrompt}
+                    inlineDeleteMessage={commentMessages.taskDeletePrompt}
                     isPending={isPending}
                     onDelete={onDelete}
                     onEdit={onEdit}
@@ -109,11 +109,11 @@ class Task extends React.Component<Props> {
                 <div className="bcs-task-approvers-container">
                     <div className="bcs-task-approvers-header">
                         <strong>
-                            <FormattedMessage {...taskMessages.tasksForApproval} />
+                            <FormattedMessage {...messages.tasksForApproval} />
                         </strong>
                         {due_at ? (
                             <span className="bcs-task-due-date">
-                                <FormattedMessage {...taskMessages.taskDueDate} />
+                                <FormattedMessage {...messages.taskDueDate} />
                                 <FormattedDate value={due_at} day="numeric" month="long" year="numeric" />
                             </span>
                         ) : null}

@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 
-import messages from '../../../common/messages';
+import messages from './messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 type Props = {

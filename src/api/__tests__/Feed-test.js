@@ -1,4 +1,5 @@
 import messages from '../../elements/common/messages';
+import apiMessages from '../messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
 import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED } from '../../constants';
@@ -1420,7 +1421,7 @@ describe('api/Feed', () => {
         test('should invoke update the feed item with an AF error and call the success callback', () => {
             const e = { status: 409 };
             feed.createCommentErrorCallback(e, errorCode, id);
-            expect(feed.createFeedError).toBeCalledWith(messages.commentCreateConflictMessage);
+            expect(feed.createFeedError).toBeCalledWith(apiMessages.commentCreateConflictMessage);
             expect(feed.updateFeedItem).toBeCalledWith(message, id);
             expect(feed.feedErrorCallback).toHaveBeenCalledWith(false, e, errorCode);
         });
@@ -1429,7 +1430,7 @@ describe('api/Feed', () => {
             const e = { status: 500 };
             feed.isDestroyed = jest.fn().mockReturnValue(true);
             feed.createCommentErrorCallback(e, errorCode, id);
-            expect(feed.createFeedError).toBeCalledWith(messages.commentCreateErrorMessage);
+            expect(feed.createFeedError).toBeCalledWith(apiMessages.commentCreateErrorMessage);
             expect(feed.updateFeedItem).toBeCalledWith(message, id);
         });
     });

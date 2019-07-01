@@ -8,8 +8,8 @@ import noop from 'lodash/noop';
 import omit from 'lodash/omit';
 import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
-import messages from '../elements/common/messages';
-import apiMessages from './messages';
+import commonMessages from '../elements/common/messages';
+import messages from './messages';
 import { sortFeedItems } from '../utils/sorter';
 import Base from './Base';
 import CommentsAPI from './Comments';
@@ -433,18 +433,18 @@ class Feed extends Base {
             let errorMessage;
             switch (taskCollaboratorStatus) {
                 case TASK_NEW_APPROVED:
-                    errorMessage = apiMessages.taskApproveErrorMessage;
+                    errorMessage = messages.taskApproveErrorMessage;
                     break;
                 case TASK_NEW_COMPLETED:
-                    errorMessage = apiMessages.taskCompleteErrorMessage;
+                    errorMessage = messages.taskCompleteErrorMessage;
                     break;
                 case TASK_NEW_REJECTED:
-                    errorMessage = apiMessages.taskRejectErrorMessage;
+                    errorMessage = messages.taskRejectErrorMessage;
                     break;
                 default:
-                    errorMessage = apiMessages.taskCompleteErrorMessage;
+                    errorMessage = messages.taskCompleteErrorMessage;
             }
-            this.updateFeedItem(this.createFeedError(errorMessage, apiMessages.taskActionErrorTitle), taskId);
+            this.updateFeedItem(this.createFeedError(errorMessage, messages.taskActionErrorTitle), taskId);
             this.feedErrorCallback(true, e, code);
         };
         collaboratorsApi.updateTaskCollaborator({
@@ -764,7 +764,7 @@ class Feed extends Base {
                 this.createTaskSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
             },
             errorCallback: (e: ElementsXhrError, code: string) => {
-                this.updateFeedItem(this.createFeedError(apiMessages.taskCreateErrorMessage), uuid);
+                this.updateFeedItem(this.createFeedError(messages.taskCreateErrorMessage), uuid);
                 this.feedErrorCallback(false, e, code);
             },
         });
@@ -1128,7 +1128,7 @@ class Feed extends Base {
             task,
             successCallback: this.deleteFeedItem.bind(this, task.id, successCallback),
             errorCallback: (e: ElementsXhrError, code: string) => {
-                this.updateFeedItem(this.createFeedError(apiMessages.taskDeleteErrorMessage), task.id);
+                this.updateFeedItem(this.createFeedError(messages.taskDeleteErrorMessage), task.id);
                 this.feedErrorCallback(true, e, code);
             },
         });
@@ -1320,7 +1320,7 @@ class Feed extends Base {
      * @param {string} title - The error message title.
      * @return {Object} An error message object
      */
-    createFeedError(message: MessageDescriptor, title: MessageDescriptor = messages.errorOccured) {
+    createFeedError(message: MessageDescriptor, title: MessageDescriptor = commonMessages.errorOccured) {
         return {
             error: { message, title },
         };
@@ -1503,7 +1503,7 @@ class Feed extends Base {
      * @return {void}
      */
     deleteAppActivityErrorCallback = (e: ElementsXhrError, code: string, id: string) => {
-        this.updateFeedItem(this.createFeedError(messages.appActivityDeleteErrorMessage), id);
+        this.updateFeedItem(this.createFeedError(commonMessages.appActivityDeleteErrorMessage), id);
         this.feedErrorCallback(true, e, code);
     };
 

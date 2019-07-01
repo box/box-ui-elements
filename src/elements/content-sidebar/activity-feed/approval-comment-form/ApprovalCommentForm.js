@@ -9,12 +9,11 @@ import classNames from 'classnames';
 import { ContentState, EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import commonMessages from '../../../../common/messages';
+import messages from './messages';
 import Form from '../../../../components/form-elements/form/Form';
 import DraftJSMentionSelector, {
     DraftMentionDecorator,
 } from '../../../../components/form-elements/draft-js-mention-selector';
-
-import messages from '../../../common/messages';
 import { FeatureFlag } from '../../../common/feature-checking';
 import AddApproval from './AddApproval';
 import CommentInputControls from './CommentInputControls';

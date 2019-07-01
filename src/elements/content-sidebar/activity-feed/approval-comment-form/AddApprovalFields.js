@@ -10,7 +10,7 @@ import ContactDatalistItem from '../../../../components/contact-datalist-item/Co
 import DatePicker from '../../../../components/date-picker/DatePicker';
 import PillSelectorDropdown from '../../../../components/pill-selector-dropdown/PillSelectorDropdown';
 
-import messages from '../../../common/messages';
+import messages from './messages';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
 
 type Props = {

@@ -9,7 +9,7 @@ import { injectIntl } from 'react-intl';
 import Checkbox from '../../../../components/checkbox/Checkbox';
 
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import messages from '../../../common/messages';
+import messages from './messages';
 import AddApprovalFields from './AddApprovalFields';
 
 type Props = {
