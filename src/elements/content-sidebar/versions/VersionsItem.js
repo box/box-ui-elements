@@ -21,6 +21,7 @@ type Props = {
     fileId: string,
     isCurrent?: boolean,
     isSelected?: boolean,
+    isWatermarked?: boolean,
     onDelete?: VersionActionCallback,
     onDownload?: VersionActionCallback,
     onPreview?: VersionActionCallback,
@@ -44,6 +45,7 @@ const VersionsItem = ({
     fileId,
     isCurrent = false,
     isSelected = false,
+    isWatermarked = false,
     onDelete,
     onDownload,
     onPreview,
@@ -63,6 +65,8 @@ const VersionsItem = ({
         size,
         version_number: versionNumber,
     } = version;
+    const { can_delete, can_download, can_preview, can_upload } = permissions;
+
     // Version info helpers
     const versionSize = sizeUtil(size);
     const versionTimestamp = createdAt && new Date(createdAt).getTime();
@@ -70,12 +74,21 @@ const VersionsItem = ({
     const versionInteger = versionNumber ? parseInt(versionNumber, 10) : 1;
 
     // Version state helpers
-    const isLimited = versionCount - versionInteger >= versionLimit;
     const isDeleted = action === VERSION_DELETE_ACTION;
     const isDownloadable = !!is_download_available;
-    const isPreviewable = !isDeleted && !isLimited && permissions.can_preview;
+    const isLimited = versionCount - versionInteger >= versionLimit;
+    const isRestricted = isWatermarked && !isCurrent && !can_download; // Watermarked files use can_download for preview
 
-    // Version action helper
+    // Version action helpers
+    const canPreview = can_preview && !isDeleted && !isLimited && !isRestricted;
+    const showDelete = can_delete && !isDeleted && !isCurrent;
+    const showDownload = can_download && !isDeleted && isDownloadable;
+    const showPromote = can_upload && !isDeleted && !isCurrent;
+    const showRestore = can_delete && isDeleted;
+    const showPreview = canPreview && !isSelected;
+    const hasActions = showDelete || showDownload || showPreview || showPromote || showRestore;
+
+    // Version action callback helper
     const handleAction = (handler?: VersionActionCallback) => (): void => {
         if (handler) {
             handler(versionId);
@@ -87,7 +100,7 @@ const VersionsItem = ({
             <VersionsItemButton
                 fileId={fileId}
                 isCurrent={isCurrent}
-                isDisabled={!isPreviewable}
+                isDisabled={!canPreview}
                 isSelected={isSelected}
                 onClick={handleAction(onPreview)}
             >
@@ -118,7 +131,7 @@ const VersionsItem = ({
                         {!!size && <span className="bcs-VersionsItem-size">{versionSize}</span>}
                     </div>
 
-                    {isLimited && (
+                    {isLimited && hasActions && (
                         <div className="bcs-VersionsItem-footer">
                             <FormattedMessage {...messages.versionLimitExceeded} values={{ versionLimit }} />
                         </div>
@@ -126,19 +139,20 @@ const VersionsItem = ({
                 </div>
             </VersionsItemButton>
 
-            {!isLimited && (
+            {!isLimited && hasActions && (
                 <VersionsItemActions
                     fileId={fileId}
                     isCurrent={isCurrent}
-                    isDeleted={isDeleted}
-                    isDownloadable={isDownloadable}
-                    isSelected={isSelected}
                     onDelete={handleAction(onDelete)}
                     onDownload={handleAction(onDownload)}
                     onPreview={handleAction(onPreview)}
                     onPromote={handleAction(onPromote)}
                     onRestore={handleAction(onRestore)}
-                    permissions={permissions}
+                    showDelete={showDelete}
+                    showDownload={showDownload}
+                    showPreview={showPreview}
+                    showPromote={showPromote}
+                    showRestore={showRestore}
                 />
             )}
         </div>

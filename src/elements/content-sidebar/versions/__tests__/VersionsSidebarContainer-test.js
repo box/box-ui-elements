@@ -158,6 +158,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             expect(wrapper.state()).toEqual({
                 error: message,
                 isLoading: false,
+                isWatermarked: false,
                 versionCount: 0,
                 versionLimit: Infinity,
                 versions: [],
@@ -194,10 +195,22 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             expect(wrapper.state()).toMatchObject({
                 error: undefined,
                 isLoading: false,
+                isWatermarked: false,
                 versionCount: 2,
                 versionLimit: 10,
             });
             expect(wrapper.state('versions')).toBe(versionsWithCurrent.entries);
+        });
+
+        test('should set state with isWatermarked if file is watermarked', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const testFile = { ...file, watermark_info: { is_watermarked: true } };
+
+            instance.verifyVersion = jest.fn();
+            instance.handleFetchSuccess([testFile, versionsWithCurrent]);
+
+            expect(wrapper.state('isWatermarked')).toBe(true);
         });
     });
 
