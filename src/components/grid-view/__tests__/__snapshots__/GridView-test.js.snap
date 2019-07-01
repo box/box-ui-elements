@@ -3,25 +3,6 @@
 exports[`components/grid-view/GridView should render() 1`] = `
 <Component
   className="bdl-GridView bdl-GridView--columns-5"
-  deferredMeasurementCache={
-    CellMeasurerCache {
-      "_cellHeightCache": Object {},
-      "_cellWidthCache": Object {},
-      "_columnCount": 0,
-      "_columnWidthCache": Object {},
-      "_defaultHeight": 300,
-      "_defaultWidth": 400,
-      "_hasFixedHeight": false,
-      "_hasFixedWidth": true,
-      "_keyMapper": [Function],
-      "_minHeight": 0,
-      "_minWidth": 0,
-      "_rowCount": 0,
-      "_rowHeightCache": Object {},
-      "columnWidth": [Function],
-      "rowHeight": [Function],
-    }
-  }
   disableHeader={true}
   gridClassName="bdl-GridView-body"
   height={600}

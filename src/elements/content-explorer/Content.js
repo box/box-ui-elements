@@ -35,7 +35,6 @@ type Props = {
     columnCount?: number,
     currentCollection: Collection,
     focusedRow: number,
-    isGridView?: boolean,
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,

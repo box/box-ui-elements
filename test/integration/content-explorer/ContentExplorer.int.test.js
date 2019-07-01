@@ -213,7 +213,6 @@ describe('ContentExplorer', () => {
         });
 
         it('Should initially show list view', () => {
-            helpers.load({ features: gridViewOn });
             cy.getByTestId('content-explorer')
                 .find(helpers.getSelector(listViewClass))
                 .should('have.length', 1);

@@ -8,6 +8,7 @@
     .bdl-GridView-row {
         display: flex;
         justify-content: space-between;
+        padding-bottom: 0;
     }
 
     &.bdl-GridView--columns-1 .bdl-GridViewSlot {

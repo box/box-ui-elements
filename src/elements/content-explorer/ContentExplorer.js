@@ -12,6 +12,7 @@ import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
+import getProp from 'lodash/get';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -27,6 +28,11 @@ import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
+import getSize from '../../utils/size';
+import moreOptionsCellRenderer from './moreOptionsCellRenderer';
+import dateCellRenderer from './dateCellRenderer';
+import nameCellRenderer from '../common/item/nameCellRenderer';
+import { getIcon } from '../common/item/iconCellRenderer';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
@@ -60,6 +66,7 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
+import '../../components/grid-view/GridViewSlot.scss';
 
 type Props = {
     apiHost: string,
@@ -116,7 +123,6 @@ type State = {
     focusedRow: number,
     isCreateFolderModalOpen: boolean,
     isDeleteModalOpen: boolean,
-    isGridView: boolean,
     isLoading: boolean,
     isPreviewModalOpen: boolean,
     isRenameModalOpen: boolean,
@@ -1231,18 +1237,60 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
-     * Toggle grid view
+     * Renderer used for cards in grid view
      *
-     * @private
-     * @return {void}
+     * @param {number} slotIndex - index of item in currentCollection.items
+     * @return {React.Element} - Element to display in card
      */
-    switchGridView = (): void => {
-        const { isGridView }: State = this.state;
-        this.setState({ isGridView: !isGridView });
-    };
-
     slotRenderer = (slotIndex: number) => {
-        return <div>{slotIndex}</div>;
+        const { currentCollection, view } = this.state;
+        const { canPreview, canShare, canDownload, canDelete, canRename, isSmall, isTouch, rootFolderId } = this.props;
+        const item: ?BoxItem = getProp(currentCollection, `items[${slotIndex}]`);
+
+        if (!item) {
+            return <div />;
+        }
+
+        const moreOptionsCell = moreOptionsCellRenderer(
+            canPreview,
+            canShare,
+            canDownload,
+            canDelete,
+            canRename,
+            this.select,
+            this.delete,
+            this.download,
+            this.rename,
+            this.share,
+            this.preview,
+            isSmall,
+        );
+
+        const nameCell = nameCellRenderer(
+            rootFolderId,
+            view,
+            this.onItemClick,
+            this.select,
+            canPreview,
+            isSmall, // shows details if false
+            isTouch,
+        );
+
+        const dateCell = dateCellRenderer();
+
+        return (
+            <div>
+                <div className="bdl-GridView-itemThumbnail">
+                    <div className="bdl-GridView-itemIcon"> {getIcon(128, item)} </div>
+                </div>
+                <div>
+                    {item && nameCell({ rowData: item })}
+                    <div> {getSize(item.size)} </div>
+                    {item && dateCell({ dataKey: '', rowData: item })}
+                </div>
+                {item && moreOptionsCell({ rowData: item })}
+            </div>
+        );
     };
 
     /**
@@ -1304,7 +1352,6 @@ class ContentExplorer extends Component<Props, State> {
             currentPageSize,
             searchQuery,
             isDeleteModalOpen,
-            isGridView,
             isRenameModalOpen,
             isShareModalOpen,
             isUploadModalOpen,
@@ -1340,7 +1387,6 @@ class ContentExplorer extends Component<Props, State> {
                             view={view}
                             viewMode={viewMode}
                             rootId={rootFolderId}
-                            isGridView={isGridView}
                             isSmall={isSmall}
                             rootName={rootName}
                             currentCollection={currentCollection}
@@ -1356,7 +1402,6 @@ class ContentExplorer extends Component<Props, State> {
                             view={view}
                             viewMode={viewMode}
                             rootId={rootFolderId}
-                            isGridView={isGridView}
                             isSmall={isSmall}
                             isMedium={isMedium}
                             isTouch={isTouch}

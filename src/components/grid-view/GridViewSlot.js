@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import './GridViewSlot.scss';
 
 type Props = {
     slotIndex: number,
@@ -8,7 +9,7 @@ type Props = {
 
 function GridViewSlot({ slotIndex, slotRenderer }: Props) {
     if (!slotRenderer) {
-        return <div className="bdl-GridViewSlot--blank" />;
+        return <div className="bdl-GridViewSlot bdl-GridViewSlot--blank" />;
     }
 
     return <div className="bdl-GridViewSlot">{slotRenderer(slotIndex)}</div>;
