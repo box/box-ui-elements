@@ -5,8 +5,8 @@ import flow from 'lodash/flow';
 import get from 'lodash/get';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import messages from '../../../common/messages';
-import taskMessages from './messages';
+import commonMessages from '../../../common/messages';
+import messages from './messages';
 import CommentInlineError from '../comment/CommentInlineError';
 import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../../../icons/two-toned/IconTaskGeneral';
@@ -68,15 +68,15 @@ type State = {
 const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
     if (isCurrentUser) {
         if (taskType === TASK_TYPE_APPROVAL) {
-            return taskMessages.tasksFeedHeadlineApprovalCurrentUser;
+            return messages.tasksFeedHeadlineApprovalCurrentUser;
         }
-        return taskMessages.tasksFeedHeadlineGeneralCurrentUser;
+        return messages.tasksFeedHeadlineGeneralCurrentUser;
     }
 
     if (taskType === TASK_TYPE_APPROVAL) {
-        return taskMessages.tasksFeedHeadlineApproval;
+        return messages.tasksFeedHeadlineApproval;
     }
-    return taskMessages.tasksFeedHeadlineGeneral;
+    return messages.tasksFeedHeadlineGeneral;
 };
 
 class Task extends React.Component<Props, State> {
@@ -124,8 +124,8 @@ class Task extends React.Component<Props, State> {
 
     getAllTaskCollaborators = (onSuccess: () => any) => {
         const { id, api, task_links, assigned_to } = this.props;
-        const { errorOccured } = messages;
-        const { taskCollaboratorLoadErrorMessage } = taskMessages;
+        const { errorOccured } = commonMessages;
+        const { taskCollaboratorLoadErrorMessage } = messages;
 
         // skip fetch when there are no additional collaborators
         if (!assigned_to.next_marker) {
