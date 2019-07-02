@@ -205,6 +205,7 @@ class Comment extends React.Component<Props, State> {
                                             className="be-modal bcs-comment-confirm-container"
                                             onKeyDown={this.onKeyDown}
                                             shouldOutlineFocus={false}
+                                            shouldDefaultFocus
                                         >
                                             <div className="bcs-comment-confirm-prompt">
                                                 <FormattedMessage {...deleteConfirmMessage} />
