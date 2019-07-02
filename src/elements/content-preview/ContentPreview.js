@@ -46,6 +46,7 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
+import type { ErrorType } from '../common/flowTypes';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import './ContentPreview.scss';
@@ -92,8 +93,8 @@ type Props = {
 
 type State = {
     currentFileId?: string,
+    error?: ErrorType,
     file?: BoxItem,
-    isFileError: boolean,
     isReloadNotificationVisible: boolean,
     isThumbnailSidebarOpen: boolean,
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
@@ -129,13 +130,8 @@ type PreviewMetrics = {
     value: number,
 };
 
-type PreviewError = {
-    error: {
-        code: string,
-        details: Object,
-        displayMessage: string,
-        message: string,
-    },
+type PreviewLibraryError = {
+    error: ErrorType,
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -170,7 +166,7 @@ class ContentPreview extends PureComponent<Props, State> {
     updateVersionToCurrent: ?() => void;
 
     initialState: State = {
-        isFileError: false,
+        error: undefined,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
     };
@@ -517,16 +513,17 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Handler for 'preview_error' preview event
      *
-     * @param {PreviewError} previewError - the error data emitted from preview
+     * @param {PreviewLibraryError} previewError - the error data emitted from preview
      * @return {void}
      */
-    onPreviewError = ({ error, ...rest }: PreviewError): void => {
+    onPreviewError = ({ error, ...rest }: PreviewLibraryError): void => {
         const { code = ERROR_CODE_UNKNOWN } = error;
+        const { onError } = this.props;
 
         // In case of error, there should be no thumbnail sidebar to account for
         this.setState({ isThumbnailSidebarOpen: false });
 
-        this.props.onError(
+        onError(
             error,
             code,
             {
@@ -797,8 +794,14 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileErrorCallback = (fileError: ElementsXhrError, code: string): void => {
-        this.setState({ isFileError: true });
-        this.props.onError(fileError, code, {
+        const { onError } = this.props;
+        const errorCode = fileError.code || code;
+        const error = {
+            code: errorCode,
+            message: fileError.message,
+        };
+        this.setState({ error, file: undefined });
+        onError(fileError, errorCode, {
             error: fileError,
         });
     };
@@ -1102,8 +1105,8 @@ class ContentPreview extends PureComponent<Props, State> {
         }: Props = this.props;
 
         const {
+            error,
             file,
-            isFileError,
             isReloadNotificationVisible,
             currentFileId,
             isThumbnailSidebarOpen,
@@ -1122,6 +1125,7 @@ class ContentPreview extends PureComponent<Props, State> {
             return null;
         }
 
+        const errorCode = getProp(error, 'code');
         const currentVersionId = getProp(file, 'file_version.id');
         const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
@@ -1153,7 +1157,8 @@ class ContentPreview extends PureComponent<Props, State> {
                             ) : (
                                 <div className="bcpr-loading-wrapper">
                                     <PreviewLoading
-                                        isLoading={!isFileError}
+                                        errorCode={errorCode}
+                                        isLoading={!errorCode}
                                         loadingIndicatorProps={{
                                             size: 'large',
                                         }}

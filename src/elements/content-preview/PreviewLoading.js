@@ -9,16 +9,25 @@ import { FormattedMessage } from 'react-intl';
 import IconFileDefault from '../../icons/file/IconFileDefault';
 import makeLoadable from '../../components/loading-indicator/makeLoadable';
 import messages from '../common/messages';
+import { ERROR_CODE_FETCH_FILE_DUE_TO_POLICY } from '../../constants';
 import './PreviewLoading.scss';
 
-const PreviewLoading = () => (
-    <div className="bcpr-loading">
-        <IconFileDefault height={160} width={160} />
-        <div className="bcpr-loading-text">
-            <FormattedMessage {...messages.previewError} />
+type Props = {
+    errorCode?: string,
+};
+
+const PreviewLoading = ({ errorCode }: Props) => {
+    const isBlockedByPolicy = errorCode === ERROR_CODE_FETCH_FILE_DUE_TO_POLICY;
+    const message = isBlockedByPolicy ? messages.previewErrorBlockedByPolicy : messages.previewError;
+    return (
+        <div className="bcpr-PreviewLoading">
+            <IconFileDefault height={160} width={160} />
+            <div className="bcpr-PreviewLoading-message">
+                <FormattedMessage {...message} />
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export { PreviewLoading as PreviewLoadingComponent };
 export default makeLoadable(PreviewLoading);
