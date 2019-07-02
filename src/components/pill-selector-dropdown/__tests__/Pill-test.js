@@ -16,7 +16,7 @@ describe('components/pill-selector-dropdown/Pill', () => {
     });
 
     test('should have the selected class when isSelected is true', () => {
-        const wrapper = shallow(<Pill isSelected onRemove={onRemoveStub} text="box" />);
+        const wrapper = shallow(<Pill isSelected isDisabled={false} onRemove={onRemoveStub} text="box" />);
 
         expect(wrapper.hasClass('is-selected')).toBe(true);
     });
