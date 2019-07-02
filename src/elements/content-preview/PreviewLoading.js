@@ -20,9 +20,9 @@ const PreviewLoading = ({ errorCode }: Props) => {
     const isBlockedByPolicy = errorCode === ERROR_CODE_FETCH_FILE_DUE_TO_POLICY;
     const message = isBlockedByPolicy ? messages.previewErrorBlockedByPolicy : messages.previewError;
     return (
-        <div className="bcpr-loading">
+        <div className="bcpr-PreviewLoading">
             <IconFileDefault height={160} width={160} />
-            <div className="bcpr-loading-text">
+            <div className="bcpr-PreviewLoading-message">
                 <FormattedMessage {...message} />
             </div>
         </div>

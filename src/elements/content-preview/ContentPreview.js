@@ -46,11 +46,10 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
+import type { ErrorType } from '../common/flowTypes';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import './ContentPreview.scss';
-
-import type { ErrorType } from '../common/flowTypes';
 
 type Props = {
     apiHost: string,
@@ -519,11 +518,12 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     onPreviewError = ({ error, ...rest }: PreviewLibraryError): void => {
         const { code = ERROR_CODE_UNKNOWN } = error;
+        const { onError } = this.props;
 
         // In case of error, there should be no thumbnail sidebar to account for
         this.setState({ isThumbnailSidebarOpen: false });
 
-        this.props.onError(
+        onError(
             error,
             code,
             {
@@ -794,13 +794,14 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileErrorCallback = (fileError: ElementsXhrError, code: string): void => {
+        const { onError } = this.props;
         const errorCode = fileError.code || code;
         const error = {
             code: errorCode,
             message: fileError.message,
         };
         this.setState({ error, file: undefined });
-        this.props.onError(fileError, errorCode, {
+        onError(fileError, errorCode, {
             error: fileError,
         });
     };
