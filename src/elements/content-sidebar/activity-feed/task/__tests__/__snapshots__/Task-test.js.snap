@@ -23,7 +23,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should correctly render
     inlineDeleteMessage={
       Object {
         "defaultMessage": "Are you sure you want to permanently delete this task?",
-        "id": "be.taskDeletePrompt",
+        "id": "be.contentSidebar.activityFeed.comment.taskDeletePrompt",
       }
     }
     onDelete={[MockFunction]}
@@ -46,7 +46,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should correctly render
       <strong>
         <FormattedMessage
           defaultMessage="Tasks"
-          id="be.tasksForApproval"
+          id="be.contentSidebar.activityFeed.task.tasksForApproval"
         />
       </strong>
       <span
@@ -54,7 +54,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should correctly render
       >
         <FormattedMessage
           defaultMessage="Due"
-          id="be.taskDueDate"
+          id="be.contentSidebar.activityFeed.task.taskDueDate"
         />
         <FormattedDate
           day="numeric"
@@ -108,7 +108,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should not render due d
     inlineDeleteMessage={
       Object {
         "defaultMessage": "Are you sure you want to permanently delete this task?",
-        "id": "be.taskDeletePrompt",
+        "id": "be.contentSidebar.activityFeed.comment.taskDeletePrompt",
       }
     }
     isPending={false}
@@ -130,7 +130,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should not render due d
       <strong>
         <FormattedMessage
           defaultMessage="Tasks"
-          id="be.tasksForApproval"
+          id="be.contentSidebar.activityFeed.task.tasksForApproval"
         />
       </strong>
     </div>
@@ -178,7 +178,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should show actions for
     inlineDeleteMessage={
       Object {
         "defaultMessage": "Are you sure you want to permanently delete this task?",
-        "id": "be.taskDeletePrompt",
+        "id": "be.contentSidebar.activityFeed.comment.taskDeletePrompt",
       }
     }
     isPending={false}
@@ -200,7 +200,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should show actions for
       <strong>
         <FormattedMessage
           defaultMessage="Tasks"
-          id="be.tasksForApproval"
+          id="be.contentSidebar.activityFeed.task.tasksForApproval"
         />
       </strong>
       <span
@@ -208,7 +208,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should show actions for
       >
         <FormattedMessage
           defaultMessage="Due"
-          id="be.taskDueDate"
+          id="be.contentSidebar.activityFeed.task.taskDueDate"
         />
         <FormattedDate
           day="numeric"
@@ -259,7 +259,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should show tooltips wh
       text={
         <FormattedMessage
           defaultMessage="Complete"
-          id="be.taskApprove"
+          id="be.contentSidebar.activityFeed.task.taskApprove"
         />
       }
       theme="default"
@@ -284,7 +284,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should show tooltips wh
       text={
         <FormattedMessage
           defaultMessage="Decline"
-          id="be.taskReject"
+          id="be.contentSidebar.activityFeed.task.taskReject"
         />
       }
       theme="default"

@@ -12,7 +12,7 @@ import PlainButton from '../../../../components/plain-button';
 import Tooltip from '../../../../components/tooltip';
 
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import messages from '../../../common/messages';
+import messages from './messages';
 
 type Props = {
     name: string,

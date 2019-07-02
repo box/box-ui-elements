@@ -8,7 +8,7 @@ import MenuToggle from '../../components/dropdown-menu/MenuToggle';
 import { Menu, MenuItem } from '../../components/menu';
 import IconTaskApproval from '../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../icons/two-toned/IconTaskGeneral';
-import messages from '../common/messages';
+import messages from './messages';
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 import type { TaskType } from '../../common/types/tasks';
 

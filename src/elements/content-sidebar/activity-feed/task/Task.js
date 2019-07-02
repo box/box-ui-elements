@@ -8,7 +8,8 @@ import noop from 'lodash/noop';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-import messages from '../../../common/messages';
+import messages from './messages';
+import commentMessages from '../comment/messages';
 import { fillUserPlaceholder } from '../../../../utils/fields';
 import Comment from '../comment';
 import CompletedAssignment from './CompletedAssignment';
@@ -91,7 +92,7 @@ class Task extends React.Component<Props> {
                     currentUser={currentUser}
                     error={error}
                     id={id}
-                    inlineDeleteMessage={messages.taskDeletePrompt}
+                    inlineDeleteMessage={commentMessages.taskDeletePrompt}
                     isPending={isPending}
                     onDelete={onDelete}
                     onEdit={onEdit}

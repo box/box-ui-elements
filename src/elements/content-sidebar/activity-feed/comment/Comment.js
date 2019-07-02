@@ -15,7 +15,8 @@ import Tooltip from '../../../../components/tooltip';
 import { Overlay } from '../../../../components/flyout';
 import PrimaryButton from '../../../../components/primary-button';
 import Button from '../../../../components/button';
-import messages from '../../../common/messages';
+import commonMessages from '../../../common/messages';
+import messages from './messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 import CommentMenu from './CommentMenu';
@@ -214,14 +215,14 @@ class Comment extends React.Component<Props, State> {
                                                     onClick={this.handleDeleteCancel}
                                                     type="button"
                                                 >
-                                                    <FormattedMessage {...messages.cancel} />
+                                                    <FormattedMessage {...commonMessages.cancel} />
                                                 </Button>
                                                 <PrimaryButton
                                                     className="bcs-comment-confirm-delete"
                                                     onClick={this.handleDeleteConfirm}
                                                     type="button"
                                                 >
-                                                    <FormattedMessage {...messages.delete} />
+                                                    <FormattedMessage {...commonMessages.delete} />
                                                 </PrimaryButton>
                                             </div>
                                         </Overlay>

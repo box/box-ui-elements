@@ -8,6 +8,9 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import commonMessages from '../../../../common/messages';
+import messages from './messages';
+import apiMessages from '../../../../api/messages';
+import approvalCommentFormMessages from '../approval-comment-form/messages';
 import Form from '../../../../components/form-elements/form/Form';
 import ContactDatalistItem from '../../../../components/contact-datalist-item/ContactDatalistItem';
 import TextArea from '../../../../components/text-area';
@@ -17,7 +20,6 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import InlineError from '../../../../components/inline-error/InlineError';
 import { TASK_EDIT_MODE_CREATE, TASK_EDIT_MODE_EDIT } from '../../../../constants';
-import messages from '../../../common/messages';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
 import type { TaskCollabAssignee, TaskType, TaskEditMode, TaskUpdatePayload } from '../../../../common/types/tasks';
 
@@ -308,7 +310,9 @@ class TaskForm extends React.Component<Props, State> {
             ? messages.tasksAddTaskFormSubmitLabel
             : messages.tasksEditTaskFormSubmitLabel;
 
-        const taskErrorMessage = isCreateEditMode ? messages.taskCreateErrorMessage : messages.taskUpdateErrorMessage;
+        const taskErrorMessage = isCreateEditMode
+            ? apiMessages.taskCreateErrorMessage
+            : messages.taskUpdateErrorMessage;
 
         return (
             <div className={inputContainerClassNames} data-resin-component="taskform">
@@ -335,7 +339,7 @@ class TaskForm extends React.Component<Props, State> {
                             onInput={this.handleApproverSelectorInput}
                             onRemove={this.handleApproverSelectorRemove}
                             onSelect={this.handleApproverSelectorSelect}
-                            placeholder={intl.formatMessage(messages.approvalAddAssignee)}
+                            placeholder={intl.formatMessage(approvalCommentFormMessages.approvalAddAssignee)}
                             selectedOptions={renderApprovers}
                             selectorOptions={approverOptions}
                             validateForError={() => this.validateForm('taskAssignees')}
@@ -359,7 +363,7 @@ class TaskForm extends React.Component<Props, State> {
                             name="taskName"
                             onBlur={() => this.validateForm('taskName')}
                             onChange={this.handleChangeMessage}
-                            placeholder={intl.formatMessage(messages.commentWrite)}
+                            placeholder={intl.formatMessage(approvalCommentFormMessages.commentWrite)}
                             value={message}
                         />
                         <DatePicker
@@ -376,7 +380,7 @@ class TaskForm extends React.Component<Props, State> {
                             minDate={new Date()}
                             name="taskDueDate"
                             onChange={this.handleDueDateChange}
-                            placeholder={intl.formatMessage(messages.approvalSelectDate)}
+                            placeholder={intl.formatMessage(approvalCommentFormMessages.approvalSelectDate)}
                             value={dueDate || undefined}
                         />
                         <div className="bcs-task-input-controls">

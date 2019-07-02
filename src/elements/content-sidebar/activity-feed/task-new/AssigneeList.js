@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import PlainButton from '../../../../components/plain-button';
 import ReadableTime from '../../../../components/time/ReadableTime';
 import messages from '../../../common/messages';
+import taskMessages from './messages';
 import AvatarGroupAvatar from './AvatarGroupAvatar';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
 import type { TaskAssigneeCollection } from '../../../../common/types/tasks';
@@ -24,9 +25,9 @@ type Props = {|
 |};
 
 const statusMessages = {
-    [TASK_NEW_APPROVED]: messages.tasksFeedStatusApproved,
-    [TASK_NEW_REJECTED]: messages.tasksFeedStatusRejected,
-    [TASK_NEW_COMPLETED]: messages.tasksFeedStatusCompleted,
+    [TASK_NEW_APPROVED]: taskMessages.tasksFeedStatusApproved,
+    [TASK_NEW_REJECTED]: taskMessages.tasksFeedStatusRejected,
+    [TASK_NEW_COMPLETED]: taskMessages.tasksFeedStatusCompleted,
     [TASK_NEW_NOT_STARTED]: null,
 };
 
@@ -87,8 +88,8 @@ function AssigneeList(props: Props) {
     const maxAdditionalAssignees = TASKS_PAGE_SIZE - initialAssigneeCount;
     const hasMoreAssigneesThanPageSize = hiddenAssigneeCount > maxAdditionalAssignees || next_marker;
     const additionalAssigneeMessage = hasMoreAssigneesThanPageSize
-        ? messages.taskShowMoreAssigneesOverflow
-        : messages.taskShowMoreAssignees;
+        ? taskMessages.taskShowMoreAssigneesOverflow
+        : taskMessages.taskShowMoreAssignees;
 
     return (
         <div className="bcs-AssigneeList">
@@ -122,7 +123,7 @@ function AssigneeList(props: Props) {
                         onClick={onCollapse}
                         className="lnk"
                     >
-                        <FormattedMessage {...messages.taskShowLessAssignees} />
+                        <FormattedMessage {...taskMessages.taskShowLessAssignees} />
                     </PlainButton>
                 </div>
             )}

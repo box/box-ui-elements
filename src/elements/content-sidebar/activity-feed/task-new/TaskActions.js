@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import messages from '../../../common/messages';
+import messages from './messages';
 import Button from '../../../../components/button';
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../../../constants';
 import type { TaskType } from '../../../../common/types/tasks';

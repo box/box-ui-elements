@@ -11,7 +11,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
   >
     <FormattedMessage
       defaultMessage="Due: {date}"
-      id="be.tasks.taskDueDate"
+      id="be.contentSidebar.activityFeed.taskNew.taskDueDateLabel"
       values={
         Object {
           "date": <ReadableTime
