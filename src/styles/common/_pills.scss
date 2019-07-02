@@ -36,6 +36,14 @@ $pillTextColorDark: lighten($black, 31%);
         margin-left: 8px;
     }
 
+    &.is-disabled {
+        opacity: .5;
+
+        .close-btn {
+            cursor: default;
+        }
+    }
+
     &.is-invalid {
         background-color: $bdl-watermelon-red;
     }

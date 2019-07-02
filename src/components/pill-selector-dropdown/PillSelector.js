@@ -192,6 +192,7 @@ class PillSelector extends React.Component<Props, State> {
                     {selectedOptions.map((option: Option, index: number) => (
                         <Pill
                             isValid={allowInvalidPills ? validator(option) : true}
+                            isDisabled={disabled}
                             isSelected={index === selectedIndex}
                             key={option.value}
                             onRemove={onRemove.bind(this, option, index)}
