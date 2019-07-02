@@ -4,7 +4,7 @@ exports[`elements/content-sidebar/TaskModal render should render a default compo
 <Modal
   className="be-modal task-modal"
   data-testid="create-task-modal"
-  focusElementSelector=".task-modal input"
+  focusElementSelector=".task-modal textarea, .task-modal input"
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={
@@ -40,7 +40,7 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
 <Modal
   className="be-modal task-modal"
   data-testid="create-task-modal"
-  focusElementSelector=".task-modal input"
+  focusElementSelector=".task-modal textarea, .task-modal input"
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={
@@ -77,7 +77,7 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
 <Modal
   className="be-modal task-modal"
   data-testid="create-task-modal"
-  focusElementSelector=".task-modal input"
+  focusElementSelector=".task-modal textarea, .task-modal input"
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={
@@ -114,7 +114,7 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode C
 <Modal
   className="be-modal task-modal"
   data-testid="create-task-modal"
-  focusElementSelector=".task-modal input"
+  focusElementSelector=".task-modal textarea, .task-modal input"
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={
@@ -151,7 +151,7 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode E
 <Modal
   className="be-modal task-modal"
   data-testid="create-task-modal"
-  focusElementSelector=".task-modal input"
+  focusElementSelector=".task-modal textarea, .task-modal input"
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={

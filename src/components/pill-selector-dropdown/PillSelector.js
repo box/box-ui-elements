@@ -181,14 +181,13 @@ class PillSelector extends React.Component<Props, State> {
 
         return (
             <Tooltip isShown={!!error} text={error || ''} position="middle-right" theme="error">
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <span
                     className={classes}
                     onBlur={this.handleBlur}
                     onClick={this.handleClick}
                     onFocus={this.handleFocus}
                     onKeyDown={this.handleKeyDown}
-                    role="button"
-                    tabIndex={0}
                 >
                     {selectedOptions.map((option: Option, index: number) => (
                         <Pill
@@ -208,7 +207,7 @@ class PillSelector extends React.Component<Props, State> {
                         ref={this.hiddenRef}
                         tabIndex={-1}
                     />
-                    <input
+                    <textarea
                         {...rest}
                         {...inputProps}
                         autoComplete="off"
@@ -219,7 +218,6 @@ class PillSelector extends React.Component<Props, State> {
                         ref={input => {
                             this.inputEl = input;
                         }}
-                        type="text"
                     />
                     <SuggestedPillsRow
                         onSuggestedPillAdd={onSuggestedPillAdd}
