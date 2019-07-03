@@ -54,7 +54,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
       >
         <FormattedMessage
           defaultMessage="Cancel"
-          id="be.tasks.addTaskForm.cancel"
+          id="be.contentSidebar.activityFeed.taskForm.tasksAddTaskFormCancelLabel"
         >
           <div />
         </FormattedMessage>
@@ -132,7 +132,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
         >
           <FormattedMessage
             defaultMessage="Update"
-            id="be.tasks.editTaskForm.submit"
+            id="be.contentSidebar.activityFeed.taskForm.tasksEditTaskFormSubmitLabel"
           >
             <div />
           </FormattedMessage>

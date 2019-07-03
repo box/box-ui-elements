@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor } from 'react-intl';
 import Modal from '../../components/modal/Modal';
 import TaskForm from './activity-feed/task-form';
-import messages from '../common/messages';
+import messages from './messages';
 import { TASK_EDIT_MODE_CREATE, TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
 import type { TaskType, TaskEditMode } from '../../common/types/tasks';
@@ -34,7 +34,7 @@ function getMessageForModalTitle(taskType: TaskType, mode: TaskEditMode): Messag
     }
 }
 
-const focusTargetSelector: string = '.task-modal input';
+const focusTargetSelector: string = '.task-modal textarea, .task-modal input';
 
 const TaskModal = (props: TaskModalProps) => {
     const {

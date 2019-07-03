@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_NOT_STARTED } from '../../../../../constants';
-import messages from '../../../../common/messages';
+import messages from '../messages';
 
 import AssigneeList from '../AssigneeList';
 

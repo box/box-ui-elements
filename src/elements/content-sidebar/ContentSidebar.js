@@ -238,7 +238,7 @@ class ContentSidebar extends React.Component<Props, State> {
 
         if (canHaveMetadataSidebar) {
             this.api
-                .getMetadataAPI(true)
+                .getMetadataAPI(false)
                 .getMetadata(((file: any): BoxItem), this.fetchMetadataSuccessCallback, noop, isFeatureEnabled);
         }
     }

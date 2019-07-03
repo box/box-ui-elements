@@ -1,4 +1,5 @@
-import messages from '../../elements/common/messages';
+import commonMessages from '../../elements/common/messages';
+import messages from '../messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
 import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED } from '../../constants';
@@ -1331,7 +1332,7 @@ describe('api/Feed', () => {
             expect(feedError).toEqual({
                 error: {
                     message: 'foo',
-                    title: messages.errorOccured,
+                    title: commonMessages.errorOccured,
                 },
             });
         });

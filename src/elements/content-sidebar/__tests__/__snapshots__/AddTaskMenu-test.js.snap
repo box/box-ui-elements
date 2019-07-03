@@ -12,7 +12,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
     <MenuToggle>
       <FormattedMessage
         defaultMessage="Add Task"
-        id="be.tasks.addTask"
+        id="be.contentSidebar.addTask"
       />
     </MenuToggle>
   </Button>
@@ -39,7 +39,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
         >
           <FormattedMessage
             defaultMessage="General Task"
-            id="be.tasks.addTask.general"
+            id="be.contentSidebar.addTask.general"
           />
         </div>
         <div
@@ -47,7 +47,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
         >
           <FormattedMessage
             defaultMessage="Keep track of work that needs to get done"
-            id="be.tasks.addTask.general.description"
+            id="be.contentSidebar.addTask.general.description"
           />
         </div>
       </div>
@@ -70,7 +70,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
         >
           <FormattedMessage
             defaultMessage="Approval Task"
-            id="be.tasks.addTask.approval"
+            id="be.contentSidebar.addTask.approval"
           />
         </div>
         <div
@@ -78,7 +78,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
         >
           <FormattedMessage
             defaultMessage="Request an approval to move work forward"
-            id="be.tasks.addTask.approval.description"
+            id="be.contentSidebar.addTask.approval.description"
           />
         </div>
       </div>

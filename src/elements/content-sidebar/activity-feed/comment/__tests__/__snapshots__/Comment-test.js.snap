@@ -38,7 +38,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           text={
             <FormattedMessage
               defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.commentPostedFullDateTime"
+              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
               values={
                 Object {
                   "time": 1506534041000,
@@ -108,7 +108,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           text={
             <FormattedMessage
               defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.commentPostedFullDateTime"
+              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
               values={
                 Object {
                   "time": 1506534041000,
@@ -179,7 +179,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
           text={
             <FormattedMessage
               defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.commentPostedFullDateTime"
+              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
               values={
                 Object {
                   "time": 1506534041000,
@@ -253,7 +253,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
           text={
             <FormattedMessage
               defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.commentPostedFullDateTime"
+              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
               values={
                 Object {
                   "time": 1506534041000,

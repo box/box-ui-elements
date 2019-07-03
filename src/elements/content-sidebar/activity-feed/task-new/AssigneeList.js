@@ -3,7 +3,8 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PlainButton from '../../../../components/plain-button';
 import ReadableTime from '../../../../components/time/ReadableTime';
-import messages from '../../../common/messages';
+import commonMessages from '../../../common/messages';
+import messages from './messages';
 import AvatarGroupAvatar from './AvatarGroupAvatar';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
 import type { TaskAssigneeCollection } from '../../../../common/types/tasks';
@@ -39,7 +40,7 @@ const AvatarDetails = React.memo(({ user, status, completedAt, className }) => {
     return (
         <div className={className}>
             <div className="bcs-AssigneeList-detailsName">
-                {user.name ? user.name : <FormattedMessage {...messages.priorCollaborator} />}
+                {user.name ? user.name : <FormattedMessage {...commonMessages.priorCollaborator} />}
             </div>
             {statusMessage && completedAt && (
                 <div className="bcs-AssigneeList-detailsStatus">

@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 
 import IconCheck from '../../../../icons/general/IconCheck';
 
-import messages from '../../../common/messages';
+import messages from '../task-new/messages';
 
 type Props = {
     name: string,
@@ -21,7 +21,7 @@ const CompletedAssignment = ({ name }: Props): React.Node => (
             <IconCheck
                 className="bcs-task-check-icon"
                 height={18}
-                title={<FormattedMessage {...messages.completedAssignment} />}
+                title={<FormattedMessage {...messages.taskAssignmentCompleted} />}
                 width={18}
             />
         </div>

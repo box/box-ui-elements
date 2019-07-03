@@ -14,10 +14,10 @@ describe('Create Task', () => {
 
     context('Add Task button', () => {
         it('opens task form', () => {
-            cy.contains(l('be.tasks.addTask')).click();
-            cy.contains(l('be.tasks.addTask.approval')).click();
+            cy.contains(l('be.contentSidebar.addTask')).click();
+            cy.contains(l('be.contentSidebar.addTask.approval')).click();
             cy.getByTestId('create-task-modal').within(() => {
-                cy.contains(l('be.tasks.createTask.approval.title')).should('exist');
+                cy.contains(l('be.contentSidebar.addTask.approval.title')).should('exist');
                 getSubmitButton().should('exist');
                 getCancelButton().should('exist');
             });
@@ -26,8 +26,8 @@ describe('Create Task', () => {
 
     context('Task Modal', () => {
         it('autofocuses first input (assignees)', () => {
-            cy.contains(l('be.tasks.addTask')).click();
-            cy.contains(l('be.tasks.addTask.approval')).click();
+            cy.contains(l('be.contentSidebar.addTask')).click();
+            cy.contains(l('be.contentSidebar.addTask.approval')).click();
             cy.focused().should('have.attr', 'data-testid', 'task-form-assignee-input');
         });
     });
@@ -35,8 +35,8 @@ describe('Create Task', () => {
     context('Task Form', () => {
         beforeEach(() => {
             cy.server();
-            cy.contains(l('be.tasks.addTask')).click();
-            cy.contains(l('be.tasks.addTask.approval')).click();
+            cy.contains(l('be.contentSidebar.addTask')).click();
+            cy.contains(l('be.contentSidebar.addTask.approval')).click();
         });
         it('does not allow submitting form without input', () => {
             getMessageField()
@@ -54,8 +54,8 @@ describe('Create Task', () => {
             getCancelButton().click();
 
             // reopen modal
-            cy.contains(l('be.tasks.addTask')).click();
-            cy.contains(l('be.tasks.addTask.approval')).click();
+            cy.contains(l('be.contentSidebar.addTask')).click();
+            cy.contains(l('be.contentSidebar.addTask.approval')).click();
 
             cy.getByTestId('task-assignee-option').should('not.exist');
         });
