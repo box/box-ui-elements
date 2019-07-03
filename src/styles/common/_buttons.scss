@@ -18,7 +18,7 @@
     font-weight: 400;
     letter-spacing: .035em;
     line-height: 10px;
-    margin: 5px;
+    margin: 5px 0;
     padding: 10px 16px;
     position: relative;
     text-align: center;
@@ -79,6 +79,10 @@
     &.is-disabled {
         box-shadow: none;
         opacity: .4;
+    }
+
+    & + & {
+        margin-left: 10px;
     }
 }
 
