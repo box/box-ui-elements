@@ -12,4 +12,9 @@ export default {
             enabled: false,
         },
     },
+    contentExplorer: {
+        gridView: {
+            enabled: false,
+        },
+    },
 };

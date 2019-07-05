@@ -42,6 +42,7 @@ import {
     VIEW_FOLDER,
     VIEW_ERROR,
     VIEW_RECENTS,
+    VIEW_MODE_LIST,
     TYPE_FILE,
     TYPE_WEBLINK,
     TYPE_FOLDER,
@@ -54,6 +55,7 @@ import {
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
+import type { ViewMode } from '../common/flowTypes';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -124,6 +126,7 @@ type State = {
     sortBy: SortBy,
     sortDirection: SortDirection,
     view: View,
+    viewMode: ViewMode,
 };
 
 class ContentExplorer extends Component<Props, State> {
@@ -218,23 +221,24 @@ class ContentExplorer extends Component<Props, State> {
         this.id = uniqueid('bce_');
 
         this.state = {
-            sortBy,
-            sortDirection,
-            rootName: '',
             currentCollection: {},
             currentOffset: initialPageSize * (initialPage - 1),
             currentPageSize: initialPageSize,
-            searchQuery: '',
-            view: VIEW_FOLDER,
-            isDeleteModalOpen: false,
-            isRenameModalOpen: false,
-            isCreateFolderModalOpen: false,
-            isShareModalOpen: false,
-            isUploadModalOpen: false,
-            isPreviewModalOpen: false,
-            isLoading: false,
             errorCode: '',
             focusedRow: 0,
+            isCreateFolderModalOpen: false,
+            isDeleteModalOpen: false,
+            isLoading: false,
+            isPreviewModalOpen: false,
+            isRenameModalOpen: false,
+            isShareModalOpen: false,
+            isUploadModalOpen: false,
+            rootName: '',
+            searchQuery: '',
+            sortBy,
+            sortDirection,
+            view: VIEW_FOLDER,
+            viewMode: VIEW_MODE_LIST,
         };
     }
 
@@ -1222,6 +1226,16 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Change the current view mode
+     *
+     * @param {ViewMode} viewMode - the new view mode
+     * @return {void}
+     */
+    changeViewMode = (viewMode: ViewMode): void => {
+        this.setState({ viewMode });
+    };
+
+    /**
      * Renders the file picker
      *
      * @private
@@ -1264,6 +1278,7 @@ class ContentExplorer extends Component<Props, State> {
 
         const {
             view,
+            viewMode,
             rootName,
             currentCollection,
             currentPageSize,
@@ -1301,6 +1316,7 @@ class ContentExplorer extends Component<Props, State> {
                         />
                         <SubHeader
                             view={view}
+                            viewMode={viewMode}
                             rootId={rootFolderId}
                             isSmall={isSmall}
                             rootName={rootName}
@@ -1311,9 +1327,11 @@ class ContentExplorer extends Component<Props, State> {
                             onCreate={this.createFolder}
                             onItemClick={this.fetchFolder}
                             onSortChange={this.sort}
+                            onViewModeChange={this.changeViewMode}
                         />
                         <Content
                             view={view}
+                            viewMode={viewMode}
                             rootId={rootFolderId}
                             isSmall={isSmall}
                             isMedium={isMedium}

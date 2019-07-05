@@ -17,7 +17,9 @@
             }
 
             .explorer1,
-            .explorer2 {
+            .explorer2,
+            .explorer3,
+            .explorer4 {
                 width: 100%;
                 height: 600px;
                 overflow: auto;
@@ -67,6 +69,8 @@
             <div class="explorer2"></div>
             <h1>Content Explorer (no folder upload)</h1>
             <div class="explorer3"></div>
+            <h1>Content Explorer (grid view)</h1>
+            <div class="explorer4"></div>
         </div>
         <script src="../dev/en-US/explorer.js"></script>
         <script>
@@ -122,8 +126,8 @@
                 });
                 document.querySelector('.explorer1').innerHTML = '';
                 explorer1.show(folderId, token, {
-                    container: '.explorer1',
                     autoFocus: true,
+                    container: '.explorer1',
                     contentPreviewProps: {
                         contentSidebarProps: {
                             hasActivityFeed: true,
@@ -147,10 +151,25 @@
 
                 const explorer3 = new ContentExplorer();
                 document.querySelector('.explorer3').innerHTML = '';
-                explorer2.show(folderId, token, {
+                explorer3.show(folderId, token, {
                     container: '.explorer3',
                     canUpload: false,
                     logoUrl: 'box',
+                });
+
+                const explorer4 = new ContentExplorer();
+                document.querySelector('.explorer4').innerHTML = '';
+                explorer4.show(folderId, token, {
+                    container: '.explorer4',
+                    canUpload: false,
+                    logoUrl: 'box',
+                    features: {
+                        contentExplorer: {
+                            gridView: {
+                                enabled: true,
+                            },
+                        },
+                    },
                 });
             }
             load();
