@@ -48,7 +48,7 @@ const helpers = {
         return cy.getByAriaLabel(localize('be.add'));
     },
     getViewModeChangeButton() {
-        return cy.getByAriaLabel(localize('be.gridView'));
+        return cy.getByTestId('view-mode-change-button');
     },
     // need exact match since 'Upload' appears elsewhere on the page
     getUploadButton() {

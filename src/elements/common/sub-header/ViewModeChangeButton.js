@@ -33,6 +33,7 @@ const ViewModeChangeButton = ({ className = '', onViewModeChange, intl, viewMode
             }
         >
             <Button
+                data-testid="view-mode-change-button"
                 className={classNames('bdl-ViewModeChangeButton', className)}
                 type="button"
                 onClick={onClick}

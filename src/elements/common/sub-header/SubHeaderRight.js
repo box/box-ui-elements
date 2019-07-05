@@ -46,13 +46,7 @@ const SubHeaderRight = ({
     return (
         <div className="be-sub-header-right">
             <FeatureFlag feature="contentExplorer.gridView.enabled">
-                {showGridButton && (
-                    <ViewModeChangeButton
-                        className="bdl-SubHeaderRight-ViewModeChangeButton"
-                        viewMode={viewMode}
-                        onViewModeChange={onViewModeChange}
-                    />
-                )}
+                {showGridButton && <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />}
             </FeatureFlag>
 
             {showSort && !!sortBy && !!sortDirection && (
