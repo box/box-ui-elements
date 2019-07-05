@@ -11,7 +11,9 @@ import includes from 'lodash/includes';
 import lowerCase from 'lodash/lowerCase';
 import TokenService from './TokenService';
 import {
+    DEFAULT_LOCALE,
     HEADER_ACCEPT,
+    HEADER_ACCEPT_LANGUAGE,
     HEADER_CLIENT_NAME,
     HEADER_CLIENT_VERSION,
     HEADER_CONTENT_TYPE,
@@ -38,6 +40,8 @@ class Xhr {
     axiosSource: CancelTokenSource;
 
     clientName: ?string;
+
+    language: ?string;
 
     token: Token;
 
@@ -70,6 +74,7 @@ class Xhr {
      * @param {string} options.id - item id
      * @param {string} options.clientName - Client Name
      * @param {string|function} options.token - Auth token
+     * @param {string} [options.language] - Accept-Language header value
      * @param {string} [options.sharedLink] - Shared link
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.requestInterceptor] - Request interceptor
@@ -81,6 +86,7 @@ class Xhr {
     constructor({
         id,
         clientName,
+        language,
         token,
         version,
         sharedLink,
@@ -102,6 +108,7 @@ class Xhr {
         this.shouldRetry = shouldRetry;
         this.retryableStatusCodes = retryableStatusCodes;
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
+        this.language = language || DEFAULT_LOCALE;
 
         if (typeof requestInterceptor === 'function') {
             this.axios.interceptors.request.use(requestInterceptor);
@@ -209,6 +216,7 @@ class Xhr {
             {
                 Accept: 'application/json',
                 [HEADER_CONTENT_TYPE]: 'application/json',
+                [HEADER_ACCEPT_LANGUAGE]: this.language,
             },
             args,
         );

@@ -27,7 +27,14 @@ import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
 import OpenWithAPI from './OpenWith';
 import BoxEditAPI from './box-edit';
-import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
+import {
+    DEFAULT_HOSTNAME_API,
+    DEFAULT_HOSTNAME_UPLOAD,
+    DEFAULT_LOCALE,
+    TYPE_FOLDER,
+    TYPE_FILE,
+    TYPE_WEBLINK,
+} from '../constants';
 
 class APIFactory {
     /**
@@ -162,6 +169,7 @@ class APIFactory {
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
             cache: options.cache || new Cache(),
+            language: options.language || DEFAULT_LOCALE,
         });
     }
 

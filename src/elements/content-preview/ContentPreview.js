@@ -217,26 +217,28 @@ class ContentPreview extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         const {
-            cache,
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
+            cache,
+            fileId,
+            language,
             requestInterceptor,
             responseInterceptor,
-            fileId,
+            sharedLink,
+            sharedLinkPassword,
+            token,
         } = props;
 
         this.id = uniqueid('bcpr_');
         this.api = new API({
-            cache,
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
+            cache,
             clientName: CLIENT_NAME_CONTENT_PREVIEW,
+            language,
             requestInterceptor,
             responseInterceptor,
+            sharedLink,
+            sharedLinkPassword,
+            token,
         });
         this.state = {
             ...this.initialState,
@@ -1178,6 +1180,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 getPreview={this.getPreview}
                                 getViewer={this.getViewer}
                                 history={history}
+                                language={language}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}
