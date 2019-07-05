@@ -10,7 +10,7 @@ import InlineError from '../../../components/inline-error';
 import messages from './messages';
 import messagesCommon from '../../common/messages';
 import SidebarContent from '../SidebarContent';
-import VersionsGroup, { getGroup } from './VersionsGroup';
+import VersionsMenu from './VersionsMenu';
 import { BackButton } from '../../common/nav-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import './VersionsSidebar.scss';
@@ -25,18 +25,9 @@ type Props = {
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, isLoading, fileId, parentName, versions, ...rest }: Props) => {
-    const { id: currentId } = versions[0] || {};
+const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Props) => {
     const showVersions = !!versions.length;
     const showEmpty = !isLoading && !showVersions;
-    const versionGroups = versions.reduce((groups, version) => {
-        const versionGroup = getGroup(version);
-
-        groups[versionGroup] = groups[versionGroup] || [];
-        groups[versionGroup].push(version);
-
-        return groups;
-    }, {});
 
     return (
         <SidebarContent
@@ -60,19 +51,9 @@ const VersionsSidebar = ({ error, isLoading, fileId, parentName, versions, ...re
                 )}
 
                 {showVersions && (
-                    <ul className="bcs-Versions-menu">
-                        {Object.keys(versionGroups).map(versionGroupKey => (
-                            <li className="bcs-Versions-menu-item" key={versionGroupKey}>
-                                <VersionsGroup
-                                    currentId={currentId}
-                                    fileId={fileId}
-                                    versionGroup={versionGroupKey}
-                                    versions={versionGroups[versionGroupKey]}
-                                    {...rest}
-                                />
-                            </li>
-                        ))}
-                    </ul>
+                    <div className="bcs-Versions-menu">
+                        <VersionsMenu versions={versions} {...rest} />
+                    </div>
                 )}
             </LoadingIndicatorWrapper>
         </SidebarContent>
