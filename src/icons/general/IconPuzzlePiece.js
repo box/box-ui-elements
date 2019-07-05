@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-
 import AccessibleSVG from '../accessible-svg';
 import { silverChalice } from '../../styles/variables';
 
@@ -8,7 +7,7 @@ type Props = {
     className?: string,
     color?: string,
     dimension?: number,
-    title?: string,
+    title?: string | React.Element<any>,
 };
 
 const IconPuzzlePiece = ({ className = '', color = silverChalice, dimension = 14, title }: Props) => (
@@ -16,7 +15,7 @@ const IconPuzzlePiece = ({ className = '', color = silverChalice, dimension = 14
         className={`bdl-IconPuzzlePiece ${className}`}
         height={dimension}
         title={title}
-        viewBox={`0 0 ${dimension} ${dimension}`}
+        viewBox="0 0 14 14"
         width={dimension}
     >
         <path
