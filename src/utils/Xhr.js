@@ -11,7 +11,6 @@ import includes from 'lodash/includes';
 import lowerCase from 'lodash/lowerCase';
 import TokenService from './TokenService';
 import {
-    DEFAULT_LOCALE,
     HEADER_ACCEPT,
     HEADER_ACCEPT_LANGUAGE,
     HEADER_CLIENT_NAME,
@@ -96,19 +95,20 @@ class Xhr {
         retryableStatusCodes = [HTTP_STATUS_CODE_RATE_LIMIT],
         shouldRetry = true,
     }: Options = {}) {
-        this.id = id;
-        this.token = token;
         this.clientName = clientName;
-        this.version = version;
+        this.id = id;
+        this.language = language;
+        this.responseInterceptor = responseInterceptor || this.defaultResponseInterceptor;
+        this.retryableStatusCodes = retryableStatusCodes;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
-        this.responseInterceptor = responseInterceptor || this.defaultResponseInterceptor;
+        this.shouldRetry = shouldRetry;
+        this.token = token;
+        this.version = version;
+
         this.axios = axios.create();
         this.axiosSource = axios.CancelToken.source();
-        this.shouldRetry = shouldRetry;
-        this.retryableStatusCodes = retryableStatusCodes;
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
-        this.language = language || DEFAULT_LOCALE;
 
         if (typeof requestInterceptor === 'function') {
             this.axios.interceptors.request.use(requestInterceptor);
@@ -216,10 +216,13 @@ class Xhr {
             {
                 Accept: 'application/json',
                 [HEADER_CONTENT_TYPE]: 'application/json',
-                [HEADER_ACCEPT_LANGUAGE]: this.language,
             },
             args,
         );
+
+        if (this.language && !headers[HEADER_ACCEPT_LANGUAGE]) {
+            headers[HEADER_ACCEPT_LANGUAGE] = this.language;
+        }
 
         if (this.sharedLink) {
             headers.BoxApi = `shared_link=${this.sharedLink}`;
