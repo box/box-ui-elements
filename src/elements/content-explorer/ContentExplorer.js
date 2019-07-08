@@ -192,30 +192,32 @@ class ContentExplorer extends Component<Props, State> {
         super(props);
 
         const {
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
-            uploadHost,
             initialPage,
             initialPageSize,
-            sortBy,
-            sortDirection,
+            language,
             requestInterceptor,
             responseInterceptor,
             rootFolderId,
+            sharedLink,
+            sharedLinkPassword,
+            sortBy,
+            sortDirection,
+            token,
+            uploadHost,
         }: Props = props;
 
         this.api = new API({
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
-            uploadHost,
-            requestInterceptor,
-            responseInterceptor,
             clientName: CLIENT_NAME_CONTENT_EXPLORER,
             id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`,
+            language,
+            requestInterceptor,
+            responseInterceptor,
+            sharedLink,
+            sharedLinkPassword,
+            token,
+            uploadHost,
         });
 
         this.id = uniqueid('bce_');

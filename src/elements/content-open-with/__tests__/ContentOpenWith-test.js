@@ -86,7 +86,7 @@ describe('elements/content-open-with/ContentOpenWith', () => {
             instance.api = api;
 
             instance.fetchOpenWithData();
-            expect(openWithStub).toHaveBeenCalledWith('1234', expect.any(Function), expect.any(Function), 'en-US');
+            expect(openWithStub).toHaveBeenCalledWith('1234', expect.any(Function), expect.any(Function));
         });
     });
 

@@ -12,6 +12,7 @@ import lowerCase from 'lodash/lowerCase';
 import TokenService from './TokenService';
 import {
     HEADER_ACCEPT,
+    HEADER_ACCEPT_LANGUAGE,
     HEADER_CLIENT_NAME,
     HEADER_CLIENT_VERSION,
     HEADER_CONTENT_TYPE,
@@ -38,6 +39,8 @@ class Xhr {
     axiosSource: CancelTokenSource;
 
     clientName: ?string;
+
+    language: ?string;
 
     token: Token;
 
@@ -70,6 +73,7 @@ class Xhr {
      * @param {string} options.id - item id
      * @param {string} options.clientName - Client Name
      * @param {string|function} options.token - Auth token
+     * @param {string} [options.language] - Accept-Language header value
      * @param {string} [options.sharedLink] - Shared link
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.requestInterceptor] - Request interceptor
@@ -81,6 +85,7 @@ class Xhr {
     constructor({
         id,
         clientName,
+        language,
         token,
         version,
         sharedLink,
@@ -90,17 +95,19 @@ class Xhr {
         retryableStatusCodes = [HTTP_STATUS_CODE_RATE_LIMIT],
         shouldRetry = true,
     }: Options = {}) {
-        this.id = id;
-        this.token = token;
         this.clientName = clientName;
-        this.version = version;
+        this.id = id;
+        this.language = language;
+        this.responseInterceptor = responseInterceptor || this.defaultResponseInterceptor;
+        this.retryableStatusCodes = retryableStatusCodes;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
-        this.responseInterceptor = responseInterceptor || this.defaultResponseInterceptor;
+        this.shouldRetry = shouldRetry;
+        this.token = token;
+        this.version = version;
+
         this.axios = axios.create();
         this.axiosSource = axios.CancelToken.source();
-        this.shouldRetry = shouldRetry;
-        this.retryableStatusCodes = retryableStatusCodes;
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
 
         if (typeof requestInterceptor === 'function') {
@@ -212,6 +219,10 @@ class Xhr {
             },
             args,
         );
+
+        if (this.language && !headers[HEADER_ACCEPT_LANGUAGE]) {
+            headers[HEADER_ACCEPT_LANGUAGE] = this.language;
+        }
 
         if (this.sharedLink) {
             headers.BoxApi = `shared_link=${this.sharedLink}`;
