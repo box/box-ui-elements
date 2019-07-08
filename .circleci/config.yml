@@ -41,6 +41,7 @@ jobs:
       - run:
           name: Babel build
           command: yarn build:ci:es
+      - run: ./scripts/check_generated_files.sh
       - run:
           name: Webpack build
           command: yarn build:ci:dist
