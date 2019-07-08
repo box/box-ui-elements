@@ -10,7 +10,7 @@ import VersionsItem from './VersionsItem';
 import './VersionsList.scss';
 
 type Props = {
-    currentId: string,
+    currentId?: string,
     fileId: string,
     versionCount: number,
     versionLimit: number,

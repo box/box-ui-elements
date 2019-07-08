@@ -28,12 +28,23 @@ $pillTextColorDark: lighten($black, 31%);
     }
 
     .close-btn {
+        background-color: transparent;
+        border: none;
         color: $white;
         cursor: pointer;
         flex: none;
         font-size: 8px;
         font-weight: 600;
-        margin-left: 8px;
+        margin: 0 0 0 4px;
+        padding: 4px 0 4px 4px;
+    }
+
+    &.is-disabled {
+        opacity: .5;
+
+        .close-btn {
+            cursor: default;
+        }
     }
 
     &.is-invalid {

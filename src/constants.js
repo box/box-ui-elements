@@ -24,6 +24,10 @@ export const VIEW_UPLOAD_EMPTY: 'upload-empty' = 'upload-empty';
 export const VIEW_UPLOAD_IN_PROGRESS: 'upload-inprogress' = 'upload-inprogress';
 export const VIEW_UPLOAD_SUCCESS: 'upload-success' = 'upload-success';
 
+/* ----------------------- ViewModes ---------------------------- */
+export const VIEW_MODE_LIST: 'list' = 'list';
+export const VIEW_MODE_GRID: 'grid' = 'grid';
+
 /* ----------------------- Types ---------------------------- */
 export const TYPE_FOLDER: 'folder' = 'folder';
 export const TYPE_FILE: 'file' = 'file';
@@ -200,6 +204,7 @@ export const ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED = 'storage_limit_exceeded'
 export const ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED = 'file_size_limit_exceeded';
 export const ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT = 'pending_app_folder_size_limit';
 export const ERROR_CODE_FETCH_FILE = 'fetch_file_error';
+export const ERROR_CODE_FETCH_FILE_DUE_TO_POLICY = 'forbidden_by_policy';
 export const ERROR_CODE_FETCH_FOLDER = 'fetch_folder_error';
 export const ERROR_CODE_FETCH_CLASSIFICATION = 'fetch_classification_error';
 export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';

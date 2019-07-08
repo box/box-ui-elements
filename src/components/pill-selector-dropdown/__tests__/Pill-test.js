@@ -1,16 +1,9 @@
 import React from 'react';
-import sinon from 'sinon';
 
 import Pill from '../Pill';
 
-const sandbox = sinon.sandbox.create();
-
 describe('components/pill-selector-dropdown/Pill', () => {
-    const onRemoveStub = sandbox.stub();
-
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
+    const onRemoveStub = jest.fn();
 
     test('should render default component', () => {
         const wrapper = shallow(<Pill onRemove={onRemoveStub} text="box" />);
@@ -23,7 +16,7 @@ describe('components/pill-selector-dropdown/Pill', () => {
     });
 
     test('should have the selected class when isSelected is true', () => {
-        const wrapper = shallow(<Pill isSelected onRemove={onRemoveStub} text="box" />);
+        const wrapper = shallow(<Pill isSelected isDisabled={false} onRemove={onRemoveStub} text="box" />);
 
         expect(wrapper.hasClass('is-selected')).toBe(true);
     });
@@ -31,5 +24,13 @@ describe('components/pill-selector-dropdown/Pill', () => {
     test('should generate pill with invalid class when pill is not valid', () => {
         const wrapper = shallow(<Pill isValid={false} isSelected onRemove={onRemoveStub} text="box" />);
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should disable click handler and add class when disabled', () => {
+        const onRemoveMock = jest.fn();
+        const wrapper = shallow(<Pill isDisabled isValid onRemove={onRemoveMock} text="box" />);
+        wrapper.simulate('click');
+        expect(onRemoveMock).not.toBeCalled();
+        expect(wrapper.childAt(0).hasClass('is-disabled'));
     });
 });

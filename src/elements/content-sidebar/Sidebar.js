@@ -65,14 +65,16 @@ class Sidebar extends React.Component<Props, State> {
 
     props: Props;
 
-    state: State = {
-        isDirty: false,
-    };
+    state: State;
 
     store: LocalStore = new LocalStore();
 
     constructor(props: Props) {
         super(props);
+
+        this.state = {
+            isDirty: this.getLocationState('open') || false,
+        };
 
         this.setForcedByLocation();
     }
