@@ -43,19 +43,9 @@ prepush() {
     yarn build:i18n || exit 1
 
     printf "${blue}-------------------------------------------------------------${end}"
-    printf "${blue}Linting${end}"
-    printf "${blue}-------------------------------------------------------------${end}"
-    yarn lint || exit 1
-
-    printf "${blue}-------------------------------------------------------------${end}"
-    printf "${blue}Checking flow types${end}"
-    printf "${blue}-------------------------------------------------------------${end}"
-    yarn flow check || exit 1
-
-    printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Testing${end}"
     printf "${blue}-------------------------------------------------------------${end}"
-    yarn test || exit 1
+    yarn test --lastCommit || exit 1
 
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Building all sources, this will update i18n/json${end}"

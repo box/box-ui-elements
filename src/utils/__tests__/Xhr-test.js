@@ -1,5 +1,9 @@
 import noop from 'lodash/noop';
+import TokenService from '../TokenService';
 import Xhr from '../Xhr';
+
+jest.mock('../TokenService');
+TokenService.getReadToken.mockImplementation(() => Promise.resolve(`${Math.random()}`));
 
 describe('util/Xhr', () => {
     let xhrInstance;
@@ -409,6 +413,22 @@ describe('util/Xhr', () => {
             expect(xhrInstance.getExponentialRetryTimeoutInMs).not.toHaveBeenCalled();
             expect(xhrInstance.axios).not.toHaveBeenCalled();
             expect(xhrInstance.responseInterceptor).toHaveBeenCalledWith(response.data);
+        });
+    });
+
+    describe('getHeaders()', () => {
+        it('should not override any existing Accept-Language header', async () => {
+            xhrInstance.language = 'bar';
+            const actHeaders = await xhrInstance.getHeaders('123', { 'Accept-Language': 'foo' });
+
+            expect(actHeaders['Accept-Language']).toBe('foo');
+        });
+
+        it('should apply Accept-Language header if language exists', async () => {
+            xhrInstance.language = 'bar';
+            const actHeaders = await xhrInstance.getHeaders('123');
+
+            expect(actHeaders['Accept-Language']).toBe('bar');
         });
     });
 });

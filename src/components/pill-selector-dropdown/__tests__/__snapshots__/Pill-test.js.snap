@@ -9,14 +9,12 @@ exports[`components/pill-selector-dropdown/Pill should generate pill with invali
   >
     box
   </span>
-  <button
+  <span
     aria-hidden="true"
     className="close-btn"
-    disabled={false}
     onClick={[MockFunction]}
-    type="button"
   >
     ✕
-  </button>
+  </span>
 </span>
 `;

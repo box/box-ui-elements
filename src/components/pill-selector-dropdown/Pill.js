@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import noop from 'lodash/noop';
 import classNames from 'classnames';
 
 type Props = {
@@ -16,12 +17,14 @@ const Pill = ({ isDisabled = false, isSelected = false, isValid = true, onRemove
         'is-invalid': !isValid,
         'is-disabled': isDisabled,
     });
+    const onClick = isDisabled ? noop : onRemove;
+
     return (
         <span className={styles}>
             <span className="pill-text">{text}</span>
-            <button aria-hidden="true" className="close-btn" disabled={isDisabled} onClick={onRemove} type="button">
+            <span aria-hidden="true" className="close-btn" onClick={onClick}>
                 ✕
-            </button>
+            </span>
         </span>
     );
 };
