@@ -7,6 +7,8 @@
 import React from 'react';
 import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderRight from './SubHeaderRight';
+import type { ViewMode } from '../flowTypes';
+import { VIEW_MODE_LIST } from '../../../constants';
 
 import './SubHeader.scss';
 
@@ -19,23 +21,27 @@ type Props = {
     onItemClick: Function,
     onSortChange: Function,
     onUpload: Function,
+    onViewModeChange?: (viewMode: ViewMode) => void,
     rootId: string,
     rootName?: string,
     view: View,
+    viewMode?: ViewMode,
 };
 
 const SubHeader = ({
-    rootId,
-    rootName,
+    canCreateNewFolder,
+    canUpload,
+    currentCollection,
+    isSmall,
+    onCreate,
     onItemClick,
     onSortChange,
-    currentCollection,
     onUpload,
-    onCreate,
-    canUpload,
-    canCreateNewFolder,
+    onViewModeChange,
+    rootId,
+    rootName,
     view,
-    isSmall,
+    viewMode = VIEW_MODE_LIST,
 }: Props) => (
     <div className="be-sub-header" data-testid="be-sub-header">
         <SubHeaderLeft
@@ -50,7 +56,9 @@ const SubHeader = ({
             canCreateNewFolder={canCreateNewFolder}
             canUpload={canUpload}
             currentCollection={currentCollection}
+            viewMode={viewMode}
             onCreate={onCreate}
+            onViewModeChange={onViewModeChange}
             onSortChange={onSortChange}
             onUpload={onUpload}
             view={view}

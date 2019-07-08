@@ -33,4 +33,16 @@ describe('components/pill-selector-dropdown/Pill', () => {
         expect(onRemoveMock).not.toBeCalled();
         expect(wrapper.childAt(0).hasClass('is-disabled'));
     });
+
+    test('should not call click handler when isDisabled is true', () => {
+        const wrapper = shallow(<Pill onRemove={onRemoveStub} text="box" />);
+
+        wrapper.setProps({ isDisabled: true });
+        wrapper.find('.close-btn').simulate('click');
+        expect(onRemoveStub).toHaveBeenCalledTimes(0);
+
+        wrapper.setProps({ isDisabled: false });
+        wrapper.find('.close-btn').simulate('click');
+        expect(onRemoveStub).toHaveBeenCalledTimes(1);
+    });
 });

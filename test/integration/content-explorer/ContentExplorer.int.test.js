@@ -3,14 +3,28 @@ import utils from '../../support/utils';
 
 // <reference types="Cypress" />
 const selectedRowClassName = 'bce-item-row-selected';
-const selectedRowClassSelector = `.${selectedRowClassName}`;
+const listViewClass = 'bce-item-grid';
+const gridViewClass = 'bdl-GridView';
+
+const gridViewOn = {
+    contentExplorer: {
+        gridView: {
+            enabled: true,
+        },
+    },
+};
+
 const helpers = {
-    load(additionalProps = {}) {
+    load({ props, features } = {}) {
         cy.visit('/Elements/ContentExplorer', {
             onBeforeLoad: contentWindow => {
-                contentWindow.PROPS = additionalProps;
+                contentWindow.PROPS = props;
+                contentWindow.FEATURES = features;
             },
         });
+    },
+    getSelector(className) {
+        return `.${className}`;
     },
     getRow(rowNum) {
         return cy.getByTestId('content-explorer').find(`.bce-item-row-${rowNum}`);
@@ -18,11 +32,11 @@ const helpers = {
     checkRowSelections(selectedRow) {
         if (selectedRow) {
             cy.getByTestId('content-explorer')
-                .find(`${selectedRowClassSelector}`)
+                .find(this.getSelector(selectedRowClassName))
                 .should('have.length', 1)
                 .should('have.class', `bce-item-row-${selectedRow}`);
         } else {
-            cy.getByTestId('content-explorer').should('not.have.descendants', selectedRowClassSelector);
+            cy.getByTestId('content-explorer').should('not.have.descendants', this.getSelector(selectedRowClassName));
         }
     },
     selectRow(rowNum) {
@@ -32,6 +46,9 @@ const helpers = {
     },
     getAddButton() {
         return cy.getByAriaLabel(localize('be.add'));
+    },
+    getViewModeChangeButton() {
+        return cy.getByTestId('view-mode-change-button');
     },
     // need exact match since 'Upload' appears elsewhere on the page
     getUploadButton() {
@@ -84,19 +101,20 @@ describe('ContentExplorer', () => {
     });
 
     describe('Selection', () => {
-        it('Should not have a selected row to start', () => {
+        beforeEach(() => {
             helpers.load();
+        });
+
+        it('Should not have a selected row to start', () => {
             helpers.checkRowSelections();
         });
 
         it('Should be able to select a row', () => {
-            helpers.load();
             helpers.selectRow(3);
             helpers.checkRowSelections(3);
         });
 
         it('Should change selected rows', () => {
-            helpers.load();
             helpers.selectRow(3);
             helpers.checkRowSelections(3);
             helpers.selectRow(5);
@@ -104,7 +122,6 @@ describe('ContentExplorer', () => {
         });
 
         it('Should open and close upload modal', () => {
-            helpers.load();
             helpers.selectRow(2);
             helpers.checkRowSelections(2);
             helpers.openUploadModal();
@@ -117,7 +134,6 @@ describe('ContentExplorer', () => {
         });
 
         it('Should click add button and then select new row', () => {
-            helpers.load();
             helpers.selectRow(2);
             helpers.getAddButton().click();
             helpers.checkRowSelections(2);
@@ -128,7 +144,6 @@ describe('ContentExplorer', () => {
         });
 
         it('Should cancel creating new folder', () => {
-            helpers.load();
             helpers.selectRow(2);
             helpers.checkRowSelections(2);
             helpers.openNewFolderModal();
@@ -139,7 +154,6 @@ describe('ContentExplorer', () => {
         });
 
         it('Should open and close share text', () => {
-            helpers.load();
             helpers.getShareButton(2).click();
             helpers.getCloseButton().click();
             helpers.checkRowSelections(2);
@@ -150,7 +164,6 @@ describe('ContentExplorer', () => {
         });
 
         it('Should preview an item', () => {
-            helpers.load();
             helpers.previewItemFromRow(4);
             helpers.getClosePreviewButton().click();
             helpers.checkRowSelections(4);
@@ -161,7 +174,6 @@ describe('ContentExplorer', () => {
         });
 
         it('Should open and close rename modal', () => {
-            helpers.load();
             helpers.selectRow(2);
             helpers.checkRowSelections(2);
             helpers.getMoreOptionsButton(4).click();
@@ -173,7 +185,6 @@ describe('ContentExplorer', () => {
         });
 
         it('Should perform multiple operations in sequence', () => {
-            helpers.load();
             helpers.selectRow(1);
             helpers.checkRowSelections(1);
             helpers.selectRow(4);
@@ -193,6 +204,31 @@ describe('ContentExplorer', () => {
             helpers.checkRowSelections(3);
             helpers.selectRow(4);
             helpers.checkRowSelections(4);
+        });
+    });
+
+    describe('Grid View', () => {
+        beforeEach(() => {
+            helpers.load({ features: gridViewOn });
+        });
+
+        it('Should initially show list view', () => {
+            cy.getByTestId('content-explorer')
+                .find(helpers.getSelector(listViewClass))
+                .should('have.length', 1);
+            cy.getByTestId('content-explorer')
+                .find(helpers.getSelector(gridViewClass))
+                .should('have.length', 0);
+        });
+
+        it('Should switch to grid view', () => {
+            helpers.getViewModeChangeButton().click();
+            cy.getByTestId('content-explorer')
+                .find(helpers.getSelector(listViewClass))
+                .should('have.length', 0);
+            cy.getByTestId('content-explorer')
+                .find(helpers.getSelector(gridViewClass))
+                .should('have.length', 1);
         });
     });
 });
