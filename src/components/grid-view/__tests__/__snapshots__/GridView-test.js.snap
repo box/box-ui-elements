@@ -10,6 +10,7 @@ exports[`components/grid-view/GridView should render() 1`] = `
   rowCount={1}
   rowGetter={[Function]}
   rowHeight={[Function]}
+  scrollToIndex={0}
   sortDirection="ASC"
   width={400}
 >

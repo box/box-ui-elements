@@ -12,7 +12,6 @@ import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
-import getProp from 'lodash/get';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -28,11 +27,6 @@ import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
-import getSize from '../../utils/size';
-import moreOptionsCellRenderer from './moreOptionsCellRenderer';
-import dateCellRenderer from './dateCellRenderer';
-import nameCellRenderer from '../common/item/nameCellRenderer';
-import { getIcon } from '../common/item/iconCellRenderer';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { withFeatureProvider } from '../common/feature-checking';
 import {
@@ -66,7 +60,6 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
-import '../../components/grid-view/GridViewSlot.scss';
 
 type Props = {
     apiHost: string,
@@ -115,7 +108,6 @@ type Props = {
 };
 
 type State = {
-    columnCount: number,
     currentCollection: Collection,
     currentOffset: number,
     currentPageSize: number,
@@ -231,7 +223,6 @@ class ContentExplorer extends Component<Props, State> {
         this.id = uniqueid('bce_');
 
         this.state = {
-            columnCount: 5,
             currentCollection: {},
             currentOffset: initialPageSize * (initialPage - 1),
             currentPageSize: initialPageSize,
@@ -1237,63 +1228,6 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
-     * Renderer used for cards in grid view
-     *
-     * @param {number} slotIndex - index of item in currentCollection.items
-     * @return {React.Element} - Element to display in card
-     */
-    slotRenderer = (slotIndex: number) => {
-        const { currentCollection, view } = this.state;
-        const { canPreview, canShare, canDownload, canDelete, canRename, isSmall, isTouch, rootFolderId } = this.props;
-        const item: ?BoxItem = getProp(currentCollection, `items[${slotIndex}]`);
-
-        if (!item) {
-            return <div />;
-        }
-
-        const moreOptionsCell = moreOptionsCellRenderer(
-            canPreview,
-            canShare,
-            canDownload,
-            canDelete,
-            canRename,
-            this.select,
-            this.delete,
-            this.download,
-            this.rename,
-            this.share,
-            this.preview,
-            isSmall,
-        );
-
-        const nameCell = nameCellRenderer(
-            rootFolderId,
-            view,
-            this.onItemClick,
-            this.select,
-            canPreview,
-            isSmall, // shows details if false
-            isTouch,
-        );
-
-        const dateCell = dateCellRenderer();
-
-        return (
-            <div>
-                <div className="bdl-GridView-itemThumbnail">
-                    <div className="bdl-GridView-itemIcon"> {getIcon(128, item)} </div>
-                </div>
-                <div>
-                    {item && nameCell({ rowData: item })}
-                    <div> {getSize(item.size)} </div>
-                    {item && dateCell({ dataKey: '', rowData: item })}
-                </div>
-                {item && moreOptionsCell({ rowData: item })}
-            </div>
-        );
-    };
-
-    /**
      * Change the current view mode
      *
      * @param {ViewMode} viewMode - the new view mode
@@ -1361,7 +1295,6 @@ class ContentExplorer extends Component<Props, State> {
             isLoading,
             errorCode,
             focusedRow,
-            columnCount,
         }: State = this.state;
 
         const { id, offset, permissions, totalCount }: Collection = currentCollection;
@@ -1423,8 +1356,6 @@ class ContentExplorer extends Component<Props, State> {
                             onItemShare={this.share}
                             onItemPreview={this.preview}
                             onSortChange={this.sort}
-                            columnCount={columnCount}
-                            slotRenderer={this.slotRenderer}
                         />
                         <Footer>
                             <Pagination
