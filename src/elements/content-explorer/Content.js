@@ -5,10 +5,13 @@
  */
 
 import React from 'react';
+import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
-import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
+import GridView from '../../components/grid-view/GridView';
+import type { ViewMode } from '../common/flowTypes';
+import { VIEW_ERROR, VIEW_MODE_LIST, VIEW_SELECTED } from '../../constants';
 import './Content.scss';
 
 /**
@@ -29,6 +32,7 @@ type Props = {
     canPreview: boolean,
     canRename: boolean,
     canShare: boolean,
+    columnCount?: number,
     currentCollection: Collection,
     focusedRow: number,
     isMedium: boolean,
@@ -44,67 +48,46 @@ type Props = {
     onSortChange: Function,
     rootElement?: HTMLElement,
     rootId: string,
+    slotRenderer?: Function,
     tableRef: Function,
     view: View,
+    viewMode?: ViewMode,
 };
 
 const Content = ({
-    view,
-    isSmall,
-    isMedium,
-    isTouch,
-    rootId,
-    rootElement,
+    columnCount = 1,
     currentCollection,
-    tableRef,
-    focusedRow,
-    canDownload,
-    canDelete,
-    canRename,
-    canShare,
-    canPreview,
-    onItemClick,
-    onItemSelect,
-    onItemDelete,
-    onItemDownload,
-    onItemRename,
-    onItemShare,
-    onItemPreview,
-    onSortChange,
-}: Props) => (
-    <div className="bce-content">
-        {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
-            <ProgressBar percent={currentCollection.percentLoaded} />
-        )}
-        {isEmpty(view, currentCollection) ? (
-            <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
-        ) : (
-            <ItemList
-                view={view}
-                isSmall={isSmall}
-                isMedium={isMedium}
-                isTouch={isTouch}
-                rootId={rootId}
-                rootElement={rootElement}
-                focusedRow={focusedRow}
-                currentCollection={currentCollection}
-                tableRef={tableRef}
-                canShare={canShare}
-                canPreview={canPreview}
-                canDelete={canDelete}
-                canRename={canRename}
-                canDownload={canDownload}
-                onItemClick={onItemClick}
-                onItemSelect={onItemSelect}
-                onItemDelete={onItemDelete}
-                onItemDownload={onItemDownload}
-                onItemRename={onItemRename}
-                onItemShare={onItemShare}
-                onItemPreview={onItemPreview}
-                onSortChange={onSortChange}
-            />
-        )}
-    </div>
-);
+    slotRenderer = index => <div>{index}</div>,
+    view,
+    viewMode = VIEW_MODE_LIST,
+    ...rest
+}: Props) => {
+    const isViewEmpty = isEmpty(view, currentCollection);
+    const isListView = viewMode === VIEW_MODE_LIST;
+    return (
+        <div className="bce-content">
+            {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
+                <ProgressBar percent={currentCollection.percentLoaded} />
+            )}
+
+            {isViewEmpty && <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />}
+            {!isViewEmpty && isListView && <ItemList currentCollection={currentCollection} view={view} {...rest} />}
+            {!isViewEmpty && !isListView && (
+                <AutoSizer>
+                    {({ height, width }) => (
+                        <GridView
+                            columnCount={columnCount}
+                            currentCollection={currentCollection}
+                            height={height}
+                            slotRenderer={slotRenderer}
+                            width={width}
+                            {...rest}
+                        />
+                    )}
+                </AutoSizer>
+            )}
+        </div>
+    );
+};
 
 export default Content;

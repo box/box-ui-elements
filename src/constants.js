@@ -24,6 +24,10 @@ export const VIEW_UPLOAD_EMPTY: 'upload-empty' = 'upload-empty';
 export const VIEW_UPLOAD_IN_PROGRESS: 'upload-inprogress' = 'upload-inprogress';
 export const VIEW_UPLOAD_SUCCESS: 'upload-success' = 'upload-success';
 
+/* ----------------------- ViewModes ---------------------------- */
+export const VIEW_MODE_LIST: 'list' = 'list';
+export const VIEW_MODE_GRID: 'grid' = 'grid';
+
 /* ----------------------- Types ---------------------------- */
 export const TYPE_FOLDER: 'folder' = 'folder';
 export const TYPE_FILE: 'file' = 'file';
