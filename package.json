@@ -38,7 +38,7 @@
     "scripts": {
         "build": "yarn build:dev:dist",
         "build:ci:es": "yarn build:prod:es",
-        "build:ci:dist": "LANGUAGE=en-US REACT=true yarn build:prod:dist",
+        "build:ci:dist": "LANGUAGE=en-US ENTRY=explorer REACT=true yarn build:prod:dist",
         "build:dev:dist": "LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev webpack --config scripts/webpack.config.js --mode development --progress --colors",
         "build:dev:es": "BABEL_ENV=dev NODE_ENV=dev yarn build:es --copy-files --source-maps inline --watch --ignore \"**/__tests__/**\"",
         "build:es": "babel src --out-dir es",
