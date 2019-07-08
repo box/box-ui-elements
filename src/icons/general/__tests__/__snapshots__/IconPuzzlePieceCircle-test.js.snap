@@ -4,7 +4,7 @@ exports[`icons/general/IconPuzzlePieceCircle should correctly render default ico
 <AccessibleSVG
   className="bdl-IconPuzzlePieceCircle"
   height={32}
-  viewBox="0 0 32 32"
+  viewBox="0 0 28 28"
   width={32}
 >
   <rect
@@ -28,7 +28,7 @@ exports[`icons/general/IconPuzzlePieceCircle should correctly render icon with c
 <AccessibleSVG
   className="bdl-IconPuzzlePieceCircle circular"
   height={32}
-  viewBox="0 0 32 32"
+  viewBox="0 0 28 28"
   width={32}
 >
   <rect
@@ -52,7 +52,7 @@ exports[`icons/general/IconPuzzlePieceCircle should correctly render icon with s
 <AccessibleSVG
   className="bdl-IconPuzzlePieceCircle"
   height={32}
-  viewBox="0 0 32 32"
+  viewBox="0 0 28 28"
   width={32}
 >
   <rect
@@ -72,12 +72,12 @@ exports[`icons/general/IconPuzzlePieceCircle should correctly render icon with s
 </AccessibleSVG>
 `;
 
-exports[`icons/general/IconPuzzlePieceCircle should correctly render icon with specified width and height 1`] = `
+exports[`icons/general/IconPuzzlePieceCircle should correctly render icon with specified width and height and default viewBox value 1`] = `
 <AccessibleSVG
   className="bdl-IconPuzzlePieceCircle"
-  height={32}
-  viewBox="0 0 32 32"
-  width={32}
+  height={16}
+  viewBox="0 0 28 28"
+  width={16}
 >
   <rect
     fill="none"
@@ -101,7 +101,7 @@ exports[`icons/general/IconPuzzlePieceCircle should correctly render icon with t
   className="bdl-IconPuzzlePieceCircle"
   height={32}
   title="abcde"
-  viewBox="0 0 32 32"
+  viewBox="0 0 28 28"
   width={32}
 >
   <rect

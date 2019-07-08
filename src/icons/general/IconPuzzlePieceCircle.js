@@ -16,7 +16,7 @@ const IconPuzzlePieceCircle = ({ className = '', color = bdlBoxBlue, height = 32
     <AccessibleSVG
         className={classNames('bdl-IconPuzzlePieceCircle', className)}
         height={height}
-        viewBox="0 0 32 32"
+        viewBox="0 0 28 28"
         title={title}
         width={width}
     >

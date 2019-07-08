@@ -12,7 +12,7 @@ type Props = {
     width?: number,
 };
 
-const IconPuzzlePiece = ({ className = '', color = silverChalice, height = 14, title, width = 14 }: Props) => (
+const IconPuzzlePiece = ({ className = '', color = silverChalice, height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
         className={classNames('bdl-IconPuzzlePiece', className)}
         height={height}

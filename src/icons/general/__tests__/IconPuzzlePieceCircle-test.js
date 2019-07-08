@@ -13,8 +13,8 @@ describe('icons/general/IconPuzzlePieceCircle', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render icon with specified width and height', () => {
-        const wrapper = shallow(<IconPuzzlePieceCircle dimension={16} />);
+    test('should correctly render icon with specified width and height and default viewBox value', () => {
+        const wrapper = shallow(<IconPuzzlePieceCircle height={16} width={16} />);
         expect(wrapper).toMatchSnapshot();
     });
 

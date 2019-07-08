@@ -324,9 +324,9 @@ exports[`icons/states/SandboxesInterstitialState should correctly render icon wi
 exports[`icons/states/SandboxesInterstitialState should correctly render icon with specified width and height and default viewBox value 1`] = `
 <AccessibleSVG
   className="bdl-SandboxesInterstitialState"
-  height={140}
+  height={200}
   viewBox="0 0 140 140"
-  width={140}
+  width={200}
 >
   <path
     d="M13 122.5s29 1.5 57 1.5 34-4 46-4 12 4 12 4l-1 5H14z"
