@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 import AccessibleSVG from '../accessible-svg';
 import { bdlBoxBlue, bdlBoxBlue40 } from '../../styles/variables';
 
@@ -21,7 +22,7 @@ const SandboxesEmptyState = ({
     width = 130,
 }: Props) => (
     <AccessibleSVG
-        className={`bdl-SandboxesEmptyState ${className}`}
+        className={classNames('bdl-SandboxesEmptyState', className)}
         height={height}
         title={title}
         viewBox="0 0 130 85"
