@@ -162,6 +162,7 @@ class APIFactory {
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
             cache: options.cache || new Cache(),
+            language: options.language,
         });
     }
 
