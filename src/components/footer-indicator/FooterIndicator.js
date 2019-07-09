@@ -17,7 +17,7 @@ const FooterIndicator = ({ indicatorText }: Props) => {
             <Tooltip position="top-right" text={indicatorText}>
                 <div className="bdl-FooterIndicator-content">
                     <span className="bdl-FooterIndicator-iconWrapper">
-                        <IconPuzzlePiece />
+                        <IconPuzzlePiece height={14} width={14} />
                     </span>
                     <span className="bdl-FooterIndicator-text">{indicatorText}</span>
                 </div>
