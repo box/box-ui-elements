@@ -137,7 +137,7 @@ build_assets() {
 
 push_to_npm() {
     printf "${blue}Publishing assets to npmjs...${end}"
-    npm publish --access public --tag "$DISTTAG" || return 1
+    npm publish --dry-run --access public --tag "$DISTTAG" || return 1
     printf "${green}Published npm using dist-tag=${DISTTAG}!${end}"
 }
 
