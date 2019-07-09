@@ -44,6 +44,12 @@
         padding: 10px 0;
     }
 
+    .collapsible-card-transition {
+        overflow: hidden;
+        transition-property: height;
+        transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    }
+
     &.is-open .collapsible-card-header-caret {
         transform: rotateZ(180deg);
     }

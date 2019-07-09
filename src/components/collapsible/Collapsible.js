@@ -2,7 +2,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import AnimateHeight from 'react-animate-height';
 
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconCaretDown from '../../icons/general/IconCaretDown';
@@ -13,7 +12,7 @@ import './Collapsible.scss';
 
 type Props = {
     /** Duration of animation (milliseconds) */
-    animationDuration?: number,
+    animationDuration: number,
     /** Other props (e.g. resin target names) to be included in the button */
     buttonProps?: Object,
     /** Content to be displayed in the card if it's expanded */
@@ -37,10 +36,15 @@ type Props = {
 };
 
 type State = {
+    /** This is the height of the animated div */
+    height: string,
+    /** This value represents if the collapsible is open or not */
     isOpen: boolean,
 };
 
-class Collapsible extends React.Component<Props, State> {
+class Collapsible extends React.PureComponent<Props, State> {
+    transitionElement: { current: ?HTMLDivElement };
+
     static defaultProps = {
         buttonProps: {},
         className: '',
@@ -50,16 +54,33 @@ class Collapsible extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        this.transitionElement = React.createRef();
         this.state = {
             isOpen: props.isOpen,
+            height: 'auto',
         };
+    }
+
+    componentDidMount() {
+        const { current } = this.transitionElement;
+        if (!current) {
+            return;
+        }
+        this.setState(prevState => ({
+            height: prevState.isOpen ? `${current.scrollHeight}px` : '0',
+        }));
     }
 
     toggleVisibility = () => {
         const { onOpen, onClose } = this.props;
+        const { current } = this.transitionElement;
+        if (!current) {
+            return;
+        }
         this.setState(
             prevState => ({
                 isOpen: !prevState.isOpen,
+                height: !prevState.isOpen ? `${current.scrollHeight}px` : '0',
             }),
             () => {
                 const { isOpen } = this.state;
@@ -73,7 +94,7 @@ class Collapsible extends React.Component<Props, State> {
     };
 
     render() {
-        const { isOpen }: State = this.state;
+        const { isOpen, height }: State = this.state;
         const {
             animationDuration,
             buttonProps = {},
@@ -119,9 +140,16 @@ class Collapsible extends React.Component<Props, State> {
                     </PlainButton>
                     {isOpen && headerActionItems}
                 </div>
-                <AnimateHeight duration={animationDuration} height={isOpen ? 'auto' : 0}>
+                <div
+                    className="collapsible-card-transition"
+                    ref={this.transitionElement}
+                    style={{
+                        height,
+                        transitionDuration: `${animationDuration}ms`,
+                    }}
+                >
                     <div className="collapsible-card-content">{children}</div>
-                </AnimateHeight>
+                </div>
             </div>
         );
     }
