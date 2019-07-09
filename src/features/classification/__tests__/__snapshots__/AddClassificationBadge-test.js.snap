@@ -4,14 +4,8 @@ exports[`features/classification/AddClassificationBadge should render a classifi
 <h1
   className="bdl-AddClassificationBadge"
 >
-  <IconAddTags
-    color="#909090"
-    height={10}
-    strokeWidth={3}
-    width={10}
-  />
   <FormattedMessage
-    defaultMessage="Add Classification"
+    defaultMessage="CLASSIFY"
     id="boxui.classification.addClassification"
   >
     <Component />

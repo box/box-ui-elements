@@ -6,13 +6,11 @@
     border-radius: $bdl-border-radius-size;
     display: inline-flex;
     margin: 0;
-    padding: 2px 5px;
+    padding: 0 5px;
 }
 
 @mixin bdl-ClassificationBadge-name {
     font-size: 10px !important; // To inhibit overriding
     font-weight: 600;
-    line-height: initial;
-    margin-left: 5px;
-    text-transform: uppercase;
+    line-height: 16px;
 }
