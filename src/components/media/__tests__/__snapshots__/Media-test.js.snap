@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/Media compound component 1`] = `
+<div
+  class="bdl-Media"
+>
+  <div
+    class="bdl-Media-img"
+  >
+    <img
+      alt="some img"
+      src=""
+    />
+  </div>
+  <div
+    class="bdl-Media-body"
+  >
+    <div
+      class="bdl-Media-menu"
+    >
+      <icon-ellipsis />
+    </div>
+    <div>
+      <b>
+        Yo Yo Ma
+      </b>
+       commented on this file
+    </div>
+    <div>
+      Please review the notes
+    </div>
+  </div>
+</div>
+`;

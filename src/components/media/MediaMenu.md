@@ -1,0 +1,21 @@
+The `Media.Menu` component should go inside `Media.Body` for optimal reflow of the content around the menu icon
+
+```js
+<Media style={{ width: 300 }}>
+  <Media.Img>
+    <Avatar size="large" />
+  </Media.Img>
+
+  <Media.Body style={{ boxShadow: '0 0 4px 4px orange' }}>
+    <Media.Menu style={{ boxShadow: '0 0 4px 4px red' }}>Hi</Media.Menu>
+    <div>
+      <b>Yo Yo Ma</b> commented on this file
+    </div>
+    <div>
+      Please review the notes
+      <br />a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8
+      9 0 1 2 3 4 5 6 7 8 9
+    </div>
+  </Media.Body>
+</Media>
+```

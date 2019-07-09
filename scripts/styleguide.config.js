@@ -103,6 +103,23 @@ const allSections = [
         description: 'Box UI Elements components implement the reusable building blocks of the Box Design Language',
         sectionDepth: 2,
         usageMode: 'expand',
+        sections: [
+            {
+                name: 'Media',
+                components: ['../src/components/media/Media.js'],
+                pagePerSection: true,
+                sections: [
+                    {
+                        name: 'Helpers',
+                        components: [
+                            '../src/components/media/MediaImg.js',
+                            '../src/components/media/MediaBody.js',
+                            '../src/components/media/MediaMenu.js',
+                        ],
+                    },
+                ],
+            },
+        ],
     },
     {
         name: 'Icons',
