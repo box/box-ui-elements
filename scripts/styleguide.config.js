@@ -257,6 +257,12 @@ const allSections = [
 ];
 
 module.exports = {
+    getComponentPathLine(componentPath) {
+        const name = path.basename(componentPath, '.js');
+        const dir = path.dirname(componentPath);
+        const packageRelativePath = dir.replace(/.*\/src\//, '');
+        return `import ${name} from 'box-ui-elements/es/${packageRelativePath}/${name}';`;
+    },
     pagePerSection: true,
     require: [path.resolve(__dirname, 'styleguide.setup.js'), path.resolve(__dirname, 'styleguide.styles.scss')],
     styleguideDir: path.join(__dirname, '../styleguide'),
