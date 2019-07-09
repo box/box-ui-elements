@@ -1,30 +1,30 @@
 import * as React from 'react';
 
-import IconPuzzlePiece from '../IconPuzzlePiece';
+import IconPuzzlePieceCircle from '../IconPuzzlePieceCircle';
 
-describe('icons/general/IconPuzzlePiece', () => {
+describe('icons/general/IconPuzzlePieceCircle', () => {
     test('should correctly render default icon with default color', () => {
-        const wrapper = shallow(<IconPuzzlePiece />);
+        const wrapper = shallow(<IconPuzzlePieceCircle />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render icon with specified color', () => {
-        const wrapper = shallow(<IconPuzzlePiece color="#fcfcfc" />);
+        const wrapper = shallow(<IconPuzzlePieceCircle color="#fcfcfc" />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render icon with specified width and height and default viewBox value', () => {
-        const wrapper = shallow(<IconPuzzlePiece height={16} width={16} />);
+        const wrapper = shallow(<IconPuzzlePieceCircle height={16} width={16} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render icon with title', () => {
-        const wrapper = shallow(<IconPuzzlePiece title="abcde" />);
+        const wrapper = shallow(<IconPuzzlePieceCircle title="abcde" />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render icon with custom class name', () => {
-        const wrapper = shallow(<IconPuzzlePiece className="rectangular" />);
+        const wrapper = shallow(<IconPuzzlePieceCircle className="circular" />);
         expect(wrapper).toMatchSnapshot();
     });
 });

@@ -18,7 +18,10 @@ exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicato
       <span
         className="bdl-FooterIndicator-iconWrapper"
       >
-        <IconPuzzlePiece />
+        <IconPuzzlePiece
+          height={14}
+          width={14}
+        />
       </span>
       <span
         className="bdl-FooterIndicator-text"
