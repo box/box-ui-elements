@@ -45,7 +45,8 @@ prepush() {
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Testing${end}"
     printf "${blue}-------------------------------------------------------------${end}"
-    yarn test --lastCommit || exit 1
+    git fetch upstream
+    yarn test --changedSince=upstream/master || exit 1
 
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Building all sources, this will update i18n/json${end}"
