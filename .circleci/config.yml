@@ -11,7 +11,7 @@ aliases:
 
   - &restore-yarn-cache
     keys:
-      - yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+      - yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
   - &save-yarn-cache
     paths:
@@ -19,7 +19,7 @@ aliases:
       - ~/.npm
       - ~/.cache/yarn
       - ~/.cache/Cypress
-    key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+    key: yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
 defaults: &defaults
   working_directory: ~/buie
