@@ -11,7 +11,7 @@ exports[`features/classification/AddClassificationBadge should render a classifi
     width={10}
   />
   <FormattedMessage
-    defaultMessage="Add Classification"
+    defaultMessage="Classify"
     id="boxui.classification.addClassification"
   >
     <Component />
