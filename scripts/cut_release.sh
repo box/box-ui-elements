@@ -86,6 +86,21 @@ checkout_branch() {
 }
 
 setup() {
+    # Check branch being dirty
+    check_branch_dirty || return 1
+
+    # Check uncommitted files
+    check_uncommitted_files || return 1
+
+    # Check untracked files
+    check_untracked_files || return 1
+
+    # Check npm registry is correct
+    check_npm_registry || return 1
+
+    # Check npm login
+    check_npm_login || return 1
+
     # Setup remote git url
     setup_remote || return 1
 
@@ -151,6 +166,12 @@ build_examples() {
 }
 
 push_to_gh_pages() {
+    # Build examples
+    if ! build_examples; then
+        printf "${red}Failed building styleguide!${end}"
+        return 1
+    fi
+
     printf "${blue}Pushing styleguide to gh-pages...${end}"
     if [[ $(git branch | grep -w "gh-pages") != "" ]] ; then
         git branch -D gh-pages || return 1
@@ -181,11 +202,27 @@ check_uncommitted_files() {
     fi
 }
 
+check_uncommitted_untracked_files() {
+    # Check uncommitted files
+    check_uncommitted_files || return 1
+
+    # Check untracked files
+    check_untracked_files || return 1
+}
+
 check_uncommitted_files_ignoring_package_json() {
     if [[ $(git status --porcelain | sed s/^...//) != "package.json" ]] ; then
         printf "${red}Your branch has uncommitted files!${end}"
         return 1
     fi
+}
+
+check_untracked_uncommitted_files_ignoring_package_json() {
+    # package.json should be the only updated and uncommitted file
+    check_uncommitted_files_ignoring_package_json || return 1
+
+    # Check untracked files
+    check_untracked_files || return 1
 }
 
 check_branch_dirty() {
@@ -210,21 +247,6 @@ check_npm_login() {
 }
 
 push_new_release() {
-    # Check branch being dirty
-    check_branch_dirty || return 1
-
-    # Check uncommitted files
-    check_uncommitted_files || return 1
-
-    # Check untracked files
-    check_untracked_files || return 1
-
-    # Check npm registry is correct
-    check_npm_registry || return 1
-
-    # Check npm login
-    check_npm_login || return 1
-
     # Setup
     if ! setup; then
         printf "${red}Failed setup!${end}"
@@ -243,11 +265,8 @@ push_new_release() {
         return 1
     fi
 
-    # Check uncommitted files
-    check_uncommitted_files || return 1
-
-    # Check untracked files
-    check_untracked_files || return 1
+    # Check uncommitted and untracked files
+    check_uncommitted_untracked_files || return 1
 
     # Run the release
     if ! HUSKY_SKIP_HOOKS=1 yarn semantic-release --no-ci; then
@@ -265,10 +284,7 @@ push_new_release() {
     fi
 
     # package.json should be the only updated and uncommitted file
-    check_uncommitted_files_ignoring_package_json || return 1
-
-    # Check untracked files
-    check_untracked_files || return 1
+    check_untracked_uncommitted_files_ignoring_package_json || return 1
 
     # Publish to npm
     if ! push_to_npm; then
@@ -277,26 +293,11 @@ push_new_release() {
     fi
 
     # package.json should be the only updated and uncommitted file
-    check_uncommitted_files_ignoring_package_json || return 1
-
-    # Check untracked files
-    check_untracked_files || return 1
-
-    # Build examples
-    if ! build_examples; then
-        printf "${red}Failed building styleguide!${end}"
-        return 1
-    fi
+    check_untracked_uncommitted_files_ignoring_package_json || return 1
 
     # Publish gh-pages
     if ! push_to_gh_pages; then
         printf "${red}Failed pushing styleguide to gh-pages!${end}"
         return 1
     fi
-
-    # Check uncommitted files
-    check_uncommitted_files || return 1
-
-    # Check untracked files
-    check_untracked_files || return 1
 }
