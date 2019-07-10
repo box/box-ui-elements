@@ -229,10 +229,10 @@ push_new_release() {
     fi
 
     # Linting and testing
-    if ! lint_and_test; then
-        printf "${red}Failed linting and testing!${end}"
-        return 1
-    fi
+    # if ! lint_and_test; then
+    #     printf "${red}Failed linting and testing!${end}"
+    #     return 1
+    # fi
 
     # Build npm assets
     if ! build_assets; then
