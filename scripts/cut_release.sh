@@ -32,7 +32,7 @@ setup_remote() {
         printf "${green}Removed existing release remote branch!${end}"
     fi
     printf "${blue}Adding release remote branch...${end}"
-    git remote add release git@github.com:box/box-ui-elements.git || return 1
+    git remote add release https://github.com/box/box-ui-elements.git || return 1
     printf "${green}Release remote branch added!${end}"
 }
 
