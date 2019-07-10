@@ -32,7 +32,7 @@ setup_remote() {
         printf "${green}Removed existing release remote branch!${end}"
     fi
     printf "${blue}Adding release remote branch...${end}"
-    git remote add release https://github.com/box/box-ui-elements.git || return 1
+    git remote add release "https://$GITHUB_TOKEN@github.com/box/box-ui-elements.git" || return 1
     printf "${green}Release remote branch added!${end}"
 }
 
@@ -51,11 +51,13 @@ checkout_branch() {
         DISTTAG='latest'
         printf "${blue}Checking out ${BRANCH}...${end}"
         git checkout $BRANCH || return 1
+        GIT_BRANCH=$BRANCH
     elif [[ "$HOTFIX" != true ]] && [[ "$BRANCH" == "master" ]]; then
         printf "${blue}This is a master branch release, using beta dist-tag...${end}"
         DISTTAG='beta'
         printf "${blue}Checking out master...${end}"
         git checkout master || return 1
+        GIT_BRANCH=master
         printf "${blue}Resetting to remote release/master...${end}"
         git reset --hard release/master || return 1
     elif [[ "$HOTFIX" != true ]] && [[ "$BRANCH" == "release" ]]; then
@@ -63,6 +65,7 @@ checkout_branch() {
         DISTTAG='latest'
         printf "${blue}Checking out release...${end}"
         git checkout release || return 1
+        GIT_BRANCH=release
         printf "${blue}Resetting to remote release/master...${end}"
         git reset --hard release/master || return 1
         printf "${blue}Updating remote release branch with latest from master...${end}"
@@ -229,10 +232,10 @@ push_new_release() {
     fi
 
     # Linting and testing
-    if ! lint_and_test; then
-        printf "${red}Failed linting and testing!${end}"
-        return 1
-    fi
+    # if ! lint_and_test; then
+    #     printf "${red}Failed linting and testing!${end}"
+    #     return 1
+    # fi
 
     # Build npm assets
     if ! build_assets; then
