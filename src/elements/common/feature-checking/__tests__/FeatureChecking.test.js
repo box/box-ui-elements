@@ -54,7 +54,7 @@ describe('FeatureFlag', () => {
                 </FeatureFlag>
             </FeatureProvider>,
         );
-        expect(wrapper.html()).toBeNull();
+        expect(wrapper.html()).toBe('');
         expect(MockChild).not.toHaveBeenCalled();
     });
 
