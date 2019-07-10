@@ -3,6 +3,7 @@
 exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when isDragging is true 1`] = `
 <div
   className="bcu-overall-progress-bar"
+  data-resin-target="uploadcollapse"
   onClick={[Function]}
   onKeyDown={[Function]}
   role="button"
@@ -28,6 +29,7 @@ exports[`elements/content-uploader/OverallUploadsProgressBar should render corre
 exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when isVisible is false 1`] = `
 <div
   className="bcu-overall-progress-bar"
+  data-resin-target="uploadcollapse"
   onClick={[Function]}
   onKeyDown={[Function]}
   role="button"
@@ -53,6 +55,7 @@ exports[`elements/content-uploader/OverallUploadsProgressBar should render corre
 exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when view is VIEW_ERROR 1`] = `
 <div
   className="bcu-overall-progress-bar"
+  data-resin-target="uploadcollapse"
   onClick={[Function]}
   onKeyDown={[Function]}
   role="button"
@@ -78,6 +81,7 @@ exports[`elements/content-uploader/OverallUploadsProgressBar should render corre
 exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when view is VIEW_UPLOAD_EMPTY 1`] = `
 <div
   className="bcu-overall-progress-bar"
+  data-resin-target="uploadcollapse"
   onClick={[Function]}
   onKeyDown={[Function]}
   role="button"
@@ -103,6 +107,7 @@ exports[`elements/content-uploader/OverallUploadsProgressBar should render corre
 exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when view is VIEW_UPLOAD_IN_PROGRESS 1`] = `
 <div
   className="bcu-overall-progress-bar"
+  data-resin-target="uploadcollapse"
   onClick={[Function]}
   onKeyDown={[Function]}
   role="button"
@@ -128,6 +133,7 @@ exports[`elements/content-uploader/OverallUploadsProgressBar should render corre
 exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when view is VIEW_UPLOAD_SUCCESS 1`] = `
 <div
   className="bcu-overall-progress-bar"
+  data-resin-target="uploadcollapse"
   onClick={[Function]}
   onKeyDown={[Function]}
   role="button"

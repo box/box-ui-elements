@@ -9,6 +9,7 @@ describe('elements/content-uploader/OverallUploadsProgressBar', () => {
         shallow(
             <OverallUploadsProgressBar
                 isDragging={false}
+                isExpanded
                 isVisible
                 onClick={noop}
                 onKeyDown={noop}
