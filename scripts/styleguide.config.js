@@ -3,6 +3,9 @@ const webpackConf = require('./webpack.config.js');
 
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
 
+// theme variables
+const vars = require('../src/styles/variables.json');
+
 const allSections = [
     {
         name: 'Elements',
@@ -97,6 +100,9 @@ const allSections = [
             '../src/components/toggle/Toggle.js',
             '../src/components/tooltip/Tooltip.js',
         ],
+        description: 'Box UI Elements components implement the reusable building blocks of the Box Design Language',
+        sectionDepth: 2,
+        usageMode: 'expand',
     },
     {
         name: 'Icons',
@@ -270,21 +276,89 @@ module.exports = {
     styles: {
         Heading: {
             heading: {
-                lineHeight: 1,
+                lineHeight: 2,
+            },
+        },
+        Pathline: {
+            pathline: {
+                background: vars['bdl-box-blue-05'],
+                borderRadius: 3,
+                color: vars['bdl-gray'],
+                display: 'inline',
+                fontSize: 12,
+                padding: 10,
+            },
+        },
+        Code: {
+            code: {
+                fontSize: 12,
+            },
+        },
+        Type: {
+            type: {
+                fontSize: 12,
+            },
+        },
+        Name: {
+            name: {
+                fontSize: 12,
+            },
+        },
+        TabButton: {
+            isActive: {
+                borderBottomColor: vars['bdl-box-blue'],
+            },
+            button: {
+                borderBottom: `2px solid ${vars['bdl-gray-20']}`,
+            },
+        },
+        Blockquote: {
+            blockquote: {
+                borderLeft: `3px solid ${vars['bdl-yellow']}`,
+                borderRadius: 3,
+                fontSize: 'inherit',
+                marginLeft: 0,
+                paddingTop: 10,
+                paddingLeft: 10,
+                paddingBottom: 1,
+                background: vars['bdl-yellow-10'],
             },
         },
     },
     title: 'Box UI Elements',
     theme: {
+        buttonTextTransform: 'capitalize',
         color: {
-            link: '#777',
-            linkHover: '#0061d5',
+            base: vars['bdl-gray'],
+            link: vars['bdl-gray-62'],
+            linkHover: vars['bdl-box-blue'],
+            error: vars['bdl-watermelon-red'],
+            type: vars['bdl-gray-80'],
+            name: vars['bdl-gray-80'],
+            border: vars['bdl-gray-10'],
+            sidebarBackground: vars['bdl-gray-02'],
+            light: vars['bdl-gray-80'],
+            lightest: vars['bdl-gray-20'],
+            focus: vars['bdl-light-blue-50'],
+            codeBase: vars['bdl-gray'],
         },
         fontFamily: {
             base: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
         },
+        fontSize: {
+            base: 13,
+            text: 13,
+            small: 13,
+            h1: 30,
+            h2: 24,
+            h3: 20,
+            h4: 16,
+            h5: 14,
+            h6: 12,
+        },
         lineHeight: 'inherit',
         maxWidth: '100%',
+        spaceFactor: 6,
     },
     webpackConfig,
 };
