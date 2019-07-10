@@ -82,5 +82,4 @@ const VersionsMenu = React.memo<Props>(({ intl, versions, ...rest }: Props) => {
     );
 });
 
-export { VersionsMenu as VersionsMenuComponent };
 export default injectIntl(VersionsMenu);
