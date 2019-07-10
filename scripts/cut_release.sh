@@ -140,7 +140,7 @@ build_assets() {
 
 push_to_npm() {
     printf "${blue}Publishing assets to npmjs...${end}"
-    npm publish --dry-run --access public --tag "$DISTTAG" || return 1
+    npm publish --access public --tag "$DISTTAG" || return 1
     printf "${green}Published npm using dist-tag=${DISTTAG}!${end}"
 }
 
@@ -232,10 +232,10 @@ push_new_release() {
     fi
 
     # Linting and testing
-    # if ! lint_and_test; then
-    #     printf "${red}Failed linting and testing!${end}"
-    #     return 1
-    # fi
+    if ! lint_and_test; then
+        printf "${red}Failed linting and testing!${end}"
+        return 1
+    fi
 
     # Build npm assets
     if ! build_assets; then
