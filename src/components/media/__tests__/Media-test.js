@@ -30,4 +30,15 @@ describe('components/Media', () => {
 
         expect(wrapper.render()).toMatchSnapshot();
     });
+
+    test('"as" prop changes Media root element', () => {
+        const compoundComponent = <Media as="li" />;
+        const wrapper = mount(compoundComponent);
+
+        expect(wrapper.render()).toMatchInlineSnapshot(`
+<li
+  class="bdl-Media"
+/>
+`);
+    });
 });

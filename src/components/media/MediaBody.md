@@ -1,11 +1,20 @@
+> **Note**
+>
+> `Media` is a compound component, the inner elements are not meant to be used outside of the Media container
+
 ```js
+const { MenuItem } = require('../menu');
+
 <Media style={{ width: 300 }}>
   <Media.Img>
     <Avatar size="large" />
   </Media.Img>
 
-  <Media.Body style={{ boxShadow: '0 0 4px 4px red' }}>
-    <Media.Menu>Hi</Media.Menu>
+  <Media.Body style={{ boxShadow: '0 0 2px 3px red' }}>
+    <Media.Menu>
+      <MenuItem>Edit</MenuItem>
+      <MenuItem>Delete</MenuItem>
+    </Media.Menu>
     <div>
       <b>Yo Yo Ma</b> commented on this file
     </div>
@@ -15,5 +24,5 @@
       9 0 1 2 3 4 5 6 7 8 9
     </div>
   </Media.Body>
-</Media>
+</Media>;
 ```

@@ -1,13 +1,22 @@
-The `Media.Menu` component should go inside `Media.Body` for optimal reflow of the content around the menu icon
+> **Note**
+>
+> `Media` is a compound component, the inner elements are not meant to be used outside of the Media container
+
+Using the `Media.Menu` component is optional for a Media component and should go inside `Media.Body` for optimal reflow of the content around the menu icon
 
 ```js
+const { MenuItem } = require('../menu');
+
 <Media style={{ width: 300 }}>
   <Media.Img>
     <Avatar size="large" />
   </Media.Img>
 
-  <Media.Body style={{ boxShadow: '0 0 4px 4px orange' }}>
-    <Media.Menu style={{ boxShadow: '0 0 4px 4px red' }}>Hi</Media.Menu>
+  <Media.Body style={{ boxShadow: '0 0 2px 3px orange' }}>
+    <Media.Menu style={{ boxShadow: '0 0 2px 3px red' }}>
+      <MenuItem>Edit</MenuItem>
+      <MenuItem>Delete</MenuItem>
+    </Media.Menu>
     <div>
       <b>Yo Yo Ma</b> commented on this file
     </div>
@@ -17,5 +26,5 @@ The `Media.Menu` component should go inside `Media.Body` for optimal reflow of t
       9 0 1 2 3 4 5 6 7 8 9
     </div>
   </Media.Body>
-</Media>
+</Media>;
 ```

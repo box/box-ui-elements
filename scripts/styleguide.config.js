@@ -106,18 +106,14 @@ const allSections = [
         sections: [
             {
                 name: 'Media',
-                components: ['../src/components/media/Media.js'],
-                pagePerSection: true,
-                sections: [
-                    {
-                        name: 'Helpers',
-                        components: [
-                            '../src/components/media/MediaImg.js',
-                            '../src/components/media/MediaBody.js',
-                            '../src/components/media/MediaMenu.js',
-                        ],
-                    },
+                components: [
+                    '../src/components/media/Media.js',
+                    '../src/components/media/MediaImg.js',
+                    '../src/components/media/MediaBody.js',
+                    '../src/components/media/MediaMenu.js',
                 ],
+                description: 'Implements the "media object" layout from Bootstrap',
+                usageMode: 'expand',
             },
         ],
     },

@@ -1,24 +1,26 @@
-Implements the "media object" element from Bootstrap
+> **Note**
+>
+> `Media` is a compound component, the inner elements are not meant to be used outside of the Media container
 
-This is a compound component, the inner elements are not meant to be used outside of the Media container
+Implements the "media object" element from Bootstrap
 
 ```plaintext
 import Media from 'box-ui-elements/es/components/media'
-
-<Media />
-<Media.Img />
-<Media.Body />
-<Media.Menu />
 ```
 
 ```js
+const { MenuItem } = require('../menu');
+
 <Media style={{ width: 300 }}>
   <Media.Img>
     <Avatar size="large" />
   </Media.Img>
 
   <Media.Body>
-    <Media.Menu>Hi</Media.Menu>
+    <Media.Menu>
+      <MenuItem>Edit</MenuItem>
+      <MenuItem>Delete</MenuItem>
+    </Media.Menu>
     <div>
       <b>Yo Yo Ma</b> commented on this file
     </div>
@@ -28,5 +30,42 @@ import Media from 'box-ui-elements/es/components/media'
       9 0 1 2 3 4 5 6 7 8 9
     </div>
   </Media.Body>
-</Media>
+</Media>;
+```
+
+```js
+const { MenuItem } = require('../menu');
+
+<>
+  <code>
+    <span style={{ color: 'green' }}>Media</span>{' '}
+    <span style={{ color: 'purple' }}>Media.Img</span>{' '}
+    <span style={{ color: 'orange' }}>Media.Body</span>{' '}
+    <span style={{ color: 'red' }}>Media.Menu</span>
+  </code>
+  <br />
+  <br />
+  <Media style={{ width: 300, boxShadow: '0 0 2px 3px green', padding: 5 }}>
+    <Media.Img style={{ boxShadow: '0 0 2px 3px purple' }}>
+      <Avatar size="large" />
+    </Media.Img>
+
+    <Media.Body style={{ boxShadow: '0 0 2px 3px orange', padding: 3 }}>
+      <Media.Menu
+        style={{ boxShadow: '0 0 2px 3px red', margin: 3, padding: 3 }}
+      >
+        <MenuItem>Edit</MenuItem>
+        <MenuItem>Delete</MenuItem>
+      </Media.Menu>
+      <div>
+        <b>Yo Yo Ma</b> commented on this file
+      </div>
+      <div>
+        Please review the notes
+        <br />a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7
+        8 9 0 1 2 3 4 5 6 7 8 9
+      </div>
+    </Media.Body>
+  </Media>
+</>;
 ```

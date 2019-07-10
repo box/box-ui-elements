@@ -18,7 +18,15 @@ exports[`components/Media compound component 1`] = `
     <div
       class="bdl-Media-menu"
     >
-      <icon-ellipsis />
+      <button
+        aria-expanded="false"
+        aria-haspopup="true"
+        class="btn-plain "
+        id="menubutton2"
+        type="button"
+      >
+        <icon-ellipsis />
+      </button>
     </div>
     <div>
       <b>
