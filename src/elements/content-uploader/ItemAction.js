@@ -26,6 +26,7 @@ type Props = {
 
 const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     let icon = <IconClose />;
+    let retry = false;
     let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
 
     if (isFolder && status !== STATUS_PENDING) {
@@ -40,6 +41,7 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
         case STATUS_ERROR:
             icon = <IconRetry />;
             tooltip = intl.formatMessage(messages.retry);
+            retry = true;
             break;
         case STATUS_IN_PROGRESS:
             icon = <IconInProgress />;
@@ -52,7 +54,7 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     return (
         <div className="bcu-item-action">
             <Tooltip position="top-left" text={tooltip}>
-                <PlainButton onClick={onClick} type="button">
+                <PlainButton onClick={onClick} type="button" {...(retry ? { 'data-resin-target': 'uploadretry' } : {})}>
                     {icon}
                 </PlainButton>
             </Tooltip>

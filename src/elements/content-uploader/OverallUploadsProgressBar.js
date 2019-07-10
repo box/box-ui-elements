@@ -52,6 +52,7 @@ const getPercent = (view: string, percent: number): number => {
 
 type Props = {
     isDragging: boolean,
+    isExpanded: boolean,
     isVisible: boolean,
     onClick: Function,
     onKeyDown: Function,
@@ -59,7 +60,7 @@ type Props = {
     view: View,
 };
 
-const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDragging, isVisible }: Props) => {
+const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDragging, isVisible, isExpanded }: Props) => {
     // Show the upload prompt and set progress to 0 when the uploads manager
     // is invisible or is having files dragged to it
     const shouldShowPrompt = isDragging || !isVisible;
@@ -73,6 +74,7 @@ const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDraggi
     return (
         <div
             className="bcu-overall-progress-bar"
+            data-resin-target={isExpanded ? 'uploadcollapse' : 'uploadexpand'}
             onClick={onClick}
             onKeyDown={onKeyDown}
             role="button"
