@@ -27,6 +27,7 @@ type Props = {
 const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     let icon = <IconClose />;
     let target = null;
+    let resin = {};
     let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
 
     if (isFolder && status !== STATUS_PENDING) {
@@ -52,10 +53,14 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
         // empty
     }
 
+    if (target) {
+        resin = { 'data-resin-target': target };
+    }
+
     return (
         <div className="bcu-item-action">
             <Tooltip position="top-left" text={tooltip}>
-                <PlainButton onClick={onClick} type="button" {...(target ? { 'data-resin-target': target } : {})}>
+                <PlainButton onClick={onClick} type="button" {...resin}>
                     {icon}
                 </PlainButton>
             </Tooltip>
