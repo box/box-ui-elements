@@ -10,6 +10,7 @@ import Media from 'box-ui-elements/es/components/media'
 
 ```js
 const { MenuItem } = require('../menu');
+const Button = require('../button');
 
 <Media style={{ width: 300 }}>
   <Media.Figure>
@@ -68,4 +69,70 @@ const { MenuItem } = require('../menu');
     </Media.Body>
   </Media>
 </>;
+```
+
+```js
+const { MenuItem } = require('../menu');
+
+<Media style={{ width: 300 }}>
+  <Media.Figure>
+    <Avatar />
+  </Media.Figure>
+
+  <Media.Body>
+    <Media.Menu>
+      <MenuItem>Edit</MenuItem>
+      <MenuItem>Delete</MenuItem>
+    </Media.Menu>
+    <div>
+      <b>Yo Yo Ma</b> commented on this file
+    </div>
+    <div>This is a nested media object</div>
+    <ul style={{ margin: 0, padding: 0 }}>
+      <Media as="li" style={{ marginTop: 10 }}>
+        <Media.Figure>
+          <Avatar />
+        </Media.Figure>
+
+        <Media.Body>
+          <div>
+            <b>Bjork</b> replied
+          </div>
+          <div>I must agree!</div>
+          <Media as="li" style={{ marginTop: 10 }}>
+            <Media.Figure>
+              <Avatar />
+            </Media.Figure>
+
+            <Media.Body>
+              <div>
+                <b>Bono</b> replied
+              </div>
+              <div>Me too!</div>
+            </Media.Body>
+          </Media>
+        </Media.Body>
+      </Media>
+    </ul>
+  </Media.Body>
+</Media>;
+```
+
+```js
+<Media style={{ width: 300 }}>
+  <Media.Figure>
+    <Avatar size="large" />
+  </Media.Figure>
+
+  <Media.Body>
+    <div>
+      <b>W.A. Mozart</b> commented on this file
+    </div>
+    <div>Everyone get ready to perform the symphony tonight!</div>
+    <div>
+      <Button>Reply</Button>
+      <Button>Cancel</Button>
+    </div>
+  </Media.Body>
+</Media>
 ```
