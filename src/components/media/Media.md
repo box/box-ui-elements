@@ -17,7 +17,7 @@ const { MenuItem } = require('../menu');
   </Media.Figure>
 
   <Media.Body>
-    <Media.Menu>
+    <Media.Menu label="Options">
       <MenuItem>Edit</MenuItem>
       <MenuItem>Delete</MenuItem>
     </Media.Menu>

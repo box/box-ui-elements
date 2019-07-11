@@ -15,13 +15,15 @@ type Props = {
     className?: string,
     /** is the dropdown menu button disabled */
     isDisabled: boolean,
+    /** aria-label prop for button icon */
+    label?: string,
 };
 
-function MediaMenu({ className, children, isDisabled = false, ...rest }: Props) {
+function MediaMenu({ className, children, isDisabled = false, label, ...rest }: Props) {
     return (
         <div className={classnames('bdl-Media-menu', className)} {...rest}>
             <DropdownMenu constrainToScrollParent isRightAligned>
-                <PlainButton isDisabled={isDisabled} type="button">
+                <PlainButton isDisabled={isDisabled} type="button" aria-label={label}>
                     <IconEllipsis color={bdlGray62} height={16} width={16} />
                 </PlainButton>
                 <Menu>{children}</Menu>
