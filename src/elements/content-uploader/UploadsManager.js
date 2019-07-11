@@ -62,6 +62,8 @@ const UploadsManager = ({
 
     return (
         <div
+            data-resin-component="uploadsmanager"
+            data-resin-feature="uploads"
             className={classNames('be bcu-uploads-manager-container', {
                 'bcu-is-expanded': isExpanded,
                 'bcu-is-visible': isVisible,
@@ -69,6 +71,7 @@ const UploadsManager = ({
         >
             <OverallUploadsProgressBar
                 isDragging={isDragging}
+                isExpanded={isExpanded}
                 isVisible={isVisible}
                 onClick={toggleUploadsManager}
                 onKeyDown={handleProgressBarKeyDown}
