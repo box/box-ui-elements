@@ -86,14 +86,22 @@
     }
 }
 
+.btn-plain {
+    margin: 0;
+    padding: 0;
+
+    // prevent default .btn behavior of adding space between buttons
+    & + & {
+        margin-left: 0;
+    }
+}
+
 .btn-plain,
 .btn-plain:hover,
 .btn-plain:active {
     border: none;
     cursor: pointer;
     font-weight: normal;
-    margin: 0;
-    padding: 0;
 }
 
 .btn-plain,
