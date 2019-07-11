@@ -2,7 +2,7 @@
 >
 > `Media` is a compound component, the inner elements are not meant to be used outside of the Media container
 
-Implements the "media object" element from Bootstrap
+Implements the "media object" element
 
 ```plaintext
 import Media from 'box-ui-elements/es/components/media'
@@ -70,6 +70,8 @@ const { MenuItem } = require('../menu');
 </>;
 ```
 
+## Nesting Media Components
+
 ```js
 const { MenuItem } = require('../menu');
 
@@ -116,6 +118,8 @@ const { MenuItem } = require('../menu');
   </Media.Body>
 </Media>;
 ```
+
+## With Form Elements
 
 ```js
 const { MenuItem } = require('../menu');
