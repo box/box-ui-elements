@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import IntlMessageFormat from 'intl-messageformat';
 
@@ -22,7 +22,9 @@ FormattedNumber.displayName = 'FormattedNumber';
 export const IntlProvider = () => <div />;
 IntlProvider.displayName = 'IntlProvider';
 
-export const defineMessages = messages => messages;
+export const defineMessages = (messages: {
+    [key: string]: { defaultMessage: string, description: string, id: string },
+}) => messages;
 export const intlShape = PropTypes.any;
 
 export const addLocaleData = () => {};
@@ -31,7 +33,7 @@ type Props = {
     locale: string,
 };
 
-export const injectIntl = Component => {
+export const injectIntl = (Component: React.ComponentType<any>) => {
     const WrapperComponent = (props: Props) => {
         const injectedProps = {
             ...props,
