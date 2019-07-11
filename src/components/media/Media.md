@@ -10,7 +10,6 @@ import Media from 'box-ui-elements/es/components/media'
 
 ```js
 const { MenuItem } = require('../menu');
-const Button = require('../button');
 
 <Media style={{ width: 300 }}>
   <Media.Figure>
@@ -119,12 +118,18 @@ const { MenuItem } = require('../menu');
 ```
 
 ```js
+const { MenuItem } = require('../menu');
+
 <Media style={{ width: 300 }}>
   <Media.Figure>
     <Avatar size="large" />
   </Media.Figure>
 
   <Media.Body>
+    <Media.Menu>
+      <MenuItem>Edit</MenuItem>
+      <MenuItem>Delete</MenuItem>
+    </Media.Menu>
     <div>
       <b>W.A. Mozart</b> commented on this file
     </div>
@@ -132,7 +137,8 @@ const { MenuItem } = require('../menu');
     <div>
       <Button>Reply</Button>
       <Button>Cancel</Button>
+      <TextArea label="Response" />
     </div>
   </Media.Body>
-</Media>
+</Media>;
 ```
