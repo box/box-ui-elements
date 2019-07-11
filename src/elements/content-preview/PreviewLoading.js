@@ -7,6 +7,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import IconFileDefault from '../../icons/file/IconFileDefault';
+import SecurityBlockedState from '../../icons/states/SecurityBlockedState';
 import makeLoadable from '../../components/loading-indicator/makeLoadable';
 import messages from '../common/messages';
 import { ERROR_CODE_FETCH_FILE_DUE_TO_POLICY } from '../../constants';
@@ -19,9 +20,10 @@ type Props = {
 const PreviewLoading = ({ errorCode }: Props) => {
     const isBlockedByPolicy = errorCode === ERROR_CODE_FETCH_FILE_DUE_TO_POLICY;
     const message = isBlockedByPolicy ? messages.previewErrorBlockedByPolicy : messages.previewError;
+    const icon = isBlockedByPolicy ? <SecurityBlockedState /> : <IconFileDefault height={160} width={160} />;
     return (
         <div className="bcpr-PreviewLoading">
-            <IconFileDefault height={160} width={160} />
+            {icon}
             <div className="bcpr-PreviewLoading-message">
                 <FormattedMessage {...message} />
             </div>
