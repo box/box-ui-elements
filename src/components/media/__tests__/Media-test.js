@@ -15,12 +15,12 @@ describe('components/Media', () => {
 
         const compoundComponent = (
             <Media>
-                <Media.Img>
+                <Media.Figure>
                     <img src="" alt="some img" />
-                </Media.Img>
+                </Media.Figure>
 
                 <Media.Body>
-                    <Media.Menu>Hi</Media.Menu>
+                    <Media.Menu />
                     {title}
                     {content}
                 </Media.Body>
@@ -32,13 +32,9 @@ describe('components/Media', () => {
     });
 
     test('"as" prop changes Media root element', () => {
-        const compoundComponent = <Media as="li" />;
-        const wrapper = mount(compoundComponent);
-
-        expect(wrapper.render()).toMatchInlineSnapshot(`
-<li
-  class="bdl-Media"
-/>
-`);
+        const wrapper = shallow(<Media />);
+        const wrapperAs = shallow(<Media as="li" />);
+        expect(wrapper.is('div')).toBe(true);
+        expect(wrapperAs.is('li')).toBe(true);
     });
 });

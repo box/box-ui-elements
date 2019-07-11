@@ -8,9 +8,9 @@ Using the `Media.Menu` component is optional for a Media component and should go
 const { MenuItem } = require('../menu');
 
 <Media style={{ width: 300 }}>
-  <Media.Img>
+  <Media.Figure>
     <Avatar size="large" />
-  </Media.Img>
+  </Media.Figure>
 
   <Media.Body style={{ boxShadow: '0 0 2px 3px orange' }}>
     <Media.Menu style={{ boxShadow: '0 0 2px 3px red' }}>

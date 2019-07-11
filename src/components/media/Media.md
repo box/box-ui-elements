@@ -12,9 +12,9 @@ import Media from 'box-ui-elements/es/components/media'
 const { MenuItem } = require('../menu');
 
 <Media style={{ width: 300 }}>
-  <Media.Img>
+  <Media.Figure>
     <Avatar size="large" />
-  </Media.Img>
+  </Media.Figure>
 
   <Media.Body>
     <Media.Menu>
@@ -39,16 +39,16 @@ const { MenuItem } = require('../menu');
 <>
   <code>
     <span style={{ color: 'green' }}>Media</span>{' '}
-    <span style={{ color: 'purple' }}>Media.Img</span>{' '}
+    <span style={{ color: 'purple' }}>Media.Figure</span>{' '}
     <span style={{ color: 'orange' }}>Media.Body</span>{' '}
     <span style={{ color: 'red' }}>Media.Menu</span>
   </code>
   <br />
   <br />
   <Media style={{ width: 300, boxShadow: '0 0 2px 3px green', padding: 5 }}>
-    <Media.Img style={{ boxShadow: '0 0 2px 3px purple' }}>
+    <Media.Figure style={{ boxShadow: '0 0 2px 3px purple' }}>
       <Avatar size="large" />
-    </Media.Img>
+    </Media.Figure>
 
     <Media.Body style={{ boxShadow: '0 0 2px 3px orange', padding: 3 }}>
       <Media.Menu

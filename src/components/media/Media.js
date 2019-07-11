@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classnames from 'classnames';
-import MediaImg from './MediaImg';
+import MediaFigure from './MediaFigure';
 import MediaBody from './MediaBody';
 import MediaMenu from './MediaMenu';
 import './Media.scss';
@@ -10,7 +10,7 @@ type Props = {
     /** Component to use as outermost element, e.g., 'li' */
     as: React.ElementType,
     /** Child elements */
-    children: React.ChildrenArray<React.Element<typeof MediaImg | typeof MediaBody | typeof MediaMenu>>,
+    children: React.ChildrenArray<React.Element<typeof MediaFigure | typeof MediaBody | typeof MediaMenu>>,
     /** Additional class names */
     className?: string,
 };
@@ -29,6 +29,6 @@ Media.defaultProps = {
 
 Media.Body = MediaBody;
 Media.Menu = MediaMenu;
-Media.Img = MediaImg;
+Media.Figure = MediaFigure;
 
 export default Media;

@@ -108,11 +108,11 @@ const allSections = [
                 name: 'Media',
                 components: [
                     '../src/components/media/Media.js',
-                    '../src/components/media/MediaImg.js',
+                    '../src/components/media/MediaFigure.js',
                     '../src/components/media/MediaBody.js',
                     '../src/components/media/MediaMenu.js',
                 ],
-                description: 'Implements the "media object" layout from Bootstrap',
+                description: 'Implements the "media object" layout',
                 usageMode: 'expand',
             },
         ],

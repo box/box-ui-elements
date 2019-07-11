@@ -7,11 +7,13 @@
 }
 
 // the media content, ie, an avatar
-.bdl-Media-img {
+.bdl-Media-figure {
     align-self: flex-start;
     flex: 0 0 auto;
     justify-self: flex-start;
+    margin: 0;
     margin-right: 10px;
+    padding: 0;
 }
 
 // the main content, e.g. title and message

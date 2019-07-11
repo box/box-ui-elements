@@ -6,9 +6,9 @@
 const { MenuItem } = require('../menu');
 
 <Media style={{ width: 300 }}>
-  <Media.Img>
+  <Media.Figure>
     <Avatar size="large" />
-  </Media.Img>
+  </Media.Figure>
 
   <Media.Body style={{ boxShadow: '0 0 2px 3px red' }}>
     <Media.Menu>
