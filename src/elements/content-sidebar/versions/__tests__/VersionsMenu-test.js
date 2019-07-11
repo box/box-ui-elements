@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
-import { shallow } from 'enzyme/build';
 import messages from '../messages';
 import VersionsGroup from '../VersionsGroup';
-import { VersionsMenuComponent as VersionsMenu } from '../VersionsMenu';
+import VersionsMenu from '../VersionsMenu';
 
 jest.unmock('react-intl');
 
 describe('elements/content-sidebar/versions/VersionsMenu', () => {
-    const { intl } = new IntlProvider({ locale: 'en', messages }, {}).getChildContext();
     const defaultDate = '2019-06-20T20:00:00.000Z';
+    const defaultDateMs = new Date(defaultDate).valueOf();
     const defaultVersion = {
         id: '12345',
         action: 'upload',
@@ -18,11 +17,15 @@ describe('elements/content-sidebar/versions/VersionsMenu', () => {
         modified_by: { name: 'Test User', id: '098765' },
     };
     const getVersion = (overrides = {}) => ({ ...defaultVersion, ...overrides });
-    const getWrapper = (props = {}) => shallow(<VersionsMenu intl={intl} {...props} />);
+    const getWrapper = (props = {}) =>
+        shallow(<VersionsMenu {...props} />, {
+            wrappingComponent: wrapperProps => <IntlProvider locale="en" messages={messages} {...wrapperProps} />,
+        }).shallow();
     const GlobalDate = Date;
 
     beforeEach(() => {
         global.Date = jest.fn(date => new GlobalDate(date || defaultDate));
+        global.Date.now = () => defaultDateMs;
     });
 
     afterEach(() => {
