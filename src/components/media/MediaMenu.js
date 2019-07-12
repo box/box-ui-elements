@@ -19,7 +19,7 @@ type Props = {
     label?: string,
 };
 
-const MediaMenu = ({ className, children, isDisabled = false, label, ...rest }: Props) => (
+const MediaMenu = ({ className, children, isDisabled, label, ...rest }: Props) => (
     <div className={classnames('bdl-Media-menu', className)} {...rest}>
         <DropdownMenu constrainToScrollParent isRightAligned>
             <PlainButton isDisabled={isDisabled} type="button" aria-label={label}>
@@ -29,5 +29,9 @@ const MediaMenu = ({ className, children, isDisabled = false, label, ...rest }: 
         </DropdownMenu>
     </div>
 );
+
+MediaMenu.defaultProps = {
+    isDisabled: false,
+};
 
 export default MediaMenu;
