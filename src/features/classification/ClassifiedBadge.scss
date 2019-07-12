@@ -13,4 +13,5 @@
     @include bdl-ClassificationBadge-name;
 
     color: $bdl-gray !important; // To inhibit overriding
+    text-transform: uppercase;
 }

@@ -44,20 +44,20 @@
         align-items: center;
         display: flex;
         position: relative;
+    }
 
-        .nav-list-collapse {
-            align-items: center;
-            display: flex;
-            height: calc(100% - 10px);
-            justify-content: center;
-            margin: 5px;
-            padding: 0 5px;
-            position: absolute;
-            right: 0;
+    .nav-list-collapse {
+        align-items: center;
+        display: flex;
+        height: calc(100% - 10px);
+        justify-content: center;
+        margin: 5px;
+        padding: 0 5px;
+        position: absolute;
+        right: 0;
 
-            > svg {
-                transition: transform 100ms ease-in-out;
-            }
+        > svg {
+            transition: transform 100ms ease-in-out;
         }
     }
 

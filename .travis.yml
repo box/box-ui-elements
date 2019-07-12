@@ -13,9 +13,5 @@ before_install:
     - export HUSKY_SKIP_HOOKS=1
 jobs:
   include:
-    - name: "Lint & Build"
-      script: commitlint-travis && npm-run-all clean build:i18n lint build:ci:es build:ci:dist && echo "Running Flow on $(yarn flow ls | wc -l) files" && yarn flow
     - name: "E2E Tests"
       script: yarn test:e2e
-    - name: "Unit Tests"
-      script: yarn test

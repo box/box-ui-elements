@@ -5,6 +5,7 @@ pull_request_rules:
       - "#approved-reviews-by>=1"
       - "#changes-requested-reviews-by=0"
       - "#review-requested=0"
+      - status-success=lint_test_build
       - status-success=Travis CI - Pull Request
       - label=ready-to-merge
       - label!=do-not-merge

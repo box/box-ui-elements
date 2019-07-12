@@ -47,6 +47,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
     theme="default"
   >
     <PlainButton
+      data-resin-target="uploadretry"
       onClick={[Function]}
       type="button"
     >
@@ -76,6 +77,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
     theme="default"
   >
     <PlainButton
+      data-resin-target="uploadcancel"
       onClick={[Function]}
       type="button"
     >

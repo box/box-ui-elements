@@ -97,6 +97,14 @@ const icons = [
         component: require('./RecentsEmptyState').default,
     },
     {
+        name: 'SandboxesEmptyState',
+        component: require('./SandboxesEmptyState').default,
+    },
+    {
+        name: 'SandboxesInterstitialState',
+        component: require('./SandboxesInterstitialState').default,
+    },
+    {
         name: 'SearchEmptyState',
         component: require('./SearchEmptyState').default,
     },

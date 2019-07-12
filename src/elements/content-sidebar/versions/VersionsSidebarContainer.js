@@ -51,6 +51,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         versions: [],
     };
 
+    window: any = window;
+
     componentDidMount() {
         this.fetchData();
     }
@@ -160,6 +162,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         if (fileVersion) {
             this.updateVersion(fileVersion.id);
+
+            if (this.window) {
+                this.window.location.reload(); // TODO: Replace with callback to inform the host app of version actions
+            }
         }
     };
 
