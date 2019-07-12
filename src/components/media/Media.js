@@ -15,14 +15,15 @@ type Props = {
     className?: string,
 };
 
-function Media({ as: Wrapper, children, className, ...rest }: Props) {
-    return (
-        <Wrapper className={classnames('bdl-Media', className)} {...rest}>
-            {children}
-        </Wrapper>
-    );
-}
+const Media = ({ as: Wrapper, children, className, ...rest }: Props) => (
+    <Wrapper className={classnames('bdl-Media', className)} {...rest}>
+        {children}
+    </Wrapper>
+);
 
+// Use this instead of default value because of param destructuring bug in Flow
+// that affects union types
+// https://github.com/facebook/flow/issues/5461
 Media.defaultProps = {
     as: 'div',
 };

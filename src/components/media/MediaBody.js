@@ -10,13 +10,10 @@ type Props = {
     className?: string,
 };
 
-function MediaBody(props: Props) {
-    const { className, children, ...rest } = props;
-    return (
-        <div className={classnames('bdl-Media-body', className)} {...rest}>
-            {children}
-        </div>
-    );
-}
+const MediaBody = ({ className, children, ...rest }: Props) => (
+    <div className={classnames('bdl-Media-body', className)} {...rest}>
+        {children}
+    </div>
+);
 
 export default MediaBody;

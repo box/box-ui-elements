@@ -19,17 +19,15 @@ type Props = {
     label?: string,
 };
 
-function MediaMenu({ className, children, isDisabled = false, label, ...rest }: Props) {
-    return (
-        <div className={classnames('bdl-Media-menu', className)} {...rest}>
-            <DropdownMenu constrainToScrollParent isRightAligned>
-                <PlainButton isDisabled={isDisabled} type="button" aria-label={label}>
-                    <IconEllipsis color={bdlGray62} height={16} width={16} />
-                </PlainButton>
-                <Menu>{children}</Menu>
-            </DropdownMenu>
-        </div>
-    );
-}
+const MediaMenu = ({ className, children, isDisabled = false, label, ...rest }: Props) => (
+    <div className={classnames('bdl-Media-menu', className)} {...rest}>
+        <DropdownMenu constrainToScrollParent isRightAligned>
+            <PlainButton isDisabled={isDisabled} type="button" aria-label={label}>
+                <IconEllipsis color={bdlGray62} height={16} width={16} />
+            </PlainButton>
+            <Menu>{children}</Menu>
+        </DropdownMenu>
+    </div>
+);
 
 export default MediaMenu;

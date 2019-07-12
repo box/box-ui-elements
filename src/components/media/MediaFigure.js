@@ -12,14 +12,15 @@ type Props = {
     className?: string,
 };
 
-function MediaFigure({ as: Wrapper, className, children, ...rest }: Props) {
-    return (
-        <Wrapper className={classnames('bdl-Media-figure', className)} {...rest}>
-            {children}
-        </Wrapper>
-    );
-}
+const MediaFigure = ({ as: Wrapper, className, children, ...rest }: Props) => (
+    <Wrapper className={classnames('bdl-Media-figure', className)} {...rest}>
+        {children}
+    </Wrapper>
+);
 
+// Use this instead of default value because of param destructuring bug in Flow
+// that affects union types
+// https://github.com/facebook/flow/issues/5461
 MediaFigure.defaultProps = {
     as: 'figure',
 };
