@@ -99,10 +99,11 @@
             color: lighten($black, 31%);
             flex: 1;
             height: 18px;
-            margin: 0;
+            line-height: 18px;
+            margin: 1px;
             min-width: 0;
             overflow: hidden;
-            padding: 5px 3px 3px;
+            padding: 3px;
             resize: none;
             white-space: nowrap;
 
