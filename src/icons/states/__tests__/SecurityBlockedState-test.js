@@ -9,7 +9,7 @@ describe('icons/states/SecurityBlockedState', () => {
     });
 
     test('should correctly render icon with specified color', () => {
-        const wrapper = shallow(<SecurityBlockedState color="#fcfcfc" strokeColor="#eee" />);
+        const wrapper = shallow(<SecurityBlockedState primaryColor="#fcfcfc" secondaryColor="#eee" />);
         expect(wrapper).toMatchSnapshot();
     });
 
