@@ -12,14 +12,11 @@ import identity from 'lodash/identity';
 
 import { ReadableTime } from '../../../../components/time';
 import Tooltip from '../../../../components/tooltip';
-import { Overlay } from '../../../../components/flyout';
-import PrimaryButton from '../../../../components/primary-button';
-import Button from '../../../../components/button';
-import commonMessages from '../../../common/messages';
 import messages from './messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 import CommentMenu from './CommentMenu';
+import CommentDeleteConfirmation from './CommentDeleteConfirmation';
 import UserLink from './UserLink';
 import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
@@ -28,7 +25,7 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
 
 import './Comment.scss';
-import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK, PLACEHOLDER_USER, KEYS } from '../../../../constants';
+import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK, PLACEHOLDER_USER } from '../../../../constants';
 
 type Props = {
     avatarRenderer?: React.Node => React.Element<any>,
@@ -57,7 +54,7 @@ type Props = {
 };
 
 type State = {
-    isConfirming: boolean,
+    isConfirmingDelete: boolean,
     isEditing: boolean,
     isInputOpen: boolean,
 };
@@ -68,7 +65,7 @@ class Comment extends React.Component<Props, State> {
     };
 
     state = {
-        isConfirming: false,
+        isConfirmingDelete: false,
         isEditing: false,
         isInputOpen: false,
     };
@@ -82,11 +79,11 @@ class Comment extends React.Component<Props, State> {
     };
 
     handleDeleteCancel = (): void => {
-        this.setState({ isConfirming: false });
+        this.setState({ isConfirmingDelete: false });
     };
 
     handleDeleteClick = () => {
-        this.setState({ isConfirming: true });
+        this.setState({ isConfirmingDelete: true });
     };
 
     handleEditClick = (): void => {
@@ -96,32 +93,6 @@ class Comment extends React.Component<Props, State> {
             onEditClick();
         } else {
             this.setState({ isEditing: true, isInputOpen: true });
-        }
-    };
-
-    onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
-        const { nativeEvent } = event;
-        const { isConfirming } = this.state;
-
-        nativeEvent.stopImmediatePropagation();
-
-        switch (event.key) {
-            case KEYS.escape:
-                event.stopPropagation();
-                event.preventDefault();
-                if (isConfirming) {
-                    this.handleDeleteCancel();
-                }
-                break;
-            case KEYS.enter:
-                event.stopPropagation();
-                event.preventDefault();
-                if (isConfirming) {
-                    this.handleDeleteConfirm();
-                }
-                break;
-            default:
-                break;
         }
     };
 
@@ -158,11 +129,9 @@ class Comment extends React.Component<Props, State> {
             getMentionWithQuery,
             mentionSelectorContacts,
         } = this.props;
-        const { isConfirming, isEditing, isInputOpen } = this.state;
+        const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
-        const deleteConfirmMessage =
-            type === COMMENT_TYPE_DEFAULT ? messages.commentDeletePrompt : messages.taskDeletePrompt;
 
         return (
             <div className="bcs-comment-container">
@@ -194,40 +163,19 @@ class Comment extends React.Component<Props, State> {
                                 >
                                     <CommentMenu
                                         id={id}
-                                        isDisabled={isConfirming}
+                                        isDisabled={isConfirmingDelete}
                                         onDeleteClick={this.handleDeleteClick}
                                         onEditClick={this.handleEditClick}
                                         permissions={permissions}
                                         type={type}
                                     />
-                                    {isConfirming && (
-                                        <Overlay
-                                            className="be-modal bcs-comment-confirm-container"
-                                            onKeyDown={this.onKeyDown}
-                                            shouldOutlineFocus={false}
-                                            shouldDefaultFocus
-                                            role="dialog"
-                                        >
-                                            <div className="bcs-comment-confirm-prompt">
-                                                <FormattedMessage {...deleteConfirmMessage} />
-                                            </div>
-                                            <div>
-                                                <Button
-                                                    className="bcs-comment-confirm-cancel"
-                                                    onClick={this.handleDeleteCancel}
-                                                    type="button"
-                                                >
-                                                    <FormattedMessage {...commonMessages.cancel} />
-                                                </Button>
-                                                <PrimaryButton
-                                                    className="bcs-comment-confirm-delete"
-                                                    onClick={this.handleDeleteConfirm}
-                                                    type="button"
-                                                >
-                                                    <FormattedMessage {...commonMessages.delete} />
-                                                </PrimaryButton>
-                                            </div>
-                                        </Overlay>
+                                    {isConfirmingDelete && (
+                                        <CommentDeleteConfirmation
+                                            isOpen={isConfirmingDelete}
+                                            onDeleteCancel={this.handleDeleteCancel}
+                                            onDeleteConfirm={this.handleDeleteConfirm}
+                                            type={type}
+                                        />
                                     )}
                                 </TetherComponent>
                             )}
