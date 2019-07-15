@@ -40,7 +40,7 @@ type State = {
     isOpen: boolean,
 };
 
-class Collapsible extends React.Component<Props, State> {
+class Collapsible extends React.PureComponent<Props, State> {
     static defaultProps = {
         buttonProps: {},
         className: '',
