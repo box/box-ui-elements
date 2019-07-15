@@ -25,12 +25,15 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
     <InlineError
       title={
         <FormattedMessage
-          defaultMessage="Error"
-          id="be.error"
+          defaultMessage="Server Error"
+          id="be.sidebarVersions.serverError"
         />
       }
     >
-      This is an error
+      <FormattedMessage
+        defaultMessage="File versions could not be retrieved."
+        id="be.sidebarVersions.fetchError"
+      />
     </InlineError>
     <div
       className="bcs-Versions-empty"

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme/build';
+import messages from '../messages';
 import openUrlInsideIframe from '../../../../utils/iframe';
 import VersionsSidebar from '../VersionsSidebarContainer';
 import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../../utils/fields';
@@ -151,12 +152,11 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     describe('handleFetchError', () => {
         test('should set state to default values with error message', () => {
             const wrapper = getWrapper();
-            const message = 'This is an error!';
 
-            wrapper.instance().handleFetchError({ message });
+            wrapper.instance().handleFetchError();
 
             expect(wrapper.state()).toEqual({
-                error: message,
+                error: messages.versionFetchError,
                 isLoading: false,
                 isWatermarked: false,
                 versionCount: 0,
