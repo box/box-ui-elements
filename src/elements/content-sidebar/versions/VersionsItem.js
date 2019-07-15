@@ -77,7 +77,7 @@ const VersionsItem = ({
     const isDeleted = action === VERSION_DELETE_ACTION;
     const isDownloadable = !!is_download_available;
     const isLimited = versionCount - versionInteger >= versionLimit;
-    const isRestricted = isWatermarked && !isCurrent && !can_download; // Watermarked files use can_download for preview
+    const isRestricted = isWatermarked && !isCurrent; // Watermarked files do not support prior version preview
 
     // Version action helpers
     const canPreview = can_preview && !isDeleted && !isLimited && !isRestricted;
