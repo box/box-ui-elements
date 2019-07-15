@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmation render() should render component with COMMENT_TYPE_DEFAULT 1`] = `
+<div
+  className="bcs-comment-confirm-prompt"
+>
+  <FormattedMessage
+    defaultMessage="Delete comment?"
+    id="be.contentSidebar.activityFeed.comment.commentDeletePrompt"
+  />
+</div>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmation render() should render component with COMMENT_TYPE_TASK 1`] = `
+<div
+  className="bcs-comment-confirm-prompt"
+>
+  <FormattedMessage
+    defaultMessage="Are you sure you want to permanently delete this task?"
+    id="be.contentSidebar.activityFeed.comment.taskDeletePrompt"
+  />
+</div>
+`;
