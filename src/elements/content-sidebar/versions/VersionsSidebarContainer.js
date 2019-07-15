@@ -10,7 +10,9 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { generatePath, withRouter } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
+import type { MessageDescriptor } from 'react-intl';
 import API from '../../../api';
+import messages from './messages';
 import openUrlInsideIframe from '../../../utils/iframe';
 import VersionsSidebar from './VersionsSidebar';
 import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../utils/fields';
@@ -27,7 +29,7 @@ type Props = {
 };
 
 type State = {
-    error?: string,
+    error?: MessageDescriptor,
     isLoading: boolean,
     isWatermarked: boolean,
     versionCount: number,
@@ -54,7 +56,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     window: any = window;
 
     componentDidMount() {
-        this.fetchData();
+        this.fetchData().catch(this.handleFetchError);
     }
 
     componentDidUpdate({ versionId: prevVersionId }: Props) {
@@ -75,17 +77,17 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
             this.deleteVersion(versionId)
                 .then(this.fetchData)
                 .then(() => this.handleDeleteSuccess(versionId))
-                .catch(this.handleActionError);
+                .catch(() => this.handleActionError(messages.versionActionDeleteError));
         });
     };
 
     handleActionDownload = (versionId: string): void => {
         this.fetchDownloadUrl(versionId)
             .then(openUrlInsideIframe)
-            .catch(this.handleActionError);
+            .catch(() => this.handleActionError(messages.versionActionDownloadError));
     };
 
-    handleActionError = ({ message }: ElementsXhrError): void => {
+    handleActionError = (message: MessageDescriptor): void => {
         this.setState({
             error: message,
             isLoading: false,
@@ -101,7 +103,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
             this.promoteVersion(versionId)
                 .then(this.fetchData)
                 .then(this.handlePromoteSuccess)
-                .catch(this.handleActionError);
+                .catch(() => this.handleActionError(messages.versionActionPromoteError));
         });
     };
 
@@ -109,7 +111,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState({ isLoading: true }, () => {
             this.restoreVersion(versionId)
                 .then(this.fetchData)
-                .catch(this.handleActionError);
+                .catch(() => this.handleActionError(messages.versionActionRestoreError));
         });
     };
 
@@ -122,9 +124,9 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         }
     };
 
-    handleFetchError = ({ message }: ElementsXhrError): void => {
+    handleFetchError = (): void => {
         this.setState({
-            error: message,
+            error: messages.versionFetchError,
             isLoading: false,
             isWatermarked: false,
             versionCount: 0,
@@ -172,8 +174,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     fetchData = (): Promise<any> => {
         return Promise.all([this.fetchFile(), this.fetchVersions()])
             .then(this.fetchVersionCurrent)
-            .then(this.handleFetchSuccess)
-            .catch(this.handleFetchError);
+            .then(this.handleFetchSuccess);
     };
 
     fetchDownloadUrl = (versionId: string): Promise<string> => {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'enzyme/build';
 import InlineError from '../../../../components/inline-error';
+import messages from '../messages';
 import VersionsMenu from '../VersionsMenu';
 import VersionsSidebar from '../VersionsSidebar';
 
@@ -15,15 +16,15 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
         test('should show the versions list if no error prop is provided', () => {
             const wrapper = getWrapper({ versions: [{ id: '12345' }] });
 
-            expect(wrapper.find(InlineError).length).toEqual(0);
-            expect(wrapper.find(VersionsMenu).length).toEqual(1);
+            expect(wrapper.exists(InlineError)).toBe(false);
+            expect(wrapper.exists(VersionsMenu)).toBe(true);
             expect(wrapper).toMatchSnapshot();
         });
 
         test('should show an inline error if the prop is provided', () => {
-            const wrapper = getWrapper({ error: 'This is an error', versions: [] });
+            const wrapper = getWrapper({ error: messages.versionFetchError, versions: [] });
 
-            expect(wrapper.find(InlineError).length).toEqual(1);
+            expect(wrapper.exists(InlineError)).toBe(true);
             expect(wrapper).toMatchSnapshot();
         });
     });
