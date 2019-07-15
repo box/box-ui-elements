@@ -109,6 +109,10 @@ const icons = [
         component: require('./SearchEmptyState').default,
     },
     {
+        name: 'SecurityBlockedState',
+        component: require('./SecurityBlockedState').default,
+    },
+    {
         name: 'SelectedItemsEmptyState',
         component: require('./SelectedItemsEmptyState').default,
     },
