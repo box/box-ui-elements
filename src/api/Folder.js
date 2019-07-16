@@ -5,13 +5,25 @@
  */
 
 import noop from 'lodash/noop';
+import getProp from 'lodash/get';
 import flatten from '../utils/flatten';
 import { FOLDER_FIELDS_TO_FETCH } from '../utils/fields';
 import { getBadItemError } from '../utils/error';
 import Item from './Item';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
-import { CACHE_PREFIX_FOLDER, ERROR_CODE_FETCH_FOLDER, ERROR_CODE_CREATE_FOLDER } from '../constants';
+import {
+    CACHE_PREFIX_FOLDER,
+    ERROR_CODE_FETCH_FOLDER,
+    ERROR_CODE_CREATE_FOLDER,
+    FIELD_REPRESENTATIONS,
+} from '../constants';
+
+// available dimensions for JPG: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048"
+const DEFAULT_JPG_DIMENSIONS = '1024x1024';
+
+// available dimensions for PNG: "1024x1024", "2048x2048"
+const DEFAULT_PNG_DIMENSIONS = '1024x1024';
 
 class Folder extends Item {
     /**
@@ -88,6 +100,45 @@ class Folder extends Item {
     isLoaded(): boolean {
         const cache: APICache = this.getCache();
         return cache.has(this.key);
+    }
+
+    /**
+     * Takes representations fields from items in collection and assigns thumbnailUrls
+     * to items, with the use of the callback
+     *
+     * @param {?Array<BoxItem>} items - collection with items that have representations field populated
+     * @param {(item: BoxItem, representation: ?string, template: ?string) => Promise<void>} callback - Function to call with generated thumbnailUrl
+     * @return {void}
+     */
+    formatRepresentations(
+        items: ?Array<BoxItem>,
+        callback: (item: BoxItem, representation: ?string, template: ?string) => Promise<void> = () =>
+            Promise.resolve(),
+    ): void {
+        if (items) {
+            items.forEach(item => {
+                const entries = getProp(item, 'representations.entries');
+                const status = getProp(entries, '[0].status.state');
+                if (status === 'success') {
+                    const { representation, template } = this.getDataFromEntries(entries, 0);
+                    callback(item, representation, template);
+                }
+            });
+        }
+    }
+
+    /**
+     * Retrieve the representation and template fields from the 'index' in 'entries'
+     *
+     * @param {FileRepresentationCollection} - entries object from representations field of item
+     * @return {?string, ?string} - object containing the entry's representation and template
+     */
+    getDataFromEntries(
+        entries: FileRepresentationCollection,
+        index: number,
+    ): { representation: ?string, template: ?string } {
+        const entry = getProp(entries, `[${index}]`);
+        return { representation: getProp(entry, 'representation'), template: getProp(entry, 'content.url_template') };
     }
 
     /**
@@ -199,7 +250,7 @@ class Folder extends Item {
      * @return {Promise}
      */
     folderRequest(
-        { fields, noPagination }: FetchOptions = {},
+        { fields, noPagination, shouldFetchThumbnails }: FetchOptions = {},
         successHandler?: Function = this.folderSuccessHandler,
     ): Promise<any> {
         if (this.isDestroyed()) {
@@ -207,11 +258,12 @@ class Folder extends Item {
         }
 
         const requestFields = fields || FOLDER_FIELDS_TO_FETCH;
+        if (shouldFetchThumbnails) {
+            requestFields.push(FIELD_REPRESENTATIONS);
+        }
 
         this.errorCode = ERROR_CODE_FETCH_FOLDER;
-
         let params = { fields: requestFields.toString() };
-
         if (!noPagination) {
             params = Object.assign({}, params, {
                 direction: this.sortDirection.toLowerCase(),
@@ -226,6 +278,13 @@ class Folder extends Item {
             .get({
                 url: this.getUrl(this.id),
                 params,
+                headers: shouldFetchThumbnails
+                    ? {
+                          // if unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do
+                          // not have a thumbnail rep but do have a first page rep.
+                          'X-Rep-Hints': `[jpg?dimensions=${DEFAULT_JPG_DIMENSIONS},png?dimensions=${DEFAULT_PNG_DIMENSIONS}]`,
+                      }
+                    : {},
             })
             .then(successHandler)
             .catch(this.errorHandler);
@@ -305,7 +364,7 @@ class Folder extends Item {
         }
 
         // Make the XHR request
-        this.folderRequest();
+        this.folderRequest(options);
     }
 
     /**

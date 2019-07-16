@@ -51,6 +51,121 @@ describe('api/Folder', () => {
         });
     });
 
+    describe('getDataFromEntries()', () => {
+        test('should return proper representation and template', () => {
+            const representation = 'representation';
+            const template = 'template';
+            expect(
+                folder.getDataFromEntries(
+                    [
+                        {
+                            representation,
+                            content: {
+                                url_template: template,
+                            },
+                        },
+                    ],
+                    0,
+                ),
+            ).toEqual({
+                representation,
+                template,
+            });
+        });
+        test('should return nulls if no entries', () => {
+            expect(folder.getDataFromEntries([], 0)).toEqual({
+                representation: undefined,
+                template: undefined,
+            });
+        });
+    });
+
+    describe('formatRepresentations()', () => {
+        let callback;
+        beforeEach(() => {
+            callback = jest.fn();
+            folder.getDataFromEntries = jest.fn();
+        });
+
+        describe('early return cases', () => {
+            afterEach(() => {
+                expect(folder.getDataFromEntries).not.toHaveBeenCalled();
+                expect(callback).not.toHaveBeenCalled();
+            });
+
+            test('should not call callback if items is null', () => {
+                folder.formatRepresentations(null, callback);
+            });
+
+            test('should not call callback if items is empty', () => {
+                folder.formatRepresentations([], callback);
+            });
+
+            test('should not call callback if items representation field is empty', () => {
+                folder.formatRepresentations([{ name: 'item' }], callback);
+            });
+
+            test('should not call callback if items representation fetch was not successful', () => {
+                folder.formatRepresentations(
+                    [
+                        {
+                            representation: {
+                                entries: [
+                                    {
+                                        status: { state: 'failure' },
+                                    },
+                                ],
+                            },
+                        },
+                    ],
+                    callback,
+                );
+            });
+        });
+
+        describe('success case', () => {
+            test('should call callback twice for two items with thumbnails', () => {
+                folder.getDataFromEntries
+                    .mockReturnValueOnce({ representation: 'representation1', template: 'template1' })
+                    .mockReturnValueOnce({ representation: 'representation2', template: 'template2' });
+                const entries1 = [
+                    {
+                        representation: 'representation1',
+                        status: { state: 'success' },
+                        content: {
+                            url_template: 'template1',
+                        },
+                    },
+                ];
+                const entries2 = [
+                    {
+                        representation: 'represenation2',
+                        status: { state: 'success' },
+                        content: {
+                            url_template: 'template2',
+                        },
+                    },
+                ];
+                item1 = {
+                    representations: {
+                        entries: entries1,
+                    },
+                };
+                item2 = {
+                    representations: {
+                        entries: entries2,
+                    },
+                };
+                folder.formatRepresentations([item1, item2], callback);
+                expect(folder.getDataFromEntries.mock.calls).toEqual([[entries1, 0], [entries2, 0]]);
+                expect(callback.mock.calls).toEqual([
+                    [item1, 'representation1', 'template1'],
+                    [item2, 'representation2', 'template2'],
+                ]);
+            });
+        });
+    });
+
     describe('getFolder()', () => {
         test('should not do anything if destroyed', () => {
             folder.isDestroyed = jest.fn().mockReturnValueOnce(true);
@@ -153,6 +268,30 @@ describe('api/Folder', () => {
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                         sort: 'by',
                     },
+                    headers: {},
+                });
+            });
+        });
+        test('should make xhr to folder with thumbnail field and call success callback', () => {
+            folder.folderSuccessHandler = jest.fn();
+            folder.errorHandler = jest.fn();
+            folder.includePreviewFields = true;
+            folder.xhr = {
+                get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
+            };
+            return folder.folderRequest({ shouldFetchThumbnails: true }).then(() => {
+                expect(folder.folderSuccessHandler).toHaveBeenCalledWith('success');
+                expect(folder.errorHandler).not.toHaveBeenCalled();
+                expect(folder.xhr.get).toHaveBeenCalledWith({
+                    url: 'https://api.box.com/2.0/folders/id',
+                    params: {
+                        direction: 'direction',
+                        limit: 20,
+                        offset: 0,
+                        fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                        sort: 'by',
+                    },
+                    headers: { 'X-Rep-Hints': '[jpg?dimensions=1024x1024,png?dimensions=1024x1024]' },
                 });
             });
         });
@@ -177,6 +316,7 @@ describe('api/Folder', () => {
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                         sort: 'by',
                     },
+                    headers: {},
                 });
             });
         });

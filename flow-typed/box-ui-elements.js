@@ -393,10 +393,12 @@ type BoxItem = {
     parent?: BoxItem,
     path_collection?: BoxPathCollection,
     permissions?: BoxItemPermission,
+    representations?: FileRepresentationCollection,
     restored_from?: BoxItemVersion,
     selected?: boolean,
     shared_link?: SharedLink,
     size?: number,
+    thumbnailUrl?: string,
     type?: ItemType,
     url?: string,
     version_limit?: ?number,
@@ -470,6 +472,25 @@ type Collection = {
     sortBy?: SortBy,
     sortDirection?: SortDirection,
     totalCount?: number,
+};
+
+type FileRepresentationCollection = {
+    entries: Array<FileRepresentation>,
+};
+
+type FileRepresentation = {
+    content: {
+        url_template: string,
+    },
+    properties: {
+        dimensions: string,
+        paged: string,
+        thumb: string,
+    },
+    representation: string,
+    status: {
+        state: string,
+    },
 };
 
 type FolderUploadItem = {
@@ -788,6 +809,7 @@ type FetchOptions = {
     forceFetch?: boolean,
     noPagination?: boolean,
     refreshCache?: boolean,
+    shouldFetchThumbnails?: boolean,
 };
 
 type ErrorResponseData = {
