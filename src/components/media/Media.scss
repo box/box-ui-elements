@@ -9,7 +9,8 @@
 // the media content, ie, an avatar
 .bdl-Media-figure {
     align-self: flex-start;
-    flex: 0 0 auto;
+    flex-grow: 0;
+    flex-shrink: 0;
     justify-self: flex-start;
     margin: 0;
     padding: 0;
@@ -17,15 +18,18 @@
 
 // the main content, e.g. title and message
 .bdl-Media-body {
-    flex: 1 1 auto;
+    flex-basis: 100%;
+    flex-grow: 1;
+    flex-shrink: 1;
     margin-left: 10px;
     // handle wrapping long words in text content without breaking
     // float position of menu
-    word-break: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word; // CJK scripts
+    word-wrap: break-word; // old IE
 }
 
 // the "..." menu button, meant to be used inside Media-body
-// float is used to reflow content instead of pushing it to the left
 .bdl-Media-menu {
     // float is used to reflow content instead of pushing it to the left
     float: right;
