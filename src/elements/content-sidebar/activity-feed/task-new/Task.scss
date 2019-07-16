@@ -2,14 +2,12 @@
 @import './mixins';
 
 $bcs-task-grid: 4px;
-$bcs-task-left-offset: 10 * $bcs-task-grid;
+$bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
 
 // Comment overrides
 .bcs-Task {
     .bcs-comment {
         .bcs-comment-user-name {
-            margin-right: 0;
-
             &.link {
                 white-space: normal;
             }
@@ -39,7 +37,6 @@ $bcs-task-left-offset: 10 * $bcs-task-grid;
     @include avatar-badge-icon;
 
     border-width: 2px;
-    right: $bcs-task-grid;
 }
 
 .bcs-Task-statusContainer {

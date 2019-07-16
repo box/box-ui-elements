@@ -4,24 +4,24 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 <div
   className="bcs-comment-container"
 >
-  <div
+  <Media
+    as="div"
     className="bcs-comment"
   >
-    <Component
-      className="bcs-comment-avatar"
-      user={
-        Object {
-          "id": 10,
-          "name": "50 Cent",
-        }
-      }
-    />
-    <div
-      className="bcs-comment-content"
+    <MediaFigure
+      as="figure"
     >
-      <div
-        className="bcs-comment-headline"
-      >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <div>
         <UserLink
           className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
@@ -65,8 +65,8 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         translationEnabled={false}
         translationFailed={null}
       />
-    </div>
-  </div>
+    </MediaBody>
+  </Media>
 </div>
 `;
 
@@ -74,24 +74,24 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 <div
   className="bcs-comment-container"
 >
-  <div
+  <Media
+    as="div"
     className="bcs-comment"
   >
-    <Component
-      className="bcs-comment-avatar"
-      user={
-        Object {
-          "id": 10,
-          "name": "50 Cent",
-        }
-      }
-    />
-    <div
-      className="bcs-comment-content"
+    <MediaFigure
+      as="figure"
     >
-      <div
-        className="bcs-comment-headline"
-      >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <div>
         <UserLink
           className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
@@ -136,8 +136,8 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         translationEnabled={true}
         translationFailed={null}
       />
-    </div>
-  </div>
+    </MediaBody>
+  </Media>
 </div>
 `;
 
@@ -145,24 +145,24 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
 <div
   className="bcs-comment-container"
 >
-  <div
+  <Media
+    as="div"
     className="bcs-comment bcs-is-pending"
   >
-    <Component
-      className="bcs-comment-avatar"
-      user={
-        Object {
-          "id": 10,
-          "name": "50 Cent",
-        }
-      }
-    />
-    <div
-      className="bcs-comment-content"
+    <MediaFigure
+      as="figure"
     >
-      <div
-        className="bcs-comment-headline"
-      >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <div>
         <UserLink
           className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
@@ -206,8 +206,8 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
         translationEnabled={false}
         translationFailed={true}
       />
-    </div>
-  </div>
+    </MediaBody>
+  </Media>
   <CommentInlineError
     message="errorrrrr"
     title="error"
@@ -219,24 +219,24 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
 <div
   className="bcs-comment-container"
 >
-  <div
+  <Media
+    as="div"
     className="bcs-comment"
   >
-    <Component
-      className="bcs-comment-avatar"
-      user={
-        Object {
-          "id": 10,
-          "name": "50 Cent",
-        }
-      }
-    />
-    <div
-      className="bcs-comment-content"
+    <MediaFigure
+      as="figure"
     >
-      <div
-        className="bcs-comment-headline"
-      >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <div>
         <UserLink
           className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
@@ -280,7 +280,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
         translationEnabled={false}
         translationFailed={null}
       />
-    </div>
-  </div>
+    </MediaBody>
+  </Media>
 </div>
 `;

@@ -35,6 +35,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
+            permissions: { can_delete: false, can_edit: true },
         };
 
         const wrapper = shallow(
@@ -102,10 +103,12 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     });
 
     test.each`
-        permissions
-        ${{ can_delete: true, can_edit: false }}
-        ${{ can_delete: false, can_edit: true }}
-    `('should render comment menu based on permissions', ({ permissions }) => {
+        permissions                              | type         | show
+        ${{ can_delete: true, can_edit: false }} | ${'task'}    | ${true}
+        ${{ can_delete: false, can_edit: true }} | ${'task'}    | ${true}
+        ${{ can_delete: true, can_edit: false }} | ${'comment'} | ${true}
+        ${{ can_delete: false, can_edit: true }} | ${'comment'} | ${false}
+    `('should have comment menu if edit or delete is permitted', ({ permissions, type, show }) => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
@@ -116,6 +119,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             <Comment
                 id="123"
                 {...comment}
+                type={type}
                 approverSelectorContacts={approverSelectorContacts}
                 currentUser={currentUser}
                 handlers={allHandlers}
@@ -125,10 +129,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             />,
         );
 
-        expect(wrapper.find('CommentMenu').length).toEqual(1);
+        expect(wrapper.find('CommentMenuItems').length).toEqual(show ? 1 : 0);
     });
 
-    test('should not allow actions when comment is pending', () => {
+    test('should not show actions when comment is pending', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
@@ -149,7 +153,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             />,
         );
 
-        expect(wrapper.find('CommentMenu').length).toEqual(0);
+        expect(wrapper.find('CommentMenuItems').length).toEqual(0);
     });
 
     test('should allow user to edit if they have edit permissions on the task and edit handler is defined', () => {
@@ -173,22 +177,21 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         const instance = wrapper.instance();
 
-        expect(wrapper.find('CommentMenu').length).toEqual(1);
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isEditingInline')).toBe(false);
 
-        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isEditingInline')).toBe(false);
         instance.handleEditClick();
         wrapper.update();
         expect(wrapper.find('CommentText').length).toEqual(0);
-        expect(wrapper.state('isEditing')).toBe(true);
+        expect(wrapper.state('isEditingInline')).toBe(true);
 
         instance.approvalCommentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
         instance.updateTaskHandler();
-        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isEditingInline')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
     });
 
@@ -214,16 +217,15 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         const instance = wrapper.instance();
 
-        expect(wrapper.find('CommentMenu').length).toEqual(1);
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isEditingInline')).toBe(false);
 
-        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isEditingInline')).toBe(false);
         instance.handleEditClick();
         wrapper.update();
         expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isEditingInline')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
 
         expect(comment.onEditClick).toHaveBeenCalledTimes(1);
@@ -308,18 +310,15 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 onEdit={jest.fn()}
             />,
         );
-
-        expect(wrapper.find('CommentMenu').length).toEqual(1);
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isEditingInline')).toBe(false);
         expect(wrapper.find('UserLink').length).toEqual(2);
-        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isEditingInline')).toBe(false);
 
         wrapper.instance().handleEditClick();
         wrapper.update();
-        expect(wrapper.state('isEditing')).toBe(true);
-        expect(wrapper.find('CommentMenu').length).toEqual(1);
+        expect(wrapper.state('isEditingInline')).toBe(true);
         expect(wrapper.find('UserLink').length).toEqual(1);
     });
 

@@ -11,6 +11,7 @@ import PrimaryButton from '../../../../components/primary-button';
 import Button from '../../../../components/button';
 import commonMessages from '../../../common/messages';
 import messages from './messages';
+import './CommentDeleteConfirmation.scss';
 
 import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK, KEYS } from '../../../../constants';
 
@@ -24,7 +25,7 @@ type Props = {
 class CommentDeleteConfirmation extends React.Component<Props> {
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
-        const { isOpen, onDeleteCancel, onDeleteConfirm } = this.props;
+        const { isOpen, onDeleteCancel } = this.props;
 
         nativeEvent.stopImmediatePropagation();
 
@@ -34,13 +35,6 @@ class CommentDeleteConfirmation extends React.Component<Props> {
                 event.preventDefault();
                 if (isOpen) {
                     onDeleteCancel();
-                }
-                break;
-            case KEYS.enter:
-                event.stopPropagation();
-                event.preventDefault();
-                if (isOpen) {
-                    onDeleteConfirm();
                 }
                 break;
             default:

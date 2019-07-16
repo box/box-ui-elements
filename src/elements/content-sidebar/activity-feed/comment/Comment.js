@@ -12,10 +12,11 @@ import identity from 'lodash/identity';
 
 import { ReadableTime } from '../../../../components/time';
 import Tooltip from '../../../../components/tooltip';
+import Media from '../../../../components/media';
 import messages from './messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
-import CommentMenu from './CommentMenu';
+import CommentMenuItems from './CommentMenuItems';
 import CommentDeleteConfirmation from './CommentDeleteConfirmation';
 import UserLink from './UserLink';
 import CommentInlineError from './CommentInlineError';
@@ -55,7 +56,7 @@ type Props = {
 
 type State = {
     isConfirmingDelete: boolean,
-    isEditing: boolean,
+    isEditingInline: boolean,
     isInputOpen: boolean,
 };
 
@@ -66,7 +67,7 @@ class Comment extends React.Component<Props, State> {
 
     state = {
         isConfirmingDelete: false,
-        isEditing: false,
+        isEditingInline: false,
         isInputOpen: false,
     };
 
@@ -92,15 +93,15 @@ class Comment extends React.Component<Props, State> {
         if (onEditClick) {
             onEditClick();
         } else {
-            this.setState({ isEditing: true, isInputOpen: true });
+            this.setState({ isEditingInline: true, isInputOpen: true });
         }
     };
 
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
 
-    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditingInline: false });
 
-    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditingInline: false });
 
     updateTaskHandler = (args: any): void => {
         const { onEdit = noop } = this.props;
@@ -129,22 +130,52 @@ class Comment extends React.Component<Props, State> {
             getMentionWithQuery,
             mentionSelectorContacts,
         } = this.props;
-        const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
+        const { isConfirmingDelete, isEditingInline, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
+        const isTask = type === COMMENT_TYPE_TASK;
+        const isEditSupported = isTask; // comment editing not supported
+        const canEdit = permissions.can_edit && isEditSupported;
+        const canDelete = permissions.can_delete;
 
         return (
             <div className="bcs-comment-container">
-                <div
+                <Media
                     className={classNames('bcs-comment', {
                         'bcs-is-pending': isPending || error,
                     })}
                 >
-                    {avatarRenderer(
-                        <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />,
-                    )}
-                    <div className="bcs-comment-content">
-                        <div className="bcs-comment-headline">
+                    <Media.Figure>
+                        {avatarRenderer(<Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />)}
+                    </Media.Figure>
+                    <Media.Body>
+                        {(canDelete || canEdit) && !isPending && (
+                            <TetherComponent
+                                attachment="top right"
+                                className="bcs-comment-delete-confirm"
+                                constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                                targetAttachment="bottom right"
+                            >
+                                <Media.Menu isDisabled={isConfirmingDelete}>
+                                    <CommentMenuItems
+                                        id={id}
+                                        onDeleteClick={this.handleDeleteClick}
+                                        onEditClick={this.handleEditClick}
+                                        permissions={permissions}
+                                        type={type}
+                                    />
+                                </Media.Menu>
+                                {isConfirmingDelete && (
+                                    <CommentDeleteConfirmation
+                                        isOpen={isConfirmingDelete}
+                                        onDeleteCancel={this.handleDeleteCancel}
+                                        onDeleteConfirm={this.handleDeleteConfirm}
+                                        type={type}
+                                    />
+                                )}
+                            </TetherComponent>
+                        )}
+                        <div>
                             {userHeadlineRenderer(
                                 <UserLink
                                     className="bcs-comment-user-name"
@@ -153,31 +184,6 @@ class Comment extends React.Component<Props, State> {
                                     name={createdByUser.name}
                                     getUserProfileUrl={getUserProfileUrl}
                                 />,
-                            )}
-                            {(permissions.can_delete || permissions.can_edit) && !isPending && (
-                                <TetherComponent
-                                    attachment="top right"
-                                    className="bcs-comment-delete-confirm"
-                                    constraints={[{ to: 'scrollParent', attachment: 'together' }]}
-                                    targetAttachment="bottom right"
-                                >
-                                    <CommentMenu
-                                        id={id}
-                                        isDisabled={isConfirmingDelete}
-                                        onDeleteClick={this.handleDeleteClick}
-                                        onEditClick={this.handleEditClick}
-                                        permissions={permissions}
-                                        type={type}
-                                    />
-                                    {isConfirmingDelete && (
-                                        <CommentDeleteConfirmation
-                                            isOpen={isConfirmingDelete}
-                                            onDeleteCancel={this.handleDeleteCancel}
-                                            onDeleteConfirm={this.handleDeleteConfirm}
-                                            type={type}
-                                        />
-                                    )}
-                                </TetherComponent>
                             )}
                         </div>
                         <div>
@@ -194,7 +200,7 @@ class Comment extends React.Component<Props, State> {
                                 </small>
                             </Tooltip>
                         </div>
-                        {isEditing ? (
+                        {isEditingInline ? (
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
                                 isDisabled={isDisabled}
@@ -206,15 +212,14 @@ class Comment extends React.Component<Props, State> {
                                 user={currentUser}
                                 onCancel={this.approvalCommentFormCancelHandler}
                                 onFocus={this.approvalCommentFormFocusHandler}
-                                isEditing={isEditing}
+                                isEditing={isEditingInline}
                                 entityId={id}
                                 tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
                                 getAvatarUrl={getAvatarUrl}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getMentionWithQuery={getMentionWithQuery}
                             />
-                        ) : null}
-                        {!isEditing ? (
+                        ) : (
                             <CommentText
                                 id={id}
                                 tagged_message={tagged_message}
@@ -223,9 +228,9 @@ class Comment extends React.Component<Props, State> {
                                 translationFailed={error ? true : null}
                                 getUserProfileUrl={getUserProfileUrl}
                             />
-                        ) : null}
-                    </div>
-                </div>
+                        )}
+                    </Media.Body>
+                </Media>
                 {error ? <CommentInlineError {...error} /> : null}
             </div>
         );

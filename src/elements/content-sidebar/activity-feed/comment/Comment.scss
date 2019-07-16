@@ -5,27 +5,6 @@
     z-index: $overlay-z-index;
 }
 
-.bcs-comment-confirm-container {
-    width: 212px;
-
-    .overlay {
-        padding: 20px;
-    }
-
-    .bcs-comment-confirm-prompt {
-        margin-bottom: 20px;
-    }
-
-    .bcs-comment-confirm-delete,
-    .bcs-comment-confirm-cancel {
-        margin-left: 0;
-    }
-
-    .bcs-comment-confirm-cancel {
-        margin-right: 10px;
-    }
-}
-
 .be {
     .bcs-comment-container {
         position: relative;
@@ -35,7 +14,7 @@
             padding: 14px 15px;
 
             .bcs-comment-error-action {
-                color: $king-crimson;
+                color: $bdl-watermelon-red;
                 display: block;
                 margin-top: 5px;
                 text-decoration: underline;
@@ -44,50 +23,9 @@
     }
 
     .bcs-comment {
-        display: flex;
         margin-top: 23px;
         opacity: 1;
         transition: opacity .33s;
-        width: 100%;
-
-        .bcs-comment-edit-container {
-            margin-top: 3px;
-            opacity: 0;
-            position: absolute;
-            right: 16px;
-            top: 0;
-
-            .bcs-comment-edit {
-                vertical-align: top;
-            }
-        }
-
-        .bcs-comment-edit-container {
-            .flyout-wrapper .overlay-wrapper .overlay {
-                min-width: 120px;
-
-                .overlay-title {
-                    white-space: nowrap;
-                }
-            }
-
-            .flyout-wrapper .overlay-wrapper.left {
-                .overlay {
-                    padding: 10px 15px;
-                    transform: translateY(-20%);
-                }
-
-                .arrow {
-                    top: 20%;
-                }
-            }
-        }
-
-        .bcs-comment-menu-btn {
-            position: absolute;
-            right: 4px;
-            top: 0;
-        }
 
         .bcs-comment-text {
             white-space: pre-wrap;
@@ -117,35 +55,17 @@
             opacity: .4;
         }
 
-        .bcs-comment-avatar {
-            flex-shrink: 0;
-            margin-right: 10px;
-        }
-
-        .bcs-comment-content {
-            flex: 1;
-            min-width: 0;
-        }
-
         .bcs-comment-user-name {
-            color: $twos;
+            color: $bdl-gray;
             font-weight: bold;
             line-height: 19.5px;
-            margin-right: 10px;
         }
 
         .bcs-comment-created-at {
-            color: $sevens;
+            color: $bdl-gray-62;
             cursor: default;
             font-size: 12px;
             line-height: 20px;
-        }
-
-        .bcs-comment-headline {
-            display: flex;
-            flex-flow: row wrap;
-            padding-right: 25px;
-            position: relative;
         }
 
         .bcs-comment-text-loading {

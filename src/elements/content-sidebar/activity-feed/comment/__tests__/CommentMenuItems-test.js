@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK } from '../../../../../constants';
-import CommentMenu from '../CommentMenu';
+import CommentMenuItems from '../CommentMenuItems';
 
-describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
+describe('elements/content-sidebar/ActivityFeed/comment/CommentMenuItems', () => {
     test('should allow user to delete if they have delete permissions on the comment and delete handler is defined', () => {
         const comment = {
             permissions: { can_delete: true },
             onDeleteClick: jest.fn(),
         };
 
-        const wrapper = mount(<CommentMenu {...comment} />);
+        const wrapper = mount(<CommentMenuItems {...comment} />);
 
-        wrapper.find('PlainButton').simulate('click');
         expect(wrapper.find('MenuItem.bcs-comment-menu-delete').length).toBe(1);
     });
 
@@ -22,9 +21,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
             onDeleteClick: jest.fn(),
         };
 
-        const wrapper = mount(<CommentMenu {...comment} />);
+        const wrapper = mount(<CommentMenuItems {...comment} />);
 
-        wrapper.find('PlainButton').simulate('click');
         expect(wrapper.find('MenuItem.bcs-comment-menu-delete').length).toBe(0);
     });
 
@@ -33,9 +31,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
             permissions: { can_delete: true },
         };
 
-        const wrapper = mount(<CommentMenu {...comment} />);
+        const wrapper = mount(<CommentMenuItems {...comment} />);
 
-        wrapper.find('PlainButton').simulate('click');
         expect(wrapper.find('MenuItem.bcs-comment-menu-delete').length).toBe(0);
     });
 
@@ -46,9 +43,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
             type: COMMENT_TYPE_TASK,
         };
 
-        const wrapper = mount(<CommentMenu {...comment} />);
+        const wrapper = mount(<CommentMenuItems {...comment} />);
 
-        wrapper.find('PlainButton').simulate('click');
         expect(wrapper.find('MenuItem.bcs-comment-menu-edit').length).toBe(1);
     });
 
@@ -58,9 +54,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
             onEditClick: jest.fn(),
         };
 
-        const wrapper = mount(<CommentMenu {...comment} />);
+        const wrapper = mount(<CommentMenuItems {...comment} />);
 
-        wrapper.find('PlainButton').simulate('click');
         expect(wrapper.find('MenuItem.bcs-comment-menu-edit').length).toBe(0);
     });
 
@@ -69,9 +64,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
             permissions: { can_edit: true },
         };
 
-        const wrapper = mount(<CommentMenu {...comment} />);
+        const wrapper = mount(<CommentMenuItems {...comment} />);
 
-        wrapper.find('PlainButton').simulate('click');
         expect(wrapper.find('MenuItem.bcs-comment-menu-edit').length).toBe(0);
     });
 
@@ -82,9 +76,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentMenu', () => {
             type: COMMENT_TYPE_DEFAULT,
         };
 
-        const wrapper = mount(<CommentMenu {...comment} />);
+        const wrapper = mount(<CommentMenuItems {...comment} />);
 
-        wrapper.find('PlainButton').simulate('click');
         expect(wrapper.find('MenuItem.bcs-comment-menu-edit').length).toBe(0);
     });
 });
