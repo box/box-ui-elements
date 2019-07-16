@@ -1,21 +1,21 @@
-.bcs-comment-confirm-container {
+.bcs-CommentDeleteConfirmation {
     width: 212px;
 
     .overlay {
         border-radius: 4px;
         padding: 20px;
     }
+}
 
-    .bcs-comment-confirm-prompt {
-        margin-bottom: 20px;
-    }
+.bcs-CommentDeleteConfirmation-prompt {
+    margin-bottom: 20px;
+}
 
-    .bcs-comment-confirm-delete,
-    .bcs-comment-confirm-cancel {
-        margin-left: 0;
-    }
+.bcs-CommentDeleteConfirmation-delete,
+.bcs-CommentDeleteConfirmation-cancel {
+    margin-left: 0;
+}
 
-    .bcs-comment-confirm-cancel {
-        margin-right: 10px;
-    }
+.bcs-CommentDeleteConfirmation-cancel {
+    margin-right: 10px;
 }

@@ -49,20 +49,24 @@ class CommentDeleteConfirmation extends React.Component<Props> {
 
         return (
             <Overlay
-                className="be-modal bcs-comment-confirm-container"
+                className="be-modal bcs-CommentDeleteConfirmation"
                 onKeyDown={this.onKeyDown}
                 shouldOutlineFocus={false}
                 shouldDefaultFocus
                 role="dialog"
             >
-                <div className="bcs-comment-confirm-prompt">
+                <div className="bcs-CommentDeleteConfirmation-prompt">
                     <FormattedMessage {...deleteConfirmMessage} />
                 </div>
                 <div>
-                    <Button className="bcs-comment-confirm-cancel" onClick={onDeleteCancel} type="button">
+                    <Button className="bcs-CommentDeleteConfirmation-cancel" onClick={onDeleteCancel} type="button">
                         <FormattedMessage {...commonMessages.cancel} />
                     </Button>
-                    <PrimaryButton className="bcs-comment-confirm-delete" onClick={onDeleteConfirm} type="button">
+                    <PrimaryButton
+                        className="bcs-CommentDeleteConfirmation-delete"
+                        onClick={onDeleteConfirm}
+                        type="button"
+                    >
                         <FormattedMessage {...commonMessages.delete} />
                     </PrimaryButton>
                 </div>
