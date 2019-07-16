@@ -16,6 +16,7 @@ const isDev = process.env.NODE_ENV === 'dev';
 const language = process.env.LANGUAGE;
 const react = process.env.REACT === 'true';
 const examples = process.env.EXAMPLES === 'true';
+const shouldAnalyzeBundles = process.env.BUNDLE_ANALYSIS === 'true';
 const shouldIncludeAllSupportedBrowsers = isRelease || process.env.BROWSERSLIST_ENV === 'production';
 const token = process.env.TOKEN; // used for examples only
 const folderId = process.env.FOLDERID; // used for examples only
@@ -153,7 +154,7 @@ function getConfig(isReactExternalized) {
             ...config.module.rules,
         ];
     }
-    if (isRelease && language === 'en-US') {
+    if (isRelease && language === 'en-US' && shouldAnalyzeBundles) {
         config.plugins.push(
             new BundleAnalyzerPlugin({
                 analyzerMode: 'static',

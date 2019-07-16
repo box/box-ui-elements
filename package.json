@@ -44,6 +44,7 @@
         "build:es": "babel src --out-dir es",
         "build:i18n": "props2es",
         "build:npm": "npm-run-all clean build:i18n build:prod:npm build:prod:es",
+        "build:prod:analyze": "BUNDLE_ANALYSIS=true npm-run-all setup build:prod:npm",
         "build:prod:es": "BABEL_ENV=npm NODE_ENV=production yarn build:es --ignore \"**/__tests__/**,**/__mocks__/**\"",
         "build:prod:dist": "NODE_ENV=production webpack --config scripts/webpack.config.js --mode production",
         "build:prod:examples": "LANGUAGE=en-US REACT=true NODE_ENV=production node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js build --config scripts/styleguide.config.js --mode production",
