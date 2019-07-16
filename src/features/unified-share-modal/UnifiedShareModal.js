@@ -52,6 +52,7 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
+    children: React.Node,
     /** If item is classified this property contains the classification name */
     classificationName?: string,
     /** Message warning about restrictions regarding inviting collaborators to the item */
@@ -683,6 +684,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
         const {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
+            children,
             classificationName,
             focusSharedLinkOnLoad,
             item,
@@ -705,6 +707,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             sendSharedLinkError,
             trackingProps,
         } = rest;
+        const classificationBtn = children;
         const {
             modalTracking,
             sharedLinkTracking,
@@ -734,7 +737,12 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     className="unified-share-modal"
                     isOpen={isConfirmModalOpen ? false : isOpen}
                     onRequestClose={submitting ? undefined : onRequestClose}
-                    title={<span>{this.renderModalTitle()}</span>}
+                    title={
+                        <span>
+                            {this.renderModalTitle()}
+                            {classificationBtn}
+                        </span>
+                    }
                     {...extendedModalProps}
                 >
                     <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
