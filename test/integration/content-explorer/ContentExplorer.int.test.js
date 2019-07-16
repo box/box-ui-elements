@@ -33,7 +33,7 @@ const helpers = {
         if (selectedRow) {
             cy.getByTestId('content-explorer')
                 .find(this.getSelector(selectedRowClassName))
-                .should('have.length', 1)
+                .should('exist')
                 .should('have.class', `bce-item-row-${selectedRow}`);
         } else {
             cy.getByTestId('content-explorer').should('not.have.descendants', this.getSelector(selectedRowClassName));
@@ -60,8 +60,9 @@ const helpers = {
     getCancelButton() {
         return cy.contains(localize('be.cancel'));
     },
+    // need exact match since 'Close' appears elsewhere on the page
     getCloseButton() {
-        return cy.contains(localize('be.close'));
+        return cy.contains(utils.getExactRegex(localize('be.close')));
     },
     getShareButton(rowNum) {
         return this.getRow(rowNum).contains(localize('be.share'));
@@ -69,6 +70,9 @@ const helpers = {
     // using data-testid since more options button has "..." for text
     getMoreOptionsButton(rowNum) {
         return this.getRow(rowNum).find('[data-testid="bce-btn-more-options"]');
+    },
+    getAllMoreOptionsButtons() {
+        return cy.get('[data-testid="bce-btn-more-options"]');
     },
     // need exact match since 'Rename' appears elsewhere on the page
     getRenameButton() {
@@ -79,7 +83,7 @@ const helpers = {
         return this.getRow(rowNum).find('[data-testid="be-item-name"]');
     },
     getClosePreviewButton() {
-        return cy.getByAriaLabel('Close');
+        return cy.getByAriaLabel(localize('be.close'));
     },
     openUploadModal() {
         this.getAddButton().click();
@@ -205,30 +209,58 @@ describe('ContentExplorer', () => {
             helpers.selectRow(4);
             helpers.checkRowSelections(4);
         });
+
+        it('Should initially show list view', () => {
+            cy.getByTestId('content-explorer')
+                .find(helpers.getSelector(listViewClass))
+                .should('exist');
+            cy.getByTestId('content-explorer')
+                .find(helpers.getSelector(gridViewClass))
+                .should('not.exist');
+        });
     });
 
     describe('Grid View', () => {
         beforeEach(() => {
             helpers.load({ features: gridViewOn });
-        });
-
-        it('Should initially show list view', () => {
-            cy.getByTestId('content-explorer')
-                .find(helpers.getSelector(listViewClass))
-                .should('have.length', 1);
-            cy.getByTestId('content-explorer')
-                .find(helpers.getSelector(gridViewClass))
-                .should('have.length', 0);
+            helpers.getViewModeChangeButton().click();
         });
 
         it('Should switch to grid view', () => {
-            helpers.getViewModeChangeButton().click();
             cy.getByTestId('content-explorer')
                 .find(helpers.getSelector(listViewClass))
-                .should('have.length', 0);
+                .should('not.exist');
             cy.getByTestId('content-explorer')
                 .find(helpers.getSelector(gridViewClass))
-                .should('have.length', 1);
+                .should('exist');
+        });
+
+        it('Should open and close share modal', () => {
+            cy.getByAriaLabel(localize('be.shareDialogLabel')).should('not.exist');
+            cy.contains(localize('be.share')).click();
+            cy.getByAriaLabel(localize('be.shareDialogLabel')).should('exist');
+            helpers.getCloseButton().click();
+            cy.getByAriaLabel(localize('be.shareDialogLabel')).should('not.exist');
+        });
+
+        it('Should open and close rename modal', () => {
+            cy.getByAriaLabel(localize('be.renameDialogLabel')).should('not.exist');
+            helpers
+                .getAllMoreOptionsButtons()
+                .eq(0)
+                .click();
+            helpers.getRenameButton().click();
+            cy.getByAriaLabel(localize('be.renameDialogLabel')).should('exist');
+            helpers.getCancelButton().click();
+            cy.getByAriaLabel(localize('be.renameDialogLabel')).should('not.exist');
+        });
+
+        it('Should open and close preview', () => {
+            cy.getByAriaLabel(localize('be.preview')).should('not.exist');
+            cy.contains(Cypress.env('FIRST_FILE_NAME')).click();
+            cy.getByAriaLabel(localize('be.preview')).should('exist');
+            helpers.getClosePreviewButton().click();
+            cy.getByAriaLabel(localize('be.preview')).should('not.exist');
         });
     });
 });
