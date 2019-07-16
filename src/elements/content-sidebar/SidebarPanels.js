@@ -22,6 +22,7 @@ import {
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { VersionsSidebarProps } from './versions';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -40,6 +41,7 @@ type Props = {
     metadataSidebarProps: MetadataSidebarProps,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    versionsSidebarProps: VersionsSidebarProps,
 };
 
 // TODO: place into code splitting logic
@@ -82,6 +84,7 @@ const SidebarPanels = ({
     metadataSidebarProps,
     onVersionChange,
     onVersionHistoryClick,
+    versionsSidebarProps,
 }: Props) =>
     isOpen && (
         <Switch>
@@ -153,6 +156,7 @@ const SidebarPanels = ({
                             onVersionChange={onVersionChange}
                             parentName={match.params.sidebar}
                             versionId={match.params.versionId}
+                            {...versionsSidebarProps}
                         />
                     )}
                 />
