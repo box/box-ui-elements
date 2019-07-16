@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BOX_BLUE } from '../../../common/variables';
+import { bdlBoxBlue } from '../../../styles/variables';
 import TrashEmptyState from '../TrashEmptyState';
 
 describe('icons/states/TrashEmptyState', () => {
@@ -15,7 +15,7 @@ describe('icons/states/TrashEmptyState', () => {
                 .find('path')
                 .at(0)
                 .prop('stroke'),
-        ).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
     });
 
     test('should correctly render svg with specified class', () => {

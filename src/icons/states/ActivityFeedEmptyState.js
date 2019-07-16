@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const ActivityFeedEmptyState = ({ className = '', color = BOX_BLUE, height = 90, title, width = 90 }: Props) => (
+const ActivityFeedEmptyState = ({ className = '', color = bdlBoxBlue, height = 90, title, width = 90 }: Props) => (
     <AccessibleSVG
         className={`box-ui-activity-feed-empty-state-illustration ${className}`}
         height={height}

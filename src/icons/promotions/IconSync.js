@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconSync = ({ className = '', color = BOX_BLUE, height = 137, title, width = 153 }: Props) => (
+const IconSync = ({ className = '', color = bdlBoxBlue, height = 137, title, width = 153 }: Props) => (
     <AccessibleSVG
         className={`icon-sync ${className}`}
         height={height}
