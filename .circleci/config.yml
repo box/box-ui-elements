@@ -57,7 +57,7 @@ jobs:
       - run: *i18n
       - run:
           name: Commit Lint
-          command: yarn commitlint-circle
+          command: ./scripts/commitlint.sh
       - run:
           name: Code Lint
           command: yarn lint
