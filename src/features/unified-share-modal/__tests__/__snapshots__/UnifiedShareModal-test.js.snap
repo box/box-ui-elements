@@ -12,7 +12,9 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -189,7 +191,9 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Send Link to '{itemName}'"
           id="boxui.unifiedShare.emailModalTitle"
@@ -246,7 +250,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -423,7 +429,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -600,7 +608,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -781,7 +791,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -958,7 +970,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -1135,7 +1149,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -1283,7 +1299,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -1461,7 +1479,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -1639,7 +1659,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -1817,7 +1839,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -1966,7 +1990,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="People in '{itemName}'"
           id="boxui.unifiedShare.collaboratorListTitle"
@@ -2030,7 +2056,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -2211,7 +2239,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -2392,7 +2422,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -2569,7 +2601,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -2745,7 +2779,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"
@@ -2896,7 +2932,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
+      <span
+        className="modal-title-label"
+      >
         <FormattedMessage
           defaultMessage="Share '{itemName}'"
           id="boxui.unifiedShare.modalTitle"

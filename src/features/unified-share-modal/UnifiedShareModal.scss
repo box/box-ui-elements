@@ -50,6 +50,12 @@
 }
 
 .unified-share-modal {
+    /** header title with label */
+    .modal-title-label {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
     /** overrides for USM sub-components */
     .text-area-container {
         position: static;
