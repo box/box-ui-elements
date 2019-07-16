@@ -17,15 +17,13 @@ aliases:
     paths:
       - node_modules
       - ~/.npm
-      - ~/.cache/yarn
-      - ~/.cache/Cypress
+      - ~/.cache
     key: yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
 defaults: &defaults
   working_directory: ~/buie
   docker:
     - image: circleci/node:10
-  resource_class: large
 
 version: 2
 jobs:
@@ -72,9 +70,23 @@ jobs:
       - restore-cache: *restore-yarn-cache
       - run: *yarn
       - save-cache: *save-yarn-cache
+      - run: echo 'export TZ=America/Los_Angeles' >> $BASH_ENV
       - run:
           name: Unit tests
           command: yarn test --maxWorkers=2
+
+  e2e-tests:
+    working_directory: ~/buie
+    docker:
+      - image: cypress/base:10
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run:
+          name: E2E tests
+          command: yarn test:e2e
 
 workflows:
   version: 2
@@ -83,3 +95,4 @@ workflows:
       - lint
       - unit-tests
       - build
+      - e2e-tests
