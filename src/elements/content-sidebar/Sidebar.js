@@ -17,10 +17,11 @@ import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
 import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
+import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
-import type { FeatureConfig } from '../common/feature-checking';
+import type { VersionsSidebarProps } from './versions';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -45,6 +46,7 @@ type Props = {
     metadataSidebarProps: MetadataSidebarProps,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    versionsSidebarProps: VersionsSidebarProps,
 };
 
 type State = {
@@ -189,6 +191,7 @@ class Sidebar extends React.Component<Props, State> {
             metadataEditors,
             metadataSidebarProps,
             onVersionChange,
+            versionsSidebarProps,
         }: Props = this.props;
 
         const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isLarge;
@@ -238,6 +241,7 @@ class Sidebar extends React.Component<Props, State> {
                             metadataSidebarProps={metadataSidebarProps}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
+                            versionsSidebarProps={versionsSidebarProps}
                         />
                     </React.Fragment>
                 )}
