@@ -11,23 +11,19 @@ import './Media.scss';
 type Props = {
     /** Child elements */
     children: React.Node,
-    /** Additional class names */
+    /** Additional class names for the menu button */
     className?: string,
     /** is the dropdown menu button disabled */
     isDisabled: boolean,
-    /** aria-label prop for button icon */
-    label?: string,
 };
 
-const MediaMenu = ({ className, children, isDisabled, label, ...rest }: Props) => (
-    <div className={classnames('bdl-Media-menu', className)} {...rest}>
-        <DropdownMenu constrainToScrollParent isRightAligned>
-            <PlainButton isDisabled={isDisabled} type="button" aria-label={label}>
-                <IconEllipsis color={bdlGray62} height={16} width={16} />
-            </PlainButton>
-            <Menu>{children}</Menu>
-        </DropdownMenu>
-    </div>
+const MediaMenu = ({ className, children, isDisabled, ...rest }: Props) => (
+    <DropdownMenu constrainToScrollParent isRightAligned {...rest}>
+        <PlainButton isDisabled={isDisabled} className={classnames('bdl-Media-menu', className)} type="button">
+            <IconEllipsis color={bdlGray62} height={16} width={16} />
+        </PlainButton>
+        <Menu>{children}</Menu>
+    </DropdownMenu>
 );
 
 MediaMenu.defaultProps = {

@@ -171,6 +171,7 @@ class DropdownMenu extends React.Component<Props, State> {
             constrainToScrollParent,
             constrainToWindow,
             className,
+            ...rest
         } = this.props;
         const { isOpen, initialFocusIndex } = this.state;
 
@@ -184,6 +185,7 @@ class DropdownMenu extends React.Component<Props, State> {
         const menu = elements[1];
 
         const menuButtonProps: Object = {
+            ...rest,
             id: this.menuButtonID,
             key: this.menuButtonID,
             onClick: this.handleButtonClick, // NOTE: Overrides button's handler
