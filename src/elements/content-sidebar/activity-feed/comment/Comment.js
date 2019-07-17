@@ -13,10 +13,15 @@ import identity from 'lodash/identity';
 import { ReadableTime } from '../../../../components/time';
 import Tooltip from '../../../../components/tooltip';
 import Media from '../../../../components/media';
+import { MenuItem } from '../../../../components/menu';
+import IconTrash from '../../../../icons/general/IconTrash';
+import IconPencil from '../../../../icons/general/IconPencil';
 import messages from './messages';
+import commonMessages from '../../../common/messages';
+import deleteMessages from '../inline-delete/messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import { bdlGray80 } from '../../../../styles/variables';
 
-import CommentMenuItems from './CommentMenuItems';
 import CommentDeleteConfirmation from './CommentDeleteConfirmation';
 import UserLink from './UserLink';
 import CommentInlineError from './CommentInlineError';
@@ -133,10 +138,9 @@ class Comment extends React.Component<Props, State> {
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
-        const isTask = type === COMMENT_TYPE_TASK;
-        const isEditSupported = isTask; // comment editing not supported
-        const canEdit = permissions.can_edit && isEditSupported;
-        const canDelete = permissions.can_delete;
+        const isTask = type === COMMENT_TYPE_TASK; // comment editing not supported
+        const { can_edit: canEdit = false, can_delete: canDelete = false } = permissions;
+        const isMenuVisible = (canDelete || (canEdit && isTask)) && !isPending;
 
         return (
             <div className="bcs-comment-container">
@@ -149,21 +153,38 @@ class Comment extends React.Component<Props, State> {
                         {avatarRenderer(<Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />)}
                     </Media.Figure>
                     <Media.Body>
-                        {(canDelete || canEdit) && !isPending && (
+                        {isMenuVisible && (
                             <TetherComponent
                                 attachment="top right"
                                 className="bcs-comment-delete-confirm"
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                             >
-                                <Media.Menu isDisabled={isConfirmingDelete}>
-                                    <CommentMenuItems
-                                        id={id}
-                                        onDeleteClick={this.handleDeleteClick}
-                                        onEditClick={this.handleEditClick}
-                                        permissions={permissions}
-                                        type={type}
-                                    />
+                                <Media.Menu isDisabled={isConfirmingDelete} data-testid="open-actions-menu">
+                                    {canEdit && isTask && (
+                                        <MenuItem
+                                            className="bcs-comment-menu-edit"
+                                            data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
+                                            onClick={this.handleDeleteClick}
+                                        >
+                                            <IconPencil color={bdlGray80} />
+                                            <FormattedMessage
+                                                {...(isTask ? messages.taskEditMenuItem : commonMessages.editLabel)}
+                                            />
+                                        </MenuItem>
+                                    )}
+                                    {canDelete && (
+                                        <MenuItem
+                                            className="bcs-comment-menu-delete"
+                                            data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
+                                            onClick={this.handleEditClick}
+                                        >
+                                            <IconTrash color={bdlGray80} />
+                                            <FormattedMessage
+                                                {...(isTask ? messages.taskDeleteMenuItem : deleteMessages.deleteLabel)}
+                                            />
+                                        </MenuItem>
+                                    )}
                                 </Media.Menu>
                                 {isConfirmingDelete && (
                                     <CommentDeleteConfirmation
@@ -201,6 +222,7 @@ class Comment extends React.Component<Props, State> {
                             </Tooltip>
                         </div>
                         {isEditing ? (
+                            /* This is for legacy task inline editing */
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
                                 isDisabled={isDisabled}

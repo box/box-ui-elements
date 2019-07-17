@@ -103,36 +103,43 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     });
 
     test.each`
-        permissions                              | type         | show
-        ${{ can_delete: true, can_edit: false }} | ${'task'}    | ${true}
-        ${{ can_delete: false, can_edit: true }} | ${'task'}    | ${true}
-        ${{ can_delete: true, can_edit: false }} | ${'comment'} | ${true}
-        ${{ can_delete: false, can_edit: true }} | ${'comment'} | ${false}
-    `('should have comment menu if edit or delete is permitted', ({ permissions, type, show }) => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-        };
+        permissions                               | type         | showMenu | showDelete | showEdit
+        ${{ can_delete: true, can_edit: false }}  | ${'task'}    | ${true}  | ${true}    | ${false}
+        ${{ can_delete: false, can_edit: true }}  | ${'task'}    | ${true}  | ${false}   | ${true}
+        ${{ can_delete: false, can_edit: false }} | ${'task'}    | ${false} | ${false}   | ${false}
+        ${{ can_delete: true, can_edit: false }}  | ${'comment'} | ${true}  | ${true}    | ${false}
+        ${{ can_delete: false, can_edit: true }}  | ${'comment'} | ${false} | ${false}   | ${false}
+        ${{ can_delete: false, can_edit: false }} | ${'comment'} | ${false} | ${false}   | ${false}
+    `(
+        `for a $type with permissions $permissions, should showMenu: $showMenu, showDelete: $showDelete, showEdit: $showEdit`,
+        ({ permissions, type, showMenu, showDelete, showEdit }) => {
+            const comment = {
+                created_at: TIME_STRING_SEPT_27_2017,
+                tagged_message: 'test',
+                created_by: { name: '50 Cent', id: 10 },
+            };
 
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                type={type}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onDelete={jest.fn()}
-                permissions={permissions}
-            />,
-        );
+            const wrapper = shallow(
+                <Comment
+                    id="123"
+                    {...comment}
+                    type={type}
+                    approverSelectorContacts={approverSelectorContacts}
+                    currentUser={currentUser}
+                    handlers={allHandlers}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onDelete={jest.fn()}
+                    permissions={permissions}
+                />,
+            );
 
-        expect(wrapper.find('CommentMenuItems').length).toEqual(show ? 1 : 0);
-    });
+            expect(wrapper.find('.bcs-comment-menu-delete').length).toEqual(showDelete ? 1 : 0);
+            expect(wrapper.find('.bcs-comment-menu-edit').length).toEqual(showEdit ? 1 : 0);
+            expect(wrapper.find('[data-testid="open-actions-menu"]').length).toEqual(showMenu ? 1 : 0);
+        },
+    );
 
-    test('should not show actions when comment is pending', () => {
+    test('should not show actions menu when comment is pending', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
@@ -153,7 +160,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             />,
         );
 
-        expect(wrapper.find('CommentMenuItems').length).toEqual(0);
+        expect(wrapper.find('[data-testid="open-actions-menu"]').length).toEqual(0);
     });
 
     test('should allow user to edit if they have edit permissions on the task and edit handler is defined', () => {
