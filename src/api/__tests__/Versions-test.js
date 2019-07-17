@@ -135,18 +135,6 @@ describe('api/Versions', () => {
         });
     });
 
-    describe('sortVersions', () => {
-        test('should sort versions by their created date', () => {
-            const { entries: entriesOrigin } = response;
-            const { entries: entriesSorted, total_count } = versions.sortVersions(response);
-
-            expect(entriesOrigin).not.toBe(entriesSorted); // Sort call should create a new array
-            expect(entriesOrigin).toEqual([firstVersion, deleteVersion, restoreVersion]);
-            expect(entriesSorted).toEqual([restoreVersion, deleteVersion, firstVersion]);
-            expect(total_count).toEqual(response.total_count);
-        });
-    });
-
     describe('CRUD operations', () => {
         const successCallback = jest.fn();
         const errorCallback = jest.fn();
