@@ -70,12 +70,12 @@ export default class VersionsSidebarAPI {
     deleteVersion = (version: ?BoxItemVersion): Promise<null> => {
         const { id: versionId, permissions = {} } = version || {};
 
-        return new Promise((successCallback, errorCallback) =>
+        return new Promise((resolve, reject) =>
             this.api.getVersionsAPI(false).deleteVersion({
                 fileId: this.fileId,
                 permissions,
-                successCallback,
-                errorCallback,
+                successCallback: resolve,
+                errorCallback: reject,
                 versionId,
             }),
         );
@@ -84,12 +84,12 @@ export default class VersionsSidebarAPI {
     promoteVersion = (version: ?BoxItemVersion): Promise<BoxItemVersion> => {
         const { id: versionId, permissions = {} } = version || {};
 
-        return new Promise((successCallback, errorCallback) =>
+        return new Promise((resolve, reject) =>
             this.api.getVersionsAPI(false).promoteVersion({
                 fileId: this.fileId,
                 permissions,
-                successCallback,
-                errorCallback,
+                successCallback: resolve,
+                errorCallback: reject,
                 versionId,
             }),
         );
@@ -98,12 +98,12 @@ export default class VersionsSidebarAPI {
     restoreVersion = (version: ?BoxItemVersion): Promise<any> => {
         const { id: versionId, permissions = {} } = version || {};
 
-        return new Promise((successCallback, errorCallback) =>
+        return new Promise((resolve, reject) =>
             this.api.getVersionsAPI(false).restoreVersion({
                 fileId: this.fileId,
                 permissions,
-                successCallback,
-                errorCallback,
+                successCallback: resolve,
+                errorCallback: reject,
                 versionId,
             }),
         );
