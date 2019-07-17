@@ -875,5 +875,3 @@ type AdditionalVersionInfo = {
     currentVersionId?: ?string,
     updateVersionToCurrent: () => void,
 };
-
-type OnVersionChange = (version: ?BoxItemVersion, additionalVersionInfo: ?AdditionalVersionInfo) => void;

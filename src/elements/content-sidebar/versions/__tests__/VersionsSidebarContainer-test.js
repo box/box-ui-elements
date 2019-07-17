@@ -41,8 +41,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         getFileAPI: () => fileAPI,
         getVersionsAPI: () => versionsAPI,
     };
-    const getWrapper = ({ fileId = defaultId, ...rest } = {}) =>
-        shallow(<VersionsSidebar api={api} fileId={fileId} {...rest} />);
+    const getWrapper = ({ ...props } = {}) => shallow(<VersionsSidebar api={api} fileId={defaultId} {...props} />);
 
     describe('componentDidMount', () => {
         test('should fetch file info', () => {
@@ -84,68 +83,78 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     });
 
     describe('handleActionDelete', () => {
-        test('should set state and call api endpoint helpers', () => {
-            const wrapper = getWrapper({ versionId: '123' });
+        test('should call api endpoint helpers', () => {
+            const handleDelete = jest.fn();
+            const wrapper = getWrapper({ onVersionDelete: handleDelete, versionId: '123' });
             const instance = wrapper.instance();
             const versionId = '456';
 
             instance.deleteVersion = jest.fn().mockResolvedValueOnce();
             instance.fetchData = jest.fn().mockResolvedValueOnce();
-            instance.updateVersion = jest.fn();
+            instance.handleDeleteSuccess = jest.fn();
 
-            instance.handleActionDelete(versionId);
-
-            expect(wrapper.state('isLoading')).toBe(true);
-            expect(instance.deleteVersion).toHaveBeenCalledWith(versionId);
+            instance.handleActionDelete(versionId).then(() => {
+                expect(instance.deleteVersion).toHaveBeenCalledWith(versionId);
+                expect(instance.fetchData).toHaveBeenCalled();
+                expect(instance.handleDeleteSuccess).toHaveBeenCalledWith(versionId);
+                expect(handleDelete).toHaveBeenCalledWith(versionId);
+            });
         });
     });
 
     describe('handleActionDownload', () => {
-        test('should call api endpoint helpers', async () => {
+        test('should call api endpoint helpers', () => {
             const downloadUrl = 'https://box.com/url';
-            const wrapper = getWrapper({ versionId: '123' });
+            const handleDownload = jest.fn();
+            const wrapper = getWrapper({ onVersionDownload: handleDownload, versionId: '123' });
             const instance = wrapper.instance();
             const versionId = '456';
 
             instance.fetchDownloadUrl = jest.fn().mockResolvedValueOnce(downloadUrl);
 
-            await instance.handleActionDownload(versionId);
-
-            expect(instance.fetchDownloadUrl).toHaveBeenCalledWith(versionId);
-            expect(openUrlInsideIframe).toHaveBeenCalledWith(downloadUrl);
+            instance.handleActionDownload(versionId).then(() => {
+                expect(instance.fetchDownloadUrl).toHaveBeenCalledWith(versionId);
+                expect(openUrlInsideIframe).toHaveBeenCalledWith(downloadUrl);
+                expect(handleDownload).toHaveBeenCalledWith(versionId);
+            });
         });
     });
 
     describe('handleActionPromote', () => {
-        test('should set state and call api endpoint helpers', () => {
-            const wrapper = getWrapper({ versionId: '123' });
+        test('should call api endpoint helpers', () => {
+            const handlePromote = jest.fn();
+            const wrapper = getWrapper({ onVersionPromote: handlePromote, versionId: '123' });
             const instance = wrapper.instance();
             const versionId = '456';
 
-            instance.promoteVersion = jest.fn().mockResolvedValueOnce();
             instance.fetchData = jest.fn().mockResolvedValueOnce();
-            instance.updateVersion = jest.fn();
+            instance.handlePromoteSuccess = jest.fn();
+            instance.promoteVersion = jest.fn().mockResolvedValueOnce();
 
-            instance.handleActionPromote(versionId);
-
-            expect(wrapper.state('isLoading')).toBe(true);
-            expect(instance.promoteVersion).toHaveBeenCalledWith(versionId);
+            instance.handleActionPromote(versionId).then(() => {
+                expect(instance.promoteVersion).toHaveBeenCalledWith(versionId);
+                expect(instance.fetchData).toHaveBeenCalled();
+                expect(instance.handlePromoteSuccess).toHaveBeenCalled();
+                expect(handlePromote).toHaveBeenCalledWith(versionId);
+            });
         });
     });
 
     describe('handleActionRestore', () => {
-        test('should set state and call api endpoint helpers', () => {
-            const wrapper = getWrapper({ versionId: '123' });
+        test('should call api endpoint helpers', () => {
+            const handleRestore = jest.fn();
+            const wrapper = getWrapper({ onVersionRestore: handleRestore, versionId: '123' });
             const instance = wrapper.instance();
             const versionId = '456';
 
             instance.restoreVersion = jest.fn().mockResolvedValueOnce();
             instance.fetchData = jest.fn().mockResolvedValueOnce();
 
-            instance.handleActionRestore(versionId);
-
-            expect(wrapper.state('isLoading')).toBe(true);
-            expect(instance.restoreVersion).toHaveBeenCalledWith(versionId);
+            instance.handleActionRestore(versionId).then(() => {
+                expect(instance.restoreVersion).toHaveBeenCalledWith(versionId);
+                expect(instance.fetchData).toHaveBeenCalled();
+                expect(handleRestore).toHaveBeenCalledWith(versionId);
+            });
         });
     });
 

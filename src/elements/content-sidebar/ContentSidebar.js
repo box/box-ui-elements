@@ -26,6 +26,7 @@ import { withLogger } from '../common/logger';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { VersionsSidebarProps } from './versions';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -61,6 +62,7 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     token: Token,
+    versionsSidebarProps: VersionsSidebarProps,
 } & ErrorContextProps &
     WithLoggerProps;
 
@@ -310,6 +312,7 @@ class ContentSidebar extends React.Component<Props, State> {
             metadataSidebarProps,
             onVersionChange,
             onVersionHistoryClick,
+            versionsSidebarProps,
         }: Props = this.props;
         const { file, isLoading, metadataEditors }: State = this.state;
         const initialPath = defaultView.charAt(0) === '/' ? defaultView : `/${defaultView}`;
@@ -342,6 +345,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             metadataSidebarProps={metadataSidebarProps}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
+                            versionsSidebarProps={versionsSidebarProps}
                         />
                     </SidebarRouter>
                 </APIContext.Provider>

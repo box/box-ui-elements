@@ -17,13 +17,19 @@ import openUrlInsideIframe from '../../../utils/iframe';
 import VersionsSidebar from './VersionsSidebar';
 import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { withAPIContext } from '../../common/api-context';
+import type { VersionActionCallback, VersionChangeCallback } from './flowTypes';
 
 type Props = {
     api: API,
     fileId: string,
     history: RouterHistory,
     match: Match,
-    onVersionChange: OnVersionChange,
+    onVersionChange: VersionChangeCallback,
+    onVersionDelete: VersionActionCallback,
+    onVersionDownload: VersionActionCallback,
+    onVersionPreview: VersionActionCallback,
+    onVersionPromote: VersionActionCallback,
+    onVersionRestore: VersionActionCallback,
     parentName: string,
     versionId?: string,
 };
@@ -40,6 +46,11 @@ type State = {
 class VersionsSidebarContainer extends React.Component<Props, State> {
     static defaultProps = {
         onVersionChange: noop,
+        onVersionDelete: noop,
+        onVersionDownload: noop,
+        onVersionPreview: noop,
+        onVersionPromote: noop,
+        onVersionRestore: noop,
         parentName: '',
     };
 
@@ -72,46 +83,51 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.props.onVersionChange(null);
     }
 
-    handleActionDelete = (versionId: string): void => {
-        this.setState({ isLoading: true }, () => {
-            this.deleteVersion(versionId)
-                .then(this.fetchData)
-                .then(() => this.handleDeleteSuccess(versionId))
-                .catch(() => this.handleActionError(messages.versionActionDeleteError));
-        });
+    handleActionDelete = (versionId: string): Promise<void> => {
+        this.setState({ isLoading: true });
+
+        return this.deleteVersion(versionId)
+            .then(this.fetchData)
+            .then(() => this.handleDeleteSuccess(versionId))
+            .then(() => this.props.onVersionDelete(versionId))
+            .catch(() => this.handleActionError(messages.versionActionDeleteError));
     };
 
-    handleActionDownload = (versionId: string): void => {
-        this.fetchDownloadUrl(versionId)
+    handleActionDownload = (versionId: string): Promise<void> => {
+        return this.fetchDownloadUrl(versionId)
             .then(openUrlInsideIframe)
+            .then(() => this.props.onVersionDownload(versionId))
             .catch(() => this.handleActionError(messages.versionActionDownloadError));
+    };
+
+    handleActionPreview = (versionId: string): void => {
+        this.updateVersion(versionId);
+        this.props.onVersionPreview(versionId);
+    };
+
+    handleActionPromote = (versionId: string): Promise<void> => {
+        this.setState({ isLoading: true });
+
+        return this.promoteVersion(versionId)
+            .then(this.fetchData)
+            .then(this.handlePromoteSuccess)
+            .then(() => this.props.onVersionPromote(versionId))
+            .catch(() => this.handleActionError(messages.versionActionPromoteError));
+    };
+
+    handleActionRestore = (versionId: string): Promise<void> => {
+        this.setState({ isLoading: true });
+
+        return this.restoreVersion(versionId)
+            .then(this.fetchData)
+            .then(() => this.props.onVersionRestore(versionId))
+            .catch(() => this.handleActionError(messages.versionActionRestoreError));
     };
 
     handleActionError = (message: MessageDescriptor): void => {
         this.setState({
             error: message,
             isLoading: false,
-        });
-    };
-
-    handleActionPreview = (versionId: string): void => {
-        this.updateVersion(versionId);
-    };
-
-    handleActionPromote = (versionId: string): void => {
-        this.setState({ isLoading: true }, () => {
-            this.promoteVersion(versionId)
-                .then(this.fetchData)
-                .then(this.handlePromoteSuccess)
-                .catch(() => this.handleActionError(messages.versionActionPromoteError));
-        });
-    };
-
-    handleActionRestore = (versionId: string): void => {
-        this.setState({ isLoading: true }, () => {
-            this.restoreVersion(versionId)
-                .then(this.fetchData)
-                .catch(() => this.handleActionError(messages.versionActionRestoreError));
         });
     };
 
@@ -150,7 +166,6 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 isWatermarked,
                 versionCount: totalCount,
                 versionLimit,
-
                 versions,
             },
             this.verifyVersion,
@@ -164,10 +179,6 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         if (fileVersion) {
             this.updateVersion(fileVersion.id);
-
-            if (this.window) {
-                this.window.location.reload(); // TODO: Replace with callback to inform the host app of version actions
-            }
         }
     };
 
@@ -326,4 +337,5 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     }
 }
 
+export type VersionsSidebarProps = Props;
 export default flow([withRouter, withAPIContext])(VersionsSidebarContainer);
