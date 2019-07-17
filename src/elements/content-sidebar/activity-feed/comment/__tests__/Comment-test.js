@@ -179,19 +179,19 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.state('isEditingInline')).toBe(false);
+        expect(wrapper.state('isEditing')).toBe(false);
 
-        expect(wrapper.state('isEditingInline')).toBe(false);
+        expect(wrapper.state('isEditing')).toBe(false);
         instance.handleEditClick();
         wrapper.update();
         expect(wrapper.find('CommentText').length).toEqual(0);
-        expect(wrapper.state('isEditingInline')).toBe(true);
+        expect(wrapper.state('isEditing')).toBe(true);
 
         instance.approvalCommentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
         instance.updateTaskHandler();
-        expect(wrapper.state('isEditingInline')).toBe(false);
+        expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
     });
 
@@ -219,13 +219,13 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.state('isEditingInline')).toBe(false);
+        expect(wrapper.state('isEditing')).toBe(false);
 
-        expect(wrapper.state('isEditingInline')).toBe(false);
+        expect(wrapper.state('isEditing')).toBe(false);
         instance.handleEditClick();
         wrapper.update();
         expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.state('isEditingInline')).toBe(false);
+        expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
 
         expect(comment.onEditClick).toHaveBeenCalledTimes(1);
@@ -312,13 +312,13 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         );
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.state('isEditingInline')).toBe(false);
+        expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.find('UserLink').length).toEqual(2);
-        expect(wrapper.state('isEditingInline')).toBe(false);
+        expect(wrapper.state('isEditing')).toBe(false);
 
         wrapper.instance().handleEditClick();
         wrapper.update();
-        expect(wrapper.state('isEditingInline')).toBe(true);
+        expect(wrapper.state('isEditing')).toBe(true);
         expect(wrapper.find('UserLink').length).toEqual(1);
     });
 

@@ -56,7 +56,7 @@ type Props = {
 
 type State = {
     isConfirmingDelete: boolean,
-    isEditingInline: boolean,
+    isEditing: boolean,
     isInputOpen: boolean,
 };
 
@@ -67,7 +67,7 @@ class Comment extends React.Component<Props, State> {
 
     state = {
         isConfirmingDelete: false,
-        isEditingInline: false,
+        isEditing: false,
         isInputOpen: false,
     };
 
@@ -93,15 +93,15 @@ class Comment extends React.Component<Props, State> {
         if (onEditClick) {
             onEditClick();
         } else {
-            this.setState({ isEditingInline: true, isInputOpen: true });
+            this.setState({ isEditing: true, isInputOpen: true });
         }
     };
 
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
 
-    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditingInline: false });
+    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
-    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditingInline: false });
+    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
     updateTaskHandler = (args: any): void => {
         const { onEdit = noop } = this.props;
@@ -130,7 +130,7 @@ class Comment extends React.Component<Props, State> {
             getMentionWithQuery,
             mentionSelectorContacts,
         } = this.props;
-        const { isConfirmingDelete, isEditingInline, isInputOpen } = this.state;
+        const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
         const isTask = type === COMMENT_TYPE_TASK;
@@ -200,7 +200,7 @@ class Comment extends React.Component<Props, State> {
                                 </small>
                             </Tooltip>
                         </div>
-                        {isEditingInline ? (
+                        {isEditing ? (
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
                                 isDisabled={isDisabled}
@@ -212,7 +212,7 @@ class Comment extends React.Component<Props, State> {
                                 user={currentUser}
                                 onCancel={this.approvalCommentFormCancelHandler}
                                 onFocus={this.approvalCommentFormFocusHandler}
-                                isEditing={isEditingInline}
+                                isEditing={isEditing}
                                 entityId={id}
                                 tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
                                 getAvatarUrl={getAvatarUrl}
