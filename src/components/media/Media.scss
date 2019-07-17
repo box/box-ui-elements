@@ -9,8 +9,7 @@
 // the media content, ie, an avatar
 .bdl-Media-figure {
     align-self: flex-start;
-    flex-grow: 0;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     justify-self: flex-start;
     margin: 0;
     padding: 0;
@@ -18,9 +17,7 @@
 
 // the main content, e.g. title and message
 .bdl-Media-body {
-    flex-basis: 100%;
-    flex-grow: 1;
-    flex-shrink: 1;
+    flex: 1 1 100%;
     margin-left: 10px;
     // handle wrapping long words in text content without breaking
     // float position of menu
