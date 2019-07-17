@@ -138,9 +138,10 @@ class Comment extends React.Component<Props, State> {
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
-        const isTask = type === COMMENT_TYPE_TASK; // comment editing not supported
-        const { can_edit: canEdit = false, can_delete: canDelete = false } = permissions;
-        const isMenuVisible = (canDelete || (canEdit && isTask)) && !isPending;
+        const isTask = type === COMMENT_TYPE_TASK;
+        const canEdit = isTask && permissions.can_edit; // comment editing not supported
+        const canDelete = permissions.can_delete;
+        const isMenuVisible = (canDelete || canEdit) && !isPending;
 
         return (
             <div className="bcs-comment-container">
@@ -160,12 +161,13 @@ class Comment extends React.Component<Props, State> {
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                             >
-                                <Media.Menu isDisabled={isConfirmingDelete} data-testid="open-actions-menu">
-                                    {canEdit && isTask && (
+                                <Media.Menu isDisabled={isConfirmingDelete} data-testid="comment-actions-menu">
+                                    {canEdit && (
                                         <MenuItem
                                             className="bcs-comment-menu-edit"
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
-                                            onClick={this.handleDeleteClick}
+                                            data-testid="edit-comment"
+                                            onClick={this.handleEditClick}
                                         >
                                             <IconPencil color={bdlGray80} />
                                             <FormattedMessage
@@ -177,7 +179,8 @@ class Comment extends React.Component<Props, State> {
                                         <MenuItem
                                             className="bcs-comment-menu-delete"
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
-                                            onClick={this.handleEditClick}
+                                            data-testid="delete-comment"
+                                            onClick={this.handleDeleteClick}
                                         >
                                             <IconTrash color={bdlGray80} />
                                             <FormattedMessage

@@ -35,7 +35,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_delete: false, can_edit: true },
+            permissions: { can_delete: true, can_edit: true },
         };
 
         const wrapper = shallow(
@@ -135,7 +135,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
             expect(wrapper.find('.bcs-comment-menu-delete').length).toEqual(showDelete ? 1 : 0);
             expect(wrapper.find('.bcs-comment-menu-edit').length).toEqual(showEdit ? 1 : 0);
-            expect(wrapper.find('[data-testid="open-actions-menu"]').length).toEqual(showMenu ? 1 : 0);
+            expect(wrapper.find('[data-testid="comment-actions-menu"]').length).toEqual(showMenu ? 1 : 0);
         },
     );
 
@@ -160,7 +160,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             />,
         );
 
-        expect(wrapper.find('[data-testid="open-actions-menu"]').length).toEqual(0);
+        expect(wrapper.find('[data-testid="comment-actions-menu"]').length).toEqual(0);
     });
 
     test('should allow user to edit if they have edit permissions on the task and edit handler is defined', () => {
@@ -168,7 +168,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_edit: true },
+            type: 'task',
+            permissions: { can_edit: true, can_delete: true },
         };
         const wrapper = mount(
             <Comment
@@ -189,8 +190,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.state('isEditing')).toBe(false);
 
         expect(wrapper.state('isEditing')).toBe(false);
-        instance.handleEditClick();
+        wrapper.find('button[data-testid="comment-actions-menu"]').simulate('click');
+        wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
         wrapper.update();
+
         expect(wrapper.find('CommentText').length).toEqual(0);
         expect(wrapper.state('isEditing')).toBe(true);
 
