@@ -26,6 +26,7 @@ $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
     @include avatar-badge-icon;
 
     border-width: 2px;
+    right: -4px;
 }
 
 .bcs-Task-statusContainer {
