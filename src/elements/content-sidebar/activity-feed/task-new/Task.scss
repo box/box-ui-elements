@@ -4,17 +4,6 @@
 $bcs-task-grid: 4px;
 $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
 
-// Comment overrides
-.bcs-Task {
-    .bcs-comment {
-        .bcs-comment-user-name {
-            &.link {
-                white-space: normal;
-            }
-        }
-    }
-}
-
 .bcs-Task-body {
     opacity: 1;
     transition: opacity .33s;
