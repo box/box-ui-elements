@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const SharedLinkBadge = ({ className = '', color = BOX_BLUE, height = 16, title, width = 16 }: Props) => (
+const SharedLinkBadge = ({ className = '', color = bdlBoxBlue, height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={`shared-link-badge ${className}`}
         height={height}

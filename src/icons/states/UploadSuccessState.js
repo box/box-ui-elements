@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const UploadSuccessState = ({ className = '', color = BOX_BLUE, height = 49, title, width = 50 }: Props) => (
+const UploadSuccessState = ({ className = '', color = bdlBoxBlue, height = 49, title, width = 50 }: Props) => (
     <AccessibleSVG
         className={`upload-success-state ${className}`}
         height={height}

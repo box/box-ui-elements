@@ -1,7 +1,7 @@
 import React from 'react';
 
 import UploadStartState from '../UploadStartState';
-import { BOX_BLUE } from '../../../common/variables';
+import { bdlBoxBlue } from '../../../styles/variables';
 
 describe('icons/states/UploadStartState', () => {
     test('should correctly render default icon', () => {
@@ -13,32 +13,32 @@ describe('icons/states/UploadStartState', () => {
                 .find('path')
                 .at(0)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
         expect(
             wrapper
                 .find('path')
                 .at(1)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
         expect(
             wrapper
                 .find('path')
                 .at(2)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
         expect(
             wrapper
                 .find('path')
                 .at(3)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
         expect(
             wrapper
                 .find('path')
                 .at(4)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
-        expect(wrapper.find('circle').prop('fill')).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
+        expect(wrapper.find('circle').prop('fill')).toEqual(bdlBoxBlue);
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(128);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(85);
     });

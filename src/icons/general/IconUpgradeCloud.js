@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconUpgradeCloud = ({ className = '', color = BOX_BLUE, height = 50, title, width = 82 }: Props) => (
+const IconUpgradeCloud = ({ className = '', color = bdlBoxBlue, height = 50, title, width = 82 }: Props) => (
     <AccessibleSVG
         className={`icon-upgrade-cloud ${className}`}
         height={height}

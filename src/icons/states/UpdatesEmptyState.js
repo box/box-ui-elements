@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const UpdatesEmptyState = ({ className = '', color = BOX_BLUE, height = 150, title, width = 150 }: Props) => (
+const UpdatesEmptyState = ({ className = '', color = bdlBoxBlue, height = 150, title, width = 150 }: Props) => (
     <AccessibleSVG
         className={`updates-empty-state ${className}`}
         title={title}
