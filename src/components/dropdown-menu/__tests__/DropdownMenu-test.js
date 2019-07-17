@@ -128,19 +128,6 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             expect(menu.prop('aria-labelledby')).toEqual(instance.menuButtonID);
         });
 
-        test('should pass extra props to button', () => {
-            const extraProps = { foo: 'bar', 'aria-label': 'open the menu' };
-            const wrapper = shallow(
-                <DropdownMenu {...extraProps}>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
-
-            const button = wrapper.find(FakeButton);
-            expect(button.props()).toEqual(expect.objectContaining(extraProps));
-        });
-
         test('should render TetherComponent with correct props with correct default values', () => {
             const wrapper = shallow(
                 <DropdownMenu>
