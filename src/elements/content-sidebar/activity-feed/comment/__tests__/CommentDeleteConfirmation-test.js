@@ -19,12 +19,12 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmatio
     describe('render()', () => {
         test('should render component with COMMENT_TYPE_DEFAULT', () => {
             const wrapper = getWrapper({ type: COMMENT_TYPE_DEFAULT });
-            expect(wrapper.find('.bcs-comment-confirm-prompt')).toMatchSnapshot();
+            expect(wrapper.find('.bcs-CommentDeleteConfirmation-prompt')).toMatchSnapshot();
         });
 
         test('should render component with COMMENT_TYPE_TASK', () => {
             const wrapper = getWrapper({ type: COMMENT_TYPE_TASK });
-            expect(wrapper.find('.bcs-comment-confirm-prompt')).toMatchSnapshot();
+            expect(wrapper.find('.bcs-CommentDeleteConfirmation-prompt')).toMatchSnapshot();
         });
     });
 
@@ -41,20 +41,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmatio
             });
             expect(onDeleteCancelMock).toBeCalled();
             expect(onDeleteConfirmMock).not.toBeCalled();
-        });
-
-        test('should handle Enter key', () => {
-            const onDeleteCancelMock = jest.fn();
-            const onDeleteConfirmMock = jest.fn();
-            const wrapper = getWrapper({ onDeleteCancel: onDeleteCancelMock, onDeleteConfirm: onDeleteConfirmMock });
-            wrapper.simulate('keydown', {
-                key: 'Enter',
-                preventDefault: jest.fn(),
-                stopPropagation: jest.fn(),
-                nativeEvent: { stopImmediatePropagation: jest.fn() },
-            });
-            expect(onDeleteConfirmMock).toBeCalled();
-            expect(onDeleteCancelMock).not.toBeCalled();
         });
     });
 });
