@@ -1,8 +1,12 @@
-Colors choices should meet WCAG 2.0 AA guidelines for accessibility.
+Colors choices should meet [WCAG 2.0 AA guidelines](https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html) for accessibility.
 
-**Text** should have a minimum contrast ratio of 4.5:1, `gray-62` on white.
+| Role       | Min Contrast Ratio | Lightest Gray in Palette\* |
+| ---------- | ------------------ | -------------------------- |
+| Text       | 4.5:1              | `bdl-gray-62`              |
+| Icons      | 3:1                | `bdl-gray-50`              |
+| Large Text | 3:1                | `bdl-gray-50`              |
 
-**Icons** and large text should have a minimum contrast ratio of 3:1, `gray-50` on white.
+\* _against white (#fff) background_
 
 ```jsx
 const colors = require('box-ui-elements/es/styles/variables');
