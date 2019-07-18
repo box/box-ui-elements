@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { silverChalice } from '../../../styles/variables';
+import { bdlGray40 } from '../../../styles/variables';
 import IconDoubleArrows from '../IconDoubleArrows';
 
 describe('icons/general/IconDoubleArrows', () => {
@@ -13,7 +13,7 @@ describe('icons/general/IconDoubleArrows', () => {
     test('should correctly render default icon with default color', () => {
         const wrapper = shallow(<IconDoubleArrows />);
 
-        expect(wrapper.find('path').prop('fill')).toEqual(silverChalice);
+        expect(wrapper.find('path').prop('fill')).toEqual(bdlGray40);
     });
 
     test('should correctly render icon with specified color', () => {

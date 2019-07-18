@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { boxBlue, purpleRain } from '../../styles/variables';
+import { bdlBoxBlue, bdlPurpleRain } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 
 type Props = {
@@ -19,11 +19,11 @@ const IconMetadataColored = ({ className = '', color, title, type, width = 16, h
     if (color) {
         fill = color;
     } else if (type === 'cascade') {
-        fill = purpleRain;
+        fill = bdlPurpleRain;
     } else if (type === 'default') {
-        fill = boxBlue;
+        fill = bdlBoxBlue;
     } else {
-        fill = boxBlue;
+        fill = bdlBoxBlue;
     }
 
     return (

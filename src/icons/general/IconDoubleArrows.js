@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { silverChalice } from '../../styles/variables';
+import { bdlGray40 } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconDoubleArrows = ({ className = '', color = silverChalice, height = 32, title, width = 32 }: Props) => (
+const IconDoubleArrows = ({ className = '', color = bdlGray40, height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
         className={`icon-double-arrows ${className}`}
         height={height}
