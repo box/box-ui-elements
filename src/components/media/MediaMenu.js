@@ -5,7 +5,7 @@ import IconEllipsis from '../../icons/general/IconEllipsis';
 import PlainButton from '../plain-button';
 import DropdownMenu from '../dropdown-menu';
 import { Menu } from '../menu';
-import { bdlGray62 } from '../../styles/variables';
+import { bdlGray50 } from '../../styles/variables';
 import './Media.scss';
 
 type Props = {
@@ -27,7 +27,7 @@ const MediaMenu = ({ className, children, isDisabled, dropdownProps, ...rest }: 
             type="button"
             {...rest}
         >
-            <IconEllipsis color={bdlGray62} height={16} width={16} />
+            <IconEllipsis color={bdlGray50} height={16} width={16} />
         </PlainButton>
         <Menu>{children}</Menu>
     </DropdownMenu>
