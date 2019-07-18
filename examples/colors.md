@@ -1,3 +1,9 @@
+Colors choices should meet WCAG 2.0 AA guidelines for accessibility.
+
+**Text** should have a minimum contrast ratio of 4.5:1, `gray-62` on white.
+
+**Icons** and large text should have a minimum contrast ratio of 3:1, `gray-50` on white.
+
 ```jsx
 const colors = require('box-ui-elements/es/styles/variables');
 const bdlColors = {};
