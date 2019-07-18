@@ -15,6 +15,7 @@ import { UpgradeBadge } from '../../components/badge';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
+import Classification from '../classification';
 
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
@@ -52,7 +53,7 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    children: React.Node,
+    classification: ClassificationInfo,
     /** If item is classified this property contains the classification name */
     classificationName?: string,
     /** Message warning about restrictions regarding inviting collaborators to the item */
@@ -681,12 +682,26 @@ class UnifiedShareModal extends React.Component<Props, State> {
         return listContent;
     }
 
+    renderTitle() {
+        const { classification } = this.props;
+        const { advisoryMessage, name } = classification;
+        return (
+            <span className="modal-title-label">
+                {this.renderModalTitle()}
+                {advisoryMessage && (
+                    <span className="EditClassificationButton">
+                        <Classification advisoryMessage={advisoryMessage} messageStyle="tooltip" name={name} />
+                    </span>
+                )}
+            </span>
+        );
+    }
+
     render() {
         // Shared link section props
         const {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
-            children,
             classificationName,
             focusSharedLinkOnLoad,
             item,
@@ -709,7 +724,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
             sendSharedLinkError,
             trackingProps,
         } = rest;
-        const classificationBtn = children;
         const {
             modalTracking,
             sharedLinkTracking,
@@ -739,12 +753,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     className="unified-share-modal"
                     isOpen={isConfirmModalOpen ? false : isOpen}
                     onRequestClose={submitting ? undefined : onRequestClose}
-                    title={
-                        <span className="modal-title-label">
-                            {this.renderModalTitle()}
-                            {classificationBtn}
-                        </span>
-                    }
+                    title={this.renderTitle()}
                     {...extendedModalProps}
                 >
                     <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
