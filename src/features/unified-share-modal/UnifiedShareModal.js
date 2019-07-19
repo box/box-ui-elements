@@ -72,6 +72,8 @@ type Props = {
     getInitialData: Function,
     /** Handler function for when the user types into email shared link field to fetch contacts. */
     getSharedLinkContacts: (query: string) => Promise<Array<Contact>>,
+    /** An array of initially selected contacts. If none are initially selected, an empty array. */
+    initiallySelectedContacts?: Array<Contact>,
     intl: IntlShape,
     /** An array of invitee permissions */
     inviteePermissions: Array<InviteePermissions>,
@@ -161,7 +163,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
 
         this.state = {
             emailSharedLinkContacts: [],
-            inviteCollabsContacts: [],
+            inviteCollabsContacts: props.initiallySelectedContacts || [],
             inviteePermissionLevel: '',
             isConfirmModalOpen: false,
             isEmailLinkSectionExpanded: false,
