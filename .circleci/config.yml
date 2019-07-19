@@ -74,6 +74,7 @@ jobs:
 
   e2e-tests:
     <<: *defaults
+    parallelism: 2
     steps:
       - checkout
       - restore-cache: *restore-yarn-cache
@@ -81,7 +82,7 @@ jobs:
       - save-cache: *save-yarn-cache
       - run:
           name: E2E tests
-          command: yarn test:e2e
+          command: yarn test:e2e --parallel --group $CIRCLE_JOB
 
 workflows:
   version: 2
