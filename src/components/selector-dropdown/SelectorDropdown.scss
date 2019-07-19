@@ -48,7 +48,7 @@
         color: $bdl-gray-80 !important;
 
         &.is-selected {
-            background-color: fade-out($bdl-gray-100, .95);
+            background-color: fade-out($bdl-gray, .95);
         }
     }
 }
