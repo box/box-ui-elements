@@ -5,7 +5,7 @@
         margin-left: 49px;
 
         .bcs-task-approvers-header {
-            border-bottom: 1px solid $off-white;
+            border-bottom: 1px solid $bdl-gray-10;
             display: flex;
             justify-content: space-between;
             margin-bottom: 3px;
@@ -13,12 +13,12 @@
             padding-bottom: 6px;
 
             strong {
-                color: $seventy-sixers;
+                color: $bdl-gray-62;
             }
         }
 
         .bcs-task-due-date {
-            color: $nines;
+            color: $bdl-gray-50;
             font-size: 11px;
 
             span:first-child {
@@ -58,34 +58,34 @@
         }
 
         .bcs-task-completed-assignment {
-            border: 1px solid $shady-acres;
-            color: $shady-acres;
+            border: 1px solid $bdl-green-light;
+            color: $bdl-green-light;
 
             .bcs-task-assignment-actions {
                 flex-basis: 20px;
             }
 
             .bcs-task-check-icon .fill-color {
-                fill: $shady-acres;
+                fill: $bdl-green-light;
             }
         }
 
         .bcs-task-rejected-assignment {
-            border: 1px solid $amaranth;
-            color: $amaranth;
+            border: 1px solid $bdl-watermelon-red;
+            color: $bdl-watermelon-red;
 
             .bcs-task-assignment-actions {
                 flex-basis: 20px;
             }
 
             .bcs-task-x-icon .fill-color {
-                fill: $amaranth;
+                fill: $bdl-watermelon-red;
             }
         }
 
         .bcs-task-pending-assignment {
-            background-color: fade-out($box-blue, .9);
-            color: $box-blue;
+            background-color: fade-out($bdl-box-blue, .9);
+            color: $bdl-box-blue;
 
             .bcs-task-assignment-actions {
                 flex-basis: 40px;
@@ -102,7 +102,7 @@
 
             .bcs-task-x-icon .fill-color,
             .bcs-task-check-icon .fill-color {
-                fill: $box-blue;
+                fill: $bdl-box-blue;
             }
         }
     }

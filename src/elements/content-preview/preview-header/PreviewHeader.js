@@ -16,7 +16,7 @@ import IconPointAnnotation from '../../../icons/annotations/IconPointAnnotation'
 import IconPrint from '../../../icons/general/IconPrint';
 import IconDownload from '../../../icons/general/IconDownloadSolid';
 import messages from '../../common/messages';
-import { nines } from '../../../styles/variables';
+import { bdlGray50 } from '../../../styles/variables';
 import PlainButton from '../../../components/plain-button/PlainButton';
 
 import './Header.scss';
@@ -89,7 +89,7 @@ const PreviewHeader = ({
                                 title={drawMsg}
                                 type="button"
                             >
-                                <IconDrawAnnotationMode color={nines} height={18} width={18} />
+                                <IconDrawAnnotationMode color={bdlGray50} height={18} width={18} />
                             </PlainButton>
                             <PlainButton
                                 aria-label={pointMsg}
@@ -97,7 +97,7 @@ const PreviewHeader = ({
                                 title={pointMsg}
                                 type="button"
                             >
-                                <IconPointAnnotation color={nines} height={18} width={18} />
+                                <IconPointAnnotation color={bdlGray50} height={18} width={18} />
                             </PlainButton>
                         </React.Fragment>
                     )}
@@ -109,7 +109,7 @@ const PreviewHeader = ({
                             title={printMsg}
                             type="button"
                         >
-                            <IconPrint color={nines} height={22} width={22} />
+                            <IconPrint color={bdlGray50} height={22} width={22} />
                         </PlainButton>
                     )}
                     {canDownload && isPreviewingCurrentVersion && (
@@ -120,7 +120,7 @@ const PreviewHeader = ({
                             title={downloadMsg}
                             type="button"
                         >
-                            <IconDownload color={nines} height={18} width={18} />
+                            <IconDownload color={bdlGray50} height={18} width={18} />
                         </PlainButton>
                     )}
                     {onClose && (
@@ -130,7 +130,11 @@ const PreviewHeader = ({
                             onClick={onClose}
                             type="button"
                         >
-                            {isPreviewingCurrentVersion ? <IconClose color={nines} height={24} width={24} /> : closeMsg}
+                            {isPreviewingCurrentVersion ? (
+                                <IconClose color={bdlGray50} height={24} width={24} />
+                            ) : (
+                                closeMsg
+                            )}
                         </PlainButton>
                     )}
                 </div>

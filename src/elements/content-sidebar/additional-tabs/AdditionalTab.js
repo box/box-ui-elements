@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import { downtownGrey } from '../../../styles/variables';
+import { bdlGray50 } from '../../../styles/variables';
 import Tooltip from '../../common/Tooltip';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
@@ -53,7 +53,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                 />
             );
         } else {
-            TabIcon = <IconEllipsis color={downtownGrey} />;
+            TabIcon = <IconEllipsis color={bdlGray50} />;
         }
 
         return (

@@ -20,10 +20,10 @@
 
         &:focus,
         &:hover {
-            color: $bdl-neutral-04;
+            color: $bdl-gray-10;
 
             .fill-color {
-                fill: $bdl-neutral-02;
+                fill: $bdl-gray-62;
             }
         }
     }
@@ -39,7 +39,7 @@
 
 .bcpr-header {
     align-items: center;
-    background-color: $haze;
+    background-color: $bdl-gray-02;
     border-bottom: 1px solid $see-see;
     display: flex;
     flex: 0 0 60px;
@@ -65,7 +65,7 @@
 
     .bcpr-name,
     .btn-plain.bcpr-btn {
-        color: $haze;
+        color: $bdl-gray-02;
     }
 }
 
@@ -81,9 +81,9 @@
 
 .bp-header button.ba-btn-annotate-point-exit,
 .bp-header button.ba-btn-annotate-draw-cancel {
-    background-color: $twos;
-    border: solid $off-white 1px;
-    color: $off-white;
+    background-color: $bdl-gray;
+    border: solid $bdl-gray-10 1px;
+    color: $bdl-gray-10;
 
     &:hover {
         background-color: $black;
@@ -91,8 +91,8 @@
 }
 
 .bp-header button.ba-btn-annotate-draw-post {
-    background-color: $off-white;
-    color: $twos;
+    background-color: $bdl-gray-10;
+    color: $bdl-gray;
 
     &:hover {
         background-color: $white;
@@ -125,7 +125,7 @@
         margin: 5px;
 
         svg {
-            fill: $off-white;
+            fill: $bdl-gray-10;
             vertical-align: middle;
         }
     }
