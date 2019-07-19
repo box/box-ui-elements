@@ -12,7 +12,7 @@ import Tooltip from '../../components/tooltip';
 import IconMetadataColored from '../../icons/general/IconMetadataColored';
 import IconAlertCircle from '../../icons/general/IconAlertCircle';
 import IconEdit from '../../icons/general/IconEdit';
-import { kingCrimson } from '../../styles/variables';
+import { bdlWatermelonRed } from '../../styles/variables';
 import { scrollIntoView } from '../../utils/dom';
 
 import CascadePolicy from './CascadePolicy';
@@ -363,7 +363,7 @@ class Instance extends React.PureComponent<Props, State> {
                 >
                     {isProperties ? <FormattedMessage {...messages.customTitle} /> : template.displayName}
                 </span>
-                {hasError && <IconAlertCircle color={kingCrimson} />}
+                {hasError && <IconAlertCircle color={bdlWatermelonRed} />}
             </span>
         );
     }

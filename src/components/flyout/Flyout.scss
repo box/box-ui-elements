@@ -93,7 +93,7 @@ $rotation-middle-left: 315deg;
 
     &::before {
         border: $arrow-size solid $white;
-        box-shadow: 1px 1px 0 0 $sf-fog;
+        box-shadow: 1px 1px 0 0 $bdl-gray-30;
         content: '';
         position: absolute;
         z-index: $overlay-z-index + 1;

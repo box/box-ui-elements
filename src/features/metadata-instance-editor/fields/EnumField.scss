@@ -12,7 +12,7 @@
         margin-top: 5px;
 
         .datalist-item.select-option:first-child {
-            color: $sevens;
+            color: $bdl-gray-62;
 
             .select-option-check-icon {
                 visibility: hidden;
@@ -21,7 +21,7 @@
     }
 
     .metadata-instance-editor-field-enum-desc {
-        color: $sevens;
+        color: $bdl-gray-62;
         word-wrap: break-word;
     }
 }

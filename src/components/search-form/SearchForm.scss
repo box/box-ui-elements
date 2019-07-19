@@ -53,7 +53,7 @@
         display: none;
 
         path:first-of-type {
-            fill: $silver-chalice;
+            fill: $bdl-gray-40;
         }
     }
 
@@ -83,13 +83,13 @@
 
     .search-input:focus ~ .clear-button {
         path:first-of-type {
-            fill: $better-black;
+            fill: $bdl-gray-80;
         }
     }
 
     .search-input:focus + .search-button {
         path {
-            fill: $better-black;
+            fill: $bdl-gray-80;
         }
     }
 

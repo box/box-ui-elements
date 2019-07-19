@@ -12,7 +12,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
     type="button"
   >
     <IconEllipsis
-      color="#999ea4"
+      color="#909090"
     />
   </PlainButton>
 </Tooltip>

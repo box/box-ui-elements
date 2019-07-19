@@ -19,7 +19,7 @@
     }
 
     .date-picker-description {
-        color: $sevens;
+        color: $bdl-gray-62;
         display: block;
     }
 
@@ -67,7 +67,7 @@
 
     .date-picker-clear-btn {
         path {
-            fill: $silver-chalice;
+            fill: $bdl-gray-40;
             transition: fill linear .1s;
         }
     }
@@ -75,8 +75,8 @@
     > .date-picker-clear-btn:hover,
     > .date-picker-clear-btn:focus {
         path {
-            fill: $better-black;
-            path: $better-black;
+            fill: $bdl-gray-80;
+            path: $bdl-gray-80;
         }
     }
 
@@ -87,13 +87,13 @@
     > .date-picker-open-btn:hover:enabled,
     > .date-picker-open-btn:focus:enabled {
         .fill-color {
-            fill: $better-black;
+            fill: $bdl-gray-80;
         }
     }
 
     .date-picker-icon-alert {
         path {
-            fill: $great-balls-of-fire;
+            fill: $bdl-watermelon-red;
         }
     }
 

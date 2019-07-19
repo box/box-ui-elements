@@ -13,7 +13,7 @@
 
     .overlay {
         // TODO: decide which BDL color applies here
-        border: 1px solid $off-white;
+        border: 1px solid $bdl-gray-10;
         padding: 2 * $flyout-header-spacer $flyout-list-padding 0;
     }
 }
@@ -51,14 +51,14 @@
         }
 
         &.with-header.with-footer {
-            // the overall height minus the padding, and both text heights
+            // the overall height minus the padding, and both text hbdl-gray-50
             height: $flyout-list-height - ($flyout-list-padding + $title-height + $footer-height);
             margin-bottom: 0;
         }
     }
 
     .flyout-list-container-footer {
-        border-top: 1px solid $off-white;
+        border-top: 1px solid $bdl-gray-10;
         font-size: $flyout-footer-font-size;
         line-height: $flyout-footer-line-height;
         padding: $flyout-footer-spacer 0;

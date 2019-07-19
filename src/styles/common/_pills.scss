@@ -57,22 +57,22 @@ $pillTextColorDark: lighten($black, 31%);
 }
 
 .pill-warning {
-    background-color: $early-dawn;
-    border: 1px solid $wild-rice;
-    color: $kumera;
+    background-color: $bdl-yellorange-10;
+    border: 1px solid $bdl-yellorange-50;
+    color: $bdl-yellorange;
 
     a {
-        color: $kumera;
+        color: $bdl-yellorange;
     }
 }
 
 .pill-error {
-    background-color: $lavender-blush;
-    border: 1px solid $carissma;
-    color: $king-crimson;
+    background-color: $bdl-watermelon-red-10;
+    border: 1px solid $bdl-watermelon-red-50;
+    color: $bdl-watermelon-red;
 
     a {
-        color: $king-crimson;
+        color: $bdl-watermelon-red;
     }
 }
 
@@ -96,7 +96,7 @@ $pillTextColorDark: lighten($black, 31%);
 }
 
 .pill-cloud-container {
-    border: 1px solid $efive;
+    border: 1px solid $bdl-gray-10;
     overflow-y: scroll;
     padding: 8px;
 }

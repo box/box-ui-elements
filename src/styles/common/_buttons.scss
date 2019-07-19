@@ -5,12 +5,12 @@
 .btn {
     -webkit-appearance: none;
     background-color: $white;
-    border: 1px solid $sf-fog;
+    border: 1px solid $bdl-gray-30;
     border-radius: 4px;
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
-    color: $sunset-grey;
+    color: $bdl-gray-80;
     cursor: pointer;
     display: inline-block;
     font-size: 13px;
@@ -44,11 +44,11 @@
 
         &:active {
             background-color: darken($white, 8%);
-            border-color: $sf-fog;
+            border-color: $bdl-gray-30;
         }
 
         &:focus {
-            border-color: darken($sf-fog, 14%);
+            border-color: darken($bdl-gray-30, 14%);
             box-shadow: 0 1px 2px fade-out($black, .9);
         }
     }
@@ -135,7 +135,7 @@ button svg {
 
     &.is-loading {
         .btn-content {
-            background-color: $sf-fog;
+            background-color: $bdl-gray-30;
         }
     }
 }

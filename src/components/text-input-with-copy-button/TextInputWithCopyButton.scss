@@ -31,13 +31,13 @@
         .btn:hover,
         .btn:active,
         .btn:active:hover {
-            background-color: $thats-mint;
-            border-color: $thats-mint;
+            background-color: $bdl-green-light;
+            border-color: $bdl-green-light;
             color: $white;
         }
 
         input:focus {
-            border-color: $thats-mint;
+            border-color: $bdl-green-light;
         }
     }
 }

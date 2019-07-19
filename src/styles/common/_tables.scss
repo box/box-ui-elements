@@ -10,17 +10,17 @@
 }
 
 .tbl tr {
-    background: $ffive;
+    background: $bdl-gray-05;
 }
 
 .tbl th {
-    background: $efive;
-    color: $twos;
+    background: $bdl-gray-10;
+    color: $bdl-gray;
     font-weight: bold;
 }
 
 .tbl td {
-    border-top: 1px solid $eees; /* Horizontal border - Also helps with browsers lacking nth-child support */
+    border-top: 1px solid $bdl-gray-10; /* Horizontal border - Also helps with browsers lacking nth-child support */
 }
 
 /*
@@ -75,7 +75,7 @@
     position: relative;
 
     .table-header & {
-        border-bottom: 1px solid $off-white;
+        border-bottom: 1px solid $bdl-gray-10;
         height: 40px;
     }
 }
@@ -97,7 +97,7 @@
 }
 
 .table-body .table-row {
-    border-top: 1px solid $off-white;
+    border-top: 1px solid $bdl-gray-10;
 
     .table.has-hover-styles &:not(.is-selected):hover,
     .table.has-hover-styles &:not(.is-selected).hover-styles {
@@ -146,7 +146,7 @@
         outline: none;
 
         &::before {
-            background-color: $bfive;
+            background-color: $bdl-gray-30;
             bottom: 0;
             content: ' ';
             position: absolute;
@@ -160,7 +160,7 @@
     }
 
     &:last-child {
-        border-bottom: 1px solid $off-white;
+        border-bottom: 1px solid $bdl-gray-10;
     }
 }
 
@@ -221,7 +221,7 @@
 
 .tbl-striped tr:nth-of-type(odd) {
     /* IE9+ only */
-    background: $eees;
+    background: $bdl-gray-10;
 }
 
 .table.is-compact {
@@ -230,7 +230,7 @@
             border-color: transparent;
 
             &:nth-child(odd) {
-                background-color: $ffive;
+                background-color: $bdl-gray-05;
             }
 
             &.is-selected {

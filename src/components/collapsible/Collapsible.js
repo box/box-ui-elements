@@ -7,7 +7,7 @@ import AnimateHeight from 'react-animate-height';
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconCaretDown from '../../icons/general/IconCaretDown';
 import PlainButton from '../plain-button';
-import { nines } from '../../styles/variables';
+import { bdlGray50 } from '../../styles/variables';
 
 import './Collapsible.scss';
 
@@ -115,7 +115,7 @@ class Collapsible extends React.Component<Props, State> {
                         type="button"
                     >
                         {title}
-                        <IconCaretDown className="collapsible-card-header-caret" color={nines} width={8} />
+                        <IconCaretDown className="collapsible-card-header-caret" color={bdlGray50} width={8} />
                     </PlainButton>
                     {isOpen && headerActionItems}
                 </div>

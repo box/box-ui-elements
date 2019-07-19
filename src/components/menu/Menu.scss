@@ -2,7 +2,7 @@
 
 .aria-menu {
     background: $white;
-    border: 1px solid $sf-fog;
+    border: 1px solid $bdl-gray-30;
     border-radius: 4px;
     box-shadow: 0 2px 6px 0 fade-out($black, .9);
     list-style: none;
@@ -16,7 +16,7 @@
 
     [role='separator'] {
         border: 0;
-        border-top: 1px solid $sf-fog;
+        border-top: 1px solid $bdl-gray-30;
         height: 0;
         margin: 8px 0;
     }
@@ -33,7 +33,7 @@
 
 .menu-item {
     align-items: center;
-    color: $better-black;
+    color: $bdl-gray-80;
     cursor: pointer;
     display: flex;
     min-height: 30px;
@@ -61,7 +61,7 @@
 
         /* checkmark */
         &.is-selected::before {
-            border-color: $better-black;
+            border-color: $bdl-gray-80;
             border-style: none solid solid none;
             border-width: 2px;
             content: '';
@@ -78,12 +78,12 @@
     &:not([aria-disabled]) {
         &:focus,
         &:hover {
-            background-color: $off-white;
-            color: $better-black;
+            background-color: $bdl-gray-10;
+            color: $bdl-gray-80;
         }
 
         &:focus {
-            outline: 1px dashed $twos;
+            outline: 1px dashed $bdl-gray;
         }
     }
 

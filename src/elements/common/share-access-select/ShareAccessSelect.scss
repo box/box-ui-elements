@@ -8,7 +8,7 @@
     select.be-share-access-select {
         appearance: none;
         background: none;
-        background-image: sas-background-image-function($sevens);
+        background-image: sas-background-image-function($bdl-gray-62);
         background-position: right 14px center, right 10px center;
         background-repeat: no-repeat;
         background-size: 4px 4px, 4px 4px;
@@ -31,16 +31,16 @@
         }
 
         &:disabled {
-            background-image: sas-background-image-function($off-white);
-            border-color: $off-white;
-            color: $off-white;
+            background-image: sas-background-image-function($bdl-gray-10);
+            border-color: $bdl-gray-10;
+            color: $bdl-gray-10;
         }
 
         /* stylelint-disable */
         &:-moz-focusring,
         &::-moz-focus-inner {
             color: transparent !important;
-            text-shadow: 0 0 0 $twos !important;
+            text-shadow: 0 0 0 $bdl-gray !important;
         }
 
         &::-ms-expand {

@@ -29,7 +29,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
         type="button"
       >
         <IconCopy
-          color="#999"
+          color="#909090"
         />
       </PlainButton>
     </Tooltip>
@@ -124,7 +124,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
         type="button"
       >
         <IconCopy
-          color="#999"
+          color="#909090"
         />
       </PlainButton>
     </Tooltip>
@@ -148,7 +148,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
         type="button"
       >
         <IconExpand
-          color="#999"
+          color="#909090"
         />
       </PlainButton>
     </Tooltip>
@@ -271,7 +271,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
         type="button"
       >
         <IconCopy
-          color="#999"
+          color="#909090"
         />
       </PlainButton>
     </Tooltip>
