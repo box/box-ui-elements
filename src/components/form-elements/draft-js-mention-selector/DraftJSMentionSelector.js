@@ -95,16 +95,20 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             nextState = { ...nextState, contacts };
         }
 
-        // Detect case where controlled EditorState is created anew and empty.
-        // If next editorState is empty and the current editorState is not empty
-        // that means it is a new empty state and this component should not be marked dirty
-        if (this.isEditorStateEmpty(nextEditorState) && !this.isEditorStateEmpty(editorState)) {
-            nextState = { ...nextState, hasReceivedFirstInteraction: false };
-        } else if (this.isEditorStateEmpty(editorState) && !this.isEditorStateEmpty(nextEditorState)) {
-            // Detect case where controlled EditorState has been made dirty
-            // If the current editorState is empty and the next editorState is not
-            // empty then this is the first interaction so mark this component dirty
-            nextState = { ...nextState, hasReceivedFirstInteraction: true };
+        // Only check if operating in the mode where EditorState is received as a
+        // prop vs internalEditorState stored in state
+        if (editorState) {
+            // Detect case where controlled EditorState is created anew and empty.
+            // If next editorState is empty and the current editorState is not empty
+            // that means it is a new empty state and this component should not be marked dirty
+            if (this.isEditorStateEmpty(nextEditorState) && !this.isEditorStateEmpty(editorState)) {
+                nextState = { ...nextState, hasReceivedFirstInteraction: false };
+            } else if (this.isEditorStateEmpty(editorState) && !this.isEditorStateEmpty(nextEditorState)) {
+                // Detect case where controlled EditorState has been made dirty
+                // If the current editorState is empty and the next editorState is not
+                // empty then this is the first interaction so mark this component dirty
+                nextState = { ...nextState, hasReceivedFirstInteraction: true };
+            }
         }
 
         if (Object.keys(nextState).length !== 0) {
