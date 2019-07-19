@@ -206,15 +206,11 @@ class ActivityFeed extends React.Component<Props, State> {
                     <ApprovalCommentForm
                         onSubmit={this.resetFeedScroll}
                         isDisabled={isDisabled}
-                        approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
                         className={classNames('bcs-activity-feed-comment-input', {
                             'bcs-is-disabled': isDisabled,
                         })}
                         createComment={hasCommentPermission ? this.onCommentCreate : noop}
-                        createTask={hasCommentPermission ? this.onTaskCreate : noop}
-                        updateTask={hasCommentPermission ? onTaskUpdate : noop}
-                        getApproverWithQuery={getApproverWithQuery}
                         getMentionWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
                         user={currentUser}

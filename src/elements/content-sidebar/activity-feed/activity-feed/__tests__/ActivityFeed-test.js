@@ -249,32 +249,6 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(createCommentSpy).toHaveBeenCalledTimes(1);
     });
 
-    test('should call create task handler and close input on valid task submit', () => {
-        const createTaskSpy = jest.fn();
-        const wrapper = shallow(
-            <ActivityFeed
-                currentUser={currentUser}
-                feedItems={feedItems}
-                file={file}
-                onCommentCreate={jest.fn()}
-                onTaskCreate={createTaskSpy}
-            />,
-        );
-        const instance = wrapper.instance();
-        const approvalCommentForm = wrapper.find('ApprovalCommentForm').first();
-
-        instance.approvalCommentFormFocusHandler();
-        expect(wrapper.state('isInputOpen')).toBe(true);
-
-        approvalCommentForm.prop('createTask')({
-            text: 'foo',
-            dueAt: 12333445558585,
-            assignees: [],
-        });
-        expect(wrapper.state('isInputOpen')).toBe(false);
-        expect(createTaskSpy).toHaveBeenCalledTimes(1);
-    });
-
     test('should stop event propagation onKeyDown', () => {
         const wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={jest.fn()} />);
         const stopPropagationSpy = jest.fn();

@@ -3,9 +3,20 @@
 exports[`elements/content-sidebar/ActivitySidebar render() should render the activity feed sidebar 1`] = `
 <SidebarContent
   actions={
-    <FeatureFlag
-      enabled={[Function]}
-      feature="activityFeed.tasks.createButton"
+    <AddTaskButton
+      isDisabled={false}
+      onTaskModalClose={[Function]}
+      taskFormProps={
+        Object {
+          "approverSelectorContacts": undefined,
+          "approvers": Array [],
+          "createTask": [Function],
+          "getApproverWithQuery": [Function],
+          "getAvatarUrl": [Function],
+          "id": "",
+          "message": "",
+        }
+      }
     />
   }
   className="bcs-activity"

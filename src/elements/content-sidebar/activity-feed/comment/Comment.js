@@ -225,7 +225,7 @@ class Comment extends React.Component<Props, State> {
                             </Tooltip>
                         </div>
                         {isEditing ? (
-                            /* This is for legacy task inline editing */
+                            /* Inline editing is not currently supported for comments */
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
                                 isDisabled={isDisabled}

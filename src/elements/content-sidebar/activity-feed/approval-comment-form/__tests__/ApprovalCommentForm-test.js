@@ -2,7 +2,6 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import { EditorState, convertFromRaw } from 'draft-js';
 
-import FeatureProvider from '../../../../common/feature-checking/FeatureProvider';
 import { ApprovalCommentFormUnwrapped as ApprovalCommentForm } from '../ApprovalCommentForm';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
@@ -12,14 +11,6 @@ const intlFake = {
 };
 
 describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCommentForm', () => {
-    const features = {
-        activityFeed: {
-            tasks: {
-                createFromComment: true,
-            },
-        },
-    };
-
     const render = props =>
         mount(
             <ApprovalCommentForm
@@ -88,42 +79,6 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         ).toEqual(true);
     });
 
-    test('should render add approval ui when createTask handler is defined, and the feature is enabled', () => {
-        const wrapper = mount(
-            <FeatureProvider features={features}>
-                <ApprovalCommentForm
-                    createTask={jest.fn()}
-                    getMentionWithQuery={() => {}}
-                    intl={intlFake}
-                    user={{ id: 123, name: 'foo bar' }}
-                />
-            </FeatureProvider>,
-        );
-
-        expect(wrapper.find('.bcs-comment-add-approver').length).toEqual(1);
-    });
-
-    test('should render add approval fields when add approver is checked', () => {
-        const wrapper = mount(
-            <FeatureProvider features={features}>
-                <ApprovalCommentForm
-                    createTask={jest.fn()}
-                    getMentionWithQuery={() => {}}
-                    intl={intlFake}
-                    user={{ id: 123, name: 'foo bar' }}
-                />
-            </FeatureProvider>,
-        );
-
-        wrapper
-            .find('ApprovalCommentForm')
-            .instance()
-            .onFormChangeHandler({ addApproval: 'on' });
-        wrapper.update();
-
-        expect(wrapper.find('.bcs-comment-add-approver-fields-container').length).toEqual(1);
-    });
-
     // Test cases in order
     // empty comment box
     // non empty comment box
@@ -145,157 +100,6 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         submitBtn.simulate('submit', { target: formEl });
 
         expect(createCommentSpy).toHaveBeenCalledTimes(expectedCallCount);
-    });
-
-    test('should call createTask handler when approver has been added', () => {
-        const createTaskSpy = jest.fn();
-        const createCommentSpy = jest.fn();
-        const wrapper = render({
-            createComment: createCommentSpy,
-            createTask: createTaskSpy,
-        });
-
-        const instance = wrapper.instance();
-        instance.getFormattedCommentText = jest.fn().mockReturnValue({ text: 'hey', hasMention: false });
-
-        wrapper.setState({
-            approvers: [{ text: '123', value: '123' }],
-            isAddApprovalVisible: true,
-        });
-
-        instance.onFormValidSubmitHandler({ addApproval: 'on' });
-
-        expect(createTaskSpy).toHaveBeenCalledTimes(1);
-        expect(createCommentSpy).not.toHaveBeenCalled();
-    });
-
-    test('should call createTask with correct args on task submit', () => {
-        const createTaskSpy = jest.fn();
-        const createCommentStub = jest.fn();
-        const commentText = { text: 'a comment', hasMention: false };
-        const addApproval = 'on';
-        const approvers = [{ text: '123', value: 123 }, { text: '124', value: 124 }];
-
-        const wrapper = render({
-            createComment: createCommentStub,
-            createTask: createTaskSpy,
-        });
-
-        const instance = wrapper.instance();
-        instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
-
-        wrapper.setState({
-            approvers,
-            approvalDate: '2014-04-12',
-        });
-
-        wrapper.find('Form').prop('onValidSubmit')({
-            addApproval,
-        });
-
-        expect(createTaskSpy).toHaveBeenCalledWith({
-            text: commentText.text,
-            assignees: approvers,
-            dueAt: '2014-04-12',
-        });
-        expect(instance.getFormattedCommentText).toHaveBeenCalledTimes(1);
-    });
-
-    test('should set error and not call createTask() when no approvers have been selected', () => {
-        const createTaskSpy = jest.fn();
-        const wrapper = render({ createTask: createTaskSpy });
-
-        const instance = wrapper.instance();
-        instance.getFormattedCommentText = jest.fn().mockReturnValue({ text: 'a comment', hasMention: false });
-
-        wrapper.find('Form').prop('onValidSubmit')({
-            addApproval: 'on',
-            approverDateInput: '2014-04-12',
-        });
-
-        expect(wrapper.state('approverSelectorError')).toBeTruthy();
-        expect(createTaskSpy).not.toHaveBeenCalled();
-        expect(instance.getFormattedCommentText).toHaveBeenCalled();
-    });
-
-    test('should filter approver selector options correctly', () => {
-        const props = {
-            approverSelectorContacts: [
-                { id: 123, item: { id: 123, name: 'name' }, name: 'name' },
-                { id: 234, item: { id: 234, name: 'test' }, name: 'test' },
-            ],
-            createTask: jest.fn(),
-        };
-        const wrapper = mount(
-            <FeatureProvider features={features}>
-                <ApprovalCommentForm
-                    createTask={jest.fn()}
-                    getMentionWithQuery={() => {}}
-                    intl={intlFake}
-                    user={{ id: 123, name: 'foo bar' }}
-                    {...props}
-                />
-            </FeatureProvider>,
-        );
-
-        const approvalCommentForm = wrapper.find('ApprovalCommentForm');
-        approvalCommentForm.instance().setState({
-            approvers: [{ text: 'name', value: 123 }],
-            isAddApprovalVisible: true,
-        });
-
-        wrapper.update();
-        expect(wrapper.find('PillSelectorDropdown').prop('selectorOptions').length).toBe(1);
-    });
-
-    test('should reset approvers after submitting the form', () => {
-        const commentText = 'a comment';
-        const addApproval = 'on';
-        const approverDateInput = '2014-04-12';
-        const wrapper = render({
-            createComment: jest.fn(),
-            createTask: jest.fn(),
-        });
-        const instance = wrapper.instance();
-        instance.getFormattedCommentText = jest.fn().mockReturnValue({ text: commentText, hasMention: false });
-
-        wrapper.setState({
-            approvers: [{ text: '123', value: 123 }, { text: '124', value: 124 }],
-        });
-
-        wrapper.find('Form').prop('onValidSubmit')({
-            addApproval,
-            approverDateInput,
-        });
-
-        expect(wrapper.state('approvers').length).toBe(0);
-    });
-
-    describe('onApprovalDateChangeHandler()', () => {
-        test('should set the approval date to be one millisecond before midnight of the next day', () => {
-            // Midnight on December 3rd GMT
-            const date = new Date('2018-12-03T00:00:00');
-            // 11:59:59:999 on December 3rd GMT
-            const lastMillisecondOfDate = new Date('2018-12-03T23:59:59.999');
-            const wrapper = render({});
-            wrapper.instance().onApprovalDateChangeHandler(date);
-
-            expect(wrapper.state('approvalDate')).toEqual(lastMillisecondOfDate);
-        });
-
-        test('should change a previously set approval date to null if there is no approval date', () => {
-            // Midnight on December 3rd GMT
-            const date = new Date('2018-12-03T00:00:00');
-            // 11:59:59:999 on December 3rd GMT
-            const lastMillisecondOfDate = new Date('2018-12-03T23:59:59.999');
-            const wrapper = render({});
-
-            wrapper.instance().onApprovalDateChangeHandler(date);
-            expect(wrapper.state('approvalDate')).toEqual(lastMillisecondOfDate);
-
-            wrapper.instance().onApprovalDateChangeHandler(null);
-            expect(wrapper.state('approvalDate')).toEqual(null);
-        });
     });
 
     describe('getFormattedCommentText()', () => {
@@ -449,67 +253,5 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
                 .at(0)
                 .prop('onMention'),
         ).toEqual(null);
-    });
-
-    describe('handleApproverSelectorInput()', () => {
-        test('should call getApproverWithQuery() when called', () => {
-            const value = 'test';
-            const getApproverWithQuery = jest.fn();
-            const wrapper = render({ getApproverWithQuery });
-            wrapper.instance().handleApproverSelectorInput(value);
-
-            expect(getApproverWithQuery).toHaveBeenCalledWith(value);
-        });
-
-        test('should clear approver selector error when called', () => {
-            const wrapper = render({
-                getApproverWithQuery: jest.fn(),
-            });
-            wrapper.setState({ approverSelectorError: 'test' });
-            wrapper.instance().handleApproverSelectorInput('hi');
-            expect(wrapper.state('approverSelectorError')).toEqual('');
-        });
-    });
-
-    describe('scrollApproverSelector()', () => {
-        test('should scroll the approver selector input', () => {
-            const input = {
-                scrollTop: 0,
-                scrollHeight: 100,
-            };
-            document.querySelector = jest.fn().mockReturnValue(input);
-
-            const wrapper = render();
-            wrapper.instance().scrollApproverSelector();
-
-            expect(input.scrollTop).toEqual(100);
-        });
-    });
-
-    describe('handleApproverSelectorSelect()', () => {
-        test('should update approvers when called', () => {
-            const wrapper = render();
-            wrapper.setState({ approvers: [{ value: 123 }] });
-            wrapper.instance().handleApproverSelectorSelect([{ value: 234 }]);
-            expect(wrapper.state('approvers')).toEqual([{ value: 123 }, { value: 234 }]);
-        });
-
-        test('should scroll the selector input after the state has been set', () => {
-            const wrapper = render();
-            const instance = wrapper.instance();
-            instance.scrollApproverSelector = jest.fn();
-
-            wrapper.instance().handleApproverSelectorSelect([{ value: 234 }]);
-            expect(instance.scrollApproverSelector).toHaveBeenCalled();
-        });
-    });
-
-    describe('handleApproverSelectorRemove()', () => {
-        test('should update approvers when called', () => {
-            const wrapper = render();
-            wrapper.setState({ approvers: [{ value: 123 }, { value: 234 }] });
-            wrapper.instance().handleApproverSelectorRemove({ value: 123 }, 0);
-            expect(wrapper.state('approvers')).toEqual([{ value: 234 }]);
-        });
     });
 });

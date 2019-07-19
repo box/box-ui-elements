@@ -854,13 +854,9 @@ type WithLoggerProps = {
 };
 
 type ActivityFeedFeatures = {
-    tasks?: {|
-        createButton?: boolean, // Show the Create Task button (requires newApi)
-        createFromComment?: boolean, // Show the Add Task checkbox
-        feedbackUrl?: string, // URL used for feedback form for tasks
-        newApi?: boolean, // Use new service
-        newCards?: boolean, // Show new task card layout (requires on newApi)
-    |},
+    appActivity: {
+        enabled: boolean,
+    },
 };
 
 type ContentSidebarFeatures = {
