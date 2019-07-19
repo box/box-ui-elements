@@ -107,7 +107,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             // If next editorState is empty and the current editorState is not empty
             // that means it is a new empty state and this component should not be marked dirty
             if (isNewEditorState) {
-                nextState = { ...nextState, hasReceivedFirstInteraction: false };
+                nextState = { ...nextState, hasReceivedFirstInteraction: false, error: null };
             } else if (isEditorStateDirty) {
                 // Detect case where controlled EditorState has been made dirty
                 // If the current editorState is empty and the next editorState is not
