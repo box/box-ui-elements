@@ -13,13 +13,23 @@ aliases:
     keys:
       - yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
+  - &restore-yarn-cache-e2e
+    keys:
+      - yarn-e2e-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+
   - &save-yarn-cache
     paths:
       - node_modules
       - ~/.npm
-      - ~/.cache/yarn
-      - ~/.cache/Cypress
+      - ~/.cache
     key: yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+
+  - &save-yarn-cache-e2e
+    paths:
+      - node_modules
+      - ~/.npm
+      - ~/.cache
+    key: yarn-e2e-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
 defaults: &defaults
   working_directory: ~/buie
@@ -82,9 +92,9 @@ jobs:
       - image: cypress/base:10
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-yarn-cache-e2e
       - run: *yarn
-      - save-cache: *save-yarn-cache
+      - save-cache: *save-yarn-cache-e2e
       - run:
           name: E2E tests
           command: yarn test:e2e
