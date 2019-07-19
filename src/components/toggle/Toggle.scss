@@ -36,7 +36,7 @@
     }
 
     + .toggle-btn {
-        background: $sf-fog;
+        background: $bdl-gray-30;
         border-radius: 40px;
         cursor: pointer;
         display: inline-block;
@@ -58,7 +58,7 @@
 
         &::after {
             background: $white;
-            border: 1px solid $storms-a-comin;
+            border: 1px solid $bdl-gray-62;
             border-radius: 50%;
             box-shadow: 0 1px 2px fade-out($black, .9);
             height: 26px;
@@ -125,7 +125,7 @@ $width: $height * 2;
 }
 
 .toggle-simple-description {
-    color: $downtown-grey;
+    color: $bdl-gray-50;
     margin-left: $width + 6;
     margin-top: 2px;
 
@@ -160,7 +160,7 @@ $width: $height * 2;
     }
 
     &::before {
-        background-color: $sf-fog;
+        background-color: $bdl-gray-30;
         border-radius: $height;
         right: 0;
         transition: background .4s;
@@ -168,7 +168,7 @@ $width: $height * 2;
 
     &::after {
         background-color: $white;
-        border: 1px solid $storms-a-comin;
+        border: 1px solid $bdl-gray-62;
         border-radius: 100%;
         height: $height;
         transition: margin .4s;
@@ -197,7 +197,7 @@ $width: $height * 2;
 
         &::after {
             background-color: darken($white, 2%);
-            border-color: lighten($storms-a-comin, 32%);
+            border-color: lighten($bdl-gray-62, 32%);
         }
     }
 

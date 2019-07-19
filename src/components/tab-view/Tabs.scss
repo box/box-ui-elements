@@ -50,8 +50,8 @@
 
     .tab,
     .tab:hover {
-        border-bottom: 1px solid $off-white;
-        color: $downtown-grey;
+        border-bottom: 1px solid $bdl-gray-10;
+        color: $bdl-gray-50;
         display: inline-block;
         flex: 1;
         font-size: 13px;
@@ -65,7 +65,7 @@
         }
 
         &.is-selected {
-            color: $twos;
+            color: $bdl-gray;
 
             .tab-underline {
                 opacity: 1;
@@ -113,23 +113,23 @@
     .tab:hover,
     .tab:focus {
         .tab-title {
-            color: $twos;
+            color: $bdl-gray;
         }
     }
 
     .tab-spacer {
-        border-bottom: 1px solid $off-white;
+        border-bottom: 1px solid $bdl-gray-10;
         flex: 1 1 auto;
     }
 
     .tab.btn-plain:not(.is-disabled) {
         &:active {
             background: transparent;
-            border-bottom: 1px solid $off-white;
+            border-bottom: 1px solid $bdl-gray-10;
         }
 
         &:focus {
-            border-color: $off-white;
+            border-color: $bdl-gray-10;
             box-shadow: none;
         }
 

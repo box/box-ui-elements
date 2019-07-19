@@ -15,7 +15,7 @@
 
 .notification {
     align-items: center;
-    background-color: $sunset-grey;
+    background-color: $bdl-gray-80;
     border-radius: 4px;
     box-shadow: 0 2px 6px fade-out($black, .85);
     color: $white;
@@ -30,15 +30,15 @@
     transition: opacity .1s ease-out;
 
     &.info {
-        background-color: $thats-mint;
+        background-color: $bdl-green-light;
     }
 
     &.warn {
-        background-color: $dehydrated;
+        background-color: $bdl-yellorange;
     }
 
     &.error {
-        background-color: $amaranth;
+        background-color: $bdl-watermelon-red;
     }
 
     &.is-hidden {
@@ -76,7 +76,7 @@
         &.btn.is-disabled,
         &.btn:not(.is-disabled) {
             background-color: transparent;
-            border-color: $off-white;
+            border-color: $bdl-gray-10;
             margin: 0 5px;
             padding: 7px 13px;
         }

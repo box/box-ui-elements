@@ -41,7 +41,7 @@
 
     hr {
         border: none;
-        border-top: 1px solid $seesee;
+        border-top: 1px solid $bdl-gray-20;
         margin: 20px 0;
     }
 }
@@ -53,7 +53,7 @@
 .modal-dialog {
     background-clip: padding-box;
     background-color: $white;
-    border: 1px solid $sf-fog;
+    border: 1px solid $bdl-gray-30;
     border-radius: $bdl-border-radius-size;
     box-shadow: 0 1px 1px 1px fade-out($black, .95);
     display: flex;
@@ -83,7 +83,7 @@
 .modal-close-button {
     background: none;
     border: 0;
-    color: $downtown-grey;
+    color: $bdl-gray-50;
     cursor: pointer;
     font-size: 11px;
     font-weight: bold;

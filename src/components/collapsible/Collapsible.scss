@@ -49,7 +49,7 @@
     }
 
     &.is-bordered {
-        border: 1px solid $eees;
+        border: 1px solid $bdl-gray-10;
 
         .collapsible-card-header {
             background-color: $white;
@@ -61,7 +61,7 @@
         }
 
         &.is-open .btn-plain.collapsible-card-title {
-            border-bottom: 1px solid $eees;
+            border-bottom: 1px solid $bdl-gray-10;
         }
 
         .collapsible-card-header-caret {
@@ -71,12 +71,12 @@
 
     &:not(.is-bordered) {
         .btn-plain.collapsible-card-title {
-            border-bottom: 1px solid $eees;
+            border-bottom: 1px solid $bdl-gray-10;
 
             &:hover,
             &:active,
             &:focus {
-                border-bottom-color: $box-blue;
+                border-bottom-color: $bdl-box-blue;
                 text-decoration: none;
             }
         }
