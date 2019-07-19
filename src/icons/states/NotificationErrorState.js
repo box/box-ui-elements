@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { boxBlue, white } from '../../styles/variables';
+import { bdlBoxBlue, white } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -16,7 +16,7 @@ type Props = {
 
 const NotificationErrorState = ({
     className = '',
-    color = boxBlue,
+    color = bdlBoxBlue,
     height = 111,
     opacity = 0.5,
     title,

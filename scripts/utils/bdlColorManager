@@ -5,6 +5,7 @@ const fs = require('fs');
 const colors = require('colors/safe');
 const { promisify } = require('util');
 const camelCase = require('lodash/camelCase');
+const kebabCase = require('lodash/kebabCase');
 const identity = require('lodash/identity');
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
@@ -111,7 +112,7 @@ async function main() {
             case 'swap':
                 // find, then swap in the proper new name
                 const matches = [...new Set(fileToParse.match(reBadName))];
-                const replacements = matches.map(entry => conversionMap[entry]);
+                const replacements = matches.map(entry => converter(conversionMap[kebabCase(entry)]));
                 let replacementFile = fileToParse;
 
                 if (verboseMode) {
@@ -122,7 +123,7 @@ async function main() {
 
                 matches.forEach(match => {
                     if (fileType === 'js' || fileType === 'scss') {
-                        replacementFile = replacementFile.replace(new RegExp(converter(match), 'g'), converter(conversionMap[match]));
+                        replacementFile = replacementFile.replace(new RegExp(converter(match), 'g'), converter(conversionMap[kebabCase(match)]));
                     } else {
                         console.error(colors.yellow('Unrecognized file type for conversion. skipping', fileName, '...'));
                         process.exit(0);
@@ -130,13 +131,16 @@ async function main() {
                 });
 
                 try {
-                    await writeFile(fileName, replacementFile);
+                    if (matches.length > 0) {
+                        await writeFile(fileName, replacementFile);
+                        console.log (colors.cyan(`Replaced ${matches.length} color value${matches.length !== 1 ? 's': ''} in:\t`), fileName);
+                    } else if (verboseMode) {
+                        console.warn(colors.yellow('No changes needed to file:\t'), fileName);
+                    }
                 } catch (error) {
                     console.error(colors.red('Cannot write updated file to disk\n'), error);
                     process.exit(1);
                 }
-
-                console.log(`Replaced ${matches.length} deprecated color value${matches.length > 1 ? 's': ''}`);
 
                 break;
             default:

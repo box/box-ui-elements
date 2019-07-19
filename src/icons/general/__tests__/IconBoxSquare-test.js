@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { boxBlue, white } from '../../../styles/variables';
+import { bdlBoxBlue, white } from '../../../styles/variables';
 import IconBoxSquare from '../IconBoxSquare';
 
 describe('icons/general/IconBoxSquare', () => {
@@ -16,7 +16,7 @@ describe('icons/general/IconBoxSquare', () => {
     test('should correctly render default icon with default color', () => {
         const wrapper = shallow(<IconBoxSquare />);
 
-        expect(wrapper.find('rect').prop('fill')).toEqual(boxBlue);
+        expect(wrapper.find('rect').prop('fill')).toEqual(bdlBoxBlue);
         expect(
             wrapper
                 .find('path')
