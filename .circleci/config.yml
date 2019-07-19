@@ -17,7 +17,8 @@ aliases:
     paths:
       - node_modules
       - ~/.npm
-      - ~/.cache
+      - ~/.cache/yarn
+      - ~/.cache/Cypress
     key: yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
 defaults: &defaults
