@@ -19,7 +19,7 @@
         }
 
         .name {
-            color: $twos;
+            color: $bdl-gray;
             font-size: 13px;
             font-weight: bold;
             line-height: 16px;
@@ -29,11 +29,11 @@
         }
 
         .name .link {
-            color: $twos;
+            color: $bdl-gray;
         }
 
         .email .link {
-            color: $seventy-sixers;
+            color: $bdl-gray-62;
         }
 
         .name .link:hover,
@@ -46,7 +46,7 @@
         }
 
         .email {
-            color: $seventy-sixers;
+            color: $bdl-gray-62;
             font-size: 12px;
             line-height: 16px;
             max-width: 200px;
@@ -55,7 +55,7 @@
         }
 
         .role {
-            color: $seventy-sixers;
+            color: $bdl-gray-62;
             line-height: 32px;
         }
     }
@@ -64,7 +64,7 @@
         justify-content: inherit;
 
         .link {
-            color: $box-blue;
+            color: $bdl-box-blue;
             line-height: 32px;
             text-decoration: none;
         }

@@ -2,7 +2,7 @@
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
-    color: $seventy-sixers;
+    color: $bdl-gray-62;
     display: block;
     font-size: 12px;
 }
@@ -93,7 +93,7 @@
 
     .pill-selector-wrapper.scrollable {
         .overlay-wrapper {
-            border: 1px solid $sf-fog;
+            border: 1px solid $bdl-gray-30;
             height: 280px;
             overflow-y: scroll;
             position: absolute;
@@ -111,7 +111,7 @@
         }
 
         .text-area-container textarea::placeholder {
-            color: $nines;
+            color: $bdl-gray-50;
         }
 
         .pill-selector-input-wrapper {
@@ -120,24 +120,24 @@
     }
 
     .pill-selector-input-wrapper {
-        border: 1px solid $seesee;
+        border: 1px solid $bdl-gray-20;
         margin-top: 10px;
 
         .pill-selector-input::placeholder {
-            color: $nines;
+            color: $bdl-gray-50;
         }
 
         &.is-disabled {
-            background-color: $haze;
+            background-color: $bdl-gray-02;
             box-shadow: none;
-            color: $bfive;
+            color: $bdl-gray-30;
 
             .pill-selector-input::placeholder {
-                color: $nines;
+                color: $bdl-gray-50;
             }
 
             &:hover {
-                border-color: $sf-fog;
+                border-color: $bdl-gray-30;
             }
         }
     }
@@ -159,7 +159,7 @@
             }
 
             .toggle-simple-label {
-                color: $twos;
+                color: $bdl-gray;
                 cursor: pointer;
             }
         }
@@ -207,13 +207,13 @@
             margin-right: 10px;
 
             &.can-edit-btn {
-                color: $seventy-sixers;
+                color: $bdl-gray-62;
             }
         }
     }
 
     .security-indicator-note {
-        color: $sevens;
+        color: $bdl-gray-62;
         margin-top: 10px;
 
         .security-indicator-icon-globe {
@@ -224,7 +224,7 @@
                 margin-bottom: -2px;
 
                 .fill-color {
-                    fill: $nines;
+                    fill: $bdl-gray-50;
                 }
             }
         }
@@ -235,7 +235,7 @@
     }
 
     .upgrade-link {
-        color: $box-blue;
+        color: $bdl-box-blue;
     }
 
     .upgrade-description {
@@ -253,7 +253,7 @@
     }
 
     .manage-all-btn {
-        color: $box-blue;
+        color: $bdl-box-blue;
         float: right;
         margin: -5px 0 10px 0;
     }
