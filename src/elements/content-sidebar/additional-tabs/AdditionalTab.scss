@@ -6,10 +6,10 @@
     @include bdl-SidebarNavButton;
 
     &:hover {
-        background-color: $ffive;
+        background-color: $bdl-gray-05;
 
         svg path {
-            fill: $fours;
+            fill: $bdl-gray-80;
         }
     }
 }

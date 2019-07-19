@@ -23,7 +23,7 @@
 
         &.breadcrumb-item-last {
             * {
-                color: $sunset-grey;
+                color: $bdl-gray-80;
             }
         }
 
@@ -32,13 +32,13 @@
         }
 
         * {
-            color: $downtown-grey;
+            color: $bdl-gray-50;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
 
             &:hover {
-                color: $sunset-grey;
+                color: $bdl-gray-80;
             }
         }
 
@@ -48,13 +48,13 @@
 
             &:hover,
             &:focus {
-                color: $sunset-grey;
+                color: $bdl-gray-80;
                 outline: none;
             }
         }
 
         & + .breadcrumb-item::before {
-            border-color: $downtown-grey;
+            border-color: $bdl-gray-50;
             border-style: solid solid none none;
             border-width: 2px;
             content: '';

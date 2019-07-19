@@ -17,11 +17,11 @@
         width: 24px;
 
         &:hover svg path {
-            fill: $twos;
+            fill: $bdl-gray;
         }
 
         &.be-faces-is-editing {
-            background-color: $off-white;
+            background-color: $bdl-gray-10;
 
             .icon-edit > .fill-color {
                 fill: $fivef;

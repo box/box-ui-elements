@@ -1,7 +1,7 @@
 @import '../../../common/variables';
 
 .be .bcs-comment-input-container {
-    border-top: solid 1px $off-white;
+    border-top: solid 1px $bdl-gray-10;
     display: flex;
 
     .bcs-comment-input {
@@ -51,7 +51,7 @@
 
         &:empty {
             &::before {
-                color: $seesee;
+                color: $bdl-gray-20;
                 content: attr(placeholder);
                 cursor: text;
                 display: block;
@@ -95,7 +95,7 @@
         min-width: 0;
 
         aside {
-            color: $eights;
+            color: $bdl-gray-50;
             margin-top: -8px;
         }
 
@@ -127,7 +127,7 @@
         }
 
         .bcs-comment-add-approver-fields-container {
-            border-top: 1px solid $off-white;
+            border-top: 1px solid $bdl-gray-10;
             display: flex;
             flex-direction: column;
             padding-top: 9px;

@@ -9,11 +9,11 @@
     &:focus,
     &:hover {
         background-color: $lsb-menu-hover-link-bg;
-        color: $twos;
+        color: $bdl-gray;
         text-decoration: none;
 
         .left-sidebar-link:not(.is-selected) {
-            color: $twos;
+            color: $bdl-gray;
         }
 
         .lsb-remove-button {
@@ -31,7 +31,7 @@
         &:focus,
         &:hover {
             .fill-color {
-                fill: $twos;
+                fill: $bdl-gray;
             }
         }
     }
@@ -40,7 +40,7 @@
         &:active,
         &:focus {
             .left-sidebar-link-text {
-                color: $twos;
+                color: $bdl-gray;
                 text-decoration: none;
             }
         }

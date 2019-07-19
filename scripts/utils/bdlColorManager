@@ -51,10 +51,10 @@ const conversionMap = {
     'karl-fog': 'bdl-gray-02',
     'silver-chalice': 'bdl-gray-40',
     'storms-a-comin': 'bdl-gray-62',
-    'blue-steel': 'bdl-gray-100',
+    'blue-steel': 'bdl-gray',
     'better-black': 'bdl-gray-80',
     'downtown-grey': 'bdl-gray-50',
-    'twos': 'bdl-gray-100',
+    'twos': 'bdl-gray',
     'fours': 'bdl-gray-80',
     'sevens': 'bdl-gray-62',
     'eights': 'bdl-gray-50',
@@ -66,6 +66,12 @@ const conversionMap = {
     'approx-mischka-grey': 'bdl-gray-40',
     'lightest-charcoal': 'bdl-gray-30',
     'purple-rain': 'bdl-purple-rain',
+    'bdl-neutral-01': 'bdl-gray',
+    'bdl-neutral-02': 'bdl-gray-62',
+    'bdl-neutral-03': 'bdl-gray-50',
+    'bdl-neutral-04': 'bdl-gray-10',
+    'bdl-neutral-05': 'bdl-gray-05',
+    'bdl-neutral-06': 'bdl-gray-02',
 };
 
 function printHelp() {

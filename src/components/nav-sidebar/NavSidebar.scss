@@ -1,8 +1,8 @@
 @import '../../styles/variables';
 
 .nav-sidebar {
-    background-color: $karl-fog;
-    border-right: 1px solid $off-white;
+    background-color: $bdl-gray-02;
+    border-right: 1px solid $bdl-gray-10;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 25px 10px 0 20px;
@@ -14,7 +14,7 @@
     margin-bottom: 20px;
 
     > h2 {
-        color: $approx-mischka-grey;
+        color: $bdl-gray-40;
         font-size: 10px;
         letter-spacing: .1em;
         line-height: 28px;
@@ -31,13 +31,13 @@
     }
 
     > .placeholder {
-        color: $lightest-charcoal;
+        color: $bdl-gray-30;
         padding: 0 18px 0 28px;
         width: 180px;
     }
 
     a {
-        color: $sevens;
+        color: $bdl-gray-62;
     }
 
     .nav-list-collapse-header {

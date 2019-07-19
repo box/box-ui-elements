@@ -22,7 +22,7 @@
             }
 
             .bcs-app-activity-content {
-                color: $fours;
+                color: $bdl-gray-80;
                 flex: 1;
                 min-width: 0;
 
@@ -31,7 +31,7 @@
                 }
 
                 .bcs-app-activity-created-at {
-                    color: $sevens;
+                    color: $bdl-gray-62;
                     cursor: default;
                     font-size: 12px;
                     line-height: 20px;
@@ -45,7 +45,7 @@
                 position: relative;
 
                 .bcs-app-activity-app-name {
-                    color: $twos;
+                    color: $bdl-gray;
                     font-weight: bold;
                     line-height: 19.5px;
                     margin-right: 10px;

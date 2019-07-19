@@ -47,7 +47,7 @@ textarea:focus {
 input::-webkit-input-placeholder,
 input::-moz-placeholder,
 input:-ms-input-placeholder {
-    color: $seesee;
+    color: $bdl-gray-20;
 }
 
 input[type='text'].is-invalid,
@@ -59,7 +59,7 @@ input[type='tel'].is-invalid,
 input[type='number'].is-invalid,
 div[contentEditable='true'].is-invalid,
 textarea.is-invalid {
-    border: 1px solid $amaranth;
+    border: 1px solid $bdl-watermelon-red;
 }
 
 input[type='text'].is-invalid:focus,
@@ -83,13 +83,13 @@ input[type='tel']:disabled,
 input[type='number']:disabled,
 div[contentEditable='true']:disabled,
 textarea:disabled {
-    background-color: $haze;
-    border-color: $efive;
+    background-color: $bdl-gray-02;
+    border-color: $bdl-gray-10;
     box-shadow: none;
-    color: $bfive;
+    color: $bdl-gray-30;
 
     &:hover {
-        border-color: $efive;
+        border-color: $bdl-gray-10;
     }
 }
 
@@ -166,7 +166,7 @@ textarea {
 .select-container select {
     background: none;
     border: none;
-    color: $twos;
+    color: $bdl-gray;
     padding-right: 25px;
 }
 
@@ -205,7 +205,7 @@ textarea {
 .select-container .select-overlay,
 .select-container .select-button {
     background-color: $white;
-    border: 1px solid $dtwo;
+    border: 1px solid $bdl-gray-20;
     border-radius: 2px;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
     -webkit-transition: border-color linear .15s, box-shadow linear .1s;
@@ -216,7 +216,7 @@ textarea {
 .select-container .select-button::before {
     border-left: 3px solid transparent;
     border-right: 3px solid transparent;
-    border-top: 3px solid $better-black;
+    border-top: 3px solid $bdl-gray-80;
     content: '';
     height: 0;
     position: absolute;
@@ -231,7 +231,7 @@ textarea {
 }
 
 .select-container .select-button {
-    color: $twos;
+    color: $bdl-gray;
     padding-right: 25px;
 }
 
@@ -253,13 +253,13 @@ textarea {
 
 .select-container .select-button:disabled,
 .select-container select:disabled {
-    color: $bfive;
+    color: $bdl-gray-30;
 }
 
 .select-container .select-button:disabled,
 .select-container select:disabled ~ .select-overlay {
-    background-color: $haze;
-    border-color: $efive;
+    background-color: $bdl-gray-02;
+    border-color: $bdl-gray-10;
     box-shadow: none;
 }
 
@@ -277,11 +277,11 @@ textarea {
 .select-container.is-invalid .select-button:focus ~ .select-overlay,
 .select-container.is-invalid select:focus ~ .select-overlay,
 .select-container.is-invalid select:hover + .select-overlay {
-    border: 1px solid $amaranth;
+    border: 1px solid $bdl-watermelon-red;
 }
 
 .select-container .select-button:active {
-    background-color: $efive;
+    background-color: $bdl-gray-10;
 }
 
 .select-container-x-small {

@@ -71,10 +71,10 @@
     }
 
     > .btn.is-selected {
-        background-color: $off-white;
-        border-color: $storms-a-comin;
+        background-color: $bdl-gray-10;
+        border-color: $bdl-gray-62;
         box-shadow: none;
-        color: $better-black;
+        color: $bdl-gray-80;
         z-index: 2; /* place on top of siblings */
     }
 
@@ -84,10 +84,10 @@
 
     &.is-disabled {
         > .btn {
-            background-color: $haze;
-            border: 1px solid $sf-fog;
+            background-color: $bdl-gray-02;
+            border: 1px solid $bdl-gray-30;
             box-shadow: none;
-            color: $tendemob-grey;
+            color: $bdl-gray-62;
             cursor: default;
             opacity: .4;
         }

@@ -11,7 +11,7 @@
     }
 
     div.overlay {
-        border: 1px solid $sf-fog;
+        border: 1px solid $bdl-gray-30;
         border-radius: 4px;
         overflow: hidden;
         padding: 0;
@@ -87,7 +87,7 @@
 
         // input re-styling due to tethering
         .search-input-container {
-            border-bottom: 1px solid $sf-fog;
+            border-bottom: 1px solid $bdl-gray-30;
             border-radius: 4px 4px 0 0;
             margin: 0;
             padding: 10px 12px 12px;
@@ -126,7 +126,7 @@
         width: 100%;
 
         &.metadata-template-dropdown-is-selected {
-            color: $box-blue;
+            color: $bdl-box-blue;
         }
 
         .template-display-name {
@@ -138,10 +138,10 @@
 
     .metadata-instance-editor-template-message {
         background-color: $white;
-        border: 1px solid $sf-fog;
+        border: 1px solid $bdl-gray-30;
         border-radius: 0 0 4px 4px;
         border-top-color: transparent;
-        color: $nines;
+        color: $bdl-gray-50;
         padding: 16px 15px;
         position: absolute;
         right: 0;

@@ -9,8 +9,8 @@ $horizontal-offset: 10px;
 $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
 
 .tooltip {
-    background-color: $fours;
-    border-color: $fours;
+    background-color: $bdl-gray-80;
+    border-color: $bdl-gray-80;
     border-radius: 4px;
     color: $white;
     font-size: 13px;
@@ -37,18 +37,18 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
     }
 
     &.is-error {
-        background-color: $lavender-blush;
-        border: 1px solid $amaranth;
-        color: $amaranth;
+        background-color: $bdl-watermelon-red-10;
+        border: 1px solid $bdl-watermelon-red;
+        color: $bdl-watermelon-red;
 
         .tooltip-close-button .icon-close .fill-color {
-            fill: $amaranth;
+            fill: $bdl-watermelon-red;
         }
     }
 
     &.is-callout {
-        background-color: $blue-purple;
-        border-color: $blue-purple;
+        background-color: $bdl-purple-rain;
+        border-color: $bdl-purple-rain;
     }
 
     &.is-metadata-tooltip {
@@ -85,7 +85,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
 
         &.is-error::after {
-            border-top-color: $lavender-blush;
+            border-top-color: $bdl-watermelon-red-10;
             left: 50%;
             margin-left: -$arrow-size + 1;
             top: 100%;
@@ -102,7 +102,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
 
         &.is-error::after {
-            border-top-color: $lavender-blush;
+            border-top-color: $bdl-watermelon-red-10;
             left: $horizontal-offset + 1;
             top: 100%;
         }
@@ -118,7 +118,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
 
         &.is-error::after {
-            border-top-color: $lavender-blush;
+            border-top-color: $bdl-watermelon-red-10;
             right: $horizontal-offset + 1;
             top: 100%;
         }
@@ -135,7 +135,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
 
         &.is-error::after {
-            border-right-color: $lavender-blush;
+            border-right-color: $bdl-watermelon-red-10;
             margin-top: -$arrow-size + 1;
             right: 100%;
             top: 50%;
@@ -153,7 +153,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
 
         &.is-error::after {
-            border-left-color: $lavender-blush;
+            border-left-color: $bdl-watermelon-red-10;
             left: 100%;
             margin-top: -$arrow-size + 1;
             top: 50%;
@@ -171,7 +171,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
 
         &.is-error::after {
-            border-bottom-color: $lavender-blush;
+            border-bottom-color: $bdl-watermelon-red-10;
             bottom: 100%;
             left: 50%;
             margin-left: -$arrow-size + 1;
@@ -188,7 +188,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
 
         &.is-error::after {
-            border-bottom-color: $lavender-blush;
+            border-bottom-color: $bdl-watermelon-red-10;
             bottom: 100%;
             left: $horizontal-offset + 1;
         }
@@ -204,7 +204,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
 
         &.is-error::after {
-            border-bottom-color: $lavender-blush;
+            border-bottom-color: $bdl-watermelon-red-10;
             bottom: 100%;
             right: $horizontal-offset + 1;
         }

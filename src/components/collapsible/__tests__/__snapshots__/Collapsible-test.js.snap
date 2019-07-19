@@ -17,7 +17,7 @@ exports[`components/collapsible/Collapsible should apply buttonProps correctly 1
       foo
       <IconCaretDown
         className="collapsible-card-header-caret"
-        color="#999"
+        color="#909090"
         width={8}
       />
     </PlainButton>
@@ -71,7 +71,7 @@ exports[`components/collapsible/Collapsible should apply correct border class 1`
       foo
       <IconCaretDown
         className="collapsible-card-header-caret"
-        color="#999"
+        color="#909090"
         width={8}
       />
     </PlainButton>
@@ -125,7 +125,7 @@ exports[`components/collapsible/Collapsible should apply correct isOpen state 1`
       foo
       <IconCaretDown
         className="collapsible-card-header-caret"
-        color="#999"
+        color="#909090"
         width={8}
       />
     </PlainButton>
@@ -179,7 +179,7 @@ exports[`components/collapsible/Collapsible should not render a PlainButton if a
       foo
       <IconCaretDown
         className="collapsible-card-header-caret"
-        color="#999"
+        color="#909090"
         width={8}
       />
     </PlainButton>
@@ -233,7 +233,7 @@ exports[`components/collapsible/Collapsible should render a PlainButton if a but
       foo
       <IconCaretDown
         className="collapsible-card-header-caret"
-        color="#999"
+        color="#909090"
         width={8}
       />
     </PlainButton>
@@ -287,7 +287,7 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
       foo
       <IconCaretDown
         className="collapsible-card-header-caret"
-        color="#999"
+        color="#909090"
         width={8}
       />
     </PlainButton>

@@ -1,12 +1,12 @@
 @import '../../styles/variables';
 
 .file-version-list {
-    border: 1px solid $sf-fog;
+    border: 1px solid $bdl-gray-30;
     margin-bottom: 20px;
 }
 
 .file-version-row {
-    border-top: 1px solid $off-white;
+    border-top: 1px solid $bdl-gray-10;
     display: flex;
     padding: 8px 5px;
 
@@ -24,7 +24,7 @@
 
     .file-version-badge {
         background-color: $selected-blue-background;
-        color: $koray-ing;
+        color: $bdl-dark-blue;
     }
 
     .file-version-name {
@@ -45,7 +45,7 @@
         }
 
         .file-version-retention-info {
-            color: $ayers-rock;
+            color: $bdl-yellorange;
         }
     }
 
@@ -63,7 +63,7 @@
         .file-version-info,
         .file-version-name,
         .file-version-badge {
-            color: $nines;
+            color: $bdl-gray-50;
         }
     }
 }

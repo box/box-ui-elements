@@ -19,11 +19,11 @@
         width: 24px;
 
         &:hover svg path {
-            fill: $twos;
+            fill: $bdl-gray;
         }
 
         &.be-transcript-is-editing {
-            background-color: $off-white;
+            background-color: $bdl-gray-10;
 
             .icon-edit > .fill-color {
                 fill: $fivef;
@@ -32,16 +32,16 @@
     }
 
     .btn-plain.be-transcript-copy.be-transcript-copied {
-        background-color: $off-white;
+        background-color: $bdl-gray-10;
         transition: background-color 1s;
 
         svg path {
-            fill: $thats-mint;
+            fill: $bdl-green-light;
         }
     }
 
     .be-transcript-edit-message {
-        color: $sevens;
+        color: $bdl-gray-62;
         margin-bottom: 15px;
     }
 
