@@ -1,21 +1,20 @@
 
 aliases:
-  - &yarn |
-    yarn install --non-interactive --frozen-lockfile --cache-folder ~/.cache/yarn
+  - &yarn
+    name: Installing dependencies
+    command: yarn install --non-interactive --frozen-lockfile --cache-folder ~/.cache/yarn
 
-  - &clean |
-    yarn clean
+  - &clean
+    name: Cleaning
+    command: yarn clean
 
-  - &i18n |
-    yarn build:i18n
+  - &i18n
+    name: Building locales
+    command: yarn build:i18n
 
   - &restore-yarn-cache
     keys:
       - yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
-
-  - &restore-yarn-cache-e2e
-    keys:
-      - yarn-e2e-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
   - &save-yarn-cache
     paths:
@@ -24,21 +23,33 @@ aliases:
       - ~/.cache
     key: yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
-  - &save-yarn-cache-e2e
-    paths:
-      - node_modules
-      - ~/.npm
-      - ~/.cache
-    key: yarn-e2e-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
-
 defaults: &defaults
   working_directory: ~/buie
   docker:
-    - image: circleci/node:10
+    - image: cypress/base:10.16.0
 
 version: 2
 jobs:
-  build:
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run: *clean
+      - run: *i18n
+      - run:
+          name: Commit lint
+          command: ./scripts/commitlint.sh
+      - run:
+          name: Code lint
+          command: yarn lint
+      - run:
+          name: Flow
+          command: yarn flow check
+
+  build-unit-tests:
     <<: *defaults
     steps:
       - checkout
@@ -50,51 +61,24 @@ jobs:
       - run:
           name: Babel build
           command: yarn build:ci:es
-      - run: ./scripts/check_generated_files.sh
+      - run:
+          name: Checking locales and styles
+          command: ./scripts/check_generated_files.sh
       - run:
           name: Webpack build
           command: yarn build:ci:dist
-
-  lint:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore-cache: *restore-yarn-cache
-      - run: *yarn
-      - save-cache: *save-yarn-cache
-      - run: *clean
-      - run: *i18n
-      - run:
-          name: Commit Lint
-          command: ./scripts/commitlint.sh
-      - run:
-          name: Code Lint
-          command: yarn lint
-      - run:
-          name: Flow
-          command: yarn flow check
-
-  unit-tests:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore-cache: *restore-yarn-cache
-      - run: *yarn
-      - save-cache: *save-yarn-cache
       - run: echo 'export TZ=America/Los_Angeles' >> $BASH_ENV
       - run:
           name: Unit tests
           command: yarn test --maxWorkers=2
 
   e2e-tests:
-    working_directory: ~/buie
-    docker:
-      - image: cypress/base:10
+    <<: *defaults
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache-e2e
+      - restore-cache: *restore-yarn-cache
       - run: *yarn
-      - save-cache: *save-yarn-cache-e2e
+      - save-cache: *save-yarn-cache
       - run:
           name: E2E tests
           command: yarn test:e2e
@@ -104,6 +88,5 @@ workflows:
   lint_test_build:
     jobs:
       - lint
-      - unit-tests
-      - build
+      - build-unit-tests
       - e2e-tests
