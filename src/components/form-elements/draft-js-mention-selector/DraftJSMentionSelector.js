@@ -92,18 +92,23 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         let nextState = {};
 
         if (contacts) {
-            nextState = { ...nextState, contacts };
+            nextState = { contacts };
         }
 
         // Only check if operating in the mode where EditorState is received as a
         // prop vs internalEditorState stored in state
         if (editorState) {
+            const isCurrentEditorStateEmpty = this.isEditorStateEmpty(editorState);
+            const isNextEditorStateEmpty = this.isEditorStateEmpty(nextEditorState);
+            const isNewEditorState = isNextEditorStateEmpty && !isCurrentEditorStateEmpty;
+            const isEditorStateDirty = isCurrentEditorStateEmpty && !isNextEditorStateEmpty;
+
             // Detect case where controlled EditorState is created anew and empty.
             // If next editorState is empty and the current editorState is not empty
             // that means it is a new empty state and this component should not be marked dirty
-            if (this.isEditorStateEmpty(nextEditorState) && !this.isEditorStateEmpty(editorState)) {
+            if (isNewEditorState) {
                 nextState = { ...nextState, hasReceivedFirstInteraction: false };
-            } else if (this.isEditorStateEmpty(editorState) && !this.isEditorStateEmpty(nextEditorState)) {
+            } else if (isEditorStateDirty) {
                 // Detect case where controlled EditorState has been made dirty
                 // If the current editorState is empty and the next editorState is not
                 // empty then this is the first interaction so mark this component dirty
@@ -112,13 +117,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         }
 
         if (Object.keys(nextState).length !== 0) {
-            this.setState(nextState, () => {
-                this.checkValidity();
-            });
+            this.setState(nextState, this.checkValidity);
         }
     }
 
-    isEditorStateEmpty = (editorState: EditorState): boolean => {
+    isEditorStateEmpty(editorState: EditorState): boolean {
         const text = editorState
             .getCurrentContent()
             .getPlainText()
@@ -126,7 +129,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const lastChangeType = editorState.getLastChangeType();
 
         return text.length === 0 && lastChangeType === null;
-    };
+    }
 
     /**
      * @returns {string}
@@ -193,17 +196,25 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const { onChange } = this.props;
 
         if (internalEditorState) {
-            this.setState(
-                {
-                    internalEditorState: nextEditorState,
-                },
-                () => {
-                    if (onChange) {
-                        onChange(nextEditorState);
-                    }
-                    this.checkValidity();
-                },
-            );
+            const isCurrentEditorStateEmpty = this.isEditorStateEmpty(internalEditorState);
+            const isNextEditorStateEmpty = this.isEditorStateEmpty(nextEditorState);
+            const isEditorStateDirty = isCurrentEditorStateEmpty && !isNextEditorStateEmpty;
+
+            let nextState = { internalEditorState: nextEditorState };
+
+            // Detect case where controlled EditorState has been made dirty
+            // If the current editorState is empty and the next editorState is not
+            // empty then this is the first interaction so mark this component dirty
+            if (isEditorStateDirty) {
+                nextState = { ...nextState, hasReceivedFirstInteraction: true };
+            }
+
+            this.setState(nextState, () => {
+                if (onChange) {
+                    onChange(nextEditorState);
+                }
+                this.checkValidity();
+            });
         } else if (onChange) {
             onChange(nextEditorState);
         }
