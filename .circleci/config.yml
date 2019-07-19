@@ -34,7 +34,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/buie
   docker:
-    - image: circleci/node:10
+    - image: cypress/base:10
 
 version: 2
 jobs:
@@ -42,9 +42,9 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-yarn-cache-e2e
       - run: *yarn
-      - save-cache: *save-yarn-cache
+      - save-cache: *save-yarn-cache-e2e
       - run: *clean
       - run: *i18n
       - run:
@@ -59,9 +59,9 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-yarn-cache-e2e
       - run: *yarn
-      - save-cache: *save-yarn-cache
+      - save-cache: *save-yarn-cache-e2e
       - run: *clean
       - run: *i18n
       - run:
@@ -78,9 +78,9 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-yarn-cache-e2e
       - run: *yarn
-      - save-cache: *save-yarn-cache
+      - save-cache: *save-yarn-cache-e2e
       - run: echo 'export TZ=America/Los_Angeles' >> $BASH_ENV
       - run:
           name: Unit tests
