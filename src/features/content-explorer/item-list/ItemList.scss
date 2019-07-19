@@ -20,7 +20,7 @@
         }
 
         &:not(.is-selected):not(.disabled):hover {
-            background-color: $bdl-light-blue-background;
+            background-color: $hover-blue-background;
         }
 
         &:focus::before {
