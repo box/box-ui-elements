@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { boxBlue } from '../../styles/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 import type { TwoTonedIcon } from '../flowTypes';
 
@@ -16,7 +16,7 @@ const IconChatBubble = ({ className = '', height = 24, title, width = 24 }: TwoT
         <path
             className="background-color"
             d="M16,24.1637833 L18.4,24.1637833 C23.7019336,24.1637833 28,20.0976819 28,15.0818916 C28,10.0661014 23.7019336,6 18.4,6 L13.6,6 C8.2980664,6 4,10.0661014 4,15.0818916 C4,17.9499355 5.40529004,20.5074704 7.6,22.1718644 L7.6,25.8966534 C7.6,26.0460378 7.63207381,26.1938656 7.69427624,26.3311715 C7.94794433,26.8911195 8.6334064,27.1505067 9.22529862,26.910529 L16,24.1637833 Z"
-            fill={boxBlue}
+            fill={bdlBoxBlue}
             fillRule="nonzero"
         />
         <path

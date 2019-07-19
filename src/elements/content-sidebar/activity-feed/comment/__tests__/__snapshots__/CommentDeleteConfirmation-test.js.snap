@@ -2,7 +2,7 @@
 
 exports[`elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmation render() should render component with COMMENT_TYPE_DEFAULT 1`] = `
 <div
-  className="bcs-comment-confirm-prompt"
+  className="bcs-CommentDeleteConfirmation-prompt"
 >
   <FormattedMessage
     defaultMessage="Delete comment?"
@@ -13,7 +13,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmation
 
 exports[`elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmation render() should render component with COMMENT_TYPE_TASK 1`] = `
 <div
-  className="bcs-comment-confirm-prompt"
+  className="bcs-CommentDeleteConfirmation-prompt"
 >
   <FormattedMessage
     defaultMessage="Are you sure you want to permanently delete this task?"

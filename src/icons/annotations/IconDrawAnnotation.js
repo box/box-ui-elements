@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { fours } from '../../styles/variables';
+import { bdlGray80 } from '../../styles/variables';
 
 import AccessibleSVG from '../accessible-svg';
 
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconDrawAnnotationMode = ({ className = '', color = fours, height = 21, title, width = 22 }: Props) => (
+const IconDrawAnnotationMode = ({ className = '', color = bdlGray80, height = 21, title, width = 22 }: Props) => (
     <AccessibleSVG
         className={`icon-annotation-draw ${className}`}
         height={height}
