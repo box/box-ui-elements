@@ -13,23 +13,12 @@ aliases:
     keys:
       - yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
-  - &restore-yarn-cache-e2e
-    keys:
-      - yarn-e2e-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
-
   - &save-yarn-cache
     paths:
       - node_modules
       - ~/.npm
       - ~/.cache
     key: yarn-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
-
-  - &save-yarn-cache-e2e
-    paths:
-      - node_modules
-      - ~/.npm
-      - ~/.cache
-    key: yarn-e2e-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
 defaults: &defaults
   working_directory: ~/buie
@@ -38,30 +27,13 @@ defaults: &defaults
 
 version: 2
 jobs:
-  build:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore-cache: *restore-yarn-cache-e2e
-      - run: *yarn
-      - save-cache: *save-yarn-cache-e2e
-      - run: *clean
-      - run: *i18n
-      - run:
-          name: Babel build
-          command: yarn build:ci:es
-      - run: ./scripts/check_generated_files.sh
-      - run:
-          name: Webpack build
-          command: yarn build:ci:dist
-
   lint:
     <<: *defaults
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache-e2e
+      - restore-cache: *restore-yarn-cache
       - run: *yarn
-      - save-cache: *save-yarn-cache-e2e
+      - save-cache: *save-yarn-cache
       - run: *clean
       - run: *i18n
       - run:
@@ -74,27 +46,34 @@ jobs:
           name: Flow
           command: yarn flow check
 
-  unit-tests:
+  build-unit-tests:
     <<: *defaults
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache-e2e
+      - restore-cache: *restore-yarn-cache
       - run: *yarn
-      - save-cache: *save-yarn-cache-e2e
+      - save-cache: *save-yarn-cache
+      - run: *clean
+      - run: *i18n
+      - run:
+          name: Babel build
+          command: yarn build:ci:es
+      - run: ./scripts/check_generated_files.sh
+      - run:
+          name: Webpack build
+          command: yarn build:ci:dist
       - run: echo 'export TZ=America/Los_Angeles' >> $BASH_ENV
       - run:
           name: Unit tests
           command: yarn test --maxWorkers=2
 
   e2e-tests:
-    working_directory: ~/buie
-    docker:
-      - image: cypress/base:10
+    <<: *defaults
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache-e2e
+      - restore-cache: *restore-yarn-cache
       - run: *yarn
-      - save-cache: *save-yarn-cache-e2e
+      - save-cache: *save-yarn-cache
       - run:
           name: E2E tests
           command: yarn test:e2e
@@ -104,6 +83,5 @@ workflows:
   lint_test_build:
     jobs:
       - lint
-      - unit-tests
-      - build
+      - build-unit-tests
       - e2e-tests
