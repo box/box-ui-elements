@@ -29,21 +29,74 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
     });
 
     describe('componentWillReceiveProps()', () => {
+        let isEditorStateEmpty;
+        let mockIsEditorStateEmpty;
+        let setStateSpy;
+        let instance;
+
+        beforeEach(() => {
+            isEditorStateEmpty = DraftJSMentionSelector.prototype.isEditorStateEmpty;
+            mockIsEditorStateEmpty = jest.fn();
+            DraftJSMentionSelector.prototype.isEditorStateEmpty = mockIsEditorStateEmpty;
+        });
+
+        afterEach(() => {
+            DraftJSMentionSelector.prototype.isEditorStateEmpty = isEditorStateEmpty;
+            jest.clearAllMocks();
+        });
+
+        const setupInstance = props => {
+            const wrapper = shallow(<DraftJSMentionSelector {...props} />);
+            instance = wrapper.instance();
+            setStateSpy = jest.spyOn(instance, 'setState');
+        };
+
         test('should update contacts and call checkValidity when called', () => {
             const newProps = {
                 contacts: [{ name: 'foo' }, { name: 'bar' }],
             };
 
-            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
-
-            const instance = wrapper.instance();
-
-            const setStateSpy = sandbox.spy(instance, 'setState');
-            sandbox.mock(instance).expects('checkValidity');
+            setupInstance(newProps);
 
             instance.componentWillReceiveProps(newProps);
 
-            expect(setStateSpy.calledOnce).toBe(true);
+            expect(setStateSpy).toHaveBeenCalledWith(newProps, instance.checkValidity);
+        });
+
+        test('should reset hasReceivedFirstInteraction to false if new empty EditorState', () => {
+            const newProps = {
+                editorState: 'nextEditorState',
+            };
+            const initialProps = { ...requiredProps, editorState: 'currentEditorState' };
+
+            setupInstance(initialProps);
+
+            mockIsEditorStateEmpty.mockReturnValueOnce(false).mockReturnValueOnce(true);
+
+            instance.componentWillReceiveProps(newProps);
+
+            expect(setStateSpy).toHaveBeenCalledWith(
+                { hasReceivedFirstInteraction: false, error: null },
+                instance.checkValidity,
+            );
+        });
+
+        test('should set hasReceivedFirstInteraction to true if EditorState is dirty', () => {
+            const newProps = {
+                editorState: 'nextEditorState',
+            };
+            const initialProps = { ...requiredProps, editorState: 'currentEditorState' };
+
+            setupInstance(initialProps);
+
+            mockIsEditorStateEmpty.mockReturnValueOnce(true).mockReturnValueOnce(false);
+
+            const mockCheckValidity = jest.fn();
+            instance.checkValidity = mockCheckValidity;
+
+            instance.componentWillReceiveProps(newProps);
+
+            expect(setStateSpy).toHaveBeenCalledWith({ hasReceivedFirstInteraction: true }, instance.checkValidity);
         });
     });
 
@@ -150,20 +203,24 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         [
             // internal editor state
             {
+                name: 'internal editor state',
                 internalEditorState: EditorState.createWithContent(contentStateForInternal),
                 externalEditorState: null,
+                checkValidityCallCount: 1,
             },
             // external editor state
             {
+                name: 'external editor state',
                 internalEditorState: null,
                 externalEditorState: EditorState.createWithContent(contentStateForExternal),
+                checkValidityCallCount: 0,
             },
-        ].forEach(({ internalEditorState, externalEditorState }) => {
+        ].forEach(({ name, internalEditorState, externalEditorState, checkValidityCallCount }) => {
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} editorState={externalEditorState} />);
 
             const instance = wrapper.instance();
 
-            test('should call onchange and checkValidity when called', () => {
+            test(`should call onchange and checkValidity when called: ${name}`, () => {
                 wrapper
                     .setState({
                         internalEditorState,
@@ -172,13 +229,16 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                         onChange: sandbox.mock().withArgs(dummyEditorState),
                     });
 
-                sandbox.mock(instance).expects('checkValidity');
+                sandbox
+                    .mock(instance)
+                    .expects('checkValidity')
+                    .exactly(checkValidityCallCount);
 
                 instance.handleChange(dummyEditorState);
             });
 
             if (internalEditorState) {
-                test('should call setState with the new EditorState', () => {
+                test(`should call setState with the new EditorState: ${name}`, () => {
                     sandbox
                         .mock(instance)
                         .expects('setState')
@@ -241,6 +301,25 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             sandbox.mock(instance).expects('handleValidityStateUpdateHandler');
 
             instance.checkValidity();
+        });
+    });
+
+    describe('isEditorStateEmpty', () => {
+        const emptyEditorState = EditorState.createEmpty();
+        const contentState = ContentState.createFromText('');
+        const editorStateWithChangeType = EditorState.push(emptyEditorState, contentState, 'backspace-character');
+        const nonEmptyEditorState = EditorState.createWithContent(ContentState.createFromText('hello'));
+
+        test.each`
+            testcase             | editorState                  | expectedResult
+            ${'empty'}           | ${emptyEditorState}          | ${true}
+            ${'not empty'}       | ${nonEmptyEditorState}       | ${false}
+            ${'has change type'} | ${editorStateWithChangeType} | ${false}
+        `('should return whether the editor state is empty or not: $testcase', ({ editorState, expectedResult }) => {
+            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
+            const instance = wrapper.instance();
+
+            expect(instance.isEditorStateEmpty(editorState)).toEqual(expectedResult);
         });
     });
 });
