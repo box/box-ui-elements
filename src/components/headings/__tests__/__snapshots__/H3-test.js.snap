@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/headings/H3 should render H3 1`] = `
+<h3
+  className="bdl-H3 moo"
+>
+  foo
+</h3>
+`;

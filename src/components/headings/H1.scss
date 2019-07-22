@@ -1,0 +1,11 @@
+@import '../../styles/variables';
+
+h1.bdl-H1 {
+    @include font-family;
+
+    color: $bdl-gray;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: .3px;
+    line-height: 28px;
+}

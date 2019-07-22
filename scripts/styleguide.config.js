@@ -115,6 +115,10 @@ const allSections = [
                 description: 'Implements the "media object" layout',
                 usageMode: 'expand',
             },
+            {
+                name: 'Headings',
+                content: '../src/components/headings/README.md',
+            },
         ],
     },
     {

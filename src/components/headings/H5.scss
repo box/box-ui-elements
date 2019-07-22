@@ -1,0 +1,12 @@
+@import '../../styles/variables';
+
+h5.bdl-H5 {
+    @include font-family;
+
+    color: $bdl-gray-62;
+    font-size: 11px;
+    font-weight: normal;
+    letter-spacing: .6px;
+    line-height: 16px;
+    text-transform: uppercase;
+}
