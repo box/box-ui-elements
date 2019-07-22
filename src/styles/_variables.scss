@@ -195,7 +195,7 @@ $bdl-line-height: 20px;
 @mixin common-typography {
     @include fonts;
 
-    color: $better-black;
+    color: $bdl-gray;
     letter-spacing: .01em;
     line-height: $bdl-line-height;
 }
