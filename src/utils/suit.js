@@ -26,10 +26,8 @@ type SuitOptions = {
 };
 
 export type SuitComponentProps = {
-    /** Component to use as outermost element, e.g., 'span' */
-    as: string | React.ElementType,
-    /** Additional class names */
-    className?: string,
+    as: React.ElementType, // Component to use as outermost element, e.g., 'span'
+    className?: string, // Additional class names
 };
 
 const suit = (baseClass: SuitComponentName, options: SuitOptions = {}) => {
