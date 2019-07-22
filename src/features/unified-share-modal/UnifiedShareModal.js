@@ -15,8 +15,8 @@ import { UpgradeBadge } from '../../components/badge';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
-import Classification from '../classification';
 
+import UnifiedShareModalTitle from './UnifiedShareModalTitle';
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
 import RemoveLinkConfirmModal from './RemoveLinkConfirmModal';
@@ -620,44 +620,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
         );
     }
 
-    renderModalTitle() {
-        const { isEmailLinkSectionExpanded, showCollaboratorList } = this.state;
-        const { item } = this.props;
-        const { name } = item;
-        let title;
-
-        if (isEmailLinkSectionExpanded) {
-            title = (
-                <FormattedMessage
-                    {...messages.emailModalTitle}
-                    values={{
-                        itemName: name,
-                    }}
-                />
-            );
-        } else if (showCollaboratorList) {
-            title = (
-                <FormattedMessage
-                    {...messages.collaboratorListTitle}
-                    values={{
-                        itemName: name,
-                    }}
-                />
-            );
-        } else {
-            title = (
-                <FormattedMessage
-                    {...messages.modalTitle}
-                    values={{
-                        itemName: name,
-                    }}
-                />
-            );
-        }
-
-        return title;
-    }
-
     renderCollaboratorList() {
         const { item, collaboratorsList, trackingProps } = this.props;
         const { name, type } = item;
@@ -682,26 +644,12 @@ class UnifiedShareModal extends React.Component<Props, State> {
         return listContent;
     }
 
-    renderTitle() {
-        const { classification } = this.props;
-        const { advisoryMessage, name } = classification;
-        return (
-            <span className="modal-title-label">
-                {this.renderModalTitle()}
-                {advisoryMessage && (
-                    <span className="EditClassificationButton">
-                        <Classification advisoryMessage={advisoryMessage} messageStyle="tooltip" name={name} />
-                    </span>
-                )}
-            </span>
-        );
-    }
-
     render() {
         // Shared link section props
         const {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
+            classification,
             classificationName,
             focusSharedLinkOnLoad,
             item,
@@ -753,7 +701,14 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     className="unified-share-modal"
                     isOpen={isConfirmModalOpen ? false : isOpen}
                     onRequestClose={submitting ? undefined : onRequestClose}
-                    title={this.renderTitle()}
+                    title={
+                        <UnifiedShareModalTitle
+                            classification={classification}
+                            isEmailLinkSectionExpanded={isEmailLinkSectionExpanded}
+                            showCollaboratorList={showCollaboratorList}
+                            item={item}
+                        />
+                    }
                     {...extendedModalProps}
                 >
                     <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
