@@ -48,8 +48,8 @@ type Props = {
 type State = {
     contacts: SelectorItems,
     error: ?Object,
-    hasReceivedFirstInteraction: boolean,
     internalEditorState: ?EditorState,
+    isTouched: boolean,
 };
 
 class DraftJSMentionSelector extends React.Component<Props, State> {
@@ -75,49 +75,70 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         // otherwise we initialize it here
         this.state = {
             contacts: [],
-            hasReceivedFirstInteraction: false,
+            isTouched: false,
             internalEditorState: props.editorState ? null : EditorState.createEmpty(mentionDecorator),
             error: null,
         };
     }
 
-    /**
-     * Lifecycle method that gets called when a component is receiving new props
-     * @param {object} nextProps Props the component is receiving
-     * @returns {void}
-     */
-    componentWillReceiveProps(nextProps: Props) {
-        const { editorState } = this.props;
-        const { contacts, editorState: nextEditorState } = nextProps;
-        let nextState = {};
+    static getDerivedStateFromProps(nextProps: Props) {
+        const { contacts } = nextProps;
+        let nextState = null;
 
         if (contacts) {
             nextState = { contacts };
         }
 
-        // Only check if operating in the mode where EditorState is received as a
-        // prop vs internalEditorState stored in state
-        if (editorState) {
-            const isCurrentEditorStateEmpty = this.isEditorStateEmpty(editorState);
-            const isNextEditorStateEmpty = this.isEditorStateEmpty(nextEditorState);
-            const isNewEditorState = isNextEditorStateEmpty && !isCurrentEditorStateEmpty;
-            const isEditorStateDirty = isCurrentEditorStateEmpty && !isNextEditorStateEmpty;
+        return nextState;
+    }
+
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        const { internalEditorState: prevInternalEditorState } = prevState;
+        const { internalEditorState } = this.state;
+
+        const { editorState: prevEditorStateFromProps } = prevProps;
+        const { editorState } = this.props;
+
+        let prevEditorState;
+        let currentEditorState;
+
+        // Determine whether we're working with the internal editor state or
+        // external editor state passed in from props
+        if (prevInternalEditorState) {
+            prevEditorState = prevInternalEditorState;
+            currentEditorState = internalEditorState;
+        } else if (prevEditorStateFromProps) {
+            prevEditorState = prevEditorStateFromProps;
+            currentEditorState = editorState;
+        }
+
+        if (prevEditorState && currentEditorState && prevEditorState !== currentEditorState) {
+            const isPreviousEditorStateEmpty = this.isEditorStateEmpty(prevEditorState);
+            const isCurrentEditorStateEmpty = this.isEditorStateEmpty(currentEditorState);
+            const isNewEditorState = isCurrentEditorStateEmpty && !isPreviousEditorStateEmpty;
+            const isEditorStateDirty = isPreviousEditorStateEmpty && !isCurrentEditorStateEmpty;
 
             // Detect case where controlled EditorState is created anew and empty.
             // If next editorState is empty and the current editorState is not empty
             // that means it is a new empty state and this component should not be marked dirty
             if (isNewEditorState) {
-                nextState = { ...nextState, hasReceivedFirstInteraction: false, error: null };
+                this.setState({ isTouched: false, error: null }, this.checkValidityIfAllowed);
             } else if (isEditorStateDirty) {
                 // Detect case where controlled EditorState has been made dirty
                 // If the current editorState is empty and the next editorState is not
                 // empty then this is the first interaction so mark this component dirty
-                nextState = { ...nextState, hasReceivedFirstInteraction: true };
+                this.setState({ isTouched: true }, this.checkValidityIfAllowed);
+            } else {
+                this.checkValidityIfAllowed();
             }
         }
+    }
 
-        if (Object.keys(nextState).length !== 0) {
-            this.setState(nextState, this.checkValidity);
+    checkValidityIfAllowed() {
+        const { validateOnBlur }: Props = this.props;
+
+        if (!validateOnBlur) {
+            this.checkValidity();
         }
     }
 
@@ -196,32 +217,14 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const { onChange } = this.props;
 
         if (internalEditorState) {
-            const isCurrentEditorStateEmpty = this.isEditorStateEmpty(internalEditorState);
-            const isNextEditorStateEmpty = this.isEditorStateEmpty(nextEditorState);
-            const isEditorStateDirty = isCurrentEditorStateEmpty && !isNextEditorStateEmpty;
-
-            let nextState = { internalEditorState: nextEditorState };
-
-            // Detect case where controlled EditorState has been made dirty
-            // If the current editorState is empty and the next editorState is not
-            // empty then this is the first interaction so mark this component dirty
-            if (isEditorStateDirty) {
-                nextState = { ...nextState, hasReceivedFirstInteraction: true };
-            }
-
-            this.setState(nextState, () => {
-                if (onChange) {
-                    onChange(nextEditorState);
-                }
-                this.checkValidity();
-            });
+            this.setState({ internalEditorState: nextEditorState }, () => onChange && onChange(nextEditorState));
         } else if (onChange) {
             onChange(nextEditorState);
         }
     };
 
     handleValidityStateUpdateHandler = () => {
-        if (!this.state.hasReceivedFirstInteraction) {
+        if (!this.state.isTouched) {
             return;
         }
 
