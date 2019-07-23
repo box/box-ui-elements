@@ -52,7 +52,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
             />
             <FormattedMessage
               defaultMessage="Delete"
-              id="be.deleteLabel"
+              id="be.contentSidebar.activityFeed.comment.commentDeleteMenuItem"
             />
           </MenuItem>
         </MediaMenu>

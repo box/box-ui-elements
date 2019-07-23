@@ -12,6 +12,11 @@ const messages = defineMessages({
         defaultMessage: '{time, date, full} at {time, time, short}',
         description: 'App Activity created at full date time for title',
     },
+    appActivityDeleteMenuItem: {
+        id: 'be.appActivity.deleteMenuItem',
+        defaultMessage: 'Delete',
+        description: 'Text to display in the delete app activity submit button',
+    },
     appActivityDeletePrompt: {
         id: 'be.appActivity.deletePrompt',
         defaultMessage: 'Are you sure you want to permanently delete this app activity?',

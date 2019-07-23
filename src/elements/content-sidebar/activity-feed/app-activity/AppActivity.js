@@ -11,7 +11,6 @@ import TetherComponent from 'react-tether';
 import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
 
 import CommentDeleteConfirmation from '../comment/CommentDeleteConfirmation';
-import deleteMessages from '../inline-delete/messages';
 import IconTrash from '../../../../icons/general/IconTrash';
 import Media from '../../../../components/media';
 import messages from './messages';
@@ -147,7 +146,7 @@ class AppActivity extends React.PureComponent<Props, State> {
                             <Media.Menu isDisabled={isConfirmingDelete}>
                                 <MenuItem onClick={this.handleDeleteClick}>
                                     <IconTrash color={bdlGray80} />
-                                    <FormattedMessage {...deleteMessages.deleteLabel} />
+                                    <FormattedMessage {...messages.appActivityDeleteMenuItem} />
                                 </MenuItem>
                             </Media.Menu>
 

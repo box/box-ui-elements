@@ -17,8 +17,6 @@ import { MenuItem } from '../../../../components/menu';
 import IconTrash from '../../../../icons/general/IconTrash';
 import IconPencil from '../../../../icons/general/IconPencil';
 import messages from './messages';
-import commonMessages from '../../../common/messages';
-import deleteMessages from '../inline-delete/messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 
@@ -172,7 +170,7 @@ class Comment extends React.Component<Props, State> {
                                         >
                                             <IconPencil color={bdlGray80} />
                                             <FormattedMessage
-                                                {...(isTask ? messages.taskEditMenuItem : commonMessages.editLabel)}
+                                                {...(isTask ? messages.taskEditMenuItem : messages.commentEditMenuItem)}
                                             />
                                         </MenuItem>
                                     )}
@@ -185,7 +183,9 @@ class Comment extends React.Component<Props, State> {
                                         >
                                             <IconTrash color={bdlGray80} />
                                             <FormattedMessage
-                                                {...(isTask ? messages.taskDeleteMenuItem : deleteMessages.deleteLabel)}
+                                                {...(isTask
+                                                    ? messages.taskDeleteMenuItem
+                                                    : messages.commentDeleteMenuItem)}
                                             />
                                         </MenuItem>
                                     )}
