@@ -135,113 +135,53 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
-    tasksApiNew = {
-        createTask: (
-            message: string,
-            assignees: SelectorItems,
-            taskType: TaskType,
-            dueAt: ?string,
-            onSuccess: ?Function,
-            onError: ?Function,
-        ): void => {
-            const { currentUser } = this.state;
-            const { file, api } = this.props;
+    createTask = (
+        message: string,
+        assignees: SelectorItems,
+        taskType: TaskType,
+        dueAt: ?string,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ): void => {
+        const { currentUser } = this.state;
+        const { file, api } = this.props;
 
-            if (!currentUser) {
-                throw getBadUserError();
+        if (!currentUser) {
+            throw getBadUserError();
+        }
+        const errorCallback = (e, code, contextInfo) => {
+            if (onError) {
+                onError(e, code, contextInfo);
             }
-            const errorCallback = (e, code, contextInfo) => {
-                if (onError) {
-                    onError(e, code, contextInfo);
-                }
-                this.feedErrorCallback(e, code, contextInfo);
-            };
-            const successCallback = () => {
-                if (onSuccess) {
-                    onSuccess();
-                }
-                this.feedSuccessCallback();
-            };
+            this.feedErrorCallback(e, code, contextInfo);
+        };
+        const successCallback = () => {
+            if (onSuccess) {
+                onSuccess();
+            }
+            this.feedSuccessCallback();
+        };
 
-            api.getFeedAPI(false).createTaskNew(
-                file,
-                currentUser,
-                message,
-                assignees,
-                taskType,
-                dueAt,
-                successCallback,
-                errorCallback,
-            );
+        api.getFeedAPI(false).createTaskNew(
+            file,
+            currentUser,
+            message,
+            assignees,
+            taskType,
+            dueAt,
+            successCallback,
+            errorCallback,
+        );
 
-            // need to load the pending item
-            this.fetchFeedItems();
-        },
-        deleteTask: (task: TaskNew): void => {
-            const { file, api, onTaskDelete = noop } = this.props;
-            api.getFeedAPI(false).deleteTaskNew(
-                file,
-                task,
-                (taskId: string) => {
-                    this.feedSuccessCallback();
-                    onTaskDelete(taskId);
-                },
-                this.feedErrorCallback,
-            );
-
-            // need to load the pending item
-            this.fetchFeedItems();
-        },
-        updateTask: (task: TaskUpdatePayload, onSuccess: ?Function, onError: ?Function): void => {
-            const { file, api, onTaskUpdate = noop } = this.props;
-            const errorCallback = (e, code) => {
-                if (onError) {
-                    onError(e, code);
-                }
-                this.feedErrorCallback(e, code);
-            };
-            const successCallback = () => {
-                this.feedSuccessCallback();
-
-                if (onSuccess) {
-                    onSuccess();
-                }
-
-                onTaskUpdate();
-            };
-
-            api.getFeedAPI(false).updateTaskNew(file, task, successCallback, errorCallback);
-
-            // need to load the pending item
-            this.fetchFeedItems();
-        },
-        updateTaskAssignment: (taskId: string, taskAssignmentId: string, status: TaskAssignmentStatus): void => {
-            const { file, api } = this.props;
-
-            api.getFeedAPI(false).updateTaskCollaborator(
-                file,
-                taskId,
-                taskAssignmentId,
-                status,
-                this.feedSuccessCallback,
-                this.feedErrorCallback,
-            );
-
-            // need to load the pending item
-            this.fetchFeedItems();
-        },
+        // need to load the pending item
+        this.fetchFeedItems();
     };
 
-    /**
-     * Deletes a task via the API.
-     *
-     * @param {Object} args - A subset of the task
-     */
-    deleteTask = ({ id }: { id: string }): void => {
+    deleteTask = (task: TaskNew): void => {
         const { file, api, onTaskDelete = noop } = this.props;
-        api.getFeedAPI(false).deleteTask(
+        api.getFeedAPI(false).deleteTaskNew(
             file,
-            id,
+            task,
             (taskId: string) => {
                 this.feedSuccessCallback();
                 onTaskDelete(taskId);
@@ -253,32 +193,34 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
-    /**
-     * Updates a task in the state via the API.
-     *
-     * @param {Object} args - A subset of the task
-     * @return void
-     */
-    updateTask = ({ text, id }: { id: string, text: string }): void => {
-        const { file, api } = this.props;
-        api.getFeedAPI(false).updateTask(file, id, text, this.feedSuccessCallback, this.feedErrorCallback);
+    updateTask = (task: TaskUpdatePayload, onSuccess: ?Function, onError: ?Function): void => {
+        const { file, api, onTaskUpdate = noop } = this.props;
+        const errorCallback = (e, code) => {
+            if (onError) {
+                onError(e, code);
+            }
+            this.feedErrorCallback(e, code);
+        };
+        const successCallback = () => {
+            this.feedSuccessCallback();
+
+            if (onSuccess) {
+                onSuccess();
+            }
+
+            onTaskUpdate();
+        };
+
+        api.getFeedAPI(false).updateTaskNew(file, task, successCallback, errorCallback);
 
         // need to load the pending item
         this.fetchFeedItems();
     };
 
-    /**
-     * Updates the task assignment
-     *
-     * @param {string} taskId - ID of task to be updated
-     * @param {string} taskAssignmentId - Task assignment ID
-     * @param {TaskAssignmentStatus} status - New task assignment status
-     * @return void
-     */
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskAssignmentStatus): void => {
         const { file, api } = this.props;
 
-        api.getFeedAPI(false).updateTaskAssignment(
+        api.getFeedAPI(false).updateTaskCollaborator(
             file,
             taskId,
             taskAssignmentId,
@@ -347,36 +289,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Creates a task via the API
-     *
-     * @param {string} message - Task text
-     * @param {Array} assignees - List of assignees
-     * @param {number} dueAt - Task's due date
-     * @return {void}
-     */
-    createTask = (message: string, assignees: SelectorItems, dueAt: ?string): void => {
-        const { currentUser } = this.state;
-        const { file, api } = this.props;
-
-        if (!currentUser) {
-            throw getBadUserError();
-        }
-
-        api.getFeedAPI(false).createTask(
-            file,
-            currentUser,
-            message,
-            assignees,
-            dueAt,
-            this.feedSuccessCallback,
-            this.feedErrorCallback,
-        );
-
-        // need to load the pending item
-        this.fetchFeedItems();
-    };
-
-    /**
      * Deletes an app activity item via the API.
      *
      * @param {Object} args - A subset of the app activity
@@ -398,7 +310,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const { file, api, features } = this.props;
-        const shouldShowNewTasks = isFeatureEnabled(features, 'activityFeed.tasks.newApi');
+        const shouldShowNewTasks = true;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
@@ -578,12 +490,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     renderAddTaskButton = () => {
         const { isDisabled } = this.props;
         const { approverSelectorContacts } = this.state;
-        const {
-            getApproverWithQuery,
-            getAvatarUrl,
-            tasksApiNew: { createTask },
-            onTaskModalClose,
-        } = this;
+        const { getApproverWithQuery, getAvatarUrl, createTask, onTaskModalClose } = this;
         const props = {
             isDisabled,
             onTaskModalClose,
@@ -601,7 +508,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl, features } = this.props;
+        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
         const {
             currentUser,
             approverSelectorContacts,
@@ -610,18 +517,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activityFeedError,
             currentUserError,
         } = this.state;
-
-        const updateTaskAssignment = isFeatureEnabled(features, 'activityFeed.tasks.newApi')
-            ? this.tasksApiNew.updateTaskAssignment
-            : this.updateTaskAssignment;
-
-        const updateTask = isFeatureEnabled(features, 'activityFeed.tasks.newApi')
-            ? this.tasksApiNew.updateTask
-            : this.updateTask;
-
-        const deleteTask = isFeatureEnabled(features, 'activityFeed.tasks.newApi')
-            ? this.tasksApiNew.deleteTask
-            : this.deleteTask;
 
         return (
             <SidebarContent
@@ -640,10 +535,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
                     onTaskCreate={this.createTask}
-                    onTaskDelete={deleteTask}
-                    onTaskUpdate={updateTask}
+                    onTaskDelete={this.deleteTask}
+                    onTaskUpdate={this.updateTask}
                     onTaskModalClose={this.onTaskModalClose}
-                    onTaskAssignmentUpdate={updateTaskAssignment}
+                    onTaskAssignmentUpdate={this.updateTaskAssignment}
                     getApproverWithQuery={this.getApproverWithQuery}
                     getMentionWithQuery={this.getMentionWithQuery}
                     onVersionHistoryClick={onVersionHistoryClick}
