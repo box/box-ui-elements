@@ -145,12 +145,10 @@ class AppActivity extends React.PureComponent<Props, State> {
                             targetAttachment="bottom right"
                         >
                             <Media.Menu isDisabled={isConfirmingDelete}>
-                                {canDelete && (
-                                    <MenuItem onClick={this.handleDeleteClick}>
-                                        <IconTrash color={bdlGray80} />
-                                        <FormattedMessage {...deleteMessages.deleteLabel} />
-                                    </MenuItem>
-                                )}
+                                <MenuItem onClick={this.handleDeleteClick}>
+                                    <IconTrash color={bdlGray80} />
+                                    <FormattedMessage {...deleteMessages.deleteLabel} />
+                                </MenuItem>
                             </Media.Menu>
 
                             {isConfirmingDelete && (
