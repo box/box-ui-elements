@@ -262,51 +262,38 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
     });
 
     describe('handleChange()', () => {
-        const contentStateForInternal = ContentState.createFromText('internal');
-        const contentStateForExternal = ContentState.createFromText('external');
+        let wrapper;
+        let instance;
+        let mockOnChange;
+        let spySetState;
 
-        const dummyEditorState = EditorState.createEmpty();
-        [
-            // internal editor state
-            {
-                name: 'internal editor state',
-                internalEditorState: EditorState.createWithContent(contentStateForInternal),
-                externalEditorState: null,
-            },
-            // external editor state
-            {
-                name: 'external editor state',
-                internalEditorState: null,
-                externalEditorState: EditorState.createWithContent(contentStateForExternal),
-            },
-        ].forEach(({ name, internalEditorState, externalEditorState }) => {
-            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} editorState={externalEditorState} />);
+        const setup = props => {
+            mockOnChange = jest.fn();
 
-            const instance = wrapper.instance();
+            wrapper = shallow(<DraftJSMentionSelector {...props} onChange={mockOnChange} />);
+            instance = wrapper.instance();
 
-            test(`should call onchange and checkValidity when called: ${name}`, () => {
-                wrapper
-                    .setState({
-                        internalEditorState,
-                    })
-                    .setProps({
-                        onChange: sandbox.mock().withArgs(dummyEditorState),
-                    });
+            spySetState = jest.spyOn(instance, 'setState');
+        };
 
-                instance.handleChange(dummyEditorState);
-            });
+        test('should call onChange and setState if internal editor state exists', () => {
+            setup({ ...requiredProps });
+            const dummyEditorState = EditorState.createEmpty();
 
-            if (internalEditorState) {
-                test(`should call setState with the new EditorState: ${name}`, () => {
-                    sandbox
-                        .mock(instance)
-                        .expects('setState')
-                        .withArgs({
-                            internalEditorState: dummyEditorState,
-                        });
-                    instance.handleChange(dummyEditorState);
-                });
-            }
+            instance.handleChange(dummyEditorState);
+
+            expect(mockOnChange).toHaveBeenCalledWith(dummyEditorState);
+            expect(spySetState).toHaveBeenCalledWith({ internalEditorState: dummyEditorState });
+        });
+
+        test('should call onChange and not setState if no internal editor state exists', () => {
+            const dummyEditorState = EditorState.createEmpty();
+            setup({ ...requiredProps, editorState: dummyEditorState });
+
+            instance.handleChange(dummyEditorState);
+
+            expect(mockOnChange).toHaveBeenCalledWith(dummyEditorState);
+            expect(spySetState).not.toHaveBeenCalled();
         });
     });
 

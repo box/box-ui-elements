@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { CompositeDecorator, EditorState } from 'draft-js';
+import noop from 'lodash/noop';
 
 import DraftJSMentionSelectorCore from './DraftJSMentionSelectorCore';
 import DraftMentionItem from './DraftMentionItem';
@@ -35,7 +36,7 @@ type Props = {
     mentionTriggers?: Array<string>,
     minLength?: number,
     name: string,
-    onChange?: Function,
+    onChange: Function,
     onFocus?: Function,
     onMention?: Function,
     onReturn?: Function,
@@ -55,6 +56,7 @@ type State = {
 class DraftJSMentionSelector extends React.Component<Props, State> {
     static defaultProps = {
         isRequired: false,
+        onChange: noop,
         validateOnBlur: true,
     };
 
@@ -99,18 +101,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const { editorState: prevEditorStateFromProps } = prevProps;
         const { editorState } = this.props;
 
-        let prevEditorState;
-        let currentEditorState;
-
         // Determine whether we're working with the internal editor state or
         // external editor state passed in from props
-        if (prevInternalEditorState) {
-            prevEditorState = prevInternalEditorState;
-            currentEditorState = internalEditorState;
-        } else if (prevEditorStateFromProps) {
-            prevEditorState = prevEditorStateFromProps;
-            currentEditorState = editorState;
-        }
+        const prevEditorState = prevInternalEditorState || prevEditorStateFromProps;
+        const currentEditorState = internalEditorState || editorState;
 
         // Only handle isTouched state transitions and check validity if the
         // editorState references are different. This is to avoid getting stuck
@@ -126,7 +120,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         }
     }
 
-    getDerivedStateFromEditorState(currentEditorState: EditorState, previousEditorState: EditorState): State {
+    getDerivedStateFromEditorState(currentEditorState: EditorState, previousEditorState: EditorState) {
         const isPreviousEditorStateEmpty = this.isEditorStateEmpty(previousEditorState);
         const isCurrentEditorStateEmpty = this.isEditorStateEmpty(currentEditorState);
         const isNewEditorState = isCurrentEditorStateEmpty && !isPreviousEditorStateEmpty;
@@ -227,13 +221,13 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @returns {void}
      */
     handleChange = (nextEditorState: EditorState) => {
-        const { internalEditorState } = this.state;
-        const { onChange } = this.props;
+        const { internalEditorState }: State = this.state;
+        const { onChange }: Props = this.props;
+
+        onChange(nextEditorState);
 
         if (internalEditorState) {
-            this.setState({ internalEditorState: nextEditorState }, () => onChange && onChange(nextEditorState));
-        } else if (onChange) {
-            onChange(nextEditorState);
+            this.setState({ internalEditorState: nextEditorState });
         }
     };
 
