@@ -1503,7 +1503,7 @@ class Feed extends Base {
      * @return {void}
      */
     deleteAppActivityErrorCallback = (e: ElementsXhrError, code: string, id: string) => {
-        this.updateFeedItem(this.createFeedError(commonMessages.appActivityDeleteErrorMessage), id);
+        this.updateFeedItem(this.createFeedError(messages.appActivityDeleteErrorMessage), id);
         this.feedErrorCallback(true, e, code);
     };
 

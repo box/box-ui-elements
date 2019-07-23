@@ -65,7 +65,7 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
         text={
           <FormattedMessage
             defaultMessage="{time, date, full} at {time, time, short}"
-            id="be.appActivityCreatedAtFullDateTime"
+            id="be.appActivity.createdAtFullDateTime"
             values={
               Object {
                 "time": 1551989569223,

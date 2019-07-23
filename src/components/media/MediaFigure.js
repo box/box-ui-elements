@@ -5,7 +5,7 @@ import './Media.scss';
 
 type Props = {
     /** Component to use as outermost element, e.g., 'div' */
-    as?: React.ElementType,
+    as: React.ElementType,
     /** Child elements */
     children: React.Node,
     /** Additional class names */

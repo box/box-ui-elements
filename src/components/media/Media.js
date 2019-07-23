@@ -8,7 +8,7 @@ import './Media.scss';
 
 type Props = {
     /** Component to use as outermost element, e.g., 'li' */
-    as?: React.ElementType,
+    as: React.ElementType,
     /** Child elements */
     children: React.ChildrenArray<React.Element<typeof MediaFigure | typeof MediaBody | typeof MediaMenu>>,
     /** Additional class names */
