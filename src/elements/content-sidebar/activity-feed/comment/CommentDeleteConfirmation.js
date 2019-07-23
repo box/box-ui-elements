@@ -4,22 +4,20 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, type MessageDescriptor } from 'react-intl';
 
-import { Overlay } from '../../../../components/flyout';
-import PrimaryButton from '../../../../components/primary-button';
 import Button from '../../../../components/button';
 import commonMessages from '../../../common/messages';
-import messages from './messages';
+import PrimaryButton from '../../../../components/primary-button';
+import { KEYS } from '../../../../constants';
+import { Overlay } from '../../../../components/flyout';
 import './CommentDeleteConfirmation.scss';
-
-import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK, KEYS } from '../../../../constants';
 
 type Props = {
     isOpen: boolean,
+    message: MessageDescriptor,
     onDeleteCancel: Function,
     onDeleteConfirm: Function,
-    type: typeof COMMENT_TYPE_DEFAULT | typeof COMMENT_TYPE_TASK,
 };
 
 class CommentDeleteConfirmation extends React.Component<Props> {
@@ -43,20 +41,18 @@ class CommentDeleteConfirmation extends React.Component<Props> {
     };
 
     render() {
-        const { type, onDeleteCancel, onDeleteConfirm } = this.props;
-        const deleteConfirmMessage =
-            type === COMMENT_TYPE_DEFAULT ? messages.commentDeletePrompt : messages.taskDeletePrompt;
+        const { message, onDeleteCancel, onDeleteConfirm } = this.props;
 
         return (
             <Overlay
                 className="be-modal bcs-CommentDeleteConfirmation"
                 onKeyDown={this.onKeyDown}
-                shouldOutlineFocus={false}
-                shouldDefaultFocus
                 role="dialog"
+                shouldDefaultFocus
+                shouldOutlineFocus={false}
             >
                 <div className="bcs-CommentDeleteConfirmation-prompt">
-                    <FormattedMessage {...deleteConfirmMessage} />
+                    <FormattedMessage {...message} />
                 </div>
                 <div>
                     <Button className="bcs-CommentDeleteConfirmation-cancel" onClick={onDeleteCancel} type="button">

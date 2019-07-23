@@ -1,88 +1,103 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should correctly render an app activity item 1`] = `
-<div
-  className="bcs-app-activity-container"
+<Media
+  as="div"
+  className="bcs-AppActivity"
   data-resin-feature="app_activity_template_12345_card"
   data-resin-target="loaded"
 >
-  <div
-    className="bcs-app-activity"
+  <MediaFigure
+    as="figure"
   >
     <img
       alt="My Application Icon"
-      className="bcs-app-activity-icon"
+      className="bcs-AppActivity-icon"
       src="foo/bar/baz.jpg"
     />
-    <div
-      className="bcs-app-activity-content"
+  </MediaFigure>
+  <MediaBody
+    className="bcs-AppActivity-body"
+  >
+    <TetherComponent
+      attachment="top right"
+      className="bcs-AppActivity-confirm"
+      constraints={
+        Array [
+          Object {
+            "attachment": "together",
+            "to": "scrollParent",
+          },
+        ]
+      }
+      renderElementTag="div"
+      renderElementTo={null}
+      targetAttachment="bottom right"
     >
-      <div
-        className="bcs-app-activity-headline"
+      <MediaMenu
+        dropdownProps={Object {}}
+        isDisabled={false}
       >
-        <span
-          className="bcs-app-activity-app-name"
+        <MenuItem
+          onClick={[Function]}
         >
-          My Application
-        </span>
-        <InlineDelete
-          id="activity_12345"
-          message={
-            <FormattedMessage
-              defaultMessage="Delete App Activity?"
-              id="be.appActivityDeletePrompt"
-            />
-          }
-          onDelete={[MockFunction]}
-          permissions={
-            Object {
-              "can_delete": true,
-            }
-          }
-        />
-      </div>
-      <div>
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          isDisabled={false}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.appActivityCreatedAtFullDateTime"
-              values={
-                Object {
-                  "time": 1551989569223,
-                }
+          <IconTrash
+            color="#4e4e4e"
+          />
+          <FormattedMessage
+            defaultMessage="Delete"
+            id="be.appActivity.deleteMenuItem"
+          />
+        </MenuItem>
+      </MediaMenu>
+    </TetherComponent>
+    <figcaption
+      className="bcs-AppActivity-headline"
+    >
+      My Application
+    </figcaption>
+    <div>
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="{time, date, full} at {time, time, short}"
+            id="be.appActivity.createdAtFullDateTime"
+            values={
+              Object {
+                "time": 1551989569223,
               }
-            />
-          }
-          theme="default"
-        >
-          <small
-            className="bcs-app-activity-created-at"
-          >
-            <ReadableTime
-              relativeThreshold={3600000}
-              timestamp={1551989569223}
-            />
-          </small>
-        </Tooltip>
-      </div>
-      You did something from 
-      <Link
-        className="bcs-app-activity-link"
-        data-resin-action="bar"
-        data-resin-target="foo"
-        href=""
-        key="app_actvity_link_"
-        rel="roreferrer noopener"
-        target="_blank"
+            }
+          />
+        }
+        theme="default"
       >
-        This App
-      </Link>
+        <small
+          className="bcs-AppActivity-timestamp"
+        >
+          <ReadableTime
+            alwaysShowTime={true}
+            relativeThreshold={3600000}
+            timestamp={1551989569223}
+          />
+        </small>
+      </Tooltip>
     </div>
-  </div>
-</div>
+    You did something from 
+    <Link
+      className="bcs-AppActivity-link"
+      data-resin-action="bar"
+      data-resin-target="foo"
+      href=""
+      key="app_actvity_link_"
+      rel="roreferrer noopener"
+      target="_blank"
+    >
+      This App
+    </Link>
+  </MediaBody>
+</Media>
 `;
