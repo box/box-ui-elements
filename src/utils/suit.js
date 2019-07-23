@@ -30,21 +30,18 @@ export type SuitComponentProps = {
     className?: string, // Additional class names
 };
 
-const suit = (baseClass: SuitComponentName, options: SuitOptions = {}) => {
+const suit = (baseClass: SuitComponentName, options: SuitOptions = {}): React.ComponentType<SuitComponentProps> => {
     const { tag = DEFAULT_ELEMENT, scope = DEFAULT_PREFIX } = options;
     const scopedClassname = `${scope}-${baseClass}`;
 
-    const SuitComponent = ({ as: Tag, className, ...rest }: SuitComponentProps) => (
-        <Tag className={classnames(scopedClassname, className)} {...rest} />
-    );
-
-    SuitComponent.defaultProps = {
-        as: tag,
+    const forwardRef = (props: SuitComponentProps, ref) => {
+        const { as: Tag = tag, className, ...rest } = props;
+        return <Tag className={classnames(scopedClassname, className)} ref={ref} {...rest} />;
     };
 
-    SuitComponent.displayName = upperFirst(camelCase(baseClass));
+    forwardRef.displayName = upperFirst(camelCase(baseClass));
 
-    return SuitComponent;
+    return React.forwardRef(forwardRef);
 };
 
 export default suit;
