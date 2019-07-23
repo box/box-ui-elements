@@ -1,4 +1,5 @@
 // <reference types="Cypress" />
+import localize from '../../support/i18n';
 
 describe('ContentSidebar', () => {
     const helpers = {
@@ -94,6 +95,59 @@ describe('ContentSidebar', () => {
                 .contains('Back')
                 .click();
             cy.get('@versionHistory').should('not.exist');
+        });
+    });
+
+    describe('activity feed comments', () => {
+        const getDraftJSEditor = () => cy.get('[contenteditable]');
+        const getTooltip = () => cy.get('[role="tooltip"]');
+        const getCancelButton = () =>
+            cy.contains(localize('be.contentSidebar.activityFeed.approvalCommentForm.commentCancel'));
+
+        beforeEach(() => {
+            cy.server();
+            cy.route('POST', '**/2.0/comments/*').as('createComment');
+
+            helpers.load({
+                fileId: Cypress.env('FILE_ID_DOC'),
+            });
+
+            cy.getByTestId('bcs-content').should('exist');
+            cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
+        });
+
+        it('should not show required error if focused and blurred', () => {
+            getDraftJSEditor().click();
+            getCancelButton();
+            getTooltip().should('not.exist');
+        });
+
+        it('should show required error if type and then delete text', () => {
+            getDraftJSEditor()
+                .click()
+                .type('qwerty')
+                .clear();
+
+            getTooltip()
+                .should('exist')
+                .contains(localize('boxui.validation.requiredError'));
+        });
+
+        it('should reset validation errors if comment is cancelled', () => {
+            getDraftJSEditor()
+                .click()
+                .type('qwerty')
+                .clear();
+
+            getTooltip()
+                .should('exist')
+                .contains(localize('boxui.validation.requiredError'));
+
+            getCancelButton().click();
+
+            getDraftJSEditor().click();
+
+            getTooltip().should('not.exist');
         });
     });
 });
