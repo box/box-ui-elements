@@ -85,13 +85,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
     static getDerivedStateFromProps(nextProps: Props) {
         const { contacts } = nextProps;
-        let nextState = null;
-
-        if (contacts) {
-            nextState = { contacts };
-        }
-
-        return nextState;
+        return contacts ? { contacts } : null;
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
