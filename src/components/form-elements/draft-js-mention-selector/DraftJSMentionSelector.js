@@ -112,26 +112,40 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             currentEditorState = editorState;
         }
 
+        // Only handle isTouched state transitions and check validity if the
+        // editorState references are different. This is to avoid getting stuck
+        // in an infinite loop of checking validity because checkValidity always
+        // calls setState({ error })
         if (prevEditorState && currentEditorState && prevEditorState !== currentEditorState) {
-            const isPreviousEditorStateEmpty = this.isEditorStateEmpty(prevEditorState);
-            const isCurrentEditorStateEmpty = this.isEditorStateEmpty(currentEditorState);
-            const isNewEditorState = isCurrentEditorStateEmpty && !isPreviousEditorStateEmpty;
-            const isEditorStateDirty = isPreviousEditorStateEmpty && !isCurrentEditorStateEmpty;
-
-            // Detect case where controlled EditorState is created anew and empty.
-            // If next editorState is empty and the current editorState is not empty
-            // that means it is a new empty state and this component should not be marked dirty
-            if (isNewEditorState) {
-                this.setState({ isTouched: false, error: null }, this.checkValidityIfAllowed);
-            } else if (isEditorStateDirty) {
-                // Detect case where controlled EditorState has been made dirty
-                // If the current editorState is empty and the next editorState is not
-                // empty then this is the first interaction so mark this component dirty
-                this.setState({ isTouched: true }, this.checkValidityIfAllowed);
+            const newState = this.getDerivedStateFromEditorState(currentEditorState, prevEditorState);
+            if (newState) {
+                this.setState(newState, this.checkValidityIfAllowed);
             } else {
                 this.checkValidityIfAllowed();
             }
         }
+    }
+
+    getDerivedStateFromEditorState(currentEditorState: EditorState, previousEditorState: EditorState): State {
+        const isPreviousEditorStateEmpty = this.isEditorStateEmpty(previousEditorState);
+        const isCurrentEditorStateEmpty = this.isEditorStateEmpty(currentEditorState);
+        const isNewEditorState = isCurrentEditorStateEmpty && !isPreviousEditorStateEmpty;
+        const isEditorStateDirty = isPreviousEditorStateEmpty && !isCurrentEditorStateEmpty;
+
+        let newState = null;
+        // Detect case where controlled EditorState is created anew and empty.
+        // If next editorState is empty and the current editorState is not empty
+        // that means it is a new empty state and this component should not be marked dirty
+        if (isNewEditorState) {
+            newState = { isTouched: false, error: null };
+        } else if (isEditorStateDirty) {
+            // Detect case where controlled EditorState has been made dirty
+            // If the current editorState is empty and the next editorState is not
+            // empty then this is the first interaction so mark this component dirty
+            newState = { isTouched: true };
+        }
+
+        return newState;
     }
 
     checkValidityIfAllowed() {
