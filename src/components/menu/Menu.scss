@@ -37,10 +37,12 @@
     cursor: pointer;
     display: flex;
     min-height: 30px;
-    padding: 5px 35px 5px 15px;
     position: relative;
 
-    &.btn-plain:hover {
+    &,
+    &.btn-plain,
+    &.btn-plain:hover,
+    &.btn-plain:active {
         padding: 5px 35px 5px 15px;
     }
 
