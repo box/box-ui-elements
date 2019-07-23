@@ -226,7 +226,9 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     };
 
     handleValidityStateUpdateHandler = () => {
-        if (!this.state.isTouched) {
+        const { isTouched } = this.state;
+
+        if (!isTouched) {
             return;
         }
 

@@ -99,7 +99,7 @@ describe('ContentSidebar', () => {
     });
 
     describe('activity feed comments', () => {
-        const getDraftJSEditor = () => cy.get('[contenteditable]');
+        const getDraftJSEditor = () => cy.getByTestId('bcs-comment-input-form-container').find('[contenteditable]');
         const getTooltip = () => cy.get('[role="tooltip"]');
         const getCancelButton = () =>
             cy.contains(localize('be.contentSidebar.activityFeed.approvalCommentForm.commentCancel'));
@@ -125,9 +125,7 @@ describe('ContentSidebar', () => {
                 .type('qwerty')
                 .clear();
 
-            getTooltip()
-                .should('exist')
-                .contains(localize('boxui.validation.requiredError'));
+            getTooltip().contains(localize('boxui.validation.requiredError'));
         });
 
         it('should reset validation errors if comment is cancelled', () => {
@@ -136,9 +134,7 @@ describe('ContentSidebar', () => {
                 .type('qwerty')
                 .clear();
 
-            getTooltip()
-                .should('exist')
-                .contains(localize('boxui.validation.requiredError'));
+            getTooltip().contains(localize('boxui.validation.requiredError'));
 
             getCancelButton().click();
 
