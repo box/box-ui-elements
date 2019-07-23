@@ -141,6 +141,7 @@ class Comment extends React.Component<Props, State> {
         const isTask = type === COMMENT_TYPE_TASK;
         const canEdit = isTask && permissions.can_edit; // comment editing not supported
         const canDelete = permissions.can_delete;
+        const confirmMessage = isTask ? messages.taskDeletePrompt : messages.commentDeletePrompt;
         const isMenuVisible = (canDelete || canEdit) && !isPending;
 
         return (
@@ -192,9 +193,9 @@ class Comment extends React.Component<Props, State> {
                                 {isConfirmingDelete && (
                                     <CommentDeleteConfirmation
                                         isOpen={isConfirmingDelete}
+                                        message={confirmMessage}
                                         onDeleteCancel={this.handleDeleteCancel}
                                         onDeleteConfirm={this.handleDeleteConfirm}
-                                        type={type}
                                     />
                                 )}
                             </TetherComponent>

@@ -24,7 +24,7 @@ const messages = defineMessages({
     },
     commentDeletePrompt: {
         id: 'be.contentSidebar.activityFeed.comment.commentDeletePrompt',
-        defaultMessage: 'Delete comment?',
+        defaultMessage: 'Are you sure you want to permanently delete this comment?',
         description: 'Confirmation prompt text to delete comment',
     },
     commentShowOriginal: {
