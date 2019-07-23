@@ -105,9 +105,6 @@ describe('ContentSidebar', () => {
             cy.contains(localize('be.contentSidebar.activityFeed.approvalCommentForm.commentCancel'));
 
         beforeEach(() => {
-            cy.server();
-            cy.route('POST', '**/2.0/comments/*').as('createComment');
-
             helpers.load({
                 fileId: Cypress.env('FILE_ID_DOC'),
             });
