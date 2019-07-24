@@ -11,7 +11,7 @@ import flow from 'lodash/flow';
 import messages from '../common/messages';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
-import { FeatureFlag, withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
+import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { getBadUserError, getBadItemError } from '../../utils/error';
 import API from '../../api';
 import { withLogger } from '../common/logger';
@@ -522,7 +522,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             <SidebarContent
                 className="bcs-activity"
                 title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_ACTIVITY)}
-                actions={<FeatureFlag feature="activityFeed.tasks.createButton" enabled={this.renderAddTaskButton} />}
+                actions={this.renderAddTaskButton()}
             >
                 <ActivityFeed
                     file={file}
