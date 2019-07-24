@@ -125,7 +125,7 @@ class AppActivity extends React.PureComponent<Props, State> {
                     'bcs-is-pending': isPending || error,
                 })}
                 data-resin-target="loaded"
-                data-resin-feature={`app_activity_${templateId}_card`}
+                data-resin-feature={`appActivityCard${templateId}`}
             >
                 <Media.Figure>
                     <img
