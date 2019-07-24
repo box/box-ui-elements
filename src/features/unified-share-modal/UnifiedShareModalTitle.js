@@ -7,7 +7,6 @@ import messages from './messages';
 import type { item as ItemType } from './flowTypes';
 
 type Props = {
-    classification: ClassificationInfo,
     isEmailLinkSectionExpanded: boolean,
     item: ItemType,
     showCollaboratorList: boolean,
@@ -49,17 +48,17 @@ function getTitle(isEmailLinkSectionExpanded, showCollaboratorList, item) {
     return title;
 }
 
-const UnifiedShareModalTitle = ({ classification, isEmailLinkSectionExpanded, showCollaboratorList, item }: Props) => {
+const UnifiedShareModalTitle = ({ isEmailLinkSectionExpanded, showCollaboratorList, item }: Props) => {
     const title = getTitle(isEmailLinkSectionExpanded, showCollaboratorList, item);
-    const { advisoryMessage, name } = classification;
+    const { bannerPolicy, classification } = item;
 
     return (
         <span className="bdl-UnifiedShareModalTitle">
             {title}
             <Classification
-                advisoryMessage={advisoryMessage}
+                advisoryMessage={bannerPolicy ? bannerPolicy.body : undefined}
                 messageStyle="tooltip"
-                name={name}
+                name={classification}
                 className="bdl-UnifiedShareModalTitle-classification"
             />
         </span>

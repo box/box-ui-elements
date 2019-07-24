@@ -47,6 +47,11 @@ export type inviteePermissionType = {
 };
 
 export type item = {
+    bannerPolicy?: {
+        body: string,
+        title: string,
+    },
+    classification?: string,
     description: string,
     extension: string,
     grantedPermissions: {
