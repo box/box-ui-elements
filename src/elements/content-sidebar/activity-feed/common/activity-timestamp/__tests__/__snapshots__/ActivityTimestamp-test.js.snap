@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/ActivityFeed/common/Timestamp should correctly render timestamp 1`] = `
+exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should correctly render timestamp 1`] = `
 <Tooltip
   constrainToScrollParent={false}
   constrainToWindow={true}
@@ -9,7 +9,7 @@ exports[`elements/content-sidebar/ActivityFeed/common/Timestamp should correctly
   text={
     <FormattedMessage
       defaultMessage="{time, date, full} at {time, time, short}"
-      id="be.fullDateTime"
+      id="be.activityFeed.fullDateTime"
       values={
         Object {
           "time": 1506534041000,
@@ -20,7 +20,7 @@ exports[`elements/content-sidebar/ActivityFeed/common/Timestamp should correctly
   theme="default"
 >
   <small
-    className="bdl-Timestamp"
+    className="bcs-ActivityTimestamp"
   >
     <ReadableTime
       alwaysShowTime={true}

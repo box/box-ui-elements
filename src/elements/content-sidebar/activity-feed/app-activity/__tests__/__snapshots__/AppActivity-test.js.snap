@@ -57,7 +57,7 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
       My Application
     </figcaption>
     <div>
-      <Timestamp
+      <ActivityTimestamp
         date={1551989569223}
       />
     </div>

@@ -10,8 +10,8 @@ import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
 
-import DeleteConfirmation from '../common/DeleteConfirmation';
-import Timestamp from '../common/Timestamp';
+import DeleteConfirmation from '../common/delete-confirmation';
+import ActivityTimestamp from '../common/activity-timestamp';
 import IconTrash from '../../../../icons/general/IconTrash';
 import Media from '../../../../components/media';
 import messages from './messages';
@@ -162,7 +162,7 @@ class AppActivity extends React.PureComponent<Props, State> {
                     <figcaption className="bcs-AppActivity-headline">{name}</figcaption>
 
                     <div>
-                        <Timestamp date={createdAtTimestamp} />
+                        <ActivityTimestamp date={createdAtTimestamp} />
                     </div>
 
                     {this.parseActivity().map(mapActivityNodes)}

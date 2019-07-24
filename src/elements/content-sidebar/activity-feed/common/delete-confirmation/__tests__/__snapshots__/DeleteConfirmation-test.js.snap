@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/ActivityFeed/common/DeleteConfirmation render() should render component 1`] = `
+exports[`elements/content-sidebar/ActivityFeed/common/delete-confirmation render() should render component 1`] = `
 <div
-  className="bdl-DeleteConfirmation-promptMessage"
+  className="bcs-DeleteConfirmation-promptMessage"
 >
   <FormattedMessage
     defaultMessage="Are you sure you want to permanently delete this comment?"

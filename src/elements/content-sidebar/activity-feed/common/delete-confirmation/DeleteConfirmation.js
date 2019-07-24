@@ -6,11 +6,11 @@
 import * as React from 'react';
 import { FormattedMessage, type MessageDescriptor } from 'react-intl';
 
-import Button from '../../../../components/button';
-import commonMessages from '../../../common/messages';
-import PrimaryButton from '../../../../components/primary-button';
-import { KEYS } from '../../../../constants';
-import { Overlay } from '../../../../components/flyout';
+import Button from '../../../../../components/button';
+import commonMessages from '../../../../common/messages';
+import PrimaryButton from '../../../../../components/primary-button';
+import { KEYS } from '../../../../../constants';
+import { Overlay } from '../../../../../components/flyout';
 import './DeleteConfirmation.scss';
 
 type Props = {
@@ -45,20 +45,20 @@ class DeleteConfirmation extends React.Component<Props> {
 
         return (
             <Overlay
-                className="be-modal bdl-DeleteConfirmation"
+                className="be-modal bcs-DeleteConfirmation"
                 onKeyDown={this.onKeyDown}
                 role="dialog"
                 shouldDefaultFocus
                 shouldOutlineFocus={false}
             >
-                <div className="bdl-DeleteConfirmation-promptMessage">
+                <div className="bcs-DeleteConfirmation-promptMessage">
                     <FormattedMessage {...message} />
                 </div>
                 <div>
-                    <Button className="bdl-DeleteConfirmation-cancel" onClick={onDeleteCancel} type="button">
+                    <Button className="bcs-DeleteConfirmation-cancel" onClick={onDeleteCancel} type="button">
                         <FormattedMessage {...commonMessages.cancel} />
                     </Button>
-                    <PrimaryButton className="bdl-DeleteConfirmation-delete" onClick={onDeleteConfirm} type="button">
+                    <PrimaryButton className="bcs-DeleteConfirmation-delete" onClick={onDeleteConfirm} type="button">
                         <FormattedMessage {...commonMessages.delete} />
                     </PrimaryButton>
                 </div>

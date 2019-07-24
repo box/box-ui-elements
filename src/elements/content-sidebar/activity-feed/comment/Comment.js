@@ -18,8 +18,8 @@ import messages from './messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 
-import DeleteConfirmation from '../common/DeleteConfirmation';
-import Timestamp from '../common/Timestamp';
+import DeleteConfirmation from '../common/delete-confirmation';
+import ActivityTimestamp from '../common/activity-timestamp';
 import UserLink from './UserLink';
 import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
@@ -211,7 +211,7 @@ class Comment extends React.Component<Props, State> {
                             )}
                         </div>
                         <div>
-                            <Timestamp date={createdAtTimestamp} />
+                            <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
                         {isEditing ? (
                             /* Inline editing is not currently supported for comments */

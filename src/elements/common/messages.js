@@ -903,11 +903,6 @@ const messages = defineMessages({
             'If a user has been deleted, we call the user "a prior collaborator" - meaning someone who used to be able to collaborate on the content.',
         defaultMessage: 'A Prior Collaborator',
     },
-    fullDateTime: {
-        id: 'be.fullDateTime',
-        defaultMessage: '{time, date, full} at {time, time, short}',
-        description: 'Full date time and time stamp',
-    },
 });
 
 export default messages;
