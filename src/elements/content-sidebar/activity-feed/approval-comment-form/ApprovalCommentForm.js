@@ -232,7 +232,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </div>
                 )}
-                <div className="bcs-comment-input-form-container">
+                <div className="bcs-comment-input-form-container" data-testid="bcs-comment-input-form-container">
                     <Form onChange={this.onFormChangeHandler} onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
                             className="bcs-comment-input"
