@@ -13,12 +13,6 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -200,12 +194,6 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={true}
         item={
           Object {
@@ -267,12 +255,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -454,12 +436,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -641,12 +617,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -832,12 +802,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -1019,12 +983,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -1206,12 +1164,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -1364,12 +1316,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -1552,12 +1498,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -1740,12 +1680,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -1928,12 +1862,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -2087,12 +2015,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -2161,12 +2083,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -2352,12 +2268,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -2543,12 +2453,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -2730,12 +2634,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -2916,12 +2814,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
@@ -3077,12 +2969,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
     title={
       <UnifiedShareModalTitle
-        classification={
-          Object {
-            "advisoryMessage": undefined,
-            "name": undefined,
-          }
-        }
         isEmailLinkSectionExpanded={false}
         item={
           Object {
