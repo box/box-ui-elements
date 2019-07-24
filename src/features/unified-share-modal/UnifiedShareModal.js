@@ -53,7 +53,6 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    classification: ClassificationInfo,
     /** If item is classified this property contains the classification name */
     classificationName?: string,
     /** Message warning about restrictions regarding inviting collaborators to the item */
@@ -649,7 +648,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
         const {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
-            classification,
             classificationName,
             focusSharedLinkOnLoad,
             item,
@@ -703,7 +701,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     onRequestClose={submitting ? undefined : onRequestClose}
                     title={
                         <UnifiedShareModalTitle
-                            classification={classification}
                             isEmailLinkSectionExpanded={isEmailLinkSectionExpanded}
                             showCollaboratorList={showCollaboratorList}
                             item={item}

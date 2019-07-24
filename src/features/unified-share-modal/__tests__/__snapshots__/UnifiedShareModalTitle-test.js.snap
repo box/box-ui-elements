@@ -14,10 +14,10 @@ exports[`features/unified-share-modal/HeaderTitle should render classifiction la
     }
   />
   <Classification
-    advisoryMessage="Internal use only"
+    advisoryMessage="test"
     className="bdl-UnifiedShareModalTitle-classification"
     messageStyle="tooltip"
-    name="TopSecret"
+    name="internal"
   />
 </span>
 `;
