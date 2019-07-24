@@ -45,6 +45,23 @@ describe('components/radio/RadioGroup', () => {
         ).toEqual('radio3desc');
     });
 
+    test('should set correct value to input', () => {
+        const component = renderRadioButtons();
+
+        expect(
+            component
+                .find('input')
+                .at(0)
+                .prop('value'),
+        ).toEqual('radio1');
+        expect(
+            component
+                .find('input')
+                .at(0)
+                .prop('value'),
+        ).toEqual('radio1');
+    });
+
     test('should pass rest of props to input', () => {
         const component = renderRadioButtons();
         const inputEl = component.find('input').at(0);
