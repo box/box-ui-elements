@@ -66,34 +66,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         />
       </div>
       <div>
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          isDisabled={false}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
-              values={
-                Object {
-                  "time": 1506534041000,
-                }
-              }
-            />
-          }
-          theme="default"
-        >
-          <small
-            className="bcs-comment-created-at"
-          >
-            <ReadableTime
-              alwaysShowTime={true}
-              relativeThreshold={0}
-              timestamp={1506534041000}
-            />
-          </small>
-        </Tooltip>
+        <Timestamp
+          date={1506534041000}
+        />
       </div>
       <CommentText
         id="123"
@@ -136,34 +111,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         />
       </div>
       <div>
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          isDisabled={false}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
-              values={
-                Object {
-                  "time": 1506534041000,
-                }
-              }
-            />
-          }
-          theme="default"
-        >
-          <small
-            className="bcs-comment-created-at"
-          >
-            <ReadableTime
-              alwaysShowTime={true}
-              relativeThreshold={0}
-              timestamp={1506534041000}
-            />
-          </small>
-        </Tooltip>
+        <Timestamp
+          date={1506534041000}
+        />
       </div>
       <CommentText
         id="123"
@@ -207,34 +157,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
         />
       </div>
       <div>
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          isDisabled={false}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
-              values={
-                Object {
-                  "time": 1506534041000,
-                }
-              }
-            />
-          }
-          theme="default"
-        >
-          <small
-            className="bcs-comment-created-at"
-          >
-            <ReadableTime
-              alwaysShowTime={true}
-              relativeThreshold={0}
-              timestamp={1506534041000}
-            />
-          </small>
-        </Tooltip>
+        <Timestamp
+          date={1506534041000}
+        />
       </div>
       <CommentText
         id="123"
@@ -281,34 +206,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
         />
       </div>
       <div>
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          isDisabled={false}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
-              values={
-                Object {
-                  "time": 1506534041000,
-                }
-              }
-            />
-          }
-          theme="default"
-        >
-          <small
-            className="bcs-comment-created-at"
-          >
-            <ReadableTime
-              alwaysShowTime={true}
-              relativeThreshold={0}
-              timestamp={1506534041000}
-            />
-          </small>
-        </Tooltip>
+        <Timestamp
+          date={1506534041000}
+        />
       </div>
       <CommentText
         id="123"

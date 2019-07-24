@@ -57,34 +57,9 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
       My Application
     </figcaption>
     <div>
-      <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        isDisabled={false}
-        position="top-center"
-        text={
-          <FormattedMessage
-            defaultMessage="{time, date, full} at {time, time, short}"
-            id="be.appActivity.createdAtFullDateTime"
-            values={
-              Object {
-                "time": 1551989569223,
-              }
-            }
-          />
-        }
-        theme="default"
-      >
-        <small
-          className="bcs-AppActivity-timestamp"
-        >
-          <ReadableTime
-            alwaysShowTime={true}
-            relativeThreshold={3600000}
-            timestamp={1551989569223}
-          />
-        </small>
-      </Tooltip>
+      <Timestamp
+        date={1551989569223}
+      />
     </div>
     You did something from 
     <Link

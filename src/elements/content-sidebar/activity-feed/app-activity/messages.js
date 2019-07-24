@@ -7,11 +7,6 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    appActivityCreatedAtFullDateTime: {
-        id: 'be.appActivity.createdAtFullDateTime',
-        defaultMessage: '{time, date, full} at {time, time, short}',
-        description: 'App Activity created at full date time for title',
-    },
     appActivityDeleteMenuItem: {
         id: 'be.appActivity.deleteMenuItem',
         defaultMessage: 'Delete',
