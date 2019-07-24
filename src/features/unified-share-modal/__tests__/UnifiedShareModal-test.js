@@ -33,6 +33,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
     const getWrapper = (props = {}) =>
         shallow(
             <UnifiedShareModal
+                classification={{ advisoryMessage: undefined, name: undefined }}
                 collaborationRestrictionWarning=""
                 getInitialData={jest.fn().mockImplementation(() => Promise.resolve('test'))}
                 intl={intl}

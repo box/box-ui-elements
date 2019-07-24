@@ -2,22 +2,21 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import AppActivity from '../AppActivity';
+import Media from '../../../../../components/media';
+import { Link } from '../../../../../components/link';
 
 describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () => {
     const fakeActivityTemplate = {
         id: 'template_12345',
     };
-
     const fakeApp = {
         id: 'app_12345',
         icon_url: 'foo/bar/baz.jpg',
         name: 'My Application',
     };
-
     const fakeUser = {
         id: 'user_1',
     };
-
     const fakeAppActivity = {
         activity_template: fakeActivityTemplate,
         app: fakeApp,
@@ -26,7 +25,6 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
         id: 'activity_12345',
         rendered_text: 'You did something from <a data-resin-target="foo" data-resin-action="bar" >This App</a>',
     };
-
     const render = (props = {}) =>
         shallow(<AppActivity isPending={false} onDelete={jest.fn()} {...fakeAppActivity} {...props} />).dive();
 
@@ -49,50 +47,41 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
         const currentUser = {
             ...fakeUser,
         };
-
         const wrapper = render({
             currentUser,
+            isPending: true,
             permissions: {
                 can_delete: true,
             },
-            isPending: true,
         });
-        const activity = wrapper.find('.bcs-app-activity');
 
-        expect(activity.hasClass('bcs-is-pending')).toBe(true);
+        expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
     });
 
     test('should render as pending if an error occurred', () => {
         const currentUser = {
             ...fakeUser,
         };
-
         const wrapper = render({
             currentUser,
+            error: {},
             permissions: {
                 can_delete: true,
             },
-            error: {},
         });
-        const activity = wrapper.find('.bcs-app-activity');
 
-        expect(activity.hasClass('bcs-is-pending')).toBe(true);
+        expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
     });
 
-    test('should render the InlineDelete component if the current user is the one who made the activity', () => {
-        const currentUser = {
-            ...fakeUser,
-        };
-
+    test('should show the overflow menu if the current user is the one who made the activity', () => {
         const wrapper = render({
-            currentUser,
+            currentUser: { ...fakeUser },
         });
-        const inlineDelete = wrapper.find('InlineDelete');
 
-        expect(inlineDelete.exists()).toBe(true);
+        expect(wrapper.exists(Media.Menu)).toBe(true);
     });
 
-    test('should render the InlineDelete component if a different user, with the correct permissions', () => {
+    test('should show the overflow menu if a different user, with the correct permissions', () => {
         const wrapper = render({
             currentUser: {
                 id: 'someone_else',
@@ -101,12 +90,11 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
                 can_delete: true,
             },
         });
-        const inlineDelete = wrapper.find('InlineDelete');
 
-        expect(inlineDelete.exists()).toBe(true);
+        expect(wrapper.exists(Media.Menu)).toBe(true);
     });
 
-    test('should not render InlineDelete component if pending', () => {
+    test('should show the overflow menu if pending', () => {
         const wrapper = render({
             currentUser: {
                 id: 'someone_else',
@@ -116,12 +104,11 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
             },
             isPending: true,
         });
-        const inlineDelete = wrapper.find('InlineDelete');
 
-        expect(inlineDelete.exists()).toBe(false);
+        expect(wrapper.exists(Media.Menu)).toBe(false);
     });
 
-    test('should not render InlineDelete component if missing permissions and a different user', () => {
+    test('should show the overflow menu if missing permissions and a different user', () => {
         const wrapper = render({
             currentUser: {
                 id: 'someone_else',
@@ -130,44 +117,24 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
                 can_delete: false,
             },
         });
-        const inlineDelete = wrapper.find('InlineDelete');
 
-        expect(inlineDelete.exists()).toBe(false);
+        expect(wrapper.exists(Media.Menu)).toBe(false);
     });
 
-    test('should render Link component in place of anchor tags in rendered_text', () => {
-        const rendered_text =
-            'You did shared via <a data-resin-target="my_target" data-resin-action="my_action" >Box</a>';
-
+    test('should render app activity links and pass through any resin attributes', () => {
+        const action = 'my_action';
+        const target = 'my_target';
         const wrapper = render({
             currentUser: {
                 id: 'someone_else',
             },
-            rendered_text,
+            rendered_text: `You did shared via <a data-resin-target="${target}" data-resin-action="${action}">Box</a>`,
         });
-
-        const link = wrapper.find('Link');
-        const anchor = wrapper.find('a');
+        const link = wrapper.find(Link);
 
         expect(link.exists()).toBe(true);
-        expect(anchor.exists()).toBe(false);
-    });
-
-    test('should pass through resin tags from anchors to Link component', () => {
-        const target = 'my_target';
-        const action = 'my_action';
-        const rendered_text = `You did shared via <a data-resin-target="${target}" data-resin-action="${action}" >Box</a>`;
-
-        const wrapper = render({
-            currentUser: {
-                id: 'someone_else',
-            },
-            rendered_text,
-        });
-
-        const link = wrapper.find('Link');
-
-        expect(link.prop('data-resin-target')).toEqual(target);
         expect(link.prop('data-resin-action')).toEqual(action);
+        expect(link.prop('data-resin-target')).toEqual(target);
+        expect(wrapper.exists('a')).toBe(false);
     });
 });

@@ -692,26 +692,6 @@ const messages = defineMessages({
         defaultMessage: 'An error occurred',
         description: 'Title when an error occurs',
     },
-    appActivityDeleteErrorMessage: {
-        id: 'be.appActivityDeleteErrorMessage',
-        description: 'Error message when an app activity deletion fails',
-        defaultMessage: 'There was an error deleting this item.',
-    },
-    appActivityCreatedAtFullDateTime: {
-        id: 'be.appActivityCreatedAtFullDateTime',
-        defaultMessage: '{time, date, full} at {time, time, short}',
-        description: 'App Activity created at full date time for title',
-    },
-    appActivityDeletePrompt: {
-        id: 'be.appActivityDeletePrompt',
-        defaultMessage: 'Delete App Activity?',
-        description: 'Confirmation prompt text to delete app activity',
-    },
-    appActivityAltIcon: {
-        id: 'be.appActivityAltIcon',
-        defaultMessage: '{appActivityName} Icon',
-        description: 'Alt message if app activity icon is missing or cannot load',
-    },
     editLabel: {
         id: 'be.editLabel',
         defaultMessage: 'Edit',

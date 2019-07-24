@@ -47,20 +47,15 @@ class RadioGroup extends React.Component<Props, State> {
 
     render() {
         const { children, className, name } = this.props;
-        const { value } = this.state;
+        const { value: stateValue } = this.state;
 
         return (
             <div className={`radio-group ${className}`} onChange={this.onChangeHandler}>
-                {React.Children.map(children, radio => (
-                    <RadioButton
-                        description={radio.props.description}
-                        isDisabled={radio.props.isDisabled}
-                        isSelected={radio.props.value === value}
-                        label={radio.props.label}
-                        name={name}
-                        value={radio.props.value}
-                    />
-                ))}
+                {React.Children.map(children, radio => {
+                    const { value, ...rest } = radio.props;
+
+                    return <RadioButton isSelected={value === stateValue} name={name} value={value} {...rest} />;
+                })}
             </div>
         );
     }

@@ -72,13 +72,21 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
             expect(instance.handleBlur).toHaveBeenCalledWith('foo');
         });
 
-        test('should be called when onInput is called', () => {
+        test('should be called when underlying pill selector onInput is called', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.handleInput = jest.fn();
             instance.forceUpdate();
             wrapper.prop('onInput')();
             expect(instance.handleInput).toHaveBeenCalled();
+        });
+
+        test('should call its onInput prop when provided', () => {
+            const onInput = jest.fn();
+            const wrapper = getWrapper({ onInput });
+            const instance = wrapper.instance();
+            instance.handleInput('foo');
+            expect(onInput).toHaveBeenCalledWith('foo', undefined);
         });
     });
 
