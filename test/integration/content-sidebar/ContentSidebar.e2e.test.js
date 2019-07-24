@@ -113,22 +113,13 @@ describe('ContentSidebar', () => {
             cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
         });
 
-        it('should not show required error if focused and blurred', () => {
+        it('Comment form validation', () => {
+            // should not show validation error if focused and then blurred
             getDraftJSEditor().click();
             getCancelButton();
             getTooltip().should('not.exist');
-        });
 
-        it('should show required error if type and then delete text', () => {
-            getDraftJSEditor()
-                .click()
-                .type('qwerty')
-                .clear();
-
-            getTooltip().contains(localize('boxui.validation.requiredError'));
-        });
-
-        it('should reset validation errors if comment is cancelled', () => {
+            // should show required error if type and then delete text
             getDraftJSEditor()
                 .click()
                 .type('qwerty')
@@ -136,10 +127,9 @@ describe('ContentSidebar', () => {
 
             getTooltip().contains(localize('boxui.validation.requiredError'));
 
+            // should reset validation state after clicking "Cancel" and focusing again
             getCancelButton().click();
-
             getDraftJSEditor().click();
-
             getTooltip().should('not.exist');
         });
     });
