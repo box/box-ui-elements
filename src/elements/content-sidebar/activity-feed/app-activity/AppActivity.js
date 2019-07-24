@@ -10,7 +10,7 @@ import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
 
-import CommentDeleteConfirmation from '../comment/CommentDeleteConfirmation';
+import DeleteConfirmation from '../common/DeleteConfirmation';
 import IconTrash from '../../../../icons/general/IconTrash';
 import Media from '../../../../components/media';
 import messages from './messages';
@@ -151,7 +151,7 @@ class AppActivity extends React.PureComponent<Props, State> {
                             </Media.Menu>
 
                             {isConfirmingDelete && (
-                                <CommentDeleteConfirmation
+                                <DeleteConfirmation
                                     isOpen={isConfirmingDelete}
                                     message={messages.appActivityDeletePrompt}
                                     onDeleteCancel={this.handleDeleteCancel}

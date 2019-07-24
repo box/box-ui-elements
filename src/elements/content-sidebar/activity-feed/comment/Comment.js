@@ -20,7 +20,7 @@ import messages from './messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 
-import CommentDeleteConfirmation from './CommentDeleteConfirmation';
+import CommentDeleteConfirmation from '../common/DeleteConfirmation';
 import UserLink from './UserLink';
 import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';

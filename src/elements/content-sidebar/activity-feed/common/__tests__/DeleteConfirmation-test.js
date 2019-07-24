@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import CommentDeleteConfirmation from '../CommentDeleteConfirmation';
-import messages from '../messages';
+import DeleteConfirmation from '../DeleteConfirmation';
+import messages from '../../comment/messages';
 
-describe('elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmation', () => {
+describe('elements/content-sidebar/ActivityFeed/common/DeleteConfirmation', () => {
     const getWrapper = props =>
         shallow(
-            <CommentDeleteConfirmation
+            <DeleteConfirmation
                 isOpen
                 message={messages.commentDeletePrompt}
                 onDeleteCancel={jest.fn()}
@@ -19,7 +19,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmatio
     describe('render()', () => {
         test('should render component', () => {
             const wrapper = getWrapper();
-            expect(wrapper.find('.bcs-CommentDeleteConfirmation-prompt')).toMatchSnapshot();
+            expect(wrapper.find('.bdl-DeleteConfirmation-promptMessage')).toMatchSnapshot();
         });
     });
 

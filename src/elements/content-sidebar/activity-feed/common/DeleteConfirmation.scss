@@ -1,0 +1,24 @@
+@import '../../../../styles/variables';
+
+.bdl-DeleteConfirmation {
+    width: 212px;
+
+    .overlay {
+        border-radius: $bdl-border-radius-size;
+        padding: 20px;
+    }
+}
+
+.bdl-DeleteConfirmation-promptMessage {
+    margin-bottom: 20px;
+}
+
+// overrides for confirm/cancel button spacing
+.bdl-DeleteConfirmation-delete,
+.bcs-DeleteConfirmation-cancel {
+    margin-left: 0;
+}
+
+.bdl-DeleteConfirmation-cancel {
+    margin-right: 10px;
+}
