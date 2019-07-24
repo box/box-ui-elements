@@ -24,7 +24,7 @@
     }
 
     .text-input-description {
-        color: $sevens;
+        color: $bdl-gray-62;
         display: block;
         word-wrap: break-word;
     }
@@ -49,7 +49,7 @@
     &.is-required,
     &.show-error {
         input {
-            border-color: $amaranth;
+            border-color: $bdl-watermelon-red;
         }
     }
 }

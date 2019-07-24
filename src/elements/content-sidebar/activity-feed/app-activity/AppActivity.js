@@ -4,22 +4,23 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import TetherComponent from 'react-tether';
+import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
 
-import InlineDelete from '../inline-delete';
-import { ReadableTime } from '../../../../components/time';
+import CommentDeleteConfirmation from '../comment/CommentDeleteConfirmation';
+import IconTrash from '../../../../icons/general/IconTrash';
+import Media from '../../../../components/media';
+import messages from './messages';
 import Tooltip from '../../../../components/tooltip';
+import { bdlGray80 } from '../../../../styles/variables';
 import { Link } from '../../../../components/link';
-import messages from '../../../common/messages';
+import { MenuItem } from '../../../../components/menu';
 import { ONE_HOUR_MS } from '../../../../constants';
-
+import { ReadableTime } from '../../../../components/time';
 import './AppActivity.scss';
-
-const parser = new DOMParser();
 
 type Props = {
     activity_template: ActivityTemplateItem,
@@ -31,23 +32,18 @@ type Props = {
     id: string,
     intl: IntlShape,
     isPending: boolean,
-    onDelete: Function,
+    onDelete: ({ id: string, permissions?: {} }) => void,
     permissions?: BoxItemPermission,
     rendered_text: string,
 };
 
-function parseActivity(htmlString: string): Array<HTMLLinkElement> {
-    const doc: Document = parser.parseFromString(htmlString, 'text/html');
-    if (!doc) {
-        return [];
-    }
-
-    const childNodes = getProp(doc, 'body.childNodes', []);
-    return Array.from(childNodes);
-}
+type State = {
+    isConfirmingDelete: boolean,
+};
 
 function mapActivityNodes(node: HTMLLinkElement): React.Node {
     const { dataset = {}, href = '#', tagName, textContent } = node;
+
     switch (tagName) {
         case 'A':
             return (
@@ -57,7 +53,7 @@ function mapActivityNodes(node: HTMLLinkElement): React.Node {
                     data-resin-action={dataset.resinAction}
                     key={`app_actvity_link_${href}`}
                     rel="roreferrer noopener"
-                    className="bcs-app-activity-link"
+                    className="bcs-AppActivity-link"
                     target="_blank"
                 >
                     {textContent}
@@ -68,54 +64,105 @@ function mapActivityNodes(node: HTMLLinkElement): React.Node {
     }
 }
 
-const AppActivity = ({
-    activity_template,
-    app,
-    currentUser,
-    created_at,
-    created_by,
-    error,
-    id,
-    intl,
-    isPending,
-    rendered_text,
-    permissions = {},
-    onDelete = noop,
-}: Props): React.Node => {
-    const createdAtTimestamp = new Date(created_at).getTime();
-    const activityNodes = parseActivity(rendered_text);
-    const canDelete = getProp(permissions, 'can_delete', false) || currentUser.id === created_by.id;
-    const { name, icon_url } = app;
-    const { id: templateId } = activity_template;
+class AppActivity extends React.PureComponent<Props, State> {
+    static defaultProps = {
+        onDelete: noop,
+        permissions: {},
+    };
 
-    return (
-        <div
-            className="bcs-app-activity-container"
-            data-resin-target="loaded"
-            data-resin-feature={`app_activity_${templateId}_card`}
-        >
-            <div
-                className={classNames('bcs-app-activity', {
+    parser = new DOMParser();
+
+    state: State = {
+        isConfirmingDelete: false,
+    };
+
+    handleDeleteCancel = (): void => {
+        this.setState({ isConfirmingDelete: false });
+    };
+
+    handleDeleteClick = () => {
+        this.setState({ isConfirmingDelete: true });
+    };
+
+    handleDeleteConfirm = (): void => {
+        const { id, onDelete, permissions } = this.props;
+
+        onDelete({ id, permissions });
+    };
+
+    parseActivity = (): Array<HTMLLinkElement> => {
+        const { rendered_text: renderedText } = this.props;
+        const doc: Document = this.parser.parseFromString(renderedText, 'text/html');
+        if (!doc) {
+            return [];
+        }
+
+        const childNodes = getProp(doc, 'body.childNodes', []);
+        return Array.from(childNodes);
+    };
+
+    render() {
+        const {
+            activity_template: { id: templateId },
+            app: { name, icon_url },
+            created_at: createdAt,
+            created_by: createdBy,
+            currentUser,
+            error,
+            intl,
+            isPending,
+            permissions,
+        } = this.props;
+
+        const canDelete = getProp(permissions, 'can_delete', false) || currentUser.id === createdBy.id;
+        const createdAtTimestamp = new Date(createdAt).getTime();
+        const isMenuVisible = canDelete && !isPending;
+        const { isConfirmingDelete } = this.state;
+
+        return (
+            <Media
+                className={classNames('bcs-AppActivity', {
                     'bcs-is-pending': isPending || error,
                 })}
+                data-resin-target="loaded"
+                data-resin-feature={`app_activity_${templateId}_card`}
             >
-                <img
-                    className="bcs-app-activity-icon"
-                    alt={intl.formatMessage(messages.appActivityAltIcon, { appActivityName: name })}
-                    src={icon_url}
-                />
-                <div className="bcs-app-activity-content">
-                    <div className="bcs-app-activity-headline">
-                        <span className="bcs-app-activity-app-name">{name}</span>
-                        {canDelete && !isPending && (
-                            <InlineDelete
-                                id={id}
-                                permissions={permissions}
-                                message={<FormattedMessage {...messages.appActivityDeletePrompt} />}
-                                onDelete={onDelete}
-                            />
-                        )}
-                    </div>
+                <Media.Figure>
+                    <img
+                        className="bcs-AppActivity-icon"
+                        alt={intl.formatMessage(messages.appActivityAltIcon, { appActivityName: name })}
+                        src={icon_url}
+                    />
+                </Media.Figure>
+
+                <Media.Body className="bcs-AppActivity-body">
+                    {isMenuVisible && (
+                        <TetherComponent
+                            attachment="top right"
+                            className="bcs-AppActivity-confirm"
+                            constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                            targetAttachment="bottom right"
+                        >
+                            <Media.Menu isDisabled={isConfirmingDelete}>
+                                <MenuItem onClick={this.handleDeleteClick}>
+                                    <IconTrash color={bdlGray80} />
+                                    <FormattedMessage {...messages.appActivityDeleteMenuItem} />
+                                </MenuItem>
+                            </Media.Menu>
+
+                            {isConfirmingDelete && (
+                                <CommentDeleteConfirmation
+                                    isOpen={isConfirmingDelete}
+                                    message={messages.appActivityDeletePrompt}
+                                    onDeleteCancel={this.handleDeleteCancel}
+                                    onDeleteConfirm={this.handleDeleteConfirm}
+                                />
+                            )}
+                        </TetherComponent>
+                    )}
+
+                    <figcaption className="bcs-AppActivity-headline">{name}</figcaption>
+
                     <div>
                         <Tooltip
                             text={
@@ -125,16 +172,21 @@ const AppActivity = ({
                                 />
                             }
                         >
-                            <small className="bcs-app-activity-created-at">
-                                <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
+                            <small className="bcs-AppActivity-timestamp">
+                                <ReadableTime
+                                    alwaysShowTime
+                                    relativeThreshold={ONE_HOUR_MS}
+                                    timestamp={createdAtTimestamp}
+                                />
                             </small>
                         </Tooltip>
                     </div>
-                    {activityNodes.map(mapActivityNodes)}
-                </div>
-            </div>
-        </div>
-    );
-};
+
+                    {this.parseActivity().map(mapActivityNodes)}
+                </Media.Body>
+            </Media>
+        );
+    }
+}
 
 export default injectIntl(AppActivity);

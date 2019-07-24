@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { boxBlue, white } from '../../styles/variables';
+import { bdlBoxBlue, white } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 
 type Props = {
@@ -19,7 +19,7 @@ const IconBoxSquare = ({ className = '', height = 72, title, width = 72 }: Props
         viewBox="0 0 72 72"
         width={width}
     >
-        <rect width="72" height="72" rx="8" ry="8" fill={boxBlue} />
+        <rect width="72" height="72" rx="8" ry="8" fill={bdlBoxBlue} />
         <path
             d="M37.39 28.57A10.26 10.26 0 0 0 28.33 34a10.31 10.31 0 0 0-15.23-3.39V22A2.05 2.05 0 0 0 9 22v17a10.27 10.27 0 0 0 19.33 4.62 10.25 10.25 0 1 0 9.06-15zM19.26 44.91a6.13 6.13 0 1 1 6.15-6.13 6.14 6.14 0 0 1-6.15 6.13zm18.13 0a6.13 6.13 0 1 1 6.15-6.13 6.14 6.14 0 0 1-6.15 6.13z"
             fill={white}

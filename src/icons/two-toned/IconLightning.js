@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 import type { TwoTonedIcon } from '../flowTypes';
-import { boxBlue, white } from '../../styles/variables';
+import { bdlBoxBlue, white } from '../../styles/variables';
 
 const IconLightning = ({ className = '', height = 24, title, width = 24 }: TwoTonedIcon) => (
     <AccessibleSVG
@@ -13,7 +13,7 @@ const IconLightning = ({ className = '', height = 24, title, width = 24 }: TwoTo
         viewBox="0 0 32 32"
         width={width}
     >
-        <circle className="background-color" fill={boxBlue} cx="16" cy="16" r="12" />
+        <circle className="background-color" fill={bdlBoxBlue} cx="16" cy="16" r="12" />
         <polygon
             className="foreground-color"
             fill={white}

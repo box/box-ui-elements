@@ -13,8 +13,8 @@ import VersionsItemActions from './VersionsItemActions';
 import VersionsItemButton from './VersionsItemButton';
 import VersionsItemBadge from './VersionsItemBadge';
 import { ReadableTime } from '../../../components/time';
-import type { VersionActionCallback } from './Versions';
 import { VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION, VERSION_UPLOAD_ACTION } from '../../../constants';
+import type { VersionActionCallback } from './flowTypes';
 import './VersionsItem.scss';
 
 type Props = {

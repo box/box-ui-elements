@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BOX_BLUE } from '../../../common/variables';
+import { bdlBoxBlue } from '../../../styles/variables';
 import UploadFilePaywallState from '../UploadFilePaywallState';
 
 describe('icons/states/UploadFilePaywallState', () => {
@@ -15,7 +15,7 @@ describe('icons/states/UploadFilePaywallState', () => {
                 .find('path')
                 .at(0)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
     });
 
     test('should correctly render svg with specified class', () => {

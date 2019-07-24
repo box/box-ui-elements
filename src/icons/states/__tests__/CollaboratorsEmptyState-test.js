@@ -1,5 +1,5 @@
 import React from 'react';
-import { BOX_BLUE } from '../../../common/variables';
+import { bdlBoxBlue } from '../../../styles/variables';
 
 import CollaboratorsEmptyState from '../CollaboratorsEmptyState';
 
@@ -15,7 +15,7 @@ describe('icons/states/CollaboratorsEmptyState', () => {
                 .find('path')
                 .at(0)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
     });
 
     test('should correctly render svg with specified class', () => {

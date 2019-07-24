@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 import AccessibleSVG from '../accessible-svg';
 
@@ -14,7 +14,7 @@ type Props = {
     width?: number,
 };
 
-const IconPresenceInvite = ({ className = '', color = BOX_BLUE, height = 28, title, width = 28 }: Props) => (
+const IconPresenceInvite = ({ className = '', color = bdlBoxBlue, height = 28, title, width = 28 }: Props) => (
     <AccessibleSVG
         className={`icon-presence-invite ${className}`}
         height={height}

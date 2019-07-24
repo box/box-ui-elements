@@ -23,7 +23,7 @@
 }
 
 .box-ui-security-cloud-game {
-    background-color: $koray-ing;
+    background-color: $bdl-dark-blue;
     display: flex;
     flex-flow: column;
     position: relative;
@@ -52,7 +52,7 @@
 
 .drop-cloud {
     display: inline-block;
-    fill: darken($koray-ing, 20%);
+    fill: darken($bdl-dark-blue, 20%);
     position: absolute;
 
     .logo {

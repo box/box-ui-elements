@@ -34,14 +34,14 @@ $transform-duration: .125s;
 
 .overlay {
     background: $white;
-    border: 1px solid $sf-fog;
+    border: 1px solid $bdl-gray-30;
     box-shadow: 0 2px 6px 0 fade-out($black, .9);
     margin: 0;
     padding: 8px 0;
 
     hr {
         border: 0;
-        border-top: 1px solid $sf-fog;
+        border-top: 1px solid $bdl-gray-30;
         height: 0;
         margin: 8px 0;
     }

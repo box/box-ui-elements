@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import classNames from 'classnames';
 import AccessibleSVG from '../accessible-svg';
-import { boxBlue, white } from '../../styles/variables';
+import { bdlBoxBlue, white } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -15,7 +15,7 @@ type Props = {
     width?: number,
 };
 
-const IconShield = ({ className, color = boxBlue, height = 32, opacity = 0.2, width = 32, title }: Props) => (
+const IconShield = ({ className, color = bdlBoxBlue, height = 32, opacity = 0.2, width = 32, title }: Props) => (
     <AccessibleSVG
         className={classNames('bdl-IconShield', className)}
         height={height}

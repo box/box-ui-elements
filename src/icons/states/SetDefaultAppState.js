@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const SetDefaultAppState = ({ className = '', color = BOX_BLUE, height = 160, title, width = 305 }: Props) => (
+const SetDefaultAppState = ({ className = '', color = bdlBoxBlue, height = 160, title, width = 305 }: Props) => (
     <AccessibleSVG
         className={`icon-set-default-app ${className}`}
         height={height}

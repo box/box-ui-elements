@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import IconSearch from '../IconSearch';
-import { silverChalice } from '../../../styles/variables';
+import { bdlGray40 } from '../../../styles/variables';
 
 describe('icons/general/IconSearch', () => {
     test('should correctly render default icon with default color', () => {
@@ -9,7 +9,7 @@ describe('icons/general/IconSearch', () => {
         const wrapper = shallow(<IconSearch />);
 
         expect(wrapper.hasClass('icon-search')).toEqual(true);
-        expect(wrapper.find('path').prop('fill')).toEqual(silverChalice);
+        expect(wrapper.find('path').prop('fill')).toEqual(bdlGray40);
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(dimension);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(dimension);
     });

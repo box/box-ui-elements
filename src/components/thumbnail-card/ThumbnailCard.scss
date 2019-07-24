@@ -2,7 +2,7 @@
 @import './variables';
 
 .thumbnail-card {
-    border: $thumbnail-card-border solid $off-white;
+    border: $thumbnail-card-border solid $bdl-gray-10;
     border-radius: 4px;
     box-shadow: 0 5px 10px 0 rgba(198, 198, 198, .2);
     display: flex;
@@ -15,7 +15,7 @@
 
 .thumbnail-card-details {
     align-items: center;
-    border-top: 1px solid $ffive;
+    border-top: 1px solid $bdl-gray-05;
     display: flex;
     flex: 1;
     line-height: 16px;
@@ -34,13 +34,13 @@
     }
 
     .thumbnail-card-subtitle {
-        color: $sevens;
+        color: $bdl-gray-62;
     }
 }
 
 .thumbnail-card-thumbnail-container {
     align-items: center;
-    background-color: $ffive;
+    background-color: $bdl-gray-05;
     display: flex;
     height: $thumbnail-height;
     width: 100%;

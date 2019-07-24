@@ -23,7 +23,7 @@
     }
 
     .item-name {
-        color: $twos;
+        color: $bdl-gray;
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -37,7 +37,7 @@
 
     .item-subtext {
         align-items: center;
-        color: $nines;
+        color: $bdl-gray-50;
         display: flex;
         font-size: 12px;
         max-width: 100%;

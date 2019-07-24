@@ -14,19 +14,21 @@ type Props = FieldProps & {
     /** CSS class for the component. */
     className?: string,
     /** Given selected values and input text, returns a list of filtered options. Defaults to defaultDropdownFilter. */
-    dropdownFilter?: (options: Array<Option>, selectedValues: Array<Option>, inputText: string) => Array<Option>,
+    dropdownFilter: (options: Array<Option>, selectedValues: Array<Option>, inputText: string) => Array<Option>,
     /** Given options, renders the dropdown list. Defaults to defaultDropdownRenderer. */
     dropdownRenderer: (options: Array<Option>) => React.Node,
     /** A CSS selector matching the element to use as a boundary when auto-scrolling dropdown elements into view. When not provided, boundary will be determined by scrollIntoView utility function */
     dropdownScrollBoundarySelector?: string,
     /** Function to parse user input into an array of items. Defaults to CSV parser. */
-    inputParser?: (inputValue: string, options: Array<Option>, selectedOptions: Array<Option>) => Array<Option>,
+    inputParser: (inputValue: string, options: Array<Option>, selectedOptions: Array<Option>) => Array<Option>,
     /** If true, the user can add pills not included in the dropdown options. Defaults to true. */
     isCustomInputAllowed: boolean,
     /** If true, the input control is disabled so no more input can be made. Defaults to false. */
     isDisabled: boolean,
     /** Pill selector label. */
     label: React.Node,
+    /** Function to intercept the user entered input to fetch options in the selector dropdown */
+    onInput: (text: string, event?: SyntheticInputEvent<HTMLInputElement>) => void,
     /** Array of options shown in the dropdown. */
     options: Array<Option>,
     /** Called to check if pill text is valid. The text is passed in. */
@@ -43,10 +45,12 @@ type State = {
 
 class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     static defaultProps = {
+        dropdownFilter: defaultDropdownFilter,
         dropdownRenderer: defaultDropdownRenderer,
         inputParser: defaultInputParser,
         isCustomInputAllowed: true,
         isDisabled: false,
+        onInput: noop,
         options: [],
         shouldClearUnmatchedInput: false,
     };
@@ -62,7 +66,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         return { target: { name, value } };
     }
 
-    handleBlur = (event: SyntheticInputEvent<HTMLInputElement>) => {
+    handleBlur = (event?: SyntheticInputEvent<HTMLInputElement>) => {
         const { field } = this.props;
         const { name, onBlur } = field;
         // Sets touched in formik for the pill selector field.
@@ -70,8 +74,10 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         onBlur(event || this.createFakeEventTarget(name));
     };
 
-    handleInput = (text: string, event: SyntheticInputEvent<HTMLInputElement>) => {
+    handleInput = (text: string, event?: SyntheticInputEvent<HTMLInputElement>) => {
+        const { onInput } = this.props;
         this.setState({ inputText: text });
+        onInput(text, event);
         if (text === '') {
             this.handleBlur(event);
         }
@@ -95,9 +101,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
     handleParseItems = (inputValue: string): ?Array<Option> => {
         const { field, inputParser, options } = this.props;
         const { value: selectedOptions } = field;
-        const parseItems = inputParser || noop;
-
-        return parseItems(inputValue, options, selectedOptions);
+        return inputParser(inputValue, options, selectedOptions);
     };
 
     render() {
@@ -121,8 +125,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
         const { errors, touched } = form;
         const isTouched = getProp(touched, name);
         const error = isTouched ? getProp(errors, name) : null;
-        const filterDropdownOptions = dropdownFilter || defaultDropdownFilter;
-        const filteredOptions: Array<Option> = filterDropdownOptions(options, value, inputText);
+        const filteredOptions: Array<Option> = dropdownFilter(options, value, inputText);
         const inputProps = { name }; // so that events generated have event.target.name
 
         return (

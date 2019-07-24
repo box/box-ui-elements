@@ -14,7 +14,12 @@ describe('components/radio/RadioGroup', () => {
     const renderRadioButtons = onChange =>
         mount(
             <RadioGroup name="radiogroup" onChange={onChange} value="radio3">
-                <RadioButton description="radio1desc" label="Radio Button 1" value="radio1" />
+                <RadioButton
+                    data-resin-target="resin1"
+                    description="radio1desc"
+                    label="Radio Button 1"
+                    value="radio1"
+                />
                 <RadioButton label="Radio Button 2" value="radio2" />
                 <RadioButton description="radio3desc" label="Radio Button 3" value="radio3" />
                 <RadioButton label="Radio Button 4" value="radio4" />
@@ -38,6 +43,30 @@ describe('components/radio/RadioGroup', () => {
                 .at(1)
                 .text(),
         ).toEqual('radio3desc');
+    });
+
+    test('should set correct value to input', () => {
+        const component = renderRadioButtons();
+
+        expect(
+            component
+                .find('input')
+                .at(0)
+                .prop('value'),
+        ).toEqual('radio1');
+        expect(
+            component
+                .find('input')
+                .at(0)
+                .prop('value'),
+        ).toEqual('radio1');
+    });
+
+    test('should pass rest of props to input', () => {
+        const component = renderRadioButtons();
+        const inputEl = component.find('input').at(0);
+
+        expect(inputEl.prop('data-resin-target')).toEqual('resin1');
     });
 
     test('should select the correct radio button based on value', () => {

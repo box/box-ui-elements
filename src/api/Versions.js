@@ -338,25 +338,6 @@ class Versions extends OffsetBasedAPI {
             errorCallback,
         });
     }
-
-    /**
-     * Helper to sort versions by their created date
-     *
-     * @param {FileVersions} versions - API returned file versions for this file
-     * @return {FileVersions} sorted versions array
-     */
-    sortVersions(versions: ?FileVersions): ?FileVersions {
-        if (!versions) {
-            return versions;
-        }
-
-        const { entries, total_count } = versions;
-
-        return {
-            entries: [...entries].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
-            total_count,
-        };
-    }
 }
 
 export default Versions;

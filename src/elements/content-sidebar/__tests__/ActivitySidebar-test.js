@@ -9,11 +9,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         feedItems: jest.fn(),
         deleteComment: jest.fn(),
-        deleteTask: jest.fn(),
-        createTask: jest.fn(),
-        updateTask: jest.fn(),
+        deleteTaskNew: jest.fn(),
+        createTaskNew: jest.fn(),
         updateTaskNew: jest.fn(),
-        updateTaskAssignment: jest.fn(),
+        updateTaskCollaborator: jest.fn(),
         createComment: jest.fn(),
     };
     const usersAPI = {
@@ -122,16 +121,18 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const message = 'message';
             const assignees = ['1', '2'];
             const dueAt = 'test';
+            const taskType = 'GENERAL';
             instance.fetchFeedItems = jest.fn();
-            instance.createTask(message, assignees, dueAt);
-            expect(feedAPI.createTask).toHaveBeenCalledWith(
+            instance.createTask(message, assignees, taskType, dueAt);
+            expect(feedAPI.createTaskNew).toHaveBeenCalledWith(
                 file,
                 currentUser,
                 message,
                 assignees,
+                taskType,
                 dueAt,
-                instance.feedSuccessCallback,
-                instance.feedErrorCallback,
+                expect.any(Function),
+                expect.any(Function),
             );
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
@@ -146,7 +147,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.fetchFeedItems = jest.fn();
 
             instance.deleteTask({ id });
-            expect(feedAPI.deleteTask).toHaveBeenCalled();
+            expect(feedAPI.deleteTaskNew).toHaveBeenCalled();
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
     });
@@ -268,12 +269,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         test('should call the update task API and fetch the items', () => {
             instance.updateTask(taskObj);
-            expect(feedAPI.updateTask).toBeCalled();
-            expect(instance.fetchFeedItems).toBeCalled();
-        });
-
-        test('should call new update task API and fetch the items', () => {
-            instance.tasksApiNew.updateTask(taskObj);
             expect(feedAPI.updateTaskNew).toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
@@ -291,7 +286,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         test('should call the update task assignment API and fetch the items', () => {
             instance.updateTaskAssignment('1', '2', 'foo', 'bar');
-            expect(feedAPI.updateTaskAssignment).toBeCalled();
+            expect(feedAPI.updateTaskCollaborator).toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
     });

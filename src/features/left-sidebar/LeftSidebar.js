@@ -7,7 +7,7 @@ import throttle from 'lodash/throttle';
 import { NavSidebar, NavList, NavListCollapseHeader } from '../../components/nav-sidebar';
 import FooterIndicator from '../../components/footer-indicator/FooterIndicator';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 import CopyrightFooter from './CopyrightFooter';
 import InstantLogin from './InstantLogin';
@@ -190,7 +190,7 @@ class LeftSidebar extends React.Component<Props, State> {
             return (
                 <LeftSidebarIconWrapper className={wrapperClass}>
                     <IconComponent
-                        color={selected && customTheme.secondaryColor ? customTheme.secondaryColor : BOX_BLUE}
+                        color={selected && customTheme.secondaryColor ? customTheme.secondaryColor : bdlBoxBlue}
                         selected={selected}
                     />
                 </LeftSidebarIconWrapper>

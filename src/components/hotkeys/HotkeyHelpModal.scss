@@ -5,8 +5,8 @@
     flex-direction: column;
 
     .hotkey-list {
-        border-bottom: 1px solid $off-white;
-        border-top: 1px solid $off-white;
+        border-bottom: 1px solid $bdl-gray-10;
+        border-top: 1px solid $bdl-gray-10;
         margin: 10px 0 0;
         overflow: auto;
     }
@@ -29,15 +29,15 @@
 
         kbd {
             background: $white;
-            border: 1px solid $sf-fog;
+            border: 1px solid $bdl-gray-30;
             border-radius: 3px;
-            box-shadow: 0 1px 0 $sf-fog;
+            box-shadow: 0 1px 0 $bdl-gray-30;
             margin: 1px;
             padding: 2px 4px;
         }
     }
 
     &:nth-child(even) {
-        background-color: $ffive;
+        background-color: $bdl-gray-05;
     }
 }

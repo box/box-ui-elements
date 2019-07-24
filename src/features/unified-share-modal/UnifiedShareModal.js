@@ -16,6 +16,7 @@ import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
 
+import UnifiedShareModalTitle from './UnifiedShareModalTitle';
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
 import RemoveLinkConfirmModal from './RemoveLinkConfirmModal';
@@ -72,6 +73,8 @@ type Props = {
     getInitialData: Function,
     /** Handler function for when the user types into email shared link field to fetch contacts. */
     getSharedLinkContacts: (query: string) => Promise<Array<Contact>>,
+    /** An array of initially selected contacts. If none are initially selected, an empty array. */
+    initiallySelectedContacts?: Array<Contact>,
     intl: IntlShape,
     /** An array of invitee permissions */
     inviteePermissions: Array<InviteePermissions>,
@@ -161,7 +164,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
 
         this.state = {
             emailSharedLinkContacts: [],
-            inviteCollabsContacts: [],
+            inviteCollabsContacts: props.initiallySelectedContacts || [],
             inviteePermissionLevel: '',
             isConfirmModalOpen: false,
             isEmailLinkSectionExpanded: false,
@@ -616,44 +619,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
         );
     }
 
-    renderModalTitle() {
-        const { isEmailLinkSectionExpanded, showCollaboratorList } = this.state;
-        const { item } = this.props;
-        const { name } = item;
-        let title;
-
-        if (isEmailLinkSectionExpanded) {
-            title = (
-                <FormattedMessage
-                    {...messages.emailModalTitle}
-                    values={{
-                        itemName: name,
-                    }}
-                />
-            );
-        } else if (showCollaboratorList) {
-            title = (
-                <FormattedMessage
-                    {...messages.collaboratorListTitle}
-                    values={{
-                        itemName: name,
-                    }}
-                />
-            );
-        } else {
-            title = (
-                <FormattedMessage
-                    {...messages.modalTitle}
-                    values={{
-                        itemName: name,
-                    }}
-                />
-            );
-        }
-
-        return title;
-    }
-
     renderCollaboratorList() {
         const { item, collaboratorsList, trackingProps } = this.props;
         const { name, type } = item;
@@ -734,7 +699,13 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     className="unified-share-modal"
                     isOpen={isConfirmModalOpen ? false : isOpen}
                     onRequestClose={submitting ? undefined : onRequestClose}
-                    title={<span>{this.renderModalTitle()}</span>}
+                    title={
+                        <UnifiedShareModalTitle
+                            isEmailLinkSectionExpanded={isEmailLinkSectionExpanded}
+                            showCollaboratorList={showCollaboratorList}
+                            item={item}
+                        />
+                    }
                     {...extendedModalProps}
                 >
                     <LoadingIndicatorWrapper isLoading={isFetching} hideContent>

@@ -47,6 +47,7 @@ import {
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import type { ErrorType } from '../common/flowTypes';
+import type { VersionChangeCallback } from '../content-sidebar/versions';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import './ContentPreview.scss';
@@ -77,7 +78,7 @@ type Props = {
     onDownload: Function,
     onLoad: Function,
     onNavigate: Function,
-    onVersionChange: OnVersionChange,
+    onVersionChange: VersionChangeCallback,
     previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,

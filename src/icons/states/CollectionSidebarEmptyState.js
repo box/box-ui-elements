@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const CollectionSidebarEmptyState = ({ className = '', color = BOX_BLUE, height = 70, title, width = 90 }: Props) => (
+const CollectionSidebarEmptyState = ({ className = '', color = bdlBoxBlue, height = 70, title, width = 90 }: Props) => (
     <AccessibleSVG
         className={`collection-sidebar-empty-state ${className}`}
         height={height}
