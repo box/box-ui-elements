@@ -29,6 +29,7 @@ import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
+import LocalStore from '../../utils/LocalStore';
 import {
     isFeatureEnabled,
     withFeatureConsumer,
@@ -137,6 +138,8 @@ type State = {
     viewMode: ViewMode,
 };
 
+const localStoreViewMode = 'bce.defaultViewMode';
+
 class ContentExplorer extends Component<Props, State> {
     id: string;
 
@@ -155,6 +158,8 @@ class ContentExplorer extends Component<Props, State> {
     globalModifier: boolean;
 
     firstLoad: boolean = true; // Keeps track of very 1st load
+
+    store: LocalStore = new LocalStore();
 
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -248,7 +253,7 @@ class ContentExplorer extends Component<Props, State> {
             sortBy,
             sortDirection,
             view: VIEW_FOLDER,
-            viewMode: VIEW_MODE_LIST,
+            viewMode: this.getViewMode(),
         };
     }
 
@@ -281,7 +286,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { defaultView, currentFolderId }: Props = this.props;
+        const { currentFolderId, defaultView }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
@@ -289,6 +294,15 @@ class ContentExplorer extends Component<Props, State> {
             this.showRecents();
         } else {
             this.fetchFolder(currentFolderId);
+        }
+    }
+
+    componentDidUpdate(prevProps: Props, { viewMode: prevViewMode }: State) {
+        const { features }: Props = this.props;
+        const { viewMode }: State = this.state;
+
+        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled') && viewMode !== prevViewMode) {
+            this.store.setItem(localStoreViewMode, viewMode);
         }
     }
 
@@ -1247,6 +1261,13 @@ class ContentExplorer extends Component<Props, State> {
      */
     paginate = (newOffset: number) => {
         this.setState({ currentOffset: newOffset }, this.refreshCollection);
+    };
+
+    getViewMode = (): ViewMode => {
+        const { features }: Props = this.props;
+        const viewModePreference = this.store.getItem(localStoreViewMode);
+        const isGridViewEnabled = isFeatureEnabled(features, 'contentExplorer.gridView.enabled');
+        return isGridViewEnabled && viewModePreference ? viewModePreference : VIEW_MODE_LIST;
     };
 
     /**
