@@ -4,7 +4,7 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
 <Media
   as="div"
   className="bcs-AppActivity"
-  data-resin-feature="app_activity_template_12345_card"
+  data-resin-feature="appActivityCardtemplate_12345"
   data-resin-target="loaded"
 >
   <MediaFigure
