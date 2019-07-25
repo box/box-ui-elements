@@ -10,14 +10,12 @@ type Props = {
     date: number, // unix epoch timestamp (new Date().getTime())
 };
 
-const ActivityTimestamp = ({ date }: Props) => {
-    return (
-        <Tooltip text={<FormattedMessage {...messages.fullDateTime} values={{ time: date }} />}>
-            <small className="bcs-ActivityTimestamp">
-                <ReadableTime relativeThreshold={0} alwaysShowTime timestamp={date} />
-            </small>
-        </Tooltip>
-    );
-};
+const ActivityTimestamp = ({ date }: Props) => (
+    <Tooltip text={<FormattedMessage {...messages.fullDateTime} values={{ time: date }} />}>
+        <small className="bcs-ActivityTimestamp">
+            <ReadableTime relativeThreshold={0} alwaysShowTime timestamp={date} />
+        </small>
+    </Tooltip>
+);
 
 export default ActivityTimestamp;
