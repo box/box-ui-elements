@@ -6,6 +6,7 @@ import omit from 'lodash/omit';
 import LoadingIndicator from '../loading-indicator';
 import RadarAnimation from '../radar';
 
+// Type
 type Props = {
     /** Child components */
     children?: React.Node,
