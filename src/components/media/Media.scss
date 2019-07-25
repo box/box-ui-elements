@@ -33,9 +33,10 @@
 
     // overrides for .btn-plain's margin resets on focus states
     &,
-    &:active,
-    &:hover,
-    &:focus {
+    &.btn-plain,
+    &.btn-plain:active,
+    &.btn-plain:hover,
+    &.btn-plain:focus {
         margin-bottom: 5px;
         margin-left: 10px;
     }
