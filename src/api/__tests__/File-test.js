@@ -1,6 +1,8 @@
+import cloneDeep from 'lodash/cloneDeep';
 import Cache from '../../utils/Cache';
 import * as fields from '../../utils/fields';
 import File from '../File';
+import TokenService from '../../utils/TokenService';
 import { X_REP_HINTS, ERROR_CODE_FETCH_FILE, ERROR_CODE_GET_DOWNLOAD_URL, FIELD_EXTENSION } from '../../constants';
 
 jest.mock('../../utils/file', () => ({
@@ -92,6 +94,76 @@ describe('api/File', () => {
                 expect(success).not.toHaveBeenCalled();
                 expect(error).toHaveBeenCalledWith(new Error(ERROR), ERROR_CODE_GET_DOWNLOAD_URL);
             });
+        });
+    });
+
+    describe('getThumbnailUrl()', () => {
+        const baseUrl = 'baseUrl';
+        const url_template = `${baseUrl}/{+asset_path}`;
+        const representation = 'jpg';
+
+        const baseItem = {
+            representations: {
+                entries: [
+                    {
+                        representation,
+                        status: { state: 'success' },
+                        content: {
+                            url_template,
+                        },
+                    },
+                ],
+            },
+        };
+
+        let item;
+        beforeEach(() => {
+            item = cloneDeep(baseItem);
+        });
+
+        test('should return thumbnail url for item with jpg representation', () => {
+            TokenService.getReadToken = jest.fn().mockReturnValueOnce(TOKEN);
+            return file
+                .getThumbnailUrl(item)
+                .then(thumbnailUrl => expect(thumbnailUrl).toBe(`${baseUrl}/?access_token=${TOKEN}`));
+        });
+
+        test('should return thumbnail url for item with png representation', () => {
+            TokenService.getReadToken = jest.fn().mockReturnValueOnce(TOKEN);
+            item.representations.entries[0].representation = 'png';
+            return file
+                .getThumbnailUrl(item)
+                .then(thumbnailUrl => expect(thumbnailUrl).toBe(`${baseUrl}/1.png?access_token=${TOKEN}`));
+        });
+
+        test('should return null if item has no representations field', () => {
+            item.representations = undefined;
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if item has no entries', () => {
+            item.representations.entries = [];
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if TokenService returns null', () => {
+            TokenService.getReadToken = jest.fn().mockReturnValueOnce(null);
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if response status is not success', () => {
+            item.representations.entries[0].status.state = 'failure';
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if no representation in reponse', () => {
+            item.representations.entries[0].representation = undefined;
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if no template in response', () => {
+            item.representations.entries[0].content.url_template = undefined;
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
         });
     });
 

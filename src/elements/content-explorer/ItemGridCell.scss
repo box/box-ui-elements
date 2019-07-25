@@ -1,18 +1,3 @@
-.bce-ItemGridCell-itemThumbnail {
-    margin-bottom: 10px;
-    // padding is used to maintain cell's aspect ratio on resize of container
-    padding-bottom: 65%;
-    position: relative;
-}
-
-.bce-ItemGridCell-itemIcon {
-    align-items: center;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 0;
+.bce-ItemGridCell {
+    margin: 0;
 }
