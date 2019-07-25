@@ -27,29 +27,6 @@
         opacity: 1;
         transition: opacity .33s;
 
-        .bcs-comment-text {
-            white-space: pre-wrap;
-
-            .bcs-comment-mention {
-                overflow: initial;
-                white-space: normal;
-            }
-
-            .link {
-                color: $bdl-box-blue;
-                white-space: normal;
-
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-
-            .bcs-comment-translate {
-                color: $bdl-box-blue;
-                display: block;
-            }
-        }
-
         &.bcs-is-pending {
             opacity: .4;
         }

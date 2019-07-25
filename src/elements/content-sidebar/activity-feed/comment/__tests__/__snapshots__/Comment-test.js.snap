@@ -70,7 +70,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           date={1506534041000}
         />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         tagged_message="test"
         translationEnabled={false}
@@ -115,7 +115,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           date={1506534041000}
         />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         onTranslate={[MockFunction]}
         tagged_message="test"
@@ -161,7 +161,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
           date={1506534041000}
         />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         tagged_message="test"
         translationEnabled={false}
@@ -210,7 +210,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
           date={1506534041000}
         />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         tagged_message="test"
         translationEnabled={false}

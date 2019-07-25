@@ -22,7 +22,7 @@ import DeleteConfirmation from '../common/delete-confirmation';
 import ActivityTimestamp from '../common/activity-timestamp';
 import UserLink from './UserLink';
 import CommentInlineError from './CommentInlineError';
-import CommentText from './CommentText';
+import ActivityMessage from '../common/activity-message';
 import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
@@ -234,7 +234,7 @@ class Comment extends React.Component<Props, State> {
                                 getMentionWithQuery={getMentionWithQuery}
                             />
                         ) : (
-                            <CommentText
+                            <ActivityMessage
                                 id={id}
                                 tagged_message={tagged_message}
                                 translatedTaggedMessage={translatedTaggedMessage}
