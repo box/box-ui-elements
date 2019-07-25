@@ -1,6 +1,7 @@
 import Cache from '../../utils/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import Folder from '../Folder';
+import { FIELD_REPRESENTATIONS } from '../../constants';
 
 let folder;
 let cache;
@@ -48,121 +49,6 @@ describe('api/Folder', () => {
             cache.set('key', { item_collection: {} });
             folder.getCache = jest.fn().mockReturnValueOnce(cache);
             expect(folder.isLoaded()).toBe(true);
-        });
-    });
-
-    describe('getDataFromEntries()', () => {
-        test('should return proper representation and template', () => {
-            const representation = 'representation';
-            const template = 'template';
-            expect(
-                folder.getDataFromEntries(
-                    [
-                        {
-                            representation,
-                            content: {
-                                url_template: template,
-                            },
-                        },
-                    ],
-                    0,
-                ),
-            ).toEqual({
-                representation,
-                template,
-            });
-        });
-        test('should return nulls if no entries', () => {
-            expect(folder.getDataFromEntries([], 0)).toEqual({
-                representation: undefined,
-                template: undefined,
-            });
-        });
-    });
-
-    describe('formatRepresentations()', () => {
-        let callback;
-        beforeEach(() => {
-            callback = jest.fn();
-            folder.getDataFromEntries = jest.fn();
-        });
-
-        describe('early return cases', () => {
-            afterEach(() => {
-                expect(folder.getDataFromEntries).not.toHaveBeenCalled();
-                expect(callback).not.toHaveBeenCalled();
-            });
-
-            test('should not call callback if items is null', () => {
-                folder.formatRepresentations(null, callback);
-            });
-
-            test('should not call callback if items is empty', () => {
-                folder.formatRepresentations([], callback);
-            });
-
-            test('should not call callback if items representation field is empty', () => {
-                folder.formatRepresentations([{ name: 'item' }], callback);
-            });
-
-            test('should not call callback if items representation fetch was not successful', () => {
-                folder.formatRepresentations(
-                    [
-                        {
-                            representation: {
-                                entries: [
-                                    {
-                                        status: { state: 'failure' },
-                                    },
-                                ],
-                            },
-                        },
-                    ],
-                    callback,
-                );
-            });
-        });
-
-        describe('success case', () => {
-            test('should call callback twice for two items with thumbnails', () => {
-                folder.getDataFromEntries
-                    .mockReturnValueOnce({ representation: 'representation1', template: 'template1' })
-                    .mockReturnValueOnce({ representation: 'representation2', template: 'template2' });
-                const entries1 = [
-                    {
-                        representation: 'representation1',
-                        status: { state: 'success' },
-                        content: {
-                            url_template: 'template1',
-                        },
-                    },
-                ];
-                const entries2 = [
-                    {
-                        representation: 'represenation2',
-                        status: { state: 'success' },
-                        content: {
-                            url_template: 'template2',
-                        },
-                    },
-                ];
-                item1 = {
-                    representations: {
-                        entries: entries1,
-                    },
-                };
-                item2 = {
-                    representations: {
-                        entries: entries2,
-                    },
-                };
-                folder.formatRepresentations([item1, item2], callback);
-                expect(folder.getDataFromEntries.mock.calls).toEqual([[entries1, 0], [entries2, 0]]);
-                expect(callback.mock.calls).toEqual([
-                    [item1, 'representation1', 'template1'],
-                    [item2, 'representation2', 'template2'],
-                ]);
-            });
         });
     });
 
@@ -279,7 +165,8 @@ describe('api/Folder', () => {
             folder.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
-            return folder.folderRequest({ shouldFetchThumbnails: true }).then(() => {
+            const fields = [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS];
+            return folder.folderRequest({ fields }).then(() => {
                 expect(folder.folderSuccessHandler).toHaveBeenCalledWith('success');
                 expect(folder.errorHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.get).toHaveBeenCalledWith({
@@ -288,7 +175,7 @@ describe('api/Folder', () => {
                         direction: 'direction',
                         limit: 20,
                         offset: 0,
-                        fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                        fields: fields.toString(),
                         sort: 'by',
                     },
                     headers: { 'X-Rep-Hints': '[jpg?dimensions=1024x1024,png?dimensions=1024x1024]' },

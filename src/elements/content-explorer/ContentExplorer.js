@@ -12,9 +12,6 @@ import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
-import getProp from 'lodash/get';
-import { getTypedFileId } from '../../utils/file';
-import TokenService from '../../utils/TokenService';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -31,6 +28,7 @@ import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import {
     isFeatureEnabled,
     withFeatureConsumer,
@@ -45,6 +43,7 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
+    FIELD_REPRESENTATIONS,
     DEFAULT_ROOT,
     VIEW_SEARCH,
     VIEW_FOLDER,
@@ -393,46 +392,6 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
-     * Format template, representation, and tokenString into a url usable in the DOM
-     *
-     * @param {string} representation - representation field from representations field of item
-     * @param {string} template - template field from representations field of item
-     * @param {string} tokenString - string of access_token
-     * @return {string} - generated thumbnailUrl
-     */
-    makeThumbnailUrl(representation: string, template: string, tokenString: string): string {
-        const thumbnailBaseUrl = template.replace('{+asset_path}', representation === 'jpg' ? '' : '1.png');
-        return `${thumbnailBaseUrl}?access_token=${tokenString}`;
-    }
-
-    /**
-     * Updates item in currentCollection with the given thumbnailUrl
-     *
-     * @param {BoxItem} item - item that should have thumbnailUrl field set
-     * @param {?string} representation - representation from item's representations field
-     * @param {?string} template -  template from item's representations field
-     * @return {Promise<void>}
-     */
-    assignItemThumbnailUrl = async (item: BoxItem, representation: ?string, template: ?string): Promise<void> => {
-        const { token } = this.props;
-        if (!!template && !!representation) {
-            const tokenResult = await TokenService.getToken(getTypedFileId(item.id), token);
-            const tokenString = typeof tokenResult === 'string' ? tokenResult : getProp(tokenResult, 'read');
-            if (!tokenString) {
-                return;
-            }
-            const thumbnailUrl = this.makeThumbnailUrl(representation, template, tokenString);
-            const newCollection = { ...this.state.currentCollection };
-            if (newCollection.items) {
-                newCollection.items = newCollection.items.map(newItem =>
-                    item.id === newItem.id ? { ...cloneDeep(item), thumbnailUrl } : newItem,
-                );
-                this.setState({ currentCollection: newCollection });
-            }
-        }
-    };
-
-    /**
      * Folder fetch success callback
      *
      * @private
@@ -440,18 +399,23 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
      * @return {void}
      */
-    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
+    async fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): Promise<void> {
         const { features, onNavigate, rootFolderId }: Props = this.props;
-        const { boxItem, id, name }: Collection = collection;
+        const { boxItem, id, items = [], name }: Collection = collection;
         const { selected }: State = this.state;
         const rootName = id === rootFolderId ? name : '';
 
-        this.updateCollection(collection, selected, () => {
-            if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
-                const { items } = this.state.currentCollection;
-                this.api.getFolderAPI().formatRepresentations(items, this.assignItemThumbnailUrl);
-            }
-        });
+        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
+            const fileAPI = this.api.getFileAPI();
+            const itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
+            const itemsWithThumbnails = items.map((item, index) => {
+                const thumbnailUrl = itemThumbnails[index];
+                return thumbnailUrl ? { ...item, thumbnailUrl } : item;
+            });
+            this.updateCollection({ ...collection, items: itemsWithThumbnails }, selected);
+        } else {
+            this.updateCollection(collection, selected);
+        }
 
         // Close any open modals
         this.closeModals();
@@ -489,7 +453,6 @@ class ContentExplorer extends Component<Props, State> {
         const hasFolderChanged = currentId && currentId !== folderId;
         const hasSearchQuery = !!searchQuery.trim().length;
         const offset = hasFolderChanged || hasSearchQuery ? 0 : currentOffset; // Reset offset on folder or mode change
-        const shouldFetchThumbnails = isFeatureEnabled(features, 'contentExplorer.gridView.enabled');
 
         // If we are navigating around, aka not first load
         // then reset the focus to the root so that after
@@ -507,6 +470,10 @@ class ContentExplorer extends Component<Props, State> {
             currentOffset: offset,
         });
 
+        const fields = isFeatureEnabled(features, 'contentExplorer.gridView.enabled')
+            ? [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS]
+            : FOLDER_FIELDS_TO_FETCH;
+
         // Fetch the folder using folder API
         this.api.getFolderAPI().getFolder(
             folderId,
@@ -518,7 +485,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { forceFetch: true, shouldFetchThumbnails },
+            { forceFetch: true, fields },
         );
     };
 

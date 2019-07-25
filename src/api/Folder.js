@@ -5,7 +5,6 @@
  */
 
 import noop from 'lodash/noop';
-import getProp from 'lodash/get';
 import flatten from '../utils/flatten';
 import { FOLDER_FIELDS_TO_FETCH } from '../utils/fields';
 import { getBadItemError } from '../utils/error';
@@ -100,45 +99,6 @@ class Folder extends Item {
     isLoaded(): boolean {
         const cache: APICache = this.getCache();
         return cache.has(this.key);
-    }
-
-    /**
-     * Takes representations fields from items in collection and assigns thumbnailUrls
-     * to items, with the use of the callback
-     *
-     * @param {?Array<BoxItem>} items - collection with items that have representations field populated
-     * @param {(item: BoxItem, representation: ?string, template: ?string) => Promise<void>} callback - Function to call with generated thumbnailUrl
-     * @return {void}
-     */
-    formatRepresentations(
-        items: ?Array<BoxItem>,
-        callback: (item: BoxItem, representation: ?string, template: ?string) => Promise<void> = () =>
-            Promise.resolve(),
-    ): void {
-        if (items) {
-            items.forEach(item => {
-                const entries = getProp(item, 'representations.entries');
-                const status = getProp(entries, '[0].status.state');
-                if (status === 'success') {
-                    const { representation, template } = this.getDataFromEntries(entries, 0);
-                    callback(item, representation, template);
-                }
-            });
-        }
-    }
-
-    /**
-     * Retrieve the representation and template fields from the 'index' in 'entries'
-     *
-     * @param {FileRepresentationCollection} - entries object from representations field of item
-     * @return {?string, ?string} - object containing the entry's representation and template
-     */
-    getDataFromEntries(
-        entries: FileRepresentationCollection,
-        index: number,
-    ): { representation: ?string, template: ?string } {
-        const entry = getProp(entries, `[${index}]`);
-        return { representation: getProp(entry, 'representation'), template: getProp(entry, 'content.url_template') };
     }
 
     /**
@@ -250,7 +210,7 @@ class Folder extends Item {
      * @return {Promise}
      */
     folderRequest(
-        { fields, noPagination, shouldFetchThumbnails }: FetchOptions = {},
+        { fields, noPagination }: FetchOptions = {},
         successHandler?: Function = this.folderSuccessHandler,
     ): Promise<any> {
         if (this.isDestroyed()) {
@@ -258,9 +218,6 @@ class Folder extends Item {
         }
 
         const requestFields = fields || FOLDER_FIELDS_TO_FETCH;
-        if (shouldFetchThumbnails) {
-            requestFields.push(FIELD_REPRESENTATIONS);
-        }
 
         this.errorCode = ERROR_CODE_FETCH_FOLDER;
         let params = { fields: requestFields.toString() };
@@ -278,7 +235,7 @@ class Folder extends Item {
             .get({
                 url: this.getUrl(this.id),
                 params,
-                headers: shouldFetchThumbnails
+                headers: requestFields.includes(FIELD_REPRESENTATIONS)
                     ? {
                           // if unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do
                           // not have a thumbnail rep but do have a first page rep.

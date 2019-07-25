@@ -393,7 +393,7 @@ type BoxItem = {
     parent?: BoxItem,
     path_collection?: BoxPathCollection,
     permissions?: BoxItemPermission,
-    representations?: FileRepresentationCollection,
+    representations?: FileRepresentationResponse,
     restored_from?: BoxItemVersion,
     selected?: boolean,
     shared_link?: SharedLink,
@@ -474,20 +474,20 @@ type Collection = {
     totalCount?: number,
 };
 
-type FileRepresentationCollection = {
+type FileRepresentationResponse = {
     entries: Array<FileRepresentation>,
 };
 
 type FileRepresentation = {
-    content: {
+    content?: {
         url_template: string,
     },
-    properties: {
+    properties?: {
         dimensions: string,
         paged: string,
         thumb: string,
     },
-    representation: string,
+    representation?: string,
     status: {
         state: string,
     },
@@ -809,7 +809,6 @@ type FetchOptions = {
     forceFetch?: boolean,
     noPagination?: boolean,
     refreshCache?: boolean,
-    shouldFetchThumbnails?: boolean,
 };
 
 type ErrorResponseData = {
