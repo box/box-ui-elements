@@ -50,7 +50,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         );
 
         // validating that the Tooltip and the comment posted time are properly set
-        expect(wrapper.find('ReadableTime').prop('timestamp')).toEqual(unixTime);
+        expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
 
         expect(wrapper).toMatchSnapshot();
     });

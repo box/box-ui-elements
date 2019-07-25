@@ -2,9 +2,9 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import DeleteConfirmation from '../DeleteConfirmation';
-import messages from '../../comment/messages';
+import messages from '../../../comment/messages';
 
-describe('elements/content-sidebar/ActivityFeed/common/DeleteConfirmation', () => {
+describe('elements/content-sidebar/ActivityFeed/common/delete-confirmation', () => {
     const getWrapper = props =>
         shallow(
             <DeleteConfirmation
@@ -19,7 +19,7 @@ describe('elements/content-sidebar/ActivityFeed/common/DeleteConfirmation', () =
     describe('render()', () => {
         test('should render component', () => {
             const wrapper = getWrapper();
-            expect(wrapper.find('.bdl-DeleteConfirmation-promptMessage')).toMatchSnapshot();
+            expect(wrapper.find('.bcs-DeleteConfirmation-promptMessage')).toMatchSnapshot();
         });
     });
 

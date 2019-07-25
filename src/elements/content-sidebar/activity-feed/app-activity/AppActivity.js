@@ -10,16 +10,14 @@ import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
 
-import DeleteConfirmation from '../common/DeleteConfirmation';
+import DeleteConfirmation from '../common/delete-confirmation';
+import ActivityTimestamp from '../common/activity-timestamp';
 import IconTrash from '../../../../icons/general/IconTrash';
 import Media from '../../../../components/media';
 import messages from './messages';
-import Tooltip from '../../../../components/tooltip';
 import { bdlGray80 } from '../../../../styles/variables';
 import { Link } from '../../../../components/link';
 import { MenuItem } from '../../../../components/menu';
-import { ONE_HOUR_MS } from '../../../../constants';
-import { ReadableTime } from '../../../../components/time';
 import './AppActivity.scss';
 
 type Props = {
@@ -164,22 +162,7 @@ class AppActivity extends React.PureComponent<Props, State> {
                     <figcaption className="bcs-AppActivity-headline">{name}</figcaption>
 
                     <div>
-                        <Tooltip
-                            text={
-                                <FormattedMessage
-                                    {...messages.appActivityCreatedAtFullDateTime}
-                                    values={{ time: createdAtTimestamp }}
-                                />
-                            }
-                        >
-                            <small className="bcs-AppActivity-timestamp">
-                                <ReadableTime
-                                    alwaysShowTime
-                                    relativeThreshold={ONE_HOUR_MS}
-                                    timestamp={createdAtTimestamp}
-                                />
-                            </small>
-                        </Tooltip>
+                        <ActivityTimestamp date={createdAtTimestamp} />
                     </div>
 
                     {this.parseActivity().map(mapActivityNodes)}

@@ -1,6 +1,6 @@
-@import '../../../../styles/variables';
+@import '../../../../../styles/variables';
 
-.bdl-DeleteConfirmation {
+.bcs-DeleteConfirmation {
     width: 212px;
 
     .overlay {
@@ -9,16 +9,16 @@
     }
 }
 
-.bdl-DeleteConfirmation-promptMessage {
+.bcs-DeleteConfirmation-promptMessage {
     margin-bottom: 20px;
 }
 
 // overrides for confirm/cancel button spacing
-.bdl-DeleteConfirmation-delete,
+.bcs-DeleteConfirmation-delete,
 .bcs-DeleteConfirmation-cancel {
     margin-left: 0;
 }
 
-.bdl-DeleteConfirmation-cancel {
+.bcs-DeleteConfirmation-cancel {
     margin-right: 10px;
 }
