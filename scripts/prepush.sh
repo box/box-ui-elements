@@ -37,6 +37,7 @@ check_and_commit_updated_translations() {
 
 # lint, test, and build assets to update translations
 prepush() {
+    yarn clean || exit 1
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Building all sources, this will update i18n/json${end}"
     printf "${blue}-------------------------------------------------------------${end}"
