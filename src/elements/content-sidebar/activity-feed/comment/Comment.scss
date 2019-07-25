@@ -23,22 +23,11 @@
     }
 
     .bcs-comment {
-        margin-top: 23px;
         opacity: 1;
         transition: opacity .33s;
 
         &.bcs-is-pending {
             opacity: .4;
-        }
-
-        .bcs-comment-user-name {
-            color: $bdl-gray;
-            font-weight: bold;
-            line-height: 19.5px;
-        }
-
-        .bcs-comment-text-loading {
-            margin-top: 3px;
         }
     }
 }

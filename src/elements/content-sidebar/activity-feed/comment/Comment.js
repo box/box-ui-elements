@@ -20,7 +20,7 @@ import { bdlGray80 } from '../../../../styles/variables';
 
 import DeleteConfirmation from '../common/delete-confirmation';
 import ActivityTimestamp from '../common/activity-timestamp';
-import UserLink from './UserLink';
+import UserLink from '../common/user-link';
 import CommentInlineError from './CommentInlineError';
 import ActivityMessage from '../common/activity-message';
 import ApprovalCommentForm from '../approval-comment-form';
@@ -202,7 +202,6 @@ class Comment extends React.Component<Props, State> {
                         <div>
                             {userHeadlineRenderer(
                                 <UserLink
-                                    className="bcs-comment-user-name"
                                     data-resin-target={ACTIVITY_TARGETS.PROFILE}
                                     id={createdByUser.id}
                                     name={createdByUser.name}

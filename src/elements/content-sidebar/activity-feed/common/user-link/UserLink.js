@@ -1,16 +1,13 @@
-/**
- * @flow
- * @file UserLink component
- */
-
+// @flow
 import * as React from 'react';
-
-import { Link } from '../../../../components/link';
+import classnames from 'classnames';
+import { Link } from '../../../../../components/link';
+import './UserLink.scss';
 
 type Props = {
+    className?: string,
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
-    mentionTrigger?: any,
     name: string,
 };
 
@@ -51,11 +48,11 @@ class UserLink extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { name, getUserProfileUrl, ...rest }: Props = this.props;
+        const { name, getUserProfileUrl, className, ...rest }: Props = this.props;
         const { profileUrl }: State = this.state;
 
         return profileUrl ? (
-            <Link {...rest} href={profileUrl}>
+            <Link className={classnames('bcs-UserLink', className)} {...rest} href={profileUrl}>
                 {name}
             </Link>
         ) : (
