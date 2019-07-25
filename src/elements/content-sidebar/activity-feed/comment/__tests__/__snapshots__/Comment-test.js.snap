@@ -2,11 +2,11 @@
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly render comment 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
   <Media
     as="div"
-    className="bcs-comment"
+    className="bcs-Comment-content"
   >
     <MediaFigure
       as="figure"
@@ -23,7 +23,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
     <MediaBody>
       <TetherComponent
         attachment="top right"
-        className="bcs-comment-delete-confirm"
+        className="bcs-Comment-deleteConfirmationModal"
         constraints={
           Array [
             Object {
@@ -42,7 +42,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           isDisabled={false}
         >
           <MenuItem
-            className="bcs-comment-menu-delete"
             data-resin-target="activityfeed-inlinedelete"
             data-testid="delete-comment"
             onClick={[Function]}
@@ -82,11 +81,11 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly render comment when translation is enabled 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
   <Media
     as="div"
-    className="bcs-comment"
+    className="bcs-Comment-content"
   >
     <MediaFigure
       as="figure"
@@ -127,11 +126,11 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an error when one is defined 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
   <Media
     as="div"
-    className="bcs-comment bcs-is-pending"
+    className="bcs-Comment-content bcs-is-pending"
   >
     <MediaFigure
       as="figure"
@@ -175,11 +174,11 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render commenter as a link 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
   <Media
     as="div"
-    className="bcs-comment"
+    className="bcs-Comment-content"
   >
     <MediaFigure
       as="figure"

@@ -1,22 +1,22 @@
 @import '../../../common/variables';
 
-// tethered styles
-.bcs-comment-delete-confirm {
-    z-index: $overlay-z-index;
+// the comment container including inline error component
+.bcs-Comment {
+    position: relative;
+    z-index: 1;
 }
 
-.be {
-    .bcs-comment-container {
-        position: relative;
-        z-index: 1;
-    }
+// the comment activity item
+.bcs-Comment-content {
+    opacity: 1;
+    transition: opacity .33s;
 
-    .bcs-comment {
-        opacity: 1;
-        transition: opacity .33s;
-
-        &.bcs-is-pending {
-            opacity: .4;
-        }
+    &.bcs-is-pending {
+        opacity: .4;
     }
+}
+
+// tethered styles for delete confirmation modal
+.bcs-Comment-deleteConfirmationModal {
+    z-index: $overlay-z-index;
 }

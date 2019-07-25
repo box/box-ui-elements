@@ -142,9 +142,9 @@ class Comment extends React.Component<Props, State> {
         const isMenuVisible = (canDelete || canEdit) && !isPending;
 
         return (
-            <div className="bcs-comment-container">
+            <div className="bcs-Comment">
                 <Media
-                    className={classNames('bcs-comment', {
+                    className={classNames('bcs-Comment-content', {
                         'bcs-is-pending': isPending || error,
                     })}
                 >
@@ -155,14 +155,13 @@ class Comment extends React.Component<Props, State> {
                         {isMenuVisible && (
                             <TetherComponent
                                 attachment="top right"
-                                className="bcs-comment-delete-confirm"
+                                className="bcs-Comment-deleteConfirmationModal"
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                             >
                                 <Media.Menu isDisabled={isConfirmingDelete} data-testid="comment-actions-menu">
                                     {canEdit && (
                                         <MenuItem
-                                            className="bcs-comment-menu-edit"
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
                                             data-testid="edit-comment"
                                             onClick={this.handleEditClick}
@@ -175,7 +174,6 @@ class Comment extends React.Component<Props, State> {
                                     )}
                                     {canDelete && (
                                         <MenuItem
-                                            className="bcs-comment-menu-delete"
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
                                             data-testid="delete-comment"
                                             onClick={this.handleDeleteClick}

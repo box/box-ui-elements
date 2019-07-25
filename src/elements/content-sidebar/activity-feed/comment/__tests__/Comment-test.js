@@ -133,8 +133,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 />,
             );
 
-            expect(wrapper.find('.bcs-comment-menu-delete').length).toEqual(showDelete ? 1 : 0);
-            expect(wrapper.find('.bcs-comment-menu-edit').length).toEqual(showEdit ? 1 : 0);
+            expect(wrapper.find('[data-testid="delete-comment"]').length).toEqual(showDelete ? 1 : 0);
+            expect(wrapper.find('[data-testid="edit-comment"]').length).toEqual(showEdit ? 1 : 0);
             expect(wrapper.find('[data-testid="comment-actions-menu"]').length).toEqual(showMenu ? 1 : 0);
         },
     );
