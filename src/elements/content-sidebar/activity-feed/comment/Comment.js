@@ -10,8 +10,6 @@ import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
 import identity from 'lodash/identity';
 
-import { ReadableTime } from '../../../../components/time';
-import Tooltip from '../../../../components/tooltip';
 import Media from '../../../../components/media';
 import { MenuItem } from '../../../../components/menu';
 import IconTrash from '../../../../icons/general/IconTrash';
@@ -20,7 +18,8 @@ import messages from './messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 
-import CommentDeleteConfirmation from './CommentDeleteConfirmation';
+import DeleteConfirmation from '../common/delete-confirmation';
+import ActivityTimestamp from '../common/activity-timestamp';
 import UserLink from './UserLink';
 import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
@@ -191,7 +190,7 @@ class Comment extends React.Component<Props, State> {
                                     )}
                                 </Media.Menu>
                                 {isConfirmingDelete && (
-                                    <CommentDeleteConfirmation
+                                    <DeleteConfirmation
                                         isOpen={isConfirmingDelete}
                                         message={confirmMessage}
                                         onDeleteCancel={this.handleDeleteCancel}
@@ -212,21 +211,10 @@ class Comment extends React.Component<Props, State> {
                             )}
                         </div>
                         <div>
-                            <Tooltip
-                                text={
-                                    <FormattedMessage
-                                        {...messages.commentPostedFullDateTime}
-                                        values={{ time: createdAtTimestamp }}
-                                    />
-                                }
-                            >
-                                <small className="bcs-comment-created-at">
-                                    <ReadableTime relativeThreshold={0} alwaysShowTime timestamp={createdAtTimestamp} />
-                                </small>
-                            </Tooltip>
+                            <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
                         {isEditing ? (
-                            /* This is for legacy task inline editing */
+                            /* Inline editing is not currently supported for comments */
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
                                 isDisabled={isDisabled}

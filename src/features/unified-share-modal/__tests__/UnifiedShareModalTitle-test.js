@@ -7,6 +7,10 @@ import UnifiedShareModalTitle from '../UnifiedShareModalTitle';
 describe('features/unified-share-modal/HeaderTitle', () => {
     let wrapper;
     const defaultItem = {
+        classification: 'internal',
+        bannerPolicy: {
+            body: 'test',
+        },
         id: '111',
         name: 'test file',
         type: 'file',
@@ -17,13 +21,7 @@ describe('features/unified-share-modal/HeaderTitle', () => {
     };
 
     const getWrapper = (props = {}) => {
-        return shallow(
-            <UnifiedShareModalTitle
-                classification={{ advisoryMessage: 'Internal use only', name: 'TopSecret' }}
-                item={defaultItem}
-                {...props}
-            />,
-        );
+        return shallow(<UnifiedShareModalTitle item={defaultItem} {...props} />);
     };
 
     beforeEach(() => {

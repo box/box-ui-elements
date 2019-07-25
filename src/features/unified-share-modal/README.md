@@ -47,6 +47,10 @@ class USMExample extends React.Component {
         return this.state = {
             isOpen: false,
             item: {
+                bannerPolicy: {
+                    body: 'test',
+                },
+                classification: 'internal',
                 grantedPermissions: {
                     itemShare: true
                 },
