@@ -5,6 +5,7 @@ import GridView from './GridView';
 type Props = {
     currentCollection: Collection,
     height: number,
+    onItemClick: (item: BoxItem | string) => void,
     slotRenderer: (slotIndex: number) => ?React.Element<any>,
     width: number,
 };

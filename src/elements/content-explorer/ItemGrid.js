@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import getProp from 'lodash/get';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import GridViewWrapper from '../../components/grid-view/GridViewWrapper';
@@ -11,17 +11,17 @@ type Props = {
     ...$Exact<ItemGridProps>,
 };
 
-const ItemGrid = ({ currentCollection, rootId, ...rest }: Props) => {
+const ItemGrid = ({ currentCollection, onItemClick, rootId, ...rest }: Props) => {
     /**
      * Renderer used for cards in grid view
      *
      * @param {number} slotIndex - index of item in currentCollection.items
      * @return {React.Element} - Element to display in card
      */
-    const slotRenderer = (slotIndex: number) => {
+    const slotRenderer = (slotIndex: number): ?React.Element<any> => {
         const item: ?BoxItem = getProp(currentCollection, `items[${slotIndex}]`);
 
-        return item ? <ItemGridCell item={item} rootId={rootId} {...rest} /> : null;
+        return item ? <ItemGridCell item={item} onItemClick={onItemClick} rootId={rootId} {...rest} /> : null;
     };
 
     return (
@@ -30,6 +30,7 @@ const ItemGrid = ({ currentCollection, rootId, ...rest }: Props) => {
                 <GridViewWrapper
                     currentCollection={currentCollection}
                     height={height}
+                    onItemClick={onItemClick}
                     slotRenderer={slotRenderer}
                     width={width}
                 />

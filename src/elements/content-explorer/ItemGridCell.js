@@ -1,9 +1,7 @@
 // @flow
 import * as React from 'react';
 import ItemGridThumbnail from './ItemGridThumbnail';
-import getSize from '../../utils/size';
 import MoreOptions from './MoreOptions';
-import Date from './Date';
 import Name from '../common/item/Name';
 import type { ItemGridProps } from './flowTypes';
 import './ItemGridCell.scss';
@@ -27,7 +25,7 @@ const ItemGridCell = ({
     return (
         <figure className="bce-ItemGridCell">
             <ItemGridThumbnail item={item} />
-            <figcaption>
+            <figcaption className="bce-ItemGridCell-figcaption">
                 <Name
                     canPreview={canPreview}
                     isTouch={isTouch}
@@ -35,17 +33,11 @@ const ItemGridCell = ({
                     onItemClick={onItemClick}
                     onItemSelect={onItemSelect}
                     rootId={rootId}
-                    showDetails={isSmall}
+                    showDetails
                     view={view}
                 />
-                {!isSmall && (
-                    <React.Fragment>
-                        <div>{getSize(item.size)}</div>
-                        <Date dataKey="" item={item} />
-                    </React.Fragment>
-                )}
+                <MoreOptions canPreview={canPreview} isSmall item={item} onItemSelect={onItemSelect} {...rest} />
             </figcaption>
-            <MoreOptions canPreview={canPreview} isSmall={isSmall} item={item} onItemSelect={onItemSelect} {...rest} />
         </figure>
     );
 };

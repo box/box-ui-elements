@@ -3,7 +3,6 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
 import Table, { Column } from 'react-virtualized/dist/es/Table';
-import uniqueId from 'lodash/uniqueId';
 import getProp from 'lodash/get';
 
 import 'react-virtualized/styles.css';
@@ -22,6 +21,7 @@ type Props = {
     columnCount: number,
     currentCollection: Collection,
     height: number,
+    onItemClick: (item: BoxItem | string) => void,
     slotRenderer: (slotIndex: number) => ?React.Element<any>,
     width: number,
 };
@@ -37,13 +37,21 @@ class GridView extends React.Component<Props> {
         fixedWidth: true,
     });
 
-    componentDidUpdate(prevProps: Props) {
-        const { columnCount, width } = this.props;
+    componentDidUpdate({
+        columnCount: prevColumnCount,
+        currentCollection: prevCurrentCollection,
+        width: prevWidth,
+    }: Props) {
+        const { columnCount, currentCollection, width } = this.props;
 
         // The React Virtualized Table must be notified when either the cached
         // row sizes or the parent width change. If omitted, rows are sized
         // incorrectly resulting in gaps or content overlap.
-        if (columnCount !== prevProps.columnCount || width !== prevProps.width) {
+        if (
+            columnCount !== prevColumnCount ||
+            currentCollection.id !== prevCurrentCollection.id ||
+            width !== prevWidth
+        ) {
             this.cache.clearAll();
             this.forceUpdate();
         }
@@ -58,13 +66,18 @@ class GridView extends React.Component<Props> {
         const maxSlotIndex = Math.min(startingIndex + columnCount, count);
 
         for (let slotIndex = startingIndex; slotIndex < maxSlotIndex; slotIndex += 1) {
+            const item = getProp(currentCollection, `items[${slotIndex}]`);
+            const { id, selected } = item;
+
             // using item's id as key is important for renrendering.  React Virtualized Table rerenders
             // on every 1px scroll, so using improper key would lead to image flickering in each
             // card of the grid view when scrolling.
             contents.push(
                 <div
-                    key={getProp(currentCollection, `items[${slotIndex}].id`) || uniqueId('bdl-GridView-slot')}
-                    className="bdl-GridView-slot"
+                    key={id}
+                    className={classNames('bdl-GridView-slot', {
+                        'bdl-GridView-slot--selected': selected,
+                    })}
                 >
                     {slotRenderer(slotIndex)}
                 </div>,

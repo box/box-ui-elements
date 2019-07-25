@@ -1,5 +1,9 @@
+@import '../../elements/common/variables';
+@import '../../styles/variables';
+
 .bce-ItemGridThumbnail {
-    margin-bottom: 10px;
+    background-color: $bdl-gray-02;
+    margin-bottom: 2px;
     // padding is used to maintain cell's aspect ratio on resize of container
     padding-bottom: 65%;
     position: relative;
@@ -17,4 +21,9 @@
     position: absolute;
     right: 0;
     top: 0;
+
+    & svg {
+        height: 60%;
+        width: 60%;
+    }
 }
