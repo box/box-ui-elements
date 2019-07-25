@@ -11,7 +11,18 @@ import { getBadItemError } from '../utils/error';
 import Item from './Item';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
-import { CACHE_PREFIX_FOLDER, ERROR_CODE_FETCH_FOLDER, ERROR_CODE_CREATE_FOLDER } from '../constants';
+import {
+    CACHE_PREFIX_FOLDER,
+    ERROR_CODE_FETCH_FOLDER,
+    ERROR_CODE_CREATE_FOLDER,
+    FIELD_REPRESENTATIONS,
+} from '../constants';
+
+// available dimensions for JPG: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048"
+const DEFAULT_JPG_DIMENSIONS = '1024x1024';
+
+// available dimensions for PNG: "1024x1024", "2048x2048"
+const DEFAULT_PNG_DIMENSIONS = '1024x1024';
 
 class Folder extends Item {
     /**
@@ -209,9 +220,7 @@ class Folder extends Item {
         const requestFields = fields || FOLDER_FIELDS_TO_FETCH;
 
         this.errorCode = ERROR_CODE_FETCH_FOLDER;
-
         let params = { fields: requestFields.toString() };
-
         if (!noPagination) {
             params = Object.assign({}, params, {
                 direction: this.sortDirection.toLowerCase(),
@@ -226,6 +235,13 @@ class Folder extends Item {
             .get({
                 url: this.getUrl(this.id),
                 params,
+                headers: requestFields.includes(FIELD_REPRESENTATIONS)
+                    ? {
+                          // if unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do
+                          // not have a thumbnail rep but do have a first page rep.
+                          'X-Rep-Hints': `[jpg?dimensions=${DEFAULT_JPG_DIMENSIONS},png?dimensions=${DEFAULT_PNG_DIMENSIONS}]`,
+                      }
+                    : {},
             })
             .then(successHandler)
             .catch(this.errorHandler);
@@ -305,7 +321,7 @@ class Folder extends Item {
         }
 
         // Make the XHR request
-        this.folderRequest();
+        this.folderRequest(options);
     }
 
     /**
