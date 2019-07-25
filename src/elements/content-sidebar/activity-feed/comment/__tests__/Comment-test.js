@@ -294,7 +294,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 onDelete={jest.fn()}
             />,
         );
-        const inlineErrorActionLink = wrapper.find('InlineError').find('PlainButton.lnk');
+        const inlineErrorActionLink = wrapper.find('InlineError').find('button.bcs-ActivityError-action');
         expect(inlineErrorActionLink.length).toEqual(1);
 
         inlineErrorActionLink.simulate('click');

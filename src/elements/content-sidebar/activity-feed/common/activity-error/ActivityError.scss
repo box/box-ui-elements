@@ -1,0 +1,13 @@
+@import '../../../../../styles/variables';
+
+.bcs-ActivityError {
+    padding: 14px 15px;
+}
+
+.bcs-ActivityError-action,
+button.bcs-ActivityError-action {
+    color: $bdl-watermelon-red;
+    display: block;
+    margin-top: 5px;
+    text-decoration: underline;
+}

@@ -21,7 +21,7 @@ import { bdlGray80 } from '../../../../styles/variables';
 import DeleteConfirmation from '../common/delete-confirmation';
 import ActivityTimestamp from '../common/activity-timestamp';
 import UserLink from '../common/user-link';
-import CommentInlineError from './CommentInlineError';
+import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
@@ -244,7 +244,7 @@ class Comment extends React.Component<Props, State> {
                         )}
                     </Media.Body>
                 </Media>
-                {error ? <CommentInlineError {...error} /> : null}
+                {error ? <ActivityError {...error} /> : null}
             </div>
         );
     }

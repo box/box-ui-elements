@@ -9,17 +9,6 @@
     .bcs-comment-container {
         position: relative;
         z-index: 1;
-
-        .bcs-comment-error {
-            padding: 14px 15px;
-
-            .bcs-comment-error-action {
-                color: $bdl-watermelon-red;
-                display: block;
-                margin-top: 5px;
-                text-decoration: underline;
-            }
-        }
     }
 
     .bcs-comment {

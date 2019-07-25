@@ -249,7 +249,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
 
-        expect(wrapper.find('CommentInlineError')).toHaveLength(1);
+        expect(wrapper.find('ActivityError')).toHaveLength(1);
     });
 
     test('should call getAllTaskCollaborators on modal open if there is a next_marker', async () => {
