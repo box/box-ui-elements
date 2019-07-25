@@ -1,67 +1,22 @@
 @import '../../../common/variables';
 
-// tethered styles
-.bcs-comment-delete-confirm {
-    z-index: $overlay-z-index;
+// the comment container including inline error component
+.bcs-Comment {
+    position: relative;
+    z-index: 1;
 }
 
-.be {
-    .bcs-comment-container {
-        position: relative;
-        z-index: 1;
+// the comment activity item
+.bcs-Comment-content {
+    opacity: 1;
+    transition: opacity .33s;
 
-        .bcs-comment-error {
-            padding: 14px 15px;
-
-            .bcs-comment-error-action {
-                color: $bdl-watermelon-red;
-                display: block;
-                margin-top: 5px;
-                text-decoration: underline;
-            }
-        }
+    &.bcs-is-pending {
+        opacity: .4;
     }
+}
 
-    .bcs-comment {
-        margin-top: 23px;
-        opacity: 1;
-        transition: opacity .33s;
-
-        .bcs-comment-text {
-            white-space: pre-wrap;
-
-            .bcs-comment-mention {
-                overflow: initial;
-                white-space: normal;
-            }
-
-            .link {
-                color: $bdl-box-blue;
-                white-space: normal;
-
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-
-            .bcs-comment-translate {
-                color: $bdl-box-blue;
-                display: block;
-            }
-        }
-
-        &.bcs-is-pending {
-            opacity: .4;
-        }
-
-        .bcs-comment-user-name {
-            color: $bdl-gray;
-            font-weight: bold;
-            line-height: 19.5px;
-        }
-
-        .bcs-comment-text-loading {
-            margin-top: 3px;
-        }
-    }
+// tethered styles for delete confirmation modal
+.bcs-Comment-deleteConfirmationModal {
+    z-index: $overlay-z-index;
 }

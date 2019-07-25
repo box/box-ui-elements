@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import commonMessages from '../../../common/messages';
 import messages from './messages';
-import CommentInlineError from '../comment/CommentInlineError';
+import ActivityError from '../common/activity-error';
 import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../../../icons/two-toned/IconTaskGeneral';
 import { withAPIContext } from '../../../common/api-context';
@@ -219,7 +219,7 @@ class Task extends React.Component<Props, State> {
 
         return (
             <div className="bcs-Task">
-                {inlineError ? <CommentInlineError {...inlineError} /> : null}
+                {inlineError ? <ActivityError {...inlineError} /> : null}
                 <div
                     className={classNames('bcs-Task-body', {
                         'bcs-is-pending': isPending || isLoading,

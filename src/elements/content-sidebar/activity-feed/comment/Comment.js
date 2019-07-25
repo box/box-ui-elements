@@ -20,9 +20,9 @@ import { bdlGray80 } from '../../../../styles/variables';
 
 import DeleteConfirmation from '../common/delete-confirmation';
 import ActivityTimestamp from '../common/activity-timestamp';
-import UserLink from './UserLink';
-import CommentInlineError from './CommentInlineError';
-import CommentText from './CommentText';
+import UserLink from '../common/user-link';
+import ActivityError from '../common/activity-error';
+import ActivityMessage from '../common/activity-message';
 import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
@@ -142,9 +142,9 @@ class Comment extends React.Component<Props, State> {
         const isMenuVisible = (canDelete || canEdit) && !isPending;
 
         return (
-            <div className="bcs-comment-container">
+            <div className="bcs-Comment">
                 <Media
-                    className={classNames('bcs-comment', {
+                    className={classNames('bcs-Comment-content', {
                         'bcs-is-pending': isPending || error,
                     })}
                 >
@@ -155,14 +155,13 @@ class Comment extends React.Component<Props, State> {
                         {isMenuVisible && (
                             <TetherComponent
                                 attachment="top right"
-                                className="bcs-comment-delete-confirm"
+                                className="bcs-Comment-deleteConfirmationModal"
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                             >
                                 <Media.Menu isDisabled={isConfirmingDelete} data-testid="comment-actions-menu">
                                     {canEdit && (
                                         <MenuItem
-                                            className="bcs-comment-menu-edit"
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
                                             data-testid="edit-comment"
                                             onClick={this.handleEditClick}
@@ -175,7 +174,6 @@ class Comment extends React.Component<Props, State> {
                                     )}
                                     {canDelete && (
                                         <MenuItem
-                                            className="bcs-comment-menu-delete"
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
                                             data-testid="delete-comment"
                                             onClick={this.handleDeleteClick}
@@ -202,7 +200,6 @@ class Comment extends React.Component<Props, State> {
                         <div>
                             {userHeadlineRenderer(
                                 <UserLink
-                                    className="bcs-comment-user-name"
                                     data-resin-target={ACTIVITY_TARGETS.PROFILE}
                                     id={createdByUser.id}
                                     name={createdByUser.name}
@@ -234,7 +231,7 @@ class Comment extends React.Component<Props, State> {
                                 getMentionWithQuery={getMentionWithQuery}
                             />
                         ) : (
-                            <CommentText
+                            <ActivityMessage
                                 id={id}
                                 tagged_message={tagged_message}
                                 translatedTaggedMessage={translatedTaggedMessage}
@@ -245,7 +242,7 @@ class Comment extends React.Component<Props, State> {
                         )}
                     </Media.Body>
                 </Media>
-                {error ? <CommentInlineError {...error} /> : null}
+                {error ? <ActivityError {...error} /> : null}
             </div>
         );
     }

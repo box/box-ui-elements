@@ -2,11 +2,11 @@
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly render comment 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
   <Media
     as="div"
-    className="bcs-comment"
+    className="bcs-Comment-content"
   >
     <MediaFigure
       as="figure"
@@ -23,7 +23,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
     <MediaBody>
       <TetherComponent
         attachment="top right"
-        className="bcs-comment-delete-confirm"
+        className="bcs-Comment-deleteConfirmationModal"
         constraints={
           Array [
             Object {
@@ -42,7 +42,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           isDisabled={false}
         >
           <MenuItem
-            className="bcs-comment-menu-delete"
             data-resin-target="activityfeed-inlinedelete"
             data-testid="delete-comment"
             onClick={[Function]}
@@ -59,7 +58,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       </TetherComponent>
       <div>
         <UserLink
-          className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
           id={10}
           name="50 Cent"
@@ -70,7 +68,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           date={1506534041000}
         />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         tagged_message="test"
         translationEnabled={false}
@@ -83,11 +81,11 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly render comment when translation is enabled 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
   <Media
     as="div"
-    className="bcs-comment"
+    className="bcs-Comment-content"
   >
     <MediaFigure
       as="figure"
@@ -104,7 +102,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
     <MediaBody>
       <div>
         <UserLink
-          className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
           id={10}
           name="50 Cent"
@@ -115,7 +112,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           date={1506534041000}
         />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         onTranslate={[MockFunction]}
         tagged_message="test"
@@ -129,11 +126,11 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an error when one is defined 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
   <Media
     as="div"
-    className="bcs-comment bcs-is-pending"
+    className="bcs-Comment-content bcs-is-pending"
   >
     <MediaFigure
       as="figure"
@@ -150,7 +147,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
     <MediaBody>
       <div>
         <UserLink
-          className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
           id={10}
           name="50 Cent"
@@ -161,7 +157,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
           date={1506534041000}
         />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         tagged_message="test"
         translationEnabled={false}
@@ -169,7 +165,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
       />
     </MediaBody>
   </Media>
-  <CommentInlineError
+  <ActivityError
     message="errorrrrr"
     title="error"
   />
@@ -178,11 +174,11 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render commenter as a link 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
   <Media
     as="div"
-    className="bcs-comment"
+    className="bcs-Comment-content"
   >
     <MediaFigure
       as="figure"
@@ -199,7 +195,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
     <MediaBody>
       <div>
         <UserLink
-          className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
           id={10}
           name="50 Cent"
@@ -210,7 +205,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
           date={1506534041000}
         />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         tagged_message="test"
         translationEnabled={false}

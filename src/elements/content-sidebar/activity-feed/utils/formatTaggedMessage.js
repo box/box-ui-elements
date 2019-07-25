@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { Link } from '../../../../components/link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import UserLink from '../comment/UserLink';
+import UserLink from '../common/user-link';
 
 // this regex matches one of the following regular expressions:
 // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
