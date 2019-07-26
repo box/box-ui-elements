@@ -45,8 +45,6 @@ const ActiveState = ({
     getApproverWithQuery,
     getAvatarUrl,
     getUserProfileUrl,
-    getMentionWithQuery,
-    mentionSelectorContacts,
 }: Props): React.Node => (
     <ul className="bcs-activity-feed-active-state">
         {items.map((item: any) => {
@@ -79,9 +77,7 @@ const ActiveState = ({
                                 currentUser={currentUser}
                                 getApproverWithQuery={getApproverWithQuery}
                                 getAvatarUrl={getAvatarUrl}
-                                getMentionWithQuery={getMentionWithQuery}
                                 getUserProfileUrl={getUserProfileUrl}
-                                mentionSelectorContacts={mentionSelectorContacts}
                                 onAssignmentUpdate={onTaskAssignmentUpdate}
                                 onDelete={onTaskDelete}
                                 onEdit={onTaskEdit}

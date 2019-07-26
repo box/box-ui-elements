@@ -4,47 +4,108 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
 <div
   className="bcs-Task"
 >
-  <div
-    className="bcs-Task-body"
+  <Media
+    as="div"
+    className="bcs-Task-media"
     data-testid="task-card"
   >
-    <Comment
-      avatarRenderer={[Function]}
-      created_at="2010-01-01"
-      created_by={
-        Object {
-          "id": "1",
-          "name": "Jake Thomas",
-          "type": "user",
-        }
-      }
-      currentUser={
-        Object {
-          "id": "1",
-          "name": "Jake Thomas",
-          "type": "user",
-        }
-      }
-      id="123125"
-      onDelete={[MockFunction]}
-      onEdit={[MockFunction]}
-      onEditClick={[Function]}
-      permissions={
-        Object {
-          "can_create_task_collaborator": true,
-          "can_create_task_link": true,
-          "can_delete": true,
-          "can_edit": true,
-          "can_update": true,
-        }
-      }
-      tagged_message="This is where we tell each other what we need to do"
-      type="task"
-      userHeadlineRenderer={[Function]}
-    />
-    <div
-      className="bcs-Task-content"
+    <MediaFigure
+      as="figure"
+      className="bcs-Task-avatar"
     >
+      <Avatar
+        user={
+          Object {
+            "id": "1",
+            "name": "Jake Thomas",
+            "type": "user",
+          }
+        }
+      />
+      <IconTaskGeneral
+        className="bcs-Task-avatarBadge"
+        height={20}
+        width={20}
+      />
+    </MediaFigure>
+    <MediaBody>
+      <TetherComponent
+        attachment="top right"
+        className="bcs-Task-deleteConfirmationModal"
+        constraints={
+          Array [
+            Object {
+              "attachment": "together",
+              "to": "scrollParent",
+            },
+          ]
+        }
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="bottom right"
+      >
+        <MediaMenu
+          data-testid="task-actions-menu"
+          dropdownProps={Object {}}
+          isDisabled={false}
+        >
+          <MenuItem
+            data-resin-target="activityfeed-inlineedit"
+            data-testid="edit-task"
+            onClick={[Function]}
+          >
+            <IconPencil
+              color="#4e4e4e"
+            />
+            <FormattedMessage
+              defaultMessage="Modify task"
+              id="be.contentSidebar.activityFeed.task.taskEditMenuItem"
+            />
+          </MenuItem>
+          <MenuItem
+            data-resin-target="activityfeed-inlinedelete"
+            data-testid="delete-task"
+            onClick={[Function]}
+          >
+            <IconTrash
+              color="#4e4e4e"
+            />
+            <FormattedMessage
+              defaultMessage="Delete task"
+              id="be.contentSidebar.activityFeed.task.taskDeleteMenuItem"
+            />
+          </MenuItem>
+        </MediaMenu>
+      </TetherComponent>
+      <div>
+        <FormattedMessage
+          defaultMessage="{user} assigned you a Task"
+          id="be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineGeneralCurrentUser"
+          values={
+            Object {
+              "user": <UserLink
+                data-resin-target="activityfeed-profilelink"
+                id="1"
+                name="Jake Thomas"
+                type="user"
+              />,
+            }
+          }
+        />
+      </div>
+      <div>
+        <ActivityTimestamp
+          date={1262304000000}
+        />
+      </div>
+      <div>
+        <ActivityMessage
+          id="123125"
+          tagged_message="This is where we tell each other what we need to do"
+          translationEnabled={false}
+          translationFailed={null}
+        />
+      </div>
       <div
         className="bcs-Task-statusContainer"
       >
@@ -110,8 +171,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           taskType="GENERAL"
         />
       </div>
-    </div>
-  </div>
+    </MediaBody>
+  </Media>
   <TaskModal
     editMode="EDIT"
     feedbackUrl=""
