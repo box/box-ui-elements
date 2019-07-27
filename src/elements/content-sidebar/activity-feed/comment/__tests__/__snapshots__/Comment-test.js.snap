@@ -6,7 +6,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 >
   <Media
     as="div"
-    className="bcs-Comment-content"
+    className="bcs-Comment-media"
   >
     <MediaFigure
       as="figure"
@@ -85,7 +85,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 >
   <Media
     as="div"
-    className="bcs-Comment-content"
+    className="bcs-Comment-media"
   >
     <MediaFigure
       as="figure"
@@ -130,7 +130,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
 >
   <Media
     as="div"
-    className="bcs-Comment-content bcs-is-pending"
+    className="bcs-Comment-media bcs-is-pending"
   >
     <MediaFigure
       as="figure"
@@ -178,7 +178,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
 >
   <Media
     as="div"
-    className="bcs-Comment-content"
+    className="bcs-Comment-media"
   >
     <MediaFigure
       as="figure"

@@ -117,7 +117,7 @@ class Comment extends React.Component<Props, State> {
         return (
             <div className="bcs-Comment">
                 <Media
-                    className={classNames('bcs-Comment-content', {
+                    className={classNames('bcs-Comment-media', {
                         'bcs-is-pending': isPending || error,
                     })}
                 >
