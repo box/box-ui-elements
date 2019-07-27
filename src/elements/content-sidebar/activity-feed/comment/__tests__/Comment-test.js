@@ -103,13 +103,14 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     });
 
     test.each`
-        permissions                               | showMenu | showDelete | showEdit
-        ${{ can_delete: true, can_edit: false }}  | ${true}  | ${true}    | ${false}
-        ${{ can_delete: false, can_edit: true }}  | ${false} | ${false}   | ${false}
-        ${{ can_delete: false, can_edit: false }} | ${false} | ${false}   | ${false}
+        permissions                               | onEdit       | showMenu | showDelete | showEdit
+        ${{ can_delete: true, can_edit: false }}  | ${jest.fn()} | ${true}  | ${true}    | ${false}
+        ${{ can_delete: false, can_edit: true }}  | ${jest.fn()} | ${true}  | ${false}   | ${true}
+        ${{ can_delete: false, can_edit: true }}  | ${undefined} | ${false} | ${false}   | ${false}
+        ${{ can_delete: false, can_edit: false }} | ${jest.fn()} | ${false} | ${false}   | ${false}
     `(
-        `for a $type with permissions $permissions, should showMenu: $showMenu, showDelete: $showDelete, showEdit: $showEdit`,
-        ({ permissions, type, showMenu, showDelete, showEdit }) => {
+        `for a comment with permissions $permissions and onEdit ($onEdit), should showMenu: $showMenu, showDelete: $showDelete, showEdit: $showEdit`,
+        ({ permissions, onEdit, showMenu, showDelete, showEdit }) => {
             const comment = {
                 created_at: TIME_STRING_SEPT_27_2017,
                 tagged_message: 'test',
@@ -120,12 +121,12 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 <Comment
                     id="123"
                     {...comment}
-                    type={type}
                     approverSelectorContacts={approverSelectorContacts}
                     currentUser={currentUser}
                     handlers={allHandlers}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={jest.fn()}
+                    onEdit={onEdit}
                     permissions={permissions}
                 />,
             );
@@ -158,6 +159,48 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         );
 
         expect(wrapper.find('[data-testid="comment-actions-menu"]').length).toEqual(0);
+    });
+
+    test('should allow user to edit if they have edit permissions on the task and edit handler is defined', () => {
+        const comment = {
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
+            type: 'task',
+            permissions: { can_edit: true, can_delete: true },
+        };
+        const wrapper = mount(
+            <Comment
+                id="123"
+                {...comment}
+                approverSelectorContacts={approverSelectorContacts}
+                currentUser={currentUser}
+                handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
+                onEdit={jest.fn()}
+            />,
+        );
+
+        const instance = wrapper.instance();
+
+        expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
+        expect(wrapper.find('ActivityMessage').length).toEqual(1);
+        expect(wrapper.state('isEditing')).toBe(false);
+
+        expect(wrapper.state('isEditing')).toBe(false);
+        wrapper.find('button[data-testid="comment-actions-menu"]').simulate('click');
+        wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
+        wrapper.update();
+
+        expect(wrapper.find('ActivityMessage').length).toEqual(0);
+        expect(wrapper.state('isEditing')).toBe(true);
+
+        instance.approvalCommentFormFocusHandler();
+        expect(wrapper.state('isInputOpen')).toBe(true);
+
+        instance.handleUpdate();
+        expect(wrapper.state('isEditing')).toBe(false);
+        expect(wrapper.state('isInputOpen')).toBe(false);
     });
 
     test('should render an error when one is defined', () => {

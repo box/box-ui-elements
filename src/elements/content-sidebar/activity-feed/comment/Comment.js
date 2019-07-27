@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
@@ -7,27 +8,35 @@ import Avatar from '../Avatar';
 import Media from '../../../../components/media';
 import { MenuItem } from '../../../../components/menu';
 import IconTrash from '../../../../icons/general/IconTrash';
-import { bdlGray80 } from '../../../../styles/variables';
+import IconPencil from '../../../../icons/general/IconPencil';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import DeleteConfirmation from '../common/delete-confirmation';
+import ActivityTimestamp from '../common/activity-timestamp';
+import UserLink from '../common/user-link';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
-import ActivityTimestamp from '../common/activity-timestamp';
-import DeleteConfirmation from '../common/delete-confirmation';
-import UserLink from '../common/user-link';
+import ApprovalCommentForm from '../approval-comment-form';
+import formatTaggedMessage from '../utils/formatTaggedMessage';
+import { bdlGray80 } from '../../../../styles/variables';
 import { PLACEHOLDER_USER } from '../../../../constants';
-import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import messages from './messages';
 import './Comment.scss';
 
 type Props = {
     created_at: string | number,
     created_by: User,
+    currentUser?: User,
     error?: ActionItemError,
     getAvatarUrl: GetAvatarUrlCallback,
+    getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
+    isDisabled?: boolean,
     isPending?: boolean,
+    mentionSelectorContacts?: SelectorItems,
     modified_at?: string | number,
     onDelete?: Function,
+    onEdit?: Function,
     permissions?: BoxItemPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -36,11 +45,15 @@ type Props = {
 
 type State = {
     isConfirmingDelete: boolean,
+    isEditing: boolean,
+    isInputOpen: boolean,
 };
 
 class Comment extends React.Component<Props, State> {
     state = {
         isConfirmingDelete: false,
+        isEditing: false,
+        isInputOpen: false,
     };
 
     handleDeleteConfirm = (): void => {
@@ -59,6 +72,22 @@ class Comment extends React.Component<Props, State> {
         this.setState({ isConfirmingDelete: true });
     };
 
+    handleEditClick = (): void => {
+        this.setState({ isEditing: true, isInputOpen: true });
+    };
+
+    approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
+
+    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+
+    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+
+    handleUpdate = (args: any): void => {
+        const { onEdit = noop } = this.props;
+        onEdit(args);
+        this.approvalCommentFormSubmitHandler();
+    };
+
     render(): React.Node {
         const {
             created_by,
@@ -70,20 +99,25 @@ class Comment extends React.Component<Props, State> {
             tagged_message = '',
             translatedTaggedMessage,
             translations,
+            currentUser,
+            isDisabled,
             getAvatarUrl,
             getUserProfileUrl,
+            getMentionWithQuery,
+            mentionSelectorContacts,
+            onEdit,
         } = this.props;
-        const { isConfirmingDelete } = this.state;
+        const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
-        const { can_delete: canDelete = false } = permissions;
-        const isMenuVisible = canDelete && !isPending;
+        const canEdit = !!onEdit && permissions.can_edit; // comment editing not supported
+        const canDelete = permissions.can_delete;
+        const isMenuVisible = (canDelete || canEdit) && !isPending;
 
         return (
             <div className="bcs-Comment">
-                {error ? <ActivityError {...error} /> : null}
                 <Media
-                    className={classNames('bcs-Comment-media', {
+                    className={classNames('bcs-Comment-content', {
                         'bcs-is-pending': isPending || error,
                     })}
                 >
@@ -99,6 +133,16 @@ class Comment extends React.Component<Props, State> {
                                 targetAttachment="bottom right"
                             >
                                 <Media.Menu isDisabled={isConfirmingDelete} data-testid="comment-actions-menu">
+                                    {canEdit && (
+                                        <MenuItem
+                                            data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
+                                            data-testid="edit-comment"
+                                            onClick={this.handleEditClick}
+                                        >
+                                            <IconPencil color={bdlGray80} />
+                                            <FormattedMessage {...messages.commentEditMenuItem} />
+                                        </MenuItem>
+                                    )}
                                     {canDelete && (
                                         <MenuItem
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
@@ -131,16 +175,38 @@ class Comment extends React.Component<Props, State> {
                         <div>
                             <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
-                        <ActivityMessage
-                            id={id}
-                            tagged_message={tagged_message}
-                            translatedTaggedMessage={translatedTaggedMessage}
-                            {...translations}
-                            translationFailed={error ? true : null}
-                            getUserProfileUrl={getUserProfileUrl}
-                        />
+                        {isEditing ? (
+                            /* NOTE: Inline editing is not currently supported for comments */
+                            <ApprovalCommentForm
+                                isDisabled={isDisabled}
+                                className={classNames('bcs-activity-feed-comment-input', {
+                                    'bcs-is-disabled': isDisabled,
+                                })}
+                                updateComment={this.handleUpdate}
+                                isOpen={isInputOpen}
+                                user={currentUser}
+                                onCancel={this.approvalCommentFormCancelHandler}
+                                onFocus={this.approvalCommentFormFocusHandler}
+                                isEditing={isEditing}
+                                entityId={id}
+                                tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
+                                getAvatarUrl={getAvatarUrl}
+                                mentionSelectorContacts={mentionSelectorContacts}
+                                getMentionWithQuery={getMentionWithQuery}
+                            />
+                        ) : (
+                            <ActivityMessage
+                                id={id}
+                                tagged_message={tagged_message}
+                                translatedTaggedMessage={translatedTaggedMessage}
+                                {...translations}
+                                translationFailed={error ? true : null}
+                                getUserProfileUrl={getUserProfileUrl}
+                            />
+                        )}
                     </Media.Body>
                 </Media>
+                {error ? <ActivityError {...error} /> : null}
             </div>
         );
     }
