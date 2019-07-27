@@ -35,6 +35,7 @@ type ExternalProps = {
     getUserProfileUrl?: GetProfileUrlCallback,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
+    onCommentUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
@@ -267,6 +268,37 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             },
             this.feedErrorCallback,
         );
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
+    updateComment = (
+        id: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxItemPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ): void => {
+        const { file, api, onCommentUpdate = noop } = this.props;
+
+        const errorCallback = (e, code) => {
+            if (onError) {
+                onError(e, code);
+            }
+            this.feedErrorCallback(e, code);
+        };
+
+        const successCallback = () => {
+            this.feedSuccessCallback();
+            if (onSuccess) {
+                onSuccess();
+            }
+            onCommentUpdate();
+        };
+
+        api.getFeedAPI(false).updateComment(file, id, text, hasMention, permissions, successCallback, errorCallback);
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -550,6 +582,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
+                    onCommentUpdate={this.updateComment}
                     onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}
                     onTaskUpdate={this.updateTask}

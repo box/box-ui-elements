@@ -20,3 +20,15 @@
 .bcs-Comment-deleteConfirmationModal {
     z-index: $overlay-z-index;
 }
+
+// override for activity feed defaults
+.be {
+    .bcs-Comment-editor.bcs-activity-feed-comment-input.bcs-comment-input-is-open {
+        background-color: inherit;
+        border-top: none;
+
+        .bcs-comment-input-form-container {
+            margin-right: 0;
+        }
+    }
+}

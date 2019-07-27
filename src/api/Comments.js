@@ -151,6 +151,7 @@ class Comments extends OffsetBasedAPI {
         file,
         commentId,
         message,
+        tagged_message,
         permissions,
         successCallback,
         errorCallback,
@@ -161,6 +162,7 @@ class Comments extends OffsetBasedAPI {
         message: string,
         permissions: BoxItemPermission,
         successCallback: Function,
+        tagged_message?: string,
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_COMMENT;
         const { id = '' } = file;
@@ -173,7 +175,7 @@ class Comments extends OffsetBasedAPI {
         }
 
         const requestData = {
-            data: { message },
+            data: { message, tagged_message },
         };
 
         this.put({
