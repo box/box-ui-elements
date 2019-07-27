@@ -103,16 +103,14 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     });
 
     test.each`
-        permissions                               | type         | showMenu | showDelete | showEdit
-        ${{ can_delete: true, can_edit: false }}  | ${'task'}    | ${true}  | ${true}    | ${false}
-        ${{ can_delete: false, can_edit: true }}  | ${'task'}    | ${true}  | ${false}   | ${true}
-        ${{ can_delete: false, can_edit: false }} | ${'task'}    | ${false} | ${false}   | ${false}
-        ${{ can_delete: true, can_edit: false }}  | ${'comment'} | ${true}  | ${true}    | ${false}
-        ${{ can_delete: false, can_edit: true }}  | ${'comment'} | ${false} | ${false}   | ${false}
-        ${{ can_delete: false, can_edit: false }} | ${'comment'} | ${false} | ${false}   | ${false}
+        permissions                               | onEdit       | showMenu | showDelete | showEdit
+        ${{ can_delete: true, can_edit: false }}  | ${jest.fn()} | ${true}  | ${true}    | ${false}
+        ${{ can_delete: false, can_edit: true }}  | ${jest.fn()} | ${true}  | ${false}   | ${true}
+        ${{ can_delete: false, can_edit: true }}  | ${undefined} | ${false} | ${false}   | ${false}
+        ${{ can_delete: false, can_edit: false }} | ${jest.fn()} | ${false} | ${false}   | ${false}
     `(
-        `for a $type with permissions $permissions, should showMenu: $showMenu, showDelete: $showDelete, showEdit: $showEdit`,
-        ({ permissions, type, showMenu, showDelete, showEdit }) => {
+        `for a comment with permissions $permissions and onEdit ($onEdit), should showMenu: $showMenu, showDelete: $showDelete, showEdit: $showEdit`,
+        ({ permissions, onEdit, showMenu, showDelete, showEdit }) => {
             const comment = {
                 created_at: TIME_STRING_SEPT_27_2017,
                 tagged_message: 'test',
@@ -123,12 +121,12 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 <Comment
                     id="123"
                     {...comment}
-                    type={type}
                     approverSelectorContacts={approverSelectorContacts}
                     currentUser={currentUser}
                     handlers={allHandlers}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={jest.fn()}
+                    onEdit={onEdit}
                     permissions={permissions}
                 />,
             );
@@ -200,45 +198,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         instance.approvalCommentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        instance.updateTaskHandler();
+        instance.handleUpdate();
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
-    });
-
-    test('should handle custom edit click handling if edit permissions exist and the handler is defined', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_edit: true },
-            onEditClick: jest.fn(),
-        };
-        const wrapper = mount(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onEdit={jest.fn()}
-            />,
-        );
-
-        const instance = wrapper.instance();
-
-        expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
-        expect(wrapper.find('ActivityMessage').length).toEqual(1);
-        expect(wrapper.state('isEditing')).toBe(false);
-
-        expect(wrapper.state('isEditing')).toBe(false);
-        instance.handleEditClick();
-        wrapper.update();
-        expect(wrapper.find('ActivityMessage').length).toEqual(1);
-        expect(wrapper.state('isEditing')).toBe(false);
-        expect(wrapper.state('isInputOpen')).toBe(false);
-
-        expect(comment.onEditClick).toHaveBeenCalledTimes(1);
     });
 
     test('should render an error when one is defined', () => {
@@ -300,81 +262,5 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         inlineErrorActionLink.simulate('click');
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
-    });
-
-    test('should not have UserLink mention object when shouldReturnString is true', () => {
-        const comment = {
-            created_at: '2016-11-02T11:35:14-07:00',
-            tagged_message: 'test @[3203255873:test user] ',
-            created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_edit: true },
-        };
-        const wrapper = mount(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onEdit={jest.fn()}
-            />,
-        );
-        expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
-        expect(wrapper.find('ActivityMessage').length).toEqual(1);
-        expect(wrapper.state('isEditing')).toBe(false);
-        expect(wrapper.find('UserLink').length).toEqual(2);
-        expect(wrapper.state('isEditing')).toBe(false);
-
-        wrapper.instance().handleEditClick();
-        wrapper.update();
-        expect(wrapper.state('isEditing')).toBe(true);
-        expect(wrapper.find('UserLink').length).toEqual(1);
-    });
-
-    test('should use userHeadlineRenderer if prop is passed in', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-        };
-        const userHeadlineRenderer = userLink => <div className="userHeadlineRenderer">{userLink}</div>;
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                userHeadlineRenderer={userHeadlineRenderer}
-            />,
-        );
-
-        expect(wrapper.find('.userHeadlineRenderer')).toHaveLength(1);
-    });
-
-    test('should use avatarRenderer if prop is passed in', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-        };
-        const avatarRenderer = avatar => <div className="avatar-test">{avatar}</div>;
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                avatarRenderer={avatarRenderer}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-            />,
-        );
-
-        expect(wrapper.find('.avatar-test')).toHaveLength(1);
     });
 });

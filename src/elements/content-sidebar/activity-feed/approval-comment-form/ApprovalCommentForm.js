@@ -32,6 +32,7 @@ type Props = {
     onFocus: Function,
     onSubmit: Function,
     tagged_message?: string,
+    updateComment?: Function,
     user: User,
 } & InjectIntlProvidedProps;
 
@@ -62,14 +63,19 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     }
 
     onFormValidSubmitHandler = (): void => {
-        const { createComment = noop, onSubmit } = this.props;
+        const { createComment = noop, updateComment = noop, onSubmit, entityId } = this.props;
 
         const { text, hasMention } = this.getFormattedCommentText();
+
         if (!text) {
             return;
         }
 
-        createComment({ text, hasMention });
+        if (entityId) {
+            updateComment({ text, hasMention });
+        } else {
+            createComment({ text, hasMention });
+        }
 
         if (onSubmit) {
             onSubmit();

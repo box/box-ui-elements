@@ -7,21 +7,6 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    taskDeleteMenuItem: {
-        id: 'be.contentSidebar.activityFeed.comment.taskDeleteMenuItem',
-        defaultMessage: 'Delete task',
-        description: 'Text to show on menu item to delete task',
-    },
-    taskEditMenuItem: {
-        id: 'be.contentSidebar.activityFeed.comment.taskEditMenuItem',
-        defaultMessage: 'Modify task',
-        description: 'Text to show on menu item to edit task',
-    },
-    taskDeletePrompt: {
-        id: 'be.contentSidebar.activityFeed.comment.taskDeletePrompt',
-        defaultMessage: 'Are you sure you want to permanently delete this task?',
-        description: 'Confirmation prompt text to delete task',
-    },
     commentDeleteMenuItem: {
         id: 'be.contentSidebar.activityFeed.comment.commentDeleteMenuItem',
         defaultMessage: 'Delete',

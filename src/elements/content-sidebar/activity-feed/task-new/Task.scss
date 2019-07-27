@@ -4,17 +4,13 @@
 $bcs-task-grid: 4px;
 $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
 
-.bcs-Task-body {
+.bcs-Task-media {
     opacity: 1;
     transition: opacity .33s;
 
     &.bcs-is-pending {
         opacity: .4;
     }
-}
-
-.bcs-Task-content {
-    margin-left: $bcs-task-left-offset;
 }
 
 .bcs-Task-avatar {
@@ -39,4 +35,9 @@ $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
 
 .bcs-Task-actionsContainer {
     margin-top: 5 * $bcs-task-grid;
+}
+
+// tethered styles for delete confirmation modal
+.bcs-Task-deleteConfirmationModal {
+    z-index: $overlay-z-index;
 }
