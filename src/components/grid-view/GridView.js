@@ -21,7 +21,6 @@ type Props = {
     columnCount: number,
     currentCollection: Collection,
     height: number,
-    onItemClick: (item: BoxItem | string) => void,
     slotRenderer: (slotIndex: number) => ?React.Element<any>,
     width: number,
 };
@@ -65,6 +64,8 @@ class GridView extends React.Component<Props> {
         const startingIndex = rowIndex * columnCount;
         const maxSlotIndex = Math.min(startingIndex + columnCount, count);
 
+        const slotWidth = `${(100 / columnCount).toFixed(4)}%`;
+
         for (let slotIndex = startingIndex; slotIndex < maxSlotIndex; slotIndex += 1) {
             const item = getProp(currentCollection, `items[${slotIndex}]`);
             const { id, selected } = item;
@@ -75,11 +76,16 @@ class GridView extends React.Component<Props> {
             contents.push(
                 <div
                     key={id}
-                    className={classNames('bdl-GridView-slot', {
-                        'bdl-GridView-slot--selected': selected,
-                    })}
+                    className="bdl-GridView-slotWrapper"
+                    style={{ maxWidth: slotWidth, flexBasis: slotWidth }}
                 >
-                    {slotRenderer(slotIndex)}
+                    <div
+                        className={classNames('bdl-GridView-slot', {
+                            'bdl-GridView-slot--selected': selected,
+                        })}
+                    >
+                        {slotRenderer(slotIndex)}
+                    </div>
                 </div>,
             );
         }
@@ -102,7 +108,7 @@ class GridView extends React.Component<Props> {
 
         return (
             <Table
-                className={classNames('bdl-GridView', `bdl-GridView--columns-${columnCount}`)}
+                className="bdl-GridView"
                 disableHeader
                 height={height}
                 rowCount={rowCount}
@@ -111,6 +117,7 @@ class GridView extends React.Component<Props> {
                 width={width}
                 gridClassName="bdl-GridView-body"
                 rowClassName="bdl-GridView-tableRow"
+                rowStyle={{ paddingRight: 0, width: '100%' }}
                 scrollToIndex={0}
                 sortDirection="ASC"
             >

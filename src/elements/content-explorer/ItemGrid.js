@@ -11,7 +11,7 @@ type Props = {
     ...$Exact<ItemGridProps>,
 };
 
-const ItemGrid = ({ currentCollection, onItemClick, rootId, ...rest }: Props) => {
+const ItemGrid = ({ currentCollection, rootId, ...rest }: Props) => {
     /**
      * Renderer used for cards in grid view
      *
@@ -21,7 +21,7 @@ const ItemGrid = ({ currentCollection, onItemClick, rootId, ...rest }: Props) =>
     const slotRenderer = (slotIndex: number): ?React.Element<any> => {
         const item: ?BoxItem = getProp(currentCollection, `items[${slotIndex}]`);
 
-        return item ? <ItemGridCell item={item} onItemClick={onItemClick} rootId={rootId} {...rest} /> : null;
+        return item ? <ItemGridCell item={item} rootId={rootId} {...rest} /> : null;
     };
 
     return (
@@ -30,7 +30,6 @@ const ItemGrid = ({ currentCollection, onItemClick, rootId, ...rest }: Props) =>
                 <GridViewWrapper
                     currentCollection={currentCollection}
                     height={height}
-                    onItemClick={onItemClick}
                     slotRenderer={slotRenderer}
                     width={width}
                 />

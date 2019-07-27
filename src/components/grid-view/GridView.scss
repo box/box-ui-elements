@@ -2,58 +2,7 @@
 @import '../../styles/variables';
 
 .bdl-GridView {
-    padding: 0 5px;
-
-    &.bdl-GridView--columns-1 .bdl-GridView-slot {
-        $columns1prct: calc(100% - 10px);
-
-        flex-basis: $columns1prct;
-        max-width: $columns1prct;
-    }
-
-    &.bdl-GridView--columns-2 .bdl-GridView-slot {
-        $columns2prct: calc(50% - 10px); /* 100%/2 - 10px */
-
-        flex-basis: $columns2prct;
-        max-width: $columns2prct;
-    }
-
-    &.bdl-GridView--columns-3 .bdl-GridView-slot {
-        $columns3prct: calc(33.3333% - 10px); /* 100%/3 - 10px */
-
-        flex-basis: $columns3prct;
-        max-width: $columns3prct;
-    }
-
-    &.bdl-GridView--columns-4 .bdl-GridView-slot {
-        $columns4prct: calc(25% - 10px); /* 100%/4 - 10px */
-
-        flex-basis: $columns4prct;
-        max-width: $columns4prct;
-    }
-
-    &.bdl-GridView--columns-5 .bdl-GridView-slot {
-        $columns5prct: calc(20% - 10px); /* 100%/5 - 10px */
-
-        flex-basis: $columns5prct;
-        max-width: $columns5prct;
-    }
-
-    &.bdl-GridView--columns-6 .bdl-GridView-slot {
-        $columns6prct: calc(16.6666% - 10px); /* 100%/6 - 10px */
-
-        flex-basis: $columns6prct;
-        max-width: $columns6prct;
-    }
-
-    &.bdl-GridView--columns-7 .bdl-GridView-slot {
-        $columns7prct: calc(14.2857% - 10px); /* 100%/7 - 10px */
-
-        flex-basis: $columns7prct;
-        max-width: $columns7prct;
-    }
-
-    .ReactVirtualized__Table__rowColumn:first-of-type {
+    .ReactVirtualized__Table__rowColumn:first-child {
         margin: 0;
     }
 
@@ -64,6 +13,7 @@
 
 .bdl-GridView-body {
     outline: none;
+    padding: 5px;
 }
 
 .bdl-GridView-row {
@@ -71,14 +21,17 @@
     justify-content: flex-start;
 }
 
+.bdl-GridView-slotWrapper {
+    flex: 0 1 auto;
+    overflow: hidden;
+    padding: 5px;
+    white-space: normal;
+}
+
 .bdl-GridView-slot {
     border: 1px solid $bdl-gray-10;
     box-shadow: 0 1px 5px rgba(50, 50, 50, .1);
-    flex: 0 1 auto;
-    margin-bottom: 5px;
-    margin-top: 5px;
-    overflow: hidden;
-    white-space: normal;
+    height: 100%;
 
     &:hover,
     &:active,
@@ -89,24 +42,8 @@
     &.bdl-GridView-slot--selected {
         border-color: $bdl-box-blue-50;
     }
-
-    &:first-child {
-        margin-left: 2px;
-    }
-
-    & + & {
-        margin-left: 10px;
-    }
 }
 
 .bdl-GridView-tableRow {
     border: none;
-
-    &:first-child .bdl-GridView-slot {
-        margin-top: 10px;
-    }
-
-    &:last-child .bdl-GridView-slot {
-        margin-bottom: 10px;
-    }
 }

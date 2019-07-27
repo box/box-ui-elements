@@ -2,7 +2,7 @@
 
 exports[`components/grid-view/GridView should render() 1`] = `
 <Component
-  className="bdl-GridView bdl-GridView--columns-5"
+  className="bdl-GridView"
   disableHeader={true}
   gridClassName="bdl-GridView-body"
   height={600}
@@ -10,6 +10,12 @@ exports[`components/grid-view/GridView should render() 1`] = `
   rowCount={1}
   rowGetter={[Function]}
   rowHeight={[Function]}
+  rowStyle={
+    Object {
+      "paddingRight": 0,
+      "width": "100%",
+    }
+  }
   scrollToIndex={0}
   sortDirection="ASC"
   width={400}
