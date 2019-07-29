@@ -5,6 +5,7 @@
  */
 
 import queryString from 'query-string';
+import getProp from 'lodash/get';
 import { findMissingProperties, fillMissingProperties } from '../utils/fields';
 import { getTypedFileId } from '../utils/file';
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
@@ -75,6 +76,31 @@ class File extends Item {
         const downloadUrlQuery = queryString.stringify(downloadUrlParams);
 
         this.successHandler(`${downloadBaseUrl}?${downloadUrlQuery}`);
+    }
+
+    /**
+     * API for getting a thumbnail URL for a BoxItem
+     *
+     * @param {BoxItem} item - BoxItem to get the thumbnail URL for
+     * @return {Promise<?string>} - the url for the item's thumbnail, or null
+     */
+    async getThumbnailUrl(item: BoxItem): Promise<?string> {
+        const entry = getProp(item, 'representations.entries[0]');
+        const extension = getProp(entry, 'representation');
+        const template = getProp(entry, 'content.url_template');
+        const token = await TokenService.getReadToken(getTypedFileId(item.id), this.options.token);
+
+        if (getProp(entry, 'status.state') !== 'success' || !extension || !template || !token) {
+            return null;
+        }
+
+        const thumbnailUrl = template.replace('{+asset_path}', extension === 'jpg' ? '' : '1.png');
+
+        const { query, url: thumbnailBaseUrl } = queryString.parseUrl(thumbnailUrl);
+        const thumbnailUrlParams = { ...query, access_token: token };
+        const thumbnailUrlQuery = queryString.stringify(thumbnailUrlParams);
+
+        return `${thumbnailBaseUrl}?${thumbnailUrlQuery}`;
     }
 
     /**

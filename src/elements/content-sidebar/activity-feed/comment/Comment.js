@@ -1,40 +1,28 @@
-/**
- * @flow
- * @file Comment component
- */
-
+// @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
-import identity from 'lodash/identity';
-
-import { ReadableTime } from '../../../../components/time';
-import Tooltip from '../../../../components/tooltip';
+import Avatar from '../Avatar';
 import Media from '../../../../components/media';
 import { MenuItem } from '../../../../components/menu';
 import IconTrash from '../../../../icons/general/IconTrash';
 import IconPencil from '../../../../icons/general/IconPencil';
-import messages from './messages';
-import commonMessages from '../../../common/messages';
-import deleteMessages from '../inline-delete/messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import { bdlGray80 } from '../../../../styles/variables';
-
-import CommentDeleteConfirmation from './CommentDeleteConfirmation';
-import UserLink from './UserLink';
-import CommentInlineError from './CommentInlineError';
-import CommentText from './CommentText';
+import DeleteConfirmation from '../common/delete-confirmation';
+import ActivityTimestamp from '../common/activity-timestamp';
+import UserLink from '../common/user-link';
+import ActivityError from '../common/activity-error';
+import ActivityMessage from '../common/activity-message';
 import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
-import Avatar from '../Avatar';
-
+import { bdlGray80 } from '../../../../styles/variables';
+import { PLACEHOLDER_USER } from '../../../../constants';
+import messages from './messages';
 import './Comment.scss';
-import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK, PLACEHOLDER_USER } from '../../../../constants';
 
 type Props = {
-    avatarRenderer?: React.Node => React.Element<any>,
     created_at: string | number,
     created_by: User,
     currentUser?: User,
@@ -45,18 +33,14 @@ type Props = {
     id: string,
     isDisabled?: boolean,
     isPending?: boolean,
-    is_reply_comment?: boolean,
     mentionSelectorContacts?: SelectorItems,
     modified_at?: string | number,
     onDelete?: Function,
     onEdit?: Function,
-    onEditClick?: () => any,
     permissions?: BoxItemPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
-    type: typeof COMMENT_TYPE_DEFAULT | typeof COMMENT_TYPE_TASK,
-    userHeadlineRenderer?: React.Node => React.Element<typeof FormattedMessage>,
 };
 
 type State = {
@@ -66,10 +50,6 @@ type State = {
 };
 
 class Comment extends React.Component<Props, State> {
-    static defaultProps = {
-        type: COMMENT_TYPE_DEFAULT,
-    };
-
     state = {
         isConfirmingDelete: false,
         isEditing: false,
@@ -93,13 +73,7 @@ class Comment extends React.Component<Props, State> {
     };
 
     handleEditClick = (): void => {
-        const { onEditClick } = this.props;
-
-        if (onEditClick) {
-            onEditClick();
-        } else {
-            this.setState({ isEditing: true, isInputOpen: true });
-        }
+        this.setState({ isEditing: true, isInputOpen: true });
     };
 
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
@@ -108,7 +82,7 @@ class Comment extends React.Component<Props, State> {
 
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
-    updateTaskHandler = (args: any): void => {
+    handleUpdate = (args: any): void => {
         const { onEdit = noop } = this.props;
         onEdit(args);
         this.approvalCommentFormSubmitHandler();
@@ -116,7 +90,6 @@ class Comment extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            avatarRenderer = identity,
             created_by,
             created_at,
             permissions = {},
@@ -124,115 +97,92 @@ class Comment extends React.Component<Props, State> {
             isPending,
             error,
             tagged_message = '',
-            userHeadlineRenderer = identity,
             translatedTaggedMessage,
             translations,
-            type,
             currentUser,
             isDisabled,
             getAvatarUrl,
             getUserProfileUrl,
             getMentionWithQuery,
             mentionSelectorContacts,
+            onEdit,
         } = this.props;
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
-        const isTask = type === COMMENT_TYPE_TASK;
-        const canEdit = isTask && permissions.can_edit; // comment editing not supported
+        const canEdit = !!onEdit && permissions.can_edit; // comment editing not supported
         const canDelete = permissions.can_delete;
         const isMenuVisible = (canDelete || canEdit) && !isPending;
 
         return (
-            <div className="bcs-comment-container">
+            <div className="bcs-Comment">
                 <Media
-                    className={classNames('bcs-comment', {
+                    className={classNames('bcs-Comment-media', {
                         'bcs-is-pending': isPending || error,
                     })}
                 >
                     <Media.Figure>
-                        {avatarRenderer(<Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />)}
+                        <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />
                     </Media.Figure>
                     <Media.Body>
                         {isMenuVisible && (
                             <TetherComponent
                                 attachment="top right"
-                                className="bcs-comment-delete-confirm"
+                                className="bcs-Comment-deleteConfirmationModal"
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                             >
                                 <Media.Menu isDisabled={isConfirmingDelete} data-testid="comment-actions-menu">
                                     {canEdit && (
                                         <MenuItem
-                                            className="bcs-comment-menu-edit"
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
                                             data-testid="edit-comment"
                                             onClick={this.handleEditClick}
                                         >
                                             <IconPencil color={bdlGray80} />
-                                            <FormattedMessage
-                                                {...(isTask ? messages.taskEditMenuItem : commonMessages.editLabel)}
-                                            />
+                                            <FormattedMessage {...messages.commentEditMenuItem} />
                                         </MenuItem>
                                     )}
                                     {canDelete && (
                                         <MenuItem
-                                            className="bcs-comment-menu-delete"
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
                                             data-testid="delete-comment"
                                             onClick={this.handleDeleteClick}
                                         >
                                             <IconTrash color={bdlGray80} />
-                                            <FormattedMessage
-                                                {...(isTask ? messages.taskDeleteMenuItem : deleteMessages.deleteLabel)}
-                                            />
+                                            <FormattedMessage {...messages.commentDeleteMenuItem} />
                                         </MenuItem>
                                     )}
                                 </Media.Menu>
                                 {isConfirmingDelete && (
-                                    <CommentDeleteConfirmation
+                                    <DeleteConfirmation
                                         isOpen={isConfirmingDelete}
+                                        message={messages.commentDeletePrompt}
                                         onDeleteCancel={this.handleDeleteCancel}
                                         onDeleteConfirm={this.handleDeleteConfirm}
-                                        type={type}
                                     />
                                 )}
                             </TetherComponent>
                         )}
                         <div>
-                            {userHeadlineRenderer(
-                                <UserLink
-                                    className="bcs-comment-user-name"
-                                    data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                                    id={createdByUser.id}
-                                    name={createdByUser.name}
-                                    getUserProfileUrl={getUserProfileUrl}
-                                />,
-                            )}
+                            <UserLink
+                                data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                                id={createdByUser.id}
+                                name={createdByUser.name}
+                                getUserProfileUrl={getUserProfileUrl}
+                            />
                         </div>
                         <div>
-                            <Tooltip
-                                text={
-                                    <FormattedMessage
-                                        {...messages.commentPostedFullDateTime}
-                                        values={{ time: createdAtTimestamp }}
-                                    />
-                                }
-                            >
-                                <small className="bcs-comment-created-at">
-                                    <ReadableTime relativeThreshold={0} alwaysShowTime timestamp={createdAtTimestamp} />
-                                </small>
-                            </Tooltip>
+                            <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
                         {isEditing ? (
-                            /* This is for legacy task inline editing */
+                            /* NOTE: Inline editing is not currently supported for comments */
                             <ApprovalCommentForm
-                                onSubmit={() => {}}
                                 isDisabled={isDisabled}
                                 className={classNames('bcs-activity-feed-comment-input', {
                                     'bcs-is-disabled': isDisabled,
                                 })}
-                                updateTask={this.updateTaskHandler}
+                                updateComment={this.handleUpdate}
                                 isOpen={isInputOpen}
                                 user={currentUser}
                                 onCancel={this.approvalCommentFormCancelHandler}
@@ -245,7 +195,7 @@ class Comment extends React.Component<Props, State> {
                                 getMentionWithQuery={getMentionWithQuery}
                             />
                         ) : (
-                            <CommentText
+                            <ActivityMessage
                                 id={id}
                                 tagged_message={tagged_message}
                                 translatedTaggedMessage={translatedTaggedMessage}
@@ -256,7 +206,7 @@ class Comment extends React.Component<Props, State> {
                         )}
                     </Media.Body>
                 </Media>
-                {error ? <CommentInlineError {...error} /> : null}
+                {error ? <ActivityError {...error} /> : null}
             </div>
         );
     }

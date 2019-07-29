@@ -1,6 +1,7 @@
 import Cache from '../../utils/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import Folder from '../Folder';
+import { FIELD_REPRESENTATIONS } from '../../constants';
 
 let folder;
 let cache;
@@ -153,6 +154,31 @@ describe('api/Folder', () => {
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                         sort: 'by',
                     },
+                    headers: {},
+                });
+            });
+        });
+        test('should make xhr to folder with thumbnail field and call success callback', () => {
+            folder.folderSuccessHandler = jest.fn();
+            folder.errorHandler = jest.fn();
+            folder.includePreviewFields = true;
+            folder.xhr = {
+                get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
+            };
+            const fields = [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS];
+            return folder.folderRequest({ fields }).then(() => {
+                expect(folder.folderSuccessHandler).toHaveBeenCalledWith('success');
+                expect(folder.errorHandler).not.toHaveBeenCalled();
+                expect(folder.xhr.get).toHaveBeenCalledWith({
+                    url: 'https://api.box.com/2.0/folders/id',
+                    params: {
+                        direction: 'direction',
+                        limit: 20,
+                        offset: 0,
+                        fields: fields.toString(),
+                        sort: 'by',
+                    },
+                    headers: { 'X-Rep-Hints': '[jpg?dimensions=1024x1024,png?dimensions=1024x1024]' },
                 });
             });
         });
@@ -177,6 +203,7 @@ describe('api/Folder', () => {
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                         sort: 'by',
                     },
+                    headers: {},
                 });
             });
         });

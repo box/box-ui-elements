@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/ActivityFeed/comment/CommentText should properly format tagged comment 1`] = `
+exports[`elements/content-sidebar/ActivityFeed/common/activity-message should properly format tagged comment 1`] = `
 <div
-  className="bcs-comment-text"
+  className="bcs-ActivityMessage"
 >
   How u doing 
   <UserLink
@@ -16,9 +16,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/CommentText should proper
 </div>
 `;
 
-exports[`elements/content-sidebar/ActivityFeed/comment/CommentText should properly handle unicode variants of @ in tagged comments 1`] = `
+exports[`elements/content-sidebar/ActivityFeed/common/activity-message should properly handle unicode variants of @ in tagged comments 1`] = `
 <div
-  className="bcs-comment-text"
+  className="bcs-ActivityMessage"
 >
   Hi 
   <UserLink

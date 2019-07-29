@@ -1,16 +1,11 @@
-/**
- * @flow
- * @file Comment Text component used by Comment component
- */
-
+// @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
-
-import LoadingIndicator from '../../../../components/loading-indicator';
-
-import formatTaggedMessage from '../utils/formatTaggedMessage';
+import LoadingIndicator from '../../../../../components/loading-indicator';
+import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
+import './ActivityMessage.scss';
 
 type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -27,7 +22,7 @@ type State = {
     isTranslation?: boolean,
 };
 
-class CommentText extends React.Component<Props, State> {
+class ActivityMessage extends React.Component<Props, State> {
     static defaultProps = {
         translationEnabled: false,
     };
@@ -77,11 +72,11 @@ class CommentText extends React.Component<Props, State> {
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
         return isLoading ? (
-            <div className="bcs-comment-text-loading">
+            <div className="bcs-ActivityMessageLoading">
                 <LoadingIndicator size="small" />
             </div>
         ) : (
-            <div className="bcs-comment-text">
+            <div className="bcs-ActivityMessage">
                 {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>
@@ -89,4 +84,4 @@ class CommentText extends React.Component<Props, State> {
     }
 }
 
-export default CommentText;
+export default ActivityMessage;

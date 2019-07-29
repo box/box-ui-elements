@@ -12,17 +12,21 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -189,17 +193,21 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Send Link to '{itemName}'"
-          id="boxui.unifiedShare.emailModalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={true}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -246,17 +254,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -423,17 +435,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -600,17 +616,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -781,17 +801,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -958,17 +982,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1135,17 +1163,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1283,17 +1315,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "web_link",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1461,17 +1497,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "folder",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1639,17 +1679,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1817,17 +1861,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1966,17 +2014,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="People in '{itemName}'"
-          id="boxui.unifiedShare.collaboratorListTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={true}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2030,17 +2082,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2211,17 +2267,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2392,17 +2452,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2569,17 +2633,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2745,17 +2813,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2896,17 +2968,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper

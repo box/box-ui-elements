@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import PlainButton from '../../../../components/plain-button';
+import PlainButton from '../../../../../components/plain-button';
 
 import messages from './messages';
 
@@ -15,8 +15,8 @@ type Props = {
 };
 
 const ShowOriginalButton = ({ handleShowOriginal }: Props): React.Node => (
-    <PlainButton className="bcs-comment-translate" onClick={handleShowOriginal}>
-        <FormattedMessage {...messages.commentShowOriginal} />
+    <PlainButton className="bcs-ActivityMessage-translate" onClick={handleShowOriginal}>
+        <FormattedMessage {...messages.activityMessageShowOriginal} />
     </PlainButton>
 );
 

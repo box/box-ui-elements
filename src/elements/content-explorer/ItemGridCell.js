@@ -1,10 +1,10 @@
 // @flow
 import * as React from 'react';
+import ItemGridThumbnail from './ItemGridThumbnail';
 import getSize from '../../utils/size';
 import MoreOptions from './MoreOptions';
 import Date from './Date';
 import Name from '../common/item/Name';
-import { getIcon } from '../common/item/iconCellRenderer';
 import type { ItemGridProps } from './flowTypes';
 import './ItemGridCell.scss';
 
@@ -25,10 +25,8 @@ const ItemGridCell = ({
     ...rest
 }: Props) => {
     return (
-        <figure>
-            <div className="bce-ItemGridCell-itemThumbnail">
-                <div className="bce-ItemGridCell-itemIcon">{getIcon(128, item)}</div>
-            </div>
+        <figure className="bce-ItemGridCell">
+            <ItemGridThumbnail item={item} />
             <figcaption>
                 <Name
                     canPreview={canPreview}

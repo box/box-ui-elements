@@ -393,10 +393,12 @@ type BoxItem = {
     parent?: BoxItem,
     path_collection?: BoxPathCollection,
     permissions?: BoxItemPermission,
+    representations?: FileRepresentationResponse,
     restored_from?: BoxItemVersion,
     selected?: boolean,
     shared_link?: SharedLink,
     size?: number,
+    thumbnailUrl?: string,
     type?: ItemType,
     url?: string,
     version_limit?: ?number,
@@ -470,6 +472,25 @@ type Collection = {
     sortBy?: SortBy,
     sortDirection?: SortDirection,
     totalCount?: number,
+};
+
+type FileRepresentationResponse = {
+    entries: Array<FileRepresentation>,
+};
+
+type FileRepresentation = {
+    content?: {
+        url_template: string,
+    },
+    properties?: {
+        dimensions: string,
+        paged: string,
+        thumb: string,
+    },
+    representation?: string,
+    status: {
+        state: string,
+    },
 };
 
 type FolderUploadItem = {
@@ -854,13 +875,9 @@ type WithLoggerProps = {
 };
 
 type ActivityFeedFeatures = {
-    tasks?: {|
-        createButton?: boolean, // Show the Create Task button (requires newApi)
-        createFromComment?: boolean, // Show the Add Task checkbox
-        feedbackUrl?: string, // URL used for feedback form for tasks
-        newApi?: boolean, // Use new service
-        newCards?: boolean, // Show new task card layout (requires on newApi)
-    |},
+    appActivity: {
+        enabled: boolean,
+    },
 };
 
 type ContentSidebarFeatures = {

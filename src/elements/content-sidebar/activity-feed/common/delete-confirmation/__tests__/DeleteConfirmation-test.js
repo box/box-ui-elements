@@ -1,30 +1,25 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import CommentDeleteConfirmation from '../CommentDeleteConfirmation';
-import { COMMENT_TYPE_DEFAULT, COMMENT_TYPE_TASK } from '../../../../../constants';
+import DeleteConfirmation from '../DeleteConfirmation';
+import messages from '../../../comment/messages';
 
-describe('elements/content-sidebar/ActivityFeed/comment/CommentDeleteConfirmation', () => {
+describe('elements/content-sidebar/ActivityFeed/common/delete-confirmation', () => {
     const getWrapper = props =>
         shallow(
-            <CommentDeleteConfirmation
+            <DeleteConfirmation
                 isOpen
+                message={messages.commentDeletePrompt}
                 onDeleteCancel={jest.fn()}
                 onDeleteConfirm={jest.fn()}
-                type={COMMENT_TYPE_DEFAULT}
                 {...props}
             />,
         );
 
     describe('render()', () => {
-        test('should render component with COMMENT_TYPE_DEFAULT', () => {
-            const wrapper = getWrapper({ type: COMMENT_TYPE_DEFAULT });
-            expect(wrapper.find('.bcs-CommentDeleteConfirmation-prompt')).toMatchSnapshot();
-        });
-
-        test('should render component with COMMENT_TYPE_TASK', () => {
-            const wrapper = getWrapper({ type: COMMENT_TYPE_TASK });
-            expect(wrapper.find('.bcs-CommentDeleteConfirmation-prompt')).toMatchSnapshot();
+        test('should render component', () => {
+            const wrapper = getWrapper();
+            expect(wrapper.find('.bcs-DeleteConfirmation-promptMessage')).toMatchSnapshot();
         });
     });
 

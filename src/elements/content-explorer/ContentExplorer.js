@@ -28,7 +28,13 @@ import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
-import { withFeatureProvider } from '../common/feature-checking';
+import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
+import {
+    isFeatureEnabled,
+    withFeatureConsumer,
+    withFeatureProvider,
+    type FeatureConfig,
+} from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -37,6 +43,7 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
+    FIELD_REPRESENTATIONS,
     DEFAULT_ROOT,
     VIEW_SEARCH,
     VIEW_FOLDER,
@@ -77,6 +84,7 @@ type Props = {
     contentPreviewProps: ContentPreviewProps,
     currentFolderId?: string,
     defaultView: DefaultView,
+    features: FeatureConfig,
     initialPage: number,
     initialPageSize: number,
     isLarge: boolean,
@@ -391,13 +399,23 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
      * @return {void}
      */
-    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
-        const { onNavigate, rootFolderId }: Props = this.props;
-        const { id, name, boxItem }: Collection = collection;
+    async fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): Promise<void> {
+        const { features, onNavigate, rootFolderId }: Props = this.props;
+        const { boxItem, id, items = [], name }: Collection = collection;
         const { selected }: State = this.state;
         const rootName = id === rootFolderId ? name : '';
 
-        this.updateCollection(collection, selected);
+        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
+            const fileAPI = this.api.getFileAPI();
+            const itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
+            const itemsWithThumbnails = items.map((item, index) => {
+                const thumbnailUrl = itemThumbnails[index];
+                return thumbnailUrl ? { ...item, thumbnailUrl } : item;
+            });
+            this.updateCollection({ ...collection, items: itemsWithThumbnails }, selected);
+        } else {
+            this.updateCollection(collection, selected);
+        }
 
         // Close any open modals
         this.closeModals();
@@ -422,7 +440,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true) => {
-        const { rootFolderId }: Props = this.props;
+        const { features, rootFolderId }: Props = this.props;
         const {
             currentCollection: { id: currentId },
             currentOffset,
@@ -452,6 +470,10 @@ class ContentExplorer extends Component<Props, State> {
             currentOffset: offset,
         });
 
+        const fields = isFeatureEnabled(features, 'contentExplorer.gridView.enabled')
+            ? [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS]
+            : FOLDER_FIELDS_TO_FETCH;
+
         // Fetch the folder using folder API
         this.api.getFolderAPI().getFolder(
             folderId,
@@ -463,7 +485,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { forceFetch: true },
+            { forceFetch: true, fields },
         );
     };
 
@@ -1462,4 +1484,4 @@ class ContentExplorer extends Component<Props, State> {
 }
 
 export { ContentExplorer as ContentExplorerComponent };
-export default flow([makeResponsive, withFeatureProvider])(ContentExplorer);
+export default flow([makeResponsive, withFeatureConsumer, withFeatureProvider])(ContentExplorer);

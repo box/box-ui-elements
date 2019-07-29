@@ -1,4 +1,5 @@
 // <reference types="Cypress" />
+import localize from '../../support/i18n';
 
 describe('ContentSidebar', () => {
     const helpers = {
@@ -94,6 +95,42 @@ describe('ContentSidebar', () => {
                 .contains('Back')
                 .click();
             cy.get('@versionHistory').should('not.exist');
+        });
+    });
+
+    describe('activity feed comments', () => {
+        const getDraftJSEditor = () => cy.getByTestId('bcs-comment-input-form-container').find('[contenteditable]');
+        const getTooltip = () => cy.get('[role="tooltip"]');
+        const getCancelButton = () =>
+            cy.contains(localize('be.contentSidebar.activityFeed.approvalCommentForm.commentCancel'));
+
+        beforeEach(() => {
+            helpers.load({
+                fileId: Cypress.env('FILE_ID_DOC'),
+            });
+
+            cy.getByTestId('bcs-content').should('exist');
+            cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
+        });
+
+        it('Comment form validation', () => {
+            // should not show validation error if focused and then blurred
+            getDraftJSEditor().click();
+            getCancelButton();
+            getTooltip().should('not.exist');
+
+            // should show required error if type and then delete text
+            getDraftJSEditor()
+                .click()
+                .type('qwerty')
+                .clear();
+
+            getTooltip().contains(localize('boxui.validation.requiredError'));
+
+            // should reset validation state after clicking "Cancel" and focusing again
+            getCancelButton().click();
+            getDraftJSEditor().click();
+            getTooltip().should('not.exist');
         });
     });
 });
