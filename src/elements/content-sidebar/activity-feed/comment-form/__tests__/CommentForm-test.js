@@ -2,7 +2,10 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import { EditorState, convertFromRaw } from 'draft-js';
 
-import { ApprovalCommentFormUnwrapped as ApprovalCommentForm } from '../ApprovalCommentForm';
+import Button from '../../../../../components/button/Button';
+import Media from '../../../../../components/media';
+import PrimaryButton from '../../../../../components/primary-button';
+import { CommentFormUnwrapped as CommentForm } from '../CommentForm';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -10,10 +13,10 @@ const intlFake = {
     formatMessage: message => message.id,
 };
 
-describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCommentForm', () => {
+describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () => {
     const render = props =>
         mount(
-            <ApprovalCommentForm
+            <CommentForm
                 getMentionWithQuery={() => {}}
                 intl={intlFake}
                 user={{ id: 123, name: 'foo bar' }}
@@ -25,9 +28,8 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         const wrapper = render();
 
         expect(wrapper.find('[contentEditable]').length).toEqual(1);
-        expect(wrapper.find('.bcs-comment-input-controls').length).toEqual(1);
-        expect(wrapper.find('.bcs-comment-input-controls').find('button').length).toEqual(2);
-        expect(wrapper.find('.bcs-at-mention-tip').hasClass('accessibility-hidden')).toBe(false);
+        expect(wrapper.find('.bcs-CommentFormControls').length).toEqual(1);
+        expect(wrapper.find('.bcs-CommentFormControls').find('button').length).toEqual(2);
     });
 
     test('should call onFocus handler when input is focused', () => {
@@ -42,19 +44,17 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
 
     test('should call oncancel handler when input is canceled', () => {
         const onCancelSpy = jest.fn();
-
         const wrapper = render({ onCancel: onCancelSpy });
+        const cancelButton = wrapper.find(Button).first();
 
-        const cancelButton = wrapper.find('Button.bcs-comment-input-cancel-btn');
         cancelButton.simulate('click');
         expect(onCancelSpy).toHaveBeenCalledTimes(1);
     });
 
-    test('should render open comment input and hidden tip when isOpen is true', () => {
+    test('should render open comment input when isOpen is true', () => {
         const wrapper = render({ isOpen: true });
 
-        expect(wrapper.find('.bcs-comment-input-is-open').length).toEqual(1);
-        expect(wrapper.find('.bcs-at-mention-tip').hasClass('accessibility-hidden')).toBe(true);
+        expect(wrapper.find(Media).hasClass('bdl-is-open')).toBe(true);
     });
 
     test('should set required to false on comment input when not open', () => {
@@ -94,7 +94,7 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
 
         instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
 
-        const submitBtn = wrapper.find('PrimaryButton.bcs-comment-input-submit-btn');
+        const submitBtn = wrapper.find(PrimaryButton);
         const formEl = wrapper.find('form').getDOMNode();
         formEl.checkValidity = () => !!expectedCallCount;
         submitBtn.simulate('submit', { target: formEl });
@@ -235,7 +235,7 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
                 .find('DraftJSMentionSelector')
                 .at(0)
                 .prop('placeholder'),
-        ).toEqual('be.contentSidebar.activityFeed.approvalCommentForm.commentWrite');
+        ).toEqual('be.contentSidebar.activityFeed.commentForm.commentWrite');
 
         const content = wrapper
             .state()

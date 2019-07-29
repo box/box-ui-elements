@@ -1,0 +1,63 @@
+@import '../../../common/variables';
+
+.be {
+    .bcs-CommentForm {
+        border-top: solid 1px $bdl-gray-10;
+        display: flex;
+        padding: 20px;
+
+        &.bdl-is-open {
+            .bcs-CommentForm-input {
+                .public-DraftEditor-content {
+                    max-height: 140px;
+                    min-height: 68px;
+                    overflow: auto;
+                }
+            }
+
+            .bcs-CommentFormControls {
+                display: block;
+                text-align: right;
+            }
+        }
+    }
+
+    .bcs-CommentForm-avatar {
+        margin-right: 10px;
+    }
+
+    .bcs-CommentForm-input {
+        max-height: 140px;
+        width: auto;
+
+        .content-editable,
+        .content-editable-container,
+        .mention-selector-wrapper {
+            margin: 0;
+            width: 100%;
+        }
+
+        .public-DraftEditor-content {
+            cursor: text;
+            width: auto;
+        }
+    }
+
+    .bcs-CommentForm-tip {
+        color: $bdl-gray-50;
+        padding-top: 10px;
+    }
+
+    .bcs-CommentFormControls {
+        display: none;
+        padding-top: 20px;
+
+        .btn {
+            margin: 0;
+        }
+
+        .btn:last-child {
+            margin-left: 10px;
+        }
+    }
+}

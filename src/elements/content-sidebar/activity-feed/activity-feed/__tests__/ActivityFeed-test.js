@@ -207,23 +207,23 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(instance.feedContainer.scrollTop).toEqual(100);
     });
 
-    test('should show input when approvalCommentFormFocusHandler is called', () => {
+    test('should show input when commentFormFocusHandler is called', () => {
         const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
 
         const instance = wrapper.instance();
-        instance.approvalCommentFormFocusHandler();
+        instance.commentFormFocusHandler();
 
         expect(wrapper.state('isInputOpen')).toBe(true);
     });
 
-    test('should hide input when approvalCommentFormCancelHandler is called', () => {
+    test('should hide input when commentFormCancelHandler is called', () => {
         const wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={jest.fn()} />);
 
         const instance = wrapper.instance();
-        instance.approvalCommentFormFocusHandler();
+        instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        instance.approvalCommentFormCancelHandler();
+        instance.commentFormCancelHandler();
         expect(wrapper.state('isInputOpen')).toBe(false);
     });
 
@@ -239,12 +239,12 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         );
 
         const instance = wrapper.instance();
-        const approvalCommentForm = wrapper.find('ApprovalCommentForm').first();
+        const commentForm = wrapper.find('CommentForm').first();
 
-        instance.approvalCommentFormFocusHandler();
+        instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        approvalCommentForm.prop('createComment')({ text: 'foo' });
+        commentForm.prop('createComment')({ text: 'foo' });
         expect(wrapper.state('isInputOpen')).toBe(false);
         expect(createCommentSpy).toHaveBeenCalledTimes(1);
     });
