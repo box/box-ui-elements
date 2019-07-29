@@ -66,8 +66,7 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidUpdate({ refreshIdentity: prevRefreshIdentity }: Props) {
-        const { refreshIdentity } = this.props;
-        const { api, file }: Props = this.props;
+        const { api, file, refreshIdentity }: Props = this.props;
 
         if (refreshIdentity !== prevRefreshIdentity) {
             api.getMetadataAPI(false).getSkills(file, this.fetchSkillsSuccessCallback, noop);
