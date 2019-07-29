@@ -10,6 +10,14 @@ import ES6Wrapper from './ES6Wrapper';
 import ContentSidebarComponent from '../content-sidebar';
 
 class ContentSidebar extends ES6Wrapper {
+    /**
+     * Helper to programmatically refresh the current sidebar panel
+     * @returns {void}
+     */
+    refresh(): void {
+        this.getComponent().refresh();
+    }
+
     /** @inheritdoc */
     render() {
         render(

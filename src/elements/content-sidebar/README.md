@@ -17,6 +17,7 @@ var ContentSidebar = require('./ContentSidebar').default;
         hasActivityFeed
         hasMetadata
         hasSkills
+        refresh
         token={TOKEN}
         {...PROPS}
     />

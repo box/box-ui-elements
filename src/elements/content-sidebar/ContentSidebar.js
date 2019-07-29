@@ -70,6 +70,7 @@ type State = {
     file?: BoxItem,
     isLoading: boolean,
     metadataEditors?: Array<MetadataEditor>,
+    refresh: boolean,
 };
 
 const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
@@ -283,6 +284,11 @@ class ContentSidebar extends React.Component<Props, State> {
         }
     }
 
+    refresh(): void {
+        const { refresh } = this.state;
+        this.setState({ refresh: !refresh });
+    }
+
     /**
      * Renders the sidebar
      *
@@ -314,7 +320,7 @@ class ContentSidebar extends React.Component<Props, State> {
             onVersionHistoryClick,
             versionsSidebarProps,
         }: Props = this.props;
-        const { file, isLoading, metadataEditors }: State = this.state;
+        const { file, isLoading, metadataEditors, refresh }: State = this.state;
         const initialPath = defaultView.charAt(0) === '/' ? defaultView : `/${defaultView}`;
 
         if (!file || !fileId || !SidebarUtils.shouldRenderSidebar(this.props, file, metadataEditors)) {
@@ -345,6 +351,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             metadataSidebarProps={metadataSidebarProps}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
+                            refresh={refresh}
                             versionsSidebarProps={versionsSidebarProps}
                         />
                     </SidebarRouter>

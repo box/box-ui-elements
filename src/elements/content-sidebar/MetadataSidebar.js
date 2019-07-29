@@ -42,6 +42,7 @@ type ExternalProps = {
 
 type PropsWithoutContext = {
     fileId: string,
+    refresh: boolean,
 } & ExternalProps;
 
 type Props = {
@@ -79,6 +80,13 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         this.fetchFile();
+    }
+
+    componentDidUpdate({ refresh: prevRefresh }: Props) {
+        const { refresh } = this.props;
+        if (refresh !== prevRefresh) {
+            this.fetchFile();
+        }
     }
 
     /**

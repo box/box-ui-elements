@@ -84,6 +84,7 @@ const SidebarPanels = ({
     metadataSidebarProps,
     onVersionChange,
     onVersionHistoryClick,
+    refresh,
     versionsSidebarProps,
 }: Props) =>
     isOpen && (
@@ -114,6 +115,7 @@ const SidebarPanels = ({
                             onVersionHistoryClick={onVersionHistoryClick}
                             startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
                             {...activitySidebarProps}
+                            refresh={refresh}
                         />
                     )}
                 />
@@ -129,6 +131,7 @@ const SidebarPanels = ({
                             onVersionHistoryClick={onVersionHistoryClick}
                             startMarkName={MARK_NAME_JS_LOADING_DETAILS}
                             {...detailsSidebarProps}
+                            refresh={refresh}
                         />
                     )}
                 />
@@ -142,6 +145,7 @@ const SidebarPanels = ({
                             fileId={fileId}
                             startMarkName={MARK_NAME_JS_LOADING_METADATA}
                             {...metadataSidebarProps}
+                            refresh={refresh}
                         />
                     )}
                 />
@@ -157,6 +161,7 @@ const SidebarPanels = ({
                             parentName={match.params.sidebar}
                             versionId={match.params.versionId}
                             {...versionsSidebarProps}
+                            refresh={refresh}
                         />
                     )}
                 />
