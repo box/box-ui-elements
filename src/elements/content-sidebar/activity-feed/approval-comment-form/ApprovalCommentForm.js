@@ -179,11 +179,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             placeholder={tagged_message ? undefined : formatMessage(messages.commentWrite)}
                             validateOnBlur={false}
                         />
-                        <aside
-                            className={classNames('bcs-at-mention-tip', {
-                                'accessibility-hidden': isOpen,
-                            })}
-                        >
+                        <aside className="bcs-comment-mention-tip">
                             <FormattedMessage {...messages.atMentionTip} />
                         </aside>
                         <CommentInputControls onCancel={onCancel} />

@@ -3,6 +3,7 @@
 .be .bcs-comment-input-container {
     border-top: solid 1px $bdl-gray-10;
     display: flex;
+    padding: 20px;
 
     .bcs-comment-input {
         div[contentEditable='true'].public-DraftEditor-content {
@@ -11,8 +12,6 @@
         }
 
         box-shadow: none;
-        margin-bottom: 15px;
-        margin-top: 20px;
         max-height: 140px;
         width: auto;
 
@@ -31,9 +30,7 @@
             display: none;
 
             .btn {
-                margin-bottom: 10px;
-                margin-right: 0;
-                margin-top: 0;
+                margin: 0;
             }
 
             .btn:last-child {
@@ -84,19 +81,20 @@
 
     .bcs-avatar-container {
         height: 40px;
-        margin-left: 20px;
         margin-right: 18px;
-        margin-top: 20px;
+    }
+
+    .bcs-comment-input-controls {
+        padding-top: 20px;
     }
 
     .bcs-comment-input-form-container {
         flex: 1;
-        margin-right: 20px;
         min-width: 0;
 
-        aside {
+        .bcs-comment-mention-tip {
             color: $bdl-gray-50;
-            margin-top: -8px;
+            padding-top: 10px;
         }
 
         .bcs-comment-add-approver-checkbox {
@@ -107,23 +105,6 @@
         .bcs-comment-add-approver-date-input {
             margin-left: 0;
             margin-right: 0;
-        }
-
-        .pill-selector-wrapper {
-            margin-left: 0;
-            width: 100%;
-
-            .pill-selector-input-wrapper {
-                max-height: 75px;
-                overflow: auto;
-                width: auto;
-            }
-        }
-
-        input {
-            &[type='text'] {
-                width: 100%;
-            }
         }
 
         .bcs-comment-add-approver-fields-container {
