@@ -39,9 +39,9 @@ const SubHeaderRight = ({
     const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
     const hasItems: boolean = items.length > 0;
     const isFolder: boolean = view === VIEW_FOLDER;
-    const showSort: boolean = isFolder && hasItems;
+    const showSort: boolean = hasItems;
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
-    const showGridButton: boolean = isFolder && hasItems;
+    const showGridButton: boolean = hasItems;
 
     return (
         <div className="be-sub-header-right">

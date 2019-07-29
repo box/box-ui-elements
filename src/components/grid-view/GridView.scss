@@ -6,8 +6,15 @@
         margin: 0;
     }
 
+    & .bce-more-options {
+        align-self: flex-start;
+    }
+
     & .bce-btn-more-options {
-        padding: 4px 10px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 4px;
     }
 }
 

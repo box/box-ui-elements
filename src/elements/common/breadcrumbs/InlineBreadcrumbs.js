@@ -12,20 +12,29 @@ import { DELIMITER_SLASH } from '../../../constants';
 import './InlineBreadcrumbs.scss';
 
 type Props = {
+    isGridView: boolean,
     item: BoxItem,
     onItemClick: Function,
     rootId: string,
 };
 
-const InlineBreadcrumbs = ({ rootId, item, onItemClick }: Props) => {
+const InlineBreadcrumbs = ({ item, isGridView, onItemClick, rootId }: Props) => {
     const { path_collection }: BoxItem = item;
     const { entries: breadcrumbs = [] } = path_collection || {};
     return (
-        <span className="be-inline-breadcrumbs">
-            <FormattedMessage {...messages.in} />
-            &nbsp;
-            <Breadcrumbs crumbs={breadcrumbs} delimiter={DELIMITER_SLASH} onCrumbClick={onItemClick} rootId={rootId} />
-        </span>
+        <React.Fragment>
+            <span className="be-inline-breadcrumbs">
+                <FormattedMessage {...messages.in} />
+                &nbsp;
+                <Breadcrumbs
+                    crumbs={breadcrumbs}
+                    delimiter={DELIMITER_SLASH}
+                    onCrumbClick={onItemClick}
+                    rootId={rootId}
+                />
+            </span>
+            {isGridView && <div className="bdl-InlineBreadcrumbs-spacer" />}
+        </React.Fragment>
     );
 };
 

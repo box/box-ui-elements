@@ -12,18 +12,19 @@ import ItemSubDetails from './ItemSubDetails';
 import './ItemDetails.scss';
 
 type Props = {
+    isGridView: boolean,
     item: BoxItem,
     onItemClick: Function,
     rootId: string,
     view: View,
 };
 
-const ItemDetails = ({ view, rootId, item, onItemClick }: Props) => (
+const ItemDetails = ({ view, rootId, isGridView, item, onItemClick }: Props) => (
     <div className="be-item-details">
         {view === VIEW_SELECTED || view === VIEW_SEARCH ? (
-            <InlineBreadcrumbs item={item} onItemClick={onItemClick} rootId={rootId} />
+            <InlineBreadcrumbs isGridView={isGridView} item={item} onItemClick={onItemClick} rootId={rootId} />
         ) : (
-            <ItemSubDetails item={item} view={view} />
+            <ItemSubDetails isGridView={isGridView} item={item} view={view} />
         )}
     </div>
 );

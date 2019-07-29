@@ -36,21 +36,13 @@ class GridView extends React.Component<Props> {
         fixedWidth: true,
     });
 
-    componentDidUpdate({
-        columnCount: prevColumnCount,
-        currentCollection: prevCurrentCollection,
-        width: prevWidth,
-    }: Props) {
-        const { columnCount, currentCollection, width } = this.props;
+    componentDidUpdate({ columnCount: prevColumnCount, width: prevWidth }: Props) {
+        const { columnCount, width } = this.props;
 
-        // The React Virtualized Table must be notified when either the cached
-        // row sizes or the parent width change. If omitted, rows are sized
+        // The React Virtualized Table must be notified whenever the heights of rows
+        // could potentially change. If omitted, rows are sized
         // incorrectly resulting in gaps or content overlap.
-        if (
-            columnCount !== prevColumnCount ||
-            currentCollection.id !== prevCurrentCollection.id ||
-            width !== prevWidth
-        ) {
+        if (columnCount !== prevColumnCount || width !== prevWidth) {
             this.cache.clearAll();
             this.forceUpdate();
         }

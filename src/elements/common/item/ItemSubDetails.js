@@ -10,13 +10,15 @@ import getSize from '../../../utils/size';
 import Datefield from '../date';
 import messages from '../messages';
 import { VIEW_RECENTS } from '../../../constants';
+import './ItemSubDetails.scss';
 
 type Props = {
+    isGridView: boolean,
     item: BoxItem,
     view: View,
 };
 
-const ItemSubDetails = ({ view, item }: Props) => {
+const ItemSubDetails = ({ isGridView, item, view }: Props) => {
     const { modified_at = '', interacted_at = '', modified_by }: BoxItem = item;
     const modifiedBy: string = modified_by ? modified_by.name || '' : '';
     const isRecents: boolean = view === VIEW_RECENTS;
@@ -33,15 +35,17 @@ const ItemSubDetails = ({ view, item }: Props) => {
 
     return (
         <span>
-            <FormattedMessage
-                {...message}
-                values={{
-                    date: DateValue,
-                    name: modifiedBy,
-                }}
-            />
-            <span>
-                &nbsp;-&nbsp;
+            <span className={isGridView ? 'bdl-ItemSubDetails-span-modifiedBy' : ''}>
+                <FormattedMessage
+                    {...message}
+                    values={{
+                        date: DateValue,
+                        name: modifiedBy,
+                    }}
+                />
+            </span>
+            <span className={isGridView ? 'bdl-ItemSubDetails-span-size' : ''}>
+                {!isGridView && <React.Fragment>&nbsp;-&nbsp;</React.Fragment>}
                 {getSize(size)}
             </span>
         </span>
