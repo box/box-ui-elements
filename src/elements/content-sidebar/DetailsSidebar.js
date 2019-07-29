@@ -48,7 +48,7 @@ type ExternalProps = {
     onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
-    refresh: Boolean,
+    refresh: boolean,
     retentionPolicy?: Object,
 } & ErrorContextProps &
     WithLoggerProps;

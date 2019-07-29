@@ -1081,6 +1081,12 @@ class ContentPreview extends PureComponent<Props, State> {
         this.previewContainer = container;
     };
 
+    getSidebarRef = () => this.sidebarRef;
+
+    setSidebarRef = sidebar => {
+        this.sidebarRef = sidebar;
+    };
+
     /**
      * Renders the file preview
      *
@@ -1187,6 +1193,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 getViewer={this.getViewer}
                                 history={history}
                                 language={language}
+                                componentRef={this.setSidebarRef}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}

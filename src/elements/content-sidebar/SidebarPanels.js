@@ -41,6 +41,7 @@ type Props = {
     metadataSidebarProps: MetadataSidebarProps,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    refresh: boolean,
     versionsSidebarProps: VersionsSidebarProps,
 };
 

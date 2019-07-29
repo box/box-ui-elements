@@ -285,8 +285,7 @@ class ContentSidebar extends React.Component<Props, State> {
     }
 
     refresh(): void {
-        const { refresh } = this.state;
-        this.setState({ refresh: !refresh });
+        this.setState(state => ({ refresh: !state.refresh }));
     }
 
     /**

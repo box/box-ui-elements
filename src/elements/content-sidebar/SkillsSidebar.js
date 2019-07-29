@@ -30,7 +30,7 @@ type PropsWithoutContext = {
     file: BoxItem,
     getPreview: Function,
     getViewer: Function,
-    refresh: Boolean,
+    refresh: boolean,
 };
 
 type Props = {

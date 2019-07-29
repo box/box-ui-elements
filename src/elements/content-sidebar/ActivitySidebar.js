@@ -40,7 +40,7 @@ type PropsWithoutContext = {
     file: BoxItem,
     isDisabled: boolean,
     onVersionHistoryClick?: Function,
-    refresh: Boolean,
+    refresh: boolean,
     translations?: Translations,
 } & ExternalProps &
     WithLoggerProps;
