@@ -58,6 +58,7 @@ type Props = {
     isDraggingItemsToUploadsManager?: boolean,
     isFolderUploadEnabled: boolean,
     isLarge: boolean,
+    isResumableUploadsEnabled: boolean,
     isSmall: boolean,
     isTouch: boolean,
     language?: string,
@@ -131,6 +132,7 @@ class ContentUploader extends Component<Props, State> {
         onMinimize: noop,
         onCancel: noop,
         isFolderUploadEnabled: false,
+        isResumableUploadsEnabled: true,
         dataTransferItems: [],
         isDraggingItemsToUploadsManager: false,
     };
