@@ -48,7 +48,7 @@ type ExternalProps = {
     onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
-    refresh: boolean,
+    refreshIdentity?: boolean,
     retentionPolicy?: Object,
 } & ErrorContextProps &
     WithLoggerProps;
@@ -99,8 +99,8 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         }
     }
 
-    componentDidUpdate({ hasAccessStats: prevHasAccessStats, refresh: prevRefresh }: Props) {
-        const { hasAccessStats, refresh } = this.props;
+    componentDidUpdate({ hasAccessStats: prevHasAccessStats, refreshIdentity: prevRefreshIdentity }: Props) {
+        const { hasAccessStats, refreshIdentity } = this.props;
         // Component visibility props such as hasAccessStats can sometimes be flipped after an async call
         const hasAccessStatsChanged = prevHasAccessStats !== hasAccessStats;
         if (hasAccessStatsChanged) {
@@ -115,7 +115,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             }
         }
 
-        if (refresh !== prevRefresh) {
+        if (refreshIdentity !== prevRefreshIdentity) {
             this.fetchAccessStats();
         }
     }

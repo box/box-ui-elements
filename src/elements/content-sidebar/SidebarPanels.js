@@ -41,7 +41,7 @@ type Props = {
     metadataSidebarProps: MetadataSidebarProps,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
-    refresh: boolean,
+    refreshIdentity?: boolean,
     versionsSidebarProps: VersionsSidebarProps,
 };
 
@@ -85,7 +85,7 @@ const SidebarPanels = ({
     metadataSidebarProps,
     onVersionChange,
     onVersionHistoryClick,
-    refresh,
+    refreshIdentity,
     versionsSidebarProps,
 }: Props) =>
     isOpen && (
@@ -116,7 +116,7 @@ const SidebarPanels = ({
                             onVersionHistoryClick={onVersionHistoryClick}
                             startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
                             {...activitySidebarProps}
-                            refresh={refresh}
+                            refreshIdentity={refreshIdentity}
                         />
                     )}
                 />
@@ -132,7 +132,7 @@ const SidebarPanels = ({
                             onVersionHistoryClick={onVersionHistoryClick}
                             startMarkName={MARK_NAME_JS_LOADING_DETAILS}
                             {...detailsSidebarProps}
-                            refresh={refresh}
+                            refreshIdentity={refreshIdentity}
                         />
                     )}
                 />
@@ -146,7 +146,7 @@ const SidebarPanels = ({
                             fileId={fileId}
                             startMarkName={MARK_NAME_JS_LOADING_METADATA}
                             {...metadataSidebarProps}
-                            refresh={refresh}
+                            refreshIdentity={refreshIdentity}
                         />
                     )}
                 />
@@ -162,7 +162,7 @@ const SidebarPanels = ({
                             parentName={match.params.sidebar}
                             versionId={match.params.versionId}
                             {...versionsSidebarProps}
-                            refresh={refresh}
+                            refreshIdentity={refreshIdentity}
                         />
                     )}
                 />

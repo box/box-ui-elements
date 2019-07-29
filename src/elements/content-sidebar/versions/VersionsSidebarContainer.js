@@ -31,7 +31,7 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: string,
-    refresh: boolean,
+    refreshIdentity?: boolean,
     versionId?: string,
 };
 
@@ -74,10 +74,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.fetchData();
     }
 
-    componentDidUpdate({ fileId: prevFileId, refresh: prevRefresh, versionId: prevVersionId }: Props) {
-        const { fileId, refresh, versionId } = this.props;
+    componentDidUpdate({ fileId: prevFileId, refreshIdentity: prevRefreshIdentity, versionId: prevVersionId }: Props) {
+        const { fileId, refreshIdentity, versionId } = this.props;
 
-        if (fileId !== prevFileId || refresh !== prevRefresh) {
+        if (fileId !== prevFileId || refreshIdentity !== prevRefreshIdentity) {
             this.initialize();
             this.setState({ isLoading: true }, this.fetchData);
         }
