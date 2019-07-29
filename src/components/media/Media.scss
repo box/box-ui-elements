@@ -18,12 +18,15 @@
 // the main content, e.g. title and message
 .bdl-Media-body {
     flex: 1 1 100%;
-    margin-left: 10px;
     // handle wrapping long words in text content without breaking
     // float position of menu
     overflow-wrap: break-word;
     word-break: break-word; // CJK scripts
     word-wrap: break-word; // old IE
+
+    .bdl-Media-figure + & {
+        margin-left: 10px;
+    }
 }
 
 // the "..." menu button, meant to be used inside Media-body

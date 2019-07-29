@@ -8,13 +8,14 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { ContentState, EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import messages from './messages';
-import Form from '../../../../components/form-elements/form/Form';
+import Avatar from '../Avatar';
+import CommentInputControls from './CommentInputControls';
 import DraftJSMentionSelector, {
     DraftMentionDecorator,
 } from '../../../../components/form-elements/draft-js-mention-selector';
-import CommentInputControls from './CommentInputControls';
-import Avatar from '../Avatar';
+import Form from '../../../../components/form-elements/form/Form';
+import Media from '../../../../components/media';
+import messages from './messages';
 
 import './ApprovalCommentForm.scss';
 
@@ -156,13 +157,16 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         });
 
         return (
-            <div className={inputContainerClassNames}>
-                {!isEditing && (
-                    <div className="bcs-avatar-container">
-                        <Avatar getAvatarUrl={getAvatarUrl} user={user} />
-                    </div>
-                )}
-                <div className="bcs-comment-input-form-container" data-testid="bcs-comment-input-form-container">
+            <Media className={inputContainerClassNames}>
+                <Media.Figure>
+                    {!isEditing && (
+                        <div className="bcs-avatar-container">
+                            <Avatar getAvatarUrl={getAvatarUrl} user={user} />
+                        </div>
+                    )}
+                </Media.Figure>
+
+                <Media.Body data-testid="bcs-comment-input-form-container">
                     <Form onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
                             className="bcs-comment-input"
@@ -184,8 +188,8 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                         </aside>
                         <CommentInputControls onCancel={onCancel} />
                     </Form>
-                </div>
-            </div>
+                </Media.Body>
+            </Media>
         );
     }
 }

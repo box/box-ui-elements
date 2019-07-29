@@ -81,41 +81,36 @@
 
     .bcs-avatar-container {
         height: 40px;
-        margin-right: 18px;
+        margin-right: 10px;
     }
 
     .bcs-comment-input-controls {
         padding-top: 20px;
     }
 
-    .bcs-comment-input-form-container {
-        flex: 1;
-        min-width: 0;
+    .bcs-comment-mention-tip {
+        color: $bdl-gray-50;
+        padding-top: 10px;
+    }
 
-        .bcs-comment-mention-tip {
-            color: $bdl-gray-50;
-            padding-top: 10px;
-        }
+    .bcs-comment-add-approver-checkbox {
+        margin-left: 0;
+        white-space: nowrap;
+    }
 
-        .bcs-comment-add-approver-checkbox {
-            margin-left: 0;
-            white-space: nowrap;
-        }
+    .bcs-comment-add-approver-date-input {
+        margin-left: 0;
+        margin-right: 0;
+    }
 
-        .bcs-comment-add-approver-date-input {
-            margin-left: 0;
-            margin-right: 0;
-        }
+    .bcs-comment-add-approver-fields-container {
+        border-top: 1px solid $bdl-gray-10;
+        display: flex;
+        flex-direction: column;
+        padding-top: 9px;
 
-        .bcs-comment-add-approver-fields-container {
-            border-top: 1px solid $bdl-gray-10;
-            display: flex;
-            flex-direction: column;
-            padding-top: 9px;
-
-            input.pill-selector-hidden-input {
-                width: 1px;
-            }
+        input.pill-selector-hidden-input {
+            width: 1px;
         }
     }
 }
