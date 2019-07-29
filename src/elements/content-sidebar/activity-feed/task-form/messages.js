@@ -47,6 +47,17 @@ const messages = defineMessages({
         defaultMessage: 'Cancel',
         description: 'label for cancel button in create task popup',
     },
+    taskAnyCheckboxLabel: {
+        id: 'be.contentSidebar.activityFeed.taskForm.taskAnyCheckboxLabel',
+        defaultMessage: 'Only one assignee is required to complete this task',
+        description: 'Label for checkbox to set a task that requires only one assignee to complete.',
+    },
+    taskAnyInfoTooltip: {
+        id: 'be.contentSidebar.activityFeed.taskForm.taskAnyInfoTooltip',
+        defaultMessage:
+            'By default, all assignees are required to take action before a task is complete. Selecting this option will require only one assignee to complete this task.',
+        description: 'Text in tooltip explaining completion rule for an any assignee task.',
+    },
 });
 
 export default messages;

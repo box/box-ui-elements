@@ -139,6 +139,11 @@ const messages = defineMessages({
         defaultMessage: 'Are you sure you want to permanently delete this task?',
         description: 'Confirmation prompt text to delete task',
     },
+    taskAnyAffordanceTooltip: {
+        id: 'be.contentSidebar.activityFeed.task.taskAnyAffordanceTooltip',
+        defaultMessage: 'The task creator only requires one assignee to complete this task',
+        description: 'Tooltip text for any task icon, explaining that the task only needs one assignee to complete.',
+    },
 });
 
 export default messages;
