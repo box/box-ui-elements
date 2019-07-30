@@ -9,6 +9,7 @@ type Props = {
 
 const ItemGridThumbnail = ({ item }: Props) => {
     const { thumbnailUrl } = item;
+
     return (
         <div className="bce-ItemGridThumbnail">
             {thumbnailUrl ? (

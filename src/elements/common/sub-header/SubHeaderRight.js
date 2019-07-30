@@ -41,12 +41,11 @@ const SubHeaderRight = ({
     const isFolder: boolean = view === VIEW_FOLDER;
     const showSort: boolean = isFolder && hasItems;
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
-    const showGridButton: boolean = isFolder && hasItems;
 
     return (
         <div className="be-sub-header-right">
             <FeatureFlag feature="contentExplorer.gridView.enabled">
-                {showGridButton && <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />}
+                {hasItems && <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />}
             </FeatureFlag>
 
             {showSort && !!sortBy && !!sortDirection && (

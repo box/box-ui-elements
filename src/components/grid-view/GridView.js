@@ -1,10 +1,9 @@
 // @flow
 import * as React from 'react';
-import classNames from 'classnames';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
 import Table, { Column } from 'react-virtualized/dist/es/Table';
-import uniqueId from 'lodash/uniqueId';
 import getProp from 'lodash/get';
+import GridViewSlot from './GridViewSlot';
 
 import 'react-virtualized/styles.css';
 import './GridView.scss';
@@ -37,13 +36,13 @@ class GridView extends React.Component<Props> {
         fixedWidth: true,
     });
 
-    componentDidUpdate(prevProps: Props) {
+    componentDidUpdate({ columnCount: prevColumnCount, width: prevWidth }: Props) {
         const { columnCount, width } = this.props;
 
-        // The React Virtualized Table must be notified when either the cached
-        // row sizes or the parent width change. If omitted, rows are sized
+        // The React Virtualized Table must be notified whenever the heights of rows
+        // could potentially change. If omitted, rows are sized
         // incorrectly resulting in gaps or content overlap.
-        if (columnCount !== prevProps.columnCount || width !== prevProps.width) {
+        if (columnCount !== prevColumnCount || width !== prevWidth) {
             this.cache.clearAll();
             this.forceUpdate();
         }
@@ -58,16 +57,19 @@ class GridView extends React.Component<Props> {
         const maxSlotIndex = Math.min(startingIndex + columnCount, count);
 
         for (let slotIndex = startingIndex; slotIndex < maxSlotIndex; slotIndex += 1) {
+            const { id, selected } = getProp(currentCollection, `items[${slotIndex}]`);
+
             // using item's id as key is important for renrendering.  React Virtualized Table rerenders
             // on every 1px scroll, so using improper key would lead to image flickering in each
             // card of the grid view when scrolling.
             contents.push(
-                <div
-                    key={getProp(currentCollection, `items[${slotIndex}].id`) || uniqueId('bdl-GridView-slot')}
-                    className="bdl-GridView-slot"
-                >
-                    {slotRenderer(slotIndex)}
-                </div>,
+                <GridViewSlot
+                    key={id}
+                    selected={selected}
+                    slotIndex={slotIndex}
+                    slotRenderer={slotRenderer}
+                    slotWidth={`${(100 / columnCount).toFixed(4)}%`}
+                />,
             );
         }
 
@@ -89,7 +91,7 @@ class GridView extends React.Component<Props> {
 
         return (
             <Table
-                className={classNames('bdl-GridView', `bdl-GridView--columns-${columnCount}`)}
+                className="bdl-GridView"
                 disableHeader
                 height={height}
                 rowCount={rowCount}

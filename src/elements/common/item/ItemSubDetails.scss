@@ -1,0 +1,21 @@
+.bdl-GridView {
+    .bdl-ItemSubDetails-modifiedBy,
+    .bdl-ItemSubDetails-size {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.bce-item-row {
+    .bdl-ItemSubDetails-size {
+        &::before {
+            content: '•';
+            font-size: 8px;
+            padding-left: 3px;
+            padding-right: 3px;
+            vertical-align: middle;
+        }
+    }
+}

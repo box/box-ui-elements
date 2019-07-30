@@ -1,7 +1,11 @@
 @import '../variables';
 
 .be-item-label {
+    display: block;
     outline: none;
+    overflow: hidden;
     text-align: left;
+    text-overflow: ellipsis;
     white-space: nowrap;
+    width: 100%;
 }

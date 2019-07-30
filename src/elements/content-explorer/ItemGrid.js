@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import getProp from 'lodash/get';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import GridViewWrapper from '../../components/grid-view/GridViewWrapper';
@@ -18,7 +18,7 @@ const ItemGrid = ({ currentCollection, rootId, ...rest }: Props) => {
      * @param {number} slotIndex - index of item in currentCollection.items
      * @return {React.Element} - Element to display in card
      */
-    const slotRenderer = (slotIndex: number) => {
+    const slotRenderer = (slotIndex: number): ?React.Element<any> => {
         const item: ?BoxItem = getProp(currentCollection, `items[${slotIndex}]`);
 
         return item ? <ItemGridCell item={item} rootId={rootId} {...rest} /> : null;

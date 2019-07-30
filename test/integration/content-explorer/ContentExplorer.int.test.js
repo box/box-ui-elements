@@ -237,7 +237,11 @@ describe('ContentExplorer', () => {
 
         it('Should open and close share modal', () => {
             cy.getByAriaLabel(localize('be.shareDialogLabel')).should('not.exist');
-            cy.contains(localize('be.share')).click();
+            helpers
+                .getAllMoreOptionsButtons()
+                .eq(0)
+                .click();
+            cy.contains(utils.getExactRegex(localize('be.share'))).click();
             cy.getByAriaLabel(localize('be.shareDialogLabel')).should('exist');
             helpers.getCloseButton().click();
             cy.getByAriaLabel(localize('be.shareDialogLabel')).should('not.exist');

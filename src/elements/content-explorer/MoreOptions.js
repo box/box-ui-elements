@@ -6,6 +6,8 @@ import DropdownMenu from '../../components/dropdown-menu/DropdownMenu';
 import Menu from '../../components/menu/Menu';
 import MenuItem from '../../components/menu/MenuItem';
 import Browser from '../../utils/Browser';
+import IconEllipsis from '../../icons/general/IconEllipsis';
+import { bdlGray50 } from '../../styles/variables';
 import messages from '../common/messages';
 import {
     PERMISSION_CAN_DOWNLOAD,
@@ -80,7 +82,7 @@ const MoreOptions = ({
                     onFocus={onFocus}
                     type="button"
                 >
-                    ···
+                    <IconEllipsis color={bdlGray50} height={10} width={16} />
                 </Button>
                 <Menu>
                     {allowPreview && (

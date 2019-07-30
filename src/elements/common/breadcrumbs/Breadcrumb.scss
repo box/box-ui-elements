@@ -22,3 +22,10 @@
     flex-shrink: 0;
     margin: 1px 8px 0 5px;
 }
+
+.bdl-Breadcrumb-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
