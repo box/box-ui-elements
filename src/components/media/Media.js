@@ -10,7 +10,9 @@ type Props = {
     /** Component to use as outermost element, e.g., 'li' */
     as: React.ElementType,
     /** Child elements */
-    children: React.ChildrenArray<React.Element<typeof MediaFigure | typeof MediaBody | typeof MediaMenu>>,
+    children: React.ChildrenArray<
+        React.Element<typeof MediaFigure | typeof MediaBody | typeof MediaMenu> | false | null,
+    >,
     /** Additional class names */
     className?: string,
 };

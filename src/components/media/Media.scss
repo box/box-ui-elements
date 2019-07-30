@@ -11,14 +11,13 @@
     align-self: flex-start;
     flex: 0 0 auto;
     justify-self: flex-start;
-    margin: 0;
+    margin: 0 10px 0 0;
     padding: 0;
 }
 
 // the main content, e.g. title and message
 .bdl-Media-body {
     flex: 1 1 100%;
-    margin-left: 10px;
     // handle wrapping long words in text content without breaking
     // float position of menu
     overflow-wrap: break-word;

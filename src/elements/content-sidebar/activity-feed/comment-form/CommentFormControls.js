@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Comment Input Controls components for ApprovalCommentForm
+ * @file Comment Input Controls components for CommentForm
  */
 
 import * as React from 'react';
@@ -17,16 +17,11 @@ type Props = {
 };
 
 const CommentInputControls = ({ onCancel }: Props): React.Node => (
-    <div className="bcs-comment-input-controls">
-        <Button
-            className="bcs-comment-input-cancel-btn"
-            data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_CANCEL}
-            onClick={onCancel}
-            type="button"
-        >
+    <div className="bcs-CommentFormControls">
+        <Button data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_CANCEL} onClick={onCancel} type="button">
             <FormattedMessage {...messages.commentCancel} />
         </Button>
-        <PrimaryButton className="bcs-comment-input-submit-btn" data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}>
+        <PrimaryButton data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}>
             <FormattedMessage {...messages.commentPost} />
         </PrimaryButton>
     </div>

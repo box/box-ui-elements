@@ -87,7 +87,6 @@
     .bcs-activity-feed-comment-input {
         background-color: $white;
         flex: 0 0 auto;
-        margin-bottom: 4px;
         max-height: 500px;
         min-height: 93px;
         overflow: hidden;
@@ -105,13 +104,6 @@
 
         .overlay {
             max-height: 95px;
-            overflow: auto;
-        }
-    }
-
-    .bcs-comment-add-approver-fields-container {
-        .overlay {
-            max-height: 140px;
             overflow: auto;
         }
     }

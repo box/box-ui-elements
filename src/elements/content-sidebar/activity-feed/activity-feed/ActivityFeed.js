@@ -8,7 +8,7 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import ActiveState from './ActiveState';
-import ApprovalCommentForm from '../approval-comment-form';
+import CommentForm from '../comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import './ActivityFeed.scss';
@@ -96,19 +96,19 @@ class ActivityFeed extends React.Component<Props, State> {
         nativeEvent.stopImmediatePropagation();
     };
 
-    approvalCommentFormFocusHandler = (): void => {
+    commentFormFocusHandler = (): void => {
         this.resetFeedScroll();
         this.setState({ isInputOpen: true });
     };
 
-    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
+    commentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
 
-    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
+    commentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
     onCommentCreate = ({ text, hasMention }: { hasMention: boolean, text: string }) => {
         const { onCommentCreate = noop } = this.props;
         onCommentCreate(text, hasMention);
-        this.approvalCommentFormSubmitHandler();
+        this.commentFormSubmitHandler();
     };
 
     /**
@@ -122,7 +122,7 @@ class ActivityFeed extends React.Component<Props, State> {
     onTaskCreate = ({ text, assignees, dueAt }: { assignees: SelectorItems, dueAt: string, text: string }): void => {
         const { onTaskCreate = noop } = this.props;
         onTaskCreate(text, assignees, dueAt);
-        this.approvalCommentFormSubmitHandler();
+        this.commentFormSubmitHandler();
     };
 
     /**
@@ -161,7 +161,7 @@ class ActivityFeed extends React.Component<Props, State> {
         } = this.props;
         const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
-        const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
+        const showCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
         const isLoading = !feedItems || !currentUser;
@@ -176,7 +176,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     className="bcs-activity-feed-items-container"
                 >
                     {isEmpty ? (
-                        <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
+                        <EmptyState isLoading={isLoading} showCommentMessage={showCommentForm} />
                     ) : (
                         <ActiveState
                             {...activityFeedError}
@@ -202,8 +202,8 @@ class ActivityFeed extends React.Component<Props, State> {
                         />
                     )}
                 </div>
-                {showApprovalCommentForm ? (
-                    <ApprovalCommentForm
+                {showCommentForm ? (
+                    <CommentForm
                         onSubmit={this.resetFeedScroll}
                         isDisabled={isDisabled}
                         mentionSelectorContacts={mentionSelectorContacts}
@@ -214,8 +214,8 @@ class ActivityFeed extends React.Component<Props, State> {
                         getMentionWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
                         user={currentUser}
-                        onCancel={this.approvalCommentFormCancelHandler}
-                        onFocus={this.approvalCommentFormFocusHandler}
+                        onCancel={this.commentFormCancelHandler}
+                        onFocus={this.commentFormFocusHandler}
                         getAvatarUrl={getAvatarUrl}
                     />
                 ) : null}

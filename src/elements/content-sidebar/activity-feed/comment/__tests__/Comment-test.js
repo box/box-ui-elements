@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 
 import Comment from '../Comment';
-import ApprovalCommentForm from '../../approval-comment-form/ApprovalCommentForm';
+import CommentForm from '../../comment-form/CommentForm';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -26,7 +26,7 @@ const allHandlers = {
 
 describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     beforeEach(() => {
-        ApprovalCommentForm.default = jest.fn().mockReturnValue(<div />);
+        CommentForm.default = jest.fn().mockReturnValue(<div />);
     });
 
     test('should correctly render comment', () => {
@@ -183,7 +183,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         const instance = wrapper.instance();
 
-        expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
+        expect(wrapper.find('CommentForm').length).toEqual(0);
         expect(wrapper.find('ActivityMessage').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
 
@@ -195,7 +195,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.find('ActivityMessage').length).toEqual(0);
         expect(wrapper.state('isEditing')).toBe(true);
 
-        instance.approvalCommentFormFocusHandler();
+        instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
         instance.handleUpdate();

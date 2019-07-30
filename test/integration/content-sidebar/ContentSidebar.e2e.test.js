@@ -99,10 +99,9 @@ describe('ContentSidebar', () => {
     });
 
     describe('activity feed comments', () => {
-        const getDraftJSEditor = () => cy.getByTestId('bcs-comment-input-form-container').find('[contenteditable]');
+        const getDraftJSEditor = () => cy.getByTestId('bcs-CommentForm-body').find('[contenteditable]');
         const getTooltip = () => cy.get('[role="tooltip"]');
-        const getCancelButton = () =>
-            cy.contains(localize('be.contentSidebar.activityFeed.approvalCommentForm.commentCancel'));
+        const getCancelButton = () => cy.contains(localize('be.contentSidebar.activityFeed.commentForm.commentCancel'));
 
         beforeEach(() => {
             helpers.load({
