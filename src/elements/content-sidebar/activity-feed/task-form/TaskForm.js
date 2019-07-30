@@ -10,7 +10,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import commonMessages from '../../../../common/messages';
 import messages from './messages';
 import apiMessages from '../../../../api/messages';
-import approvalCommentFormMessages from '../approval-comment-form/messages';
+import commentFormMessages from '../comment-form/messages';
 import Form from '../../../../components/form-elements/form/Form';
 import ContactDatalistItem from '../../../../components/contact-datalist-item/ContactDatalistItem';
 import TextArea from '../../../../components/text-area';
@@ -339,7 +339,7 @@ class TaskForm extends React.Component<Props, State> {
                             onInput={this.handleApproverSelectorInput}
                             onRemove={this.handleApproverSelectorRemove}
                             onSelect={this.handleApproverSelectorSelect}
-                            placeholder={intl.formatMessage(approvalCommentFormMessages.approvalAddAssignee)}
+                            placeholder={intl.formatMessage(commentFormMessages.approvalAddAssignee)}
                             selectedOptions={renderApprovers}
                             selectorOptions={approverOptions}
                             validateForError={() => this.validateForm('taskAssignees')}
@@ -363,7 +363,7 @@ class TaskForm extends React.Component<Props, State> {
                             name="taskName"
                             onBlur={() => this.validateForm('taskName')}
                             onChange={this.handleChangeMessage}
-                            placeholder={intl.formatMessage(approvalCommentFormMessages.commentWrite)}
+                            placeholder={intl.formatMessage(commentFormMessages.commentWrite)}
                             value={message}
                         />
                         <DatePicker
@@ -380,7 +380,7 @@ class TaskForm extends React.Component<Props, State> {
                             minDate={new Date()}
                             name="taskDueDate"
                             onChange={this.handleDueDateChange}
-                            placeholder={intl.formatMessage(approvalCommentFormMessages.approvalSelectDate)}
+                            placeholder={intl.formatMessage(commentFormMessages.approvalSelectDate)}
                             value={dueDate || undefined}
                         />
                         <div className="bcs-task-input-controls">

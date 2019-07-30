@@ -8,15 +8,16 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { ContentState, EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import messages from './messages';
-import Form from '../../../../components/form-elements/form/Form';
+import Avatar from '../Avatar';
+import CommentFormControls from './CommentFormControls';
 import DraftJSMentionSelector, {
     DraftMentionDecorator,
 } from '../../../../components/form-elements/draft-js-mention-selector';
-import CommentInputControls from './CommentInputControls';
-import Avatar from '../Avatar';
+import Form from '../../../../components/form-elements/form/Form';
+import Media from '../../../../components/media';
+import messages from './messages';
 
-import './ApprovalCommentForm.scss';
+import './CommentForm.scss';
 
 type Props = {
     className: string,
@@ -40,7 +41,7 @@ type State = {
     commentEditorState: any,
 };
 
-class ApprovalCommentForm extends React.Component<Props, State> {
+class CommentForm extends React.Component<Props, State> {
     static defaultProps = {
         isOpen: false,
     };
@@ -151,21 +152,22 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             getAvatarUrl,
         } = this.props;
         const { commentEditorState } = this.state;
-        const inputContainerClassNames = classNames('bcs-comment-input-container', className, {
-            'bcs-comment-input-is-open': isOpen,
+        const inputContainerClassNames = classNames('bcs-CommentForm', className, {
+            'bcs-is-open': isOpen,
         });
 
         return (
-            <div className={inputContainerClassNames}>
+            <Media className={inputContainerClassNames}>
                 {!isEditing && (
-                    <div className="bcs-avatar-container">
+                    <Media.Figure className="bcs-CommentForm-avatar">
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
-                    </div>
+                    </Media.Figure>
                 )}
-                <div className="bcs-comment-input-form-container" data-testid="bcs-comment-input-form-container">
+
+                <Media.Body className="bcs-CommentForm-body" data-testid="bcs-CommentForm-body">
                     <Form onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
-                            className="bcs-comment-input"
+                            className="bcs-CommentForm-input"
                             contacts={isOpen ? mentionSelectorContacts : []}
                             editorState={commentEditorState}
                             hideLabel
@@ -179,22 +181,18 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             placeholder={tagged_message ? undefined : formatMessage(messages.commentWrite)}
                             validateOnBlur={false}
                         />
-                        <aside
-                            className={classNames('bcs-at-mention-tip', {
-                                'accessibility-hidden': isOpen,
-                            })}
-                        >
+                        <aside className="bcs-CommentForm-tip">
                             <FormattedMessage {...messages.atMentionTip} />
                         </aside>
-                        <CommentInputControls onCancel={onCancel} />
+
+                        {isOpen && <CommentFormControls onCancel={onCancel} />}
                     </Form>
-                </div>
-            </div>
+                </Media.Body>
+            </Media>
         );
     }
 }
 
 // For testing only
-export { ApprovalCommentForm as ApprovalCommentFormUnwrapped };
-
-export default injectIntl(ApprovalCommentForm);
+export { CommentForm as CommentFormUnwrapped };
+export default injectIntl(CommentForm);

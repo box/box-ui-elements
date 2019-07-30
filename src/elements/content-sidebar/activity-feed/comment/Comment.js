@@ -15,7 +15,7 @@ import ActivityTimestamp from '../common/activity-timestamp';
 import UserLink from '../common/user-link';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
-import ApprovalCommentForm from '../approval-comment-form';
+import CommentForm from '../comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
 import { bdlGray80 } from '../../../../styles/variables';
 import { PLACEHOLDER_USER } from '../../../../constants';
@@ -76,16 +76,16 @@ class Comment extends React.Component<Props, State> {
         this.setState({ isEditing: true, isInputOpen: true });
     };
 
-    approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
+    commentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
 
-    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    commentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
-    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    commentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
     handleUpdate = (args: any): void => {
         const { onEdit = noop } = this.props;
         onEdit(args);
-        this.approvalCommentFormSubmitHandler();
+        this.commentFormSubmitHandler();
     };
 
     render(): React.Node {
@@ -177,7 +177,7 @@ class Comment extends React.Component<Props, State> {
                         </div>
                         {isEditing ? (
                             /* NOTE: Inline editing is not currently supported for comments */
-                            <ApprovalCommentForm
+                            <CommentForm
                                 isDisabled={isDisabled}
                                 className={classNames('bcs-activity-feed-comment-input', {
                                     'bcs-is-disabled': isDisabled,
@@ -185,8 +185,8 @@ class Comment extends React.Component<Props, State> {
                                 updateComment={this.handleUpdate}
                                 isOpen={isInputOpen}
                                 user={currentUser}
-                                onCancel={this.approvalCommentFormCancelHandler}
-                                onFocus={this.approvalCommentFormFocusHandler}
+                                onCancel={this.commentFormCancelHandler}
+                                onFocus={this.commentFormFocusHandler}
                                 isEditing={isEditing}
                                 entityId={id}
                                 tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
