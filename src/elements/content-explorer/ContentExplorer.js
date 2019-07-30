@@ -394,6 +394,22 @@ class ContentExplorer extends Component<Props, State> {
         }
     };
 
+    getFolderFields = () => {
+        const { features } = this.props;
+        return isFeatureEnabled(features, 'contentExplorer.gridView.enabled')
+            ? [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS]
+            : FOLDER_FIELDS_TO_FETCH;
+    };
+
+    populateItemsWithThumbnails = async (items: Array<BoxItem> = []): Promise<Array<BoxItem>> => {
+        const fileAPI = this.api.getFileAPI();
+        const itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
+        return items.map((item, index) => {
+            const thumbnailUrl = itemThumbnails[index];
+            return thumbnailUrl ? { ...item, thumbnailUrl } : item;
+        });
+    };
+
     /**
      * Folder fetch success callback
      *
@@ -409,12 +425,7 @@ class ContentExplorer extends Component<Props, State> {
         const rootName = id === rootFolderId ? name : '';
 
         if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
-            const fileAPI = this.api.getFileAPI();
-            const itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
-            const itemsWithThumbnails = items.map((item, index) => {
-                const thumbnailUrl = itemThumbnails[index];
-                return thumbnailUrl ? { ...item, thumbnailUrl } : item;
-            });
+            const itemsWithThumbnails = await this.populateItemsWithThumbnails(items);
             this.updateCollection({ ...collection, items: itemsWithThumbnails }, selected);
         } else {
             this.updateCollection(collection, selected);
@@ -443,7 +454,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true) => {
-        const { features, rootFolderId }: Props = this.props;
+        const { rootFolderId }: Props = this.props;
         const {
             currentCollection: { id: currentId },
             currentOffset,
@@ -473,10 +484,6 @@ class ContentExplorer extends Component<Props, State> {
             currentOffset: offset,
         });
 
-        const fields = isFeatureEnabled(features, 'contentExplorer.gridView.enabled')
-            ? [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS]
-            : FOLDER_FIELDS_TO_FETCH;
-
         // Fetch the folder using folder API
         this.api.getFolderAPI().getFolder(
             folderId,
@@ -488,7 +495,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { forceFetch: true, fields },
+            { fields: this.getFolderFields(), forceFetch: true },
         );
     };
 
@@ -528,8 +535,10 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Object} collection item collection object
      * @return {void}
      */
-    searchSuccessCallback = (collection: Collection) => {
+    searchSuccessCallback = async (collection: Collection) => {
+        const { features }: Props = this.props;
         const { selected }: State = this.state;
+        const { items } = collection;
 
         // Unselect any rows that were selected
         this.unselect();
@@ -537,7 +546,12 @@ class ContentExplorer extends Component<Props, State> {
         // Close any open modals
         this.closeModals();
 
-        this.updateCollection(collection, selected);
+        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
+            const itemsWithThumbnails = await this.populateItemsWithThumbnails(items);
+            this.updateCollection({ ...collection, items: itemsWithThumbnails }, selected);
+        } else {
+            this.updateCollection(collection, selected);
+        }
     };
 
     /**
@@ -554,6 +568,7 @@ class ContentExplorer extends Component<Props, State> {
         this.api
             .getSearchAPI()
             .search(id, query, currentPageSize, currentOffset, this.searchSuccessCallback, this.errorCallback, {
+                fields: this.getFolderFields(),
                 forceFetch: true,
             });
     }, DEFAULT_SEARCH_DEBOUNCE);
@@ -616,12 +631,22 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean} triggerNavigationEvent - To trigger navigate event
      * @return {void}
      */
-    recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean) {
-        // Unselect any rows that were selected
+    async recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean) {
+        const { features }: Props = this.props;
+        const { items } = collection;
+
         this.unselect();
 
         // Set the new state and focus the grid for tabbing
-        const newState = { currentCollection: collection };
+        const newState = {
+            currentCollection: collection,
+        };
+
+        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
+            const itemsWithThumbnails = await this.populateItemsWithThumbnails(items);
+            newState.currentCollection = { ...collection, items: itemsWithThumbnails };
+        }
+
         if (triggerNavigationEvent) {
             this.setState(newState, this.finishNavigation);
         } else {
@@ -654,7 +679,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.recentsSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { forceFetch: true },
+            { fields: this.getFolderFields(), forceFetch: true },
         );
     }
 
@@ -785,8 +810,6 @@ class ContentExplorer extends Component<Props, State> {
      * Unselects an item
      *
      * @private
-     * @param {Object} item - file or folder object
-     * @param {Function|void} [onSelect] - optional on select callback
      * @return {void}
      */
     unselect(): void {

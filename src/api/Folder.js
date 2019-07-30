@@ -16,13 +16,8 @@ import {
     ERROR_CODE_FETCH_FOLDER,
     ERROR_CODE_CREATE_FOLDER,
     FIELD_REPRESENTATIONS,
+    X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
 } from '../constants';
-
-// available dimensions for JPG: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048"
-const DEFAULT_JPG_DIMENSIONS = '1024x1024';
-
-// available dimensions for PNG: "1024x1024", "2048x2048"
-const DEFAULT_PNG_DIMENSIONS = '1024x1024';
 
 class Folder extends Item {
     /**
@@ -237,9 +232,7 @@ class Folder extends Item {
                 params,
                 headers: requestFields.includes(FIELD_REPRESENTATIONS)
                     ? {
-                          // if unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do
-                          // not have a thumbnail rep but do have a first page rep.
-                          'X-Rep-Hints': `[jpg?dimensions=${DEFAULT_JPG_DIMENSIONS},png?dimensions=${DEFAULT_PNG_DIMENSIONS}]`,
+                          'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
                       }
                     : {},
             })
