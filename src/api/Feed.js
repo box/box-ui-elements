@@ -34,6 +34,7 @@ import {
     TYPED_ID_FEED_PREFIX,
 } from '../constants';
 import type {
+    TaskCompletionRule,
     TaskCollabAssignee,
     TaskCollabStatus,
     TaskLink,
@@ -789,6 +790,7 @@ class Feed extends Base {
         assignees: SelectorItems,
         taskType: TaskType,
         dueAt: ?string,
+        completionRule: TaskCompletionRule,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -814,6 +816,7 @@ class Feed extends Base {
                 role: 'CREATOR',
                 status: TASK_NEW_INITIAL_STATUS,
             },
+            completion_rule: completionRule,
             created_at: new Date().toISOString(),
             due_at: dueAtString,
             id: uuid,
@@ -862,7 +865,12 @@ class Feed extends Base {
             status: TASK_NEW_NOT_STARTED,
         };
 
-        const taskPayload: TaskPayload = { description: message, due_at: dueAtString, task_type: taskType };
+        const taskPayload: TaskPayload = {
+            description: message,
+            due_at: dueAtString,
+            task_type: taskType,
+            completion_rule: completionRule,
+        };
 
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.tasksNewAPI.createTask({

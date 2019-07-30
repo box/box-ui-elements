@@ -25,8 +25,14 @@ $assignee-dropdown-height: 215px;
         min-width: 0;
 
         textarea,
-        input {
+        .date-picker-input {
             width: 100%;
+        }
+
+        .checkbox-container {
+            // default margin is 20px between form input elements
+            // this checkbox needs to be 10px below the pill selector input
+            margin-top: -10px;
         }
 
         .bcs-task-add-due-date-input {

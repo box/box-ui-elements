@@ -10,6 +10,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
         Object {
           "approverSelectorContacts": undefined,
           "approvers": Array [],
+          "completionRule": "ALL_ASSIGNEES",
           "createTask": [Function],
           "getApproverWithQuery": [Function],
           "getAvatarUrl": [Function],

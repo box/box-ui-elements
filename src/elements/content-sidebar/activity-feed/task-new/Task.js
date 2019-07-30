@@ -143,6 +143,11 @@ class Task extends React.Component<Props, State> {
 
     handleEditSubmitSuccess = () => {
         this.setState({ isEditing: false });
+        const { onModalClose } = this.props;
+
+        if (onModalClose) {
+            onModalClose();
+        }
     };
 
     handleEditSubmitError = (error: ElementsXhrError) => {
@@ -199,6 +204,7 @@ class Task extends React.Component<Props, State> {
         const {
             approverSelectorContacts,
             assigned_to,
+            completion_rule,
             created_at,
             created_by,
             currentUser,
@@ -393,6 +399,7 @@ class Task extends React.Component<Props, State> {
                         id,
                         approvers: assignedToFull.entries,
                         approverSelectorContacts,
+                        completionRule: completion_rule,
                         getApproverWithQuery,
                         getAvatarUrl,
                         createTask: () => {},
