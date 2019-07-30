@@ -445,6 +445,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 file,
                 hasAccessStats: false,
                 hasClassification: false,
+                refreshIdentity: false,
             });
             instance = wrapper.instance();
             instance.fetchAccessStats = jest.fn();
@@ -456,6 +457,22 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             });
 
             expect(instance.fetchAccessStats).toHaveBeenCalled();
+        });
+
+        test('should fetch the access stats data if the refreshIdentity changed', () => {
+            wrapper.setProps({
+                refreshIdentity: true,
+            });
+
+            expect(instance.fetchAccessStats).toHaveBeenCalled();
+        });
+
+        test('should not fetch the access stats data if the refreshIdentity did not change', () => {
+            wrapper.setProps({
+                refreshIdentity: false,
+            });
+
+            expect(instance.fetchAccessStats).not.toHaveBeenCalled();
         });
     });
 });

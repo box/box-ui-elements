@@ -243,4 +243,25 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             expect(getMetadata).not.toBeCalled();
         });
     });
+
+    describe('refresh()', () => {
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test.each`
+            testcase   | initialValue | expectedResult
+            ${'null'}  | ${null}      | ${true}
+            ${'false'} | ${false}     | ${true}
+            ${'true'}  | ${true}      | ${false}
+        `('should change the refreshIdentity state: $testcase', ({ initialValue, expectedResult }) => {
+            instance.setState({ refreshIdentity: initialValue });
+            instance.refresh();
+            expect(instance.state.refreshIdentity).toEqual(expectedResult);
+        });
+    });
 });
