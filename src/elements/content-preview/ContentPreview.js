@@ -1195,7 +1195,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 getViewer={this.getViewer}
                                 history={history}
                                 language={language}
-                                componentRef={this.setSidebarRef}
+                                ref={this.setSidebarRef}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}
