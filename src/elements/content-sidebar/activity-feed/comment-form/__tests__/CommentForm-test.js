@@ -4,7 +4,6 @@ import { EditorState, convertFromRaw } from 'draft-js';
 
 import Button from '../../../../../components/button/Button';
 import Media from '../../../../../components/media';
-import PrimaryButton from '../../../../../components/primary-button';
 import { CommentFormUnwrapped as CommentForm } from '../CommentForm';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
@@ -28,8 +27,8 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
         const wrapper = render();
 
         expect(wrapper.find('[contentEditable]').length).toEqual(1);
-        expect(wrapper.find('.bcs-CommentFormControls').length).toEqual(1);
-        expect(wrapper.find('.bcs-CommentFormControls').find('button').length).toEqual(2);
+        expect(wrapper.find('.bcs-CommentFormControls').length).toEqual(0);
+        expect(wrapper.find('.bcs-CommentFormControls').find('button').length).toEqual(0);
     });
 
     test('should call onFocus handler when input is focused', () => {
@@ -44,7 +43,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
 
     test('should call oncancel handler when input is canceled', () => {
         const onCancelSpy = jest.fn();
-        const wrapper = render({ onCancel: onCancelSpy });
+        const wrapper = render({ isOpen: true, onCancel: onCancelSpy });
         const cancelButton = wrapper.find(Button).first();
 
         cancelButton.simulate('click');
@@ -54,7 +53,9 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     test('should render open comment input when isOpen is true', () => {
         const wrapper = render({ isOpen: true });
 
-        expect(wrapper.find(Media).hasClass('bdl-is-open')).toBe(true);
+        expect(wrapper.find(Media).hasClass('bcs-is-open')).toBe(true);
+        expect(wrapper.find('.bcs-CommentFormControls').length).toEqual(1);
+        expect(wrapper.find('.bcs-CommentFormControls').find('button').length).toEqual(2);
     });
 
     test('should set required to false on comment input when not open', () => {
@@ -94,10 +95,10 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
 
         instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
 
-        const submitBtn = wrapper.find(PrimaryButton);
-        const formEl = wrapper.find('form').getDOMNode();
+        const form = wrapper.find('form');
+        const formEl = form.getDOMNode();
         formEl.checkValidity = () => !!expectedCallCount;
-        submitBtn.simulate('submit', { target: formEl });
+        form.simulate('submit', { target: formEl });
 
         expect(createCommentSpy).toHaveBeenCalledTimes(expectedCallCount);
     });

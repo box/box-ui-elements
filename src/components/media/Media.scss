@@ -11,7 +11,7 @@
     align-self: flex-start;
     flex: 0 0 auto;
     justify-self: flex-start;
-    margin: 0;
+    margin: 0 10px 0 0;
     padding: 0;
 }
 
@@ -23,10 +23,6 @@
     overflow-wrap: break-word;
     word-break: break-word; // CJK scripts
     word-wrap: break-word; // old IE
-
-    .bdl-Media-figure + & {
-        margin-left: 10px;
-    }
 }
 
 // the "..." menu button, meant to be used inside Media-body

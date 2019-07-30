@@ -3,10 +3,9 @@
 .be {
     .bcs-CommentForm {
         border-top: solid 1px $bdl-gray-10;
-        display: flex;
         padding: 20px;
 
-        &.bdl-is-open {
+        &.bcs-is-open {
             .bcs-CommentForm-input {
                 .public-DraftEditor-content {
                     max-height: 140px;
@@ -14,27 +13,20 @@
                     overflow: auto;
                 }
             }
-
-            .bcs-CommentFormControls {
-                display: block;
-                text-align: right;
-            }
         }
     }
 
     .bcs-CommentForm-avatar {
-        margin-right: 10px;
+        margin-right: 20px;
+    }
+
+    .bcs-CommentForm-body {
+        min-width: 0; // Prevents overflow with long text strings in MS Edge
     }
 
     .bcs-CommentForm-input {
-        max-height: 140px;
-        width: auto;
-
-        .content-editable,
-        .content-editable-container,
         .mention-selector-wrapper {
             margin: 0;
-            width: 100%;
         }
 
         .public-DraftEditor-content {
@@ -45,12 +37,12 @@
 
     .bcs-CommentForm-tip {
         color: $bdl-gray-50;
-        padding-top: 10px;
+        margin-top: 10px;
     }
 
     .bcs-CommentFormControls {
-        display: none;
-        padding-top: 20px;
+        margin-top: 20px;
+        text-align: right;
 
         .btn {
             margin: 0;

@@ -153,18 +153,18 @@ class CommentForm extends React.Component<Props, State> {
         } = this.props;
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
-            'bdl-is-open': isOpen,
+            'bcs-is-open': isOpen,
         });
 
         return (
             <Media className={inputContainerClassNames}>
                 {!isEditing && (
-                    <Media.Figure>
-                        <Avatar className="bcs-CommentForm-avatar" getAvatarUrl={getAvatarUrl} user={user} />
+                    <Media.Figure className="bcs-CommentForm-avatar">
+                        <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </Media.Figure>
                 )}
 
-                <Media.Body data-testid="bcs-CommentForm-body">
+                <Media.Body className="bcs-CommentForm-body" data-testid="bcs-CommentForm-body">
                     <Form onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
                             className="bcs-CommentForm-input"
@@ -184,7 +184,8 @@ class CommentForm extends React.Component<Props, State> {
                         <aside className="bcs-CommentForm-tip">
                             <FormattedMessage {...messages.atMentionTip} />
                         </aside>
-                        <CommentFormControls onCancel={onCancel} />
+
+                        {isOpen && <CommentFormControls onCancel={onCancel} />}
                     </Form>
                 </Media.Body>
             </Media>
