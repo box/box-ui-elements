@@ -28,7 +28,6 @@ const ItemGridCell = ({
             <figcaption className="bce-ItemGridCell-figcaption">
                 <Name
                     canPreview={canPreview}
-                    isGridView
                     isTouch={isTouch}
                     item={item}
                     onItemClick={onItemClick}

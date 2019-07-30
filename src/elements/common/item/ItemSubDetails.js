@@ -13,12 +13,11 @@ import { VIEW_RECENTS } from '../../../constants';
 import './ItemSubDetails.scss';
 
 type Props = {
-    isGridView: boolean,
     item: BoxItem,
     view: View,
 };
 
-const ItemSubDetails = ({ isGridView, item, view }: Props) => {
+const ItemSubDetails = ({ item, view }: Props) => {
     const { modified_at = '', interacted_at = '', modified_by }: BoxItem = item;
     const modifiedBy: string = modified_by ? modified_by.name || '' : '';
     const isRecents: boolean = view === VIEW_RECENTS;
@@ -35,7 +34,7 @@ const ItemSubDetails = ({ isGridView, item, view }: Props) => {
 
     return (
         <span>
-            <span className={isGridView ? 'bdl-ItemSubDetails-span-modifiedBy' : ''}>
+            <span className="bdl-ItemSubDetails-modifiedBy">
                 <FormattedMessage
                     {...message}
                     values={{
@@ -44,10 +43,7 @@ const ItemSubDetails = ({ isGridView, item, view }: Props) => {
                     }}
                 />
             </span>
-            <span className={isGridView ? 'bdl-ItemSubDetails-span-size' : ''}>
-                {!isGridView && <React.Fragment>&nbsp;-&nbsp;</React.Fragment>}
-                {getSize(size)}
-            </span>
+            <span className="bdl-ItemSubDetails-size">{getSize(size)}</span>
         </span>
     );
 };

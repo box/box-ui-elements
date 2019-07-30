@@ -18,11 +18,11 @@ type Props = {
 
 const Breadcrumb = ({ name = '', onClick, isLast, delimiter }: Props) => {
     const title = onClick ? (
-        <PlainButton onClick={onClick} type="button" className="bdl-Breadcrumb-title-button">
+        <PlainButton onClick={onClick} type="button" className="bdl-Breadcrumb-title">
             {name}
         </PlainButton>
     ) : (
-        <div className="bdl-Breadcrumb-title-span">{name}</div>
+        <div className="bdl-Breadcrumb-title">{name}</div>
     );
     return (
         <span className="be-breadcrumb">

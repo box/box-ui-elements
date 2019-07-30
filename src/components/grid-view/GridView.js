@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
-import classNames from 'classnames';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
 import Table, { Column } from 'react-virtualized/dist/es/Table';
 import getProp from 'lodash/get';
+import GridViewSlot from './GridViewSlot';
 
 import 'react-virtualized/styles.css';
 import './GridView.scss';
@@ -56,29 +56,20 @@ class GridView extends React.Component<Props> {
         const startingIndex = rowIndex * columnCount;
         const maxSlotIndex = Math.min(startingIndex + columnCount, count);
 
-        const slotWidth = `${(100 / columnCount).toFixed(4)}%`;
-
         for (let slotIndex = startingIndex; slotIndex < maxSlotIndex; slotIndex += 1) {
-            const item = getProp(currentCollection, `items[${slotIndex}]`);
-            const { id, selected } = item;
+            const { id, selected } = getProp(currentCollection, `items[${slotIndex}]`);
 
             // using item's id as key is important for renrendering.  React Virtualized Table rerenders
             // on every 1px scroll, so using improper key would lead to image flickering in each
             // card of the grid view when scrolling.
             contents.push(
-                <div
+                <GridViewSlot
                     key={id}
-                    className="bdl-GridView-slotWrapper"
-                    style={{ maxWidth: slotWidth, flexBasis: slotWidth }}
-                >
-                    <div
-                        className={classNames('bdl-GridView-slot', {
-                            'bdl-GridView-slot--selected': selected,
-                        })}
-                    >
-                        {slotRenderer(slotIndex)}
-                    </div>
-                </div>,
+                    selected={selected}
+                    slotIndex={slotIndex}
+                    slotRenderer={slotRenderer}
+                    slotWidth={`${(100 / columnCount).toFixed(4)}%`}
+                />,
             );
         }
 
@@ -109,7 +100,6 @@ class GridView extends React.Component<Props> {
                 width={width}
                 gridClassName="bdl-GridView-body"
                 rowClassName="bdl-GridView-tableRow"
-                rowStyle={{ paddingRight: 0, width: '100%' }}
                 scrollToIndex={0}
                 sortDirection="ASC"
             >

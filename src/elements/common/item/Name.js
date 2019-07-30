@@ -8,7 +8,6 @@ import './NameCell.scss';
 
 type Props = {
     canPreview: boolean,
-    isGridView?: boolean,
     isTouch: boolean,
     item: BoxItem,
     onItemClick: (item: BoxItem | string) => void,
@@ -20,7 +19,6 @@ type Props = {
 
 const Name = ({
     canPreview = false,
-    isGridView = false,
     isTouch = false,
     item,
     onItemClick,
@@ -32,7 +30,7 @@ const Name = ({
     <div className="be-item-name">
         <ItemName canPreview={canPreview} isTouch={isTouch} item={item} onClick={onItemClick} onFocus={onItemSelect} />
         {view === VIEW_SEARCH || showDetails ? (
-            <ItemDetails isGridView={isGridView} item={item} onItemClick={onItemClick} rootId={rootId} view={view} />
+            <ItemDetails item={item} onItemClick={onItemClick} rootId={rootId} view={view} />
         ) : null}
     </div>
 );
