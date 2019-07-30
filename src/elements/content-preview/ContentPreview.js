@@ -5,7 +5,7 @@
  */
 
 import 'regenerator-runtime/runtime';
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
@@ -145,7 +145,7 @@ const LoadableSidebar = AsyncLoad({
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-sidebar" */ '../content-sidebar'),
 });
 
-class ContentPreview extends PureComponent<Props, State> {
+class ContentPreview extends React.PureComponent<Props, State> {
     id: string;
 
     props: Props;
@@ -161,6 +161,8 @@ class ContentPreview extends PureComponent<Props, State> {
     mouseMoveTimeoutID: TimeoutID;
 
     rootElement: HTMLElement;
+
+    sidebarRef: ?React.Node;
 
     stagedFile: ?BoxItem;
 
@@ -1081,9 +1083,9 @@ class ContentPreview extends PureComponent<Props, State> {
         this.previewContainer = container;
     };
 
-    getSidebarRef = () => this.sidebarRef;
+    getSidebarRef = (): ?React.Node => this.sidebarRef;
 
-    setSidebarRef = sidebar => {
+    setSidebarRef = (sidebar: ?React.Node) => {
         this.sidebarRef = sidebar;
     };
 
