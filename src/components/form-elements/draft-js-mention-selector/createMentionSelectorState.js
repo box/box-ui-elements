@@ -5,9 +5,11 @@ import DraftMentionDecorator from './DraftMentionDecorator';
 // returns data for first mention in a string
 const getMentionFromText = (text: string) => {
     // RegEx.exec() is stateful, so we create a new regex instance each time
-    const MENTION_REGEX = /([@＠﹫])\[([0-9]+):([^\]]+)]/gi;
-    const matchArray = MENTION_REGEX.exec(text);
-    if (!matchArray) return null;
+    const mentionRegex = /([@＠﹫])\[([0-9]+):([^\]]+)]/gi;
+    const matchArray = mentionRegex.exec(text);
+    if (!matchArray) {
+        return null;
+    }
     const [fullMatch, triggerSymbol, id, name] = matchArray;
     const start = matchArray.index;
     const end = start + fullMatch.length;
@@ -29,8 +31,7 @@ const createMentionSelectorState = (message: string = '') => {
             const { data, start, end } = mention;
             contentState.createEntity('MENTION', 'IMMUTABLE', data);
             const mentionEntityKey = contentState.getLastCreatedEntityKey();
-            let mentionRange = SelectionState.createEmpty(contentBlock.getKey());
-            mentionRange = mentionRange.merge({
+            const mentionRange = SelectionState.createEmpty(contentBlock.getKey()).merge({
                 anchorOffset: start,
                 focusOffset: end,
             });
@@ -38,8 +39,7 @@ const createMentionSelectorState = (message: string = '') => {
             contentBlock = contentState.getBlockForKey(contentBlock.getKey());
         }
     }
-    const editorState = EditorState.createWithContent(contentState, DraftMentionDecorator);
-    return editorState;
+    return EditorState.createWithContent(contentState, DraftMentionDecorator);
 };
 
 export default createMentionSelectorState;
