@@ -102,7 +102,7 @@ describe('ContentExplorer', () => {
     beforeEach(() => {
         cy.server();
         cy.route('GET', '**/folders/*', 'fixture:content-explorer/root-folder.json');
-        cy.route('GET', '**/files/*?fields=allowed_shared_link_access_levels,shared_link', {
+        cy.route('GET', '**/files/319004423111?fields=allowed_shared_link_access_levels,shared_link', {
             type: 'file',
             id: '319004423111',
             etag: '4',
