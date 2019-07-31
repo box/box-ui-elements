@@ -33,13 +33,13 @@ import './ActivitySidebar.scss';
 type ExternalProps = {
     currentUser?: User,
     getUserProfileUrl?: GetProfileUrlCallback,
-    onCommentCreate?: Function,
-    onCommentDelete?: Function,
-    onCommentUpdate?: Function,
-    onTaskAssignmentUpdate?: Function,
-    onTaskCreate?: Function,
-    onTaskDelete?: Function,
-    onTaskUpdate?: Function,
+    onCommentCreate: Function,
+    onCommentDelete: (comment: Comment) => any,
+    onCommentUpdate: () => any,
+    onTaskAssignmentUpdate: Function,
+    onTaskCreate: Function,
+    onTaskDelete: (id: string) => any,
+    onTaskUpdate: () => any,
 } & ErrorContextProps;
 
 type PropsWithoutContext = {
@@ -77,7 +77,16 @@ const MARK_NAME_JS_READY = `${ORIGIN_ACTIVITY_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
-    state = {};
+    static defaultProps = {
+        isDisabled: false,
+        onCommentCreate: noop,
+        onCommentDelete: noop,
+        onCommentUpdate: noop,
+        onTaskAssignmentUpdate: noop,
+        onTaskCreate: noop,
+        onTaskDelete: noop,
+        onTaskUpdate: noop,
+    };
 
     constructor(props: Props) {
         super(props);
@@ -86,11 +95,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
+        this.state = {};
     }
-
-    static defaultProps = {
-        isDisabled: false,
-    };
 
     componentDidMount() {
         const { currentUser } = this.props;
@@ -194,7 +200,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     deleteTask = (task: TaskNew): void => {
-        const { file, api, onTaskDelete = noop } = this.props;
+        const { file, api, onTaskDelete } = this.props;
         api.getFeedAPI(false).deleteTaskNew(
             file,
             task,
@@ -210,7 +216,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     updateTask = (task: TaskUpdatePayload, onSuccess: ?Function, onError: ?Function): void => {
-        const { file, api, onTaskUpdate = noop } = this.props;
+        const { file, api, onTaskUpdate } = this.props;
         const errorCallback = (e, code) => {
             if (onError) {
                 onError(e, code);
@@ -256,7 +262,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return void
      */
     deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
-        const { file, api, onCommentDelete = noop } = this.props;
+        const { file, api, onCommentDelete } = this.props;
 
         api.getFeedAPI(false).deleteComment(
             file,
@@ -281,7 +287,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { file, api, onCommentUpdate = noop } = this.props;
+        const { file, api, onCommentUpdate } = this.props;
 
         const errorCallback = (e, code) => {
             if (onError) {
@@ -312,7 +318,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createComment = (text: string, hasMention: boolean): void => {
-        const { file, api, onCommentCreate = noop } = this.props;
+        const { file, api, onCommentCreate } = this.props;
         const { currentUser } = this.state;
 
         if (!currentUser) {

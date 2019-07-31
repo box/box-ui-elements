@@ -111,7 +111,7 @@ class Comment extends React.Component<Props, State> {
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
-        const canEdit = !!onEdit && permissions.can_edit; // comment editing not supported
+        const canEdit = onEdit !== noop && permissions.can_edit;
         const canDelete = permissions.can_delete;
         const isMenuVisible = (canDelete || canEdit) && !isPending;
 
@@ -179,7 +179,7 @@ class Comment extends React.Component<Props, State> {
                         {isEditing ? (
                             <CommentForm
                                 isDisabled={isDisabled}
-                                className={classNames('bcs-activity-feed-comment-input', 'bcs-Comment-editor', {
+                                className={classNames('bcs-CommentForm-input', 'bcs-Comment-editor', {
                                     'bcs-is-disabled': isDisabled,
                                 })}
                                 updateComment={this.handleUpdate}
