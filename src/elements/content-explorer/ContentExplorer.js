@@ -529,7 +529,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     searchSuccessCallback = (collection: Collection) => {
-        const { selected = {} }: State = this.state;
+        const { selected }: State = this.state;
 
         // Unselect any rows that were selected
         this.unselect();
