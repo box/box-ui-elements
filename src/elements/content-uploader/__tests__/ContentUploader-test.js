@@ -102,6 +102,19 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('resumeFile()', () => {
+        test('should call resume from api and call updateViewAndCollection', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const item = { api: {} };
+            item.api.resume = jest.fn();
+            instance.updateViewAndCollection = jest.fn();
+            instance.resumeFile(item);
+            expect(item.api.resume).toBeCalled();
+            expect(instance.updateViewAndCollection).toBeCalled();
+        });
+    });
+
     describe('isDone', () => {
         test('should be true if all items are complete or staged', () => {
             const wrapper = getWrapper();
@@ -150,7 +163,7 @@ describe('elements/content-uploader/ContentUploader', () => {
 
         beforeEach(() => {
             jest.spyOn(global.console, 'warn').mockImplementation();
-            wrapper = getWrapper();
+            wrapper = getWrapper({ isResumableUploadsEnabled: false });
             instance = wrapper.instance();
             getPlainUploadAPI = jest.fn();
             getChunkedUploadAPI = jest.fn();
