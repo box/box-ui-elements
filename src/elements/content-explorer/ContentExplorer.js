@@ -405,7 +405,7 @@ class ContentExplorer extends Component<Props, State> {
     async fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): Promise<void> {
         const { features, onNavigate, rootFolderId }: Props = this.props;
         const { boxItem, id, items = [], name }: Collection = collection;
-        const { selected }: State = this.state;
+        const { selected = {} }: State = this.state;
         const rootName = id === rootFolderId ? name : '';
 
         if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
@@ -415,9 +415,9 @@ class ContentExplorer extends Component<Props, State> {
                 const thumbnailUrl = itemThumbnails[index];
                 return thumbnailUrl ? { ...item, thumbnailUrl } : item;
             });
-            this.updateCollection({ ...collection, items: itemsWithThumbnails }, selected);
+            this.updateCollection({ ...collection, items: itemsWithThumbnails }, selected.id);
         } else {
-            this.updateCollection(collection, selected);
+            this.updateCollection(collection, selected.id);
         }
 
         // Close any open modals
@@ -529,7 +529,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     searchSuccessCallback = (collection: Collection) => {
-        const { selected }: State = this.state;
+        const { selected = {} }: State = this.state;
 
         // Unselect any rows that were selected
         this.unselect();
@@ -537,7 +537,7 @@ class ContentExplorer extends Component<Props, State> {
         // Close any open modals
         this.closeModals();
 
-        this.updateCollection(collection, selected);
+        this.updateCollection(collection, selected.id);
     };
 
     /**
@@ -754,21 +754,20 @@ class ContentExplorer extends Component<Props, State> {
      *
      * @private
      * @param {Collection} collection - collection that needs to be updated
-     * @param {?BoxItem} selected - item that should be selected in that collection (if present)
+     * @param {string} [selectedId] - ID of the item that should be selected in that collection (if present)
      * @param {Function} [callback] - callback function that should be called after setState occurs
      * @return {void}
      */
-    updateCollection(collection: Collection, selected: ?BoxItem, callback: Function = noop): Object {
+    updateCollection(collection: Collection, selectedId: ?string, callback: Function = noop): Object {
         const newCollection: Collection = { ...collection };
         let newSelected: ?BoxItem;
-        const targetID = selected ? selected.id : null;
 
         if (collection.items) {
             newCollection.items = collection.items.map(obj => {
-                const item = { ...obj, selected: obj.id === targetID };
+                const item = { ...obj, selected: obj.id === selectedId };
 
                 // If the previously selected item is found in the folder, keep it as selected item
-                if (item.id === targetID) {
+                if (item.id === selectedId) {
                     newSelected = item;
                 }
                 return item;
@@ -812,8 +811,8 @@ class ContentExplorer extends Component<Props, State> {
 
         const selectedItem: BoxItem = { ...item, selected: true };
 
-        const newItems = items.map(currentItem => (currentItem.id === item.id ? item : currentItem));
-        this.updateCollection({ ...currentCollection, items: newItems }, selectedItem, () => {
+        const newCollection = this.updateItemInCollection(currentCollection, selectedItem);
+        this.updateCollection(newCollection, selectedItem.id, () => {
             onSelect(cloneDeep([selectedItem]));
             callback(selectedItem);
         });
@@ -822,6 +821,19 @@ class ContentExplorer extends Component<Props, State> {
 
         this.setState({ focusedRow });
     };
+
+    /**
+     * Utility method to update the item in the collection
+     * @param {Object} collection - The collection of BoxItems
+     * @param {Object} item - The item to be updated in the collection
+     * @return {Object} Returns the updated collection
+     */
+    updateItemInCollection(collection: Collection, item: BoxItem): Collection {
+        const { items = [] } = collection;
+        const newItems = items.map(currentItem => (currentItem.id === item.id ? item : currentItem));
+
+        return { ...collection, items: newItems };
+    }
 
     /**
      * Selects the clicked file and then previews it
@@ -1144,13 +1156,10 @@ class ContentExplorer extends Component<Props, State> {
      */
     handleSharedLinkSuccess = (newItem: BoxItem) => {
         const { currentCollection } = this.state;
-        const { items = [] } = currentCollection;
 
         // Update item in collection
-        const newItems = items.map(item => (item.id === newItem.id ? newItem : item));
-        this.updateCollection({ ...currentCollection, items: newItems }, newItem, () =>
-            this.setState({ isShareModalOpen: true }),
-        );
+        const newCollection = this.updateItemInCollection(currentCollection, newItem);
+        this.updateCollection(newCollection, newItem.id, () => this.setState({ isShareModalOpen: true }));
     };
 
     /**

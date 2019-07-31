@@ -102,6 +102,13 @@ describe('ContentExplorer', () => {
     beforeEach(() => {
         cy.server();
         cy.route('GET', '**/folders/*', 'fixture:content-explorer/root-folder.json');
+        cy.route('GET', '**/files/*?fields=allowed_shared_link_access_levels,shared_link', {
+            type: 'file',
+            id: '319004423111',
+            etag: '4',
+            allowed_shared_link_access_levels: ['collaborators', 'open', 'company'],
+            shared_link: null,
+        });
     });
 
     describe('Selection', () => {
@@ -201,11 +208,11 @@ describe('ContentExplorer', () => {
             helpers.openUploadModal();
             helpers.getCloseButton().click();
             helpers.checkRowSelections(5);
-            helpers.selectRow(2);
-            helpers.checkRowSelections(2);
-            helpers.getShareButton(3).click();
-            helpers.getCloseButton().click();
+            helpers.selectRow(3);
             helpers.checkRowSelections(3);
+            helpers.getShareButton(2).click();
+            helpers.getCloseButton().click();
+            helpers.checkRowSelections(2);
             helpers.selectRow(4);
             helpers.checkRowSelections(4);
         });
@@ -223,7 +230,10 @@ describe('ContentExplorer', () => {
     describe('Grid View', () => {
         beforeEach(() => {
             helpers.load({ features: gridViewOn });
-            helpers.getViewModeChangeButton().click();
+            helpers
+                .getViewModeChangeButton()
+                .click()
+                .blur();
         });
 
         it('Should switch to grid view', () => {
@@ -239,7 +249,7 @@ describe('ContentExplorer', () => {
             cy.getByAriaLabel(localize('be.shareDialogLabel')).should('not.exist');
             helpers
                 .getAllMoreOptionsButtons()
-                .eq(0)
+                .eq(2)
                 .click();
             cy.contains(utils.getExactRegex(localize('be.share'))).click();
             cy.getByAriaLabel(localize('be.shareDialogLabel')).should('exist');
