@@ -16,7 +16,6 @@ import UserLink from '../common/user-link';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import CommentForm from '../comment-form';
-import formatTaggedMessage from '../utils/formatTaggedMessage';
 import { bdlGray80 } from '../../../../styles/variables';
 import { PLACEHOLDER_USER } from '../../../../constants';
 import messages from './messages';
@@ -189,7 +188,7 @@ class Comment extends React.Component<Props, State> {
                                 onFocus={this.commentFormFocusHandler}
                                 isEditing={isEditing}
                                 entityId={id}
-                                tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
+                                tagged_message={tagged_message}
                                 getAvatarUrl={getAvatarUrl}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getMentionWithQuery={getMentionWithQuery}
