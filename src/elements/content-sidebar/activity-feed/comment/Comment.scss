@@ -23,12 +23,9 @@
 
 // override for activity feed defaults
 .be {
-    .bcs-Comment-editor.bcs-activity-feed-comment-input.bcs-comment-input-is-open {
-        background-color: inherit;
+    .bcs-Comment-editor.bcs-CommentForm {
         border-top: none;
-
-        .bcs-comment-input-form-container {
-            margin-right: 0;
-        }
+        margin-top: 20px;
+        padding: 0;
     }
 }
