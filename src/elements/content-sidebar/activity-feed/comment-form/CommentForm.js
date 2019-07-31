@@ -6,12 +6,11 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
-import { ContentState, EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Avatar from '../Avatar';
 import CommentFormControls from './CommentFormControls';
 import DraftJSMentionSelector, {
-    DraftMentionDecorator,
+    createMentionSelectorState,
 } from '../../../../components/form-elements/draft-js-mention-selector';
 import Form from '../../../../components/form-elements/form/Form';
 import Media from '../../../../components/media';
@@ -47,10 +46,7 @@ class CommentForm extends React.Component<Props, State> {
     };
 
     state = {
-        commentEditorState: EditorState.createWithContent(
-            ContentState.createFromText(this.props.tagged_message || ''),
-            DraftMentionDecorator,
-        ),
+        commentEditorState: createMentionSelectorState(this.props.tagged_message),
     };
 
     componentWillReceiveProps(nextProps: Props): void {
@@ -58,7 +54,7 @@ class CommentForm extends React.Component<Props, State> {
 
         if (isOpen !== this.props.isOpen && !isOpen) {
             this.setState({
-                commentEditorState: EditorState.createEmpty(DraftMentionDecorator),
+                commentEditorState: createMentionSelectorState(),
             });
         }
     }
@@ -83,7 +79,7 @@ class CommentForm extends React.Component<Props, State> {
         }
 
         this.setState({
-            commentEditorState: EditorState.createEmpty(DraftMentionDecorator),
+            commentEditorState: createMentionSelectorState(),
         });
     };
 
