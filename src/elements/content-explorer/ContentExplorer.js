@@ -135,7 +135,6 @@ type State = {
     sortBy: SortBy,
     sortDirection: SortDirection,
     view: View,
-    viewMode: ViewMode,
 };
 
 const localStoreViewMode = 'bce.defaultViewMode';
@@ -253,7 +252,6 @@ class ContentExplorer extends Component<Props, State> {
             sortBy,
             sortDirection,
             view: VIEW_FOLDER,
-            viewMode: this.getViewMode(),
         };
     }
 
@@ -294,15 +292,6 @@ class ContentExplorer extends Component<Props, State> {
             this.showRecents();
         } else {
             this.fetchFolder(currentFolderId);
-        }
-    }
-
-    componentDidUpdate(prevProps: Props, { viewMode: prevViewMode }: State) {
-        const { features }: Props = this.props;
-        const { viewMode }: State = this.state;
-
-        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled') && viewMode !== prevViewMode) {
-            this.store.setItem(localStoreViewMode, viewMode);
         }
     }
 
@@ -1277,7 +1266,12 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     changeViewMode = (viewMode: ViewMode): void => {
-        this.setState({ viewMode });
+        const { features }: Props = this.props;
+
+        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
+            this.store.setItem(localStoreViewMode, viewMode);
+            this.forceUpdate();
+        }
     };
 
     /**
@@ -1323,7 +1317,6 @@ class ContentExplorer extends Component<Props, State> {
 
         const {
             view,
-            viewMode,
             rootName,
             currentCollection,
             currentPageSize,
@@ -1345,6 +1338,8 @@ class ContentExplorer extends Component<Props, State> {
         const styleClassName = classNames('be bce', className);
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
+
+        const viewMode = this.getViewMode();
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */

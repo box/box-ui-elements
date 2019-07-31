@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
 import { FOLDER_FIELDS_TO_FETCH } from '../../../utils/fields';
-import { FIELD_REPRESENTATIONS, VIEW_MODE_GRID, VIEW_MODE_LIST } from '../../../constants';
+import { FIELD_REPRESENTATIONS, VIEW_MODE_GRID } from '../../../constants';
 
 jest.mock('../../common/header/Header', () => 'mock-header');
 jest.mock('../../common/sub-header/SubHeader', () => 'mock-subheader');
@@ -45,20 +45,11 @@ describe('elements/content-explorer/ContentExplorer', () => {
     describe('changeViewMode()', () => {
         const localStoreViewMode = 'bce.defaultViewMode';
 
-        let wrapper;
-        beforeEach(() => {
-            wrapper = getWrapper({ features: { contentExplorer: { gridView: { enabled: true } } } });
-        });
-
-        test('should start as list view', () => {
-            expect(wrapper.state('viewMode')).toBe(VIEW_MODE_LIST);
-        });
-
         test('should change to grid view', () => {
+            const wrapper = getWrapper({ features: { contentExplorer: { gridView: { enabled: true } } } });
             const instance = wrapper.instance();
             instance.store.setItem = jest.fn();
             instance.changeViewMode(VIEW_MODE_GRID);
-            expect(wrapper.state('viewMode')).toBe(VIEW_MODE_GRID);
             expect(instance.store.setItem).toHaveBeenCalledWith(localStoreViewMode, VIEW_MODE_GRID);
         });
     });
