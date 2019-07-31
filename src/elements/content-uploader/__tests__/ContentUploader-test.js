@@ -83,7 +83,7 @@ describe('elements/content-uploader/ContentUploader', () => {
 
         beforeEach(() => {
             jest.spyOn(global.console, 'warn').mockImplementation();
-            wrapper = getWrapper();
+            wrapper = getWrapper({ isResumableUploadsEnabled: false });
             instance = wrapper.instance();
             getPlainUploadAPI = jest.fn();
             getChunkedUploadAPI = jest.fn();

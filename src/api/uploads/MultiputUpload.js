@@ -15,7 +15,13 @@ import {
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
     HTTP_STATUS_CODE_FORBIDDEN,
 } from '../../constants';
-import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
+import MultiputPart, {
+    PART_STATE_UPLOADED,
+    PART_STATE_UPLOADING,
+    PART_STATE_DIGEST_READY,
+    PART_STATE_COMPUTING_DIGEST,
+    PART_STATE_NOT_STARTED,
+} from './MultiputPart';
 import BaseMultiput from './BaseMultiput';
 
 // Constants used for specifying log event types.
@@ -49,6 +55,8 @@ class MultiputUpload extends BaseMultiput {
     initialFileLastModified: ?string;
 
     initialFileSize: number;
+
+    isResumableUploadsEnabled: boolean;
 
     successCallback: Function;
 
@@ -115,6 +123,7 @@ class MultiputUpload extends BaseMultiput {
         this.partSize = 0;
         this.commitRetryCount = 0;
         this.clientId = null;
+        this.isResumableUploadsEnabled = false;
     }
 
     /**
@@ -330,6 +339,182 @@ class MultiputUpload extends BaseMultiput {
     }
 
     /**
+     * Resume uploading the given file
+     *
+     *
+     * @param {Object} options
+     * @param {File} options.file
+     * @param {string} options.folderId - Untyped folder id (e.g. no "folder_" prefix)
+     * @param {string} [options.fileId] - Untyped file id (e.g. no "file_" prefix)
+     * @param {string} options.sessionId
+     * @param {Function} [options.errorCallback]
+     * @param {Function} [options.progressCallback]
+     * @param {Function} [options.successCallback]
+     * @return {void}
+     */
+    resume({
+        file,
+        folderId,
+        errorCallback,
+        progressCallback,
+        sessionId,
+        successCallback,
+        overwrite = true,
+        fileId,
+    }: {
+        errorCallback?: Function,
+        file: File,
+        fileId: ?string,
+        folderId: string,
+        overwrite?: boolean,
+        progressCallback?: Function,
+        sessionId: string,
+        successCallback?: Function,
+    }): void {
+        this.file = file;
+        this.fileName = this.file.name;
+        this.folderId = folderId;
+        this.errorCallback = errorCallback || noop;
+        this.progressCallback = progressCallback || noop;
+        this.successCallback = successCallback || noop;
+
+        if (!this.sha1Worker) {
+            this.sha1Worker = createWorker();
+        }
+        this.sha1Worker.addEventListener('message', this.onWorkerMessage);
+
+        this.overwrite = overwrite;
+        this.fileId = fileId;
+        this.sessionId = sessionId;
+
+        this.getSessionInfo(sessionId);
+    }
+
+    /**
+     * Get session information from API.
+     * Uses session info to commit a complete session or continue an in-progress session.
+     *
+     * @private
+     * @return {void}
+     */
+    getSessionInfo = async (session: string): Promise<any> => {
+        const uploadUrl = this.getBaseUploadUrl();
+        const sessionUrl = `${uploadUrl}/files/upload_sessions/${session}`;
+        try {
+            const response = await this.xhr.get({ url: sessionUrl });
+            this.getSessionSuccessHandler(response.data);
+        } catch (error) {
+            this.getSessionErrorHandler(error);
+        }
+    };
+
+    /**
+     * Handles a getSessionInfo success and either commits the session or continues to process
+     * the parts that still need to be uploaded.
+     *
+     * @param response
+     * @return {void}
+     */
+    getSessionSuccessHandler(data: any): void {
+        const { total_parts, part_size, session_endpoints } = data;
+
+        // Set session information gotten from API response
+        this.partSize = part_size;
+        this.sessionEndpoints = {
+            ...this.sessionEndpoints,
+            uploadPart: session_endpoints.upload_part,
+            listParts: session_endpoints.list_parts,
+            commit: session_endpoints.commit,
+            abort: session_endpoints.abort,
+            logEvent: session_endpoints.log_event,
+        };
+
+        // Reset uploading process for parts that were in progress when the upload failed
+        let nextUploadIndex = this.firstUnuploadedPartIndex;
+        while (this.numPartsUploading > 0 || this.numPartsDigestComputing > 0) {
+            const part = this.parts[nextUploadIndex];
+            if (part && part.state === PART_STATE_UPLOADING) {
+                part.state = PART_STATE_DIGEST_READY;
+                part.numUploadRetriesPerformed = 0;
+                part.timing = {};
+                part.uploadedBytes = 0;
+
+                this.numPartsUploading -= 1;
+                this.numPartsDigestReady += 1;
+            } else if (part && part.state === PART_STATE_COMPUTING_DIGEST) {
+                part.state = PART_STATE_NOT_STARTED;
+                part.numDigestRetriesPerformed = 0;
+                part.timing = {};
+
+                this.numPartsDigestComputing -= 1;
+                this.numPartsNotStarted += 1;
+            }
+            nextUploadIndex += 1;
+        }
+
+        if (this.numPartsUploaded === total_parts) {
+            // Commit sessions that have all the parts of the file uploaded
+            this.commitSession();
+        } else {
+            this.processNextParts();
+        }
+    }
+
+    /**
+     * Handle error from getting upload session.
+     * Restart uploads without valid sessions from the beginning of the upload process.
+     *
+     * @param error
+     * @return {void}
+     */
+    getSessionErrorHandler(error: Object): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        const errorData = this.getErrorResponse(error);
+        if (errorData && errorData.status >= 429) {
+            return;
+        }
+
+        // Restart upload process for errors resulting from invalid session
+        this.parts.forEach(part => {
+            part.cancel();
+        });
+        this.parts = [];
+
+        // Reset information about uploaded parts
+        this.fileSha1 = null;
+        this.totalUploadedBytes = 0;
+        this.numPartsNotStarted = 0;
+        this.numPartsDigestComputing = 0;
+        this.numPartsDigestReady = 0;
+        this.numPartsUploading = 0;
+        this.numPartsUploaded = 0;
+        this.firstUnuploadedPartIndex = 0;
+        this.createSessionNumRetriesPerformed = 0;
+        this.partSize = 0;
+        this.commitRetryCount = 0;
+
+        // Abort session
+        clearTimeout(this.createSessionTimeout);
+        clearTimeout(this.commitSessionTimeout);
+        this.abortSession();
+
+        // Restart the uploading process from the beginning
+        const uploadOptions: Object = {
+            file: this.file,
+            folderId: this.folderId,
+            errorCallback: this.errorCallback,
+            progressCallback: this.progressCallback,
+            successCallback: this.successCallback,
+            overwrite: this.overwrite,
+            fileId: this.fileId,
+        };
+        this.upload(uploadOptions);
+    }
+
+    /**
      * Session error handler.
      * Retries the create session request or fails the upload.
      *
@@ -340,7 +525,9 @@ class MultiputUpload extends BaseMultiput {
      * @return {Promise}
      */
     async sessionErrorHandler(error: ?Error, logEventType: string, logMessage?: string): Promise<any> {
-        this.destroy();
+        if (!this.isResumableUploadsEnabled) {
+            this.destroy();
+        }
         const errorData = this.getErrorResponse(error);
         this.errorCallback(errorData);
 
@@ -358,8 +545,9 @@ class MultiputUpload extends BaseMultiput {
                 this.config.retries,
                 this.config.initialRetryDelayMs,
             );
-
-            this.abortSession();
+            if (!this.isResumableUploadsEnabled) {
+                this.abortSession();
+            }
         } catch (err) {
             this.abortSession();
         }

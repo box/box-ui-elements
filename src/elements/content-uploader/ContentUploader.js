@@ -599,13 +599,17 @@ class ContentUploader extends Component<Props, State> {
      * @return {UploadAPI} - Instance of Upload API
      */
     getUploadAPI(file: File, uploadAPIOptions?: UploadItemAPIOptions) {
-        const { chunked } = this.props;
+        const { chunked, isResumableUploadsEnabled } = this.props;
         const { size } = file;
         const factory = this.createAPIFactory(uploadAPIOptions);
 
         if (chunked && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
             if (isMultiputSupported()) {
-                return factory.getChunkedUploadAPI();
+                const chunkedUploadAPI = factory.getChunkedUploadAPI();
+                if (isResumableUploadsEnabled) {
+                    chunkedUploadAPI.isResumableUploadsEnabled = true;
+                }
+                return chunkedUploadAPI;
             }
 
             /* eslint-disable no-console */
@@ -712,6 +716,42 @@ class ContentUploader extends Component<Props, State> {
     }
 
     /**
+     * Helper to resume uploading a single file.
+     *
+     * @param {UploadItem} item - Upload item object
+     * @return {void}
+     */
+    resumeFile(item: UploadItem) {
+        const { overwrite, rootFolderId } = this.props;
+        const { api, file, options } = item;
+
+        if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
+            return;
+        }
+
+        this.numItemsUploading += 1;
+
+        const resumeOptions: Object = {
+            file,
+            folderId: options && options.folderId ? options.folderId : rootFolderId,
+            errorCallback: error => this.handleUploadError(item, error),
+            progressCallback: event => this.handleUploadProgress(item, event),
+            successCallback: entries => this.handleUploadSuccess(item, entries),
+            overwrite,
+            sessionId: api && api.sessionId ? api.sessionId : null,
+            fileId: options && options.fileId ? options.fileId : null,
+        };
+
+        item.status = STATUS_IN_PROGRESS;
+        const { items } = this.state;
+        items[items.indexOf(item)] = item;
+
+        api.resume(resumeOptions);
+
+        this.updateViewAndCollection(items);
+    }
+
+    /**
      * Helper to reset a file. Cancels any current upload and resets progress.
      *
      * @param {UploadItem} item - Upload item to reset
@@ -746,7 +786,7 @@ class ContentUploader extends Component<Props, State> {
         const { onUpload, useUploadsManager } = this.props;
 
         item.progress = 100;
-        if (!item.error) {
+        if (item.status !== STATUS_ERROR) {
             item.status = STATUS_COMPLETE;
         }
         this.numItemsUploading -= 1;
@@ -909,6 +949,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     onClick = (item: UploadItem) => {
+        const { chunked, isResumableUploadsEnabled } = this.props;
         const { status } = item;
         switch (status) {
             case STATUS_IN_PROGRESS:
@@ -917,8 +958,12 @@ class ContentUploader extends Component<Props, State> {
                 this.removeFileFromUploadQueue(item);
                 break;
             case STATUS_ERROR:
-                this.resetFile(item);
-                this.uploadFile(item);
+                if (isResumableUploadsEnabled && chunked && item.api.sessionId) {
+                    this.resumeFile(item);
+                } else {
+                    this.resetFile(item);
+                    this.uploadFile(item);
+                }
                 break;
             default:
                 break;
