@@ -28,7 +28,7 @@ import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
-import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
+import { FILE_SHARED_LINK_FIELDS_TO_FETCH, FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import LocalStore from '../../utils/LocalStore';
 import {
     isFeatureEnabled,
@@ -812,7 +812,8 @@ class ContentExplorer extends Component<Props, State> {
 
         const selectedItem: BoxItem = { ...item, selected: true };
 
-        this.updateCollection(currentCollection, selectedItem, () => {
+        const newItems = items.map(currentItem => (currentItem.id === item.id ? item : currentItem));
+        this.updateCollection({ ...currentCollection, items: newItems }, selectedItem, () => {
             onSelect(cloneDeep([selectedItem]));
             callback(selectedItem);
         });
@@ -1109,6 +1110,50 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Fetch the shared link info
+     * @param {BoxItem} item - The item (folder, file, weblink)
+     * @returns {void}
+     */
+    fetchSharedLinkInfo = (item: BoxItem): void => {
+        const { id, type }: BoxItem = item;
+
+        switch (type) {
+            case TYPE_FOLDER:
+                this.api.getFolderAPI().getFolderFields(id, this.handleSharedLinkSuccess, noop, {
+                    fields: FILE_SHARED_LINK_FIELDS_TO_FETCH,
+                });
+                break;
+            case TYPE_FILE:
+                this.api
+                    .getFileAPI()
+                    .getFile(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
+                break;
+            case TYPE_WEBLINK:
+                break;
+            default:
+                throw new Error('Unknown Type');
+        }
+    };
+
+    /**
+     * Handles the shared link info by either creating a share link using enterprise defaults if
+     * it does not already exist, otherwise update the item in the state currentCollection.
+     *
+     * @param {Object} item file or folder
+     * @returns {void}
+     */
+    handleSharedLinkSuccess = (newItem: BoxItem) => {
+        const { currentCollection } = this.state;
+        const { items = [] } = currentCollection;
+
+        // Update item in collection
+        const newItems = items.map(item => (item.id === newItem.id ? newItem : item));
+        this.updateCollection({ ...currentCollection, items: newItems }, newItem, () =>
+            this.setState({ isShareModalOpen: true }),
+        );
+    };
+
+    /**
      * Chages the sort by and sort direction
      *
      * @private
@@ -1132,7 +1177,7 @@ class ContentExplorer extends Component<Props, State> {
             return;
         }
 
-        this.setState({ isShareModalOpen: true });
+        this.fetchSharedLinkInfo(selected);
     };
 
     /**
