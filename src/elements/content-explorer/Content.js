@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import noop from 'lodash/noop';
 import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
 import ItemGrid from './ItemGrid';
@@ -33,9 +34,11 @@ type Props = {
     canShare: boolean,
     currentCollection: Collection,
     focusedRow: number,
+    gridColumnCount?: number,
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
+    onGridViewResize?: (maxGridColumnCountForWidth: number) => void,
     onItemClick: Function,
     onItemDelete: Function,
     onItemDownload: Function,
@@ -54,7 +57,9 @@ type Props = {
 const Content = ({
     currentCollection,
     focusedRow,
+    gridColumnCount = 0,
     isMedium,
+    onGridViewResize = noop,
     onSortChange,
     tableRef,
     view,
@@ -81,7 +86,15 @@ const Content = ({
                     {...rest}
                 />
             )}
-            {!isViewEmpty && !isListView && <ItemGrid currentCollection={currentCollection} view={view} {...rest} />}
+            {!isViewEmpty && !isListView && (
+                <ItemGrid
+                    currentCollection={currentCollection}
+                    gridColumnCount={gridColumnCount}
+                    onGridViewResize={onGridViewResize}
+                    view={view}
+                    {...rest}
+                />
+            )}
         </div>
     );
 };
