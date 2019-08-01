@@ -62,6 +62,7 @@ type Props = {
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
+    contentSidebarRef: React.ref,
     enableThumbnailsSidebar: boolean,
     features?: FeatureConfig,
     fileId?: string,
@@ -161,8 +162,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     mouseMoveTimeoutID: TimeoutID;
 
     rootElement: HTMLElement;
-
-    sidebarRef: ?React.Node;
 
     stagedFile: ?BoxItem;
 
@@ -1083,12 +1082,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.previewContainer = container;
     };
 
-    getSidebarRef = (): ?React.Node => this.sidebarRef;
-
-    setSidebarRef = (sidebar: ?React.Node) => {
-        this.sidebarRef = sidebar;
-    };
-
     /**
      * Renders the file preview
      *
@@ -1104,6 +1097,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             messages,
             className,
             contentSidebarProps,
+            contentSidebarRef,
             contentOpenWithProps,
             hasHeader,
             history,
@@ -1195,7 +1189,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 getViewer={this.getViewer}
                                 history={history}
                                 language={language}
-                                ref={this.setSidebarRef}
+                                ref={contentSidebarRef}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}
