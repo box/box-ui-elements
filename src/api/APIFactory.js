@@ -26,6 +26,7 @@ import FileCollaboratorsAPI from './FileCollaborators';
 import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
 import OpenWithAPI from './OpenWith';
+import MetadataQueryAPI from './MetadataQuery';
 import BoxEditAPI from './box-edit';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 
@@ -139,6 +140,11 @@ class APIFactory {
      * @property {AppIntegrationsAPI}
      */
     appIntegrationsAPI: AppIntegrationsAPI;
+
+    /**
+     * @property {MetadataQueryAPI}
+     */
+    metadataQueryAPI: MetadataQueryAPI;
 
     /** @property {BoxEditAPI}
      *
@@ -261,6 +267,11 @@ class APIFactory {
         if (this.appIntegrationsAPI) {
             this.appIntegrationsAPI.destroy();
             delete this.appIntegrationsAPI;
+        }
+
+        if (this.metadataQueryAPI) {
+            this.metadataQueryAPI.destroy();
+            delete this.metadataQueryAPI;
         }
 
         if (this.openWithAPI) {
@@ -594,6 +605,21 @@ class APIFactory {
 
         this.appIntegrationsAPI = new AppIntegrationsAPI(this.options);
         return this.appIntegrationsAPI;
+    }
+
+    /**
+     * API for Metadata Query
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {MetadataQuery} MetadataQuery instance
+     */
+    getMetadataQueryAPI(shouldDestroy: boolean = false): MetadataQueryAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.metadataQueryAPI = new MetadataQueryAPI(this.options);
+        return this.metadataQueryAPI;
     }
 
     /**

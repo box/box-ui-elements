@@ -46,6 +46,7 @@ export const CACHE_PREFIX_WEBLINK = TYPED_ID_WEBLINK_PREFIX;
 export const CACHE_PREFIX_SEARCH = 'search_';
 export const CACHE_PREFIX_RECENTS = 'recents_';
 export const CACHE_PREFIX_METADATA = 'metadata_';
+export const CACHE_PREFIX_METADATA_QUERY = 'metadata_query_';
 
 /* ----------------------- Sorts ---------------------------- */
 export const SORT_ASC: 'ASC' = 'ASC';
@@ -251,6 +252,7 @@ export const ERROR_CODE_SET_FILE_DESCRIPTION = 'set_file_description_error';
 export const ERROR_CODE_UPLOAD = 'upload_error';
 export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
 export const ERROR_CODE_SEARCH = 'search_error';
+export const ERROR_CODE_METADATA_QUERY = 'metadata_query_error';
 export const ERROR_CODE_UNKNOWN = 'unknown_error';
 
 /* ------------------ Origins ---------------------- */
