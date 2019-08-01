@@ -192,10 +192,10 @@ class Search extends Base {
     /**
      * Does the network request
      *
-     * @param {Object} options - options for request
+     * @param {FetchOptions} options - options for request
      * @return {void}
      */
-    searchRequest(options: Object = {}): Promise<void> {
+    searchRequest(options: FetchOptions = {}): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }

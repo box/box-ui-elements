@@ -119,33 +119,24 @@ describe('elements/content-explorer/ContentExplorer', () => {
             wrapper = getWrapper();
             instance = wrapper.instance();
             instance.api = { getFileAPI };
-            instance.setState = jest.fn();
             instance.closeModals = jest.fn();
             instance.updateCollection = jest.fn();
 
-            return instance.fetchFolderSuccessCallback(collection, false).then(() => {
-                expect(instance.setState).toHaveBeenCalled();
-                expect(instance.closeModals).toHaveBeenCalled();
-                expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined);
-            });
+            instance.fetchFolderSuccessCallback(collection, false);
+            expect(instance.closeModals).toHaveBeenCalled();
+            expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined, expect.any(Function));
         });
 
         test('thumbnail url should be assigned to item if grid view is enabled', () => {
             wrapper = getWrapper({ features: { contentExplorer: { gridView: { enabled: true } } } });
             instance = wrapper.instance();
             instance.api = { getFileAPI };
-            instance.setState = jest.fn();
             instance.closeModals = jest.fn();
             instance.updateCollection = jest.fn();
 
-            return instance.fetchFolderSuccessCallback(collection, false).then(() => {
-                expect(instance.setState).toHaveBeenCalled();
-                expect(instance.closeModals).toHaveBeenCalled();
-                expect(instance.updateCollection).toHaveBeenCalledWith(
-                    { ...collection, items: [{ ...item, thumbnailUrl }] },
-                    undefined,
-                );
-            });
+            instance.fetchFolderSuccessCallback(collection, false);
+            expect(instance.closeModals).toHaveBeenCalled();
+            expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined, expect.any(Function));
         });
     });
 

@@ -158,10 +158,10 @@ class Recents extends Base {
     /**
      * Does the network request
      *
-     * @param {Object} options - options for request
+     * @param {FetchOptions} options - options for request
      * @return {Promise}
      */
-    recentsRequest(options: Object = {}): Promise<void> {
+    recentsRequest(options: FetchOptions = {}): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }

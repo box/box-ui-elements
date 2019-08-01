@@ -314,8 +314,10 @@ class APIFactory {
      *
      * @return {FileAPI} FileAPI instance
      */
-    getFileAPI(): FileAPI {
-        this.destroy();
+    getFileAPI(shouldDestroy: boolean = true): FileAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
         this.fileAPI = new FileAPI(this.options);
         return this.fileAPI;
     }
