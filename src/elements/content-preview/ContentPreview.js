@@ -709,7 +709,7 @@ class ContentPreview extends PureComponent<Props, State> {
             enableThumbnailsSidebar,
             fileOptions: fileOpts,
             header: 'none',
-            headerElement: `#${this.id} .bcpr-header`,
+            headerElement: `#${this.id} .bcpr-PreviewHeader`,
             showAnnotations: this.canViewAnnotations(),
             showDownload: this.canDownload(),
             skipServerUpdate: true,
