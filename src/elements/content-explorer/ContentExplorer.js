@@ -763,7 +763,7 @@ class ContentExplorer extends Component<Props, State> {
         newCollection.items = items.map((obj, index) => {
             const isSelected = obj.id === selectedId;
             const currentItem = isSelected ? selectedItem : obj;
-            const thumbnailUrl = isGridViewEnabled && itemThumbnails[index];
+            const thumbnailUrl = isGridViewEnabled ? itemThumbnails[index] : null;
             const newItem = {
                 ...currentItem,
                 selected: isSelected,

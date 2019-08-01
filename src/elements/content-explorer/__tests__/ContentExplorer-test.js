@@ -1,4 +1,5 @@
 import React from 'react';
+import cloneDeep from 'lodash/cloneDeep';
 import { mount } from 'enzyme';
 import noop from 'lodash/noop';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
@@ -14,6 +15,8 @@ jest.mock('../DeleteConfirmationDialog', () => 'mock-deletedialog');
 jest.mock('../RenameDialog', () => 'mock-renamedialog');
 jest.mock('../ShareDialog', () => 'mock-sharedialog');
 jest.mock('../PreviewDialog', () => 'mock-previewdialog');
+
+const gridViewOn = { features: { contentExplorer: { gridView: { enabled: true } } } };
 
 describe('elements/content-explorer/ContentExplorer', () => {
     let rootElement;
@@ -104,39 +107,118 @@ describe('elements/content-explorer/ContentExplorer', () => {
     });
 
     describe('fetchFolderSuccessCallback()', () => {
-        const item = { id: 1 };
-        const collection = { boxItem: {}, id: '0', items: [item], name: 'name' };
+        const collection = { name: 'collection ' };
+
+        test('updateCollection should be called with a callback', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.closeModals = jest.fn();
+            instance.updateCollection = jest.fn();
+
+            instance.fetchFolderSuccessCallback(collection, false);
+            expect(instance.closeModals).toHaveBeenCalled();
+            expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined, expect.any(Function));
+        });
+    });
+
+    describe('recentsSuccessCallback()', () => {
+        const collection = { name: 'collection ' };
+
+        test('navigation event should not be triggered if argument set to false', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.updateCollection = jest.fn();
+
+            instance.recentsSuccessCallback(collection, false);
+            expect(instance.updateCollection).toHaveBeenCalledWith(collection);
+        });
+
+        test('navigation event should be triggered if argument set to true ', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.updateCollection = jest.fn();
+
+            instance.recentsSuccessCallback(collection, true);
+            expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined, instance.finishNavigation);
+        });
+    });
+
+    describe('updateCollection()', () => {
+        const baseItem = { id: '1', selected: true };
+        const baseCollection = { boxItem: {}, id: '0', items: [baseItem], name: 'collectionName', selected: baseItem };
         const thumbnailUrl = 'thumbnailUrl';
         const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
         const getFileAPI = jest.fn().mockReturnValue({
             getThumbnailUrl,
         });
+        const callback = jest.fn();
 
         let wrapper;
         let instance;
+        let collection;
+        let item;
 
-        test('thumbnail url should not be assigned to item if grid view is not enabled', () => {
+        beforeEach(() => {
+            collection = cloneDeep(baseCollection);
+            item = cloneDeep(baseItem);
+        });
+
+        test('should only update selected field of selected item to true', () => {
             wrapper = getWrapper();
             instance = wrapper.instance();
             instance.api = { getFileAPI };
-            instance.closeModals = jest.fn();
-            instance.updateCollection = jest.fn();
+            instance.setState = jest.fn();
 
-            instance.fetchFolderSuccessCallback(collection, false);
-            expect(instance.closeModals).toHaveBeenCalled();
-            expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined, expect.any(Function));
+            const unselectedItem = { id: '2', selected: false };
+
+            item.selected = false;
+            collection.items[0].selected = false;
+            collection.items.push(unselectedItem);
+
+            return instance.updateCollection(collection, item, callback).then(() => {
+                const newSelected = { ...item, selected: true, thumbnailUrl: null };
+                const newUnselected = { ...unselectedItem, thumbnailUrl: null };
+                const newCollection = { ...collection, items: [newSelected, newUnselected] };
+
+                expect(instance.setState).toHaveBeenCalledWith(
+                    { currentCollection: newCollection, selected: newSelected },
+                    callback,
+                );
+            });
         });
 
-        test('thumbnail url should be assigned to item if grid view is enabled', () => {
-            wrapper = getWrapper({ features: { contentExplorer: { gridView: { enabled: true } } } });
+        test('should not add thumbnailUrl if grid view is disabled', () => {
+            wrapper = getWrapper();
             instance = wrapper.instance();
             instance.api = { getFileAPI };
-            instance.closeModals = jest.fn();
-            instance.updateCollection = jest.fn();
+            instance.setState = jest.fn();
 
-            instance.fetchFolderSuccessCallback(collection, false);
-            expect(instance.closeModals).toHaveBeenCalled();
-            expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined, expect.any(Function));
+            return instance.updateCollection(collection, item, callback).then(() => {
+                const newSelected = { ...item, thumbnailUrl: null };
+                const newCollection = { ...collection, items: [newSelected] };
+
+                expect(instance.setState).toHaveBeenCalledWith(
+                    { currentCollection: newCollection, selected: newSelected },
+                    callback,
+                );
+            });
+        });
+
+        test('should add thumbnailUrl if grid view is enabled', () => {
+            wrapper = getWrapper(gridViewOn);
+            instance = wrapper.instance();
+            instance.api = { getFileAPI };
+            instance.setState = jest.fn();
+
+            return instance.updateCollection(collection, item, callback).then(() => {
+                const newSelected = { ...item, thumbnailUrl };
+                const newCollection = { ...collection, items: [newSelected] };
+
+                expect(instance.setState).toHaveBeenCalledWith(
+                    { currentCollection: newCollection, selected: newSelected },
+                    callback,
+                );
+            });
         });
     });
 
