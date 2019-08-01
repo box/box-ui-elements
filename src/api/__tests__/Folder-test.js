@@ -1,7 +1,7 @@
 import Cache from '../../utils/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import Folder from '../Folder';
-import { FIELD_REPRESENTATIONS } from '../../constants';
+import { FIELD_REPRESENTATIONS, X_REP_HINT_HEADER_DIMENSIONS_DEFAULT } from '../../constants';
 
 let folder;
 let cache;
@@ -178,7 +178,7 @@ describe('api/Folder', () => {
                         fields: fields.toString(),
                         sort: 'by',
                     },
-                    headers: { 'X-Rep-Hints': '[jpg?dimensions=1024x1024,png?dimensions=1024x1024]' },
+                    headers: { 'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT },
                 });
             });
         });

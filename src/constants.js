@@ -312,6 +312,17 @@ export const SKILLS_STATUS_INVOKED = 'skills_invoked_status';
 /* ------------------ File Extensions ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
 
+/* ------------------ X-Rep-Hints ---------------------- */
+// available dimensions for JPG: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048"
+export const X_REP_HINT_JPG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
+
+// available dimensions for PNG: "1024x1024", "2048x2048"
+export const X_REP_HINT_PNG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
+
+// if unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do
+// not have a thumbnail rep but do have a first page rep.
+export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}]`;
+
 /* ------------------ Sidebar View ---------------------- */
 export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
 export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';

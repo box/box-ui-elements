@@ -394,6 +394,13 @@ class ContentExplorer extends Component<Props, State> {
         }
     };
 
+    getFolderFields = () => {
+        const { features } = this.props;
+        return isFeatureEnabled(features, 'contentExplorer.gridView.enabled')
+            ? [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS]
+            : FOLDER_FIELDS_TO_FETCH;
+    };
+
     /**
      * Folder fetch success callback
      *
@@ -402,36 +409,26 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
      * @return {void}
      */
-    async fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): Promise<void> {
-        const { features, onNavigate, rootFolderId }: Props = this.props;
-        const { boxItem, id, items = [], name }: Collection = collection;
+    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
+        const { onNavigate, rootFolderId }: Props = this.props;
+        const { boxItem, id, name }: Collection = collection;
         const { selected }: State = this.state;
         const rootName = id === rootFolderId ? name : '';
-
-        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
-            const fileAPI = this.api.getFileAPI();
-            const itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
-            const itemsWithThumbnails = items.map((item, index) => {
-                const thumbnailUrl = itemThumbnails[index];
-                return thumbnailUrl ? { ...item, thumbnailUrl } : item;
-            });
-            this.updateCollection({ ...collection, items: itemsWithThumbnails }, selected);
-        } else {
-            this.updateCollection(collection, selected);
-        }
 
         // Close any open modals
         this.closeModals();
 
-        if (triggerNavigationEvent) {
-            // Fire folder navigation event
-            this.setState({ rootName }, this.finishNavigation);
-            if (boxItem) {
-                onNavigate(cloneDeep(boxItem));
+        this.updateCollection(collection, selected, () => {
+            if (triggerNavigationEvent) {
+                // Fire folder navigation event
+                this.setState({ rootName }, this.finishNavigation);
+                if (boxItem) {
+                    onNavigate(cloneDeep(boxItem));
+                }
+            } else {
+                this.setState({ rootName });
             }
-        } else {
-            this.setState({ rootName });
-        }
+        });
     }
 
     /**
@@ -443,7 +440,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true) => {
-        const { features, rootFolderId }: Props = this.props;
+        const { rootFolderId }: Props = this.props;
         const {
             currentCollection: { id: currentId },
             currentOffset,
@@ -473,10 +470,6 @@ class ContentExplorer extends Component<Props, State> {
             currentOffset: offset,
         });
 
-        const fields = isFeatureEnabled(features, 'contentExplorer.gridView.enabled')
-            ? [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS]
-            : FOLDER_FIELDS_TO_FETCH;
-
         // Fetch the folder using folder API
         this.api.getFolderAPI().getFolder(
             folderId,
@@ -488,7 +481,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { forceFetch: true, fields },
+            { fields: this.getFolderFields(), forceFetch: true },
         );
     };
 
@@ -531,9 +524,6 @@ class ContentExplorer extends Component<Props, State> {
     searchSuccessCallback = (collection: Collection) => {
         const { selected }: State = this.state;
 
-        // Unselect any rows that were selected
-        this.unselect();
-
         // Close any open modals
         this.closeModals();
 
@@ -554,6 +544,7 @@ class ContentExplorer extends Component<Props, State> {
         this.api
             .getSearchAPI()
             .search(id, query, currentPageSize, currentOffset, this.searchSuccessCallback, this.errorCallback, {
+                fields: this.getFolderFields(),
                 forceFetch: true,
             });
     }, DEFAULT_SEARCH_DEBOUNCE);
@@ -617,15 +608,10 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean) {
-        // Unselect any rows that were selected
-        this.unselect();
-
-        // Set the new state and focus the grid for tabbing
-        const newState = { currentCollection: collection };
         if (triggerNavigationEvent) {
-            this.setState(newState, this.finishNavigation);
+            this.updateCollection(collection, undefined, this.finishNavigation);
         } else {
-            this.setState(newState);
+            this.updateCollection(collection);
         }
     }
 
@@ -654,7 +640,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.recentsSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { forceFetch: true },
+            { fields: this.getFolderFields(), forceFetch: true },
         );
     }
 
@@ -759,39 +745,39 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Function} [callback] - callback function that should be called after setState occurs
      * @return {void}
      */
-    updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
+    async updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
+        const { features } = this.props;
+        const { items = [] } = collection;
         const newCollection: Collection = { ...collection };
         const selectedId = selectedItem ? selectedItem.id : null;
-        let newSelectedItem;
+        let newSelectedItem: ?BoxItem;
 
-        if (collection.items) {
-            newCollection.items = collection.items.map(obj => {
-                const newItem =
-                    obj.id === selectedId ? { ...selectedItem, selected: true } : { ...obj, selected: false };
+        const isGridViewEnabled = isFeatureEnabled(features, 'contentExplorer.gridView.enabled');
 
-                // Only if selectedItem is in the current collection do we want to set selected state
-                if (newItem.selected) {
-                    newSelectedItem = newItem;
-                }
-
-                return newItem;
-            });
+        let itemThumbnails = [];
+        if (isGridViewEnabled) {
+            const fileAPI = this.api.getFileAPI(false);
+            itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
         }
 
-        this.setState({ currentCollection: newCollection, selected: newSelectedItem }, callback);
-    }
+        newCollection.items = items.map((obj, index) => {
+            const isSelected = obj.id === selectedId;
+            const currentItem = isSelected ? selectedItem : obj;
+            const thumbnailUrl = isGridViewEnabled ? itemThumbnails[index] : null;
+            const newItem = {
+                ...currentItem,
+                selected: isSelected,
+                thumbnailUrl,
+            };
 
-    /**
-     * Unselects an item
-     *
-     * @private
-     * @param {Object} item - file or folder object
-     * @param {Function|void} [onSelect] - optional on select callback
-     * @return {void}
-     */
-    unselect(): void {
-        const { currentCollection }: State = this.state;
-        this.updateCollection(currentCollection);
+            // Only if selectedItem is in the current collection do we want to set selected state
+            if (isSelected) {
+                newSelectedItem = newItem;
+            }
+
+            return newItem;
+        });
+        this.setState({ currentCollection: newCollection, selected: newSelectedItem }, callback);
     }
 
     /**
@@ -811,8 +797,6 @@ class ContentExplorer extends Component<Props, State> {
             callback(item);
             return;
         }
-
-        this.unselect();
 
         const selectedItem: BoxItem = { ...item, selected: true };
 

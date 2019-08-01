@@ -155,6 +155,7 @@ describe('api/Search', () => {
                         limit: 20,
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                     },
+                    headers: {},
                 });
             });
         });
@@ -180,6 +181,7 @@ describe('api/Search', () => {
                         limit: 20,
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                     },
+                    headers: {},
                 });
             });
         });

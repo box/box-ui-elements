@@ -1,4 +1,5 @@
 import React from 'react';
+import cloneDeep from 'lodash/cloneDeep';
 import { mount } from 'enzyme';
 import noop from 'lodash/noop';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
@@ -14,6 +15,8 @@ jest.mock('../DeleteConfirmationDialog', () => 'mock-deletedialog');
 jest.mock('../RenameDialog', () => 'mock-renamedialog');
 jest.mock('../ShareDialog', () => 'mock-sharedialog');
 jest.mock('../PreviewDialog', () => 'mock-previewdialog');
+
+const gridViewOn = { features: { contentExplorer: { gridView: { enabled: true } } } };
 
 describe('elements/content-explorer/ContentExplorer', () => {
     let rootElement;
@@ -104,114 +107,185 @@ describe('elements/content-explorer/ContentExplorer', () => {
     });
 
     describe('fetchFolderSuccessCallback()', () => {
-        const item = { id: 1 };
-        const collection = { boxItem: {}, id: '0', items: [item], name: 'name' };
-        const thumbnailUrl = 'thumbnailUrl';
-        const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
-        const getFileAPI = jest.fn().mockReturnValue({
-            getThumbnailUrl,
-        });
+        const collection = { name: 'collection ' };
 
-        let wrapper;
-        let instance;
-
-        test('thumbnail url should not be assigned to item if grid view is not enabled', () => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.api = { getFileAPI };
-            instance.setState = jest.fn();
+        test('updateCollection should be called with a callback', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
             instance.closeModals = jest.fn();
             instance.updateCollection = jest.fn();
 
-            return instance.fetchFolderSuccessCallback(collection, false).then(() => {
-                expect(instance.setState).toHaveBeenCalled();
-                expect(instance.closeModals).toHaveBeenCalled();
-                expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined);
-            });
+            instance.fetchFolderSuccessCallback(collection, false);
+            expect(instance.closeModals).toHaveBeenCalled();
+            expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined, expect.any(Function));
         });
+    });
 
-        test('thumbnail url should be assigned to item if grid view is enabled', () => {
-            wrapper = getWrapper({ features: { contentExplorer: { gridView: { enabled: true } } } });
-            instance = wrapper.instance();
-            instance.api = { getFileAPI };
-            instance.setState = jest.fn();
-            instance.closeModals = jest.fn();
+    describe('recentsSuccessCallback()', () => {
+        const collection = { name: 'collection ' };
+
+        test('navigation event should not be triggered if argument set to false', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
             instance.updateCollection = jest.fn();
 
-            return instance.fetchFolderSuccessCallback(collection, false).then(() => {
-                expect(instance.setState).toHaveBeenCalled();
-                expect(instance.closeModals).toHaveBeenCalled();
-                expect(instance.updateCollection).toHaveBeenCalledWith(
-                    { ...collection, items: [{ ...item, thumbnailUrl }] },
-                    undefined,
-                );
-            });
+            instance.recentsSuccessCallback(collection, false);
+            expect(instance.updateCollection).toHaveBeenCalledWith(collection);
+        });
+
+        test('navigation event should be triggered if argument set to true ', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.updateCollection = jest.fn();
+
+            instance.recentsSuccessCallback(collection, true);
+            expect(instance.updateCollection).toHaveBeenCalledWith(collection, undefined, instance.finishNavigation);
         });
     });
 
     describe('updateCollection()', () => {
-        const item1 = { id: 1 };
-        const item2 = { id: 2 };
-        const collection = { boxItem: {}, id: '0', items: [item1, item2], name: 'name' };
+        describe('selection', () => {
+            const item1 = { id: 1 };
+            const item2 = { id: 2 };
+            const collection = { boxItem: {}, id: '0', items: [item1, item2], name: 'name' };
 
-        let wrapper;
-        let instance;
+            let wrapper;
+            let instance;
 
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.setState({ currentCollection: collection, selected: undefined });
-            instance.setState = jest.fn();
+            beforeEach(() => {
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.setState({ currentCollection: collection, selected: undefined });
+                instance.setState = jest.fn();
+            });
+
+            test('should set same collection and no selected item to state if no items present in collection', () => {
+                const noItemsCollection = { ...collection, items: undefined };
+                const expectedCollection = { ...collection, items: [] };
+
+                instance.updateCollection(noItemsCollection, { id: 3 });
+
+                expect(instance.setState).toHaveBeenCalledWith(
+                    { currentCollection: expectedCollection, selected: undefined },
+                    noop,
+                );
+            });
+
+            test('should update the collection items selected to false even if selected item is not in the collection', () => {
+                const expectedItem1 = { id: 1, selected: false, thumbnailUrl: null };
+                const expectedItem2 = { id: 2, selected: false, thumbnailUrl: null };
+                const expectedCollection = {
+                    boxItem: {},
+                    id: '0',
+                    items: [expectedItem1, expectedItem2],
+                    name: 'name',
+                };
+
+                instance.updateCollection(collection, { id: 3 });
+
+                expect(instance.setState).toHaveBeenCalledWith(
+                    { currentCollection: expectedCollection, selected: undefined },
+                    noop,
+                );
+            });
+
+            test('should update the collection items selected to false except for the selected item in the collection', () => {
+                const expectedItem1 = { id: 1, selected: false, thumbnailUrl: null };
+                const expectedItem2 = { id: 2, selected: true, thumbnailUrl: null };
+                const expectedCollection = {
+                    boxItem: {},
+                    id: '0',
+                    items: [expectedItem1, expectedItem2],
+                    name: 'name',
+                };
+
+                instance.updateCollection(collection, { id: 2 });
+
+                expect(instance.setState).toHaveBeenCalledWith(
+                    { currentCollection: expectedCollection, selected: expectedItem2 },
+                    noop,
+                );
+            });
+
+            test('should update the selected item in the collection', () => {
+                const expectedItem1 = { id: 1, selected: false, thumbnailUrl: null };
+                const expectedItem2 = { id: 2, selected: true, newProperty: 'newProperty', thumbnailUrl: null };
+                const expectedCollection = {
+                    boxItem: {},
+                    id: '0',
+                    items: [expectedItem1, expectedItem2],
+                    name: 'name',
+                };
+
+                instance.updateCollection(collection, { id: 2, newProperty: 'newProperty' });
+
+                expect(instance.setState).toHaveBeenCalledWith(
+                    {
+                        currentCollection: expectedCollection,
+                        selected: { ...expectedItem2, newProperty: 'newProperty' },
+                    },
+                    noop,
+                );
+            });
         });
 
-        test('should set same collection and no selected item to state if no items present in collection', () => {
-            const noItemsCollection = { ...collection, items: null };
+        describe('thumbnails', () => {
+            const baseItem = { id: '1', selected: true };
+            const baseCollection = {
+                boxItem: {},
+                id: '0',
+                items: [baseItem],
+                name: 'collectionName',
+                selected: baseItem,
+            };
+            const thumbnailUrl = 'thumbnailUrl';
+            const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
+            const getFileAPI = jest.fn().mockReturnValue({
+                getThumbnailUrl,
+            });
+            const callback = jest.fn();
 
-            instance.updateCollection(noItemsCollection, { id: 3 });
+            let wrapper;
+            let instance;
+            let collection;
+            let item;
 
-            expect(instance.setState).toHaveBeenCalledWith(
-                { currentCollection: noItemsCollection, selected: undefined },
-                noop,
-            );
-        });
+            beforeEach(() => {
+                collection = cloneDeep(baseCollection);
+                item = cloneDeep(baseItem);
+            });
 
-        test('should update the collection items selected to false even if selected item is not in the collection', () => {
-            const expectedItem1 = { id: 1, selected: false };
-            const expectedItem2 = { id: 2, selected: false };
-            const expectedCollection = { boxItem: {}, id: '0', items: [expectedItem1, expectedItem2], name: 'name' };
+            test('should not add thumbnailUrl if grid view is disabled', () => {
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.api = { getFileAPI };
+                instance.setState = jest.fn();
 
-            instance.updateCollection(collection, { id: 3 });
+                instance.updateCollection(collection, item, callback);
+                const newSelected = { ...item, thumbnailUrl: null };
+                const newCollection = { ...collection, items: [newSelected] };
+                expect(instance.setState).toHaveBeenCalledWith(
+                    { currentCollection: newCollection, selected: newSelected },
+                    callback,
+                );
+            });
 
-            expect(instance.setState).toHaveBeenCalledWith(
-                { currentCollection: expectedCollection, selected: undefined },
-                noop,
-            );
-        });
+            test('should add thumbnailUrl if grid view is enabled', () => {
+                wrapper = getWrapper(gridViewOn);
+                instance = wrapper.instance();
+                instance.api = { getFileAPI };
+                instance.setState = jest.fn();
 
-        test('should update the collection items selected to false except for the selected item in the collection', () => {
-            const expectedItem1 = { id: 1, selected: false };
-            const expectedItem2 = { id: 2, selected: true };
-            const expectedCollection = { boxItem: {}, id: '0', items: [expectedItem1, expectedItem2], name: 'name' };
+                return instance.updateCollection(collection, item, callback).then(() => {
+                    const newSelected = { ...item, thumbnailUrl };
+                    const newCollection = { ...collection, items: [newSelected] };
 
-            instance.updateCollection(collection, { id: 2 });
-
-            expect(instance.setState).toHaveBeenCalledWith(
-                { currentCollection: expectedCollection, selected: expectedItem2 },
-                noop,
-            );
-        });
-
-        test('should update the selected item in the collection', () => {
-            const expectedItem1 = { id: 1, selected: false };
-            const expectedItem2 = { id: 2, selected: true, newProperty: 'newProperty' };
-            const expectedCollection = { boxItem: {}, id: '0', items: [expectedItem1, expectedItem2], name: 'name' };
-
-            instance.updateCollection(collection, { id: 2, newProperty: 'newProperty' });
-
-            expect(instance.setState).toHaveBeenCalledWith(
-                { currentCollection: expectedCollection, selected: { ...expectedItem2, newProperty: 'newProperty' } },
-                noop,
-            );
+                    expect(instance.setState).toHaveBeenCalledWith(
+                        { currentCollection: newCollection, selected: newSelected },
+                        callback,
+                    );
+                });
+            });
         });
     });
 });
