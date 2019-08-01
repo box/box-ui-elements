@@ -23,10 +23,10 @@ describe('ContentPreview', () => {
             });
         },
         checkPreviewHeader() {
-            cy.get('.bcpr-header').should('be.visible');
+            cy.get('.bcpr-PreviewHeader').should('be.visible');
         },
         checkVersionsHeader() {
-            cy.get('.bcpr-header--basic').should('be.visible');
+            cy.get('.bcpr-PreviewHeader--basic').should('be.visible');
         },
         selectVersion(versionName) {
             cy.getByTestId('versions-item-button').within($versionsItem => {
