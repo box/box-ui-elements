@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import noop from 'lodash/noop';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
 import { FOLDER_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { FIELD_REPRESENTATIONS, VIEW_MODE_GRID } from '../../../constants';
@@ -145,6 +146,72 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     undefined,
                 );
             });
+        });
+    });
+
+    describe('updateCollection()', () => {
+        const item1 = { id: 1 };
+        const item2 = { id: 2 };
+        const collection = { boxItem: {}, id: '0', items: [item1, item2], name: 'name' };
+
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.setState({ currentCollection: collection, selected: undefined });
+            instance.setState = jest.fn();
+        });
+
+        test('should set same collection and no selected item to state if no items present in collection', () => {
+            const noItemsCollection = { ...collection, items: null };
+
+            instance.updateCollection(noItemsCollection, { id: 3 });
+
+            expect(instance.setState).toHaveBeenCalledWith(
+                { currentCollection: noItemsCollection, selected: undefined },
+                noop,
+            );
+        });
+
+        test('should update the collection items selected to false even if selected item is not in the collection', () => {
+            const expectedItem1 = { id: 1, selected: false };
+            const expectedItem2 = { id: 2, selected: false };
+            const expectedCollection = { boxItem: {}, id: '0', items: [expectedItem1, expectedItem2], name: 'name' };
+
+            instance.updateCollection(collection, { id: 3 });
+
+            expect(instance.setState).toHaveBeenCalledWith(
+                { currentCollection: expectedCollection, selected: undefined },
+                noop,
+            );
+        });
+
+        test('should update the collection items selected to false except for the selected item in the collection', () => {
+            const expectedItem1 = { id: 1, selected: false };
+            const expectedItem2 = { id: 2, selected: true };
+            const expectedCollection = { boxItem: {}, id: '0', items: [expectedItem1, expectedItem2], name: 'name' };
+
+            instance.updateCollection(collection, { id: 2 });
+
+            expect(instance.setState).toHaveBeenCalledWith(
+                { currentCollection: expectedCollection, selected: expectedItem2 },
+                noop,
+            );
+        });
+
+        test('should update the selected item in the collection', () => {
+            const expectedItem1 = { id: 1, selected: false };
+            const expectedItem2 = { id: 2, selected: true, newProperty: 'newProperty' };
+            const expectedCollection = { boxItem: {}, id: '0', items: [expectedItem1, expectedItem2], name: 'name' };
+
+            instance.updateCollection(collection, { id: 2, newProperty: 'newProperty' });
+
+            expect(instance.setState).toHaveBeenCalledWith(
+                { currentCollection: expectedCollection, selected: { ...expectedItem2, newProperty: 'newProperty' } },
+                noop,
+            );
         });
     });
 });

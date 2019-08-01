@@ -28,7 +28,7 @@ import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
-import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
+import { FILE_SHARED_LINK_FIELDS_TO_FETCH, FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import LocalStore from '../../utils/LocalStore';
 import {
     isFeatureEnabled,
@@ -749,32 +749,36 @@ class ContentExplorer extends Component<Props, State> {
 
     /**
      * Sets state with currentCollection updated to have items.selected properties
-     * set according to the given selected param. selected will be set to the selected
+     * set according to the given selected param. Also updates the selected item in the
+     * currentcollection. selectedItem will be set to the selected state
      * item if it is in currentCollection, otherwise it will be set to undefined.
      *
      * @private
      * @param {Collection} collection - collection that needs to be updated
-     * @param {?BoxItem} selected - item that should be selected in that collection (if present)
+     * @param {Object} [selectedItem] - The item that should be selected in that collection (if present)
      * @param {Function} [callback] - callback function that should be called after setState occurs
      * @return {void}
      */
-    updateCollection(collection: Collection, selected: ?BoxItem, callback: Function = noop): Object {
+    updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
         const newCollection: Collection = { ...collection };
-        let newSelected: ?BoxItem;
-        const targetID = selected ? selected.id : null;
+        const selectedId = selectedItem ? selectedItem.id : null;
+        let newSelectedItem;
 
         if (collection.items) {
             newCollection.items = collection.items.map(obj => {
-                const item = { ...obj, selected: obj.id === targetID };
+                const newItem =
+                    obj.id === selectedId ? { ...selectedItem, selected: true } : { ...obj, selected: false };
 
-                // If the previously selected item is found in the folder, keep it as selected item
-                if (item.id === targetID) {
-                    newSelected = item;
+                // Only if selectedItem is in the current collection do we want to set selected state
+                if (newItem.selected) {
+                    newSelectedItem = newItem;
                 }
-                return item;
+
+                return newItem;
             });
         }
-        this.setState({ currentCollection: newCollection, selected: newSelected }, callback);
+
+        this.setState({ currentCollection: newCollection, selected: newSelectedItem }, callback);
     }
 
     /**
@@ -1109,6 +1113,46 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Fetch the shared link info
+     * @param {BoxItem} item - The item (folder, file, weblink)
+     * @returns {void}
+     */
+    fetchSharedLinkInfo = (item: BoxItem): void => {
+        const { id, type }: BoxItem = item;
+
+        switch (type) {
+            case TYPE_FOLDER:
+                this.api.getFolderAPI().getFolderFields(id, this.handleSharedLinkSuccess, noop, {
+                    fields: FILE_SHARED_LINK_FIELDS_TO_FETCH,
+                });
+                break;
+            case TYPE_FILE:
+                this.api
+                    .getFileAPI()
+                    .getFile(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
+                break;
+            case TYPE_WEBLINK:
+                break;
+            default:
+                throw new Error('Unknown Type');
+        }
+    };
+
+    /**
+     * Handles the shared link info by either creating a share link using enterprise defaults if
+     * it does not already exist, otherwise update the item in the state currentCollection.
+     *
+     * @param {Object} item file or folder
+     * @returns {void}
+     */
+    handleSharedLinkSuccess = (newItem: BoxItem) => {
+        const { currentCollection } = this.state;
+
+        // Update item in collection
+        this.updateCollection(currentCollection, newItem, () => this.setState({ isShareModalOpen: true }));
+    };
+
+    /**
      * Chages the sort by and sort direction
      *
      * @private
@@ -1132,7 +1176,7 @@ class ContentExplorer extends Component<Props, State> {
             return;
         }
 
-        this.setState({ isShareModalOpen: true });
+        this.fetchSharedLinkInfo(selected);
     };
 
     /**
