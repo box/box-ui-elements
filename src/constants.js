@@ -382,6 +382,10 @@ export const TASK_NEW_REJECTED: 'REJECTED' = 'REJECTED';
 export const TASK_TYPE_GENERAL: 'GENERAL' = 'GENERAL';
 export const TASK_TYPE_APPROVAL: 'APPROVAL' = 'APPROVAL';
 
+/* ----------------- Task Completion Rules ------------ */
+export const TASK_COMPLETION_RULE_ALL: 'ALL_ASSIGNEES' = 'ALL_ASSIGNEES';
+export const TASK_COMPLETION_RULE_ANY: 'ANY_ASSIGNEE' = 'ANY_ASSIGNEE';
+
 /* ----------------- Task Edit modes ---------------- */
 export const TASK_EDIT_MODE_CREATE: 'CREATE' = 'CREATE';
 export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';

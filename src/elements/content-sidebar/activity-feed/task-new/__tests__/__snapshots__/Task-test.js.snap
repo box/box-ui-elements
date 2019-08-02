@@ -215,6 +215,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
             "type": "task_collaborator",
           },
         ],
+        "completionRule": "ALL_ASSIGNEES",
         "createTask": [Function],
         "dueDate": null,
         "editTask": [MockFunction],

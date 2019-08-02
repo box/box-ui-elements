@@ -10,4 +10,7 @@ export default {
             enabled: false,
         },
     },
+    tasks: {
+        anyTask: true,
+    },
 };

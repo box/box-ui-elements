@@ -21,8 +21,13 @@ import ActivityFeed from './activity-feed';
 import SidebarContent from './SidebarContent';
 import AddTaskButton from './AddTaskButton';
 import SidebarUtils from './SidebarUtils';
-import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, SIDEBAR_VIEW_ACTIVITY } from '../../constants';
-import type { TaskType, TaskNew, TaskUpdatePayload } from '../../common/types/tasks';
+import {
+    DEFAULT_COLLAB_DEBOUNCE,
+    ORIGIN_ACTIVITY_SIDEBAR,
+    SIDEBAR_VIEW_ACTIVITY,
+    TASK_COMPLETION_RULE_ALL,
+} from '../../constants';
+import type { TaskCompletionRule, TaskType, TaskNew, TaskUpdatePayload } from '../../common/types/tasks';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {
@@ -140,6 +145,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         assignees: SelectorItems,
         taskType: TaskType,
         dueAt: ?string,
+        completionRule: TaskCompletionRule,
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
@@ -169,6 +175,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             assignees,
             taskType,
             dueAt,
+            completionRule,
             successCallback,
             errorCallback,
         );
@@ -497,6 +504,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         };
         const taskFormProps = {
             approverSelectorContacts,
+            completionRule: TASK_COMPLETION_RULE_ALL,
             createTask,
             getApproverWithQuery,
             getAvatarUrl,

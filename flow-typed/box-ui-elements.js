@@ -878,6 +878,9 @@ type ActivityFeedFeatures = {
     appActivity: {
         enabled: boolean,
     },
+    tasks: {
+        anyTask: boolean,
+    },
 };
 
 type ContentSidebarFeatures = {
