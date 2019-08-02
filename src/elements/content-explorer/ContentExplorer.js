@@ -70,8 +70,6 @@ import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
 
-const GRID_VIEW_DEFAULT_COLUMNS = 4;
-
 type Props = {
     apiHost: string,
     appHost: string,
@@ -95,6 +93,7 @@ type Props = {
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
+    isVeryLarge: boolean,
     language?: string,
     logoUrl?: string,
     measureRef?: Function,
@@ -133,7 +132,6 @@ type State = {
     isRenameModalOpen: boolean,
     isShareModalOpen: boolean,
     isUploadModalOpen: boolean,
-    maxGridColumnCountForWidth: number,
     rootName: string,
     searchQuery: string,
     selected?: BoxItem,
@@ -245,8 +243,7 @@ class ContentExplorer extends Component<Props, State> {
             currentPageSize: initialPageSize,
             errorCode: '',
             focusedRow: 0,
-            gridColumnCount: GRID_VIEW_DEFAULT_COLUMNS,
-            maxGridColumnCountForWidth: GRID_VIEW_MAX_COLUMNS,
+            gridColumnCount: 4,
             isCreateFolderModalOpen: false,
             isDeleteModalOpen: false,
             isLoading: false,
@@ -1287,11 +1284,35 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({ currentOffset: newOffset }, this.refreshCollection);
     };
 
+    /**
+     * Get the current viewMode, checking local store if applicable
+     *
+     * @return {ViewMode}
+     */
     getViewMode = (): ViewMode => {
         const { features }: Props = this.props;
         const viewModePreference = this.store.getItem(localStoreViewMode);
         const isGridViewEnabled = isFeatureEnabled(features, 'contentExplorer.gridView.enabled');
         return isGridViewEnabled && viewModePreference ? viewModePreference : VIEW_MODE_LIST;
+    };
+
+    /**
+     * Get the maximum number of grid view columns based on the current width of the
+     * content explorer.
+     *
+     * @return {number}
+     */
+    getMaxNumberOfGridViewColumnsForWidth = (): number => {
+        const { isSmall, isMedium, isLarge } = this.props;
+        let maxWidthColumns = GRID_VIEW_MAX_COLUMNS;
+        if (isSmall) {
+            maxWidthColumns = 1;
+        } else if (isMedium) {
+            maxWidthColumns = 3;
+        } else if (isLarge) {
+            maxWidthColumns = 5;
+        }
+        return maxWidthColumns;
     };
 
     /**
@@ -1320,20 +1341,6 @@ class ContentExplorer extends Component<Props, State> {
         // means highest number of columns
         const gridColumnCount = GRID_VIEW_MAX_COLUMNS - sliderValue + 1;
         this.setState({ gridColumnCount });
-    };
-
-    /**
-     * Sets maxGridColumnCountForWidth and gridColumnCount properties of state based on width
-     * of GridView.
-     *
-     * @param {number} maxGridColumnCountForWidth - maximum number of columns that can be displayed given
-     * the current width of the GridView.
-     * @return {void}
-     */
-    onGridViewResize = (maxGridColumnCountForWidth: number) => {
-        this.setState({
-            maxGridColumnCountForWidth,
-        });
     };
 
     /**
@@ -1384,7 +1391,6 @@ class ContentExplorer extends Component<Props, State> {
             currentPageSize,
             searchQuery,
             gridColumnCount,
-            maxGridColumnCountForWidth,
             isDeleteModalOpen,
             isRenameModalOpen,
             isShareModalOpen,
@@ -1404,6 +1410,7 @@ class ContentExplorer extends Component<Props, State> {
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
 
         const viewMode = this.getViewMode();
+        const maxGridColumnCountForWidth = this.getMaxNumberOfGridViewColumnsForWidth();
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1449,8 +1456,6 @@ class ContentExplorer extends Component<Props, State> {
                             isMedium={isMedium}
                             isSmall={isSmall}
                             isTouch={isTouch}
-                            maxGridColumnCountForWidth={maxGridColumnCountForWidth}
-                            onGridViewResize={this.onGridViewResize}
                             onItemClick={this.onItemClick}
                             onItemDelete={this.delete}
                             onItemDownload={this.download}

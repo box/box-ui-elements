@@ -32,7 +32,7 @@ const GridViewSlider = ({ columnCount, maxColumnCount, onChange }: Props) => {
                         onChange(Math.max(RANGE_MIN, sliderValue - RANGE_STEP));
                     }}
                     type="button"
-                    aria-label={messages.gridViewIncreaseNumberOfColumns.defaultMessage}
+                    aria-label={messages.gridViewDecreaseColumnSize.defaultMessage}
                 >
                     <IconMinusThin color={bdlGray50} width={14} height={14} />
                 </PlainButton>
@@ -53,7 +53,7 @@ const GridViewSlider = ({ columnCount, maxColumnCount, onChange }: Props) => {
                         onChange(Math.min(RANGE_MAX, sliderValue + RANGE_STEP));
                     }}
                     type="button"
-                    aria-label={messages.gridViewDecreaseNumberOfColumns.defaultMessage}
+                    aria-label={messages.gridViewIncreaseColumnSize.defaultMessage}
                 >
                     <IconPlusThin color={bdlGray50} width={14} height={14} />
                 </PlainButton>

@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import noop from 'lodash/noop';
 import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
 import ItemGrid from './ItemGrid';
@@ -38,7 +37,6 @@ type Props = {
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
-    onGridViewResize?: (maxGridColumnCountForWidth: number) => void,
     onItemClick: Function,
     onItemDelete: Function,
     onItemDownload: Function,
@@ -59,7 +57,6 @@ const Content = ({
     focusedRow,
     gridColumnCount = 0,
     isMedium,
-    onGridViewResize = noop,
     onSortChange,
     tableRef,
     view,
@@ -90,7 +87,6 @@ const Content = ({
                 <ItemGrid
                     currentCollection={currentCollection}
                     gridColumnCount={gridColumnCount}
-                    onGridViewResize={onGridViewResize}
                     view={view}
                     {...rest}
                 />
