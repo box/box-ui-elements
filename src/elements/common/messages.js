@@ -42,6 +42,11 @@ const messages = defineMessages({
         description: 'Error message when Preview fails due to the files call which is blocked by an access policy.',
         defaultMessage: 'Your access is restricted due to the classification applied to this content.',
     },
+    boxEditErrorBlockedByPolicy: {
+        id: 'be.boxEditErrorBlockedByPolicy',
+        defaultMessage: 'Local editing of this content has been disabled based on an access policy',
+        description: 'Shown in the opwn with dropdown when an application is blocked by shield access policy.',
+    },
     previewUpdate: {
         id: 'be.previewUpdate',
         description: 'Message when new preview is available.',
