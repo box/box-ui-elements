@@ -62,7 +62,7 @@ type Props = {
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
-    contentSidebarRef: React.ref,
+    contentSidebarRef: React.Ref<any>,
     enableThumbnailsSidebar: boolean,
     features?: FeatureConfig,
     fileId?: string,
