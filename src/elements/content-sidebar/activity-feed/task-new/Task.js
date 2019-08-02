@@ -22,6 +22,7 @@ import IconPencil from '../../../../icons/general/IconPencil';
 import UserLink from '../common/user-link';
 import API from '../../../../api/APIFactory';
 import {
+    TASK_COMPLETION_RULE_ALL,
     TASK_NEW_APPROVED,
     TASK_NEW_REJECTED,
     TASK_NEW_NOT_STARTED,
@@ -90,6 +91,10 @@ const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
 };
 
 class Task extends React.Component<Props, State> {
+    static defaultProps = {
+        completion_rule: TASK_COMPLETION_RULE_ALL,
+    };
+
     state = {
         loadCollabError: undefined,
         assignedToFull: this.props.assigned_to,
