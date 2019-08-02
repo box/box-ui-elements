@@ -20,6 +20,7 @@ import {
     X_REP_HINTS,
 } from '../constants';
 import Item from './Item';
+import { retryNumOfTimes } from '../utils/function';
 import TokenService from '../utils/TokenService';
 
 class File extends Item {
@@ -96,18 +97,28 @@ class File extends Item {
         const { id } = item;
         const infoUrl = getProp(item, 'representations.entries[0].info.url');
 
+        const numOfTries = 8;
+        const initialTimeout = 1000;
+        const backoffFactor = 2;
+
         if (!infoUrl) {
             return;
         }
 
-        let status;
-        do {
-            // eslint-disable-next-line no-await-in-loop
-            status = getProp(await this.xhr.get({ url: infoUrl }), 'data.status.state');
-        } while (status && status !== 'success' && status !== 'error');
+        const requestFunc = async (resolve: Function, reject: Function): Promise<?string> => {
+            const status = getProp(await this.xhr.get({ url: infoUrl }), 'data.status.state');
+            if (!status || status === 'success' || status === 'error') {
+                resolve(status);
+            }
+            reject(status);
+        };
 
-        if (status === 'success') {
-            callback(id, thumbnailUrl);
+        try {
+            if ((await retryNumOfTimes(requestFunc, numOfTries, initialTimeout, backoffFactor)) === 'success') {
+                callback(id, thumbnailUrl);
+            }
+        } catch (e) {
+            this.errorHandler(e);
         }
     }
 
