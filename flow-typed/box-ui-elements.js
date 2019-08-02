@@ -482,6 +482,9 @@ type FileRepresentation = {
     content?: {
         url_template: string,
     },
+    info?: {
+        url: string,
+    },
     properties?: {
         dimensions: string,
         paged: string,

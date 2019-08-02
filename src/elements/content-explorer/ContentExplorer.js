@@ -763,7 +763,9 @@ class ContentExplorer extends Component<Props, State> {
         let itemThumbnails = [];
         if (isGridViewEnabled) {
             const fileAPI = this.api.getFileAPI(false);
-            itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
+            itemThumbnails = await Promise.all(
+                items.map(item => fileAPI.getThumbnailUrl(item, this.updateItemThumbnailUrl)),
+            );
         }
 
         newCollection.items = items.map((obj, index) => {
@@ -785,6 +787,21 @@ class ContentExplorer extends Component<Props, State> {
         });
         this.setState({ currentCollection: newCollection, selected: newSelectedItem }, callback);
     }
+
+    /**
+     * Update the item in state with the given id to have the given thumbnailUrl
+     *
+     * @param {string} id - id of BoxItem to update
+     * @param {string} thumbnailUrl - thumbnailUrl to update BoxItem with
+     * @return {void}
+     */
+    updateItemThumbnailUrl = (id: string, thumbnailUrl: string): void => {
+        const { currentCollection } = this.state;
+        const { items = [] } = currentCollection;
+        const newCollection = { ...currentCollection };
+        newCollection.items = items.map(item => (item.id === id ? { ...cloneDeep(item), thumbnailUrl } : item));
+        this.setState({ currentCollection: newCollection });
+    };
 
     /**
      * Selects or unselects an item

@@ -6,6 +6,7 @@
 
 import queryString from 'query-string';
 import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import { findMissingProperties, fillMissingProperties } from '../utils/fields';
 import { getTypedFileId } from '../utils/file';
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
@@ -79,28 +80,70 @@ class File extends Item {
     }
 
     /**
+     * Polls an item's infoUrl until it's representation is generated or an error occurrs.
+     * Calls callback if representation was successfully generated.
+     *
+     * @param {BoxItem} item - BoxItem that needs infoUrl polled
+     * @param {string} thumbanilUrl - thumbanil url of item
+     * @param {string, string) => void} callback - function to call if polling results in success
+     * @return {Promise<void>}
+     */
+    async pollInfoUrl(
+        item: BoxItem,
+        thumbnailUrl: string,
+        callback: (id: string, thumbnailUrl: string) => void = noop,
+    ): Promise<void> {
+        const { id } = item;
+        const infoUrl = getProp(item, 'representations.entries[0].info.url');
+
+        if (!infoUrl) {
+            return;
+        }
+
+        let status;
+        do {
+            // eslint-disable-next-line no-await-in-loop
+            status = getProp(await this.xhr.get({ url: infoUrl }), 'data.status.state');
+        } while (status && status !== 'success' && status !== 'error');
+
+        if (status === 'success') {
+            callback(id, thumbnailUrl);
+        }
+    }
+
+    /**
      * API for getting a thumbnail URL for a BoxItem
      *
      * @param {BoxItem} item - BoxItem to get the thumbnail URL for
+     * @param {(string, string) => void)} callback - function to call if url was successfully generated after polling
      * @return {Promise<?string>} - the url for the item's thumbnail, or null
      */
-    async getThumbnailUrl(item: BoxItem): Promise<?string> {
+    async getThumbnailUrl(item: BoxItem, callback?: (thumbnailUrl: string, id: string) => void): Promise<?string> {
         const entry = getProp(item, 'representations.entries[0]');
         const extension = getProp(entry, 'representation');
         const template = getProp(entry, 'content.url_template');
         const token = await TokenService.getReadToken(getTypedFileId(item.id), this.options.token);
 
-        if (getProp(entry, 'status.state') !== 'success' || !extension || !template || !token) {
+        const status = getProp(entry, 'status.state');
+
+        if (status === 'error' || !extension || !template || !token) {
             return null;
         }
 
         const thumbnailUrl = template.replace('{+asset_path}', extension === 'jpg' ? '' : '1.png');
-
         const { query, url: thumbnailBaseUrl } = queryString.parseUrl(thumbnailUrl);
         const thumbnailUrlParams = { ...query, access_token: token };
         const thumbnailUrlQuery = queryString.stringify(thumbnailUrlParams);
+        const result = `${thumbnailBaseUrl}?${thumbnailUrlQuery}`;
 
-        return `${thumbnailBaseUrl}?${thumbnailUrlQuery}`;
+        if (status !== 'success') {
+            if (callback) {
+                this.pollInfoUrl(item, result, callback);
+            }
+            return null;
+        }
+
+        return result;
     }
 
     /**
