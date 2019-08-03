@@ -6,7 +6,6 @@
 
 import queryString from 'query-string';
 import getProp from 'lodash/get';
-import noop from 'lodash/noop';
 import { findMissingProperties, fillMissingProperties } from '../utils/fields';
 import { getTypedFileId } from '../utils/file';
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
@@ -82,19 +81,11 @@ class File extends Item {
 
     /**
      * Polls an item's infoUrl until it's representation is generated or an error occurrs.
-     * Calls callback if representation was successfully generated.
      *
      * @param {BoxItem} item - BoxItem that needs infoUrl polled
-     * @param {string} thumbanilUrl - thumbanil url of item
-     * @param {string, string) => void} callback - function to call if polling results in success
-     * @return {Promise<void>}
+     * @return {Promise<boolean>} - boolean for if generation was successful
      */
-    async pollInfoUrl(
-        item: BoxItem,
-        thumbnailUrl: string,
-        callback: (id: string, thumbnailUrl: string) => void = noop,
-    ): Promise<void> {
-        const { id } = item;
+    async generateRepresentation(item: BoxItem): Promise<boolean> {
         const infoUrl = getProp(item, 'representations.entries[0].info.url');
 
         const numOfTries = 8;
@@ -102,10 +93,10 @@ class File extends Item {
         const backoffFactor = 2;
 
         if (!infoUrl) {
-            return;
+            return false;
         }
 
-        const requestFunc = async (resolve: Function, reject: Function): Promise<?string> => {
+        const pollInfoUrl = async (resolve: Function, reject: Function): Promise<?string> => {
             const status = getProp(await this.xhr.get({ url: infoUrl }), 'data.status.state');
             if (!status || status === 'success' || status === 'error') {
                 resolve(status);
@@ -114,22 +105,22 @@ class File extends Item {
         };
 
         try {
-            if ((await retryNumOfTimes(requestFunc, numOfTries, initialTimeout, backoffFactor)) === 'success') {
-                callback(id, thumbnailUrl);
+            if ((await retryNumOfTimes(pollInfoUrl, numOfTries, initialTimeout, backoffFactor)) === 'success') {
+                return true;
             }
         } catch (e) {
             this.errorHandler(e);
         }
+        return false;
     }
 
     /**
      * API for getting a thumbnail URL for a BoxItem
      *
      * @param {BoxItem} item - BoxItem to get the thumbnail URL for
-     * @param {(string, string) => void)} callback - function to call if url was successfully generated after polling
      * @return {Promise<?string>} - the url for the item's thumbnail, or null
      */
-    async getThumbnailUrl(item: BoxItem, callback?: (thumbnailUrl: string, id: string) => void): Promise<?string> {
+    async getThumbnailUrl(item: BoxItem, isAlreadyGenerated: boolean = false): Promise<?string> {
         const entry = getProp(item, 'representations.entries[0]');
         const extension = getProp(entry, 'representation');
         const template = getProp(entry, 'content.url_template');
@@ -137,7 +128,7 @@ class File extends Item {
 
         const status = getProp(entry, 'status.state');
 
-        if (status === 'error' || !extension || !template || !token) {
+        if ((status !== 'success' && !isAlreadyGenerated) || !extension || !template || !token) {
             return null;
         }
 
@@ -145,16 +136,7 @@ class File extends Item {
         const { query, url: thumbnailBaseUrl } = queryString.parseUrl(thumbnailUrl);
         const thumbnailUrlParams = { ...query, access_token: token };
         const thumbnailUrlQuery = queryString.stringify(thumbnailUrlParams);
-        const result = `${thumbnailBaseUrl}?${thumbnailUrlQuery}`;
-
-        if (status !== 'success') {
-            if (callback) {
-                this.pollInfoUrl(item, result, callback);
-            }
-            return null;
-        }
-
-        return result;
+        return `${thumbnailBaseUrl}?${thumbnailUrlQuery}`;
     }
 
     /**

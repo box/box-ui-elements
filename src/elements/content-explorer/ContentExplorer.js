@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
+import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import CreateFolderDialog from '../common/create-folder-dialog';
@@ -763,20 +764,22 @@ class ContentExplorer extends Component<Props, State> {
         let itemThumbnails = [];
         if (isGridViewEnabled) {
             const fileAPI = this.api.getFileAPI(false);
-            itemThumbnails = await Promise.all(
-                items.map(item => fileAPI.getThumbnailUrl(item, this.updateItemThumbnailUrl)),
-            );
+            itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
         }
 
-        newCollection.items = items.map((obj, index) => {
-            const isSelected = obj.id === selectedId;
-            const currentItem = isSelected ? selectedItem : obj;
+        newCollection.items = items.map((item, index) => {
+            const isSelected = item.id === selectedId;
+            const currentItem = isSelected ? selectedItem : item;
             const thumbnailUrl = isGridViewEnabled ? itemThumbnails[index] : null;
             const newItem = {
                 ...currentItem,
                 selected: isSelected,
                 thumbnailUrl,
             };
+
+            if (!thumbnailUrl && getProp(item, 'representations.entries[0].status.state') !== 'error') {
+                this.attemptThumbnailGeneration(item);
+            }
 
             // Only if selectedItem is in the current collection do we want to set selected state
             if (isSelected) {
@@ -787,6 +790,32 @@ class ContentExplorer extends Component<Props, State> {
         });
         this.setState({ currentCollection: newCollection, selected: newSelectedItem }, callback);
     }
+
+    /**
+     * Attempts to generate a thumbnail for the given item and assigns the
+     * item its thumbnail url if successful
+     *
+     * @param {BoxItem} item - item to generate thumbnail for
+     * @return {Promise<void>}
+     */
+    attemptThumbnailGeneration = async (item: BoxItem): Promise<void> => {
+        const { features } = this.props;
+        const { id } = item;
+        const fileAPI = this.api.getFileAPI(false);
+
+        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
+            try {
+                if (await fileAPI.generateRepresentation(item)) {
+                    const thumbnailUrl = await fileAPI.getThumbnailUrl(item, true);
+                    if (thumbnailUrl) {
+                        this.updateItemThumbnailUrl(id, thumbnailUrl);
+                    }
+                }
+            } catch (e) {
+                this.errorCallback(e);
+            }
+        }
+    };
 
     /**
      * Update the item in state with the given id to have the given thumbnailUrl
