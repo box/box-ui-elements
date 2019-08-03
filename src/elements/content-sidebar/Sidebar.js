@@ -46,6 +46,7 @@ type Props = {
     metadataSidebarProps: MetadataSidebarProps,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    refreshIdentity?: boolean,
     versionsSidebarProps: VersionsSidebarProps,
 };
 
@@ -191,6 +192,7 @@ class Sidebar extends React.Component<Props, State> {
             metadataEditors,
             metadataSidebarProps,
             onVersionChange,
+            refreshIdentity,
             versionsSidebarProps,
         }: Props = this.props;
 
@@ -241,6 +243,7 @@ class Sidebar extends React.Component<Props, State> {
                             metadataSidebarProps={metadataSidebarProps}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
+                            refreshIdentity={refreshIdentity}
                             versionsSidebarProps={versionsSidebarProps}
                         />
                     </React.Fragment>

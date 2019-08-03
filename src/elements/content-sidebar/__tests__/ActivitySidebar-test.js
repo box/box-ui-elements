@@ -94,6 +94,38 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('componentDidUpdate()', () => {
+        let wrapper;
+        let instance;
+        currentUser = {
+            id: '123',
+        };
+        beforeEach(() => {
+            jest.spyOn(ActivitySidebarComponent.prototype, 'fetchFeedItems');
+            wrapper = getWrapper({
+                currentUser,
+                refreshIdentity: false,
+            });
+            instance = wrapper.instance();
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should fetch the feed items if refreshIdentity changed', () => {
+            wrapper.setProps({ refreshIdentity: true });
+
+            expect(instance.fetchFeedItems.mock.calls.length).toEqual(2);
+        });
+
+        test('should not fetch the feed items if refreshIdentity did not change', () => {
+            wrapper.setProps({ refreshIdentity: false });
+
+            expect(instance.fetchFeedItems.mock.calls.length).toEqual(1);
+        });
+    });
+
     describe('render()', () => {
         test('should render the activity feed sidebar', () => {
             const wrapper = getWrapper();

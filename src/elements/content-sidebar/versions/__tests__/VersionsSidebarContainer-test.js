@@ -31,10 +31,17 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     const getWrapper = ({ ...props } = {}) => shallow(<VersionsSidebar api={api} fileId="12345" {...props} />);
 
     describe('componentDidUpdate', () => {
+        let onVersionChange;
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            onVersionChange = jest.fn();
+            wrapper = getWrapper({ onVersionChange, refreshIdentity: false });
+            instance = wrapper.instance();
+        });
+
         test('should verify the selected version id exists when it changes', () => {
-            const onVersionChange = jest.fn();
-            const wrapper = getWrapper({ onVersionChange });
-            const instance = wrapper.instance();
             const version = { id: '45678' };
             const currentVersion = { id: '54321' };
 
@@ -44,6 +51,24 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             wrapper.setProps({ versionId: '45678' });
 
             expect(instance.verifyVersion).toHaveBeenCalled();
+        });
+
+        test('should refetch data when refreshIdentity changes', () => {
+            const fetchData = jest.fn();
+            instance.fetchData = fetchData;
+
+            wrapper.setProps({ refreshIdentity: true });
+
+            expect(fetchData).toHaveBeenCalled();
+        });
+
+        test('should not refetch data when refreshIdentity changes', () => {
+            const fetchData = jest.fn();
+            instance.fetchData = fetchData;
+
+            wrapper.setProps({ refreshIdentity: false });
+
+            expect(fetchData).not.toHaveBeenCalled();
         });
     });
 

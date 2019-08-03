@@ -30,6 +30,7 @@ type PropsWithoutContext = {
     file: BoxItem,
     getPreview: Function,
     getViewer: Function,
+    refreshIdentity?: boolean,
 };
 
 type Props = {
@@ -62,6 +63,14 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
     componentDidMount() {
         const { api, file }: Props = this.props;
         api.getMetadataAPI(false).getSkills(file, this.fetchSkillsSuccessCallback, noop);
+    }
+
+    componentDidUpdate({ refreshIdentity: prevRefreshIdentity }: Props) {
+        const { api, file, refreshIdentity }: Props = this.props;
+
+        if (refreshIdentity !== prevRefreshIdentity) {
+            api.getMetadataAPI(false).getSkills(file, this.fetchSkillsSuccessCallback, noop);
+        }
     }
 
     /**

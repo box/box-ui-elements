@@ -45,6 +45,7 @@ type PropsWithoutContext = {
     file: BoxItem,
     isDisabled: boolean,
     onVersionHistoryClick?: Function,
+    refreshIdentity?: boolean,
     translations?: Translations,
 } & ExternalProps &
     WithLoggerProps;
@@ -94,6 +95,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { currentUser } = this.props;
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
+    }
+
+    componentDidUpdate({ refreshIdentity: prevRefreshIdentity }: Props) {
+        const { refreshIdentity } = this.props;
+        if (refreshIdentity !== prevRefreshIdentity) {
+            this.fetchFeedItems(true);
+        }
     }
 
     /**

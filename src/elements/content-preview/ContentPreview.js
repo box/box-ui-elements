@@ -5,7 +5,7 @@
  */
 
 import 'regenerator-runtime/runtime';
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
@@ -62,6 +62,7 @@ type Props = {
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
+    contentSidebarRef: React.Ref<any>,
     enableThumbnailsSidebar: boolean,
     features?: FeatureConfig,
     fileId?: string,
@@ -145,7 +146,7 @@ const LoadableSidebar = AsyncLoad({
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-sidebar" */ '../content-sidebar'),
 });
 
-class ContentPreview extends PureComponent<Props, State> {
+class ContentPreview extends React.PureComponent<Props, State> {
     id: string;
 
     props: Props;
@@ -1096,6 +1097,7 @@ class ContentPreview extends PureComponent<Props, State> {
             messages,
             className,
             contentSidebarProps,
+            contentSidebarRef,
             contentOpenWithProps,
             hasHeader,
             history,
@@ -1187,6 +1189,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 getViewer={this.getViewer}
                                 history={history}
                                 language={language}
+                                ref={contentSidebarRef}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}
