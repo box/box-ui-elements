@@ -1,5 +1,6 @@
 import localize from '../../support/i18n';
 import utils from '../../support/utils';
+import { GRID_VIEW_MAX_COLUMNS, GRID_VIEW_MIN_COLUMNS } from '../../../src/constants';
 
 // <reference types="Cypress" />
 const selectedRowClassName = 'bce-item-row-selected';
@@ -84,6 +85,19 @@ const helpers = {
     },
     getClosePreviewButton() {
         return cy.getByAriaLabel(localize('be.close'));
+    },
+    getSliderPlusButton() {
+        return cy.getByAriaLabel(localize('be.gridView.increaseColumnSize'));
+    },
+    getSliderMinusButton() {
+        return cy.getByAriaLabel(localize('be.gridView.decreaseColumnSize'));
+    },
+    getGridViewColumnCount() {
+        return cy
+            .get('.bdl-GridView-row')
+            .eq(0)
+            .find('.bdl-GridViewSlot')
+            .its('length');
     },
     openUploadModal() {
         this.getAddButton().click();
@@ -229,6 +243,8 @@ describe('ContentExplorer', () => {
 
     describe('Grid View', () => {
         beforeEach(() => {
+            // Done to ensure that grid view can display GRID_VIEW_MAX_COLUMNS
+            cy.viewport(2560, 1440);
             helpers.load({ features: gridViewOn });
             helpers
                 .getViewModeChangeButton()
@@ -275,6 +291,42 @@ describe('ContentExplorer', () => {
             cy.getByAriaLabel(localize('be.preview')).should('exist');
             helpers.getClosePreviewButton().click();
             cy.getByAriaLabel(localize('be.preview')).should('not.exist');
+        });
+
+        it('Should increase number of columns', () => {
+            helpers.getGridViewColumnCount().then(numColumns => {
+                helpers.getSliderMinusButton().click();
+                helpers.getGridViewColumnCount().should('equal', numColumns + 1);
+            });
+        });
+
+        it('Should decrease number of columns', () => {
+            helpers.getGridViewColumnCount().then(numColumns => {
+                helpers.getSliderPlusButton().click();
+                helpers.getGridViewColumnCount().should('equal', numColumns - 1);
+            });
+        });
+
+        it('Should cycle through all slider values, always staying within column restraints', () => {
+            helpers.getGridViewColumnCount().then(numColumns => {
+                for (let i = 0; i < GRID_VIEW_MAX_COLUMNS + 1; i += 1) {
+                    helpers.getSliderPlusButton().click();
+                    helpers.getGridViewColumnCount().should('equal', Math.max(numColumns - 1, GRID_VIEW_MIN_COLUMNS));
+                    numColumns -= 1;
+                }
+                numColumns = GRID_VIEW_MIN_COLUMNS;
+                for (let i = 0; i < GRID_VIEW_MAX_COLUMNS + 1; i += 1) {
+                    helpers.getSliderMinusButton().click();
+                    helpers.getGridViewColumnCount().should('equal', Math.min(numColumns + 1, GRID_VIEW_MAX_COLUMNS));
+                    numColumns += 1;
+                }
+                numColumns = GRID_VIEW_MAX_COLUMNS;
+                for (let i = 0; i < GRID_VIEW_MAX_COLUMNS + 1; i += 1) {
+                    helpers.getSliderPlusButton().click();
+                    helpers.getGridViewColumnCount().should('equal', Math.max(numColumns - 1, GRID_VIEW_MIN_COLUMNS));
+                    numColumns -= 1;
+                }
+            });
         });
     });
 });
