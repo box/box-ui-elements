@@ -154,8 +154,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const assignees = ['1', '2'];
             const dueAt = 'test';
             const taskType = 'GENERAL';
+            const completionRule = 'ALL_ASSIGNEES';
             instance.fetchFeedItems = jest.fn();
-            instance.createTask(message, assignees, taskType, dueAt);
+            instance.createTask(message, assignees, taskType, dueAt, completionRule);
             expect(feedAPI.createTaskNew).toHaveBeenCalledWith(
                 file,
                 currentUser,
@@ -163,6 +164,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 assignees,
                 taskType,
                 dueAt,
+                completionRule,
                 expect.any(Function),
                 expect.any(Function),
             );

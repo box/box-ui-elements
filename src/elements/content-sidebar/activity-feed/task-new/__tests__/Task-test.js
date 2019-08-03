@@ -48,6 +48,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             limit: 10,
             next_marker: null,
         },
+        completion_rule: 'ALL_ASSIGNEES',
         created_at: '2010-01-01',
         created_by: { id: '0', target: currentUser, role: 'CREATOR', status: 'NOT_STARTED', type: 'task_collaborator' },
         due_at: null,
