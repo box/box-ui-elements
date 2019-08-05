@@ -69,9 +69,9 @@ class Composition {
      * @private
      */
     nextKey() {
-        const ret = `key${this.keyIndex}`;
+        const result = `key${this.keyIndex}`;
         this.keyIndex += 1;
-        return ret;
+        return result;
     }
 
     /**
