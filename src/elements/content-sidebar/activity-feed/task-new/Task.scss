@@ -27,6 +27,10 @@ $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
 
 .bcs-Task-statusContainer {
     margin-top: 2 * $bcs-task-grid;
+
+    .bcs-TaskCompletionRuleIcon {
+        margin-left: 4px;
+    }
 }
 
 .bcs-Task-assigneeListContainer {

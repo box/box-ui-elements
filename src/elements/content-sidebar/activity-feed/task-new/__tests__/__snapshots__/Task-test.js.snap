@@ -112,6 +112,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         <Component
           status="NOT_STARTED"
         />
+        <TaskCompletionRuleIcon
+          completionRule="ALL_ASSIGNEES"
+        />
       </div>
       <div
         className="bcs-Task-assigneeListContainer"
