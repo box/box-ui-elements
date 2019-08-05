@@ -492,7 +492,7 @@ type FileRepresentation = {
     },
     representation?: string,
     status: {
-        state: string,
+        state: ?string,
     },
 };
 

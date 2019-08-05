@@ -324,6 +324,13 @@ export const X_REP_HINT_PNG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
 // not have a thumbnail rep but do have a first page rep.
 export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}]`;
 
+/* ------------------ Representations Response ---------- */
+export const REPRESENTATIONS_RESPONSE_ERROR: 'error' = 'error';
+export const REPRESENTATIONS_RESPONSE_NONE: 'none' = 'none';
+export const REPRESENTATIONS_RESPONSE_PENDING: 'pending' = 'pending';
+export const REPRESENTATIONS_RESPONSE_SUCCESS: 'success' = 'success';
+export const REPRESENTATIONS_RESPONSE_VIEWABLE: 'viewable' = 'viewable';
+
 /* ------------------ Sidebar View ---------------------- */
 export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
 export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';

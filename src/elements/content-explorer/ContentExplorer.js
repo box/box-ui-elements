@@ -28,6 +28,7 @@ import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
+import isThumbnailReady from './utils';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH, FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import LocalStore from '../../utils/LocalStore';
@@ -771,14 +772,15 @@ class ContentExplorer extends Component<Props, State> {
             const isSelected = item.id === selectedId;
             const currentItem = isSelected ? selectedItem : item;
             const thumbnailUrl = isGridViewEnabled ? itemThumbnails[index] : null;
+
             const newItem = {
                 ...currentItem,
                 selected: isSelected,
                 thumbnailUrl,
             };
 
-            if (!thumbnailUrl && getProp(item, 'representations.entries[0].status.state') !== 'error') {
-                this.attemptThumbnailGeneration(item);
+            if (thumbnailUrl && !isThumbnailReady(newItem)) {
+                this.attemptThumbnailGeneration(newItem);
             }
 
             // Only if selectedItem is in the current collection do we want to set selected state
@@ -800,35 +802,32 @@ class ContentExplorer extends Component<Props, State> {
      */
     attemptThumbnailGeneration = async (item: BoxItem): Promise<void> => {
         const { features } = this.props;
-        const { id } = item;
+        const { representations } = item;
+        const representation = getProp(representations, 'entries[0]');
         const fileAPI = this.api.getFileAPI(false);
 
         if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
-            try {
-                if (await fileAPI.generateRepresentation(item)) {
-                    const thumbnailUrl = await fileAPI.getThumbnailUrl(item, true);
-                    if (thumbnailUrl) {
-                        this.updateItemThumbnailUrl(id, thumbnailUrl);
-                    }
-                }
-            } catch (e) {
-                this.errorCallback(e);
+            const updatedRepresentation = await fileAPI.generateRepresentation(representation);
+            if (updatedRepresentation) {
+                this.updateItemInCollection({
+                    ...cloneDeep(item),
+                    representations: { entries: [updatedRepresentation] },
+                });
             }
         }
     };
 
     /**
-     * Update the item in state with the given id to have the given thumbnailUrl
+     * Update item in this.state.currentCollection
      *
-     * @param {string} id - id of BoxItem to update
-     * @param {string} thumbnailUrl - thumbnailUrl to update BoxItem with
+     * @param {BoxItem} newItem - item with updated properties
      * @return {void}
      */
-    updateItemThumbnailUrl = (id: string, thumbnailUrl: string): void => {
+    updateItemInCollection = (newItem: BoxItem): void => {
         const { currentCollection } = this.state;
         const { items = [] } = currentCollection;
         const newCollection = { ...currentCollection };
-        newCollection.items = items.map(item => (item.id === id ? { ...cloneDeep(item), thumbnailUrl } : item));
+        newCollection.items = items.map(item => (item.id === newItem.id ? newItem : item));
         this.setState({ currentCollection: newCollection });
     };
 

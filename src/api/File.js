@@ -5,6 +5,7 @@
  */
 
 import queryString from 'query-string';
+import cloneDeep from 'lodash/cloneDeep';
 import getProp from 'lodash/get';
 import { findMissingProperties, fillMissingProperties } from '../utils/fields';
 import { getTypedFileId } from '../utils/file';
@@ -16,6 +17,8 @@ import {
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_EXTENSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
+    REPRESENTATIONS_RESPONSE_ERROR,
+    REPRESENTATIONS_RESPONSE_SUCCESS,
     X_REP_HINTS,
 } from '../constants';
 import Item from './Item';
@@ -80,38 +83,41 @@ class File extends Item {
     }
 
     /**
-     * Polls an item's infoUrl until it's representation is generated or an error occurrs.
+     * Polls a representation's infoUrl, attempting to generate a representation
      *
-     * @param {BoxItem} item - BoxItem that needs infoUrl polled
-     * @return {Promise<boolean>} - boolean for if generation was successful
+     * @param {FileRepresentation} representation - reprsentation that should have it's info.url polled
+     * @return {Promise<FileRepresentation>} - representation updated with most current status
      */
-    async generateRepresentation(item: BoxItem): Promise<boolean> {
-        const infoUrl = getProp(item, 'representations.entries[0].info.url');
+    async generateRepresentation(representation: ?FileRepresentation): Promise<?FileRepresentation> {
+        const infoUrl = getProp(representation, 'info.url');
 
-        const numOfTries = 8;
-        const initialTimeout = 1000;
+        const numOfTries = 3;
+        const initialTimeout = 3000;
         const backoffFactor = 2;
 
         if (!infoUrl) {
-            return false;
+            return representation;
         }
 
         const pollInfoUrl = async (resolve: Function, reject: Function): Promise<?string> => {
             const status = getProp(await this.xhr.get({ url: infoUrl }), 'data.status.state');
-            if (!status || status === 'success' || status === 'error') {
+            if (!status || status === REPRESENTATIONS_RESPONSE_SUCCESS || status === REPRESENTATIONS_RESPONSE_ERROR) {
                 resolve(status);
             }
             reject(status);
         };
 
         try {
-            if ((await retryNumOfTimes(pollInfoUrl, numOfTries, initialTimeout, backoffFactor)) === 'success') {
-                return true;
+            let newState;
+            try {
+                newState = await new Promise((resolve, reject) => pollInfoUrl(resolve, reject));
+            } catch (e) {
+                newState = await retryNumOfTimes(pollInfoUrl, numOfTries, initialTimeout, backoffFactor);
             }
+            return representation ? { ...cloneDeep(representation), status: { state: newState } } : representation;
         } catch (e) {
-            this.errorHandler(e);
+            return representation;
         }
-        return false;
     }
 
     /**
@@ -120,15 +126,13 @@ class File extends Item {
      * @param {BoxItem} item - BoxItem to get the thumbnail URL for
      * @return {Promise<?string>} - the url for the item's thumbnail, or null
      */
-    async getThumbnailUrl(item: BoxItem, isAlreadyGenerated: boolean = false): Promise<?string> {
+    async getThumbnailUrl(item: BoxItem): Promise<?string> {
         const entry = getProp(item, 'representations.entries[0]');
         const extension = getProp(entry, 'representation');
         const template = getProp(entry, 'content.url_template');
         const token = await TokenService.getReadToken(getTypedFileId(item.id), this.options.token);
 
-        const status = getProp(entry, 'status.state');
-
-        if ((status !== 'success' && !isAlreadyGenerated) || !extension || !template || !token) {
+        if (!extension || !template || !token) {
             return null;
         }
 
