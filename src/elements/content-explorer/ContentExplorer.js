@@ -51,7 +51,6 @@ import {
     VIEW_ERROR,
     VIEW_RECENTS,
     VIEW_MODE_LIST,
-    GRID_VIEW_MAX_COLUMNS,
     TYPE_FILE,
     TYPE_WEBLINK,
     TYPE_FOLDER,
@@ -69,6 +68,9 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
+
+const GRID_VIEW_MAX_COLUMNS = 7;
+const GRID_VIEW_MIN_COLUMNS = 1;
 
 type Props = {
     apiHost: string,
@@ -1410,7 +1412,7 @@ class ContentExplorer extends Component<Props, State> {
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
 
         const viewMode = this.getViewMode();
-        const maxGridColumnCountForWidth = this.getMaxNumberOfGridViewColumnsForWidth();
+        const maxGridColumnCount = this.getMaxNumberOfGridViewColumnsForWidth();
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1435,7 +1437,9 @@ class ContentExplorer extends Component<Props, State> {
                             canUpload={allowUpload}
                             canCreateNewFolder={allowCreate}
                             gridColumnCount={gridColumnCount}
-                            maxGridColumnCountForWidth={maxGridColumnCountForWidth}
+                            gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                            gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                            maxGridColumnCountForWidth={maxGridColumnCount}
                             onUpload={this.upload}
                             onCreate={this.createFolder}
                             onGridViewSliderChange={this.onGridViewSliderChange}
@@ -1452,7 +1456,7 @@ class ContentExplorer extends Component<Props, State> {
                             canShare={canShare}
                             currentCollection={currentCollection}
                             focusedRow={focusedRow}
-                            gridColumnCount={Math.min(gridColumnCount, maxGridColumnCountForWidth)}
+                            gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
                             isMedium={isMedium}
                             isSmall={isSmall}
                             isTouch={isTouch}

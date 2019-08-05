@@ -19,6 +19,8 @@ type Props = {
     canUpload: boolean,
     currentCollection: Collection,
     gridColumnCount: number,
+    gridMaxColumns: number,
+    gridMinColumns: number,
     maxGridColumnCountForWidth: number,
     onCreate: Function,
     onGridViewSliderChange: (newSliderValue: number) => void,
@@ -34,6 +36,8 @@ const SubHeaderRight = ({
     canUpload,
     currentCollection,
     gridColumnCount,
+    gridMaxColumns,
+    gridMinColumns,
     maxGridColumnCountForWidth,
     onGridViewSliderChange,
     onCreate,
@@ -55,6 +59,8 @@ const SubHeaderRight = ({
                 {hasItems && viewMode === VIEW_MODE_GRID && (
                     <GridViewSlider
                         columnCount={gridColumnCount}
+                        gridMaxColumns={gridMaxColumns}
+                        gridMinColumns={gridMinColumns}
                         maxColumnCount={maxGridColumnCountForWidth}
                         onChange={onGridViewSliderChange}
                     />

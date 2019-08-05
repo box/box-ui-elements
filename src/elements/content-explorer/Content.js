@@ -55,7 +55,7 @@ type Props = {
 const Content = ({
     currentCollection,
     focusedRow,
-    gridColumnCount = 0,
+    gridColumnCount = 1,
     isMedium,
     onSortChange,
     tableRef,
