@@ -45,7 +45,7 @@ const messages = defineMessages({
     boxEditErrorBlockedByPolicy: {
         id: 'be.boxEditErrorBlockedByPolicy',
         defaultMessage: 'Local editing of this content has been disabled based on an access policy',
-        description: 'Shown in the opwn with dropdown when an application is blocked by shield access policy.',
+        description: 'Shown in the open with dropdown when an application is blocked by shield access policy.',
     },
     previewUpdate: {
         id: 'be.previewUpdate',
