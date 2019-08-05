@@ -11,18 +11,16 @@ type Props = {|
     completionRule: ?TaskCompletionRule,
 |};
 
-const TaskCompletionRuleIcon = ({ completionRule }: Props): React.Node => {
-    return (
-        <React.Fragment>
-            {completionRule === TASK_COMPLETION_RULE_ANY ? (
-                <Tooltip position="top-center" text={<FormattedMessage {...messages.taskAnyAffordanceTooltip} />}>
-                    <span>
-                        <IconAnyTask className="bcs-TaskCompletionRuleIcon" />
-                    </span>
-                </Tooltip>
-            ) : null}
-        </React.Fragment>
-    );
-};
+const TaskCompletionRuleIcon = ({ completionRule }: Props): React.Node => (
+    <React.Fragment>
+        {completionRule === TASK_COMPLETION_RULE_ANY ? (
+            <Tooltip position="top-center" text={<FormattedMessage {...messages.taskAnyAffordanceTooltip} />}>
+                <span>
+                    <IconAnyTask height={9} width={11} className="bcs-TaskCompletionRuleIcon" />
+                </span>
+            </Tooltip>
+        ) : null}
+    </React.Fragment>
+);
 
 export default TaskCompletionRuleIcon;

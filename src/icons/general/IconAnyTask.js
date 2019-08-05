@@ -14,7 +14,7 @@ type Props = {
 };
 
 const IconAnyTask = ({ className = '', color = bdlGray62, height = 10, title, width = 11 }: Props) => (
-    <AccessibleSVG className={className} height={height} title={title} viewBox="0 0 10 11" width={width}>
+    <AccessibleSVG className={className} height={height} title={title} viewBox="0 0 11 10" width={width}>
         <g fill="none" fillRule="evenodd">
             <path
                 d="M9.8571701 4.87513643c0 .34510262.25583119.62486357.57141495.62486357S11 5.22023905 11 4.87513643V1.12595504c0-.50631882-.52181991-.80241628-.90039552-.51091349l-.85712242.6599833c-.25803393.19868584-.31992213.5884963-.13823118.87066603.17173192.26670315.49960538.34178318.75291923.18144038v2.54800517z"
