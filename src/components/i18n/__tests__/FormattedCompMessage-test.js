@@ -73,6 +73,16 @@ describe('components/i18n', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
+        test('should correctly render FormattedCompMessage which starts with HTML, snapshot', () => {
+            const wrapper = mount(
+                <FormattedCompMessage id="test" description="asdf">
+                    <b>bold</b> text. More text.
+                </FormattedCompMessage>,
+            );
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
         test('should correctly render FormattedCompMessage with subcomponents', () => {
             const wrapper = mount(
                 <FormattedCompMessage id="test" description="asdf">
