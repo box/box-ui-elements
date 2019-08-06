@@ -7,6 +7,8 @@ import Tooltip from '../../../../components/tooltip';
 import IconAnyTask from '../../../../icons/general/IconAnyTask';
 import type { TaskCompletionRule } from '../../../../common/types/tasks';
 
+import './TaskCompletionRuleIcon.scss';
+
 type Props = {|
     completionRule: ?TaskCompletionRule,
 |};
