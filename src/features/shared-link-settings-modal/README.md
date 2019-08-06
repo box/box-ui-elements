@@ -26,6 +26,20 @@ const fakeRequest = val => {
         <SharedLinkSettingsModal
             accessLevel="peopleWithTheLink"
             canChangeVanityName
+            item={{
+                bannerPolicy: {
+                    body: 'test',
+                },
+                classification: 'internal',
+                grantedPermissions: {
+                    itemShare: true
+                },
+                hideCollaborators: false,
+                id: 12345,
+                name: 'My Example Folder',
+                type: 'folder',
+                typedID: 'd_12345'
+            }}
             isOpen
             onRequestClose={ () => setState({ isOpen: false })}
             onSubmit={ fakeRequest }
@@ -42,6 +56,7 @@ const fakeRequest = val => {
             directLink="https://box.com/download/path"
             isDirectLinkAvailable
             isDirectLinkUnavailableDueToDownloadSettings={ false }
+            isDirectLinkUnavailableDueToAccessPolicy
             vanityNameInputProps={ { 'data-resin-target': 'test' } }
             passwordCheckboxProps={ { 'data-resin-target': 'test' } }
             passwordInputProps={ { 'data-resin-target': 'test' } }
