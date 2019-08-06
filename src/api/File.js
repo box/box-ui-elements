@@ -92,8 +92,8 @@ class File extends Item {
         const infoUrl = getProp(representation, 'info.url');
 
         const numOfTries = 3;
-        const initialTimeout = 3000;
-        const backoffFactor = 2;
+        const initialTimeout = 500;
+        const backoffFactor = 3;
 
         if (!infoUrl) {
             return representation;
