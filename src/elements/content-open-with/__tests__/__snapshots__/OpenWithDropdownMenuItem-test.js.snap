@@ -55,6 +55,64 @@ exports[`elements/content-open-with/OpenWithDropdownMenuItem should render corre
 </MenuItem>
 `;
 
+exports[`elements/content-open-with/OpenWithDropdownMenuItem should render correctly if the item is disabled because hidden collaborators 1`] = `
+<MenuItem
+  className="bcow-box-tools-uninstalled"
+  isDisabled={true}
+  onClick={[Function]}
+>
+  <FileIcon
+    dimension={30}
+    height={30}
+    width={30}
+  />
+  <span>
+    <p
+      className="bcow-menu-item-title"
+    >
+      A new integration
+    </p>
+    <p
+      className="bcow-menu-item-description"
+    >
+      <FormattedMessage
+        defaultMessage="Opening this file with other services is currently unavailable"
+        id="be.errorOpenWithDescription"
+      />
+    </p>
+  </span>
+</MenuItem>
+`;
+
+exports[`elements/content-open-with/OpenWithDropdownMenuItem should render correctly if the item is disabled because of an access policy 1`] = `
+<MenuItem
+  className="bcow-box-tools-uninstalled"
+  isDisabled={true}
+  onClick={[Function]}
+>
+  <FileIcon
+    dimension={30}
+    height={30}
+    width={30}
+  />
+  <span>
+    <p
+      className="bcow-menu-item-title"
+    >
+      A new integration
+    </p>
+    <p
+      className="bcow-menu-item-description"
+    >
+      <FormattedMessage
+        defaultMessage="Local editing of this content has been disabled based on an access policy"
+        id="be.boxEditErrorBlockedByPolicy"
+      />
+    </p>
+  </span>
+</MenuItem>
+`;
+
 exports[`elements/content-open-with/OpenWithDropdownMenuItem should render the description and correct icon 1`] = `
 <MenuItem
   className=""

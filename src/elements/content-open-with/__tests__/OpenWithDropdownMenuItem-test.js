@@ -80,4 +80,34 @@ describe('elements/content-open-with/OpenWithDropdownMenuItem', () => {
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render correctly if the item is disabled because of an access policy', () => {
+        const props = {
+            integration: {
+                displayName: 'A new integration',
+                disabledReasons: ['blocked_by_shield_access_policy'],
+                displayDescription: 'Open With the new integration',
+                isDisabled: true,
+                appIntegrationId: '22',
+            },
+            onClick: noop,
+        };
+        const wrapper = getWrapper(props);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render correctly if the item is disabled because hidden collaborators', () => {
+        const props = {
+            integration: {
+                displayName: 'A new integration',
+                disabledReasons: ['collaborators_hidden'],
+                displayDescription: 'Open With the new integration',
+                isDisabled: true,
+                appIntegrationId: '22',
+            },
+            onClick: noop,
+        };
+        const wrapper = getWrapper(props);
+        expect(wrapper).toMatchSnapshot();
+    });
 });
