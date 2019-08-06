@@ -13,8 +13,8 @@ import CopyrightFooter from './CopyrightFooter';
 import InstantLogin from './InstantLogin';
 import LeftSidebarDropWrapper from './LeftSidebarDropWrapper';
 import LeftSidebarIconWrapper from './LeftSidebarIconWrapper';
-import LeftSidebarLink from './LeftSidebarLink';
 import NewItemsIndicator from './NewItemsIndicator';
+import defaultNavLinkRenderer from './defaultNavLinkRenderer';
 
 import type { Callout } from './Callout';
 
@@ -27,6 +27,7 @@ type SubMenuItem = {
     canReceiveDrop?: boolean,
     /** class to add to sub menu element */
     className?: string,
+    customLinkRenderer?: Function,
     /** Ref for parent to access drop target */
     dropTargetRef?: { current: null | HTMLDivElement },
     /** Optional HTML attributes to append to menu item */
@@ -64,6 +65,7 @@ type MenuItem = {
     className?: string,
     /** Whether the menu should render as collapsed or expanded */
     collapsed?: boolean,
+    customRender?: Function,
     /** Ref for parent to access drop target */
     dropTargetRef?: { current: null | HTMLDivElement },
     /** Optional HTML attributes to append to menu item */
@@ -276,6 +278,7 @@ class LeftSidebar extends React.Component<Props, State> {
             callout,
             canReceiveDrop = false,
             className = '',
+            customLinkRenderer,
             dropTargetRef,
             htmlAttributes,
             iconComponent,
@@ -296,26 +299,47 @@ class LeftSidebar extends React.Component<Props, State> {
             'is-selected': selected,
         });
 
-        const builtLink = (
-            <LeftSidebarLink
-                callout={callout}
-                canReceiveDrop={canReceiveDrop}
-                className={linkClassNames}
-                customTheme={leftSidebarProps.customTheme}
-                onClickRemove={onClickRemove}
-                htmlAttributes={htmlAttributes}
-                icon={this.getIcon(iconElement, iconComponent, leftSidebarProps.customTheme, selected, scaleIcon)}
-                isScrolling={this.state.isScrolling}
-                key={`link-${id}`}
-                message={message}
-                newItemBadge={this.getNewItemBadge(newItemBadge, leftSidebarProps.customTheme)}
-                removeButtonHtmlAttributes={removeButtonHtmlAttributes}
-                routerLink={routerLink}
-                routerProps={routerProps}
-                selected={selected}
-                showTooltip={showTooltip}
-            />
-        );
+        let builtLink;
+
+        if (customLinkRenderer) {
+            builtLink = customLinkRenderer({
+                callout,
+                canReceiveDrop,
+                linkClassNames,
+                customTheme: leftSidebarProps.customTheme,
+                onClickRemove,
+                htmlAttributes,
+                icon: this.getIcon(iconElement, iconComponent, leftSidebarProps.customTheme, selected, scaleIcon),
+                isScrolling: this.state.isScrolling,
+                key: `link-${id}`,
+                message,
+                newItemBadge: this.getNewItemBadge(newItemBadge, leftSidebarProps.customTheme),
+                removeButtonHtmlAttributes,
+                routerLink,
+                routerProps,
+                selected,
+                showTooltip,
+            });
+        } else {
+            builtLink = defaultNavLinkRenderer({
+                callout,
+                canReceiveDrop,
+                linkClassNames,
+                customTheme: leftSidebarProps.customTheme,
+                onClickRemove,
+                htmlAttributes,
+                icon: this.getIcon(iconElement, iconComponent, leftSidebarProps.customTheme, selected, scaleIcon),
+                isScrolling: this.state.isScrolling,
+                key: `link-${id}`,
+                message,
+                newItemBadge: this.getNewItemBadge(newItemBadge, leftSidebarProps.customTheme),
+                removeButtonHtmlAttributes,
+                routerLink,
+                routerProps,
+                selected,
+                showTooltip,
+            });
+        }
 
         // Check for menu items on links so we don't double-highlight groups
         return canReceiveDrop && !props.menuItems ? (
