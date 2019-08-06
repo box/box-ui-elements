@@ -233,6 +233,9 @@ jest.mock('../Comments', () =>
         deleteComment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
+        updateComment: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
         createComment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
@@ -873,6 +876,29 @@ describe('api/Feed', () => {
             feed.isDestroyed = jest.fn().mockReturnValue(true);
             feed.updateTaskSuccessCallback(tasks.entries[0], successCb);
             expect(successCb).not.toBeCalled();
+        });
+    });
+
+    describe('updateComment()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.updateComment({})).toThrow(fileError);
+        });
+
+        test('should call the comments api and update the feed items', () => {
+            const successCallback = jest.fn();
+            const comment = {
+                id: '1',
+                tagged_message: 'updated message',
+                message: 'update message',
+                permissions: { can_edit: true },
+            };
+            feed.updateComment(file, comment.id, comment.text, true, comment.permmissions, successCallback, jest.fn());
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
         });
     });
 

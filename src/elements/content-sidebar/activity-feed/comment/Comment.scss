@@ -20,3 +20,12 @@
 .bcs-Comment-deleteConfirmationModal {
     z-index: $overlay-z-index;
 }
+
+// override for activity feed defaults
+.be {
+    .bcs-Comment-editor.bcs-CommentForm {
+        border-top: none;
+        margin-top: 20px;
+        padding: 0;
+    }
+}

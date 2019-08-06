@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
-import noop from 'lodash/noop';
 import classNames from 'classnames';
+import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
 import Avatar from '../Avatar';
@@ -34,8 +34,8 @@ type Props = {
     isPending?: boolean,
     mentionSelectorContacts?: SelectorItems,
     modified_at?: string | number,
-    onDelete?: Function,
-    onEdit?: Function,
+    onDelete: ({ id: string, permissions?: BoxItemPermission }) => any,
+    onEdit: (id: string, text: string, hasMention: boolean, permissions?: BoxItemPermission) => any,
     permissions?: BoxItemPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -49,6 +49,11 @@ type State = {
 };
 
 class Comment extends React.Component<Props, State> {
+    static defaultProps = {
+        onDelete: noop,
+        onEdit: noop,
+    };
+
     state = {
         isConfirmingDelete: false,
         isEditing: false,
@@ -57,10 +62,7 @@ class Comment extends React.Component<Props, State> {
 
     handleDeleteConfirm = (): void => {
         const { id, onDelete, permissions } = this.props;
-
-        if (onDelete) {
-            onDelete({ id, permissions });
-        }
+        onDelete({ id, permissions });
     };
 
     handleDeleteCancel = (): void => {
@@ -81,9 +83,9 @@ class Comment extends React.Component<Props, State> {
 
     commentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
-    handleUpdate = (args: any): void => {
-        const { onEdit = noop } = this.props;
-        onEdit(args);
+    handleUpdate = ({ id, text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
+        const { onEdit, permissions } = this.props;
+        onEdit(id, text, hasMention, permissions);
         this.commentFormSubmitHandler();
     };
 
@@ -109,7 +111,7 @@ class Comment extends React.Component<Props, State> {
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
-        const canEdit = !!onEdit && permissions.can_edit; // comment editing not supported
+        const canEdit = onEdit !== noop && permissions.can_edit;
         const canDelete = permissions.can_delete;
         const isMenuVisible = (canDelete || canEdit) && !isPending;
 
@@ -175,10 +177,9 @@ class Comment extends React.Component<Props, State> {
                             <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
                         {isEditing ? (
-                            /* NOTE: Inline editing is not currently supported for comments */
                             <CommentForm
                                 isDisabled={isDisabled}
-                                className={classNames('bcs-activity-feed-comment-input', {
+                                className={classNames('bcs-Comment-editor', {
                                     'bcs-is-disabled': isDisabled,
                                 })}
                                 updateComment={this.handleUpdate}

@@ -169,6 +169,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             type: 'task',
             permissions: { can_edit: true, can_delete: true },
         };
+        const mockOnEdit = jest.fn();
         const wrapper = mount(
             <Comment
                 id="123"
@@ -177,7 +178,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 currentUser={currentUser}
                 handlers={allHandlers}
                 mentionSelectorContacts={mentionSelectorContacts}
-                onEdit={jest.fn()}
+                onEdit={mockOnEdit}
             />,
         );
 
@@ -198,9 +199,16 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        instance.handleUpdate();
+        const updatePayload = { id: '000', hasMention: true, text: 'updated message' };
+        instance.handleUpdate(updatePayload);
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
+        expect(mockOnEdit).toHaveBeenCalledWith(
+            updatePayload.id,
+            updatePayload.text,
+            updatePayload.hasMention,
+            comment.permissions,
+        );
     });
 
     test('should render an error when one is defined', () => {

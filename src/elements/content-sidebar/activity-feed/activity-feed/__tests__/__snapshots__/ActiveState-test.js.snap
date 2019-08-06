@@ -61,6 +61,8 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         }
       }
       id="c_123"
+      onDelete={[Function]}
+      onEdit={[Function]}
       permissions={
         Object {
           "can_delete": false,
