@@ -14,6 +14,7 @@ import {
     DEFAULT_RETRY_DELAY_MS,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
     HTTP_STATUS_CODE_FORBIDDEN,
+    MS_IN_S,
 } from '../../constants';
 import MultiputPart, {
     PART_STATE_UPLOADED,
@@ -77,6 +78,8 @@ class MultiputUpload extends BaseMultiput {
     numPartsUploaded: number;
 
     numPartsUploading: number;
+
+    numResumeRetries: number;
 
     sessionEndpoints: Object;
 
@@ -387,7 +390,7 @@ class MultiputUpload extends BaseMultiput {
         this.fileId = fileId;
         this.sessionId = sessionId;
 
-        this.getSessionInfo(sessionId);
+        this.getSessionInfo();
     }
 
     /**
@@ -397,9 +400,9 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    getSessionInfo = async (session: string): Promise<any> => {
+    getSessionInfo = async (): Promise<any> => {
         const uploadUrl = this.getBaseUploadUrl();
-        const sessionUrl = `${uploadUrl}/files/upload_sessions/${session}`;
+        const sessionUrl = `${uploadUrl}/files/upload_sessions/${this.sessionId}`;
         try {
             const response = await this.xhr.get({ url: sessionUrl });
             this.getSessionSuccessHandler(response.data);
@@ -473,45 +476,61 @@ class MultiputUpload extends BaseMultiput {
         }
 
         const errorData = this.getErrorResponse(error);
-        if (errorData && errorData.status >= 429) {
+        if (this.numResumeRetries > this.config.retries) {
+            this.errorCallback(errorData);
             return;
         }
 
-        // Restart upload process for errors resulting from invalid session
-        this.parts.forEach(part => {
-            part.cancel();
-        });
-        this.parts = [];
-
-        // Reset information about uploaded parts
-        this.fileSha1 = null;
-        this.totalUploadedBytes = 0;
-        this.numPartsNotStarted = 0;
-        this.numPartsDigestComputing = 0;
-        this.numPartsDigestReady = 0;
-        this.numPartsUploading = 0;
-        this.numPartsUploaded = 0;
-        this.firstUnuploadedPartIndex = 0;
-        this.createSessionNumRetriesPerformed = 0;
-        this.partSize = 0;
-        this.commitRetryCount = 0;
-
-        // Abort session
-        clearTimeout(this.createSessionTimeout);
-        clearTimeout(this.commitSessionTimeout);
-        this.abortSession();
-
-        // Restart the uploading process from the beginning
-        const uploadOptions: Object = {
-            file: this.file,
-            folderId: this.folderId,
-            errorCallback: this.errorCallback,
-            progressCallback: this.progressCallback,
-            successCallback: this.successCallback,
-            overwrite: this.overwrite,
-            fileId: this.fileId,
-        };
-        this.upload(uploadOptions);
+        if (errorData && errorData.status === 429) {
+            let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
+            if (errorData.headers) {
+                const retryAfterSec = parseInt(
+                    errorData.headers['retry-after'] || errorData.headers.get('Retry-After'),
+                    10,
+                );
+                if (!Number.isNaN(retryAfterSec)) {
+                    retryAfterMs = retryAfterSec * MS_IN_S;
+                }
+            }
+            this.retryTimeout = setTimeout(this.getSessionInfo, retryAfterMs);
+            this.numResumeRetries += 1;
+        } else if (errorData && errorData.status >= 500) {
+            this.retryTimeout = setTimeout(this.getSessionInfo, 2 ** this.numResumeRetries * MS_IN_S);
+            this.numResumeRetries += 1;
+        } else {
+            // Restart upload process for errors resulting from invalid session
+            this.parts.forEach(part => {
+                part.cancel();
+            });
+            this.parts = [];
+            // Reset information about uploaded parts
+            this.fileSha1 = null;
+            this.totalUploadedBytes = 0;
+            this.numPartsNotStarted = 0;
+            this.numPartsDigestComputing = 0;
+            this.numPartsDigestReady = 0;
+            this.numPartsUploading = 0;
+            this.numPartsUploaded = 0;
+            this.firstUnuploadedPartIndex = 0;
+            this.createSessionNumRetriesPerformed = 0;
+            this.partSize = 0;
+            this.commitRetryCount = 0;
+            // Abort session
+            clearTimeout(this.createSessionTimeout);
+            clearTimeout(this.commitSessionTimeout);
+            this.abortSession();
+            // Restart the uploading process from the beginning
+            const uploadOptions: Object = {
+                file: this.file,
+                folderId: this.folderId,
+                errorCallback: this.errorCallback,
+                progressCallback: this.progressCallback,
+                successCallback: this.successCallback,
+                overwrite: this.overwrite,
+                fileId: this.fileId,
+            };
+            this.upload(uploadOptions);
+        }
     }
 
     /**
@@ -549,7 +568,9 @@ class MultiputUpload extends BaseMultiput {
                 this.abortSession();
             }
         } catch (err) {
-            this.abortSession();
+            if (!this.isResumableUploadsEnabled) {
+                this.abortSession();
+            }
         }
     }
 

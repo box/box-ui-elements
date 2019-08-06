@@ -71,6 +71,21 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('resumeFile()', () => {
+        test('should call resume from api and call updateViewAndCollection', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const item = { api: {} };
+            item.api.resume = jest.fn();
+            instance.updateViewAndCollection = jest.fn();
+
+            instance.resumeFile(item);
+
+            expect(item.api.resume).toBeCalled();
+            expect(instance.updateViewAndCollection).toBeCalled();
+        });
+    });
+
     describe('getUploadAPI()', () => {
         let wrapper;
         let instance;

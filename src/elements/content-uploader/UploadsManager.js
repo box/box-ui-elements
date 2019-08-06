@@ -14,9 +14,11 @@ import { STATUS_ERROR } from '../../constants';
 type Props = {
     isDragging: boolean,
     isExpanded: boolean,
+    isResumableUploadsEnabled: boolean,
     isVisible: boolean,
     items: UploadItem[],
     onItemActionClick: Function,
+    onUploadsManagerActionClick: Function,
     toggleUploadsManager: Function,
     view: View,
 };
@@ -25,9 +27,11 @@ const UploadsManager = ({
     items,
     view,
     onItemActionClick,
+    onUploadsManagerActionClick,
     toggleUploadsManager,
     isExpanded,
     isVisible,
+    isResumableUploadsEnabled,
     isDragging,
 }: Props) => {
     /**
@@ -72,9 +76,15 @@ const UploadsManager = ({
             <OverallUploadsProgressBar
                 isDragging={isDragging}
                 isExpanded={isExpanded}
+                isResumableUploadsEnabled={isResumableUploadsEnabled}
                 isVisible={isVisible}
+                numFailedUploads={items.reduce(
+                    (updatedCount, item) => (item.status === STATUS_ERROR ? updatedCount + 1 : updatedCount),
+                    0,
+                )}
                 onClick={toggleUploadsManager}
                 onKeyDown={handleProgressBarKeyDown}
+                onUploadsManagerActionClick={onUploadsManagerActionClick}
                 percent={percent}
                 view={view}
             />

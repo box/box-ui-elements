@@ -82,6 +82,16 @@ const messages = defineMessages({
         description: 'Label for remove action.',
         defaultMessage: 'Remove',
     },
+    resume: {
+        id: 'be.resume',
+        description: 'Label for resume action for a single file.',
+        defaultMessage: 'Resume',
+    },
+    resumeAll: {
+        id: 'be.resumeAll',
+        description: 'Label for resume action for multiple files.',
+        defaultMessage: 'Resume All',
+    },
     retry: {
         id: 'be.retry',
         description: 'Label for retry action.',

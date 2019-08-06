@@ -971,6 +971,24 @@ class ContentUploader extends Component<Props, State> {
     };
 
     /**
+     * Click all uploads in the Uploads Manager with the given status.
+     *
+     * @private
+     * @param {UploadStatus}
+     * @return {void}
+     */
+    clickAllWithStatus = (status?: UploadStatus) => {
+        const { items } = this.state;
+
+        for (let i = 0; i < items.length; i += 1) {
+            const item = items[i];
+            if (!status || (status && item.status === status)) {
+                this.onClick(item);
+            }
+        }
+    };
+
+    /**
      * Expands the upload manager
      *
      * @return {void}
@@ -1085,6 +1103,7 @@ class ContentUploader extends Component<Props, State> {
             isTouch,
             fileLimit,
             useUploadsManager,
+            isResumableUploadsEnabled,
             isFolderUploadEnabled,
             isDraggingItemsToUploadsManager = false,
         }: Props = this.props;
@@ -1107,9 +1126,11 @@ class ContentUploader extends Component<Props, State> {
                         <UploadsManager
                             isDragging={isDraggingItemsToUploadsManager}
                             isExpanded={isUploadsManagerExpanded}
+                            isResumableUploadsEnabled={isResumableUploadsEnabled}
                             isVisible={isVisible}
                             items={items}
                             onItemActionClick={this.onClick}
+                            onUploadsManagerActionClick={this.clickAllWithStatus}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}
                         />

@@ -10,6 +10,7 @@ import ProgressBar from './ProgressBar';
 import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR, VIEW_UPLOAD_EMPTY } from '../../constants';
 
 import './OverallUploadsProgressBar.scss';
+import UploadsManagerItemAction from './UploadsManagerAction';
 
 /**
  * Get upload status
@@ -53,14 +54,28 @@ const getPercent = (view: string, percent: number): number => {
 type Props = {
     isDragging: boolean,
     isExpanded: boolean,
+    isResumableUploadsEnabled: boolean,
     isVisible: boolean,
+    numFailedUploads: number,
     onClick: Function,
     onKeyDown: Function,
+    onUploadsManagerActionClick: Function,
     percent: number,
     view: View,
 };
 
-const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDragging, isVisible, isExpanded }: Props) => {
+const OverallUploadsProgressBar = ({
+    percent,
+    view,
+    onClick,
+    onKeyDown,
+    onUploadsManagerActionClick,
+    numFailedUploads,
+    isDragging,
+    isResumableUploadsEnabled,
+    isVisible,
+    isExpanded,
+}: Props) => {
     // Show the upload prompt and set progress to 0 when the uploads manager
     // is invisible or is having files dragged to it
     const shouldShowPrompt = isDragging || !isVisible;
@@ -70,6 +85,11 @@ const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDraggi
         getUploadStatus(view)
     );
     const updatedPercent = shouldShowPrompt ? 0 : getPercent(view, percent);
+
+    let button;
+    if (isResumableUploadsEnabled && numFailedUploads > 0) {
+        button = <UploadsManagerItemAction onClick={onUploadsManagerActionClick} numFailedUploads={numFailedUploads} />;
+    }
 
     return (
         <div
@@ -82,6 +102,7 @@ const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDraggi
         >
             <span className="bcu-upload-status">{status}</span>
             <ProgressBar percent={updatedPercent} />
+            {button}
             <span className="bcu-uploads-manager-toggle" />
         </div>
     );
