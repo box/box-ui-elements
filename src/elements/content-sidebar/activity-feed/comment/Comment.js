@@ -179,7 +179,7 @@ class Comment extends React.Component<Props, State> {
                         {isEditing ? (
                             <CommentForm
                                 isDisabled={isDisabled}
-                                className={classNames('bcs-CommentForm-input', 'bcs-Comment-editor', {
+                                className={classNames('bcs-Comment-editor', {
                                     'bcs-is-disabled': isDisabled,
                                 })}
                                 updateComment={this.handleUpdate}
