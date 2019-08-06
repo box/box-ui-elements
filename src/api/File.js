@@ -5,7 +5,6 @@
  */
 
 import queryString from 'query-string';
-import cloneDeep from 'lodash/cloneDeep';
 import getProp from 'lodash/get';
 import { findMissingProperties, fillMissingProperties } from '../utils/fields';
 import { getTypedFileId } from '../utils/file';
@@ -88,36 +87,43 @@ class File extends Item {
      * @param {FileRepresentation} representation - reprsentation that should have it's info.url polled
      * @return {Promise<FileRepresentation>} - representation updated with most current status
      */
-    async generateRepresentation(representation: ?FileRepresentation): Promise<?FileRepresentation> {
+    async generateRepresentation(representation: FileRepresentation): Promise<FileRepresentation> {
         const infoUrl = getProp(representation, 'info.url');
 
-        const numOfTries = 3;
-        const initialTimeout = 500;
-        const backoffFactor = 3;
+        const numOfTries = 4;
+        const initialTimeout = 2000;
+        const backoffFactor = 2;
 
         if (!infoUrl) {
             return representation;
         }
 
-        const pollInfoUrl = async (resolve: Function, reject: Function): Promise<?string> => {
-            const status = getProp(await this.xhr.get({ url: infoUrl }), 'data.status.state');
-            if (!status || status === REPRESENTATIONS_RESPONSE_SUCCESS || status === REPRESENTATIONS_RESPONSE_ERROR) {
-                resolve(status);
-            }
-            reject(status);
+        const isStatusSuccess = response => {
+            const status = getProp(response, 'data.status.state');
+            return !status || status === REPRESENTATIONS_RESPONSE_SUCCESS || status === REPRESENTATIONS_RESPONSE_ERROR;
         };
 
-        try {
-            let newState;
-            try {
-                newState = await new Promise((resolve, reject) => pollInfoUrl(resolve, reject));
-            } catch (e) {
-                newState = await retryNumOfTimes(pollInfoUrl, numOfTries, initialTimeout, backoffFactor);
-            }
-            return representation ? { ...cloneDeep(representation), status: { state: newState } } : representation;
-        } catch (e) {
-            return representation;
-        }
+        return this.xhr
+            .get({ url: infoUrl })
+            .then(() =>
+                retryNumOfTimes(
+                    (successCallback, errorCallback) =>
+                        this.xhr
+                            .get({ url: infoUrl })
+                            .then(response =>
+                                isStatusSuccess(response)
+                                    ? successCallback(response.data)
+                                    : errorCallback(response.data),
+                            )
+                            .catch(e => {
+                                errorCallback(e);
+                            }),
+                    numOfTries,
+                    initialTimeout,
+                    backoffFactor,
+                ),
+            )
+            .catch(() => representation);
     }
 
     /**

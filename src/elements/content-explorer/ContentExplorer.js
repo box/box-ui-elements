@@ -803,11 +803,12 @@ class ContentExplorer extends Component<Props, State> {
     attemptThumbnailGeneration = async (item: BoxItem): Promise<void> => {
         const { features } = this.props;
         const entries = getProp(item, 'representations.entries');
+        const representation = entries[0];
         const fileAPI = this.api.getFileAPI(false);
 
-        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled') && entries) {
-            const updatedRepresentation = await fileAPI.generateRepresentation(entries[0]);
-            if (updatedRepresentation) {
+        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled') && representation) {
+            const updatedRepresentation = await fileAPI.generateRepresentation(representation);
+            if (updatedRepresentation !== representation) {
                 this.updateItemInCollection({
                     ...cloneDeep(item),
                     representations: {
