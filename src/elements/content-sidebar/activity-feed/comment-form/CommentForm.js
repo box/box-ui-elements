@@ -69,7 +69,7 @@ class CommentForm extends React.Component<Props, State> {
         }
 
         if (entityId) {
-            updateComment({ text, hasMention });
+            updateComment({ id: entityId, text, hasMention });
         } else {
             createComment({ text, hasMention });
         }

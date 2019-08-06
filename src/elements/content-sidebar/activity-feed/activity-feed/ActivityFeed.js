@@ -28,6 +28,7 @@ type Props = {
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
+    onCommentUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
@@ -153,6 +154,7 @@ class ActivityFeed extends React.Component<Props, State> {
             activityFeedError,
             onVersionHistoryClick,
             onCommentDelete,
+            onCommentUpdate,
             onTaskDelete,
             onTaskUpdate,
             onTaskAssignmentUpdate,
@@ -186,6 +188,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
+                            onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
                             // We don't know task edit/delete specific permissions,
                             // but you must at least be able to comment to do these operations.
                             onTaskDelete={hasCommentPermission ? onTaskDelete : noop}

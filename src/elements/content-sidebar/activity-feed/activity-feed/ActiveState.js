@@ -22,6 +22,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
+    onCommentEdit?: Function,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
     onTaskEdit?: Function,
@@ -38,6 +39,7 @@ const ActiveState = ({
     getMentionWithQuery,
     onAppActivityDelete,
     onCommentDelete,
+    onCommentEdit,
     onTaskDelete,
     onTaskEdit,
     onTaskAssignmentUpdate,
@@ -64,6 +66,7 @@ const ActiveState = ({
                                 getUserProfileUrl={getUserProfileUrl}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 onDelete={onCommentDelete}
+                                onEdit={onCommentEdit}
                                 permissions={{
                                     can_delete: getProp(permissions, 'can_delete', false),
                                     can_edit: getProp(permissions, 'can_edit', false),

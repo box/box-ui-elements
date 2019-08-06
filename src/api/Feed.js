@@ -1422,6 +1422,73 @@ class Feed extends Base {
     };
 
     /**
+     * Update a comment
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Object} currentUser - the user who performed the action
+     * @param {string} text - the comment text
+     * @param {boolean} hasMention - true if there is an @mention in the text
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @return {void}
+     */
+    updateComment = (
+        file: BoxItem,
+        commentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxItemPermission,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        const commentData = {
+            tagged_message: text,
+        };
+
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+        this.updateFeedItem({ ...commentData, isPending: true }, commentId);
+
+        const message = {};
+        if (hasMention) {
+            message.tagged_message = text;
+        } else {
+            message.message = text;
+        }
+
+        this.commentsAPI = new CommentsAPI(this.options);
+
+        this.commentsAPI.updateComment({
+            file,
+            commentId,
+            permissions,
+            ...message,
+            successCallback: (comment: Comment) => {
+                // use the request payload instead of response in the
+                // feed item update because response may not contain
+                // the tagged version of the message
+                this.updateFeedItem(
+                    {
+                        ...message,
+                        isPending: false,
+                    },
+                    commentId,
+                );
+                if (!this.isDestroyed()) {
+                    successCallback(comment);
+                }
+            },
+            errorCallback: (e: ErrorResponseData, code: string) => {
+                this.feedErrorCallback(true, e, code);
+            },
+        });
+    };
+
+    /**
      * Destroys all the task assignment API's
      *
      * @return {void}
