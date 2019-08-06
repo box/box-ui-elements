@@ -1,4 +1,4 @@
-The `Ghost` component can be used to create loading states and placeholder elements
+The `Ghost` component can be used to create loading states and placeholder elements. The default shape is a 100% width rectangle.
 
 A circle:
 

@@ -8,17 +8,17 @@ type Dimension = string | number;
 
 type Props = {
     /** style.borderRadius */
-    borderRadius: Dimension,
+    borderRadius?: Dimension,
     /** classnames in addition to .bdl-Ghost */
     className?: string,
     /** style.height */
-    height: Dimension,
+    height?: Dimension,
     /** Set to false to remove animated background effect */
     isAnimated?: boolean,
     /** inline styles merged with height/width/radius options */
-    style: {},
+    style?: {},
     /** style.width */
-    width: Dimension,
+    width?: Dimension,
 };
 
 const Ghost = ({ isAnimated = true, className, height, width, borderRadius, style = {}, ...rest }: Props) => (
