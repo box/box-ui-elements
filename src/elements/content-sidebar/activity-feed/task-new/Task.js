@@ -36,6 +36,7 @@ import type { TaskAssigneeCollection, TaskNew, TaskType } from '../../../../comm
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 import TaskActions from './TaskActions';
+import TaskCompletionRuleIcon from './TaskCompletionRuleIcon';
 import TaskDueDate from './TaskDueDate';
 import TaskStatus from './TaskStatus';
 import AssigneeList from './AssigneeList';
@@ -345,6 +346,7 @@ class Task extends React.Component<Props, State> {
                         <div className="bcs-Task-statusContainer">
                             {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
                             <TaskStatus status={status} />
+                            <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>
                         <div className="bcs-Task-assigneeListContainer">
                             <AssigneeList

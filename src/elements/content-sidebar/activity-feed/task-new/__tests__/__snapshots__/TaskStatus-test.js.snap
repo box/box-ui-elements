@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status APPROVED 1`] = `
+<Component
+  status="APPROVED"
+>
+  <FormattedMessage
+    defaultMessage="Status: {taskStatus}"
+    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
+    values={
+      Object {
+        "taskStatus": <span
+          className="bcs-TaskStatus-message approved"
+        >
+          <FormattedMessage
+            defaultMessage="Approved"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedLabel"
+          />
+        </span>,
+      }
+    }
+  >
+    <div />
+  </FormattedMessage>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status COMPLETED 1`] = `
+<Component
+  status="COMPLETED"
+>
+  <FormattedMessage
+    defaultMessage="Status: {taskStatus}"
+    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
+    values={
+      Object {
+        "taskStatus": <span
+          className="bcs-TaskStatus-message completed"
+        >
+          <FormattedMessage
+            defaultMessage="Completed"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedLabel"
+          />
+        </span>,
+      }
+    }
+  >
+    <div />
+  </FormattedMessage>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status IN_PROGRESS 1`] = `
+<Component
+  status="IN_PROGRESS"
+>
+  <FormattedMessage
+    defaultMessage="Status: {taskStatus}"
+    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
+    values={
+      Object {
+        "taskStatus": <span
+          className="bcs-TaskStatus-message inProgress"
+        >
+          <FormattedMessage
+            defaultMessage="In Progress"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressLabel"
+          />
+        </span>,
+      }
+    }
+  >
+    <div />
+  </FormattedMessage>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status NOT_STARTED 1`] = `
+<Component
+  status="NOT_STARTED"
+>
+  <FormattedMessage
+    defaultMessage="Status: {taskStatus}"
+    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
+    values={
+      Object {
+        "taskStatus": <span
+          className="bcs-TaskStatus-message notStarted"
+        >
+          <FormattedMessage
+            defaultMessage="In Progress"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressLabel"
+          />
+        </span>,
+      }
+    }
+  >
+    <div />
+  </FormattedMessage>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status REJECTED 1`] = `
+<Component
+  status="REJECTED"
+>
+  <FormattedMessage
+    defaultMessage="Status: {taskStatus}"
+    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
+    values={
+      Object {
+        "taskStatus": <span
+          className="bcs-TaskStatus-message rejected"
+        >
+          <FormattedMessage
+            defaultMessage="Rejected"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedLabel"
+          />
+        </span>,
+      }
+    }
+  >
+    <div />
+  </FormattedMessage>
+</Component>
+`;
