@@ -1,5 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/i18n components/i18n/FormattedCompMessage should correctly render FormattedCompMessage which starts with HTML, snapshot 1`] = `
+<FormattedCompMessage
+  description="asdf"
+  id="test"
+>
+  <FormattedCompMessage
+    description="asdf"
+    id="test"
+    intl={
+      Object {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+      }
+    }
+    tagName="span"
+  >
+    <span
+      key="test"
+      x-resource-id="test"
+    >
+      <b
+        key="key0"
+      >
+        bold
+      </b>
+       text. More text.
+    </span>
+  </FormattedCompMessage>
+</FormattedCompMessage>
+`;
+
 exports[`components/i18n components/i18n/FormattedCompMessage should correctly render FormattedCompMessage with HTML snapshot 1`] = `
 <FormattedCompMessage
   description="asdf"
@@ -22,7 +53,7 @@ exports[`components/i18n components/i18n/FormattedCompMessage should correctly r
     >
       some 
       <b
-        key="null"
+        key="key0"
       >
         bold
       </b>
@@ -80,7 +111,7 @@ exports[`components/i18n components/i18n/FormattedCompMessage should correctly r
     >
       some 
       <LinkButton
-        key="null"
+        key="key0"
         to="foo"
       >
         <a

@@ -18,6 +18,7 @@ class Composition {
         this.isComposed = false;
 
         this.ma = new MessageAccumulator();
+        this.keyIndex = 0;
     }
 
     recompose(element) {
@@ -67,6 +68,15 @@ class Composition {
     /**
      * @private
      */
+    nextKey() {
+        const result = `key${this.keyIndex}`;
+        this.keyIndex += 1;
+        return result;
+    }
+
+    /**
+     * @private
+     */
     mapToReactElements(node) {
         if (!node) return '';
 
@@ -86,11 +96,11 @@ class Composition {
 
         if (el) {
             return children && children.length
-                ? React.cloneElement(el, { key: el.key }, children)
-                : React.cloneElement(el, { key: el.key });
+                ? React.cloneElement(el, { key: el.key || this.nextKey() }, children)
+                : React.cloneElement(el, { key: el.key || this.nextKey() });
         }
         if (children.length) {
-            return children;
+            return children.length > 1 ? children : children[0];
         }
 
         return node.value || '';
@@ -112,10 +122,21 @@ class Composition {
             this.compose();
         }
         const translation = MessageAccumulator.create(string, this.ma);
-        const nodeArray = this.ma
-            .getPrefix()
+        const nodeArray = [
+            new Node({
+                type: 'root',
+                use: 'start',
+            }),
+        ]
+            .concat(this.ma.getPrefix())
             .concat(translation.root.toArray().slice(1, -1))
-            .concat(this.ma.getSuffix());
+            .concat(this.ma.getSuffix())
+            .concat([
+                new Node({
+                    type: 'root',
+                    use: 'end',
+                }),
+            ]);
         // convert to a tree again
         return this.mapToReactElements(Node.fromArray(nodeArray));
     }

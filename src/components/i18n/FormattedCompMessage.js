@@ -150,7 +150,7 @@ class FormattedCompMessage extends React.Component<Props, State> {
     }
 
     render() {
-        const { count, tagName, intl, description, id, ...rest } = this.props;
+        const { count, tagName, intl, description, id, defaultMessage, ...rest } = this.props;
         const { composition, source } = this.state;
         const values = {};
         if (typeof count === 'number') {

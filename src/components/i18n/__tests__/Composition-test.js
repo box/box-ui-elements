@@ -102,6 +102,22 @@ describe('components/i18n/Composition', () => {
         expect(actual).toEqual(expected);
     });
 
+    test('Compose properly with a complex set of nested subchildren at the beginning of the string to a coded string', () => {
+        const el = React.createElement('span', { key: 'x' }, [
+            React.createElement('b', { key: 'y' }, [
+                'emergency ',
+                React.createElement('i', { key: 'z' }, 'broadcast'),
+                ' system',
+            ]),
+            '. This is only a test.',
+        ]);
+
+        const c = new Composition(el);
+        const expected = '<c0>emergency <c1>broadcast</c1> system</c0>. This is only a test.';
+        const actual = c.compose();
+        expect(actual).toEqual(expected);
+    });
+
     test('Decompose a React element with a string', () => {
         const c = new Composition('simple string');
         expect(c.decompose('einfache Zeichenfolge')).toEqual('einfache Zeichenfolge');
@@ -160,6 +176,21 @@ describe('components/i18n/Composition', () => {
         expect(
             c.decompose('Dies ist ein Test des <c0>Notfall-<c1>Broadcast</c1>-Systems</c0>. Dies ist nur ein Test.'),
         ).toEqual(expected);
+    });
+
+    test('Decompose a React element with subchildren at the beginning of the string', () => {
+        const el = React.createElement('span', { key: 'a' }, [
+            React.createElement('b', { key: 'b' }, 'emergency broadcast system'),
+            '. This is only a test.',
+        ]);
+
+        const expected = React.createElement('span', { key: 'a' }, [
+            React.createElement('b', { key: 'b' }, 'Notfall-Broadcast-Systems'),
+            '. Dies ist nur ein Test.',
+        ]);
+
+        const c = new Composition(el);
+        expect(c.decompose('<c0>Notfall-Broadcast-Systems</c0>. Dies ist nur ein Test.')).toEqual(expected);
     });
 
     test('Make sure other properties are preserved while decomposing', () => {
