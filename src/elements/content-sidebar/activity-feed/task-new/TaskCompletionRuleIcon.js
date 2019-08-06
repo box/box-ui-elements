@@ -18,7 +18,7 @@ const TaskCompletionRuleIcon = ({ completionRule }: Props): React.Node => (
         {completionRule === TASK_COMPLETION_RULE_ANY ? (
             <Tooltip position="top-center" text={<FormattedMessage {...messages.taskAnyAffordanceTooltip} />}>
                 <span>
-                    <IconAnyTask height={9} width={11} className="bcs-TaskCompletionRuleIcon" />
+                    <IconAnyTask height={10} width={10} className="bcs-TaskCompletionRuleIcon" />
                 </span>
             </Tooltip>
         ) : null}
