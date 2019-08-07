@@ -47,6 +47,7 @@ const allSections = [
             '../src/components/dropdown-menu/DropdownMenu.js',
             '../src/components/error-mask/ErrorMask.js',
             '../src/components/flyout/Flyout.js',
+            '../src/components/ghost/Ghost.js',
             '../src/components/flyout/Overlay.js',
             '../src/components/focus-trap/FocusTrap.js',
             '../src/components/footer-indicator/FooterIndicator.js',
