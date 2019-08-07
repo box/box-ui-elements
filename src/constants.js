@@ -10,9 +10,10 @@ import Browser from './utils/Browser';
 export const API_PAGE_LIMIT = 1000; // default limit for paginated api calls
 
 /* ----------------------- Size ---------------------------- */
-export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_LARGE: 'large' = 'large';
 export const SIZE_MEDIUM: 'medium' = 'medium';
+export const SIZE_SMALL: 'small' = 'small';
+export const SIZE_VERY_LARGE: 'very_large' = 'very_large';
 
 /* ----------------------- Views ---------------------------- */
 export const VIEW_FOLDER: 'folder' = 'folder';

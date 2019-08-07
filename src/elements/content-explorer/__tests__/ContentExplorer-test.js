@@ -288,4 +288,30 @@ describe('elements/content-explorer/ContentExplorer', () => {
             });
         });
     });
+
+    describe('getMaxNumberOfGridViewColumnsForWidth()', () => {
+        test('should be able to display 7 columns if isVeryLarge', () => {
+            const wrapper = getWrapper({ isVeryLarge: true });
+            const instance = wrapper.instance();
+            expect(instance.getMaxNumberOfGridViewColumnsForWidth()).toBe(7);
+        });
+
+        test('should only be able to display 5 columns if isLarge', () => {
+            const wrapper = getWrapper({ isLarge: true });
+            const instance = wrapper.instance();
+            expect(instance.getMaxNumberOfGridViewColumnsForWidth()).toBe(5);
+        });
+
+        test('should only be able to display 3 columns if isMedium', () => {
+            const wrapper = getWrapper({ isMedium: true });
+            const instance = wrapper.instance();
+            expect(instance.getMaxNumberOfGridViewColumnsForWidth()).toBe(3);
+        });
+
+        test('should only be able to display 1 column if isSmall', () => {
+            const wrapper = getWrapper({ isSmall: true });
+            const instance = wrapper.instance();
+            expect(instance.getMaxNumberOfGridViewColumnsForWidth()).toBe(1);
+        });
+    });
 });
