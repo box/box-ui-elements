@@ -69,6 +69,9 @@ import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
 
+const GRID_VIEW_MAX_COLUMNS = 7;
+const GRID_VIEW_MIN_COLUMNS = 1;
+
 type Props = {
     apiHost: string,
     appHost: string,
@@ -92,6 +95,7 @@ type Props = {
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
+    isVeryLarge: boolean,
     language?: string,
     logoUrl?: string,
     measureRef?: Function,
@@ -122,6 +126,7 @@ type State = {
     currentPageSize: number,
     errorCode: string,
     focusedRow: number,
+    gridColumnCount: number,
     isCreateFolderModalOpen: boolean,
     isDeleteModalOpen: boolean,
     isLoading: boolean,
@@ -240,6 +245,7 @@ class ContentExplorer extends Component<Props, State> {
             currentPageSize: initialPageSize,
             errorCode: '',
             focusedRow: 0,
+            gridColumnCount: 4,
             isCreateFolderModalOpen: false,
             isDeleteModalOpen: false,
             isLoading: false,
@@ -1280,11 +1286,35 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({ currentOffset: newOffset }, this.refreshCollection);
     };
 
+    /**
+     * Get the current viewMode, checking local store if applicable
+     *
+     * @return {ViewMode}
+     */
     getViewMode = (): ViewMode => {
         const { features }: Props = this.props;
         const viewModePreference = this.store.getItem(localStoreViewMode);
         const isGridViewEnabled = isFeatureEnabled(features, 'contentExplorer.gridView.enabled');
         return isGridViewEnabled && viewModePreference ? viewModePreference : VIEW_MODE_LIST;
+    };
+
+    /**
+     * Get the maximum number of grid view columns based on the current width of the
+     * content explorer.
+     *
+     * @return {number}
+     */
+    getMaxNumberOfGridViewColumnsForWidth = (): number => {
+        const { isSmall, isMedium, isLarge } = this.props;
+        let maxWidthColumns = GRID_VIEW_MAX_COLUMNS;
+        if (isSmall) {
+            maxWidthColumns = 1;
+        } else if (isMedium) {
+            maxWidthColumns = 3;
+        } else if (isLarge) {
+            maxWidthColumns = 5;
+        }
+        return maxWidthColumns;
     };
 
     /**
@@ -1300,6 +1330,19 @@ class ContentExplorer extends Component<Props, State> {
             this.store.setItem(localStoreViewMode, viewMode);
             this.forceUpdate();
         }
+    };
+
+    /**
+     * Callback for when value of GridViewSlider changes
+     *
+     * @param {number} sliderValue - value of slider
+     * @return {void}
+     */
+    onGridViewSliderChange = (sliderValue: number): void => {
+        // need to do this calculation since lowest value of grid view slider
+        // means highest number of columns
+        const gridColumnCount = GRID_VIEW_MAX_COLUMNS - sliderValue + 1;
+        this.setState({ gridColumnCount });
     };
 
     /**
@@ -1349,6 +1392,7 @@ class ContentExplorer extends Component<Props, State> {
             currentCollection,
             currentPageSize,
             searchQuery,
+            gridColumnCount,
             isDeleteModalOpen,
             isRenameModalOpen,
             isShareModalOpen,
@@ -1368,6 +1412,7 @@ class ContentExplorer extends Component<Props, State> {
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
 
         const viewMode = this.getViewMode();
+        const maxGridColumnCount = this.getMaxNumberOfGridViewColumnsForWidth();
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1391,37 +1436,43 @@ class ContentExplorer extends Component<Props, State> {
                             currentCollection={currentCollection}
                             canUpload={allowUpload}
                             canCreateNewFolder={allowCreate}
+                            gridColumnCount={gridColumnCount}
+                            gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                            gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                            maxGridColumnCountForWidth={maxGridColumnCount}
                             onUpload={this.upload}
                             onCreate={this.createFolder}
+                            onGridViewSliderChange={this.onGridViewSliderChange}
                             onItemClick={this.fetchFolder}
                             onSortChange={this.sort}
                             onViewModeChange={this.changeViewMode}
                         />
                         <Content
-                            view={view}
-                            viewMode={viewMode}
-                            rootId={rootFolderId}
-                            isSmall={isSmall}
-                            isMedium={isMedium}
-                            isTouch={isTouch}
-                            rootElement={this.rootElement}
-                            focusedRow={focusedRow}
+                            canDelete={canDelete}
+                            canDownload={canDownload}
+                            canPreview={canPreview}
+                            canRename={canRename}
                             canSetShareAccess={canSetShareAccess}
                             canShare={canShare}
-                            canPreview={canPreview}
-                            canDelete={canDelete}
-                            canRename={canRename}
-                            canDownload={canDownload}
                             currentCollection={currentCollection}
-                            tableRef={this.tableRef}
-                            onItemSelect={this.select}
+                            focusedRow={focusedRow}
+                            gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
+                            isMedium={isMedium}
+                            isSmall={isSmall}
+                            isTouch={isTouch}
                             onItemClick={this.onItemClick}
                             onItemDelete={this.delete}
                             onItemDownload={this.download}
-                            onItemRename={this.rename}
-                            onItemShare={this.share}
                             onItemPreview={this.preview}
+                            onItemRename={this.rename}
+                            onItemSelect={this.select}
+                            onItemShare={this.share}
                             onSortChange={this.sort}
+                            rootElement={this.rootElement}
+                            rootId={rootFolderId}
+                            tableRef={this.tableRef}
+                            view={view}
+                            viewMode={viewMode}
                         />
                         <Footer>
                             <Pagination

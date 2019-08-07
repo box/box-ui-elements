@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import noop from 'lodash/noop';
 import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
@@ -16,8 +17,13 @@ type Props = {
     canCreateNewFolder: boolean,
     canUpload: boolean,
     currentCollection: Collection,
+    gridColumnCount?: number,
+    gridMaxColumns?: number,
+    gridMinColumns?: number,
     isSmall: boolean,
+    maxGridColumnCountForWidth?: number,
     onCreate: Function,
+    onGridViewSliderChange?: (newSliderValue: number) => void,
     onItemClick: Function,
     onSortChange: Function,
     onUpload: Function,
@@ -32,6 +38,11 @@ const SubHeader = ({
     canCreateNewFolder,
     canUpload,
     currentCollection,
+    gridColumnCount = 0,
+    gridMaxColumns = 0,
+    gridMinColumns = 0,
+    maxGridColumnCountForWidth = 0,
+    onGridViewSliderChange = noop,
     isSmall,
     onCreate,
     onItemClick,
@@ -56,12 +67,17 @@ const SubHeader = ({
             canCreateNewFolder={canCreateNewFolder}
             canUpload={canUpload}
             currentCollection={currentCollection}
-            viewMode={viewMode}
+            gridColumnCount={gridColumnCount}
+            gridMaxColumns={gridMaxColumns}
+            gridMinColumns={gridMinColumns}
+            maxGridColumnCountForWidth={maxGridColumnCountForWidth}
             onCreate={onCreate}
-            onViewModeChange={onViewModeChange}
+            onGridViewSliderChange={onGridViewSliderChange}
             onSortChange={onSortChange}
             onUpload={onUpload}
+            onViewModeChange={onViewModeChange}
             view={view}
+            viewMode={viewMode}
         />
     </div>
 );

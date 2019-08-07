@@ -137,6 +137,16 @@ const messages = defineMessages({
         description: 'Label for switching to grid view',
         defaultMessage: 'Switch to Grid View',
     },
+    gridViewIncreaseColumnSize: {
+        id: 'be.gridView.increaseColumnSize',
+        description: 'Label for increasing the size of columns in grid view',
+        defaultMessage: 'Increase column size',
+    },
+    gridViewDecreaseColumnSize: {
+        id: 'be.gridView.decreaseColumnSize',
+        description: 'Label for decreasing the size of columns in grid view',
+        defaultMessage: 'Decrease column size',
+    },
     listView: {
         id: 'be.listView',
         description: 'Label for switching to list view',
