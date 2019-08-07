@@ -406,6 +406,13 @@ const messages = defineMessages({
         description: 'Text to display for a group of users who have accepted an invitation to collaborate',
         id: 'boxui.unifiedShare.collaboration.groupCollabText',
     },
+
+    // Recommended Sharing Tooltip messages
+    recommendedSharingTooltipCalloutText: {
+        defaultMessage: 'Based on your usage, we think {fullName} would be interested in this file.',
+        description: 'Tooltip description to explain recommendation for sharing tooltip',
+        id: 'boxui.unifiedShare.recommendedSharingTooltipCalloutText',
+    },
 });
 
 export default messages;
