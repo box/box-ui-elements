@@ -54,4 +54,19 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
         expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render disabled button when blocked by shield access policy', () => {
+        const mockSrc = 'https://foo.com/image';
+        const props = {
+            title: 'test title',
+            iconUrl: mockSrc,
+            id: 4,
+            callback: () => {},
+            status: 'BLOCKED_BY_SHIELD_ACCESS_POLICY',
+        };
+
+        const wrapper = getWrapper(props);
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });
