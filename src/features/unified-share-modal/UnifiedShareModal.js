@@ -92,6 +92,8 @@ type Props = {
     onRequestClose?: Function,
     /** Handler function for clicks on the settings icon. If not provided, the settings icon won't be rendered. */
     onSettingsClick?: Function,
+    /** Shows a callout tooltip next to the names / email addresses input field explaining pre-populated recommendation */
+    recommendedSharingTooltipCalloutName: ?string,
     /**
      * Function to send collab invitations based on the given parameters object.
      * This function should return a Promise.
@@ -463,6 +465,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             contactLimit,
             getCollaboratorContacts,
             item,
+            recommendedSharingTooltipCalloutName = null,
             sendInvitesError,
             showEnterEmailsCallout = false,
             showCalloutForUser = false,
@@ -513,17 +516,32 @@ class UnifiedShareModal extends React.Component<Props, State> {
                 </div>
             </div>
         );
+        const ftuxTooltipProps = {
+            className: 'usm-ftux-tooltip',
+            isShown: shouldRenderFTUXTooltip && showCalloutForUser,
+            position: 'middle-left',
+            showCloseButton: true,
+            text: ftuxTooltipText,
+            theme: 'callout',
+        };
+        const recommendedSharingTooltipProps = {
+            isShown: !!recommendedSharingTooltipCalloutName,
+            position: 'middle-left',
+            text: (
+                <FormattedMessage
+                    {...messages.recommendedSharingTooltipCalloutText}
+                    values={{ fullName: recommendedSharingTooltipCalloutName }}
+                />
+            ),
+            theme: 'callout',
+        };
+        const tooltipPropsToRender = recommendedSharingTooltipCalloutName
+            ? recommendedSharingTooltipProps
+            : ftuxTooltipProps;
 
         return (
             <React.Fragment>
-                <Tooltip
-                    className="usm-ftux-tooltip"
-                    isShown={shouldRenderFTUXTooltip && showCalloutForUser}
-                    position="middle-left"
-                    showCloseButton
-                    text={ftuxTooltipText}
-                    theme="callout"
-                >
+                <Tooltip {...tooltipPropsToRender}>
                     <div className="invite-collaborator-container">
                         <EmailForm
                             contactLimit={contactLimit}
