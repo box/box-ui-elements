@@ -18,6 +18,7 @@ import {
     FIELD_IS_DOWNLOAD_AVAILABLE,
     REPRESENTATIONS_RESPONSE_ERROR,
     REPRESENTATIONS_RESPONSE_SUCCESS,
+    REPRESENTATIONS_RESPONSE_VIEWABLE,
     X_REP_HINTS,
 } from '../constants';
 import Item from './Item';
@@ -100,7 +101,12 @@ class File extends Item {
 
         const isStatusSuccess = response => {
             const status = getProp(response, 'data.status.state');
-            return !status || status === REPRESENTATIONS_RESPONSE_SUCCESS || status === REPRESENTATIONS_RESPONSE_ERROR;
+            return (
+                !status ||
+                status === REPRESENTATIONS_RESPONSE_ERROR ||
+                status === REPRESENTATIONS_RESPONSE_SUCCESS ||
+                status === REPRESENTATIONS_RESPONSE_VIEWABLE
+            );
         };
 
         return this.xhr

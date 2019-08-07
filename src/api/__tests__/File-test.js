@@ -2,6 +2,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import Cache from '../../utils/Cache';
 import * as fields from '../../utils/fields';
 import File from '../File';
+import * as utils from '../../utils/function';
 import TokenService from '../../utils/TokenService';
 import { X_REP_HINTS, ERROR_CODE_FETCH_FILE, ERROR_CODE_GET_DOWNLOAD_URL, FIELD_EXTENSION } from '../../constants';
 
@@ -93,6 +94,70 @@ describe('api/File', () => {
             return file.getDownloadUrl('foo', downloadFile, success, error).catch(() => {
                 expect(success).not.toHaveBeenCalled();
                 expect(error).toHaveBeenCalledWith(new Error(ERROR), ERROR_CODE_GET_DOWNLOAD_URL);
+            });
+        });
+    });
+
+    describe('generateRepresentation()', () => {
+        const representation = { info: { url: 'info.url' } };
+
+        test('should return given representation if info.url is not defined', () => {
+            const badRepresentation = { representation: 'representation' };
+
+            file.xhr = {
+                get: jest.fn(),
+            };
+
+            utils.retryNumOfTimes = jest.fn();
+
+            return file.generateRepresentation(badRepresentation).then(result => {
+                expect(file.xhr.get).not.toHaveBeenCalled();
+                expect(result).toBe(badRepresentation);
+            });
+        });
+
+        test('should return given representation initial xhr request is rejected', () => {
+            file.xhr = {
+                get: jest.fn().mockReturnValue(Promise.reject(new Error())),
+            };
+
+            utils.retryNumOfTimes = jest.fn();
+
+            return file.generateRepresentation(representation).then(result => {
+                expect(file.xhr.get).toHaveBeenCalled();
+                expect(utils.retryNumOfTimes).not.toHaveBeenCalled();
+                expect(result).toEqual(representation);
+            });
+        });
+
+        test('should return given representation if retryNumOfTimes throws error', () => {
+            file.xhr = {
+                get: jest.fn().mockReturnValue(Promise.resolve('data')),
+            };
+
+            utils.retryNumOfTimes = jest.fn().mockImplementation(() => {
+                throw new Error();
+            });
+
+            return file.generateRepresentation(representation).then(result => {
+                expect(file.xhr.get).toHaveBeenCalled();
+                expect(utils.retryNumOfTimes).toHaveBeenCalled();
+                expect(result).toEqual(representation);
+            });
+        });
+
+        test('should return updated representation if successful', () => {
+            const updatedRepresentation = 'updatedRepresentation';
+            file.xhr = {
+                get: jest.fn().mockReturnValue(Promise.resolve('data')),
+            };
+
+            utils.retryNumOfTimes = jest.fn().mockReturnValue(updatedRepresentation);
+
+            return file.generateRepresentation(representation).then(result => {
+                expect(file.xhr.get).toHaveBeenCalled();
+                expect(utils.retryNumOfTimes).toHaveBeenCalled();
+                expect(result).toBe(updatedRepresentation);
             });
         });
     });
