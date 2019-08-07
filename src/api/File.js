@@ -85,7 +85,7 @@ class File extends Item {
     /**
      * Polls a representation's infoUrl, attempting to generate a representation
      *
-     * @param {FileRepresentation} representation - reprsentation that should have it's info.url polled
+     * @param {FileRepresentation} representation - representation that should have it's info.url polled
      * @return {Promise<FileRepresentation>} - representation updated with most current status
      */
     async generateRepresentation(representation: FileRepresentation): Promise<FileRepresentation> {
@@ -109,27 +109,22 @@ class File extends Item {
             );
         };
 
-        return this.xhr
-            .get({ url: infoUrl })
-            .then(() =>
-                retryNumOfTimes(
-                    (successCallback, errorCallback) =>
-                        this.xhr
-                            .get({ url: infoUrl })
-                            .then(response =>
-                                isStatusSuccess(response)
-                                    ? successCallback(response.data)
-                                    : errorCallback(response.data),
-                            )
-                            .catch(e => {
-                                errorCallback(e);
-                            }),
-                    numOfTries,
-                    initialTimeout,
-                    backoffFactor,
-                ),
-            )
-            .catch(() => representation);
+        return this.xhr.get({ url: infoUrl }).then(() =>
+            retryNumOfTimes(
+                (successCallback, errorCallback) =>
+                    this.xhr
+                        .get({ url: infoUrl })
+                        .then(response =>
+                            isStatusSuccess(response) ? successCallback(response.data) : errorCallback(response.data),
+                        )
+                        .catch(e => {
+                            errorCallback(e);
+                        }),
+                numOfTries,
+                initialTimeout,
+                backoffFactor,
+            ),
+        );
     }
 
     /**

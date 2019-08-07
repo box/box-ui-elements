@@ -231,7 +231,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
         });
 
         describe('thumbnails', () => {
-            const baseItem = { id: '1', selected: true };
+            const baseItem = { id: '1', selected: true, type: 'file' };
             const baseCollection = {
                 boxItem: {},
                 id: '0',
@@ -294,7 +294,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 });
             });
 
-            test('should not call attemptThumbnail generation if thumbnail null', () => {
+            test('should not call attemptThumbnailGeneration if thumbnail is null', () => {
                 const getThumbnailUrl = jest.fn().mockReturnValue(null);
                 const getFileAPI = jest.fn().mockReturnValue({
                     getThumbnailUrl,
@@ -311,7 +311,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 });
             });
 
-            test('should not call attemptThumbnail generation isThumbnailReady is true', () => {
+            test('should not call attemptThumbnailGeneration if isThumbnailReady is true', () => {
                 const getThumbnailUrl = jest.fn().mockReturnValue(null);
                 const getFileAPI = jest.fn().mockReturnValue({
                     getThumbnailUrl,
@@ -329,7 +329,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 });
             });
 
-            test('should call attemptThumbnail generation isThumbnailReady is true', () => {
+            test('should call attemptThumbnailGeneration if isThumbnailReady is false', () => {
                 const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
                 const getFileAPI = jest.fn().mockReturnValue({
                     getThumbnailUrl,
@@ -344,6 +344,26 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
                 return instance.updateCollection(collection, item, callback).then(() => {
                     expect(instance.attemptThumbnailGeneration).toHaveBeenCalled();
+                });
+            });
+
+            test('should not call attemptThumbnailGeneration or getThumbnailUrl if item is not file', () => {
+                const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
+                const getFileAPI = jest.fn().mockReturnValue({
+                    getThumbnailUrl,
+                });
+
+                wrapper = getWrapper(gridViewOn);
+                instance = wrapper.instance();
+                instance.api = { getFileAPI };
+                instance.setState = jest.fn();
+                instance.attemptThumbnailGeneration = jest.fn();
+                utils.isThumbnailReady = jest.fn().mockReturnValue(false);
+
+                collection.items[0].type = 'folder';
+                return instance.updateCollection(collection, item, callback).then(() => {
+                    expect(instance.attemptThumbnailGeneration).not.toHaveBeenCalled();
+                    expect(getThumbnailUrl).not.toHaveBeenCalled();
                 });
             });
         });

@@ -765,7 +765,11 @@ class ContentExplorer extends Component<Props, State> {
         let itemThumbnails = [];
         if (isGridViewEnabled) {
             const fileAPI = this.api.getFileAPI(false);
-            itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
+            itemThumbnails = await Promise.all(
+                items.map(item => {
+                    return item.type === TYPE_FILE ? fileAPI.getThumbnailUrl(item) : null;
+                }),
+            );
         }
 
         newCollection.items = items.map((item, index) => {
@@ -779,7 +783,7 @@ class ContentExplorer extends Component<Props, State> {
                 thumbnailUrl,
             };
 
-            if (thumbnailUrl && !isThumbnailReady(newItem)) {
+            if (item.type === TYPE_FILE && thumbnailUrl && !isThumbnailReady(newItem)) {
                 this.attemptThumbnailGeneration(newItem);
             }
 
@@ -828,6 +832,7 @@ class ContentExplorer extends Component<Props, State> {
         const { currentCollection } = this.state;
         const { items = [] } = currentCollection;
         const newCollection = { ...currentCollection };
+
         newCollection.items = items.map(item => (item.id === newItem.id ? newItem : item));
         this.setState({ currentCollection: newCollection });
     };

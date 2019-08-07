@@ -116,21 +116,22 @@ describe('api/File', () => {
             });
         });
 
-        test('should return given representation initial xhr request is rejected', () => {
+        test('should throw from get if initial xhr request is rejected', () => {
             file.xhr = {
-                get: jest.fn().mockReturnValue(Promise.reject(new Error())),
+                get: jest.fn().mockImplementation(() => {
+                    throw new Error();
+                }),
             };
 
             utils.retryNumOfTimes = jest.fn();
 
-            return file.generateRepresentation(representation).then(result => {
-                expect(file.xhr.get).toHaveBeenCalled();
+            return file.generateRepresentation(representation).catch(() => {
+                expect(file.xhr.get).toThrow();
                 expect(utils.retryNumOfTimes).not.toHaveBeenCalled();
-                expect(result).toEqual(representation);
             });
         });
 
-        test('should return given representation if retryNumOfTimes throws error', () => {
+        test('should throw from retryNumOfTimes if xhr successful but retryNumOfTimes unsuccessful throws error', () => {
             file.xhr = {
                 get: jest.fn().mockReturnValue(Promise.resolve('data')),
             };
@@ -139,10 +140,9 @@ describe('api/File', () => {
                 throw new Error();
             });
 
-            return file.generateRepresentation(representation).then(result => {
+            return file.generateRepresentation(representation).catch(() => {
                 expect(file.xhr.get).toHaveBeenCalled();
-                expect(utils.retryNumOfTimes).toHaveBeenCalled();
-                expect(result).toEqual(representation);
+                expect(utils.retryNumOfTimes).toThrow();
             });
         });
 
