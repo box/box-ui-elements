@@ -49,6 +49,7 @@ type Props = {
     onRequestClose: Function,
     onSubmit: Function,
     openInviteCollaboratorsSection?: Function,
+    recommendedSharingTooltipCalloutName?: ?string,
     selectedContacts: Array<Contact>,
     sendButtonProps?: Object,
     showEnterEmailsCallout: boolean,
@@ -234,6 +235,7 @@ class EmailForm extends React.Component<Props, State> {
             isExpanded,
             messageProps,
             onPillCreate,
+            recommendedSharingTooltipCalloutName,
             sendButtonProps,
             showEnterEmailsCallout,
             selectedContacts,
@@ -241,16 +243,34 @@ class EmailForm extends React.Component<Props, State> {
             suggestedCollaborators,
         } = this.props;
 
+        const ftuxTooltipProps = {
+            className: 'usm-ftux-tooltip',
+            isShown: showEnterEmailsCallout,
+            position: 'middle-right',
+            showCloseButton: true,
+            text: <FormattedMessage {...messages.enterEmailAddressesCalloutText} />,
+            theme: 'callout',
+        };
+
+        const recommendedSharingTooltipProps = {
+            isShown: !!recommendedSharingTooltipCalloutName,
+            position: 'middle-left',
+            text: (
+                <FormattedMessage
+                    {...messages.recommendedSharingTooltipCalloutText}
+                    values={{ fullName: recommendedSharingTooltipCalloutName }}
+                />
+            ),
+            theme: 'callout',
+        };
+
+        const tooltipPropsToRender = recommendedSharingTooltipCalloutName
+            ? recommendedSharingTooltipProps
+            : ftuxTooltipProps;
+
         const contactsField = (
             <div className="tooltip-target">
-                <Tooltip
-                    className="usm-ftux-tooltip"
-                    isShown={showEnterEmailsCallout}
-                    position="middle-right"
-                    showCloseButton
-                    text={<FormattedMessage {...messages.enterEmailAddressesCalloutText} />}
-                    theme="callout"
-                >
+                <Tooltip {...tooltipPropsToRender}>
                     <ContactsField
                         disabled={!isContactsFieldEnabled}
                         error={contactsFieldError}
