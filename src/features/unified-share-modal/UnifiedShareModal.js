@@ -518,30 +518,17 @@ class UnifiedShareModal extends React.Component<Props, State> {
         );
         const ftuxTooltipProps = {
             className: 'usm-ftux-tooltip',
-            isShown: shouldRenderFTUXTooltip && showCalloutForUser,
+            // don't want ftux tooltip to show if the recommended sharing tooltip callout is showing
+            isShown: !recommendedSharingTooltipCalloutName && shouldRenderFTUXTooltip && showCalloutForUser,
             position: 'middle-left',
             showCloseButton: true,
             text: ftuxTooltipText,
             theme: 'callout',
         };
-        const recommendedSharingTooltipProps = {
-            isShown: !!recommendedSharingTooltipCalloutName,
-            position: 'middle-left',
-            text: (
-                <FormattedMessage
-                    {...messages.recommendedSharingTooltipCalloutText}
-                    values={{ fullName: recommendedSharingTooltipCalloutName }}
-                />
-            ),
-            theme: 'callout',
-        };
-        const tooltipPropsToRender = recommendedSharingTooltipCalloutName
-            ? recommendedSharingTooltipProps
-            : ftuxTooltipProps;
 
         return (
             <React.Fragment>
-                <Tooltip {...tooltipPropsToRender}>
+                <Tooltip {...ftuxTooltipProps}>
                     <div className="invite-collaborator-container">
                         <EmailForm
                             contactLimit={contactLimit}
@@ -558,6 +545,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                             onRequestClose={this.closeInviteCollaborators}
                             onSubmit={this.handleSendInvites}
                             openInviteCollaboratorsSection={this.openInviteCollaboratorsSection}
+                            recommendedSharingTooltipCalloutName={recommendedSharingTooltipCalloutName}
                             showEnterEmailsCallout={showEnterEmailsCallout}
                             submitting={submitting}
                             selectedContacts={this.state.inviteCollabsContacts}

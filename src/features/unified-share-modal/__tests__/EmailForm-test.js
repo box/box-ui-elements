@@ -396,5 +396,27 @@ describe('features/unified-share-modal/EmailForm', () => {
             });
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is a string', () => {
+            const wrapper = getWrapper({
+                recommendedSharingTooltipCalloutName: 'Foo Bar',
+            });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test.each([[null], [undefined]])(
+            'should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is null or undefined',
+            recommendedSharingTooltipCalloutName => {
+                const wrapper = getWrapper({
+                    recommendedSharingTooltipCalloutName,
+                });
+                expect(wrapper).toMatchSnapshot();
+            },
+        );
+
+        test('should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is not passed in', () => {
+            const wrapper = getWrapper();
+            expect(wrapper).toMatchSnapshot();
+        });
     });
 });
