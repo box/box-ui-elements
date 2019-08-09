@@ -609,3 +609,186 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   </ModalActions>
 </form>
 `;
+
+exports[`features/unified-share-modal/EmailForm render() should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is a string 1`] = `
+<form
+  className=""
+  onSubmit={[Function]}
+>
+  <div
+    className="tooltip-target"
+  >
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      isShown={true}
+      position="middle-left"
+      text={
+        <FormattedMessage
+          defaultMessage="Based on your usage, we think {fullName} would be interested in this file."
+          id="boxui.unifiedShare.recommendedSharingTooltipCalloutText"
+          values={
+            Object {
+              "fullName": "Foo Bar",
+            }
+          }
+        />
+      }
+      theme="callout"
+    >
+      <ContactsField
+        disabled={false}
+        error=""
+        fieldRef={
+          Object {
+            "current": null,
+          }
+        }
+        getContacts={[MockFunction]}
+        onContactAdd={[Function]}
+        onContactRemove={[Function]}
+        onInput={[Function]}
+        selectedContacts={Array []}
+        validateForError={[Function]}
+        validator={[Function]}
+      />
+    </Tooltip>
+  </div>
+</form>
+`;
+
+exports[`features/unified-share-modal/EmailForm render() should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is not passed in 1`] = `
+<form
+  className=""
+  onSubmit={[Function]}
+>
+  <div
+    className="tooltip-target"
+  >
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      isShown={true}
+      position="middle-right"
+      showCloseButton={true}
+      text={
+        <FormattedMessage
+          defaultMessage="Share this item with coworkers by entering their email addresses"
+          id="boxui.unifiedShare.enterEmailAddressesCalloutText"
+        />
+      }
+      theme="callout"
+    >
+      <ContactsField
+        disabled={false}
+        error=""
+        fieldRef={
+          Object {
+            "current": null,
+          }
+        }
+        getContacts={[MockFunction]}
+        onContactAdd={[Function]}
+        onContactRemove={[Function]}
+        onInput={[Function]}
+        selectedContacts={Array []}
+        validateForError={[Function]}
+        validator={[Function]}
+      />
+    </Tooltip>
+  </div>
+</form>
+`;
+
+exports[`features/unified-share-modal/EmailForm render() should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is null or undefined 1`] = `
+<form
+  className=""
+  onSubmit={[Function]}
+>
+  <div
+    className="tooltip-target"
+  >
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      isShown={true}
+      position="middle-right"
+      showCloseButton={true}
+      text={
+        <FormattedMessage
+          defaultMessage="Share this item with coworkers by entering their email addresses"
+          id="boxui.unifiedShare.enterEmailAddressesCalloutText"
+        />
+      }
+      theme="callout"
+    >
+      <ContactsField
+        disabled={false}
+        error=""
+        fieldRef={
+          Object {
+            "current": null,
+          }
+        }
+        getContacts={[MockFunction]}
+        onContactAdd={[Function]}
+        onContactRemove={[Function]}
+        onInput={[Function]}
+        selectedContacts={Array []}
+        validateForError={[Function]}
+        validator={[Function]}
+      />
+    </Tooltip>
+  </div>
+</form>
+`;
+
+exports[`features/unified-share-modal/EmailForm render() should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is null or undefined 2`] = `
+<form
+  className=""
+  onSubmit={[Function]}
+>
+  <div
+    className="tooltip-target"
+  >
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      isShown={true}
+      position="middle-right"
+      showCloseButton={true}
+      text={
+        <FormattedMessage
+          defaultMessage="Share this item with coworkers by entering their email addresses"
+          id="boxui.unifiedShare.enterEmailAddressesCalloutText"
+        />
+      }
+      theme="callout"
+    >
+      <ContactsField
+        disabled={false}
+        error=""
+        fieldRef={
+          Object {
+            "current": null,
+          }
+        }
+        getContacts={[MockFunction]}
+        onContactAdd={[Function]}
+        onContactRemove={[Function]}
+        onInput={[Function]}
+        selectedContacts={Array []}
+        validateForError={[Function]}
+        validator={[Function]}
+      />
+    </Tooltip>
+  </div>
+</form>
+`;
