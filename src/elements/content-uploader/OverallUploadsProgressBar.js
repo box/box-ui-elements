@@ -52,11 +52,11 @@ const getPercent = (view: string, percent: number): number => {
 };
 
 type Props = {
+    hasMultipleFailedUploads: boolean,
     isDragging: boolean,
     isExpanded: boolean,
-    isResumableUploadsEnabled: boolean,
+    isResumeVisible: boolean,
     isVisible: boolean,
-    numFailedUploads: number,
     onClick: Function,
     onKeyDown: Function,
     onUploadsManagerActionClick: Function,
@@ -70,11 +70,11 @@ const OverallUploadsProgressBar = ({
     onClick,
     onKeyDown,
     onUploadsManagerActionClick,
-    numFailedUploads,
     isDragging,
-    isResumableUploadsEnabled,
+    isResumeVisible,
     isVisible,
     isExpanded,
+    hasMultipleFailedUploads,
 }: Props) => {
     // Show the upload prompt and set progress to 0 when the uploads manager
     // is invisible or is having files dragged to it
@@ -85,11 +85,6 @@ const OverallUploadsProgressBar = ({
         getUploadStatus(view)
     );
     const updatedPercent = shouldShowPrompt ? 0 : getPercent(view, percent);
-
-    let button;
-    if (isResumableUploadsEnabled && numFailedUploads > 0) {
-        button = <UploadsManagerItemAction onClick={onUploadsManagerActionClick} numFailedUploads={numFailedUploads} />;
-    }
 
     return (
         <div
@@ -102,7 +97,12 @@ const OverallUploadsProgressBar = ({
         >
             <span className="bcu-upload-status">{status}</span>
             <ProgressBar percent={updatedPercent} />
-            {button}
+            {isResumeVisible && (
+                <UploadsManagerItemAction
+                    hasMultipleFailedUploads={hasMultipleFailedUploads}
+                    onClick={onUploadsManagerActionClick}
+                />
+            )}
             <span className="bcu-uploads-manager-toggle" />
         </div>
     );

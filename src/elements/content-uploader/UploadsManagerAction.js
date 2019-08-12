@@ -10,25 +10,23 @@ import PrimaryButton from '../../components/primary-button';
 import { STATUS_ERROR } from '../../constants';
 
 type Props = {
-    numFailedUploads: number,
+    hasMultipleFailedUploads: boolean,
     onClick: Function,
 };
 
-const UploadsManagerAction = ({ onClick, numFailedUploads }: Props) => {
+const UploadsManagerAction = ({ onClick, hasMultipleFailedUploads }: Props) => {
     const handleResumeClick = event => {
         event.stopPropagation();
         onClick(STATUS_ERROR);
     };
 
-    const resumeMessage =
-        numFailedUploads > 1 ? <FormattedMessage {...messages.resumeAll} /> : <FormattedMessage {...messages.resume} />;
+    const resumeMessage = hasMultipleFailedUploads ? messages.resumeAll : messages.resume;
 
     return (
         <PrimaryButton onClick={handleResumeClick} type="button">
-            {resumeMessage}
+            <FormattedMessage {...resumeMessage} />
         </PrimaryButton>
     );
 };
 
-export { UploadsManagerAction };
 export default UploadsManagerAction;

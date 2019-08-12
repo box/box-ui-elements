@@ -51,17 +51,18 @@ const UploadsManager = ({
         }
     };
 
-    const totalSize = items.reduce(
-        (updatedSize, item) => (item.status === STATUS_ERROR || item.isFolder ? updatedSize : updatedSize + item.size),
-        0,
-    );
-    const totalUploaded = items.reduce(
-        (updatedSize, item) =>
-            item.status === STATUS_ERROR || item.isFolder
-                ? updatedSize
-                : updatedSize + (item.size * item.progress) / 100.0,
-        0,
-    );
+    let numFailedUploads = 0;
+    let totalSize = 0;
+    let totalUploaded = 0;
+    items.forEach(item => {
+        if (!(item.status === STATUS_ERROR || item.isFolder)) {
+            totalSize += item.size;
+            totalUploaded += (item.size * item.progress) / 100.0;
+        } else if (item.status === STATUS_ERROR) {
+            numFailedUploads += 1;
+        }
+    });
+
     const percent = (totalUploaded / totalSize) * 100;
 
     return (
@@ -76,12 +77,9 @@ const UploadsManager = ({
             <OverallUploadsProgressBar
                 isDragging={isDragging}
                 isExpanded={isExpanded}
-                isResumableUploadsEnabled={isResumableUploadsEnabled}
+                isResumeVisible={isResumableUploadsEnabled && numFailedUploads > 0}
                 isVisible={isVisible}
-                numFailedUploads={items.reduce(
-                    (updatedCount, item) => (item.status === STATUS_ERROR ? updatedCount + 1 : updatedCount),
-                    0,
-                )}
+                hasMultipleFailedUploads={numFailedUploads > 1}
                 onClick={toggleUploadsManager}
                 onKeyDown={handleProgressBarKeyDown}
                 onUploadsManagerActionClick={onUploadsManagerActionClick}

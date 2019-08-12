@@ -743,6 +743,7 @@ class ContentUploader extends Component<Props, State> {
         };
 
         item.status = STATUS_IN_PROGRESS;
+        delete item.error;
         const { items } = this.state;
         items[items.indexOf(item)] = item;
 
@@ -786,7 +787,7 @@ class ContentUploader extends Component<Props, State> {
         const { onUpload, useUploadsManager } = this.props;
 
         item.progress = 100;
-        if (item.status !== STATUS_ERROR) {
+        if (!item.error) {
             item.status = STATUS_COMPLETE;
         }
         this.numItemsUploading -= 1;
@@ -950,7 +951,10 @@ class ContentUploader extends Component<Props, State> {
      */
     onClick = (item: UploadItem) => {
         const { chunked, isResumableUploadsEnabled } = this.props;
-        const { status } = item;
+        const { status, file } = item;
+        const isChunkedUpload = chunked && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
+        const isResumable = isResumableUploadsEnabled && isChunkedUpload && item.api.sessionId;
+
         switch (status) {
             case STATUS_IN_PROGRESS:
             case STATUS_COMPLETE:
@@ -958,7 +962,7 @@ class ContentUploader extends Component<Props, State> {
                 this.removeFileFromUploadQueue(item);
                 break;
             case STATUS_ERROR:
-                if (isResumableUploadsEnabled && chunked && item.api.sessionId) {
+                if (isResumable) {
                     this.resumeFile(item);
                 } else {
                     this.resetFile(item);
@@ -980,12 +984,11 @@ class ContentUploader extends Component<Props, State> {
     clickAllWithStatus = (status?: UploadStatus) => {
         const { items } = this.state;
 
-        for (let i = 0; i < items.length; i += 1) {
-            const item = items[i];
+        items.forEach(item => {
             if (!status || (status && item.status === status)) {
                 this.onClick(item);
             }
-        }
+        });
     };
 
     /**

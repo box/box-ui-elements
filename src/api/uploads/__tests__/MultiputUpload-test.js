@@ -420,35 +420,9 @@ describe('api/uploads/MultiputUpload', () => {
     });
 
     describe('getSessionSuccessHandler()', () => {
-        test('should commit if all parts have been uploaded', () => {
-            // Setup
-            multiputUploadTest.numPartsUploaded = 20;
-            const response = {
-                data: {
-                    total_parts: 20,
-                    part_size: multiputUploadTest.partSize,
-                    session_endpoints: {
-                        uploadPart: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123',
-                        listParts: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123/parts',
-                        commit: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123/commit',
-                        abort: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123',
-                        logEvent: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123/log',
-                    },
-                },
-            };
-
-            // Expectations
-            multiputUploadTest.commitSession = jest.fn();
-
-            // Execute
-            multiputUploadTest.getSessionSuccessHandler(response.data);
-            expect(multiputUploadTest.commitSession).toHaveBeenCalled();
-        });
-
-        test('should call processNextParts if some parts are not uploaded', () => {
-            // Setup
-            multiputUploadTest.numPartsUploaded = 20;
-            const response = {
+        let response;
+        beforeEach(() => {
+            response = {
                 data: {
                     total_parts: 25,
                     part_size: multiputUploadTest.partSize,
@@ -461,6 +435,23 @@ describe('api/uploads/MultiputUpload', () => {
                     },
                 },
             };
+        });
+
+        test('should commit if all parts have been uploaded', () => {
+            // Setup
+            multiputUploadTest.numPartsUploaded = 25;
+
+            // Expectations
+            multiputUploadTest.commitSession = jest.fn();
+
+            // Execute
+            multiputUploadTest.getSessionSuccessHandler(response.data);
+            expect(multiputUploadTest.commitSession).toHaveBeenCalled();
+        });
+
+        test('should call processNextParts if some parts are not uploaded', () => {
+            // Setup
+            multiputUploadTest.numPartsUploaded = 20;
 
             multiputUploadTest.processNextParts = jest.fn();
 
@@ -481,19 +472,6 @@ describe('api/uploads/MultiputUpload', () => {
                 { state: PART_STATE_UPLOADING, numUploadRetriesPerformed: 2, uploadedBytes: 5 },
             ];
 
-            const response = {
-                data: {
-                    total_parts: 25,
-                    part_size: multiputUploadTest.partSize,
-                    session_endpoints: {
-                        uploadPart: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123',
-                        listParts: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123/parts',
-                        commit: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123/commit',
-                        abort: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123',
-                        logEvent: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123/log',
-                    },
-                },
-            };
             multiputUploadTest.processNextParts = jest.fn();
 
             // Execute
@@ -525,19 +503,6 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.firstUnuploadedPartIndex = 0;
             multiputUploadTest.parts = [{ state: PART_STATE_COMPUTING_DIGEST, numDigestRetriesPerformed: 3 }];
 
-            const response = {
-                data: {
-                    total_parts: 25,
-                    part_size: multiputUploadTest.partSize,
-                    session_endpoints: {
-                        uploadPart: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123',
-                        listParts: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123/parts',
-                        commit: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123/commit',
-                        abort: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123',
-                        logEvent: 'https://upload.box.com/api/2.0/files/content?upload_session_id=123/log',
-                    },
-                },
-            };
             multiputUploadTest.processNextParts = jest.fn();
 
             // Execute

@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import isNaN from 'lodash/isNaN';
 import Base from '../Base';
 import { DEFAULT_RETRY_DELAY_MS, MS_IN_S } from '../../constants';
 
@@ -103,18 +104,7 @@ class BaseUpload extends Base {
             this.retryCount += 1;
             // When rate limited, retry after interval defined in header
         } else if (errorData && (errorData.status === 429 || errorData.code === 'too_many_requests')) {
-            let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
-
-            if (errorData.headers) {
-                const retryAfterSec = parseInt(
-                    errorData.headers['retry-after'] || errorData.headers.get('Retry-After'),
-                    10,
-                );
-
-                if (!Number.isNaN(retryAfterSec)) {
-                    retryAfterMs = retryAfterSec * MS_IN_S;
-                }
-            }
+            const retryAfterMs = this.getRetryAfter(errorData);
 
             this.retryTimeout = setTimeout(this.makePreflightRequest, retryAfterMs);
             this.retryCount += 1;
@@ -152,6 +142,28 @@ class BaseUpload extends Base {
 
             reader.onerror = reject;
         });
+    }
+
+    /**
+     * Get retry-after value from header
+     *
+     * @param {Object}
+     * @return {Promise}
+     */
+    getRetryAfter(errorData: Object): number {
+        let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
+
+        if (errorData.headers) {
+            const retryAfterSec = parseInt(
+                errorData.headers['retry-after'] || errorData.headers.get('Retry-After'),
+                10,
+            );
+
+            if (!isNaN(retryAfterSec)) {
+                retryAfterMs = retryAfterSec * MS_IN_S;
+            }
+        }
+        return retryAfterMs;
     }
 }
 
