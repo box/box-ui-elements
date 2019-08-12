@@ -21,10 +21,11 @@ const ICON_CHECK_COLOR = '#26C281';
 type Props = {
     isFolder?: boolean,
     onClick: Function,
+    progress: number,
     status: UploadStatus,
 } & InjectIntlProvidedProps;
 
-const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
+const ItemAction = ({ status, onClick, intl, isFolder = false, progress }: Props) => {
     let icon = <IconClose />;
     let target = null;
     let resin = {};
@@ -60,7 +61,7 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     return (
         <div className="bcu-item-action">
             <Tooltip position="top-left" text={tooltip}>
-                <PlainButton onClick={onClick} type="button" {...resin}>
+                <PlainButton onClick={onClick} type="button" isDisabled={progress === 100} {...resin}>
                     {icon}
                 </PlainButton>
             </Tooltip>
