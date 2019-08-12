@@ -15,7 +15,7 @@ exports[`icons/general/IconTaskGeneral should correctly render default icon 1`] 
       className="background-color"
       cx="16.162"
       cy="16.162"
-      fill="#26c281"
+      fill="#0061d5"
       r="16"
     />
     <path
