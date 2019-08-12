@@ -51,6 +51,8 @@ type SubMenuItem = {
     scaleIcon?: boolean,
     /** Whether the current page is associated with the current link */
     selected?: boolean,
+    /** Whether to show drop zone only when hovered over */
+    showDropZoneOnHover?: boolean,
     /** Whether the tooltip should be shown */
     showTooltip?: boolean,
 };
@@ -95,6 +97,8 @@ type MenuItem = {
     selected?: boolean,
     /** Whether child icons of this menu item should be shown */
     showChildIcons?: boolean,
+    /** Whether to show drop zone only when hovered over */
+    showDropZoneOnHover?: boolean,
     /** Whether to show a loading indicator on the list */
     showLoadingIndicator?: boolean,
     /** Whether the tooltip should be shown */
@@ -220,6 +224,7 @@ class LeftSidebar extends React.Component<Props, State> {
             id,
             menuItems,
             placeholder,
+            showDropZoneOnHover,
         } = headerLinkProps;
 
         const heading = onToggleCollapse ? (
@@ -263,7 +268,11 @@ class LeftSidebar extends React.Component<Props, State> {
         );
 
         return canReceiveDrop ? (
-            <LeftSidebarDropWrapper isDragging={leftSidebarProps.isDragging} dropTargetRef={dropTargetRef}>
+            <LeftSidebarDropWrapper
+                isDragging={leftSidebarProps.isDragging}
+                dropTargetRef={dropTargetRef}
+                showDropZoneOnHover={showDropZoneOnHover}
+            >
                 {builtNavList}
             </LeftSidebarDropWrapper>
         ) : (
@@ -290,6 +299,7 @@ class LeftSidebar extends React.Component<Props, State> {
             scaleIcon,
             selected = false,
             showTooltip,
+            showDropZoneOnHover,
         } = props;
 
         const linkClassNames = classNames('left-sidebar-link', className, {
@@ -323,6 +333,7 @@ class LeftSidebar extends React.Component<Props, State> {
                 isDragging={leftSidebarProps.isDragging}
                 dropTargetRef={dropTargetRef}
                 key={`link-${id}`}
+                showDropZoneOnHover={showDropZoneOnHover}
             >
                 {builtLink}
             </LeftSidebarDropWrapper>
