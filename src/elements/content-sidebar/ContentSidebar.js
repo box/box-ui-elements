@@ -51,7 +51,7 @@ type Props = {
     hasMetadata: boolean,
     hasSkills: boolean,
     history?: RouterHistory,
-    isLarge?: boolean,
+    isDefaultOpen?: boolean,
     language?: string,
     messages?: StringMap,
     metadataSidebarProps: MetadataSidebarProps,
@@ -97,7 +97,7 @@ class ContentSidebar extends React.Component<Props, State> {
         hasAdditionalTabs: false,
         hasMetadata: false,
         hasSkills: false,
-        isLarge: true,
+        isDefaultOpen: true,
         metadataSidebarProps: {},
     };
 
@@ -311,7 +311,7 @@ class ContentSidebar extends React.Component<Props, State> {
             hasMetadata,
             hasSkills,
             history,
-            isLarge,
+            isDefaultOpen,
             language,
             messages,
             metadataSidebarProps,
@@ -344,7 +344,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             hasAdditionalTabs={hasAdditionalTabs}
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
-                            isLarge={isLarge}
+                            isDefaultOpen={isDefaultOpen}
                             isLoading={isLoading}
                             metadataEditors={metadataEditors}
                             metadataSidebarProps={metadataSidebarProps}

@@ -39,7 +39,7 @@ type Props = {
     hasMetadata: boolean,
     hasSkills: boolean,
     history: RouterHistory,
-    isLarge?: boolean,
+    isDefaultOpen?: boolean,
     isLoading?: boolean,
     location: Location,
     metadataEditors?: Array<MetadataEditor>,
@@ -60,7 +60,7 @@ export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
-        isLarge: true,
+        isDefaultOpen: true,
         isLoading: false,
     };
 
@@ -187,7 +187,7 @@ class Sidebar extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasAdditionalTabs,
-            isLarge,
+            isDefaultOpen,
             isLoading,
             metadataEditors,
             metadataSidebarProps,
@@ -196,7 +196,7 @@ class Sidebar extends React.Component<Props, State> {
             versionsSidebarProps,
         }: Props = this.props;
 
-        const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isLarge;
+        const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
