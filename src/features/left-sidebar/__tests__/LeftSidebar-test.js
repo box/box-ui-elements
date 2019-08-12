@@ -285,6 +285,26 @@ describe('feature/left-sidebar/LeftSidebar', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should use custom render for menu item if provided', () => {
+        const oneMenuItem = [
+            {
+                navLinkRenderer: () => <h1>Custom Link</h1>,
+                id: 'all-files',
+                message: 'All Files',
+                htmlAttributes: {
+                    href: '/folder/0',
+                },
+                routerLink: undefined,
+                routerProps: undefined,
+                showTooltip: true,
+            },
+        ];
+
+        const wrapper = shallow(<LeftSidebar menuItems={oneMenuItem} />);
+
+        expect(wrapper.exists('h1')).toBeTruthy();
+    });
+
     describe('checkAndChangeScrollShadows()', () => {
         [
             // isn't scrollable

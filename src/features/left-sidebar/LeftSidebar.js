@@ -13,8 +13,8 @@ import CopyrightFooter from './CopyrightFooter';
 import InstantLogin from './InstantLogin';
 import LeftSidebarDropWrapper from './LeftSidebarDropWrapper';
 import LeftSidebarIconWrapper from './LeftSidebarIconWrapper';
-import LeftSidebarLink from './LeftSidebarLink';
 import NewItemsIndicator from './NewItemsIndicator';
+import defaultNavLinkRenderer from './defaultNavLinkRenderer';
 
 import type { Callout } from './Callout';
 
@@ -39,6 +39,7 @@ type SubMenuItem = {
     id: string,
     /** Localized text string to use for individual menu items */
     message: string,
+    navLinkRenderer?: Function,
     /** Whether we should show a badge marking new item content */
     newItemBadge?: boolean,
     /** Optional remove link click handler */
@@ -282,6 +283,7 @@ class LeftSidebar extends React.Component<Props, State> {
             iconElement,
             id,
             message,
+            navLinkRenderer,
             newItemBadge,
             onClickRemove,
             removeButtonHtmlAttributes,
@@ -296,26 +298,24 @@ class LeftSidebar extends React.Component<Props, State> {
             'is-selected': selected,
         });
 
-        const builtLink = (
-            <LeftSidebarLink
-                callout={callout}
-                canReceiveDrop={canReceiveDrop}
-                className={linkClassNames}
-                customTheme={leftSidebarProps.customTheme}
-                onClickRemove={onClickRemove}
-                htmlAttributes={htmlAttributes}
-                icon={this.getIcon(iconElement, iconComponent, leftSidebarProps.customTheme, selected, scaleIcon)}
-                isScrolling={this.state.isScrolling}
-                key={`link-${id}`}
-                message={message}
-                newItemBadge={this.getNewItemBadge(newItemBadge, leftSidebarProps.customTheme)}
-                removeButtonHtmlAttributes={removeButtonHtmlAttributes}
-                routerLink={routerLink}
-                routerProps={routerProps}
-                selected={selected}
-                showTooltip={showTooltip}
-            />
-        );
+        const linkProps = {
+            callout,
+            className: linkClassNames,
+            customTheme: leftSidebarProps.customTheme,
+            onClickRemove,
+            htmlAttributes,
+            icon: this.getIcon(iconElement, iconComponent, leftSidebarProps.customTheme, selected, scaleIcon),
+            isScrolling: this.state.isScrolling,
+            message,
+            newItemBadge: this.getNewItemBadge(newItemBadge, leftSidebarProps.customTheme),
+            removeButtonHtmlAttributes,
+            routerLink,
+            routerProps,
+            selected,
+            showTooltip,
+        };
+
+        const builtLink = navLinkRenderer ? navLinkRenderer(linkProps) : defaultNavLinkRenderer(linkProps);
 
         // Check for menu items on links so we don't double-highlight groups
         return canReceiveDrop && !props.menuItems ? (
@@ -327,7 +327,7 @@ class LeftSidebar extends React.Component<Props, State> {
                 {builtLink}
             </LeftSidebarDropWrapper>
         ) : (
-            builtLink
+            <React.Fragment key={`link-${id}`}>{builtLink}</React.Fragment>
         );
     }
 
