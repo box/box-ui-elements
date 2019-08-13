@@ -288,6 +288,7 @@ class Task extends React.Component<Props, State> {
                                     {permissions.can_update && (
                                         <MenuItem
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
+                                            data-resin-component="tasks"
                                             data-testid="edit-task"
                                             onClick={this.handleEditClick}
                                         >
@@ -298,6 +299,7 @@ class Task extends React.Component<Props, State> {
                                     {permissions.can_delete && (
                                         <MenuItem
                                             data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
+                                            data-resin-component="tasks"
                                             data-testid="delete-task"
                                             onClick={this.handleDeleteClick}
                                         >
