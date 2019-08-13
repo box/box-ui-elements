@@ -861,6 +861,40 @@ describe('api/uploads/MultiputUpload', () => {
         });
     });
 
+    describe('commitSession()', () => {
+        beforeEach(() => {
+            multiputUploadTest.xhr.post = jest.fn().mockResolvedValue();
+            multiputUploadTest.sessionEndpoints.commit =
+                'https://upload.box.com/api/2.0/files/content?upload_session_id=123/commit';
+        });
+
+        test('should noop when isDestroyed', () => {
+            multiputUploadTest.destroyed = true;
+
+            multiputUploadTest.commitSession();
+
+            expect(multiputUploadTest.xhr.post).not.toHaveBeenCalled();
+        });
+
+        test('should commit session with file sha1 included in header', () => {
+            multiputUploadTest.parts = [];
+            multiputUploadTest.fileSha1 = '123456789';
+            const postData = {
+                url: multiputUploadTest.sessionEndpoints.commit,
+                data: { parts: [], attributes: {} },
+                headers: {
+                    Digest: `sha=${multiputUploadTest.fileSha1}`,
+                    'X-Box-Client-Event-Info':
+                        '{"avg_part_read_time":null,"avg_part_digest_time":null,"avg_file_digest_time":null,"avg_part_upload_time":null}',
+                },
+            };
+
+            multiputUploadTest.commitSession();
+
+            expect(multiputUploadTest.xhr.post).toHaveBeenCalledWith(postData);
+        });
+    });
+
     describe('onWorkerMessage()', () => {
         beforeEach(() => {
             multiputUploadTest.isDestroyed = jest.fn();
