@@ -2,7 +2,7 @@
 
 exports[`feature/left-sidebar/LeftSidebarDropWrapper render should not render drop zone if it is not hovered and showDropZoneOnHover is true  1`] = `
 <div
-  className="left-sidebar-drop-wrapper "
+  className="left-sidebar-drop-wrapper"
   onMouseEnter={[Function]}
   onMouseLeave={[Function]}
 >
@@ -12,7 +12,7 @@ exports[`feature/left-sidebar/LeftSidebarDropWrapper render should not render dr
 
 exports[`feature/left-sidebar/LeftSidebarDropWrapper render should render a LeftSidebarDropWrapper component 1`] = `
 <div
-  className="left-sidebar-drop-wrapper "
+  className="left-sidebar-drop-wrapper"
 >
   <div />
 </div>
@@ -20,7 +20,7 @@ exports[`feature/left-sidebar/LeftSidebarDropWrapper render should render a Left
 
 exports[`feature/left-sidebar/LeftSidebarDropWrapper render should render drop zone if it is hovered and showDropZoneOnHover is true  1`] = `
 <div
-  className="left-sidebar-drop-wrapper "
+  className="left-sidebar-drop-wrapper"
   onMouseEnter={[Function]}
   onMouseLeave={[Function]}
 >
