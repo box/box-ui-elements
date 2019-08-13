@@ -130,22 +130,22 @@ describe('elements/content-sidebar/Sidebar', () => {
 
     describe('render', () => {
         test.each`
-            forced                        | isLarge  | expected
-            ${SIDEBAR_FORCE_VALUE_CLOSED} | ${true}  | ${false}
-            ${SIDEBAR_FORCE_VALUE_CLOSED} | ${false} | ${false}
-            ${SIDEBAR_FORCE_VALUE_OPEN}   | ${true}  | ${true}
-            ${SIDEBAR_FORCE_VALUE_OPEN}   | ${false} | ${true}
-            ${null}                       | ${true}  | ${true}
-            ${null}                       | ${false} | ${false}
+            forced                        | isDefaultOpen | expected
+            ${SIDEBAR_FORCE_VALUE_CLOSED} | ${true}       | ${false}
+            ${SIDEBAR_FORCE_VALUE_CLOSED} | ${false}      | ${false}
+            ${SIDEBAR_FORCE_VALUE_OPEN}   | ${true}       | ${true}
+            ${SIDEBAR_FORCE_VALUE_OPEN}   | ${false}      | ${true}
+            ${null}                       | ${true}       | ${true}
+            ${null}                       | ${false}      | ${false}
         `(
-            'should render the open state correctly with forced set to $forced and isLarge set to $isLarge',
-            ({ expected, forced, isLarge }) => {
+            'should render the open state correctly with forced set to $forced and isDefaultOpen set to $isDefaultOpen',
+            ({ expected, forced, isDefaultOpen }) => {
                 LocalStore.mockImplementationOnce(() => ({
                     getItem: jest.fn(() => forced),
                     setItem: jest.fn(() => forced),
                 }));
 
-                const wrapper = getWrapper({ isLarge });
+                const wrapper = getWrapper({ isDefaultOpen });
 
                 expect(wrapper.hasClass('bcs-is-open')).toBe(expected);
             },
