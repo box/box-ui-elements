@@ -48,9 +48,14 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           data-testid="task-actions-menu"
           dropdownProps={Object {}}
           isDisabled={false}
+          menuProps={
+            Object {
+              "data-resin-component": "activityfeedtaskoptions",
+            }
+          }
         >
           <MenuItem
-            data-resin-target="activityfeed-inlineedit"
+            data-resin-target="activityfeed-taskoptions-edit"
             data-testid="edit-task"
             onClick={[Function]}
           >
@@ -63,7 +68,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
             />
           </MenuItem>
           <MenuItem
-            data-resin-target="activityfeed-inlinedelete"
+            data-resin-component="tasks"
+            data-resin-target="activityfeed-taskoptions-delete"
             data-testid="delete-task"
             onClick={[Function]}
           >

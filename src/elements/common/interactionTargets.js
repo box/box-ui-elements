@@ -28,8 +28,8 @@ export const DETAILS_TARGETS = {
 };
 
 export const ACTIVITY_TARGETS = {
-    INLINE_EDIT: 'activityfeed-inlineedit',
-    INLINE_DELETE: 'activityfeed-inlinedelete',
+    INLINE_DELETE_CONFIRM: 'activityfeed-delete-confirm',
+    INLINE_DELETE_CANCEL: 'activityfeed-delete-cancel',
     APPROVAL_FORM_ADD_TASK: 'activityfeed-apporvalformaddtask',
     APPROVAL_FORM_CANCEL: 'activityfeed-approvalformcancel',
     APPROVAL_FORM_POST: 'activityfeed-approvalformpost',
@@ -40,6 +40,12 @@ export const ACTIVITY_TARGETS = {
     TASK_APPROVE: 'activityfeed-taskapprove',
     TASK_COMPLETE: 'activityfeed-taskcomplete',
     TASK_REJECT: 'activityfeed-taskreject',
+    TASK_OPTIONS: 'activityfeedtaskoptions', // component
+    TASK_OPTIONS_DELETE: 'activityfeed-taskoptions-delete',
+    TASK_OPTIONS_EDIT: 'activityfeed-taskoptions-edit',
+    COMMENT_OPTIONS: 'activityfeedcommentoptions', // component
+    COMMENT_OPTIONS_DELETE: 'activityfeed-commentoptions-delete',
+    COMMENT_OPTIONS_EDIT: 'activityfeed-commentoptions-edit',
 };
 
 export const SKILLS_TARGETS = {

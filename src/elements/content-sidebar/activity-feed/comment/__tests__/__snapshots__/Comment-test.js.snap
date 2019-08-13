@@ -40,9 +40,14 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           data-testid="comment-actions-menu"
           dropdownProps={Object {}}
           isDisabled={false}
+          menuProps={
+            Object {
+              "data-resin-component": "activityfeedcommentoptions",
+            }
+          }
         >
           <MenuItem
-            data-resin-target="activityfeed-inlinedelete"
+            data-resin-target="activityfeed-commentoptions-delete"
             data-testid="delete-comment"
             onClick={[Function]}
           >
