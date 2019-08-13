@@ -2,6 +2,8 @@
 import * as React from 'react';
 import LeftSidebarLink from './LeftSidebarLink';
 
+import type { Callout } from './Callout';
+
 type Props = {
     callout?: Callout,
     className?: string,

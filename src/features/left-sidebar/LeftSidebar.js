@@ -39,6 +39,7 @@ type SubMenuItem = {
     id: string,
     /** Localized text string to use for individual menu items */
     message: string,
+    /** Optional left side bar link renderer. Defaults to defaultNavLinkRenderer */
     navLinkRenderer?: Function,
     /** Whether we should show a badge marking new item content */
     newItemBadge?: boolean,
@@ -79,6 +80,8 @@ type MenuItem = {
     menuItems?: Array<SubMenuItem>,
     /** Localized text string to use for individual menu items */
     message: string,
+    /** Optional left side bar link renderer. Defaults to defaultNavLinkRenderer */
+    navLinkRenderer?: Function,
     /** Whether we should show a badge marking new item content */
     newItemBadge?: boolean,
     /** Optional remove link click handler */
