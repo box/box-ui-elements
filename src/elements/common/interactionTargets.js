@@ -40,12 +40,12 @@ export const ACTIVITY_TARGETS = {
     TASK_APPROVE: 'activityfeed-taskapprove',
     TASK_COMPLETE: 'activityfeed-taskcomplete',
     TASK_REJECT: 'activityfeed-taskreject',
-    TASK_OPTIONS: 'activityfeedtaskoptions', // component
-    TASK_OPTIONS_DELETE: 'activityfeed-taskoptions-delete',
-    TASK_OPTIONS_EDIT: 'activityfeed-taskoptions-edit',
-    COMMENT_OPTIONS: 'activityfeedcommentoptions', // component
-    COMMENT_OPTIONS_DELETE: 'activityfeed-commentoptions-delete',
-    COMMENT_OPTIONS_EDIT: 'activityfeed-commentoptions-edit',
+    TASK_OPTIONS: 'activityfeedtask', // component
+    TASK_OPTIONS_DELETE: 'activityfeed-task-delete',
+    TASK_OPTIONS_EDIT: 'activityfeed-task-edit',
+    COMMENT_OPTIONS: 'activityfeedcomment', // component
+    COMMENT_OPTIONS_DELETE: 'activityfeed-comment-delete',
+    COMMENT_OPTIONS_EDIT: 'activityfeed-comment-edit',
 };
 
 export const SKILLS_TARGETS = {

@@ -50,12 +50,12 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           isDisabled={false}
           menuProps={
             Object {
-              "data-resin-component": "activityfeedtaskoptions",
+              "data-resin-component": "activityfeedtask",
             }
           }
         >
           <MenuItem
-            data-resin-target="activityfeed-taskoptions-edit"
+            data-resin-target="activityfeed-task-edit"
             data-testid="edit-task"
             onClick={[Function]}
           >
@@ -69,7 +69,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           </MenuItem>
           <MenuItem
             data-resin-component="tasks"
-            data-resin-target="activityfeed-taskoptions-delete"
+            data-resin-target="activityfeed-task-delete"
             data-testid="delete-task"
             onClick={[Function]}
           >
