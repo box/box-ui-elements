@@ -1122,6 +1122,9 @@ class ContentExplorer extends Component<Props, State> {
                     .getFile(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             case TYPE_WEBLINK:
+                this.api
+                    .getWebLinkAPI()
+                    .getWeblink(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             default:
                 throw new Error('Unknown Type');
