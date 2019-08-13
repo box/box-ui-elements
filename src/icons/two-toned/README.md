@@ -118,7 +118,7 @@ const icons = [
                             }
 
                             .icon-task-general-example .background-color {
-                                fill: #0061d5;
+                                fill: #26c281;
                             }
                         `}
                     </style>
@@ -140,7 +140,7 @@ const icons = [
                             }
 
                             .icon-task-approval-example .background-color {
-                                fill: #0061d5;
+                                fill: #f5b31b;
                             }
                         `}
                     </style>
