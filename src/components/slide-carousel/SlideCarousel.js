@@ -11,7 +11,12 @@ type Props = {
     className?: string,
     /** Used as the value for the content area's style height property */
     contentHeight?: string,
+    /** If provided, turns this into a controlled component where the parent chooses which slide index to render */
+    currentIndex?: number,
+    /** Index of initial slide to render. Will be overriden by currentIndex if currentIndex is provided */
     initialIndex: number,
+    /** Callback for when the slide changes */
+    onSlideChange?: (newIndex: number) => void,
     title?: string,
 };
 
@@ -35,6 +40,11 @@ class SlideCarousel extends React.Component<Props, State> {
         };
     }
 
+    isControlled() {
+        const { currentIndex } = this.props;
+        return currentIndex !== undefined;
+    }
+
     /*
      * If the selected index in the state has somehow gotten set to an
      * out of bounds value (either because we were passed a bad value,
@@ -42,17 +52,26 @@ class SlideCarousel extends React.Component<Props, State> {
      * index which is a floored value between 0 <= index < num children
      */
     getBoundedSelectedIndex() {
-        const { children } = this.props;
+        const { children, currentIndex } = this.props;
         const { selectedIndex } = this.state;
 
+        const indexToCheck = this.isControlled() ? currentIndex : selectedIndex;
+
         const lastChildIndex = Math.max(React.Children.count(children) - 1, 0);
-        const boundedSelectedIndex = Math.max(selectedIndex || 0, 0);
+        const boundedSelectedIndex = Math.max(indexToCheck || 0, 0);
 
         return boundedSelectedIndex > lastChildIndex ? lastChildIndex : Math.floor(boundedSelectedIndex);
     }
 
     setSelectedIndex = (index: number) => {
-        this.setState({ selectedIndex: index });
+        const { onSlideChange } = this.props;
+        if (!this.isControlled()) {
+            // Only update local state if we're using this as an uncontrolled component
+            this.setState({ selectedIndex: index });
+        }
+        if (onSlideChange) {
+            onSlideChange(index);
+        }
     };
 
     id: string;

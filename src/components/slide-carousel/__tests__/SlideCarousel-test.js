@@ -104,6 +104,18 @@ describe('components/slide-carousel/SlideCarousel', () => {
         });
     });
 
+    describe('isControlled()', () => {
+        test('should return true if currentIndex is provided', () => {
+            const wrapper = getWrapper({ currentIndex: 0 });
+            expect(wrapper.instance().isControlled()).toBe(true);
+        });
+
+        test('should return false if currentIndex is not provided', () => {
+            const wrapper = getWrapper();
+            expect(wrapper.instance().isControlled()).toBe(false);
+        });
+    });
+
     describe('setSelectedIndex()', () => {
         test('should update selectedIndex when setSelectedIndex is called', () => {
             const wrapper = getWrapper({ children: getSlides(7) });
@@ -114,6 +126,19 @@ describe('components/slide-carousel/SlideCarousel', () => {
             wrapper.instance().setSelectedIndex(1);
 
             expect(wrapper.state('selectedIndex')).toBe(1);
+        });
+
+        test('should not update selectedIndex state if currentIndex is provided (controlled component)', () => {
+            const wrapper = getWrapper({ currentIndex: 2 });
+            wrapper.instance().setSelectedIndex(3);
+            expect(wrapper.state('selectedIndex')).toBe(defaultProps.initialIndex);
+        });
+
+        test('should call onSlideChange with the new index if provided', () => {
+            const onSlideChangeMock = jest.fn();
+            const wrapper = getWrapper({ onSlideChange: onSlideChangeMock });
+            wrapper.instance().setSelectedIndex(3);
+            expect(onSlideChangeMock).toHaveBeenCalledWith(3);
         });
     });
 });
