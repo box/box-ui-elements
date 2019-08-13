@@ -304,7 +304,6 @@ class Task extends React.Component<Props, State> {
                                     {permissions.can_delete && (
                                         <MenuItem
                                             data-resin-target={ACTIVITY_TARGETS.TASK_OPTIONS_DELETE}
-                                            data-resin-component="tasks"
                                             data-testid="delete-task"
                                             onClick={this.handleDeleteClick}
                                         >
