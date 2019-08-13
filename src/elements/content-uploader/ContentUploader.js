@@ -1049,6 +1049,7 @@ class ContentUploader extends Component<Props, State> {
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some(item => item.status === STATUS_IN_PROGRESS);
+        const allDone = items.every(item => item.progress === 100);
 
         const styleClassName = classNames('bcu', className, {
             'be-app-element': !useUploadsManager,
@@ -1089,6 +1090,7 @@ class ContentUploader extends Component<Props, State> {
                             onCancel={this.cancel}
                             onClose={onClose}
                             onUpload={this.upload}
+                            isDone={allDone}
                         />
                     </div>
                 )}
