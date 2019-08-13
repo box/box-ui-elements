@@ -64,6 +64,14 @@ describe('components/modal/ModalDialog', () => {
         expect(closeButtonWrapper.prop('data-custom-close-button')).toEqual('asdf');
     });
 
+    test('should render button instead of icon to close modal when closeButtonText provided', () => {
+        wrapper.setProps({
+            closeButtonProps: { 'data-custom-close-button': 'asdf' },
+            closeButtonText: 'hello',
+        });
+        expect(wrapper.find('.bdl-ModalCloseButton--with-custom-text')).toMatchSnapshot();
+    });
+
     test('should not render close button when onRequestClose is falsey', () => {
         wrapper.setProps({ onRequestClose: undefined });
         expect(wrapper.find('.modal-close-button').length).toBeFalsy();

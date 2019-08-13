@@ -5,6 +5,7 @@ import omit from 'lodash/omit';
 import uniqueId from 'lodash/uniqueId';
 import { defineMessages, injectIntl } from 'react-intl';
 
+import Button from '../button';
 import IconClose from '../../icons/general/IconClose';
 
 const ALERT_TYPE = 'alert';
@@ -22,6 +23,7 @@ type Props = {
     children: React.Node,
     className?: string,
     closeButtonProps: Object,
+    closeButtonText?: string,
     intl: Object,
     modalRef?: Function,
     onRequestClose?: Function,
@@ -58,20 +60,25 @@ class ModalDialog extends React.Component<Props> {
      * @return {ReactElement|null} - Returns the button, or null if the button shouldn't be rendered
      */
     renderCloseButton() {
-        const { closeButtonProps, onRequestClose, intl } = this.props;
+        const { closeButtonProps, closeButtonText, onRequestClose, intl } = this.props;
         const { formatMessage } = intl;
         if (!onRequestClose) {
             return null;
         }
 
-        return (
+        const sharedProps = {
+            ...closeButtonProps,
+            'aria-label': formatMessage(messages.closeModalText),
+            onClick: this.onCloseButtonClick,
+        };
+
+        return closeButtonText ? (
+            <Button className="bdl-ModalCloseButton--with-custom-text" {...sharedProps}>
+                {closeButtonText}
+            </Button>
+        ) : (
             // eslint-disable-next-line react/button-has-type
-            <button
-                {...closeButtonProps}
-                aria-label={formatMessage(messages.closeModalText)}
-                className="modal-close-button"
-                onClick={this.onCloseButtonClick}
-            >
+            <button className="modal-close-button" {...sharedProps}>
                 <IconClose color="#909090" height={18} width={18} />
             </button>
         );
@@ -106,7 +113,7 @@ class ModalDialog extends React.Component<Props> {
             ...rest // Useful for resin tagging, and other misc tags such as a11y
         } = this.props;
         const isAlertType = type === ALERT_TYPE;
-        const divProps = omit(rest, ['children', 'closeButtonProps', 'onRequestClose', 'intl']);
+        const divProps = omit(rest, ['children', 'closeButtonProps', 'closeButtonText', 'onRequestClose', 'intl']);
 
         divProps.role = isAlertType ? 'alertdialog' : 'dialog';
         divProps['aria-labelledby'] = `${this.modalID}-label`;

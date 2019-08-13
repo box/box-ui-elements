@@ -93,6 +93,12 @@
     top: 20px;
 }
 
+.bdl-ModalCloseButton--with-custom-text {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
 .modal-backdrop {
     background: fade-out($black, .25);
     bottom: 0;

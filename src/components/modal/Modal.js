@@ -15,6 +15,8 @@ type Props = {
     children: React.Node,
     /** Additional CSS classname of the `.modal` element */
     className?: string,
+    /** If provided, will render a button with this text instead of the 'X' to dismiss the modal (onRequestClose must also be provided) */
+    closeButtonText?: string,
     focusElementSelector?: string,
     isLoading?: boolean,
     isOpen?: boolean,
@@ -130,7 +132,16 @@ class Modal extends React.Component<Props> {
     };
 
     render() {
-        const { className, isLoading, isOpen, onRequestClose, shouldNotUsePortal, style, ...rest } = this.props;
+        const {
+            className,
+            closeButtonText,
+            isLoading,
+            isOpen,
+            onRequestClose,
+            shouldNotUsePortal,
+            style,
+            ...rest
+        } = this.props;
 
         if (!isOpen) {
             return null;
@@ -156,6 +167,7 @@ class Modal extends React.Component<Props> {
                         <LoadingIndicator size="large" />
                     ) : (
                         <ModalDialog
+                            closeButtonText={closeButtonText}
                             modalRef={modalEl => {
                                 // This callback gets passed through as a regular prop since
                                 // ModalDialog is wrapped in a HOC

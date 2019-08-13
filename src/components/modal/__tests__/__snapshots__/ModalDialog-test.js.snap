@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/modal/ModalDialog should render button instead of icon to close modal when closeButtonText provided 1`] = `
+<Button
+  aria-label="boxui.modalDialog.closeModalText"
+  className="bdl-ModalCloseButton--with-custom-text"
+  data-custom-close-button="asdf"
+  onClick={[Function]}
+>
+  hello
+</Button>
+`;

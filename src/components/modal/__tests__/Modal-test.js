@@ -50,6 +50,7 @@ describe('components/modal/Modal', () => {
 
         test('should render a modal dialog with props in a div when isOpen is true', () => {
             wrapper.setProps({
+                closeButtonText: 'hello',
                 shouldNotUsePortal: true,
                 title: 'title',
             });
@@ -61,6 +62,7 @@ describe('components/modal/Modal', () => {
             const dialog = wrapperComponent.find('ModalDialog');
             expect(dialog.length).toBeTruthy();
 
+            expect(dialog.prop('closeButtonText')).toEqual('hello');
             expect(dialog.prop('onRequestClose')).toEqual(onRequestClose);
             expect(dialog.prop('title')).toEqual('title');
         });

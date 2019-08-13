@@ -46,6 +46,38 @@ closeModal = () => setState({ isModalOpen: false });
 </div>
 ```
 
+**Basic With Close Button Text**
+
+```
+const SimpleModal = ({ isOpen, onRequestClose }) => (
+    <Modal
+        closeButtonText="Close Me Here!"
+        title="Box: Sharing is simple"
+        onRequestClose={ onRequestClose }
+        isOpen={ isOpen }
+    >
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum congue, lacus ut scelerisque porttitor, libero diam luctus ante, non porta lectus dolor eu lectus. Suspendisse sagittis ut orci eget placerat.
+        </p>
+    </Modal>
+);
+openModal = () =>
+    setState({
+        isModalOpen: true,
+    });
+closeModal = () => setState({ isModalOpen: false });
+
+<div>
+    <SimpleModal
+        onRequestClose={ closeModal }
+        isOpen={ state.isModalOpen }
+    />
+    <PrimaryButton onClick={ openModal }>
+        Launch standard modal with close button text
+    </PrimaryButton>
+</div>
+```
+
 **Include a custom backdrop click handler, which overrides the default behavior**
 
 ```
