@@ -96,8 +96,11 @@ async function main() {
     const fileType = fileName.split('.').pop();
     const verboseMode = process.argv[4] === '--verbose';
 
-    const converter = fileType === 'js' ? camelCase : identity;
-    const reBadName = new RegExp(Object.keys(conversionMap).map(entry => converter(entry)).join('|'), 'g');
+    const toRegExp = fileType === 'js' ? identity : entity => `\\\$${entity}(?!-)`;
+    const caseConverter = fileType === 'js' ? camelCase : kebabCase;
+    const toTargetLanguage = fileType === 'js' ? camelCase : entity => `$${kebabCase(entity)}`;
+
+    const reBadName = new RegExp(Object.keys(conversionMap).map(entry => toRegExp(caseConverter(entry))).join('|'), 'g');
 
     try {
         const fileToParse = await readFile(fileName, { encoding: 'utf8' });
@@ -118,10 +121,10 @@ async function main() {
             case 'swap':
                 // find, then swap in the proper new name
                 const matches = [...new Set(fileToParse.match(reBadName))];
-                const replacements = matches.map(entry => converter(conversionMap[kebabCase(entry)]));
                 let replacementFile = fileToParse;
 
                 if (verboseMode) {
+                    const replacements = matches.map(entry => caseConverter(conversionMap[kebabCase(entry)]));
                     console.log(colors.cyan('File name:'), colors.white(fileName));
                     console.log(colors.cyan('Found:'), matches);
                     console.log(colors.cyan('Replace with:'), replacements);
@@ -129,7 +132,7 @@ async function main() {
 
                 matches.forEach(match => {
                     if (fileType === 'js' || fileType === 'scss') {
-                        replacementFile = replacementFile.replace(new RegExp(converter(match), 'g'), converter(conversionMap[kebabCase(match)]));
+                        replacementFile = replacementFile.replace(new RegExp(toRegExp(caseConverter(match)), 'g'), toTargetLanguage(conversionMap[kebabCase(match)]));
                     } else {
                         console.error(colors.yellow('Unrecognized file type for conversion. skipping', fileName, '...'));
                         process.exit(0);
