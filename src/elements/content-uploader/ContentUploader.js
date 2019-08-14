@@ -40,6 +40,7 @@ import {
     VIEW_UPLOAD_SUCCESS,
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
+    STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
     ERROR_CODE_UPLOAD_FILE_LIMIT,
@@ -893,7 +894,11 @@ class ContentUploader extends Component<Props, State> {
         }
 
         item.progress = Math.min(Math.round((event.loaded / event.total) * 100), 100);
-        item.status = STATUS_IN_PROGRESS;
+        if (item.progress === 100) {
+            item.status = STATUS_STAGED;
+        } else {
+            item.status = STATUS_IN_PROGRESS;
+        }
 
         const { items } = this.state;
         items[items.indexOf(item)] = item;
@@ -912,6 +917,7 @@ class ContentUploader extends Component<Props, State> {
         const { status } = item;
         switch (status) {
             case STATUS_IN_PROGRESS:
+            case STATUS_STAGED:
             case STATUS_COMPLETE:
             case STATUS_PENDING:
                 this.removeFileFromUploadQueue(item);
@@ -1049,7 +1055,7 @@ class ContentUploader extends Component<Props, State> {
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some(item => item.status === STATUS_IN_PROGRESS);
-        const isDone = items.every(item => item.progress === 100);
+        const isDone = items.every(item => item.status === STATUS_COMPLETE || item.status === STATUS_STAGED);
 
         const styleClassName = classNames('bcu', className, {
             'be-app-element': !useUploadsManager,

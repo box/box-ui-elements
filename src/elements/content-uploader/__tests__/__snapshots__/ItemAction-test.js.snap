@@ -117,3 +117,32 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
   </Tooltip>
 </div>
 `;
+
+exports[`elements/content-uploader/ItemAction should render correctly with STATUS_STAGED 1`] = `
+<div
+  className="bcu-item-action"
+>
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
+    position="top-left"
+    text={
+      <span
+        defaultMessage="Cancel this upload"
+        id="be.uploadsCancelButtonTooltip"
+      />
+    }
+    theme="default"
+  >
+    <PlainButton
+      data-resin-target="uploadcancel"
+      isDisabled={true}
+      onClick={[Function]}
+      type="button"
+    >
+      <IconInProgress />
+    </PlainButton>
+  </Tooltip>
+</div>
+`;

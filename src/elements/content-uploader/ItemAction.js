@@ -12,7 +12,7 @@ import IconClose from '../../icons/general/IconClose';
 import IconRetry from '../../icons/general/IconRetry';
 import messages from '../common/messages';
 import IconInProgress from './IconInProgress';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
 
 import './ItemAction.scss';
 
@@ -21,11 +21,10 @@ const ICON_CHECK_COLOR = '#26C281';
 type Props = {
     isFolder?: boolean,
     onClick: Function,
-    progress: number,
     status: UploadStatus,
 } & InjectIntlProvidedProps;
 
-const ItemAction = ({ status, onClick, intl, isFolder = false, progress }: Props) => {
+const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     let icon = <IconClose />;
     let target = null;
     let resin = {};
@@ -46,6 +45,7 @@ const ItemAction = ({ status, onClick, intl, isFolder = false, progress }: Props
             target = 'uploadretry';
             break;
         case STATUS_IN_PROGRESS:
+        case STATUS_STAGED:
             icon = <IconInProgress />;
             target = 'uploadcancel';
             break;
@@ -61,7 +61,7 @@ const ItemAction = ({ status, onClick, intl, isFolder = false, progress }: Props
     return (
         <div className="bcu-item-action">
             <Tooltip position="top-left" text={tooltip}>
-                <PlainButton onClick={onClick} type="button" isDisabled={progress === 100} {...resin}>
+                <PlainButton onClick={onClick} type="button" isDisabled={status === STATUS_STAGED} {...resin}>
                     {icon}
                 </PlainButton>
             </Tooltip>
