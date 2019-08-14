@@ -284,10 +284,16 @@ class Task extends React.Component<Props, State> {
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                             >
-                                <Media.Menu isDisabled={isConfirmingDelete} data-testid="task-actions-menu">
+                                <Media.Menu
+                                    isDisabled={isConfirmingDelete}
+                                    data-testid="task-actions-menu"
+                                    menuProps={{
+                                        'data-resin-component': ACTIVITY_TARGETS.TASK_OPTIONS,
+                                    }}
+                                >
                                     {permissions.can_update && (
                                         <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
+                                            data-resin-target={ACTIVITY_TARGETS.TASK_OPTIONS_EDIT}
                                             data-testid="edit-task"
                                             onClick={this.handleEditClick}
                                         >
@@ -297,7 +303,7 @@ class Task extends React.Component<Props, State> {
                                     )}
                                     {permissions.can_delete && (
                                         <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
+                                            data-resin-target={ACTIVITY_TARGETS.TASK_OPTIONS_DELETE}
                                             data-testid="delete-task"
                                             onClick={this.handleDeleteClick}
                                         >
@@ -308,6 +314,7 @@ class Task extends React.Component<Props, State> {
                                 </Media.Menu>
                                 {isConfirmingDelete && (
                                     <DeleteConfirmation
+                                        data-resin-component={ACTIVITY_TARGETS.TASK_OPTIONS}
                                         isOpen={isConfirmingDelete}
                                         message={messages.taskDeletePrompt}
                                         onDeleteCancel={this.handleDeleteCancel}
