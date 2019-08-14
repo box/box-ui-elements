@@ -16,6 +16,7 @@ import LeftSidebarIconWrapper from './LeftSidebarIconWrapper';
 import NewItemsIndicator from './NewItemsIndicator';
 import defaultNavLinkRenderer from './defaultNavLinkRenderer';
 
+import type { Props as LeftSidebarLinkProps } from './LeftSidebarLink';
 import type { Callout } from './Callout';
 
 import './styles/LeftSidebar.scss';
@@ -40,7 +41,7 @@ type SubMenuItem = {
     /** Localized text string to use for individual menu items */
     message: string,
     /** Optional left side bar link renderer. Defaults to defaultNavLinkRenderer */
-    navLinkRenderer?: Function,
+    navLinkRenderer?: (props: LeftSidebarLinkProps) => React.Node,
     /** Whether we should show a badge marking new item content */
     newItemBadge?: boolean,
     /** Optional remove link click handler */
@@ -81,7 +82,7 @@ type MenuItem = {
     /** Localized text string to use for individual menu items */
     message: string,
     /** Optional left side bar link renderer. Defaults to defaultNavLinkRenderer */
-    navLinkRenderer?: Function,
+    navLinkRenderer?: (props: LeftSidebarLinkProps) => React.Node,
     /** Whether we should show a badge marking new item content */
     newItemBadge?: boolean,
     /** Optional remove link click handler */
