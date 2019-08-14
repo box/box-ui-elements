@@ -11,6 +11,7 @@ import commonMessages from '../../../../common/messages';
 import PrimaryButton from '../../../../../components/primary-button';
 import { KEYS } from '../../../../../constants';
 import { Overlay } from '../../../../../components/flyout';
+import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
 import './DeleteConfirmation.scss';
 
 type Props = {
@@ -41,7 +42,7 @@ class DeleteConfirmation extends React.Component<Props> {
     };
 
     render() {
-        const { message, onDeleteCancel, onDeleteConfirm } = this.props;
+        const { message, onDeleteCancel, onDeleteConfirm, ...rest } = this.props;
 
         return (
             <Overlay
@@ -50,15 +51,26 @@ class DeleteConfirmation extends React.Component<Props> {
                 role="dialog"
                 shouldDefaultFocus
                 shouldOutlineFocus={false}
+                {...rest}
             >
                 <div className="bcs-DeleteConfirmation-promptMessage">
                     <FormattedMessage {...message} />
                 </div>
                 <div>
-                    <Button className="bcs-DeleteConfirmation-cancel" onClick={onDeleteCancel} type="button">
+                    <Button
+                        className="bcs-DeleteConfirmation-cancel"
+                        onClick={onDeleteCancel}
+                        type="button"
+                        data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE_CANCEL}
+                    >
                         <FormattedMessage {...commonMessages.cancel} />
                     </Button>
-                    <PrimaryButton className="bcs-DeleteConfirmation-delete" onClick={onDeleteConfirm} type="button">
+                    <PrimaryButton
+                        className="bcs-DeleteConfirmation-delete"
+                        onClick={onDeleteConfirm}
+                        type="button"
+                        data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE_CONFIRM}
+                    >
                         <FormattedMessage {...commonMessages.delete} />
                     </PrimaryButton>
                 </div>

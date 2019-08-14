@@ -133,10 +133,16 @@ class Comment extends React.Component<Props, State> {
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                             >
-                                <Media.Menu isDisabled={isConfirmingDelete} data-testid="comment-actions-menu">
+                                <Media.Menu
+                                    isDisabled={isConfirmingDelete}
+                                    data-testid="comment-actions-menu"
+                                    menuProps={{
+                                        'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
+                                    }}
+                                >
                                     {canEdit && (
                                         <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
+                                            data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
                                             data-testid="edit-comment"
                                             onClick={this.handleEditClick}
                                         >
@@ -146,7 +152,7 @@ class Comment extends React.Component<Props, State> {
                                     )}
                                     {canDelete && (
                                         <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
+                                            data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_DELETE}
                                             data-testid="delete-comment"
                                             onClick={this.handleDeleteClick}
                                         >
@@ -157,6 +163,7 @@ class Comment extends React.Component<Props, State> {
                                 </Media.Menu>
                                 {isConfirmingDelete && (
                                     <DeleteConfirmation
+                                        data-resin-component={ACTIVITY_TARGETS.COMMENT_OPTIONS}
                                         isOpen={isConfirmingDelete}
                                         message={messages.commentDeletePrompt}
                                         onDeleteCancel={this.handleDeleteCancel}
