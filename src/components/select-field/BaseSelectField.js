@@ -98,11 +98,11 @@ class BaseSelectField extends React.Component<Props, State> {
         const { shouldScrollIntoView } = this.state;
         const itemEl = id ? document.getElementById(id) : null;
 
-        this.setState({ activeItemID: id, shouldScrollIntoView: false });
-
-        if (shouldScrollIntoView) {
-            scrollIntoView(itemEl, { block: 'nearest' });
-        }
+        this.setState({ activeItemID: id, shouldScrollIntoView: false }, () => {
+            if (shouldScrollIntoView) {
+                scrollIntoView(itemEl, { block: 'nearest' });
+            }
+        });
     };
 
     selectFieldID: string;
