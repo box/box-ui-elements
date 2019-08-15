@@ -5,7 +5,7 @@
  */
 
 import Item from './Item';
-import { CACHE_PREFIX_WEBLINK } from '../constants';
+import { CACHE_PREFIX_WEBLINK, ERROR_CODE_FETCH_WEBLINK } from '../constants';
 import { findMissingProperties } from '../utils/fields';
 
 class WebLink extends Item {
@@ -51,6 +51,9 @@ class WebLink extends Item {
 
         const cache: APICache = this.getCache();
         const key: string = this.getCacheKey(id);
+        this.errorCode = ERROR_CODE_FETCH_WEBLINK;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
 
         if (cache.has(key)) {
             const missingFields: Array<string> = findMissingProperties(cache.get(key), fields);
@@ -60,13 +63,22 @@ class WebLink extends Item {
             }
         }
 
-        const params = { fields: fields ? fields.toString() : '' };
+        const xhrOptions = {
+            url: this.getUrl(id),
+        };
+
+        if (fields) {
+            xhrOptions.params = {
+                fields: fields.toString(),
+            };
+        }
 
         try {
-            const { data } = await this.xhr.get({
-                url: this.getUrl(id),
-                params,
-            });
+            const { data } = await this.xhr.get(xhrOptions);
+
+            if (this.isDestroyed()) {
+                return;
+            }
 
             // Cache check is again done since this code is executed async
             if (cache.has(key)) {
@@ -76,9 +88,9 @@ class WebLink extends Item {
                 cache.set(key, data);
             }
 
-            successCallback(cache.get(key));
+            this.successHandler(cache.get(key));
         } catch (e) {
-            errorCallback(e);
+            this.errorHandler(e);
         }
     }
 }
