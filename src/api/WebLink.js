@@ -63,7 +63,7 @@ class WebLink extends Item {
             }
         }
 
-        const xhrOptions = {
+        const xhrOptions: Object = {
             url: this.getUrl(id),
         };
 
