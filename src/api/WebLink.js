@@ -5,7 +5,8 @@
  */
 
 import Item from './Item';
-import { CACHE_PREFIX_WEBLINK, X_REP_HINTS } from '../constants';
+import { CACHE_PREFIX_WEBLINK } from '../constants';
+import { findMissingProperties } from '../utils/fields';
 
 class WebLink extends Item {
     /**
@@ -30,17 +31,17 @@ class WebLink extends Item {
     }
 
     /**
-     * Gets a box weblink.
+     * Gets a Box weblink
      *
      * @param {string} id - Weblink id
-     * @param {Function} successCallback - Function to call with results
+     * @param {(newItem: BoxItem) => void} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
      * @param {Array<String>} fields - Array of field strings
      * @returns {Promise}
      */
     async getWeblink(
         id: string,
-        successCallback: Function,
+        successCallback: (newItem: BoxItem) => void,
         errorCallback: Function,
         { fields }: FetchOptions = {},
     ): Promise<void> {
@@ -48,20 +49,34 @@ class WebLink extends Item {
             return;
         }
 
-        const cacheKey = this.getCacheKey(id);
-        const params = { fields: fields.toString() };
+        const cache: APICache = this.getCache();
+        const key: string = this.getCacheKey(id);
+
+        if (cache.has(key)) {
+            const missingFields: Array<string> = findMissingProperties(cache.get(key), fields);
+            if (missingFields.length === 0) {
+                successCallback(cache.get(key));
+                return;
+            }
+        }
+
+        const params = { fields: fields ? fields.toString() : '' };
 
         try {
             const { data } = await this.xhr.get({
                 url: this.getUrl(id),
                 params,
-                headers: { 'X-Rep-Hints': X_REP_HINTS },
             });
 
-            const cachedEntry = this.getCache().get(cacheKey);
-            const updatedCacheEntry = { ...cachedEntry, ...data };
-            this.getCache().set(cacheKey, updatedCacheEntry);
-            successCallback(updatedCacheEntry);
+            // Cache check is again done since this code is executed async
+            if (cache.has(key)) {
+                cache.merge(key, data);
+            } else {
+                // If there was nothing in the cache
+                cache.set(key, data);
+            }
+
+            successCallback(cache.get(key));
         } catch (e) {
             errorCallback(e);
         }
