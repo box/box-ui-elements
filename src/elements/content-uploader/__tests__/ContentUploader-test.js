@@ -2,7 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
-import { STATUS_PENDING, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import Footer from '../Footer';
+import { STATUS_PENDING, STATUS_STAGED, STATUS_COMPLETE, VIEW_UPLOAD_SUCCESS } from '../../../constants';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 
@@ -59,6 +60,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(wrapper.state().itemIds).toEqual({});
         });
     });
+
     describe('addFilesToUploadQueue()', () => {
         test('should overwrite itemIds if they already exist', () => {
             const wrapper = getWrapper();
@@ -68,6 +70,42 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             const expected = { yoyo: true };
             expect(wrapper.state().itemIds).toMatchObject(expected);
+        });
+    });
+
+    describe('isDone', () => {
+        test('should be true if all items are complete or staged', () => {
+            const wrapper = getWrapper();
+            const files = createMockFiles(3);
+            const items = mapToUploadItems(files).map(item => {
+                return {
+                    ...item,
+                    status: STATUS_COMPLETE,
+                };
+            });
+            items[2].status = STATUS_STAGED;
+            wrapper.setState({
+                items,
+            });
+
+            expect(wrapper.find(Footer).prop('isDone')).toEqual(true);
+        });
+
+        test('should be false if not all items are complete or staged', () => {
+            const wrapper = getWrapper();
+            const files = createMockFiles(3);
+            const items = mapToUploadItems(files).map(item => {
+                return {
+                    ...item,
+                    status: STATUS_COMPLETE,
+                };
+            });
+            items[2].status = STATUS_PENDING;
+            wrapper.setState({
+                items,
+            });
+
+            expect(wrapper.find(Footer).prop('isDone')).toEqual(false);
         });
     });
 
