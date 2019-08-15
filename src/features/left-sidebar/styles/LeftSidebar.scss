@@ -88,6 +88,14 @@
         margin-bottom: 0;
     }
 
+    &.is-loading {
+        margin-bottom: 0;
+    }
+
+    &.is-loading-empty {
+        margin-bottom: 40px;
+    }
+
     // Override nav-list default color for link
     .left-sidebar-link:not(.is-selected) {
         color: $light-charcoal;
