@@ -6,7 +6,7 @@
 
 import { defineMessages } from 'react-intl';
 
-const messages: { [string]: MessageDescriptor } = defineMessages({
+const messages = defineMessages({
     today: {
         id: 'be.today',
         description: 'Shown instead of todays date.',
@@ -36,6 +36,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.previewError',
         description: 'Error message when Preview fails due to the files call.',
         defaultMessage: 'We’re sorry, the preview didn’t load. Please refresh the page.',
+    },
+    previewErrorBlockedByPolicy: {
+        id: 'be.previewErrorBlockedByPolicy',
+        description: 'Error message when Preview fails due to the files call which is blocked by an access policy.',
+        defaultMessage: 'Your access is restricted due to the classification applied to this content.',
+    },
+    boxEditErrorBlockedByPolicy: {
+        id: 'be.boxEditErrorBlockedByPolicy',
+        defaultMessage: 'Local editing of this content has been disabled based on an access policy',
+        description: 'Shown in the open with dropdown when an application is blocked by shield access policy.',
     },
     previewUpdate: {
         id: 'be.previewUpdate',
@@ -121,6 +131,26 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.add',
         description: 'Label for add action',
         defaultMessage: 'Add',
+    },
+    gridView: {
+        id: 'be.gridView',
+        description: 'Label for switching to grid view',
+        defaultMessage: 'Switch to Grid View',
+    },
+    gridViewIncreaseColumnSize: {
+        id: 'be.gridView.increaseColumnSize',
+        description: 'Label for increasing the size of columns in grid view',
+        defaultMessage: 'Increase column size',
+    },
+    gridViewDecreaseColumnSize: {
+        id: 'be.gridView.decreaseColumnSize',
+        description: 'Label for decreasing the size of columns in grid view',
+        defaultMessage: 'Decrease column size',
+    },
+    listView: {
+        id: 'be.listView',
+        description: 'Label for switching to list view',
+        defaultMessage: 'Switch to List View',
     },
     sort: {
         id: 'be.sort',
@@ -391,6 +421,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.sidebarProperties',
         description: 'Label for file properties section in the preview sidebar',
         defaultMessage: 'File Properties',
+    },
+    sidebarNavLabel: {
+        id: 'be.sidebarNavLabel',
+        description: 'Label for the sidebar tabs list',
+        defaultMessage: 'Sidebar',
     },
     defaultSkill: {
         id: 'be.defaultSkill',
@@ -667,146 +702,15 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Default error message shown when upload fails',
         defaultMessage: 'Something went wrong with the upload. Please try again.',
     },
-    approvalAddAssignee: {
-        id: 'be.approvalAddAssignee',
-        defaultMessage: 'Add an assignee',
-        description: 'Placeholder for approvers input',
-    },
-    approvalAddTask: {
-        id: 'be.approvalAddTask',
-        defaultMessage: 'Add Task',
-        description: 'Label for checkbox to add approvers to a comment',
-    },
-    approvalAddTaskTooltip: {
-        id: 'be.approvalAddTaskTooltip',
-        defaultMessage:
-            'Assigning a task to someone will send them a notification with the message in the comment box and allow them to approve or deny.',
-        description: 'Tooltip text for checkbox to add approvers to a comment',
-    },
-    approvalAssignees: {
-        id: 'be.approvalAssignees',
-        defaultMessage: 'Assignees',
-        description: 'Title for assignees input',
-    },
-    approvalDueDate: {
-        id: 'be.approvalDueDate',
-        defaultMessage: 'Due Date',
-        description: 'Title for approvers due date input',
-    },
-    approvalSelectDate: {
-        id: 'be.approvalSelectDate',
-        defaultMessage: 'Select a date',
-        description: 'Placeholder for due date input',
-    },
-    atMentionTip: {
-        id: 'be.atMentionTip',
-        defaultMessage: '@mention users to notify them.',
-        description: 'Mentioning call to action displayed below the comment input',
-    },
     errorOccured: {
         id: 'be.errorOccured',
         defaultMessage: 'An error occurred',
         description: 'Title when an error occurs',
     },
-    commentCancel: {
-        id: 'be.commentCancel',
-        defaultMessage: 'Cancel',
-        description: 'Text for cancel button',
-    },
-    commentDeletePrompt: {
-        id: 'be.commentDeletePrompt',
-        defaultMessage: 'Delete comment?',
-        description: 'Confirmation prompt text to delete comment',
-    },
-    commentPost: {
-        id: 'be.commentPost',
-        defaultMessage: 'Post',
-        description: 'Text for post button',
-    },
-    commentShowOriginal: {
-        id: 'be.commentShowOriginal',
-        defaultMessage: 'Show Original',
-        description: 'Show original button for showing original comment',
-    },
-    commentTranslate: {
-        id: 'be.commentTranslate',
-        defaultMessage: 'Translate',
-        description: 'Translate button for translating comment',
-    },
-    commentWrite: {
-        id: 'be.commentWrite',
-        defaultMessage: 'Write a comment',
-        description: 'Placeholder for comment input',
-    },
-    commentPostedFullDateTime: {
-        id: 'be.commentPostedFullDateTime',
-        defaultMessage: '{time, date, full} at {time, time, short}',
-        description: 'Comment posted full date time for title',
-    },
-    commentCreateErrorMessage: {
-        id: 'be.commentCreateErrorMessage',
-        description: 'Error message when a comment creation fails',
-        defaultMessage: 'There was an error creating this comment.',
-    },
-    commentCreateConflictMessage: {
-        id: 'be.commentCreateConflictMessage',
-        description: 'Error message when a comment creation fails due to a conflict',
-        defaultMessage: 'This comment already exists.',
-    },
-    commentDeleteErrorMessage: {
-        id: 'be.commentDeleteErrorMessage',
-        description: 'Error message when a comment deletion fails',
-        defaultMessage: 'There was an error deleting this comment.',
-    },
-    taskDeletePrompt: {
-        id: 'be.taskDeletePrompt',
-        defaultMessage: 'Delete task?',
-        description: 'Confirmation prompt text to delete task',
-    },
-    taskCreateErrorMessage: {
-        id: 'be.taskCreateErrornMessage',
-        description: 'Error message when a task creation fails',
-        defaultMessage: 'There was an error creating this task.',
-    },
-    taskUpdateErrorMessage: {
-        id: 'be.taskEditErrorMessage',
-        description: 'Error message when a task edit fails',
-        defaultMessage: 'There was an error updating this task.',
-    },
-    taskDeleteErrorMessage: {
-        id: 'be.taskDeleteErrorMessage',
-        description: 'Error message when a task deletion fails',
-        defaultMessage: 'There was an error deleting this task.',
-    },
-    completedAssignment: {
-        id: 'be.completedAssignment',
-        defaultMessage: 'Completed',
-        description: 'Title for checkmark icon indicating someone completed a task',
-    },
-    appActivityDeleteErrorMessage: {
-        id: 'be.appActivityDeleteErrorMessage',
-        description: 'Error message when an app activity deletion fails',
-        defaultMessage: 'There was an error deleting this item.',
-    },
-    appActivityCreatedAtFullDateTime: {
-        id: 'be.appActivityCreatedAtFullDateTime',
-        defaultMessage: '{time, date, full} at {time, time, short}',
-        description: 'App Activity created at full date time for title',
-    },
-    appActivityDeletePrompt: {
-        id: 'be.appActivityDeletePrompt',
-        defaultMessage: 'Delete App Activity?',
-        description: 'Confirmation prompt text to delete app activity',
-    },
-    appActivityAltIcon: {
-        id: 'be.appActivityAltIcon',
-        defaultMessage: '{appActivityName} Icon',
-        description: 'Alt message if app activity icon is missing or cannot load',
-    },
     editLabel: {
         id: 'be.editLabel',
         defaultMessage: 'Edit',
-        description: 'Aria label for button to edit a comment or task',
+        description: 'Label for an edit action',
     },
     getVersionInfo: {
         id: 'be.getVersionInfo',
@@ -832,101 +736,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.noActivityCommentPrompt',
         defaultMessage: 'Comment and @mention people to notify them.',
         description: 'Message shown in ',
-    },
-    rejectedAssignment: {
-        id: 'be.rejectedAssignment',
-        defaultMessage: 'Rejected',
-        description: 'Title for x icon indicating someone rejected a task',
-    },
-    taskApprove: {
-        id: 'be.taskApprove',
-        defaultMessage: 'Complete',
-        description: 'Approve option for a task',
-    },
-    taskDueDate: {
-        id: 'be.taskDueDate',
-        defaultMessage: 'Due',
-        description: 'Due date for a task',
-    },
-    tasksForApproval: {
-        id: 'be.tasksForApproval',
-        defaultMessage: 'Tasks',
-        description: 'Tasks for approval',
-    },
-    taskReject: {
-        id: 'be.taskReject',
-        defaultMessage: 'Decline',
-        description: 'Reject option for a task',
-    },
-    tasksAddTask: {
-        id: 'be.tasks.addTask',
-        defaultMessage: 'Add Task',
-        description: 'label for button that opens task popup',
-    },
-    tasksAddTaskFormTitle: {
-        id: 'be.tasks.addTaskForm.title',
-        defaultMessage: 'Add Task',
-        description: 'title for task popup',
-    },
-    tasksAddTaskFormAssigneesLabel: {
-        id: 'be.tasks.addTaskForm.assigneesLabel',
-        defaultMessage: 'Assignees',
-        description: 'label for task create form assignee input',
-    },
-    tasksAddTaskFormMessageLabel: {
-        id: 'be.tasks.addTaskForm.messageLabel',
-        defaultMessage: 'Message',
-        description: 'label for task create form message input',
-    },
-    tasksAddTaskFormDueDateLabel: {
-        id: 'be.tasks.addTaskForm.dueDateLabel',
-        defaultMessage: 'Due Date',
-        description: 'label for task create form due date input',
-    },
-    tasksAddTaskFormSubmitLabel: {
-        id: 'be.tasks.addTaskForm.submit',
-        defaultMessage: 'Add Task',
-        description: 'label for create button in create task popup',
-    },
-    tasksAddTaskFormCancelLabel: {
-        id: 'be.tasks.addTaskForm.cancel',
-        defaultMessage: 'Cancel',
-        description: 'label for cancel button in create task popup',
-    },
-    tasksFeedApproveAction: {
-        id: 'be.tasks.feed.approveAction',
-        defaultMessage: 'Approve',
-        description: 'Approve option for an approval task',
-    },
-    tasksFeedCompleteAction: {
-        id: 'be.tasks.feed.completeAction',
-        defaultMessage: 'Mark as Complete',
-        description: 'Completion option for a general task',
-    },
-    tasksFeedRejectAction: {
-        id: 'be.tasks.feed.rejectAction',
-        defaultMessage: 'Reject',
-        description: 'Reject option for an approval task',
-    },
-    tasksFeedCompletedLabel: {
-        id: 'be.tasks.feed.completedLabel',
-        defaultMessage: 'Task Complete',
-        description: 'Label for a completed task',
-    },
-    tasksFeedApprovedLabel: {
-        id: 'be.tasks.feed.approvedLabel',
-        defaultMessage: 'Task Approved',
-        description: 'Label for an approved task',
-    },
-    tasksFeedRejectedLabel: {
-        id: 'be.tasks.feed.rejectedLabel',
-        defaultMessage: 'Task Rejected',
-        description: 'Label for a rejected task',
-    },
-    tasksFeedIncompleteLabel: {
-        id: 'be.tasks.feed.incompleteLabel',
-        defaultMessage: 'Awaiting Assignees',
-        description: 'Label for an incomplete task',
     },
     versionDeleted: {
         id: 'be.versionDeleted',
@@ -1102,6 +911,12 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.back',
         description: 'Label for back button',
         defaultMessage: 'Back',
+    },
+    priorCollaborator: {
+        id: 'be.priorCollaborator',
+        description:
+            'If a user has been deleted, we call the user "a prior collaborator" - meaning someone who used to be able to collaborate on the content.',
+        defaultMessage: 'A Prior Collaborator',
     },
 });
 

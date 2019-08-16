@@ -1,58 +1,110 @@
 // @flow
 import * as React from 'react';
 
-import { columns, initialCondition, conditions } from '../components/fixtures';
+import { columnForTemplateFieldName, columnForDateType } from '../components/fixtures';
 import FilterButton from '../components/filter/FilterButton';
+import type { ConditionType } from '../flowTypes';
 import { EQUALS, LESS_THAN } from '../constants';
+
+const validCondition: ConditionType = {
+    columnId: columnForTemplateFieldName.id,
+    id: '0',
+    operator: EQUALS,
+    values: [1],
+};
+const invalidCondition: ConditionType = {
+    ...validCondition,
+    values: [],
+};
+const columns = [columnForTemplateFieldName, columnForDateType];
+const validConditions = [validCondition];
+const invalidConditions = [invalidCondition];
 
 describe('feature/query-bar/components/filter/FilterButton', () => {
     const getWrapper = (props = {}) => {
-        return shallow(<FilterButton conditions={conditions} {...props} />);
+        return shallow(<FilterButton conditions={validConditions} {...props} />);
     };
 
     describe('render', () => {
         test('should disable FilterButton when columns is undefined', () => {
-            const wrapper = getWrapper({ columns: undefined });
-            expect(wrapper).toMatchSnapshot();
+            const wrapper = getWrapper({ columns: null });
+            const Button = wrapper.find('Button');
+            expect(Button.props().isDisabled).toBeTruthy();
         });
 
         test('should enable FilterButton when columns is non-empty', () => {
             const wrapper = getWrapper({ columns });
-            expect(wrapper).toMatchSnapshot();
+            const Button = wrapper.find('Button');
+            expect(Button.props().isDisabled).toBeFalsy();
+        });
+
+        test('Should close the menu and clear out transientConditions when Apply button is clicked', () => {
+            const wrapper = getWrapper({ conditions: validConditions });
+            wrapper.instance().setState({
+                transientConditions: validConditions,
+                isMenuOpen: true,
+            });
+
+            wrapper.find('.apply-filters-button').simulate('click');
+
+            const Flyout = wrapper.find('Flyout');
+            expect(Flyout.props().overlayIsVisible).toBeFalsy();
+            expect(wrapper.state('transientConditions')).toHaveLength(0);
+        });
+
+        test('Should set hasUserSubmitted to true for Condition if any condition is invalid', () => {
+            const wrapper = getWrapper({ conditions: [{ values: [] }] });
+            wrapper.instance().setState({
+                transientConditions: invalidConditions,
+                isMenuOpen: true,
+            });
+
+            wrapper.find('.apply-filters-button').simulate('click');
+
+            const Condition = wrapper.find('Condition');
+            expect(Condition.props().hasUserSubmitted).toBeTruthy();
         });
     });
 
     describe('componentDidUpdate()', () => {
-        const transientConditions = [];
-        const wrapper = getWrapper({
-            conditions,
+        const initialCondition = {
+            columnId: columnForTemplateFieldName.id,
+            id: '1',
+            operator: '=',
+            values: [],
+        };
+
+        test.each`
+            innerColumns | conditions         | transientConditions | expectedConditions    | should
+            ${columns}   | ${validConditions} | ${[]}               | ${validConditions}    | ${'should reinitialize conditions from props.conditions when flyout is opened and props.conditions is not empty'}
+            ${columns}   | ${[]}              | ${[]}               | ${[initialCondition]} | ${'should set initial condition if props.conditions is empty and transientConditions are empty'}
+            ${[]}        | ${[]}              | ${[]}               | ${[]}                 | ${'should set empty array if props.conditions is empty and transientConditions are empty and columns are empty'}
+        `('$should', ({ innerColumns, conditions, transientConditions, expectedConditions }) => {
+            const wrapper = getWrapper({ columns: innerColumns, conditions });
+            wrapper.setState({
+                isMenuOpen: true,
+                transientConditions,
+            });
+            wrapper.instance().componentDidUpdate({}, { isMenuOpen: false });
+
+            expect(wrapper.state('transientConditions')).toEqual(expectedConditions);
         });
-        wrapper.setState({
-            transientConditions,
-        });
-        wrapper.instance().componentDidUpdate();
-        expect(wrapper.state('transientConditions')).toEqual(conditions);
     });
 
     describe('handleColumnChange()', () => {
-        const condition = {
-            columnId: '1',
-            id: '3',
-            operator: EQUALS,
-            values: [],
-        };
-        const expectedConditions = [{ columnId: '2', id: '3', operator: EQUALS, values: [] }];
-        test.each`
-            columnId | transientConditions
-            ${'2'}   | ${[condition]}
-        `('should update condition.columnId', ({ columnId, transientConditions }) => {
+        test('should update condition to the selected column', () => {
+            const conditions2 = {
+                ...validConditions,
+                columnId: columnForTemplateFieldName.id,
+            };
+
             const wrapper = getWrapper({ columns });
             wrapper.setState({
-                transientConditions,
+                conditions: conditions2,
             });
-            wrapper.instance().handleColumnChange(condition, columnId);
+            wrapper.instance().handleColumnChange(conditions2[0], columnForDateType.id);
 
-            expect(wrapper.state('transientConditions')).toEqual(expectedConditions);
+            expect(wrapper.state('transientConditions')[0].columnId).toEqual(columnForDateType.id);
         });
     });
 
@@ -201,35 +253,26 @@ describe('feature/query-bar/components/filter/FilterButton', () => {
             });
 
             const condition = wrapper.instance().createCondition();
-            expect(condition.columnId).toEqual('1');
+            expect(condition.columnId).toEqual(columnForTemplateFieldName.id);
             expect(condition.id).toBeDefined();
             expect(condition.operator).toEqual(EQUALS);
             expect(condition.values).toEqual([]);
         });
 
-        test('Should return an empty object if columns is empty', () => {
+        test('Should throw an error if columns is empty', () => {
             const wrapper = getWrapper({ columns: [] });
-            const expected = {};
 
-            const condition = wrapper.instance().createCondition();
-
-            expect(condition).toEqual(expected);
+            expect(() => {
+                wrapper.instance().createCondition();
+            }).toThrow('Columns Required');
         });
     });
 
     describe('closeOnClickPredicate()', () => {
-        const conditionsWithValues = [
-            {
-                ...initialCondition,
-                values: ['1'],
-            },
-        ];
-        const conditionsWithEmptyValues = [{ ...initialCondition, values: [] }];
-
         test.each`
-            description                                                                | transientConditions          | shouldCloseResult
-            ${'Should return true if Apply button was clicked and value is not empty'} | ${conditionsWithValues}      | ${true}
-            ${'Should return false if Apply button was clicked and value is empty'}    | ${conditionsWithEmptyValues} | ${false}
+            description                                                                | transientConditions  | shouldCloseResult
+            ${'Should return true if Apply button was clicked and value is not empty'} | ${validConditions}   | ${true}
+            ${'Should return false if Apply button was clicked and value is empty'}    | ${invalidConditions} | ${false}
         `('$description', ({ transientConditions, shouldCloseResult }) => {
             const wrapper = getWrapper({ columns });
             const targetWithClassName = {

@@ -31,7 +31,7 @@ const handleInput = value => {
                 user.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
             ) {
                 selectorOptions.push({
-                    text: user.name,
+                    displayText: user.name,
                     value: user.id,
                 });
             }
@@ -90,7 +90,7 @@ const validator = text => {
 >
     {state.selectorOptions.map(option => (
         <DatalistItem key={ option.value }>
-            {option.text}
+            {option.displayText}
         </DatalistItem>
     ))}
 </PillSelectorDropdown>

@@ -100,7 +100,19 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should return true if the currently-selected version ID has changed', () => {
-            expect(instance.shouldLoadPreview({ selectedVersionId: '12345' })).toBe(true);
+            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
+        });
+
+        test('should return true if the selected version is missing and the previous selection was an old version', () => {
+            wrapper.setState({ selectedVersion: { id: undefined } });
+
+            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
+        });
+
+        test('should return false if the selected version is missing but the previous selection was the current version', () => {
+            wrapper.setState({ selectedVersion: { id: undefined } });
+
+            expect(instance.shouldLoadPreview({ selectedVersion: { id: '1' } })).toBe(false);
         });
     });
 
@@ -255,7 +267,12 @@ describe('elements/content-preview/ContentPreview', () => {
             };
             TokenService.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
             const wrapper = getWrapper(props);
-            wrapper.setState({ file, selectedVersionId: '12345' });
+            wrapper.setState({
+                file,
+                selectedVersion: {
+                    id: '12345',
+                },
+            });
             const instance = wrapper.instance();
             await instance.loadPreview();
             expect(instance.preview.show).toHaveBeenCalledWith(
@@ -362,7 +379,7 @@ describe('elements/content-preview/ContentPreview', () => {
         test('should set state to the new file', () => {
             instance.fetchFileSuccessCallback(file);
             expect(instance.state.file).toEqual(file);
-            expect(instance.state.isFileError).toEqual(false);
+            expect(instance.state.error).toBeUndefined();
             expect(instance.state.isReloadNotificationVisible).toEqual(false);
         });
 
@@ -373,7 +390,7 @@ describe('elements/content-preview/ContentPreview', () => {
             instance.fetchFileSuccessCallback(newFile);
 
             expect(instance.state.file).toEqual(newFile);
-            expect(instance.state.isFileError).toEqual(false);
+            expect(instance.state.error).toBeUndefined();
             expect(instance.state.isReloadNotificationVisible).toEqual(false);
         });
 
@@ -402,7 +419,7 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(instance.stagedFile).toEqual(newFile);
             expect(instance.state.file).toEqual(file);
-            expect(instance.state.isFileError).toBeFalsy();
+            expect(instance.state.error).toBeUndefined();
             expect(instance.state.isReloadNotificationVisible).toBeTruthy();
         });
     });
@@ -423,10 +440,19 @@ describe('elements/content-preview/ContentPreview', () => {
             error = new Error('foo');
         });
 
-        test('should set the file error state', () => {
-            instance.fetchFileErrorCallback(error);
-            expect(instance.state.isFileError).toEqual(true);
+        test('should set the error state from the error object', () => {
+            instance.fetchFileErrorCallback(error, 'code');
+            expect(instance.state.error).toEqual({ code: 'code', message: 'foo' });
             expect(instance.fetchFile).not.toBeCalled();
+            expect(instance.file).toBeUndefined();
+            expect(onError).toHaveBeenCalled();
+        });
+
+        test('should use the code from response if it exists', () => {
+            instance.fetchFileErrorCallback({ code: 'specialCode', message: 'specialMessage' }, 'code');
+            expect(instance.state.error).toEqual({ code: 'specialCode', message: 'specialMessage' });
+            expect(instance.fetchFile).not.toBeCalled();
+            expect(instance.file).toBeUndefined();
             expect(onError).toHaveBeenCalled();
         });
     });
@@ -652,7 +678,7 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.state.file).toEqual(file);
             expect(instance.stagedFile).toBeUndefined();
             expect(instance.state.isReloadNotificationVisible).toBeFalsy();
-            expect(instance.state.isFileError).toBeFalsy();
+            expect(instance.state.error).toBeUndefined();
         });
     });
 

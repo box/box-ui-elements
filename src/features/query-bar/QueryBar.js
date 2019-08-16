@@ -19,6 +19,10 @@ type Props = {
     templates?: Array<MetadataTemplate>,
 };
 
+const isItemName = (column: ColumnType) => {
+    return column.source === 'item' && column.property === 'name';
+};
+
 const QueryBar = ({
     activeTemplate,
     columns,
@@ -27,12 +31,16 @@ const QueryBar = ({
     onFilterChange,
     onTemplateChange,
     templates,
-}: Props) => (
-    <section className="metadata-view-query-bar">
-        <TemplateButton activeTemplate={activeTemplate} onTemplateChange={onTemplateChange} templates={templates} />
-        <FilterButton columns={columns} conditions={conditions} onFilterChange={onFilterChange} />
-        <ColumnButton columns={columns} onColumnChange={onColumnChange} template={activeTemplate} />
-    </section>
-);
+}: Props) => {
+    const metadataColumns = columns && columns.filter(column => column.source !== 'item');
+    const columnsWithoutItemName = columns && columns.filter(column => !isItemName(column));
+    return (
+        <section className="metadata-view-query-bar">
+            <TemplateButton activeTemplate={activeTemplate} onTemplateChange={onTemplateChange} templates={templates} />
+            <FilterButton columns={metadataColumns} conditions={conditions} onFilterChange={onFilterChange} />
+            <ColumnButton columns={columnsWithoutItemName} onColumnChange={onColumnChange} template={activeTemplate} />
+        </section>
+    );
+};
 
 export default QueryBar;

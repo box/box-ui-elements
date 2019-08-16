@@ -1,27 +1,38 @@
 // @flow
 import React from 'react';
+import {
+    bdlLightBlue,
+    bdlBoxBlue,
+    bdlSecondaryBlue,
+    bdlGray62,
+    bdlGreenLight,
+    bdlYellorange,
+    bdlGrimace,
+    bdlPurpleRain,
+    bdlWatermelonRed,
+} from '../../styles/variables';
 
 const AVATAR_COLORS = [
-    '#18BBF7',
-    '#0D67C7',
-    '#052E5C',
-    '#747679',
-    '#FDA308',
-    '#98C332',
-    '#159F45',
-    '#B800B2',
-    '#F22C44',
+    bdlLightBlue,
+    bdlBoxBlue,
+    bdlSecondaryBlue,
+    bdlGray62,
+    bdlGreenLight,
+    bdlYellorange,
+    bdlGrimace,
+    bdlPurpleRain,
+    bdlWatermelonRed,
 ];
 
 const getInitials = name => {
     const firstInitial = name.slice(0, 1);
     const lastInitial = name.slice(name.lastIndexOf(' ') + 1, name.lastIndexOf(' ') + 2);
-    return firstInitial + lastInitial;
+    return (firstInitial + lastInitial).toUpperCase();
 };
 
 type Props = {
     className?: string,
-    id?: string | number,
+    id?: ?string | number,
     name: string,
 };
 

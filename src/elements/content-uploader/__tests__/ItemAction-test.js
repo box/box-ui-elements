@@ -2,7 +2,7 @@ import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import { ItemActionForTesting as ItemAction } from '../ItemAction';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../../constants';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_STAGED, STATUS_ERROR } from '../../../constants';
 
 describe('elements/content-uploader/ItemAction', () => {
     const getWrapper = props =>
@@ -26,6 +26,14 @@ describe('elements/content-uploader/ItemAction', () => {
     test('should render correctly with STATUS_IN_PROGRESS', () => {
         const wrapper = getWrapper({
             status: STATUS_IN_PROGRESS,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render correctly with STATUS_STAGED', () => {
+        const wrapper = getWrapper({
+            status: STATUS_STAGED,
         });
 
         expect(wrapper).toMatchSnapshot();

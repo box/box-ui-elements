@@ -1,0 +1,42 @@
+@import '../../styles/variables';
+
+// the outermost element
+.bdl-Media {
+    align-items: flex-start;
+    display: flex;
+}
+
+// the media content, ie, an avatar
+.bdl-Media-figure {
+    align-self: flex-start;
+    flex: 0 0 auto;
+    justify-self: flex-start;
+    margin: 0 10px 0 0;
+    padding: 0;
+}
+
+// the main content, e.g. title and message
+.bdl-Media-body {
+    flex: 1 1 100%;
+    // handle wrapping long words in text content without breaking
+    // float position of menu
+    overflow-wrap: break-word;
+    word-break: break-word; // CJK scripts
+    word-wrap: break-word; // old IE
+}
+
+// the "..." menu button, meant to be used inside Media-body
+.bdl-Media-menu {
+    // float is used to reflow content instead of pushing it to the left
+    float: right;
+
+    // overrides for .btn-plain's margin resets on focus states
+    &,
+    &.btn-plain,
+    &.btn-plain:active,
+    &.btn-plain:hover,
+    &.btn-plain:focus {
+        margin-bottom: 5px;
+        margin-left: 10px;
+    }
+}

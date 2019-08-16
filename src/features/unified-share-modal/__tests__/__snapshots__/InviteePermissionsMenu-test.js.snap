@@ -12,6 +12,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -243,6 +244,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -474,6 +476,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -705,6 +708,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -936,6 +940,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -1167,6 +1172,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -1505,6 +1511,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
+      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -1621,6 +1628,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
 <Tooltip
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="bottom-center"
   text={
     <FormattedMessage
@@ -1653,6 +1661,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
 <Tooltip
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isDisabled={false}
   position="bottom-center"
   text={
     <FormattedMessage

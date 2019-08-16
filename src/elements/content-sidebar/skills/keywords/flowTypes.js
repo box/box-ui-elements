@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import type { PillOption } from '../../../../components/pill-cloud/PillCloud';
+import type { Option } from '../../../../components/pill-selector-dropdown/flowTypes';
 
-export type Pill = PillOption;
-export type Pills = Array<PillOption>;
+export type Pill = Option;
+export type Pills = Array<Option>;

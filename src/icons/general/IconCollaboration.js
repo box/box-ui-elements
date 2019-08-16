@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 import AccessibleSVG from '../accessible-svg';
 
@@ -14,24 +14,22 @@ type Props = {
     width?: number,
 };
 
-const IconCollaboration = ({ className = '', color = BOX_BLUE, height = 26, title, width = 27 }: Props) => (
+const IconCollaboration = ({ className = '', color = bdlBoxBlue, height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
-        className={`icon-collaboration ${className}`}
+        className={`bdl-IconCollaboration ${className}`}
         height={height}
         title={title}
-        viewBox="0 0 27 26"
+        viewBox="0 0 32 32"
         width={width}
     >
-        <path
-            className="fill-color"
-            d="M25.9 9.5c.3 1.1.5 2.3.5 3.5 0 7.2-5.9 13-13.2 13S0 20.2 0 13 5.9 0 13.2 0c1.5 0 3 .3 4.4.7 0 0 .9.2.7.7s-.7.3-1 .2C16 1.2 14.6 1 13.2 1 6.4 1 1 6.4 1 13s5.4 12 12.2 12 12.2-5.4 12.2-12c0-1.1-.2-2.2-.5-3.3-.1-.4-.2-.9.3-1s.7.8.7.8z"
-            fill={color}
-        />
-        <path
-            className="fill-color"
-            d="M15.5 11.4c0-1.2-1-2.2-2.3-2.2s-2.3 1-2.3 2.2 1 2.2 2.3 2.2 2.3-1 2.3-2.2zm-5.6 0c0-1.8 1.5-3.2 3.3-3.2s3.3 1.5 3.3 3.2-1.5 3.2-3.3 3.2-3.3-1.4-3.3-3.2zM9 18.2c.3-.2.6-.4 1-.6 1.1-.6 2.3-.9 3.7-.9s2.6.3 3.7.9c.4.2.7.4 1 .6.2.1.3.2.3.3.2.2.5.2.7 0 .2-.2.2-.5 0-.7-.3-.3-.8-.6-1.5-1-1.2-.6-2.6-1-4.1-1s-2.9.4-4.1 1c-.7.4-1.2.8-1.5 1-.2.2-.2.5 0 .7.2.2.5.2.7 0-.2-.1-.1-.2.1-.3zM22 4V1.5c0-.3-.2-.5-.5-.5s-.5.2-.5.5V4h-2.5c-.3 0-.5.2-.5.5s.2.5.5.5H21v2.5c0 .3.2.5.5.5s.5-.2.5-.5V5h2.5c.3 0 .5-.2.5-.5s-.2-.5-.5-.5H22z"
-            fill={color}
-        />
+        <g fill="none">
+            <circle className="stroke-color" stroke={color} cx="16" cy="16" r="15.5" />
+            <path
+                className="fill-color"
+                d="M16 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm0-1a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zM9.433 22.75c.061-.106.194-.307.397-.57a8.892 8.892 0 0 1 1.237-1.3C12.437 19.701 14.077 19 16 19s3.563.702 4.933 1.88c.482.413.895.858 1.237 1.3.203.263.335.464.397.57a.5.5 0 0 0 .866-.5 6.603 6.603 0 0 0-.472-.68 9.886 9.886 0 0 0-1.376-1.45C20.045 18.799 18.18 18 16 18s-4.045.798-5.585 2.12c-.536.462-.994.955-1.376 1.45-.232.3-.39.536-.472.68a.5.5 0 0 0 .866.5z"
+                fill={color}
+            />
+        </g>
     </AccessibleSVG>
 );
 

@@ -93,7 +93,7 @@
         color: $light-charcoal;
 
         &:hover {
-            color: $twos;
+            color: $bdl-gray;
         }
     }
 
@@ -230,7 +230,7 @@
     font-size: $lsb-font-size;
     height: 28px;
     letter-spacing: .3px;
-    line-height: 30px;
+    line-height: 28px;
     padding: 0 $lsb-padding-x;
     position: relative;
     width: $lsb-width;
@@ -244,7 +244,7 @@
     &:hover,
     &.nav-link-callout-enabled {
         background-color: $lsb-menu-hover-link-bg;
-        color: $twos;
+        color: $bdl-gray;
         text-decoration: none;
 
         & + .lsb-remove-button {
@@ -261,7 +261,7 @@
         }
 
         .left-sidebar-link-text {
-            color: $twos;
+            color: $bdl-gray;
             text-decoration: none;
         }
 

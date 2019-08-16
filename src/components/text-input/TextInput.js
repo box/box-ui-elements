@@ -18,11 +18,14 @@ type Props = {
     error?: React.Node,
     /** Renders error tooltip at the specified position (positions are those from Tooltip) */
     errorPosition?: Position,
+    /** Hides the label */
     hideLabel?: boolean,
+    /** Hides (optional) text from the label */
     hideOptionalLabel?: boolean,
-    inputRef?: Function,
+    inputRef?: Function, // @TODO: eventually rename to innerRef for consistancy across all form elements
     /** Renders a loading indicator within the component when true */
     isLoading?: boolean,
+    /** Makes the input value required */
     isRequired?: boolean,
     /** Renders a green verified checkmark within the component when true */
     isValid?: boolean,
@@ -71,4 +74,5 @@ const TextInput = ({
 
 TextInput.displayName = 'TextInput';
 
+export type TextInputProps = Props;
 export default TextInput;

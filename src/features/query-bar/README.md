@@ -18,5 +18,6 @@ const template = require('./components/fixtures').template;
 
 <div>
     <MetadataViewQueryBarExamples templates={[template]} activeTemplate={template} />
+    Note: When Apply is clicked, the results of onFilterChange are logged to console.
 </div>
 ```

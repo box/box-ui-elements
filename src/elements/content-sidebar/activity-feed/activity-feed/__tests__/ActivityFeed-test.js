@@ -207,23 +207,23 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(instance.feedContainer.scrollTop).toEqual(100);
     });
 
-    test('should show input when approvalCommentFormFocusHandler is called', () => {
+    test('should show input when commentFormFocusHandler is called', () => {
         const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
 
         const instance = wrapper.instance();
-        instance.approvalCommentFormFocusHandler();
+        instance.commentFormFocusHandler();
 
         expect(wrapper.state('isInputOpen')).toBe(true);
     });
 
-    test('should hide input when approvalCommentFormCancelHandler is called', () => {
+    test('should hide input when commentFormCancelHandler is called', () => {
         const wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={jest.fn()} />);
 
         const instance = wrapper.instance();
-        instance.approvalCommentFormFocusHandler();
+        instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        instance.approvalCommentFormCancelHandler();
+        instance.commentFormCancelHandler();
         expect(wrapper.state('isInputOpen')).toBe(false);
     });
 
@@ -239,40 +239,14 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         );
 
         const instance = wrapper.instance();
-        const approvalCommentForm = wrapper.find('ApprovalCommentForm').first();
+        const commentForm = wrapper.find('CommentForm').first();
 
-        instance.approvalCommentFormFocusHandler();
+        instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        approvalCommentForm.prop('createComment')({ text: 'foo' });
+        commentForm.prop('createComment')({ text: 'foo' });
         expect(wrapper.state('isInputOpen')).toBe(false);
         expect(createCommentSpy).toHaveBeenCalledTimes(1);
-    });
-
-    test('should call create task handler and close input on valid task submit', () => {
-        const createTaskSpy = jest.fn();
-        const wrapper = shallow(
-            <ActivityFeed
-                currentUser={currentUser}
-                feedItems={feedItems}
-                file={file}
-                onCommentCreate={jest.fn()}
-                onTaskCreate={createTaskSpy}
-            />,
-        );
-        const instance = wrapper.instance();
-        const approvalCommentForm = wrapper.find('ApprovalCommentForm').first();
-
-        instance.approvalCommentFormFocusHandler();
-        expect(wrapper.state('isInputOpen')).toBe(true);
-
-        approvalCommentForm.prop('createTask')({
-            text: 'foo',
-            dueAt: 12333445558585,
-            assignees: [],
-        });
-        expect(wrapper.state('isInputOpen')).toBe(false);
-        expect(createTaskSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should stop event propagation onKeyDown', () => {

@@ -15,6 +15,7 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         position="top-left"
         text={
           <FormattedMessage
@@ -726,6 +727,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         position="top-left"
         text={
           <FormattedMessage
@@ -920,6 +922,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         position="top-left"
         text={
           <FormattedMessage
@@ -1023,6 +1026,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
       <Tooltip
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         position="top-left"
         text={
           <FormattedMessage

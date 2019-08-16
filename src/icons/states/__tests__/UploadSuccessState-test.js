@@ -1,7 +1,7 @@
 import React from 'react';
 
 import UploadSuccessState from '../UploadSuccessState';
-import { BOX_BLUE } from '../../../common/variables';
+import { bdlBoxBlue } from '../../../styles/variables';
 
 describe('icons/states/UploadSuccesstState', () => {
     test('should correctly render default icon', () => {
@@ -13,20 +13,20 @@ describe('icons/states/UploadSuccesstState', () => {
                 .find('rect')
                 .at(0)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
         expect(
             wrapper
                 .find('rect')
                 .at(1)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
         expect(
             wrapper
                 .find('rect')
                 .at(2)
                 .prop('fill'),
-        ).toEqual(BOX_BLUE);
-        expect(wrapper.find('path').prop('fill')).toEqual(BOX_BLUE);
+        ).toEqual(bdlBoxBlue);
+        expect(wrapper.find('path').prop('fill')).toEqual(bdlBoxBlue);
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(50);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(49);
     });

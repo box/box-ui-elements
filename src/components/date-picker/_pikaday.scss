@@ -9,9 +9,9 @@
     @include box-sizing;
 
     background: $white;
-    border: 1px solid $sf-fog;
-    border-bottom-color: $downtown-grey;
-    color: $sunset-grey;
+    border: 1px solid $bdl-gray-30;
+    border-bottom-color: $bdl-gray-50;
+    color: $bdl-gray-80;
     display: block;
     position: relative;
     z-index: 9999;
@@ -61,7 +61,7 @@
     &::after {
         border-left: 4px solid transparent;
         border-right: 4px solid transparent;
-        border-top: 4px solid $better-black;
+        border-top: 4px solid $bdl-gray-80;
         content: '';
         position: absolute;
         right: 4px;
@@ -102,7 +102,7 @@
 
     &::before {
         border-bottom: 4px solid transparent;
-        border-right: 4px solid $better-black;
+        border-right: 4px solid $bdl-gray-80;
         border-top: 4px solid transparent;
         content: '';
         left: 10px;
@@ -116,7 +116,7 @@
 
     &::after {
         border-bottom: 4px solid transparent;
-        border-left: 4px solid $better-black;
+        border-left: 4px solid $bdl-gray-80;
         border-radius: 2px;
         border-top: 4px solid transparent;
         content: '';

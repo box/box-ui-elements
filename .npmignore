@@ -1,5 +1,6 @@
 *~
 *~~bak
+.circleci
 .conventional-changelog-lintrc
 .DS_Store
 .editorconfig
@@ -12,6 +13,7 @@
 .github
 .gitignore
 .idea
+.mergify.yml
 .npmignore
 .npmrc
 .nvmrc
@@ -28,7 +30,6 @@ babel.config.js
 build
 CODEOWNERS
 commitlint.config.js
-conf
 coverage
 cypress.json
 desktop.ini
@@ -41,6 +42,7 @@ npm-error.log
 postcss.config.js
 release.config.js
 reports
+scripts
 styleguide
 stylelint.config.js
 test

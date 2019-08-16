@@ -1,7 +1,7 @@
 import React from 'react';
 
 import IconLogo from '../IconLogo';
-import { BOX_BLUE } from '../../../common/variables';
+import { bdlBoxBlue } from '../../../styles/variables';
 
 describe('icons/general/IconLogo', () => {
     test('should correctly render default icon', () => {
@@ -12,7 +12,7 @@ describe('icons/general/IconLogo', () => {
         expect(wrapper.prop('width')).toEqual(45);
         expect(wrapper.prop('height')).toEqual(25);
         expect(wrapper.prop('viewBox')).toEqual('0 0 98 52');
-        expect(wrapper.find('path').prop('fill')).toEqual(BOX_BLUE);
+        expect(wrapper.find('path').prop('fill')).toEqual(bdlBoxBlue);
     });
 
     test('should correctly render icon with specified color', () => {

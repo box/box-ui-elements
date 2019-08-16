@@ -1,0 +1,128 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/i18n components/i18n/FormattedCompMessage should correctly render FormattedCompMessage which starts with HTML, snapshot 1`] = `
+<FormattedCompMessage
+  description="asdf"
+  id="test"
+>
+  <FormattedCompMessage
+    description="asdf"
+    id="test"
+    intl={
+      Object {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+      }
+    }
+    tagName="span"
+  >
+    <span
+      key="test"
+      x-resource-id="test"
+    >
+      <b
+        key="key0"
+      >
+        bold
+      </b>
+       text. More text.
+    </span>
+  </FormattedCompMessage>
+</FormattedCompMessage>
+`;
+
+exports[`components/i18n components/i18n/FormattedCompMessage should correctly render FormattedCompMessage with HTML snapshot 1`] = `
+<FormattedCompMessage
+  description="asdf"
+  id="test"
+>
+  <FormattedCompMessage
+    description="asdf"
+    id="test"
+    intl={
+      Object {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+      }
+    }
+    tagName="span"
+  >
+    <span
+      key="test"
+      x-resource-id="test"
+    >
+      some 
+      <b
+        key="key0"
+      >
+        bold
+      </b>
+       text
+    </span>
+  </FormattedCompMessage>
+</FormattedCompMessage>
+`;
+
+exports[`components/i18n components/i18n/FormattedCompMessage should correctly render FormattedCompMessage with children snapshot 1`] = `
+<FormattedCompMessage
+  description="asdf"
+  id="test"
+>
+  <FormattedCompMessage
+    description="asdf"
+    id="test"
+    intl={
+      Object {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+      }
+    }
+    tagName="span"
+  >
+    <span
+      key="test"
+      x-resource-id="test"
+    >
+      some text
+    </span>
+  </FormattedCompMessage>
+</FormattedCompMessage>
+`;
+
+exports[`components/i18n components/i18n/FormattedCompMessage should correctly render FormattedCompMessage with subcomponents snapshot 1`] = `
+<FormattedCompMessage
+  description="asdf"
+  id="test"
+>
+  <FormattedCompMessage
+    description="asdf"
+    id="test"
+    intl={
+      Object {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+      }
+    }
+    tagName="span"
+  >
+    <span
+      key="test"
+      x-resource-id="test"
+    >
+      some 
+      <LinkButton
+        key="key0"
+        to="foo"
+      >
+        <a
+          className="btn"
+          href="foo"
+        >
+          link
+        </a>
+      </LinkButton>
+       text
+    </span>
+  </FormattedCompMessage>
+</FormattedCompMessage>
+`;

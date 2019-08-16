@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/grid-view/GridView should render() 1`] = `
+<Component
+  className="bdl-GridView"
+  disableHeader={true}
+  gridClassName="bdl-GridView-body"
+  height={600}
+  rowClassName="bdl-GridView-tableRow"
+  rowCount={1}
+  rowGetter={[Function]}
+  rowHeight={[Function]}
+  scrollToIndex={0}
+  sortDirection="ASC"
+  width={400}
+>
+  <Column
+    cellDataGetter={[Function]}
+    cellRenderer={[Function]}
+    dataKey=""
+    defaultSortDirection="ASC"
+    flexGrow={1}
+    flexShrink={1}
+    headerRenderer={[Function]}
+    style={Object {}}
+    width={400}
+  />
+</Component>
+`;

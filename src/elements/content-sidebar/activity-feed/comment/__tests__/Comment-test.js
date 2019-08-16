@@ -2,8 +2,7 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 
 import Comment from '../Comment';
-import ApprovalCommentForm from '../../approval-comment-form/ApprovalCommentForm';
-import InlineEdit from '../InlineEdit';
+import CommentForm from '../../comment-form/CommentForm';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -27,23 +26,8 @@ const allHandlers = {
 
 describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     beforeEach(() => {
-        ApprovalCommentForm.default = jest.fn().mockReturnValue(<div />);
-        InlineEdit.default = jest.fn().mockReturnValue(<div />);
+        CommentForm.default = jest.fn().mockReturnValue(<div />);
     });
-
-    const render = (props = {}) =>
-        shallow(
-            <Comment
-                approverSelectorContacts={approverSelectorContacts}
-                created_by={{ name: '50 Cent', id: 10 }}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                id="123"
-                mentionSelectorContacts={mentionSelectorContacts}
-                tagged_message="test"
-                {...props}
-            />,
-        );
 
     test('should correctly render comment', () => {
         const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
@@ -51,6 +35,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
+            permissions: { can_delete: true, can_edit: true },
         };
 
         const wrapper = shallow(
@@ -65,20 +50,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         );
 
         // validating that the Tooltip and the comment posted time are properly set
-        expect(wrapper.find('ReadableTime').prop('timestamp')).toEqual(unixTime);
+        expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
 
         expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should correctly add bcs-is-focused class when comment is focused', () => {
-        const wrapper = render();
-        const comment = wrapper.find('.bcs-comment');
-
-        expect(comment.hasClass('bcs-is-focused')).toBe(false);
-        comment.simulate('focus');
-        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(true);
-        comment.simulate('blur');
-        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(false);
     });
 
     test('should correctly render comment when translation is enabled', () => {
@@ -128,7 +102,42 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should not allow actions when comment is pending', () => {
+    test.each`
+        permissions                               | onEdit       | showMenu | showDelete | showEdit
+        ${{ can_delete: true, can_edit: false }}  | ${jest.fn()} | ${true}  | ${true}    | ${false}
+        ${{ can_delete: false, can_edit: true }}  | ${jest.fn()} | ${true}  | ${false}   | ${true}
+        ${{ can_delete: false, can_edit: true }}  | ${undefined} | ${false} | ${false}   | ${false}
+        ${{ can_delete: false, can_edit: false }} | ${jest.fn()} | ${false} | ${false}   | ${false}
+    `(
+        `for a comment with permissions $permissions and onEdit ($onEdit), should showMenu: $showMenu, showDelete: $showDelete, showEdit: $showEdit`,
+        ({ permissions, onEdit, showMenu, showDelete, showEdit }) => {
+            const comment = {
+                created_at: TIME_STRING_SEPT_27_2017,
+                tagged_message: 'test',
+                created_by: { name: '50 Cent', id: 10 },
+            };
+
+            const wrapper = shallow(
+                <Comment
+                    id="123"
+                    {...comment}
+                    approverSelectorContacts={approverSelectorContacts}
+                    currentUser={currentUser}
+                    handlers={allHandlers}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onDelete={jest.fn()}
+                    onEdit={onEdit}
+                    permissions={permissions}
+                />,
+            );
+
+            expect(wrapper.find('[data-testid="delete-comment"]').length).toEqual(showDelete ? 1 : 0);
+            expect(wrapper.find('[data-testid="edit-comment"]').length).toEqual(showEdit ? 1 : 0);
+            expect(wrapper.find('[data-testid="comment-actions-menu"]').length).toEqual(showMenu ? 1 : 0);
+        },
+    );
+
+    test('should not show actions menu when comment is pending', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
@@ -149,54 +158,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             />,
         );
 
-        expect(wrapper.find('InlineDelete').length).toEqual(0);
-        expect(wrapper.find('InlineEdit').length).toEqual(0);
-    });
-
-    test('should allow user to delete if they have delete permissions on the comment and delete handler is defined', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_delete: true },
-        };
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onDelete={jest.fn()}
-            />,
-        );
-
-        expect(wrapper.find('InlineDelete').length).toEqual(1);
-    });
-
-    test('should allow user to delete if they have delete permissions on the task and delete handler is defined', () => {
-        const task = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_delete: true },
-        };
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...task}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onDelete={jest.fn()}
-            />,
-        );
-
-        expect(wrapper.find('InlineDelete').length).toEqual(1);
+        expect(wrapper.find('[data-testid="comment-actions-menu"]').length).toEqual(0);
     });
 
     test('should allow user to edit if they have edit permissions on the task and edit handler is defined', () => {
@@ -204,8 +166,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_edit: true },
+            type: 'task',
+            permissions: { can_edit: true, can_delete: true },
         };
+        const mockOnEdit = jest.fn();
         const wrapper = mount(
             <Comment
                 id="123"
@@ -214,116 +178,37 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 currentUser={currentUser}
                 handlers={allHandlers}
                 mentionSelectorContacts={mentionSelectorContacts}
-                onEdit={jest.fn()}
+                onEdit={mockOnEdit}
             />,
         );
 
         const instance = wrapper.instance();
 
-        expect(wrapper.find('InlineEdit').length).toEqual(2);
-        expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
-        expect(wrapper.find('CommentText').length).toEqual(1);
+        expect(wrapper.find('CommentForm').length).toEqual(0);
+        expect(wrapper.find('ActivityMessage').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
 
         expect(wrapper.state('isEditing')).toBe(false);
-        instance.toEdit();
+        wrapper.find('button[data-testid="comment-actions-menu"]').simulate('click');
+        wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
         wrapper.update();
-        expect(wrapper.find('CommentText').length).toEqual(0);
+
+        expect(wrapper.find('ActivityMessage').length).toEqual(0);
         expect(wrapper.state('isEditing')).toBe(true);
 
-        instance.approvalCommentFormFocusHandler();
+        instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        instance.updateTaskHandler();
+        const updatePayload = { id: '000', hasMention: true, text: 'updated message' };
+        instance.handleUpdate(updatePayload);
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
-    });
-
-    test('should not allow user to delete if they lack delete permissions on the comment', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-            permissions: {},
-        };
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onDelete={jest.fn()}
-            />,
+        expect(mockOnEdit).toHaveBeenCalledWith(
+            updatePayload.id,
+            updatePayload.text,
+            updatePayload.hasMention,
+            comment.permissions,
         );
-
-        expect(wrapper.find('InlineDelete').length).toEqual(0);
-    });
-
-    test('should not allow user to edit if they lack edit permissions on the comment', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 },
-            permissions: {},
-        };
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onEdit={jest.fn()}
-            />,
-        );
-
-        expect(wrapper.find('InlineEdit').length).toEqual(0);
-    });
-
-    test('should not allow comment creator to delete if onDelete handler is undefined', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 11 },
-        };
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                mentionSelectorContacts={mentionSelectorContacts}
-            />,
-        );
-
-        expect(wrapper.find('InlineDelete').length).toEqual(0);
-    });
-
-    test('should not allow task creator to edit if onEdit handler is undefined', () => {
-        const comment = {
-            created_at: TIME_STRING_SEPT_27_2017,
-            tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 11 },
-        };
-
-        const wrapper = shallow(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-            />,
-        );
-
-        expect(wrapper.find('InlineEdit').length).toEqual(0);
     });
 
     test('should render an error when one is defined', () => {
@@ -379,44 +264,11 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 onDelete={jest.fn()}
             />,
         );
-        const inlineErrorActionLink = wrapper.find('InlineError').find('PlainButton.lnk');
+        const inlineErrorActionLink = wrapper.find('InlineError').find('button.bcs-ActivityError-action');
         expect(inlineErrorActionLink.length).toEqual(1);
 
         inlineErrorActionLink.simulate('click');
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
-    });
-
-    test('should not have UserLink mention object when shouldReturnString is true', () => {
-        const comment = {
-            created_at: '2016-11-02T11:35:14-07:00',
-            tagged_message: 'test @[3203255873:test user] ',
-            created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_edit: true },
-        };
-        const wrapper = mount(
-            <Comment
-                id="123"
-                {...comment}
-                approverSelectorContacts={approverSelectorContacts}
-                currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onEdit={jest.fn()}
-            />,
-        );
-
-        expect(wrapper.find('InlineEdit').length).toEqual(2);
-        expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
-        expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.state('isEditing')).toBe(false);
-        expect(wrapper.find('UserLink').length).toEqual(2);
-        expect(wrapper.state('isEditing')).toBe(false);
-
-        wrapper.instance().toEdit();
-        wrapper.update();
-        expect(wrapper.state('isEditing')).toBe(true);
-        expect(wrapper.find('InlineEdit').length).toEqual(2);
-        expect(wrapper.find('UserLink').length).toEqual(1);
     });
 });

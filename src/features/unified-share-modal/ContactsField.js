@@ -16,7 +16,8 @@ import parseEmails from '../../utils/parseEmails';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';
-import type { contactType as Contact } from './flowTypes';
+import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
+import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
     disabled: boolean,
@@ -28,15 +29,16 @@ type Props = {
     onContactAdd: Function,
     onContactRemove: Function,
     onInput?: Function,
-    onSuggestedCollaboratorAdd: Contact => void,
+    onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     selectedContacts: Array<Contact>,
-    suggestedCollaborators?: Array<Contact>,
+    suggestedCollaborators?: suggestedCollaboratorsType,
     validateForError: Function,
     validator: Function,
 };
 
 type State = {
     contacts: Array<Contact>,
+    numSuggestedShowing: number,
     pillSelectorInputValue: string,
 };
 
@@ -50,16 +52,40 @@ class ContactsField extends React.Component<Props, State> {
 
         this.state = {
             contacts: [],
+            numSuggestedShowing: 0,
             pillSelectorInputValue: '',
         };
     }
 
+    addSuggestedContacts = (contacts: Array<Contact>) => {
+        const { suggestedCollaborators = {} } = this.props;
+
+        const suggestedSelectorOptions = contacts
+            .filter(option => {
+                const id = option.id;
+                return id && suggestedCollaborators[id.toString()];
+            })
+            .sort((optionA, optionB) => {
+                const currentSuggestedItemA = suggestedCollaborators[optionA.id.toString()];
+                const currentSuggestedItemB = suggestedCollaborators[optionB.id.toString()];
+                return currentSuggestedItemB.userScore - currentSuggestedItemA.userScore;
+            })
+            .slice(0, 3);
+
+        this.setState({ numSuggestedShowing: suggestedSelectorOptions.length });
+        const selectorOptionsParsed = contacts.filter(
+            option => !suggestedSelectorOptions.map(suggestion => suggestion.id).includes(option.id),
+        );
+
+        return [...suggestedSelectorOptions, ...selectorOptionsParsed];
+    };
+
     filterContacts = (contacts: Array<Contact>) => {
         const { pillSelectorInputValue } = this.state;
-        const { selectedContacts } = this.props;
+        const { selectedContacts, suggestedCollaborators } = this.props;
 
         if (pillSelectorInputValue && contacts) {
-            return contacts
+            const fullContacts = contacts
                 .filter(
                     // filter contacts whose name or email don't match input value
                     ({ name, email }) =>
@@ -69,14 +95,21 @@ class ContactsField extends React.Component<Props, State> {
                     // filter contacts who have already been selected
                     ({ email, id }) => !selectedContacts.find(({ value }) => value === email || value === id),
                 )
-                .map<Object>(({ email, id, name, type }) => ({
+                .map<Object>(({ email, id, isExternalUser, name, type }) => ({
                     // map to standardized DatalistItem format
                     email,
                     id,
+                    isExternalUser,
                     text: name,
                     type,
                     value: email || id, // if email doesn't exist, contact is a group, use id
                 }));
+
+            if (suggestedCollaborators) {
+                return this.addSuggestedContacts(fullContacts);
+            }
+
+            return fullContacts;
         }
 
         // return empty selector options if input value is empty
@@ -132,13 +165,13 @@ class ContactsField extends React.Component<Props, State> {
             selectedContacts,
             onContactAdd,
             onContactRemove,
-            onSuggestedCollaboratorAdd,
-            suggestedCollaborators,
+            onPillCreate,
             validateForError,
             validator,
         } = this.props;
-        const { contacts } = this.state;
+        const { contacts, numSuggestedShowing } = this.state;
         const groupLabel = <FormattedMessage {...messages.groupLabel} />;
+        const shouldShowSuggested = numSuggestedShowing > 0 && contacts.length !== numSuggestedShowing;
         const pillSelectorOverlayClasses = classNames({
             scrollable: contacts.length > 5,
         });
@@ -147,6 +180,7 @@ class ContactsField extends React.Component<Props, State> {
             <PillSelectorDropdown
                 allowCustomPills
                 className={pillSelectorOverlayClasses}
+                dividerIndex={shouldShowSuggested ? numSuggestedShowing : undefined}
                 disabled={disabled}
                 error={error}
                 inputProps={{
@@ -157,19 +191,18 @@ class ContactsField extends React.Component<Props, State> {
                 onInput={this.handlePillSelectorInput}
                 onRemove={onContactRemove}
                 onSelect={onContactAdd}
-                onSuggestedPillAdd={onSuggestedCollaboratorAdd}
+                onPillCreate={onPillCreate}
+                overlayTitle={shouldShowSuggested ? intl.formatMessage(messages.suggestedCollabsTitle) : undefined}
                 parseItems={parseEmails}
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
                 ref={fieldRef}
                 selectedOptions={selectedContacts}
                 selectorOptions={contacts}
-                suggestedPillsData={suggestedCollaborators}
-                suggestedPillsTitle={intl.formatMessage(messages.suggestedCollabsInlineTitle)}
                 validateForError={validateForError}
                 validator={validator}
             >
                 {contacts.map(({ email, text = null, id }) => (
-                    <ContactDatalistItem key={id} name={text} subtitle={email || groupLabel} />
+                    <ContactDatalistItem key={id} name={text} subtitle={email || groupLabel} title={text} />
                 ))}
             </PillSelectorDropdown>
         );

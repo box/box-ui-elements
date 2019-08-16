@@ -24,17 +24,18 @@
 .bcow-menu {
     .bcow-menu-item-title {
         color: $threes;
-        font-weight: 700;
+        font-weight: bold;
         margin: 0;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     .bcow-menu-item-description {
-        color: $downtown-grey;
+        color: $bdl-gray-62;
         font-size: 11px;
         line-height: 14px;
         margin: 0;
+        max-width: 200px;
         white-space: normal;
         word-wrap: break-word;
     }
@@ -49,7 +50,7 @@
     .bcow-portal-loading-indicator {
         div {
             // Platform standard color
-            background-color: $twos;
+            background-color: $bdl-gray;
         }
     }
 

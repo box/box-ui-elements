@@ -9,15 +9,16 @@ import SearchAPI from '../Search';
 import RecentsAPI from '../Recents';
 import VersionsAPI from '../Versions';
 import CommentsAPI from '../Comments';
-import TasksAPI from '../Tasks';
-import TasksNewAPI from '../TasksNew';
-import TaskCollaboratorsAPI from '../TaskCollaborators';
-import TaskLinksAPI from '../TaskLinks';
+import TasksAPI from '../tasks/Tasks';
+import TasksNewAPI from '../tasks/TasksNew';
+import TaskCollaboratorsAPI from '../tasks/TaskCollaborators';
+import TaskLinksAPI from '../tasks/TaskLinks';
 import FileAccessStatsAPI from '../FileAccessStats';
 import MetadataAPI from '../Metadata';
 import FileCollaboratorsAPI from '../FileCollaborators';
 import UsersAPI from '../Users';
 import BoxEditAPI from '../box-edit';
+import MetadataQueryAPI from '../MetadataQuery';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -49,6 +50,7 @@ describe('api/APIFactory', () => {
             factory.taskLinksAPI = { destroy: jest.fn() };
             factory.taskCollaboratorsAPI = { destroy: jest.fn() };
             factory.boxEditAPI = { destroy: jest.fn() };
+            factory.metadataQueryAPI = { destroy: jest.fn() };
             factory.destroy();
             expect(factory.fileAPI).toBeUndefined();
             expect(factory.folderAPI).toBeUndefined();
@@ -63,6 +65,7 @@ describe('api/APIFactory', () => {
             expect(factory.taskLinksAPI).toBeUndefined();
             expect(factory.tasksNewAPI).toBeUndefined();
             expect(factory.usersAPI).toBeUndefined();
+            expect(factory.metadataQueryAPI).toBeUndefined();
         });
         test('should not destroy cache by default', () => {
             const { cache } = factory.options;
@@ -403,6 +406,28 @@ describe('api/APIFactory', () => {
         test('should not call destroy and return box edit API', () => {
             const boxEditAPI = factory.getBoxEditAPI();
             expect(boxEditAPI).toBeInstanceOf(BoxEditAPI);
+        });
+    });
+
+    describe('getMetadataQueryAPI()', () => {
+        test('should call destroy and return versions API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const metadataQueryAPI = factory.getMetadataQueryAPI(true);
+            expect(spy).toBeCalled();
+            expect(metadataQueryAPI).toBeInstanceOf(MetadataQueryAPI);
+            expect(metadataQueryAPI.options.cache).toBeInstanceOf(Cache);
+            expect(metadataQueryAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(metadataQueryAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return versions API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const metadataQueryAPI = factory.getMetadataQueryAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(metadataQueryAPI).toBeInstanceOf(MetadataQueryAPI);
+            expect(metadataQueryAPI.options.cache).toBeInstanceOf(Cache);
+            expect(metadataQueryAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(metadataQueryAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

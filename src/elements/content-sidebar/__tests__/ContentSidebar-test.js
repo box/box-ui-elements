@@ -14,6 +14,7 @@ const file = {
 
 describe('elements/content-sidebar/ContentSidebar', () => {
     let rootElement;
+
     const getWrapper = (props = {}) =>
         mount(<ContentSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, {
             attachTo: rootElement,
@@ -23,6 +24,9 @@ describe('elements/content-sidebar/ContentSidebar', () => {
         SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
         rootElement = document.createElement('div');
         document.body.appendChild(rootElement);
+
+        // Prevent componentDidMount from triggering API calls
+        ContentSidebar.prototype.componentDidMount = jest.fn();
     });
 
     afterEach(() => {
@@ -63,9 +67,9 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             const instance = wrapper.instance();
             const newProps = { fileId: '123' };
 
+            instance.fetchFile = jest.fn();
             instance.setState({ view: 'activityFeed' });
             instance.setState = jest.fn();
-            instance.fetchFile = jest.fn();
 
             instance.componentDidUpdate(newProps);
 
@@ -164,10 +168,6 @@ describe('elements/content-sidebar/ContentSidebar', () => {
         });
 
         test('should set the state with the file and view and then call fetchMetadata', () => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.setState = setState;
-
             instance.fetchMetadata = jest.fn();
             instance.fetchFileSuccessCallback(file);
 
@@ -201,7 +201,7 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             instance.fetchMetadata();
 
             expect(SidebarUtils.canHaveMetadataSidebar).toBeCalledWith(instance.props);
-            expect(getMetadataAPI).toBeCalledWith(true);
+            expect(getMetadataAPI).toBeCalledWith(false);
             expect(getMetadata).toBeCalledWith(file, instance.fetchMetadataSuccessCallback, noop, false);
         });
 
@@ -241,6 +241,27 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             expect(SidebarUtils.canHaveMetadataSidebar).toBeCalledWith(instance.props);
             expect(getMetadataAPI).not.toBeCalled();
             expect(getMetadata).not.toBeCalled();
+        });
+    });
+
+    describe('refresh()', () => {
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test.each`
+            testcase   | initialValue | expectedResult
+            ${'null'}  | ${null}      | ${true}
+            ${'false'} | ${false}     | ${true}
+            ${'true'}  | ${true}      | ${false}
+        `('should change the refreshIdentity state: $testcase', ({ initialValue, expectedResult }) => {
+            instance.setState({ refreshIdentity: initialValue });
+            instance.refresh();
+            expect(instance.state.refreshIdentity).toEqual(expectedResult);
         });
     });
 });

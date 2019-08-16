@@ -1,122 +1,43 @@
 @import '../../../common/variables';
+@import './mixins';
 
-$success-color: $shady-acres;
-$error-color: $red;
+$bcs-task-grid: 4px;
+$bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
 
-.be .bcs-task {
+.bcs-Task-media {
     opacity: 1;
     transition: opacity .33s;
 
     &.bcs-is-pending {
         opacity: .4;
     }
+}
 
-    .bcs-task-assignment-container {
-        margin-left: 40px;
-    }
+.bcs-Task-avatar {
+    height: 100%;
+    position: relative;
+}
 
-    .bcs-task-due-date {
-        color: $threes;
-        font-weight: bold;
-        margin: 5px 0;
+.bcs-Task-avatarBadge {
+    @include avatar-badge-icon;
 
-        span:first-child {
-            padding-right: 3px;
-        }
+    border-width: 2px;
+    right: -4px;
+}
 
-        &.bcs-task-overdue {
-            color: $error-color;
-        }
-    }
+.bcs-Task-statusContainer {
+    margin-top: 2 * $bcs-task-grid;
+}
 
-    .bcs-task-assignments {
-        display: flex;
-        margin: 8px 0;
-    }
+.bcs-Task-assigneeListContainer {
+    margin-top: $bcs-task-grid;
+}
 
-    .bcs-task-assignment-avatar {
-        height: 32px;
-        width: 32px;
-    }
+.bcs-Task-actionsContainer {
+    margin-top: 5 * $bcs-task-grid;
+}
 
-    .bcs-task-assignment-count {
-        align-items: center;
-        background: $grey;
-        border-radius: 100%;
-        color: #fff;
-        display: flex;
-        justify-content: center;
-    }
-
-    .bcs-task-assignment-status {
-        display: inline-block;
-        height: 32px;
-        position: relative;
-        width: 32px;
-
-        // select all but first instance
-        & + & {
-            margin-left: 3px;
-        }
-    }
-
-    .bcs-task-assignment-status-icon {
-        border: 1px solid $white;
-        border-radius: 50%;
-        bottom: 0;
-        height: 12px;
-        position: absolute;
-        right: 0;
-        width: 12px;
-
-        &.completed,
-        &.approved,
-        &.rejected {
-            background: $white;
-        }
-    }
-
-    .bcs-task-status {
-        align-items: center;
-        display: flex;
-        margin-top: 15px;
-    }
-
-    .bcs-task-status-icon {
-        border: 1px solid $white;
-        border-radius: 100%;
-        bottom: 0;
-        height: 14px;
-        margin-right: 5px;
-        width: 14px;
-
-        &.completed,
-        &.approved,
-        &.rejected {
-            background: $white;
-        }
-
-        &.pending,
-        &.incomplete,
-        &.notStarted {
-            align-items: center;
-            color: white;
-            display: flex;
-            font-size: 80%;
-            font-weight: bold;
-            justify-content: center;
-
-            .fill-color {
-                fill: $grey;
-            }
-        }
-    }
-
-    .bcs-task-pending-assignment {
-        margin-top: 5px;
-    }
-
-    button:first-of-type.bcs-task-action-button {
-        margin-left: 0;
-    }
+// tethered styles for delete confirmation modal
+.bcs-Task-deleteConfirmationModal {
+    z-index: $overlay-z-index;
 }

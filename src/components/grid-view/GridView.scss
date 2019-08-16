@@ -1,0 +1,37 @@
+.bdl-GridView {
+    .ReactVirtualized__Table__rowColumn:first-child {
+        margin: 0;
+    }
+
+    .bce-more-options {
+        align-self: flex-start;
+    }
+
+    .bce-btn-more-options {
+        margin-top: 0;
+        margin-right: 0;
+        padding: 5px 10px;
+
+        .btn-content {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
+    }
+}
+
+.bdl-GridView-body {
+    outline: none;
+    padding: 5px;
+}
+
+.bdl-GridView-row {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.bdl-GridView-tableRow {
+    border: none;
+    padding-right: 0 !important;
+    width: 100% !important;
+}

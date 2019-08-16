@@ -1,9 +1,8 @@
 @import '../../../styles/variables';
 
 .bcs-VersionsList {
-    &.bcs-is-empty {
-        padding-top: 10px;
-        text-align: center;
+    .be & {
+        margin: 0;
     }
 }
 
@@ -28,7 +27,7 @@
     }
 
     & + & {
-        border-top: $border-height solid $off-white;
+        border-top: $border-height solid $bdl-gray-10;
 
         .bcs-VersionsItem {
             margin-top: -$border-height;

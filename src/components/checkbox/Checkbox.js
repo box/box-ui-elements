@@ -16,18 +16,23 @@ type Props = {
     /** Unique `id` for the input */
     id?: string,
     /** Checkbox checked state */
-    isChecked?: boolean,
-    isDisabled?: boolean,
+    isChecked?: boolean, // @TODO: eventually call this `checked`
+    /** Checkbox disabled state */
+    isDisabled?: boolean, // @TODO: eventually call this `disabled`
     /** Label displayed for the input */
     label: React.Node,
     /** Name of the input */
     name: string,
+    /** blur callback function called with event as the argument */
+    onBlur?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
     /** change callback function called with event as the argument */
-    onChange?: Function,
+    onChange?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
     /** Subsection below the checkbox */
     subsection?: React.Node,
     /** Info tooltip text next to the checkbox label */
     tooltip?: string,
+    /** optional value for the checkbox */
+    value?: any,
 };
 
 const Checkbox = ({
@@ -43,7 +48,7 @@ const Checkbox = ({
     onChange,
     subsection,
     tooltip,
-    ...rest
+    ...rest // @TODO: eventually remove `rest` in favor of explicit props
 }: Props) => {
     const checkboxLabel = (
         // eslint-disable-next-line jsx-a11y/label-has-for
@@ -73,4 +78,5 @@ const Checkbox = ({
     );
 };
 
+export type CheckboxProps = Props;
 export default Checkbox;

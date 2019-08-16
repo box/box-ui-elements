@@ -6,6 +6,7 @@
 import * as React from 'react';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import SidebarContent from './SidebarContent';
+import SidebarSection from './SidebarSection';
 import './SidebarLoading.scss';
 
 type Props = {
@@ -15,7 +16,9 @@ type Props = {
 const SidebarLoading = ({ title }: Props) => {
     return (
         <SidebarContent title={title}>
-            <LoadingIndicator className="bcs-sidebar-loading" />
+            <SidebarSection isOpen>
+                <LoadingIndicator className="bcs-sidebar-loading" />
+            </SidebarSection>
         </SidebarContent>
     );
 };

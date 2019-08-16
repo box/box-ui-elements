@@ -11,7 +11,13 @@ import { getBadItemError } from '../utils/error';
 import Item from './Item';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
-import { CACHE_PREFIX_FOLDER, ERROR_CODE_FETCH_FOLDER, ERROR_CODE_CREATE_FOLDER } from '../constants';
+import {
+    CACHE_PREFIX_FOLDER,
+    ERROR_CODE_FETCH_FOLDER,
+    ERROR_CODE_CREATE_FOLDER,
+    FIELD_REPRESENTATIONS,
+    X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
+} from '../constants';
 
 class Folder extends Item {
     /**
@@ -209,9 +215,7 @@ class Folder extends Item {
         const requestFields = fields || FOLDER_FIELDS_TO_FETCH;
 
         this.errorCode = ERROR_CODE_FETCH_FOLDER;
-
         let params = { fields: requestFields.toString() };
-
         if (!noPagination) {
             params = Object.assign({}, params, {
                 direction: this.sortDirection.toLowerCase(),
@@ -226,6 +230,11 @@ class Folder extends Item {
             .get({
                 url: this.getUrl(this.id),
                 params,
+                headers: requestFields.includes(FIELD_REPRESENTATIONS)
+                    ? {
+                          'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
+                      }
+                    : {},
             })
             .then(successHandler)
             .catch(this.errorHandler);
@@ -305,7 +314,7 @@ class Folder extends Item {
         }
 
         // Make the XHR request
-        this.folderRequest();
+        this.folderRequest(options);
     }
 
     /**

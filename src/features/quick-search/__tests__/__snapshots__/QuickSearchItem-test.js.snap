@@ -6,9 +6,9 @@ exports[`features/quick-search/QuickSearchItem should not render parent folder o
 >
   <span
     className="txt-ellipsis"
-    title="{date, date, medium} by {user}"
+    title="Dec 31, 1969 by Yo"
   >
-    {date, date, medium} by {user}
+    Dec 31, 1969 by Yo
   </span>
 </span>
 `;

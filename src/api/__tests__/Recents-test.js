@@ -95,6 +95,7 @@ describe('api/Recents', () => {
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
                     params: { fields: FOLDER_FIELDS_TO_FETCH.toString() },
+                    headers: {},
                 });
             });
         });
@@ -114,6 +115,7 @@ describe('api/Recents', () => {
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
                     params: { fields: FOLDER_FIELDS_TO_FETCH.toString() },
+                    headers: {},
                 });
             });
         });

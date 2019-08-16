@@ -6,29 +6,45 @@
 import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import omit from 'lodash/omit';
+import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
-import messages from '../elements/common/messages';
+import commonMessages from '../elements/common/messages';
+import messages from './messages';
 import { sortFeedItems } from '../utils/sorter';
 import Base from './Base';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
-import TasksAPI from './Tasks';
-import TasksNewAPI from './TasksNew';
-import TaskCollaboratorsAPI from './TaskCollaborators';
-import TaskLinksAPI from './TaskLinks';
-import TaskAssignmentsAPI from './TaskAssignments';
+import TasksAPI from './tasks/Tasks';
+import TasksNewAPI from './tasks/TasksNew';
+import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
+import TaskLinksAPI from './tasks/TaskLinks';
+import TaskAssignmentsAPI from './tasks/TaskAssignments';
 import AppActivityAPI from './AppActivity';
 import {
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_CREATE_TASK_ASSIGNMENT,
+    ERROR_CODE_UPDATE_TASK,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_INCOMPLETE,
-    TASK_NEW_INCOMPLETE,
+    TASK_NEW_APPROVED,
+    TASK_NEW_COMPLETED,
+    TASK_NEW_REJECTED,
+    TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
 } from '../constants';
+import type {
+    TaskCompletionRule,
+    TaskCollabAssignee,
+    TaskCollabStatus,
+    TaskLink,
+    TaskNew,
+    TaskType,
+    TaskPayload,
+    TaskUpdatePayload,
+} from '../common/types/tasks';
 
-const TASK_NEW_INITIAL_STATUS = TASK_NEW_INCOMPLETE;
+const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 const TASK = 'task';
 const TASK_ASSIGNMENT = 'task_assignment';
 const TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
@@ -82,9 +98,9 @@ class Feed extends Base {
     taskLinksAPI: TaskLinksAPI[];
 
     /**
-     * @property {string}
+     * @property {BoxItem}
      */
-    id: string;
+    file: BoxItem;
 
     /**
      * @property {boolean}
@@ -169,28 +185,29 @@ class Feed extends Base {
             }
         }
 
-        this.id = id;
+        this.file = file;
         this.hasError = false;
         this.errorCallback = onError;
         const versionsPromise = this.fetchVersions();
+        const currentVersionPromise = this.fetchCurrentVersion();
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = shouldShowNewTasks ? this.fetchTasksNew() : this.fetchTasks();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
-        Promise.all([versionsPromise, commentsPromise, tasksPromise, appActivityPromise]).then(feedItems => {
-            const versions: ?FileVersions = feedItems[0];
-            const versionsWithRestoredVersion = this.versionsAPI.addCurrentVersion(versions, file);
-            const unsortedFeedItems = [versionsWithRestoredVersion, ...feedItems.slice(1)];
-            const sortedFeedItems = sortFeedItems(...unsortedFeedItems);
-            if (!this.isDestroyed()) {
-                this.setCachedItems(id, sortedFeedItems);
-                if (this.hasError) {
-                    errorCallback(sortedFeedItems);
-                } else {
-                    successCallback(sortedFeedItems);
+        Promise.all([versionsPromise, currentVersionPromise, commentsPromise, tasksPromise, appActivityPromise]).then(
+            ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                const versionsWithCurrent = this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file);
+                const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
+                if (!this.isDestroyed()) {
+                    this.setCachedItems(id, sortedFeedItems);
+                    if (this.hasError) {
+                        errorCallback(sortedFeedItems);
+                    } else {
+                        successCallback(sortedFeedItems);
+                    }
                 }
-            }
-        });
+            },
+        );
     }
 
     /**
@@ -203,7 +220,7 @@ class Feed extends Base {
         this.commentsAPI = new CommentsAPI(this.options);
         return new Promise(resolve => {
             this.commentsAPI.getComments(
-                this.id,
+                this.file.id,
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
@@ -220,7 +237,26 @@ class Feed extends Base {
         this.versionsAPI = new VersionsAPI(this.options);
 
         return new Promise(resolve => {
-            this.versionsAPI.getVersions(this.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
+            this.versionsAPI.getVersions(this.file.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
+        });
+    }
+
+    /**
+     * Fetches the current version for a file
+     *
+     * @return {Promise} - the file versions
+     */
+    fetchCurrentVersion(): Promise<?BoxItemVersion> {
+        this.versionsAPI = new VersionsAPI(this.options);
+
+        return new Promise(resolve => {
+            const { file_version = {} } = this.file;
+            this.versionsAPI.getCurrentVersion(
+                this.file.id,
+                file_version.id,
+                resolve,
+                this.fetchFeedItemErrorCallback.bind(this, resolve),
+            );
         });
     }
 
@@ -234,7 +270,7 @@ class Feed extends Base {
 
         return new Promise(resolve => {
             this.tasksAPI.getTasks(
-                this.id,
+                this.file.id,
                 tasks => {
                     this.fetchTaskAssignments(tasks).then(resolve);
                 },
@@ -253,7 +289,7 @@ class Feed extends Base {
 
         return new Promise(resolve => {
             this.tasksNewAPI.getTasksForFile({
-                file: { id: this.id },
+                file: { id: this.file.id },
                 successCallback: resolve,
                 errorCallback: (err, code) => this.fetchFeedItemErrorCallback(resolve, err, code),
             });
@@ -299,7 +335,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, taskId);
         const assignmentAPI = new TaskAssignmentsAPI(this.options);
@@ -330,7 +366,7 @@ class Feed extends Base {
         updatedAssignment: TaskAssignment,
         successCallback: Function,
     ): void => {
-        const cachedItems = this.getCachedItems(this.id);
+        const cachedItems = this.getCachedItems(this.file.id);
         if (cachedItems) {
             // $FlowFixMe
             const task: ?Task = cachedItems.items.find(item => item.type === TASK && item.id === taskId);
@@ -385,7 +421,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, taskId);
         const collaboratorsApi = new TaskCollaboratorsAPI(this.options);
@@ -395,6 +431,21 @@ class Feed extends Base {
             status: taskCollaboratorStatus,
         };
         const handleError = (e: ElementsXhrError, code: string) => {
+            let errorMessage;
+            switch (taskCollaboratorStatus) {
+                case TASK_NEW_APPROVED:
+                    errorMessage = messages.taskApproveErrorMessage;
+                    break;
+                case TASK_NEW_COMPLETED:
+                    errorMessage = messages.taskCompleteErrorMessage;
+                    break;
+                case TASK_NEW_REJECTED:
+                    errorMessage = messages.taskRejectErrorMessage;
+                    break;
+                default:
+                    errorMessage = messages.taskCompleteErrorMessage;
+            }
+            this.updateFeedItem(this.createFeedError(errorMessage, messages.taskActionErrorTitle), taskId);
             this.feedErrorCallback(true, e, code);
         };
         collaboratorsApi.updateTaskCollaborator({
@@ -457,7 +508,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, taskId);
         this.tasksAPI = new TasksAPI(this.options);
@@ -473,6 +524,65 @@ class Feed extends Base {
                 this.feedErrorCallback(true, e, code);
             },
         });
+    };
+
+    /**
+     * Updates a task in the new API
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {string} task - The update task payload object
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    updateTaskNew = (
+        file: BoxItem,
+        task: TaskUpdatePayload,
+        successCallback: () => void = noop,
+        errorCallback: ErrorCallback = noop,
+    ) => {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+        this.tasksNewAPI = new TasksNewAPI(this.options);
+        this.updateFeedItem({ isPending: true }, task.id);
+
+        Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)))
+            .then(() => {
+                return Promise.all(
+                    task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
+                );
+            })
+            .then(() => {
+                this.tasksNewAPI.updateTask({
+                    file,
+                    task,
+                    successCallback: (taskData: Task) => {
+                        this.updateFeedItem(
+                            {
+                                ...taskData,
+                                isPending: false,
+                            },
+                            task.id,
+                        );
+
+                        if (!this.isDestroyed()) {
+                            successCallback();
+                        }
+                    },
+                    errorCallback: (e: ElementsXhrError) => {
+                        this.updateFeedItem({ isPending: false }, task.id);
+                        this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
+                    },
+                });
+            })
+            .catch((e: ElementsXhrError) => {
+                this.updateFeedItem({ isPending: false }, task.id);
+                this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
+            });
     };
 
     /**
@@ -518,7 +628,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, commentId);
 
@@ -617,7 +727,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         const uuid = uniqueId('task_');
         let dueAtString;
@@ -645,7 +755,7 @@ class Feed extends Base {
             },
             type: TASK,
         };
-        this.addPendingItem(this.id, currentUser, task);
+        this.addPendingItem(this.file.id, currentUser, task);
         this.tasksAPI = new TasksAPI(this.options);
         this.tasksAPI.createTask({
             file,
@@ -678,7 +788,9 @@ class Feed extends Base {
         currentUser: User,
         message: string,
         assignees: SelectorItems,
+        taskType: TaskType,
         dueAt: ?string,
+        completionRule: TaskCompletionRule,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -686,7 +798,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         const uuid = uniqueId('task_');
         let dueAtString;
@@ -704,10 +816,11 @@ class Feed extends Base {
                 role: 'CREATOR',
                 status: TASK_NEW_INITIAL_STATUS,
             },
+            completion_rule: completionRule,
             created_at: new Date().toISOString(),
             due_at: dueAtString,
             id: uuid,
-            name: message,
+            description: message,
             type: TASK,
             assigned_to: {
                 entries: assignees.map((assignee: SelectorItem) => ({
@@ -748,22 +861,26 @@ class Feed extends Base {
                 limit: 1,
                 next_marker: null,
             },
-            status: TASK_NEW_INCOMPLETE,
+            task_type: taskType,
+            status: TASK_NEW_NOT_STARTED,
         };
 
-        this.addPendingItem(this.id, currentUser, pendingTask);
-
-        const taskPayload = { name: message, due_at: dueAtString };
+        const taskPayload: TaskPayload = {
+            description: message,
+            due_at: dueAtString,
+            task_type: taskType,
+            completion_rule: completionRule,
+        };
 
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.tasksNewAPI.createTask({
             file,
             task: taskPayload,
             successCallback: (taskData: Task) => {
+                this.addPendingItem(this.file.id, currentUser, pendingTask);
                 this.createTaskNewSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
             },
             errorCallback: (e: ElementsXhrError, code: string) => {
-                this.updateFeedItem(this.createFeedError(messages.taskCreateErrorMessage), uuid);
                 this.feedErrorCallback(false, e, code);
             },
         });
@@ -838,7 +955,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         return new Promise((resolve, reject) => {
             const taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
             this.taskAssignmentsAPI.push(taskAssignmentsAPI);
@@ -863,17 +980,21 @@ class Feed extends Base {
      * Creates a task collaborator via the API.
      *
      * @param {BoxItem} file - The file to which the task is assigned
-     * @param {Task} task - The newly created task from the API
+     * @param {Task|TaskUpdatePayload} task - The newly created or existing task from the API
      * @param {SelectorItem} assignee - The user assigned to this task
      * @param {Function} errorCallback - Task create error callback
-     * @return {Promise<TaskAssignment}
+     * @return {Promise<TaskAssignment>}
      */
-    createTaskCollaborator(file: BoxItem, task: Task, assignee: SelectorItem): Promise<TaskCollabAssignee> {
+    createTaskCollaborator(
+        file: BoxItem,
+        task: Task | TaskUpdatePayload,
+        assignee: SelectorItem,
+    ): Promise<TaskCollabAssignee> {
         if (!file.id) {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         return new Promise((resolve, reject) => {
             const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
             this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
@@ -882,6 +1003,41 @@ class Feed extends Base {
                 file,
                 task,
                 user: assignee,
+                successCallback: resolve,
+                errorCallback: (e: ElementsXhrError) => {
+                    reject(e);
+                },
+            });
+        });
+    }
+
+    /**
+     * Deletes a task collaborator via the API.
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Task|TaskUpdatePayload} task - The newly deleted or existing task from the API
+     * @param {TaskCollabAssignee} assignee - The user assigned to this task
+     * @param {Function} errorCallback - Task delete error callback
+     * @return {Promise<TaskAssignment>}
+     */
+    deleteTaskCollaborator(
+        file: BoxItem,
+        task: Task | TaskUpdatePayload,
+        assignee: TaskCollabAssignee,
+    ): Promise<TaskCollabAssignee> {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file.id = file.id;
+        return new Promise((resolve, reject) => {
+            const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
+            this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
+
+            taskCollaboratorsAPI.deleteTaskCollaborator({
+                file,
+                task,
+                taskCollaborator: { id: assignee.id },
                 successCallback: resolve,
                 errorCallback: (e: ElementsXhrError) => {
                     reject(e);
@@ -903,7 +1059,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         return new Promise((resolve, reject) => {
             const taskLinksAPI = new TaskLinksAPI(this.options);
             this.taskLinksAPI.push(taskLinksAPI);
@@ -936,7 +1092,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.tasksAPI = new TasksAPI(this.options);
         this.updateFeedItem({ isPending: true }, taskId);
@@ -970,7 +1126,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.updateFeedItem({ isPending: true }, task.id);
@@ -980,6 +1136,7 @@ class Feed extends Base {
             task,
             successCallback: this.deleteFeedItem.bind(this, task.id, successCallback),
             errorCallback: (e: ElementsXhrError, code: string) => {
+                this.updateFeedItem(this.createFeedError(messages.taskDeleteErrorMessage), task.id);
                 this.feedErrorCallback(true, e, code);
             },
         });
@@ -992,10 +1149,10 @@ class Feed extends Base {
      * @param {Function} successCallback - function to be called after the delete
      */
     deleteFeedItem = (id: string, successCallback: Function = noop) => {
-        const cachedItems = this.getCachedItems(this.id);
+        const cachedItems = this.getCachedItems(this.file.id);
         if (cachedItems) {
             const feedItems = cachedItems.items.filter(feedItem => feedItem.id !== id);
-            this.setCachedItems(this.id, feedItems);
+            this.setCachedItems(this.file.id, feedItems);
 
             if (!this.isDestroyed()) {
                 successCallback(id);
@@ -1040,7 +1197,7 @@ class Feed extends Base {
                     const tasksAPI = new TasksAPI(this.options);
                     this.taskAssignmentsAPI.push(tasksAPI);
                     tasksAPI.getAssignments(
-                        this.id,
+                        this.file.id,
                         task.id,
                         (assignments: TaskAssignments) => {
                             const formattedTask = this.appendAssignmentsToTask(task, assignments.entries);
@@ -1114,7 +1271,7 @@ class Feed extends Base {
             isPending: true,
             ...itemBase,
         };
-        const cachedItems = this.getCachedItems(this.id);
+        const cachedItems = this.getCachedItems(this.file.id);
         const feedItems = cachedItems ? cachedItems.items : [];
         const feedItemsWithPendingItem = [...feedItems, pendingFeedItem];
         this.setCachedItems(id, feedItemsWithPendingItem);
@@ -1171,7 +1328,7 @@ class Feed extends Base {
      * @param {string} title - The error message title.
      * @return {Object} An error message object
      */
-    createFeedError(message: string, title: string = messages.errorOccured) {
+    createFeedError(message: MessageDescriptor, title: MessageDescriptor = commonMessages.errorOccured) {
         return {
             error: { message, title },
         };
@@ -1185,11 +1342,11 @@ class Feed extends Base {
      * @return {void}
      */
     updateFeedItem = (updates: Object, id: string): ?FeedItems => {
-        if (!this.id) {
+        if (!this.file.id) {
             throw getBadItemError();
         }
 
-        const cachedItems = this.getCachedItems(this.id);
+        const cachedItems = this.getCachedItems(this.file.id);
         if (cachedItems) {
             const updatedFeedItems = cachedItems.items.map((item: FeedItem) => {
                 if (item.id === id) {
@@ -1202,7 +1359,7 @@ class Feed extends Base {
                 return item;
             });
 
-            this.setCachedItems(this.id, updatedFeedItems);
+            this.setCachedItems(this.file.id, updatedFeedItems);
             return updatedFeedItems;
         }
 
@@ -1239,9 +1396,9 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.id = file.id;
+        this.file = file;
         this.errorCallback = errorCallback;
-        this.addPendingItem(this.id, currentUser, commentData);
+        this.addPendingItem(this.file.id, currentUser, commentData);
 
         const message = {};
         if (hasMention) {
@@ -1260,6 +1417,73 @@ class Feed extends Base {
             },
             errorCallback: (e: ErrorResponseData, code: string) => {
                 this.createCommentErrorCallback(e, code, uuid);
+            },
+        });
+    };
+
+    /**
+     * Update a comment
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Object} currentUser - the user who performed the action
+     * @param {string} text - the comment text
+     * @param {boolean} hasMention - true if there is an @mention in the text
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @return {void}
+     */
+    updateComment = (
+        file: BoxItem,
+        commentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxItemPermission,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        const commentData = {
+            tagged_message: text,
+        };
+
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+        this.updateFeedItem({ ...commentData, isPending: true }, commentId);
+
+        const message = {};
+        if (hasMention) {
+            message.tagged_message = text;
+        } else {
+            message.message = text;
+        }
+
+        this.commentsAPI = new CommentsAPI(this.options);
+
+        this.commentsAPI.updateComment({
+            file,
+            commentId,
+            permissions,
+            ...message,
+            successCallback: (comment: Comment) => {
+                // use the request payload instead of response in the
+                // feed item update because response may not contain
+                // the tagged version of the message
+                this.updateFeedItem(
+                    {
+                        ...message,
+                        isPending: false,
+                    },
+                    commentId,
+                );
+                if (!this.isDestroyed()) {
+                    successCallback(comment);
+                }
+            },
+            errorCallback: (e: ErrorResponseData, code: string) => {
+                this.feedErrorCallback(true, e, code);
             },
         });
     };
@@ -1301,7 +1525,7 @@ class Feed extends Base {
 
         return new Promise(resolve => {
             this.appActivityAPI.getAppActivity(
-                this.id,
+                this.file.id,
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
@@ -1331,7 +1555,7 @@ class Feed extends Base {
 
         this.appActivityAPI = new AppActivityAPI(this.options);
 
-        this.id = id;
+        this.file = file;
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, appActivityId);
 

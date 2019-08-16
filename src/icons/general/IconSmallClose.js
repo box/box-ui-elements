@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { SEESEE } from '../../common/variables';
+import { bdlGray20 } from '../../styles/variables';
 
 import AccessibleSVG from '../accessible-svg';
 
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconSmallClose = ({ className = '', color = SEESEE, height = 8, title, width = 8 }: Props) => (
+const IconSmallClose = ({ className = '', color = bdlGray20, height = 8, title, width = 8 }: Props) => (
     <AccessibleSVG
         className={`icon-close ${className}`}
         height={height}

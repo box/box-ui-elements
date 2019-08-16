@@ -88,10 +88,13 @@ describe('components/form-elements/text-area/TextArea', () => {
         stub.onCall(1).returns();
 
         const wrapper = mount(<TextArea label="label" name="textarea" type="custom" validation={stub} value="yes" />);
-        const textarea = wrapper.find('textarea');
+        let textarea = wrapper.find('textarea');
 
         textarea.simulate('blur');
         expect(textarea.instance().validity.valid).toBeFalsy();
+
+        // Get the re-rendered textarea again
+        textarea = wrapper.find('textarea');
 
         textarea.simulate('blur');
         expect(textarea.instance().validity.valid).toBeTruthy();

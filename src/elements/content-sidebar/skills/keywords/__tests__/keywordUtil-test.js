@@ -16,11 +16,11 @@ describe('elements/content-sidebar/keywordUtils/getPills', () => {
         ).toEqual([
             {
                 value: 0,
-                text: 'foo',
+                displayText: 'foo',
             },
             {
                 value: 1,
-                text: 'bar',
+                displayText: 'bar',
             },
         ]);
     });

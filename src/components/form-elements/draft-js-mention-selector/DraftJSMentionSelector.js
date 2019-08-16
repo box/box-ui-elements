@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { CompositeDecorator, EditorState } from 'draft-js';
+import noop from 'lodash/noop';
 
 import DraftJSMentionSelectorCore from './DraftJSMentionSelectorCore';
 import DraftMentionItem from './DraftMentionItem';
@@ -35,7 +36,7 @@ type Props = {
     mentionTriggers?: Array<string>,
     minLength?: number,
     name: string,
-    onChange?: Function,
+    onChange: Function,
     onFocus?: Function,
     onMention?: Function,
     onReturn?: Function,
@@ -48,13 +49,14 @@ type Props = {
 type State = {
     contacts: SelectorItems,
     error: ?Object,
-    hasReceivedFirstInteraction: boolean,
     internalEditorState: ?EditorState,
+    isTouched: boolean,
 };
 
 class DraftJSMentionSelector extends React.Component<Props, State> {
     static defaultProps = {
         isRequired: false,
+        onChange: noop,
         validateOnBlur: true,
     };
 
@@ -75,25 +77,81 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         // otherwise we initialize it here
         this.state = {
             contacts: [],
-            hasReceivedFirstInteraction: false,
+            isTouched: false,
             internalEditorState: props.editorState ? null : EditorState.createEmpty(mentionDecorator),
             error: null,
         };
     }
 
-    /**
-     * Lifecycle method that gets called when a component is receiving new props
-     * @param {object} nextProps Props the component is receiving
-     * @returns {void}
-     */
-    componentWillReceiveProps(nextProps: Props) {
+    static getDerivedStateFromProps(nextProps: Props) {
         const { contacts } = nextProps;
+        return contacts ? { contacts } : null;
+    }
 
-        if (contacts) {
-            this.setState({ contacts }, () => {
-                this.checkValidity();
-            });
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        const { internalEditorState: prevInternalEditorState } = prevState;
+        const { internalEditorState } = this.state;
+
+        const { editorState: prevEditorStateFromProps } = prevProps;
+        const { editorState } = this.props;
+
+        // Determine whether we're working with the internal editor state or
+        // external editor state passed in from props
+        const prevEditorState = prevInternalEditorState || prevEditorStateFromProps;
+        const currentEditorState = internalEditorState || editorState;
+
+        // Only handle isTouched state transitions and check validity if the
+        // editorState references are different. This is to avoid getting stuck
+        // in an infinite loop of checking validity because checkValidity always
+        // calls setState({ error })
+        if (prevEditorState && currentEditorState && prevEditorState !== currentEditorState) {
+            const newState = this.getDerivedStateFromEditorState(currentEditorState, prevEditorState);
+            if (newState) {
+                this.setState(newState, this.checkValidityIfAllowed);
+            } else {
+                this.checkValidityIfAllowed();
+            }
         }
+    }
+
+    getDerivedStateFromEditorState(currentEditorState: EditorState, previousEditorState: EditorState) {
+        const isPreviousEditorStateEmpty = this.isEditorStateEmpty(previousEditorState);
+        const isCurrentEditorStateEmpty = this.isEditorStateEmpty(currentEditorState);
+        const isNewEditorState = isCurrentEditorStateEmpty && !isPreviousEditorStateEmpty;
+        const isEditorStateDirty = isPreviousEditorStateEmpty && !isCurrentEditorStateEmpty;
+
+        let newState = null;
+        // Detect case where controlled EditorState is created anew and empty.
+        // If next editorState is empty and the current editorState is not empty
+        // that means it is a new empty state and this component should not be marked dirty
+        if (isNewEditorState) {
+            newState = { isTouched: false, error: null };
+        } else if (isEditorStateDirty) {
+            // Detect case where controlled EditorState has been made dirty
+            // If the current editorState is empty and the next editorState is not
+            // empty then this is the first interaction so mark this component dirty
+            newState = { isTouched: true };
+        }
+
+        return newState;
+    }
+
+    checkValidityIfAllowed() {
+        const { validateOnBlur }: Props = this.props;
+
+        if (!validateOnBlur) {
+            this.checkValidity();
+        }
+    }
+
+    isEditorStateEmpty(editorState: EditorState): boolean {
+        const text = editorState
+            .getCurrentContent()
+            .getPlainText()
+            .trim();
+        const lastChangeType = editorState.getLastChangeType();
+
+        return text.length === 0 && lastChangeType === null;
     }
 
     /**
@@ -141,8 +199,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         ) {
             this.checkValidity();
         }
-
-        this.setState({ hasReceivedFirstInteraction: true });
     };
 
     handleFocus = (event: SyntheticEvent<>) => {
@@ -159,31 +215,20 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @returns {void}
      */
     handleChange = (nextEditorState: EditorState) => {
-        const { internalEditorState } = this.state;
-        const { onChange } = this.props;
+        const { internalEditorState }: State = this.state;
+        const { onChange }: Props = this.props;
+
+        onChange(nextEditorState);
 
         if (internalEditorState) {
-            this.setState(
-                {
-                    internalEditorState: nextEditorState,
-                },
-                () => {
-                    if (onChange) {
-                        onChange(nextEditorState);
-                    }
-                    this.checkValidity();
-                },
-            );
-        } else {
-            if (onChange) {
-                onChange(nextEditorState);
-            }
-            this.checkValidity();
+            this.setState({ internalEditorState: nextEditorState });
         }
     };
 
     handleValidityStateUpdateHandler = () => {
-        if (!this.state.hasReceivedFirstInteraction) {
+        const { isTouched } = this.state;
+
+        if (!isTouched) {
             return;
         }
 

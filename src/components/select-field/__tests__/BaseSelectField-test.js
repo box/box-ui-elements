@@ -13,6 +13,7 @@ jest.mock('../../../utils/dom', () => ({
 describe('components/select-field/BaseSelectField', () => {
     afterEach(() => {
         sandbox.verifyAndRestore();
+        jest.clearAllMocks();
     });
 
     const options = [
@@ -115,6 +116,14 @@ describe('components/select-field/BaseSelectField', () => {
             const buttonWrapper = wrapper.find('SelectButton');
             expect(buttonWrapper.prop('data-resin-thing')).toBe('hi');
         });
+
+        test('should send error to select button when error has some value', () => {
+            const wrapper = shallowRenderSelectField({
+                error: 'error',
+            });
+            const buttonWrapper = wrapper.find('SelectButton');
+            expect(buttonWrapper).toMatchSnapshot();
+        });
     });
 
     describe('renderSelectOptions()', () => {
@@ -159,6 +168,19 @@ describe('components/select-field/BaseSelectField', () => {
             const overlayWrapper = wrapper.find('.overlay');
             expect(overlayWrapper.childAt(1).prop('role')).toEqual('separator');
             expect(overlayWrapper.childAt(4).prop('role')).toEqual('separator');
+        });
+
+        test('should render option content using optionRenderer when provided', () => {
+            const optionRenderer = jest.fn().mockImplementation(({ displayText, value }) => (
+                <span>
+                    {displayText}-{value}
+                </span>
+            ));
+            const wrapper = shallowRenderSelectField({ optionRenderer });
+            const itemsWrapper = wrapper.find('DatalistItem');
+
+            expect(optionRenderer).toHaveBeenCalledTimes(options.length);
+            expect(itemsWrapper).toMatchSnapshot();
         });
     });
 
@@ -564,14 +586,11 @@ describe('components/select-field/BaseSelectField', () => {
     });
 
     describe('onOptionMouseDown', () => {
-        test('should prevent default when mousedown on item occurs to prevent blur', () => {
+        test('should prevent default when mousedown on overlay occurs to prevent blur', () => {
             const wrapper = shallowRenderSelectField();
-            wrapper
-                .find('DatalistItem')
-                .at(0)
-                .simulate('mouseDown', {
-                    preventDefault: sandbox.mock(),
-                });
+            wrapper.find('.overlay').simulate('mouseDown', {
+                preventDefault: sandbox.mock(),
+            });
         });
     });
 
@@ -585,6 +604,18 @@ describe('components/select-field/BaseSelectField', () => {
                 .simulate('mouseEnter');
 
             expect(wrapper.state('activeItemIndex')).toEqual(2);
+        });
+
+        test('should set shouldScrollIntoView to false when hovering over item', () => {
+            const wrapper = shallowRenderSelectField();
+            wrapper.setState({ shouldScrollIntoView: true });
+
+            wrapper
+                .find('DatalistItem')
+                .at(2)
+                .simulate('mouseEnter');
+
+            expect(wrapper.state('shouldScrollIntoView')).toBe(false);
         });
     });
 
@@ -609,6 +640,12 @@ describe('components/select-field/BaseSelectField', () => {
                 .withArgs(null);
             instance.setActiveItem(-1);
         });
+
+        test('should set shouldScrollIntoView to true by default when called', () => {
+            wrapper.setState({ shouldScrollIntoView: false });
+            instance.setActiveItem(1);
+            expect(wrapper.state('shouldScrollIntoView')).toBe(true);
+        });
     });
 
     describe('setActiveItemID()', () => {
@@ -621,9 +658,14 @@ describe('components/select-field/BaseSelectField', () => {
             expect(wrapper.state('activeItemID')).toEqual(id);
         });
 
-        test('should scroll into view when called', () => {
+        test('should scroll into view when called and previously specified in state', () => {
+            wrapper.setState({ shouldScrollIntoView: false });
             instance.setActiveItemID(id);
-            expect(scrollIntoView).toHaveBeenCalled();
+            expect(scrollIntoView).toHaveBeenCalledTimes(0);
+
+            wrapper.setState({ shouldScrollIntoView: true });
+            instance.setActiveItemID(id);
+            expect(scrollIntoView).toHaveBeenCalledTimes(1);
         });
     });
 

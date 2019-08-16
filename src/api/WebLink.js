@@ -5,7 +5,8 @@
  */
 
 import Item from './Item';
-import { CACHE_PREFIX_WEBLINK } from '../constants';
+import { CACHE_PREFIX_WEBLINK, ERROR_CODE_FETCH_WEBLINK } from '../constants';
+import { findMissingProperties } from '../utils/fields';
 
 class WebLink extends Item {
     /**
@@ -27,6 +28,70 @@ class WebLink extends Item {
     getUrl(id: string): string {
         const suffix: string = id ? `/${id}` : '';
         return `${this.getBaseApiUrl()}/web_links${suffix}`;
+    }
+
+    /**
+     * Gets a Box weblink
+     *
+     * @param {string} id - Weblink id
+     * @param {(newItem: BoxItem) => void} successCallback - Function to call with results
+     * @param {Function} errorCallback - Function to call with errors
+     * @param {Array<String>} fields - Array of field strings
+     * @returns {Promise}
+     */
+    async getWeblink(
+        id: string,
+        successCallback: (newItem: BoxItem) => void,
+        errorCallback: Function,
+        { fields }: FetchOptions = {},
+    ): Promise<void> {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        const cache: APICache = this.getCache();
+        const key: string = this.getCacheKey(id);
+        this.errorCode = ERROR_CODE_FETCH_WEBLINK;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        if (cache.has(key)) {
+            const missingFields: Array<string> = findMissingProperties(cache.get(key), fields);
+            if (missingFields.length === 0) {
+                successCallback(cache.get(key));
+                return;
+            }
+        }
+
+        const xhrOptions: Object = {
+            url: this.getUrl(id),
+        };
+
+        if (fields) {
+            xhrOptions.params = {
+                fields: fields.toString(),
+            };
+        }
+
+        try {
+            const { data } = await this.xhr.get(xhrOptions);
+
+            if (this.isDestroyed()) {
+                return;
+            }
+
+            // Cache check is again done since this code is executed async
+            if (cache.has(key)) {
+                cache.merge(key, data);
+            } else {
+                // If there was nothing in the cache
+                cache.set(key, data);
+            }
+
+            this.successHandler(cache.get(key));
+        } catch (e) {
+            this.errorHandler(e);
+        }
     }
 }
 

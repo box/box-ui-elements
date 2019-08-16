@@ -2,11 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import ItemProperties from '../../../features/item-details/ItemProperties';
 import InlineError from '../../../components/inline-error/InlineError';
-import SidebarFileProperties, {
-    SidebarFilePropertiesComponent,
-    getClassificationModal,
-} from '../SidebarFileProperties';
-import { KEY_CLASSIFICATION_TYPE } from '../../../constants';
+import SidebarFileProperties, { SidebarFilePropertiesComponent } from '../SidebarFileProperties';
 
 describe('elements/content-sidebar/SidebarFileProperties', () => {
     const getWrapper = props => shallow(<SidebarFilePropertiesComponent {...props} />);
@@ -30,26 +26,6 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
         onDescriptionChange: jest.fn(),
         intl: {
             locale: 'en',
-        },
-    };
-
-    const classificationProps = {
-        hasClassification: true,
-        onClassificationClick: jest.fn(),
-        bannerPolicy: {
-            body: 'tooltip value',
-        },
-        file: {
-            size: '1',
-            permissions: {
-                can_upload: false,
-            },
-        },
-        intl: {
-            locale: 'en',
-        },
-        classification: {
-            [KEY_CLASSIFICATION_TYPE]: 'Public',
         },
     };
 
@@ -97,74 +73,9 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should not render classification information if hasClassification is false', () => {
-            const wrapper = getMountWrapper({
-                ...props,
-                hasClassification: false,
-            });
-            expect(wrapper).toMatchSnapshot();
-        });
-
-        test('should render classification information and not link when given proper metadata', () => {
-            const wrapper = getMountWrapper(classificationProps);
-            expect(wrapper).toMatchSnapshot();
-        });
-
-        test('should render classification link only when given callback and has_upload permission is true', () => {
-            // Only onClassificationClick callback is passed
-            const wrapper = getMountWrapper({
-                ...classificationProps,
-                file: {
-                    ...classificationProps.file,
-                    permissions: {
-                        can_upload: true,
-                    },
-                    metadata: null,
-                },
-            });
-            expect(wrapper).toMatchSnapshot();
-        });
-
-        test('should not render a tooltip if no banner policy body is provided', () => {
-            const wrapper = getMountWrapper({
-                ...classificationProps,
-                bannerPolicy: undefined,
-                file: {
-                    ...classificationProps.file,
-                    permissions: {
-                        can_upload: true,
-                    },
-                    metadata: null,
-                },
-            });
-            expect(wrapper).toMatchSnapshot();
-        });
-
         test('should render retention policy information when given proper props and callback', () => {
             const wrapper = getMountWrapper(retentionPolicyProps);
             expect(wrapper).toMatchSnapshot();
-        });
-    });
-
-    describe('getClassificationModal()', () => {
-        test('should not have onClassificationClick prop on SidebarFileProperties when can_upload is falsy', () => {
-            expect(
-                getClassificationModal(classificationProps.file, classificationProps.onClassificationClick),
-            ).toBeUndefined();
-        });
-
-        test('should have onClassificationClick prop on SidebarFileProperties when can_upload is true', () => {
-            expect(
-                getClassificationModal(
-                    {
-                        ...classificationProps.file,
-                        permissions: {
-                            can_upload: true,
-                        },
-                    },
-                    classificationProps.onClassificationClick,
-                ),
-            ).toEqual(classificationProps.onClassificationClick);
         });
     });
 });

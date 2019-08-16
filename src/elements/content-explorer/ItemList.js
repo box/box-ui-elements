@@ -194,7 +194,7 @@ const ItemList = ({
                             {isSmall || isMedium ? null : (
                                 <Column
                                     className="bce-item-coloumn"
-                                    disableSort
+                                    disableSort={!hasSort}
                                     label={intl.formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
                                     cellRenderer={sizeAccessCell}

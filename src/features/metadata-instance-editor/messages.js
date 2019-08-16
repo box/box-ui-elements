@@ -194,7 +194,7 @@ const messages = defineMessages({
         id: 'boxui.metadataInstanceEditor.noMetadataAddTemplate',
     },
     enableCascadePolicy: {
-        defaultMessage: 'Enable cascade policy',
+        defaultMessage: 'Enable Cascade Policy',
         description: 'Label for enable cascade policy toggle switch',
         id: 'boxui.metadataInstanceEditor.enableCascadePolicy',
     },
@@ -217,7 +217,7 @@ const messages = defineMessages({
     },
     cascadePolicyModeQuestion: {
         defaultMessage:
-            'In the case of conflicts when applying this template and its values to existing items, what would you like to do?',
+            'In the case of conflicts when applying this template and its values to existing items, what would you like to do? This is a one time action.',
         description:
             'Tooltip text that asks the user what they want to do when applying cascading to their metadata policy',
         id: 'boxui.metadataInstanceEditor.cascadePolicyModeQuestion',
@@ -243,6 +243,12 @@ const messages = defineMessages({
         description:
             'Informational text below collapsible header indicating that there are no attributes for this template',
         id: 'boxui.metadataInstanceEditor.noAttributesForTemplate',
+    },
+    operationNotImmediate: {
+        defaultMessage: 'This operation is not immediate and may take some time.',
+        description:
+            'Informational text below cascade policy description and explains to the user that the policy will take some time to take effect.',
+        id: 'boxui.metadataInstanceEditor.operationNotImmediate',
     },
 });
 

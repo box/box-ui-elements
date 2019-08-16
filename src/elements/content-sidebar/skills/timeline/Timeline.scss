@@ -1,7 +1,7 @@
 @import '../../../common/variables';
 
 .be-timeline {
-    color: $sevens;
+    color: $bdl-gray-62;
     display: flex;
     flex-direction: column;
     font-size: 12px;
@@ -38,7 +38,7 @@
         }
 
         .btn-plain:hover svg path {
-            fill: $twos;
+            fill: $bdl-gray;
         }
     }
 }

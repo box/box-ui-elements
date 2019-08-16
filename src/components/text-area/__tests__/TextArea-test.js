@@ -68,4 +68,14 @@ describe('components/text-area/TextArea', () => {
         const tooltip = wrapper.find('Tooltip');
         expect(tooltip.prop('isShown')).toBe(false);
     });
+
+    test('should not show optional text when hideOptionalLabel is true', () => {
+        const wrapper = shallow(<TextArea label="label" hideOptionalLabel />);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should show optional text when hideOptionalLabel is false', () => {
+        const wrapper = shallow(<TextArea label="label" />);
+        expect(wrapper).toMatchSnapshot();
+    });
 });

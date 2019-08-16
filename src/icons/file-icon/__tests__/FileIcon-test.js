@@ -57,6 +57,9 @@ describe('icons/file-icon/FileIcon', () => {
             extension: 'xlsm',
         },
         {
+            extension: 'xlsb',
+        },
+        {
             extension: 'zip',
         },
     ].forEach(({ extension }) => {

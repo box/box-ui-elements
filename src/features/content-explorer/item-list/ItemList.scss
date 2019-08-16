@@ -2,15 +2,15 @@
 
 .content-explorer-item-list {
     .table-header-item {
-        color: $seventy-sixers;
+        color: $bdl-gray-62;
         font-size: 14px;
-        font-weight: 400;
+        font-weight: normal;
         letter-spacing: .035em;
         text-transform: none;
     }
 
     .table-body {
-        border-top: 1px solid $off-white;
+        border-top: 1px solid $bdl-gray-10;
         outline: none;
     }
 
@@ -45,16 +45,16 @@
 
     .item-list-name {
         align-items: center;
-        color: $twos;
+        color: $bdl-gray;
         display: flex;
         font-size: 14px;
         padding-right: 1px;
 
         &.link:hover {
-            color: $box-blue;
+            color: $bdl-box-blue;
 
             .icon-chevron {
-                border-color: $box-blue !important;
+                border-color: $bdl-box-blue !important;
             }
         }
     }
@@ -67,7 +67,7 @@
     }
 
     .item-list-name-label {
-        color: $box-blue;
+        color: $bdl-box-blue;
         font-size: 11px;
         font-weight: bold;
         margin-left: 15px;
@@ -75,7 +75,7 @@
     }
 
     .item-list-loading-placeholder {
-        background-color: $sf-fog;
+        background-color: $bdl-gray-30;
         border-radius: 3px;
         height: 12px;
         width: 75%;

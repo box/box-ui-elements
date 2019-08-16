@@ -12,17 +12,21 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -33,6 +37,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -114,10 +119,13 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -125,7 +133,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -186,17 +194,21 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Send Link to '{itemName}'"
-          id="boxui.unifiedShare.emailModalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={true}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -218,6 +230,8 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
         }
         isContactsFieldEnabled={true}
         isExpanded={true}
+        isExternalUserSelected={false}
+        onPillCreate={[Function]}
         onRequestClose={[Function]}
         onSubmit={[Function]}
         selectedContacts={Array []}
@@ -241,17 +255,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -262,6 +280,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -343,10 +362,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -354,7 +376,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -415,17 +437,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -436,6 +462,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -517,10 +544,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -528,7 +558,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -589,17 +619,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -610,6 +644,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -691,10 +726,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -702,7 +740,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -767,17 +805,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -788,6 +830,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={true}
         position="middle-left"
         showCloseButton={true}
@@ -869,10 +912,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -880,7 +926,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -941,17 +987,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -962,6 +1012,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1043,10 +1094,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1054,7 +1108,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1115,17 +1169,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1136,6 +1194,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1217,10 +1276,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={true}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1228,7 +1290,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1260,17 +1322,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "web_link",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1281,6 +1347,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1363,10 +1430,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={false}
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1374,7 +1444,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1435,17 +1505,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "folder",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1456,6 +1530,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1538,10 +1613,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={false}
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1549,7 +1627,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1610,17 +1688,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1631,6 +1713,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1713,10 +1796,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1724,7 +1810,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1785,17 +1871,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1806,6 +1896,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -1888,10 +1979,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={true}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -1899,7 +1993,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -1931,17 +2025,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="People in '{itemName}'"
-          id="boxui.unifiedShare.collaboratorListTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={true}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -1995,17 +2093,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2016,6 +2118,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2097,10 +2200,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -2108,7 +2214,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2173,17 +2279,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2194,6 +2304,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2275,10 +2386,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -2286,7 +2400,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2351,17 +2465,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2372,6 +2490,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2453,10 +2572,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
               }
             }
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -2464,7 +2586,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={true}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2525,17 +2647,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2546,6 +2672,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2628,10 +2755,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={false}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             submitting={false}
@@ -2640,7 +2770,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   "Editor",
@@ -2698,17 +2828,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2719,6 +2853,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2803,10 +2938,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={true}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -2814,7 +2952,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {
@@ -2846,17 +2984,21 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       }
     }
     title={
-      <span>
-        <FormattedMessage
-          defaultMessage="Share '{itemName}'"
-          id="boxui.unifiedShare.modalTitle"
-          values={
-            Object {
-              "itemName": "test file",
-            }
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          Object {
+            "grantedPermissions": Object {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
           }
-        />
-      </span>
+        }
+        showCollaboratorList={false}
+      />
     }
   >
     <LoadingIndicatorWrapper
@@ -2867,6 +3009,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         className="usm-ftux-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
+        isDisabled={false}
         isShown={false}
         position="middle-left"
         showCloseButton={true}
@@ -2949,10 +3092,13 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             }
             isContactsFieldEnabled={true}
             isExpanded={true}
+            isExternalUserSelected={false}
             onContactInput={[Function]}
+            onPillCreate={[Function]}
             onRequestClose={[Function]}
             onSubmit={[Function]}
             openInviteCollaboratorsSection={[Function]}
+            recommendedSharingTooltipCalloutName={null}
             selectedContacts={Array []}
             showEnterEmailsCallout={false}
             updateSelectedContacts={[Function]}
@@ -2960,7 +3106,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             <InviteePermissionsMenu
               changeInviteePermissionLevel={[Function]}
               disabled={false}
-              inviteePermissionLevel="Editor"
+              inviteePermissionLevel=""
               inviteePermissions={
                 Array [
                   Object {

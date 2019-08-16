@@ -82,6 +82,11 @@ const messages = defineMessages({
         description: 'Error message for when an invalid URL is entered',
         id: 'boxui.validation.URLError',
     },
+    invalidUserError: {
+        defaultMessage: 'Invalid User',
+        description: 'Error message for when an invalid user is entered',
+        id: 'boxui.validation.invalidUserError',
+    },
     requiredFieldError: {
         defaultMessage: 'Required Field',
         description: 'Error message for when a required field is missing',

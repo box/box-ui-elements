@@ -4,9 +4,9 @@
     .bcs-collapsed-version,
     .bcs-version {
         align-items: center;
-        background-color: fade-out($thats-mint, .9);
+        background-color: fade-out($bdl-green-light, .9);
         border-radius: 4px;
-        color: $shady-acres;
+        color: $bdl-green-light;
         display: flex;
         justify-content: space-between;
         margin-top: 10px;
@@ -30,7 +30,7 @@
             width: 16px;
 
             path {
-                fill: $shady-acres;
+                fill: $bdl-green-light;
             }
         }
 

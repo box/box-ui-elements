@@ -8,6 +8,7 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="top-center"
     text={
       <FormattedMessage
@@ -50,6 +51,7 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="top-center"
     text={
       <FormattedMessage

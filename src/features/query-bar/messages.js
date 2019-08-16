@@ -7,6 +7,16 @@ const messages = defineMessages({
         description: 'Text displayed on the Tooltip for an input field',
         id: 'boxui.queryBar.tooltipEnterValueError',
     },
+    tooltipInvalidFloatError: {
+        defaultMessage: 'Please Enter a Decimal Number',
+        description: 'Text displayed on the Tooltip for an input field of type float',
+        id: 'boxui.queryBar.tooltipInvalidFloatError',
+    },
+    tooltipInvalidNumberError: {
+        defaultMessage: 'Please Enter an Integer',
+        description: 'Text displayed on the Tooltip for an input field of type number',
+        id: 'boxui.queryBar.tooltipInvalidNumberError',
+    },
     tooltipSelectValueError: {
         defaultMessage: 'Please Select a Value',
         description: 'Text displayed on the Tooltip for a value field',
@@ -57,6 +67,12 @@ const messages = defineMessages({
         description: 'Text on the templates button when templates are still being loaded',
         id: 'boxui.queryBar.templatesLoadingButtonText',
     },
+    noTemplatesText: {
+        defaultMessage: 'No Templates Available',
+        description:
+            'Text on the templates button when templates have been loaded and there are no templates in the enterprise',
+        id: 'boxui.queryBar.noTemplatesText',
+    },
     templatesButtonText: {
         defaultMessage: 'Select Metadata',
         description:
@@ -86,8 +102,9 @@ const messages = defineMessages({
         id: 'boxui.queryBar.columnsButtonText',
     },
     columnsHiddenButtonText: {
-        defaultMessage: '{number} Columns Hidden',
-        description: 'Text on the columns button, if columns have been hidden then it will display this text',
+        defaultMessage: '{count, plural, one {1 Column Hidden} other {{count} Columns Hidden}}',
+        description:
+            'Text on the columns button, if one or more columns have been hidden then it will display this text',
         id: 'boxui.queryBar.columnsHiddenButtonText',
     },
 });

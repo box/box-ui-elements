@@ -149,7 +149,7 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
 
     handleFocus = (event: SyntheticEvent<>) => {
         if (this.copyInputRef) {
-            this.copyInputRef.select();
+            this.performAutofocus();
         }
 
         if (this.props.onFocus) {
@@ -167,8 +167,10 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
     };
 
     performAutofocus = () => {
-        if (this.copyInputRef) {
-            this.copyInputRef.select();
+        const { copyInputRef } = this;
+        if (copyInputRef) {
+            copyInputRef.select();
+            copyInputRef.scrollLeft = 0;
         }
     };
 

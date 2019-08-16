@@ -19,7 +19,7 @@
         + span {
             &::before {
                 background: $white;
-                border: 1px solid $downtown-grey;
+                border: 1px solid $bdl-gray-50;
                 border-radius: 2px;
                 content: '';
                 height: 14px;
@@ -54,12 +54,12 @@
 
         &:disabled {
             + span::before {
-                background-color: $karl-fog;
-                border: 1px solid $dtwo;
+                background-color: $bdl-gray-02;
+                border: 1px solid $bdl-gray-20;
             }
 
             + span::after {
-                border-color: $bfive;
+                border-color: $bdl-gray-30;
             }
         }
 
@@ -89,6 +89,10 @@
 .checkbox-container {
     margin: 0 0 20px;
 
+    &.is-disabled .checkbox-label {
+        color: $bdl-gray-50;
+    }
+
     > .label {
         margin: 8px 0;
     }
@@ -101,5 +105,5 @@
 }
 
 .checkbox-description {
-    color: $downtown-grey;
+    color: $bdl-gray-50;
 }

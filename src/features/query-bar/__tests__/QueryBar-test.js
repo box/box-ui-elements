@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import { template } from '../components/fixtures';
+import { columnForItemName, columnForTemplateFieldName, template } from '../components/fixtures';
 import QueryBar from '../QueryBar';
+
+const columns = [columnForItemName, columnForTemplateFieldName];
 
 describe('features/query-bar/components/QueryBar', () => {
     const getWrapper = props => {
@@ -18,5 +20,17 @@ describe('features/query-bar/components/QueryBar', () => {
             templates: [template],
         });
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render ColumnButton with columns that do not include item name', () => {
+        const wrapper = getWrapper({ columns });
+        const ColumnButton = wrapper.find('ColumnButton');
+        expect(ColumnButton.props().columns).toEqual([columnForTemplateFieldName]);
+    });
+
+    test('should render FilterButton with metadata columns', () => {
+        const wrapper = getWrapper({ columns });
+        const FilterButton = wrapper.find('FilterButton');
+        expect(FilterButton.props().columns).toEqual([columnForTemplateFieldName]);
     });
 });

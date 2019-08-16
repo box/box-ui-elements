@@ -4,7 +4,7 @@
     margin: 0;
 
     dt {
-        color: $seventy-sixers;
+        color: $bdl-gray-62;
     }
 
     dd {
@@ -24,9 +24,13 @@
         transition: background-color .2s, border-color .2s, margin-left .2s, padding .2s;
         width: 100%;
 
+        &:hover {
+            box-shadow: none;
+        }
+
         &:focus {
-            background-color: $karl-fog;
-            border-color: $off-white;
+            background-color: $bdl-gray-02;
+            border-color: $bdl-gray-10;
             margin-left: 0;
             max-height: none;
             padding: 7px;
@@ -47,7 +51,7 @@
             transition: border .2s, height .2s, padding .2s;
 
             &:focus {
-                border: 1px solid $box-blue;
+                border: 1px solid $bdl-box-blue;
                 height: 32px;
                 padding: 7px;
             }

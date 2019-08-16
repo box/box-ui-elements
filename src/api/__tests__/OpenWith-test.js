@@ -24,17 +24,6 @@ describe('api/ContentOpenWith', () => {
             expect(openWith.formatOpenWithData).toBeCalledWith(data);
             expect(openWith.consolidateBoxEditIntegrations).toBeCalled();
         });
-
-        test('should correctly pass language header', () => {
-            const successFn = jest.fn();
-            const errorFn = jest.fn();
-            openWith.get = ({ requestData }) => {
-                const { headers } = requestData;
-                expect(headers['Accept-Language']).toEqual('es-ES');
-            };
-
-            openWith.getOpenWithIntegrations('123', successFn, errorFn, 'es-ES');
-        });
     });
 
     describe('consolidateBoxEditIntegrations()', () => {

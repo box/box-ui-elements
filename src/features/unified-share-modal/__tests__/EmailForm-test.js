@@ -4,7 +4,6 @@ import CollaboratorAvatars from '../../collaborator-avatars/CollaboratorAvatars'
 import commonMessages from '../../../common/messages';
 
 import { EmailFormBase as EmailForm } from '../EmailForm';
-import messages from '../messages';
 
 describe('features/unified-share-modal/EmailForm', () => {
     const expectedContacts = [
@@ -66,6 +65,19 @@ describe('features/unified-share-modal/EmailForm', () => {
             expect(updateSelectedContacts).toHaveBeenCalledWith(contactsToAdd);
             expect(onContactAdd).toBeCalled();
         });
+
+        test('should set error when contact limit reached', () => {
+            const wrapper = getWrapper({
+                contactLimit: 1,
+                intl: {
+                    formatMessage: jest.fn().mockReturnValue('contact limit reached'),
+                },
+            });
+
+            const contactsToAdd = [expectedContacts[1], expectedContacts[2]];
+            wrapper.instance().handleContactAdd(contactsToAdd);
+            expect(wrapper.state('contactsFieldError')).toBe('contact limit reached');
+        });
     });
 
     describe('handleContactRemove()', () => {
@@ -84,21 +96,17 @@ describe('features/unified-share-modal/EmailForm', () => {
             expect(onContactRemove).toBeCalled();
             expect(updateSelectedContacts).toHaveBeenCalledWith([]);
         });
-    });
 
-    describe('handleContactInput()', () => {
-        test('should reset the error', () => {
-            const onContactInput = jest.fn();
-            const wrapper = getWrapper({ onContactInput });
-
-            wrapper.setState({
-                contactsFieldError: 'Error',
+        test('should set error when contact limit reached', () => {
+            const wrapper = getWrapper({
+                contactLimit: 1,
+                contactsFieldError: 'contact limit reached',
+                selectedContacts: [expectedContacts[1], expectedContacts[2]],
             });
 
-            wrapper.instance().handleContactInput();
+            wrapper.instance().handleContactRemove(expectedContacts[1], 0);
 
-            expect(wrapper.state('contactsFieldError')).toEqual('');
-            expect(onContactInput).toBeCalled();
+            expect(wrapper.state('contactsFieldError')).toBe('');
         });
     });
 
@@ -160,12 +168,15 @@ describe('features/unified-share-modal/EmailForm', () => {
             const onSubmitSpy = jest.fn();
             const wrapper = getWrapper({
                 sendInvites: onSubmitSpy,
+                intl: {
+                    formatMessage: () => 'error',
+                },
             });
             const event = { preventDefault: jest.fn() };
 
             wrapper.instance().handleSubmit(event);
 
-            expect(intl.formatMessage).toHaveBeenCalledWith(messages.enterAtLeastOneEmailError);
+            expect(wrapper.state('contactsFieldError')).toEqual('error');
             expect(onSubmitSpy).not.toHaveBeenCalled();
         });
 
@@ -216,32 +227,6 @@ describe('features/unified-share-modal/EmailForm', () => {
             wrapper.instance().handleSubmit(event);
 
             expect(onSubmit).toHaveBeenCalledWith(expectedParam);
-        });
-    });
-
-    describe('handleSuggestedCollaboratorAdd()', () => {
-        const contact = {
-            id: 123,
-            type: 'user',
-        };
-
-        test('should call handleContactAdd', () => {
-            const wrapper = getWrapper();
-            const handleContactAddSpy = jest.spyOn(wrapper.instance(), 'handleContactAdd');
-            wrapper.instance().handleSuggestedCollaboratorAdd(contact);
-
-            expect(handleContactAddSpy).toHaveBeenCalledWith([contact]);
-        });
-
-        test('should call openInviteCollaboratorsSection', () => {
-            const openInviteCollaboratorsSection = jest.fn();
-            const wrapper = getWrapper({
-                openInviteCollaboratorsSection,
-            });
-
-            wrapper.instance().handleSuggestedCollaboratorAdd(contact);
-
-            expect(openInviteCollaboratorsSection).toHaveBeenCalled();
         });
     });
 
@@ -310,6 +295,18 @@ describe('features/unified-share-modal/EmailForm', () => {
                 expectedValue: false,
             },
             {
+                email: 'foo@bar.dog',
+                expectedValue: true,
+            },
+            {
+                email: 'foo@bar.design',
+                expectedValue: true,
+            },
+            {
+                email: 'foo@bar.dev',
+                expectedValue: true,
+            },
+            {
                 email: 'test@@example.com',
                 expectedValue: false,
             },
@@ -327,6 +324,11 @@ describe('features/unified-share-modal/EmailForm', () => {
     describe('render()', () => {
         test('should render default component when expanded', () => {
             const wrapper = getWrapper({ isExpanded: true });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render default component with secruity indicator notes when expanded and has external users selected', () => {
+            const wrapper = getWrapper({ isExpanded: true, isExternalUserSelected: true });
             expect(wrapper).toMatchSnapshot();
         });
 
@@ -392,6 +394,28 @@ describe('features/unified-share-modal/EmailForm', () => {
                     content: undefined,
                 },
             });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is a string', () => {
+            const wrapper = getWrapper({
+                recommendedSharingTooltipCalloutName: 'Foo Bar',
+            });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test.each([[null], [undefined]])(
+            'should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is null or undefined',
+            recommendedSharingTooltipCalloutName => {
+                const wrapper = getWrapper({
+                    recommendedSharingTooltipCalloutName,
+                });
+                expect(wrapper).toMatchSnapshot();
+            },
+        );
+
+        test('should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is not passed in', () => {
+            const wrapper = getWrapper();
             expect(wrapper).toMatchSnapshot();
         });
     });

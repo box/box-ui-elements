@@ -1,44 +1,25 @@
 // @flow
-import type { ColumnType, ConditionType } from '../flowTypes';
-import { EQUALS } from '../constants';
+import type { ColumnType } from '../flowTypes';
 
-const initialCondition: ConditionType = {
-    columnId: '3',
-    id: '0',
-    operator: EQUALS,
-    values: [],
-};
-
-const columnOptions = [
-    {
-        displayText: '$100',
-        value: '$100',
-    },
-];
-
-const conditions: Array<ConditionType> = [initialCondition];
-
-const columnWithStringType = {
-    displayName: 'Hullo Thar',
+export const columnForItemName: ColumnType = {
+    displayName: 'Name',
     id: '1',
     isShown: true,
-    options: null,
     property: 'name',
     source: 'item',
     type: 'string',
 };
 
-const columnWithDateType = {
+export const columnForItemLastUpdated: ColumnType = {
     displayName: 'Last Updated',
     id: '2',
     isShown: true,
-    options: null,
     property: 'lastUpdatedByName',
     source: 'item',
     type: 'date',
 };
 
-const columnWithEnumType = {
+export const columnWithEnumType: ColumnType = {
     displayName: 'Contract Value',
     id: '3',
     isShown: true,
@@ -53,9 +34,18 @@ const columnWithEnumType = {
     ],
 };
 
-const columnWithMultiEnumType = {
-    displayName: 'Offices',
+export const columnForDateType: ColumnType = {
+    displayName: 'Expire Date',
     id: '4',
+    isShown: true,
+    property: 'expireDate',
+    source: 'metadata',
+    type: 'date',
+};
+
+export const columnWithMultiEnumType: ColumnType = {
+    displayName: 'Offices',
+    id: '5',
     isShown: true,
     property: 'offices',
     source: 'metadata',
@@ -72,26 +62,34 @@ const columnWithMultiEnumType = {
     ],
 };
 
-const columns: Array<ColumnType> = [
-    columnWithStringType,
-    columnWithDateType,
-    columnWithEnumType,
-    columnWithMultiEnumType,
-];
+export const columnWithFloatType: ColumnType = {
+    displayName: 'Count',
+    id: '6',
+    isShown: true,
+    property: 'count',
+    source: 'metadata',
+    type: 'float',
+};
 
-const columnsWithNewOrder: Array<ColumnType> = [
-    columnWithDateType,
-    columnWithStringType,
-    columnWithEnumType,
-    columnWithMultiEnumType,
-];
+export const columnForTemplateFieldName = {
+    displayName: 'Name',
+    id: '7',
+    isShown: true,
+    property: 'name',
+    source: 'metadata',
+    type: 'string',
+};
 
-const columnsWithOneColumnNotShown: Array<ColumnType> = [
-    { ...columnWithStringType, isShown: false },
-    columnWithDateType,
-    columnWithEnumType,
-    columnWithMultiEnumType,
-];
+export const columnWithNumberType: ColumnType = {
+    displayName: 'Assets',
+    id: '8',
+    isShown: true,
+    property: 'assets',
+    source: 'metadata',
+    type: 'number',
+};
+
+const metadataColumns: Array<ColumnType> = [columnWithEnumType, columnWithMultiEnumType];
 
 const expectedVisibleColumns = {
     visibleColumns: [
@@ -511,12 +509,7 @@ const metadataTableStateAfterMount = {
 };
 
 export {
-    initialCondition,
-    conditions,
-    columns,
-    columnOptions,
-    columnsWithNewOrder,
-    columnsWithOneColumnNotShown,
+    metadataColumns,
     expectedVisibleColumns,
     visibleColumnsOneHidden,
     expectedVisibleColumnsOneHidden,

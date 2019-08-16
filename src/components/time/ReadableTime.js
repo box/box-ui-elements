@@ -2,24 +2,25 @@
 import React from 'react';
 import { FormattedMessage, FormattedRelative, FormattedDate } from 'react-intl';
 
+import { ONE_HOUR_MS } from '../../constants';
 import { isToday, isYesterday, isCurrentYear } from '../../utils/datetime';
 
 import messages from './messages';
 
 type Props = {
-    /** The timestamp which should be used to display the date */
-    allowFutureTimestamps?: boolean,
-    /** The number of milliseconds before now that a relative (vs. absolute) time should be displayed */
-    alwaysShowTime?: boolean,
     /** A boolean that will cause future timestamps (usually due to incorrect computer time) to be corrected to the isToday message */
-    relativeThreshold: number,
+    allowFutureTimestamps?: boolean,
     /** A boolean that will include the time alongside the date, if the date is shown */
+    alwaysShowTime?: boolean,
+    /** The number of milliseconds before now that a relative (vs. absolute) time should be displayed (Default: 1 hour) */
+    relativeThreshold?: number,
+    /** The timestamp which should be used to display the date */
     timestamp: number,
 };
 
 const ReadableTime = ({
     timestamp,
-    relativeThreshold,
+    relativeThreshold = ONE_HOUR_MS,
     allowFutureTimestamps = true,
     alwaysShowTime = false,
 }: Props) => {
@@ -27,6 +28,7 @@ const ReadableTime = ({
     const shouldShowYear = !isCurrentYear(timestamp);
 
     if (!allowFutureTimestamps && timestamp > Date.now()) {
+        // TODO: what is the reasoning behind this rule?
         timestamp = relativeIfNewerThanTs; // Default to 'Today' for timestamps that would show a future date
     }
 
@@ -53,7 +55,9 @@ const ReadableTime = ({
 
     let output = <FormattedMessage {...dateMessage} values={{ time: timestamp, date }} />;
 
-    if (timestamp > relativeIfNewerThanTs) {
+    // if the time stamp is within +/- the relative threshold for the current time,
+    // print the default time format
+    if (Math.abs(Date.now() - timestamp) <= relativeThreshold) {
         output = <FormattedRelative value={timestamp} />;
     }
 

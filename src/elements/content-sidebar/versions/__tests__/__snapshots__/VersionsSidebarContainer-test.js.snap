@@ -2,9 +2,17 @@
 
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer render should match its snapshot 1`] = `
 <VersionsSidebar
+  fileId="12345"
   isLoading={true}
+  isWatermarked={false}
+  onDelete={[Function]}
+  onDownload={[Function]}
+  onPreview={[Function]}
+  onPromote={[Function]}
+  onRestore={[Function]}
   parentName="activity"
-  permissions={Object {}}
+  versionCount={Infinity}
+  versionLimit={Infinity}
   versions={Array []}
 />
 `;

@@ -1,7 +1,8 @@
-import messages from '../../elements/common/messages';
+import commonMessages from '../../elements/common/messages';
+import messages from '../messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
-import { IS_ERROR_DISPLAYED, TASK_NEW_INCOMPLETE } from '../../constants';
+import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED } from '../../constants';
 import Feed from '../Feed';
 
 const mockTaskNew = {
@@ -10,7 +11,7 @@ const mockTaskNew = {
         target: { name: 'Jay-Z', id: '100' },
         id: '000',
         role: 'CREATOR',
-        status: TASK_NEW_INCOMPLETE,
+        status: TASK_NEW_NOT_STARTED,
     },
     created_at: '2019-01-01',
     due_at: '2019-02-02',
@@ -22,7 +23,7 @@ const mockTaskNew = {
             {
                 id: '1',
                 target: { name: 'Beyonce', id: '2', avatar_url: '', type: 'user' },
-                status: 'NOT_STARTED',
+                status: TASK_NEW_NOT_STARTED,
                 permissions: {
                     can_delete: false,
                     can_update: false,
@@ -58,12 +59,48 @@ const mockTaskNew = {
         limit: 1,
         next_marker: null,
     },
-    status: TASK_NEW_INCOMPLETE,
+    status: TASK_NEW_NOT_STARTED,
+};
+
+const mockFirstVersion = {
+    action: 'upload',
+    type: 'file_version',
+    id: 123,
+    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+    trashed_at: 1234567891,
+    modified_at: 1234567891,
+    modified_by: { name: 'Akon', id: 11 },
+};
+
+const mockCurrentVersion = {
+    action: 'restore',
+    type: 'file_version',
+    id: '123',
+};
+
+const deleted_version = {
+    action: 'delete',
+    type: 'file_version',
+    id: 234,
+    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+    trashed_at: 1234567891,
+    modified_at: 1234567891,
+    modified_by: { name: 'Akon', id: 11 },
+};
+
+const versions = {
+    total_count: 1,
+    entries: [mockFirstVersion, deleted_version],
+};
+
+const versionsWithCurrent = {
+    total_count: 3,
+    entries: [mockCurrentVersion, mockFirstVersion, deleted_version],
 };
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
-jest.mock('../Tasks', () => {
+jest.mock('../tasks/Tasks', () => {
     const task = {
         type: 'task',
         id: '1234',
@@ -110,7 +147,7 @@ jest.mock('../Tasks', () => {
     }));
 });
 
-jest.mock('../TasksNew', () => {
+jest.mock('../tasks/TasksNew', () => {
     const task = mockTaskNew;
     return jest.fn().mockImplementation(() => ({
         createTask: jest.fn().mockImplementation(({ successCallback }) => {
@@ -129,7 +166,7 @@ jest.mock('../TasksNew', () => {
     }));
 });
 
-jest.mock('../TaskCollaborators', () =>
+jest.mock('../tasks/TaskCollaborators', () =>
     jest.fn().mockImplementation(() => ({
         createTaskCollaborator: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
@@ -160,7 +197,7 @@ jest.mock('../TaskCollaborators', () =>
     })),
 );
 
-jest.mock('../TaskLinks', () =>
+jest.mock('../tasks/TaskLinks', () =>
     jest.fn().mockImplementation(() => ({
         createTaskLink: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
@@ -168,7 +205,7 @@ jest.mock('../TaskLinks', () =>
     })),
 );
 
-jest.mock('../TaskAssignments', () =>
+jest.mock('../tasks/TaskAssignments', () =>
     jest.fn().mockImplementation(() => ({
         updateTaskAssignment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
@@ -196,30 +233,21 @@ jest.mock('../Comments', () =>
         deleteComment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
+        updateComment: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
         createComment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
     })),
 );
 
-jest.mock('../Versions', () =>
-    jest.fn().mockImplementation(() => ({
-        getVersions: jest.fn().mockReturnValue({
-            total_count: 1,
-            entries: [
-                {
-                    action: 'upload',
-                    type: 'file_version',
-                    id: 123,
-                    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-                    trashed_at: 1234567891,
-                    modified_at: 1234567891,
-                    modified_by: { name: 'Akon', id: 11 },
-                },
-            ],
-        }),
-    })),
-);
+jest.mock('../Versions', () => {
+    return jest.fn().mockImplementation(() => ({
+        getVersions: jest.fn(() => mockFirstVersion),
+        getCurrentVersion: jest.fn(() => mockCurrentVersion),
+    }));
+});
 
 const MOCK_APP_ACTIVITY_ITEM = {
     activity_template: {
@@ -309,30 +337,6 @@ describe('api/Feed', () => {
         limit: 1000,
         next_marker: null,
     };
-    const first_version = {
-        action: 'upload',
-        type: 'file_version',
-        id: 123,
-        created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-        trashed_at: 1234567891,
-        modified_at: 1234567891,
-        modified_by: { name: 'Akon', id: 11 },
-    };
-
-    const deleted_version = {
-        action: 'delete',
-        type: 'file_version',
-        id: 234,
-        created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-        trashed_at: 1234567891,
-        modified_at: 1234567891,
-        modified_by: { name: 'Akon', id: 11 },
-    };
-
-    const versions = {
-        total_count: 1,
-        entries: [first_version, deleted_version],
-    };
 
     const appActivities = {
         total_count: 1,
@@ -352,8 +356,8 @@ describe('api/Feed', () => {
             id: 987,
         },
         restored_from: {
-            id: first_version.id,
-            type: first_version.type,
+            id: mockFirstVersion.id,
+            type: mockFirstVersion.type,
         },
     };
 
@@ -417,19 +421,26 @@ describe('api/Feed', () => {
     });
 
     describe('feedItems()', () => {
-        const sortedItems = [...versions.entries, ...tasks.entries, ...comments.entries, ...appActivities.entries];
+        const sortedItems = [
+            ...versionsWithCurrent.entries,
+            ...tasks.entries,
+            ...comments.entries,
+            ...appActivities.entries,
+        ];
         let successCb;
         let errorCb;
 
         beforeEach(() => {
             feed.fetchVersions = jest.fn().mockResolvedValue(versions);
+            feed.fetchCurrentVersion = jest.fn().mockResolvedValue(mockCurrentVersion);
             feed.fetchTasks = jest.fn().mockResolvedValue(tasks);
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasksNew);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
             feed.fetchAppActivity = jest.fn().mockReturnValue(appActivities);
             feed.setCachedItems = jest.fn();
             feed.versionsAPI = {
-                addCurrentVersion: jest.fn().mockReturnValue(versions),
+                getCurrentVersion: jest.fn().mockReturnValue(versions),
+                addCurrentVersion: jest.fn().mockReturnValue(versionsWithCurrent),
             };
             successCb = jest.fn();
             errorCb = jest.fn();
@@ -444,7 +455,8 @@ describe('api/Feed', () => {
         test('should get feed items, sort, save to cache, and call the success callback', done => {
             feed.feedItems(file, false, successCb, errorCb, jest.fn(), false, true);
             setImmediate(() => {
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versions, comments, tasks, appActivities);
+                expect(feed.versionsAPI.addCurrentVersion).toHaveBeenCalledWith(mockCurrentVersion, versions, file);
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versionsWithCurrent, comments, tasks, appActivities);
                 expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
                 expect(successCb).toHaveBeenCalledWith(sortedItems);
                 done();
@@ -529,6 +541,7 @@ describe('api/Feed', () => {
 
     describe('fetchComments()', () => {
         beforeEach(() => {
+            feed.file = file;
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
 
@@ -539,51 +552,50 @@ describe('api/Feed', () => {
         });
     });
 
-    describe('fetchVersions()', () => {
+    describe('Fetching Base Items', () => {
         beforeEach(() => {
+            feed.file = file;
             feed.fetchFeedItemErrorCallback = jest.fn();
         });
 
-        test('should return a promise and call the versions api', () => {
-            const versionItems = feed.fetchVersions();
-            expect(versionItems instanceof Promise).toBeTruthy();
-            expect(feed.versionsAPI.getVersions).toBeCalled();
-        });
-    });
-
-    describe('fetchTasks()', () => {
-        beforeEach(() => {
-            feed.fetchFeedItemErrorCallback = jest.fn();
+        describe('fetchVersions()', () => {
+            test('should return a promise and call the versions api', () => {
+                const versionItems = feed.fetchVersions();
+                expect(versionItems instanceof Promise).toBeTruthy();
+                expect(feed.versionsAPI.getVersions).toBeCalled();
+            });
         });
 
-        test('should return a promise and call the tasks api', () => {
-            const taskItems = feed.fetchTasks();
-            expect(taskItems instanceof Promise).toBeTruthy();
-            expect(feed.tasksAPI.getTasks).toBeCalled();
-        });
-    });
-
-    describe('fetchAppActivity()', () => {
-        beforeEach(() => {
-            feed.fetchFeedItemErrorCallback = jest.fn();
+        describe('fetchCurrentVersion()', () => {
+            test('should return a promise and call the versions api', () => {
+                const currentVersion = feed.fetchCurrentVersion();
+                expect(currentVersion instanceof Promise).toBeTruthy();
+                expect(feed.versionsAPI.getCurrentVersion).toBeCalled();
+            });
         });
 
-        test('should return a promise and call the app activity api', () => {
-            const activityItems = feed.fetchAppActivity();
-            expect(activityItems instanceof Promise).toBeTruthy();
-            expect(feed.appActivityAPI.getAppActivity).toBeCalled();
-        });
-    });
-
-    describe('fetchTasksNew()', () => {
-        beforeEach(() => {
-            feed.fetchFeedItemErrorCallback = jest.fn();
+        describe('fetchTasks()', () => {
+            test('should return a promise and call the tasks api', () => {
+                const taskItems = feed.fetchTasks();
+                expect(taskItems instanceof Promise).toBeTruthy();
+                expect(feed.tasksAPI.getTasks).toBeCalled();
+            });
         });
 
-        test('should return a promise and call the tasks api', () => {
-            const taskItems = feed.fetchTasksNew();
-            expect(taskItems instanceof Promise).toBeTruthy();
-            expect(feed.tasksNewAPI.getTasksForFile).toBeCalled();
+        describe('fetchAppActivity()', () => {
+            test('should return a promise and call the app activity api', () => {
+                const activityItems = feed.fetchAppActivity();
+                expect(activityItems instanceof Promise).toBeTruthy();
+                expect(feed.appActivityAPI.getAppActivity).toBeCalled();
+            });
+        });
+
+        describe('fetchTasksNew()', () => {
+            test('should return a promise and call the tasks api', () => {
+                const taskItems = feed.fetchTasksNew();
+                expect(taskItems instanceof Promise).toBeTruthy();
+                expect(feed.tasksNewAPI.getTasksForFile).toBeCalled();
+            });
         });
     });
 
@@ -606,6 +618,7 @@ describe('api/Feed', () => {
 
     describe('updateTaskAssignmentSuccessCallback()', () => {
         beforeEach(() => {
+            feed.file = file;
             feed.getCachedItems = jest.fn().mockReturnValue({
                 hasError: false,
                 items: feedItems,
@@ -693,6 +706,150 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('updateTaskNew()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.updateTaskNew({})).toThrow(fileError);
+        });
+
+        test('should call the error handling when unable to create new task collaborator', async () => {
+            const mockErrorCallback = jest.fn();
+            feed.createTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
+
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [
+                    {
+                        type: 'user',
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                    },
+                ],
+                removedAssignees: [
+                    {
+                        type: 'task_collaborator',
+                        id: '19283765',
+                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
+                        role: 'ASSIGNEE',
+                        permissions: {
+                            can_delete: true,
+                            can_update: true,
+                        },
+                        status: 'incomplete',
+                    },
+                ],
+            };
+
+            feed.updateTaskNew(file, task, jest.fn(), mockErrorCallback);
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(mockErrorCallback).toBeCalled();
+        });
+
+        test('should call the error handling when unable to delete existing task collaborator', async () => {
+            const mockErrorCallback = jest.fn();
+            feed.deleteTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
+
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [
+                    {
+                        type: 'user',
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                    },
+                ],
+                removedAssignees: [
+                    {
+                        type: 'task_collaborator',
+                        id: '19283765',
+                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
+                        role: 'ASSIGNEE',
+                        permissions: {
+                            can_delete: true,
+                            can_update: true,
+                        },
+                        status: 'incomplete',
+                    },
+                ],
+            };
+
+            feed.updateTaskNew(file, task, jest.fn(), mockErrorCallback);
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(mockErrorCallback).toBeCalled();
+        });
+
+        test('should call the new task api and if successful, the success callback', async () => {
+            const successCallback = jest.fn();
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [],
+                removedAssignees: [],
+            };
+            feed.updateTaskNew(file, task, successCallback, jest.fn());
+            expect(feed.file.id).toBe(file.id);
+
+            // push a new promise to trigger the promises in updateTaskNew
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
+        });
+
+        test('should call the appropriate new task APIs when adding new assignees', async () => {
+            const successCallback = jest.fn();
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [
+                    {
+                        type: 'user',
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                    },
+                ],
+                removedAssignees: [
+                    {
+                        type: 'task_collaborator',
+                        id: '19283765',
+                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
+                        role: 'ASSIGNEE',
+                        permissions: {
+                            can_delete: true,
+                            can_update: true,
+                        },
+                        status: 'incomplete',
+                    },
+                ],
+            };
+
+            feed.updateTaskNew(file, task, successCallback, jest.fn());
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
+        });
+    });
+
     describe('updateTaskSuccessCallback()', () => {
         let successCb;
         beforeEach(() => {
@@ -719,6 +876,29 @@ describe('api/Feed', () => {
             feed.isDestroyed = jest.fn().mockReturnValue(true);
             feed.updateTaskSuccessCallback(tasks.entries[0], successCb);
             expect(successCb).not.toBeCalled();
+        });
+    });
+
+    describe('updateComment()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.updateComment({})).toThrow(fileError);
+        });
+
+        test('should call the comments api and update the feed items', () => {
+            const successCallback = jest.fn();
+            const comment = {
+                id: '1',
+                tagged_message: 'updated message',
+                message: 'update message',
+                permissions: { can_edit: true },
+            };
+            feed.updateComment(file, comment.id, comment.text, true, comment.permmissions, successCallback, jest.fn());
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
         });
     });
 
@@ -791,6 +971,7 @@ describe('api/Feed', () => {
         });
 
         test('should call the success callback', done => {
+            feed.file = file;
             feed.createTaskAssignment = jest.fn().mockResolvedValue('foo');
             feed.createTaskSuccessCallback(file, 'generated', tasks.entries[0], assignees, successCb, errorCb);
             setImmediate(() => {
@@ -802,6 +983,7 @@ describe('api/Feed', () => {
         });
 
         test('should call the error callback', done => {
+            feed.file = file;
             feed.createTaskAssignment = jest.fn().mockRejectedValue('bar');
             feed.createTaskSuccessCallback(file, 'generated', tasks.entries[0], assignees, successCb, errorCb);
             setImmediate(() => {
@@ -887,7 +1069,7 @@ describe('api/Feed', () => {
 
         test('should call the task assignment api and if successful, resolve', done => {
             const promise = feed.createTaskAssignment(file, tasks.entries[0], 'foo', errorCb);
-            expect(feed.id).toBe(file.id);
+            expect(feed.file.id).toBe(file.id);
             expect(promise instanceof Promise).toBeTruthy();
             expect(feed.taskAssignmentsAPI[0].createTaskAssignment).toBeCalled();
             promise.then(() => {
@@ -908,7 +1090,7 @@ describe('api/Feed', () => {
 
         test('should call the comments api and if successful, the success callback', () => {
             feed.deleteTask(file, '1');
-            expect(feed.id).toBe(file.id);
+            expect(feed.file.id).toBe(file.id);
             expect(feed.tasksAPI.deleteTask).toBeCalled();
             expect(feed.deleteFeedItem).toBeCalled();
         });
@@ -926,7 +1108,7 @@ describe('api/Feed', () => {
 
         test('should call the new task api and if successful, the success callback', () => {
             feed.deleteTaskNew(file, { id: '1' });
-            expect(feed.id).toBe(file.id);
+            expect(feed.file.id).toBe(file.id);
             expect(feed.tasksNewAPI.deleteTask).toBeCalled();
             expect(feed.deleteFeedItem).toBeCalled();
         });
@@ -937,7 +1119,7 @@ describe('api/Feed', () => {
         const feedItemId = feedItems[0].id;
         beforeEach(() => {
             feed.setCachedItems = jest.fn();
-            feed.id = file.id;
+            feed.file = file;
             successCb = jest.fn();
         });
 
@@ -1010,6 +1192,7 @@ describe('api/Feed', () => {
             },
         };
         beforeEach(() => {
+            feed.file = file;
             feed.appendAssignmentsToTask = jest.fn().mockReturnValue(tasksEntriesWithAssignments);
             feed.errorCallback = jest.fn();
         });
@@ -1090,6 +1273,7 @@ describe('api/Feed', () => {
         };
 
         beforeEach(() => {
+            feed.file = file;
             feed.setCachedItems = jest.fn();
         });
         test('should create an item and add it to the feed with empty cache', () => {
@@ -1174,7 +1358,7 @@ describe('api/Feed', () => {
             expect(feedError).toEqual({
                 error: {
                     message: 'foo',
-                    title: messages.errorOccured,
+                    title: commonMessages.errorOccured,
                 },
             });
         });
@@ -1196,11 +1380,12 @@ describe('api/Feed', () => {
         });
 
         test('should throw if no file id', () => {
+            feed.file = {};
             expect(() => feed.updateFeedItem({}, id)).toThrow(fileError);
         });
 
         test('should update the cache with the updated item', () => {
-            feed.id = file.id;
+            feed.file = file;
             const updatedFeedItems = feed.updateFeedItem(updates, id);
             expect(updatedFeedItems).not.toBeNull();
             expect(feed.setCachedItems).toBeCalledWith(file.id, updatedFeedItems);

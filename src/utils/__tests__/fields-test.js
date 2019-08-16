@@ -3,7 +3,7 @@ import {
     PREVIEW_FIELDS_TO_FETCH,
     SIDEBAR_FIELDS_TO_FETCH,
     TASKS_FIELDS_TO_FETCH,
-    VERSIONS_FIELDS_TO_FETCH,
+    FILE_VERSIONS_FIELDS_TO_FETCH,
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
     COMMENTS_FIELDS_TO_FETCH,
     findMissingProperties,
@@ -38,6 +38,7 @@ import {
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_FILE_VERSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
+    FIELD_VERSION_LIMIT,
     FIELD_VERSION_NUMBER,
     FIELD_METADATA_SKILLS,
     FIELD_TASK_ASSIGNMENT_COLLECTION,
@@ -69,6 +70,8 @@ describe('util/fields', () => {
             FIELD_HAS_COLLABORATIONS,
             FIELD_IS_EXTERNALLY_OWNED,
             FIELD_ITEM_COLLECTION,
+            FIELD_AUTHENTICATED_DOWNLOAD_URL,
+            FIELD_IS_DOWNLOAD_AVAILABLE,
         ]);
     });
 
@@ -108,9 +111,12 @@ describe('util/fields', () => {
             FIELD_DESCRIPTION,
             FIELD_METADATA_SKILLS,
             FIELD_ITEM_EXPIRATION,
+            FIELD_VERSION_LIMIT,
             FIELD_VERSION_NUMBER,
             FIELD_IS_EXTERNALLY_OWNED,
             FIELD_RESTORED_FROM,
+            FIELD_AUTHENTICATED_DOWNLOAD_URL,
+            FIELD_IS_DOWNLOAD_AVAILABLE,
         ]);
     });
 
@@ -126,10 +132,15 @@ describe('util/fields', () => {
     });
 
     test('should fetch correct version fields', () => {
-        expect(VERSIONS_FIELDS_TO_FETCH).toEqual([
+        expect(FILE_VERSIONS_FIELDS_TO_FETCH).toEqual([
+            FIELD_AUTHENTICATED_DOWNLOAD_URL,
             FIELD_CREATED_AT,
+            FIELD_EXTENSION,
+            FIELD_IS_DOWNLOAD_AVAILABLE,
             FIELD_MODIFIED_AT,
             FIELD_MODIFIED_BY,
+            FIELD_NAME,
+            FIELD_PERMISSIONS,
             FIELD_SIZE,
             FIELD_TRASHED_AT,
             FIELD_VERSION_NUMBER,

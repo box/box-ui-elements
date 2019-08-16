@@ -120,6 +120,13 @@ exports[`icons/file-icon/FileIcon should render the expected icon when extension
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 16`] = `
+<IconFileExcelSpreadsheet
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 17`] = `
 <IconFileZip
   height={32}
   width={32}

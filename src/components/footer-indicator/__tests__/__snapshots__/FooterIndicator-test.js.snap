@@ -7,7 +7,8 @@ exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicato
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
-    position="middle-right"
+    isDisabled={false}
+    position="top-right"
     text="abcdefghijklmnopqrstuvwxyz"
     theme="default"
   >
@@ -17,7 +18,10 @@ exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicato
       <span
         className="bdl-FooterIndicator-iconWrapper"
       >
-        <IconPuzzlePiece />
+        <IconPuzzlePiece
+          height={14}
+          width={14}
+        />
       </span>
       <span
         className="bdl-FooterIndicator-text"

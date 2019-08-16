@@ -4,7 +4,7 @@
  * @author Box
  */
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
-import { OVERLAY_WRAPPER_CLASS } from '../constants';
+import { KEYS, OVERLAY_WRAPPER_CLASS } from '../constants';
 import './domPolyfill';
 
 /**
@@ -57,6 +57,26 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
 }
 
 /**
+ * Checks if a keyboard event is intended to activate an element.
+ *
+ * @param {SyntheticKeyboardEvent<HTMLElement>} event - The keyboard event
+ * @returns {boolean} true if the event is intended to activate the element
+ */
+export function isActivateKey(event: SyntheticKeyboardEvent<HTMLElement>) {
+    return event.key === KEYS.enter || event.key === KEYS.space;
+}
+
+/**
+ * Checks if a mouse event is an unmodified left click.
+ *
+ * @param {SyntheticMouseEvent<HTMLElement>} event - The mouse event
+ * @returns {boolean} true if the event is an unmodified left click
+ */
+export function isLeftClick(event: SyntheticMouseEvent<HTMLElement>) {
+    return event.button === 0 && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey;
+}
+
+/**
  * Focuses a DOM element if it exists.
  *
  * @param {HTMLElement} root - the root dom element to search
@@ -86,12 +106,22 @@ export function focus(root: ?HTMLElement, selector?: string, focusRoot: boolean 
  * Scrolls the container / modal / wrapper instead of the body
  *
  * @param {HTMLElement} itemEl - the base dom element to search
+ * @param {Object} options - scroll into view options to override
  * @return {void}
  */
-export function scrollIntoView(itemEl: ?HTMLElement): void {
+export function scrollIntoView(itemEl: ?HTMLElement, options?: Object = {}): void {
     // @NOTE: breaks encapsulation but alternative is unknown child ref
     if (itemEl) {
         const parentEl = itemEl.closest(`.body, .modal, .${OVERLAY_WRAPPER_CLASS}`);
-        scrollIntoViewIfNeeded(itemEl, false, undefined, parentEl);
+        scrollIntoViewIfNeeded(
+            itemEl,
+            Object.assign(
+                {
+                    scrollMode: 'if-needed',
+                    boundary: parentEl,
+                },
+                options,
+            ),
+        );
     }
 }

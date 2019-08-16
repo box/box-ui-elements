@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
+import cloneDeep from 'lodash/cloneDeep';
 
 import IconMetadataFilter from '../../../../icons/metadata-view/IconMetadataFilter';
 import Condition from './Condition';
@@ -10,15 +11,21 @@ import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';
-import { AND, OR, COLUMN_OPERATORS, OPERATOR, VALUES } from '../../constants';
+import { AND, OR, COLUMN_OPERATORS } from '../../constants';
 
 import messages from '../../messages';
 
-import type { ColumnType, ConditionType, ConnectorType, OperatorType, OptionType } from '../../flowTypes';
+import type {
+    ColumnType,
+    ConditionType,
+    ConditionValueType,
+    ConnectorType,
+    OperatorType,
+    OptionType,
+} from '../../flowTypes';
 
 type State = {
-    appliedConditions: Array<Object>,
-    areErrorsEnabled: boolean,
+    hasUserSubmitted: boolean,
     isMenuOpen: boolean,
     selectedConnector: ConnectorType,
     transientConditions: Array<Object>,
@@ -35,38 +42,40 @@ class FilterButton extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            appliedConditions: [],
-            transientConditions: this.props.conditions.slice(0),
-            selectedConnector: AND,
-            areErrorsEnabled: false,
+            hasUserSubmitted: false,
             isMenuOpen: false,
+            selectedConnector: AND,
+            transientConditions: cloneDeep(this.props.conditions),
         };
     }
 
-    componentDidMount() {
-        const initialCondition = this.createCondition();
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        const { columns, conditions } = this.props;
+        const { isMenuOpen, transientConditions } = this.state;
+        const { isMenuOpen: prevIsMenuOpen } = prevState;
+        const wasFlyoutOpened = isMenuOpen && !prevIsMenuOpen;
+        if (wasFlyoutOpened) {
+            const hasUnsavedConditions = transientConditions.length > 0;
+            const shouldSetInitialCondition = conditions.length === 0;
 
-        this.setState({
-            transientConditions: [initialCondition],
-        });
-    }
-
-    componentDidUpdate() {
-        const { conditions } = this.props;
-        const { transientConditions } = this.state;
-        const wasFlyoutClosed = transientConditions.length === 0;
-        const shouldHydrateConditions = transientConditions.length !== conditions.length;
-        if (wasFlyoutClosed && shouldHydrateConditions) {
-            this.setState({
-                transientConditions: this.props.conditions.slice(0),
-            });
+            if (!hasUnsavedConditions) {
+                if (shouldSetInitialCondition) {
+                    const newConditions = columns && columns.length === 0 ? [] : [this.createCondition()];
+                    this.setState({
+                        transientConditions: newConditions,
+                    });
+                } else {
+                    this.setState({
+                        transientConditions: cloneDeep(this.props.conditions),
+                    });
+                }
+            }
         }
     }
 
     onClose = () => {
         this.setState({
             isMenuOpen: false,
-            transientConditions: [],
         });
     };
 
@@ -92,14 +101,14 @@ class FilterButton extends React.Component<Props, State> {
                 values: [],
             };
         }
-        return {};
+        throw new Error('Columns Required');
     };
 
     addFilter = () => {
         const newCondition = this.createCondition();
         this.setState({
             transientConditions: [...this.state.transientConditions, newCondition],
-            areErrorsEnabled: false,
+            hasUserSubmitted: false,
         });
     };
 
@@ -114,12 +123,13 @@ class FilterButton extends React.Component<Props, State> {
                 onFilterChange(transientConditions);
             }
             this.setState({
-                appliedConditions: transientConditions,
                 isMenuOpen: false,
+                transientConditions: [],
+                hasUserSubmitted: false,
             });
         } else {
             this.setState({
-                areErrorsEnabled: true,
+                hasUserSubmitted: true,
             });
         }
     };
@@ -135,7 +145,7 @@ class FilterButton extends React.Component<Props, State> {
         let newCondition = { ...conditionToUpdate };
         newCondition = updateCondition(newCondition);
 
-        const newConditions = transientConditions.slice(0);
+        const newConditions = cloneDeep(transientConditions);
         newConditions[newConditionIndex] = newCondition;
 
         this.setState({
@@ -153,38 +163,39 @@ class FilterButton extends React.Component<Props, State> {
         });
 
         const column = columns && columns.find(c => c.id === columnId);
-
-        if (column) {
-            const type = column && column.type;
-
-            const operator = COLUMN_OPERATORS[type][0].key;
-
-            const newCondition = {
-                ...conditionToUpdate,
-                columnId,
-                operator,
-                values: [],
-            };
-
-            const newConditions = transientConditions.slice(0);
-            newConditions[newConditionIndex] = newCondition;
-
-            this.setState({
-                transientConditions: newConditions,
-            });
+        if (!column) {
+            throw new Error('Invalid Column.id');
         }
+
+        const type = column && column.type;
+
+        const operator = COLUMN_OPERATORS[type][0].key;
+
+        const newCondition = {
+            ...conditionToUpdate,
+            columnId,
+            operator,
+            values: [],
+        };
+
+        const newConditions = cloneDeep(transientConditions);
+        newConditions[newConditionIndex] = newCondition;
+
+        this.setState({
+            transientConditions: newConditions,
+        });
     };
 
     handleOperatorChange = (conditionId: string, value: OperatorType) => {
         this.updateConditionState(conditionId, condition => {
-            condition[OPERATOR] = value;
+            condition.operator = value;
             return condition;
         });
     };
 
-    handleValueChange = (conditionId: string, values: Array<string>) => {
+    handleValueChange = (conditionId: string, values: Array<ConditionValueType>) => {
         this.updateConditionState(conditionId, condition => {
-            condition[VALUES] = values;
+            condition.values = values;
             return condition;
         });
     };
@@ -246,12 +257,16 @@ class FilterButton extends React.Component<Props, State> {
     };
 
     render() {
-        const { columns } = this.props;
-        const { appliedConditions, transientConditions, areErrorsEnabled, isMenuOpen, selectedConnector } = this.state;
+        const { columns, conditions } = this.props;
+        const { transientConditions, hasUserSubmitted, isMenuOpen, selectedConnector } = this.state;
 
-        const numberOfAppliedConditions = appliedConditions.length;
+        const numberOfConditions = conditions.length;
+        const areAllValid = this.areAllValid();
 
-        const buttonClasses = classNames('query-bar-button', numberOfAppliedConditions !== 0 ? 'is-active' : '');
+        const buttonClasses = classNames(
+            'query-bar-button',
+            numberOfConditions !== 0 && areAllValid ? 'is-active' : '',
+        );
 
         const isFilterDisabled = !columns || columns.length === 0;
 
@@ -277,13 +292,13 @@ class FilterButton extends React.Component<Props, State> {
                     <MenuToggle>
                         <IconMetadataFilter className="button-icon" />
                         <span className="button-label">
-                            {numberOfAppliedConditions === 0 ? (
+                            {numberOfConditions === 0 ? (
                                 <FormattedMessage {...messages.filtersButtonText} />
                             ) : (
                                 <FormattedMessage
                                     {...messages.multipleFiltersButtonText}
                                     values={{
-                                        number: numberOfAppliedConditions,
+                                        number: numberOfConditions,
                                     }}
                                 />
                             )}
@@ -302,7 +317,7 @@ class FilterButton extends React.Component<Props, State> {
                                     return (
                                         <Condition
                                             key={`metadata-view-filter-item-${condition.id}`}
-                                            areErrorsEnabled={areErrorsEnabled}
+                                            hasUserSubmitted={hasUserSubmitted}
                                             columns={columns}
                                             condition={condition}
                                             deleteCondition={this.deleteCondition}

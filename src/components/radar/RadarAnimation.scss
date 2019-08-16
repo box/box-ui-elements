@@ -5,7 +5,7 @@ $radar-animation-offset: 1px;
     position: relative;
 
     .radar-dot::before {
-        background-color: $box-blue;
+        background-color: $bdl-box-blue;
         border: 2px solid $white;
         border-radius: 50%;
         content: ' ';
@@ -23,7 +23,7 @@ $radar-animation-offset: 1px;
         animation-iteration-count: infinite;
         animation-name: ripple;
         animation-timing-function: ease;
-        background-color: $box-blue;
+        background-color: $bdl-box-blue;
         border-radius: 50%;
         box-shadow: 0 0 10px rgba(0, 0, 0, .3) inset;
         content: ' ';
@@ -34,7 +34,7 @@ $radar-animation-offset: 1px;
     }
 
     .radar-circle::before {
-        border: 1px solid $box-blue;
+        border: 1px solid $bdl-box-blue;
         border-radius: 50%;
         content: ' ';
         height: 40px;
@@ -46,7 +46,7 @@ $radar-animation-offset: 1px;
     }
 
     .radar-circle::after {
-        background-color: $box-blue;
+        background-color: $bdl-box-blue;
         border-radius: 50%;
         content: ' ';
         height: 40px;

@@ -17,7 +17,7 @@ type Props = {
     rootId: string,
 };
 
-const InlineBreadcrumbs = ({ rootId, item, onItemClick }: Props) => {
+const InlineBreadcrumbs = ({ item, onItemClick, rootId }: Props) => {
     const { path_collection }: BoxItem = item;
     const { entries: breadcrumbs = [] } = path_collection || {};
     return (

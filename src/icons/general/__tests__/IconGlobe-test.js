@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { white } from '../../../styles/variables';
+
 import IconGlobe from '../IconGlobe';
 
 describe('icons/general/IconGlobe', () => {
@@ -10,13 +12,13 @@ describe('icons/general/IconGlobe', () => {
     });
 
     test('should correctly render icon with specified color', () => {
-        const color = '#ffffff';
+        const color = white;
         const wrapper = shallow(<IconGlobe color={color} />);
 
         expect(
             wrapper
-                .find('circle')
-                .at(0)
+                .find('path')
+                .at(1)
                 .prop('fill'),
         ).toEqual(color);
     });

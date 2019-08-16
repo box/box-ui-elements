@@ -10,7 +10,6 @@ import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from 
 import { getTypedFileId } from '../utils/file';
 import File from './File';
 import {
-    ERROR_CODE_FETCH_CLASSIFICATION,
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
@@ -502,62 +501,6 @@ class Metadata extends File {
                 this.merge(this.getCacheKey(id), FIELD_METADATA_SKILLS, metadata.data);
                 this.getCache().set(this.getSkillsCacheKey(id), cards);
                 this.successHandler(cards);
-            }
-        } catch (e) {
-            this.errorHandler(e);
-        }
-    }
-
-    /**
-     * Gets classification for a file.
-     *
-     * @param {string} fileId - The file id
-     * @param {Function} successCallback - Success callback
-     * @param {Function} errorCallback - Error callback
-     * @param {boolean|void} [options.forceFetch] - Optionally Bypasses the cache
-     * @param {boolean|void} [options.refreshCache] - Optionally Updates the cache
-     * @return {Promise}
-     */
-    async getClassification(
-        fileId: string,
-        successCallback: Function,
-        errorCallback: Function,
-        options: FetchOptions = {},
-    ): Promise<void> {
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
-        this.errorCode = ERROR_CODE_FETCH_CLASSIFICATION;
-
-        if (!fileId) {
-            this.errorHandler(getBadItemError());
-            return;
-        }
-
-        const cache: APICache = this.getCache();
-        const key = this.getClassificationCacheKey(fileId);
-
-        // Clear the cache if needed
-        if (options.forceFetch) {
-            cache.unset(key);
-        }
-
-        // Return the Cache value if it exists
-        if (cache.has(key)) {
-            this.successHandler(cache.get(key));
-            if (!options.refreshCache) {
-                return;
-            }
-        }
-
-        try {
-            const classification = await this.xhr.get({
-                url: this.getMetadataUrl(fileId, METADATA_SCOPE_ENTERPRISE, METADATA_TEMPLATE_CLASSIFICATION),
-                id: getTypedFileId(fileId),
-            });
-
-            if (!this.isDestroyed()) {
-                cache.set(key, classification.data);
-                this.successHandler(cache.get(key));
             }
         } catch (e) {
             this.errorHandler(e);

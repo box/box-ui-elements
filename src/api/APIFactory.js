@@ -14,11 +14,11 @@ import SearchAPI from './Search';
 import RecentsAPI from './Recents';
 import VersionsAPI from './Versions';
 import CommentsAPI from './Comments';
-import TasksAPI from './Tasks';
-import TaskAssignmentsAPI from './TaskAssignments';
-import TasksNewAPI from './TasksNew';
-import TaskCollaboratorsAPI from './TaskCollaborators';
-import TaskLinksAPI from './TaskLinks';
+import TasksAPI from './tasks/Tasks';
+import TaskAssignmentsAPI from './tasks/TaskAssignments';
+import TasksNewAPI from './tasks/TasksNew';
+import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
+import TaskLinksAPI from './tasks/TaskLinks';
 import FileAccessStatsAPI from './FileAccessStats';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
@@ -26,6 +26,7 @@ import FileCollaboratorsAPI from './FileCollaborators';
 import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
 import OpenWithAPI from './OpenWith';
+import MetadataQueryAPI from './MetadataQuery';
 import BoxEditAPI from './box-edit';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 
@@ -140,6 +141,11 @@ class APIFactory {
      */
     appIntegrationsAPI: AppIntegrationsAPI;
 
+    /**
+     * @property {MetadataQueryAPI}
+     */
+    metadataQueryAPI: MetadataQueryAPI;
+
     /** @property {BoxEditAPI}
      *
      */
@@ -162,6 +168,7 @@ class APIFactory {
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
             cache: options.cache || new Cache(),
+            language: options.language,
         });
     }
 
@@ -262,6 +269,11 @@ class APIFactory {
             delete this.appIntegrationsAPI;
         }
 
+        if (this.metadataQueryAPI) {
+            this.metadataQueryAPI.destroy();
+            delete this.metadataQueryAPI;
+        }
+
         if (this.openWithAPI) {
             this.openWithAPI.destroy();
             delete this.openWithAPI;
@@ -313,8 +325,10 @@ class APIFactory {
      *
      * @return {FileAPI} FileAPI instance
      */
-    getFileAPI(): FileAPI {
-        this.destroy();
+    getFileAPI(shouldDestroy: boolean = true): FileAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
         this.fileAPI = new FileAPI(this.options);
         return this.fileAPI;
     }
@@ -479,7 +493,7 @@ class APIFactory {
      * API for taskCollaborators
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {TasksAPI} TaskCollaboratorsAPI instance
+     * @return {TaskCollaboratorsAPI} TaskCollaboratorsAPI instance
      */
     getTaskCollaboratorsAPI(shouldDestroy: boolean): TaskCollaboratorsAPI {
         if (shouldDestroy) {
@@ -593,6 +607,21 @@ class APIFactory {
 
         this.appIntegrationsAPI = new AppIntegrationsAPI(this.options);
         return this.appIntegrationsAPI;
+    }
+
+    /**
+     * API for Metadata Query
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {MetadataQuery} MetadataQuery instance
+     */
+    getMetadataQueryAPI(shouldDestroy: boolean = false): MetadataQueryAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.metadataQueryAPI = new MetadataQueryAPI(this.options);
+        return this.metadataQueryAPI;
     }
 
     /**

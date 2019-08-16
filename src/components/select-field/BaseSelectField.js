@@ -34,6 +34,8 @@ type Props = {
     className?: string,
     /** The fallback option value when other options are all unselected. Default option cannot be selected at the same time as other options. `selectedValues` must not be empty when this option is used. */
     defaultValue?: SelectOptionValueProp,
+    /** An optional error to show within a tooltip. */
+    error?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
     multiple: boolean,
@@ -41,13 +43,15 @@ type Props = {
     onChange: Function,
     /** Function will be called with the user selected option (even on deselect or when the option was previously selected) */
     onOptionSelect?: Function,
+    /** Function that allows custom rendering of select field options. When not provided the component will only render the option's displayText by default */
+    optionRenderer?: (option: SelectOptionProp) => React.Node,
     /** List of options (displayText, value) */
     options: Array<SelectOptionProp>,
     /** The select button text shown when no options are selected. */
     placeholder?: string | React.Element<any>,
     /** The currently selected option values (can be empty) */
     selectedValues: Array<SelectOptionValueProp>,
-    /**  Array of ordered indices indicating where to insert separators (ex. index 2 means insert a separator after option 2) */
+    /** Array of ordered indices indicating where to insert separators (ex. index 2 means insert a separator after option 2) */
     separatorIndices: Array<number>,
     /** The select button text (by default, component will use comma separated list of all selected option displayText) */
     title?: string | React.Element<any>,
@@ -57,6 +61,7 @@ type State = {
     activeItemID: ?string,
     activeItemIndex: number,
     isOpen: boolean,
+    shouldScrollIntoView: boolean,
 };
 
 class BaseSelectField extends React.Component<Props, State> {
@@ -78,20 +83,26 @@ class BaseSelectField extends React.Component<Props, State> {
             activeItemID: null,
             activeItemIndex: -1,
             isOpen: false,
+            shouldScrollIntoView: false,
         };
     }
 
-    setActiveItem = (index: number) => {
-        this.setState({ activeItemIndex: index });
+    setActiveItem = (index: number, shouldScrollIntoView?: boolean = true) => {
+        this.setState({ activeItemIndex: index, shouldScrollIntoView });
         if (index === -1) {
             this.setActiveItemID(null);
         }
     };
 
     setActiveItemID = (id: ?string) => {
+        const { shouldScrollIntoView } = this.state;
         const itemEl = id ? document.getElementById(id) : null;
-        this.setState({ activeItemID: id });
-        scrollIntoView(itemEl);
+
+        this.setState({ activeItemID: id, shouldScrollIntoView: false }, () => {
+            if (shouldScrollIntoView) {
+                scrollIntoView(itemEl, { block: 'nearest' });
+            }
+        });
     };
 
     selectFieldID: string;
@@ -277,8 +288,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
     renderSelectButton = () => {
         const { activeItemID, isOpen } = this.state;
-        const { buttonProps: buttonElProps, isDisabled, className } = this.props;
-
+        const { buttonProps: buttonElProps, isDisabled, className, error } = this.props;
         const buttonText = this.renderButtonText();
         const buttonProps = {
             ...buttonElProps,
@@ -295,11 +305,15 @@ class BaseSelectField extends React.Component<Props, State> {
             title: buttonText,
         };
 
-        return <SelectButton {...buttonProps}>{buttonText}</SelectButton>;
+        return (
+            <SelectButton {...buttonProps} error={error}>
+                {buttonText}
+            </SelectButton>
+        );
     };
 
     renderSelectOptions = () => {
-        const { options, selectedValues, separatorIndices } = this.props;
+        const { optionRenderer, options, selectedValues, separatorIndices } = this.props;
         const { activeItemIndex } = this.state;
 
         const selectOptions = options.map<React.Element<typeof DatalistItem | 'li'>>((item, index) => {
@@ -316,12 +330,8 @@ class BaseSelectField extends React.Component<Props, State> {
 
                     this.selectOption(index);
                 },
-                /* preventDefault on mousedown so blur doesn't happen before click */
-                onMouseDown: event => {
-                    event.preventDefault();
-                },
                 onMouseEnter: () => {
-                    this.setActiveItem(index);
+                    this.setActiveItem(index, false);
                 },
                 setActiveItemID: this.setActiveItemID,
             };
@@ -337,7 +347,7 @@ class BaseSelectField extends React.Component<Props, State> {
                     <div className="select-option-check-icon">
                         {isSelected ? <IconCheck height={16} width={16} /> : null}
                     </div>
-                    {displayText}
+                    {optionRenderer ? optionRenderer(item) : displayText}
                 </DatalistItem>
             );
             /* eslint-enable react/jsx-key */
@@ -369,7 +379,7 @@ class BaseSelectField extends React.Component<Props, State> {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                className={classNames('select-container', className)}
+                className={classNames(className, 'select-container')}
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
             >
@@ -380,7 +390,14 @@ class BaseSelectField extends React.Component<Props, State> {
                             'is-visible': isOpen,
                         })}
                     >
-                        <ul className="overlay" id={this.selectFieldID} role="listbox" {...listboxProps}>
+                        <ul
+                            className="overlay"
+                            id={this.selectFieldID}
+                            role="listbox"
+                            // preventDefault on mousedown so blur doesn't happen before click
+                            onMouseDown={event => event.preventDefault()}
+                            {...listboxProps}
+                        >
                             {this.renderSelectOptions()}
                         </ul>
                     </div>

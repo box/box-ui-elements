@@ -1,5 +1,7 @@
 @import '../../../common/variables';
 
+$assignee-dropdown-height: 215px;
+
 .be .bcs-task-input-container {
     display: flex;
 
@@ -23,8 +25,14 @@
         min-width: 0;
 
         textarea,
-        input {
+        .date-picker-input {
             width: 100%;
+        }
+
+        .checkbox-container {
+            // default margin is 20px between form input elements
+            // this checkbox needs to be 10px below the pill selector input
+            margin-top: -10px;
         }
 
         .bcs-task-add-due-date-input {
@@ -53,6 +61,23 @@
             .pill-selector-input-wrapper {
                 width: auto;
             }
+
+            &.scrollable {
+                .overlay-wrapper {
+                    border: 1px solid $bdl-gray-30;
+                    height: $assignee-dropdown-height;
+                    overflow-y: scroll;
+                    position: absolute;
+                }
+
+                .overlay {
+                    border: none;
+                }
+            }
         }
+    }
+
+    .inline-alert {
+        margin: 0 0 20px 0;
     }
 }

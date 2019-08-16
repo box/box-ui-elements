@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { boxBlue } from '../../styles/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 import AccessibleSVG from '../accessible-svg';
 
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconPointAnnotation = ({ className = '', color = boxBlue, height = 21, title, width = 22 }: Props) => (
+const IconPointAnnotation = ({ className = '', color = bdlBoxBlue, height = 21, title, width = 22 }: Props) => (
     <AccessibleSVG
         className={`icon-annotation-point ${className}`}
         height={height}

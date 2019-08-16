@@ -5,8 +5,11 @@
  */
 
 import React from 'react';
+import noop from 'lodash/noop';
 import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderRight from './SubHeaderRight';
+import type { ViewMode } from '../flowTypes';
+import { VIEW_MODE_LIST } from '../../../constants';
 
 import './SubHeader.scss';
 
@@ -14,28 +17,42 @@ type Props = {
     canCreateNewFolder: boolean,
     canUpload: boolean,
     currentCollection: Collection,
+    gridColumnCount?: number,
+    gridMaxColumns?: number,
+    gridMinColumns?: number,
     isSmall: boolean,
+    maxGridColumnCountForWidth?: number,
     onCreate: Function,
+    onGridViewSliderChange?: (newSliderValue: number) => void,
     onItemClick: Function,
     onSortChange: Function,
     onUpload: Function,
+    onViewModeChange?: (viewMode: ViewMode) => void,
     rootId: string,
     rootName?: string,
     view: View,
+    viewMode?: ViewMode,
 };
 
 const SubHeader = ({
-    rootId,
-    rootName,
+    canCreateNewFolder,
+    canUpload,
+    currentCollection,
+    gridColumnCount = 0,
+    gridMaxColumns = 0,
+    gridMinColumns = 0,
+    maxGridColumnCountForWidth = 0,
+    onGridViewSliderChange = noop,
+    isSmall,
+    onCreate,
     onItemClick,
     onSortChange,
-    currentCollection,
     onUpload,
-    onCreate,
-    canUpload,
-    canCreateNewFolder,
+    onViewModeChange,
+    rootId,
+    rootName,
     view,
-    isSmall,
+    viewMode = VIEW_MODE_LIST,
 }: Props) => (
     <div className="be-sub-header" data-testid="be-sub-header">
         <SubHeaderLeft
@@ -50,10 +67,17 @@ const SubHeader = ({
             canCreateNewFolder={canCreateNewFolder}
             canUpload={canUpload}
             currentCollection={currentCollection}
+            gridColumnCount={gridColumnCount}
+            gridMaxColumns={gridMaxColumns}
+            gridMinColumns={gridMinColumns}
+            maxGridColumnCountForWidth={maxGridColumnCountForWidth}
             onCreate={onCreate}
+            onGridViewSliderChange={onGridViewSliderChange}
             onSortChange={onSortChange}
             onUpload={onUpload}
+            onViewModeChange={onViewModeChange}
             view={view}
+            viewMode={viewMode}
         />
     </div>
 );

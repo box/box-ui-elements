@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 
-import Task from '..';
-
-jest.mock('../../comment/Comment', () => 'mock-comment');
+import { TaskComponent as Task } from '..';
 
 const allHandlers = {
     tasks: {
@@ -50,11 +48,12 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             limit: 10,
             next_marker: null,
         },
+        completion_rule: 'ALL_ASSIGNEES',
         created_at: '2010-01-01',
         created_by: { id: '0', target: currentUser, role: 'CREATOR', status: 'NOT_STARTED', type: 'task_collaborator' },
         due_at: null,
         id: '123125',
-        name: 'This is where we tell each other what we need to do',
+        description: 'This is where we tell each other what we need to do',
         status: 'NOT_STARTED',
         permissions: {
             can_update: true,
@@ -67,6 +66,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             limit: 1000,
             next_marker: null,
         },
+        task_type: 'GENERAL',
         type: 'task',
     };
 
@@ -77,8 +77,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
 
     test('should show assignment status badges for each assignee', () => {
         const wrapper = mount(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
-        expect(wrapper).toMatchSnapshot();
-        expect(wrapper.find('[data-testid="task-assignment-status"]')).toHaveLength(2);
+        expect(wrapper.find('[data-testid="avatar-group-avatar-container"]')).toHaveLength(2);
     });
 
     test('should not show due date container if not set', () => {
@@ -87,7 +86,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should show due date if set', () => {
-        const wrapper = shallow(
+        const wrapper = mount(
             <Task
                 currentUser={currentUser}
                 onEdit={jest.fn()}
@@ -100,7 +99,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('due date should have overdue class if task is incomplete and due date is in past', () => {
-        const incompleteWrapper = shallow(
+        const incompleteWrapper = mount(
             <Task
                 {...task}
                 currentUser={currentUser}
@@ -110,9 +109,11 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 status="NOT_STARTED"
             />,
         );
-        expect(incompleteWrapper.find('.bcs-task-overdue')).toHaveLength(1);
+        expect(incompleteWrapper.find('.bcs-is-taskOverdue')).toHaveLength(1);
+    });
 
-        const completeWrapper = shallow(
+    test('due date should not have overdue class if task is complete and due date is in past', () => {
+        const completeWrapper = mount(
             <Task
                 {...task}
                 currentUser={currentUser}
@@ -122,7 +123,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 status="COMPLETED"
             />,
         );
-        expect(completeWrapper.find('.bcs-task-overdue')).toHaveLength(0);
+        expect(completeWrapper.find('.bcs-is-taskOverdue')).toHaveLength(0);
     });
 
     test('should add pending class for isPending prop', () => {
@@ -133,7 +134,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         };
 
         const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...myTask} />);
-        expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
+        expect(wrapper.find('[data-testid="task-card"]').hasClass('bcs-is-pending')).toBe(true);
     });
 
     test('should show actions when current user is assigned and task is incomplete', () => {
@@ -171,6 +172,26 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         expect(wrapper.find('TaskActions')).toHaveLength(0);
     });
 
+    test('should show actions for task type', () => {
+        const approvalTask = mount(<Task {...task} task_type="APPROVAL" currentUser={currentUser} />).render();
+        const approvalBtns = global.queryAllByTestId(approvalTask, 'approve-task');
+        const rejectBtns = global.queryAllByTestId(approvalTask, 'reject-task');
+        expect(approvalBtns).toHaveLength(1);
+        expect(rejectBtns).toHaveLength(1);
+
+        const generalTask = mount(<Task {...task} task_type="GENERAL" currentUser={currentUser} />).render();
+        const completeBtns = global.queryAllByTestId(generalTask, 'complete-task');
+        expect(completeBtns).toHaveLength(1);
+    });
+
+    test('should show proper icons for task avatar based on task type', () => {
+        const approvalTask = mount(<Task {...task} task_type="APPROVAL" currentUser={currentUser} />);
+        expect(approvalTask.find('IconTaskApproval')).toHaveLength(1);
+
+        const generalTask = mount(<Task {...task} task_type="GENERAL" currentUser={currentUser} />);
+        expect(generalTask.find('IconTaskGeneral')).toHaveLength(1);
+    });
+
     test('should call onAssignmentUpdate with completed status when task action complete is clicked', () => {
         const onAssignmentUpdateSpy = jest.fn();
         const wrapper = mount(
@@ -182,7 +203,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
 
-        const checkButton = wrapper.find('.bcs-task-check-btn').hostNodes();
+        const checkButton = wrapper.find('[data-testid="complete-task"]').hostNodes();
         checkButton.simulate('click');
 
         expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 'current-user-assignment-id', 'COMPLETED');
@@ -192,28 +213,133 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const wrapper = shallow(
             <Task
                 {...task}
-                permissions={{ can_delete: false, can_update: false }}
+                permissions={{ can_delete: false, can_update: true }}
                 currentUser={otherUser}
                 approverSelectorContacts={approverSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
             />,
         );
-
-        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_delete).toBe(false);
+        wrapper.find('MediaMenu[data-testid="task-actions-menu"]').simulate('click');
+        wrapper.update();
+        expect(wrapper.find('MenuItem[data-testid="delete-task"]')).toHaveLength(0);
+        expect(wrapper.find('MenuItem[data-testid="edit-task"]')).toHaveLength(1);
     });
 
-    test('should not allow user to edit if they are not the task creator', () => {
+    test('should not allow user to edit if the permissions do not allow it', () => {
         const wrapper = mount(
             <Task
                 {...task}
+                permissions={{ can_delete: true, can_update: false }}
                 currentUser={otherUser}
                 approverSelectorContacts={approverSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
             />,
         );
+        wrapper.find('MediaMenu[data-testid="task-actions-menu"]').simulate('click');
+        wrapper.update();
+        expect(wrapper.find('MenuItem[data-testid="edit-task"]')).toHaveLength(0);
+        expect(wrapper.find('MenuItem[data-testid="delete-task"]')).toHaveLength(1);
+    });
 
-        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_edit).toBe(false);
+    test('should show inline error for error prop', () => {
+        const wrapper = mount(
+            <Task
+                {...task}
+                currentUser={currentUser}
+                error={{ title: 'blah', message: 'blah' }}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+            />,
+        );
+
+        expect(wrapper.find('ActivityError')).toHaveLength(1);
+    });
+
+    test('should call getAllTaskCollaborators on modal open if there is a next_marker', async () => {
+        const taskWithMarker = {
+            ...task,
+            assigned_to: {
+                next_marker: 'foo',
+                entries: [],
+            },
+        };
+
+        const wrapper = mount(
+            <Task
+                {...taskWithMarker}
+                currentUser={currentUser}
+                error={{ title: 'blah', message: 'blah' }}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+            />,
+        );
+        const instance = wrapper.instance();
+        instance.getAllTaskCollaborators = jest.fn();
+
+        await instance.handleEditClick();
+
+        expect(instance.getAllTaskCollaborators).toBeCalled();
+    });
+
+    test('should be able to toggle expanded state', () => {
+        const COUNT = 30;
+        const INITIAL_DISPLAY_COUNT = 3;
+        let assigneeList;
+
+        const taskWithThirtyAssignees = {
+            ...task,
+            assigned_to: {
+                next_marker: null,
+                entries: Array.from({ length: COUNT }, (_, idx) => ({
+                    id: `current-user-assignment-id-${idx}`,
+                    target: currentUser,
+                    status: 'NOT_STARTED',
+                    role: 'ASSIGNEE',
+                    permissions: {
+                        can_update: true,
+                        can_delete: true,
+                    },
+                    type: 'task_collaborator',
+                })),
+            },
+        };
+
+        const wrapper = mount(
+            <Task
+                currentUser={currentUser}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+                {...taskWithThirtyAssignees}
+                due_at={new Date() + 1000}
+            />,
+        );
+
+        assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
+        expect(assigneeList).toHaveLength(INITIAL_DISPLAY_COUNT);
+
+        const expandBtn = global.queryAllByTestId(wrapper, 'show-more-assignees').first();
+        expandBtn.simulate('click');
+
+        assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
+        expect(assigneeList).toHaveLength(COUNT);
+
+        const collapseBtn = global.queryAllByTestId(wrapper, 'show-less-assignees').first();
+        collapseBtn.simulate('click');
+
+        assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
+        expect(assigneeList).toHaveLength(INITIAL_DISPLAY_COUNT);
+    });
+
+    test('should call onModalClose prop when modal is closed', () => {
+        const onModalClose = jest.fn();
+
+        const wrapper = mount(<Task {...task} currentUser={currentUser} onModalClose={onModalClose} />);
+
+        const instance = wrapper.instance();
+        instance.handleEditModalClose();
+
+        expect(onModalClose).toBeCalled();
     });
 });

@@ -11,7 +11,7 @@ import type { Callout } from './Callout';
 
 import './styles/LeftSidebarLink.scss';
 
-type Props = {
+export type Props = {
     callout?: Callout,
     className?: string,
     customTheme?: Object,
@@ -116,6 +116,7 @@ class LeftSidebarLink extends React.Component<Props, State> {
                     className={classNames('nav-link-tooltip', {
                         'is-visible': this.state.isTextOverflowed && !isScrolling,
                     })}
+                    isTabbable={false}
                     position="middle-right"
                     text={message}
                 >

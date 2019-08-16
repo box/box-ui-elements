@@ -5,7 +5,7 @@ $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
 
 .be {
     &.bcs {
-        background-color: $haze;
+        background-color: $bdl-gray-02;
         display: flex;
         max-width: $sidebarWidth;
         min-width: $sidebarTabsWidth;

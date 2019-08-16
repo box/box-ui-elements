@@ -10,7 +10,7 @@
 
 .be .btn-plain.bcs-section-title {
     align-items: center;
-    border-bottom: 1px solid $off-white;
+    border-bottom: 1px solid $bdl-gray-10;
     color: initial;
     display: flex;
     justify-content: space-between;
@@ -18,21 +18,21 @@
     text-align: left;
     width: 100%;
 
+    .icon-caret-down {
+        transition: transform $bdl-transition-duration-200ms;
+    }
+
     &:active,
     &:focus {
         border-bottom-color: $blue;
         text-decoration: none;
 
         svg path {
-            fill: $twos;
+            fill: $bdl-gray;
         }
-    }
-
-    .icon-caret-down {
-        transform: rotateZ(-90deg);
     }
 }
 
 .be .bcs-section-open .btn-plain.bcs-section-title .icon-caret-down {
-    transform: none;
+    transform: rotateZ(180deg);
 }

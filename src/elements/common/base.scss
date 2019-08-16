@@ -8,13 +8,9 @@
 @import '../../components/notification/Notification';
 
 @mixin be-content {
-    color: $twos;
+    color: $bdl-gray;
     letter-spacing: .3px;
     line-height: 20px;
-
-    .ReactModal__Body--open & {
-        position: relative;
-    }
 
     /* stylelint-disable */
     ::-webkit-input-placeholder {
@@ -73,10 +69,14 @@
     overflow: hidden;
     padding: 0;
     width: 100%;
+
+    .ReactModal__Body--open & {
+        position: relative;
+    }
 }
 
 .be-modal {
-    // This class can be used to applu the base content reset to portalled elements are outside of the .be root
+    // This class can be used to apply the base content reset to portalled elements are outside of the .be root
     // Also add the .be class to the inner content to get the rest of the styles
     @include reset;
     @include be-content;

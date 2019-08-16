@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import queryString from 'query-string';
 import TokenService from '../utils/TokenService';
 import { getTypedFileId } from '../utils/file';
 import Base from './Base';
@@ -34,16 +35,34 @@ class Users extends Base {
     }
 
     /**
-     * Gets the user avatar URL
+     * Gets authenticated user avatar URL from cache or by getting new token
      *
      * @param {string} userId the user id
      * @param {string} fileId the file id
      * @return {string} the user avatar URL string for a given user with access token attached
      */
-    async getAvatarUrlWithAccessToken(userId: string, fileId: string): Promise<?string> {
+    async getAvatarUrlWithAccessToken(userId?: ?string, fileId: string): Promise<?string> {
+        if (!userId) {
+            return null;
+        }
+
+        // treat cache as key-value pairs of { userId: avatarUrl }
+        const cache = this.getCache();
+        if (cache.has(userId)) {
+            return cache.get(userId);
+        }
+
         const accessToken: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);
+
         if (typeof accessToken === 'string') {
-            return `${this.getAvatarUrl(userId)}?access_token=${accessToken}`;
+            const options = {
+                access_token: accessToken,
+                pic_type: 'large',
+            };
+            const urlParams = queryString.stringify(options);
+            const url = `${this.getAvatarUrl(userId)}?${urlParams}`;
+            cache.set(userId, url);
+            return url;
         }
 
         return null;

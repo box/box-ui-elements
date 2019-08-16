@@ -12,11 +12,11 @@ exports[`elements/content-sidebar/Skills/Keywords/ReadOnlyKeywords should correc
     options={
       Array [
         Object {
-          "text": "foo",
+          "displayText": "foo",
           "value": 0,
         },
         Object {
-          "text": "bar",
+          "displayText": "bar",
           "value": 1,
         },
       ]
@@ -37,11 +37,11 @@ exports[`elements/content-sidebar/Skills/Keywords/ReadOnlyKeywords should correc
     options={
       Array [
         Object {
-          "text": "foo",
+          "displayText": "foo",
           "value": 0,
         },
         Object {
-          "text": "bar",
+          "displayText": "bar",
           "value": 1,
         },
       ]

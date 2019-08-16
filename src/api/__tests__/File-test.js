@@ -1,18 +1,23 @@
+import cloneDeep from 'lodash/cloneDeep';
 import Cache from '../../utils/Cache';
 import * as fields from '../../utils/fields';
 import File from '../File';
+import TokenService from '../../utils/TokenService';
 import { X_REP_HINTS, ERROR_CODE_FETCH_FILE, ERROR_CODE_GET_DOWNLOAD_URL, FIELD_EXTENSION } from '../../constants';
 
 jest.mock('../../utils/file', () => ({
     getTypedFileId: jest.fn().mockReturnValue('file_id'),
 }));
 
+const TOKEN = 'token';
 let file;
 let cache;
 
 describe('api/File', () => {
     beforeEach(() => {
-        file = new File({});
+        file = new File({
+            token: TOKEN,
+        });
         cache = new Cache();
     });
 
@@ -32,64 +37,133 @@ describe('api/File', () => {
     });
 
     describe('getDownloadUrl()', () => {
-        test('should make xhr to get download url and call success callback', () => {
+        const ERROR = 'Download is missing required fields or token.';
+
+        test('should return a download url for a file', () => {
+            const downloadUrl = 'https://api.box.com/2.0/files/foo/content';
+            const downloadFile = {
+                authenticated_download_url: downloadUrl,
+                id: 'foo',
+                is_download_available: true,
+            };
             const success = jest.fn();
-            const get = jest.fn().mockReturnValueOnce(Promise.resolve({ data: { download_url: 'bar' } }));
-            file.xhr = { get };
-            return file.getDownloadUrl('foo', success).then(() => {
-                expect(success).toHaveBeenCalledWith('bar');
-                expect(get).toHaveBeenCalledWith({
-                    url: 'https://api.box.com/2.0/files/foo',
-                    params: { fields: 'download_url' },
-                });
+
+            return file.getDownloadUrl('foo', downloadFile, success).then(() => {
+                expect(success).toHaveBeenCalledWith(`${downloadUrl}?access_token=${TOKEN}`);
             });
         });
 
-        test('should make xhr to get download url and not call success callback if destroyed', () => {
-            file.isDestroyed = jest.fn().mockReturnValueOnce(true);
+        test('should return a download url for a file version', () => {
+            const downloadVersion = {
+                authenticated_download_url: 'https://api.box.com/2.0/files/foo/content?version=bar',
+                id: 'bar',
+                is_download_available: true,
+            };
             const success = jest.fn();
-            const get = jest.fn().mockReturnValueOnce(Promise.resolve({ data: { download_url: 'bar' } }));
-            file.xhr = { get };
-            return file.getDownloadUrl('foo', success).then(() => {
+
+            return file.getDownloadUrl('foo', downloadVersion, success).then(() => {
+                expect(success).toHaveBeenCalledWith(
+                    `https://api.box.com/2.0/files/foo/content?access_token=${TOKEN}&version=bar`,
+                );
+            });
+        });
+
+        test('should return an error if authenticatd_download_url is missing', () => {
+            const downloadFile = {
+                id: 'foo',
+                is_download_available: true,
+            };
+            const error = jest.fn();
+            const success = jest.fn();
+
+            return file.getDownloadUrl('foo', downloadFile, success, error).catch(() => {
                 expect(success).not.toHaveBeenCalled();
-                expect(get).toHaveBeenCalledWith({
-                    url: 'https://api.box.com/2.0/files/foo',
-                    params: { fields: 'download_url' },
-                });
+                expect(error).toHaveBeenCalledWith(new Error(ERROR), ERROR_CODE_GET_DOWNLOAD_URL);
             });
         });
 
-        test('should make xhr to get download url and call error callback', () => {
-            const error = new Error('error');
-            const successCb = jest.fn();
-            const errorCb = jest.fn();
-            const get = jest.fn().mockReturnValueOnce(Promise.reject(error));
-            file.xhr = { get };
-            return file.getDownloadUrl('foo', successCb, errorCb).then(() => {
-                expect(successCb).not.toHaveBeenCalled();
-                expect(errorCb).toHaveBeenCalledWith(error, ERROR_CODE_GET_DOWNLOAD_URL);
-                expect(get).toHaveBeenCalledWith({
-                    url: 'https://api.box.com/2.0/files/foo',
-                    params: { fields: 'download_url' },
-                });
+        test('should return an error if is_download_available is false', () => {
+            const downloadFile = {
+                id: 'foo',
+                is_download_available: false,
+            };
+            const error = jest.fn();
+            const success = jest.fn();
+
+            return file.getDownloadUrl('foo', downloadFile, success, error).catch(() => {
+                expect(success).not.toHaveBeenCalled();
+                expect(error).toHaveBeenCalledWith(new Error(ERROR), ERROR_CODE_GET_DOWNLOAD_URL);
             });
         });
+    });
 
-        test('should make xhr to get download url and not call error callback when destroyed', () => {
-            file.isDestroyed = jest.fn().mockReturnValueOnce(true);
-            const error = new Error('error');
-            const successCb = jest.fn();
-            const errorCb = jest.fn();
-            const get = jest.fn().mockReturnValueOnce(Promise.reject(error));
-            file.xhr = { get };
-            return file.getDownloadUrl('foo', successCb, errorCb).then(() => {
-                expect(successCb).not.toHaveBeenCalled();
-                expect(errorCb).not.toHaveBeenCalled();
-                expect(get).toHaveBeenCalledWith({
-                    url: 'https://api.box.com/2.0/files/foo',
-                    params: { fields: 'download_url' },
-                });
-            });
+    describe('getThumbnailUrl()', () => {
+        const baseUrl = 'baseUrl';
+        const url_template = `${baseUrl}/{+asset_path}`;
+        const representation = 'jpg';
+
+        const baseItem = {
+            representations: {
+                entries: [
+                    {
+                        representation,
+                        status: { state: 'success' },
+                        content: {
+                            url_template,
+                        },
+                    },
+                ],
+            },
+        };
+
+        let item;
+        beforeEach(() => {
+            item = cloneDeep(baseItem);
+        });
+
+        test('should return thumbnail url for item with jpg representation', () => {
+            TokenService.getReadToken = jest.fn().mockReturnValueOnce(TOKEN);
+            return file
+                .getThumbnailUrl(item)
+                .then(thumbnailUrl => expect(thumbnailUrl).toBe(`${baseUrl}/?access_token=${TOKEN}`));
+        });
+
+        test('should return thumbnail url for item with png representation', () => {
+            TokenService.getReadToken = jest.fn().mockReturnValueOnce(TOKEN);
+            item.representations.entries[0].representation = 'png';
+            return file
+                .getThumbnailUrl(item)
+                .then(thumbnailUrl => expect(thumbnailUrl).toBe(`${baseUrl}/1.png?access_token=${TOKEN}`));
+        });
+
+        test('should return null if item has no representations field', () => {
+            item.representations = undefined;
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if item has no entries', () => {
+            item.representations.entries = [];
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if TokenService returns null', () => {
+            TokenService.getReadToken = jest.fn().mockReturnValueOnce(null);
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if response status is not success', () => {
+            item.representations.entries[0].status.state = 'failure';
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if no representation in reponse', () => {
+            item.representations.entries[0].representation = undefined;
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
+        });
+
+        test('should return null if no template in response', () => {
+            item.representations.entries[0].content.url_template = undefined;
+            return file.getThumbnailUrl(item).then(thumbnailUrl => expect(thumbnailUrl).toBe(null));
         });
     });
 

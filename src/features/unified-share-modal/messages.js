@@ -1,6 +1,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    contentSharedWithExternalCollaborators: {
+        defaultMessage: 'This content will be shared with external collaborators.',
+        description: 'Text shown in share modal when there is at least one external collaborators',
+        id: 'boxui.unifiedShare.contentSharedWithExternalCollaborators',
+    },
     disabledShareLinkPermission: {
         defaultMessage: 'This option isn’t available for this item due to a security restriction or classification.',
         description:
@@ -11,6 +16,12 @@ const messages = defineMessages({
         defaultMessage: 'Enter at least one valid email',
         description: 'Error message when user tries to send Shared Link as email without entering any recipients',
         id: 'boxui.unifiedShare.enterAtLeastOneEmail',
+    },
+    contactsExceedLimitError: {
+        defaultMessage:
+            'Oops! The maximum number of collaborators that can be added at once is {maxContacts} collaborators. Please try again by splitting your invitations into batches.',
+        description: 'Error message when more than the maximum number of contacts is entered',
+        id: 'boxui.unifiedShare.contactsExceedLimitError',
     },
     enterEmailAddressesCalloutText: {
         defaultMessage: 'Share this item with coworkers by entering their email addresses',
@@ -105,10 +116,10 @@ const messages = defineMessages({
         description: 'Label for "Message" text box to email the Shared Link',
         id: 'boxui.unifiedShare.message',
     },
-    suggestedCollabsInlineTitle: {
-        defaultMessage: 'Add:',
-        description: 'Title for suggested collaborators that can be added to the input box from an inline list',
-        id: 'boxui.unifiedShare.suggestedCollabsInlineTitle',
+    suggestedCollabsTitle: {
+        defaultMessage: 'Suggested',
+        description: 'Title for suggested collaborators that can be added to the form',
+        id: 'boxui.unifiedShare.suggestedCollabsTitle',
     },
 
     // shared link access labels
@@ -394,6 +405,13 @@ const messages = defineMessages({
         defaultMessage: 'Group',
         description: 'Text to display for a group of users who have accepted an invitation to collaborate',
         id: 'boxui.unifiedShare.collaboration.groupCollabText',
+    },
+
+    // Recommended Sharing Tooltip messages
+    recommendedSharingTooltipCalloutText: {
+        defaultMessage: 'Based on your usage, we think {fullName} would be interested in this file.',
+        description: 'Tooltip description to explain recommendation for sharing tooltip',
+        id: 'boxui.unifiedShare.recommendedSharingTooltipCalloutText',
     },
 });
 

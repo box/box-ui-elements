@@ -1,10 +1,10 @@
 /**
  * @flow
- * @file Versions Item Action component
+ * @file Versions Item Actions component
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import DropdownMenu from '../../../components/dropdown-menu';
 import IconClockPast from '../../../icons/general/IconClockPast';
@@ -15,18 +15,23 @@ import IconTrash from '../../../icons/general/IconTrash';
 import IconUpload from '../../../icons/general/IconUpload';
 import messages from './messages';
 import PlainButton from '../../../components/plain-button';
-import { Menu, MenuItem } from '../../../components/menu';
+import VersionsItemAction from './VersionsItemAction';
+import { Menu } from '../../../components/menu';
 import './VersionsItemActions.scss';
 
 type Props = {
-    isCurrent: boolean,
-    isDeleted: boolean,
+    fileId: string,
+    isCurrent?: boolean,
     onDelete?: () => void,
     onDownload?: () => void,
     onPreview?: () => void,
     onPromote?: () => void,
     onRestore?: () => void,
-    permissions: BoxItemPermission,
+    showDelete?: boolean,
+    showDownload?: boolean,
+    showPreview?: boolean,
+    showPromote?: boolean,
+    showRestore?: boolean,
 };
 
 const ICON_SIZE = { height: 12, width: 12 };
@@ -40,22 +45,19 @@ const handleToggleClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
 };
 
 const VersionsItemActions = ({
+    fileId,
     isCurrent = false,
-    isDeleted = false,
     onDelete,
     onDownload,
     onPreview,
     onPromote,
     onRestore,
-    permissions,
+    showDelete = false,
+    showDownload = false,
+    showPreview = false,
+    showPromote = false,
+    showRestore = false,
 }: Props) => {
-    const { can_delete, can_download, can_preview, can_upload } = permissions;
-    const showDelete = can_delete && !isDeleted && !isCurrent;
-    const showDownload = can_download && !isDeleted;
-    const showPreview = can_preview && !isDeleted;
-    const showPromote = can_upload && !isDeleted && !isCurrent;
-    const showRestore = can_delete && isDeleted;
-
     if (!showDelete && !showDownload && !showPreview && !showPromote && !showRestore) {
         return null;
     }
@@ -64,43 +66,59 @@ const VersionsItemActions = ({
         <DropdownMenu
             className="bcs-VersionsItemActions"
             constrainToScrollParent
+            constrainToWindow
             isRightAligned
             onMenuClose={handleMenuClose}
         >
-            <PlainButton className="bcs-VersionsItemActions-toggle" onClick={handleToggleClick}>
-                <IconEllipsis height={4} width={14} title={<FormattedMessage {...messages.versionActionToggle} />} />
+            <PlainButton
+                className="bcs-VersionsItemActions-toggle"
+                data-resin-iscurrent={isCurrent}
+                data-resin-itemid={fileId}
+                data-resin-target="overflow"
+                onClick={handleToggleClick}
+                type="button"
+            >
+                <IconEllipsis height={4} width={14} />
+                <FormattedMessage {...messages.versionActionToggle}>
+                    {text => <span className="accessibility-hidden">{text}</span>}
+                </FormattedMessage>
             </PlainButton>
-            <Menu>
+
+            <Menu
+                className="bcs-VersionsItemActions-menu"
+                data-resin-component="preview" // Needed for resin events due to tether moving menu to body
+                data-resin-feature="versions" // Needed for resin events due to tether moving menu to body
+            >
                 {showPreview && (
-                    <MenuItem className="bcs-VersionsItemActions-item" onClick={onPreview}>
+                    <VersionsItemAction action="preview" fileId={fileId} isCurrent={isCurrent} onClick={onPreview}>
                         <IconOpenWith {...ICON_SIZE} />
                         <FormattedMessage {...messages.versionActionPreview} />
-                    </MenuItem>
+                    </VersionsItemAction>
                 )}
 
                 {showDownload && (
-                    <MenuItem className="bcs-VersionsItemActions-item" onClick={onDownload}>
+                    <VersionsItemAction action="download" fileId={fileId} isCurrent={isCurrent} onClick={onDownload}>
                         <IconDownload {...ICON_SIZE} />
                         <FormattedMessage {...messages.versionActionDownload} />
-                    </MenuItem>
+                    </VersionsItemAction>
                 )}
                 {showPromote && (
-                    <MenuItem className="bcs-VersionsItemActions-item" onClick={onPromote}>
+                    <VersionsItemAction action="promote" fileId={fileId} isCurrent={isCurrent} onClick={onPromote}>
                         <IconUpload {...ICON_SIZE} />
                         <FormattedMessage {...messages.versionActionPromote} />
-                    </MenuItem>
+                    </VersionsItemAction>
                 )}
                 {showRestore && (
-                    <MenuItem className="bcs-VersionsItemActions-item" onClick={onRestore}>
+                    <VersionsItemAction action="restore" fileId={fileId} isCurrent={isCurrent} onClick={onRestore}>
                         <IconClockPast height={14} width={14} />
                         <FormattedMessage {...messages.versionActionRestore} />
-                    </MenuItem>
+                    </VersionsItemAction>
                 )}
                 {showDelete && (
-                    <MenuItem className="bcs-VersionsItemActions-item" onClick={onDelete}>
+                    <VersionsItemAction action="remove" fileId={fileId} isCurrent={isCurrent} onClick={onDelete}>
                         <IconTrash {...ICON_SIZE} />
                         <FormattedMessage {...messages.versionActionDelete} />
-                    </MenuItem>
+                    </VersionsItemAction>
                 )}
             </Menu>
         </DropdownMenu>

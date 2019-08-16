@@ -82,3 +82,34 @@ const handleChange = selectedOption => {
     />
 </Label>
 ```
+
+Invalid
+
+```
+initialState = {
+    selectedValue: 'b',
+};
+
+const options = [
+    { displayText: 'Option A', value: 'a' },
+    { displayText: 'Option B', value: 'b' },
+    { displayText: 'Option C', value: 'c' },
+    { displayText: 'Option D', value: 'd' },
+    { displayText: 'Option E', value: 'e' },
+];
+
+const handleChange = selectedOption => {
+    setState({
+        selectedValue: selectedOption.value,
+    });
+};
+
+<Label text="Single select field">
+    <SingleSelectField
+        error="oops"
+        onChange={ handleChange }
+        options={ options }
+        selectedValue={ state.selectedValue }
+    />
+</Label>
+```

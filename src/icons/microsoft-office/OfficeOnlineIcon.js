@@ -30,6 +30,7 @@ const OfficeOnlineIcon = ({ className, dimension = 30, extension, title }: Props
         case 'xls':
         case 'xlsx':
         case 'xlsm':
+        case 'xlsb':
             Component = IconExcelOnline;
             break;
         // no default

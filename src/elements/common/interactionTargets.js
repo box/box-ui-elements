@@ -3,11 +3,13 @@ export const SIDEBAR_NAV_TARGETS = {
     DETAILS: 'sidebardetails',
     SKILLS: 'sidebarskills',
     METADATA: 'sidebarmetadata',
+    TOGGLE: 'sidebartoggle',
 };
 
 export const SECTION_TARGETS = {
     FILE_PROPERTIES: 'fileproperties',
     ACCESS_STATS: 'accessstats',
+    CLASSIFICATION: 'classification',
 };
 
 export const DETAILS_TARGETS = {
@@ -26,8 +28,8 @@ export const DETAILS_TARGETS = {
 };
 
 export const ACTIVITY_TARGETS = {
-    INLINE_EDIT: 'activityfeed-inlineedit',
-    INLINE_DELETE: 'activityfeed-inlinedelete',
+    INLINE_DELETE_CONFIRM: 'activityfeed-delete-confirm',
+    INLINE_DELETE_CANCEL: 'activityfeed-delete-cancel',
     APPROVAL_FORM_ADD_TASK: 'activityfeed-apporvalformaddtask',
     APPROVAL_FORM_CANCEL: 'activityfeed-approvalformcancel',
     APPROVAL_FORM_POST: 'activityfeed-approvalformpost',
@@ -38,6 +40,12 @@ export const ACTIVITY_TARGETS = {
     TASK_APPROVE: 'activityfeed-taskapprove',
     TASK_COMPLETE: 'activityfeed-taskcomplete',
     TASK_REJECT: 'activityfeed-taskreject',
+    TASK_OPTIONS: 'activityfeedtask', // component
+    TASK_OPTIONS_DELETE: 'activityfeed-task-delete',
+    TASK_OPTIONS_EDIT: 'activityfeed-task-edit',
+    COMMENT_OPTIONS: 'activityfeedcomment', // component
+    COMMENT_OPTIONS_DELETE: 'activityfeed-comment-delete',
+    COMMENT_OPTIONS_EDIT: 'activityfeed-comment-edit',
 };
 
 export const SKILLS_TARGETS = {

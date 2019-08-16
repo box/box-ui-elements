@@ -161,31 +161,33 @@ class ContentPicker extends Component<Props, State> {
         super(props);
 
         const {
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
-            uploadHost,
+            clientName,
             initialPage,
             initialPageSize,
-            sortBy,
-            sortDirection,
-            clientName,
+            language,
             requestInterceptor,
             responseInterceptor,
             rootFolderId,
+            sharedLink,
+            sharedLinkPassword,
+            sortBy,
+            sortDirection,
+            token,
+            uploadHost,
         } = props;
 
         this.api = new API({
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
-            uploadHost,
             clientName,
+            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`,
+            language,
             requestInterceptor,
             responseInterceptor,
-            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`,
+            sharedLink,
+            sharedLinkPassword,
+            token,
+            uploadHost,
         });
 
         this.id = uniqueid('bcp_');
@@ -854,6 +856,9 @@ class ContentPicker extends Component<Props, State> {
                     .getFile(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             case TYPE_WEBLINK:
+                this.api
+                    .getWebLinkAPI()
+                    .getWeblink(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             default:
                 throw new Error('Unknown Type');

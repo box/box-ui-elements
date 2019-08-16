@@ -4,10 +4,10 @@ import messages from '../../common/messages';
 import { getBadItemError } from '../../../utils/error';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
-import { ERROR_CODE_FETCH_CLASSIFICATION, IS_ERROR_DISPLAYED } from '../../../constants';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
+jest.mock('../SidebarClassification', () => 'SidebarClassification');
 
 const file = {
     id: 'foo',
@@ -16,11 +16,10 @@ const file = {
 
 describe('elements/content-sidebar/DetailsSidebar', () => {
     let api;
-    let getClassification;
     let getFile;
     let getStats;
     let setFileDescription;
-    let onError = jest.fn();
+    const onError = jest.fn();
     const getWrapper = (props, options) =>
         shallow(
             <DetailsSidebar
@@ -35,16 +34,12 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
 
     beforeEach(() => {
         getFile = jest.fn().mockResolvedValue(file);
-        getClassification = jest.fn();
         getStats = jest.fn();
         setFileDescription = jest.fn();
         api = {
             getFileAPI: jest.fn().mockImplementation(() => ({
                 getFile,
                 setFileDescription,
-            })),
-            getMetadataAPI: jest.fn().mockImplementation(() => ({
-                getClassification,
             })),
             getFileAccessStatsAPI: jest.fn().mockImplementation(() => ({
                 getFileAccessStats: getStats,
@@ -67,7 +62,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('render()', () => {
-        test('should render nothing if there is no file information', () => {
+        test('should render an empty container if there is no file information', () => {
             // TODO: replace this test with proper loading and error cases once files call split out
             const wrapper = getWrapper({}, { disableLifecycleMethods: true });
             expect(wrapper).toMatchSnapshot();
@@ -76,12 +71,14 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         test('should render DetailsSidebar with all components', () => {
             const wrapper = getWrapper(
                 {
+                    classification: { advisoryMessage: 'message', name: 'name' },
                     hasProperties: true,
                     hasNotices: true,
                     hasAccessStats: true,
                     hasClassification: true,
                     hasRetentionPolicy: true,
                     hasVersions: true,
+                    onClassificationClick: () => {},
                 },
                 { disableLifecycleMethods: true },
             );
@@ -155,24 +152,21 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             instance = wrapper.instance();
             instance.fetchFile = jest.fn();
             instance.fetchAccessStats = jest.fn();
-            instance.fetchClassification = jest.fn();
         });
 
         test('should fetch the file information', () => {
             instance.componentDidMount();
             expect(instance.fetchFile).toHaveBeenCalled();
             expect(instance.fetchAccessStats).not.toHaveBeenCalled();
-            expect(instance.fetchAccessStats).not.toHaveBeenCalled();
         });
 
-        test('should fetch the file info, access stats, and classification', () => {
+        test('should fetch the file info and access stats', () => {
             wrapper.setProps({
                 hasAccessStats: true,
                 hasClassification: true,
             });
             instance.componentDidMount();
             expect(instance.fetchFile).toHaveBeenCalled();
-            expect(instance.fetchAccessStats).toHaveBeenCalled();
             expect(instance.fetchAccessStats).toHaveBeenCalled();
         });
     });
@@ -299,158 +293,6 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         });
     });
 
-    describe('fetchClassificationSuccessCallback', () => {
-        let wrapper;
-        let instance;
-        beforeEach(() => {
-            wrapper = getWrapper(
-                {
-                    hasClassification: true,
-                },
-                {
-                    disableLifecycleMethods: true,
-                },
-            );
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-        });
-
-        test('should short circuit if hasClassification is false', () => {
-            wrapper.setProps({
-                hasClassification: false,
-            });
-            instance.fetchClassificationSuccessCallback('classification');
-            expect(instance.setState).not.toHaveBeenCalled();
-        });
-        test('should update the classification state', () => {
-            instance.fetchClassificationSuccessCallback('classification');
-            expect(instance.setState).toBeCalledWith({
-                isLoadingClassification: false,
-                classification: 'classification',
-                classificationError: undefined,
-            });
-        });
-    });
-
-    describe('fetchClassificationErrorCallback', () => {
-        const code = ERROR_CODE_FETCH_CLASSIFICATION;
-        let wrapper;
-        let instance;
-        beforeEach(() => {
-            wrapper = getWrapper(
-                {
-                    hasClassification: true,
-                },
-                {
-                    disableLifecycleMethods: true,
-                },
-            );
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-        });
-
-        test('should short circuit if hasClassification is false', () => {
-            wrapper.setProps({
-                hasClassification: false,
-            });
-            instance.fetchClassificationSuccessCallback('classification');
-            expect(instance.setState).not.toHaveBeenCalled();
-        });
-
-        test('should set an inlineError and call onError prop if there is an error in fetching the classification', () => {
-            const error = {
-                status: 500,
-            };
-            instance.fetchClassificationErrorCallback(error, code);
-            expect(instance.setState).toBeCalledWith({
-                isLoadingClassification: false,
-                classification: undefined,
-                classificationError: {
-                    inlineError: {
-                        title: messages.fileClassificationErrorHeaderMessage,
-                        content: messages.defaultErrorMaskSubHeaderMessage,
-                    },
-                },
-            });
-            expect(onError).toBeCalledWith(error, code, {
-                error,
-                [IS_ERROR_DISPLAYED]: true,
-            });
-        });
-
-        test('should invoke onError prop with error details', () => {
-            onError = jest.fn();
-            const error = {};
-            wrapper.setProps({
-                onError,
-            });
-            instance.fetchClassificationErrorCallback(error, code);
-            expect(onError).toBeCalledWith(error, code, {
-                error,
-                [IS_ERROR_DISPLAYED]: false,
-            });
-        });
-
-        test('should not display inline error when a forbidden error', () => {
-            onError = jest.fn();
-            const error = {
-                status: 403,
-            };
-            wrapper.setProps({
-                onError,
-            });
-            instance.fetchClassificationErrorCallback(error, code);
-            expect(onError).toBeCalledWith(error, code, {
-                error,
-                [IS_ERROR_DISPLAYED]: false,
-            });
-
-            expect(instance.setState).toBeCalledWith({
-                isLoadingClassification: false,
-                classification: undefined,
-                classificationError: undefined,
-            });
-        });
-    });
-
-    describe('fetchClassification()', () => {
-        let wrapper;
-        let instance;
-        beforeEach(() => {
-            wrapper = getWrapper(
-                {
-                    hasClassification: true,
-                },
-                {
-                    disableLifecycleMethods: true,
-                },
-            );
-            instance = wrapper.instance();
-        });
-
-        test('should short circuit if it is already fetching', () => {
-            wrapper.setState({
-                isLoadingClassification: true,
-            });
-            instance.fetchClassification();
-            expect(getClassification).not.toHaveBeenCalled();
-        });
-
-        test('should fetch the classification info', () => {
-            instance.setState = jest.fn();
-            instance.fetchClassification();
-            expect(instance.setState).toBeCalledWith({ isLoadingClassification: true });
-            expect(getClassification).toBeCalledWith(
-                file.id,
-                instance.fetchClassificationSuccessCallback,
-                instance.fetchClassificationErrorCallback,
-                {
-                    refreshCache: true,
-                },
-            );
-        });
-    });
-
     describe('descriptionChangeErrorCallback()', () => {
         test('should set an inlineError if there is an error in updating the file description', () => {
             const wrapper = getWrapper();
@@ -479,22 +321,6 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 file: 'file',
                 fileError: undefined,
             });
-        });
-    });
-
-    describe('onClassificationClick()', () => {
-        let instance;
-        let onClassificationClick;
-
-        beforeEach(() => {
-            onClassificationClick = jest.fn();
-            const wrapper = getWrapper({ onClassificationClick });
-            instance = wrapper.instance();
-            instance.fetchClassification = jest.fn();
-        });
-        test('should call onClassificationClick with the classification fetch function', () => {
-            instance.onClassificationClick();
-            expect(onClassificationClick).toBeCalledWith(instance.fetchClassification);
         });
     });
 
@@ -619,10 +445,10 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 file,
                 hasAccessStats: false,
                 hasClassification: false,
+                refreshIdentity: false,
             });
             instance = wrapper.instance();
             instance.fetchAccessStats = jest.fn();
-            instance.fetchClassification = jest.fn();
         });
 
         test('should fetch the access stats data if the access stats visibility changed', () => {
@@ -633,12 +459,20 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             expect(instance.fetchAccessStats).toHaveBeenCalled();
         });
 
-        test('should fetch the classification data if the classification visibility changed', () => {
+        test('should fetch the access stats data if the refreshIdentity changed', () => {
             wrapper.setProps({
-                hasClassification: true,
+                refreshIdentity: true,
             });
 
-            expect(instance.fetchClassification).toHaveBeenCalled();
+            expect(instance.fetchAccessStats).toHaveBeenCalled();
+        });
+
+        test('should not fetch the access stats data if the refreshIdentity did not change', () => {
+            wrapper.setProps({
+                refreshIdentity: false,
+            });
+
+            expect(instance.fetchAccessStats).not.toHaveBeenCalled();
         });
     });
 });

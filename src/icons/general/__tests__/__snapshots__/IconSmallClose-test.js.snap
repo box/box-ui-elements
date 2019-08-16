@@ -26,7 +26,7 @@ exports[`icons/general/IconSmallClose should correctly render default component 
   <path
     className="fill-color"
     d="M189 11.806l-.806-.806L185 14.194 181.806 11l-.806.806L184.194 15 181 18.194l.806.806L185 15.806 188.194 19l.806-.806L185.806 15"
-    fill="#ccc"
+    fill="#d3d3d3"
   />
 </AccessibleSVG>
 `;

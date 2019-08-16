@@ -9,29 +9,39 @@ import Label from '../label';
 import SelectorDropdown from '../selector-dropdown';
 
 import PillSelector from './PillSelector';
-import type { SelectedOptions, SuggestedPillsFilter } from './flowTypes';
+import type { contactType as Contact } from '../../features/unified-share-modal/flowTypes';
+import type { SelectOptionProp } from '../select-field/props';
+import type { Option, OptionValue, SelectedOptions, SuggestedPillsFilter } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
 
 type Props = {
     /** If true, user can add pills not included in selector options */
-    allowCustomPills?: boolean,
+    allowCustomPills: boolean,
+    /** If true, pills with errors are parsed as pills also */
+    allowInvalidPills: boolean,
     /** `DatalistItem` components for dropdown options to select */
     children: React.Node,
     /** CSS class for the component */
     className?: string,
     /** If true, the input control is disabled so no more input can be made */
-    disabled?: boolean,
+    disabled: boolean,
     /** Index at which to insert a divider */
     dividerIndex?: number,
+    /** A CSS selector matching the element to use as a boundary when auto-scrolling dropdown elements into view. When not provided, boundary will be determined by scrollIntoView utility function */
+    dropdownScrollBoundarySelector?: string,
     /** Error message */
     error?: React.Node,
     /** Passed in by `SelectorDropdown` for accessibility */
     inputProps: Object,
     /** Input label */
     label: React.Node,
+    /** Called when pill selector input is blurred */
+    onBlur: (event: SyntheticInputEvent<HTMLInputElement>) => void,
     /** Should update selectorOptions based on the given input value */
     onInput: Function,
+    /** Called when creating pills */
+    onPillCreate: (pills: Array<SelectOptionProp | Contact>) => void,
     /** Should update selectedOptions given the option and index to remove */
     onRemove: Function,
     /** Should update selectedOptions given an array of pills and the event */
@@ -48,6 +58,10 @@ type Props = {
     selectedOptions: SelectedOptions,
     /** Array or Immutable list with data for the dropdown options to select */
     selectorOptions: Array<Object> | List<Object>,
+    /** Determines whether or not input text is cleared automatically when it does not result in new pills being added */
+    shouldClearUnmatchedInput?: boolean,
+    /** Determines whether or not the first item is highlighted automatically when the dropdown opens */
+    shouldSetActiveItemOnOpen?: boolean,
     /** Array of suggested collaborators */
     suggestedPillsData?: Array<Object>,
     /** String decribes the datapoint to filter by so that items in the form are not shown in suggestions. */
@@ -57,50 +71,68 @@ type Props = {
     /** Validate the given input value, and update `error` prop if necessary */
     validateForError?: Function,
     /** Called to check if pill item data is valid. The `item` is passed in. */
-    validator?: Function,
+    validator: (option: Option | OptionValue) => boolean,
 };
 
 type State = {
     inputValue: string,
+    isInCompositionMode: boolean,
 };
 
 class PillSelectorDropdown extends React.Component<Props, State> {
     static defaultProps = {
         allowCustomPills: false,
+        allowInvalidPills: false,
         disabled: false,
         error: '',
         inputProps: {},
         label: '',
+        onBlur: noop,
+        onPillCreate: noop,
         placeholder: '',
         selectedOptions: [],
         selectorOptions: [],
+        shouldClearUnmatchedInput: false,
+        shouldSetActiveItemOnOpen: false,
+        validator: () => true,
     };
 
-    state = { inputValue: '' };
+    state = { inputValue: '', isInCompositionMode: false };
 
     parsePills = () => {
         const { inputValue } = this.state;
-        const { parseItems, validator } = this.props;
-
+        const { allowInvalidPills, parseItems, validator } = this.props;
         let pills = parseItems ? parseItems(inputValue) : parseCSV(inputValue);
 
         if (!pills) {
             return [];
         }
 
-        if (validator) {
+        if (!allowInvalidPills) {
             pills = pills.filter(pill => validator(pill));
         }
 
-        // Keep the data format consistent with DatalistItem
-        return pills.map(pill => ({
-            text: pill,
-            value: pill,
-        }));
+        const normalizedPills = pills.map(pill =>
+            typeof pill === 'string'
+                ? {
+                      displayText: pill,
+                      text: pill, // deprecated, left for backwards compatibility
+                      value: pill,
+                  }
+                : pill,
+        );
+        return normalizedPills;
     };
 
     addPillsFromInput = () => {
-        const { allowCustomPills, onInput, onSelect, selectedOptions, validateForError } = this.props;
+        const {
+            allowCustomPills,
+            onPillCreate,
+            onSelect,
+            selectedOptions,
+            shouldClearUnmatchedInput,
+            validateForError,
+        } = this.props;
         const { inputValue } = this.state;
 
         // Do nothing if custom pills are not allowed
@@ -114,32 +146,42 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         // "Select" the pills
         if (pills.length > 0) {
             onSelect(pills);
+            onPillCreate(pills);
 
-            // Reset inputValue
-            this.setState({ inputValue: '' });
-            onInput('');
-        } else if (validateForError && (inputValue !== '' || selectedOptions.length === 0)) {
-            /**
-             * If no pills were added, but an inputValue exists or
-             * there are no pills selected, check for errors
-             */
-            validateForError(inputValue);
+            this.resetInputValue();
+        } else {
+            if (validateForError && (inputValue !== '' || selectedOptions.length === 0)) {
+                /**
+                 * If no pills were added, but an inputValue exists or
+                 * there are no pills selected, check for errors
+                 */
+                validateForError(inputValue);
+            }
+            if (shouldClearUnmatchedInput) {
+                this.resetInputValue();
+            }
         }
     };
 
-    handleBlur = () => {
+    handleBlur = (event: SyntheticInputEvent<HTMLInputElement>) => {
+        const { onBlur } = this.props;
         this.addPillsFromInput();
+        onBlur(event);
     };
 
-    handleInput = ({ target }: { target: HTMLInputElement | Object }) => {
+    handleInput = (event: SyntheticInputEvent<HTMLInputElement> | { target: HTMLInputElement | Object }) => {
+        const { target } = event;
         const { value } = target;
         this.setState({ inputValue: value });
-        this.props.onInput(value);
+        this.props.onInput(value, event);
     };
 
     handleEnter = (event: SyntheticEvent<>) => {
-        event.preventDefault();
-        this.addPillsFromInput();
+        const { isInCompositionMode } = this.state;
+        if (!isInCompositionMode) {
+            event.preventDefault();
+            this.addPillsFromInput();
+        }
     };
 
     handlePaste = () => {
@@ -153,22 +195,40 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     };
 
     handleSelect = (index: number, event: SyntheticEvent<>) => {
-        const { onSelect, selectorOptions } = this.props;
+        const { onPillCreate, onSelect, selectorOptions } = this.props;
         const selectedOption =
             // $FlowFixMe
             typeof selectorOptions.get === 'function' ? selectorOptions.get(index) : selectorOptions[index];
 
         onSelect([selectedOption], event);
+        onPillCreate([selectedOption]);
 
         this.handleInput({ target: { value: '' } });
     };
 
+    handleCompositionStart = () => {
+        this.setState({ isInCompositionMode: true });
+    };
+
+    handleCompositionEnd = () => {
+        this.setState({ isInCompositionMode: false });
+    };
+
+    resetInputValue = () => {
+        const { onInput } = this.props;
+
+        this.setState({ inputValue: '' });
+        onInput('');
+    };
+
     render() {
         const {
+            allowInvalidPills,
             children,
             className,
             disabled,
             dividerIndex,
+            dropdownScrollBoundarySelector,
             error,
             inputProps,
             label,
@@ -180,6 +240,8 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
+            shouldSetActiveItemOnOpen,
+            validator,
         } = this.props;
 
         return (
@@ -189,11 +251,16 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                 onEnter={this.handleEnter}
                 onSelect={this.handleSelect}
                 overlayTitle={overlayTitle}
+                scrollBoundarySelector={dropdownScrollBoundarySelector}
+                shouldSetActiveItemOnOpen={shouldSetActiveItemOnOpen}
                 selector={
                     <Label text={label}>
                         <PillSelector
                             onChange={noop} // fix console error
+                            onCompositionEnd={this.handleCompositionEnd}
+                            onCompositionStart={this.handleCompositionStart}
                             {...inputProps}
+                            allowInvalidPills={allowInvalidPills}
                             disabled={disabled}
                             error={error}
                             onBlur={this.handleBlur}
@@ -206,6 +273,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             suggestedPillsData={suggestedPillsData}
                             suggestedPillsFilter={suggestedPillsFilter}
                             suggestedPillsTitle={suggestedPillsTitle}
+                            validator={validator}
                             value={this.state.inputValue}
                         />
                     </Label>

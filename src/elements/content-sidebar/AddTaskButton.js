@@ -1,65 +1,61 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import Button from '../../components/button';
-import Modal from '../../components/modal/Modal';
-import TaskForm from './activity-feed/task-form';
-import messages from '../common/messages';
+import AddTaskMenu from './AddTaskMenu';
+import TaskModal from './TaskModal';
+import { TASK_TYPE_APPROVAL } from '../../constants';
+import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
+import type { TaskType } from '../../common/types/tasks';
 
-type AddTaskButtonProps = {|
+type Props = {|
     isDisabled: boolean,
+    onTaskModalClose: () => void,
+    taskFormProps: TaskFormProps,
 |};
-
-// These are used by the wrapped form
-type PassThroughProps = {|
-    approverSelectorContacts: any,
-    className?: string,
-    createTask: any,
-    getApproverWithQuery?: any,
-    getAvatarUrl: any,
-|};
-
-type Props = {| ...AddTaskButtonProps, ...PassThroughProps |};
 
 type State = {
+    error: ?ElementsXhrError,
     isTaskFormOpen: boolean,
+    taskType: TaskType,
 };
 
 class AddTaskButton extends React.Component<Props, State> {
     state = {
+        error: null,
         isTaskFormOpen: false,
+        taskType: TASK_TYPE_APPROVAL,
     };
 
     static defaultProps = {
         isDisabled: false,
     };
 
-    handleClickAdd = () => this.setState({ isTaskFormOpen: true });
+    handleClickMenuItem = (taskType: TaskType) => this.setState({ isTaskFormOpen: true, taskType });
 
-    handleClose = () => this.setState({ isTaskFormOpen: false });
+    handleModalClose = () => {
+        this.props.onTaskModalClose();
+        this.setState({ isTaskFormOpen: false, error: null });
+    };
 
-    handleSubmit = () => this.setState({ isTaskFormOpen: false });
+    handleSubmitSuccess = () => this.setState({ isTaskFormOpen: false, error: null });
+
+    handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
 
     render() {
-        const { isDisabled, ...passThrough } = this.props;
-        const { isTaskFormOpen } = this.state;
+        const { isDisabled, taskFormProps } = this.props;
+        const { isTaskFormOpen, taskType, error } = this.state;
 
         return (
             <React.Fragment>
-                <Button isDisabled={isDisabled} onClick={this.handleClickAdd} type="button">
-                    <FormattedMessage {...messages.tasksAddTask} />
-                </Button>
-                <Modal
-                    className="be-modal task-modal"
-                    data-testid="create-task-modal"
-                    isOpen={isTaskFormOpen}
-                    onRequestClose={this.handleClose}
-                    title={<FormattedMessage {...messages.tasksAddTaskFormTitle} />}
-                >
-                    <div className="be">
-                        <TaskForm {...passThrough} onCancel={this.handleClose} onSubmit={this.handleSubmit} />
-                    </div>
-                </Modal>
+                <AddTaskMenu isDisabled={isDisabled} onMenuItemClick={this.handleClickMenuItem} />
+                <TaskModal
+                    error={error}
+                    onSubmitError={this.handleSubmitError}
+                    onSubmitSuccess={this.handleSubmitSuccess}
+                    onModalClose={this.handleModalClose}
+                    isTaskFormOpen={isTaskFormOpen}
+                    taskFormProps={taskFormProps}
+                    taskType={taskType}
+                />
             </React.Fragment>
         );
     }

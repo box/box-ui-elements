@@ -8,39 +8,12 @@ jest.mock('../../../../utils/function', () => ({
 }));
 
 describe('elements/common/async-load/AsyncLoad', () => {
-    let defaultProps;
-
-    const getAsyncComponent = (props = defaultProps) => AsyncLoad(props);
-
-    beforeEach(() => {
-        defaultProps = {
-            loader: jest.fn(),
-        };
-    });
-
-    test('should return a react component', () => {
-        const AsyncComponent = getAsyncComponent();
-        expect(AsyncComponent.prototype).toBeInstanceOf(React.Component);
-    });
+    const getAsyncComponent = (props = { loader: jest.fn() }) => AsyncLoad(props);
+    const getWrapper = (AsyncComponent, props) => shallow(<AsyncComponent {...props} />).dive();
 
     test('should load the lazy component', () => {
         const AsyncComponent = getAsyncComponent();
-        const wrapper = shallow(<AsyncComponent foo="bar" />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render the error component if there is an error', () => {
-        const errorComponent = () => <div>ERROR!!</div>;
-        const AsyncComponent = getAsyncComponent({
-            ...defaultProps,
-            errorComponent,
-        });
-
-        const wrapper = shallow(<AsyncComponent />);
-        wrapper.setState({
-            error: new Error('foo'),
-        });
-
+        const wrapper = getWrapper(AsyncComponent, { foo: 'bar' });
         expect(wrapper).toMatchSnapshot();
     });
 

@@ -37,6 +37,7 @@ class HeaderFlyout extends React.Component<Props> {
                 closeOnClick={false}
                 offset={HeaderFlyout.panelOffset}
                 className={classNames('header-flyout', className)}
+                constrainToWindow
                 {...rest}
             >
                 {flyoutButton}

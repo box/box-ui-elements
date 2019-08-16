@@ -1,5 +1,9 @@
 import noop from 'lodash/noop';
+import TokenService from '../TokenService';
 import Xhr from '../Xhr';
+
+jest.mock('../TokenService');
+TokenService.getReadToken.mockImplementation(() => Promise.resolve(`${Math.random()}`));
 
 describe('util/Xhr', () => {
     let xhrInstance;
@@ -301,113 +305,40 @@ describe('util/Xhr', () => {
     });
 
     describe('shouldRetryRequest', () => {
-        const createXhrInstance = shouldRetryRequest => {
+        const createXhrInstance = options => {
             xhrInstance = new Xhr({
                 token: '123',
-                shouldRetryRequest,
+                ...options,
             });
         };
 
-        test.each([
-            [
-                false,
-                {
-                    status: 429,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                4,
-                false,
-            ], // false, shouldRetry false
-            [
-                true,
-                {
-                    status: 429,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                true,
-            ], // true, rate limit
-            [
-                true,
-                {
-                    status: 429,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                3,
-                false,
-            ], // false, max number exceeded
-            [
-                true,
-                {
-                    status: 500,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                false,
-            ], // false, not valid code
-            [
-                true,
-                {
-                    status: 404,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                false,
-            ], // false, not valid code
-            [
-                true,
-                undefined,
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                true,
-            ], // true, generic network error
-            [
-                true,
-                {
-                    status: 404,
-                },
-                {
-                    data: {
-                        foo: 'bar',
-                    },
-                },
-                0,
-                false,
-            ], // false, invalid status code
-            [true, undefined, undefined, 0, false], // false, error thrown during request
-        ])('should retry request %#', (shouldRetryRequest, response, request, retryCount, expected) => {
-            createXhrInstance(shouldRetryRequest);
-            xhrInstance.retryCount = retryCount;
-            const result = xhrInstance.shouldRetryRequest({
-                response,
-                request,
-            });
-            expect(result).toBe(expected);
-        });
+        test.each`
+            condition                      | shouldRetry | method      | retryableStatusCodes | responseCode | hasRequestBody | retryCount | expected
+            ${'shouldRetry=false'}         | ${false}    | ${'get'}    | ${undefined}         | ${429}       | ${true}        | ${0}       | ${false}
+            ${'max retries hit'}           | ${true}     | ${'get'}    | ${undefined}         | ${429}       | ${true}        | ${3}       | ${false}
+            ${'invalid status 5xx'}        | ${true}     | ${'get'}    | ${undefined}         | ${500}       | ${true}        | ${0}       | ${false}
+            ${'invalid status 4xx'}        | ${true}     | ${'get'}    | ${undefined}         | ${404}       | ${true}        | ${0}       | ${false}
+            ${'error was thrown'}          | ${true}     | ${'get'}    | ${undefined}         | ${undefined} | ${false}       | ${0}       | ${false}
+            ${'unsafe http method POST'}   | ${true}     | ${'post'}   | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
+            ${'unsafe http method PUT'}    | ${true}     | ${'put'}    | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
+            ${'unsafe http method DELETE'} | ${true}     | ${'delete'} | ${[500]}             | ${500}       | ${true}        | ${0}       | ${false}
+            ${'unsafe method w/429 code'}  | ${true}     | ${'post'}   | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
+            ${'rate limit status 429'}     | ${true}     | ${'get'}    | ${undefined}         | ${429}       | ${true}        | ${0}       | ${true}
+            ${'custom retryable statuses'} | ${true}     | ${'get'}    | ${[503, 429]}        | ${503}       | ${true}        | ${0}       | ${true}
+            ${'generic error is thrown'}   | ${true}     | ${'get'}    | ${undefined}         | ${undefined} | ${true}        | ${0}       | ${true}
+        `(
+            `should retry = $expected when $condition`,
+            ({ shouldRetry, method, retryableStatusCodes, responseCode, hasRequestBody, retryCount, expected }) => {
+                createXhrInstance({ shouldRetry, retryableStatusCodes });
+                xhrInstance.retryCount = retryCount;
+                const result = xhrInstance.shouldRetryRequest({
+                    response: responseCode ? { status: responseCode } : undefined,
+                    request: hasRequestBody ? { data: { foo: 'bar' } } : undefined,
+                    config: { method }, // AxiosXHRConfig for the request
+                });
+                expect(result).toBe(expected);
+            },
+        );
     });
 
     describe('getExponentialRetryTimeoutInMs()', () => {
@@ -482,6 +413,22 @@ describe('util/Xhr', () => {
             expect(xhrInstance.getExponentialRetryTimeoutInMs).not.toHaveBeenCalled();
             expect(xhrInstance.axios).not.toHaveBeenCalled();
             expect(xhrInstance.responseInterceptor).toHaveBeenCalledWith(response.data);
+        });
+    });
+
+    describe('getHeaders()', () => {
+        it('should not override any existing Accept-Language header', async () => {
+            xhrInstance.language = 'bar';
+            const actHeaders = await xhrInstance.getHeaders('123', { 'Accept-Language': 'foo' });
+
+            expect(actHeaders['Accept-Language']).toBe('foo');
+        });
+
+        it('should apply Accept-Language header if language exists', async () => {
+            xhrInstance.language = 'bar';
+            const actHeaders = await xhrInstance.getHeaders('123');
+
+            expect(actHeaders['Accept-Language']).toBe('bar');
         });
     });
 });

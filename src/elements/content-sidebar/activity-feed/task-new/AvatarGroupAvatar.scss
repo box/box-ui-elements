@@ -1,0 +1,22 @@
+@import '../../../common/variables';
+@import './mixins';
+
+$bcs-AvatarGroupAvatar-avatar-size: 32px;
+
+.bcs-AvatarGroupAvatar {
+    display: inline-block;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: $bcs-AvatarGroupAvatar-avatar-size;
+    position: relative;
+    width: $bcs-AvatarGroupAvatar-avatar-size;
+}
+
+.bcs-AvatarGroupAvatar-avatar {
+    height: 100%;
+    width: 100%;
+}
+
+.bcs-AvatarGroupAvatar-statusIcon {
+    @include avatar-badge-icon;
+}

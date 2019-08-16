@@ -1,0 +1,18 @@
+pull_request_rules:
+  - name: Automatic strict merge
+    conditions:
+      - base=master
+      - "#approved-reviews-by>=1"
+      - "#changes-requested-reviews-by=0"
+      - "#review-requested=0"
+      - status-success=lint_test_build
+      - label=ready-to-merge
+      - label!=do-not-merge
+    actions:
+      merge:
+        method: squash
+        strict: smart
+  - name: Automatic head deletion
+    conditions: []
+    actions:
+      delete_head_branch: {}

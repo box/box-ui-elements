@@ -27,7 +27,7 @@ const icons = [
                             }
 
                             .icon-chat-bubble-example .background-color {
-                                fill: #999;
+                                fill: #999999;
                             }
                         `}
                     </style>
@@ -61,6 +61,29 @@ const icons = [
         },
     },
     {
+        name: 'IconLightning',
+        content: () => {
+            const IconLightning = require('./IconLightning').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-lightning-example .foreground-color {
+                                fill: #efefef;
+                            }
+
+                            .icon-lightning-example .background-color {
+                                fill: #999;
+                            }
+                        `}
+                    </style>
+                    <IconLightning />
+                    <IconLightning className="icon-lightning-example" />
+                </div>
+            );
+        },
+    },
+    {
         name: 'IconSharedLink',
         content: () => {
             const IconSharedLink = require('./IconSharedLink').default;
@@ -69,7 +92,7 @@ const icons = [
                     <style>
                         {`
                             .icon-shared-link-example .foreground-color {
-                                fill: #fff;
+                                fill: #ffffff;
                             }
 
                             .icon-shared-link-example .background-color {
@@ -79,6 +102,72 @@ const icons = [
                     </style>
                     <IconSharedLink />
                     <IconSharedLink className="icon-shared-link-example" />
+                </div>
+            );
+        },
+    }, {
+        name: 'IconTaskGeneral',
+        content: () => {
+            const IconTaskGeneral = require('./IconTaskGeneral').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-task-general-example .foreground-color {
+                                fill: #ffffff;
+                            }
+
+                            .icon-task-general-example .background-color {
+                                fill: #26c281;
+                            }
+                        `}
+                    </style>
+                    <IconTaskGeneral />
+                    <IconTaskGeneral className="icon-task-general-example" />
+                </div>
+            );
+        },
+    }, {
+        name: 'IconTaskApproval',
+        content: () => {
+            const IconTaskApproval = require('./IconTaskApproval').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-task-approval-example .foreground-color {
+                                fill: #ffffff;
+                            }
+
+                            .icon-task-approval-example .background-color {
+                                fill: #f5b31b;
+                            }
+                        `}
+                    </style>
+                    <IconTaskApproval />
+                    <IconTaskApproval className="icon-task-approval-example" />
+                </div>
+            );
+        },
+    }, {
+        name: 'IconWorkflow',
+        content: () => {
+            const IconWorkflow = require('./IconWorkflow').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-workflow-example .foreground-color {
+                                fill: #909090;
+                            }
+
+                            .icon-workflow-example .background-color {
+                                fill: transparent;
+                            }
+                        `}
+                    </style>
+                    <IconWorkflow height={24} width={24} />
+                    <IconWorkflow className="icon-workflow-example" height={24} width={24} />
                 </div>
             );
         },

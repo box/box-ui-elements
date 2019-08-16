@@ -33,7 +33,9 @@
         align-items: center;
         color: $white;
         display: flex;
+        font-weight: bold;
         justify-content: center;
+        line-height: 1;
     }
 
     &.avatar--large {
@@ -42,7 +44,6 @@
 
         .avatar-initials {
             font-size: 14px;
-            font-weight: bold;
         }
     }
 }

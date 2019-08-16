@@ -7,8 +7,10 @@
 import React from 'react';
 import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
+import ItemGrid from './ItemGrid';
 import ItemList from './ItemList';
-import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
+import type { ViewMode } from '../common/flowTypes';
+import { VIEW_ERROR, VIEW_MODE_LIST, VIEW_SELECTED } from '../../constants';
 import './Content.scss';
 
 /**
@@ -31,6 +33,7 @@ type Props = {
     canShare: boolean,
     currentCollection: Collection,
     focusedRow: number,
+    gridColumnCount?: number,
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
@@ -46,65 +49,50 @@ type Props = {
     rootId: string,
     tableRef: Function,
     view: View,
+    viewMode?: ViewMode,
 };
 
 const Content = ({
-    view,
-    isSmall,
-    isMedium,
-    isTouch,
-    rootId,
-    rootElement,
     currentCollection,
-    tableRef,
     focusedRow,
-    canDownload,
-    canDelete,
-    canRename,
-    canShare,
-    canPreview,
-    onItemClick,
-    onItemSelect,
-    onItemDelete,
-    onItemDownload,
-    onItemRename,
-    onItemShare,
-    onItemPreview,
+    gridColumnCount = 1,
+    isMedium,
     onSortChange,
-}: Props) => (
-    <div className="bce-content">
-        {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
-            <ProgressBar percent={currentCollection.percentLoaded} />
-        )}
-        {isEmpty(view, currentCollection) ? (
-            <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
-        ) : (
-            <ItemList
-                view={view}
-                isSmall={isSmall}
-                isMedium={isMedium}
-                isTouch={isTouch}
-                rootId={rootId}
-                rootElement={rootElement}
-                focusedRow={focusedRow}
-                currentCollection={currentCollection}
-                tableRef={tableRef}
-                canShare={canShare}
-                canPreview={canPreview}
-                canDelete={canDelete}
-                canRename={canRename}
-                canDownload={canDownload}
-                onItemClick={onItemClick}
-                onItemSelect={onItemSelect}
-                onItemDelete={onItemDelete}
-                onItemDownload={onItemDownload}
-                onItemRename={onItemRename}
-                onItemShare={onItemShare}
-                onItemPreview={onItemPreview}
-                onSortChange={onSortChange}
-            />
-        )}
-    </div>
-);
+    tableRef,
+    view,
+    viewMode = VIEW_MODE_LIST,
+    ...rest
+}: Props) => {
+    const isViewEmpty = isEmpty(view, currentCollection);
+    const isListView = viewMode === VIEW_MODE_LIST;
+    return (
+        <div className="bce-content">
+            {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
+                <ProgressBar percent={currentCollection.percentLoaded} />
+            )}
+
+            {isViewEmpty && <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />}
+            {!isViewEmpty && isListView && (
+                <ItemList
+                    currentCollection={currentCollection}
+                    onSortChange={onSortChange}
+                    focusedRow={focusedRow}
+                    isMedium={isMedium}
+                    tableRef={tableRef}
+                    view={view}
+                    {...rest}
+                />
+            )}
+            {!isViewEmpty && !isListView && (
+                <ItemGrid
+                    currentCollection={currentCollection}
+                    gridColumnCount={gridColumnCount}
+                    view={view}
+                    {...rest}
+                />
+            )}
+        </div>
+    );
+};
 
 export default Content;

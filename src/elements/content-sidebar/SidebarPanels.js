@@ -6,7 +6,6 @@
 
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import SidebarRoute from './SidebarRoute';
 import SidebarUtils from './SidebarUtils';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
@@ -23,6 +22,7 @@ import {
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { VersionsSidebarProps } from './versions';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -32,7 +32,7 @@ type Props = {
     fileId: string,
     getPreview: Function,
     getViewer: Function,
-    hasActivityFeed: boolean,
+    hasActivity: boolean,
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
@@ -41,7 +41,8 @@ type Props = {
     metadataSidebarProps: MetadataSidebarProps,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
-    selectedView?: SidebarView,
+    refreshIdentity?: boolean,
+    versionsSidebarProps: VersionsSidebarProps,
 };
 
 // TODO: place into code splitting logic
@@ -75,7 +76,7 @@ const SidebarPanels = ({
     fileId,
     getPreview,
     getViewer,
-    hasActivityFeed,
+    hasActivity,
     hasDetails,
     hasMetadata,
     hasSkills,
@@ -84,15 +85,16 @@ const SidebarPanels = ({
     metadataSidebarProps,
     onVersionChange,
     onVersionHistoryClick,
+    refreshIdentity,
+    versionsSidebarProps,
 }: Props) =>
-    (hasActivityFeed || hasDetails || hasMetadata || hasSkills) && (
+    isOpen && (
         <Switch>
-            <SidebarRoute
-                enabled={hasSkills}
-                path={`/${SIDEBAR_VIEW_SKILLS}`}
-                pathFallback={`/${SIDEBAR_VIEW_ACTIVITY}`}
-                render={() =>
-                    isOpen && (
+            {hasSkills && (
+                <Route
+                    exact
+                    path={`/${SIDEBAR_VIEW_SKILLS}`}
+                    render={() => (
                         <LoadableSkillsSidebar
                             key={file.id}
                             file={file}
@@ -100,72 +102,88 @@ const SidebarPanels = ({
                             getViewer={getViewer}
                             startMarkName={MARK_NAME_JS_LOADING_SKILLS}
                         />
-                    )
-                }
-            />
-            <SidebarRoute
-                enabled={hasActivityFeed}
-                exact
-                path={`/${SIDEBAR_VIEW_ACTIVITY}`}
-                pathFallback={`/${SIDEBAR_VIEW_DETAILS}`}
-                render={() =>
-                    isOpen && (
+                    )}
+                />
+            )}
+            {hasActivity && (
+                <Route
+                    exact
+                    path={`/${SIDEBAR_VIEW_ACTIVITY}`}
+                    render={() => (
                         <LoadableActivitySidebar
                             currentUser={currentUser}
                             file={file}
                             onVersionHistoryClick={onVersionHistoryClick}
                             startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
                             {...activitySidebarProps}
+                            refreshIdentity={refreshIdentity}
                         />
-                    )
-                }
-            />
-            <SidebarRoute
-                enabled={hasDetails}
-                exact
-                path={`/${SIDEBAR_VIEW_DETAILS}`}
-                pathFallback={`/${SIDEBAR_VIEW_METADATA}`}
-                render={() =>
-                    isOpen && (
+                    )}
+                />
+            )}
+            {hasDetails && (
+                <Route
+                    exact
+                    path={`/${SIDEBAR_VIEW_DETAILS}`}
+                    render={() => (
                         <LoadableDetailsSidebar
                             fileId={fileId}
                             key={fileId}
                             onVersionHistoryClick={onVersionHistoryClick}
                             startMarkName={MARK_NAME_JS_LOADING_DETAILS}
                             {...detailsSidebarProps}
+                            refreshIdentity={refreshIdentity}
                         />
-                    )
-                }
-            />
-            <SidebarRoute
-                enabled={hasMetadata}
-                path={`/${SIDEBAR_VIEW_METADATA}`}
-                pathFallback={`/${SIDEBAR_VIEW_SKILLS}`}
-                render={() =>
-                    isOpen && (
+                    )}
+                />
+            )}
+            {hasMetadata && (
+                <Route
+                    exact
+                    path={`/${SIDEBAR_VIEW_METADATA}`}
+                    render={() => (
                         <LoadableMetadataSidebar
                             fileId={fileId}
                             startMarkName={MARK_NAME_JS_LOADING_METADATA}
                             {...metadataSidebarProps}
+                            refreshIdentity={refreshIdentity}
                         />
-                    )
-                }
+                    )}
+                />
+            )}
+            {hasVersions && (
+                <Route
+                    path="/:sidebar/versions/:versionId?"
+                    render={({ match }) => (
+                        <LoadableVersionsSidebar
+                            fileId={fileId}
+                            key={fileId}
+                            onVersionChange={onVersionChange}
+                            parentName={match.params.sidebar}
+                            versionId={match.params.versionId}
+                            {...versionsSidebarProps}
+                            refreshIdentity={refreshIdentity}
+                        />
+                    )}
+                />
+            )}
+            <Route
+                render={() => {
+                    let redirect = '';
+
+                    if (hasSkills) {
+                        redirect = SIDEBAR_VIEW_SKILLS;
+                    } else if (hasActivity) {
+                        redirect = SIDEBAR_VIEW_ACTIVITY;
+                    } else if (hasDetails) {
+                        redirect = SIDEBAR_VIEW_DETAILS;
+                    } else if (hasMetadata) {
+                        redirect = SIDEBAR_VIEW_METADATA;
+                    }
+
+                    return <Redirect to={{ pathname: `/${redirect}`, state: { silent: true } }} />;
+                }}
             />
-            <SidebarRoute
-                enabled={hasVersions}
-                path="/:sidebar/versions/:versionId?"
-                pathFallback="/"
-                render={({ match }) => (
-                    <LoadableVersionsSidebar
-                        fileId={fileId}
-                        key={fileId}
-                        onVersionChange={onVersionChange}
-                        parentName={match.params.sidebar}
-                        versionId={match.params.versionId}
-                    />
-                )}
-            />
-            <Route render={() => <Redirect to={`/${SIDEBAR_VIEW_SKILLS}`} />} />
         </Switch>
     );
 

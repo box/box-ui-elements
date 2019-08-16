@@ -16,8 +16,8 @@ import { convertToMs } from '../../utils/datetime';
 import IconMail from '../../icons/general/IconMail';
 import IconClock from '../../icons/general/IconClock';
 import IconGlobe from '../../icons/general/IconGlobe';
-import { amaranth } from '../../styles/variables';
-import type { itemType as ItemType } from '../../common/box-types';
+import { bdlWatermelonRed } from '../../styles/variables';
+import type { ItemType } from '../../common/types/core';
 import { isBoxNote } from '../../utils/file';
 
 import convertToBoxItem from './utils/item';
@@ -100,6 +100,7 @@ class SharedLinkSection extends React.Component<Props> {
             copyButtonProps,
             onChangeSharedLinkAccessLevel,
             onChangeSharedLinkPermissionLevel,
+            onSharedLinkAccessMenuOpen,
             onSharedLinkCopy,
             sendSharedLinkButtonProps,
             sharedLinkAccessMenuButtonProps,
@@ -169,6 +170,7 @@ class SharedLinkSection extends React.Component<Props> {
                         submitting={submitting}
                         trackingProps={{
                             onChangeSharedLinkAccessLevel,
+                            onSharedLinkAccessMenuOpen,
                             sharedLinkAccessMenuButtonProps,
                         }}
                     />
@@ -194,8 +196,8 @@ class SharedLinkSection extends React.Component<Props> {
                     )}
                 </div>
                 {accessLevel === ANYONE_WITH_LINK && (
-                    <div className="shared-link-access-note">
-                        <span className="shared-link-icon-globe">
+                    <div className="security-indicator-note">
+                        <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
                         <FormattedMessage {...messages.sharedLinkPubliclyAvailable} />
@@ -271,7 +273,7 @@ class SharedLinkSection extends React.Component<Props> {
                             }
                         >
                             <span className="shared-link-expiration-badge">
-                                <IconClock color={amaranth} />
+                                <IconClock color={bdlWatermelonRed} />
                             </span>
                         </Tooltip>
                     </span>
@@ -307,7 +309,7 @@ class SharedLinkSection extends React.Component<Props> {
                             className="usm-ftux-tooltip"
                             isShown
                             onDismiss={() => onDismissTooltip('shared-link-toggle')}
-                            position="top-right"
+                            position="middle-left"
                             showCloseButton
                             text={sharedLinkToggleTooltip}
                             theme="callout"

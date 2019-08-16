@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const UploadFilePaywallState = ({ className = '', color = BOX_BLUE, height = 129, title, width = 133 }: Props) => (
+const UploadFilePaywallState = ({ className = '', color = bdlBoxBlue, height = 129, title, width = 133 }: Props) => (
     <AccessibleSVG
         className={`upload-file-paywall-state ${className}`}
         height={height}

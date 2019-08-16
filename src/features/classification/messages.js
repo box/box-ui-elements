@@ -1,8 +1,13 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    add: {
+        defaultMessage: 'Add',
+        description: 'Button to add classification on an item',
+        id: 'boxui.classification.add',
+    },
     addClassification: {
-        defaultMessage: 'Add Classification',
+        defaultMessage: 'CLASSIFY',
         description: 'Button to add classification on an item',
         id: 'boxui.classification.addClassification',
     },
@@ -15,6 +20,11 @@ const messages = defineMessages({
         defaultMessage: 'Edit',
         description: 'Button to edit classification on an item',
         id: 'boxui.classification.edit',
+    },
+    missing: {
+        defaultMessage: 'Not classified',
+        description: 'Default message for classification in the sidebar when there is none',
+        id: 'boxui.classification.missing',
     },
 });
 

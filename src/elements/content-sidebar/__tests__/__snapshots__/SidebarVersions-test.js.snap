@@ -10,7 +10,7 @@ exports[`elements/content-sidebar/SidebarVersions should not render the versions
 
 exports[`elements/content-sidebar/SidebarVersions should render the versions when version_number > 1 1`] = `
 <VersionHistoryLink
-  className=""
+  className="bcs-SidebarVersions"
   data-resin-target="versionhistory"
   data-testid="versionhistory"
   versionCount={2}

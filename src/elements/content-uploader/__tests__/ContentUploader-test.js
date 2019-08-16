@@ -1,8 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
-import { ContentUploaderComponent } from '../ContentUploader';
 import { STATUS_PENDING, STATUS_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import Footer from '../Footer';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 
@@ -59,6 +61,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(wrapper.state().itemIds).toEqual({});
         });
     });
+
     describe('addFilesToUploadQueue()', () => {
         test('should overwrite itemIds if they already exist', () => {
             const wrapper = getWrapper();
@@ -107,8 +110,43 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('isDone', () => {
+        test('should be true if all items are complete or staged', () => {
+            const wrapper = getWrapper();
+            const files = createMockFiles(3);
+            const items = mapToUploadItems(files).map(item => {
+                return {
+                    ...item,
+                    status: STATUS_COMPLETE,
+                };
+            });
+            items[2].status = STATUS_STAGED;
+            wrapper.setState({
+                items,
+            });
+
+            expect(wrapper.find(Footer).prop('isDone')).toEqual(true);
+        });
+
+        test('should be false if not all items are complete or staged', () => {
+            const wrapper = getWrapper();
+            const files = createMockFiles(3);
+            const items = mapToUploadItems(files).map(item => {
+                return {
+                    ...item,
+                    status: STATUS_COMPLETE,
+                };
+            });
+            items[2].status = STATUS_PENDING;
+            wrapper.setState({
+                items,
+            });
+
+            expect(wrapper.find(Footer).prop('isDone')).toEqual(false);
+        });
+    });
+
     describe('getUploadAPI()', () => {
-        const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
         let wrapper;
         let instance;
         let getPlainUploadAPI;
@@ -142,7 +180,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(getChunkedUploadAPI).toBeCalled();
         });
 
-        test('should use the regular upload api if the file <= 50MB', () => {
+        test('should use the regular upload api if the file <= CHUNKED_UPLOAD_MIN_SIZE_BYTES', () => {
             jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             instance.getUploadAPI({
                 ...file,

@@ -4,8 +4,8 @@
 $arrow-size: 6px;
 
 .nav-link-callout {
-    background-color: $blue-purple;
-    border-color: $blue-purple;
+    background-color: $bdl-purple-rain;
+    border-color: $bdl-purple-rain;
     border-radius: 4px;
     color: $white;
     max-width: 330px;
@@ -52,7 +52,7 @@ $arrow-size: 6px;
 
     .left-nav-callout-title {
         font-size: 16px;
-        font-weight: 600;
+        font-weight: bold;
         letter-spacing: .4px;
         line-height: 1;
         margin-bottom: 6px;

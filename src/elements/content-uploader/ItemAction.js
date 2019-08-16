@@ -12,7 +12,7 @@ import IconClose from '../../icons/general/IconClose';
 import IconRetry from '../../icons/general/IconRetry';
 import messages from '../common/messages';
 import IconInProgress from './IconInProgress';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
 
 import './ItemAction.scss';
 
@@ -26,6 +26,8 @@ type Props = {
 
 const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     let icon = <IconClose />;
+    let target = null;
+    let resin = {};
     let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
 
     if (isFolder && status !== STATUS_PENDING) {
@@ -40,19 +42,26 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
         case STATUS_ERROR:
             icon = <IconRetry />;
             tooltip = intl.formatMessage(messages.retry);
+            target = 'uploadretry';
             break;
         case STATUS_IN_PROGRESS:
+        case STATUS_STAGED:
             icon = <IconInProgress />;
+            target = 'uploadcancel';
             break;
         case STATUS_PENDING:
         default:
         // empty
     }
 
+    if (target) {
+        resin = { 'data-resin-target': target };
+    }
+
     return (
         <div className="bcu-item-action">
             <Tooltip position="top-left" text={tooltip}>
-                <PlainButton onClick={onClick} type="button">
+                <PlainButton onClick={onClick} type="button" isDisabled={status === STATUS_STAGED} {...resin}>
                     {icon}
                 </PlainButton>
             </Tooltip>

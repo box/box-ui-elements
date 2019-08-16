@@ -9,18 +9,21 @@ describe('features/unified-share-modal/ContactsField', () => {
         {
             email: 'x@example.com',
             id: '12345',
+            isExternalUser: false,
             name: 'X User',
             type: 'group',
         },
         {
             email: 'y@example.com',
             id: '23456',
+            isExternalUser: true,
             name: 'Y User',
             type: 'user',
         },
         {
             email: 'z@example.com',
             id: '34567',
+            isExternalUser: false,
             name: 'Z User',
             type: 'user',
         },
@@ -30,6 +33,7 @@ describe('features/unified-share-modal/ContactsField', () => {
         {
             email: 'x@example.com',
             id: '12345',
+            isExternalUser: false,
             text: 'X User',
             type: 'group',
             value: 'x@example.com',
@@ -37,6 +41,7 @@ describe('features/unified-share-modal/ContactsField', () => {
         {
             email: 'y@example.com',
             id: '23456',
+            isExternalUser: true,
             text: 'Y User',
             type: 'user',
             value: 'y@example.com',
@@ -44,6 +49,7 @@ describe('features/unified-share-modal/ContactsField', () => {
         {
             email: 'z@example.com',
             id: '34567',
+            isExternalUser: false,
             text: 'Z User',
             type: 'user',
             value: 'z@example.com',
@@ -70,6 +76,48 @@ describe('features/unified-share-modal/ContactsField', () => {
                 {...props}
             />,
         );
+
+    describe('addSuggestedContacts()', () => {
+        const suggestions = {
+            '23456': { id: '23456', userScore: 0.5 }, // expectedContacts[1]
+            '34567': { id: '34567', userScore: 0.1 }, // expectedContacts[2]
+        };
+
+        test('should sort suggestions by highest score', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: suggestions,
+            });
+
+            const result = wrapper.instance().addSuggestedContacts(expectedContacts);
+
+            expect(result).toEqual([expectedContacts[1], expectedContacts[2], expectedContacts[0]]);
+        });
+
+        test('should setState with number of suggested items showing', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: suggestions,
+            });
+
+            wrapper.instance().addSuggestedContacts(expectedContacts);
+
+            expect(wrapper.state().numSuggestedShowing).toEqual(2);
+        });
+
+        test('should not add suggestions not in the contact list', () => {
+            const wrapper = getWrapper({
+                suggestedCollaborators: {
+                    '56789': { id: '56789', userScore: 1 },
+                    '67890': { id: '67890', userScore: 0.1 },
+                },
+            });
+
+            const result = wrapper.instance().addSuggestedContacts(expectedContacts);
+            const resultIDs = result.map(contact => contact.id);
+
+            expect(resultIDs).not.toContain('56789');
+            expect(resultIDs).not.toContain('67890');
+        });
+    });
 
     describe('filterContacts()', () => {
         test('should return an empty set when the input value is blank (default)', () => {
@@ -106,6 +154,26 @@ describe('features/unified-share-modal/ContactsField', () => {
             const options = wrapper.instance().filterContacts(contactsFromServer);
 
             expect(options.length).toEqual(0);
+        });
+
+        test('should only call addSuggestedContacts() when has suggestedCollaborators', () => {
+            const wrapper = getWrapper({
+                selectedContacts: [],
+            });
+            const addSuggestedContactsMock = jest.fn();
+
+            wrapper.setState({ pillSelectorInputValue: 'x@' });
+            wrapper.instance().addSuggestedContacts = addSuggestedContactsMock;
+
+            wrapper.instance().filterContacts(contactsFromServer);
+            expect(addSuggestedContactsMock).not.toHaveBeenCalled();
+
+            wrapper.setProps({
+                suggestedCollaborators: { '12345': { id: 12345 }, '23456': { id: 23456 } },
+            });
+
+            wrapper.instance().filterContacts(contactsFromServer);
+            expect(addSuggestedContactsMock).toHaveBeenCalledWith([expectedContacts[0]]);
         });
     });
 
@@ -194,42 +262,47 @@ describe('features/unified-share-modal/ContactsField', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should have scrollable dropdown if contacts > 5', async () => {
-            const contactsFromServerLarge = [
-                ...contactsFromServer,
-                {
-                    email: 'a@example.com',
-                    id: '12',
-                    name: 'a b',
-                    type: 'user',
-                },
-                {
-                    email: 'b@example.com',
-                    id: '13',
-                    name: 'a b',
-                    type: 'user',
-                },
-                {
-                    email: 'c@example.com',
-                    id: '14',
-                    name: 'a c',
-                    type: 'user',
-                },
-                {
-                    email: 'd@example.com',
-                    id: '14',
-                    name: 'a d',
-                    type: 'user',
-                },
-                {
-                    email: 'e@example.com',
-                    id: '14',
-                    name: 'a e',
-                    type: 'user',
-                },
-            ];
-            const getContacts = jest.fn().mockReturnValue(Promise.resolve(contactsFromServerLarge));
+        const contactsFromServerLarge = [
+            ...contactsFromServer,
+            {
+                email: 'a@example.com',
+                id: '12',
+                isExternalUser: true,
+                name: 'a b',
+                type: 'user',
+            },
+            {
+                email: 'b@example.com',
+                id: '13',
+                isExternalUser: false,
+                name: 'a b',
+                type: 'user',
+            },
+            {
+                email: 'c@example.com',
+                id: '14',
+                isExternalUser: true,
+                name: 'a c',
+                type: 'user',
+            },
+            {
+                email: 'd@example.com',
+                id: '14',
+                isExternalUser: false,
+                name: 'a d',
+                type: 'user',
+            },
+            {
+                email: 'e@example.com',
+                id: '14',
+                isExternalUser: true,
+                name: 'a e',
+                type: 'user',
+            },
+        ];
+        const getContacts = jest.fn().mockReturnValue(Promise.resolve(contactsFromServerLarge));
 
+        test('should have scrollable dropdown if contacts > 5', async () => {
             const wrapper = getWrapper({
                 getContacts,
                 selectedContacts: [],
@@ -238,6 +311,30 @@ describe('features/unified-share-modal/ContactsField', () => {
             wrapper.setState({ pillSelectorInputValue: 'a' });
             await wrapper.instance().getContactsPromise('a');
             expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should pass overlayTitle when there are suggested collabs', async () => {
+            const wrapper = getWrapper({
+                getContacts,
+                suggestedCollaborators: { '12': { id: 12, userScore: 1 } },
+            });
+
+            wrapper.setState({ pillSelectorInputValue: 'a' });
+            await wrapper.instance().getContactsPromise('a');
+
+            expect(wrapper.find('PillSelectorDropdown').props()).toBeDefined();
+        });
+
+        test('should render divider at the correct index when there are suggested collabs', async () => {
+            const wrapper = getWrapper({
+                getContacts,
+                suggestedCollaborators: { '12': { id: 12, userScore: 1 } },
+            });
+
+            wrapper.setState({ pillSelectorInputValue: 'a' });
+            await wrapper.instance().getContactsPromise('a');
+
+            expect(wrapper.find('PillSelectorDropdown').props().dividerIndex).toBe(1);
         });
     });
 });

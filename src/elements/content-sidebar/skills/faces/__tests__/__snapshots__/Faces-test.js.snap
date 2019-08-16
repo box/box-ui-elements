@@ -8,6 +8,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render edi
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="top-center"
     text={
       <FormattedMessage
@@ -115,6 +116,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
   <Tooltip
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isDisabled={false}
     position="top-center"
     text={
       <FormattedMessage

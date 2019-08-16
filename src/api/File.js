@@ -4,18 +4,22 @@
  * @author Box
  */
 
+import queryString from 'query-string';
+import getProp from 'lodash/get';
 import { findMissingProperties, fillMissingProperties } from '../utils/fields';
 import { getTypedFileId } from '../utils/file';
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
 import {
-    FIELD_DOWNLOAD_URL,
     CACHE_PREFIX_FILE,
-    X_REP_HINTS,
-    ERROR_CODE_GET_DOWNLOAD_URL,
     ERROR_CODE_FETCH_FILE,
+    ERROR_CODE_GET_DOWNLOAD_URL,
+    FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_EXTENSION,
+    FIELD_IS_DOWNLOAD_AVAILABLE,
+    X_REP_HINTS,
 } from '../constants';
 import Item from './Item';
+import TokenService from '../utils/TokenService';
 
 class File extends Item {
     /**
@@ -40,30 +44,63 @@ class File extends Item {
     }
 
     /**
-     * API for getting download URL for files
+     * API for getting download URL for files and file versions
      *
-     * @param {string} id - File id
+     * @param {string} fileId - File id
+     * @param {BoxItem|BoxItemVersion} fileOrFileVersion - File or file version to download
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    getDownloadUrl(id: string, successCallback: Function, errorCallback: ElementsErrorCallback): Promise<void> {
+    async getDownloadUrl(
+        fileId: string,
+        fileOrFileVersion: BoxItem | BoxItemVersion,
+        successCallback: string => void,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
         this.errorCode = ERROR_CODE_GET_DOWNLOAD_URL;
-        this.successCallback = successCallback;
         this.errorCallback = errorCallback;
-        return this.xhr
-            .get({
-                url: this.getUrl(id),
-                params: {
-                    fields: FIELD_DOWNLOAD_URL,
-                },
-            })
-            .then(({ data }: { data: BoxItem }) => {
-                this.successHandler(data[FIELD_DOWNLOAD_URL]);
-            })
-            .catch((e: $AxiosError<any>) => {
-                this.errorHandler(e);
-            });
+        this.successCallback = successCallback;
+
+        const downloadAvailable = fileOrFileVersion[FIELD_IS_DOWNLOAD_AVAILABLE];
+        const downloadUrl = fileOrFileVersion[FIELD_AUTHENTICATED_DOWNLOAD_URL];
+        const token = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);
+
+        if (!downloadAvailable || !downloadUrl || !token) {
+            this.errorHandler(new Error('Download is missing required fields or token.'));
+            return;
+        }
+
+        const { query, url: downloadBaseUrl } = queryString.parseUrl(downloadUrl);
+        const downloadUrlParams = { ...query, access_token: token };
+        const downloadUrlQuery = queryString.stringify(downloadUrlParams);
+
+        this.successHandler(`${downloadBaseUrl}?${downloadUrlQuery}`);
+    }
+
+    /**
+     * API for getting a thumbnail URL for a BoxItem
+     *
+     * @param {BoxItem} item - BoxItem to get the thumbnail URL for
+     * @return {Promise<?string>} - the url for the item's thumbnail, or null
+     */
+    async getThumbnailUrl(item: BoxItem): Promise<?string> {
+        const entry = getProp(item, 'representations.entries[0]');
+        const extension = getProp(entry, 'representation');
+        const template = getProp(entry, 'content.url_template');
+        const token = await TokenService.getReadToken(getTypedFileId(item.id), this.options.token);
+
+        if (getProp(entry, 'status.state') !== 'success' || !extension || !template || !token) {
+            return null;
+        }
+
+        const thumbnailUrl = template.replace('{+asset_path}', extension === 'jpg' ? '' : '1.png');
+
+        const { query, url: thumbnailBaseUrl } = queryString.parseUrl(thumbnailUrl);
+        const thumbnailUrlParams = { ...query, access_token: token };
+        const thumbnailUrlQuery = queryString.stringify(thumbnailUrlParams);
+
+        return `${thumbnailBaseUrl}?${thumbnailUrlQuery}`;
     }
 
     /**

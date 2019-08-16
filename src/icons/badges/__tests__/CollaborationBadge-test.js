@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BOX_BLUE } from '../../../common/variables';
+import { bdlBoxBlue } from '../../../styles/variables';
 import CollaborationBadge from '../CollaborationBadge';
 
 describe('icons/badges/CollaborationBadge', () => {
@@ -14,8 +14,8 @@ describe('icons/badges/CollaborationBadge', () => {
         expect(wrapper.prop('height')).toEqual(16);
         expect(wrapper.prop('width')).toEqual(16);
         const paths = wrapper.find('path');
-        expect(paths.at(0).prop('fill')).toEqual(BOX_BLUE);
-        expect(paths.at(1).prop('fill')).toEqual(BOX_BLUE);
+        expect(paths.at(0).prop('fill')).toEqual(bdlBoxBlue);
+        expect(paths.at(1).prop('fill')).toEqual(bdlBoxBlue);
     });
 
     test('should correctly render icon with specified class', () => {

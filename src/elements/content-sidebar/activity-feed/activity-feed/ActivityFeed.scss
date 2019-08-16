@@ -17,9 +17,8 @@
     }
 
     .bcs-activity-feed-items-container {
-        align-items: center;
         display: flex;
-        flex: 1 1;
+        flex: 1 1 auto;
         flex-direction: column;
         overflow-x: hidden;
         overflow-y: auto;
@@ -39,7 +38,7 @@
         .bcs-activity-feed-task-new,
         .bcs-activity-feed-comment,
         .bcs-activity-feed-app-activity {
-            border-bottom: 1px solid $ffive;
+            border-bottom: 1px solid $bdl-gray-10;
             margin-top: 20px;
             padding-bottom: 20px;
 
@@ -87,7 +86,7 @@
 
     .bcs-activity-feed-comment-input {
         background-color: $white;
-        margin-bottom: 4px;
+        flex: 0 0 auto;
         max-height: 500px;
         min-height: 93px;
         overflow: hidden;
@@ -105,13 +104,6 @@
 
         .overlay {
             max-height: 95px;
-            overflow: auto;
-        }
-    }
-
-    .bcs-comment-add-approver-fields-container {
-        .overlay {
-            max-height: 140px;
             overflow: auto;
         }
     }

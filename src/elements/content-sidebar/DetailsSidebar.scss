@@ -1,4 +1,5 @@
 @import '../common/variables';
+@import './mixins';
 
 .bcs-details {
     .bcs-scroll-content {
@@ -12,12 +13,8 @@
             margin-bottom: 0;
         }
     }
+}
 
-    .bcs-details-content {
-        margin: 0 8px 20px 0;
-    }
-
-    .bcs-details-content:empty {
-        margin: 0;
-    }
+.bcs-DetailsSidebar-notices {
+    @include bcs-SidebarSection;
 }

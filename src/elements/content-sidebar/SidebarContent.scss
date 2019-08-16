@@ -1,14 +1,14 @@
 @import '../common/variables';
 
 .bcs-content {
-    border-left: 1px solid $off-white;
+    border-left: 1px solid $bdl-gray-10;
     margin-left: -1px; // -1px to make nav button hover not have blank space
     position: relative;
     width: 341px; // 1px extra to account for the margin left
 
     .bcs-content-header {
         align-items: center;
-        border-bottom: 1px solid $off-white;
+        border-bottom: 1px solid $bdl-gray-10;
         display: flex;
         height: 60px;
         justify-content: space-between;
@@ -18,7 +18,7 @@
         .bcs-title {
             display: flex;
             font-size: 16px;
-            font-weight: 400;
+            font-weight: normal;
             margin: 0;
             padding: 0;
         }

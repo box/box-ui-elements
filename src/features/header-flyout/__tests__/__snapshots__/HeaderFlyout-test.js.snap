@@ -7,7 +7,7 @@ exports[`components/core/header/components/HeaderFlyout render() should include 
   closeOnClickOutside={true}
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isVisibleByDefault={false}
   offset="-4px 0px"
   onClose={[Function]}
@@ -65,7 +65,7 @@ exports[`components/core/header/components/HeaderFlyout render() should render d
   closeOnClickOutside={true}
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isVisibleByDefault={false}
   offset="-4px 0px"
   onClose={[Function]}
@@ -105,7 +105,7 @@ exports[`components/core/header/components/HeaderFlyout render() should render t
   closeOnClickOutside={true}
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
-  constrainToWindow={false}
+  constrainToWindow={true}
   isVisibleByDefault={false}
   offset="-4px 0px"
   openOnHover={false}

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { BOX_BLUE } from '../../common/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 import IconLogo from '../../icons/general/IconLogo';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
     width?: number,
 };
 
-const Logo = ({ color = BOX_BLUE, height = 25, width = 45, title }: Props) => (
+const Logo = ({ color = bdlBoxBlue, height = 25, width = 45, title }: Props) => (
     <div className="logo">
         <IconLogo color={color} height={height} title={title} width={width} />
     </div>

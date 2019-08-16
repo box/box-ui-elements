@@ -40,6 +40,7 @@ import {
     VIEW_UPLOAD_SUCCESS,
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
+    STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
     ERROR_CODE_UPLOAD_FILE_LIMIT,
@@ -58,6 +59,7 @@ type Props = {
     isDraggingItemsToUploadsManager?: boolean,
     isFolderUploadEnabled: boolean,
     isLarge: boolean,
+    isResumableUploadsEnabled: boolean,
     isSmall: boolean,
     isTouch: boolean,
     language?: string,
@@ -89,7 +91,7 @@ type State = {
     view: View,
 };
 
-const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
+const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 104857600; // 100MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
@@ -131,6 +133,7 @@ class ContentUploader extends Component<Props, State> {
         onMinimize: noop,
         onCancel: noop,
         isFolderUploadEnabled: false,
+        isResumableUploadsEnabled: true,
         dataTransferItems: [],
         isDraggingItemsToUploadsManager: false,
     };
@@ -891,12 +894,12 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     handleUploadProgress = (item: UploadItem, event: any) => {
-        if (!event.total || item.status === STATUS_COMPLETE) {
+        if (!event.total || item.status === STATUS_COMPLETE || item.status === STATUS_STAGED) {
             return;
         }
 
         item.progress = Math.min(Math.round((event.loaded / event.total) * 100), 100);
-        item.status = STATUS_IN_PROGRESS;
+        item.status = item.progress === 100 ? STATUS_STAGED : STATUS_IN_PROGRESS;
 
         const { items } = this.state;
         items[items.indexOf(item)] = item;
@@ -915,6 +918,7 @@ class ContentUploader extends Component<Props, State> {
         const { status } = item;
         switch (status) {
             case STATUS_IN_PROGRESS:
+            case STATUS_STAGED:
             case STATUS_COMPLETE:
             case STATUS_PENDING:
                 this.removeFileFromUploadQueue(item);
@@ -1052,6 +1056,7 @@ class ContentUploader extends Component<Props, State> {
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some(item => item.status === STATUS_IN_PROGRESS);
+        const isDone = items.every(item => item.status === STATUS_COMPLETE || item.status === STATUS_STAGED);
 
         const styleClassName = classNames('bcu', className, {
             'be-app-element': !useUploadsManager,
@@ -1092,6 +1097,7 @@ class ContentUploader extends Component<Props, State> {
                             onCancel={this.cancel}
                             onClose={onClose}
                             onUpload={this.upload}
+                            isDone={isDone}
                         />
                     </div>
                 )}
@@ -1101,4 +1107,4 @@ class ContentUploader extends Component<Props, State> {
 }
 
 export default makeResponsive(ContentUploader);
-export { ContentUploader as ContentUploaderComponent };
+export { ContentUploader as ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES };

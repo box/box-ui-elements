@@ -9,10 +9,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         feedItems: jest.fn(),
         deleteComment: jest.fn(),
-        deleteTask: jest.fn(),
-        createTask: jest.fn(),
-        updateTask: jest.fn(),
-        updateTaskAssignment: jest.fn(),
+        deleteTaskNew: jest.fn(),
+        createTaskNew: jest.fn(),
+        updateTaskNew: jest.fn(),
+        updateTaskCollaborator: jest.fn(),
         createComment: jest.fn(),
     };
     const usersAPI = {
@@ -94,6 +94,38 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('componentDidUpdate()', () => {
+        let wrapper;
+        let instance;
+        currentUser = {
+            id: '123',
+        };
+        beforeEach(() => {
+            jest.spyOn(ActivitySidebarComponent.prototype, 'fetchFeedItems');
+            wrapper = getWrapper({
+                currentUser,
+                refreshIdentity: false,
+            });
+            instance = wrapper.instance();
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should fetch the feed items if refreshIdentity changed', () => {
+            wrapper.setProps({ refreshIdentity: true });
+
+            expect(instance.fetchFeedItems.mock.calls.length).toEqual(2);
+        });
+
+        test('should not fetch the feed items if refreshIdentity did not change', () => {
+            wrapper.setProps({ refreshIdentity: false });
+
+            expect(instance.fetchFeedItems.mock.calls.length).toEqual(1);
+        });
+    });
+
     describe('render()', () => {
         test('should render the activity feed sidebar', () => {
             const wrapper = getWrapper();
@@ -121,16 +153,20 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const message = 'message';
             const assignees = ['1', '2'];
             const dueAt = 'test';
+            const taskType = 'GENERAL';
+            const completionRule = 'ALL_ASSIGNEES';
             instance.fetchFeedItems = jest.fn();
-            instance.createTask(message, assignees, dueAt);
-            expect(feedAPI.createTask).toHaveBeenCalledWith(
+            instance.createTask(message, assignees, taskType, dueAt, completionRule);
+            expect(feedAPI.createTaskNew).toHaveBeenCalledWith(
                 file,
                 currentUser,
                 message,
                 assignees,
+                taskType,
                 dueAt,
-                instance.feedSuccessCallback,
-                instance.feedErrorCallback,
+                completionRule,
+                expect.any(Function),
+                expect.any(Function),
             );
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
@@ -145,7 +181,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.fetchFeedItems = jest.fn();
 
             instance.deleteTask({ id });
-            expect(feedAPI.deleteTask).toHaveBeenCalled();
+            expect(feedAPI.deleteTaskNew).toHaveBeenCalled();
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
     });
@@ -267,7 +303,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         test('should call the update task API and fetch the items', () => {
             instance.updateTask(taskObj);
-            expect(feedAPI.updateTask).toBeCalled();
+            expect(feedAPI.updateTaskNew).toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
     });
@@ -284,7 +320,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         test('should call the update task assignment API and fetch the items', () => {
             instance.updateTaskAssignment('1', '2', 'foo', 'bar');
-            expect(feedAPI.updateTaskAssignment).toBeCalled();
+            expect(feedAPI.updateTaskCollaborator).toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
     });

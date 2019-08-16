@@ -11,6 +11,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     const onInputStub = sandbox.stub();
     const onRemoveStub = sandbox.stub();
     const onSelectStub = sandbox.stub();
+    const onPillCreateStub = sandbox.stub();
     const OptionRecord = Record({
         text: '',
         value: '',
@@ -114,13 +115,13 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
             const result = instance.parsePills();
             expect(result).toEqual([
-                { text: 'value1', value: 'value1' },
-                { text: 'value2', value: 'value2' },
-                { text: 'value3', value: 'value3' },
+                { displayText: 'value1', text: 'value1', value: 'value1' },
+                { displayText: 'value2', text: 'value2', value: 'value2' },
+                { displayText: 'value3', text: 'value3', value: 'value3' },
             ]);
         });
 
-        test('should only return pills that pass validator if one is provided', () => {
+        test('should only return pills that pass validator if one is provided and allowInvalidPills is false', () => {
             const validator = text => {
                 // W3C type="email" input validation
                 const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -142,18 +143,91 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
             const result = instance.parsePills();
             expect(result).toEqual([
-                { text: 'aaron@example.com', value: 'aaron@example.com' },
-                { text: 'hello@gmail.com', value: 'hello@gmail.com' },
+                { displayText: 'aaron@example.com', text: 'aaron@example.com', value: 'aaron@example.com' },
+                { displayText: 'hello@gmail.com', text: 'hello@gmail.com', value: 'hello@gmail.com' },
+            ]);
+        });
+
+        test('should ignore validator if one is provided but allowInvalidPills is true', () => {
+            const validator = text => {
+                // W3C type="email" input validation
+                const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                return pattern.test(text);
+            };
+
+            const wrapper = shallow(
+                <PillSelectorDropdown
+                    allowInvalidPills
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    onSelect={onSelectStub}
+                    validator={validator}
+                />,
+            );
+            const instance = wrapper.instance();
+            wrapper.setState({
+                inputValue: 'aaron@example.com, bademail, hello@gmail.com',
+            });
+
+            const result = instance.parsePills();
+            expect(result).toEqual([
+                { displayText: 'aaron@example.com', text: 'aaron@example.com', value: 'aaron@example.com' },
+                { displayText: 'bademail', text: 'bademail', value: 'bademail' },
+                { displayText: 'hello@gmail.com', text: 'hello@gmail.com', value: 'hello@gmail.com' },
+            ]);
+        });
+
+        test('should not map pills to options when custom parser returns array of objects', () => {
+            const wrapper = shallow(
+                <PillSelectorDropdown
+                    allowInvalidPills
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    onSelect={onSelectStub}
+                />,
+            );
+            wrapper.setState({ inputValue: 'a,b' });
+
+            const { parsePills } = wrapper.instance();
+            const stringParser = input => input.split(',');
+            const optionParser = input =>
+                input.split(',').map(token => ({
+                    customProp: token,
+                }));
+
+            wrapper.setProps({ parseItems: stringParser });
+            expect(parsePills()).toStrictEqual([
+                {
+                    displayText: 'a',
+                    text: 'a',
+                    value: 'a',
+                },
+                {
+                    displayText: 'b',
+                    text: 'b',
+                    value: 'b',
+                },
+            ]);
+
+            wrapper.setProps({ parseItems: optionParser });
+            expect(parsePills()).toStrictEqual([
+                {
+                    customProp: 'a',
+                },
+                {
+                    customProp: 'b',
+                },
             ]);
         });
     });
 
     describe('addPillsFromInput', () => {
-        test('should not call onSelect if allowCustomPills prop is not provided', () => {
+        test('should not call onSelect and onPillCreate if allowCustomPills prop is not provided', () => {
             const wrapper = shallow(
                 <PillSelectorDropdown
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
                     onSelect={sandbox.mock().never()}
                 />,
             );
@@ -163,7 +237,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             instance.addPillsFromInput();
         });
 
-        test('should "select" each pill, reset inputValue, and not call props.validateForError if valid pills exist', () => {
+        test('should "select" each pill, create a user pill, reset inputValue, and not call props.validateForError if valid pills exist', () => {
             const pills = [
                 { text: 'value1', value: 'value1' },
                 { text: 'value2', value: 'value2' },
@@ -177,6 +251,10 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                         .once()
                         .withExactArgs('')}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox
+                        .mock()
+                        .once()
+                        .withExactArgs(pills)}
                     onSelect={sandbox
                         .mock()
                         .once()
@@ -205,6 +283,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                     allowCustomPills
                     onInput={sandbox.mock().never()}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
                     onSelect={sandbox.mock().never()}
                     selectedOptions={selectedOptions}
                     validateForError={sandbox.mock()}
@@ -230,6 +309,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                     allowCustomPills
                     onInput={sandbox.mock().never()}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
                     onSelect={sandbox.mock().never()}
                     selectedOptions={selectedOptions}
                     validateForError={sandbox.mock()}
@@ -255,6 +335,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                     allowCustomPills
                     onInput={sandbox.mock().never()}
                     onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
                     onSelect={sandbox.mock().never()}
                     selectedOptions={selectedOptions}
                     validateForError={sandbox.mock().never()}
@@ -270,6 +351,33 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 .returns(pills);
 
             instance.addPillsFromInput();
+        });
+
+        test('should clear unmatched input after attempting to add pills when shouldClearUnmatchedInput is set to true', () => {
+            const wrapper = shallow(
+                <PillSelectorDropdown
+                    allowCustomPills
+                    onRemove={onRemoveStub}
+                    onPillCreate={sandbox.mock().never()}
+                    onSelect={sandbox.mock().never()}
+                />,
+            );
+            const onInput = jest.fn();
+            const { addPillsFromInput } = wrapper.instance();
+
+            wrapper.setProps({ onInput, parseItems: () => [] });
+            wrapper.setState({ inputValue: 'abc' });
+
+            wrapper.setProps({ shouldClearUnmatchedInput: false });
+            addPillsFromInput();
+            expect(wrapper.state().inputValue).toBe('abc');
+            expect(onInput).toHaveBeenCalledTimes(0);
+
+            wrapper.setProps({ shouldClearUnmatchedInput: true });
+            addPillsFromInput();
+            expect(wrapper.state().inputValue).toBe('');
+            expect(onInput).toHaveBeenCalledWith('');
+            expect(onInput).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -293,11 +401,22 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
             instance.handleInput({ target: { value: 'test' } });
 
-            expect(onInputStub.calledWith('test')).toBe(true);
+            expect(onInputStub.calledWith('test', { target: { value: 'test' } })).toBe(true);
         });
     });
 
     describe('handleEnter()', () => {
+        test('should do nothing when in composition mode', () => {
+            const wrapper = shallow(<PillSelectorDropdown />);
+            const instance = wrapper.instance();
+            const event = { preventDefault: jest.fn() };
+            instance.addPillsFromInput = jest.fn();
+            instance.handleCompositionStart();
+            instance.handleEnter(event);
+            expect(event.preventDefault).not.toHaveBeenCalled();
+            expect(instance.addPillsFromInput).not.toHaveBeenCalled();
+        });
+
         test('should call addPillsFromInput and prevent default when called', () => {
             const wrapper = shallow(
                 <PillSelectorDropdown onInput={onInputStub} onRemove={onRemoveStub} onSelect={onSelectStub} />,
@@ -340,6 +459,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 <PillSelectorDropdown
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
+                    onPillCreate={onPillCreateStub}
                     onSelect={onSelectStub}
                     selectorOptions={options}
                 />,
@@ -350,6 +470,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             instance.handleSelect(1, event);
 
             expect(onSelectStub.calledWith([option], event)).toBe(true);
+            expect(onPillCreateStub.calledWith([option])).toBe(true);
         });
 
         test('should call onSelect() with immutable option and event when called', () => {
@@ -359,6 +480,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 <PillSelectorDropdown
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
+                    onPillCreate={onPillCreateStub}
                     onSelect={onSelectStub}
                     selectorOptions={options}
                 />,
@@ -369,6 +491,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             instance.handleSelect(1, event);
 
             expect(onSelectStub.calledWith([option], event)).toBe(true);
+            expect(onPillCreateStub.calledWith([option])).toBe(true);
         });
 
         test('should call handleInput() with empty string value when called', () => {
@@ -389,6 +512,41 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 .withArgs({ target: { value: '' } });
 
             instance.handleSelect(0, {});
+        });
+    });
+
+    describe('handleBlur', () => {
+        test('should call onBlur() and addPillsFromInput() when underlying input is blurred', () => {
+            const onBlur = jest.fn();
+            const wrapper = shallow(<PillSelectorDropdown onBlur={onBlur} />);
+            const instance = wrapper.instance();
+            const event = { type: 'blur' };
+
+            instance.addPillsFromInput = jest.fn();
+            instance.handleBlur(event);
+
+            expect(instance.addPillsFromInput).toHaveBeenCalled();
+            expect(onBlur).toHaveBeenCalled();
+        });
+    });
+
+    describe('handleCompositionStart()', () => {
+        test('should set composition mode', () => {
+            const wrapper = shallow(<PillSelectorDropdown />);
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.handleCompositionStart();
+            expect(instance.setState).toHaveBeenCalledWith({ isInCompositionMode: true });
+        });
+    });
+
+    describe('handleCompositionEnd()', () => {
+        test('should unset composition mode', () => {
+            const wrapper = shallow(<PillSelectorDropdown />);
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.handleCompositionEnd();
+            expect(instance.setState).toHaveBeenCalledWith({ isInCompositionMode: false });
         });
     });
 });

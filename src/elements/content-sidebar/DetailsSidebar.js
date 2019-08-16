@@ -18,8 +18,9 @@ import { withLogger } from '../common/logger';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
-import { isUserCorrectableError, getBadItemError } from '../../utils/error';
+import { getBadItemError } from '../../utils/error';
 import SidebarAccessStats from './SidebarAccessStats';
+import SidebarClassification from './SidebarClassification';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
 import SidebarVersions from './SidebarVersions';
@@ -35,7 +36,7 @@ import {
 import './DetailsSidebar.scss';
 
 type ExternalProps = {
-    bannerPolicy?: Object, // TODO: add fileVersionId
+    classification?: ClassificationInfo,
     fileId: string,
     hasAccessStats?: boolean,
     hasClassification?: boolean,
@@ -44,9 +45,10 @@ type ExternalProps = {
     hasRetentionPolicy?: boolean,
     hasVersions?: boolean,
     onAccessStatsClick?: Function,
-    onClassificationClick: Function,
+    onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
+    refreshIdentity?: boolean,
     retentionPolicy?: Object,
 } & ErrorContextProps &
     WithLoggerProps;
@@ -59,12 +61,9 @@ type Props = {
 type State = {
     accessStats?: FileAccessStats,
     accessStatsError?: Errors,
-    classification?: ClassificationInfo,
-    classificationError?: Errors,
     file?: BoxItem,
     fileError?: Errors,
     isLoadingAccessStats: boolean,
-    isLoadingClassification: boolean,
 };
 
 const MARK_NAME_JS_READY = `${ORIGIN_DETAILS_SIDEBAR}_${EVENT_JS_READY}`;
@@ -79,7 +78,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         hasClassification: false,
         hasRetentionPolicy: false,
         hasVersions: false,
-        onClassificationClick: noop,
         onError: noop,
     };
 
@@ -87,7 +85,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         super(props);
         this.state = {
             isLoadingAccessStats: false,
-            isLoadingClassification: false,
         };
         const { logger } = this.props;
         logger.onReadyMetric({
@@ -100,16 +97,12 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         if (this.props.hasAccessStats) {
             this.fetchAccessStats();
         }
-        if (this.props.hasClassification) {
-            this.fetchClassification();
-        }
     }
 
-    componentDidUpdate(prevProps: Props) {
-        const { hasAccessStats, hasClassification } = this.props;
+    componentDidUpdate({ hasAccessStats: prevHasAccessStats, refreshIdentity: prevRefreshIdentity }: Props) {
+        const { hasAccessStats, refreshIdentity } = this.props;
         // Component visibility props such as hasAccessStats can sometimes be flipped after an async call
-        const hasAccessStatsChanged = prevProps.hasAccessStats !== hasAccessStats;
-        const hasClassificationChanged = prevProps.hasClassification !== hasClassification;
+        const hasAccessStatsChanged = prevHasAccessStats !== hasAccessStats;
         if (hasAccessStatsChanged) {
             if (hasAccessStats) {
                 this.fetchAccessStats();
@@ -122,16 +115,8 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             }
         }
 
-        if (hasClassificationChanged) {
-            if (hasClassification) {
-                this.fetchClassification();
-            } else {
-                this.setState({
-                    classification: undefined,
-                    classificationError: undefined,
-                    isLoadingClassification: false,
-                });
-            }
+        if (refreshIdentity !== prevRefreshIdentity) {
+            this.fetchAccessStats();
         }
     }
 
@@ -324,99 +309,9 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         );
     }
 
-    /**
-     * File classification fetch success callback.
-     *
-     * @param {ClassificationInfo} classification - Info about the file's classification
-     * @return {void}
-     */
-    fetchClassificationSuccessCallback = (classification: ClassificationInfo): void => {
-        if (!this.props.hasClassification) {
-            return;
-        }
-
-        this.setState({
-            classification,
-            classificationError: undefined,
-            isLoadingClassification: false,
-        });
-    };
-
-    /**
-     * Handles a failed file classification fetch
-     *
-     * @private
-     * @param {ElementsXhrError} error - API error
-     * @param {string} code - Error code
-     * @return {void}
-     */
-    fetchClassificationErrorCallback = (error: ElementsXhrError, code: string): void => {
-        if (!this.props.hasClassification) {
-            return;
-        }
-
-        const isValidError = isUserCorrectableError(error.status);
-        let classificationError;
-
-        if (isValidError) {
-            classificationError = {
-                inlineError: {
-                    title: messages.fileClassificationErrorHeaderMessage,
-                    content: messages.defaultErrorMaskSubHeaderMessage,
-                },
-            };
-        }
-
-        this.setState({
-            classification: undefined,
-            classificationError,
-            isLoadingClassification: false,
-        });
-
-        this.props.onError(error, code, {
-            error,
-            [IS_ERROR_DISPLAYED]: isValidError,
-        });
-    };
-
-    /**
-     * Fetches the classification for a file
-     *
-     * @private
-     * @return {void}
-     */
-    fetchClassification = (): void => {
-        const { api, fileId }: Props = this.props;
-        const { isLoadingClassification } = this.state;
-
-        if (isLoadingClassification) {
-            return;
-        }
-
-        this.setState({ isLoadingClassification: true });
-        api.getMetadataAPI(false).getClassification(
-            fileId,
-            this.fetchClassificationSuccessCallback,
-            this.fetchClassificationErrorCallback,
-            {
-                refreshCache: true,
-            },
-        );
-    };
-
-    /**
-     * Add classification click handler
-     *
-     * @private
-     * @return {void}
-     */
-    onClassificationClick = (): void => {
-        const { onClassificationClick }: Props = this.props;
-        onClassificationClick(this.fetchClassification);
-    };
-
     render() {
         const {
+            classification,
             hasProperties,
             hasNotices,
             hasAccessStats,
@@ -425,32 +320,25 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             hasVersions,
             onAccessStatsClick,
             onVersionHistoryClick,
+            onClassificationClick,
             onRetentionPolicyExtendClick,
             retentionPolicy,
-            bannerPolicy,
         }: Props = this.props;
 
-        const {
-            accessStats,
-            accessStatsError,
-            classification,
-            classificationError,
-            file,
-            fileError,
-            isLoadingAccessStats,
-            isLoadingClassification,
-        }: State = this.state;
+        const { accessStats, accessStatsError, file, fileError, isLoadingAccessStats }: State = this.state;
 
-        if (!file) {
-            return null; // TODO: change to loading indicator and handle errors once file call split out
-        }
-
+        // TODO: Add loading indicator and handle errors once file call is split out
         return (
             <SidebarContent className="bcs-details" title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_DETAILS)}>
-                {hasNotices && (
-                    <div className="bcs-details-content">{hasNotices && <SidebarNotices file={file} />}</div>
+                {file && hasNotices && (
+                    <div className="bcs-DetailsSidebar-notices">
+                        <SidebarNotices file={file} />
+                    </div>
                 )}
-                {hasAccessStats && (
+                {file && hasClassification && (
+                    <SidebarClassification classification={classification} file={file} onEdit={onClassificationClick} />
+                )}
+                {file && hasAccessStats && (
                     <SidebarAccessStats
                         accessStats={accessStats}
                         file={file}
@@ -458,31 +346,20 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                         {...accessStatsError}
                     />
                 )}
-                {hasProperties && (
+                {file && hasProperties && (
                     <SidebarSection
                         interactionTarget={SECTION_TARGETS.FILE_PROPERTIES}
                         title={<FormattedMessage {...messages.sidebarProperties} />}
                     >
-                        {hasVersions && (
-                            <div className="bcs-details-content">
-                                {hasVersions && (
-                                    <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />
-                                )}
-                            </div>
-                        )}
+                        {hasVersions && <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />}
                         <SidebarFileProperties
                             file={file}
                             onDescriptionChange={this.onDescriptionChange}
                             {...fileError}
-                            bannerPolicy={bannerPolicy}
-                            classification={classification}
-                            hasClassification={hasClassification}
                             hasRetentionPolicy={hasRetentionPolicy}
-                            isLoading={isLoadingAccessStats && isLoadingClassification}
-                            onClassificationClick={this.onClassificationClick}
+                            isLoading={isLoadingAccessStats}
                             onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
                             retentionPolicy={retentionPolicy}
-                            {...classificationError}
                         />
                     </SidebarSection>
                 )}

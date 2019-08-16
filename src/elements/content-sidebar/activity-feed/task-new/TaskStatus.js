@@ -2,52 +2,43 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import camelCase from 'lodash/camelCase';
-import IconComplete from '../../../../icons/general/IconVerified';
-import IconReject from '../../../../icons/general/IconRejected';
-import IconPending from '../../../../icons/general/IconHelp';
-import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_INCOMPLETE } from '../../../../constants';
-import messages from '../../../common/messages';
+import {
+    TASK_NEW_APPROVED,
+    TASK_NEW_REJECTED,
+    TASK_NEW_COMPLETED,
+    TASK_NEW_NOT_STARTED,
+    TASK_NEW_IN_PROGRESS,
+} from '../../../../constants';
+import messages from './messages';
+import type { TaskStatus } from '../../../../common/types/tasks';
+
+import './TaskStatus.scss';
 
 type Props = {|
     status: TaskStatus,
 |};
 
-const ICON_SIZE = 14;
-
-const StatusIcon = ({ status, ...rest }: { status: TaskStatus }) => {
-    switch (status) {
-        case TASK_NEW_APPROVED:
-        case TASK_NEW_COMPLETED:
-            return <IconComplete width={ICON_SIZE} height={ICON_SIZE} {...rest} />;
-        case TASK_NEW_REJECTED:
-            return <IconReject width={ICON_SIZE} height={ICON_SIZE} {...rest} />;
-        case TASK_NEW_INCOMPLETE:
-            return <IconPending width={ICON_SIZE} height={ICON_SIZE} {...rest} />;
-        default:
-            return null;
-    }
-};
-
-const StatusMessage = ({ status }: { status: TaskStatus }) => {
-    switch (status) {
-        case TASK_NEW_APPROVED:
-            return <FormattedMessage {...messages.tasksFeedApprovedLabel} />;
-        case TASK_NEW_COMPLETED:
-            return <FormattedMessage {...messages.tasksFeedCompletedLabel} />;
-        case TASK_NEW_REJECTED:
-            return <FormattedMessage {...messages.tasksFeedRejectedLabel} />;
-        case TASK_NEW_INCOMPLETE:
-            return <FormattedMessage {...messages.tasksFeedIncompleteLabel} />;
-        default:
-            return null;
-    }
+const statusMessageKeyMap = {
+    [TASK_NEW_APPROVED]: messages.tasksFeedApprovedLabel,
+    [TASK_NEW_COMPLETED]: messages.tasksFeedCompletedLabel,
+    [TASK_NEW_REJECTED]: messages.tasksFeedRejectedLabel,
+    [TASK_NEW_NOT_STARTED]: messages.tasksFeedInProgressLabel,
+    [TASK_NEW_IN_PROGRESS]: messages.tasksFeedInProgressLabel,
 };
 
 const Status = React.memo<Props>(({ status }: Props) => (
-    <div className="bcs-task-status">
-        <StatusIcon status={status} className={`bcs-task-status-icon ${camelCase(status)}`} aria-hidden />
-        <StatusMessage status={status} />
-    </div>
+    <FormattedMessage
+        {...messages.tasksFeedStatusLabel}
+        values={{
+            taskStatus: (
+                <span className={`bcs-TaskStatus-message ${camelCase(status)}`}>
+                    <FormattedMessage {...statusMessageKeyMap[status]} />
+                </span>
+            ),
+        }}
+    >
+        {(...msg: Array<React.Node>): React.Node => <div className="bcs-TaskStatus">{msg}</div>}
+    </FormattedMessage>
 ));
 
 export default Status;

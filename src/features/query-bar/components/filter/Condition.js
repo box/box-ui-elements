@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import isFinite from 'lodash/isFinite';
+import isInteger from 'lodash/isInteger';
 import classNames from 'classnames';
 
 import IconClose from '../../../../icons/general/IconClose';
@@ -17,7 +19,7 @@ import {
     DATE,
     ENUM,
     FLOAT,
-    MULTI_ENUM,
+    MULTI_SELECT,
     NUMBER,
     OPERATOR,
     OR,
@@ -26,6 +28,7 @@ import {
 import type {
     ColumnType,
     ConditionType,
+    ConditionValueType,
     ConnectorType,
     OperatorOptionType,
     OperatorType,
@@ -35,15 +38,15 @@ import type {
 import '../../styles/Condition.scss';
 
 type Props = {
-    areErrorsEnabled: boolean,
     columns?: Array<ColumnType>,
     condition: ConditionType,
     deleteCondition: (index: number) => void,
+    hasUserSubmitted: boolean,
     index: number,
     onColumnChange: (condition: ConditionType, columnId: string) => void,
     onConnectorChange: (option: OptionType) => void,
     onOperatorChange: (conditionId: string, value: OperatorType) => void,
-    onValueChange: (conditionId: string, values: Array<string>) => void,
+    onValueChange: (conditionId: string, values: Array<ConditionValueType>) => void,
     selectedConnector: ConnectorType,
 };
 
@@ -51,7 +54,7 @@ const deleteButtonIconHeight = 18;
 const deleteButtonIconWidth = 18;
 
 const Condition = ({
-    areErrorsEnabled,
+    hasUserSubmitted,
     columns,
     condition,
     deleteCondition,
@@ -77,7 +80,7 @@ const Condition = ({
         onOperatorChange(id, value);
     };
 
-    const handleValueChange = (values: Array<string>) => {
+    const handleValueChange = (values: Array<ConditionValueType>) => {
         const { id } = condition;
         onValueChange(id, values);
     };
@@ -108,39 +111,66 @@ const Condition = ({
         return [];
     };
 
+    const validateValue = (values: Array<ConditionValueType>, type: string) => {
+        switch (type) {
+            case NUMBER:
+                return isInteger(Number(values[0]));
+            case FLOAT:
+                return isFinite(Number(values[0]));
+            default:
+                break;
+        }
+        return true;
+    };
+
     const getErrorMessage = () => {
         const { values, columnId } = condition;
         const column = columns && columns.find(c => c.id === columnId);
         const type = column && column.type;
 
-        const isValueSet = values.length !== 0;
-        let message;
+        const isValueEmpty = values.length === 0;
+
+        let isValueValid = false;
+        if (!isValueEmpty && type) {
+            isValueValid = validateValue(values, type);
+        }
+
+        /**
+         * isValueValid handles the error case when the user tries to enter an invalid input in either a
+         * number type field or a float type field
+         *
+         * (!hasUserSubmitted && !isValueSet) handles the error case when a user presses on the Apply button
+         * but the input field is empty
+         */
+        if (isValueValid || (!hasUserSubmitted && isValueEmpty)) {
+            return null;
+        }
+
+        let messageText;
         switch (type) {
             case STRING:
-                message = <FormattedMessage {...messages.tooltipEnterValueError} />;
+                messageText = messages.tooltipEnterValueError;
                 break;
             case NUMBER:
-                message = <FormattedMessage {...messages.tooltipEnterValueError} />;
+                messageText = !isValueValid ? messages.tooltipInvalidNumberError : messages.tooltipEnterValueError;
                 break;
             case FLOAT:
-                message = <FormattedMessage {...messages.tooltipEnterValueError} />;
+                messageText = !isValueValid ? messages.tooltipInvalidFloatError : messages.tooltipEnterValueError;
                 break;
             case DATE:
-                message = <FormattedMessage {...messages.tooltipSelectDateError} />;
+                messageText = messages.tooltipSelectDateError;
                 break;
             case ENUM:
-                message = <FormattedMessage {...messages.tooltipSelectValueError} />;
+                messageText = messages.tooltipSelectValueError;
                 break;
-            case MULTI_ENUM:
-                message = <FormattedMessage {...messages.tooltipSelectValueError} />;
+            case MULTI_SELECT:
+                messageText = messages.tooltipSelectValueError;
                 break;
             default:
                 break;
         }
 
-        const error = areErrorsEnabled && !isValueSet ? message : null;
-
-        return error;
+        return messageText && <FormattedMessage {...messageText} />;
     };
 
     const renderDeleteButton = () => {
@@ -233,31 +263,29 @@ const Condition = ({
     };
 
     const renderValueField = () => {
-        const { columnId, values } = condition;
+        const column = columns && columns.find(c => c.id === condition.columnId);
 
-        const column = columns && columns.find(c => c.id === columnId);
-        const type = column && column.type;
-
-        if (column && type) {
-            const valueOptions = getColumnOptions();
-            const error = getErrorMessage();
-
-            const classnames = classNames('condition-value-dropdown-container', {
-                'show-error': error,
-            });
-
-            return (
-                <div className={classnames}>
-                    <ValueField
-                        onChange={handleValueChange}
-                        selectedValues={values}
-                        valueOptions={valueOptions}
-                        valueType={type}
-                    />
-                </div>
-            );
+        if (!column) {
+            throw new Error('Expected Column');
         }
-        return null;
+
+        const valueOptions = getColumnOptions();
+        const error = getErrorMessage();
+
+        const classnames = classNames('condition-value-dropdown-container', {
+            'show-error': error,
+        });
+
+        return (
+            <div className={classnames}>
+                <ValueField
+                    onChange={handleValueChange}
+                    selectedValues={condition.values}
+                    valueOptions={valueOptions}
+                    valueType={column.type}
+                />
+            </div>
+        );
     };
 
     const renderErrorIcon = () => {

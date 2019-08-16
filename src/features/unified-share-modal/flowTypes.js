@@ -1,5 +1,5 @@
 // @flow
-import type { itemType } from '../../common/box-types';
+import type { ItemType } from '../../common/types/core';
 import * as constants from './constants';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
@@ -32,6 +32,7 @@ export type allowedAccessLevelsType = {
 export type contactType = {
     email?: string,
     id: number | string,
+    isExternalUser?: boolean,
     name?: string,
     text?: string,
     type: string,
@@ -39,12 +40,18 @@ export type contactType = {
 };
 
 export type inviteePermissionType = {
+    default: boolean,
     disabled?: boolean,
     text: string,
     value: string,
 };
 
 export type item = {
+    bannerPolicy?: {
+        body: string,
+        title: string,
+    },
+    classification?: string,
     description: string,
     extension: string,
     grantedPermissions: {
@@ -53,7 +60,7 @@ export type item = {
     hideCollaborators: boolean,
     id: number,
     name: string,
-    type: itemType,
+    type: ItemType,
     typedID: string,
 };
 
@@ -69,6 +76,7 @@ export type sharedLinkTrackingType = {
     copyButtonProps?: Object,
     onChangeSharedLinkAccessLevel?: Function,
     onChangeSharedLinkPermissionLevel?: Function,
+    onSharedLinkAccessMenuOpen?: Function,
     onSharedLinkCopy?: Function,
     onToggleLink?: Function,
     sendSharedLinkButtonProps?: Object,
@@ -146,3 +154,5 @@ export type tooltipComponentIdentifierType =
     | 'shared-link-copy-button'
     | 'shared-link-settings'
     | 'shared-link-toggle';
+
+export type suggestedCollaboratorsType = { [id: string]: { id: string, userScore: number } };

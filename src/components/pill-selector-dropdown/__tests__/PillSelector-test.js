@@ -25,7 +25,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = shallow(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} placeholder={placeholder} />,
             );
-            const input = wrapper.find('input');
+            const input = wrapper.find('textarea');
             const selector = wrapper.find('.pill-selector-input-wrapper');
 
             expect(wrapper.find('Tooltip').exists()).toBe(true);
@@ -67,13 +67,47 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             expect(wrapper.find('.show-error').length).toBe(0);
         });
 
-        test('should render pills when there are selected options', () => {
+        test('should render pills when there are selected options using legacy text attribute', () => {
             const options = [{ text: 'test', value: 'test' }, { text: 'blah', value: 'hi' }];
             const wrapper = shallow(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
 
             expect(wrapper.find('Pill').length).toBe(2);
+        });
+
+        test('should render pills when there are selected options', () => {
+            const options = [{ displayText: 'test', value: 'test' }, { displayText: 'blah', value: 'hi' }];
+            const wrapper = shallow(
+                <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
+            );
+
+            const pills = wrapper.find('Pill');
+            expect(pills.length).toBe(2);
+            expect(pills.at(0).prop('isValid')).toBeTruthy();
+            expect(pills.at(1).prop('isValid')).toBeTruthy();
+        });
+
+        test('should render invalid pills when validator is provided and allowInvalidPills is true', () => {
+            const validator = ({ displayText }) => {
+                // W3C type="email" input validation
+                const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                return pattern.test(displayText);
+            };
+            const options = [{ displayText: 'test', value: 'test' }, { displayText: 'blah', value: 'hi' }];
+            const wrapper = shallow(
+                <PillSelector
+                    allowInvalidPills
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    selectedOptions={options}
+                    validator={validator}
+                />,
+            );
+            const pills = wrapper.find('Pill');
+            expect(pills.length).toBe(2);
+            expect(pills.at(0).prop('isValid')).toBeFalsy();
+            expect(pills.at(1).prop('isValid')).toBeFalsy();
         });
 
         test('should render pills when selected options are immutable', () => {
@@ -117,7 +151,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = shallow(
                 <PillSelector className={className} onInput={onInputStub} onRemove={onRemoveStub} />,
             );
-            const input = wrapper.find('input');
+            const input = wrapper.find('textarea');
 
             expect(input.hasClass('pill-selector-input')).toBe(true);
             expect(input.hasClass(className)).toBe(true);
@@ -129,7 +163,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 <PillSelector inputProps={{ role }} onInput={onInputStub} onRemove={onRemoveStub} />,
             );
 
-            expect(wrapper.find('input').prop('role')).toEqual(role);
+            expect(wrapper.find('textarea').prop('role')).toEqual(role);
         });
 
         test('should pass through additional props when specified', () => {
@@ -138,7 +172,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 <PillSelector onChange={() => {}} onInput={onInputStub} onRemove={onRemoveStub} value={value} />,
             );
 
-            expect(wrapper.find('input').prop('value')).toEqual(value);
+            expect(wrapper.find('textarea').prop('value')).toEqual(value);
         });
 
         test('should not render placeholder when there are pills', () => {
@@ -147,7 +181,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
 
-            expect(wrapper.find('input').prop('placeholder')).toEqual('');
+            expect(wrapper.find('textarea').prop('placeholder')).toEqual('');
         });
 
         test('should not render placeholder when there are immutable pills', () => {
@@ -156,7 +190,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
 
-            expect(wrapper.find('input').prop('placeholder')).toEqual('');
+            expect(wrapper.find('textarea').prop('placeholder')).toEqual('');
         });
     });
 
@@ -174,7 +208,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
         test('should focus input when called', () => {
             const wrapper = mount(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
 
-            sandbox.mock(wrapper.find('input').getDOMNode()).expects('focus');
+            sandbox.mock(wrapper.find('textarea').getDOMNode()).expects('focus');
 
             wrapper.simulate('click');
         });
@@ -200,7 +234,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             wrapper.setState({ selectedIndex: 0 });
 
             sandbox.mock(instance).expects('resetSelectedIndex');
-            sandbox.mock(wrapper.find('input').getDOMNode()).expects('focus');
+            sandbox.mock(wrapper.find('textarea').getDOMNode()).expects('focus');
 
             wrapper.simulate('keyDown', {
                 key: 'Backspace',
@@ -327,7 +361,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             wrapper.setState({ selectedIndex: 1 });
 
             sandbox.mock(instance).expects('resetSelectedIndex');
-            sandbox.mock(wrapper.find('input').getDOMNode()).expects('focus');
+            sandbox.mock(wrapper.find('textarea').getDOMNode()).expects('focus');
 
             wrapper.simulate('keyDown', {
                 key: 'ArrowRight',

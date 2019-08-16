@@ -131,7 +131,7 @@ const SelectorDropdownExamples = () => (
             'The Chronic',
             'Straight Outta Compton',
             'Reasonable Doubt',
-            'Super long name that should be truncated, we should see the dots at the very end, adding some more text here, should truncate at any moment now, please truncate soon',
+            'Super long name that should be truncated, we should see the dots at the very end, adding some more text here, should truncate at any second now, please truncate soon',
         ]}
         placeholder="Select an album"
         title="Album"

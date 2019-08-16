@@ -5,7 +5,10 @@ import { ContentState, EditorState } from 'draft-js';
 import Avatar from '../../src/components/avatar';
 import Section from '../../src/components/section';
 import PrimaryButton from '../../src/components/primary-button';
-import { DraftMentionDecorator } from '../../src/components/form-elements/draft-js-mention-selector';
+import {
+    DraftMentionDecorator,
+    createMentionSelectorState,
+} from '../../src/components/form-elements/draft-js-mention-selector';
 
 import MentionSelectorContainer from './MentionSelectorContainer';
 
@@ -34,11 +37,16 @@ class DraftJSMentionSelectorExamples extends Component {
 
         this.state = {
             exampleExternalEditorState: this.initialEditorState,
+            exampleExternalMentionsState: this.initialStateWithMentions,
         };
     }
 
     onExternalEditorStateChange = newEditorState => {
         this.setState({ exampleExternalEditorState: newEditorState });
+    };
+
+    onExternaMentionsStateChange = newEditorState => {
+        this.setState({ exampleExternalMentionsState: newEditorState });
     };
 
     getMentionReplacement(mention) {
@@ -69,12 +77,14 @@ class DraftJSMentionSelectorExamples extends Component {
         DraftMentionDecorator,
     );
 
+    initialStateWithMentions = createMentionSelectorState('Hey @[123:Jim], watch my desk');
+
     initializeEditorState = () => {
         this.setState({ exampleExternalEditorState: this.initialEditorState });
     };
 
     render() {
-        const { exampleExternalEditorState } = this.state;
+        const { exampleExternalEditorState, exampleExternalMentionsState } = this.state;
 
         return (
             <div className="example-section mention-selector">
@@ -90,6 +100,12 @@ class DraftJSMentionSelectorExamples extends Component {
                 </Section>
                 <Section id="mention-selector-required-draft" title="Required">
                     <MentionSelectorContainer isRequired name="comments1" placeholder="Enter a comment (uses draft)" />
+                </Section>
+                <Section id="mention-selector-existing-mentions-draft" title="With createMentionSelectorState">
+                    <MentionSelectorContainer
+                        editorState={exampleExternalMentionsState}
+                        onChange={this.onExternaMentionsStateChange}
+                    />
                 </Section>
                 <Section id="mention-selector-required-draft" title="Handle Return Key">
                     <MentionSelectorContainer

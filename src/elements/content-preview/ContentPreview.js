@@ -5,7 +5,7 @@
  */
 
 import 'regenerator-runtime/runtime';
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
@@ -15,6 +15,7 @@ import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
+import type { RouterHistory } from 'react-router-dom';
 import { decode } from '../../utils/keys';
 import makeResponsive from '../common/makeResponsive';
 import Internationalize from '../common/Internationalize';
@@ -30,7 +31,7 @@ import { withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
-import Header from './Header';
+import PreviewHeader from './preview-header';
 import PreviewNavigation from './PreviewNavigation';
 import PreviewLoading from './PreviewLoading';
 import {
@@ -45,6 +46,8 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
+import type { ErrorType } from '../common/flowTypes';
+import type { VersionChangeCallback } from '../content-sidebar/versions';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import './ContentPreview.scss';
@@ -59,13 +62,16 @@ type Props = {
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
+    contentSidebarRef: React.Ref<any>,
     enableThumbnailsSidebar: boolean,
     features?: FeatureConfig,
     fileId?: string,
     fileOptions?: Object,
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
+    history?: RouterHistory,
     isLarge: boolean,
+    isVeryLarge?: boolean,
     language: string,
     logoUrl?: string,
     measureRef: Function,
@@ -74,6 +80,7 @@ type Props = {
     onDownload: Function,
     onLoad: Function,
     onNavigate: Function,
+    onVersionChange: VersionChangeCallback,
     previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
@@ -89,12 +96,12 @@ type Props = {
 
 type State = {
     currentFileId?: string,
+    error?: ErrorType,
     file?: BoxItem,
-    isFileError: boolean,
-    isReloadNotificationVisible: boolean, // the currently displayed file id in the collection
-    isThumbnailSidebarOpen: boolean, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
-    prevFileIdProp?: string,
-    selectedVersionId?: string,
+    isReloadNotificationVisible: boolean,
+    isThumbnailSidebarOpen: boolean,
+    prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
+    selectedVersion?: BoxItemVersion,
 };
 
 // Emitted by preview's 'load' event
@@ -126,13 +133,8 @@ type PreviewMetrics = {
     value: number,
 };
 
-type PreviewError = {
-    error: {
-        code: string,
-        details: Object,
-        displayMessage: string,
-        message: string,
-    },
+type PreviewLibraryError = {
+    error: ErrorType,
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -145,7 +147,7 @@ const LoadableSidebar = AsyncLoad({
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-sidebar" */ '../content-sidebar'),
 });
 
-class ContentPreview extends PureComponent<Props, State> {
+class ContentPreview extends React.PureComponent<Props, State> {
     id: string;
 
     props: Props;
@@ -164,8 +166,10 @@ class ContentPreview extends PureComponent<Props, State> {
 
     stagedFile: ?BoxItem;
 
+    updateVersionToCurrent: ?() => void;
+
     initialState: State = {
-        isFileError: false,
+        error: undefined,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
     };
@@ -186,6 +190,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onError: noop,
         onLoad: noop,
         onNavigate: noop,
+        onVersionChange: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         showAnnotations: false,
         staticHost: DEFAULT_HOSTNAME_STATIC,
@@ -211,26 +216,28 @@ class ContentPreview extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         const {
-            cache,
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
+            cache,
+            fileId,
+            language,
             requestInterceptor,
             responseInterceptor,
-            fileId,
+            sharedLink,
+            sharedLinkPassword,
+            token,
         } = props;
 
         this.id = uniqueid('bcpr_');
         this.api = new API({
-            cache,
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
+            cache,
             clientName: CLIENT_NAME_CONTENT_PREVIEW,
+            language,
             requestInterceptor,
             responseInterceptor,
+            sharedLink,
+            sharedLinkPassword,
+            token,
         });
         this.state = {
             ...this.initialState,
@@ -265,7 +272,7 @@ class ContentPreview extends PureComponent<Props, State> {
             this.preview = undefined;
         }
 
-        this.setState({ selectedVersionId: undefined });
+        this.setState({ selectedVersion: undefined });
     }
 
     /**
@@ -342,16 +349,20 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {boolean}
      */
     shouldLoadPreview(prevState: State): boolean {
-        const { file, selectedVersionId }: State = this.state;
-        const { file: prevFile, selectedVersionId: prevSelectedVersionId }: State = prevState;
-        const versionPath = 'file_version.id';
-        const prevFileVersionId = getProp(prevFile, versionPath);
-        const fileVersionId = getProp(file, versionPath);
+        const { file, selectedVersion }: State = this.state;
+        const { file: prevFile, selectedVersion: prevSelectedVersion }: State = prevState;
+        const prevSelectedVersionId = getProp(prevSelectedVersion, 'id');
+        const selectedVersionId = getProp(selectedVersion, 'id');
+        const prevFileVersionId = getProp(prevFile, 'file_version.id');
+        const fileVersionId = getProp(file, 'file_version.id');
         let loadPreview = false;
 
         if (selectedVersionId !== prevSelectedVersionId) {
+            const isPreviousCurrent = fileVersionId === prevSelectedVersionId || !prevSelectedVersionId;
+            const isSelectedCurrent = fileVersionId === selectedVersionId || !selectedVersionId;
+
             // Load preview if the user has selected a non-current version of the file
-            loadPreview = true;
+            loadPreview = !isPreviousCurrent || !isSelectedCurrent;
         } else if (fileVersionId && prevFileVersionId) {
             // Load preview if the file's current version ID has changed
             loadPreview = fileVersionId !== prevFileVersionId;
@@ -507,12 +518,17 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Handler for 'preview_error' preview event
      *
-     * @param {PreviewError} previewError - the error data emitted from preview
+     * @param {PreviewLibraryError} previewError - the error data emitted from preview
      * @return {void}
      */
-    onPreviewError = ({ error, ...rest }: PreviewError): void => {
+    onPreviewError = ({ error, ...rest }: PreviewLibraryError): void => {
         const { code = ERROR_CODE_UNKNOWN } = error;
-        this.props.onError(
+        const { onError } = this.props;
+
+        // In case of error, there should be no thumbnail sidebar to account for
+        this.setState({ isThumbnailSidebarOpen: false });
+
+        onError(
             error,
             code,
             {
@@ -669,7 +685,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const { enableThumbnailsSidebar, fileOptions, token: tokenOrTokenFunction, ...rest }: Props = this.props;
-        const { file, selectedVersionId }: State = this.state;
+        const { file, selectedVersion }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
             return;
@@ -685,9 +701,9 @@ class ContentPreview extends PureComponent<Props, State> {
         const typedId: string = getTypedFileId(fileId);
         const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
 
-        if (selectedVersionId) {
+        if (selectedVersion) {
             fileOpts[fileId] = fileOpts[fileId] || {};
-            fileOpts[fileId].fileVersionId = selectedVersionId;
+            fileOpts[fileId].fileVersionId = selectedVersion.id;
         }
 
         const previewOptions = {
@@ -695,7 +711,7 @@ class ContentPreview extends PureComponent<Props, State> {
             enableThumbnailsSidebar,
             fileOptions: fileOpts,
             header: 'none',
-            headerElement: `#${this.id} .bcpr-header`,
+            headerElement: `#${this.id} .bcpr-PreviewHeader`,
             showAnnotations: this.canViewAnnotations(),
             showDownload: this.canDownload(),
             skipServerUpdate: true,
@@ -783,8 +799,14 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileErrorCallback = (fileError: ElementsXhrError, code: string): void => {
-        this.setState({ isFileError: true });
-        this.props.onError(fileError, code, {
+        const { onError } = this.props;
+        const errorCode = fileError.code || code;
+        const error = {
+            code: errorCode,
+            message: fileError.message,
+        };
+        this.setState({ error, file: undefined });
+        onError(fileError, errorCode, {
             error: fileError,
         });
     };
@@ -1039,10 +1061,17 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Handles version change events
      *
-     * @param {string} versionId - The version id to set as current
+     * @param {string} [version] - The version that is now previewed
+     * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (versionId?: string) => {
-        this.setState({ selectedVersionId: versionId });
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: AdditionalVersionInfo = {}): void => {
+        const { onVersionChange }: Props = this.props;
+        this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
+
+        onVersionChange(version, additionalVersionInfo);
+        this.setState({
+            selectedVersion: version,
+        });
     };
 
     /**
@@ -1063,14 +1092,17 @@ class ContentPreview extends PureComponent<Props, State> {
     render() {
         const {
             apiHost,
-            isLarge,
             token,
             language,
             messages,
             className,
             contentSidebarProps,
+            contentSidebarRef,
             contentOpenWithProps,
             hasHeader,
+            history,
+            isLarge,
+            isVeryLarge,
             onClose,
             measureRef,
             sharedLink,
@@ -1080,11 +1112,12 @@ class ContentPreview extends PureComponent<Props, State> {
         }: Props = this.props;
 
         const {
+            error,
             file,
-            isFileError,
             isReloadNotificationVisible,
             currentFileId,
             isThumbnailSidebarOpen,
+            selectedVersion,
         }: State = this.state;
         const { collection }: Props = this.props;
         const styleClassName = classNames(
@@ -1098,21 +1131,28 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!currentFileId) {
             return null;
         }
+
+        const errorCode = getProp(error, 'code');
+        const currentVersionId = getProp(file, 'file_version.id');
+        const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
+        const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
+
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
                     {hasHeader && (
-                        <Header
+                        <PreviewHeader
                             file={file}
                             token={token}
-                            onClose={onClose}
+                            onClose={onHeaderClose}
                             onPrint={this.print}
                             canDownload={this.canDownload()}
                             onDownload={this.download}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}
+                            selectedVersion={selectedVersion}
                         />
                     )}
                     <div className="bcpr-body">
@@ -1124,7 +1164,8 @@ class ContentPreview extends PureComponent<Props, State> {
                             ) : (
                                 <div className="bcpr-loading-wrapper">
                                     <PreviewLoading
-                                        isLoading={!isFileError}
+                                        errorCode={errorCode}
+                                        isLoading={!errorCode}
                                         loadingIndicatorProps={{
                                             size: 'large',
                                         }}
@@ -1141,13 +1182,16 @@ class ContentPreview extends PureComponent<Props, State> {
                         {file && (
                             <LoadableSidebar
                                 {...contentSidebarProps}
-                                isLarge={isLarge}
                                 apiHost={apiHost}
                                 token={token}
                                 cache={this.api.getCache()}
                                 fileId={currentFileId}
                                 getPreview={this.getPreview}
                                 getViewer={this.getViewer}
+                                history={history}
+                                isDefaultOpen={isLarge || isVeryLarge}
+                                language={language}
+                                ref={contentSidebarRef}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}

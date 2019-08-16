@@ -10,19 +10,8 @@ before_install:
     - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
     - export PATH=$HOME/.yarn/bin:$PATH
     - export TZ=America/Los_Angeles
+    - export HUSKY_SKIP_HOOKS=1
 jobs:
   include:
-    - name: "Commit Lint"
-      script: commitlint-travis
-    - name: "Code Lint"
-      script: npm-run-all clean build:i18n lint
-    - name: "Flow Types"
-      script: npm-run-all clean build:i18n && echo "Running Flow on $(yarn flow ls | wc -l) files" && yarn flow
-    - name: "Unit Tests"
-      script: yarn test
     - name: "E2E Tests"
       script: yarn test:e2e
-    - name: "Build Babel"
-      script: npm-run-all clean build:i18n build:ci:es
-    - name: "Build Webpack"
-      script: npm-run-all clean build:i18n build:ci:dist

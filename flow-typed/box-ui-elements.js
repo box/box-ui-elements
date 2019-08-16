@@ -18,6 +18,7 @@ import type { ContentSidebarProps } from '../src/elements/content-sidebar';
 import type { ContentOpenWithProps } from '../src/elements/content-open-with';
 import type { ContentPreviewProps } from '../src/elements/content-preview';
 import type { FeatureConfig } from '../src/elements/common/feature-checking';
+import type { TaskNew } from '../src/common/types/tasks';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
@@ -38,6 +39,7 @@ import {
     TYPE_WEBLINK,
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
+    STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
     DELIMITER_SLASH,
@@ -46,6 +48,7 @@ import {
     SIZE_LARGE,
     FIELD_DATE,
     FIELD_NAME,
+    FIELD_SIZE,
     FIELD_RELEVANCE,
     DEFAULT_VIEW_RECENTS,
     DEFAULT_VIEW_FILES,
@@ -75,12 +78,6 @@ import {
     TASK_APPROVED,
     TASK_COMPLETED,
     TASK_INCOMPLETE,
-    TASK_TYPE_GENERAL,
-    TASK_TYPE_APPROVAL,
-    TASK_NEW_APPROVED,
-    TASK_NEW_COMPLETED,
-    TASK_NEW_INCOMPLETE,
-    TASK_NEW_REJECTED,
     TASK_REJECTED,
     METRIC_TYPE_PREVIEW,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
@@ -126,10 +123,15 @@ type View =
     | typeof VIEW_UPLOAD_EMPTY
     | typeof VIEW_UPLOAD_IN_PROGRESS
     | typeof VIEW_UPLOAD_SUCCESS;
-type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE;
+type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE | typeof FIELD_SIZE;
 type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
-type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
+type UploadStatus =
+    | typeof STATUS_PENDING
+    | typeof STATUS_IN_PROGRESS
+    | typeof STATUS_STAGED
+    | typeof STATUS_COMPLETE
+    | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 type TaskAssignmentStatus =
@@ -157,6 +159,13 @@ type BoxItemPermission = {
     can_rename?: boolean,
     can_set_share_access?: boolean,
     can_share?: boolean,
+    can_upload?: boolean,
+};
+
+type BoxItemVersionPermission = {
+    can_delete?: boolean,
+    can_download?: boolean,
+    can_preview?: boolean,
     can_upload?: boolean,
 };
 
@@ -344,12 +353,16 @@ type JSONPatchOperations = Array<JSONPatch>;
 
 type BoxItemVersion = {
     action: 'upload' | 'delete' | 'restore',
+    authenticated_download_url?: string,
     collaborators?: Object,
     created_at: string,
+    extension?: string,
     id: string,
+    is_download_available?: boolean,
     modified_at?: string,
     modified_by: User,
     name?: string,
+    permissions?: BoxItemVersionPermission,
     sha1?: string,
     size?: number,
     trashed_at: ?string,
@@ -363,6 +376,7 @@ type BoxItemVersion = {
 
 type BoxItem = {
     allowed_shared_link_access_levels?: Array<Access>,
+    authenticated_download_url?: string,
     content_created_at?: string,
     content_modified_at?: string,
     created_at?: string,
@@ -385,12 +399,15 @@ type BoxItem = {
     parent?: BoxItem,
     path_collection?: BoxPathCollection,
     permissions?: BoxItemPermission,
+    representations?: FileRepresentationResponse,
     restored_from?: BoxItemVersion,
     selected?: boolean,
     shared_link?: SharedLink,
     size?: number,
+    thumbnailUrl?: ?string,
     type?: ItemType,
     url?: string,
+    version_limit?: ?number,
     version_number?: string,
 };
 
@@ -463,6 +480,25 @@ type Collection = {
     totalCount?: number,
 };
 
+type FileRepresentationResponse = {
+    entries: Array<FileRepresentation>,
+};
+
+type FileRepresentation = {
+    content?: {
+        url_template: string,
+    },
+    properties?: {
+        dimensions: string,
+        paged: string,
+        thumb: string,
+    },
+    representation?: string,
+    status: {
+        state: string,
+    },
+};
+
 type FolderUploadItem = {
     boxFile?: BoxItem,
     error?: Object,
@@ -529,8 +565,10 @@ type Options = {
     consoleError?: boolean,
     consoleLog?: boolean,
     id?: string,
+    language?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
+    retryableStatusCodes?: Array<number>,
     sharedLink?: string,
     sharedLinkPassword?: string,
     shouldRetry?: boolean,
@@ -624,111 +662,6 @@ type Tasks = {
     entries: Array<Task>,
     total_count: number,
 };
-
-/* New Task Types START */
-
-type ID = string;
-type ISODate = string;
-
-type UserMini = User;
-
-type FileMini = {
-    id: ID,
-    name: string,
-    type: 'file',
-};
-
-type FolderMini = {
-    id: ID,
-    name: string,
-    type: 'folder',
-};
-
-type TaskStatus =
-    | typeof TASK_NEW_INCOMPLETE
-    | typeof TASK_NEW_COMPLETED
-    | typeof TASK_NEW_APPROVED
-    | typeof TASK_NEW_REJECTED;
-
-type TaskCollabStatus = typeof TASK_NEW_INCOMPLETE | typeof TASK_NEW_COMPLETED;
-
-type TaskMini = {|
-    created_at: ISODate,
-    id: ID,
-    modified_at: ISODate,
-    status: TaskStatus,
-    type: 'task',
-|};
-
-type TaskCollabRole = 'CREATOR' | 'ASSIGNEE';
-
-type TaskCollab<R> = {|
-    id: ID,
-    role: R,
-    status: TaskCollabStatus,
-    target: UserMini,
-    task?: TaskMini,
-    type: 'task_collaborator',
-|};
-
-type TaskCollabCreator = TaskCollab<'CREATOR'>;
-
-type TaskCollabAssignee = {|
-    ...TaskCollab<'ASSIGNEE'>,
-    permissions: {|
-        can_delete: boolean,
-        can_update: boolean,
-    |},
-|};
-
-type TaskLink = {|
-    description?: string,
-    id: ID,
-    permissions: {|
-        can_delete: boolean,
-        can_update: boolean,
-    |},
-    target?: ?FileMini | ?FolderMini | ?UserMini,
-    task?: TaskMini,
-    type: 'task_link',
-|};
-
-type MarkerPaginatedCollection<T> = {
-    entries: T[],
-    limit: number,
-    next_marker: ?string,
-};
-
-// See https://github.com/facebook/flow/issues/7574
-// This is currently *not* enforcing the constant types
-// type TaskType = typeof TASK_TYPE_GENERAL | typeof TASK_TYPE_APPROVAL;
-type TaskType = 'general' | 'approval';
-
-type TaskNew = {|
-    assigned_to: MarkerPaginatedCollection<TaskCollabAssignee>,
-    completed_at?: ?ISODate,
-    completion_rule?: 'ANY_ASSIGNEE' | 'ALL_ASSIGNEES',
-    created_at: ISODate,
-    created_by: TaskCollabCreator,
-    description?: ?string,
-    due_at?: ?ISODate,
-    id: ID,
-    modified_at?: ISODate,
-    name: string,
-    permissions: {|
-        can_create_task_collaborator: boolean,
-        can_create_task_link: boolean,
-        can_delete: boolean,
-        can_update: boolean,
-    |},
-    progress_at?: ?ISODate,
-    status: TaskStatus,
-    task_links: MarkerPaginatedCollection<TaskLink>,
-    task_type?: TaskType,
-    type: 'task',
-|};
-
-/* New Task Types END */
 
 type Comment = {
     created_at: string,
@@ -858,12 +791,6 @@ type AdditionalSidebarTab = {
 
 type Alignment = 'left' | 'right';
 
-type SidebarView =
-    | typeof SIDEBAR_VIEW_SKILLS
-    | typeof SIDEBAR_VIEW_DETAILS
-    | typeof SIDEBAR_VIEW_METADATA
-    | typeof SIDEBAR_VIEW_ACTIVITY;
-
 type FileSystemFileEntry = {
     createReader: Function,
     file: Function,
@@ -926,8 +853,9 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    Box__Security__Classification__Key?: string,
-} & MetadataInstance;
+    advisoryMessage?: string,
+    name: string,
+};
 
 type MetricType =
     | typeof METRIC_TYPE_PREVIEW
@@ -944,17 +872,21 @@ type LoggerProps = {
     onReadyMetric: (data: ElementsLoadMetricData) => void,
 };
 
+type GetAvatarUrlCallback = string => Promise<?string>;
+
+type GetProfileUrlCallback = string => Promise<string>;
+
 type WithLoggerProps = {
     logger: LoggerProps,
 };
 
 type ActivityFeedFeatures = {
-    tasks?: {|
-        createButton?: boolean, // Show the Create Task button (requires newApi)
-        createFromComment?: boolean, // Show the Add Task checkbox
-        newApi?: boolean, // Use new service
-        newCards?: boolean, // Show new task card layout (requires on newApi)
-    |},
+    appActivity: {
+        enabled: boolean,
+    },
+    tasks: {
+        anyTask: boolean,
+    },
 };
 
 type ContentSidebarFeatures = {
@@ -963,4 +895,9 @@ type ContentSidebarFeatures = {
 
 type NavigateOptions = {
     isToggle?: boolean,
+};
+
+type AdditionalVersionInfo = {
+    currentVersionId?: ?string,
+    updateVersionToCurrent: () => void,
 };

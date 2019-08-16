@@ -93,6 +93,17 @@ describe('components/tooltip/Tooltip', () => {
             expect(component.prop('tabIndex')).toEqual('0');
         });
 
+        test('should not add tabindex if isTabbable is false', () => {
+            const wrapper = shallow(
+                <Tooltip isShown isTabbable={false} text="hi">
+                    <button />
+                </Tooltip>,
+            );
+            const component = wrapper.find('button');
+
+            expect(component.prop('tabIndex')).toBeFalsy();
+        });
+
         test('should show tooltip when isShown state is true', () => {
             const wrapper = shallow(
                 <Tooltip text="hi">
@@ -202,6 +213,22 @@ describe('components/tooltip/Tooltip', () => {
             );
 
             expect(wrapper.find('[role="tooltip"]').hasClass('is-error')).toBe(true);
+        });
+
+        test('should render children only when tooltip is disabled', () => {
+            expect(
+                getWrapper({
+                    isDisabled: true,
+                }),
+            ).toMatchSnapshot();
+        });
+
+        test('should render children wrapped in tether when tooltip has text missing', () => {
+            expect(
+                getWrapper({
+                    text: null,
+                }),
+            ).toMatchSnapshot();
         });
     });
 
@@ -328,6 +355,19 @@ describe('components/tooltip/Tooltip', () => {
 
             wrapper.find('button').simulate('keydown', { key: 'Escape' });
             expect(onKeyDown.calledOnce).toBe(true);
+        });
+    });
+
+    describe('position instance method', () => {
+        test.each([true, false])(`should only position the tether when shown`, isShown => {
+            const positionTetherMock = jest.fn();
+
+            const wrapper = getWrapper({ isShown });
+            wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
+
+            wrapper.instance().position();
+
+            expect(positionTetherMock).toHaveBeenCalledTimes(isShown ? 1 : 0);
         });
     });
 });
