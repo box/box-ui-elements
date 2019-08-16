@@ -3,7 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import AccessibleSVG from '../accessible-svg';
-import { bdlNeutral03 } from '../../styles/variables';
+import { bdlGray } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -14,7 +14,7 @@ type Props = {
     width?: number,
 };
 
-const IconCollectionsStarFilled = ({ className = '', color = bdlNeutral03, height = 32, title, width = 32 }: Props) => (
+const IconCollectionsStarFilled = ({ className = '', color = bdlGray, height = 32, title, width = 32 }: Props) => (
     <AccessibleSVG
         className={classNames('bdl-IconCollectionsStarFilled', className)}
         height={height}
