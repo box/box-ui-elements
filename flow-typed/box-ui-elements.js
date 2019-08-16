@@ -39,6 +39,7 @@ import {
     TYPE_WEBLINK,
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
+    STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
     DELIMITER_SLASH,
@@ -125,7 +126,12 @@ type View =
 type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE | typeof FIELD_SIZE;
 type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
-type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
+type UploadStatus =
+    | typeof STATUS_PENDING
+    | typeof STATUS_IN_PROGRESS
+    | typeof STATUS_STAGED
+    | typeof STATUS_COMPLETE
+    | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 type TaskAssignmentStatus =

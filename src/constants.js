@@ -182,6 +182,7 @@ export const CLIENT_NAME_OPEN_WITH = 'ContentOpenWith';
 /* ---------------------- Statuses -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';
 export const STATUS_IN_PROGRESS: 'inprogress' = 'inprogress';
+export const STATUS_STAGED: 'staged' = 'staged';
 export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
 
