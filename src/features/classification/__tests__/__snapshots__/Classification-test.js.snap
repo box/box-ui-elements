@@ -36,14 +36,6 @@ exports[`features/classification/Classification should render a classified badge
 </article>
 `;
 
-exports[`features/classification/Classification should render add classification badge 1`] = `
-<article
-  className="bdl-Classification "
->
-  <AddClassificationBadge />
-</article>
-`;
-
 exports[`features/classification/Classification should render not classified message 1`] = `
 <article
   className="bdl-Classification "
