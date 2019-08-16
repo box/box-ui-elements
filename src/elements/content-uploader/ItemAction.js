@@ -12,7 +12,7 @@ import IconClose from '../../icons/general/IconClose';
 import IconRetry from '../../icons/general/IconRetry';
 import messages from '../common/messages';
 import IconInProgress from './IconInProgress';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
 
 import './ItemAction.scss';
 
@@ -45,6 +45,7 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
             target = 'uploadretry';
             break;
         case STATUS_IN_PROGRESS:
+        case STATUS_STAGED:
             icon = <IconInProgress />;
             target = 'uploadcancel';
             break;
@@ -60,7 +61,7 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     return (
         <div className="bcu-item-action">
             <Tooltip position="top-left" text={tooltip}>
-                <PlainButton onClick={onClick} type="button" {...resin}>
+                <PlainButton onClick={onClick} type="button" isDisabled={status === STATUS_STAGED} {...resin}>
                     {icon}
                 </PlainButton>
             </Tooltip>
