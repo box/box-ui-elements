@@ -70,6 +70,6 @@ $sidebarContentWidth: 340px;
 
 @mixin placeholder {
     font-family: $font;
-    font-weight: 200;
+    font-weight: normal;
     opacity: .6;
 }

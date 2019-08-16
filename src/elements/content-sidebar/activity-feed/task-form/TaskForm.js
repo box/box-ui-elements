@@ -417,7 +417,6 @@ class TaskForm extends React.Component<Props, State> {
                             }}
                             isDisabled={isLoading}
                             isRequired={false}
-                            isTextInputAllowed
                             label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
                             minDate={new Date()}
                             name="taskDueDate"
