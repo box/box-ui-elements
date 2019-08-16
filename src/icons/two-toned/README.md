@@ -184,7 +184,7 @@ const icons = [
                             }
 
                             .icon-workflow-example .background-color {
-                                fill: transparent;
+                                fill: #ccc;
                             }
                         `}
                     </style>
