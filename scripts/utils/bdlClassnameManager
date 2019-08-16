@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 
-/* eslint-disable */
 const fs = require('fs');
 const colors = require('colors/safe');
 const { promisify } = require('util');
-const camelCase = require('lodash/camelCase');
-const kebabCase = require('lodash/kebabCase');
-const identity = require('lodash/identity');
 const invert = require('lodash/invert');
+const trimStart = require('lodash/trimStart');
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
@@ -43,17 +40,28 @@ const conversionMap = {
     // 'tooltip': 'bdl-Tooltip',
 };
 const scssPrefix = '.';
-const jsPrefixes = ['\'', '"', '`'];
+const jsPrefixes = ["'", '"', '`'];
 
-function lengthSorter (a, b) {
+function lengthSorter(a, b) {
     return a.length > b.length ? -1 : 1;
 }
 
+function findAndReplaceSCSS(toReplace, match, replaceWith) {
+    return toReplace.replace(new RegExp(`\\${match}(?!-)`, 'g'), replaceWith);
+}
+
+function findAndReplaceJS(toReplace, match, replaceWith) {
+    return toReplace.replace(new RegExp(`(?<!-)${match}(?!-)`, 'g'), replaceWith);
+}
+
+/* eslint-disable no-console */
 function printHelp() {
     console.log(`Usage: ${process.argv[1].split('/').pop()} operation fileName [--verbose]`);
     console.log('\nSupported operations:');
     console.log('\tcheck\t\tcheck to see if a file contains deprecated values (returns error if it does)');
-    console.log('\tswap\t\treplace known-deprecated variable names in a JS or SCSS file');
+    console.log('\tswap\t\treplace known-deprecated classes in a JS or SCSS file');
+    console.log('\tappend\t\tappend new namespaced clases to known-deprecated classes in a JS or SCSS file');
+    console.log('\textend\t\tadd @extend to SCSS files with new namespaced classes');
 }
 
 function printVerboseOperationMessage(fileName, matches) {
@@ -61,18 +69,103 @@ function printVerboseOperationMessage(fileName, matches) {
     console.log(colors.cyan('Found:'), matches);
 }
 
-async function handleWriteFile(matches, fileName, fileToParse, verboseMode) {
+async function handleWriteFile(fileContentsToParse, fileName, isVerbose, matches) {
     try {
         if (matches.length > 0) {
-            await writeFile(fileName, fileToParse);
-            console.log(colors.cyan(`Replaced ${matches.length} classname value${matches.length !== 1 ? 's': ''} in:\t`), fileName);
-        } else if (verboseMode) {
+            await writeFile(fileName, fileContentsToParse);
+            console.log(
+                colors.cyan(`Replaced ${matches.length} classname value${matches.length !== 1 ? 's' : ''} in:\t`),
+                fileName,
+            );
+        } else if (isVerbose) {
             console.warn(colors.yellow('No changes needed to file:\t'), fileName);
         }
     } catch (error) {
         console.error(colors.red('Cannot write updated file to disk\n'), error);
         process.exit(1);
     }
+}
+
+async function processFileContents({ fileContentsToParse, fileName, isVerbose, sourceNameRegex }, handleMatch) {
+    const matches = [...new Set(fileContentsToParse.match(sourceNameRegex))];
+
+    if (isVerbose) {
+        printVerboseOperationMessage(fileName, matches);
+    }
+
+    // sort prevents root classnames ('btn') from preemptively changing longer classnames ('btn-primary')
+    fileContentsToParse = matches.sort(lengthSorter).reduce(handleMatch, fileContentsToParse);
+    await handleWriteFile(fileContentsToParse, fileName, isVerbose, matches);
+}
+
+async function swap({ currentConversionMap, fileType, ...operationParams }) {
+    processFileContents(operationParams, (fileContents, match) => {
+        if (fileType === 'scss') {
+            fileContents = findAndReplaceSCSS(
+                fileContents,
+                match,
+                `${scssPrefix}${currentConversionMap[trimStart(match, scssPrefix)]}`,
+            );
+        } else if (fileType === 'js') {
+            const quotationMark = match[0];
+            if (jsPrefixes.includes(quotationMark)) {
+                fileContents = findAndReplaceJS(
+                    fileContents,
+                    match,
+                    `${quotationMark}${currentConversionMap[trimStart(match, quotationMark)]}`,
+                );
+            } else if (operationParams.isVerbose) {
+                console.warn(colors.yellow('Incorrect match for js files. skipping', operationParams.fileName, '...'));
+            }
+        }
+        return fileContents;
+    });
+}
+
+async function append({ currentConversionMap, fileType, ...operationParams }) {
+    processFileContents(operationParams, (fileContents, match) => {
+        if (fileType === 'scss') {
+            fileContents = findAndReplaceSCSS(
+                fileContents,
+                match,
+                `${match}, ${scssPrefix}${currentConversionMap[trimStart(match, scssPrefix)]}`,
+            );
+        } else if (fileType === 'js') {
+            const quotationMark = match[0];
+            if (jsPrefixes.includes(quotationMark)) {
+                fileContents = findAndReplaceJS(
+                    fileContents,
+                    match,
+                    `${match} ${currentConversionMap[trimStart(match, quotationMark)]}`,
+                );
+            } else if (operationParams.isVerbose) {
+                console.warn(colors.yellow('Incorrect match for js files. skipping', operationParams.fileName, '...'));
+            }
+        }
+        return fileContents;
+    });
+}
+
+async function extend({ currentConversionMap, fileType, ...operationParams }) {
+    processFileContents(operationParams, (fileContents, match, index) => {
+        if (fileType === 'scss') {
+            const matchReplace = match.replace('.', '');
+            if (index === 0) {
+                fileContents = fileContents.concat(
+                    '\n\n/*\n* Section below is for bdl-namespace backwards compatibility.\n* Do not add changes below this line.\n*/',
+                );
+            }
+            fileContents = fileContents.concat(
+                `\n${scssPrefix}${currentConversionMap[matchReplace]} {\n    @extend ${match};\n}\n`,
+            );
+        } else {
+            console.error(
+                colors.yellow('Unrecognized file type for extend operation. skipping', operationParams.fileName, '...'),
+            );
+            process.exit(0);
+        }
+        return fileContents;
+    });
 }
 
 async function main() {
@@ -92,128 +185,89 @@ async function main() {
         process.exit(1);
     }
     const fileType = fileName.split('.').pop();
-    const verboseMode = process.argv[4] === '--verbose';
-    const extendMode = operation === 'extend'
-    const currentConversionMap = extendMode ? invert(conversionMap) : conversionMap;
+    const isVerbose = process.argv[4] === '--verbose';
+    const isExtend = operation === 'extend';
+    const currentConversionMap = isExtend ? invert(conversionMap) : conversionMap;
 
-    let reBadName;
+    let sourceNameRegex;
     if (fileType === 'scss') {
         const converter = entry => `\\${scssPrefix}${entry}(?!-)`;
-        reBadName = new RegExp(
+        sourceNameRegex = new RegExp(
             Object.keys(currentConversionMap)
                 .map(converter)
-                .sort(lengthSorter) // sort order matters here for regex
-                .join('|'), 'g'
+                // Sorting enables finding matches for longer classnames before their root counterparts
+                // E.g. compare results for /\.btn|\.btn-primary/g to /\.btn-primary|\.btn/g
+                .sort(lengthSorter)
+                .join('|'),
+            'g',
         );
     } else if (fileType === 'js') {
         // The majority of .js classnames are surrounded by quotation marks
         // Restrict to those prefixes to avoid overrwriting variable names
         const converter = entry => jsPrefixes.map(prefix => `${prefix}${entry}`).join('|');
-        reBadName = new RegExp(Object.keys(currentConversionMap).map(converter).join('|'), 'g');
+        sourceNameRegex = new RegExp(
+            Object.keys(currentConversionMap)
+                .map(converter)
+                .join('|'),
+            'g',
+        );
     } else {
         console.error(colors.yellow('Unrecognized file type for this tool. skipping', fileName, '...'));
         process.exit(0);
     }
 
     try {
-        let fileToParse = await readFile(fileName, { encoding: 'utf8' });
+        const fileContentsToParse = await readFile(fileName, { encoding: 'utf8' });
+        const operationParams = {
+            currentConversionMap,
+            fileContentsToParse,
+            fileName,
+            fileType,
+            isVerbose,
+            sourceNameRegex,
+        };
 
         switch (operation) {
-            case 'check':
+            case 'check': {
                 // determine if the file is using one of the legacy variable names
-                const foundMatch = reBadName.test(fileToParse);
+                const foundMatch = sourceNameRegex.test(fileContentsToParse);
                 if (foundMatch) {
                     // Exit with an error code: we should not find bad names
-                    if (verboseMode) {
+                    if (isVerbose) {
                         console.error(colors.red('Bad BDL class name found in', fileName));
                     }
                     process.exit(1);
                 }
 
                 break;
+            }
             case 'append': {
-                const matches = [...new Set(fileToParse.match(reBadName))];
-
-                if (verboseMode) {
-                    printVerboseOperationMessage(fileName, matches);
-                }
-
-                matches
-                    .sort(lengthSorter) // sort prevents root classnames ('btn') from preemptively changing longer classnames ('btn-primary')
-                    .forEach((match) => {
-                        if (fileType === 'scss') {
-                            fileToParse = fileToParse.replace(new RegExp(`\\${match}(?!-)`, 'g'), `${scssPrefix}${currentConversionMap[kebabCase(match)]}`);
-                        } else if (fileType === 'js') {
-                            const quotationMark = match[0];
-                            if (jsPrefixes.includes(quotationMark)) {
-                                fileToParse = fileToParse.replace(new RegExp(`(?<!-)${match}(?!-)`, 'g'), `${match} ${currentConversionMap[kebabCase(match)]}`);
-                            } else if (verboseMode) {
-                                console.warn(colors.yellow('Incorrect match for js files. skipping', fileName, '...'));
-                            }
-                        }
-                    });
-
-                handleWriteFile(matches, fileName, fileToParse, verboseMode);
-
+                append(operationParams);
                 break;
             }
             case 'extend': {
-                const matches = [...new Set(fileToParse.match(reBadName))];
-
-                if (verboseMode) {
-                    printVerboseOperationMessage(fileName, matches);
-                }
-
-                matches
-                    .sort(lengthSorter)
-                    .forEach((match) => {
-                        if (fileType === 'scss') {
-                            const matchReplace = match.replace('.', '');
-                            fileToParse = fileToParse.concat(`\n${scssPrefix}${currentConversionMap[matchReplace]} {\n    @extend ${match};\n}\n`)
-                        } else {
-                            console.error(colors.yellow('Unrecognized file type for extend operation. skipping', fileName, '...'));
-                            process.exit(0);
-                        }
-                    });
-
-                handleWriteFile(matches, fileName, fileToParse, verboseMode);
-
+                extend(operationParams);
                 break;
             }
             case 'swap': {
-                const matches = [...new Set(fileToParse.match(reBadName))];
-
-                if (verboseMode) {
-                    printVerboseOperationMessage(fileName, matches);
-                }
-
-                matches
-                    .sort(lengthSorter)
-                    .forEach((match) => {
-                        if (fileType === 'scss') {
-                            fileToParse = fileToParse.replace(new RegExp(`\\${match}(?!-)`, 'g'), `${scssPrefix}${currentConversionMap[kebabCase(match)]}`);
-                        } else if (fileType === 'js') {
-                            const quotationMark = match[0];
-                            if (jsPrefixes.includes(quotationMark)) {
-                                fileToParse = fileToParse.replace(new RegExp(`(?<!-)${match}(?!-)`, 'g'), `${quotationMark}${currentConversionMap[kebabCase(match)]}`);
-                            } else if (verboseMode) {
-                                console.warn(colors.yellow('Incorrect match for js files. skipping', fileName, '...'));
-                            }
-                        }
-                    });
-
-                handleWriteFile(matches, fileName, fileToParse, verboseMode);
-
+                swap(operationParams);
                 break;
             }
             default:
                 console.error(colors.red('Unrecognized operation:'), colors.white(operation));
-                console.error(colors.red('use "swap" to replace names, or "check" to verify if a file contains deprecated values'));
+                console.error(
+                    colors.red(
+                        'use "swap" to replace names, "append" to add new classes, "extend" to add @extend property, or "check" to verify if a file contains deprecated values',
+                    ),
+                );
                 process.exit(1);
                 break;
         }
     } catch (error) {
-        console.error(colors.red('Cannot read file, because it does not exist or the wrong path is specified\n'), error);
+        console.error(
+            colors.red('Cannot read file, because it does not exist or the wrong path is specified\n'),
+            error,
+        );
         process.exit(1);
     }
 }
