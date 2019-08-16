@@ -171,6 +171,28 @@ const icons = [
                 </div>
             );
         },
+    }, {
+        name: 'IconCollectionItemLink',
+        content: () => {
+            const IconCollectionItemLink = require('./IconCollectionItemLink').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-workflow-example .foreground-color {
+                                fill: #909090;
+                            }
+
+                            .icon-workflow-example .background-color {
+                                fill: transparent;
+                            }
+                        `}
+                    </style>
+                    <IconCollectionItemLink height={24} width={24} />
+                    <IconCollectionItemLink className="icon-workflow-example" height={24} width={24} />
+                </div>
+            );
+        },
     },
 ];
 
