@@ -71,6 +71,7 @@ type Props = {
     hasHeader?: boolean,
     history?: RouterHistory,
     isLarge: boolean,
+    isVeryLarge?: boolean,
     language: string,
     logoUrl?: string,
     measureRef: Function,
@@ -1091,7 +1092,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     render() {
         const {
             apiHost,
-            isLarge,
             token,
             language,
             messages,
@@ -1101,6 +1101,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             contentOpenWithProps,
             hasHeader,
             history,
+            isLarge,
+            isVeryLarge,
             onClose,
             measureRef,
             sharedLink,
@@ -1180,7 +1182,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
                         {file && (
                             <LoadableSidebar
                                 {...contentSidebarProps}
-                                isLarge={isLarge}
                                 apiHost={apiHost}
                                 token={token}
                                 cache={this.api.getCache()}
@@ -1188,6 +1189,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 getPreview={this.getPreview}
                                 getViewer={this.getViewer}
                                 history={history}
+                                isDefaultOpen={isLarge || isVeryLarge}
                                 language={language}
                                 ref={contentSidebarRef}
                                 sharedLink={sharedLink}

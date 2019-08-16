@@ -125,7 +125,7 @@ type Props = {
     isDisabled?: boolean,
     /** Is input required */
     isRequired?: boolean,
-    /** Is user allowed to manually input a value */
+    /** Is user allowed to manually input a value (WARNING: this doesn't work with internationalization) */
     isTextInputAllowed?: boolean,
     /** Label displayed for the text input */
     label: React.Node,

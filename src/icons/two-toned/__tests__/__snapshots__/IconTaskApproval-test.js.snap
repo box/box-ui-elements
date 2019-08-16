@@ -15,7 +15,7 @@ exports[`icons/general/IconTaskApproval should correctly render default icon 1`]
       className="background-color"
       cx="16"
       cy="16"
-      fill="#f5b31b"
+      fill="#0061d5"
       r="16"
     />
     <g
