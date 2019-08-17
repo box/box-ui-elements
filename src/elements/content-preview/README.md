@@ -19,6 +19,7 @@ var ContentPreview = require('./ContentPreview').default;
             hasActivityFeed: true,
             hasMetadata: true,
             hasSkills: true,
+            hasVersions: true,
         }}
         hasHeader={true}
         features={FEATURES}

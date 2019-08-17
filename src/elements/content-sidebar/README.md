@@ -37,6 +37,7 @@ var ContentSidebar = require('./ContentSidebar').default;
 | hasActivityFeed | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | hasMetadata | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | hasSkills | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| hasVersions | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 | language | string | `en-US` | *See the [Internationalization](../README.md#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](../README.md#internationalization) section* |
 | metadataSidebarProps | MetadataSidebarProps | `{}` | *See below* |
@@ -56,7 +57,6 @@ var ContentSidebar = require('./ContentSidebar').default;
 | hasAccessStats | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 | hasNotices | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 | hasProperties | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
-| hasVersions | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 
 #### MetadataSidebarProps
 | Prop | Type | Default | Description |

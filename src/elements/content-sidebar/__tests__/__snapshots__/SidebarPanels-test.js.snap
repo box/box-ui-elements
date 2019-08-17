@@ -54,3 +54,15 @@ exports[`elements/content-sidebar/SidebarPanels render should render skills side
   />
 </Switch>
 `;
+
+exports[`elements/content-sidebar/SidebarPanels render should render versions 1`] = `
+<Switch>
+  <Route
+    path="/:sidebar/versions/:versionId?"
+    render={[Function]}
+  />
+  <Route
+    render={[Function]}
+  />
+</Switch>
+`;
