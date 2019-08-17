@@ -552,11 +552,6 @@ class Feed extends Base {
 
         Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)))
             .then(() => {
-                return Promise.all(
-                    task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
-                );
-            })
-            .then(() => {
                 this.tasksNewAPI.updateTask({
                     file,
                     task,
@@ -578,6 +573,11 @@ class Feed extends Base {
                         this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
                     },
                 });
+            })
+            .then(() => {
+                return Promise.all(
+                    task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
+                );
             })
             .catch((e: ElementsXhrError) => {
                 this.updateFeedItem({ isPending: false }, task.id);

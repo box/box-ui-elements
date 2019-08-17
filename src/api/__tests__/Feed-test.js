@@ -788,7 +788,7 @@ describe('api/Feed', () => {
 
             await new Promise(r => setTimeout(r, 0));
 
-            expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
+            expect(feed.tasksNewAPI.updateTask).toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(mockErrorCallback).toBeCalled();
         });
