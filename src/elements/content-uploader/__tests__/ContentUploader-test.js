@@ -1,9 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../../constants';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import {
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_STAGED,
+    STATUS_COMPLETE,
+    VIEW_UPLOAD_SUCCESS,
+} from '../../../constants';
 import Footer from '../Footer';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
