@@ -41,6 +41,7 @@ type ExternalProps = {
 };
 
 type PropsWithoutContext = {
+    elementId: string,
     fileId: string,
 } & ExternalProps;
 
@@ -378,6 +379,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
     render() {
         const { editors, file, error, isLoading, templates }: State = this.state;
+        const { elementId }: Props = this.props;
         const showEditor = !!file && !!templates && !!editors;
         const showLoadingIndicator = !error && !showEditor;
         const canEdit = this.canEdit();
@@ -400,6 +402,8 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                     ) : null
                 }
                 className="bcs-metadata"
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_METADATA}
                 title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_METADATA)}
             >
                 {error && (

@@ -228,6 +228,7 @@ class Sidebar extends React.Component<Props, State> {
                     <React.Fragment>
                         <SidebarNav
                             additionalTabs={additionalTabs}
+                            elementId={this.id}
                             fileId={fileId}
                             hasActivity={hasActivity}
                             hasAdditionalTabs={hasAdditionalTabs}
@@ -239,6 +240,7 @@ class Sidebar extends React.Component<Props, State> {
                         <SidebarPanels
                             activitySidebarProps={activitySidebarProps}
                             currentUser={currentUser}
+                            elementId={this.id}
                             detailsSidebarProps={detailsSidebarProps}
                             file={file}
                             fileId={fileId}

@@ -21,6 +21,8 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     />
   }
   className="bcs-activity"
+  elementId=""
+  sidebarView="activity"
   title={
     <FormattedMessage
       defaultMessage="Activity"
