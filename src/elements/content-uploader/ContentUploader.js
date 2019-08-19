@@ -1133,6 +1133,7 @@ class ContentUploader extends Component<Props, State> {
                             isVisible={isVisible}
                             items={items}
                             onItemActionClick={this.onClick}
+                            onRemoveActionClick={this.removeFileFromUploadQueue.bind(this)}
                             onUploadsManagerActionClick={this.clickAllWithStatus}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}

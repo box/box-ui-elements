@@ -9,19 +9,25 @@ import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import nameCellRenderer from './nameCellRenderer';
 import progressCellRenderer from './progressCellRenderer';
 import actionCellRenderer from './actionCellRenderer';
+import removeCellRenderer from './removeCellRenderer';
+import resumeCellRenderer from './resumeCellRenderer';
 import './ItemList.scss';
 
 type Props = {
+    isResumableUploadsEnabled?: boolean,
     items: UploadItem[],
     onClick: Function,
+    onRemoveClick?: Function,
 };
 
-const ItemList = ({ items, onClick }: Props) => (
+const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveClick }: Props) => (
     <AutoSizer>
         {({ width, height }) => {
-            const nameCell = nameCellRenderer();
+            const nameCell = nameCellRenderer(isResumableUploadsEnabled);
             const progressCell = progressCellRenderer();
             const actionCell = actionCellRenderer(onClick);
+            const resumeCell = resumeCellRenderer(onClick);
+            const removeCell = removeCellRenderer(onRemoveClick);
 
             return (
                 <Table
@@ -44,13 +50,26 @@ const ItemList = ({ items, onClick }: Props) => (
                         style={{ textAlign: 'right' }}
                         width={300}
                     />
-                    <Column
-                        cellRenderer={actionCell}
-                        dataKey="status"
-                        flexShrink={0}
-                        style={{ marginRight: 18 }}
-                        width={25}
-                    />
+                    {isResumableUploadsEnabled ? (
+                        <Column cellRenderer={resumeCell} dataKey="status" flexShrink={0} width={25} />
+                    ) : (
+                        <Column
+                            cellRenderer={actionCell}
+                            dataKey="status"
+                            flexShrink={0}
+                            style={{ marginRight: 18 }}
+                            width={25}
+                        />
+                    )}
+                    {isResumableUploadsEnabled && (
+                        <Column
+                            cellRenderer={removeCell}
+                            dataKey="remove"
+                            flexShrink={0}
+                            style={{ marginRight: 18 }}
+                            width={25}
+                        />
+                    )}
                 </Table>
             );
         }}

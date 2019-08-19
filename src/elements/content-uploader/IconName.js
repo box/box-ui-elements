@@ -8,20 +8,37 @@ import FileIcon from '../../icons/file-icon/FileIcon';
 import IconFolderPersonal from '../../icons/folder/IconFolderPersonal';
 import ItemName from './ItemName';
 import './IconName.scss';
+import QuarantineBadge from '../../icons/badges/QuarantineBadge';
+import Badgeable from '../../components/badgeable';
+import { STATUS_ERROR } from '../../constants';
 
 type Props = {
     extension: string,
     isFolder?: boolean,
+    isResumableUploadsEnabled: boolean,
     name: string,
+    status: UploadStatus,
 };
 
-const IconName = ({ name, extension, isFolder = false }: Props) => (
-    <div className="bcu-item-icon-name">
-        <div className="bcu-item-icon">{isFolder ? <IconFolderPersonal /> : <FileIcon extension={extension} />}</div>
-        <div className="bcu-item-name">
-            <ItemName name={name} />
+const IconName = ({ name, extension, isFolder = false, isResumableUploadsEnabled, status }: Props) => {
+    let icon = isFolder ? <IconFolderPersonal /> : <FileIcon extension={extension} />;
+
+    if (isResumableUploadsEnabled && status === STATUS_ERROR) {
+        icon = (
+            <Badgeable className="bcu-icon-badge" bottomRight={<QuarantineBadge />}>
+                {icon}
+            </Badgeable>
+        );
+    }
+
+    return (
+        <div className="bcu-item-icon-name">
+            <div className="bcu-item-icon">{icon}</div>
+            <div className="bcu-item-name">
+                <ItemName name={name} />
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default IconName;
