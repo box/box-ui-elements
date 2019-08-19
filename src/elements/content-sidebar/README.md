@@ -10,13 +10,13 @@ var ContentSidebar = require('./ContentSidebar').default;
             hasAccessStats: true,
             hasClassification: true,
             hasRetentionPolicy: true,
-            hasVersions: true,
         }}
         features={FEATURES}
         fileId={FILE_ID}
         hasActivityFeed
         hasMetadata
         hasSkills
+        hasVersions
         token={TOKEN}
         {...PROPS}
     />

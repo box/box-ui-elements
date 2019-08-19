@@ -132,6 +132,7 @@ const SidebarPanels = ({
                             onVersionHistoryClick={onVersionHistoryClick}
                             startMarkName={MARK_NAME_JS_LOADING_DETAILS}
                             {...detailsSidebarProps}
+                            hasVersions={hasVersions}
                             refreshIdentity={refreshIdentity}
                         />
                     )}

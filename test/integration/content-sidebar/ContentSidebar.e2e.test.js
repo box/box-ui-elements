@@ -74,7 +74,7 @@ describe('ContentSidebar', () => {
     describe('version history', () => {
         beforeEach(() => {
             helpers.load({
-                features: { versions: true },
+                hasVersions: true,
                 fileId: Cypress.env('FILE_ID_DOC_VERSIONED'),
             });
         });
