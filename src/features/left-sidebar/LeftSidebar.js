@@ -246,6 +246,8 @@ class LeftSidebar extends React.Component<Props, State> {
             );
 
         const classes = classNames('left-sidebar-list', className, {
+            'is-loading-empty': showLoadingIndicator && menuItems && menuItems.length === 0,
+            'is-loading': showLoadingIndicator && menuItems && menuItems.length > 0,
             'lsb-scrollable-shadow-top': this.state.isScrollableAbove,
             'lsb-scrollable-shadow-bottom': this.state.isScrollableBelow,
         });
