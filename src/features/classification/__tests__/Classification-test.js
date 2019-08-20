@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Classification from '../Classification';
+import ClassifiedBadge from '../ClassifiedBadge';
 
 describe('features/classification/Classification', () => {
     const getWrapper = (props = {}) => shallow(<Classification {...props} />);
@@ -12,9 +13,11 @@ describe('features/classification/Classification', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render add classification badge', () => {
+    test('should render empty when classification does not exist but is editable', () => {
         const wrapper = getWrapper();
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(ClassifiedBadge).length).toBe(0);
+        expect(wrapper.find('.bdl-Classification-advisoryMessage').length).toBe(0);
+        expect(wrapper.find('.bdl-Classification-missingMessage').length).toBe(0);
     });
 
     test('should render not classified message', () => {

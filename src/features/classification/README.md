@@ -21,11 +21,6 @@ Renders a classification badge and advisory message.
 />
 ```
 
-**Not Classified Badge to add classification**
-```jsx
-<Classification />
-```
-
 **Not Classified Text**
 ```jsx
 <Classification messageStyle="inline" />

@@ -6,11 +6,6 @@ const messages = defineMessages({
         description: 'Button to add classification on an item',
         id: 'boxui.classification.add',
     },
-    addClassification: {
-        defaultMessage: 'CLASSIFY',
-        description: 'Button to add classification on an item',
-        id: 'boxui.classification.addClassification',
-    },
     classification: {
         defaultMessage: 'Classification',
         description: 'Header for classification section in sidebar',
