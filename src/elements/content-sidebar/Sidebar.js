@@ -47,7 +47,6 @@ type Props = {
     metadataSidebarProps: MetadataSidebarProps,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
-    refreshIdentity?: boolean,
     versionsSidebarProps: VersionsSidebarProps,
 };
 
@@ -68,6 +67,8 @@ class Sidebar extends React.Component<Props, State> {
     id: string = uniqueid('bcs_');
 
     props: Props;
+
+    sidebarPanelsRef: React.Ref<any> = React.createRef();
 
     state: State;
 
@@ -165,6 +166,16 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     /**
+     * Refreshes the sidebar panel
+     * @returns {void}
+     */
+    refresh(): void {
+        if (this.sidebarPanelsRef && this.sidebarPanelsRef.current) {
+            this.sidebarPanelsRef.current.refresh();
+        }
+    }
+
+    /**
      * Helper to set the local store open state based on the location open state, if defined
      */
     setForcedByLocation(): void {
@@ -193,7 +204,6 @@ class Sidebar extends React.Component<Props, State> {
             metadataEditors,
             metadataSidebarProps,
             onVersionChange,
-            refreshIdentity,
             versionsSidebarProps,
         }: Props = this.props;
         const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
@@ -242,7 +252,7 @@ class Sidebar extends React.Component<Props, State> {
                             metadataSidebarProps={metadataSidebarProps}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
-                            refreshIdentity={refreshIdentity}
+                            ref={this.sidebarPanelsRef}
                             versionsSidebarProps={versionsSidebarProps}
                         />
                     </React.Fragment>

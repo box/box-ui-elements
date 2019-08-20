@@ -10,6 +10,14 @@ import ES6Wrapper from './ES6Wrapper';
 import ContentPreviewResponsive from '../content-preview';
 
 class ContentPreview extends ES6Wrapper {
+    /**
+     * Helper to programmatically refresh the preview's sidebar panel
+     * @returns {void}
+     */
+    refreshContentSidebar(): void {
+        this.getComponent().refreshContentSidebar();
+    }
+
     /** @inheritdoc */
     render() {
         render(

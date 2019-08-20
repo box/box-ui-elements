@@ -31,7 +31,6 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: string,
-    refreshIdentity?: boolean,
     versionId?: string,
 };
 
@@ -74,10 +73,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.fetchData();
     }
 
-    componentDidUpdate({ fileId: prevFileId, refreshIdentity: prevRefreshIdentity, versionId: prevVersionId }: Props) {
-        const { fileId, refreshIdentity, versionId } = this.props;
+    componentDidUpdate({ fileId: prevFileId, versionId: prevVersionId }: Props) {
+        const { fileId, versionId } = this.props;
 
-        if (fileId !== prevFileId || refreshIdentity !== prevRefreshIdentity) {
+        if (fileId !== prevFileId) {
             this.initialize();
             this.setState({ isLoading: true }, this.fetchData);
         }
@@ -218,6 +217,11 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         const { versions } = this.state;
         return versions[0] ? versions[0].id : null;
     };
+
+    refresh(): void {
+        this.initialize();
+        this.setState({ isLoading: true }, this.fetchData);
+    }
 
     sortVersions(versions?: Array<BoxItemVersion> = []): Array<BoxItemVersion> {
         return [...versions].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
