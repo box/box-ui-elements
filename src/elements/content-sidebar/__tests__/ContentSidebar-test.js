@@ -253,15 +253,13 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             instance = wrapper.instance();
         });
 
-        test.each`
-            testcase   | initialValue | expectedResult
-            ${'null'}  | ${null}      | ${true}
-            ${'false'} | ${false}     | ${true}
-            ${'true'}  | ${true}      | ${false}
-        `('should change the refreshIdentity state: $testcase', ({ initialValue, expectedResult }) => {
-            instance.setState({ refreshIdentity: initialValue });
+        test('should call sidebarRef refresh method when refresh is called', () => {
+            const refresh = jest.fn();
+            instance.sidebarRef = { refresh };
+
             instance.refresh();
-            expect(instance.state.refreshIdentity).toEqual(expectedResult);
+
+            expect(refresh).toHaveBeenCalled();
         });
     });
 });

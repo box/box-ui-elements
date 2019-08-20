@@ -97,7 +97,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     data-testid="task"
     key="taskt_345"
   >
-    <Component
+    <ForwardRef
       assigned_to={
         Object {
           "entries": Array [
