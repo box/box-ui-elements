@@ -182,6 +182,7 @@ export const CLIENT_NAME_OPEN_WITH = 'ContentOpenWith';
 /* ---------------------- Statuses -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';
 export const STATUS_IN_PROGRESS: 'inprogress' = 'inprogress';
+export const STATUS_STAGED: 'staged' = 'staged';
 export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
 
@@ -208,6 +209,7 @@ export const ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT = 'pending_app_fold
 export const ERROR_CODE_FETCH_FILE = 'fetch_file_error';
 export const ERROR_CODE_FETCH_FILE_DUE_TO_POLICY = 'forbidden_by_policy';
 export const ERROR_CODE_FETCH_FOLDER = 'fetch_folder_error';
+export const ERROR_CODE_FETCH_WEBLINK = 'fetch_weblink_error';
 export const ERROR_CODE_FETCH_CLASSIFICATION = 'fetch_classification_error';
 export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';
 export const ERROR_CODE_FETCH_CURRENT_VERSION = 'fetch_current_version_error';

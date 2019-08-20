@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import PlainButton from '../../../components/plain-button';
+import { MenuItem } from '../../../components/menu';
 import './VersionsItemAction.scss';
 
 type Props = {
@@ -16,19 +16,15 @@ type Props = {
 };
 
 const VersionsItemAction = ({ action, children, fileId, isCurrent, ...rest }: Props) => (
-    <li className="bcs-VersionsItemAction">
-        <PlainButton // Button element is required to trigger resin events
-            className="bcs-VersionsItemAction-button menu-item"
-            data-resin-iscurrent={isCurrent}
-            data-resin-itemid={fileId}
-            data-resin-target={action}
-            role="menuitem"
-            type="button"
-            {...rest}
-        >
-            {children}
-        </PlainButton>
-    </li>
+    <MenuItem
+        className="bcs-VersionsItemAction"
+        data-resin-iscurrent={isCurrent}
+        data-resin-itemid={fileId}
+        data-resin-target={action}
+        {...rest}
+    >
+        {children}
+    </MenuItem>
 );
 
 export default VersionsItemAction;

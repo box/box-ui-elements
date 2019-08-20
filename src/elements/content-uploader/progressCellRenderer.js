@@ -16,6 +16,7 @@ import {
     ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
     STATUS_ERROR,
     STATUS_IN_PROGRESS,
+    STATUS_STAGED,
 } from '../../constants';
 
 type Props = {
@@ -60,6 +61,7 @@ export default () => ({ rowData }: Props) => {
 
     switch (status) {
         case STATUS_IN_PROGRESS:
+        case STATUS_STAGED:
             return <ItemProgress {...rowData} />;
         case STATUS_ERROR:
             return getErrorMessage(code, name);
