@@ -7,8 +7,6 @@
 import * as React from 'react';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
 import MoreTabPlaceholder from './MoreTabPlaceholder';
-
-import './AdditionalTabs.scss';
 import './AdditionalTabsLoading.scss';
 
 // Loading layout for the sidebar's additional tabs
