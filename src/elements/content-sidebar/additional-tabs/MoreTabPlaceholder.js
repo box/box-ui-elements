@@ -7,7 +7,6 @@
 import * as React from 'react';
 import { bdlGray10 } from '../../../styles/variables';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
-import './AdditionalTabs.scss';
 
 const MoreTabPlaceholder = () => {
     return (
