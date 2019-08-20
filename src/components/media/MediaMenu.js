@@ -17,9 +17,11 @@ type Props = {
     dropdownProps?: {},
     /** is the dropdown menu button disabled */
     isDisabled: boolean,
+    /** Additional props for the Menu */
+    menuProps?: {},
 };
 
-const MediaMenu = ({ className, children, isDisabled, dropdownProps, ...rest }: Props) => (
+const MediaMenu = ({ className, children, isDisabled, dropdownProps, menuProps, ...rest }: Props) => (
     <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
         <PlainButton
             isDisabled={isDisabled}
@@ -29,13 +31,14 @@ const MediaMenu = ({ className, children, isDisabled, dropdownProps, ...rest }: 
         >
             <IconEllipsis color={bdlGray50} height={16} width={16} />
         </PlainButton>
-        <Menu>{children}</Menu>
+        <Menu {...menuProps}>{children}</Menu>
     </DropdownMenu>
 );
 
 MediaMenu.defaultProps = {
     dropdownProps: {},
     isDisabled: false,
+    menuProps: {},
 };
 
 export default MediaMenu;
