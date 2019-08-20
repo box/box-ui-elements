@@ -1,0 +1,279 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const colors = require('colors/safe');
+const { promisify } = require('util');
+const invert = require('lodash/invert');
+const trimStart = require('lodash/trimStart');
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
+
+/*
+    The BDL classname manager is a tool to help identify and correct the usage of classnames
+    names across box-ui-elements, and other projects.
+
+    USAGE
+
+    How to use this tool in "box-ui-elements"
+    (1) find . -name "*.scss" -exec ../scripts/utils/bdlClassnameManager swap {} \;
+    (2) find . -name "*.scss" -exec ../scripts/utils/bdlClassnameManager extend {} \;
+    (3) find . -not -name "*test.js" -and -name "*.js" -exec ../scripts/utils/bdlClassnameManager append {} \;
+
+    How to use this tool in other projects that have "box-ui-elements" as a dependency
+    (1) find . -name "*.scss" -exec ../scripts/utils/bdlClassnameManager swap {} \;
+    (2) find . -not -name "*test.js" -and -name "*.js" -exec ../scripts/utils/bdlClassnameManager swap {} \;
+
+    Please note that this tool will not catch all cases, so reviewing changes may be required.
+*/
+
+const conversionMap = {
+    // 'btn': 'bdl-Button',
+    // 'btn-group': 'bdl-ButtonGroup',
+    // 'btn-plain': 'bdl-Button--plain',
+    // 'btn-primary': 'bdl-Button--primary',
+    // 'is-disabled': 'bdl-is-disabled',
+    // 'label': 'bdl-Label',
+    // 'pill': 'bdl-Pill',
+    // 'pill-error': 'bdl-Pill--error',
+    // 'select-button': 'bdl-SelectButton',
+    // 'toggle': 'bdl-Toggle',
+    // 'tooltip': 'bdl-Tooltip',
+};
+const scssPrefix = '.';
+const jsPrefixes = ["'", '"', '`'];
+
+function lengthSorter(a, b) {
+    return a.length > b.length ? -1 : 1;
+}
+
+function findAndReplaceSCSS(toReplace, match, replaceWith) {
+    return toReplace.replace(new RegExp(`\\${match}(?!-)`, 'g'), replaceWith);
+}
+
+function findAndReplaceJS(toReplace, match, replaceWith) {
+    return toReplace.replace(new RegExp(`(?<!-)${match}(?!-)`, 'g'), replaceWith);
+}
+
+/* eslint-disable no-console */
+function printHelp() {
+    console.log(`Usage: ${process.argv[1].split('/').pop()} operation fileName [--verbose]`);
+    console.log('\nSupported operations:');
+    console.log('\tcheck\t\tcheck to see if a file contains deprecated values (returns error if it does)');
+    console.log('\tswap\t\treplace known-deprecated classes in a JS or SCSS file');
+    console.log('\tappend\t\tappend new namespaced clases to known-deprecated classes in a JS or SCSS file');
+    console.log('\textend\t\tadd @extend to SCSS files with new namespaced classes');
+}
+
+function printVerboseOperationMessage(fileName, matches) {
+    console.log(colors.cyan('File name:'), colors.white(fileName));
+    console.log(colors.cyan('Found:'), matches);
+}
+
+async function handleWriteFile(fileContentsToParse, fileName, isVerbose, matches) {
+    try {
+        if (matches.length > 0) {
+            await writeFile(fileName, fileContentsToParse);
+            console.log(
+                colors.cyan(`Replaced ${matches.length} classname value${matches.length !== 1 ? 's' : ''} in:\t`),
+                fileName,
+            );
+        } else if (isVerbose) {
+            console.warn(colors.yellow('No changes needed to file:\t'), fileName);
+        }
+    } catch (error) {
+        console.error(colors.red('Cannot write updated file to disk\n'), error);
+        process.exit(1);
+    }
+}
+
+async function processFileContents({ fileContentsToParse, fileName, isVerbose, sourceNameRegex }, handleMatch) {
+    const matches = [...new Set(fileContentsToParse.match(sourceNameRegex))];
+
+    if (isVerbose) {
+        printVerboseOperationMessage(fileName, matches);
+    }
+
+    // sort prevents root classnames ('btn') from preemptively changing longer classnames ('btn-primary')
+    fileContentsToParse = matches.sort(lengthSorter).reduce(handleMatch, fileContentsToParse);
+    await handleWriteFile(fileContentsToParse, fileName, isVerbose, matches);
+}
+
+async function swap({ currentConversionMap, fileType, ...operationParams }) {
+    processFileContents(operationParams, (fileContents, match) => {
+        if (fileType === 'scss') {
+            fileContents = findAndReplaceSCSS(
+                fileContents,
+                match,
+                `${scssPrefix}${currentConversionMap[trimStart(match, scssPrefix)]}`,
+            );
+        } else if (fileType === 'js') {
+            const quotationMark = match[0];
+            if (jsPrefixes.includes(quotationMark)) {
+                fileContents = findAndReplaceJS(
+                    fileContents,
+                    match,
+                    `${quotationMark}${currentConversionMap[trimStart(match, quotationMark)]}`,
+                );
+            } else if (operationParams.isVerbose) {
+                console.warn(colors.yellow('Incorrect match for js files. skipping', operationParams.fileName, '...'));
+            }
+        }
+        return fileContents;
+    });
+}
+
+async function append({ currentConversionMap, fileType, ...operationParams }) {
+    processFileContents(operationParams, (fileContents, match) => {
+        if (fileType === 'scss') {
+            fileContents = findAndReplaceSCSS(
+                fileContents,
+                match,
+                `${match}, ${scssPrefix}${currentConversionMap[trimStart(match, scssPrefix)]}`,
+            );
+        } else if (fileType === 'js') {
+            const quotationMark = match[0];
+            if (jsPrefixes.includes(quotationMark)) {
+                fileContents = findAndReplaceJS(
+                    fileContents,
+                    match,
+                    `${match} ${currentConversionMap[trimStart(match, quotationMark)]}`,
+                );
+            } else if (operationParams.isVerbose) {
+                console.warn(colors.yellow('Incorrect match for js files. skipping', operationParams.fileName, '...'));
+            }
+        }
+        return fileContents;
+    });
+}
+
+async function extend({ currentConversionMap, fileType, ...operationParams }) {
+    processFileContents(operationParams, (fileContents, match, index) => {
+        if (fileType === 'scss') {
+            const matchReplace = match.replace('.', '');
+            if (index === 0) {
+                fileContents = fileContents.concat(
+                    '\n\n/*\n* Section below is for bdl-namespace backwards compatibility.\n* Do not add changes below this line.\n*/',
+                );
+            }
+            fileContents = fileContents.concat(
+                `\n${scssPrefix}${currentConversionMap[matchReplace]} {\n    @extend ${match};\n}\n`,
+            );
+        } else {
+            console.error(
+                colors.yellow('Unrecognized file type for extend operation. skipping', operationParams.fileName, '...'),
+            );
+            process.exit(0);
+        }
+        return fileContents;
+    });
+}
+
+async function main() {
+    // argv 0 and 1 are the node instance and the script name respectively.
+    // argv 2 is the operation: check, swap, append, extend
+    const operation = process.argv[2];
+
+    // argv 3 is the file (and extension)
+    const fileName = process.argv[3];
+
+    if (!fileName) {
+        console.error(colors.red('Missing parameter:'), colors.white('fileName'));
+        process.exit(1);
+    }
+    if (!Object.keys(conversionMap).length) {
+        console.error(colors.red('Missing values in: '), colors.white('conversionMap'));
+        process.exit(1);
+    }
+    const fileType = fileName.split('.').pop();
+    const isVerbose = process.argv[4] === '--verbose';
+    const isExtend = operation === 'extend';
+    const currentConversionMap = isExtend ? invert(conversionMap) : conversionMap;
+
+    let sourceNameRegex;
+    if (fileType === 'scss') {
+        const converter = entry => `\\${scssPrefix}${entry}(?!-)`;
+        sourceNameRegex = new RegExp(
+            Object.keys(currentConversionMap)
+                .map(converter)
+                // Sorting enables finding matches for longer classnames before their root counterparts
+                // E.g. compare results for /\.btn|\.btn-primary/g to /\.btn-primary|\.btn/g
+                .sort(lengthSorter)
+                .join('|'),
+            'g',
+        );
+    } else if (fileType === 'js') {
+        // The majority of .js classnames are surrounded by quotation marks
+        // Restrict to those prefixes to avoid overrwriting variable names
+        const converter = entry => jsPrefixes.map(prefix => `${prefix}${entry}`).join('|');
+        sourceNameRegex = new RegExp(
+            Object.keys(currentConversionMap)
+                .map(converter)
+                .join('|'),
+            'g',
+        );
+    } else {
+        console.error(colors.yellow('Unrecognized file type for this tool. skipping', fileName, '...'));
+        process.exit(0);
+    }
+
+    try {
+        const fileContentsToParse = await readFile(fileName, { encoding: 'utf8' });
+        const operationParams = {
+            currentConversionMap,
+            fileContentsToParse,
+            fileName,
+            fileType,
+            isVerbose,
+            sourceNameRegex,
+        };
+
+        switch (operation) {
+            case 'check': {
+                // determine if the file is using one of the legacy variable names
+                const foundMatch = sourceNameRegex.test(fileContentsToParse);
+                if (foundMatch) {
+                    // Exit with an error code: we should not find bad names
+                    if (isVerbose) {
+                        console.error(colors.red('Bad BDL class name found in', fileName));
+                    }
+                    process.exit(1);
+                }
+
+                break;
+            }
+            case 'append': {
+                append(operationParams);
+                break;
+            }
+            case 'extend': {
+                extend(operationParams);
+                break;
+            }
+            case 'swap': {
+                swap(operationParams);
+                break;
+            }
+            default:
+                console.error(colors.red('Unrecognized operation:'), colors.white(operation));
+                console.error(
+                    colors.red(
+                        'use "swap" to replace names, "append" to add new classes, "extend" to add @extend property, or "check" to verify if a file contains deprecated values',
+                    ),
+                );
+                process.exit(1);
+                break;
+        }
+    } catch (error) {
+        console.error(
+            colors.red('Cannot read file, because it does not exist or the wrong path is specified\n'),
+            error,
+        );
+        process.exit(1);
+    }
+}
+
+if (process.argv.length < 3) {
+    printHelp();
+} else {
+    main();
+}
