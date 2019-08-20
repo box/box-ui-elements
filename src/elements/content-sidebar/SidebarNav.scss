@@ -20,7 +20,7 @@
 
     .bcs-SidebarNav-overflow {
         display: flex;
-        flex: 1 1 0;
+        flex: 1 1 1px; // IE11 doesn't support flex-basis of 0
         flex-direction: column;
         overflow: hidden;
 
@@ -31,14 +31,8 @@
             display: block;
             flex: 0 0 1px;
             height: 1px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
             width: 44px;
-        }
-
-        &::before {
-            margin-bottom: 16px;
-            margin-top: 16px;
         }
 
         .bdl-AdditionalTab {
@@ -47,7 +41,10 @@
 
         .bdl-AdditionalTabs {
             flex: 1 1 100%;
-            overflow: auto;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding-bottom: 16px;
+            padding-top: 16px;
         }
     }
 
