@@ -29,8 +29,8 @@ class SidebarUtils {
      * @return {Boolean} true if we should render
      */
     static canHaveDetailsSidebar({ detailsSidebarProps = {} }: ContentSidebarProps): boolean {
-        const { hasProperties, hasAccessStats, hasClassification, hasNotices } = detailsSidebarProps;
-        return !!hasProperties || !!hasAccessStats || !!hasClassification || !!hasNotices;
+        const { hasProperties, hasAccessStats, hasClassification, hasVersions, hasNotices } = detailsSidebarProps;
+        return !!hasProperties || !!hasAccessStats || !!hasClassification || !!hasVersions || !!hasNotices;
     }
 
     /**
