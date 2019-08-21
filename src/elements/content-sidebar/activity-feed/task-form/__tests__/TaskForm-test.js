@@ -191,13 +191,31 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         expect(wrapper.find('PillSelectorDropdown').hasClass('scrollable'));
     });
 
-    test('should show inline error when error prop is passed', () => {
-        const wrapper = render({
-            createTask: jest.fn(),
-            error: 'error',
-        });
-        expect(wrapper.find('.inline-alert').length).toBe(1);
-    });
+    test.each([
+        ['GENERAL', 'EDIT', undefined, 0],
+        ['GENERAL', 'EDIT', { status: 403 }, 1],
+        ['GENERAL', 'EDIT', { status: 404 }, 1],
+        ['GENERAL', 'CREATE', undefined, 0],
+        ['GENERAL', 'CREATE', { status: 403 }, 1],
+        ['GENERAL', 'CREATE', { status: 404 }, 1],
+        ['APPROVAL', 'EDIT', undefined, 0],
+        ['APPROVAL', 'EDIT', { status: 403 }, 1],
+        ['APPROVAL', 'EDIT', { status: 404 }, 1],
+        ['APPROVAL', 'CREATE', undefined, 0],
+        ['APPROVAL', 'CREATE', { status: 403 }, 1],
+        ['APPROVAL', 'CREATE', { status: 404 }, 1],
+    ])(
+        'when type is %s and edit mode is %s, with error obj %o, we show the proper inline error',
+        (taskType, editMode, error, alertCount) => {
+            const wrapper = render({
+                createTask: jest.fn(),
+                error,
+                taskType,
+                editMode,
+            });
+            expect(wrapper.find('.inline-alert').length).toBe(alertCount);
+        },
+    );
 
     describe('handleDueDateChange()', () => {
         test('should set the approval date to be one millisecond before midnight of the next day', async () => {

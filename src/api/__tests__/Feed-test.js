@@ -717,7 +717,10 @@ describe('api/Feed', () => {
 
         test('should call the error handling when unable to create new task collaborator', async () => {
             const mockErrorCallback = jest.fn();
+            const mockSuccessCallback = jest.fn();
+
             feed.createTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
+            feed.deleteTaskCollaborator = jest.fn().mockResolvedValue();
 
             const task = {
                 id: '1',
@@ -745,17 +748,20 @@ describe('api/Feed', () => {
                 ],
             };
 
-            feed.updateTaskNew(file, task, jest.fn(), mockErrorCallback);
+            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
 
             await new Promise(r => setTimeout(r, 0));
 
             expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
+            expect(feed.tasksNewAPI.getTask).not.toBeCalled();
+            expect(feed.deleteTaskCollaborator).not.toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(mockErrorCallback).toBeCalled();
         });
 
         test('should call the error handling when unable to delete existing task collaborator', async () => {
             const mockErrorCallback = jest.fn();
+            const mockSuccessCallback = jest.fn();
             feed.deleteTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
 
             const task = {
@@ -784,11 +790,12 @@ describe('api/Feed', () => {
                 ],
             };
 
-            feed.updateTaskNew(file, task, jest.fn(), mockErrorCallback);
+            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
 
             await new Promise(r => setTimeout(r, 0));
 
             expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.tasksNewAPI.getTask).toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(mockErrorCallback).toBeCalled();
         });
@@ -808,6 +815,7 @@ describe('api/Feed', () => {
             await new Promise(r => setTimeout(r, 0));
 
             expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.tasksNewAPI.getTask).toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(successCallback).toBeCalled();
         });

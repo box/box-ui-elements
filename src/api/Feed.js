@@ -562,11 +562,6 @@ class Feed extends Base {
                 });
             })
             .then(() => {
-                return Promise.all(
-                    task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
-                );
-            })
-            .then(() => {
                 return new Promise((resolve, reject) => {
                     this.tasksNewAPI.getTask({
                         file,
@@ -580,10 +575,6 @@ class Feed extends Base {
                                 task.id,
                             );
 
-                            if (!this.isDestroyed()) {
-                                successCallback();
-                            }
-
                             resolve();
                         },
                         errorCallback: (e: ElementsXhrError) => {
@@ -593,6 +584,17 @@ class Feed extends Base {
                         },
                     });
                 });
+            })
+            .then(() => {
+                return Promise.all(
+                    task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
+                );
+            })
+            .then(() => {
+                // everything succeeded, so call the passed in success callback
+                if (!this.isDestroyed()) {
+                    successCallback();
+                }
             })
             .catch((e: ElementsXhrError) => {
                 this.updateFeedItem({ isPending: false }, task.id);

@@ -39,7 +39,7 @@ import type {
 import './TaskForm.scss';
 
 type TaskFormProps = {|
-    error?: { status: number },
+    error?: { status: number }, // TODO: update to ElementsXhrError once API supports it
     isDisabled?: boolean,
     onCancel: () => any,
     onSubmitError: (e: ElementsXhrError) => any,
@@ -100,6 +100,41 @@ function convertAssigneesToSelectorItems(approvers: Array<TaskCollabAssignee>): 
 
         return newSelectorItem;
     });
+}
+
+function getEditErrorMessage(taskType: TaskType, editMode?: TaskEditMode, error?: { status: number }): React.Node {
+    const isEditMode = editMode === TASK_EDIT_MODE_EDIT;
+    const taskErrorMessage = isEditMode ? messages.taskUpdateErrorMessage : apiMessages.taskCreateErrorMessage;
+    const isForbiddenErrorOnEdit = error && error.status && error.status === 403 && isEditMode;
+
+    if (!error) {
+        return null;
+    }
+
+    switch (taskType) {
+        case 'GENERAL':
+            return isForbiddenErrorOnEdit ? (
+                <InlineError title={<FormattedMessage {...messages.taskEditWarningTitle} />}>
+                    <FormattedMessage {...messages.taskGeneralAssigneeRemovalWarningMessage} />
+                </InlineError>
+            ) : (
+                <InlineError title={<FormattedMessage {...messages.taskCreateErrorTitle} />}>
+                    <FormattedMessage {...taskErrorMessage} />
+                </InlineError>
+            );
+        case 'APPROVAL':
+            return isForbiddenErrorOnEdit ? (
+                <InlineError title={<FormattedMessage {...messages.taskEditWarningTitle} />}>
+                    <FormattedMessage {...messages.taskApprovalAssigneeRemovalWarningMessage} />
+                </InlineError>
+            ) : (
+                <InlineError title={<FormattedMessage {...messages.taskCreateErrorTitle} />}>
+                    <FormattedMessage {...taskErrorMessage} />
+                </InlineError>
+            );
+        default:
+            return null;
+    }
 }
 
 class TaskForm extends React.Component<Props, State> {
@@ -313,7 +348,7 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     render() {
-        const { approverSelectorContacts, className, error, isDisabled, intl, editMode } = this.props;
+        const { approverSelectorContacts, className, error, isDisabled, intl, editMode, taskType } = this.props;
         const { dueDate, approvers, message, formValidityState, isLoading, completionRule } = this.state;
         const inputContainerClassNames = classNames('bcs-task-input-container', 'bcs-task-input-is-open', className);
         const isCreateEditMode = editMode === TASK_EDIT_MODE_CREATE;
@@ -332,25 +367,15 @@ class TaskForm extends React.Component<Props, State> {
         const submitButtonMessage = isCreateEditMode
             ? messages.tasksAddTaskFormSubmitLabel
             : messages.tasksEditTaskFormSubmitLabel;
-
-        // TODO: use `error` to determine if this came from 403 on update task - remove assignees
-        // make a little function to pick the message
-        const taskErrorMessage = isCreateEditMode
-            ? apiMessages.taskCreateErrorMessage
-            : messages.taskUpdateErrorMessage;
-
         const shouldShowCompletionRule = approvers.length > 0;
         const isCompletionRuleCheckboxDisabled = approvers.length <= 1;
         const isCompletionRuleCheckboxChecked = completionRule === TASK_COMPLETION_RULE_ANY;
+        const isForbiddenErrorOnEdit = !!(error && error.status && error.status === 403 && !isCreateEditMode);
 
         return (
             <div className={inputContainerClassNames} data-resin-component="taskform">
                 <div className="bcs-task-input-form-container">
-                    {error ? (
-                        <InlineError title={<FormattedMessage {...messages.taskCreateErrorTitle} />}>
-                            <FormattedMessage {...taskErrorMessage} />
-                        </InlineError>
-                    ) : null}
+                    {getEditErrorMessage(taskType, editMode, error)}
                     <Form
                         formValidityState={formValidityState}
                         onInvalidSubmit={this.handleInvalidSubmit}
@@ -359,7 +384,7 @@ class TaskForm extends React.Component<Props, State> {
                         <PillSelectorDropdown
                             className={pillSelectorOverlayClasses}
                             error={this.getErrorByFieldname('taskAssignees')}
-                            disabled={isLoading}
+                            disabled={isLoading || isForbiddenErrorOnEdit}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
@@ -388,7 +413,7 @@ class TaskForm extends React.Component<Props, State> {
                                 <Checkbox
                                     data-testid="task-form-completion-rule-checkbox"
                                     isChecked={isCompletionRuleCheckboxChecked}
-                                    isDisabled={isCompletionRuleCheckboxDisabled}
+                                    isDisabled={isCompletionRuleCheckboxDisabled || isForbiddenErrorOnEdit}
                                     label={<FormattedMessage {...messages.taskAnyCheckboxLabel} />}
                                     tooltip={intl.formatMessage(messages.taskAnyInfoTooltip)}
                                     name="completionRule"
@@ -400,7 +425,7 @@ class TaskForm extends React.Component<Props, State> {
                         <TextArea
                             className="bcs-task-name-input"
                             data-testid="task-form-name-input"
-                            disabled={isDisabled || isLoading}
+                            disabled={isDisabled || isLoading || isForbiddenErrorOnEdit}
                             error={this.getErrorByFieldname('taskName')}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormMessageLabel} />}
@@ -417,7 +442,7 @@ class TaskForm extends React.Component<Props, State> {
                                 [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                                 'data-testid': 'task-form-date-input',
                             }}
-                            isDisabled={isLoading}
+                            isDisabled={isLoading || isForbiddenErrorOnEdit}
                             isRequired={false}
                             label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
                             minDate={new Date()}
@@ -442,7 +467,7 @@ class TaskForm extends React.Component<Props, State> {
                                 className="bcs-task-input-submit-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
                                 data-testid="task-form-submit-button"
-                                isDisabled={isLoading}
+                                isDisabled={isLoading || isForbiddenErrorOnEdit}
                                 isLoading={isLoading}
                                 {...this.addResinInfo()}
                             >
