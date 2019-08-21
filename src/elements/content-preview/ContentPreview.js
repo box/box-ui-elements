@@ -158,7 +158,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     api: API;
 
-    contentSidebarRef: { current: null | ContentSidebar } = React.createRef();
+    contentSidebar: { current: null | ContentSidebar } = React.createRef();
 
     previewContainer: ?HTMLDivElement;
 
@@ -1091,7 +1091,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     refreshSidebar(): void {
-        const { current: contentSidebar } = this.contentSidebarRef;
+        const { current: contentSidebar } = this.contentSidebar;
 
         if (contentSidebar) {
             contentSidebar.refresh();
@@ -1205,7 +1205,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 history={history}
                                 isDefaultOpen={isLarge || isVeryLarge}
                                 language={language}
-                                ref={this.contentSidebarRef}
+                                ref={this.contentSidebar}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}

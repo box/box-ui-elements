@@ -19,14 +19,10 @@ import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_VERSIONS,
 } from '../../constants';
-import DetailsSidebar from './DetailsSidebar';
-import type { DetailsSidebarProps } from './DetailsSidebar';
-import ActivitySidebar from './ActivitySidebar';
-import type { ActivitySidebarProps } from './ActivitySidebar';
-import MetadataSidebar from './MetadataSidebar';
-import type { MetadataSidebarProps } from './MetadataSidebar';
-import VersionsSidebar from './versions';
-import type { VersionsSidebarProps } from './versions';
+import DetailsSidebar, { type DetailsSidebarProps } from './DetailsSidebar';
+import ActivitySidebar, { type ActivitySidebarProps } from './ActivitySidebar';
+import MetadataSidebar, { type MetadataSidebarProps } from './MetadataSidebar';
+import VersionsSidebar, { type VersionsSidebarProps } from './versions';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,

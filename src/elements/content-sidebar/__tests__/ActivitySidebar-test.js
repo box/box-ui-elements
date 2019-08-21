@@ -558,13 +558,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance = wrapper.instance();
         });
 
-        test('should refetch data when refresh is called', () => {
+        test('should fetch the feed items when refresh is called', () => {
             const fetchFeedItems = jest.fn();
             instance.fetchFeedItems = fetchFeedItems;
 
             instance.refresh();
 
-            expect(instance.fetchFeedItems.mock.calls.length).toEqual(1);
+            expect(fetchFeedItems).toHaveBeenCalled();
+            expect(fetchFeedItems).toHaveBeenCalledWith(true);
         });
     });
 });
