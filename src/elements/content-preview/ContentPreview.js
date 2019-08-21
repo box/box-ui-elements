@@ -47,6 +47,7 @@ import {
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import type { ErrorType } from '../common/flowTypes';
+import ContentSidebar from '../content-sidebar';
 import type { VersionChangeCallback } from '../content-sidebar/versions';
 import '../common/fonts.scss';
 import '../common/base.scss';
@@ -157,7 +158,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     api: API;
 
-    contentSidebarRef: React.Ref<any> = React.createRef();
+    contentSidebarRef: { current: null | ContentSidebar } = React.createRef();
 
     previewContainer: ?HTMLDivElement;
 
@@ -1089,9 +1090,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
      *
      * @return {void}
      */
-    refreshContentSidebar(): void {
-        if (this.contentSidebarRef && this.contentSidebarRef.current) {
-            this.contentSidebarRef.current.refresh();
+    refreshSidebar(): void {
+        const { current: contentSidebar } = this.contentSidebarRef;
+
+        if (contentSidebar) {
+            contentSidebar.refresh();
         }
     }
 

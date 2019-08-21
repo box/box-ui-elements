@@ -14,8 +14,8 @@ class ContentPreview extends ES6Wrapper {
      * Helper to programmatically refresh the preview's sidebar panel
      * @returns {void}
      */
-    refreshContentSidebar(): void {
-        this.getComponent().refreshContentSidebar();
+    refreshSidebar(): void {
+        this.getComponent().refreshSidebar();
     }
 
     /** @inheritdoc */

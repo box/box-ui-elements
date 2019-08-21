@@ -84,7 +84,7 @@ class ContentSidebar extends React.Component<Props, State> {
 
     api: API;
 
-    sidebarRef: React.Ref<any>;
+    sidebarRef: Sidebar;
 
     static defaultProps = {
         activitySidebarProps: {},

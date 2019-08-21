@@ -68,7 +68,7 @@ class Sidebar extends React.Component<Props, State> {
 
     props: Props;
 
-    sidebarPanelsRef: React.Ref<any> = React.createRef();
+    sidebarPanelsRef: { current: null | SidebarPanels } = React.createRef();
 
     state: State;
 
@@ -170,8 +170,10 @@ class Sidebar extends React.Component<Props, State> {
      * @returns {void}
      */
     refresh(): void {
-        if (this.sidebarPanelsRef && this.sidebarPanelsRef.current) {
-            this.sidebarPanelsRef.current.refresh();
+        const { current: sidebarPanels } = this.sidebarPanelsRef;
+
+        if (sidebarPanels) {
+            sidebarPanels.refresh();
         }
     }
 

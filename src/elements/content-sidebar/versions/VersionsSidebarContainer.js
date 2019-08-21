@@ -77,8 +77,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         const { fileId, versionId } = this.props;
 
         if (fileId !== prevFileId) {
-            this.initialize();
-            this.setState({ isLoading: true }, this.fetchData);
+            this.refresh();
         }
 
         if (versionId !== prevVersionId) {
