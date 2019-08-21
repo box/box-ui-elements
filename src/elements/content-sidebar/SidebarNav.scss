@@ -8,10 +8,50 @@
         justify-content: space-between;
     }
 
+    .bcs-SidebarNav-tabs {
+        display: flex;
+        flex: 1 1 100%;
+        flex-direction: column;
+    }
+
+    .bcs-SidebarNav-main {
+        flex: 0 1 auto;
+    }
+
+    .bcs-SidebarNav-overflow {
+        display: flex;
+        flex: 1 1 1px; // IE11 doesn't support flex-basis of 0
+        flex-direction: column;
+        overflow: hidden;
+
+        &::after,
+        &::before {
+            background: $bdl-gray-10;
+            content: '';
+            display: block;
+            flex: 0 0 1px;
+            height: 1px;
+            margin: 0 auto;
+            width: 44px;
+        }
+
+        .bdl-AdditionalTab {
+            flex-shrink: 0;
+        }
+
+        .bdl-AdditionalTabs {
+            flex: 1 1 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding-bottom: 16px;
+            padding-top: 16px;
+        }
+    }
+
     .bcs-SidebarNav-footer {
         align-items: center;
         display: flex;
-        height: 60px;
+        flex: 0 0 60px;
         justify-content: center;
 
         // Need to add these overriding styles because there is a specificity issue with .btn-plain
