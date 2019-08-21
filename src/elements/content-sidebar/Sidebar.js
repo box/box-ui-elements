@@ -16,7 +16,7 @@ import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
-import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
+import { withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
@@ -38,6 +38,7 @@ type Props = {
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
+    hasVersions: boolean,
     history: RouterHistory,
     isDefaultOpen?: boolean,
     isLoading?: boolean,
@@ -181,12 +182,12 @@ class Sidebar extends React.Component<Props, State> {
             className,
             currentUser,
             detailsSidebarProps,
-            features,
             file,
             fileId,
             getPreview,
             getViewer,
             hasAdditionalTabs,
+            hasVersions,
             isDefaultOpen,
             isLoading,
             metadataEditors,
@@ -195,13 +196,11 @@ class Sidebar extends React.Component<Props, State> {
             refreshIdentity,
             versionsSidebarProps,
         }: Props = this.props;
-
         const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
-        const hasVersions = isFeatureEnabled(features, 'versions');
         const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,

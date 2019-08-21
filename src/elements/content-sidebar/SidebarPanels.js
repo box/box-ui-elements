@@ -131,6 +131,7 @@ const SidebarPanels = ({
                             key={fileId}
                             onVersionHistoryClick={onVersionHistoryClick}
                             startMarkName={MARK_NAME_JS_LOADING_DETAILS}
+                            hasVersions={hasVersions}
                             {...detailsSidebarProps}
                             refreshIdentity={refreshIdentity}
                         />
