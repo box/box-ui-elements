@@ -39,7 +39,7 @@ import type {
 import './TaskForm.scss';
 
 type TaskFormProps = {|
-    error?: any,
+    error?: { status: number },
     isDisabled?: boolean,
     onCancel: () => any,
     onSubmitError: (e: ElementsXhrError) => any,
@@ -333,6 +333,8 @@ class TaskForm extends React.Component<Props, State> {
             ? messages.tasksAddTaskFormSubmitLabel
             : messages.tasksEditTaskFormSubmitLabel;
 
+        // TODO: use `error` to determine if this came from 403 on update task - remove assignees
+        // make a little function to pick the message
         const taskErrorMessage = isCreateEditMode
             ? apiMessages.taskCreateErrorMessage
             : messages.taskUpdateErrorMessage;

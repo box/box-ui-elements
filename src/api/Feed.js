@@ -552,32 +552,47 @@ class Feed extends Base {
 
         Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)))
             .then(() => {
-                this.tasksNewAPI.updateTask({
-                    file,
-                    task,
-                    successCallback: (taskData: Task) => {
-                        this.updateFeedItem(
-                            {
-                                ...taskData,
-                                isPending: false,
-                            },
-                            task.id,
-                        );
-
-                        if (!this.isDestroyed()) {
-                            successCallback();
-                        }
-                    },
-                    errorCallback: (e: ElementsXhrError) => {
-                        this.updateFeedItem({ isPending: false }, task.id);
-                        this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
-                    },
+                return new Promise((resolve, reject) => {
+                    this.tasksNewAPI.updateTask({
+                        file,
+                        task,
+                        successCallback: resolve,
+                        errorCallback: reject,
+                    });
                 });
             })
             .then(() => {
                 return Promise.all(
                     task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
                 );
+            })
+            .then(() => {
+                return new Promise((resolve, reject) => {
+                    this.tasksNewAPI.getTask({
+                        file,
+                        id: task.id,
+                        successCallback: (taskData: Task) => {
+                            this.updateFeedItem(
+                                {
+                                    ...taskData,
+                                    isPending: false,
+                                },
+                                task.id,
+                            );
+
+                            if (!this.isDestroyed()) {
+                                successCallback();
+                            }
+
+                            resolve();
+                        },
+                        errorCallback: (e: ElementsXhrError) => {
+                            this.updateFeedItem({ isPending: false }, task.id);
+                            this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
+                            reject();
+                        },
+                    });
+                });
             })
             .catch((e: ElementsXhrError) => {
                 this.updateFeedItem({ isPending: false }, task.id);
