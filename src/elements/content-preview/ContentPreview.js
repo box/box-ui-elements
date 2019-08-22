@@ -157,6 +157,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     api: API;
 
+    // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
     contentSidebar: { current: null | { refresh: Function } } = React.createRef();
 
     previewContainer: ?HTMLDivElement;
