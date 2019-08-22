@@ -8,7 +8,7 @@ import FileIcon from '../../icons/file-icon/FileIcon';
 import IconFolderPersonal from '../../icons/folder/IconFolderPersonal';
 import ItemName from './ItemName';
 import './IconName.scss';
-import QuarantineBadge from '../../icons/badges/QuarantineBadge';
+import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import Badgeable from '../../components/badgeable';
 import { STATUS_ERROR } from '../../constants';
 
@@ -25,7 +25,7 @@ const IconName = ({ name, extension, isFolder = false, isResumableUploadsEnabled
 
     if (isResumableUploadsEnabled && status === STATUS_ERROR) {
         icon = (
-            <Badgeable className="bcu-icon-badge" bottomRight={<QuarantineBadge />}>
+            <Badgeable className="bcu-icon-badge" bottomRight={<IconAlertDefault height={18} width={18} />}>
                 {icon}
             </Badgeable>
         );

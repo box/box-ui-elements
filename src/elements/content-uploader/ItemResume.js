@@ -14,7 +14,6 @@ import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } fro
 import messages from '../common/messages';
 
 const ICON_CHECK_COLOR = '#26C281';
-const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 104857600; // 100MB
 
 type Props = {
     isFolder?: boolean,
@@ -23,7 +22,7 @@ type Props = {
     status: UploadStatus,
 };
 
-const ItemResume = ({ status, size, onClick, isFolder = false }: Props) => {
+const ItemResume = ({ status, onClick, isFolder = false }: Props) => {
     let icon;
     let resin = {};
     let tooltip;
@@ -39,11 +38,7 @@ const ItemResume = ({ status, size, onClick, isFolder = false }: Props) => {
             break;
         case STATUS_ERROR:
             icon = <IconRetry height={24} width={24} />;
-            if (size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
-                tooltip = <FormattedMessage {...messages.resume} />;
-            } else {
-                tooltip = <FormattedMessage {...messages.retry} />;
-            }
+            tooltip = <FormattedMessage {...messages.resume} />;
             resin = { 'data-resin-target': 'uploadretry' };
             break;
         case STATUS_IN_PROGRESS:

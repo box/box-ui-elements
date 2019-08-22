@@ -11,16 +11,24 @@ import IconClose from '../../icons/general/IconClose';
 import messages from '../common/messages';
 
 type Props = {
+    isFailed: boolean,
     isUploading: boolean,
     onClick: Function,
 };
 
-const ItemRemove = ({ onClick, isUploading }: Props) => {
+const ItemRemove = ({ isFailed, isUploading, onClick }: Props) => {
     let resin = {};
+    let target = null;
     const tooltip = <FormattedMessage {...messages.remove} />;
 
     if (isUploading) {
-        resin = { 'data-resin-target': 'uploadcancel' };
+        target = 'uploadcancel';
+    } else if (isFailed) {
+        target = 'remove-failed';
+    }
+
+    if (target) {
+        resin = { 'data-resin-target': target };
     }
 
     return (
