@@ -354,7 +354,7 @@ class SharedLinkSettingsModal extends Component {
             <span className="bdl-SharedLinkSettingsModal-title">
                 <FormattedMessage {...messages.modalTitle} />
                 <Classification
-                    advisoryMessage={bannerPolicy ? bannerPolicy.body : undefined}
+                    definition={bannerPolicy ? bannerPolicy.body : undefined}
                     messageStyle="tooltip"
                     name={classification}
                     className="bdl-SharedLinkSettingsModal-classification"

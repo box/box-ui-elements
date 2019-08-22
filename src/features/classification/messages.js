@@ -11,6 +11,11 @@ const messages = defineMessages({
         description: 'Header for classification section in sidebar',
         id: 'boxui.classification.classification',
     },
+    definition: {
+        defaultMessage: 'Definition',
+        description: 'Header displayed above the classification definition',
+        id: 'boxui.classification.definition',
+    },
     edit: {
         defaultMessage: 'Edit',
         description: 'Button to edit classification on an item',

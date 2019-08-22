@@ -71,7 +71,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         test('should render DetailsSidebar with all components', () => {
             const wrapper = getWrapper(
                 {
-                    classification: { advisoryMessage: 'message', name: 'name' },
+                    classification: { definition: 'message', name: 'name' },
                     hasProperties: true,
                     hasNotices: true,
                     hasAccessStats: true,

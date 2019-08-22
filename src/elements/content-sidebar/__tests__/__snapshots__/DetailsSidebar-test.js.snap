@@ -46,7 +46,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   <SidebarClassification
     classification={
       Object {
-        "advisoryMessage": "message",
+        "definition": "message",
         "name": "name",
       }
     }

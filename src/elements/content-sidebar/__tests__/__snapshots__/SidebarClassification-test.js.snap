@@ -25,7 +25,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
   }
 >
   <Classification
-    advisoryMessage="message"
+    definition="message"
     messageStyle="inline"
     name="Public"
   />
@@ -51,7 +51,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
   }
 >
   <Classification
-    advisoryMessage="message"
+    definition="message"
     messageStyle="inline"
     name="Public"
   />
@@ -77,7 +77,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
   }
 >
   <Classification
-    advisoryMessage="message"
+    definition="message"
     messageStyle="inline"
     name="Public"
   />

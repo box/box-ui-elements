@@ -14,8 +14,8 @@ exports[`features/unified-share-modal/HeaderTitle should render classifiction la
     }
   />
   <Classification
-    advisoryMessage="test"
     className="bdl-UnifiedShareModalTitle-classification"
+    definition="test"
     messageStyle="tooltip"
     name="internal"
   />

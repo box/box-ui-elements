@@ -9,8 +9,8 @@ exports[` 1`] = `
     id="boxui.share.sharedLinkSettings.modalTitle"
   />
   <Classification
-    advisoryMessage="test"
     className="bdl-SharedLinkSettingsModal-classification"
+    definition="test"
     messageStyle="tooltip"
     name="internal"
   />
