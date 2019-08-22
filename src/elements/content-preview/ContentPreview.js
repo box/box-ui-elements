@@ -62,7 +62,6 @@ type Props = {
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
-    contentSidebarRef: React.Ref<any>,
     enableThumbnailsSidebar: boolean,
     features?: FeatureConfig,
     fileId?: string,
@@ -157,6 +156,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
     preview: any;
 
     api: API;
+
+    // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
+    contentSidebar: { current: null | { refresh: Function } } = React.createRef();
 
     previewContainer: ?HTMLDivElement;
 
@@ -1084,6 +1086,19 @@ class ContentPreview extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Refreshes the content sidebar panel
+     *
+     * @return {void}
+     */
+    refreshSidebar(): void {
+        const { current: contentSidebar } = this.contentSidebar;
+
+        if (contentSidebar) {
+            contentSidebar.refresh();
+        }
+    }
+
+    /**
      * Renders the file preview
      *
      * @inheritdoc
@@ -1097,7 +1112,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             messages,
             className,
             contentSidebarProps,
-            contentSidebarRef,
             contentOpenWithProps,
             hasHeader,
             history,
@@ -1191,7 +1205,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 history={history}
                                 isDefaultOpen={isLarge || isVeryLarge}
                                 language={language}
-                                ref={contentSidebarRef}
+                                ref={this.contentSidebar}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}

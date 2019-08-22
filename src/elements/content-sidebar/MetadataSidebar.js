@@ -42,7 +42,6 @@ type ExternalProps = {
 
 type PropsWithoutContext = {
     fileId: string,
-    refreshIdentity?: boolean,
 } & ExternalProps;
 
 type Props = {
@@ -80,13 +79,6 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         this.fetchFile();
-    }
-
-    componentDidUpdate({ refreshIdentity: prevRefreshIdentity }: Props) {
-        const { refreshIdentity } = this.props;
-        if (refreshIdentity !== prevRefreshIdentity) {
-            this.fetchMetadata();
-        }
     }
 
     /**
@@ -378,6 +370,10 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS],
             refreshCache: true, // see implications in file success callback
         });
+    }
+
+    refresh(): void {
+        this.fetchMetadata();
     }
 
     render() {
