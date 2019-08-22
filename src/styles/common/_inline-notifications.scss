@@ -3,31 +3,31 @@
  **************************************/
 
 .inline-alert {
-    border-radius: 2px;
     display: none;
     margin: 10px 0;
     padding: 14px 10px;
+    border-radius: 2px;
 
     &.inline-alert-visible {
         display: block;
     }
 
     &.inline-alert-warning {
+        color: $bdl-yellorange;
         background-color: $bdl-yellorange-10;
         border: 1px solid $bdl-yellorange-50;
-        color: $bdl-yellorange;
     }
 
     &.inline-alert-error {
+        color: $bdl-watermelon-red;
         background-color: $bdl-watermelon-red-10;
         border: 1px solid $bdl-watermelon-red-50;
-        color: $bdl-watermelon-red;
     }
 
     &.inline-alert-success {
+        color: $bdl-green-light;
         background-color: $bdl-green-light-10;
         border: 1px solid $bdl-green-light;
-        color: $bdl-green-light;
     }
 
     &.inline-alert-info {

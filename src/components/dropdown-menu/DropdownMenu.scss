@@ -27,13 +27,13 @@
 }
 
 .dropdown-menu-element-attached-right .aria-menu {
-    animation: dropdown_menu .125s, dropdown_menu_right_aligned .125s;
     transform-origin: right top;
+    animation: dropdown_menu .125s, dropdown_menu_right_aligned .125s;
 }
 
 .dropdown-menu-element-attached-left .aria-menu {
-    animation: dropdown_menu .125s, dropdown_menu_left_aligned .125s;
     transform-origin: left top;
+    animation: dropdown_menu .125s, dropdown_menu_left_aligned .125s;
 }
 
 // Drop down menu is a tethered element and as such attached to body
@@ -43,8 +43,8 @@
     @include box-sizing;
     @include common-typography;
 
+    z-index: $menu-z-index;
     margin-top: 5px;
     perspective: 500px;
     perspective-origin: center top;
-    z-index: $menu-z-index;
 }

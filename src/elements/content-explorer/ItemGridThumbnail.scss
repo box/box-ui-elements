@@ -2,28 +2,28 @@
 @import '../../styles/variables';
 
 .bce-ItemGridThumbnail {
-    background-color: $bdl-gray-02;
+    position: relative;
     margin-bottom: 2px;
     // padding is used to maintain cell's aspect ratio on resize of container
     padding-bottom: 65%;
-    position: relative;
+    background-color: $bdl-gray-02;
 }
 
 .bce-ItemGridThumbnail-item {
-    align-items: center;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    left: 0;
     position: absolute;
-    right: 0;
     top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
 
     svg {
-        height: 60%;
         width: 60%;
+        height: 60%;
     }
 }

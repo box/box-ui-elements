@@ -5,30 +5,30 @@
  **************************************/
 
 .radio-label {
-    align-items: center;
-    display: inline-flex;
     position: relative;
+    display: inline-flex;
+    align-items: center;
     user-select: none;
 
     > input[type='radio'] {
         flex: none;
+        width: 14px;
         height: 14px;
         margin: 0;
         opacity: 0;
-        width: 14px;
 
         + span::before {
+            position: absolute;
+            top: 3px;
+            left: 0;
+            width: 14px;
+            height: 14px;
             background-color: $white;
             border: 7px solid $white;
             border-radius: 9001px;
             box-shadow: 0 0 0 1px $bdl-gray-50, 0 -1px 1px rgba(0, 0, 0, .4);
-            content: '';
-            height: 14px;
-            left: 0;
-            position: absolute;
-            top: 3px;
             transition: border-width .1s;
-            width: 14px;
+            content: '';
         }
 
         &:checked + span::before {
@@ -61,7 +61,7 @@
 }
 
 .radio-description {
-    color: $bdl-gray-50;
-    margin-left: 24px;
     margin-top: 2px;
+    margin-left: 24px;
+    color: $bdl-gray-50;
 }

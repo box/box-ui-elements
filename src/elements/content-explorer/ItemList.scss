@@ -11,8 +11,8 @@
 }
 
 .bce-item-row {
-    border-left: 2px solid transparent;
     border-top: 1px solid $bdl-gray-10;
+    border-left: 2px solid transparent;
     outline: none;
 
     .bce-item-coloumn {
@@ -23,8 +23,8 @@
         opacity: 0;
 
         .btn {
-            background-color: transparent;
             margin-left: 8px;
+            background-color: transparent;
         }
 
         .be-is-touch & {

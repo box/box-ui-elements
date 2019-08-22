@@ -1,14 +1,14 @@
 @import '../common/variables';
 
 .bcp-content {
+    position: relative;
     display: flex;
     flex: 1 0 160px;
     flex-direction: column;
-    position: relative;
 }
 
 .bcp-share-access-loading {
-    align-items: center;
     display: flex;
+    align-items: center;
     height: 30px;
 }

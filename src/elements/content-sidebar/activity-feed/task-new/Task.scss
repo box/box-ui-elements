@@ -14,15 +14,15 @@ $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
 }
 
 .bcs-Task-avatar {
-    height: 100%;
     position: relative;
+    height: 100%;
 }
 
 .bcs-Task-avatarBadge {
     @include avatar-badge-icon;
 
-    border-width: 2px;
     right: -4px;
+    border-width: 2px;
 }
 
 .bcs-Task-statusContainer {

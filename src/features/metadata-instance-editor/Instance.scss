@@ -7,13 +7,13 @@
 }
 
 .metadata-instance-editor-instance-title {
-    align-items: center;
     display: flex;
+    align-items: center;
 }
 
 .metadata-instance-editor-instance-title-text {
-    color: $black;
     margin: 0 10px;
+    color: $black;
 
     &.metadata-instance-editor-instance-has-error {
         color: $bdl-watermelon-red;
@@ -21,16 +21,16 @@
 }
 
 .btn-plain.metadata-instance-editor-instance-edit {
-    align-items: center;
-    border-radius: 3px;
-    display: flex;
-    height: 24px;
-    justify-content: center;
     position: absolute;
-    right: 25px;
     top: 8px;
-    width: 24px;
+    right: 25px;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
 
     &:hover svg path {
         fill: $bdl-gray;

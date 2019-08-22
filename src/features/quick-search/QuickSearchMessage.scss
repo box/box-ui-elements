@@ -4,9 +4,9 @@
     width: 100%;
 
     > .overlay {
-        background-color: $bdl-gray-02;
+        width: 100%;
         color: $bdl-gray-50;
         text-align: center;
-        width: 100%;
+        background-color: $bdl-gray-02;
     }
 }
