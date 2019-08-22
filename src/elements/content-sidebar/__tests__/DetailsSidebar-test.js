@@ -458,21 +458,17 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
 
             expect(instance.fetchAccessStats).toHaveBeenCalled();
         });
+    });
 
-        test('should fetch the access stats data if the refreshIdentity changed', () => {
-            wrapper.setProps({
-                refreshIdentity: true,
-            });
+    describe('refresh', () => {
+        test('should refetch data when refresh is called', () => {
+            const instance = getWrapper().instance();
+            const fetchAccessStats = jest.fn();
+            instance.fetchAccessStats = fetchAccessStats;
 
-            expect(instance.fetchAccessStats).toHaveBeenCalled();
-        });
+            instance.refresh();
 
-        test('should not fetch the access stats data if the refreshIdentity did not change', () => {
-            wrapper.setProps({
-                refreshIdentity: false,
-            });
-
-            expect(instance.fetchAccessStats).not.toHaveBeenCalled();
+            expect(fetchAccessStats).toHaveBeenCalled();
         });
     });
 });

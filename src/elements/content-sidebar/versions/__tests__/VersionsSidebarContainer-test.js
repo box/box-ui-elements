@@ -52,24 +52,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             expect(instance.verifyVersion).toHaveBeenCalled();
         });
-
-        test('should refetch data when refreshIdentity changes', () => {
-            const fetchData = jest.fn();
-            instance.fetchData = fetchData;
-
-            wrapper.setProps({ refreshIdentity: true });
-
-            expect(fetchData).toHaveBeenCalled();
-        });
-
-        test('should not refetch data when refreshIdentity changes', () => {
-            const fetchData = jest.fn();
-            instance.fetchData = fetchData;
-
-            wrapper.setProps({ refreshIdentity: false });
-
-            expect(fetchData).not.toHaveBeenCalled();
-        });
     });
 
     describe('componentWillUnmount', () => {
@@ -243,6 +225,18 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             expect(instance.findVersion('456')).toEqual(versions[1]);
             expect(instance.findVersion('abc')).toEqual(undefined);
+        });
+    });
+
+    describe('refresh', () => {
+        test('should refetch data when refresh is called', () => {
+            const instance = getWrapper().instance();
+            const fetchData = jest.fn();
+            instance.fetchData = fetchData;
+
+            instance.refresh();
+
+            expect(fetchData).toHaveBeenCalled();
         });
     });
 
