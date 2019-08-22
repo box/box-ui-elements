@@ -128,109 +128,109 @@ class SidebarPanels extends React.Component<Props> {
             versionsSidebarProps,
         }: Props = this.props;
 
-        if (isOpen) {
-            return (
-                <Switch>
-                    {hasSkills && (
-                        <Route
-                            exact
-                            path={`/${SIDEBAR_VIEW_SKILLS}`}
-                            render={() => (
-                                <LoadableSkillsSidebar
-                                    key={file.id}
-                                    file={file}
-                                    getPreview={getPreview}
-                                    getViewer={getViewer}
-                                    startMarkName={MARK_NAME_JS_LOADING_SKILLS}
-                                />
-                            )}
-                        />
-                    )}
-                    {hasActivity && (
-                        <Route
-                            exact
-                            path={`/${SIDEBAR_VIEW_ACTIVITY}`}
-                            render={() => (
-                                <LoadableActivitySidebar
-                                    currentUser={currentUser}
-                                    file={file}
-                                    onVersionHistoryClick={onVersionHistoryClick}
-                                    ref={this.activitySidebar}
-                                    startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-                                    {...activitySidebarProps}
-                                />
-                            )}
-                        />
-                    )}
-                    {hasDetails && (
-                        <Route
-                            exact
-                            path={`/${SIDEBAR_VIEW_DETAILS}`}
-                            render={() => (
-                                <LoadableDetailsSidebar
-                                    fileId={fileId}
-                                    key={fileId}
-                                    hasVersions={hasVersions}
-                                    onVersionHistoryClick={onVersionHistoryClick}
-                                    ref={this.detailsSidebar}
-                                    startMarkName={MARK_NAME_JS_LOADING_DETAILS}
-                                    {...detailsSidebarProps}
-                                />
-                            )}
-                        />
-                    )}
-                    {hasMetadata && (
-                        <Route
-                            exact
-                            path={`/${SIDEBAR_VIEW_METADATA}`}
-                            render={() => (
-                                <LoadableMetadataSidebar
-                                    fileId={fileId}
-                                    ref={this.metadataSidebar}
-                                    startMarkName={MARK_NAME_JS_LOADING_METADATA}
-                                    {...metadataSidebarProps}
-                                />
-                            )}
-                        />
-                    )}
-                    {hasVersions && (
-                        <Route
-                            path="/:sidebar/versions/:versionId?"
-                            render={({ match }) => (
-                                <LoadableVersionsSidebar
-                                    fileId={fileId}
-                                    key={fileId}
-                                    onVersionChange={onVersionChange}
-                                    parentName={match.params.sidebar}
-                                    ref={this.versionsSidebar}
-                                    versionId={match.params.versionId}
-                                    {...versionsSidebarProps}
-                                />
-                            )}
-                        />
-                    )}
-                    <Route
-                        render={() => {
-                            let redirect = '';
-
-                            if (hasSkills) {
-                                redirect = SIDEBAR_VIEW_SKILLS;
-                            } else if (hasActivity) {
-                                redirect = SIDEBAR_VIEW_ACTIVITY;
-                            } else if (hasDetails) {
-                                redirect = SIDEBAR_VIEW_DETAILS;
-                            } else if (hasMetadata) {
-                                redirect = SIDEBAR_VIEW_METADATA;
-                            }
-
-                            return <Redirect to={{ pathname: `/${redirect}`, state: { silent: true } }} />;
-                        }}
-                    />
-                </Switch>
-            );
+        if (!isOpen) {
+            return null;
         }
 
-        return null;
+        return (
+            <Switch>
+                {hasSkills && (
+                    <Route
+                        exact
+                        path={`/${SIDEBAR_VIEW_SKILLS}`}
+                        render={() => (
+                            <LoadableSkillsSidebar
+                                key={file.id}
+                                file={file}
+                                getPreview={getPreview}
+                                getViewer={getViewer}
+                                startMarkName={MARK_NAME_JS_LOADING_SKILLS}
+                            />
+                        )}
+                    />
+                )}
+                {hasActivity && (
+                    <Route
+                        exact
+                        path={`/${SIDEBAR_VIEW_ACTIVITY}`}
+                        render={() => (
+                            <LoadableActivitySidebar
+                                currentUser={currentUser}
+                                file={file}
+                                onVersionHistoryClick={onVersionHistoryClick}
+                                ref={this.activitySidebar}
+                                startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
+                                {...activitySidebarProps}
+                            />
+                        )}
+                    />
+                )}
+                {hasDetails && (
+                    <Route
+                        exact
+                        path={`/${SIDEBAR_VIEW_DETAILS}`}
+                        render={() => (
+                            <LoadableDetailsSidebar
+                                fileId={fileId}
+                                key={fileId}
+                                hasVersions={hasVersions}
+                                onVersionHistoryClick={onVersionHistoryClick}
+                                ref={this.detailsSidebar}
+                                startMarkName={MARK_NAME_JS_LOADING_DETAILS}
+                                {...detailsSidebarProps}
+                            />
+                        )}
+                    />
+                )}
+                {hasMetadata && (
+                    <Route
+                        exact
+                        path={`/${SIDEBAR_VIEW_METADATA}`}
+                        render={() => (
+                            <LoadableMetadataSidebar
+                                fileId={fileId}
+                                ref={this.metadataSidebar}
+                                startMarkName={MARK_NAME_JS_LOADING_METADATA}
+                                {...metadataSidebarProps}
+                            />
+                        )}
+                    />
+                )}
+                {hasVersions && (
+                    <Route
+                        path="/:sidebar/versions/:versionId?"
+                        render={({ match }) => (
+                            <LoadableVersionsSidebar
+                                fileId={fileId}
+                                key={fileId}
+                                onVersionChange={onVersionChange}
+                                parentName={match.params.sidebar}
+                                ref={this.versionsSidebar}
+                                versionId={match.params.versionId}
+                                {...versionsSidebarProps}
+                            />
+                        )}
+                    />
+                )}
+                <Route
+                    render={() => {
+                        let redirect = '';
+
+                        if (hasSkills) {
+                            redirect = SIDEBAR_VIEW_SKILLS;
+                        } else if (hasActivity) {
+                            redirect = SIDEBAR_VIEW_ACTIVITY;
+                        } else if (hasDetails) {
+                            redirect = SIDEBAR_VIEW_DETAILS;
+                        } else if (hasMetadata) {
+                            redirect = SIDEBAR_VIEW_METADATA;
+                        }
+
+                        return <Redirect to={{ pathname: `/${redirect}`, state: { silent: true } }} />;
+                    }}
+                />
+            </Switch>
+        );
     }
 }
 
