@@ -19,10 +19,10 @@ import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_VERSIONS,
 } from '../../constants';
-import DetailsSidebar, { type DetailsSidebarProps } from './DetailsSidebar';
-import ActivitySidebar, { type ActivitySidebarProps } from './ActivitySidebar';
-import MetadataSidebar, { type MetadataSidebarProps } from './MetadataSidebar';
-import VersionsSidebar, { type VersionsSidebarProps } from './versions';
+import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { VersionsSidebarProps } from './versions';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -42,6 +42,10 @@ type Props = {
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
+};
+
+type ElementRefType = {
+    current: null | Object,
 };
 
 // TODO: place into code splitting logic
@@ -68,13 +72,13 @@ const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
 );
 
 class SidebarPanels extends React.Component<Props> {
-    activitySidebar: { current: null | ActivitySidebar } = React.createRef();
+    activitySidebar: ElementRefType = React.createRef();
 
-    detailsSidebar: { current: null | DetailsSidebar } = React.createRef();
+    detailsSidebar: ElementRefType = React.createRef();
 
-    metadataSidebar: { current: null | MetadataSidebar } = React.createRef();
+    metadataSidebar: ElementRefType = React.createRef();
 
-    versionsSidebar: { current: null | VersionsSidebar } = React.createRef();
+    versionsSidebar: ElementRefType = React.createRef();
 
     /**
      * Refreshes the contents of the active sidebar
