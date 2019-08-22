@@ -65,7 +65,7 @@ class Versions extends OffsetBasedAPI {
             action = VERSION_DELETE_ACTION;
         }
 
-        if (version.version_restored) {
+        if (version.restored_at || version.version_restored) {
             action = VERSION_RESTORE_ACTION;
         }
 

@@ -62,15 +62,21 @@ const VersionsItem = ({
         is_download_available,
         modified_by: modifiedBy,
         permissions = {},
+        restored_at: restoredAt,
+        restored_by: restoredBy,
         size,
+        trashed_at: trashedAt,
+        trashed_by: trashedBy,
         version_number: versionNumber,
     } = version;
     const { can_delete, can_download, can_preview, can_upload } = permissions;
 
     // Version info helpers
     const versionSize = sizeUtil(size);
-    const versionTimestamp = createdAt && new Date(createdAt).getTime();
-    const versionUserName = getProp(modifiedBy, 'name', <FormattedMessage {...messages.versionUserUnknown} />);
+    const versionTime = restoredAt || trashedAt || createdAt;
+    const versionTimestamp = versionTime && new Date(versionTime).getTime();
+    const versionUser = restoredBy || trashedBy || modifiedBy;
+    const versionUserName = getProp(versionUser, 'name', <FormattedMessage {...messages.versionUserUnknown} />);
     const versionInteger = versionNumber ? parseInt(versionNumber, 10) : 1;
 
     // Version state helpers

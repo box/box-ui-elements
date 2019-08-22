@@ -44,7 +44,6 @@ describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () =>
         const wrapper = render(item);
         const formattedMessage = wrapper.find('FormattedMessage');
 
-        expect(wrapper.hasClass('bcs-collapsed-version')).toBe(true);
         expect(wrapper).toMatchSnapshot();
 
         const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
@@ -79,7 +78,6 @@ describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () =>
         const wrapper = render(item);
         const formattedMessage = wrapper.find('FormattedMessage');
 
-        expect(wrapper.hasClass('bcs-collapsed-version')).toBe(true);
         expect(formattedMessage.length).toBe(0);
     });
 });

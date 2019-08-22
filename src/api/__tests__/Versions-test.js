@@ -35,6 +35,7 @@ describe('api/Versions', () => {
         modified_at: '2018-11-29T17:47:57-08:00',
         modified_by: { name: 'Baz', id: 12 },
         permissions: { can_delete: true },
+        restored_at: '2018-11-30T17:47:57-08:00',
         trashed_at: null,
         version_number: '3',
     };
@@ -106,7 +107,7 @@ describe('api/Versions', () => {
                     },
                     {
                         ...restoreVersion,
-                        action: 'upload',
+                        action: 'restore',
                     },
                 ],
                 total_count: 3,

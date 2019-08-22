@@ -2,10 +2,10 @@
 
 exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should correctly render for multiple collaborators 1`] = `
 <div
-  className="bcs-collapsed-version"
+  className="bcs-Version"
 >
   <span
-    className="bcs-version-message"
+    className="bcs-Version-message"
   >
     <FormattedMessage
       defaultMessage="{numberOfCollaborators} collaborators uploaded versions {versions}"
@@ -14,7 +14,7 @@ exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should c
         Object {
           "numberOfCollaborators": 2,
           "versions": <span
-            className="bcs-version-range"
+            className="bcs-Version-range"
           >
             1
              - 
@@ -29,7 +29,7 @@ exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should c
 
 exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should correctly render for multiple collaborators 2`] = `
 <span
-  className="bcs-version-range"
+  className="bcs-Version-range"
 >
   1
    - 
@@ -39,10 +39,10 @@ exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should c
 
 exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should correctly render for single collaborator 1`] = `
 <div
-  className="bcs-collapsed-version"
+  className="bcs-Version"
 >
   <span
-    className="bcs-version-message"
+    className="bcs-Version-message"
   >
     <FormattedMessage
       defaultMessage="{name} uploaded versions {versions}"
@@ -53,7 +53,7 @@ exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should c
             Person one
           </strong>,
           "versions": <span
-            className="bcs-version-range"
+            className="bcs-Version-range"
           >
             1
              - 
@@ -68,7 +68,7 @@ exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should c
 
 exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should correctly render for single collaborator 2`] = `
 <span
-  className="bcs-version-range"
+  className="bcs-Version-range"
 >
   1
    - 

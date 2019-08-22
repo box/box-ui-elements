@@ -29,7 +29,7 @@ function getMessageForAction(
     const numberOfCollaborators = collaboratorIDs.length;
 
     const versionRange: React.Node = (
-        <span className="bcs-version-range">
+        <span className="bcs-Version-range">
             {version_start} - {version_end}
         </span>
     );
@@ -76,15 +76,15 @@ const CollapsedVersion = ({
     version_start,
     version_end,
 }: Props): React.Node => (
-    <div className="bcs-collapsed-version">
-        <span className="bcs-version-message">
+    <div className="bcs-Version">
+        <span className="bcs-Version-message">
             {getMessageForAction(action, collaborators, version_start, version_end)}
         </span>
         {onInfo ? (
-            <span className="bcs-version-actions">
+            <span className="bcs-Version-actions">
                 <PlainButton
                     aria-label={intl.formatMessage(messages.getVersionInfo)}
-                    className="bcs-version-info"
+                    className="bcs-Version-info"
                     data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                     onClick={() => {
                         onInfo({ versions });

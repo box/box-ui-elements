@@ -1,8 +1,7 @@
 @import '../../../common/variables';
 
 .be {
-    .bcs-collapsed-version,
-    .bcs-version {
+    .bcs-Version {
         align-items: center;
         background-color: fade-out($bdl-green-light, .9);
         border-radius: 4px;
@@ -12,30 +11,30 @@
         margin-top: 10px;
         padding: 9px;
         width: 100%;
+    }
 
-        .bcs-version-actions {
-            display: flex;
-            justify-content: flex-end;
+    .bcs-Version-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .bcs-Version-info {
+        flex: none;
+        height: 16px;
+        width: 16px;
+
+        path {
+            fill: $bdl-green-light;
         }
+    }
 
-        .bcs-version-message {
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .bcs-Version-message {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-        .bcs-version-info {
-            flex: none;
-            height: 16px;
-            width: 16px;
-
-            path {
-                fill: $bdl-green-light;
-            }
-        }
-
-        .bcs-version-range {
-            white-space: nowrap;
-        }
+    .bcs-Version-range {
+        white-space: nowrap;
     }
 }

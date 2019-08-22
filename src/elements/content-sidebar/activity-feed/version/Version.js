@@ -4,58 +4,18 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-
-import PlainButton from '../../../../components/plain-button';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
-
 import messages from '../../../common/messages';
+import PlainButton from '../../../../components/plain-button';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-
-import './Version.scss';
 import {
     VERSION_UPLOAD_ACTION,
     VERSION_DELETE_ACTION,
     VERSION_RESTORE_ACTION,
     PLACEHOLDER_USER,
 } from '../../../../constants';
-
-function getMessageForAction(name: React.Node, action: string, version_number: string): React.Node {
-    switch (action) {
-        case VERSION_UPLOAD_ACTION:
-            return (
-                <FormattedMessage
-                    {...messages.versionUploaded}
-                    values={{
-                        name: <strong>{name}</strong>,
-                        version_number,
-                    }}
-                />
-            );
-        case VERSION_DELETE_ACTION:
-            return (
-                <FormattedMessage
-                    {...messages.versionDeleted}
-                    values={{
-                        name: <strong>{name}</strong>,
-                        version_number,
-                    }}
-                />
-            );
-        case VERSION_RESTORE_ACTION:
-            return (
-                <FormattedMessage
-                    {...messages.versionRestored}
-                    values={{
-                        name: <strong>{name}</strong>,
-                        version_number,
-                    }}
-                />
-            );
-        default:
-            return null;
-    }
-}
+import './Version.scss';
 
 type Props = {
     action: 'delete' | 'restore' | 'upload',
@@ -66,18 +26,42 @@ type Props = {
     version_restored?: string,
 } & InjectIntlProvidedProps;
 
-const Version = ({ action, modified_by, id, intl, onInfo, version_number, version_restored }: Props): React.Node => {
-    const modifiedByUser = modified_by || PLACEHOLDER_USER;
+const ACTION_MAP = {
+    [VERSION_DELETE_ACTION]: messages.versionDeleted,
+    [VERSION_RESTORE_ACTION]: messages.versionRestored,
+    [VERSION_UPLOAD_ACTION]: messages.versionUploaded,
+};
+const getActionMessage = action => ACTION_MAP[action] || ACTION_MAP[VERSION_UPLOAD_ACTION];
+
+const Version = ({
+    action,
+    modified_by: modifiedBy,
+    id,
+    intl,
+    onInfo,
+    restored_by: restoredBy,
+    trashed_by: trashedBy,
+    version_number,
+    version_restored,
+}: Props): React.Node => {
+    const { name } = restoredBy || trashedBy || modifiedBy || PLACEHOLDER_USER;
+
     return (
-        <div className="bcs-version">
-            <span className="bcs-version-message">
-                {getMessageForAction(modifiedByUser.name, action, version_restored || version_number)}
+        <div className="bcs-Version">
+            <span className="bcs-Version-message">
+                <FormattedMessage
+                    {...getActionMessage(action)}
+                    values={{
+                        name: <strong>{name}</strong>,
+                        version_number: version_restored || version_number,
+                    }}
+                />
             </span>
             {onInfo ? (
-                <span className="bcs-version-actions">
+                <span className="bcs-Version-actions">
                     <PlainButton
                         aria-label={intl.formatMessage(messages.getVersionInfo)}
-                        className="bcs-version-info"
+                        className="bcs-Version-info"
                         data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                         onClick={() => {
                             onInfo({ id, version_number });
