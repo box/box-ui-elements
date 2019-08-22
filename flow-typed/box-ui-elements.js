@@ -853,7 +853,7 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    advisoryMessage?: string,
+    definition?: string,
     name: string,
 };
 
