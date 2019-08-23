@@ -2,10 +2,12 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { shallow } from 'enzyme/build';
 import messages from '../messages';
+import selectors from '../../../common/selectors/version';
 import VersionsItem from '../VersionsItem';
 import VersionsItemActions from '../VersionsItemActions';
 import VersionsItemButton from '../VersionsItemButton';
 import { ReadableTime } from '../../../../components/time';
+import { PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
 
 jest.mock('../../../../utils/dom', () => ({
     ...jest.requireActual('../../../../utils/dom'),
@@ -21,9 +23,8 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
     const trashedUser = { name: 'Delete User', id: 11 };
     const unknownUser = <FormattedMessage {...messages.versionUserUnknown} />;
     const defaults = {
-        id: '12345',
-        action: 'upload',
         created_at: defaultDate,
+        id: '12345',
         is_download_available: true,
         modified_at: defaultDate,
         modified_by: defaultUser,
@@ -40,6 +41,11 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
     });
     const getWrapper = (props = {}) => shallow(<VersionsItem fileId="123" version={defaults} {...props} />);
 
+    beforeEach(() => {
+        selectors.getVersionAction = jest.fn().mockReturnValue(VERSION_UPLOAD_ACTION);
+        selectors.getVersionUser = jest.fn().mockReturnValue(defaultUser);
+    });
+
     describe('render', () => {
         test.each`
             action       | showDelete | showDownload | showPreview | showPromote | showRestore
@@ -49,9 +55,10 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         `(
             "should show actions correctly when the version's action is $action",
             ({ action, showDelete, showDownload, showPreview, showPromote, showRestore }) => {
+                selectors.getVersionAction.mockReturnValueOnce(action);
+
                 const wrapper = getWrapper({
                     version: getVersion({
-                        action,
                         permissions: {
                             can_delete: true,
                             can_download: true,
@@ -106,20 +113,15 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         });
 
         test.each`
-            modified_by    | restored_by    | trashed_by     | expected
-            ${null}        | ${null}        | ${null}        | ${unknownUser}
-            ${defaultUser} | ${null}        | ${null}        | ${defaultUser.name}
-            ${defaultUser} | ${restoreUser} | ${null}        | ${restoreUser.name}
-            ${defaultUser} | ${restoreUser} | ${trashedUser} | ${restoreUser.name}
-            ${defaultUser} | ${null}        | ${trashedUser} | ${trashedUser.name}
-        `('should render the correct user name', ({ expected, modified_by, restored_by, trashed_by }) => {
-            const wrapper = getWrapper({
-                version: getVersion({
-                    modified_by,
-                    restored_by,
-                    trashed_by,
-                }),
-            });
+            versionUser         | expected
+            ${defaultUser}      | ${defaultUser.name}
+            ${restoreUser}      | ${restoreUser.name}
+            ${trashedUser}      | ${trashedUser.name}
+            ${PLACEHOLDER_USER} | ${unknownUser}
+        `('should render the correct user name', ({ expected, versionUser }) => {
+            selectors.getVersionUser.mockReturnValue(versionUser);
+
+            const wrapper = getWrapper();
             const result = wrapper.find('[data-testid="bcs-VersionsItem-log"]').find('FormattedMessage');
             expect(result.prop('values')).toEqual({ name: expected });
         });

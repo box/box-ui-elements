@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import selectors from '../../../../common/selectors/version';
 import { VersionBase as Version } from '../Version';
+import { PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../../constants';
 
 const translationProps = {
     intl: { formatMessage: () => {} },
@@ -25,19 +27,19 @@ describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
         size: 10240,
         version_number: '1',
     };
-    const getVersion = (overrides = {}) => ({
-        ...defaults,
-        ...overrides,
-    });
     const getWrapper = (props = {}) => shallow(<Version {...defaults} {...props} />);
+
+    beforeEach(() => {
+        selectors.getVersionAction = jest.fn().mockReturnValueOnce(VERSION_UPLOAD_ACTION);
+        selectors.getVersionUser = jest.fn().mockReturnValueOnce(defaultUser);
+    });
 
     test('should correctly render version', () => {
         const version = {
-            modified_at: Date.now(),
             id: '148953',
-            version_number: 1,
+            modified_at: Date.now(),
             modified_by: defaultUser,
-            action: 'upload',
+            version_number: '1',
         };
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);
@@ -47,12 +49,11 @@ describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
 
     test('should correctly render info icon if onInfo is passed', () => {
         const version = {
-            modified_at: Date.now(),
             id: '148953',
-            onInfo: () => {},
-            version_number: 1,
+            modified_at: Date.now(),
             modified_by: defaultUser,
-            action: 'upload',
+            onInfo: () => {},
+            version_number: '1',
         };
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);
@@ -62,18 +63,16 @@ describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
     });
 
     test.each`
-        modified_by    | restored_by    | trashed_by     | expected
-        ${defaultUser} | ${null}        | ${null}        | ${defaultUser.name}
-        ${defaultUser} | ${restoreUser} | ${null}        | ${restoreUser.name}
-        ${defaultUser} | ${restoreUser} | ${trashedUser} | ${restoreUser.name}
-        ${defaultUser} | ${null}        | ${trashedUser} | ${trashedUser.name}
-    `('should render the correct user name', ({ expected, modified_by, restored_by, trashed_by }) => {
-        const version = getVersion({
-            modified_by,
-            restored_by,
-            trashed_by,
-        });
-        const wrapper = getWrapper(version);
+        versionUser         | expected
+        ${defaultUser}      | ${defaultUser.name}
+        ${restoreUser}      | ${restoreUser.name}
+        ${trashedUser}      | ${trashedUser.name}
+        ${PLACEHOLDER_USER} | ${''}
+    `('should render the correct user name', ({ expected, versionUser }) => {
+        selectors.getVersionUser = jest.fn().mockReturnValueOnce(versionUser);
+
+        const wrapper = getWrapper();
+
         expect(wrapper.find('FormattedMessage').prop('values')).toEqual({
             name: <strong>{expected}</strong>,
             version_number: '1',

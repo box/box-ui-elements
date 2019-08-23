@@ -357,9 +357,9 @@ export const HTTP_STATUS_CODE_SERVICE_UNAVAILABLE: 503 = 503;
 export const HTTP_STATUS_CODE_GATEWAY_TIMEOUT: 504 = 504;
 
 /* ------------------ Version Action Types  ---------------------- */
-export const VERSION_RESTORE_ACTION = 'restore';
-export const VERSION_DELETE_ACTION = 'delete';
-export const VERSION_UPLOAD_ACTION = 'upload';
+export const VERSION_DELETE_ACTION: 'delete' = 'delete';
+export const VERSION_RESTORE_ACTION: 'restore' = 'restore';
+export const VERSION_UPLOAD_ACTION: 'upload' = 'upload';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER: User = { type: 'user', id: '2', name: '' };

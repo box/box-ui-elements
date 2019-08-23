@@ -1,5 +1,5 @@
 import Versions from '../Versions';
-import { PERMISSION_CAN_DELETE, PERMISSION_CAN_UPLOAD, VERSION_RESTORE_ACTION } from '../../constants';
+import { PERMISSION_CAN_DELETE, PERMISSION_CAN_UPLOAD } from '../../constants';
 import { FILE_VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
 
 let versions;
@@ -92,29 +92,11 @@ describe('api/Versions', () => {
     });
 
     describe('successHandler()', () => {
-        test('should return API response with properly formatted data', () => {
+        test('should return API response data', () => {
             versions.successCallback = jest.fn();
 
-            const formattedResponse = {
-                entries: [
-                    {
-                        ...firstVersion,
-                        action: 'upload',
-                    },
-                    {
-                        ...deleteVersion,
-                        action: 'delete',
-                    },
-                    {
-                        ...restoreVersion,
-                        action: 'restore',
-                    },
-                ],
-                total_count: 3,
-            };
-
             versions.successHandler(response);
-            expect(versions.successCallback).toBeCalledWith(formattedResponse);
+            expect(versions.successCallback).toBeCalledWith(response);
         });
     });
 
@@ -225,7 +207,6 @@ describe('api/Versions', () => {
                 expect(result.total_count).toEqual(nonCurrentVersions.entries.length + 1);
 
                 const resultCurrentVersion = result.entries.pop();
-                expect(resultCurrentVersion.action).toEqual(VERSION_RESTORE_ACTION);
                 expect(resultCurrentVersion.version_restored).toEqual(firstVersion.version_number);
             });
         });
