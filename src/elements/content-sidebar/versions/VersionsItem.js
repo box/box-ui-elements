@@ -5,9 +5,9 @@
  */
 
 import * as React from 'react';
-import getProp from 'lodash/get';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
+import selectors from '../../common/selectors/version';
 import sizeUtil from '../../../utils/size';
 import VersionsItemActions from './VersionsItemActions';
 import VersionsItemButton from './VersionsItemButton';
@@ -39,8 +39,6 @@ const ACTION_MAP = {
 };
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
-const getActionMessage = action => ACTION_MAP[action] || ACTION_MAP[VERSION_UPLOAD_ACTION];
-
 const VersionsItem = ({
     fileId,
     isCurrent = false,
@@ -56,25 +54,28 @@ const VersionsItem = ({
     versionLimit,
 }: Props) => {
     const {
-        action = VERSION_UPLOAD_ACTION,
         created_at: createdAt,
         id: versionId,
         is_download_available,
-        modified_by: modifiedBy,
         permissions = {},
+        restored_at: restoredAt,
         size,
+        trashed_at: trashedAt,
         version_number: versionNumber,
     } = version;
     const { can_delete, can_download, can_preview, can_upload } = permissions;
 
     // Version info helpers
-    const versionSize = sizeUtil(size);
-    const versionTimestamp = createdAt && new Date(createdAt).getTime();
-    const versionUserName = getProp(modifiedBy, 'name', <FormattedMessage {...messages.versionUserUnknown} />);
+    const versionAction = selectors.getVersionAction(version);
     const versionInteger = versionNumber ? parseInt(versionNumber, 10) : 1;
+    const versionTime = restoredAt || trashedAt || createdAt;
+    const versionTimestamp = versionTime && new Date(versionTime).getTime();
+    const versionUserName = selectors.getVersionUser(version).name || (
+        <FormattedMessage {...messages.versionUserUnknown} />
+    );
 
     // Version state helpers
-    const isDeleted = action === VERSION_DELETE_ACTION;
+    const isDeleted = versionAction === VERSION_DELETE_ACTION;
     const isDownloadable = !!is_download_available;
     const isLimited = versionCount - versionInteger >= versionLimit;
     const isRestricted = isWatermarked && !isCurrent; // Watermarked files do not support prior version preview
@@ -116,7 +117,7 @@ const VersionsItem = ({
                     )}
 
                     <div className="bcs-VersionsItem-log" data-testid="bcs-VersionsItem-log" title={versionUserName}>
-                        <FormattedMessage {...getActionMessage(action)} values={{ name: versionUserName }} />
+                        <FormattedMessage {...ACTION_MAP[versionAction]} values={{ name: versionUserName }} />
                     </div>
                     <div className="bcs-VersionsItem-info">
                         {versionTimestamp && (
@@ -128,7 +129,7 @@ const VersionsItem = ({
                                 />
                             </time>
                         )}
-                        {!!size && <span className="bcs-VersionsItem-size">{versionSize}</span>}
+                        {!!size && <span className="bcs-VersionsItem-size">{sizeUtil(size)}</span>}
                     </div>
 
                     {isLimited && hasActions && (

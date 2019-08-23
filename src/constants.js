@@ -92,6 +92,7 @@ export const FIELD_PATH_COLLECTION = 'path_collection';
 export const FIELD_CONTENT_CREATED_AT: 'content_created_at' = 'content_created_at';
 export const FIELD_CONTENT_MODIFIED_AT: 'content_modified_at' = 'content_modified_at';
 export const FIELD_MODIFIED_AT: 'modified_at' = 'modified_at';
+export const FIELD_RESTORED_AT = 'restored_at';
 export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
@@ -107,6 +108,8 @@ export const FIELD_URL = 'url';
 export const FIELD_CREATED_BY = 'created_by';
 export const FIELD_MODIFIED_BY = 'modified_by';
 export const FIELD_OWNED_BY = 'owned_by';
+export const FIELD_RESTORED_BY = 'restored_by';
+export const FIELD_TRASHED_BY = 'trashed_by';
 export const FIELD_DESCRIPTION = 'description';
 export const FIELD_REPRESENTATIONS = 'representations';
 export const FIELD_SHA1 = 'sha1';
@@ -354,12 +357,12 @@ export const HTTP_STATUS_CODE_SERVICE_UNAVAILABLE: 503 = 503;
 export const HTTP_STATUS_CODE_GATEWAY_TIMEOUT: 504 = 504;
 
 /* ------------------ Version Action Types  ---------------------- */
-export const VERSION_RESTORE_ACTION = 'restore';
-export const VERSION_DELETE_ACTION = 'delete';
-export const VERSION_UPLOAD_ACTION = 'upload';
+export const VERSION_DELETE_ACTION: 'delete' = 'delete';
+export const VERSION_RESTORE_ACTION: 'restore' = 'restore';
+export const VERSION_UPLOAD_ACTION: 'upload' = 'upload';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
-export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
+export const PLACEHOLDER_USER: User = { type: 'user', id: '2', name: '' };
 
 /* ------------------ Open With ------------------------- */
 export const APP_INTEGRATION = 'app_integration';

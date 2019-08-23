@@ -31,6 +31,8 @@ import {
     FIELD_CREATED_BY,
     FIELD_MODIFIED_BY,
     FIELD_OWNED_BY,
+    FIELD_RESTORED_BY,
+    FIELD_TRASHED_BY,
     FIELD_DESCRIPTION,
     FIELD_REPRESENTATIONS,
     FIELD_SHA1,
@@ -46,6 +48,7 @@ import {
     FIELD_MESSAGE,
     FIELD_TAGGED_MESSAGE,
     FIELD_DUE_AT,
+    FIELD_RESTORED_AT,
     FIELD_TRASHED_AT,
     FIELD_ASSIGNED_TO,
     FIELD_STATUS,
@@ -141,8 +144,11 @@ describe('util/fields', () => {
             FIELD_MODIFIED_BY,
             FIELD_NAME,
             FIELD_PERMISSIONS,
+            FIELD_RESTORED_AT,
+            FIELD_RESTORED_BY,
             FIELD_SIZE,
             FIELD_TRASHED_AT,
+            FIELD_TRASHED_BY,
             FIELD_VERSION_NUMBER,
         ]);
     });

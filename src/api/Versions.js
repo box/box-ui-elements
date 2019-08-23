@@ -17,9 +17,6 @@ import {
     ERROR_CODE_RESTORE_VERSION,
     PERMISSION_CAN_DELETE,
     PERMISSION_CAN_UPLOAD,
-    VERSION_DELETE_ACTION,
-    VERSION_RESTORE_ACTION,
-    VERSION_UPLOAD_ACTION,
 } from '../constants';
 
 class Versions extends OffsetBasedAPI {
@@ -53,30 +50,7 @@ class Versions extends OffsetBasedAPI {
     }
 
     /**
-     * Formats version data for use in components.
-     *
-     * @param {BoxItemVersion} version - An individual version entry from the API
-     * @return {BoxItemVersion} A version
-     */
-    format = (version: BoxItemVersion) => {
-        let action = VERSION_UPLOAD_ACTION;
-
-        if (version.trashed_at) {
-            action = VERSION_DELETE_ACTION;
-        }
-
-        if (version.version_restored) {
-            action = VERSION_RESTORE_ACTION;
-        }
-
-        return {
-            ...version,
-            action,
-        };
-    };
-
-    /**
-     * Formats the versions api response to usable data
+     * Returns the versions api response data
      * @param {Object} data the api response data
      */
     successHandler = (data: FileVersions): void => {
@@ -84,19 +58,7 @@ class Versions extends OffsetBasedAPI {
             return;
         }
 
-        // There is no response data when deleting/promoting a version
-        if (!data) {
-            this.successCallback();
-            return;
-        }
-
-        // We don't have entries when creating/updating a version
-        if (!data.entries) {
-            this.successCallback(this.format(data));
-            return;
-        }
-
-        this.successCallback({ ...data, entries: data.entries.map(this.format) });
+        this.successCallback(data);
     };
 
     /**
@@ -239,7 +201,6 @@ class Versions extends OffsetBasedAPI {
         const restoredVersion = versions.entries.find(version => version.id === restoredFromId);
 
         if (restoredVersion) {
-            currentVersion.action = VERSION_RESTORE_ACTION;
             currentVersion.version_restored = restoredVersion.version_number;
         }
 
