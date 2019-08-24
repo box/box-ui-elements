@@ -437,18 +437,6 @@ describe('api/uploads/MultiputUpload', () => {
             };
         });
 
-        test('should commit if all parts have been uploaded', () => {
-            // Setup
-            multiputUploadTest.numPartsUploaded = 25;
-
-            // Expectations
-            multiputUploadTest.commitSession = jest.fn();
-
-            // Execute
-            multiputUploadTest.getSessionSuccessHandler(response.data);
-            expect(multiputUploadTest.commitSession).toHaveBeenCalled();
-        });
-
         test('should call processNextParts if some parts are not uploaded', () => {
             // Setup
             multiputUploadTest.numPartsUploaded = 20;

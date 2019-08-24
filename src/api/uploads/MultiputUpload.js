@@ -470,7 +470,7 @@ class MultiputUpload extends BaseMultiput {
      * @return {void}
      */
     getSessionSuccessHandler(data: any): void {
-        const { total_parts, part_size, session_endpoints } = data;
+        const { part_size, session_endpoints } = data;
 
         // Set session information gotten from API response
         this.partSize = part_size;
@@ -506,12 +506,7 @@ class MultiputUpload extends BaseMultiput {
             nextUploadIndex += 1;
         }
 
-        if (this.numPartsUploaded === total_parts) {
-            // Commit sessions that have all the parts of the file uploaded
-            this.commitSession();
-        } else {
-            this.processNextParts();
-        }
+        this.processNextParts();
     }
 
     /**

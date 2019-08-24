@@ -131,7 +131,7 @@ class ContentUploader extends Component<Props, State> {
         onMinimize: noop,
         onCancel: noop,
         isFolderUploadEnabled: false,
-        isResumableUploadsEnabled: true,
+        isResumableUploadsEnabled: false,
         dataTransferItems: [],
         isDraggingItemsToUploadsManager: false,
     };
