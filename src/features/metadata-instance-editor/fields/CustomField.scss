@@ -1,18 +1,18 @@
 @import '../../../styles/variables';
 
 .metadata-instance-editor-field-custom {
-    align-items: center;
     display: flex;
+    align-items: center;
 
     .text-input-container {
         flex: 1;
         overflow-x: hidden;
 
         .label {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
 
@@ -25,10 +25,10 @@
     margin: 5px 0 0 10px;
 
     .btn {
+        width: 32px;
         height: 32px;
         margin: 0 0 0 -1px;
         padding: 10px;
-        width: 32px;
 
         span {
             display: flex;

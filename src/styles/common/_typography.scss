@@ -29,11 +29,11 @@ h3,
 h4,
 h5,
 h6 {
-    color: inherit;
-    font-family: inherit;
-    font-weight: normal;
-    line-height: 20px;
     margin: 8px 0;
+    color: inherit;
+    font-weight: normal;
+    font-family: inherit;
+    line-height: 20px;
     text-rendering: optimizeLegibility;
 }
 
@@ -142,6 +142,6 @@ textarea {
 .txt-ellipsis {
     max-width: 100%;
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }

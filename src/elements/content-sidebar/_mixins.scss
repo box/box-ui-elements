@@ -1,11 +1,11 @@
 @mixin bdl-SidebarNavButton {
-    align-items: center;
-    background-color: transparent;
-    display: flex;
-    height: 60px;
-    justify-content: center;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 59px; // 1px for left border
+    height: 60px;
+    background-color: transparent;
 }
 
 @mixin bcs-SidebarSection {

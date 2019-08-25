@@ -2,26 +2,26 @@
 @import './mixins';
 
 .bcs-AvatarGroup {
+    $avatar-spacing: 4px;
+
     display: flex;
     margin: 10px 0;
 
     .bcs-AvatarGroup-avatar {
-        height: 32px;
         width: 32px;
+        height: 32px;
     }
 
     .bcs-AvatarGroup-overflowCount {
+        display: flex;
         align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: bold;
         background: $bdl-gray-62;
         border-radius: 100%;
-        color: #fff;
         cursor: pointer;
-        display: flex;
-        font-weight: bold;
-        justify-content: center;
     }
-
-    $avatar-spacing: 4px;
 
     .bcs-AvatarGroup-avatarContainer + .bcs-AvatarGroup-avatarContainer {
         margin-left: $avatar-spacing;
@@ -38,25 +38,25 @@
 }
 
 .bcs-AvatarGroup-listFlyout {
-    max-width: 100%;
     width: 280px;
+    max-width: 100%;
 
     .bcs-AvatarGroup-list {
-        margin: 0;
         max-height: 215px;
+        margin: 0;
+        padding: 0;
         overflow: hidden auto;
         overflow-y: overlay; // nicer scroll bar for Blink engines only
-        padding: 0;
     }
 
     .bcs-AvatarGroup-listTitle {
-        font-size: 15px;
         margin: 0 0 12px 0;
+        font-size: 15px;
     }
 
     .bcs-AvatarGroup-listItem {
-        align-items: center;
         display: flex;
+        align-items: center;
         margin: 6px 0 0 0;
         padding: 3px 0;
 
@@ -92,8 +92,8 @@
 }
 
 .bcs-AvatarGroup-avatarContainer {
-    display: inline-block;
-    height: 32px;
     position: relative;
+    display: inline-block;
     width: 32px;
+    height: 32px;
 }

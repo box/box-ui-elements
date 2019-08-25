@@ -2,17 +2,17 @@
 @import './sizes.media';
 
 @mixin lsb-icon-sizing($pixel-width) {
+    width: $pixel-width;
+    min-width: $pixel-width;
     height: $pixel-width;
     min-height: $pixel-width;
-    min-width: $pixel-width;
-    width: $pixel-width;
 }
 
 .left-sidebar-icon-wrapper {
     @include lsb-icon-sizing($lsb-icon-width);
 
-    align-items: center;
     display: flex;
+    align-items: center;
     margin-right: 9px;
 
     svg {

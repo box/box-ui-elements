@@ -5,12 +5,12 @@
     border-radius: $bdl-border-radius-size;
 
     .collapsible-card-header {
-        align-items: center;
-        border-radius: $bdl-border-radius-size;
+        position: relative; // for action items
         display: flex;
         flex-direction: row;
-        position: relative; // for action items
+        align-items: center;
         width: 100%;
+        border-radius: $bdl-border-radius-size;
 
         &.has-sticky-header {
             position: sticky;
@@ -20,9 +20,9 @@
     }
 
     .collapsible-card-action-items {
-        bottom: 0;
         position: absolute;
         right: 34px;
+        bottom: 0;
     }
 
     .collapsible-card-header-caret {
@@ -32,12 +32,12 @@
     }
 
     .btn-plain.collapsible-card-title {
-        align-items: center;
-        display: flex;
-        padding: 10px 0;
         position: relative;
-        text-align: left;
+        display: flex;
+        align-items: center;
         width: 100%;
+        padding: 10px 0;
+        text-align: left;
     }
 
     .collapsible-card-content {
@@ -76,8 +76,8 @@
             &:hover,
             &:active,
             &:focus {
-                border-bottom-color: $bdl-box-blue;
                 text-decoration: none;
+                border-bottom-color: $bdl-box-blue;
             }
         }
     }

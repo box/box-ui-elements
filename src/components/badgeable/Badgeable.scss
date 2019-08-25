@@ -6,36 +6,36 @@ $badgeable-icon-size: 14px;
 $badgeable-position: ($badgeable-icon-size/2);
 
 .badgeable-container {
+    position: relative;
     display: inline-block;
     line-height: 1;
-    position: relative;
 
     .badges {
-        height: 100%;
-        left: 0;
-        pointer-events: none;
         position: absolute;
         top: 0;
+        left: 0;
         width: 100%;
+        height: 100%;
+        pointer-events: none;
 
         %badge {
-            pointer-events: all;
             position: absolute;
+            pointer-events: all;
         }
 
         .top-left-badge {
             @extend %badge;
 
-            left: $badgeable-position + $badgeable-position-offset;
             top: -$badgeable-position + $badgeable-position-offset;
+            left: $badgeable-position + $badgeable-position-offset;
             transform: translateX(-100%);
         }
 
         .top-right-badge {
             @extend %badge;
 
-            left: calc(100% - #{$badgeable-position + $badgeable-position-offset});
             top: -$badgeable-position + $badgeable-position-offset;
+            left: calc(100% - #{$badgeable-position + $badgeable-position-offset});
         }
 
         .bottom-left-badge {
