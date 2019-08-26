@@ -630,8 +630,11 @@ class ContentUploader extends Component<Props, State> {
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
 
-        const { api } = item;
+        const { api, status } = item;
         api.cancel();
+        if (status === STATUS_IN_PROGRESS) {
+            this.numItemsUploading -= 1;
+        }
 
         const { items } = this.state;
         items.splice(items.indexOf(item), 1);
@@ -641,6 +644,7 @@ class ContentUploader extends Component<Props, State> {
 
         onCancel([item]);
         this.updateViewAndCollection(items, callback);
+        this.upload();
     }
 
     /**

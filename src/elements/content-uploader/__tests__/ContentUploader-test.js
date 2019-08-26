@@ -3,7 +3,13 @@ import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
-import { STATUS_PENDING, STATUS_STAGED, STATUS_COMPLETE, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import {
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_STAGED,
+    STATUS_COMPLETE,
+    VIEW_UPLOAD_SUCCESS,
+} from '../../../constants';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 
@@ -70,6 +76,43 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             const expected = { yoyo: true };
             expect(wrapper.state().itemIds).toMatchObject(expected);
+        });
+    });
+
+    describe('removeFileFromUploadQueue()', () => {
+        let wrapper;
+        let instance;
+        let item;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.upload = jest.fn();
+            item = {
+                api: {
+                    cancel: jest.fn(),
+                },
+                status: STATUS_IN_PROGRESS,
+            };
+        });
+
+        test('should cancel and update numItemsUploading for in-progress item', () => {
+            instance.numItemsUploading = 2;
+            instance.removeFileFromUploadQueue(item);
+
+            expect(item.api.cancel).toBeCalled();
+            expect(instance.numItemsUploading).toBe(1);
+            expect(instance.upload).toBeCalled();
+        });
+
+        test('should not update numItemsUploading for item in state other than in-progress', () => {
+            instance.numItemsUploading = 2;
+            item.status = STATUS_PENDING;
+            instance.removeFileFromUploadQueue(item);
+
+            expect(item.api.cancel).toBeCalled();
+            expect(instance.numItemsUploading).toBe(2);
+            expect(instance.upload).toBeCalled();
         });
     });
 
