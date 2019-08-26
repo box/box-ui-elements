@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import classNames from 'classnames';
 import Pikaday from 'pikaday';
 import range from 'lodash/range';
@@ -91,6 +92,8 @@ function getFormattedDate(date, format) {
     }
 }
 
+const localesWhereWeekStartsOnSunday = ['en-US', 'en-CA', 'jp-JP'];
+
 type Props = {
     /** Add a css class to the component */
     className?: string,
@@ -118,7 +121,6 @@ type Props = {
     hideOptionalLabel?: boolean,
     /** Props that will be applied on the input element */
     inputProps?: Object,
-    intl: Object,
     /** Is input clearable */
     isClearable?: boolean,
     /** Is input disabled */
@@ -148,7 +150,7 @@ type Props = {
     /** Date to set the input */
     value?: Date,
     yearRange?: number | Array<number>,
-};
+} & InjectIntlProvidedProps;
 
 class DatePicker extends React.Component<Props> {
     static defaultProps = {
@@ -190,6 +192,7 @@ class DatePicker extends React.Component<Props> {
             setDefaultDate: true,
             defaultDate: defaultValue,
             field: this.dateInputEl,
+            firstDay: localesWhereWeekStartsOnSunday.includes(intl.locale) ? 0 : 1,
             maxDate,
             minDate,
             position: 'bottom left',
