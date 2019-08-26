@@ -3,7 +3,13 @@ import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
-import { STATUS_PENDING, STATUS_STAGED, STATUS_COMPLETE, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import {
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_STAGED,
+    STATUS_COMPLETE,
+    VIEW_UPLOAD_SUCCESS,
+} from '../../../constants';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 
@@ -70,6 +76,29 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             const expected = { yoyo: true };
             expect(wrapper.state().itemIds).toMatchObject(expected);
+        });
+    });
+
+    describe('removeFileFromUploadQueue()', () => {
+        test('should cancel and remove item from uploading queue', () => {
+            const wrapper = getWrapper();
+            const item = {
+                api: {
+                    cancel: jest.fn(),
+                },
+                status: STATUS_IN_PROGRESS,
+            };
+            wrapper.setState({
+                items: [item],
+            });
+            const instance = wrapper.instance();
+            instance.upload = jest.fn();
+
+            instance.removeFileFromUploadQueue(item);
+
+            expect(item.api.cancel).toBeCalled();
+            expect(wrapper.state().items.length).toBe(0);
+            expect(instance.upload).toBeCalled();
         });
     });
 
