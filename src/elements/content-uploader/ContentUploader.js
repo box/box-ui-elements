@@ -724,12 +724,13 @@ class ContentUploader extends Component<Props, State> {
     resumeFile(item: UploadItem) {
         const { overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
+        const { items } = this.state;
 
-        if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
+        const numItemsUploading = items.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
+
+        if (numItemsUploading >= UPLOAD_CONCURRENCY) {
             return;
         }
-
-        this.numItemsUploading += 1;
 
         const resumeOptions: Object = {
             file,
@@ -744,7 +745,6 @@ class ContentUploader extends Component<Props, State> {
 
         item.status = STATUS_IN_PROGRESS;
         delete item.error;
-        const { items } = this.state;
         items[items.indexOf(item)] = item;
 
         api.resume(resumeOptions);
