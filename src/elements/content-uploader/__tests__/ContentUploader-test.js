@@ -80,38 +80,24 @@ describe('elements/content-uploader/ContentUploader', () => {
     });
 
     describe('removeFileFromUploadQueue()', () => {
-        let wrapper;
-        let instance;
-        let item;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.upload = jest.fn();
-            item = {
+        test('should cancel and remove item from uploading queue', () => {
+            const wrapper = getWrapper();
+            const item = {
                 api: {
                     cancel: jest.fn(),
                 },
                 status: STATUS_IN_PROGRESS,
             };
-        });
+            wrapper.setState({
+                items: [item],
+            });
+            const instance = wrapper.instance();
+            instance.upload = jest.fn();
 
-        test('should cancel and update numItemsUploading for in-progress item', () => {
-            instance.numItemsUploading = 2;
             instance.removeFileFromUploadQueue(item);
 
             expect(item.api.cancel).toBeCalled();
-            expect(instance.numItemsUploading).toBe(1);
-            expect(instance.upload).toBeCalled();
-        });
-
-        test('should not update numItemsUploading for item in state other than in-progress', () => {
-            instance.numItemsUploading = 2;
-            item.status = STATUS_PENDING;
-            instance.removeFileFromUploadQueue(item);
-
-            expect(item.api.cancel).toBeCalled();
-            expect(instance.numItemsUploading).toBe(2);
+            expect(wrapper.state().items.length).toBe(0);
             expect(instance.upload).toBeCalled();
         });
     });

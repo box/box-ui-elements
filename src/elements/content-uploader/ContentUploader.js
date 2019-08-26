@@ -110,8 +110,6 @@ class ContentUploader extends Component<Props, State> {
 
     resetItemsTimeout: TimeoutID;
 
-    numItemsUploading: number = 0;
-
     isAutoExpanded: boolean = false;
 
     static defaultProps = {
@@ -630,11 +628,8 @@ class ContentUploader extends Component<Props, State> {
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
 
-        const { api, status } = item;
+        const { api } = item;
         api.cancel();
-        if (status === STATUS_IN_PROGRESS) {
-            this.numItemsUploading -= 1;
-        }
 
         const { items } = this.state;
         items.splice(items.indexOf(item), 1);
@@ -690,12 +685,13 @@ class ContentUploader extends Component<Props, State> {
     uploadFile(item: UploadItem) {
         const { overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
+        const { items } = this.state;
 
-        if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
+        const numItemsUploading = items.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
+
+        if (numItemsUploading >= UPLOAD_CONCURRENCY) {
             return;
         }
-
-        this.numItemsUploading += 1;
 
         const uploadOptions: Object = {
             file,
@@ -708,7 +704,6 @@ class ContentUploader extends Component<Props, State> {
         };
 
         item.status = STATUS_IN_PROGRESS;
-        const { items } = this.state;
         items[items.indexOf(item)] = item;
 
         api.upload(uploadOptions);
@@ -754,7 +749,6 @@ class ContentUploader extends Component<Props, State> {
         if (!item.error) {
             item.status = STATUS_COMPLETE;
         }
-        this.numItemsUploading -= 1;
 
         // Cache Box File object of successfully uploaded item
         if (entries && entries.length === 1) {
@@ -853,7 +847,6 @@ class ContentUploader extends Component<Props, State> {
 
         item.status = STATUS_ERROR;
         item.error = error;
-        this.numItemsUploading -= 1;
 
         const newItems = [...items];
         const index = newItems.findIndex(singleItem => singleItem === item);
