@@ -5,6 +5,7 @@
  */
 
 import noop from 'lodash/noop';
+import isNaN from 'lodash/isNaN';
 import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from '../../utils/uploads';
 import { retryNumOfTimes } from '../../utils/function';
 import { digest } from '../../utils/webcrypto';
@@ -534,7 +535,7 @@ class MultiputUpload extends BaseMultiput {
                     errorData.headers['retry-after'] || errorData.headers.get('Retry-After'),
                     10,
                 );
-                if (!Number.isNaN(retryAfterSec)) {
+                if (!isNaN(retryAfterSec)) {
                     retryAfterMs = retryAfterSec * MS_IN_S;
                 }
             }
