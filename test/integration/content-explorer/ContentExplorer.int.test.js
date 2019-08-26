@@ -6,14 +6,6 @@ const selectedRowClassName = 'bce-item-row-selected';
 const listViewClass = 'bce-item-grid';
 const gridViewClass = 'bdl-GridView';
 
-const gridViewOn = {
-    contentExplorer: {
-        gridView: {
-            enabled: true,
-        },
-    },
-};
-
 const helpers = {
     load({ props, features } = {}) {
         cy.visit('/Elements/ContentExplorer', {
@@ -229,7 +221,7 @@ describe('ContentExplorer', () => {
 
     describe('Grid View', () => {
         beforeEach(() => {
-            helpers.load({ features: gridViewOn });
+            helpers.load();
             helpers
                 .getViewModeChangeButton()
                 .click()

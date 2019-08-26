@@ -30,12 +30,7 @@ import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH, FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import LocalStore from '../../utils/LocalStore';
-import {
-    isFeatureEnabled,
-    withFeatureConsumer,
-    withFeatureProvider,
-    type FeatureConfig,
-} from '../common/feature-checking';
+import { withFeatureConsumer, withFeatureProvider, type FeatureConfig } from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -44,7 +39,6 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
-    FIELD_REPRESENTATIONS,
     DEFAULT_ROOT,
     VIEW_SEARCH,
     VIEW_FOLDER,
@@ -400,13 +394,6 @@ class ContentExplorer extends Component<Props, State> {
         }
     };
 
-    getFolderFields = () => {
-        const { features } = this.props;
-        return isFeatureEnabled(features, 'contentExplorer.gridView.enabled')
-            ? [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS]
-            : FOLDER_FIELDS_TO_FETCH;
-    };
-
     /**
      * Folder fetch success callback
      *
@@ -487,7 +474,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { fields: this.getFolderFields(), forceFetch: true },
+            { fields: FOLDER_FIELDS_TO_FETCH, forceFetch: true },
         );
     };
 
@@ -550,7 +537,7 @@ class ContentExplorer extends Component<Props, State> {
         this.api
             .getSearchAPI()
             .search(id, query, currentPageSize, currentOffset, this.searchSuccessCallback, this.errorCallback, {
-                fields: this.getFolderFields(),
+                fields: FOLDER_FIELDS_TO_FETCH,
                 forceFetch: true,
             });
     }, DEFAULT_SEARCH_DEBOUNCE);
@@ -646,7 +633,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.recentsSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { fields: this.getFolderFields(), forceFetch: true },
+            { fields: FOLDER_FIELDS_TO_FETCH, forceFetch: true },
         );
     }
 
@@ -752,28 +739,20 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     async updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
-        const { features } = this.props;
         const { items = [] } = collection;
+        const fileAPI = this.api.getFileAPI(false);
         const newCollection: Collection = { ...collection };
         const selectedId = selectedItem ? selectedItem.id : null;
+        const thumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
         let newSelectedItem: ?BoxItem;
-
-        const isGridViewEnabled = isFeatureEnabled(features, 'contentExplorer.gridView.enabled');
-
-        let itemThumbnails = [];
-        if (isGridViewEnabled) {
-            const fileAPI = this.api.getFileAPI(false);
-            itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
-        }
 
         newCollection.items = items.map((obj, index) => {
             const isSelected = obj.id === selectedId;
             const currentItem = isSelected ? selectedItem : obj;
-            const thumbnailUrl = isGridViewEnabled ? itemThumbnails[index] : null;
             const newItem = {
                 ...currentItem,
                 selected: isSelected,
-                thumbnailUrl,
+                thumbnailUrl: thumbnails[index],
             };
 
             // Only if selectedItem is in the current collection do we want to set selected state
@@ -1294,12 +1273,7 @@ class ContentExplorer extends Component<Props, State> {
      *
      * @return {ViewMode}
      */
-    getViewMode = (): ViewMode => {
-        const { features }: Props = this.props;
-        const viewModePreference = this.store.getItem(localStoreViewMode);
-        const isGridViewEnabled = isFeatureEnabled(features, 'contentExplorer.gridView.enabled');
-        return isGridViewEnabled && viewModePreference ? viewModePreference : VIEW_MODE_LIST;
-    };
+    getViewMode = (): ViewMode => this.store.getItem(localStoreViewMode) || VIEW_MODE_LIST;
 
     /**
      * Get the maximum number of grid view columns based on the current width of the
@@ -1327,12 +1301,8 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     changeViewMode = (viewMode: ViewMode): void => {
-        const { features }: Props = this.props;
-
-        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
-            this.store.setItem(localStoreViewMode, viewMode);
-            this.forceUpdate();
-        }
+        this.store.setItem(localStoreViewMode, viewMode);
+        this.forceUpdate();
     };
 
     /**

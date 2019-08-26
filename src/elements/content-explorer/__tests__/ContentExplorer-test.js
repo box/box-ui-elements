@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import noop from 'lodash/noop';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
 import { FOLDER_FIELDS_TO_FETCH } from '../../../utils/fields';
-import { FIELD_REPRESENTATIONS, VIEW_MODE_GRID } from '../../../constants';
+import { VIEW_MODE_GRID } from '../../../constants';
 
 jest.mock('../../common/header/Header', () => 'mock-header');
 jest.mock('../../common/sub-header/SubHeader', () => 'mock-subheader');
@@ -15,8 +15,6 @@ jest.mock('../DeleteConfirmationDialog', () => 'mock-deletedialog');
 jest.mock('../RenameDialog', () => 'mock-renamedialog');
 jest.mock('../ShareDialog', () => 'mock-sharedialog');
 jest.mock('../PreviewDialog', () => 'mock-previewdialog');
-
-const gridViewOn = { features: { contentExplorer: { gridView: { enabled: true } } } };
 
 describe('elements/content-explorer/ContentExplorer', () => {
     let rootElement;
@@ -50,7 +48,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
         const localStoreViewMode = 'bce.defaultViewMode';
 
         test('should change to grid view', () => {
-            const wrapper = getWrapper({ features: { contentExplorer: { gridView: { enabled: true } } } });
+            const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.store.setItem = jest.fn();
             instance.changeViewMode(VIEW_MODE_GRID);
@@ -83,25 +81,6 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 expect.any(Function),
                 expect.any(Function),
                 { forceFetch: true, fields: FOLDER_FIELDS_TO_FETCH },
-            );
-        });
-
-        test('should fetch folder with representations field if grid view is enabled', () => {
-            wrapper = getWrapper({ features: { contentExplorer: { gridView: { enabled: true } } } });
-            instance = wrapper.instance();
-            instance.api = { getFolderAPI };
-            instance.setState = jest.fn();
-            instance.fetchFolder();
-            expect(instance.setState).toHaveBeenCalled();
-            expect(getFolder).toHaveBeenCalledWith(
-                '0',
-                50,
-                0,
-                'name',
-                'ASC',
-                expect.any(Function),
-                expect.any(Function),
-                { forceFetch: true, fields: [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS] },
             );
         });
     });
@@ -163,12 +142,12 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 const noItemsCollection = { ...collection, items: undefined };
                 const expectedCollection = { ...collection, items: [] };
 
-                instance.updateCollection(noItemsCollection, { id: 3 });
-
-                expect(instance.setState).toHaveBeenCalledWith(
-                    { currentCollection: expectedCollection, selected: undefined },
-                    noop,
-                );
+                instance.updateCollection(noItemsCollection, { id: 3 }).then(() => {
+                    expect(instance.setState).toHaveBeenCalledWith(
+                        { currentCollection: expectedCollection, selected: undefined },
+                        noop,
+                    );
+                });
             });
 
             test('should update the collection items selected to false even if selected item is not in the collection', () => {
@@ -181,12 +160,12 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     name: 'name',
                 };
 
-                instance.updateCollection(collection, { id: 3 });
-
-                expect(instance.setState).toHaveBeenCalledWith(
-                    { currentCollection: expectedCollection, selected: undefined },
-                    noop,
-                );
+                instance.updateCollection(collection, { id: 3 }).then(() => {
+                    expect(instance.setState).toHaveBeenCalledWith(
+                        { currentCollection: expectedCollection, selected: undefined },
+                        noop,
+                    );
+                });
             });
 
             test('should update the collection items selected to false except for the selected item in the collection', () => {
@@ -199,12 +178,12 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     name: 'name',
                 };
 
-                instance.updateCollection(collection, { id: 2 });
-
-                expect(instance.setState).toHaveBeenCalledWith(
-                    { currentCollection: expectedCollection, selected: expectedItem2 },
-                    noop,
-                );
+                instance.updateCollection(collection, { id: 2 }).then(() => {
+                    expect(instance.setState).toHaveBeenCalledWith(
+                        { currentCollection: expectedCollection, selected: expectedItem2 },
+                        noop,
+                    );
+                });
             });
 
             test('should update the selected item in the collection', () => {
@@ -217,15 +196,15 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     name: 'name',
                 };
 
-                instance.updateCollection(collection, { id: 2, newProperty: 'newProperty' });
-
-                expect(instance.setState).toHaveBeenCalledWith(
-                    {
-                        currentCollection: expectedCollection,
-                        selected: { ...expectedItem2, newProperty: 'newProperty' },
-                    },
-                    noop,
-                );
+                instance.updateCollection(collection, { id: 2, newProperty: 'newProperty' }).then(() => {
+                    expect(instance.setState).toHaveBeenCalledWith(
+                        {
+                            currentCollection: expectedCollection,
+                            selected: { ...expectedItem2, newProperty: 'newProperty' },
+                        },
+                        noop,
+                    );
+                });
             });
         });
 
@@ -255,23 +234,8 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 item = cloneDeep(baseItem);
             });
 
-            test('should not add thumbnailUrl if grid view is disabled', () => {
+            test('should add thumbnailUrl', () => {
                 wrapper = getWrapper();
-                instance = wrapper.instance();
-                instance.api = { getFileAPI };
-                instance.setState = jest.fn();
-
-                instance.updateCollection(collection, item, callback);
-                const newSelected = { ...item, thumbnailUrl: null };
-                const newCollection = { ...collection, items: [newSelected] };
-                expect(instance.setState).toHaveBeenCalledWith(
-                    { currentCollection: newCollection, selected: newSelected },
-                    callback,
-                );
-            });
-
-            test('should add thumbnailUrl if grid view is enabled', () => {
-                wrapper = getWrapper(gridViewOn);
                 instance = wrapper.instance();
                 instance.api = { getFileAPI };
                 instance.setState = jest.fn();
