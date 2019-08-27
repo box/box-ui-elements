@@ -1,6 +1,7 @@
 import Cache from '../../utils/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import Recents from '../Recents';
+import { X_REP_HINT_HEADER_DIMENSIONS_DEFAULT } from '../../constants';
 
 describe('api/Recents', () => {
     let recents;
@@ -95,7 +96,7 @@ describe('api/Recents', () => {
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
                     params: { fields: FOLDER_FIELDS_TO_FETCH.toString() },
-                    headers: {},
+                    headers: { 'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT },
                 });
             });
         });
@@ -115,7 +116,7 @@ describe('api/Recents', () => {
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
                     params: { fields: FOLDER_FIELDS_TO_FETCH.toString() },
-                    headers: {},
+                    headers: { 'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT },
                 });
             });
         });

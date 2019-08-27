@@ -1,7 +1,7 @@
 import Cache from '../../utils/Cache';
-import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import Folder from '../Folder';
-import { FIELD_REPRESENTATIONS, X_REP_HINT_HEADER_DIMENSIONS_DEFAULT } from '../../constants';
+import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
+import { X_REP_HINT_HEADER_DIMENSIONS_DEFAULT } from '../../constants';
 
 let folder;
 let cache;
@@ -154,34 +154,11 @@ describe('api/Folder', () => {
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                         sort: 'by',
                     },
-                    headers: {},
-                });
-            });
-        });
-        test('should make xhr to folder with thumbnail field and call success callback', () => {
-            folder.folderSuccessHandler = jest.fn();
-            folder.errorHandler = jest.fn();
-            folder.includePreviewFields = true;
-            folder.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
-            };
-            const fields = [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS];
-            return folder.folderRequest({ fields }).then(() => {
-                expect(folder.folderSuccessHandler).toHaveBeenCalledWith('success');
-                expect(folder.errorHandler).not.toHaveBeenCalled();
-                expect(folder.xhr.get).toHaveBeenCalledWith({
-                    url: 'https://api.box.com/2.0/folders/id',
-                    params: {
-                        direction: 'direction',
-                        limit: 20,
-                        offset: 0,
-                        fields: fields.toString(),
-                        sort: 'by',
-                    },
                     headers: { 'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT },
                 });
             });
         });
+
         test('should make xhr to folder and call error callback', () => {
             const error = new Error('error');
             folder.folderSuccessHandler = jest.fn();
@@ -203,7 +180,7 @@ describe('api/Folder', () => {
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                         sort: 'by',
                     },
-                    headers: {},
+                    headers: { 'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT },
                 });
             });
         });
