@@ -711,8 +711,10 @@ describe('api/Feed', () => {
             feed.updateFeedItem = jest.fn();
         });
 
-        test('should throw if no file id', () => {
-            expect(() => feed.updateTaskNew({})).toThrow(fileError);
+        test('should throw if no file id', async () => {
+            expect.assertions(1);
+            const updatedTask = feed.updateTaskNew({});
+            await expect(updatedTask).rejects.toEqual(Error(fileError));
         });
 
         test('should call the error handling when unable to create new task collaborator', async () => {
@@ -816,7 +818,7 @@ describe('api/Feed', () => {
 
             expect(feed.tasksNewAPI.updateTask).toBeCalled();
             expect(feed.tasksNewAPI.getTask).toBeCalled();
-            expect(feed.updateFeedItem).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalledTimes(2);
             expect(successCallback).toBeCalled();
         });
 
