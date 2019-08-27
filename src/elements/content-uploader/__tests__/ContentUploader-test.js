@@ -3,7 +3,13 @@ import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
-import { STATUS_PENDING, STATUS_STAGED, STATUS_COMPLETE, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import {
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_STAGED,
+    STATUS_COMPLETE,
+    VIEW_UPLOAD_SUCCESS,
+} from '../../../constants';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 
@@ -73,6 +79,42 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('removeFileFromUploadQueue()', () => {
+        test('should cancel and remove item from uploading queue', () => {
+            const wrapper = getWrapper();
+            const item = {
+                api: {
+                    cancel: jest.fn(),
+                },
+                status: STATUS_IN_PROGRESS,
+            };
+            wrapper.setState({
+                items: [item],
+            });
+            const instance = wrapper.instance();
+            instance.upload = jest.fn();
+
+            instance.removeFileFromUploadQueue(item);
+
+            expect(item.api.cancel).toBeCalled();
+            expect(wrapper.state().items.length).toBe(0);
+            expect(instance.upload).toBeCalled();
+        });
+    });
+
+    describe('resumeFile()', () => {
+        test('should call resume from api and call updateViewAndCollection', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const item = { api: {} };
+            item.api.resume = jest.fn();
+            instance.updateViewAndCollection = jest.fn();
+            instance.resumeFile(item);
+            expect(item.api.resume).toBeCalled();
+            expect(instance.updateViewAndCollection).toBeCalled();
+        });
+    });
+
     describe('isDone', () => {
         test('should be true if all items are complete or staged', () => {
             const wrapper = getWrapper();
@@ -121,7 +163,7 @@ describe('elements/content-uploader/ContentUploader', () => {
 
         beforeEach(() => {
             jest.spyOn(global.console, 'warn').mockImplementation();
-            wrapper = getWrapper();
+            wrapper = getWrapper({ isResumableUploadsEnabled: false });
             instance = wrapper.instance();
             getPlainUploadAPI = jest.fn();
             getChunkedUploadAPI = jest.fn();
