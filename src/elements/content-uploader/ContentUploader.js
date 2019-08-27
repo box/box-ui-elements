@@ -974,10 +974,10 @@ class ContentUploader extends Component<Props, State> {
     };
 
     /**
-     * Click all uploads in the Uploads Manager with the given status.
+     * Click action button for all uploads in the Uploads Manager with the given status.
      *
      * @private
-     * @param {UploadStatus}
+     * @param {UploadStatus} - the status that items should have for their action button to be clicked
      * @return {void}
      */
     clickAllWithStatus = (status?: UploadStatus) => {
