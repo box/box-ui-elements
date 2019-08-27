@@ -26,6 +26,90 @@ exports[`elements/content-uploader/OverallUploadsProgressBar should render corre
 </div>
 `;
 
+exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when isResumeVisible is false 1`] = `
+<div
+  className="bcu-overall-progress-bar"
+  data-resin-target="uploadcollapse"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  <span
+    className="bcu-upload-status"
+  >
+    <FormattedMessage
+      defaultMessage="Drop files on this page to upload them into this folder."
+      id="be.uploadsManagerUploadPrompt"
+    />
+  </span>
+  <ProgressBar
+    percent={0}
+  />
+  <span
+    className="bcu-uploads-manager-toggle"
+  />
+</div>
+`;
+
+exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when isResumeVisible is true and hasMultipleFailedUploads is false 1`] = `
+<div
+  className="bcu-overall-progress-bar"
+  data-resin-target="uploadcollapse"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  <span
+    className="bcu-upload-status"
+  >
+    <FormattedMessage
+      defaultMessage="Drop files on this page to upload them into this folder."
+      id="be.uploadsManagerUploadPrompt"
+    />
+  </span>
+  <ProgressBar
+    percent={0}
+  />
+  <UploadsManagerAction
+    hasMultipleFailedUploads={false}
+  />
+  <span
+    className="bcu-uploads-manager-toggle"
+  />
+</div>
+`;
+
+exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when isResumeVisible is true and hasMultipleFailedUploads is true 1`] = `
+<div
+  className="bcu-overall-progress-bar"
+  data-resin-target="uploadcollapse"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  <span
+    className="bcu-upload-status"
+  >
+    <FormattedMessage
+      defaultMessage="Drop files on this page to upload them into this folder."
+      id="be.uploadsManagerUploadPrompt"
+    />
+  </span>
+  <ProgressBar
+    percent={0}
+  />
+  <UploadsManagerAction
+    hasMultipleFailedUploads={true}
+  />
+  <span
+    className="bcu-uploads-manager-toggle"
+  />
+</div>
+`;
+
 exports[`elements/content-uploader/OverallUploadsProgressBar should render correctly when isVisible is false 1`] = `
 <div
   className="bcu-overall-progress-bar"

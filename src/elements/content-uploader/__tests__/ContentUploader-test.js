@@ -8,6 +8,7 @@ import {
     STATUS_IN_PROGRESS,
     STATUS_STAGED,
     STATUS_COMPLETE,
+    STATUS_ERROR,
     VIEW_UPLOAD_SUCCESS,
 } from '../../../constants';
 
@@ -112,6 +113,38 @@ describe('elements/content-uploader/ContentUploader', () => {
             instance.resumeFile(item);
             expect(item.api.resume).toBeCalled();
             expect(instance.updateViewAndCollection).toBeCalled();
+        });
+    });
+
+    describe('clickAllWithStatus()', () => {
+        test('should call onClick for all items', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const items = [{ status: STATUS_COMPLETE }, { status: STATUS_IN_PROGRESS }, { status: STATUS_ERROR }];
+            instance.state.items = items;
+
+            instance.onClick = jest.fn();
+            instance.clickAllWithStatus();
+            expect(instance.onClick).toBeCalledWith(items[0]);
+            expect(instance.onClick).toBeCalledWith(items[1]);
+            expect(instance.onClick).toBeCalledWith(items[2]);
+        });
+
+        test('should call onClick for only items with given status', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const items = [
+                { status: STATUS_COMPLETE },
+                { status: STATUS_ERROR },
+                { status: STATUS_IN_PROGRESS },
+                { status: STATUS_ERROR },
+            ];
+            instance.state.items = items;
+
+            instance.onClick = jest.fn();
+            instance.clickAllWithStatus(STATUS_ERROR);
+            expect(instance.onClick).toBeCalledWith(items[1]);
+            expect(instance.onClick).toBeCalledWith(items[3]);
         });
     });
 
