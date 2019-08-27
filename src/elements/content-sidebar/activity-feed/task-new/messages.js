@@ -141,7 +141,7 @@ const messages = defineMessages({
     },
     taskAnyAffordanceTooltip: {
         id: 'be.contentSidebar.activityFeed.task.taskAnyAffordanceTooltip',
-        defaultMessage: 'The task creator only requires one assignee to complete this task',
+        defaultMessage: 'Only one assignee is required to complete this task',
         description: 'Tooltip text for any task icon, explaining that the task only needs one assignee to complete.',
     },
 });
