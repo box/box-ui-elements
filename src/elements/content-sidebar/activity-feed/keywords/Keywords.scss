@@ -3,15 +3,15 @@
 .be {
     .bcs-collapsed-keywords,
     .bcs-keywords {
-        align-items: center;
-        background-color: #f5ebfd;
-        border-radius: 4px;
-        color: #a64dee;
         display: flex;
+        align-items: center;
         justify-content: space-between;
+        width: 100%;
         margin-top: 10px;
         padding: 9px;
-        width: 100%;
+        color: #a64dee;
+        background-color: #f5ebfd;
+        border-radius: 4px;
 
         .bcs-keywords-actions {
             display: flex;
@@ -25,10 +25,10 @@
         }
 
         .bcs-keywords-info {
-            flex: none;
-            height: 16px;
             position: relative;
+            flex: none;
             width: 16px;
+            height: 16px;
 
             path {
                 fill: #a64dee;
@@ -47,8 +47,8 @@
             display: inline-block;
             max-width: 100%;
             overflow: hidden;
-            text-overflow: ellipsis;
             white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
 }

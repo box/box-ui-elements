@@ -1,9 +1,9 @@
 @import '../../styles/variables';
 
 .bdl-SidebarToggleButton {
-    border-radius: $bdl-border-radius-size;
     margin: 0 3px;
     padding: 4px;
+    border-radius: $bdl-border-radius-size;
 
     path {
         fill: $bdl-gray-50;

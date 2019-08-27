@@ -1,13 +1,13 @@
 @import '../../styles/variables';
 
 .draggable-list {
-    align-items: center;
     display: flex;
+    align-items: center;
 
     .draggable-list-content {
-        align-items: center;
         display: flex;
         flex: 1;
+        align-items: center;
     }
 
     .draggable-list-handle {

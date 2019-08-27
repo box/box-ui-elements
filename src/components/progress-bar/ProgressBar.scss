@@ -8,8 +8,8 @@
     width: 100%;
 
     .progress-bar {
-        background-color: $primary-color;
         height: 3px;
+        background-color: $primary-color;
         transition: width .2s ease-in;
     }
 }

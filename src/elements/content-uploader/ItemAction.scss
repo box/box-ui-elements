@@ -1,9 +1,9 @@
 .bcu-item-action {
     .crawler {
-        align-items: center;
         display: flex;
-        height: 100%;
+        align-items: center;
         justify-content: center;
+        height: 100%;
     }
 
     button {
@@ -15,8 +15,8 @@
         }
 
         .be-icon-in-progress {
-            height: 24px;
             width: 24px;
+            height: 24px;
 
             // Hide cross icon without hover
             svg {

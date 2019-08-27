@@ -46,9 +46,9 @@ $sidebarContentWidth: 340px;
 
     /* stylelint-disable declaration-no-important */
     box-sizing: border-box !important;
+    font-size: 13px;
     /* stylelint-enable declaration-no-important */
     font-family: $font;
-    font-size: 13px;
 
     * {
         @include rendering;
@@ -69,7 +69,7 @@ $sidebarContentWidth: 340px;
 }
 
 @mixin placeholder {
-    font-family: $font;
     font-weight: normal;
+    font-family: $font;
     opacity: .6;
 }

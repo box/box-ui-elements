@@ -3,9 +3,9 @@
 $query-bar-button-width: 240px;
 
 @mixin activeButton {
-    border: 1px solid $bdl-box-blue;
     color: $bdl-box-blue;
     font-weight: bold;
+    border: 1px solid $bdl-box-blue;
 
     .fill-color {
         fill: $bdl-box-blue;
@@ -17,26 +17,26 @@ $query-bar-button-width: 240px;
 }
 
 @mixin dropdownFooter {
-    border-top: 1px solid $bdl-gray-10;
     display: flex;
     padding: 15px;
+    border-top: 1px solid $bdl-gray-10;
 }
 
 .metadata-view-query-bar {
+    display: flex;
+    padding: 5px;
     background: $bdl-gray-02;
     border: 1px solid $bdl-gray-05;
     border-radius: $bdl-border-radius-size;
-    display: flex;
-    padding: 5px;
 
     .button-container {
         display: flex;
         flex: 1;
 
         .button-icon {
+            width: 16px;
             height: 16px;
             margin: 3px 10px 0 0;
-            width: 16px;
         }
     }
 }
@@ -54,10 +54,10 @@ $query-bar-button-width: 240px;
 
     .button-label {
         flex: 10;
-        letter-spacing: normal;
-        line-height: 20px;
-        overflow: hidden;
         padding-left: 5px;
+        overflow: hidden;
+        line-height: 20px;
+        letter-spacing: normal;
         text-align: left;
         text-overflow: ellipsis;
     }
@@ -77,13 +77,13 @@ $query-bar-button-width: 240px;
     }
 
     .template-dropdown-list-title {
-        color: $bdl-gray-50;
         display: flex;
-        font-size: 10px;
-        letter-spacing: .6px;
+        padding-top: 5px;
         padding-bottom: 0;
         padding-left: 17px;
-        padding-top: 5px;
+        color: $bdl-gray-50;
+        font-size: 10px;
+        letter-spacing: .6px;
     }
 
     .template-display-name {
@@ -113,10 +113,10 @@ $query-bar-button-width: 240px;
             justify-content: space-between;
 
             .apply-filters-button {
+                color: $white;
                 background-color: $bdl-box-blue;
                 border: none;
                 border-radius: 5px;
-                color: $white;
             }
         }
     }
@@ -129,8 +129,8 @@ $query-bar-button-width: 240px;
 
     .column-button-dropdown {
         .column-button-dropdown-header {
-            height: 50%;
             width: 100%;
+            height: 50%;
 
             .checkbox-container {
                 margin: inherit;
@@ -144,8 +144,8 @@ $query-bar-button-width: 240px;
         }
 
         .draggable-list-example {
-            padding: 15px;
             width: $query-bar-button-width;
+            padding: 15px;
 
             .draggable-list {
                 padding-bottom: 10px;

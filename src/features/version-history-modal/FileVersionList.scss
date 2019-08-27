@@ -1,14 +1,14 @@
 @import '../../styles/variables';
 
 .file-version-list {
-    border: 1px solid $bdl-gray-30;
     margin-bottom: 20px;
+    border: 1px solid $bdl-gray-30;
 }
 
 .file-version-row {
-    border-top: 1px solid $bdl-gray-10;
     display: flex;
     padding: 8px 5px;
+    border-top: 1px solid $bdl-gray-10;
 
     .file-version-icon {
         width: 32px;
@@ -23,25 +23,25 @@
     }
 
     .file-version-badge {
-        background-color: $selected-blue-background;
         color: $bdl-dark-blue;
+        background-color: $selected-blue-background;
     }
 
     .file-version-name {
-        overflow-wrap: break-word;
         padding: 0 5px;
         word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .file-version-info {
         margin-top: 10px;
 
         p {
+            margin: 0 0 10px;
             font-size: 12px;
             line-height: 12px;
-            margin: 0 0 10px;
-            overflow-wrap: break-word;
             word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .file-version-retention-info {

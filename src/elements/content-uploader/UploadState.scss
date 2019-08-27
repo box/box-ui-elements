@@ -1,21 +1,21 @@
 @import '../common/variables';
 
 .bcu-drag-drop-overlay {
-    bottom: 0;
-    display: none;
-    left: 0;
-    opacity: .2;
     position: absolute;
-    right: 0;
     top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    opacity: .2;
 }
 
 .bcu-upload-state {
-    align-items: center;
+    position: relative;
     display: flex;
     flex: 1;
+    align-items: center;
     justify-content: center;
-    position: relative;
     text-align: center;
 
     svg {
@@ -24,14 +24,14 @@
 
     // Show blue indicator when item can be dropped
     &.bcu-is-droppable .bcu-drag-drop-overlay {
-        background: $blue;
         display: block;
+        background: $blue;
     }
 
     // Show red indicator when item cannot be dropped
     &.bcu-is-not-droppable .bcu-drag-drop-overlay {
-        background: $red;
         display: block;
+        background: $red;
     }
 
     // Hide upload prompt if there are items queued
@@ -41,13 +41,13 @@
         // If a file is dragged over, show the prompt on top of items
         &.bcu-is-droppable,
         &.bcu-is-not-droppable {
-            background-color: rgba(255, 255, 255, .8);
-            bottom: 0;
-            display: flex;
-            left: 0;
             position: absolute;
-            right: 0;
             top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            background-color: rgba(255, 255, 255, .8);
 
             .bcu-drag-drop-overlay {
                 display: none;

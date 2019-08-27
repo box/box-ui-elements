@@ -1,17 +1,17 @@
 @import '../../common/variables';
 
 .bcs-VersionsItemButton {
-    align-items: flex-start;
-    background-color: transparent;
-    border-radius: $bdl-border-radius-size;
-    color: $bdl-gray;
     display: flex;
+    align-items: flex-start;
+    width: 100%;
+    color: $bdl-gray;
     font-size: 100%;
     line-height: 20px;
-    outline: none;
     text-align: left;
+    background-color: transparent;
+    border-radius: $bdl-border-radius-size;
+    outline: none;
     transition: background-color 50ms ease-in, border 50ms ease-in;
-    width: 100%;
 
     &,
     &:hover,
