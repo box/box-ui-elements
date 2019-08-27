@@ -55,7 +55,7 @@ const UploadsManager = ({
     let totalSize = 0;
     let totalUploaded = 0;
     items.forEach(item => {
-        if (!(item.status === STATUS_ERROR || item.isFolder)) {
+        if (item.status !== STATUS_ERROR && !item.isFolder) {
             totalSize += item.size;
             totalUploaded += (item.size * item.progress) / 100.0;
         } else if (item.status === STATUS_ERROR) {

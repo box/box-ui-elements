@@ -984,7 +984,7 @@ class ContentUploader extends Component<Props, State> {
         const { items } = this.state;
 
         items.forEach(item => {
-            if (!status || (status && item.status === status)) {
+            if (!status || item.status === status) {
                 this.onClick(item);
             }
         });

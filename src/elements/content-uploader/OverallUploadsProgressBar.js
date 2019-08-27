@@ -7,10 +7,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../common/messages';
 import ProgressBar from './ProgressBar';
+import UploadsManagerItemAction from './UploadsManagerAction';
 import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR, VIEW_UPLOAD_EMPTY } from '../../constants';
 
 import './OverallUploadsProgressBar.scss';
-import UploadsManagerItemAction from './UploadsManagerAction';
 
 /**
  * Get upload status
