@@ -5,7 +5,7 @@
 
 import * as React from 'react';
 import noop from 'lodash/noop';
-import get from 'lodash/get';
+import getProp from 'lodash/get';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import commonMessages from '../../../../common/messages';
@@ -335,7 +335,7 @@ class TaskForm extends React.Component<Props, State> {
         const shouldShowCompletionRule = approvers.length > 0;
         const isCompletionRuleCheckboxDisabled = approvers.length <= 1;
         const isCompletionRuleCheckboxChecked = completionRule === TASK_COMPLETION_RULE_ANY;
-        const isForbiddenErrorOnEdit = isLoading || !!(get(error, 'status') === 403 && !isCreateEditMode);
+        const isForbiddenErrorOnEdit = isLoading || (getProp(error, 'status') === 403 && !isCreateEditMode);
 
         return (
             <div className={inputContainerClassNames} data-resin-component="taskform">

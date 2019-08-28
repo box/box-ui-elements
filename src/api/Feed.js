@@ -545,7 +545,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        let shouldCloseModal = true;
+        let updatedWithoutError = true;
         let removeAssigneeError;
 
         this.file = file;
@@ -567,7 +567,7 @@ class Feed extends Base {
             await Promise.all(
                 task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
             ).catch((e: ElementsXhrError) => {
-                shouldCloseModal = false;
+                updatedWithoutError = false;
                 removeAssigneeError = e;
             });
 
@@ -584,7 +584,7 @@ class Feed extends Base {
                             task.id,
                         );
 
-                        if (!shouldCloseModal) {
+                        if (!updatedWithoutError) {
                             this.feedErrorCallback(false, removeAssigneeError, ERROR_CODE_UPDATE_TASK);
                         }
 
@@ -599,7 +599,7 @@ class Feed extends Base {
             });
 
             // everything succeeded, so call the passed in success callback
-            if (!this.isDestroyed() && shouldCloseModal) {
+            if (!this.isDestroyed() && updatedWithoutError) {
                 successCallback();
             }
         } catch (e) {

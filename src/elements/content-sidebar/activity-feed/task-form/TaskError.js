@@ -5,7 +5,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import get from 'lodash/get';
+import getProp from 'lodash/get';
 
 import messages from './messages';
 import apiMessages from '../../../../api/messages';
@@ -20,12 +20,15 @@ type Props = {
     taskType: TaskType,
 };
 
-function TaskError(props: Props) {
-    const { editMode, error, taskType } = props;
+const TaskError = ({ editMode, error, taskType }: Props) => {
     const isEditMode = editMode === TASK_EDIT_MODE_EDIT;
-    const isForbiddenErrorOnEdit = get(error, 'status') === 403 && isEditMode;
+    const isForbiddenErrorOnEdit = getProp(error, 'status') === 403 && isEditMode;
     const errorTitle = isForbiddenErrorOnEdit ? messages.taskEditWarningTitle : messages.taskCreateErrorTitle;
     let errorMessage = isEditMode ? messages.taskUpdateErrorMessage : apiMessages.taskCreateErrorMessage;
+
+    if (!error) {
+        return null;
+    }
 
     // error message changes when a forbidden operation occurs while editing a task
     if (isForbiddenErrorOnEdit) {
@@ -40,15 +43,12 @@ function TaskError(props: Props) {
                 return null;
         }
     }
-    if (!error) {
-        return null;
-    }
 
     return (
         <InlineError title={<FormattedMessage {...errorTitle} />}>
             <FormattedMessage {...errorMessage} />
         </InlineError>
     );
-}
+};
 
 export default TaskError;
