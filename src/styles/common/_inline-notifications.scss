@@ -6,6 +6,7 @@
     display: none;
     margin: 10px 0;
     padding: 14px 10px;
+    color: $bdl-gray;
     border-radius: 2px;
 
     &.inline-alert-visible {
@@ -13,25 +14,21 @@
     }
 
     &.inline-alert-warning {
-        color: $bdl-gray;
         background-color: $bdl-yellorange-10;
         border: 1px solid $bdl-yellorange-50;
     }
 
     &.inline-alert-error {
-        color: $bdl-gray;
         background-color: $bdl-watermelon-red-10;
         border: 1px solid $bdl-watermelon-red-50;
     }
 
     &.inline-alert-success {
-        color: $bdl-gray;
         background-color: $bdl-green-light-10;
         border: 1px solid $bdl-green-light;
     }
 
     &.inline-alert-info {
-        color: $bdl-gray;
         background-color: $bdl-light-blue-10;
         border: 1px solid $bdl-light-blue-50;
     }
