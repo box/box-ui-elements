@@ -15,17 +15,6 @@ describe('components/inline-error/InlineError', () => {
             </InlineError>,
         );
 
-        expect(wrapper).toMatchInlineSnapshot(`
-            <div
-              class="inline-alert inline-alert-visible inline-alert-error some-class"
-            >
-              <strong>
-                this is the title
-              </strong>
-              <div>
-                this is a message to put in the notice
-              </div>
-            </div>
-        `);
+        expect(wrapper).toMatchSnapshot();
     });
 });
