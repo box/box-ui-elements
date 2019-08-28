@@ -2,7 +2,7 @@
 
 exports[`components/inline-error/InlineError should correctly render 1`] = `
 <div
-  class="inline-alert inline-alert-visible inline-alert-error some-class"
+  class="some-class inline-alert inline-alert-visible inline-alert-error"
 >
   <strong>
     this is the title

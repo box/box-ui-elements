@@ -7,7 +7,7 @@
     margin: 10px 0;
     padding: 14px 10px;
     color: $bdl-gray;
-    border-radius: 2px;
+    border-radius: 4px;
 
     &.inline-alert-visible {
         display: block;
@@ -31,5 +31,10 @@
     &.inline-alert-info {
         background-color: $bdl-light-blue-10;
         border: 1px solid $bdl-light-blue-50;
+    }
+
+    &.inline-alert-generic {
+        background-color: $bdl-gray-10;
+        border: 1px solid $bdl-gray-50;
     }
 }
