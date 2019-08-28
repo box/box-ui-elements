@@ -10,8 +10,8 @@ type Props = {
     type?: InlineNoticeType,
 };
 
-const InlineNotice = ({ children, className = '', title, type = 'warning' }: Props) => (
-    <div className={`inline-alert inline-alert-visible inline-alert-${type} ${className}`}>
+const InlineNotice = ({ children, className = '', title, type = 'warning', ...rest }: Props) => (
+    <div className={`inline-alert inline-alert-visible inline-alert-${type} ${className}`} {...rest}>
         {title ? <strong>{title}</strong> : null}
         <div>{children}</div>
     </div>
