@@ -9,19 +9,19 @@ Static div displaying a message to the user.
 ```
 <div style={ { width: '50%' } }>
     <InlineNotice type="warning">
-        This is a <b>warning</b> notification.  You might want to pay attention to this.
+        This is a <strong>warning</strong> notification.  You might want to pay attention to this.
     </InlineNotice>
 
     <InlineNotice type="error">
-        This is an <b>error</b> notification.  You really want to pay attention to this.
+        This is an <strong>error</strong> notification.  You really want to pay attention to this.
     </InlineNotice>
 
     <InlineNotice type="success">
-        This is a <b>success</b> notification.  You ought to feel really good about this.
+        This is a <strong>success</strong> notification.  You ought to feel really good about this.
     </InlineNotice>
 
     <InlineNotice type="info">
-        This is an <b>info</b> notification.  You'll just want to notice this.
+        This is an <strong>info</strong> notification.  You'll just want to notice this.
     </InlineNotice>
 </div>
 ```
@@ -30,7 +30,7 @@ Static div displaying a message to the user.
 
 ```
 <div style={ { width: '50%' } }>
-       <InlineNotice type="warning" title="Warning Title">
+    <InlineNotice type="warning" title="Warning Title">
         This is a warning notification.  You might want to pay attention to this.
     </InlineNotice>
     

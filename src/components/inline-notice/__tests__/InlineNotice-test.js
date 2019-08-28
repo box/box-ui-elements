@@ -1,4 +1,5 @@
 import React from 'react';
+import { render } from 'enzyme';
 
 import InlineNotice from '..';
 
@@ -50,5 +51,19 @@ describe('components/inline-notice/InlineNotice', () => {
         const wrapper = shallow(<InlineNotice className="testClass">{children}</InlineNotice>);
 
         expect(wrapper.hasClass('testClass')).toBe(true);
+    });
+
+    test('should pass other props to div', () => {
+        const label = 'an error occured';
+        const role = 'alert';
+
+        const wrapper = render(
+            <InlineNotice role={role} aria-label={label}>
+                a message
+            </InlineNotice>,
+        );
+
+        expect(wrapper.prop('role')).toBe(role);
+        expect(wrapper.prop('aria-label')).toBe(label);
     });
 });
