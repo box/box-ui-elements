@@ -12,7 +12,7 @@ type Props = {
 
 const InlineNotice = ({ children, className = '', title, type = 'warning' }: Props) => (
     <div className={`inline-alert inline-alert-visible inline-alert-${type} ${className}`}>
-        {title && <b>{title}</b>}
+        {title ? <b>{title}</b> : null}
         <div>{children}</div>
     </div>
 );
