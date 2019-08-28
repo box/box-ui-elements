@@ -13,6 +13,21 @@ describe('components/inline-notice/InlineNotice', () => {
         expect(wrapper.text()).toEqual(children);
     });
 
+    test('should render with title prop if provided', () => {
+        const children = 'this is a message to put in the notice';
+        const title = 'this is the title';
+
+        const wrapper = shallow(<InlineNotice title={title}>{children}</InlineNotice>);
+
+        expect(wrapper.find('b').text()).toEqual(title);
+        expect(
+            wrapper
+                .children()
+                .find('div')
+                .text(),
+        ).toEqual(children);
+    });
+
     test('should have a default type', () => {
         const children = 'this is a message to put in the notice';
 

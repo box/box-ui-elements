@@ -6,11 +6,15 @@ import type { InlineNoticeType } from '../../common/types/core';
 type Props = {
     children: React.Node,
     className?: string,
+    title?: React.Node,
     type?: InlineNoticeType,
 };
 
-const InlineNotice = ({ children, className = '', type = 'warning' }: Props) => (
-    <div className={`inline-alert inline-alert-visible inline-alert-${type} ${className}`}>{children}</div>
+const InlineNotice = ({ children, className = '', title, type = 'warning' }: Props) => (
+    <div className={`inline-alert inline-alert-visible inline-alert-${type} ${className}`}>
+        {title && <b>{title}</b>}
+        <div>{children}</div>
+    </div>
 );
 
 export default InlineNotice;
