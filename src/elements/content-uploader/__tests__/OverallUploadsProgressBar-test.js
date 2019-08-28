@@ -66,4 +66,30 @@ describe('elements/content-uploader/OverallUploadsProgressBar', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render correctly when isResumeVisible is false', () => {
+        const wrapper = getWrapper({
+            isResumeVisible: false,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render correctly when isResumeVisible is true and hasMultipleFailedUploads is false', () => {
+        const wrapper = getWrapper({
+            isResumeVisible: true,
+            hasMultipleFailedUploads: false,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render correctly when isResumeVisible is true and hasMultipleFailedUploads is true', () => {
+        const wrapper = getWrapper({
+            isResumeVisible: true,
+            hasMultipleFailedUploads: true,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });

@@ -14,9 +14,11 @@ import { STATUS_ERROR } from '../../constants';
 type Props = {
     isDragging: boolean,
     isExpanded: boolean,
+    isResumableUploadsEnabled: boolean,
     isVisible: boolean,
     items: UploadItem[],
     onItemActionClick: Function,
+    onUploadsManagerActionClick: Function,
     toggleUploadsManager: Function,
     view: View,
 };
@@ -25,9 +27,11 @@ const UploadsManager = ({
     items,
     view,
     onItemActionClick,
+    onUploadsManagerActionClick,
     toggleUploadsManager,
     isExpanded,
     isVisible,
+    isResumableUploadsEnabled,
     isDragging,
 }: Props) => {
     /**
@@ -47,18 +51,21 @@ const UploadsManager = ({
         }
     };
 
-    const totalSize = items.reduce(
-        (updatedSize, item) => (item.status === STATUS_ERROR || item.isFolder ? updatedSize : updatedSize + item.size),
-        0,
-    );
-    const totalUploaded = items.reduce(
-        (updatedSize, item) =>
-            item.status === STATUS_ERROR || item.isFolder
-                ? updatedSize
-                : updatedSize + (item.size * item.progress) / 100.0,
-        0,
-    );
+    let numFailedUploads = 0;
+    let totalSize = 0;
+    let totalUploaded = 0;
+    items.forEach(item => {
+        if (item.status !== STATUS_ERROR && !item.isFolder) {
+            totalSize += item.size;
+            totalUploaded += (item.size * item.progress) / 100.0;
+        } else if (item.status === STATUS_ERROR) {
+            numFailedUploads += 1;
+        }
+    });
+
     const percent = (totalUploaded / totalSize) * 100;
+    const isResumeVisible = isResumableUploadsEnabled && numFailedUploads > 0;
+    const hasMultipleFailedUploads = numFailedUploads > 1;
 
     return (
         <div
@@ -72,9 +79,12 @@ const UploadsManager = ({
             <OverallUploadsProgressBar
                 isDragging={isDragging}
                 isExpanded={isExpanded}
+                isResumeVisible={isResumeVisible}
                 isVisible={isVisible}
+                hasMultipleFailedUploads={hasMultipleFailedUploads}
                 onClick={toggleUploadsManager}
                 onKeyDown={handleProgressBarKeyDown}
+                onUploadsManagerActionClick={onUploadsManagerActionClick}
                 percent={percent}
                 view={view}
             />
