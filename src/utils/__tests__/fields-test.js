@@ -75,6 +75,7 @@ describe('util/fields', () => {
             FIELD_ITEM_COLLECTION,
             FIELD_AUTHENTICATED_DOWNLOAD_URL,
             FIELD_IS_DOWNLOAD_AVAILABLE,
+            FIELD_REPRESENTATIONS,
         ]);
     });
 

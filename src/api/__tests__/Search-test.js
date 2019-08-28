@@ -1,7 +1,7 @@
 import Cache from '../../utils/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import Search from '../Search';
-import { FIELD_RELEVANCE, SORT_DESC } from '../../constants';
+import { FIELD_RELEVANCE, SORT_DESC, X_REP_HINT_HEADER_DIMENSIONS_DEFAULT } from '../../constants';
 
 let search;
 let cache;
@@ -155,7 +155,7 @@ describe('api/Search', () => {
                         limit: 20,
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                     },
-                    headers: {},
+                    headers: { 'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT },
                 });
             });
         });
@@ -181,7 +181,7 @@ describe('api/Search', () => {
                         limit: 20,
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                     },
-                    headers: {},
+                    headers: { 'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT },
                 });
             });
         });
