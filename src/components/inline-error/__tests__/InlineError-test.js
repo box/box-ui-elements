@@ -18,9 +18,9 @@ describe('components/inline-error/InlineError', () => {
             <div
               class="inline-alert inline-alert-visible inline-alert-error some-class"
             >
-              <b>
+              <strong>
                 this is the title
-              </b>
+              </strong>
               <div>
                 this is a message to put in the notice
               </div>
