@@ -19,7 +19,7 @@ describe('components/inline-notice/InlineNotice', () => {
 
         const wrapper = shallow(<InlineNotice title={title}>{children}</InlineNotice>);
 
-        expect(wrapper.find('b').text()).toEqual(title);
+        expect(wrapper.find('strong').text()).toEqual(title);
         expect(
             wrapper
                 .children()
