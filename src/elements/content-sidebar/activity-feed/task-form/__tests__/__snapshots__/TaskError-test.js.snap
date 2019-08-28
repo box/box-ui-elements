@@ -10,25 +10,26 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
   }
   taskType="APPROVAL"
 >
-  <InlineError
+  <InlineNotice
     title={
       <FormattedMessage
         defaultMessage="Error"
         id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
       />
     }
+    type="error"
   >
     <div
-      className="inline-alert inline-alert-visible inline-alert-error "
+      className="inline-alert inline-alert-visible inline-alert-error"
     >
-      <b>
+      <strong>
         <FormattedMessage
           defaultMessage="Error"
           id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
         >
           <div />
         </FormattedMessage>
-      </b>
+      </strong>
       <div>
         <FormattedMessage
           defaultMessage="An error occurred while creating this task. Please try again."
@@ -38,7 +39,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
         </FormattedMessage>
       </div>
     </div>
-  </InlineError>
+  </InlineNotice>
 </TaskError>
 `;
 
@@ -52,25 +53,26 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
   }
   taskType="APPROVAL"
 >
-  <InlineError
+  <InlineNotice
     title={
       <FormattedMessage
         defaultMessage="Error"
         id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
       />
     }
+    type="error"
   >
     <div
-      className="inline-alert inline-alert-visible inline-alert-error "
+      className="inline-alert inline-alert-visible inline-alert-error"
     >
-      <b>
+      <strong>
         <FormattedMessage
           defaultMessage="Error"
           id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
         >
           <div />
         </FormattedMessage>
-      </b>
+      </strong>
       <div>
         <FormattedMessage
           defaultMessage="An error occurred while creating this task. Please try again."
@@ -80,7 +82,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
         </FormattedMessage>
       </div>
     </div>
-  </InlineError>
+  </InlineNotice>
 </TaskError>
 `;
 
@@ -101,25 +103,26 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
   }
   taskType="APPROVAL"
 >
-  <InlineError
+  <InlineNotice
     title={
       <FormattedMessage
         defaultMessage="Task Updated with Errors"
         id="be.contentSidebar.activityFeed.taskForm.taskEditWarningTitle"
       />
     }
+    type="error"
   >
     <div
-      className="inline-alert inline-alert-visible inline-alert-error "
+      className="inline-alert inline-alert-visible inline-alert-error"
     >
-      <b>
+      <strong>
         <FormattedMessage
           defaultMessage="Task Updated with Errors"
           id="be.contentSidebar.activityFeed.taskForm.taskEditWarningTitle"
         >
           <div />
         </FormattedMessage>
-      </b>
+      </strong>
       <div>
         <FormattedMessage
           defaultMessage="Unable to remove assignee(s) because the task is now approved."
@@ -129,7 +132,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
         </FormattedMessage>
       </div>
     </div>
-  </InlineError>
+  </InlineNotice>
 </TaskError>
 `;
 
@@ -143,25 +146,26 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
   }
   taskType="APPROVAL"
 >
-  <InlineError
+  <InlineNotice
     title={
       <FormattedMessage
         defaultMessage="Error"
         id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
       />
     }
+    type="error"
   >
     <div
-      className="inline-alert inline-alert-visible inline-alert-error "
+      className="inline-alert inline-alert-visible inline-alert-error"
     >
-      <b>
+      <strong>
         <FormattedMessage
           defaultMessage="Error"
           id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
         >
           <div />
         </FormattedMessage>
-      </b>
+      </strong>
       <div>
         <FormattedMessage
           defaultMessage="An error occurred while modifying this task. Please try again."
@@ -171,7 +175,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
         </FormattedMessage>
       </div>
     </div>
-  </InlineError>
+  </InlineNotice>
 </TaskError>
 `;
 
@@ -192,25 +196,26 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
   }
   taskType="GENERAL"
 >
-  <InlineError
+  <InlineNotice
     title={
       <FormattedMessage
         defaultMessage="Error"
         id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
       />
     }
+    type="error"
   >
     <div
-      className="inline-alert inline-alert-visible inline-alert-error "
+      className="inline-alert inline-alert-visible inline-alert-error"
     >
-      <b>
+      <strong>
         <FormattedMessage
           defaultMessage="Error"
           id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
         >
           <div />
         </FormattedMessage>
-      </b>
+      </strong>
       <div>
         <FormattedMessage
           defaultMessage="An error occurred while creating this task. Please try again."
@@ -220,7 +225,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
         </FormattedMessage>
       </div>
     </div>
-  </InlineError>
+  </InlineNotice>
 </TaskError>
 `;
 
@@ -234,25 +239,26 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
   }
   taskType="GENERAL"
 >
-  <InlineError
+  <InlineNotice
     title={
       <FormattedMessage
         defaultMessage="Error"
         id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
       />
     }
+    type="error"
   >
     <div
-      className="inline-alert inline-alert-visible inline-alert-error "
+      className="inline-alert inline-alert-visible inline-alert-error"
     >
-      <b>
+      <strong>
         <FormattedMessage
           defaultMessage="Error"
           id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
         >
           <div />
         </FormattedMessage>
-      </b>
+      </strong>
       <div>
         <FormattedMessage
           defaultMessage="An error occurred while creating this task. Please try again."
@@ -262,7 +268,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
         </FormattedMessage>
       </div>
     </div>
-  </InlineError>
+  </InlineNotice>
 </TaskError>
 `;
 
@@ -283,25 +289,26 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
   }
   taskType="GENERAL"
 >
-  <InlineError
+  <InlineNotice
     title={
       <FormattedMessage
         defaultMessage="Task Updated with Errors"
         id="be.contentSidebar.activityFeed.taskForm.taskEditWarningTitle"
       />
     }
+    type="error"
   >
     <div
-      className="inline-alert inline-alert-visible inline-alert-error "
+      className="inline-alert inline-alert-visible inline-alert-error"
     >
-      <b>
+      <strong>
         <FormattedMessage
           defaultMessage="Task Updated with Errors"
           id="be.contentSidebar.activityFeed.taskForm.taskEditWarningTitle"
         >
           <div />
         </FormattedMessage>
-      </b>
+      </strong>
       <div>
         <FormattedMessage
           defaultMessage="Unable to remove assignee(s) because the task is now completed."
@@ -311,7 +318,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
         </FormattedMessage>
       </div>
     </div>
-  </InlineError>
+  </InlineNotice>
 </TaskError>
 `;
 
@@ -325,25 +332,26 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
   }
   taskType="GENERAL"
 >
-  <InlineError
+  <InlineNotice
     title={
       <FormattedMessage
         defaultMessage="Error"
         id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
       />
     }
+    type="error"
   >
     <div
-      className="inline-alert inline-alert-visible inline-alert-error "
+      className="inline-alert inline-alert-visible inline-alert-error"
     >
-      <b>
+      <strong>
         <FormattedMessage
           defaultMessage="Error"
           id="be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle"
         >
           <div />
         </FormattedMessage>
-      </b>
+      </strong>
       <div>
         <FormattedMessage
           defaultMessage="An error occurred while modifying this task. Please try again."
@@ -353,7 +361,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
         </FormattedMessage>
       </div>
     </div>
-  </InlineError>
+  </InlineNotice>
 </TaskError>
 `;
 

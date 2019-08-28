@@ -10,7 +10,7 @@ import getProp from 'lodash/get';
 import messages from './messages';
 import apiMessages from '../../../../api/messages';
 import { TASK_EDIT_MODE_EDIT } from '../../../../constants';
-import InlineError from '../../../../components/inline-error/InlineError';
+import InlineNotice from '../../../../components/inline-notice/InlineNotice';
 
 import type { TaskType, TaskEditMode } from '../../../../common/types/tasks';
 
@@ -45,9 +45,9 @@ const TaskError = ({ editMode, error, taskType }: Props) => {
     }
 
     return (
-        <InlineError title={<FormattedMessage {...errorTitle} />}>
+        <InlineNotice type="error" title={<FormattedMessage {...errorTitle} />}>
             <FormattedMessage {...errorMessage} />
-        </InlineError>
+        </InlineNotice>
     );
 };
 
