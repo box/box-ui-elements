@@ -50,23 +50,19 @@ const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveC
                         style={{ textAlign: 'right' }}
                         width={300}
                     />
-                    {isResumableUploadsEnabled ? (
-                        <Column cellRenderer={resumeCell} dataKey="status" flexShrink={0} width={25} />
-                    ) : (
-                        <Column
-                            cellRenderer={actionCell}
-                            dataKey="status"
-                            flexShrink={0}
-                            style={{ marginRight: 18 }}
-                            width={25}
-                        />
-                    )}
+                    <Column
+                        className={isResumableUploadsEnabled ? '' : 'bcu-item-list-actionremovecell-column'}
+                        cellRenderer={isResumableUploadsEnabled ? resumeCell : actionCell}
+                        dataKey="status"
+                        flexShrink={0}
+                        width={25}
+                    />
                     {isResumableUploadsEnabled && (
                         <Column
+                            className="bcu-item-list-actionremovecell-column"
                             cellRenderer={removeCell}
                             dataKey="remove"
                             flexShrink={0}
-                            style={{ marginRight: 18 }}
                             width={25}
                         />
                     )}

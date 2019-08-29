@@ -4,11 +4,11 @@
  */
 
 import React from 'react';
+import Badgeable from '../../components/badgeable';
 import FileIcon from '../../icons/file-icon/FileIcon';
+import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import IconFolderPersonal from '../../icons/folder/IconFolderPersonal';
 import ItemName from './ItemName';
-import IconAlertDefault from '../../icons/general/IconAlertDefault';
-import Badgeable from '../../components/badgeable';
 import { STATUS_ERROR } from '../../constants';
 import './IconName.scss';
 
