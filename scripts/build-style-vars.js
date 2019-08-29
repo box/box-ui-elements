@@ -13,8 +13,9 @@ const outputJs = process.argv[3] || `${moduleName}.js`;
 const outputJson = process.argv[4] || `${moduleName}.json`;
 
 const moduleHeader = `
-// @flow
-// File auto-generated
+/* @flow */
+/* File auto-generated */
+/* eslint-disable */
 
 `;
 

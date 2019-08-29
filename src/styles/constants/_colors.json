@@ -59,13 +59,5 @@
     "bdl-watermelon-red-50": "#f69bab",
     "bdl-watermelon-red-10": "#fdebee",
     "bdl-watermelon-red-05": "#fef5f6",
-    "bdl-watermelon-red-02": "#fffbfc",
-    "modal-dialog-z-index": "160",
-    "menu-z-index": "170",
-    "notifications-wrapper-z-index": "180",
-    "overlay-z-index": "190",
-    "tooltip-z-index": "190",
-    "bdl-line-height": "20px",
-    "bdl-border-radius-size": "4px",
-    "bdl-transition-duration-200ms": "0.2s"
+    "bdl-watermelon-red-02": "#fffbfc"
 }

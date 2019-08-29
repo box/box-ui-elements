@@ -1,9 +1,7 @@
-/*
-DEPRECATED VARIABLES
-DO NOT USE IN NEW CODE
-*/
+// DEPRECATED VALUES
+// DO NOT USE IN NEW CODE
 
-@import 'variables';
+@import './constants/colors';
 
 // src/styles/_variables.scss
 $box-blue: $bdl-box-blue !default;
