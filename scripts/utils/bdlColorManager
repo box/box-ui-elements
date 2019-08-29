@@ -17,9 +17,7 @@ const writeFile = promisify(fs.writeFile);
 
 const conversionMap = {
     'box-blue': 'bdl-box-blue',
-    'primary-color': 'bdl-box-blue',
     'koray-ing': 'bdl-dark-blue',
-    'light-blue': 'bdl-light-blue',
     'picton-blue': 'bdl-light-blue',
     'baby-blue': 'bdl-box-blue-50',
     'blue-purple': 'bdl-purple-rain',
@@ -62,7 +60,7 @@ const conversionMap = {
     'threes': 'bdl-gray',
     'fours': 'bdl-gray-80',
     'sevens': 'bdl-gray-62',
-    'eights': 'bdl-gray-50',
+    'eights': 'bdl-gray-50', // false positives
     'nines': 'bdl-gray-50',
     'eees': 'bdl-gray-10',
     'tendemob-grey': 'bdl-gray-62',

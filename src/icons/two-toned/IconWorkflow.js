@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { bdlNeutral03, white } from '../../styles/variables';
+import { bdlGray50, white } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 import type { TwoTonedIcon } from '../flowTypes';
 
@@ -14,7 +14,7 @@ const IconWorkflow = ({ className = '', height = 32, title, width = 32 }: TwoTon
         width={width}
     >
         <g fill="none" fillRule="nonzero">
-            <rect className="background-color" rx="6" ry="6" width="32" height="32" fill={bdlNeutral03} />
+            <rect className="background-color" rx="6" ry="6" width="32" height="32" fill={bdlGray50} />
             <path
                 className="foreground-color"
                 transform="translate(8 8)"
