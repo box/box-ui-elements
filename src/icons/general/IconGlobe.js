@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { bdlNeutral03, white } from '../../styles/variables';
+import { bdlGray50, white } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconGlobe = ({ className = '', color = bdlNeutral03, height = 20, title, width = 20 }: Props) => (
+const IconGlobe = ({ className = '', color = bdlGray50, height = 20, title, width = 20 }: Props) => (
     <AccessibleSVG
         className={`icon-globe ${className}`}
         height={height}
