@@ -6,32 +6,35 @@
     display: none;
     margin: 10px 0;
     padding: 14px 10px;
-    border-radius: 2px;
+    color: $bdl-gray;
+    border-radius: 4px;
 
     &.inline-alert-visible {
         display: block;
     }
 
     &.inline-alert-warning {
-        color: $bdl-yellorange;
         background-color: $bdl-yellorange-10;
         border: 1px solid $bdl-yellorange-50;
     }
 
     &.inline-alert-error {
-        color: $bdl-watermelon-red;
         background-color: $bdl-watermelon-red-10;
         border: 1px solid $bdl-watermelon-red-50;
     }
 
     &.inline-alert-success {
-        color: $bdl-green-light;
         background-color: $bdl-green-light-10;
         border: 1px solid $bdl-green-light;
     }
 
     &.inline-alert-info {
-        background-color: rgba($bdl-light-blue, .1);
-        border: 1px solid rgba($bdl-box-blue, .4);
+        background-color: $bdl-light-blue-10;
+        border: 1px solid $bdl-light-blue-50;
+    }
+
+    &.inline-alert-generic {
+        background-color: $bdl-gray-10;
+        border: 1px solid $bdl-gray-50;
     }
 }

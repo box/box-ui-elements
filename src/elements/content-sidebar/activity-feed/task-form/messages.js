@@ -12,10 +12,25 @@ const messages = defineMessages({
         description: 'Title shown above error message when a task creation fails',
         defaultMessage: 'Error',
     },
+    taskEditWarningTitle: {
+        id: 'be.contentSidebar.activityFeed.taskForm.taskEditWarningTitle',
+        description: 'Title shown above warning message when a task create/edit partially fails',
+        defaultMessage: 'Task Updated with Errors',
+    },
     taskUpdateErrorMessage: {
         id: 'be.contentSidebar.activityFeed.taskForm.taskUpdateErrorMessage',
         description: 'Error message when a task edit fails',
         defaultMessage: 'An error occurred while modifying this task. Please try again.',
+    },
+    taskApprovalAssigneeRemovalWarningMessage: {
+        id: 'be.contentSidebar.activityFeed.taskForm.taskApprovalAssigneeRemovalWarningMessage',
+        description: 'Warning message showing that, while the task was updated, not all assignees (1+) were removed',
+        defaultMessage: 'Unable to remove assignee(s) because the task is now approved.',
+    },
+    taskGeneralAssigneeRemovalWarningMessage: {
+        id: 'be.contentSidebar.activityFeed.taskForm.taskGeneralAssigneeRemovalWarningMessage',
+        description: 'Warning message showing that, while the task was updated, not all assignees (1+) were removed',
+        defaultMessage: 'Unable to remove assignee(s) because the task is now completed.',
     },
     tasksAddTaskFormSelectAssigneesLabel: {
         id: 'be.contentSidebar.activityFeed.taskForm.tasksAddTaskFormSelectAssigneesLabel',
