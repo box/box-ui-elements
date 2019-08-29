@@ -17,7 +17,7 @@ const writeFile = promisify(fs.writeFile);
 
 const conversionMap = {
     'box-blue': 'bdl-box-blue',
-    'blue': 'bdl-box-blue',
+    'primary-color': 'bdl-box-blue',
     'koray-ing': 'bdl-dark-blue',
     'light-blue': 'bdl-light-blue',
     'picton-blue': 'bdl-light-blue',
@@ -41,7 +41,6 @@ const conversionMap = {
     'carissma': 'bdl-watermelon-red-50',
     'great-balls-of-fire': 'bdl-watermelon-red',
     'king-crimson': 'bdl-watermelon-red',
-    'red': 'bdl-watermelon-red',
     'bfive': 'bdl-gray-30',
     'dtwo': 'bdl-gray-20',
     'efive': 'bdl-gray-10',
@@ -85,6 +84,8 @@ function printHelp() {
     console.log('\nSupported operations:');
     console.log('\tcheck\t\tcheck to see if a file contains deprecated values (returns error if it does)');
     console.log('\tswap\t\treplace known-deprecated variable names in a JS or SCSS file');
+    console.log('\nExample:\n\n');
+    console.log(`\tfind src -name '*.scss' -exec ./scripts/utils/bdlColorManager swap {} \;`);
 }
 
 async function main() {
