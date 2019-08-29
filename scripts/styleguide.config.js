@@ -4,7 +4,7 @@ const webpackConf = require('./webpack.config.js');
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
 
 // theme variables
-const colors = require('../src/styles/constants/_colors.json');
+const vars = require('../src/styles/variables.json');
 
 const allSections = [
     {
@@ -296,9 +296,9 @@ module.exports = {
         },
         Pathline: {
             pathline: {
-                background: colors['bdl-box-blue-05'],
+                background: vars['bdl-box-blue-05'],
                 borderRadius: 3,
-                color: colors['bdl-gray'],
+                color: vars['bdl-gray'],
                 display: 'inline',
                 fontSize: 12,
                 padding: 10,
@@ -321,22 +321,22 @@ module.exports = {
         },
         TabButton: {
             isActive: {
-                borderBottomColor: colors['bdl-box-blue'],
+                borderBottomColor: vars['bdl-box-blue'],
             },
             button: {
-                borderBottom: `2px solid ${colors['bdl-gray-20']}`,
+                borderBottom: `2px solid ${vars['bdl-gray-20']}`,
             },
         },
         Blockquote: {
             blockquote: {
-                borderLeft: `3px solid ${colors['bdl-yellow']}`,
+                borderLeft: `3px solid ${vars['bdl-yellow']}`,
                 borderRadius: 3,
                 fontSize: 'inherit',
                 marginLeft: 0,
                 paddingTop: 10,
                 paddingLeft: 10,
                 paddingBottom: 1,
-                background: colors['bdl-yellow-10'],
+                background: vars['bdl-yellow-10'],
             },
         },
     },
@@ -344,18 +344,18 @@ module.exports = {
     theme: {
         buttonTextTransform: 'capitalize',
         color: {
-            base: colors['bdl-gray'],
-            link: colors['bdl-gray-62'],
-            linkHover: colors['bdl-box-blue'],
-            error: colors['bdl-watermelon-red'],
-            type: colors['bdl-gray-80'],
-            name: colors['bdl-gray-80'],
-            border: colors['bdl-gray-10'],
-            sidebarBackground: colors['bdl-gray-02'],
-            light: colors['bdl-gray-80'],
-            lightest: colors['bdl-gray-20'],
-            focus: colors['bdl-light-blue-50'],
-            codeBase: colors['bdl-gray'],
+            base: vars['bdl-gray'],
+            link: vars['bdl-gray-62'],
+            linkHover: vars['bdl-box-blue'],
+            error: vars['bdl-watermelon-red'],
+            type: vars['bdl-gray-80'],
+            name: vars['bdl-gray-80'],
+            border: vars['bdl-gray-10'],
+            sidebarBackground: vars['bdl-gray-02'],
+            light: vars['bdl-gray-80'],
+            lightest: vars['bdl-gray-20'],
+            focus: vars['bdl-light-blue-50'],
+            codeBase: vars['bdl-gray'],
         },
         fontFamily: {
             base: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
