@@ -4,7 +4,7 @@ const webpackConf = require('./webpack.config.js');
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
 
 // theme variables
-const vars = require('../src/styles/variables.json');
+const vars = require('../src/styles/variables');
 
 const allSections = [
     {
