@@ -60,7 +60,7 @@ const conversionMap = {
     'threes': 'bdl-gray',
     'fours': 'bdl-gray-80',
     'sevens': 'bdl-gray-62',
-    'eights': 'bdl-gray-50', // false positives
+    'eights': 'bdl-gray-50', // can cause false positives with words like "heights"
     'nines': 'bdl-gray-50',
     'eees': 'bdl-gray-10',
     'tendemob-grey': 'bdl-gray-62',
