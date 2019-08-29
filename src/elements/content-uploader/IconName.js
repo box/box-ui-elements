@@ -7,10 +7,10 @@ import React from 'react';
 import FileIcon from '../../icons/file-icon/FileIcon';
 import IconFolderPersonal from '../../icons/folder/IconFolderPersonal';
 import ItemName from './ItemName';
-import './IconName.scss';
 import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import Badgeable from '../../components/badgeable';
 import { STATUS_ERROR } from '../../constants';
+import './IconName.scss';
 
 type Props = {
     extension: string,

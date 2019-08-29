@@ -11,12 +11,11 @@ import IconCheck from '../../icons/general/IconCheck';
 import IconRetry from '../../icons/general/IconRetry';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
+import { bdlGreenLight } from '../../styles/variables';
 import messages from '../common/messages';
 
-const ICON_CHECK_COLOR = '#26C281';
-
 type Props = {
-    isFolder?: boolean,
+    isFolder: boolean,
     onClick: Function,
     size: number,
     status: UploadStatus,
@@ -24,9 +23,8 @@ type Props = {
 
 const ItemResume = ({ status, onClick, isFolder = false }: Props) => {
     let icon;
-    let resin = {};
+    const resin = {};
     let tooltip;
-    let shownIcon;
 
     if (isFolder && status !== STATUS_PENDING) {
         return null;
@@ -34,12 +32,12 @@ const ItemResume = ({ status, onClick, isFolder = false }: Props) => {
 
     switch (status) {
         case STATUS_COMPLETE:
-            icon = <IconCheck color={ICON_CHECK_COLOR} />;
+            icon = <IconCheck color={bdlGreenLight} />;
             break;
         case STATUS_ERROR:
             icon = <IconRetry height={24} width={24} />;
             tooltip = <FormattedMessage {...messages.resume} />;
-            resin = { 'data-resin-target': 'uploadretry' };
+            resin['data-resin-target'] = 'uploadretry';
             break;
         case STATUS_IN_PROGRESS:
             icon = <LoadingIndicator />;
@@ -49,17 +47,16 @@ const ItemResume = ({ status, onClick, isFolder = false }: Props) => {
         // empty
     }
 
-    if (status === STATUS_ERROR) {
-        shownIcon = (
+    const shownIcon =
+        status === STATUS_ERROR ? (
             <Tooltip position="top-left" text={tooltip}>
                 <PlainButton onClick={onClick} type="button" {...resin}>
                     {icon}
                 </PlainButton>
             </Tooltip>
+        ) : (
+            icon
         );
-    } else {
-        shownIcon = icon;
-    }
 
     return <div className="bcu-item-action">{shownIcon}</div>;
 };

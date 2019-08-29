@@ -17,7 +17,7 @@ type Props = {
 };
 
 const ItemRemove = ({ isFailed, isUploading, onClick }: Props) => {
-    let resin = {};
+    const resin = {};
     let target = null;
     const tooltip = <FormattedMessage {...messages.remove} />;
 
@@ -28,7 +28,7 @@ const ItemRemove = ({ isFailed, isUploading, onClick }: Props) => {
     }
 
     if (target) {
-        resin = { 'data-resin-target': target };
+        resin['data-resin-target'] = target;
     }
 
     return (

@@ -5,7 +5,7 @@ exports[`elements/content-uploader/ItemResume should render correctly with STATU
   className="bcu-item-action"
 >
   <IconCheck
-    color="#26C281"
+    color="#26c281"
   />
 </div>
 `;
