@@ -10,7 +10,6 @@ import nameCellRenderer from './nameCellRenderer';
 import progressCellRenderer from './progressCellRenderer';
 import actionCellRenderer from './actionCellRenderer';
 import removeCellRenderer from './removeCellRenderer';
-import resumeCellRenderer from './resumeCellRenderer';
 import './ItemList.scss';
 
 type Props = {
@@ -25,8 +24,7 @@ const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveC
         {({ width, height }) => {
             const nameCell = nameCellRenderer(isResumableUploadsEnabled);
             const progressCell = progressCellRenderer();
-            const actionCell = actionCellRenderer(onClick);
-            const resumeCell = resumeCellRenderer(onClick);
+            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick);
             const removeCell = removeCellRenderer(onRemoveClick);
 
             return (
@@ -52,7 +50,7 @@ const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveC
                     />
                     <Column
                         className={isResumableUploadsEnabled ? '' : 'bcu-item-list-action-column'}
-                        cellRenderer={isResumableUploadsEnabled ? resumeCell : actionCell}
+                        cellRenderer={actionCell}
                         dataKey="status"
                         flexShrink={0}
                         width={25}

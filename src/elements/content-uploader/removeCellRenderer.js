@@ -11,11 +11,11 @@ type Props = {
     rowData: UploadItem,
 };
 
-export default (onClick: Function) => ({ rowData }: Props) => {
+export default (onClick: UploadItem => void) => ({ rowData }: Props) => {
+    if (rowData.isFolder) {
+        return null;
+    }
     const isUploading = rowData.status === STATUS_IN_PROGRESS;
     const isFailed = rowData.status === STATUS_ERROR;
-    if (!rowData.isFolder) {
-        return <ItemRemove isFailed={isFailed} isUploading={isUploading} onClick={() => onClick(rowData)} />;
-    }
-    return null;
+    return <ItemRemove isFailed={isFailed} isUploading={isUploading} onClick={() => onClick(rowData)} />;
 };

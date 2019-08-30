@@ -53,7 +53,10 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
       onClick={[Function]}
       type="button"
     >
-      <IconRetry />
+      <IconRetry
+        height={24}
+        width={24}
+      />
     </PlainButton>
   </Tooltip>
 </div>

@@ -19,7 +19,6 @@ type Props = {
 const ItemRemove = ({ isFailed, isUploading, onClick }: Props) => {
     const resin = {};
     let target = null;
-    const tooltip = <FormattedMessage {...messages.remove} />;
 
     if (isUploading) {
         target = 'uploadcancel';
@@ -33,7 +32,7 @@ const ItemRemove = ({ isFailed, isUploading, onClick }: Props) => {
 
     return (
         <div className="bcu-item-action">
-            <Tooltip position="top-left" text={tooltip}>
+            <Tooltip position="top-left" text={<FormattedMessage {...messages.remove} />}>
                 <PlainButton onClick={onClick} type="button" {...resin}>
                     <IconClose />
                 </PlainButton>
