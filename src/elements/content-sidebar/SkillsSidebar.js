@@ -27,6 +27,7 @@ import SidebarSkills from './skills/SidebarSkills';
 import './SkillsSidebar.scss';
 
 type PropsWithoutContext = {
+    elementId: string,
     file: BoxItem,
     getPreview: Function,
     getViewer: Function,
@@ -241,11 +242,16 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { file, getViewer }: Props = this.props;
+        const { file, getViewer, elementId }: Props = this.props;
         const { cards, errors }: State = this.state;
 
         return (
-            <SidebarContent className="bcs-skills" title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_SKILLS)}>
+            <SidebarContent
+                className="bcs-skills"
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_SKILLS}
+                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_SKILLS)}
+            >
                 {cards ? (
                     <SidebarSkills
                         cards={cards}

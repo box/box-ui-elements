@@ -11,7 +11,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
             <MemoryRouter initialEntries={[path]}>
                 <SidebarNavButton {...props}>{children}</SidebarNavButton>
             </MemoryRouter>,
-        ).find('SidebarNavButton');
+        );
     const getButton = wrapper => wrapper.find(PlainButton).first();
 
     test('should render nav button properly', () => {

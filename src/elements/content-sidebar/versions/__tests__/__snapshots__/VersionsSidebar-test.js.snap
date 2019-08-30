@@ -5,6 +5,8 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
   className="bcs-Versions"
   data-resin-component="preview"
   data-resin-feature="versions"
+  elementId=""
+  sidebarView=""
   title={
     <React.Fragment>
       <BackButton
@@ -52,6 +54,8 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show th
   className="bcs-Versions"
   data-resin-component="preview"
   data-resin-feature="versions"
+  elementId=""
+  sidebarView=""
   title={
     <React.Fragment>
       <BackButton

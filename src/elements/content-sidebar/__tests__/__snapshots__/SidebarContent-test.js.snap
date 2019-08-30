@@ -2,8 +2,11 @@
 
 exports[`elements/content-sidebar/SidebarContent should render sidebar content component 1`] = `
 <div
+  aria-labelledby="bcs_5_activity"
   className="bcs-content"
   data-testid="bcs-content"
+  id="bcs_5_activity-content"
+  role="tabpanel"
 >
   <div
     className="bcs-content-header"

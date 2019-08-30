@@ -43,6 +43,7 @@ type ExternalProps = {
 } & ErrorContextProps;
 
 type PropsWithoutContext = {
+    elementId: string,
     file: BoxItem,
     isDisabled: boolean,
     onVersionHistoryClick?: Function,
@@ -558,7 +559,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
+        const { elementId, file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
         const {
             currentUser,
             approverSelectorContacts,
@@ -570,9 +571,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent
-                className="bcs-activity"
-                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_ACTIVITY)}
                 actions={this.renderAddTaskButton()}
+                className="bcs-activity"
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_ACTIVITY}
+                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_ACTIVITY)}
             >
                 <ActivityFeed
                     file={file}

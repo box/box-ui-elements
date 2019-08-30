@@ -28,6 +28,7 @@ type Props = {
     activitySidebarProps: ActivitySidebarProps,
     currentUser?: User,
     detailsSidebarProps: DetailsSidebarProps,
+    elementId: string,
     file: BoxItem,
     fileId: string,
     getPreview: Function,
@@ -112,6 +113,7 @@ class SidebarPanels extends React.Component<Props> {
             activitySidebarProps,
             currentUser,
             detailsSidebarProps,
+            elementId,
             file,
             fileId,
             getPreview,
@@ -140,6 +142,7 @@ class SidebarPanels extends React.Component<Props> {
                         path={`/${SIDEBAR_VIEW_SKILLS}`}
                         render={() => (
                             <LoadableSkillsSidebar
+                                elementId={elementId}
                                 key={file.id}
                                 file={file}
                                 getPreview={getPreview}
@@ -155,6 +158,7 @@ class SidebarPanels extends React.Component<Props> {
                         path={`/${SIDEBAR_VIEW_ACTIVITY}`}
                         render={() => (
                             <LoadableActivitySidebar
+                                elementId={elementId}
                                 currentUser={currentUser}
                                 file={file}
                                 onVersionHistoryClick={onVersionHistoryClick}
@@ -171,6 +175,7 @@ class SidebarPanels extends React.Component<Props> {
                         path={`/${SIDEBAR_VIEW_DETAILS}`}
                         render={() => (
                             <LoadableDetailsSidebar
+                                elementId={elementId}
                                 fileId={fileId}
                                 key={fileId}
                                 hasVersions={hasVersions}
@@ -188,6 +193,7 @@ class SidebarPanels extends React.Component<Props> {
                         path={`/${SIDEBAR_VIEW_METADATA}`}
                         render={() => (
                             <LoadableMetadataSidebar
+                                elementId={elementId}
                                 fileId={fileId}
                                 ref={this.metadataSidebar}
                                 startMarkName={MARK_NAME_JS_LOADING_METADATA}
