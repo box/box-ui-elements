@@ -16,7 +16,7 @@ type Props = {
     isResumableUploadsEnabled?: boolean,
     items: UploadItem[],
     onClick: Function,
-    onRemoveClick?: Function,
+    onRemoveClick?: UploadItem => void,
 };
 
 const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveClick }: Props) => (
