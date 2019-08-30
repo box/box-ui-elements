@@ -77,7 +77,7 @@ const TaskEmptyState = ({ className = '', color = bdlBoxBlue, height = 111, titl
             />
 
             <path
-                className="fill-color"
+                className="stroke-color"
                 stroke={color}
                 strokeWidth="2"
                 fill="#FFFFFF"
@@ -85,7 +85,7 @@ const TaskEmptyState = ({ className = '', color = bdlBoxBlue, height = 111, titl
             />
 
             <path
-                className="fill-color"
+                className="stroke-color"
                 stroke={color}
                 strokeWidth="2"
                 fill="#FFFFFF"
