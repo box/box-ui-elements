@@ -29,6 +29,9 @@ const SidebarNavTablist = ({ children, history, elementId, isOpen, onNavigate }:
                 nextIndex = (currentIndex - 1 + length) % length;
 
                 history.push(tablist[nextIndex]);
+                if (refs.length > 0) {
+                    refs[nextIndex].focus();
+                }
 
                 event.stopPropagation();
                 event.preventDefault();
@@ -37,15 +40,15 @@ const SidebarNavTablist = ({ children, history, elementId, isOpen, onNavigate }:
                 nextIndex = (currentIndex + 1) % length;
 
                 history.push(tablist[nextIndex]);
+                if (refs.length > 0) {
+                    refs[nextIndex].focus();
+                }
 
                 event.stopPropagation();
                 event.preventDefault();
                 break;
             default:
                 break;
-        }
-        if (refs.length > 0) {
-            refs[nextIndex].focus();
         }
     };
 
