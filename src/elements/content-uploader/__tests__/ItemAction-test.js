@@ -23,8 +23,26 @@ describe('elements/content-uploader/ItemAction', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render correctly with STATUS_COMPLETE and resumable uploads enabled', () => {
+        const wrapper = getWrapper({
+            isResumableUploadsEnabled: true,
+            status: STATUS_COMPLETE,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should render correctly with STATUS_IN_PROGRESS', () => {
         const wrapper = getWrapper({
+            status: STATUS_IN_PROGRESS,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render correctly with STATUS_IN_PROGRESS and resumable uploads enabled', () => {
+        const wrapper = getWrapper({
+            isResumableUploadsEnabled: true,
             status: STATUS_IN_PROGRESS,
         });
 
@@ -39,6 +57,15 @@ describe('elements/content-uploader/ItemAction', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render correctly with STATUS_STAGED and resumable uploads enabled', () => {
+        const wrapper = getWrapper({
+            isResumableUploadsEnabled: true,
+            status: STATUS_STAGED,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should render correctly with STATUS_ERROR', () => {
         const wrapper = getWrapper({
             status: STATUS_ERROR,
@@ -47,8 +74,26 @@ describe('elements/content-uploader/ItemAction', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render correctly with STATUS_ERROR and resumable uploads enabled', () => {
+        const wrapper = getWrapper({
+            isResumableUploadsEnabled: true,
+            status: STATUS_ERROR,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should render correctly with STATUS_PENDING', () => {
         const wrapper = getWrapper({
+            status: STATUS_PENDING,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render correctly with STATUS_PENDING and resumable uploads enabled', () => {
+        const wrapper = getWrapper({
+            isResumableUploadsEnabled: true,
             status: STATUS_PENDING,
         });
 
