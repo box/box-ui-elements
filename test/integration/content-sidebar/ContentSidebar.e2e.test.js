@@ -44,6 +44,25 @@ describe('ContentSidebar', () => {
             cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
         });
 
+        it('should switch the sidebar panel when a user navigates between tabs using keyboard', () => {
+            cy.getByTestId('bcs-content').should('exist');
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
+
+            cy.getByTestId('sidebarskills').trigger('keydown', { key: 'ArrowDown' });
+            cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
+            cy.getByTestId('sidebarmetadata').should('have.class', 'bcs-is-selected');
+            cy.focused().should('have.attr', 'data-testid', 'sidebarmetadata');
+
+            cy.getByTestId('sidebarskills').trigger('keydown', { key: 'ArrowUp' });
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
+            cy.getByTestId('sidebarmetadata').should('not.have.class', 'bcs-is-selected');
+            cy.focused().should('have.attr', 'data-testid', 'sidebarskills');
+
+            cy.getByTestId('sidebarskills').trigger('keydown', { key: 'ArrowRight' });
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
+            cy.focused().should('have.attr', 'data-testid', 'sidebarskills');
+        });
+
         it('should toggle sidebar content when a user clicks the toggle sidebar button', () => {
             cy.getByTestId('bcs-content').should('exist');
             cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');

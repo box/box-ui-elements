@@ -14,19 +14,22 @@ type Props = {
     'data-resin-target'?: string,
     'data-testid'?: string,
     children: React.Node,
+    elementId?: string,
     isOpen?: boolean,
     sidebarView: string,
     tooltip: React.Node,
 };
 
-const SidebarNavButton = ({
-    children,
-    'data-resin-target': dataResinTarget,
-    'data-testid': dataTestId,
-    isOpen,
-    sidebarView,
-    tooltip,
-}: Props) => {
+const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
+    const {
+        'data-resin-target': dataResinTarget,
+        'data-testid': dataTestId,
+        children,
+        elementId = '',
+        isOpen,
+        sidebarView,
+        tooltip,
+    } = props;
     const sidebarPath = `/${sidebarView}`;
 
     return (
@@ -34,20 +37,26 @@ const SidebarNavButton = ({
             {({ match }) => {
                 const isMatch = !!match;
                 const isActive = () => isMatch && !!isOpen;
+                const isActiveValue = isActive();
                 const isToggle = isMatch && match.isExact;
                 const sidebarState = { open: isToggle ? !isOpen : true };
+                const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
 
                 return (
-                    <Tooltip position="middle-left" text={tooltip}>
+                    <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
                         <NavButton
-                            aria-selected={isActive()}
                             activeClassName="bcs-is-selected"
+                            aria-selected={isActiveValue}
+                            aria-controls={`${id}-content`}
                             className="bcs-NavButton"
                             data-resin-target={dataResinTarget}
                             data-testid={dataTestId}
+                            getDOMRef={ref}
+                            id={id}
                             isActive={isActive}
                             replace={isToggle}
                             role="tab"
+                            tabIndex={isActiveValue ? '0' : '-1'}
                             to={{
                                 pathname: sidebarPath,
                                 state: sidebarState,
@@ -61,6 +70,6 @@ const SidebarNavButton = ({
             }}
         </Route>
     );
-};
+});
 
 export default SidebarNavButton;

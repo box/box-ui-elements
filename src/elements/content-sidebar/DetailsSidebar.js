@@ -37,6 +37,7 @@ import './DetailsSidebar.scss';
 
 type ExternalProps = {
     classification?: ClassificationInfo,
+    elementId: string,
     fileId: string,
     hasAccessStats?: boolean,
     hasClassification?: boolean,
@@ -311,6 +312,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     render() {
         const {
             classification,
+            elementId,
             hasProperties,
             hasNotices,
             hasAccessStats,
@@ -328,7 +330,12 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
         // TODO: Add loading indicator and handle errors once file call is split out
         return (
-            <SidebarContent className="bcs-details" title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_DETAILS)}>
+            <SidebarContent
+                className="bcs-details"
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_DETAILS}
+                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_DETAILS)}
+            >
                 {file && hasNotices && (
                     <div className="bcs-DetailsSidebar-notices">
                         <SidebarNotices file={file} />
