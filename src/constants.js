@@ -5,6 +5,7 @@
  */
 
 import Browser from './utils/Browser';
+import type { UserMini } from './common/types/core';
 
 /* ------------------------ API ---------------------------- */
 export const API_PAGE_LIMIT = 1000; // default limit for paginated api calls
@@ -362,7 +363,7 @@ export const VERSION_RESTORE_ACTION: 'restore' = 'restore';
 export const VERSION_UPLOAD_ACTION: 'upload' = 'upload';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
-export const PLACEHOLDER_USER: User = { type: 'user', id: '2', name: '' };
+export const PLACEHOLDER_USER: UserMini = { type: 'user', id: '2', name: '' };
 
 /* ------------------ Open With ------------------------- */
 export const APP_INTEGRATION = 'app_integration';
