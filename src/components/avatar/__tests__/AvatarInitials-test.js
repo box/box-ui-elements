@@ -18,6 +18,11 @@ describe('components/avatar/AvatarInitials', () => {
         expect(wrapper.prop('style').backgroundColor).toEqual('#0061d5');
     });
 
+    test('should apply style overrides', () => {
+        const wrapper = shallow(<AvatarInitials id="10" name="hello world" style={{ backgroundColor: 'blue' }} />);
+        expect(wrapper.prop('style').backgroundColor).toEqual('blue');
+    });
+
     test('should set a default backgroundColor if no id is passed in', () => {
         const wrapper = shallow(<AvatarInitials name="hello world" />);
         expect(wrapper.prop('style').backgroundColor).toEqual('#2486fc');

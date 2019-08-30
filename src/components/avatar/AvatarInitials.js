@@ -34,13 +34,14 @@ type Props = {
     className?: string,
     id?: ?string | number,
     name: string,
+    style?: Object,
 };
 
-const AvatarInitials = ({ className = '', id, name }: Props) => {
+const AvatarInitials = ({ className = '', id, name, style = {} }: Props) => {
     const avatarColorSelector = parseInt(id, 10) || 0;
     const backgroundColor = AVATAR_COLORS[avatarColorSelector % AVATAR_COLORS.length];
     return (
-        <span className={`avatar-initials ${className}`} style={{ backgroundColor }}>
+        <span className={`avatar-initials ${className}`} style={{ backgroundColor, ...style }}>
             {getInitials(name)}
         </span>
     );
