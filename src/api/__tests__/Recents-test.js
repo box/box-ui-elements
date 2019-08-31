@@ -206,8 +206,8 @@ describe('api/Recents', () => {
                     ],
                 },
             });
-            expect(cache.get('file_item1')).toEqual(Object.assign({}, item1, { interacted_at: 'interacted_at1' }));
-            expect(cache.get('file_item3')).toEqual(Object.assign({}, item3, { interacted_at: 'interacted_at3' }));
+            expect(cache.get('file_item1')).toEqual({ ...item1, interacted_at: 'interacted_at1' });
+            expect(cache.get('file_item3')).toEqual({ ...item3, interacted_at: 'interacted_at3' });
             expect(cache.get('file_item2')).toBeUndefined();
         });
     });

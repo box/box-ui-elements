@@ -7,7 +7,7 @@ import { TaskFormUnwrapped as TaskForm } from '..';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('../../../../../components/date-picker/DatePicker', () => props => (
-    <input type="date" {...props} {...props.inputProps} />
+    <input type="date" {...props} {...props.inputProps} /> // eslint-disable-line react/prop-types
 ));
 
 const mockIntl = {

@@ -39,7 +39,7 @@ const ItemProperties = ({
     return (
         <dl className="item-properties">
             {description || onDescriptionChange ? (
-                <React.Fragment>
+                <>
                     <FormattedMessage {...messages.description}>
                         {text => <dt id={descriptionId}>{text}</dt>}
                     </FormattedMessage>
@@ -54,61 +54,61 @@ const ItemProperties = ({
                             <ReadonlyDescription value={description} />
                         )}
                     </dd>
-                </React.Fragment>
+                </>
             ) : null}
             {!!url && (
-                <React.Fragment>
+                <>
                     <FormattedMessage tagName="dt" {...messages.url} />
                     <dd>{onValidURLChange ? <EditableURL onValidURLChange={onValidURLChange} value={url} /> : url}</dd>
-                </React.Fragment>
+                </>
             )}
             {owner ? (
-                <React.Fragment>
+                <>
                     <FormattedMessage tagName="dt" {...messages.owner} />
                     <dd>{owner}</dd>
-                </React.Fragment>
+                </>
             ) : null}
             {enterpriseOwner ? (
-                <React.Fragment>
+                <>
                     <FormattedMessage tagName="dt" {...messages.enterpriseOwner} />
                     <dd>{enterpriseOwner}</dd>
-                </React.Fragment>
+                </>
             ) : null}
             {uploader ? (
-                <React.Fragment>
+                <>
                     <FormattedMessage tagName="dt" {...messages.uploader} />
                     <dd>{uploader}</dd>
-                </React.Fragment>
+                </>
             ) : null}
             {createdAt ? (
-                <React.Fragment>
+                <>
                     <FormattedMessage tagName="dt" {...messages.created} />
                     <dd>
                         <FormattedDate value={new Date(createdAt)} {...datetimeOptions} />
                     </dd>
-                </React.Fragment>
+                </>
             ) : null}
             {modifiedAt ? (
-                <React.Fragment>
+                <>
                     <FormattedMessage tagName="dt" {...messages.modified} />
                     <dd>
                         <FormattedDate value={new Date(modifiedAt)} {...datetimeOptions} />
                     </dd>
-                </React.Fragment>
+                </>
             ) : null}
             {size ? (
-                <React.Fragment>
+                <>
                     <FormattedMessage tagName="dt" {...messages.size} />
                     <dd>{size}</dd>
-                </React.Fragment>
+                </>
             ) : null}
             {trashedAt ? (
-                <React.Fragment>
+                <>
                     <FormattedMessage tagName="dt" {...messages.deleted} />
                     <dd>
                         <FormattedDate value={new Date(trashedAt)} {...datetimeOptions} />
                     </dd>
-                </React.Fragment>
+                </>
             ) : null}
             <RetentionPolicy {...retentionPolicyProps} />
         </dl>

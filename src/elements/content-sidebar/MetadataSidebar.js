@@ -5,27 +5,25 @@
  */
 
 import * as React from 'react';
-import noop from 'lodash/noop';
-import getProp from 'lodash/get';
 import flow from 'lodash/flow';
+import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import Instances from '../../features/metadata-instance-editor/Instances';
+import API from '../../api';
 import EmptyContent from '../../features/metadata-instance-editor/EmptyContent';
-import TemplateDropdown from '../../features/metadata-instance-editor/TemplateDropdown';
+import InlineError from '../../components/inline-error/InlineError';
+import Instances from '../../features/metadata-instance-editor/Instances';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
-import InlineError from '../../components/inline-error/InlineError';
 import messages from '../common/messages';
+import SidebarContent from './SidebarContent';
+import TemplateDropdown from '../../features/metadata-instance-editor/TemplateDropdown';
+import { EVENT_JS_READY } from '../common/logger/constants';
+import { isUserCorrectableError } from '../../utils/error';
+import { mark } from '../../utils/performance';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
-import { isUserCorrectableError } from '../../utils/error';
-import API from '../../api';
 import { withLogger } from '../common/logger';
-import { mark } from '../../utils/performance';
-import { EVENT_JS_READY } from '../common/logger/constants';
-
-import SidebarContent from './SidebarContent';
-import SidebarUtils from './SidebarUtils';
 import {
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS,
@@ -94,15 +92,11 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
         const { onError }: Props = this.props;
         const { status } = error;
         const isValidError = isUserCorrectableError(status);
-        this.setState(
-            Object.assign(
-                {
-                    error: messages.sidebarMetadataEditingErrorContent,
-                    isLoading: false,
-                },
-                newState,
-            ),
-        );
+        this.setState({
+            error: messages.sidebarMetadataEditingErrorContent,
+            isLoading: false,
+            ...newState,
+        });
         onError(error, code, {
             error,
             [IS_ERROR_DISPLAYED]: isValidError,
@@ -404,7 +398,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                 className="bcs-metadata"
                 elementId={elementId}
                 sidebarView={SIDEBAR_VIEW_METADATA}
-                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_METADATA)}
+                title={<FormattedMessage {...messages.sidebarMetadataTitle} />}
             >
                 {error && (
                     <InlineError title={<FormattedMessage {...messages.error} />}>

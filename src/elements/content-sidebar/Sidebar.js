@@ -225,7 +225,7 @@ class Sidebar extends React.Component<Props, State> {
                         <LoadingIndicator />
                     </div>
                 ) : (
-                    <React.Fragment>
+                    <>
                         <SidebarNav
                             additionalTabs={additionalTabs}
                             elementId={this.id}
@@ -259,7 +259,7 @@ class Sidebar extends React.Component<Props, State> {
                             ref={this.sidebarPanels}
                             versionsSidebarProps={versionsSidebarProps}
                         />
-                    </React.Fragment>
+                    </>
                 )}
             </aside>
         );

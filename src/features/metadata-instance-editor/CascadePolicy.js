@@ -37,7 +37,7 @@ const CascadePolicy = ({
     ) : null;
 
     return canEdit ? (
-        <React.Fragment>
+        <>
             <div className="metadata-cascade-editor">
                 <div className="metadata-cascade-enable">
                     <div>
@@ -96,7 +96,7 @@ const CascadePolicy = ({
                     </div>
                 </div>
             )}
-        </React.Fragment>
+        </>
     ) : (
         readOnlyState
     );

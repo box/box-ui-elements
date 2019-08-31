@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import HotkeyLayer from './HotkeyLayer';
+import HotkeyLayer from './HotkeyLayer'; // eslint-disable-line import/no-cycle
 import { Modal } from '../modal';
 
 type Props = {

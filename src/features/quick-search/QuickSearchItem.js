@@ -134,7 +134,7 @@ const QuickSearchItem = ({
 
                 <span className="item-subtext">
                     {(parentName || parentFolderRenderer) && (
-                        <React.Fragment>
+                        <>
                             <IconSmallFolder title={<FormattedMessage {...messages.parentFolder} />} />
 
                             {parentFolderRenderer ? (
@@ -144,7 +144,7 @@ const QuickSearchItem = ({
                             )}
 
                             <span className="separator">·</span>
-                        </React.Fragment>
+                        </>
                     )}
 
                     <span className="txt-ellipsis" title={updatedText}>
@@ -175,6 +175,7 @@ QuickSearchItem.propTypes = {
     itemData: PropTypes.oneOfType([ImmutablePropTypes.recordOf(itemDataShape), PropTypes.shape(itemDataShape)])
         .isRequired,
     parentFolderRenderer: PropTypes.func,
+    shouldNavigateOnItemClick: PropTypes.bool,
 };
 
 export default injectIntl(QuickSearchItem);

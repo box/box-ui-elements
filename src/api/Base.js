@@ -90,11 +90,7 @@ class Base {
         this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
         this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
         // @TODO: avoid keeping another copy of data in this.options
-        this.options = Object.assign({}, options, {
-            apiHost: this.apiHost,
-            uploadHost: this.uploadHost,
-            cache: this.cache,
-        });
+        this.options = { ...options, apiHost: this.apiHost, uploadHost: this.uploadHost, cache: this.cache };
         this.xhr = new Xhr(this.options);
         this.destroyed = false;
         this.consoleLog = !!options.consoleLog && !!window.console ? window.console.log || noop : noop;

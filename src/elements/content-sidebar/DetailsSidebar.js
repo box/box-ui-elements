@@ -5,28 +5,27 @@
  */
 
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import noop from 'lodash/noop';
-import getProp from 'lodash/get';
 import flow from 'lodash/flow';
+import getProp from 'lodash/get';
+import noop from 'lodash/noop';
+import { FormattedMessage } from 'react-intl';
 import API from '../../api';
 import messages from '../common/messages';
+import SidebarAccessStats from './SidebarAccessStats';
+import SidebarClassification from './SidebarClassification';
+import SidebarContent from './SidebarContent';
+import SidebarFileProperties from './SidebarFileProperties';
+import SidebarNotices from './SidebarNotices';
+import SidebarSection from './SidebarSection';
+import SidebarVersions from './SidebarVersions';
+import { EVENT_JS_READY } from '../common/logger/constants';
+import { getBadItemError } from '../../utils/error';
+import { mark } from '../../utils/performance';
 import { SECTION_TARGETS } from '../common/interactionTargets';
+import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
-import { EVENT_JS_READY } from '../common/logger/constants';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
-import { mark } from '../../utils/performance';
-import { getBadItemError } from '../../utils/error';
-import SidebarAccessStats from './SidebarAccessStats';
-import SidebarClassification from './SidebarClassification';
-import SidebarSection from './SidebarSection';
-import SidebarContent from './SidebarContent';
-import SidebarVersions from './SidebarVersions';
-import SidebarNotices from './SidebarNotices';
-import SidebarFileProperties from './SidebarFileProperties';
-import SidebarUtils from './SidebarUtils';
 import {
     HTTP_STATUS_CODE_FORBIDDEN,
     ORIGIN_DETAILS_SIDEBAR,
@@ -334,7 +333,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                 className="bcs-details"
                 elementId={elementId}
                 sidebarView={SIDEBAR_VIEW_DETAILS}
-                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_DETAILS)}
+                title={<FormattedMessage {...messages.sidebarDetailsTitle} />}
             >
                 {file && hasNotices && (
                     <div className="bcs-DetailsSidebar-notices">
