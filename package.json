@@ -236,7 +236,7 @@
         "react-modal": "^3.8.1",
         "react-process-string": "^1.2.0",
         "react-router-dom": "^5.0.0",
-        "react-styleguidist": "^8.0.6",
+        "react-styleguidist": "^9.1.16",
         "react-tether": "1.0.1",
         "react-textarea-autosize": "^7.1.0",
         "react-virtualized": "^9.21.0",
