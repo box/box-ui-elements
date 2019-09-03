@@ -1,8 +1,8 @@
 @import '../variables';
 
 .be-breadcrumb {
-    align-items: center;
     display: flex;
+    align-items: center;
     min-width: 20px;
 
     &:only-child {
@@ -10,10 +10,10 @@
     }
 
     .be & .btn-plain {
-        color: $sevens;
+        color: $bdl-gray-62;
 
         &:last-child {
-            color: $twos;
+            color: $bdl-gray;
         }
     }
 }
@@ -21,4 +21,11 @@
 .be-breadcrumb-seperator {
     flex-shrink: 0;
     margin: 1px 8px 0 5px;
+}
+
+.bdl-Breadcrumb-title {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

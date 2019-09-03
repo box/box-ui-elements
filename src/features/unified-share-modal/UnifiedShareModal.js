@@ -16,6 +16,7 @@ import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
 
+import UnifiedShareModalTitle from './UnifiedShareModalTitle';
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
 import RemoveLinkConfirmModal from './RemoveLinkConfirmModal';
@@ -72,6 +73,8 @@ type Props = {
     getInitialData: Function,
     /** Handler function for when the user types into email shared link field to fetch contacts. */
     getSharedLinkContacts: (query: string) => Promise<Array<Contact>>,
+    /** An array of initially selected contacts. If none are initially selected, an empty array. */
+    initiallySelectedContacts: Array<Contact>,
     intl: IntlShape,
     /** An array of invitee permissions */
     inviteePermissions: Array<InviteePermissions>,
@@ -89,6 +92,8 @@ type Props = {
     onRequestClose?: Function,
     /** Handler function for clicks on the settings icon. If not provided, the settings icon won't be rendered. */
     onSettingsClick?: Function,
+    /** Shows a callout tooltip next to the names / email addresses input field explaining pre-populated recommendation */
+    recommendedSharingTooltipCalloutName: ?string,
     /**
      * Function to send collab invitations based on the given parameters object.
      * This function should return a Promise.
@@ -144,6 +149,7 @@ type State = {
 
 class UnifiedShareModal extends React.Component<Props, State> {
     static defaultProps = {
+        initiallySelectedContacts: [],
         focusSharedLinkOnLoad: false,
         trackingProps: {
             inviteCollabsEmailTracking: {},
@@ -161,12 +167,12 @@ class UnifiedShareModal extends React.Component<Props, State> {
 
         this.state = {
             emailSharedLinkContacts: [],
-            inviteCollabsContacts: [],
+            inviteCollabsContacts: props.initiallySelectedContacts,
             inviteePermissionLevel: '',
             isConfirmModalOpen: false,
             isEmailLinkSectionExpanded: false,
             isFetching: true,
-            isInviteSectionExpanded: false,
+            isInviteSectionExpanded: !!props.initiallySelectedContacts.length,
             showCollaboratorList: false,
             getInitialDataCalled: false,
             shouldRenderFTUXTooltip: false,
@@ -459,6 +465,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             contactLimit,
             getCollaboratorContacts,
             item,
+            recommendedSharingTooltipCalloutName = null,
             sendInvitesError,
             showEnterEmailsCallout = false,
             showCalloutForUser = false,
@@ -509,17 +516,19 @@ class UnifiedShareModal extends React.Component<Props, State> {
                 </div>
             </div>
         );
+        const ftuxTooltipProps = {
+            className: 'usm-ftux-tooltip',
+            // don't want ftux tooltip to show if the recommended sharing tooltip callout is showing
+            isShown: !recommendedSharingTooltipCalloutName && shouldRenderFTUXTooltip && showCalloutForUser,
+            position: 'middle-left',
+            showCloseButton: true,
+            text: ftuxTooltipText,
+            theme: 'callout',
+        };
 
         return (
-            <React.Fragment>
-                <Tooltip
-                    className="usm-ftux-tooltip"
-                    isShown={shouldRenderFTUXTooltip && showCalloutForUser}
-                    position="middle-left"
-                    showCloseButton
-                    text={ftuxTooltipText}
-                    theme="callout"
-                >
+            <>
+                <Tooltip {...ftuxTooltipProps}>
                     <div className="invite-collaborator-container">
                         <EmailForm
                             contactLimit={contactLimit}
@@ -536,6 +545,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                             onRequestClose={this.closeInviteCollaborators}
                             onSubmit={this.handleSendInvites}
                             openInviteCollaboratorsSection={this.openInviteCollaboratorsSection}
+                            recommendedSharingTooltipCalloutName={recommendedSharingTooltipCalloutName}
                             showEnterEmailsCallout={showEnterEmailsCallout}
                             submitting={submitting}
                             selectedContacts={this.state.inviteCollabsContacts}
@@ -548,7 +558,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                         </EmailForm>
                     </div>
                 </Tooltip>
-            </React.Fragment>
+            </>
         );
     }
 
@@ -614,44 +624,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
                 />
             )
         );
-    }
-
-    renderModalTitle() {
-        const { isEmailLinkSectionExpanded, showCollaboratorList } = this.state;
-        const { item } = this.props;
-        const { name } = item;
-        let title;
-
-        if (isEmailLinkSectionExpanded) {
-            title = (
-                <FormattedMessage
-                    {...messages.emailModalTitle}
-                    values={{
-                        itemName: name,
-                    }}
-                />
-            );
-        } else if (showCollaboratorList) {
-            title = (
-                <FormattedMessage
-                    {...messages.collaboratorListTitle}
-                    values={{
-                        itemName: name,
-                    }}
-                />
-            );
-        } else {
-            title = (
-                <FormattedMessage
-                    {...messages.modalTitle}
-                    values={{
-                        itemName: name,
-                    }}
-                />
-            );
-        }
-
-        return title;
     }
 
     renderCollaboratorList() {
@@ -734,7 +706,13 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     className="unified-share-modal"
                     isOpen={isConfirmModalOpen ? false : isOpen}
                     onRequestClose={submitting ? undefined : onRequestClose}
-                    title={<span>{this.renderModalTitle()}</span>}
+                    title={
+                        <UnifiedShareModalTitle
+                            isEmailLinkSectionExpanded={isEmailLinkSectionExpanded}
+                            showCollaboratorList={showCollaboratorList}
+                            item={item}
+                        />
+                    }
                     {...extendedModalProps}
                 >
                     <LoadingIndicatorWrapper isLoading={isFetching} hideContent>

@@ -9,46 +9,46 @@ $horizontal-offset: 10px;
 $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
 
 .tooltip {
-    background-color: $fours;
-    border-color: $fours;
-    border-radius: 4px;
+    position: relative;
+    max-width: 200px;
+    padding: 8px $horizontal-offset;
     color: $white;
     font-size: 13px;
     line-height: 1.4;
-    max-width: 200px;
-    padding: 8px $horizontal-offset;
-    position: relative;
     word-wrap: break-word;
+    background-color: $bdl-gray-80;
+    border-color: $bdl-gray-80;
+    border-radius: 4px;
 
     &::before {
-        border: $arrow-size solid transparent;
-        content: '';
-        height: 0;
         position: absolute;
         width: 0;
+        height: 0;
+        border: $arrow-size solid transparent;
+        content: '';
     }
 
     &.is-error::after {
-        border: $arrow-size - 1 solid transparent;
-        content: '';
-        height: 0;
         position: absolute;
         width: 0;
+        height: 0;
+        border: $arrow-size - 1 solid transparent;
+        content: '';
     }
 
     &.is-error {
-        background-color: $lavender-blush;
-        border: 1px solid $amaranth;
-        color: $amaranth;
+        color: $bdl-watermelon-red;
+        background-color: $bdl-watermelon-red-10;
+        border: 1px solid $bdl-watermelon-red;
 
         .tooltip-close-button .icon-close .fill-color {
-            fill: $amaranth;
+            fill: $bdl-watermelon-red;
         }
     }
 
     &.is-callout {
-        background-color: $blue-purple;
-        border-color: $blue-purple;
+        background-color: $bdl-purple-rain;
+        border-color: $bdl-purple-rain;
     }
 
     &.is-metadata-tooltip {
@@ -60,10 +60,10 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
     }
 
     .tooltip-close-button {
-        cursor: pointer;
         position: absolute;
-        right: 0;
         top: 4px;
+        right: 0;
+        cursor: pointer;
 
         .icon-close {
             height: 16px;
@@ -78,17 +78,17 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-bottom: $arrow-size + $tooltip-offset;
 
         &::before {
-            border-top-color: inherit;
+            top: 100%;
             left: 50%;
             margin-left: -$arrow-size;
-            top: 100%;
+            border-top-color: inherit;
         }
 
         &.is-error::after {
-            border-top-color: $lavender-blush;
+            top: 100%;
             left: 50%;
             margin-left: -$arrow-size + 1;
-            top: 100%;
+            border-top-color: $bdl-watermelon-red-10;
         }
     }
 
@@ -96,15 +96,15 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-bottom: $arrow-size + $tooltip-offset;
 
         &::before {
-            border-top-color: inherit;
-            left: $horizontal-offset;
             top: 100%;
+            left: $horizontal-offset;
+            border-top-color: inherit;
         }
 
         &.is-error::after {
-            border-top-color: $lavender-blush;
-            left: $horizontal-offset + 1;
             top: 100%;
+            left: $horizontal-offset + 1;
+            border-top-color: $bdl-watermelon-red-10;
         }
     }
 
@@ -112,15 +112,15 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-bottom: $arrow-size + $tooltip-offset;
 
         &::before {
-            border-top-color: inherit;
-            right: $horizontal-offset;
             top: 100%;
+            right: $horizontal-offset;
+            border-top-color: inherit;
         }
 
         &.is-error::after {
-            border-top-color: $lavender-blush;
-            right: $horizontal-offset + 1;
             top: 100%;
+            right: $horizontal-offset + 1;
+            border-top-color: $bdl-watermelon-red-10;
         }
     }
 
@@ -128,17 +128,17 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-left: $arrow-size + $tooltip-offset;
 
         &::before {
-            border-right-color: inherit;
-            margin-top: -$arrow-size;
-            right: 100%;
             top: 50%;
+            right: 100%;
+            margin-top: -$arrow-size;
+            border-right-color: inherit;
         }
 
         &.is-error::after {
-            border-right-color: $lavender-blush;
-            margin-top: -$arrow-size + 1;
-            right: 100%;
             top: 50%;
+            right: 100%;
+            margin-top: -$arrow-size + 1;
+            border-right-color: $bdl-watermelon-red-10;
         }
     }
 
@@ -146,17 +146,17 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-right: $arrow-size + $tooltip-offset;
 
         &::before {
-            border-left-color: inherit;
+            top: 50%;
             left: 100%;
             margin-top: -$arrow-size;
-            top: 50%;
+            border-left-color: inherit;
         }
 
         &.is-error::after {
-            border-left-color: $lavender-blush;
+            top: 50%;
             left: 100%;
             margin-top: -$arrow-size + 1;
-            top: 50%;
+            border-left-color: $bdl-watermelon-red-10;
         }
     }
 
@@ -164,17 +164,17 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-top: $arrow-size + $tooltip-offset;
 
         &::before {
-            border-bottom-color: inherit;
             bottom: 100%;
             left: 50%;
             margin-left: -$arrow-size;
+            border-bottom-color: inherit;
         }
 
         &.is-error::after {
-            border-bottom-color: $lavender-blush;
             bottom: 100%;
             left: 50%;
             margin-left: -$arrow-size + 1;
+            border-bottom-color: $bdl-watermelon-red-10;
         }
     }
 
@@ -182,15 +182,15 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-top: $arrow-size + $tooltip-offset;
 
         &::before {
-            border-bottom-color: inherit;
             bottom: 100%;
             left: $horizontal-offset;
+            border-bottom-color: inherit;
         }
 
         &.is-error::after {
-            border-bottom-color: $lavender-blush;
             bottom: 100%;
             left: $horizontal-offset + 1;
+            border-bottom-color: $bdl-watermelon-red-10;
         }
     }
 
@@ -198,15 +198,15 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-top: $arrow-size + $tooltip-offset;
 
         &::before {
-            border-bottom-color: inherit;
-            bottom: 100%;
             right: $horizontal-offset;
+            bottom: 100%;
+            border-bottom-color: inherit;
         }
 
         &.is-error::after {
-            border-bottom-color: $lavender-blush;
-            bottom: 100%;
             right: $horizontal-offset + 1;
+            bottom: 100%;
+            border-bottom-color: $bdl-watermelon-red-10;
         }
     }
 }

@@ -2,16 +2,16 @@
 @import './sizes.media';
 
 .instant-login-link {
-    align-items: center;
-    background-color: $twos;
-    color: $white;
     display: flex;
-    font-size: 13px;
+    align-items: center;
     height: 40px;
-    margin-bottom: $lsb-item-separator-margin;
     min-height: 40px;
+    margin-bottom: $lsb-item-separator-margin;
     padding: 0 13px;
+    color: $white;
+    font-size: 13px;
     text-decoration: none;
+    background-color: $bdl-gray;
 
     @include medium-size {
         min-height: 50px;

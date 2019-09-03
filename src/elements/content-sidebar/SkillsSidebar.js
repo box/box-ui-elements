@@ -5,31 +5,34 @@
  */
 
 import * as React from 'react';
-import noop from 'lodash/noop';
-import getProp from 'lodash/get';
 import flow from 'lodash/flow';
+import getProp from 'lodash/get';
+import noop from 'lodash/noop';
+import { FormattedMessage } from 'react-intl';
+import API from '../../api';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
-import { mark } from '../../utils/performance';
+import messages from '../common/messages';
+import SidebarContent from './SidebarContent';
+import SidebarSkills from './skills/SidebarSkills';
 import { EVENT_JS_READY } from '../common/logger/constants';
+import { mark } from '../../utils/performance';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
-import API from '../../api';
-import SidebarContent from './SidebarContent';
-import SidebarUtils from './SidebarUtils';
 import {
     FIELD_PERMISSIONS_CAN_UPLOAD,
     SKILLS_TRANSCRIPT,
     ORIGIN_SKILLS_SIDEBAR,
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
-import SidebarSkills from './skills/SidebarSkills';
 import './SkillsSidebar.scss';
 
 type PropsWithoutContext = {
+    elementId: string,
     file: BoxItem,
     getPreview: Function,
     getViewer: Function,
+    refreshIdentity?: boolean,
 };
 
 type Props = {
@@ -62,6 +65,14 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
     componentDidMount() {
         const { api, file }: Props = this.props;
         api.getMetadataAPI(false).getSkills(file, this.fetchSkillsSuccessCallback, noop);
+    }
+
+    componentDidUpdate({ refreshIdentity: prevRefreshIdentity }: Props) {
+        const { api, file, refreshIdentity }: Props = this.props;
+
+        if (refreshIdentity !== prevRefreshIdentity) {
+            api.getMetadataAPI(false).getSkills(file, this.fetchSkillsSuccessCallback, noop);
+        }
     }
 
     /**
@@ -232,11 +243,16 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { file, getViewer }: Props = this.props;
+        const { file, getViewer, elementId }: Props = this.props;
         const { cards, errors }: State = this.state;
 
         return (
-            <SidebarContent className="bcs-skills" title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_SKILLS)}>
+            <SidebarContent
+                className="bcs-skills"
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_SKILLS}
+                title={<FormattedMessage {...messages.sidebarSkillsTitle} />}
+            >
                 {cards ? (
                     <SidebarSkills
                         cards={cards}

@@ -33,7 +33,7 @@ const SidebarNotices = ({ file }: Props) => {
     }
 
     return (
-        <React.Fragment>
+        <>
             {!!itemExpiration && (
                 <ItemExpirationNotice
                     expiration={
@@ -57,7 +57,7 @@ const SidebarNotices = ({ file }: Props) => {
                     }
                 />
             )}
-        </React.Fragment>
+        </>
     );
 };
 

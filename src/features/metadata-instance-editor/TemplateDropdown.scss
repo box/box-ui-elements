@@ -11,11 +11,11 @@
     }
 
     div.overlay {
-        border: 1px solid $sf-fog;
-        border-radius: 4px;
-        overflow: hidden;
-        padding: 0;
         width: 288px;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid $bdl-gray-30;
+        border-radius: 4px;
     }
 
     ul.overlay {
@@ -23,16 +23,16 @@
     }
 
     .metadata-instance-editor-template-dropdown-menu {
-        background-color: $white;
+        z-index: 1;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        z-index: 1;
+        background-color: $white;
 
         .overlay-wrapper {
-            border-radius: 0 0 4px 4px;
-            border-top: none;
             overflow: hidden;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
 
             // NOTE (cwei): targets ie11
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
@@ -42,15 +42,15 @@
             // TemplateDropdown component is wrapped under two layers of Overlay components.
             // Removing the extra transform and animation properties so it doesn't mess up safari's scroll bar.
             ul.overlay {
-                animation: none;
                 transform: none;
+                animation: none;
             }
         }
 
         .overlay {
-            border-radius: 0%;
-            padding: 0;
             position: static;
+            padding: 0;
+            border-radius: 0%;
 
             .datalist-item {
                 padding: 0;
@@ -72,25 +72,25 @@
             }
 
             &::before {
+                width: 110%;
+                margin: 0 -5%;
                 border-radius: inherit;
                 box-shadow: 0 -2px 25px 0 rgba(0, 0, 0, .25);
-                margin: 0 -5%;
-                width: 110%;
             }
 
             &::after {
+                width: 110%;
                 border-radius: inherit;
                 box-shadow: 0 -2px 25px 0 rgba(0, 0, 0, .15);
-                width: 110%;
             }
         }
 
         // input re-styling due to tethering
         .search-input-container {
-            border-bottom: 1px solid $sf-fog;
-            border-radius: 4px 4px 0 0;
             margin: 0;
             padding: 10px 12px 12px;
+            border-bottom: 1px solid $bdl-gray-30;
+            border-radius: 4px 4px 0 0;
 
             input[type='text'] {
                 @include box-inputs;
@@ -113,20 +113,20 @@
     }
 
     .btn-plain.metadata-template-dropdown-select-template {
-        align-items: center;
-        color: inherit;
         display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 5px 35px 5px 15px;
+        overflow: hidden;
+        color: inherit;
         font-size: 13px;
         line-height: 20px;
-        overflow: hidden;
-        padding: 5px 35px 5px 15px;
+        white-space: nowrap;
         text-align: inherit;
         text-overflow: ellipsis;
-        white-space: nowrap;
-        width: 100%;
 
         &.metadata-template-dropdown-is-selected {
-            color: $box-blue;
+            color: $bdl-box-blue;
         }
 
         .template-display-name {
@@ -137,15 +137,15 @@
     }
 
     .metadata-instance-editor-template-message {
-        background-color: $white;
-        border: 1px solid $sf-fog;
-        border-radius: 0 0 4px 4px;
-        border-top-color: transparent;
-        color: $nines;
-        padding: 16px 15px;
         position: absolute;
         right: 0;
         width: 288px;
+        padding: 16px 15px;
+        color: $bdl-gray-50;
+        background-color: $white;
+        border: 1px solid $bdl-gray-30;
+        border-top-color: transparent;
+        border-radius: 0 0 4px 4px;
 
         &.template-dropdown-loading-indicator {
             display: flex;

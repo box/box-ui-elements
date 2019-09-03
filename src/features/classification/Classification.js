@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import Label from '../../components/label/Label';
 import ClassifiedBadge from './ClassifiedBadge';
-import AddClassificationBadge from './AddClassificationBadge';
 import messages from './messages';
 import './Classification.scss';
 
@@ -11,21 +11,19 @@ const STYLE_INLINE: 'inline' = 'inline';
 const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
 
 type Props = {
-    advisoryMessage?: string,
     className?: string,
+    definition?: string,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
     name?: string,
 };
 
-const Classification = ({ advisoryMessage, className = '', messageStyle, name }: Props) => {
+const Classification = ({ definition, className = '', messageStyle, name }: Props) => {
     const isClassified = !!name;
-    const hasMessage = !!advisoryMessage;
+    const hasMessage = !!definition;
 
     const isTooltipMessageEnabled = isClassified && hasMessage && messageStyle === STYLE_TOOLTIP;
     const isInlineMessageEnabled = isClassified && hasMessage && messageStyle === STYLE_INLINE;
 
-    // Either the add classification badge should be visible or the "not classified" text or neither
-    const isAddClassificationBadgeVisible = !isClassified && !messageStyle;
     const isNotClassifiedMessageVisible = !isClassified && messageStyle === STYLE_INLINE;
 
     return (
@@ -33,11 +31,14 @@ const Classification = ({ advisoryMessage, className = '', messageStyle, name }:
             {isClassified && (
                 <ClassifiedBadge
                     name={((name: any): string)}
-                    tooltipText={isTooltipMessageEnabled ? advisoryMessage : undefined}
+                    tooltipText={isTooltipMessageEnabled ? definition : undefined}
                 />
             )}
-            {isAddClassificationBadgeVisible && <AddClassificationBadge />}
-            {isInlineMessageEnabled && <p className="bdl-Classification-advisoryMessage">{advisoryMessage}</p>}
+            {isInlineMessageEnabled && (
+                <Label text={<FormattedMessage {...messages.definition} />}>
+                    <p className="bdl-Classification-definition">{definition}</p>
+                </Label>
+            )}
             {isNotClassifiedMessageVisible && (
                 <span className="bdl-Classification-missingMessage">
                     <FormattedMessage {...messages.missing} />
@@ -47,4 +48,5 @@ const Classification = ({ advisoryMessage, className = '', messageStyle, name }:
     );
 };
 
+export { STYLE_INLINE, STYLE_TOOLTIP };
 export default Classification;

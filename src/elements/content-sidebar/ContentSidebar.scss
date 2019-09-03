@@ -5,21 +5,21 @@ $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
 
 .be {
     &.bcs {
-        background-color: $haze;
         display: flex;
-        max-width: $sidebarWidth;
-        min-width: $sidebarTabsWidth;
         width: auto;
+        min-width: $sidebarTabsWidth;
+        max-width: $sidebarWidth;
+        background-color: $bdl-gray-02;
     }
 
     .bcs-loading {
-        align-items: center;
         display: flex;
         flex: 1;
-        font-size: 0;
-        margin: 0 auto;
-        white-space: nowrap;
+        align-items: center;
         width: 10px;
+        margin: 0 auto;
+        font-size: 0;
+        white-space: nowrap;
     }
 
     &.bcs-is-open {

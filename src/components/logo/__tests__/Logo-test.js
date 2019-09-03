@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Logo from '..';
-import { BOX_BLUE } from '../../../common/variables';
+import { bdlBoxBlue } from '../../../styles/variables';
 
 describe('components/logo/Logo', () => {
     test('should correctly render default Logo', () => {
@@ -10,7 +10,7 @@ describe('components/logo/Logo', () => {
         expect(wrapper.hasClass('logo')).toBe(true);
         expect(wrapper.find('IconLogo').prop('width')).toEqual(45);
         expect(wrapper.find('IconLogo').prop('height')).toEqual(25);
-        expect(wrapper.find('IconLogo').prop('color')).toEqual(BOX_BLUE);
+        expect(wrapper.find('IconLogo').prop('color')).toEqual(bdlBoxBlue);
     });
 
     test('should correctly render Logo specified color', () => {

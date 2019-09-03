@@ -1,20 +1,22 @@
+@import '../../styles/variables';
+
 .quick-search {
     display: inline-block;
-    transition: width .25s linear;
     width: 100%;
+    transition: width .25s linear;
 
     .selector-dropdown-wrapper {
         width: 100%;
     }
 
     .overlay {
-        border-radius: 2px;
+        border-radius: $bdl-border-radius-size;
     }
 
     ul.overlay {
+        padding: 0;
         overflow-x: hidden;
         overflow-y: auto;
-        padding: 0;
         transform: scaleY(0);
         transition: transform .2s ease;
     }

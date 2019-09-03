@@ -11,7 +11,14 @@ import Base from './Base';
 import FileAPI from './File';
 import FolderAPI from './Folder';
 import WebLinkAPI from './WebLink';
-import { CACHE_PREFIX_SEARCH, FIELD_RELEVANCE, SORT_DESC, ERROR_CODE_SEARCH } from '../constants';
+import {
+    CACHE_PREFIX_SEARCH,
+    FIELD_RELEVANCE,
+    FIELD_REPRESENTATIONS,
+    X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
+    SORT_DESC,
+    ERROR_CODE_SEARCH,
+} from '../constants';
 
 class Search extends Base {
     /**
@@ -160,9 +167,7 @@ class Search extends Base {
         this.itemCache = (this.itemCache || []).concat(flattened);
 
         this.getCache().set(this.key, {
-            item_collection: Object.assign({}, data, {
-                entries: this.itemCache,
-            }),
+            item_collection: { ...data, entries: this.itemCache },
         });
 
         this.finish();
@@ -185,12 +190,16 @@ class Search extends Base {
     /**
      * Does the network request
      *
+     * @param {FetchOptions} options - options for request
      * @return {void}
      */
-    searchRequest(): Promise<void> {
+    searchRequest(options: FetchOptions = {}): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
+
+        const { fields } = options;
+        const requestFields = fields || FOLDER_FIELDS_TO_FETCH;
 
         this.errorCode = ERROR_CODE_SEARCH;
         return this.xhr
@@ -201,8 +210,13 @@ class Search extends Base {
                     query: this.query,
                     ancestor_folder_ids: this.id,
                     limit: this.limit,
-                    fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                    fields: requestFields.toString(),
                 },
+                headers: requestFields.includes(FIELD_REPRESENTATIONS)
+                    ? {
+                          'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
+                      }
+                    : {},
             })
             .then(this.searchSuccessHandler)
             .catch(this.searchErrorHandler);
@@ -254,7 +268,7 @@ class Search extends Base {
         }
 
         // Make the XHR request
-        this.searchRequest();
+        this.searchRequest(options);
     }
 }
 

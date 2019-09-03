@@ -1,10 +1,4 @@
-@import '../../../styles/variables';
-
-.bdl-AdditionalTabs::before {
-    background: $efive;
-    content: '';
-    display: block;
-    height: 1px;
-    margin: 16px auto;
-    width: 44px;
+.bdl-AdditionalTabs {
+    display: flex;
+    flex-direction: column;
 }

@@ -3,38 +3,38 @@
  **************************************/
 
 .btn {
-    -webkit-appearance: none;
-    background-color: $white;
-    border: 1px solid $sf-fog;
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
-    box-sizing: border-box;
-    color: $sunset-grey;
-    cursor: pointer;
+    position: relative;
     display: inline-block;
-    font-size: 13px;
-    -webkit-font-smoothing: antialiased;
-    font-weight: 400;
-    letter-spacing: .035em;
-    line-height: 10px;
+    box-sizing: border-box;
     margin: 5px;
     padding: 10px 16px;
-    position: relative;
+    color: $bdl-gray-80;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 10px;
+    letter-spacing: .035em;
+    white-space: nowrap;
     text-align: center;
     text-decoration: none;
     text-shadow: none;
+    vertical-align: top;
+    background-color: $white;
+    border: 1px solid $bdl-gray-30;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    cursor: pointer;
     -webkit-transition: border-color linear .15s, box-shadow linear .15s, background-color linear .15s;
     transition: background-color .05s ease-in-out, border-color .05s ease-in-out;
-    vertical-align: top;
-    white-space: nowrap;
+    -webkit-appearance: none;
     zoom: 1;
+    -webkit-font-smoothing: antialiased;
 
     &:active,
     &:hover,
     &:focus {
-        outline: none;
         text-decoration: none;
+        outline: none;
     }
 
     &:not(.is-disabled) {
@@ -44,19 +44,19 @@
 
         &:active {
             background-color: darken($white, 8%);
-            border-color: $sf-fog;
+            border-color: $bdl-gray-30;
         }
 
         &:focus {
-            border-color: darken($sf-fog, 14%);
+            border-color: darken($bdl-gray-30, 14%);
             box-shadow: 0 1px 2px fade-out($black, .9);
         }
     }
 
     &.is-disabled,
     &.is-loading {
-        cursor: default;
         top: 0; /* prevents disabled button from being depressed on click */
+        cursor: default;
     }
 
     &.is-loading {
@@ -65,14 +65,14 @@
         }
 
         .btn-loading-indicator {
-            align-items: center;
-            display: flex;
-            height: 100%;
-            justify-content: center;
-            left: 0;
             position: absolute;
             top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
+            height: 100%;
         }
     }
 
@@ -85,11 +85,11 @@
 .btn-plain,
 .btn-plain:hover,
 .btn-plain:active {
-    border: none;
-    cursor: pointer;
-    font-weight: normal;
     margin: 0;
     padding: 0;
+    font-weight: normal;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-plain,
@@ -110,9 +110,9 @@ button svg {
 }
 
 .btn-primary {
+    color: $white;
     background-color: $primary-color;
     border-color: $primary-color;
-    color: $white;
     -webkit-font-smoothing: antialiased;
 
     &:not(.is-disabled) {
@@ -135,7 +135,7 @@ button svg {
 
     &.is-loading {
         .btn-content {
-            background-color: $sf-fog;
+            background-color: $bdl-gray-30;
         }
     }
 }

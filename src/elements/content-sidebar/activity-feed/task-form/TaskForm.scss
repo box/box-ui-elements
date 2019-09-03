@@ -10,9 +10,9 @@ $assignee-dropdown-height: 215px;
         text-align: right;
 
         .btn {
-            margin-bottom: 10px;
-            margin-right: 0;
             margin-top: 0;
+            margin-right: 0;
+            margin-bottom: 10px;
         }
 
         .btn:last-child {
@@ -25,13 +25,19 @@ $assignee-dropdown-height: 215px;
         min-width: 0;
 
         textarea,
-        input {
+        .date-picker-input {
             width: 100%;
         }
 
+        .checkbox-container {
+            // default margin is 20px between form input elements
+            // this checkbox needs to be 10px below the pill selector input
+            margin-top: -10px;
+        }
+
         .bcs-task-add-due-date-input {
-            margin-left: 0;
             margin-right: 0;
+            margin-left: 0;
 
             .date-picker-wrapper {
                 width: 166px;
@@ -39,9 +45,9 @@ $assignee-dropdown-height: 215px;
         }
 
         .bcs-task-name-input {
-            margin-bottom: 15px;
-            margin-top: 20px;
             max-height: 140px;
+            margin-top: 20px;
+            margin-bottom: 15px;
         }
 
         input.pill-selector-hidden-input {
@@ -49,8 +55,8 @@ $assignee-dropdown-height: 215px;
         }
 
         .pill-selector-wrapper {
-            margin-left: 0;
             width: 100%;
+            margin-left: 0;
 
             .pill-selector-input-wrapper {
                 width: auto;
@@ -58,10 +64,10 @@ $assignee-dropdown-height: 215px;
 
             &.scrollable {
                 .overlay-wrapper {
-                    border: 1px solid $sf-fog;
+                    position: absolute;
                     height: $assignee-dropdown-height;
                     overflow-y: scroll;
-                    position: absolute;
+                    border: 1px solid $bdl-gray-30;
                 }
 
                 .overlay {

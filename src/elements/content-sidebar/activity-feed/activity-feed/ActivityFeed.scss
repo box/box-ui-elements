@@ -1,11 +1,11 @@
 @import '../../../common/variables';
 
 .be .bcs-activity-feed {
+    position: relative;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    position: relative;
     width: $sidebarContentWidth;
+    height: 100%;
 
     ol,
     ul {
@@ -17,12 +17,12 @@
     }
 
     .bcs-activity-feed-items-container {
+        position: relative;
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
         overflow-x: hidden;
         overflow-y: auto;
-        position: relative;
 
         > .inline-alert-error {
             margin: 9px 20px;
@@ -38,9 +38,9 @@
         .bcs-activity-feed-task-new,
         .bcs-activity-feed-comment,
         .bcs-activity-feed-app-activity {
-            border-bottom: 1px solid $bdl-neutral-04;
             margin-top: 20px;
             padding-bottom: 20px;
+            border-bottom: 1px solid $bdl-gray-10;
 
             &:first-child .bcs-comment {
                 margin-top: 0;
@@ -53,8 +53,8 @@
     }
 
     .bcs-activity-feed-active-state {
-        padding: 9px 25px;
         width: 100%;
+        padding: 9px 25px;
 
         > li:last-child {
             margin-bottom: 10px;
@@ -62,35 +62,34 @@
     }
 
     .bcs-activity-feed-empty-state {
-        align-items: center;
         display: flex;
         flex-direction: column;
+        align-items: center;
 
         .bcs-empty-state-cta {
-            align-items: center;
             display: flex;
             flex-direction: column;
+            align-items: center;
 
             aside {
+                width: 200px;
                 margin-top: 6px;
                 text-align: center;
-                width: 200px;
             }
         }
 
         .bcs-activity-feed-empty-state-illustration {
-            margin-bottom: 15px;
             margin-top: 60px;
+            margin-bottom: 15px;
         }
     }
 
     .bcs-activity-feed-comment-input {
-        background-color: $white;
         flex: 0 0 auto;
-        margin-bottom: 4px;
-        max-height: 500px;
         min-height: 93px;
+        max-height: 500px;
         overflow: hidden;
+        background-color: $white;
 
         &.bcs-is-disabled {
             opacity: .4;
@@ -98,20 +97,13 @@
         }
 
         .selector-dropdown-wrapper {
-            width: 100%;
             // Override z index to prevent a new stacking context under the approval comment form
             z-index: auto;
+            width: 100%;
         }
 
         .overlay {
             max-height: 95px;
-            overflow: auto;
-        }
-    }
-
-    .bcs-comment-add-approver-fields-container {
-        .overlay {
-            max-height: 140px;
             overflow: auto;
         }
     }

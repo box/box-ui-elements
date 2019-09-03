@@ -3,7 +3,6 @@ import { shallow } from 'enzyme/build';
 import messages from '../messages';
 import openUrlInsideIframe from '../../../../utils/iframe';
 import VersionsSidebar from '../VersionsSidebarContainer';
-import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../../utils/fields';
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -22,51 +21,34 @@ jest.mock('../../../../utils/iframe', () => ({
 const versions = [{ id: '123', name: 'Version 1' }, { id: '456', name: 'Version 2' }, { id: '789', name: 'Version 3' }];
 
 describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
-    const defaultId = '12345';
-    const fileAPI = {
-        getDownloadUrl: jest.fn(),
-        getFile: jest.fn(),
-    };
     const versionsAPI = {
-        addCurrentVersion: jest.fn(),
         addPermissions: jest.fn(),
-        deleteVersion: jest.fn(),
-        getVersions: jest.fn(),
-        getCurrentVersion: jest.fn(),
-        promoteVersion: jest.fn(),
-        restoreVersion: jest.fn(),
         sortVersions: jest.fn(),
     };
     const api = {
-        getFileAPI: () => fileAPI,
         getVersionsAPI: () => versionsAPI,
     };
-    const getWrapper = ({ fileId = defaultId, ...rest } = {}) =>
-        shallow(<VersionsSidebar api={api} fileId={fileId} {...rest} />);
-
-    describe('componentDidMount', () => {
-        test('should fetch file info', () => {
-            const wrapper = getWrapper();
-
-            expect(wrapper.state('versions')).toHaveLength(0);
-            expect(fileAPI.getFile).toHaveBeenCalled();
-        });
-    });
+    const getWrapper = ({ ...props } = {}) => shallow(<VersionsSidebar api={api} fileId="12345" {...props} />);
 
     describe('componentDidUpdate', () => {
+        let onVersionChange;
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            onVersionChange = jest.fn();
+            wrapper = getWrapper({ onVersionChange, refreshIdentity: false });
+            instance = wrapper.instance();
+        });
+
         test('should verify the selected version id exists when it changes', () => {
-            const onVersionChange = jest.fn();
-            const wrapper = getWrapper({ onVersionChange });
-            const instance = wrapper.instance();
-            const version = { id: '12345' };
+            const version = { id: '45678' };
             const currentVersion = { id: '54321' };
 
             instance.verifyVersion = jest.fn();
 
-            wrapper.setState({
-                versions: [currentVersion, version],
-            });
-            wrapper.setProps({ versionId: '12345' });
+            wrapper.setState({ versions: [currentVersion, version] });
+            wrapper.setProps({ versionId: '45678' });
 
             expect(instance.verifyVersion).toHaveBeenCalled();
         });
@@ -77,75 +59,95 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             const onVersionChange = jest.fn();
             const wrapper = getWrapper({ onVersionChange });
 
-            wrapper.unmount();
+            wrapper.instance().componentWillUnmount();
 
             expect(onVersionChange).toBeCalledWith(null);
         });
     });
 
     describe('handleActionDelete', () => {
-        test('should set state and call api endpoint helpers', () => {
-            const wrapper = getWrapper({ versionId: '123' });
+        test('should call api endpoint helpers', () => {
+            const handleDelete = jest.fn();
+            const wrapper = getWrapper({ onVersionDelete: handleDelete, versionId: '123' });
             const instance = wrapper.instance();
-            const versionId = '456';
+            const version = { id: '456' };
 
-            instance.deleteVersion = jest.fn().mockResolvedValueOnce();
-            instance.fetchData = jest.fn().mockResolvedValueOnce();
-            instance.updateVersion = jest.fn();
+            instance.api.deleteVersion = jest.fn().mockResolvedValueOnce();
+            instance.api.fetchData = jest.fn().mockResolvedValueOnce();
+            instance.findVersion = jest.fn(() => version);
+            instance.handleFetchSuccess = jest.fn();
+            instance.handleDeleteSuccess = jest.fn();
 
-            instance.handleActionDelete(versionId);
-
-            expect(wrapper.state('isLoading')).toBe(true);
-            expect(instance.deleteVersion).toHaveBeenCalledWith(versionId);
+            instance.handleActionDelete(version.id).then(() => {
+                expect(instance.api.deleteVersion).toHaveBeenCalledWith(version);
+                expect(instance.api.fetchData).toHaveBeenCalled();
+                expect(instance.handleFetchSuccess).toHaveBeenCalled();
+                expect(instance.handleDeleteSuccess).toHaveBeenCalledWith(version.id);
+                expect(handleDelete).toHaveBeenCalledWith(version.id);
+            });
         });
     });
 
     describe('handleActionDownload', () => {
-        test('should call api endpoint helpers', async () => {
+        test('should call api endpoint helpers', () => {
             const downloadUrl = 'https://box.com/url';
-            const wrapper = getWrapper({ versionId: '123' });
+            const handleDownload = jest.fn();
+            const wrapper = getWrapper({ onVersionDownload: handleDownload, versionId: '123' });
             const instance = wrapper.instance();
-            const versionId = '456';
+            const version = { id: '456' };
 
-            instance.fetchDownloadUrl = jest.fn().mockResolvedValueOnce(downloadUrl);
+            instance.api.fetchDownloadUrl = jest.fn().mockResolvedValueOnce(downloadUrl);
+            instance.findVersion = jest.fn(() => version);
 
-            await instance.handleActionDownload(versionId);
-
-            expect(instance.fetchDownloadUrl).toHaveBeenCalledWith(versionId);
-            expect(openUrlInsideIframe).toHaveBeenCalledWith(downloadUrl);
+            instance.handleActionDownload(version.id).then(() => {
+                expect(instance.api.fetchDownloadUrl).toHaveBeenCalledWith(version);
+                expect(openUrlInsideIframe).toHaveBeenCalledWith(downloadUrl);
+                expect(handleDownload).toHaveBeenCalledWith(version.id);
+            });
         });
     });
 
     describe('handleActionPromote', () => {
-        test('should set state and call api endpoint helpers', () => {
-            const wrapper = getWrapper({ versionId: '123' });
+        test('should call api endpoint helpers', () => {
+            const handlePromote = jest.fn();
+            const wrapper = getWrapper({ onVersionPromote: handlePromote, versionId: '123' });
             const instance = wrapper.instance();
-            const versionId = '456';
+            const version = { id: '456' };
 
-            instance.promoteVersion = jest.fn().mockResolvedValueOnce();
-            instance.fetchData = jest.fn().mockResolvedValueOnce();
-            instance.updateVersion = jest.fn();
+            instance.api.fetchData = jest.fn().mockResolvedValueOnce();
+            instance.api.promoteVersion = jest.fn().mockResolvedValueOnce();
+            instance.findVersion = jest.fn(() => version);
+            instance.handleFetchSuccess = jest.fn();
+            instance.handlePromoteSuccess = jest.fn();
 
-            instance.handleActionPromote(versionId);
-
-            expect(wrapper.state('isLoading')).toBe(true);
-            expect(instance.promoteVersion).toHaveBeenCalledWith(versionId);
+            instance.handleActionPromote(version.id).then(() => {
+                expect(instance.api.promoteVersion).toHaveBeenCalledWith(version);
+                expect(instance.api.fetchData).toHaveBeenCalled();
+                expect(instance.handleFetchSuccess).toHaveBeenCalled();
+                expect(instance.handlePromoteSuccess).toHaveBeenCalled();
+                expect(handlePromote).toHaveBeenCalledWith(version.id);
+            });
         });
     });
 
     describe('handleActionRestore', () => {
-        test('should set state and call api endpoint helpers', () => {
-            const wrapper = getWrapper({ versionId: '123' });
+        test('should call api endpoint helpers', () => {
+            const handleRestore = jest.fn();
+            const wrapper = getWrapper({ onVersionRestore: handleRestore, versionId: '123' });
             const instance = wrapper.instance();
-            const versionId = '456';
+            const version = { id: '456' };
 
-            instance.restoreVersion = jest.fn().mockResolvedValueOnce();
-            instance.fetchData = jest.fn().mockResolvedValueOnce();
+            instance.api.fetchData = jest.fn().mockResolvedValueOnce();
+            instance.api.restoreVersion = jest.fn().mockResolvedValueOnce();
+            instance.findVersion = jest.fn(() => version);
+            instance.handleFetchSuccess = jest.fn();
 
-            instance.handleActionRestore(versionId);
-
-            expect(wrapper.state('isLoading')).toBe(true);
-            expect(instance.restoreVersion).toHaveBeenCalledWith(versionId);
+            instance.handleActionRestore(version.id).then(() => {
+                expect(instance.api.restoreVersion).toHaveBeenCalledWith(version);
+                expect(instance.api.fetchData).toHaveBeenCalled();
+                expect(instance.handleFetchSuccess).toHaveBeenCalled();
+                expect(handleRestore).toHaveBeenCalledWith(version.id);
+            });
         });
     });
 
@@ -179,19 +181,19 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             versionsWithCurrent = { entries: [version, ...currentVersion.entries], total_count: 2 };
 
             versionsAPI.addPermissions.mockReturnValueOnce(versionsWithCurrent);
-            versionsAPI.sortVersions.mockReturnValueOnce(versionsWithCurrent);
         });
 
         test('should set state with the updated versions', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
+            instance.sortVersions = jest.fn().mockReturnValue(versionsWithCurrent.entries);
             instance.verifyVersion = jest.fn();
             instance.handleFetchSuccess([file, versionsWithCurrent]);
 
-            expect(instance.verifyVersion).toBeCalled();
             expect(versionsAPI.addPermissions).toBeCalledWith(versionsWithCurrent, file);
-            expect(versionsAPI.sortVersions).toBeCalledWith(versionsWithCurrent);
+            expect(instance.verifyVersion).toBeCalled();
+            expect(instance.sortVersions).toBeCalledWith(versionsWithCurrent.entries);
             expect(wrapper.state()).toMatchObject({
                 error: undefined,
                 isLoading: false,
@@ -214,105 +216,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
-    describe('fetchData', () => {
-        test('should call getFile and getVersions', () => {
-            const wrapper = getWrapper();
-            const dataPromise = wrapper.instance().fetchData();
-
-            expect(dataPromise).toBeInstanceOf(Promise);
-            expect(fileAPI.getFile).toBeCalled();
-            expect(versionsAPI.getVersions).toBeCalled();
-        });
-    });
-
-    describe('fetchDownloadUrl', () => {
-        test('should call getDownloadUrl', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            const versionId = '456';
-            const version = { id: versionId };
-
-            instance.findVersion = jest.fn().mockReturnValueOnce(version);
-
-            const urlPromise = instance.fetchDownloadUrl(versionId);
-
-            expect(urlPromise).toBeInstanceOf(Promise);
-            expect(fileAPI.getDownloadUrl).toBeCalledWith(
-                defaultId,
-                version,
-                expect.any(Function),
-                expect.any(Function),
-            );
-        });
-    });
-
-    describe('fetchFile', () => {
-        test('should call getFile', () => {
-            const wrapper = getWrapper();
-            const filePromise = wrapper.instance().fetchFile();
-
-            expect(filePromise).toBeInstanceOf(Promise);
-            expect(fileAPI.getFile).toBeCalledWith(defaultId, expect.any(Function), expect.any(Function), {
-                fields: FILE_VERSION_FIELDS_TO_FETCH,
-                forceFetch: true,
-            });
-        });
-    });
-
-    describe('fetchVersions', () => {
-        test('should call getVersions', () => {
-            const wrapper = getWrapper();
-            const versionsPromise = wrapper.instance().fetchVersions();
-
-            expect(versionsPromise).toBeInstanceOf(Promise);
-            expect(versionsAPI.getVersions).toBeCalledWith(defaultId, expect.any(Function), expect.any(Function));
-        });
-    });
-
-    describe('fetchVersionCurrent', () => {
-        const fileVersionId = '1234';
-        test('should get the current version and add it to the versions response', () => {
-            const file = {
-                id: defaultId,
-                file_version: {
-                    id: fileVersionId,
-                },
-            };
-
-            versionsAPI.getCurrentVersion.mockResolvedValueOnce();
-
-            const wrapper = getWrapper();
-            const currentVersionsPromise = wrapper.instance().fetchVersionCurrent([file, versions]);
-
-            expect(currentVersionsPromise).toBeInstanceOf(Promise);
-            expect(versionsAPI.getCurrentVersion).toBeCalledWith(
-                defaultId,
-                fileVersionId,
-                expect.any(Function),
-                expect.any(Function),
-            );
-        });
-    });
-
-    describe('deleteVersion', () => {
-        test('should call deleteVersion', () => {
-            const wrapper = getWrapper();
-            const permissions = { can_delete: true };
-            const instance = wrapper.instance();
-
-            instance.findVersion = jest.fn(() => ({ id: '123', permissions }));
-
-            expect(instance.deleteVersion('123')).toBeInstanceOf(Promise);
-            expect(versionsAPI.deleteVersion).toBeCalledWith({
-                fileId: defaultId,
-                permissions,
-                errorCallback: expect.any(Function),
-                successCallback: expect.any(Function),
-                versionId: '123',
-            });
-        });
-    });
-
     describe('findVersion', () => {
         test('should return the version stored in state if available', () => {
             const wrapper = getWrapper();
@@ -325,41 +228,30 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
-    describe('promoteVersion', () => {
-        test('should call promoteVersion', () => {
-            const wrapper = getWrapper();
-            const permissions = { can_upload: true };
-            const instance = wrapper.instance();
+    describe('refresh', () => {
+        test('should refetch data when refresh is called', () => {
+            const instance = getWrapper().instance();
+            const fetchData = jest.fn();
+            instance.fetchData = fetchData;
 
-            instance.findVersion = jest.fn(() => ({ id: '123', permissions }));
+            instance.refresh();
 
-            expect(instance.promoteVersion('123')).toBeInstanceOf(Promise);
-            expect(versionsAPI.promoteVersion).toBeCalledWith({
-                fileId: defaultId,
-                permissions,
-                errorCallback: expect.any(Function),
-                successCallback: expect.any(Function),
-                versionId: '123',
-            });
+            expect(fetchData).toHaveBeenCalled();
         });
     });
 
-    describe('restoreVersion', () => {
-        test('should call restoreVersion', () => {
-            const wrapper = getWrapper();
-            const permissions = { can_upload: true };
-            const instance = wrapper.instance();
+    describe('sortVersions', () => {
+        test('should sort versions by their created date', () => {
+            const instance = getWrapper().instance();
+            const unsortedVersions = [
+                { id: '123', created_at: '2018-10-02T13:01:24-07:00' },
+                { id: '456', created_at: '2018-10-02T13:01:41-07:00' },
+                { id: '789', created_at: '2018-11-29T17:47:57-08:00' },
+            ];
+            const sortedVersions = instance.sortVersions(unsortedVersions);
 
-            instance.findVersion = jest.fn(() => ({ id: '123', permissions }));
-
-            expect(instance.restoreVersion('123')).toBeInstanceOf(Promise);
-            expect(versionsAPI.restoreVersion).toBeCalledWith({
-                fileId: defaultId,
-                permissions,
-                errorCallback: expect.any(Function),
-                successCallback: expect.any(Function),
-                versionId: '123',
-            });
+            expect(unsortedVersions).not.toBe(sortedVersions); // Sort call should create a new array
+            expect(sortedVersions).toEqual([unsortedVersions[2], unsortedVersions[1], unsortedVersions[0]]);
         });
     });
 

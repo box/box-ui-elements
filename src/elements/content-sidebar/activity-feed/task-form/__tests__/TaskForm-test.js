@@ -2,12 +2,12 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import DatePicker from '../../../../../components/date-picker/DatePicker'; // eslint-disable-line no-unused-vars
 import { TASK_EDIT_MODE_EDIT } from '../../../../../constants';
-
+import FeatureProvider from '../../../../common/feature-checking/FeatureProvider';
 import { TaskFormUnwrapped as TaskForm } from '..';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('../../../../../components/date-picker/DatePicker', () => props => (
-    <input type="date" {...props} {...props.inputProps} />
+    <input type="date" {...props} {...props.inputProps} /> // eslint-disable-line react/prop-types
 ));
 
 const mockIntl = {
@@ -16,6 +16,22 @@ const mockIntl = {
 
 const render = props =>
     mount(<TaskForm getMentionWithQuery={() => {}} intl={mockIntl} user={{ id: 123, name: 'foo bar' }} {...props} />);
+
+const defaultFeatures = {
+    activityFeed: {
+        tasks: {
+            anyTask: true,
+        },
+    },
+};
+
+// TODO: Remove this when Any Task GA's
+const renderWithFeatures = (props, features) =>
+    mount(
+        <FeatureProvider features={features || defaultFeatures}>
+            <TaskForm getMentionWithQuery={() => {}} intl={mockIntl} user={{ id: 123, name: 'foo bar' }} {...props} />
+        </FeatureProvider>,
+    );
 
 describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
     test('should render form fields', () => {
@@ -96,7 +112,14 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         });
 
         expect(editTaskMock).toHaveBeenCalledWith(
-            { addedAssignees: [], removedAssignees: [], id, description, due_at: null },
+            {
+                addedAssignees: [],
+                removedAssignees: [],
+                id,
+                description,
+                due_at: null,
+                completion_rule: 'ALL_ASSIGNEES',
+            },
             instance.handleSubmitSuccess,
             instance.handleSubmitError,
         );
@@ -166,14 +189,6 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             ],
         });
         expect(wrapper.find('PillSelectorDropdown').hasClass('scrollable'));
-    });
-
-    test('should show inline error when error prop is passed', () => {
-        const wrapper = render({
-            createTask: jest.fn(),
-            error: 'error',
-        });
-        expect(wrapper.find('.inline-alert').length).toBe(1);
     });
 
     describe('handleDueDateChange()', () => {
@@ -319,6 +334,123 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             expect(wrapper.state('isLoading')).toEqual(false);
             expect(onSubmitSuccessMock).toHaveBeenCalled();
             expect(clearFormMock).toHaveBeenCalled();
+        });
+    });
+
+    describe('completionRule()', () => {
+        test.each`
+            numAssignees | shouldShowCheckbox | checkBoxDisabled
+            ${0}         | ${false}           | ${undefined}
+            ${1}         | ${true}            | ${true}
+            ${2}         | ${true}            | ${false}
+        `(
+            'checkbox should be shown correctly when number of assignees is $numAssignees',
+            ({ numAssignees, shouldShowCheckbox, checkBoxDisabled }) => {
+                const approvers = new Array(numAssignees).fill().map(() => ({
+                    id: '',
+                    target: {
+                        id: 123 * Math.random(),
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                }));
+                const wrapper = renderWithFeatures({ approvers });
+                const container = wrapper.render();
+                const checkbox = container.find('[data-testid="task-form-completion-rule-checkbox"]');
+
+                expect(checkbox.length === 1).toBe(shouldShowCheckbox);
+                expect(checkbox.prop('disabled')).toBe(checkBoxDisabled);
+            },
+        );
+
+        test('should call createTask with any assignee param when checkbox is checked', () => {
+            const createTaskSpy = jest.fn();
+            const message = 'hey';
+            const taskType = 'GENERAL';
+            const dueDate = new Date('2019-04-12');
+
+            const wrapper = renderWithFeatures({
+                taskType,
+                createTask: createTaskSpy,
+            });
+
+            const approvers = new Array(3).fill().map(() => ({
+                id: '',
+                target: {
+                    id: 123 * Math.random(),
+                    name: 'abc',
+                    type: 'user',
+                },
+                role: 'ASSIGNEE',
+                type: 'task_collaborator',
+                status: 'NOT_STARTED',
+                permissions: { can_delete: false, can_update: false },
+            }));
+
+            wrapper.find(TaskForm).setState({
+                approvers,
+                message,
+                dueDate,
+                completionRule: 'ANY_ASSIGNEE',
+                isValid: true,
+            });
+
+            const container = wrapper.render();
+            const checkbox = container.find('[data-testid="task-form-completion-rule-checkbox"]');
+
+            const submitButton = wrapper.find('[data-testid="task-form-submit-button"]').hostNodes();
+            submitButton.simulate('submit', {
+                target: {
+                    checkValidity: () => true,
+                },
+            });
+
+            expect(checkbox.length).toBe(1);
+            expect(checkbox.prop('checked')).toBe(true);
+            expect(createTaskSpy).toHaveBeenCalledWith(
+                message,
+                expect.any(Object),
+                taskType,
+                dueDate.toISOString(),
+                'ANY_ASSIGNEE',
+                expect.any(Function),
+                expect.any(Function),
+            );
+        });
+
+        test('should not show completion rule checkbox when feature is off', () => {
+            const approvers = new Array(3).fill().map(() => ({
+                id: '',
+                target: {
+                    id: 123 * Math.random(),
+                    name: 'abc',
+                    type: 'user',
+                },
+                role: 'ASSIGNEE',
+                type: 'task_collaborator',
+                status: 'NOT_STARTED',
+                permissions: { can_delete: false, can_update: false },
+            }));
+            const wrapper = renderWithFeatures(
+                {
+                    activityFeed: {
+                        tasks: {
+                            anyTask: true,
+                        },
+                    },
+                },
+                {
+                    approvers,
+                },
+            );
+            const container = wrapper.render();
+            const checkbox = container.find('[data-testid="task-form-completion-rule-checkbox"]');
+
+            expect(checkbox.length).toBe(0);
         });
     });
 

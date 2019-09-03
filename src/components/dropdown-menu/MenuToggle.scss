@@ -1,8 +1,8 @@
 @import '../../styles/variables';
 
 .menu-toggle {
-    align-items: center;
     display: flex;
+    align-items: center;
 
     > .toggle-arrow {
         flex: none;
@@ -18,7 +18,7 @@
             margin-top: 2px;
 
             & path {
-                fill: $box-blue;
+                fill: $bdl-box-blue;
             }
         }
     }
@@ -28,6 +28,6 @@
     }
 
     .lnk.is-disabled & .fill-color {
-        fill: $nines;
+        fill: $bdl-gray-50;
     }
 }

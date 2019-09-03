@@ -1,24 +1,24 @@
 @import '../../styles/variables';
 
 .aria-menu {
-    background: $white;
-    border: 1px solid $sf-fog;
-    border-radius: 4px;
-    box-shadow: 0 2px 6px 0 fade-out($black, .9);
-    list-style: none;
     margin: 0;
     padding: 8px 0;
     white-space: nowrap;
+    list-style: none;
+    background: $white;
+    border: 1px solid $bdl-gray-30;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px 0 fade-out($black, .9);
 
     &:not(.should-outline-focus):focus {
         outline: none;
     }
 
     [role='separator'] {
-        border: 0;
-        border-top: 1px solid $sf-fog;
         height: 0;
         margin: 8px 0;
+        border: 0;
+        border-top: 1px solid $bdl-gray-30;
     }
 
     a,
@@ -32,22 +32,24 @@
 }
 
 .menu-item {
-    align-items: center;
-    color: $better-black;
-    cursor: pointer;
-    display: flex;
-    min-height: 30px;
-    padding: 5px 35px 5px 15px;
     position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 30px;
+    color: $bdl-gray-80;
+    cursor: pointer;
 
-    &.btn-plain:hover {
+    &,
+    &.btn-plain,
+    &.btn-plain:hover,
+    &.btn-plain:active {
         padding: 5px 35px 5px 15px;
     }
 
     &.menu-section-header {
         color: $black;
+        font-weight: bold;
         font-size: 10px;
-        font-weight: 600;
     }
 
     &[aria-disabled] {
@@ -56,34 +58,34 @@
     }
 
     &.is-select-item {
-        padding-left: 30px;
         position: relative;
+        padding-left: 30px;
 
         /* checkmark */
         &.is-selected::before {
-            border-color: $better-black;
-            border-style: none solid solid none;
-            border-width: 2px;
-            content: '';
-            height: 12px;
-            left: 14px;
-            margin: auto;
             position: absolute;
             top: 8px;
-            transform: rotate(45deg);
+            left: 14px;
             width: 6px;
+            height: 12px;
+            margin: auto;
+            border-color: $bdl-gray-80;
+            border-style: none solid solid none;
+            border-width: 2px;
+            transform: rotate(45deg);
+            content: '';
         }
     }
 
     &:not([aria-disabled]) {
         &:focus,
         &:hover {
-            background-color: $off-white;
-            color: $better-black;
+            color: $bdl-gray-80;
+            background-color: $bdl-gray-10;
         }
 
         &:focus {
-            outline: 1px dashed $twos;
+            outline: 1px dashed $bdl-gray;
         }
     }
 

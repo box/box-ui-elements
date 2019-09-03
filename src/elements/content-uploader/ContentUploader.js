@@ -40,6 +40,7 @@ import {
     VIEW_UPLOAD_SUCCESS,
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
+    STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
     ERROR_CODE_UPLOAD_FILE_LIMIT,
@@ -58,6 +59,7 @@ type Props = {
     isDraggingItemsToUploadsManager?: boolean,
     isFolderUploadEnabled: boolean,
     isLarge: boolean,
+    isResumableUploadsEnabled: boolean,
     isSmall: boolean,
     isTouch: boolean,
     language?: string,
@@ -108,8 +110,6 @@ class ContentUploader extends Component<Props, State> {
 
     resetItemsTimeout: TimeoutID;
 
-    numItemsUploading: number = 0;
-
     isAutoExpanded: boolean = false;
 
     static defaultProps = {
@@ -131,6 +131,7 @@ class ContentUploader extends Component<Props, State> {
         onMinimize: noop,
         onCancel: noop,
         isFolderUploadEnabled: false,
+        isResumableUploadsEnabled: false,
         dataTransferItems: [],
         isDraggingItemsToUploadsManager: false,
     };
@@ -597,13 +598,17 @@ class ContentUploader extends Component<Props, State> {
      * @return {UploadAPI} - Instance of Upload API
      */
     getUploadAPI(file: File, uploadAPIOptions?: UploadItemAPIOptions) {
-        const { chunked } = this.props;
+        const { chunked, isResumableUploadsEnabled } = this.props;
         const { size } = file;
         const factory = this.createAPIFactory(uploadAPIOptions);
 
         if (chunked && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
             if (isMultiputSupported()) {
-                return factory.getChunkedUploadAPI();
+                const chunkedUploadAPI = factory.getChunkedUploadAPI();
+                if (isResumableUploadsEnabled) {
+                    chunkedUploadAPI.isResumableUploadsEnabled = true;
+                }
+                return chunkedUploadAPI;
             }
 
             /* eslint-disable no-console */
@@ -638,6 +643,7 @@ class ContentUploader extends Component<Props, State> {
 
         onCancel([item]);
         this.updateViewAndCollection(items, callback);
+        this.upload();
     }
 
     /**
@@ -683,12 +689,13 @@ class ContentUploader extends Component<Props, State> {
     uploadFile(item: UploadItem) {
         const { overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
+        const { items } = this.state;
 
-        if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
+        const numItemsUploading = items.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
+
+        if (numItemsUploading >= UPLOAD_CONCURRENCY) {
             return;
         }
-
-        this.numItemsUploading += 1;
 
         const uploadOptions: Object = {
             file,
@@ -701,10 +708,46 @@ class ContentUploader extends Component<Props, State> {
         };
 
         item.status = STATUS_IN_PROGRESS;
-        const { items } = this.state;
         items[items.indexOf(item)] = item;
 
         api.upload(uploadOptions);
+
+        this.updateViewAndCollection(items);
+    }
+
+    /**
+     * Helper to resume uploading a single file.
+     *
+     * @param {UploadItem} item - Upload item object
+     * @return {void}
+     */
+    resumeFile(item: UploadItem) {
+        const { overwrite, rootFolderId } = this.props;
+        const { api, file, options } = item;
+        const { items } = this.state;
+
+        const numItemsUploading = items.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
+
+        if (numItemsUploading >= UPLOAD_CONCURRENCY) {
+            return;
+        }
+
+        const resumeOptions: Object = {
+            file,
+            folderId: options && options.folderId ? options.folderId : rootFolderId,
+            errorCallback: error => this.handleUploadError(item, error),
+            progressCallback: event => this.handleUploadProgress(item, event),
+            successCallback: entries => this.handleUploadSuccess(item, entries),
+            overwrite,
+            sessionId: api && api.sessionId ? api.sessionId : null,
+            fileId: options && options.fileId ? options.fileId : null,
+        };
+
+        item.status = STATUS_IN_PROGRESS;
+        delete item.error;
+        items[items.indexOf(item)] = item;
+
+        api.resume(resumeOptions);
 
         this.updateViewAndCollection(items);
     }
@@ -747,7 +790,6 @@ class ContentUploader extends Component<Props, State> {
         if (!item.error) {
             item.status = STATUS_COMPLETE;
         }
-        this.numItemsUploading -= 1;
 
         // Cache Box File object of successfully uploaded item
         if (entries && entries.length === 1) {
@@ -846,7 +888,6 @@ class ContentUploader extends Component<Props, State> {
 
         item.status = STATUS_ERROR;
         item.error = error;
-        this.numItemsUploading -= 1;
 
         const newItems = [...items];
         const index = newItems.findIndex(singleItem => singleItem === item);
@@ -886,12 +927,12 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     handleUploadProgress = (item: UploadItem, event: any) => {
-        if (!event.total || item.status === STATUS_COMPLETE) {
+        if (!event.total || item.status === STATUS_COMPLETE || item.status === STATUS_STAGED) {
             return;
         }
 
         item.progress = Math.min(Math.round((event.loaded / event.total) * 100), 100);
-        item.status = STATUS_IN_PROGRESS;
+        item.status = item.progress === 100 ? STATUS_STAGED : STATUS_IN_PROGRESS;
 
         const { items } = this.state;
         items[items.indexOf(item)] = item;
@@ -907,20 +948,46 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     onClick = (item: UploadItem) => {
-        const { status } = item;
+        const { chunked, isResumableUploadsEnabled } = this.props;
+        const { status, file } = item;
+        const isChunkedUpload = chunked && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
+        const isResumable = isResumableUploadsEnabled && isChunkedUpload && item.api.sessionId;
+
         switch (status) {
             case STATUS_IN_PROGRESS:
+            case STATUS_STAGED:
             case STATUS_COMPLETE:
             case STATUS_PENDING:
                 this.removeFileFromUploadQueue(item);
                 break;
             case STATUS_ERROR:
-                this.resetFile(item);
-                this.uploadFile(item);
+                if (isResumable) {
+                    this.resumeFile(item);
+                } else {
+                    this.resetFile(item);
+                    this.uploadFile(item);
+                }
                 break;
             default:
                 break;
         }
+    };
+
+    /**
+     * Click action button for all uploads in the Uploads Manager with the given status.
+     *
+     * @private
+     * @param {UploadStatus} - the status that items should have for their action button to be clicked
+     * @return {void}
+     */
+    clickAllWithStatus = (status?: UploadStatus) => {
+        const { items } = this.state;
+
+        items.forEach(item => {
+            if (!status || item.status === status) {
+                this.onClick(item);
+            }
+        });
     };
 
     /**
@@ -1038,6 +1105,7 @@ class ContentUploader extends Component<Props, State> {
             isTouch,
             fileLimit,
             useUploadsManager,
+            isResumableUploadsEnabled,
             isFolderUploadEnabled,
             isDraggingItemsToUploadsManager = false,
         }: Props = this.props;
@@ -1047,6 +1115,7 @@ class ContentUploader extends Component<Props, State> {
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some(item => item.status === STATUS_IN_PROGRESS);
+        const isDone = items.every(item => item.status === STATUS_COMPLETE || item.status === STATUS_STAGED);
 
         const styleClassName = classNames('bcu', className, {
             'be-app-element': !useUploadsManager,
@@ -1060,9 +1129,11 @@ class ContentUploader extends Component<Props, State> {
                         <UploadsManager
                             isDragging={isDraggingItemsToUploadsManager}
                             isExpanded={isUploadsManagerExpanded}
+                            isResumableUploadsEnabled={isResumableUploadsEnabled}
                             isVisible={isVisible}
                             items={items}
                             onItemActionClick={this.onClick}
+                            onUploadsManagerActionClick={this.clickAllWithStatus}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}
                         />
@@ -1087,6 +1158,7 @@ class ContentUploader extends Component<Props, State> {
                             onCancel={this.cancel}
                             onClose={onClose}
                             onUpload={this.upload}
+                            isDone={isDone}
                         />
                     </div>
                 )}

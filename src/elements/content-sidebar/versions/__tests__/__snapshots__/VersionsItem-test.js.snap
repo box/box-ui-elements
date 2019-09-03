@@ -1,57 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if modified_by is null 1`] = `
-<div
-  className="bcs-VersionsItem-log"
-  data-testid="bcs-VersionsItem-log"
-  title={
-    <FormattedMessage
-      defaultMessage="Unknown"
-      id="be.sidebarVersions.versionUserUnknown"
-    />
-  }
->
-  <FormattedMessage
-    defaultMessage="Uploaded by {name}"
-    id="be.sidebarVersions.uploadedBy"
-    values={
-      Object {
-        "name": <FormattedMessage
-          defaultMessage="Unknown"
-          id="be.sidebarVersions.versionUserUnknown"
-        />,
-      }
-    }
-  />
-</div>
-`;
-
-exports[`elements/content-sidebar/versions/VersionsItem render should default to an unknown user if modified_by is undefined 1`] = `
-<div
-  className="bcs-VersionsItem-log"
-  data-testid="bcs-VersionsItem-log"
-  title={
-    <FormattedMessage
-      defaultMessage="Unknown"
-      id="be.sidebarVersions.versionUserUnknown"
-    />
-  }
->
-  <FormattedMessage
-    defaultMessage="Uploaded by {name}"
-    id="be.sidebarVersions.uploadedBy"
-    values={
-      Object {
-        "name": <FormattedMessage
-          defaultMessage="Unknown"
-          id="be.sidebarVersions.versionUserUnknown"
-        />,
-      }
-    }
-  />
-</div>
-`;
-
 exports[`elements/content-sidebar/versions/VersionsItem render should show actions correctly when the version's action is delete 1`] = `
 <div
   className="bcs-VersionsItem"

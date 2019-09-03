@@ -1,33 +1,33 @@
 @import '../../styles/variables';
 
 .presence {
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1);
     position: relative;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1);
 }
 
 .presence-avatar-container,
 .presence-link-container {
-    display: inline-block;
     position: relative;
+    display: inline-block;
 }
 
 .presence-avatar {
-    display: inline-block;
     position: relative;
+    display: inline-block;
 }
 
 .presence-avatar.is-active::after {
-    background-color: $thats-mint;
-    border: 2px solid $white;
-    border-radius: 50%;
-    bottom: 2px;
-    box-sizing: content-box;
-    content: '';
-    display: block;
-    height: 6px;
     position: absolute;
     right: 0;
+    bottom: 2px;
+    display: block;
+    box-sizing: content-box;
     width: 6px;
+    height: 6px;
+    background-color: $bdl-green-light;
+    border: 2px solid $white;
+    border-radius: 50%;
+    content: '';
 }
 
 .presence-avatar-notehead {
@@ -39,8 +39,8 @@
 }
 
 .presence-notehead {
-    height: 28px;
     width: 28px;
+    height: 28px;
 
     &:hover {
         cursor: pointer;
@@ -48,15 +48,15 @@
 }
 
 .presence-count {
-    background-color: $seesee;
-    border-radius: 14px;
-    color: $twos;
-    height: 28px;
-    line-height: 28px;
-    max-width: 34px;
     min-width: 28px;
+    max-width: 34px;
+    height: 28px;
+    color: $bdl-gray;
+    line-height: 28px;
     text-align: center;
     vertical-align: top;
+    background-color: $bdl-gray-20;
+    border-radius: 14px;
 
     &:hover {
         cursor: pointer;
@@ -64,8 +64,8 @@
 }
 
 .presence-count.dropdown-active {
-    background-color: $sf-fog;
-    color: $sunset-grey;
+    color: $bdl-gray-80;
+    background-color: $bdl-gray-30;
 }
 
 .presence-dropdown {
@@ -73,10 +73,10 @@
 }
 
 .presence-dropdown-title {
-    color: $twos;
-    font-size: 15px;
-    margin-bottom: 10px;
     margin-top: 0;
+    margin-bottom: 10px;
+    color: $bdl-gray;
+    font-size: 15px;
 }
 
 .presence-dropdown-container {
@@ -84,8 +84,8 @@
 }
 
 .presence-dropdown-item {
-    align-items: center;
     display: flex;
+    align-items: center;
     margin-top: 10px;
 }
 
@@ -95,15 +95,15 @@
 }
 
 .presence-dropdown-item-info-name {
-    color: $twos;
-    font-size: 13px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     width: 180px;
+    overflow: hidden;
+    color: $bdl-gray;
+    font-size: 13px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
     a {
-        color: $twos;
+        color: $bdl-gray;
 
         &:hover {
             text-decoration: underline;
@@ -112,7 +112,7 @@
 }
 
 .presence-dropdown-item-info-time {
-    color: $sevens;
+    color: $bdl-gray-62;
     font-size: 12px;
 }
 
@@ -133,8 +133,8 @@
 }
 
 .presence-avatar-tooltip-name {
-    font-size: 13px;
     font-weight: bold;
+    font-size: 13px;
 }
 
 .presence-avatar-tooltip-event {
@@ -151,14 +151,14 @@
 .dropshadow-list::after,
 .dropshadow-list-with-buttons::before,
 .dropshadow-list-with-buttons::after {
-    content: '';
-    display: inline-block;
-    height: 10px;
-    left: 7.5%;
-    opacity: 0;
     position: absolute;
-    transition: opacity .1s ease-in-out;
+    left: 7.5%;
+    display: inline-block;
     width: 85%;
+    height: 10px;
+    opacity: 0;
+    transition: opacity .1s ease-in-out;
+    content: '';
 }
 
 .dropshadow-list.is-scrollable-above::before,
@@ -170,21 +170,21 @@
 
 .dropshadow-list::before,
 .dropshadow-list-with-buttons::before {
-    box-shadow: 0 4px 6px -4px rgba(0, 0, 0, .35);
     top: 41px;
     z-index: 999;
+    box-shadow: 0 4px 6px -4px rgba(0, 0, 0, .35);
 }
 
 .dropshadow-list::after {
     bottom: 11px;
-    box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
     z-index: 999;
+    box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
 }
 
 .dropshadow-list-with-buttons::after {
     bottom: 72px;
-    box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
     z-index: 999;
+    box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
 }
 
 /* GROWTH-382 */
@@ -198,14 +198,14 @@
 
 .presence-autofly .presence-dropdown-request-stats {
     display: block;
-    margin-bottom: -18px;
     margin-top: 8px;
+    margin-bottom: -18px;
     text-align: right;
 }
 
 .presence-autofly-first-load .btn-primary {
-    margin-left: 0;
     margin-top: 16px;
+    margin-left: 0;
 }
 
 .presence-autofly-first-load .btn-primary:not(.is-disabled):focus {

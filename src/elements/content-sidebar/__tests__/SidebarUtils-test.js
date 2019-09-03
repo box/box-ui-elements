@@ -47,13 +47,6 @@ describe('elements/content-sidebar/SidebarUtil', () => {
         test('should return true when activity feed should render', () => {
             expect(SidebarUtils.canHaveSidebar({ hasActivityFeed: true })).toBeTruthy();
         });
-        test('should return true when versions should render', () => {
-            expect(
-                SidebarUtils.canHaveSidebar({
-                    detailsSidebarProps: { hasVersions: true },
-                }),
-            ).toBeTruthy();
-        });
         test('should return true when notices should render', () => {
             expect(
                 SidebarUtils.canHaveSidebar({
@@ -84,13 +77,6 @@ describe('elements/content-sidebar/SidebarUtil', () => {
             expect(
                 SidebarUtils.canHaveDetailsSidebar({
                     detailsSidebarProps: { hasClassification: true },
-                }),
-            ).toBeTruthy();
-        });
-        test('should return true when versions should render', () => {
-            expect(
-                SidebarUtils.canHaveDetailsSidebar({
-                    detailsSidebarProps: { hasVersions: true },
                 }),
             ).toBeTruthy();
         });

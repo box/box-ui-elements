@@ -29,7 +29,7 @@ describe('elements/content-sidebar/SidebarClassification', () => {
             const props = {
                 classification: {
                     name: 'Public',
-                    advisoryMessage: 'message',
+                    definition: 'message',
                 },
                 file: {
                     permissions: {
@@ -51,7 +51,7 @@ describe('elements/content-sidebar/SidebarClassification', () => {
             const wrapper = getWrapper({
                 classification: {
                     name: 'Public',
-                    advisoryMessage: 'message',
+                    definition: 'message',
                 },
                 onEdit: jest.fn(),
                 intl: {
@@ -68,7 +68,7 @@ describe('elements/content-sidebar/SidebarClassification', () => {
             const wrapper = getWrapper({
                 classification: {
                     name: 'Public',
-                    advisoryMessage: 'message',
+                    definition: 'message',
                 },
                 onEdit: null,
                 file: {

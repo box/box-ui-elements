@@ -23,10 +23,10 @@ describe('ContentPreview', () => {
             });
         },
         checkPreviewHeader() {
-            cy.get('.bcpr-header').should('be.visible');
+            cy.get('.bcpr-PreviewHeader').should('be.visible');
         },
         checkVersionsHeader() {
-            cy.get('.bcpr-header--basic').should('be.visible');
+            cy.get('.bcpr-PreviewHeader--basic').should('be.visible');
         },
         selectVersion(versionName) {
             cy.getByTestId('versions-item-button').within($versionsItem => {
@@ -63,6 +63,38 @@ describe('ContentPreview', () => {
 
             // Sidebar should not exist
             cy.get('.bcs').should('exist');
+        });
+
+        it('The sidebar should be open by default only on large screens', () => {
+            const breakpoints = [
+                [300, 'not.exist'],
+                [600, 'not.exist'],
+                [800, 'not.exist'],
+                [1000, 'not.exist'],
+                [1200, 'exist'],
+                [1500, 'exist'],
+                [2000, 'exist'],
+                [1500, 'exist'],
+                [1200, 'exist'],
+                [1000, 'not.exist'],
+                [800, 'not.exist'],
+                [600, 'not.exist'],
+                [300, 'not.exist'],
+            ];
+
+            breakpoints.forEach(([width, assertion]) => {
+                cy.viewport(width, 600);
+                cy.getByTestId('bcs-content').should(assertion);
+            });
+        });
+
+        it('The sidebar should open on a small screen if a user clicks a tab', () => {
+            cy.viewport(800, 600);
+            cy.getByTestId('bcs-content').should('not.exist');
+            cy.getByTestId('sidebaractivity').click();
+            cy.getByTestId('bcs-content').should('exist');
+            cy.getByTitle('Next File').click();
+            cy.getByTestId('bcs-content').should('exist');
         });
     });
 

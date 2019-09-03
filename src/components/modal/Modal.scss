@@ -16,23 +16,23 @@
 
 // Container modal div
 .modal {
-    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
     bottom: 0;
+    left: 0;
+    z-index: $modal-dialog-z-index;
     display: flex;
     flex: 1;
-    left: 0;
-    outline: 0;
-    overflow: auto;
+    align-items: center;
     padding: 30px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: $modal-dialog-z-index;
+    overflow: auto;
+    outline: 0;
 
     .modal-dialog {
-        animation: popup_bounce_in .3s;
         border: none;
         box-shadow: none;
+        animation: popup_bounce_in .3s;
     }
 
     .modal-header {
@@ -40,9 +40,9 @@
     }
 
     hr {
-        border: none;
-        border-top: 1px solid $seesee;
         margin: 20px 0;
+        border: none;
+        border-top: 1px solid $bdl-gray-20;
     }
 }
 
@@ -51,29 +51,29 @@
 }
 
 .modal-dialog {
-    background-clip: padding-box;
-    background-color: $white;
-    border: 1px solid $sf-fog;
-    border-radius: $bdl-border-radius-size;
-    box-shadow: 0 1px 1px 1px fade-out($black, .95);
+    position: relative;
     display: flex;
     flex-direction: column;
+    width: 460px;
     margin: auto;
     padding: 30px;
-    position: relative;
-    width: 460px;
+    background-color: $white;
+    background-clip: padding-box;
+    border: 1px solid $bdl-gray-30;
+    border-radius: $bdl-border-radius-size;
+    box-shadow: 0 1px 1px 1px fade-out($black, .95);
 }
 
 .modal-title {
     display: inline-block;
     flex: 1;
+    max-width: 100%;
+    margin: 0;
+    overflow: hidden;
     font-size: 16px;
     line-height: inherit;
-    margin: 0;
-    max-width: 100%;
-    overflow: hidden;
-    overflow-wrap: break-word;
     word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .modal-content {
@@ -81,32 +81,32 @@
 }
 
 .modal-close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 2px;
+    color: $bdl-gray-50;
+    font-weight: bold;
+    font-size: 11px;
     background: none;
     border: 0;
-    color: $downtown-grey;
     cursor: pointer;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 2px;
-    position: absolute;
-    right: 20px;
-    top: 20px;
 }
 
 .modal-backdrop {
-    background: fade-out($black, .25);
+    position: fixed;
+    top: 0;
+    right: 0;
     bottom: 0;
     left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
     z-index: -1; // .modal creates a new stacking context. Let's just make sure that backdrop is below dialog.
+    background: fade-out($black, .25);
 }
 
 .modal-actions {
-    align-items: center;
     display: flex;
     flex: none;
+    align-items: center;
     justify-content: flex-end;
     margin-top: 30px;
     text-align: right;
@@ -116,17 +116,17 @@
     }
 
     .btn {
-        margin-bottom: 0;
         margin-top: 0;
+        margin-bottom: 0;
     }
 }
 
 .modal-container {
-    bottom: 0;
-    display: flex;
-    left: 0;
     position: fixed;
-    right: 0;
     top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 89;
+    display: flex;
 }

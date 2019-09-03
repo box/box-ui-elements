@@ -2,11 +2,11 @@
 $scroll-shadow-height: 30px;
 
 .scroll-container {
+    position: relative;
     display: flex;
     flex-grow: 1;
     height: 100%;
     overflow: hidden;
-    position: relative;
 
     .scroll-wrap-container {
         flex-grow: 1;
@@ -14,34 +14,34 @@ $scroll-shadow-height: 30px;
 
         &::before,
         &::after {
-            border-radius: inherit;
-            content: '';
-            display: block;
-            height: $scroll-shadow-height;
-            opacity: 0;
             position: absolute;
-            transition: opacity .1s ease-in-out;
+            display: block;
             width: 100%;
+            height: $scroll-shadow-height;
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity .1s ease-in-out;
+            content: '';
         }
 
         // default
         &::before {
-            box-shadow: 0 ($scroll-shadow-height / 2) $scroll-shadow-height (-$scroll-shadow-height / 2.5) rgba(0, 0, 0, .25);
             top: -$scroll-shadow-height;
             z-index: 20;
+            box-shadow: 0 ($scroll-shadow-height / 2) $scroll-shadow-height (-$scroll-shadow-height / 2.5) rgba(0, 0, 0, .25);
         }
 
         &::after {
             bottom: -$scroll-shadow-height;
-            box-shadow: 0 (-$scroll-shadow-height / 2) $scroll-shadow-height (-$scroll-shadow-height / 2.5) rgba(0, 0, 0, .25);
             z-index: 30;
+            box-shadow: 0 (-$scroll-shadow-height / 2) $scroll-shadow-height (-$scroll-shadow-height / 2.5) rgba(0, 0, 0, .25);
         }
 
         &.style--cover {
             &::before,
             &::after {
-                margin: 0 -5%;
                 width: 110%;
+                margin: 0 -5%;
             }
         }
 

@@ -2,15 +2,15 @@
 
 .content-explorer-item-list {
     .table-header-item {
-        color: $seventy-sixers;
+        color: $bdl-gray-62;
+        font-weight: normal;
         font-size: 14px;
-        font-weight: 400;
         letter-spacing: .035em;
         text-transform: none;
     }
 
     .table-body {
-        border-top: 1px solid $off-white;
+        border-top: 1px solid $bdl-gray-10;
         outline: none;
     }
 
@@ -34,27 +34,27 @@
     }
 
     .item-list-name-container {
-        align-items: center;
         display: flex;
+        align-items: center;
 
         .icon-chevron {
-            margin-left: 7px;
             margin-top: 1px;
+            margin-left: 7px;
         }
     }
 
     .item-list-name {
-        align-items: center;
-        color: $twos;
         display: flex;
-        font-size: 14px;
+        align-items: center;
         padding-right: 1px;
+        color: $bdl-gray;
+        font-size: 14px;
 
         &.link:hover {
-            color: $box-blue;
+            color: $bdl-box-blue;
 
             .icon-chevron {
-                border-color: $box-blue !important;
+                border-color: $bdl-box-blue !important;
             }
         }
     }
@@ -67,17 +67,17 @@
     }
 
     .item-list-name-label {
-        color: $box-blue;
-        font-size: 11px;
-        font-weight: bold;
         margin-left: 15px;
+        color: $bdl-box-blue;
+        font-weight: bold;
+        font-size: 11px;
         text-transform: uppercase;
     }
 
     .item-list-loading-placeholder {
-        background-color: $sf-fog;
-        border-radius: 3px;
-        height: 12px;
         width: 75%;
+        height: 12px;
+        background-color: $bdl-gray-30;
+        border-radius: 3px;
     }
 }

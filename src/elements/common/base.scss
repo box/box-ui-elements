@@ -8,9 +8,9 @@
 @import '../../components/notification/Notification';
 
 @mixin be-content {
-    color: $twos;
-    letter-spacing: .3px;
+    color: $bdl-gray;
     line-height: 20px;
+    letter-spacing: .3px;
 
     /* stylelint-disable */
     ::-webkit-input-placeholder {
@@ -57,18 +57,17 @@
     @import '../../styles/common/forms';
 
     @include be-content;
-
-    background: $white;
-    border: 0 none;
     /* stylelint-disable declaration-no-important */
     box-sizing: border-box !important;
+    width: 100%;
     /* stylelint-enable declaration-no-important */
     height: 100%;
     margin: 0;
-    outline: none;
-    overflow: hidden;
     padding: 0;
-    width: 100%;
+    overflow: hidden;
+    background: $white;
+    border: 0 none;
+    outline: none;
 
     .ReactModal__Body--open & {
         position: relative;
@@ -85,15 +84,15 @@
 .be-app-element {
     display: flex;
     flex-direction: column;
-    height: 100%;
     width: 100%;
+    height: 100%;
 }
 
 // Input element styled like a link
 .be-input-link {
+    display: block;
     color: $blue;
     cursor: pointer;
-    display: block;
 
     &:hover,
     &:active,
@@ -108,8 +107,8 @@
 
 // Input styled like a button
 .be-input-btn {
-    cursor: pointer;
     display: block;
+    cursor: pointer;
 
     input {
         display: none;

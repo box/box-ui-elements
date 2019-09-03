@@ -9,13 +9,13 @@
     min-height: 32px;
 
     .action-button {
+        display: flex;
         align-items: center;
+        width: 30px;
+        padding: 0;
         background: none;
         border: 0;
         cursor: pointer;
-        display: flex;
-        padding: 0;
-        width: 30px;
 
         &:hover,
         &:focus {
@@ -33,27 +33,27 @@
 
     .action-buttons,
     .search-form-loading-indicator {
-        bottom: 0;
-        display: flex;
         position: absolute;
         top: 0;
+        bottom: 0;
+        display: flex;
     }
 
     .action-buttons {
-        align-items: stretch;
         right: 0;
+        align-items: stretch;
     }
 
     .search-form-loading-indicator {
-        align-items: center;
         right: 10px;
+        align-items: center;
     }
 
     .clear-button {
         display: none;
 
         path:first-of-type {
-            fill: $silver-chalice;
+            fill: $bdl-gray-40;
         }
     }
 
@@ -83,19 +83,19 @@
 
     .search-input:focus ~ .clear-button {
         path:first-of-type {
-            fill: $better-black;
+            fill: $bdl-gray-80;
         }
     }
 
     .search-input:focus + .search-button {
         path {
-            fill: $better-black;
+            fill: $bdl-gray-80;
         }
     }
 
     .search-form {
-        align-items: stretch;
-        display: flex;
         position: relative;
+        display: flex;
+        align-items: stretch;
     }
 }

@@ -124,6 +124,26 @@ const messages = defineMessages({
         defaultMessage: 'Completed',
         description: 'Title for checkmark icon indicating someone completed a task',
     },
+    taskDeleteMenuItem: {
+        id: 'be.contentSidebar.activityFeed.task.taskDeleteMenuItem',
+        defaultMessage: 'Delete task',
+        description: 'Text to show on menu item to delete task',
+    },
+    taskEditMenuItem: {
+        id: 'be.contentSidebar.activityFeed.task.taskEditMenuItem',
+        defaultMessage: 'Modify task',
+        description: 'Text to show on menu item to edit task',
+    },
+    taskDeletePrompt: {
+        id: 'be.contentSidebar.activityFeed.task.taskDeletePrompt',
+        defaultMessage: 'Are you sure you want to permanently delete this task?',
+        description: 'Confirmation prompt text to delete task',
+    },
+    taskAnyAffordanceTooltip: {
+        id: 'be.contentSidebar.activityFeed.task.taskAnyAffordanceTooltip',
+        defaultMessage: 'Only one assignee is required to complete this task',
+        description: 'Tooltip text for any task icon, explaining that the task only needs one assignee to complete.',
+    },
 });
 
 export default messages;

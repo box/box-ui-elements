@@ -1,14 +1,14 @@
 @import '../common/variables';
 
 .bce-footer {
-    align-items: center;
-    background-color: $almost-white;
-    border-top: 1px solid $off-white;
     display: flex;
     flex: 0 0 70px;
+    align-items: center;
     justify-content: flex-end;
     max-height: 70px;
     padding: 0 20px;
+    background-color: $almost-white;
+    border-top: 1px solid $bdl-gray-10;
 
     &:empty {
         display: none;
@@ -16,7 +16,7 @@
     }
 
     .btn-group {
-        margin-left: 5px;
         margin-right: 5px;
+        margin-left: 5px;
     }
 }

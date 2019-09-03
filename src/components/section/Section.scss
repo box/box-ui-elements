@@ -9,15 +9,15 @@
     margin: 40px 0;
 
     .section-title {
-        font-size: 13px;
-        font-weight: 600;
         margin: 0 0 10px;
+        font-weight: bold;
+        font-size: 13px;
     }
 
     .section-description {
-        color: $better-black;
-        padding-right: 35px;
         width: 270px;
+        padding-right: 35px;
+        color: $bdl-gray-80;
     }
 
     .section-content {

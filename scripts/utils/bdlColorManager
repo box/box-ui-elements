@@ -1,0 +1,176 @@
+#!/usr/bin/env node
+
+/* eslint-disable */
+const fs = require('fs');
+const colors = require('colors/safe');
+const { promisify } = require('util');
+const camelCase = require('lodash/camelCase');
+const kebabCase = require('lodash/kebabCase');
+const identity = require('lodash/identity');
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
+
+/*
+    The BDL color manager is a tool to help identify and correct the usage of color
+    variable names across box-ui-elements, and other projects.
+*/
+
+const conversionMap = {
+    'box-blue': 'bdl-box-blue',
+    'koray-ing': 'bdl-dark-blue',
+    'picton-blue': 'bdl-light-blue',
+    'baby-blue': 'bdl-box-blue-50',
+    'blue-purple': 'bdl-purple-rain',
+    'hover-blue': 'bdl-light-blue',
+    'dusty-plum': 'bdl-purple-rain',
+    'sad-sunjin': 'bdl-grimace',
+    'pale-mint': 'bdl-green-light-10',
+    'thats-mint': 'bdl-green-light',
+    'shady-acres': 'bdl-green-light',
+    'wild-rice': 'bdl-yellorange-50',
+    'early-dawn': 'bdl-yellorange-10',
+    'lemon-meringue': 'bdl-yellow',
+    'dehydrated': 'bdl-yellorange',
+    'kumera': 'bdl-yellorange',
+    'mad-max': 'bdl-yellorange',
+    'ayers-rock': 'bdl-yellorange',
+    'amaranth': 'bdl-watermelon-red',
+    'lavender-blush': 'bdl-watermelon-red-10',
+    'carissma': 'bdl-watermelon-red-50',
+    'great-balls-of-fire': 'bdl-watermelon-red',
+    'king-crimson': 'bdl-watermelon-red',
+    'bfive': 'bdl-gray-30',
+    'dtwo': 'bdl-gray-20',
+    'efive': 'bdl-gray-10',
+    'ffive': 'bdl-gray-05',
+    'fivef': 'bdl-gray-05',
+    'fnine': 'bdl-gray-02',
+    'seesee': 'bdl-gray-20',
+    'see-see': 'bdl-gray-20',
+    'haze': 'bdl-gray-02',
+    'off-white': 'bdl-gray-10',
+    'sf-fog': 'bdl-gray-30',
+    'karl-fog': 'bdl-gray-02',
+    'silver-chalice': 'bdl-gray-40',
+    'storms-a-comin': 'bdl-gray-62',
+    'blue-steel': 'bdl-gray',
+    'better-black': 'bdl-gray-80',
+    'downtown-grey': 'bdl-gray-50',
+    'twos': 'bdl-gray',
+    'threes': 'bdl-gray',
+    'fours': 'bdl-gray-80',
+    'sevens': 'bdl-gray-62',
+    'eights': 'bdl-gray-50', // can cause false positives with words like "heights"
+    'nines': 'bdl-gray-50',
+    'eees': 'bdl-gray-10',
+    'tendemob-grey': 'bdl-gray-62',
+    'sunset-grey': 'bdl-gray-80',
+    'seventy-sixers': 'bdl-gray-62',
+    'approx-mischka-grey': 'bdl-gray-40',
+    'lightest-charcoal': 'bdl-gray-30',
+    'purple-rain': 'bdl-purple-rain',
+    'bdl-neutral-01': 'bdl-gray',
+    'bdl-neutral-02': 'bdl-gray-62',
+    'bdl-neutral-03': 'bdl-gray-50',
+    'bdl-neutral-04': 'bdl-gray-10',
+    'bdl-neutral-05': 'bdl-gray-05',
+    'bdl-neutral-06': 'bdl-gray-02',
+};
+
+function printHelp() {
+    console.log(`Usage: ${process.argv[1].split('/').pop()} operation fileName [--verbose]`);
+    console.log('\nSupported operations:');
+    console.log('\tcheck\t\tcheck to see if a file contains deprecated values (returns error if it does)');
+    console.log('\tswap\t\treplace known-deprecated variable names in a JS or SCSS file');
+    console.log('\nExample:\n\n');
+    console.log(`\tfind src -name '*.scss' -exec ./scripts/utils/bdlColorManager swap {} \;`);
+}
+
+async function main() {
+    // argv 0 and 1 are the node instance and the script name respectively.
+    // argv 2 is the operation: check, swap, ...
+    const operation = process.argv[2];
+
+    // argv 3 is the file (and extension)
+    const fileName = process.argv[3];
+
+    if (!fileName) {
+        console.error(colors.red('Missing parameter:'), colors.white('fileName'));
+        process.exit(1);
+    }
+    const fileType = fileName.split('.').pop();
+    const verboseMode = process.argv[4] === '--verbose';
+
+    const toRegExp = fileType === 'js' ? identity : entity => `\\\$${entity}(?!-)`;
+    const caseConverter = fileType === 'js' ? camelCase : kebabCase;
+    const toTargetLanguage = fileType === 'js' ? camelCase : entity => `$${kebabCase(entity)}`;
+
+    const reBadName = new RegExp(Object.keys(conversionMap).map(entry => toRegExp(caseConverter(entry))).join('|'), 'g');
+
+    try {
+        const fileToParse = await readFile(fileName, { encoding: 'utf8' });
+
+        switch (operation) {
+            case 'check':
+                // determine if the file is using one of the legacy variable names
+                const foundMatch = reBadName.test(fileToParse);
+                if (foundMatch) {
+                    // Exit with an error code: we should not find bad names
+                    if (verboseMode) {
+                        console.error(colors.red('Bad BDL color name found in', fileName));
+                    }
+                    process.exit(1);
+                }
+
+                break;
+            case 'swap':
+                // find, then swap in the proper new name
+                const matches = [...new Set(fileToParse.match(reBadName))];
+                let replacementFile = fileToParse;
+
+                if (verboseMode) {
+                    const replacements = matches.map(entry => caseConverter(conversionMap[kebabCase(entry)]));
+                    console.log(colors.cyan('File name:'), colors.white(fileName));
+                    console.log(colors.cyan('Found:'), matches);
+                    console.log(colors.cyan('Replace with:'), replacements);
+                }
+
+                matches.forEach(match => {
+                    if (fileType === 'js' || fileType === 'scss') {
+                        replacementFile = replacementFile.replace(new RegExp(toRegExp(caseConverter(match)), 'g'), toTargetLanguage(conversionMap[kebabCase(match)]));
+                    } else {
+                        console.error(colors.yellow('Unrecognized file type for conversion. skipping', fileName, '...'));
+                        process.exit(0);
+                    }
+                });
+
+                try {
+                    if (matches.length > 0) {
+                        await writeFile(fileName, replacementFile);
+                        console.log (colors.cyan(`Replaced ${matches.length} color value${matches.length !== 1 ? 's': ''} in:\t`), fileName);
+                    } else if (verboseMode) {
+                        console.warn(colors.yellow('No changes needed to file:\t'), fileName);
+                    }
+                } catch (error) {
+                    console.error(colors.red('Cannot write updated file to disk\n'), error);
+                    process.exit(1);
+                }
+
+                break;
+            default:
+                console.error(colors.red('Unrecognized operation:'), colors.white(operation));
+                console.error(colors.red('use "swap" to replace names, or "check" to verify if a file contains deprecated values'));
+                process.exit(1);
+                break;
+        }
+    } catch (error) {
+        console.error(colors.red('Cannot read file, because it does not exist or the wrong path is specified\n'), error);
+        process.exit(1);
+    }
+}
+
+if (process.argv.length < 3) {
+    printHelp();
+} else {
+    main();
+}

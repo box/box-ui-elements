@@ -4,34 +4,34 @@
     position: relative;
 
     &::after {
-        border: 4px solid transparent;
-        border-left-color: $bfive;
-        border-right-style: none;
-        content: '';
         position: absolute;
-        right: 10px;
         top: 12px;
+        right: 10px;
+        border: 4px solid transparent;
+        border-right-style: none;
+        border-left-color: $bdl-gray-30;
+        content: '';
     }
 
     .submenu {
-        left: 100%;
         position: absolute;
-        right: auto;
         top: 0;
+        right: auto;
+        left: 100%;
 
         &.is-left-aligned {
-            left: auto;
             right: 100%;
+            left: auto;
         }
 
         &.is-hidden {
-            left: -9999px;
             right: auto;
+            left: -9999px;
         }
 
         &.is-bottom-aligned {
-            bottom: 0;
             top: auto;
+            bottom: 0;
         }
     }
 }

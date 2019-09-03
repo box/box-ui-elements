@@ -35,10 +35,10 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Pr
             data-resin-component="preview"
             data-resin-feature="versions"
             title={
-                <React.Fragment>
+                <>
                     <BackButton data-resin-target="back" to={`/${parentName}`} />
                     <FormattedMessage {...messages.versionsTitle} />
-                </React.Fragment>
+                </>
             }
         >
             <LoadingIndicatorWrapper className="bcs-Versions-content" crawlerPosition="top" isLoading={isLoading}>

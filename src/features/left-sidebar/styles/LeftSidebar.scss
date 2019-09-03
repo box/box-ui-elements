@@ -2,13 +2,13 @@
 @import './sizes.media';
 
 .left-sidebar {
+    z-index: $lsb-z-index;
     display: flex;
     flex-direction: column;
+    width: $lsb-width;
     height: 100vh;
     padding: 0;
     transition: left .4s cubic-bezier(.215, .61, .355, 1), width .4s cubic-bezier(.215, .61, .355, 1);
-    width: $lsb-width;
-    z-index: $lsb-z-index;
 
     &.is-forced-open {
         left: 0;
@@ -20,17 +20,17 @@
     }
 
     @include small-size {
-        box-shadow: 1px 5px 5px 1px $lsb-menu-shadow-fill;
         left: -$lsb-width;
+        box-shadow: 1px 5px 5px 1px $lsb-menu-shadow-fill;
     }
 
     @include medium-size {
-        overflow-y: hidden;
         width: $lsb-width-medium;
+        overflow-y: hidden;
 
         &.is-forced-open {
-            overflow-y: auto;
             width: $lsb-width;
+            overflow-y: auto;
         }
     }
 }
@@ -43,22 +43,22 @@
 
     /* modify the spacing for the left sidebar */
     .left-sidebar-drop-veil {
+        width: calc(100% - #{$lsb-drop-zone-margin * 2});
         margin: $lsb-drop-zone-margin;
         margin-top: 0;
-        width: calc(100% - #{$lsb-drop-zone-margin * 2});
 
         @include medium-size {
-            height: 50 - ($lsb-drop-zone-margin * 2);
             top: $lsb-drop-zone-margin;
             width: calc(100% - #{$lsb-drop-zone-margin * 2});
+            height: 50 - ($lsb-drop-zone-margin * 2);
 
             .left-sidebar-drop-wrapper-text {
                 display: none;
             }
 
             .is-forced-open & {
-                height: 100%;
                 top: 0;
+                height: 100%;
             }
         }
     }
@@ -81,11 +81,19 @@
 }
 
 .left-sidebar-list {
-    margin-bottom: $lsb-item-separator-margin;
     position: relative;
+    margin-bottom: $lsb-item-separator-margin;
 
     @include medium-size {
         margin-bottom: 0;
+    }
+
+    &.is-loading {
+        margin-bottom: 0;
+    }
+
+    &.is-loading-empty {
+        margin-bottom: 40px;
     }
 
     // Override nav-list default color for link
@@ -93,7 +101,7 @@
         color: $light-charcoal;
 
         &:hover {
-            color: $twos;
+            color: $bdl-gray;
         }
     }
 
@@ -107,10 +115,10 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        margin-bottom: 0;
         max-width: 100%;
         // If the window is squished, this shows the header + 5 items in scrollable list
         min-height: calc(6 * #{$lsb-item-height});
+        margin-bottom: 0;
 
         ul {
             flex-grow: 1;
@@ -119,31 +127,31 @@
             overflow-y: auto;
 
             &::before {
-                box-shadow: 0 4px 6px -4px rgba(0, 0, 0, .35);
-                content: '';
-                display: block;
-                height: $lsb-scroll-shadow-height;
-                left: 7.5%;
-                opacity: 0;
                 position: absolute;
                 top: #{$lsb-item-height - $lsb-scroll-shadow-height};
-                transition: opacity .1s ease-in-out;
-                width: 85%;
+                left: 7.5%;
                 z-index: 2;
+                display: block;
+                width: 85%;
+                height: $lsb-scroll-shadow-height;
+                box-shadow: 0 4px 6px -4px rgba(0, 0, 0, .35);
+                opacity: 0;
+                transition: opacity .1s ease-in-out;
+                content: '';
             }
 
             &::after {
-                bottom: 0;
-                box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
-                content: '';
-                height: $lsb-scroll-shadow-height;
-                left: 7.5%;
-                margin-bottom: -$lsb-scroll-shadow-height;
-                opacity: 0;
                 position: absolute;
-                transition: opacity .1s ease-in-out;
-                width: 85%;
+                bottom: 0;
+                left: 7.5%;
                 z-index: 3;
+                width: 85%;
+                height: $lsb-scroll-shadow-height;
+                margin-bottom: -$lsb-scroll-shadow-height;
+                box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
+                opacity: 0;
+                transition: opacity .1s ease-in-out;
+                content: '';
             }
         }
 
@@ -224,16 +232,16 @@
 }
 
 .left-sidebar-link {
-    align-items: center;
-    color: $light-charcoal;
-    display: flex;
-    font-size: $lsb-font-size;
-    height: 28px;
-    letter-spacing: .3px;
-    line-height: 28px;
-    padding: 0 $lsb-padding-x;
     position: relative;
+    display: flex;
+    align-items: center;
     width: $lsb-width;
+    height: 28px;
+    padding: 0 $lsb-padding-x;
+    color: $light-charcoal;
+    font-size: $lsb-font-size;
+    line-height: 28px;
+    letter-spacing: .3px;
 
     .scaled-icon svg {
         transform: scale(1.4, 1.4);
@@ -243,13 +251,13 @@
     &:focus,
     &:hover,
     &.nav-link-callout-enabled {
-        background-color: $lsb-menu-hover-link-bg;
-        color: $twos;
+        color: $bdl-gray;
         text-decoration: none;
+        background-color: $lsb-menu-hover-link-bg;
 
         & + .lsb-remove-button {
-            opacity: 1;
             padding: 0 8px 0 7px;
+            opacity: 1;
 
             .lsb-remove-button-icon {
                 transform: scale(1, 1);
@@ -261,7 +269,7 @@
         }
 
         .left-sidebar-link-text {
-            color: $twos;
+            color: $bdl-gray;
             text-decoration: none;
         }
 
@@ -294,14 +302,14 @@
     }
 
     @include medium-size {
+        width: $lsb-width-medium;
         height: 50px;
         padding: 15px $lsb-padding-x;
-        width: $lsb-width-medium;
 
         .is-forced-open & {
+            width: $lsb-width;
             height: 28px;
             padding: 0 $lsb-padding-x;
-            width: $lsb-width;
         }
     }
 }

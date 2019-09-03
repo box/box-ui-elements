@@ -6,7 +6,7 @@
 
 import React from 'react';
 import FileIcon from '../../../icons/file-icon/FileIcon';
-import './Header.scss';
+import './FileInfo.scss';
 
 type Props = {
     file: ?BoxItem,
@@ -18,12 +18,12 @@ const FileInfo = ({ file, version }: Props) => {
     const displayItem = version || file;
 
     return (
-        <div className="bcpr-name">
+        <div className="bcpr-FileInfo">
             {displayItem && (
-                <React.Fragment>
+                <>
                     <FileIcon dimension={24} extension={displayItem.extension} />
-                    <span>{displayItem.name}</span>
-                </React.Fragment>
+                    <span className="bcpr-FileInfo-name">{displayItem.name}</span>
+                </>
             )}
         </div>
     );

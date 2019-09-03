@@ -243,4 +243,23 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             expect(getMetadata).not.toBeCalled();
         });
     });
+
+    describe('refresh()', () => {
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should call sidebarRef refresh method when refresh is called', () => {
+            const refresh = jest.fn();
+            instance.sidebarRef = { refresh };
+
+            instance.refresh();
+
+            expect(refresh).toHaveBeenCalled();
+        });
+    });
 });

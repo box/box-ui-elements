@@ -6,33 +6,33 @@
 
 a,
 .lnk {
-    color: $box-blue;
+    color: $bdl-box-blue;
     text-decoration: none;
 }
 
 .lnk {
+    display: inline;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    line-height: inherit;
     background: transparent none;
     border: none;
     box-shadow: none;
     cursor: pointer;
-    display: inline;
     filter: none;
-    height: auto;
-    line-height: inherit;
-    margin: 0;
-    padding: 0;
 }
 
 .lnk:hover,
 .lnk:active {
-    background: transparent;
-    box-shadow: none;
     height: auto;
     line-height: inherit;
+    background: transparent;
+    box-shadow: none;
 }
 
 .lnk:active {
-    color: $box-blue;
+    color: $bdl-box-blue;
     text-decoration: underline;
 }
 
@@ -49,9 +49,9 @@ a.is-disabled:active,
 .lnk.is-disabled,
 .lnk.is-disabled:hover,
 .lnk.is-disabled:active {
-    color: $nines;
-    cursor: default;
+    color: $bdl-gray-50;
     text-decoration: none;
+    cursor: default;
 }
 
 .lnk-plain {
@@ -66,7 +66,7 @@ a.is-disabled:active,
 .lnk-plain.is-disabled,
 .lnk-plain.is-disabled:hover,
 .lnk-plain.is-disabled:active {
-    color: $nines;
+    color: $bdl-gray-50;
 }
 
 a svg {
@@ -76,25 +76,25 @@ a svg {
 // Link styling from box-ui-elements: should probably get merged with the above?
 // Also see nav-sidebar.scss before merging
 .link {
-    color: $tendemob-grey;
-    font-smoothing: antialiased;
-    line-height: 1.5em;
     overflow: hidden;
+    color: $bdl-gray-62;
+    line-height: 1.5em;
+    white-space: nowrap;
     text-decoration: none;
     text-overflow: ellipsis;
     text-shadow: 1px 1px 1px fade-out($black, .996);
     transition: color .05s;
-    white-space: nowrap;
+    font-smoothing: antialiased;
 
     &:hover {
-        color: $box-blue;
+        color: $bdl-box-blue;
     }
 }
 
 .link-group-title {
-    color: $approx-mischka-grey;
+    color: $bdl-gray-40;
     font-size: 10px;
-    letter-spacing: .1em;
     line-height: 28px;
+    letter-spacing: .1em;
     text-transform: uppercase;
 }

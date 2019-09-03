@@ -2,24 +2,24 @@
 @import './variables';
 
 .thumbnail-card {
-    border: $thumbnail-card-border solid $off-white;
-    border-radius: 4px;
-    box-shadow: 0 5px 10px 0 rgba(198, 198, 198, .2);
     display: flex;
     flex: 1 0 $thumbnail-card-min-width;
     flex-direction: column;
-    height: 200px;
-    max-width: $thumbnail-card-max-width;
     min-width: $thumbnail-card-min-width;
+    max-width: $thumbnail-card-max-width;
+    height: 200px;
+    border: $thumbnail-card-border solid $bdl-gray-10;
+    border-radius: 4px;
+    box-shadow: 0 5px 10px 0 rgba(198, 198, 198, .2);
 }
 
 .thumbnail-card-details {
-    align-items: center;
-    border-top: 1px solid $ffive;
     display: flex;
     flex: 1;
-    line-height: 16px;
+    align-items: center;
     padding: 12px;
+    line-height: 16px;
+    border-top: 1px solid $bdl-gray-05;
 
     .thumbnail-card-details-content {
         flex: 1;
@@ -29,36 +29,36 @@
     .thumbnail-card-title,
     .thumbnail-card-subtitle {
         overflow: hidden;
-        text-overflow: ellipsis;
         white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .thumbnail-card-subtitle {
-        color: $sevens;
+        color: $bdl-gray-62;
     }
 }
 
 .thumbnail-card-thumbnail-container {
-    align-items: center;
-    background-color: $ffive;
     display: flex;
-    height: $thumbnail-height;
+    align-items: center;
     width: 100%;
+    height: $thumbnail-height;
+    background-color: $bdl-gray-05;
 
     .thumbnail-card-thumbnail-viewport {
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
+        position: relative;
+        width: 100%;
         height: $thumbnail-height;
         max-height: $thumbnail-height;
         overflow: hidden;
-        position: relative;
         text-align: center;
-        width: 100%;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
 
         img,
         svg {
-            max-height: $thumbnail-height;
             max-width: 100%;
+            max-height: $thumbnail-height;
             vertical-align: middle;
         }
 

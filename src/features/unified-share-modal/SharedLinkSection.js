@@ -16,7 +16,7 @@ import { convertToMs } from '../../utils/datetime';
 import IconMail from '../../icons/general/IconMail';
 import IconClock from '../../icons/general/IconClock';
 import IconGlobe from '../../icons/general/IconGlobe';
-import { amaranth } from '../../styles/variables';
+import { bdlWatermelonRed } from '../../styles/variables';
 import type { ItemType } from '../../common/types/core';
 import { isBoxNote } from '../../utils/file';
 
@@ -121,7 +121,7 @@ class SharedLinkSection extends React.Component<Props> {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <div className="shared-link-field-row">
                     <Tooltip
                         className="usm-ftux-tooltip"
@@ -203,7 +203,7 @@ class SharedLinkSection extends React.Component<Props> {
                         <FormattedMessage {...messages.sharedLinkPubliclyAvailable} />
                     </div>
                 )}
-            </React.Fragment>
+            </>
         );
     }
 
@@ -273,7 +273,7 @@ class SharedLinkSection extends React.Component<Props> {
                             }
                         >
                             <span className="shared-link-expiration-badge">
-                                <IconClock color={amaranth} />
+                                <IconClock color={bdlWatermelonRed} />
                             </span>
                         </Tooltip>
                     </span>

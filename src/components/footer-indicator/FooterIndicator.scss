@@ -1,21 +1,21 @@
 @import '../../styles/variables';
 
 .bdl-FooterIndicator {
-    background: $fours;
-    border-radius: 4px 4px 0 0;
+    position: fixed;
     bottom: 0;
+    z-index: 10;
+    width: 170px;
     height: 32px;
     margin: 0 15px;
-    position: fixed;
-    width: 170px;
-    z-index: 10;
+    background: $bdl-gray-80;
+    border-radius: 4px 4px 0 0;
 }
 
 .bdl-FooterIndicator-content {
-    align-items: center;
     display: flex;
-    height: 100%;
+    align-items: center;
     justify-content: flex-start;
+    height: 100%;
     padding: 10px;
 
     &:focus {
@@ -29,9 +29,9 @@
 }
 
 .bdl-FooterIndicator-text {
+    overflow: hidden;
     color: $white;
     font-size: 11px;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }

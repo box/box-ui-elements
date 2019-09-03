@@ -1,13 +1,13 @@
 @import 'variables';
 
 @mixin box-inputs {
-    border: 1px solid $seesee;
+    padding: 7px;
+    color: $bdl-gray;
+    border: 1px solid $bdl-gray-20;
     border-radius: 3px;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
-    color: $twos;
-    -webkit-font-smoothing: antialiased;
-    padding: 7px;
     transition: border-color linear .15s, box-shadow linear .1s;
+    -webkit-font-smoothing: antialiased;
 }
 
 @mixin box-inputs-hover {
@@ -16,6 +16,6 @@
 
 @mixin box-inputs-focus {
     border: 1px solid $primary-color;
-    box-shadow: none;
     outline: 0;
+    box-shadow: none;
 }

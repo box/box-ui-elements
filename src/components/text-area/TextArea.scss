@@ -5,16 +5,16 @@
  **************************************/
 
 .text-area-container {
-    margin: 0 0 20px;
     position: relative;
+    margin: 0 0 20px;
 
     label {
         display: block;
     }
 
     textarea {
-        font-family: inherit;
         margin-top: 5px;
+        font-family: inherit;
     }
 
     &:not(.show-error) {
@@ -25,7 +25,7 @@
 
     &.show-error {
         textarea {
-            border-color: $amaranth;
+            border-color: $bdl-watermelon-red;
         }
     }
 }

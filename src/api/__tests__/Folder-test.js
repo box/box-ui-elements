@@ -1,6 +1,7 @@
 import Cache from '../../utils/Cache';
-import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import Folder from '../Folder';
+import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
+import { X_REP_HINT_HEADER_DIMENSIONS_DEFAULT } from '../../constants';
 
 let folder;
 let cache;
@@ -153,9 +154,11 @@ describe('api/Folder', () => {
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                         sort: 'by',
                     },
+                    headers: { 'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT },
                 });
             });
         });
+
         test('should make xhr to folder and call error callback', () => {
             const error = new Error('error');
             folder.folderSuccessHandler = jest.fn();
@@ -177,6 +180,7 @@ describe('api/Folder', () => {
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                         sort: 'by',
                     },
+                    headers: { 'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT },
                 });
             });
         });

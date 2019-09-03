@@ -1,17 +1,18 @@
 @import '../variables';
 
 .be-progress-container {
-    left: 0;
     position: absolute;
     top: 0;
-    transition: .4s opacity;
+    left: 0;
+    z-index: $overlay-z-index;
     width: 100%;
+    transition: .4s opacity;
 
     .be-progress {
+        max-width: 100%;
+        height: 2px;
         background: $blue;
         box-shadow: 0 1px 5px 0 $light-blue;
-        height: 2px;
-        max-width: 100%;
         transition: .4s width;
     }
 }

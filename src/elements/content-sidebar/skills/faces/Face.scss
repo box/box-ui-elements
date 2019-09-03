@@ -2,29 +2,29 @@
 
 .be-faces {
     .be-face-wrapper {
+        position: relative; // For delete and minus icons
         display: inline-block;
         margin: 0 10px 10px 0;
-        position: relative; // For delete and minus icons
     }
 
     .btn-plain.be-face {
-        border-radius: 100%;
         overflow: hidden;
+        border-radius: 100%;
 
         img {
-            filter: brightness(1.5);
+            width: 45px;
             height: 45px;
             object-fit: cover;
-            transition: transform .3s;
             vertical-align: middle;
-            width: 45px;
+            filter: brightness(1.5);
+            transition: transform .3s;
         }
 
         .icon-minus {
-            display: none;
-            left: 16px;
             position: absolute;
             top: 16px;
+            left: 16px;
+            display: none;
         }
 
         &:hover {
@@ -39,26 +39,26 @@
     }
 
     .be-face-unselected .btn-plain.be-face img {
-        filter: none;
         opacity: .4;
+        filter: none;
     }
 
     .btn-plain.be-face-delete {
-        background-color: white;
-        border: 1px solid $downtown-grey;
-        border-radius: 100%;
-        box-shadow: 0 0 2px 0 $darker-black;
+        position: absolute;
+        top: -3px;
+        right: -5px;
         height: 18px;
         padding: 0;
-        position: absolute;
-        right: -5px;
-        top: -3px;
+        background-color: white;
+        border: 1px solid $bdl-gray-50;
+        border-radius: 100%;
+        box-shadow: 0 0 2px 0 $darker-black;
     }
 
     &.be-faces-is-editing {
         .btn-plain.be-face:hover img {
-            cursor: default;
             transform: none;
+            cursor: default;
         }
     }
 }

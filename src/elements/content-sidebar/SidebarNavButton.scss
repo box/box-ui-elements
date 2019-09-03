@@ -5,14 +5,14 @@
     @include bdl-SidebarNavButton;
 
     &::before {
-        bottom: 0;
-        content: '';
-        display: block;
-        left: -1px;
-        pointer-events: none;
         position: absolute;
         top: 0;
+        bottom: 0;
+        left: -1px;
+        display: block;
         width: 3px;
+        content: '';
+        pointer-events: none;
     }
 
     &.bcs-is-selected {
@@ -26,10 +26,10 @@
     }
 
     &:hover {
-        background-color: $ffive;
+        background-color: $bdl-gray-05;
 
         &:not(.bcs-is-selected) svg .fill-color {
-            fill: $fours;
+            fill: $bdl-gray-80;
         }
     }
 }

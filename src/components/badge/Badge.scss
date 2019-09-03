@@ -5,40 +5,40 @@
  **************************************/
 
 .badge {
-    background: $efive;
-    border-radius: 3px;
-    color: $tendemob-grey;
     display: inline-block;
-    font-size: 10px;
-    font-weight: bold;
-    line-height: 12px;
     padding: 2px 4px 3px;
+    color: $bdl-gray-62;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 12px;
     text-align: center;
     text-decoration: none;
+    background: $bdl-gray-10;
+    border-radius: 3px;
 }
 
 .badge-info {
-    background: $baby-blue;
     color: $white;
+    background: $bdl-box-blue-50;
 }
 
 .badge-warning {
-    background: $dehydrated;
     color: $white;
+    background: $bdl-yellorange;
 }
 
 .badge-highlight {
-    background: $picton-blue;
     color: $white;
+    background: $bdl-light-blue;
 }
 
 .badge-alert,
 .badge-error {
-    background: $amaranth;
     color: $white;
+    background: $bdl-watermelon-red;
 }
 
 .badge-success {
-    background: $thats-mint;
     color: $white;
+    background: $bdl-green-light;
 }

@@ -5,13 +5,11 @@
 
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-
-import PlainButton from '../../../../components/plain-button';
 import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
-
+import PlainButton from '../../../../components/plain-button';
 import messages from '../../../common/messages';
+import selectors from '../../../common/selectors/version';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-
 import './Version.scss';
 
 function getMessageForAction(
@@ -29,7 +27,7 @@ function getMessageForAction(
     const numberOfCollaborators = collaboratorIDs.length;
 
     const versionRange: React.Node = (
-        <span className="bcs-version-range">
+        <span className="bcs-Version-range">
             {version_start} - {version_end}
         </span>
     );
@@ -59,7 +57,6 @@ function getMessageForAction(
 }
 
 type Props = {
-    action: 'upload',
     collaborators: { [collaborator_id: string]: User },
     onInfo?: Function,
     version_end: number,
@@ -67,36 +64,33 @@ type Props = {
     versions: FileVersions,
 } & InjectIntlProvidedProps;
 
-const CollapsedVersion = ({
-    action,
-    collaborators,
-    intl,
-    onInfo,
-    versions,
-    version_start,
-    version_end,
-}: Props): React.Node => (
-    <div className="bcs-collapsed-version">
-        <span className="bcs-version-message">
-            {getMessageForAction(action, collaborators, version_start, version_end)}
-        </span>
-        {onInfo ? (
-            <span className="bcs-version-actions">
-                <PlainButton
-                    aria-label={intl.formatMessage(messages.getVersionInfo)}
-                    className="bcs-version-info"
-                    data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
-                    onClick={() => {
-                        onInfo({ versions });
-                    }}
-                    type="button"
-                >
-                    <IconInfoInverted height={16} width={16} />
-                </PlainButton>
+const CollapsedVersion = (props: Props): React.Node => {
+    const action = selectors.getVersionAction(props);
+    const { collaborators, intl, onInfo, versions, version_start, version_end } = props;
+
+    return (
+        <div className="bcs-Version">
+            <span className="bcs-Version-message">
+                {getMessageForAction(action, collaborators, version_start, version_end)}
             </span>
-        ) : null}
-    </div>
-);
+            {onInfo ? (
+                <span className="bcs-Version-actions">
+                    <PlainButton
+                        aria-label={intl.formatMessage(messages.getVersionInfo)}
+                        className="bcs-Version-info"
+                        data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
+                        onClick={() => {
+                            onInfo({ versions });
+                        }}
+                        type="button"
+                    >
+                        <IconInfoInverted height={16} width={16} />
+                    </PlainButton>
+                </span>
+            ) : null}
+        </div>
+    );
+};
 
 export { CollapsedVersion as CollapsedVersionBase };
 export default injectIntl(CollapsedVersion);

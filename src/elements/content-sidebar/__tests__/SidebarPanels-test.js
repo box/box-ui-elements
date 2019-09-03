@@ -30,5 +30,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             const wrapper = getWrapper({ hasMetadata: true });
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should render versions', () => {
+            const wrapper = getWrapper({ hasVersions: true });
+            expect(wrapper).toMatchSnapshot();
+        });
     });
 });

@@ -8,22 +8,22 @@
     @include common-typography;
     @include box-sizing;
 
-    background: $white;
-    border: 1px solid $sf-fog;
-    border-bottom-color: $downtown-grey;
-    color: $sunset-grey;
-    display: block;
     position: relative;
     z-index: 9999;
+    display: block;
+    color: $bdl-gray-80;
+    background: $white;
+    border: 1px solid $bdl-gray-30;
+    border-bottom-color: $bdl-gray-50;
 
     &.is-hidden {
         display: none;
     }
 
     &.is-bound {
-        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .1);
-        margin-top: 5px;
         position: absolute;
+        margin-top: 5px;
+        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .1);
     }
 }
 
@@ -32,40 +32,40 @@
 }
 
 .pika-title {
-    margin-bottom: 10px;
     position: relative;
+    margin-bottom: 10px;
     text-align: center;
 
     select {
-        cursor: pointer;
-        left: 0;
-        margin: 0;
-        opacity: 0;
         position: absolute;
         top: 5px;
+        left: 0;
         z-index: 9998;
+        margin: 0;
+        cursor: pointer;
+        opacity: 0;
     }
 }
 
 .pika-label {
-    background-color: $white;
-    display: inline-block;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 20px;
-    overflow: hidden;
-    padding: 5px 15px 5px 5px;
     position: relative;
     z-index: 9999;
+    display: inline-block;
+    padding: 5px 15px 5px 5px;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    background-color: $white;
 
     &::after {
-        border-left: 4px solid transparent;
-        border-right: 4px solid transparent;
-        border-top: 4px solid $better-black;
-        content: '';
         position: absolute;
-        right: 4px;
         top: 13px;
+        right: 4px;
+        border-top: 4px solid $bdl-gray-80;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+        content: '';
     }
 }
 
@@ -79,17 +79,17 @@
 
 .pika-prev,
 .pika-next {
-    cursor: pointer;
     display: block;
+    width: 20px;
     height: 30px;
     overflow: hidden;
+    white-space: nowrap;
 
     /* hide text using text-indent trick. */
 
     /* negative because firefox indents pseudo-elements when text-indent is positive. 999 because i18n consideration */
     text-indent: -999px;
-    white-space: nowrap;
-    width: 20px;
+    cursor: pointer;
 
     &.is-disabled {
         cursor: default;
@@ -101,13 +101,13 @@
     float: left;
 
     &::before {
-        border-bottom: 4px solid transparent;
-        border-right: 4px solid $better-black;
-        border-top: 4px solid transparent;
-        content: '';
-        left: 10px;
         position: absolute;
         top: 10px;
+        left: 10px;
+        border-top: 4px solid transparent;
+        border-right: 4px solid $bdl-gray-80;
+        border-bottom: 4px solid transparent;
+        content: '';
     }
 }
 
@@ -115,14 +115,14 @@
     float: right;
 
     &::after {
-        border-bottom: 4px solid transparent;
-        border-left: 4px solid $better-black;
-        border-radius: 2px;
-        border-top: 4px solid transparent;
-        content: '';
         position: absolute;
-        right: 10px;
         top: 10px;
+        right: 10px;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid $bdl-gray-80;
+        border-radius: 2px;
+        content: '';
     }
 }
 
@@ -136,10 +136,10 @@
     }
 
     th {
+        width: 32px;
         color: $primary-color;
         font-size: 13px;
         text-align: center;
-        width: 32px;
     }
 
     th,
@@ -158,11 +158,11 @@
 }
 
 .pika-button {
-    font-size: 13px;
+    width: 30px;
     height: 30px;
     margin: 3px;
+    font-size: 13px;
     text-align: center;
-    width: 30px;
 }
 
 .is-today .pika-button {
@@ -171,11 +171,11 @@
 
 .pika-button:hover,
 .is-selected .pika-button {
+    color: $white;
+    font-weight: bold;
     background-color: $primary-color;
     border-radius: 3px;
-    color: $white;
     cursor: pointer;
-    font-weight: bold;
 }
 
 .is-disabled .pika-button,

@@ -15,9 +15,9 @@ input[type='tel'],
 input[type='number'],
 div[contentEditable='true'],
 textarea {
-    @include box-inputs;
-
     width: 262px;
+
+    @include box-inputs;
 }
 
 input[type='text']:hover,
@@ -47,7 +47,7 @@ textarea:focus {
 input::-webkit-input-placeholder,
 input::-moz-placeholder,
 input:-ms-input-placeholder {
-    color: $seesee;
+    color: $bdl-gray-20;
 }
 
 input[type='text'].is-invalid,
@@ -59,7 +59,7 @@ input[type='tel'].is-invalid,
 input[type='number'].is-invalid,
 div[contentEditable='true'].is-invalid,
 textarea.is-invalid {
-    border: 1px solid $amaranth;
+    border: 1px solid $bdl-watermelon-red;
 }
 
 input[type='text'].is-invalid:focus,
@@ -83,24 +83,24 @@ input[type='tel']:disabled,
 input[type='number']:disabled,
 div[contentEditable='true']:disabled,
 textarea:disabled {
-    background-color: $haze;
-    border-color: $efive;
+    color: $bdl-gray-30;
+    background-color: $bdl-gray-02;
+    border-color: $bdl-gray-10;
     box-shadow: none;
-    color: $bfive;
 
     &:hover {
-        border-color: $efive;
+        border-color: $bdl-gray-10;
     }
 }
 
 /* safari does't treat search input like a normal textfield */
 input[type='search'] {
+    -webkit-appearance: textfield;
+
     &::-webkit-search-cancel-button,
     &::-webkit-search-results-button {
         display: none;
     }
-
-    -webkit-appearance: textfield;
 }
 
 /* IE10+ adds a new x to the inputs to clear it, hiding it for now */
@@ -151,23 +151,23 @@ textarea {
 
 .select-container select,
 .select-container .select-button {
+    position: relative;
+    z-index: 1; /* captures click */
+    display: inline-block;
+    width: 100%;
+    height: 34px;
+    padding: 5px 0 5px 10px;
+    cursor: pointer;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    cursor: pointer;
-    display: inline-block;
-    height: 34px;
-    padding: 5px 0 5px 10px;
-    position: relative;
-    width: 100%;
-    z-index: 1; /* captures click */
 }
 
 .select-container select {
+    padding-right: 25px;
+    color: $bdl-gray;
     background: none;
     border: none;
-    color: $twos;
-    padding-right: 25px;
 }
 
 .select-container .select-button:disabled,
@@ -176,36 +176,36 @@ textarea {
 }
 
 .select-container {
-    display: inline-block;
     position: relative;
+    display: inline-block;
 }
 
 .select-container .select-button,
 .select-container .select-container-inner {
     display: inline-block;
+    width: 100%;
     overflow: hidden;
+    white-space: nowrap;
     text-align: left;
     text-overflow: ellipsis;
     vertical-align: top;
-    white-space: nowrap;
-    width: 100%;
 }
 
 .select-container .select-overlay {
-    box-sizing: border-box;
-    height: 100%;
-    left: 0;
-    margin: 0;
-    padding: 0;
     position: absolute;
     top: 0;
+    left: 0;
+    box-sizing: border-box;
     width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .select-container .select-overlay,
 .select-container .select-button {
     background-color: $white;
-    border: 1px solid $dtwo;
+    border: 1px solid $bdl-gray-20;
     border-radius: 2px;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
     -webkit-transition: border-color linear .15s, box-shadow linear .1s;
@@ -214,16 +214,16 @@ textarea {
 
 .select-container .select-overlay::before,
 .select-container .select-button::before {
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
-    border-top: 3px solid $better-black;
-    content: '';
-    height: 0;
     position: absolute;
-    right: 11px;
     top: 15px;
-    transition: transform $bdl-transition-duration-200ms;
+    right: 11px;
     width: 0;
+    height: 0;
+    border-top: 3px solid $bdl-gray-80;
+    border-right: 3px solid transparent;
+    border-left: 3px solid transparent;
+    transition: transform $bdl-transition-duration-200ms;
+    content: '';
 }
 
 .select-container .select-button[aria-expanded='true']::before {
@@ -231,8 +231,8 @@ textarea {
 }
 
 .select-container .select-button {
-    color: $twos;
     padding-right: 25px;
+    color: $bdl-gray;
 }
 
 .select-container .select-button:focus,
@@ -253,13 +253,13 @@ textarea {
 
 .select-container .select-button:disabled,
 .select-container select:disabled {
-    color: $bfive;
+    color: $bdl-gray-30;
 }
 
 .select-container .select-button:disabled,
 .select-container select:disabled ~ .select-overlay {
-    background-color: $haze;
-    border-color: $efive;
+    background-color: $bdl-gray-02;
+    border-color: $bdl-gray-10;
     box-shadow: none;
 }
 
@@ -277,11 +277,11 @@ textarea {
 .select-container.is-invalid .select-button:focus ~ .select-overlay,
 .select-container.is-invalid select:focus ~ .select-overlay,
 .select-container.is-invalid select:hover + .select-overlay {
-    border: 1px solid $amaranth;
+    border: 1px solid $bdl-watermelon-red;
 }
 
 .select-container .select-button:active {
-    background-color: $efive;
+    background-color: $bdl-gray-10;
 }
 
 .select-container-x-small {

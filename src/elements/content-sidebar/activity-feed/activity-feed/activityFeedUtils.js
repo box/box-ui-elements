@@ -3,11 +3,11 @@
  * @file Activity feed utility methods
  */
 
-import { PLACEHOLDER_USER } from '../../../../constants';
+import selectors from '../../../common/selectors/version';
+import { PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
 
 export const ItemTypes = {
     fileVersion: 'file_version',
-    upload: 'upload',
 };
 
 export function collapseFeedState(feedState: ?FeedItems): FeedItems {
@@ -25,8 +25,8 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
         if (
             feedItem.type === ItemTypes.fileVersion &&
             previousFeedItem.type === ItemTypes.fileVersion &&
-            feedItem.action === ItemTypes.upload &&
-            previousFeedItem.action === ItemTypes.upload
+            selectors.getVersionAction(feedItem) === VERSION_UPLOAD_ACTION &&
+            selectors.getVersionAction(previousFeedItem) === VERSION_UPLOAD_ACTION
         ) {
             const {
                 modified_by: tmpModifiedBy,
@@ -37,7 +37,7 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
 
             const prevModifiedBy = tmpModifiedBy || PLACEHOLDER_USER;
 
-            const { action, modified_by: tmpCurModifiedBy, created_at, trashed_at, id, version_number } = feedItem;
+            const { modified_by: tmpCurModifiedBy, created_at, trashed_at, id, version_number } = feedItem;
             const parsedVersionNumber = parseInt(version_number, 10);
             const collaborators = previousFeedItem.collaborators || {
                 [prevModifiedBy.id]: { ...prevModifiedBy },
@@ -50,7 +50,6 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
 
             return collapsedFeedState.concat([
                 {
-                    action,
                     collaborators,
                     created_at,
                     modified_by: modifiedBy,

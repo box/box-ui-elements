@@ -5,7 +5,7 @@
  */
 
 import 'regenerator-runtime/runtime';
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
@@ -47,6 +47,7 @@ import {
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import type { ErrorType } from '../common/flowTypes';
+import type { VersionChangeCallback } from '../content-sidebar/versions';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import './ContentPreview.scss';
@@ -69,6 +70,7 @@ type Props = {
     hasHeader?: boolean,
     history?: RouterHistory,
     isLarge: boolean,
+    isVeryLarge?: boolean,
     language: string,
     logoUrl?: string,
     measureRef: Function,
@@ -77,7 +79,7 @@ type Props = {
     onDownload: Function,
     onLoad: Function,
     onNavigate: Function,
-    onVersionChange: OnVersionChange,
+    onVersionChange: VersionChangeCallback,
     previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
@@ -144,7 +146,7 @@ const LoadableSidebar = AsyncLoad({
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-sidebar" */ '../content-sidebar'),
 });
 
-class ContentPreview extends PureComponent<Props, State> {
+class ContentPreview extends React.PureComponent<Props, State> {
     id: string;
 
     props: Props;
@@ -154,6 +156,9 @@ class ContentPreview extends PureComponent<Props, State> {
     preview: any;
 
     api: API;
+
+    // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
+    contentSidebar: { current: null | { refresh: Function } } = React.createRef();
 
     previewContainer: ?HTMLDivElement;
 
@@ -708,7 +713,7 @@ class ContentPreview extends PureComponent<Props, State> {
             enableThumbnailsSidebar,
             fileOptions: fileOpts,
             header: 'none',
-            headerElement: `#${this.id} .bcpr-header`,
+            headerElement: `#${this.id} .bcpr-PreviewHeader`,
             showAnnotations: this.canViewAnnotations(),
             showDownload: this.canDownload(),
             skipServerUpdate: true,
@@ -1081,6 +1086,19 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
+     * Refreshes the content sidebar panel
+     *
+     * @return {void}
+     */
+    refreshSidebar(): void {
+        const { current: contentSidebar } = this.contentSidebar;
+
+        if (contentSidebar) {
+            contentSidebar.refresh();
+        }
+    }
+
+    /**
      * Renders the file preview
      *
      * @inheritdoc
@@ -1089,7 +1107,6 @@ class ContentPreview extends PureComponent<Props, State> {
     render() {
         const {
             apiHost,
-            isLarge,
             token,
             language,
             messages,
@@ -1098,6 +1115,8 @@ class ContentPreview extends PureComponent<Props, State> {
             contentOpenWithProps,
             hasHeader,
             history,
+            isLarge,
+            isVeryLarge,
             onClose,
             measureRef,
             sharedLink,
@@ -1177,7 +1196,6 @@ class ContentPreview extends PureComponent<Props, State> {
                         {file && (
                             <LoadableSidebar
                                 {...contentSidebarProps}
-                                isLarge={isLarge}
                                 apiHost={apiHost}
                                 token={token}
                                 cache={this.api.getCache()}
@@ -1185,7 +1203,9 @@ class ContentPreview extends PureComponent<Props, State> {
                                 getPreview={this.getPreview}
                                 getViewer={this.getViewer}
                                 history={history}
+                                isDefaultOpen={isLarge || isVeryLarge}
                                 language={language}
+                                ref={this.contentSidebar}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}

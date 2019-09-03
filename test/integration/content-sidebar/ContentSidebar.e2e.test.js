@@ -1,4 +1,5 @@
 // <reference types="Cypress" />
+import localize from '../../support/i18n';
 
 describe('ContentSidebar', () => {
     const helpers = {
@@ -43,6 +44,25 @@ describe('ContentSidebar', () => {
             cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
         });
 
+        it('should switch the sidebar panel when a user navigates between tabs using keyboard', () => {
+            cy.getByTestId('bcs-content').should('exist');
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
+
+            cy.getByTestId('sidebarskills').trigger('keydown', { key: 'ArrowDown' });
+            cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
+            cy.getByTestId('sidebarmetadata').should('have.class', 'bcs-is-selected');
+            cy.focused().should('have.attr', 'data-testid', 'sidebarmetadata');
+
+            cy.getByTestId('sidebarskills').trigger('keydown', { key: 'ArrowUp' });
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
+            cy.getByTestId('sidebarmetadata').should('not.have.class', 'bcs-is-selected');
+            cy.focused().should('have.attr', 'data-testid', 'sidebarskills');
+
+            cy.getByTestId('sidebarskills').trigger('keydown', { key: 'ArrowRight' });
+            cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
+            cy.focused().should('have.attr', 'data-testid', 'sidebarskills');
+        });
+
         it('should toggle sidebar content when a user clicks the toggle sidebar button', () => {
             cy.getByTestId('bcs-content').should('exist');
             cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
@@ -73,7 +93,6 @@ describe('ContentSidebar', () => {
     describe('version history', () => {
         beforeEach(() => {
             helpers.load({
-                features: { versions: true },
                 fileId: Cypress.env('FILE_ID_DOC_VERSIONED'),
             });
         });
@@ -94,6 +113,41 @@ describe('ContentSidebar', () => {
                 .contains('Back')
                 .click();
             cy.get('@versionHistory').should('not.exist');
+        });
+    });
+
+    describe('activity feed comments', () => {
+        const getDraftJSEditor = () => cy.getByTestId('bcs-CommentForm-body').find('[contenteditable]');
+        const getTooltip = () => cy.get('[role="tooltip"]');
+        const getCancelButton = () => cy.contains(localize('be.contentSidebar.activityFeed.commentForm.commentCancel'));
+
+        beforeEach(() => {
+            helpers.load({
+                fileId: Cypress.env('FILE_ID_DOC'),
+            });
+
+            cy.getByTestId('bcs-content').should('exist');
+            cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
+        });
+
+        it('Comment form validation', () => {
+            // should not show validation error if focused and then blurred
+            getDraftJSEditor().click();
+            getCancelButton();
+            getTooltip().should('not.exist');
+
+            // should show required error if type and then delete text
+            getDraftJSEditor()
+                .click()
+                .type('qwerty')
+                .clear();
+
+            getTooltip().contains(localize('boxui.validation.requiredError'));
+
+            // should reset validation state after clicking "Cancel" and focusing again
+            getCancelButton().click();
+            getDraftJSEditor().click();
+            getTooltip().should('not.exist');
         });
     });
 });

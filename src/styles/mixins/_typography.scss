@@ -1,0 +1,28 @@
+@import '../constants/colors';
+@import '../constants/typography';
+
+@mixin font-family {
+    font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+@mixin font-aliasing {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+@mixin fonts {
+    @include font-family;
+    @include font-aliasing;
+
+    font-weight: normal;
+    font-size: 13px;
+}
+
+@mixin common-typography {
+    @include fonts;
+
+    color: $bdl-gray;
+    line-height: $bdl-line-height;
+    letter-spacing: .3px;
+}

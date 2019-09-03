@@ -12,7 +12,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   <h1
     className="bdl-ClassifiedBadge"
   >
-    <IconAddTags
+    <IconSecurityClassification
       color="#f5b31b"
       height={10}
       strokeWidth={3}
@@ -38,7 +38,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   <h1
     className="bdl-ClassifiedBadge"
   >
-    <IconAddTags
+    <IconSecurityClassification
       color="#f5b31b"
       height={10}
       strokeWidth={3}

@@ -1,9 +1,13 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { shallow } from 'enzyme/build';
+import messages from '../messages';
+import selectors from '../../../common/selectors/version';
 import VersionsItem from '../VersionsItem';
 import VersionsItemActions from '../VersionsItemActions';
 import VersionsItemButton from '../VersionsItemButton';
 import { ReadableTime } from '../../../../components/time';
+import { PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
 
 jest.mock('../../../../utils/dom', () => ({
     ...jest.requireActual('../../../../utils/dom'),
@@ -11,13 +15,19 @@ jest.mock('../../../../utils/dom', () => ({
 }));
 
 describe('elements/content-sidebar/versions/VersionsItem', () => {
+    const defaultDate = new Date('2019-03-01T00:00:00');
+    const defaultUser = { name: 'Test User', id: 10 };
+    const restoreDate = new Date('2019-05-01T00:00:00');
+    const restoreUser = { name: 'Restore User', id: 12 };
+    const trashedDate = new Date('2019-04-01T00:00:00');
+    const trashedUser = { name: 'Delete User', id: 11 };
+    const unknownUser = <FormattedMessage {...messages.versionUserUnknown} />;
     const defaults = {
+        created_at: defaultDate,
         id: '12345',
-        action: 'upload',
-        created_at: new Date('2019-03-01T00:00:00'),
         is_download_available: true,
-        modified_at: new Date('2019-03-01T00:00:00'),
-        modified_by: { name: 'Test User', id: 10 },
+        modified_at: defaultDate,
+        modified_by: defaultUser,
         permissions: {
             can_delete: true,
             can_preview: true,
@@ -31,6 +41,11 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
     });
     const getWrapper = (props = {}) => shallow(<VersionsItem fileId="123" version={defaults} {...props} />);
 
+    beforeEach(() => {
+        selectors.getVersionAction = jest.fn().mockReturnValue(VERSION_UPLOAD_ACTION);
+        selectors.getVersionUser = jest.fn().mockReturnValue(defaultUser);
+    });
+
     describe('render', () => {
         test.each`
             action       | showDelete | showDownload | showPreview | showPromote | showRestore
@@ -40,9 +55,10 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         `(
             "should show actions correctly when the version's action is $action",
             ({ action, showDelete, showDownload, showPreview, showPromote, showRestore }) => {
+                selectors.getVersionAction.mockReturnValueOnce(action);
+
                 const wrapper = getWrapper({
                     version: getVersion({
-                        action,
                         permissions: {
                             can_delete: true,
                             can_download: true,
@@ -96,11 +112,35 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             expect(button.prop('isSelected')).toBe(true);
         });
 
-        test.each([null, undefined])('should default to an unknown user if modified_by is %s', modified_by => {
+        test.each`
+            versionUser         | expected
+            ${defaultUser}      | ${defaultUser.name}
+            ${restoreUser}      | ${restoreUser.name}
+            ${trashedUser}      | ${trashedUser.name}
+            ${PLACEHOLDER_USER} | ${unknownUser}
+        `('should render the correct user name', ({ expected, versionUser }) => {
+            selectors.getVersionUser.mockReturnValue(versionUser);
+
+            const wrapper = getWrapper();
+            const result = wrapper.find('[data-testid="bcs-VersionsItem-log"]').find('FormattedMessage');
+            expect(result.prop('values')).toEqual({ name: expected });
+        });
+
+        test.each`
+            created_at     | restored_at    | trashed_at     | expected
+            ${defaultDate} | ${null}        | ${null}        | ${defaultDate}
+            ${defaultDate} | ${restoreDate} | ${null}        | ${restoreDate}
+            ${defaultDate} | ${restoreDate} | ${trashedDate} | ${restoreDate}
+            ${defaultDate} | ${null}        | ${trashedDate} | ${trashedDate}
+        `('should render the correct date and time', ({ expected, created_at, restored_at, trashed_at }) => {
             const wrapper = getWrapper({
-                version: getVersion({ modified_by }),
+                version: getVersion({
+                    created_at,
+                    restored_at,
+                    trashed_at,
+                }),
             });
-            expect(wrapper.find('[data-testid="bcs-VersionsItem-log"]')).toMatchSnapshot();
+            expect(wrapper.find(ReadableTime).prop('timestamp')).toEqual(expected.getTime());
         });
 
         test.each`

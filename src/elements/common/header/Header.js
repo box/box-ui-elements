@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import Logo from './Logo';
 import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
@@ -13,6 +13,7 @@ import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
 import './Header.scss';
 
 type Props = {
+    intl: IntlShape,
     isSmall: boolean,
     logoUrl?: string,
     onSearch: Function,

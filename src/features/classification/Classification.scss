@@ -1,7 +1,14 @@
 @import '../../styles/variables';
 
-.bdl-Classification-advisoryMessage {
-    margin-top: 5px;
+.bdl-Classification {
+    .label {
+        margin-top: 12px;
+        font-weight: normal;
+    }
+}
+
+.bdl-Classification-definition {
+    margin-top: 3px;
 }
 
 .bdl-Classification-missingMessage {

@@ -1,13 +1,13 @@
 @import '../variables';
 
 .be-sub-header {
-    align-items: center;
-    border-bottom: 1px solid $off-white;
-    box-shadow: 0 4px 6px -2px $transparent-black;
     display: flex;
     flex: 0 0 50px;
+    align-items: center;
     justify-content: space-between;
     padding: 0 20px 0 25px;
+    border-bottom: 1px solid $bdl-gray-10;
+    box-shadow: 0 4px 6px -2px $transparent-black;
 
     .be-is-small & {
         padding: 0 15px 0 18px;

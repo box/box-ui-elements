@@ -7,7 +7,6 @@ describe('collapseFeedState', () => {
 
     const version1 = {
         type: 'file_version',
-        action: 'upload',
         version_number: '2',
         modified_by: mario,
     };
@@ -34,7 +33,6 @@ describe('collapseFeedState', () => {
     test('should collapse two file_version items into 1', () => {
         const version2 = {
             type: 'file_version',
-            action: 'upload',
             version_number: '1',
             modified_by: luigi,
         };
@@ -43,7 +41,6 @@ describe('collapseFeedState', () => {
         const expFeed = [
             {
                 type: 'file_version',
-                action: 'upload',
                 version_number: '1',
                 modified_by: luigi,
                 created_at: undefined,
@@ -67,7 +64,6 @@ describe('collapseFeedState', () => {
     test('should collapse two file_version items and handle null users', () => {
         const version2 = {
             type: 'file_version',
-            action: 'upload',
             version_number: '1',
             modified_by: null,
         };
@@ -76,7 +72,6 @@ describe('collapseFeedState', () => {
         const expFeed = [
             {
                 type: 'file_version',
-                action: 'upload',
                 version_number: '1',
                 modified_by: PLACEHOLDER_USER,
                 created_at: undefined,

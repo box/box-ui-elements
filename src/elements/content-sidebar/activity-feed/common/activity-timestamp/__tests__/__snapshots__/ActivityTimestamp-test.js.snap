@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should correctly render timestamp 1`] = `
+<Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  position="top-center"
+  text={
+    <FormattedMessage
+      defaultMessage="{time, date, full} at {time, time, short}"
+      id="be.activityFeed.fullDateTime"
+      values={
+        Object {
+          "time": 1506534041000,
+        }
+      }
+    />
+  }
+  theme="default"
+>
+  <small
+    className="bcs-ActivityTimestamp"
+  >
+    <ReadableTime
+      alwaysShowTime={true}
+      relativeThreshold={0}
+      timestamp={1506534041000}
+    />
+  </small>
+</Tooltip>
+`;

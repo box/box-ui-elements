@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import classNames from 'classnames';
 import AccessibleSVG from '../accessible-svg';
-import { boxBlue, white } from '../../styles/variables';
+import { bdlBoxBlue, white } from '../../styles/variables';
 
 type Props = {
     className?: string | { [string]: boolean },
@@ -15,7 +15,14 @@ type Props = {
     width?: number,
 };
 
-const LocationErrorState = ({ className, color = boxBlue, height = 111, opacity = 0.1, title, width = 130 }: Props) => (
+const LocationErrorState = ({
+    className,
+    color = bdlBoxBlue,
+    height = 111,
+    opacity = 0.1,
+    title,
+    width = 130,
+}: Props) => (
     <AccessibleSVG
         className={classNames('bdl-LocationErrorState', className)}
         height={height}

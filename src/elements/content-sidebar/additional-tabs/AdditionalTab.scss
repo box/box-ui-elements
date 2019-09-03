@@ -6,21 +6,25 @@
     @include bdl-SidebarNavButton;
 
     &:hover {
-        background-color: $ffive;
+        background-color: $bdl-gray-05;
 
         svg path {
-            fill: $fours;
+            fill: $bdl-gray-80;
         }
+    }
+
+    &.bdl-is-disabled {
+        opacity: .5;
+    }
+
+    &.bdl-is-hidden {
+        display: none;
     }
 }
 
 .bdl-AdditionalTab-icon {
     @include bdl-fadeIn(.5s);
 
-    height: 24px;
     width: 24px;
-}
-
-.bdl-AdditionalTab--hidden {
-    display: none;
+    height: 24px;
 }

@@ -14,23 +14,23 @@
         width: 100%;
 
         .SelectorDropdown-divider {
-            border: 0;
-            border-bottom: 1px solid $bfive;
             display: block;
+            width: calc(100% - 30px);
             height: 1px;
             margin: 5px 15px;
+            border: 0;
+            border-bottom: 1px solid $bdl-gray-30;
             pointer-events: none;
-            width: calc(100% - 30px);
         }
 
         .SelectorDropdown-title {
-            color: $bfive;
-            font-size: 12px;
-            font-weight: bold;
-            line-height: 1;
             margin: 5px 15px;
-            pointer-events: none;
+            color: $bdl-gray-30;
+            font-weight: bold;
+            font-size: 12px;
+            line-height: 1;
             text-transform: uppercase;
+            pointer-events: none;
         }
     }
 
@@ -45,10 +45,10 @@
     }
 
     .link {
-        color: $sunset-grey !important;
+        color: $bdl-gray-80 !important;
 
         &.is-selected {
-            background-color: fade-out($blue-steel, .95);
+            background-color: fade-out($bdl-gray, .95);
         }
     }
 }

@@ -26,6 +26,7 @@ import { withLogger } from '../common/logger';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { VersionsSidebarProps } from './versions';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -49,8 +50,9 @@ type Props = {
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
+    hasVersions: boolean,
     history?: RouterHistory,
-    isLarge?: boolean,
+    isDefaultOpen?: boolean,
     language?: string,
     messages?: StringMap,
     metadataSidebarProps: MetadataSidebarProps,
@@ -61,6 +63,7 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     token: Token,
+    versionsSidebarProps: VersionsSidebarProps,
 } & ErrorContextProps &
     WithLoggerProps;
 
@@ -81,6 +84,8 @@ class ContentSidebar extends React.Component<Props, State> {
 
     api: API;
 
+    sidebarRef: Sidebar;
+
     static defaultProps = {
         activitySidebarProps: {},
         apiHost: DEFAULT_HOSTNAME_API,
@@ -94,7 +99,7 @@ class ContentSidebar extends React.Component<Props, State> {
         hasAdditionalTabs: false,
         hasMetadata: false,
         hasSkills: false,
-        isLarge: true,
+        isDefaultOpen: true,
         metadataSidebarProps: {},
     };
 
@@ -282,6 +287,16 @@ class ContentSidebar extends React.Component<Props, State> {
     }
 
     /**
+     * Refreshes the sidebar panel
+     * @returns {void}
+     */
+    refresh(): void {
+        if (this.sidebarRef) {
+            this.sidebarRef.refresh();
+        }
+    }
+
+    /**
      * Renders the sidebar
      *
      * @private
@@ -303,13 +318,15 @@ class ContentSidebar extends React.Component<Props, State> {
             hasActivityFeed,
             hasMetadata,
             hasSkills,
+            hasVersions,
             history,
-            isLarge,
+            isDefaultOpen,
             language,
             messages,
             metadataSidebarProps,
             onVersionChange,
             onVersionHistoryClick,
+            versionsSidebarProps,
         }: Props = this.props;
         const { file, isLoading, metadataEditors }: State = this.state;
         const initialPath = defaultView.charAt(0) === '/' ? defaultView : `/${defaultView}`;
@@ -336,12 +353,17 @@ class ContentSidebar extends React.Component<Props, State> {
                             hasAdditionalTabs={hasAdditionalTabs}
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
-                            isLarge={isLarge}
+                            hasVersions={hasVersions}
+                            isDefaultOpen={isDefaultOpen}
                             isLoading={isLoading}
                             metadataEditors={metadataEditors}
                             metadataSidebarProps={metadataSidebarProps}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
+                            versionsSidebarProps={versionsSidebarProps}
+                            wrappedComponentRef={ref => {
+                                this.sidebarRef = ref;
+                            }}
                         />
                     </SidebarRouter>
                 </APIContext.Provider>

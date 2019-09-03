@@ -2,7 +2,15 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
-import { STATUS_PENDING, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import Footer from '../Footer';
+import {
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_STAGED,
+    STATUS_COMPLETE,
+    STATUS_ERROR,
+    VIEW_UPLOAD_SUCCESS,
+} from '../../../constants';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 
@@ -59,6 +67,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(wrapper.state().itemIds).toEqual({});
         });
     });
+
     describe('addFilesToUploadQueue()', () => {
         test('should overwrite itemIds if they already exist', () => {
             const wrapper = getWrapper();
@@ -68,6 +77,110 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             const expected = { yoyo: true };
             expect(wrapper.state().itemIds).toMatchObject(expected);
+        });
+    });
+
+    describe('removeFileFromUploadQueue()', () => {
+        test('should cancel and remove item from uploading queue', () => {
+            const wrapper = getWrapper();
+            const item = {
+                api: {
+                    cancel: jest.fn(),
+                },
+                status: STATUS_IN_PROGRESS,
+            };
+            wrapper.setState({
+                items: [item],
+            });
+            const instance = wrapper.instance();
+            instance.upload = jest.fn();
+
+            instance.removeFileFromUploadQueue(item);
+
+            expect(item.api.cancel).toBeCalled();
+            expect(wrapper.state().items.length).toBe(0);
+            expect(instance.upload).toBeCalled();
+        });
+    });
+
+    describe('resumeFile()', () => {
+        test('should call resume from api and call updateViewAndCollection', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const item = { api: {} };
+            item.api.resume = jest.fn();
+            instance.updateViewAndCollection = jest.fn();
+            instance.resumeFile(item);
+            expect(item.api.resume).toBeCalled();
+            expect(instance.updateViewAndCollection).toBeCalled();
+        });
+    });
+
+    describe('clickAllWithStatus()', () => {
+        test('should call onClick for all items', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const items = [{ status: STATUS_COMPLETE }, { status: STATUS_IN_PROGRESS }, { status: STATUS_ERROR }];
+            instance.state.items = items;
+
+            instance.onClick = jest.fn();
+            instance.clickAllWithStatus();
+            expect(instance.onClick).toBeCalledWith(items[0]);
+            expect(instance.onClick).toBeCalledWith(items[1]);
+            expect(instance.onClick).toBeCalledWith(items[2]);
+        });
+
+        test('should call onClick for only items with given status', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const items = [
+                { status: STATUS_COMPLETE },
+                { status: STATUS_ERROR },
+                { status: STATUS_IN_PROGRESS },
+                { status: STATUS_ERROR },
+            ];
+            instance.state.items = items;
+
+            instance.onClick = jest.fn();
+            instance.clickAllWithStatus(STATUS_ERROR);
+            expect(instance.onClick).toBeCalledWith(items[1]);
+            expect(instance.onClick).toBeCalledWith(items[3]);
+        });
+    });
+
+    describe('isDone', () => {
+        test('should be true if all items are complete or staged', () => {
+            const wrapper = getWrapper();
+            const files = createMockFiles(3);
+            const items = mapToUploadItems(files).map(item => {
+                return {
+                    ...item,
+                    status: STATUS_COMPLETE,
+                };
+            });
+            items[2].status = STATUS_STAGED;
+            wrapper.setState({
+                items,
+            });
+
+            expect(wrapper.find(Footer).prop('isDone')).toEqual(true);
+        });
+
+        test('should be false if not all items are complete or staged', () => {
+            const wrapper = getWrapper();
+            const files = createMockFiles(3);
+            const items = mapToUploadItems(files).map(item => {
+                return {
+                    ...item,
+                    status: STATUS_COMPLETE,
+                };
+            });
+            items[2].status = STATUS_PENDING;
+            wrapper.setState({
+                items,
+            });
+
+            expect(wrapper.find(Footer).prop('isDone')).toEqual(false);
         });
     });
 
@@ -83,7 +196,7 @@ describe('elements/content-uploader/ContentUploader', () => {
 
         beforeEach(() => {
             jest.spyOn(global.console, 'warn').mockImplementation();
-            wrapper = getWrapper();
+            wrapper = getWrapper({ isResumableUploadsEnabled: false });
             instance = wrapper.instance();
             getPlainUploadAPI = jest.fn();
             getChunkedUploadAPI = jest.fn();

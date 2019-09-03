@@ -13,6 +13,7 @@ describe('features/shared-link-settings-modal/AllowDownloadSection', () => {
     const directLink = 'box.com/download';
     const isDirectLinkAvailable = true;
     const isDirectLinkUnavailableDueToDownloadSettings = true;
+    const isDirectLinkUnavailableDueToAccessPolicy = false;
 
     const getWrapper = (props = {}) =>
         shallow(
@@ -21,6 +22,7 @@ describe('features/shared-link-settings-modal/AllowDownloadSection', () => {
                 directLink={directLink}
                 isDirectLinkAvailable={isDirectLinkAvailable}
                 isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
+                isDirectLinkUnavailableDueToAccessPolicy={isDirectLinkUnavailableDueToAccessPolicy}
                 isDownloadAvailable={isDownloadAvailable}
                 isDownloadEnabled={isDownloadEnabled}
                 onChange={sandbox.stub()}
@@ -74,6 +76,16 @@ describe('features/shared-link-settings-modal/AllowDownloadSection', () => {
             const wrapper = getWrapper({ isDownloadEnabled: false });
 
             expect(wrapper.find('TextInputWithCopyButton').length).toBe(0);
+        });
+
+        test('should render tooltip when direct download is disabled', () => {
+            const wrapper = getWrapper({ isDirectLinkUnavailableDueToAccessPolicy: true });
+            expect(wrapper.find('Tooltip').length).toBe(1);
+        });
+
+        test('should render disabled state when direct download is disabled', () => {
+            const wrapper = getWrapper({ isDirectLinkUnavailableDueToAccessPolicy: true });
+            expect(wrapper.find('.bdl-is-disabled').length).toBe(1);
         });
     });
 

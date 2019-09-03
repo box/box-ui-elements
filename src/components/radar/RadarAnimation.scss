@@ -5,74 +5,74 @@ $radar-animation-offset: 1px;
     position: relative;
 
     .radar-dot::before {
-        background-color: $box-blue;
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        z-index: $overlay-z-index + 3;
+        width: 8px;
+        height: 8px;
+        background-color: $bdl-box-blue;
         border: 2px solid $white;
         border-radius: 50%;
         content: ' ';
-        height: 8px;
-        left: -4px;
-        position: absolute;
-        top: -4px;
-        width: 8px;
-        z-index: $overlay-z-index + 3;
     }
 
     .radar-dot::after {
-        animation-delay: 0s;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-        animation-name: ripple;
-        animation-timing-function: ease;
-        background-color: $box-blue;
+        position: absolute;
+        z-index: $overlay-z-index + 2;
+        width: 10px;
+        height: 10px;
+        background-color: $bdl-box-blue;
         border-radius: 50%;
         box-shadow: 0 0 10px rgba(0, 0, 0, .3) inset;
+        animation-name: ripple;
+        animation-duration: 1s;
+        animation-timing-function: ease;
+        animation-delay: 0s;
+        animation-iteration-count: infinite;
         content: ' ';
-        height: 10px;
-        position: absolute;
-        width: 10px;
-        z-index: $overlay-z-index + 2;
     }
 
     .radar-circle::before {
-        border: 1px solid $box-blue;
-        border-radius: 50%;
-        content: ' ';
-        height: 40px;
-        left: -20px;
         position: absolute;
         top: -20px;
-        width: 40px;
+        left: -20px;
         z-index: $overlay-z-index + 2;
+        width: 40px;
+        height: 40px;
+        border: 1px solid $bdl-box-blue;
+        border-radius: 50%;
+        content: ' ';
     }
 
     .radar-circle::after {
-        background-color: $box-blue;
-        border-radius: 50%;
-        content: ' ';
-        height: 40px;
-        left: -20px;
-        opacity: .3;
         position: absolute;
         top: -20px;
-        width: 40px;
+        left: -20px;
         z-index: $overlay-z-index + 2;
+        width: 40px;
+        height: 40px;
+        background-color: $bdl-box-blue;
+        border-radius: 50%;
+        opacity: .3;
+        content: ' ';
     }
 
     @keyframes ripple {
         0% {
-            height: 0;
-            left: 0;
-            opacity: .75;
             top: 0;
+            left: 0;
             width: 0;
+            height: 0;
+            opacity: .75;
         }
 
         100% {
-            height: 40px;
-            left: -20px;
-            opacity: 0;
             top: -20px;
+            left: -20px;
             width: 40px;
+            height: 40px;
+            opacity: 0;
         }
     }
 

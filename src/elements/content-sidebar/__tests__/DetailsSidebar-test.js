@@ -71,7 +71,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         test('should render DetailsSidebar with all components', () => {
             const wrapper = getWrapper(
                 {
-                    classification: { advisoryMessage: 'message', name: 'name' },
+                    classification: { definition: 'message', name: 'name' },
                     hasProperties: true,
                     hasNotices: true,
                     hasAccessStats: true,
@@ -445,6 +445,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 file,
                 hasAccessStats: false,
                 hasClassification: false,
+                refreshIdentity: false,
             });
             instance = wrapper.instance();
             instance.fetchAccessStats = jest.fn();
@@ -456,6 +457,18 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             });
 
             expect(instance.fetchAccessStats).toHaveBeenCalled();
+        });
+    });
+
+    describe('refresh', () => {
+        test('should refetch data when refresh is called', () => {
+            const instance = getWrapper().instance();
+            const fetchAccessStats = jest.fn();
+            instance.fetchAccessStats = fetchAccessStats;
+
+            instance.refresh();
+
+            expect(fetchAccessStats).toHaveBeenCalled();
         });
     });
 });

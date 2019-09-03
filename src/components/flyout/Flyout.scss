@@ -79,63 +79,63 @@ $rotation-middle-left: 315deg;
 .flyout-overlay {
     @include common-typography;
 
-    box-sizing: border-box;
     z-index: $overlay-z-index;
+    box-sizing: border-box;
 
     & > div:not(.should-outline-focus):focus {
         outline: none;
     }
 
     .overlay {
-        border-radius: $bdl-border-radius-size;
         padding: 15px;
+        border-radius: $bdl-border-radius-size;
     }
 
     &::before {
-        border: $arrow-size solid $white;
-        box-shadow: 1px 1px 0 0 $sf-fog;
-        content: '';
         position: absolute;
         z-index: $overlay-z-index + 1;
+        border: $arrow-size solid $white;
+        box-shadow: 1px 1px 0 0 $bdl-gray-30;
+        content: '';
     }
 
     // Bottom
     &.flyout-overlay-target-attached-bottom.flyout-overlay-target-attached-left {
         &::before {
-            left: $horizontal-offset;
             top: $arrow-offset;
+            left: $horizontal-offset;
             transform: rotate($rotation-bottom);
         }
 
         .overlay {
-            animation: flyout_overlay .125s, flyout_overlay_top_left_aligned .125s;
             transform-origin: left top;
+            animation: flyout_overlay .125s, flyout_overlay_top_left_aligned .125s;
         }
     }
 
     &.flyout-overlay-target-attached-bottom.flyout-overlay-target-attached-right {
         &::before {
-            right: $horizontal-offset;
             top: $arrow-offset;
+            right: $horizontal-offset;
             transform: rotate($rotation-bottom);
         }
 
         .overlay {
-            animation: flyout_overlay .125s, flyout_overlay_top_right_aligned .125s;
             transform-origin: right top;
+            animation: flyout_overlay .125s, flyout_overlay_top_right_aligned .125s;
         }
     }
 
     &.flyout-overlay-target-attached-bottom.flyout-overlay-target-attached-center {
         &::before {
-            left: 50%;
             top: $arrow-offset;
+            left: 50%;
             transform: rotate($rotation-bottom);
         }
 
         .overlay {
-            animation: flyout_overlay .125s, flyout_overlay_top_center_aligned .125s;
             transform-origin: center top;
+            animation: flyout_overlay .125s, flyout_overlay_top_center_aligned .125s;
         }
     }
 
@@ -148,21 +148,21 @@ $rotation-middle-left: 315deg;
         }
 
         .overlay {
-            animation: flyout_overlay .125s, flyout_overlay_bottom_left_aligned .125s;
             transform-origin: left bottom;
+            animation: flyout_overlay .125s, flyout_overlay_bottom_left_aligned .125s;
         }
     }
 
     &.flyout-overlay-target-attached-top.flyout-overlay-target-attached-right {
         &::before {
-            bottom: $arrow-offset;
             right: $horizontal-offset;
+            bottom: $arrow-offset;
             transform: rotate($rotation-top);
         }
 
         .overlay {
-            animation: flyout_overlay .125s, flyout_overlay_bottom_right_aligned .125s;
             transform-origin: right bottom;
+            animation: flyout_overlay .125s, flyout_overlay_bottom_right_aligned .125s;
         }
     }
 
@@ -174,37 +174,37 @@ $rotation-middle-left: 315deg;
         }
 
         .overlay {
-            animation: flyout_overlay .125s, flyout_overlay_bottom_center_aligned .125s;
             transform-origin: center bottom;
+            animation: flyout_overlay .125s, flyout_overlay_bottom_center_aligned .125s;
         }
     }
 
     // Middle
     &.flyout-overlay-target-attached-middle.flyout-overlay-target-attached-left {
         &::before {
-            margin-top: -$arrow-size;
-            right: $arrow-offset;
             top: 50%;
+            right: $arrow-offset;
+            margin-top: -$arrow-size;
             transform: rotate($rotation-middle-left);
         }
 
         .overlay {
-            animation: flyout_overlay .125s, flyout_overlay_middle_right_aligned .125s;
             transform-origin: right center;
+            animation: flyout_overlay .125s, flyout_overlay_middle_right_aligned .125s;
         }
     }
 
     &.flyout-overlay-target-attached-middle.flyout-overlay-target-attached-right {
         &::before {
+            top: 50%;
             left: $arrow-offset;
             margin-top: -$arrow-size;
-            top: 50%;
             transform: rotate($rotation-middle-right);
         }
 
         .overlay {
-            animation: flyout_overlay .125s, flyout_overlay_middle_left_aligned .125s;
             transform-origin: left center;
+            animation: flyout_overlay .125s, flyout_overlay_middle_left_aligned .125s;
         }
     }
 }

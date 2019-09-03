@@ -1,28 +1,28 @@
 @import '../../styles/variables';
 
 .text-input-with-copy-button-container {
-    align-items: flex-end;
     display: flex;
+    align-items: flex-end;
     margin: 0 0 20px;
 
     .text-input-container {
-        margin-bottom: 0;
         margin-right: 0;
+        margin-bottom: 0;
 
         input,
         input:focus {
-            border-bottom-right-radius: 0;
-            border-top-right-radius: 0;
             width: 100%;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
         }
     }
 
     .btn {
-        border-bottom-left-radius: 0;
+        min-width: 80px;
+        margin: 0;
         border-left: 0;
         border-top-left-radius: 0;
-        margin: 0;
-        min-width: 80px;
+        border-bottom-left-radius: 0;
         transition: background-color .5s ease, border-color .5s ease;
     }
 
@@ -31,13 +31,13 @@
         .btn:hover,
         .btn:active,
         .btn:active:hover {
-            background-color: $thats-mint;
-            border-color: $thats-mint;
             color: $white;
+            background-color: $bdl-green-light;
+            border-color: $bdl-green-light;
         }
 
         input:focus {
-            border-color: $thats-mint;
+            border-color: $bdl-green-light;
         }
     }
 }

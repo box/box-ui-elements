@@ -42,6 +42,11 @@ const messages = defineMessages({
         description: 'Error message when Preview fails due to the files call which is blocked by an access policy.',
         defaultMessage: 'Your access is restricted due to the classification applied to this content.',
     },
+    boxEditErrorBlockedByPolicy: {
+        id: 'be.boxEditErrorBlockedByPolicy',
+        defaultMessage: 'Local editing of this content has been disabled based on an access policy',
+        description: 'Shown in the open with dropdown when an application is blocked by shield access policy.',
+    },
     previewUpdate: {
         id: 'be.previewUpdate',
         description: 'Message when new preview is available.',
@@ -81,6 +86,16 @@ const messages = defineMessages({
         id: 'be.remove',
         description: 'Label for remove action.',
         defaultMessage: 'Remove',
+    },
+    resume: {
+        id: 'be.resume',
+        description: 'Label for resume action for a single file.',
+        defaultMessage: 'Resume',
+    },
+    resumeAll: {
+        id: 'be.resumeAll',
+        description: 'Label for resume action for multiple files.',
+        defaultMessage: 'Resume All',
     },
     retry: {
         id: 'be.retry',
@@ -131,6 +146,16 @@ const messages = defineMessages({
         id: 'be.gridView',
         description: 'Label for switching to grid view',
         defaultMessage: 'Switch to Grid View',
+    },
+    gridViewIncreaseColumnSize: {
+        id: 'be.gridView.increaseColumnSize',
+        description: 'Label for increasing the size of columns in grid view',
+        defaultMessage: 'Increase column size',
+    },
+    gridViewDecreaseColumnSize: {
+        id: 'be.gridView.decreaseColumnSize',
+        description: 'Label for decreasing the size of columns in grid view',
+        defaultMessage: 'Decrease column size',
     },
     listView: {
         id: 'be.listView',
@@ -691,26 +716,6 @@ const messages = defineMessages({
         id: 'be.errorOccured',
         defaultMessage: 'An error occurred',
         description: 'Title when an error occurs',
-    },
-    appActivityDeleteErrorMessage: {
-        id: 'be.appActivityDeleteErrorMessage',
-        description: 'Error message when an app activity deletion fails',
-        defaultMessage: 'There was an error deleting this item.',
-    },
-    appActivityCreatedAtFullDateTime: {
-        id: 'be.appActivityCreatedAtFullDateTime',
-        defaultMessage: '{time, date, full} at {time, time, short}',
-        description: 'App Activity created at full date time for title',
-    },
-    appActivityDeletePrompt: {
-        id: 'be.appActivityDeletePrompt',
-        defaultMessage: 'Delete App Activity?',
-        description: 'Confirmation prompt text to delete app activity',
-    },
-    appActivityAltIcon: {
-        id: 'be.appActivityAltIcon',
-        defaultMessage: '{appActivityName} Icon',
-        description: 'Alt message if app activity icon is missing or cannot load',
     },
     editLabel: {
         id: 'be.editLabel',

@@ -5,12 +5,12 @@
 }
 
 .contact-sub-name {
-    color: $eights;
+    color: $bdl-gray-50;
     font-size: 12px;
 }
 
 .contact-text {
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }

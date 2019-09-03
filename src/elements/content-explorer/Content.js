@@ -5,11 +5,10 @@
  */
 
 import React from 'react';
-import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
+import ItemGrid from './ItemGrid';
 import ItemList from './ItemList';
-import GridView from '../../components/grid-view/GridView';
 import type { ViewMode } from '../common/flowTypes';
 import { VIEW_ERROR, VIEW_MODE_LIST, VIEW_SELECTED } from '../../constants';
 import './Content.scss';
@@ -32,9 +31,9 @@ type Props = {
     canPreview: boolean,
     canRename: boolean,
     canShare: boolean,
-    columnCount?: number,
     currentCollection: Collection,
     focusedRow: number,
+    gridColumnCount?: number,
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
@@ -48,16 +47,18 @@ type Props = {
     onSortChange: Function,
     rootElement?: HTMLElement,
     rootId: string,
-    slotRenderer?: Function,
     tableRef: Function,
     view: View,
     viewMode?: ViewMode,
 };
 
 const Content = ({
-    columnCount = 1,
     currentCollection,
-    slotRenderer = index => <div>{index}</div>,
+    focusedRow,
+    gridColumnCount = 1,
+    isMedium,
+    onSortChange,
+    tableRef,
     view,
     viewMode = VIEW_MODE_LIST,
     ...rest
@@ -71,20 +72,24 @@ const Content = ({
             )}
 
             {isViewEmpty && <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />}
-            {!isViewEmpty && isListView && <ItemList currentCollection={currentCollection} view={view} {...rest} />}
+            {!isViewEmpty && isListView && (
+                <ItemList
+                    currentCollection={currentCollection}
+                    onSortChange={onSortChange}
+                    focusedRow={focusedRow}
+                    isMedium={isMedium}
+                    tableRef={tableRef}
+                    view={view}
+                    {...rest}
+                />
+            )}
             {!isViewEmpty && !isListView && (
-                <AutoSizer>
-                    {({ height, width }) => (
-                        <GridView
-                            columnCount={columnCount}
-                            currentCollection={currentCollection}
-                            height={height}
-                            slotRenderer={slotRenderer}
-                            width={width}
-                            {...rest}
-                        />
-                    )}
-                </AutoSizer>
+                <ItemGrid
+                    currentCollection={currentCollection}
+                    gridColumnCount={gridColumnCount}
+                    view={view}
+                    {...rest}
+                />
             )}
         </div>
     );

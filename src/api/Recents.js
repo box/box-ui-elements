@@ -11,7 +11,15 @@ import Base from './Base';
 import FileAPI from './File';
 import FolderAPI from './Folder';
 import WebLinkAPI from './WebLink';
-import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, FIELD_DATE, SORT_DESC, ERROR_CODE_FETCH_RECENTS } from '../constants';
+import {
+    DEFAULT_ROOT,
+    CACHE_PREFIX_RECENTS,
+    ERROR_CODE_FETCH_RECENTS,
+    FIELD_DATE,
+    FIELD_REPRESENTATIONS,
+    X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
+    SORT_DESC,
+} from '../constants';
 
 class Recents extends Base {
     /**
@@ -150,20 +158,29 @@ class Recents extends Base {
     /**
      * Does the network request
      *
+     * @param {FetchOptions} options - options for request
      * @return {Promise}
      */
-    recentsRequest(): Promise<void> {
+    recentsRequest(options: FetchOptions = {}): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
+
+        const { fields } = options;
+        const requestFields = fields || FOLDER_FIELDS_TO_FETCH;
 
         this.errorCode = ERROR_CODE_FETCH_RECENTS;
         return this.xhr
             .get({
                 url: this.getUrl(),
                 params: {
-                    fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                    fields: requestFields.toString(),
                 },
+                headers: requestFields.includes(FIELD_REPRESENTATIONS)
+                    ? {
+                          'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
+                      }
+                    : {},
             })
             .then(this.recentsSuccessHandler)
             .catch(this.recentsErrorHandler);
@@ -203,7 +220,7 @@ class Recents extends Base {
         }
 
         // Make the XHR request
-        this.recentsRequest();
+        this.recentsRequest(options);
     }
 }
 

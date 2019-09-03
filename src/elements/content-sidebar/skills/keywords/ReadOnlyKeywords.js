@@ -58,7 +58,7 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
         const pillCloudProps = selected ? { selectedOptions: [options[selectedIndex]] } : {};
 
         return (
-            <React.Fragment>
+            <>
                 <PillCloud
                     onSelect={this.onSelect}
                     options={options}
@@ -76,7 +76,7 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
                         timeslices={selected.appears}
                     />
                 )}
-            </React.Fragment>
+            </>
         );
     }
 }

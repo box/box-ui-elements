@@ -5,30 +5,30 @@
  **************************************/
 
 .radio-label {
-    align-items: center;
-    display: inline-flex;
     position: relative;
+    display: inline-flex;
+    align-items: center;
     user-select: none;
 
     > input[type='radio'] {
         flex: none;
+        width: 14px;
         height: 14px;
         margin: 0;
         opacity: 0;
-        width: 14px;
 
         + span::before {
+            position: absolute;
+            top: 3px;
+            left: 0;
+            width: 14px;
+            height: 14px;
             background-color: $white;
             border: 7px solid $white;
             border-radius: 9001px;
-            box-shadow: 0 0 0 1px $nines, 0 -1px 1px rgba(0, 0, 0, .4);
-            content: '';
-            height: 14px;
-            left: 0;
-            position: absolute;
-            top: 3px;
+            box-shadow: 0 0 0 1px $bdl-gray-50, 0 -1px 1px rgba(0, 0, 0, .4);
             transition: border-width .1s;
-            width: 14px;
+            content: '';
         }
 
         &:checked + span::before {
@@ -41,9 +41,9 @@
         }
 
         &:disabled + span::before {
-            background-color: $bfive;
-            border-color: $karl-fog;
-            box-shadow: 0 0 0 1px $dtwo;
+            background-color: $bdl-gray-30;
+            border-color: $bdl-gray-02;
+            box-shadow: 0 0 0 1px $bdl-gray-20;
         }
 
         + span + span {
@@ -51,7 +51,7 @@
         }
 
         &:disabled + span + span {
-            color: $bfive;
+            color: $bdl-gray-30;
         }
     }
 }
@@ -61,7 +61,7 @@
 }
 
 .radio-description {
-    color: $downtown-grey;
-    margin-left: 24px;
     margin-top: 2px;
+    margin-left: 24px;
+    color: $bdl-gray-50;
 }

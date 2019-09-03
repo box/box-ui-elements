@@ -24,25 +24,25 @@
 }
 
 .slide-selector {
-    background: $baby-blue;
+    width: 10px;
+    height: 10px;
+    background: $bdl-box-blue-50;
     border-radius: 50%;
     cursor: pointer;
-    height: 10px;
-    width: 10px;
 
     &:active {
-        background: $koray-ing;
+        background: $bdl-dark-blue;
     }
 
     &:focus {
-        background: $baby-blue;
+        background: $bdl-box-blue-50;
     }
 
     &:hover {
-        background: $hover-blue;
+        background: $bdl-light-blue;
     }
 
     &.is-selected {
-        background: $box-blue;
+        background: $bdl-box-blue;
     }
 }

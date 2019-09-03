@@ -20,7 +20,7 @@ export function getIcon(dimension: number, rowData: BoxItem) {
         case TYPE_FILE:
             return <FileIcon dimension={dimension} extension={extension} />;
         case TYPE_WEBLINK:
-            return <BookmarkIcon width={dimension} />;
+            return <BookmarkIcon height={dimension} width={dimension} />;
         default:
             throw new Error('Unsupported item type!');
     }

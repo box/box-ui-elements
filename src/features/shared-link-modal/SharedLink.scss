@@ -13,14 +13,14 @@
     }
 
     .text-input-with-copy-button-container {
-        margin-bottom: 10px;
         margin-right: 0;
+        margin-bottom: 10px;
     }
 
     .shared-link-access {
         p {
-            color: $nines;
             margin: 0 0 5px;
+            color: $bdl-gray-50;
         }
 
         .btn-plain {
@@ -29,10 +29,10 @@
     }
 
     .shared-link-icons {
-        align-items: center;
-        display: flex;
         position: absolute;
         right: 0;
+        display: flex;
+        align-items: center;
 
         .shared-link-settings-btn {
             margin-left: 5px;
@@ -44,8 +44,8 @@
     }
 
     .shared-link-expiration {
-        height: 16px;
         width: 16px;
+        height: 16px;
     }
 }
 

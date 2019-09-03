@@ -11,7 +11,13 @@ import { getBadItemError } from '../utils/error';
 import Item from './Item';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
-import { CACHE_PREFIX_FOLDER, ERROR_CODE_FETCH_FOLDER, ERROR_CODE_CREATE_FOLDER } from '../constants';
+import {
+    CACHE_PREFIX_FOLDER,
+    ERROR_CODE_FETCH_FOLDER,
+    ERROR_CODE_CREATE_FOLDER,
+    FIELD_REPRESENTATIONS,
+    X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
+} from '../constants';
 
 class Folder extends Item {
     /**
@@ -162,14 +168,10 @@ class Folder extends Item {
         );
         this.itemCache = (this.itemCache || []).concat(flattened);
 
-        this.getCache().set(
-            this.key,
-            Object.assign({}, data, {
-                item_collection: Object.assign({}, item_collection, {
-                    entries: this.itemCache,
-                }),
-            }),
-        );
+        this.getCache().set(this.key, {
+            ...data,
+            item_collection: { ...item_collection, entries: this.itemCache },
+        });
 
         this.finish();
     };
@@ -209,23 +211,27 @@ class Folder extends Item {
         const requestFields = fields || FOLDER_FIELDS_TO_FETCH;
 
         this.errorCode = ERROR_CODE_FETCH_FOLDER;
-
         let params = { fields: requestFields.toString() };
-
         if (!noPagination) {
-            params = Object.assign({}, params, {
+            params = {
+                ...params,
                 direction: this.sortDirection.toLowerCase(),
                 limit: this.limit,
                 offset: this.offset,
                 fields: requestFields.toString(),
                 sort: this.sortBy.toLowerCase(),
-            });
+            };
         }
 
         return this.xhr
             .get({
                 url: this.getUrl(this.id),
                 params,
+                headers: requestFields.includes(FIELD_REPRESENTATIONS)
+                    ? {
+                          'X-Rep-Hints': X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
+                      }
+                    : {},
             })
             .then(successHandler)
             .catch(this.errorHandler);
@@ -305,7 +311,7 @@ class Folder extends Item {
         }
 
         // Make the XHR request
-        this.folderRequest();
+        this.folderRequest(options);
     }
 
     /**

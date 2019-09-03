@@ -34,6 +34,7 @@ import {
     TYPED_ID_FEED_PREFIX,
 } from '../constants';
 import type {
+    TaskCompletionRule,
     TaskCollabAssignee,
     TaskCollabStatus,
     TaskLink,
@@ -534,7 +535,7 @@ class Feed extends Base {
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
-    updateTaskNew = (
+    updateTaskNew = async (
         file: BoxItem,
         task: TaskUpdatePayload,
         successCallback: () => void = noop,
@@ -544,21 +545,36 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
+        let updatedWithoutError = true;
+        let removeAssigneeError;
+
         this.file = file;
         this.errorCallback = errorCallback;
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.updateFeedItem({ isPending: true }, task.id);
 
-        Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)))
-            .then(() => {
-                return Promise.all(
-                    task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
-                );
-            })
-            .then(() => {
+        try {
+            await Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)));
+            await new Promise((resolve, reject) => {
                 this.tasksNewAPI.updateTask({
                     file,
                     task,
+                    successCallback: resolve,
+                    errorCallback: reject,
+                });
+            });
+
+            await Promise.all(
+                task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
+            ).catch((e: ElementsXhrError) => {
+                updatedWithoutError = false;
+                removeAssigneeError = e;
+            });
+
+            await new Promise((resolve, reject) => {
+                this.tasksNewAPI.getTask({
+                    file,
+                    id: task.id,
                     successCallback: (taskData: Task) => {
                         this.updateFeedItem(
                             {
@@ -568,20 +584,28 @@ class Feed extends Base {
                             task.id,
                         );
 
-                        if (!this.isDestroyed()) {
-                            successCallback();
+                        if (!updatedWithoutError) {
+                            this.feedErrorCallback(false, removeAssigneeError, ERROR_CODE_UPDATE_TASK);
                         }
+
+                        resolve();
                     },
                     errorCallback: (e: ElementsXhrError) => {
                         this.updateFeedItem({ isPending: false }, task.id);
                         this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
+                        reject();
                     },
                 });
-            })
-            .catch((e: ElementsXhrError) => {
-                this.updateFeedItem({ isPending: false }, task.id);
-                this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
             });
+
+            // everything succeeded, so call the passed in success callback
+            if (!this.isDestroyed() && updatedWithoutError) {
+                successCallback();
+            }
+        } catch (e) {
+            this.updateFeedItem({ isPending: false }, task.id);
+            this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
+        }
     };
 
     /**
@@ -789,6 +813,7 @@ class Feed extends Base {
         assignees: SelectorItems,
         taskType: TaskType,
         dueAt: ?string,
+        completionRule: TaskCompletionRule,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -814,6 +839,7 @@ class Feed extends Base {
                 role: 'CREATOR',
                 status: TASK_NEW_INITIAL_STATUS,
             },
+            completion_rule: completionRule,
             created_at: new Date().toISOString(),
             due_at: dueAtString,
             id: uuid,
@@ -862,7 +888,12 @@ class Feed extends Base {
             status: TASK_NEW_NOT_STARTED,
         };
 
-        const taskPayload: TaskPayload = { description: message, due_at: dueAtString, task_type: taskType };
+        const taskPayload: TaskPayload = {
+            description: message,
+            due_at: dueAtString,
+            task_type: taskType,
+            completion_rule: completionRule,
+        };
 
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.tasksNewAPI.createTask({
@@ -1414,6 +1445,73 @@ class Feed extends Base {
     };
 
     /**
+     * Update a comment
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Object} currentUser - the user who performed the action
+     * @param {string} text - the comment text
+     * @param {boolean} hasMention - true if there is an @mention in the text
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @return {void}
+     */
+    updateComment = (
+        file: BoxItem,
+        commentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxItemPermission,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        const commentData = {
+            tagged_message: text,
+        };
+
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+        this.updateFeedItem({ ...commentData, isPending: true }, commentId);
+
+        const message = {};
+        if (hasMention) {
+            message.tagged_message = text;
+        } else {
+            message.message = text;
+        }
+
+        this.commentsAPI = new CommentsAPI(this.options);
+
+        this.commentsAPI.updateComment({
+            file,
+            commentId,
+            permissions,
+            ...message,
+            successCallback: (comment: Comment) => {
+                // use the request payload instead of response in the
+                // feed item update because response may not contain
+                // the tagged version of the message
+                this.updateFeedItem(
+                    {
+                        ...message,
+                        isPending: false,
+                    },
+                    commentId,
+                );
+                if (!this.isDestroyed()) {
+                    successCallback(comment);
+                }
+            },
+            errorCallback: (e: ErrorResponseData, code: string) => {
+                this.feedErrorCallback(true, e, code);
+            },
+        });
+    };
+
+    /**
      * Destroys all the task assignment API's
      *
      * @return {void}
@@ -1503,7 +1601,7 @@ class Feed extends Base {
      * @return {void}
      */
     deleteAppActivityErrorCallback = (e: ElementsXhrError, code: string, id: string) => {
-        this.updateFeedItem(this.createFeedError(commonMessages.appActivityDeleteErrorMessage), id);
+        this.updateFeedItem(this.createFeedError(messages.appActivityDeleteErrorMessage), id);
         this.feedErrorCallback(true, e, code);
     };
 

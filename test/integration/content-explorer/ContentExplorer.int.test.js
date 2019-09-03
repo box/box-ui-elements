@@ -6,14 +6,6 @@ const selectedRowClassName = 'bce-item-row-selected';
 const listViewClass = 'bce-item-grid';
 const gridViewClass = 'bdl-GridView';
 
-const gridViewOn = {
-    contentExplorer: {
-        gridView: {
-            enabled: true,
-        },
-    },
-};
-
 const helpers = {
     load({ props, features } = {}) {
         cy.visit('/Elements/ContentExplorer', {
@@ -33,7 +25,7 @@ const helpers = {
         if (selectedRow) {
             cy.getByTestId('content-explorer')
                 .find(this.getSelector(selectedRowClassName))
-                .should('have.length', 1)
+                .should('exist')
                 .should('have.class', `bce-item-row-${selectedRow}`);
         } else {
             cy.getByTestId('content-explorer').should('not.have.descendants', this.getSelector(selectedRowClassName));
@@ -60,8 +52,9 @@ const helpers = {
     getCancelButton() {
         return cy.contains(localize('be.cancel'));
     },
+    // need exact match since 'Close' appears elsewhere on the page
     getCloseButton() {
-        return cy.contains(localize('be.close'));
+        return cy.contains(utils.getExactRegex(localize('be.close')));
     },
     getShareButton(rowNum) {
         return this.getRow(rowNum).contains(localize('be.share'));
@@ -69,6 +62,9 @@ const helpers = {
     // using data-testid since more options button has "..." for text
     getMoreOptionsButton(rowNum) {
         return this.getRow(rowNum).find('[data-testid="bce-btn-more-options"]');
+    },
+    getAllMoreOptionsButtons() {
+        return cy.get('[data-testid="bce-btn-more-options"]');
     },
     // need exact match since 'Rename' appears elsewhere on the page
     getRenameButton() {
@@ -79,7 +75,7 @@ const helpers = {
         return this.getRow(rowNum).find('[data-testid="be-item-name"]');
     },
     getClosePreviewButton() {
-        return cy.getByAriaLabel('Close');
+        return cy.getByAriaLabel(localize('be.close'));
     },
     openUploadModal() {
         this.getAddButton().click();
@@ -98,6 +94,13 @@ describe('ContentExplorer', () => {
     beforeEach(() => {
         cy.server();
         cy.route('GET', '**/folders/*', 'fixture:content-explorer/root-folder.json');
+        cy.route('GET', '**/files/319004423111?fields=allowed_shared_link_access_levels,shared_link', {
+            type: 'file',
+            id: '319004423111',
+            etag: '4',
+            allowed_shared_link_access_levels: ['collaborators', 'open', 'company'],
+            shared_link: null,
+        });
     });
 
     describe('Selection', () => {
@@ -197,38 +200,73 @@ describe('ContentExplorer', () => {
             helpers.openUploadModal();
             helpers.getCloseButton().click();
             helpers.checkRowSelections(5);
-            helpers.selectRow(2);
-            helpers.checkRowSelections(2);
-            helpers.getShareButton(3).click();
-            helpers.getCloseButton().click();
+            helpers.selectRow(3);
             helpers.checkRowSelections(3);
+            helpers.getShareButton(2).click();
+            helpers.getCloseButton().click();
+            helpers.checkRowSelections(2);
             helpers.selectRow(4);
             helpers.checkRowSelections(4);
-        });
-    });
-
-    describe('Grid View', () => {
-        beforeEach(() => {
-            helpers.load({ features: gridViewOn });
         });
 
         it('Should initially show list view', () => {
             cy.getByTestId('content-explorer')
                 .find(helpers.getSelector(listViewClass))
-                .should('have.length', 1);
+                .should('exist');
             cy.getByTestId('content-explorer')
                 .find(helpers.getSelector(gridViewClass))
-                .should('have.length', 0);
+                .should('not.exist');
+        });
+    });
+
+    describe('Grid View', () => {
+        beforeEach(() => {
+            helpers.load();
+            helpers
+                .getViewModeChangeButton()
+                .click()
+                .blur();
         });
 
         it('Should switch to grid view', () => {
-            helpers.getViewModeChangeButton().click();
             cy.getByTestId('content-explorer')
                 .find(helpers.getSelector(listViewClass))
-                .should('have.length', 0);
+                .should('not.exist');
             cy.getByTestId('content-explorer')
                 .find(helpers.getSelector(gridViewClass))
-                .should('have.length', 1);
+                .should('exist');
+        });
+
+        it('Should open and close share modal', () => {
+            cy.getByAriaLabel(localize('be.shareDialogLabel')).should('not.exist');
+            helpers
+                .getAllMoreOptionsButtons()
+                .eq(2)
+                .click();
+            cy.contains(utils.getExactRegex(localize('be.share'))).click();
+            cy.getByAriaLabel(localize('be.shareDialogLabel')).should('exist');
+            helpers.getCloseButton().click();
+            cy.getByAriaLabel(localize('be.shareDialogLabel')).should('not.exist');
+        });
+
+        it('Should open and close rename modal', () => {
+            cy.getByAriaLabel(localize('be.renameDialogLabel')).should('not.exist');
+            helpers
+                .getAllMoreOptionsButtons()
+                .eq(0)
+                .click();
+            helpers.getRenameButton().click();
+            cy.getByAriaLabel(localize('be.renameDialogLabel')).should('exist');
+            helpers.getCancelButton().click();
+            cy.getByAriaLabel(localize('be.renameDialogLabel')).should('not.exist');
+        });
+
+        it('Should open and close preview', () => {
+            cy.getByAriaLabel(localize('be.preview')).should('not.exist');
+            cy.contains(Cypress.env('FIRST_FILE_NAME')).click();
+            cy.getByAriaLabel(localize('be.preview')).should('exist');
+            helpers.getClosePreviewButton().click();
+            cy.getByAriaLabel(localize('be.preview')).should('not.exist');
         });
     });
 });

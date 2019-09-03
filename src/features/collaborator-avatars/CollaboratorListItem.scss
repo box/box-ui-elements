@@ -7,33 +7,33 @@
         margin: 10px;
 
         .user {
-            align-items: center;
             display: flex;
+            align-items: center;
             white-space: nowrap;
         }
 
         .avatar {
+            width: 32px;
             height: 32px;
             margin-right: 8px;
-            width: 32px;
         }
 
         .name {
-            color: $twos;
-            font-size: 13px;
-            font-weight: bold;
-            line-height: 16px;
             max-width: 200px;
             overflow: hidden;
+            color: $bdl-gray;
+            font-weight: bold;
+            font-size: 13px;
+            line-height: 16px;
             text-overflow: ellipsis;
         }
 
         .name .link {
-            color: $twos;
+            color: $bdl-gray;
         }
 
         .email .link {
-            color: $seventy-sixers;
+            color: $bdl-gray-62;
         }
 
         .name .link:hover,
@@ -46,16 +46,16 @@
         }
 
         .email {
-            color: $seventy-sixers;
-            font-size: 12px;
-            line-height: 16px;
             max-width: 200px;
             overflow: hidden;
+            color: $bdl-gray-62;
+            font-size: 12px;
+            line-height: 16px;
             text-overflow: ellipsis;
         }
 
         .role {
-            color: $seventy-sixers;
+            color: $bdl-gray-62;
             line-height: 32px;
         }
     }
@@ -64,7 +64,7 @@
         justify-content: inherit;
 
         .link {
-            color: $box-blue;
+            color: $bdl-box-blue;
             line-height: 32px;
             text-decoration: none;
         }

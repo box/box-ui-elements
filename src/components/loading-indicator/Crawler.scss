@@ -5,20 +5,20 @@
  **************************************/
 
 .crawler {
-    font-size: 0;
-    margin: 0 auto;
-    white-space: nowrap;
     width: 10px;
+    margin: 0 auto;
+    font-size: 0;
+    white-space: nowrap;
 }
 
 .crawler div {
-    -webkit-animation: crawler .66s infinite ease-in-out;
-    animation: crawler .66s infinite ease-in-out;
+    display: inline-block;
+    width: 2px;
+    height: 10px;
     background-color: $primary-color;
     border-radius: 4px;
-    display: inline-block;
-    height: 10px;
-    width: 2px;
+    -webkit-animation: crawler .66s infinite ease-in-out;
+    animation: crawler .66s infinite ease-in-out;
 }
 
 .btn-primary .crawler div {
@@ -43,29 +43,29 @@
 }
 
 .crawler div:nth-child(2) {
+    margin-left: 2px;
     -webkit-animation-delay: .1s;
     animation-delay: .1s;
-    margin-left: 2px;
 }
 
 .crawler div:last-child {
-    -webkit-animation-delay: .2s;
-    animation-delay: .2s;
     left: 8px;
     margin-left: 2px;
+    -webkit-animation-delay: .2s;
+    animation-delay: .2s;
 }
 
 @-webkit-keyframes crawler {
     0%,
     80%,
     100% {
-        opacity: .5;
         -webkit-transform: scaleY(1.2);
+        opacity: .5;
     }
 
     40% {
-        opacity: 1;
         -webkit-transform: scaleY(1.6);
+        opacity: 1;
     }
 }
 
@@ -73,12 +73,12 @@
     0%,
     80%,
     100% {
-        opacity: .5;
         transform: scaleY(1.2);
+        opacity: .5;
     }
 
     40% {
-        opacity: 1;
         transform: scaleY(1.6);
+        opacity: 1;
     }
 }

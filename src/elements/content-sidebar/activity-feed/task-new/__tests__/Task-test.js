@@ -48,6 +48,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             limit: 10,
             next_marker: null,
         },
+        completion_rule: 'ALL_ASSIGNEES',
         created_at: '2010-01-01',
         created_by: { id: '0', target: currentUser, role: 'CREATOR', status: 'NOT_STARTED', type: 'task_collaborator' },
         due_at: null,
@@ -219,8 +220,10 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 onDelete={jest.fn()}
             />,
         );
-
-        expect(wrapper.find('Comment').getElements()[0].props.permissions.can_delete).toBe(false);
+        wrapper.find('MediaMenu[data-testid="task-actions-menu"]').simulate('click');
+        wrapper.update();
+        expect(wrapper.find('MenuItem[data-testid="delete-task"]')).toHaveLength(0);
+        expect(wrapper.find('MenuItem[data-testid="edit-task"]')).toHaveLength(1);
     });
 
     test('should not allow user to edit if the permissions do not allow it', () => {
@@ -234,8 +237,10 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 onEdit={jest.fn()}
             />,
         );
-
-        expect(wrapper.find('Comment').getElements()[0].props.permissions.can_edit).toBe(false);
+        wrapper.find('MediaMenu[data-testid="task-actions-menu"]').simulate('click');
+        wrapper.update();
+        expect(wrapper.find('MenuItem[data-testid="edit-task"]')).toHaveLength(0);
+        expect(wrapper.find('MenuItem[data-testid="delete-task"]')).toHaveLength(1);
     });
 
     test('should show inline error for error prop', () => {
@@ -249,7 +254,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
 
-        expect(wrapper.find('CommentInlineError')).toHaveLength(1);
+        expect(wrapper.find('ActivityError')).toHaveLength(1);
     });
 
     test('should call getAllTaskCollaborators on modal open if there is a next_marker', async () => {
@@ -333,7 +338,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const wrapper = mount(<Task {...task} currentUser={currentUser} onModalClose={onModalClose} />);
 
         const instance = wrapper.instance();
-        instance.handleModalClose();
+        instance.handleEditModalClose();
 
         expect(onModalClose).toBeCalled();
     });

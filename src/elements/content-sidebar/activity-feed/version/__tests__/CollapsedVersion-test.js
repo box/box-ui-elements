@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
+import selectors from '../../../../common/selectors/version';
 import { CollapsedVersionBase as CollapsedVersion } from '../CollapsedVersion';
 
 const translationProps = {
@@ -10,11 +11,14 @@ const translationProps = {
 describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () => {
     const render = item => shallow(<CollapsedVersion {...translationProps} {...item} />);
 
+    beforeEach(() => {
+        selectors.getVersionAction = jest.fn().mockReturnValue('upload');
+    });
+
     test('should correctly render for single collaborator', () => {
         const version_start = 1;
         const version_end = 10;
         const item = {
-            action: 'upload',
             collaborators: { 1: { name: 'Person one', id: 1 } },
             version_start,
             version_end,
@@ -32,7 +36,6 @@ describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () =>
         const version_start = 1;
         const version_end = 10;
         const item = {
-            action: 'upload',
             collaborators: {
                 1: { name: 'Person one', id: 1 },
                 2: { name: 'Person two', id: 2 },
@@ -44,7 +47,6 @@ describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () =>
         const wrapper = render(item);
         const formattedMessage = wrapper.find('FormattedMessage');
 
-        expect(wrapper.hasClass('bcs-collapsed-version')).toBe(true);
         expect(wrapper).toMatchSnapshot();
 
         const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
@@ -53,7 +55,6 @@ describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () =>
 
     test('should correctly render info icon if onInfo is passed', () => {
         const item = {
-            action: 'upload',
             onInfo: () => {},
             collaborators: {
                 1: { name: 'Person one', id: 1 },
@@ -69,8 +70,9 @@ describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () =>
     });
 
     test('should not render a message if action is not upload', () => {
+        selectors.getVersionAction.mockReturnValueOnce('delete');
+
         const item = {
-            action: 'delete',
             collaborators: { 1: { name: 'Person one', id: 1 } },
             version_start: 1,
             version_end: 10,
@@ -79,7 +81,6 @@ describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () =>
         const wrapper = render(item);
         const formattedMessage = wrapper.find('FormattedMessage');
 
-        expect(wrapper.hasClass('bcs-collapsed-version')).toBe(true);
         expect(formattedMessage.length).toBe(0);
     });
 });

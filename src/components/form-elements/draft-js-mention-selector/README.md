@@ -37,7 +37,14 @@ The component hierarchy from topmost to bottommost is:
             Your component should look like `<foo>{ props.children }</foo>`, not `<foo>{ props.text }</foo>`, or else the rendered state won't match the internal state.
         - Strategies can be more or less complex, but our mentionStrategy just checks if an Entity is annotated as being a "MENTION".
 
+### Restoring Editor State
+
+Use `createMentionSelectorState(tagged_message)` instead of `EditorState.createFromContent()` when restoring content that already contains mentions.
+
+This will parse the tagged message and create `type: MENTION` entities. It returns an EditorState instance.
+
 ### Examples
+
 ```
 const DraftJSMentionSelectorExamples = require('examples').DraftJSMentionSelectorExamples;
 

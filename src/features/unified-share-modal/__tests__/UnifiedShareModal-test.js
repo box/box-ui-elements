@@ -33,6 +33,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
     const getWrapper = (props = {}) =>
         shallow(
             <UnifiedShareModal
+                classification={{ definition: undefined, name: undefined }}
                 collaborationRestrictionWarning=""
                 getInitialData={jest.fn().mockImplementation(() => Promise.resolve('test'))}
                 intl={intl}
@@ -821,6 +822,28 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             const wrapper = getWrapper();
             wrapper.setState({ emailSharedLinkContacts: contacts });
             expect(wrapper.instance().hasExternalContact('emailSharedLinkContacts')).toBe(false);
+        });
+
+        test('should set isInviteSectionExpanded and inviteCollabsContacts correctly if there are initiallySelectedContacts', () => {
+            const initiallySelectedContacts = [
+                {
+                    email: 'x@example.com',
+                    id: '12345',
+                    isExternalUser: false,
+                    name: 'X User',
+                    type: 'group',
+                },
+            ];
+
+            const wrapper = getWrapper({ initiallySelectedContacts });
+            expect(wrapper.state('inviteCollabsContacts')).toEqual(initiallySelectedContacts);
+            expect(wrapper.state('isInviteSectionExpanded')).toEqual(true);
+        });
+
+        test('should set isInviteSectionExpanded and inviteCollabsContacts correctly if there are NO initiallySelectedContacts', () => {
+            const wrapper = getWrapper();
+            expect(wrapper.state('inviteCollabsContacts')).toEqual([]);
+            expect(wrapper.state('isInviteSectionExpanded')).toEqual(false);
         });
     });
 });

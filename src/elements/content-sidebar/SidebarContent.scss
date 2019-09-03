@@ -1,36 +1,36 @@
 @import '../common/variables';
 
 .bcs-content {
-    border-left: 1px solid $off-white;
-    margin-left: -1px; // -1px to make nav button hover not have blank space
     position: relative;
     width: 341px; // 1px extra to account for the margin left
+    margin-left: -1px; // -1px to make nav button hover not have blank space
+    border-left: 1px solid $bdl-gray-10;
 
     .bcs-content-header {
-        align-items: center;
-        border-bottom: 1px solid $off-white;
         display: flex;
-        height: 60px;
+        align-items: center;
         justify-content: space-between;
+        height: 60px;
         margin: 0 25px;
         padding: 0;
+        border-bottom: 1px solid $bdl-gray-10;
 
         .bcs-title {
             display: flex;
-            font-size: 16px;
-            font-weight: 400;
             margin: 0;
             padding: 0;
+            font-weight: normal;
+            font-size: 16px;
         }
     }
 
     .bcs-scroll-content-wrapper {
+        position: absolute; // Prevents non-sidebar parts from re-painting
+        top: 60px; // Same as title above
+        right: 0;
         bottom: 0;
         left: 0;
         overflow: auto;
-        position: absolute; // Prevents non-sidebar parts from re-painting
-        right: 0;
-        top: 60px; // Same as title above
     }
 
     .bcs-scroll-content {

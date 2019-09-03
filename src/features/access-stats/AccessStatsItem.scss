@@ -8,16 +8,16 @@
         &.btn-plain,
         &.btn-plain:focus,
         &.btn-plain:hover {
-            align-items: center;
-            background: $selected-blue-background;
-            border-radius: 2px;
-            color: $koray-ing;
             display: flex;
-            line-height: 10px;
+            align-items: center;
+            width: 100%;
             margin: 0 0 5px;
             padding: 9px;
+            color: $bdl-dark-blue;
+            line-height: 10px;
             text-align: left;
-            width: 100%;
+            background: $selected-blue-background;
+            border-radius: 2px;
         }
 
         &.btn-plain:focus,

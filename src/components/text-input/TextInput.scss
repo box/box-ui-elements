@@ -5,8 +5,8 @@
  **************************************/
 
 .text-input-container {
-    margin: 0 0 20px;
     position: relative;
+    margin: 0 0 20px;
 
     .text-input-loading {
         display: inline-block;
@@ -24,15 +24,15 @@
     }
 
     .text-input-description {
-        color: $sevens;
         display: block;
+        color: $bdl-gray-62;
         word-wrap: break-word;
     }
 
     input {
-        font-family: inherit;
         height: 32px;
         margin-top: 5px;
+        font-family: inherit;
 
         &[type='number'] {
             -moz-appearance: textfield;
@@ -40,8 +40,8 @@
 
             &::-webkit-outer-spin-button,
             &::-webkit-inner-spin-button {
-                -webkit-appearance: none;
                 margin: 0;
+                -webkit-appearance: none;
             }
         }
     }
@@ -49,7 +49,7 @@
     &.is-required,
     &.show-error {
         input {
-            border-color: $amaranth;
+            border-color: $bdl-watermelon-red;
         }
     }
 }

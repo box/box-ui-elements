@@ -11,20 +11,20 @@
 }
 
 .bce-item-row {
+    border-top: 1px solid $bdl-gray-10;
     border-left: 2px solid transparent;
-    border-top: 1px solid $off-white;
     outline: none;
 
     .bce-item-coloumn {
-        color: $sevens;
+        color: $bdl-gray-62;
     }
 
     .bce-more-options {
         opacity: 0;
 
         .btn {
-            background-color: transparent;
             margin-left: 8px;
+            background-color: transparent;
         }
 
         .be-is-touch & {
@@ -70,7 +70,7 @@
     }
 
     &:last-child {
-        border-bottom: 1px solid $off-white;
+        border-bottom: 1px solid $bdl-gray-10;
 
         &.bce-item-row-selected {
             border-bottom-color: $grey-blue;
@@ -83,12 +83,12 @@
 }
 
 .bce-item-header-row {
-    border-bottom: 1px solid $off-white;
+    border-bottom: 1px solid $bdl-gray-10;
     box-shadow: 0 4px 6px -2px $transparent-black;
 
     .ReactVirtualized__Table__headerColumn {
-        color: $sevens;
-        font-weight: 400;
+        color: $bdl-gray-62;
+        font-weight: normal;
         text-transform: none;
     }
 

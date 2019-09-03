@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import { sevens } from '../../styles/variables';
+import { bdlGray62 } from '../../styles/variables';
 
 import Checkbox from '../../components/checkbox';
 import TextInput from '../../components/text-input';
@@ -29,7 +29,7 @@ const VanityNameSection = ({
             <TextInput
                 description={
                     <span>
-                        <QuarantineBadge color={sevens} />
+                        <QuarantineBadge color={bdlGray62} />
                         <FormattedMessage {...messages.vanityURLWarning} />
                     </span>
                 }
@@ -73,6 +73,7 @@ VanityNameSection.propTypes = {
     vanityNameInputProps: PropTypes.object,
     serverURL: PropTypes.string.isRequired,
     onChange: PropTypes.func,
+    onCheckboxChange: PropTypes.func,
 };
 
 export { VanityNameSection as VanityNameSectionBase };

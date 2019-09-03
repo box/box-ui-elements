@@ -14,16 +14,16 @@
         margin: 0;
 
         .pill-selector-input-wrapper {
-            margin: 0;
             width: 100%;
+            margin: 0;
 
             input[type='text'].pill-selector-input {
-                border: 1px solid $almost-white;
-                box-shadow: none;
+                min-width: 97%;
                 height: 24px;
                 margin: 2px 0 0 2px;
-                min-width: 97%;
                 padding: 0;
+                border: 1px solid $almost-white;
+                box-shadow: none;
             }
         }
     }

@@ -2,8 +2,8 @@
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
-    color: $seventy-sixers;
     display: block;
+    color: $bdl-gray-62;
     font-size: 12px;
 }
 
@@ -12,12 +12,12 @@
     padding: 20px;
 
     .ftux-tooltip-title {
-        font-weight: 700;
+        font-weight: bold;
     }
 
     .tooltip-close-button {
-        right: 4px;
         top: 8px;
+        right: 4px;
     }
 
     .ftux-tooltip-controls {
@@ -31,8 +31,8 @@
 
     .ftux-tooltip-link {
         color: $white;
-        text-decoration: underline;
         white-space: normal;
+        text-decoration: underline;
     }
 
     h4 {
@@ -50,6 +50,16 @@
 }
 
 .unified-share-modal {
+    /** title and classifiction label */
+    .bdl-UnifiedShareModalTitle {
+        display: flex;
+        flex-flow: row wrap;
+
+        .bdl-UnifiedShareModalTitle-classification {
+            margin-left: 6px;
+        }
+    }
+
     /** overrides for USM sub-components */
     .text-area-container {
         position: static;
@@ -77,8 +87,8 @@
 
     /*** Email form ***/
     .inline-alert {
-        margin-bottom: 20px;
         margin-top: 0;
+        margin-bottom: 20px;
     }
 
     .pill-selector-wrapper .pill-selector-input-wrapper, // need both selectors for specificity
@@ -93,10 +103,10 @@
 
     .pill-selector-wrapper.scrollable {
         .overlay-wrapper {
-            border: 1px solid $sf-fog;
+            position: absolute;
             height: 280px;
             overflow-y: scroll;
-            position: absolute;
+            border: 1px solid $bdl-gray-30;
         }
 
         .overlay {
@@ -106,12 +116,12 @@
 
     .is-expanded {
         .text-area-container {
-            margin: 20px 0 0;
             min-height: 89px;
+            margin: 20px 0 0;
         }
 
         .text-area-container textarea::placeholder {
-            color: $nines;
+            color: $bdl-gray-50;
         }
 
         .pill-selector-input-wrapper {
@@ -120,32 +130,32 @@
     }
 
     .pill-selector-input-wrapper {
-        border: 1px solid $seesee;
         margin-top: 10px;
+        border: 1px solid $bdl-gray-20;
 
         .pill-selector-input::placeholder {
-            color: $nines;
+            color: $bdl-gray-50;
         }
 
         &.is-disabled {
-            background-color: $haze;
+            color: $bdl-gray-30;
+            background-color: $bdl-gray-02;
             box-shadow: none;
-            color: $bfive;
 
             .pill-selector-input::placeholder {
-                color: $nines;
+                color: $bdl-gray-50;
             }
 
             &:hover {
-                border-color: $sf-fog;
+                border-color: $bdl-gray-30;
             }
         }
     }
 
     /*** Shared link section ***/
     .shared-link-toggle-row {
-        align-items: center;
         display: flex;
+        align-items: center;
         justify-content: space-between;
         margin-top: 10px;
 
@@ -159,7 +169,7 @@
             }
 
             .toggle-simple-label {
-                color: $twos;
+                color: $bdl-gray;
                 cursor: pointer;
             }
         }
@@ -169,8 +179,8 @@
             text-align: right;
 
             .shared-link-settings-btn {
-                color: $primary-color;
                 margin-left: 5px;
+                color: $primary-color;
             }
         }
     }
@@ -180,8 +190,8 @@
         margin: 10px 0;
 
         .shared-link-field-container {
-            align-items: center;
             flex: 1;
+            align-items: center;
         }
 
         .text-input-with-copy-button-container {
@@ -207,14 +217,14 @@
             margin-right: 10px;
 
             &.can-edit-btn {
-                color: $seventy-sixers;
+                color: $bdl-gray-62;
             }
         }
     }
 
     .security-indicator-note {
-        color: $sevens;
         margin-top: 10px;
+        color: $bdl-gray-62;
 
         .security-indicator-icon-globe {
             padding-right: 5px;
@@ -224,7 +234,7 @@
                 margin-bottom: -2px;
 
                 .fill-color {
-                    fill: $nines;
+                    fill: $bdl-gray-50;
                 }
             }
         }
@@ -235,12 +245,12 @@
     }
 
     .upgrade-link {
-        color: $box-blue;
+        color: $bdl-box-blue;
     }
 
     .upgrade-description {
-        margin-bottom: 20px;
         margin-top: 15px;
+        margin-bottom: 20px;
     }
 
     .shared-link-expiration-badge {
@@ -253,8 +263,8 @@
     }
 
     .manage-all-btn {
-        color: $box-blue;
         float: right;
         margin: -5px 0 10px 0;
+        color: $bdl-box-blue;
     }
 }

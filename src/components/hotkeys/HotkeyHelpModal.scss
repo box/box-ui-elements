@@ -5,10 +5,10 @@
     flex-direction: column;
 
     .hotkey-list {
-        border-bottom: 1px solid $off-white;
-        border-top: 1px solid $off-white;
         margin: 10px 0 0;
         overflow: auto;
+        border-top: 1px solid $bdl-gray-10;
+        border-bottom: 1px solid $bdl-gray-10;
     }
 }
 
@@ -23,21 +23,21 @@
 
     .hotkey-key {
         flex: 0 0 50%;
-        font-size: 11px;
         font-weight: bold;
+        font-size: 11px;
         text-align: right;
 
         kbd {
-            background: $white;
-            border: 1px solid $sf-fog;
-            border-radius: 3px;
-            box-shadow: 0 1px 0 $sf-fog;
             margin: 1px;
             padding: 2px 4px;
+            background: $white;
+            border: 1px solid $bdl-gray-30;
+            border-radius: 3px;
+            box-shadow: 0 1px 0 $bdl-gray-30;
         }
     }
 
     &:nth-child(even) {
-        background-color: $ffive;
+        background-color: $bdl-gray-05;
     }
 }

@@ -8,7 +8,15 @@ import * as React from 'react';
 import debounce from 'lodash/debounce';
 import Measure from 'react-measure';
 import classNames from 'classnames';
-import { SIZE_LARGE, SIZE_MEDIUM, SIZE_SMALL, CLASS_IS_SMALL, CLASS_IS_TOUCH, CLASS_IS_MEDIUM } from '../../constants';
+import {
+    CLASS_IS_MEDIUM,
+    CLASS_IS_SMALL,
+    CLASS_IS_TOUCH,
+    SIZE_LARGE,
+    SIZE_MEDIUM,
+    SIZE_SMALL,
+    SIZE_VERY_LARGE,
+} from '../../constants';
 
 type PropsShape = {
     className: string,
@@ -23,6 +31,7 @@ type State = {
 
 const CROSS_OVER_WIDTH_SMALL = 700;
 const CROSS_OVER_WIDTH_MEDIUM = 1000;
+const CROSS_OVER_WIDTH_LARGE = 1500;
 const HAS_TOUCH = !!('ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch));
 
 function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): React.ComponentType<any> {
@@ -59,11 +68,13 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
          * @return {void}
          */
         getSize(width: number) {
-            let size = SIZE_LARGE;
+            let size = SIZE_VERY_LARGE;
             if (width <= CROSS_OVER_WIDTH_SMALL) {
                 size = SIZE_SMALL;
             } else if (width <= CROSS_OVER_WIDTH_MEDIUM) {
                 size = SIZE_MEDIUM;
+            } else if (width <= CROSS_OVER_WIDTH_LARGE) {
+                size = SIZE_LARGE;
             }
 
             return size;
@@ -105,13 +116,15 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
          */
         render() {
             const { isTouch, size, className, componentRef, ...rest }: Props = this.props;
-            let isSmall: boolean = size === SIZE_SMALL;
+
             let isLarge: boolean = size === SIZE_LARGE;
             let isMedium: boolean = size === SIZE_MEDIUM;
-            const isResponsive: boolean = !isSmall && !isLarge && !isMedium;
+            let isSmall: boolean = size === SIZE_SMALL;
+            let isVeryLarge: boolean = size === SIZE_VERY_LARGE;
+            const isResponsive: boolean = !isSmall && !isLarge && !isMedium && !isVeryLarge;
 
-            if ((isSmall && isLarge) || (isSmall && isMedium) || (isMedium && isLarge)) {
-                throw new Error('Box UI Element cannot be small or large or medium at the same time');
+            if ([isSmall, isMedium, isLarge, isVeryLarge].filter(item => item).length > 1) {
+                throw new Error('Box UI Element cannot be small or medium or large or very large at the same time');
             }
 
             if (!isResponsive) {
@@ -123,6 +136,7 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
                         isMedium={isMedium}
                         isSmall={isSmall}
                         isTouch={isTouch}
+                        isVeryLarge={isVeryLarge}
                         {...rest}
                     />
                 );
@@ -132,6 +146,7 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
             isSmall = sizeFromState === SIZE_SMALL;
             isMedium = sizeFromState === SIZE_MEDIUM;
             isLarge = sizeFromState === SIZE_LARGE;
+            isVeryLarge = sizeFromState === SIZE_VERY_LARGE;
             const styleClassName = classNames(
                 {
                     [CLASS_IS_SMALL]: isSmall,
@@ -152,6 +167,7 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
                             isMedium={isMedium}
                             isSmall={isSmall}
                             isTouch={isTouch}
+                            isVeryLarge={isVeryLarge}
                             measureRef={measureRef}
                             {...rest}
                         />

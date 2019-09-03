@@ -23,12 +23,27 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
     const directLink = 'box.com/download';
     const isDirectLinkAvailable = true;
     const isDirectLinkUnavailableDueToDownloadSettings = true;
+    const isDirectLinkUnavailableDueToAccessPolicy = true;
 
     const getWrapper = (props = {}) =>
         shallow(
             <SharedLinkSettingsModal
                 onSubmit={sandbox.stub()}
                 canChangeVanityName={canChangeVanityName}
+                item={{
+                    bannerPolicy: {
+                        body: 'test',
+                    },
+                    classification: 'internal',
+                    grantedPermissions: {
+                        itemShare: true,
+                    },
+                    hideCollaborators: false,
+                    id: 12345,
+                    name: 'My Example Folder',
+                    type: 'folder',
+                    typedID: 'd_12345',
+                }}
                 vanityName={vanityName}
                 serverURL={serverURL}
                 canChangePassword={canChangePassword}
@@ -41,6 +56,7 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
                 directLink={directLink}
                 isDirectLinkAvailable={isDirectLinkAvailable}
                 isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
+                isDirectLinkUnavailableDueToAccessPolicy={isDirectLinkUnavailableDueToAccessPolicy}
                 {...props}
             />,
         );
@@ -261,8 +277,17 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
             expect(section.prop('isDirectLinkUnavailableDueToDownloadSettings')).toEqual(
                 isDirectLinkUnavailableDueToDownloadSettings,
             );
+            expect(section.prop('isDirectLinkUnavailableDueToAccessPolicy')).toEqual(
+                isDirectLinkUnavailableDueToAccessPolicy,
+            );
             expect(section.prop('onChange')).toEqual(wrapper.instance().onAllowDownloadChange);
         });
+    });
+
+    describe('renderModalTitle()', () => {
+        const wrapper = getWrapper();
+        const title = shallow(wrapper.instance().renderModalTitle());
+        expect(title).toMatchSnapshot();
     });
 
     describe('render()', () => {

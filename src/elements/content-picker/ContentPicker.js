@@ -284,7 +284,7 @@ class ContentPicker extends Component<Props, State> {
         const { selected }: State = this.state;
         const { onChoose }: Props = this.props;
         const results: BoxItem[] = Object.keys(selected).map(key => {
-            const clone: BoxItem = Object.assign({}, selected[key]);
+            const clone: BoxItem = { ...selected[key] };
             delete clone.selected;
             return clone;
         });
@@ -856,6 +856,9 @@ class ContentPicker extends Component<Props, State> {
                     .getFile(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             case TYPE_WEBLINK:
+                this.api
+                    .getWebLinkAPI()
+                    .getWeblink(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             default:
                 throw new Error('Unknown Type');

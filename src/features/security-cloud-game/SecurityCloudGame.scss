@@ -23,43 +23,43 @@
 }
 
 .box-ui-security-cloud-game {
-    background-color: $koray-ing;
+    position: relative;
     display: flex;
     flex-flow: column;
-    position: relative;
+    background-color: $bdl-dark-blue;
 
     .box-ui-security-cloud-game-message {
-        background-color: rgba(0, 0, 0, .1);
-        color: $white;
         flex: none;
-        font-size: 16px;
         padding: 10px;
+        color: $white;
+        font-size: 16px;
         text-align: center;
+        background-color: rgba(0, 0, 0, .1);
     }
 
     .box-ui-security-cloud-game-board {
+        position: relative;
         display: flex;
         flex: 1;
-        position: relative;
     }
 }
 
 .drag-cloud {
+    position: absolute;
     cursor: move;
     fill: $white;
-    position: absolute;
 }
 
 .drop-cloud {
-    display: inline-block;
-    fill: darken($koray-ing, 20%);
     position: absolute;
+    display: inline-block;
+    fill: darken($bdl-dark-blue, 20%);
 
     .logo {
-        bottom: -5px;
         position: absolute;
-        text-align: center;
+        bottom: -5px;
         width: 100%;
+        text-align: center;
 
         svg {
             width: 50%;

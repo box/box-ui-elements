@@ -67,7 +67,7 @@ const AccessStats = ({
         {errorMessage ? (
             <p>{errorMessage}</p>
         ) : (
-            <React.Fragment>
+            <>
                 <AccessStatsItemsList
                     commentCount={commentCount}
                     commentStatButtonProps={commentStatButtonProps}
@@ -91,7 +91,7 @@ const AccessStats = ({
                         <FormattedMessage {...messages.accessStatsViewDetails} />
                     </PlainButton>
                 )}
-            </React.Fragment>
+            </>
         )}
     </div>
 );

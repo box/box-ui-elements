@@ -11,14 +11,14 @@ $bdl-AdditionalTabs-fade-in-time: .5s;
 .bdl-AdditionalTabPlaceholder-icon {
     @include bdl-fadeIn($bdl-AdditionalTabs-fade-in-time);
 
-    background-color: $nines;
-    border-radius: 5px;
-    height: 24px;
     width: 24px;
+    height: 24px;
+    background-color: $bdl-gray-50;
+    border-radius: 5px;
 }
 
 .bdl-AdditionalTabPlaceholder-icon--loading {
-    @include bdl-loadingPulse(#f4f4f4, $eees, $bdl-AdditionalTabs-fade-in-time);
+    @include bdl-loadingPulse(#f4f4f4, $bdl-gray-10, $bdl-AdditionalTabs-fade-in-time);
 }
 
 .bdl-AdditionalTabPlaceholder-moreIcon {

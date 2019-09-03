@@ -7,6 +7,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    appActivityDeleteErrorMessage: {
+        id: 'be.api.appActivityDeleteErrorMessage',
+        description: 'Error message when an app activity deletion fails',
+        defaultMessage: 'There was an error deleting this item.',
+    },
     commentCreateErrorMessage: {
         id: 'be.api.commentCreateErrorMessage',
         description: 'Error message when a comment creation fails',

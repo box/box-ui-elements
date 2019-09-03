@@ -288,4 +288,37 @@ describe('elements/content-sidebar/Skills/SkillsSidebar', () => {
             expect(getSkills).toBeCalledWith(file, instance.fetchSkillsSuccessCallback, noop);
         });
     });
+
+    describe('componentDidUpdate()', () => {
+        let getSkills;
+        let getMetadataAPI;
+        let wrapper;
+
+        beforeEach(() => {
+            getSkills = jest.fn();
+            getMetadataAPI = jest.fn().mockReturnValue({
+                getSkills,
+            });
+            const api = { getMetadataAPI };
+            const file = { permissions: { can_upload: true } };
+            wrapper = getWrapper({
+                file,
+                api,
+                refreshIdentity: false,
+            });
+            wrapper.instance();
+        });
+
+        test('should fetch skills if refreshIdentity changed', () => {
+            wrapper.setProps({ refreshIdentity: true });
+            expect(getMetadataAPI).toBeCalledWith(false);
+            expect(getSkills.mock.calls.length).toEqual(2);
+        });
+
+        test('should not fetch skills if refreshIdentity did not change', () => {
+            wrapper.setProps({ refreshIdentity: false });
+            expect(getMetadataAPI).toBeCalledWith(false);
+            expect(getSkills.mock.calls.length).toEqual(1);
+        });
+    });
 });

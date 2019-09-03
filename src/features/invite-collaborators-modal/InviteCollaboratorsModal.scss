@@ -2,13 +2,13 @@
 
 .invite-collaborators-modal {
     .label {
-        color: $sevens;
-        font-weight: 700;
+        color: $bdl-gray-62;
+        font-weight: bold;
     }
 
     .icon-info {
-        bottom: 2px;
         position: relative;
+        bottom: 2px;
         vertical-align: middle;
     }
 
@@ -18,8 +18,8 @@
 
     .text-area-container {
         display: block;
-        margin-left: 0;
         width: 100%;
+        margin-left: 0;
     }
 
     textarea {
@@ -48,8 +48,8 @@
         }
 
         .pill-selector-input-wrapper {
-            height: 60px;
             width: 100%;
+            height: 60px;
         }
     }
 

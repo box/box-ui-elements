@@ -6,44 +6,44 @@ $opacity-duration: .075s;
 $transform-duration: .125s;
 
 .overlay-wrapper {
-    display: inherit;
     position: relative;
+    display: inherit;
 
     .overlay {
-        opacity: 0;
-        pointer-events: none;
         position: absolute;
+        z-index: 90;
         transform: rotateY(-10deg) rotateX(-10deg);
         transform-origin: left top;
         transform-style: preserve-3d;
-        transition: visibility 0s linear $opacity-duration, opacity $opacity-duration, transform $transform-duration;
         visibility: hidden;
-        z-index: 90;
+        opacity: 0;
+        transition: visibility 0s linear $opacity-duration, opacity $opacity-duration, transform $transform-duration;
+        pointer-events: none;
     }
 
     &.is-visible {
         .overlay {
-            opacity: 1;
-            pointer-events: all;
             transform: rotateY(0deg) rotateX(0deg);
-            transition-delay: 0s;
             visibility: visible;
+            opacity: 1;
+            transition-delay: 0s;
+            pointer-events: all;
         }
     }
 }
 
 .overlay {
-    background: $white;
-    border: 1px solid $sf-fog;
-    box-shadow: 0 2px 6px 0 fade-out($black, .9);
     margin: 0;
     padding: 8px 0;
+    background: $white;
+    border: 1px solid $bdl-gray-30;
+    box-shadow: 0 2px 6px 0 fade-out($black, .9);
 
     hr {
-        border: 0;
-        border-top: 1px solid $sf-fog;
         height: 0;
         margin: 8px 0;
+        border: 0;
+        border-top: 1px solid $bdl-gray-30;
     }
 }
 

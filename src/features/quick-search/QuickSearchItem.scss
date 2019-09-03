@@ -1,10 +1,10 @@
 @import '../../styles/variables';
 
 .quick-search-item {
-    align-items: center;
     display: flex;
-    line-height: normal;
+    align-items: center;
     padding: 10px 15px;
+    line-height: normal;
 
     &.is-active {
         background-color: rgba(232, 243, 250, .4);
@@ -15,39 +15,39 @@
     }
 
     .item-info {
-        align-items: flex-start;
         display: flex;
         flex-direction: column;
-        margin-left: 10px;
+        align-items: flex-start;
         min-width: 1px; /* 0 doesn't work for IE11 */
+        margin-left: 10px;
     }
 
     .item-name {
-        color: $twos;
         max-width: 100%;
         overflow: hidden;
-        text-overflow: ellipsis;
+        color: $bdl-gray;
         white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .search-term {
-        background-color: transparent;
         font-weight: bold;
+        background-color: transparent;
     }
 
     .item-subtext {
-        align-items: center;
-        color: $nines;
         display: flex;
-        font-size: 12px;
+        align-items: center;
         max-width: 100%;
+        color: $bdl-gray-50;
+        font-size: 12px;
     }
 
     .parent-folder {
         margin-left: 5px;
         overflow: hidden;
-        text-overflow: ellipsis;
         white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .separator {

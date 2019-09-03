@@ -1,56 +1,33 @@
 @import '../../../common/variables';
 
-.be {
-    .bcs-app-activity-container {
-        position: relative;
-        z-index: 1;
+.bcs-AppActivity {
+    width: 100%;
 
-        .bcs-app-activity {
-            display: flex;
-            margin-top: 23px;
-            width: 100%;
-
-            &.bcs-is-pending {
-                opacity: .4;
-            }
-
-            .bcs-app-activity-icon {
-                flex-shrink: 0;
-                height: 32px;
-                margin-right: 10px;
-                width: 32px;
-            }
-
-            .bcs-app-activity-content {
-                color: $fours;
-                flex: 1;
-                min-width: 0;
-
-                .bcs-app-activity-link {
-                    color: $blue;
-                }
-
-                .bcs-app-activity-created-at {
-                    color: $sevens;
-                    cursor: default;
-                    font-size: 12px;
-                    line-height: 20px;
-                }
-            }
-
-            .bcs-app-activity-headline {
-                display: flex;
-                flex-flow: row wrap;
-                padding-right: 25px;
-                position: relative;
-
-                .bcs-app-activity-app-name {
-                    color: $twos;
-                    font-weight: bold;
-                    line-height: 19.5px;
-                    margin-right: 10px;
-                }
-            }
-        }
+    &.bcs-is-pending {
+        opacity: .4;
     }
+}
+
+.bcs-AppActivity-confirm {
+    z-index: $overlay-z-index;
+}
+
+.bcs-AppActivity-content {
+    color: $bdl-gray-80;
+}
+
+.bcs-AppActivity-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.bcs-AppActivity-link {
+    &.link {
+        color: $blue;
+    }
+}
+
+.bcs-AppActivity-headline {
+    color: $bdl-gray;
+    font-weight: bold;
 }

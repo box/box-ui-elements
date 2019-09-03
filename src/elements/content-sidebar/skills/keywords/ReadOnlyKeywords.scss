@@ -2,20 +2,20 @@
 
 .be-keywords {
     .pill-cloud-container {
-        border: 0 none;
-        overflow: hidden;
         padding: 0;
+        overflow: hidden;
+        border: 0 none;
 
         .btn.pill.pill-cloud-button {
-            border: 1px solid $see-see;
-            color: inherit;
             margin: 0 5px 5px 0;
+            color: inherit;
+            border: 1px solid $bdl-gray-20;
 
             &:hover,
             &.is-selected {
+                color: $white;
                 background-color: $blue;
                 border-color: $blue;
-                color: $white;
             }
         }
     }

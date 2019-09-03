@@ -233,6 +233,9 @@ jest.mock('../Comments', () =>
         deleteComment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
+        updateComment: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
         createComment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
@@ -708,13 +711,18 @@ describe('api/Feed', () => {
             feed.updateFeedItem = jest.fn();
         });
 
-        test('should throw if no file id', () => {
-            expect(() => feed.updateTaskNew({})).toThrow(fileError);
+        test('should throw if no file id', async () => {
+            expect.assertions(1);
+            const updatedTask = feed.updateTaskNew({});
+            await expect(updatedTask).rejects.toEqual(Error(fileError));
         });
 
         test('should call the error handling when unable to create new task collaborator', async () => {
             const mockErrorCallback = jest.fn();
+            const mockSuccessCallback = jest.fn();
+
             feed.createTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
+            feed.deleteTaskCollaborator = jest.fn().mockResolvedValue();
 
             const task = {
                 id: '1',
@@ -742,17 +750,20 @@ describe('api/Feed', () => {
                 ],
             };
 
-            feed.updateTaskNew(file, task, jest.fn(), mockErrorCallback);
+            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
 
             await new Promise(r => setTimeout(r, 0));
 
             expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
+            expect(feed.tasksNewAPI.getTask).not.toBeCalled();
+            expect(feed.deleteTaskCollaborator).not.toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(mockErrorCallback).toBeCalled();
         });
 
         test('should call the error handling when unable to delete existing task collaborator', async () => {
             const mockErrorCallback = jest.fn();
+            const mockSuccessCallback = jest.fn();
             feed.deleteTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
 
             const task = {
@@ -781,11 +792,12 @@ describe('api/Feed', () => {
                 ],
             };
 
-            feed.updateTaskNew(file, task, jest.fn(), mockErrorCallback);
+            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
 
             await new Promise(r => setTimeout(r, 0));
 
-            expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
+            expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.tasksNewAPI.getTask).toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(mockErrorCallback).toBeCalled();
         });
@@ -805,7 +817,8 @@ describe('api/Feed', () => {
             await new Promise(r => setTimeout(r, 0));
 
             expect(feed.tasksNewAPI.updateTask).toBeCalled();
-            expect(feed.updateFeedItem).toBeCalled();
+            expect(feed.tasksNewAPI.getTask).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalledTimes(2);
             expect(successCallback).toBeCalled();
         });
 
@@ -873,6 +886,29 @@ describe('api/Feed', () => {
             feed.isDestroyed = jest.fn().mockReturnValue(true);
             feed.updateTaskSuccessCallback(tasks.entries[0], successCb);
             expect(successCb).not.toBeCalled();
+        });
+    });
+
+    describe('updateComment()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.updateComment({})).toThrow(fileError);
+        });
+
+        test('should call the comments api and update the feed items', () => {
+            const successCallback = jest.fn();
+            const comment = {
+                id: '1',
+                tagged_message: 'updated message',
+                message: 'update message',
+                permissions: { can_edit: true },
+            };
+            feed.updateComment(file, comment.id, comment.text, true, comment.permmissions, successCallback, jest.fn());
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
         });
     });
 

@@ -5,40 +5,40 @@
  **************************************/
 
 .notifications-wrapper {
-    height: 0; /* allows elements around notifications to be clickable */
-    left: 0;
     position: fixed;
-    right: 0;
     top: 0;
+    right: 0;
+    left: 0;
     z-index: $notifications-wrapper-z-index;
+    height: 0; /* allows elements around notifications to be clickable */
 }
 
 .notification {
-    align-items: center;
-    background-color: $sunset-grey;
-    border-radius: 4px;
-    box-shadow: 0 2px 6px fade-out($black, .85);
-    color: $white;
     display: flex;
-    font-weight: bold;
-    margin: 10px auto;
+    align-items: center;
     max-width: 572px;
     min-height: 48px;
-    opacity: .9;
-    overflow: hidden;
+    margin: 10px auto;
     padding: 10px 10px 10px 20px;
+    overflow: hidden;
+    color: $white;
+    font-weight: bold;
+    background-color: $bdl-gray-80;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px fade-out($black, .85);
+    opacity: .9;
     transition: opacity .1s ease-out;
 
     &.info {
-        background-color: $thats-mint;
+        background-color: $bdl-green-light;
     }
 
     &.warn {
-        background-color: $dehydrated;
+        background-color: $bdl-yellorange;
     }
 
     &.error {
-        background-color: $amaranth;
+        background-color: $bdl-watermelon-red;
     }
 
     &.is-hidden {
@@ -47,9 +47,9 @@
     }
 
     > span {
-        font-size: 15px;
         margin-right: auto;
         padding-right: 10px;
+        font-size: 15px;
     }
 
     > svg {
@@ -59,8 +59,8 @@
 
     &.wrap > span {
         overflow: hidden;
-        overflow-wrap: break-word;
         word-wrap: break-word; /* Include legacy name to support older browsers */
+        overflow-wrap: break-word;
     }
 
     &.ellipsis > span {
@@ -70,27 +70,27 @@
 
     button,
     a {
-        color: $white;
         flex: none;
+        color: $white;
 
         &.btn.is-disabled,
         &.btn:not(.is-disabled) {
-            background-color: transparent;
-            border-color: $off-white;
             margin: 0 5px;
             padding: 7px 13px;
+            background-color: transparent;
+            border-color: $bdl-gray-10;
         }
 
         &.close-btn {
+            display: flex;
+            padding: 2px 7px;
+            font-weight: bold;
+            font-size: 14px;
             background: none;
             border: none;
-            cursor: pointer;
-            display: flex;
-            font-size: 14px;
-            font-weight: bold;
-            opacity: .6;
             outline: none;
-            padding: 2px 7px;
+            cursor: pointer;
+            opacity: .6;
         }
     }
 }

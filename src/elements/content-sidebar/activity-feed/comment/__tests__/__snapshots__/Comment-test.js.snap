@@ -2,213 +2,175 @@
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly render comment 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
-  <div
-    className="bcs-comment"
+  <Media
+    as="div"
+    className="bcs-Comment-media"
   >
-    <Component
-      className="bcs-comment-avatar"
-      user={
-        Object {
-          "id": 10,
-          "name": "50 Cent",
-        }
-      }
-    />
-    <div
-      className="bcs-comment-content"
+    <MediaFigure
+      as="figure"
     >
-      <div
-        className="bcs-comment-headline"
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <TetherComponent
+        attachment="top right"
+        className="bcs-Comment-deleteConfirmationModal"
+        constraints={
+          Array [
+            Object {
+              "attachment": "together",
+              "to": "scrollParent",
+            },
+          ]
+        }
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="bottom right"
       >
+        <MediaMenu
+          data-testid="comment-actions-menu"
+          dropdownProps={Object {}}
+          isDisabled={false}
+          menuProps={
+            Object {
+              "data-resin-component": "activityfeedcomment",
+            }
+          }
+        >
+          <MenuItem
+            data-resin-target="activityfeed-comment-delete"
+            data-testid="delete-comment"
+            onClick={[Function]}
+          >
+            <IconTrash
+              color="#4e4e4e"
+            />
+            <FormattedMessage
+              defaultMessage="Delete"
+              id="be.contentSidebar.activityFeed.comment.commentDeleteMenuItem"
+            />
+          </MenuItem>
+        </MediaMenu>
+      </TetherComponent>
+      <div>
         <UserLink
-          className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
           id={10}
           name="50 Cent"
         />
       </div>
       <div>
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          isDisabled={false}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
-              values={
-                Object {
-                  "time": 1506534041000,
-                }
-              }
-            />
-          }
-          theme="default"
-        >
-          <small
-            className="bcs-comment-created-at"
-          >
-            <ReadableTime
-              alwaysShowTime={true}
-              relativeThreshold={0}
-              timestamp={1506534041000}
-            />
-          </small>
-        </Tooltip>
+        <ActivityTimestamp
+          date={1506534041000}
+        />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         tagged_message="test"
         translationEnabled={false}
         translationFailed={null}
       />
-    </div>
-  </div>
+    </MediaBody>
+  </Media>
 </div>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly render comment when translation is enabled 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
-  <div
-    className="bcs-comment"
+  <Media
+    as="div"
+    className="bcs-Comment-media"
   >
-    <Component
-      className="bcs-comment-avatar"
-      user={
-        Object {
-          "id": 10,
-          "name": "50 Cent",
-        }
-      }
-    />
-    <div
-      className="bcs-comment-content"
+    <MediaFigure
+      as="figure"
     >
-      <div
-        className="bcs-comment-headline"
-      >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <div>
         <UserLink
-          className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
           id={10}
           name="50 Cent"
         />
       </div>
       <div>
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          isDisabled={false}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
-              values={
-                Object {
-                  "time": 1506534041000,
-                }
-              }
-            />
-          }
-          theme="default"
-        >
-          <small
-            className="bcs-comment-created-at"
-          >
-            <ReadableTime
-              alwaysShowTime={true}
-              relativeThreshold={0}
-              timestamp={1506534041000}
-            />
-          </small>
-        </Tooltip>
+        <ActivityTimestamp
+          date={1506534041000}
+        />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         onTranslate={[MockFunction]}
         tagged_message="test"
         translationEnabled={true}
         translationFailed={null}
       />
-    </div>
-  </div>
+    </MediaBody>
+  </Media>
 </div>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an error when one is defined 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
-  <div
-    className="bcs-comment bcs-is-pending"
+  <Media
+    as="div"
+    className="bcs-Comment-media bcs-is-pending"
   >
-    <Component
-      className="bcs-comment-avatar"
-      user={
-        Object {
-          "id": 10,
-          "name": "50 Cent",
-        }
-      }
-    />
-    <div
-      className="bcs-comment-content"
+    <MediaFigure
+      as="figure"
     >
-      <div
-        className="bcs-comment-headline"
-      >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <div>
         <UserLink
-          className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
           id={10}
           name="50 Cent"
         />
       </div>
       <div>
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          isDisabled={false}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
-              values={
-                Object {
-                  "time": 1506534041000,
-                }
-              }
-            />
-          }
-          theme="default"
-        >
-          <small
-            className="bcs-comment-created-at"
-          >
-            <ReadableTime
-              alwaysShowTime={true}
-              relativeThreshold={0}
-              timestamp={1506534041000}
-            />
-          </small>
-        </Tooltip>
+        <ActivityTimestamp
+          date={1506534041000}
+        />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         tagged_message="test"
         translationEnabled={false}
         translationFailed={true}
       />
-    </div>
-  </div>
-  <CommentInlineError
+    </MediaBody>
+  </Media>
+  <ActivityError
     message="errorrrrr"
     title="error"
   />
@@ -217,70 +179,44 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render commenter as a link 1`] = `
 <div
-  className="bcs-comment-container"
+  className="bcs-Comment"
 >
-  <div
-    className="bcs-comment"
+  <Media
+    as="div"
+    className="bcs-Comment-media"
   >
-    <Component
-      className="bcs-comment-avatar"
-      user={
-        Object {
-          "id": 10,
-          "name": "50 Cent",
-        }
-      }
-    />
-    <div
-      className="bcs-comment-content"
+    <MediaFigure
+      as="figure"
     >
-      <div
-        className="bcs-comment-headline"
-      >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <div>
         <UserLink
-          className="bcs-comment-user-name"
           data-resin-target="activityfeed-profilelink"
           id={10}
           name="50 Cent"
         />
       </div>
       <div>
-        <Tooltip
-          constrainToScrollParent={false}
-          constrainToWindow={true}
-          isDisabled={false}
-          position="top-center"
-          text={
-            <FormattedMessage
-              defaultMessage="{time, date, full} at {time, time, short}"
-              id="be.contentSidebar.activityFeed.comment.commentPostedFullDateTime"
-              values={
-                Object {
-                  "time": 1506534041000,
-                }
-              }
-            />
-          }
-          theme="default"
-        >
-          <small
-            className="bcs-comment-created-at"
-          >
-            <ReadableTime
-              alwaysShowTime={true}
-              relativeThreshold={0}
-              timestamp={1506534041000}
-            />
-          </small>
-        </Tooltip>
+        <ActivityTimestamp
+          date={1506534041000}
+        />
       </div>
-      <CommentText
+      <ActivityMessage
         id="123"
         tagged_message="test"
         translationEnabled={false}
         translationFailed={null}
       />
-    </div>
-  </div>
+    </MediaBody>
+  </Media>
 </div>
 `;

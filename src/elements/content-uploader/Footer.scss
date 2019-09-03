@@ -1,13 +1,13 @@
 @import '../common/variables';
 
 .bcu-footer {
-    align-items: center;
-    background-color: $almost-white;
-    border-top: 1px solid $off-white;
     display: flex;
     flex: 0 0 70px;
+    align-items: center;
     justify-content: space-between;
     padding: 0 20px;
+    background-color: $almost-white;
+    border-top: 1px solid $bdl-gray-10;
 
     .bcu-footer-message {
         padding: 0 10px;

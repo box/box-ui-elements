@@ -38,7 +38,14 @@ check_and_commit_updated_translations() {
 # lint, test, and build assets to update translations
 prepush() {
     printf "${blue}-------------------------------------------------------------${end}"
-    printf "${blue}Building bundles${end}"
+    printf "${blue}Building all sources, this will update i18n/json${end}"
+    printf "${blue}-------------------------------------------------------------${end}"
+    yarn build:prod:es || exit 1
+
+    check_uncommitted_files || exit 1
+
+    printf "${blue}-------------------------------------------------------------${end}"
+    printf "${blue}Building localized bundles, this will update en-US.properties${end}"
     printf "${blue}-------------------------------------------------------------${end}"
     yarn build:i18n || exit 1
 
@@ -47,18 +54,6 @@ prepush() {
     printf "${blue}-------------------------------------------------------------${end}"
     git fetch upstream
     yarn test --changedSince=upstream/master || exit 1
-
-    printf "${blue}-------------------------------------------------------------${end}"
-    printf "${blue}Building all sources, this will update i18n/json${end}"
-    printf "${blue}-------------------------------------------------------------${end}"
-    yarn build:prod:es || exit 1
-
-    check_uncommitted_files || exit 1
-
-    printf "${blue}-------------------------------------------------------------${end}"
-    printf "${blue}Building bundles again, this will update en-US.properties${end}"
-    printf "${blue}-------------------------------------------------------------${end}"
-    yarn build:i18n || exit 1
 
     check_and_commit_updated_translations
 }

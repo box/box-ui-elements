@@ -39,6 +39,7 @@ import {
     TYPE_WEBLINK,
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
+    STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
     DELIMITER_SLASH,
@@ -125,7 +126,12 @@ type View =
 type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE | typeof FIELD_SIZE;
 type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
-type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
+type UploadStatus =
+    | typeof STATUS_PENDING
+    | typeof STATUS_IN_PROGRESS
+    | typeof STATUS_STAGED
+    | typeof STATUS_COMPLETE
+    | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 type TaskAssignmentStatus =
@@ -346,7 +352,6 @@ type JSONPatch = {
 type JSONPatchOperations = Array<JSONPatch>;
 
 type BoxItemVersion = {
-    action: 'upload' | 'delete' | 'restore',
     authenticated_download_url?: string,
     collaborators?: Object,
     created_at: string,
@@ -354,12 +359,15 @@ type BoxItemVersion = {
     id: string,
     is_download_available?: boolean,
     modified_at?: string,
-    modified_by: User,
+    modified_by: ?User,
     name?: string,
     permissions?: BoxItemVersionPermission,
+    restored_at?: string,
+    restored_by?: ?User,
     sha1?: string,
     size?: number,
     trashed_at: ?string,
+    trashed_by?: ?User,
     type: string,
     version_end?: number,
     version_number: string,
@@ -393,10 +401,12 @@ type BoxItem = {
     parent?: BoxItem,
     path_collection?: BoxPathCollection,
     permissions?: BoxItemPermission,
+    representations?: FileRepresentationResponse,
     restored_from?: BoxItemVersion,
     selected?: boolean,
     shared_link?: SharedLink,
     size?: number,
+    thumbnailUrl?: ?string,
     type?: ItemType,
     url?: string,
     version_limit?: ?number,
@@ -470,6 +480,25 @@ type Collection = {
     sortBy?: SortBy,
     sortDirection?: SortDirection,
     totalCount?: number,
+};
+
+type FileRepresentationResponse = {
+    entries: Array<FileRepresentation>,
+};
+
+type FileRepresentation = {
+    content?: {
+        url_template: string,
+    },
+    properties?: {
+        dimensions: string,
+        paged: string,
+        thumb: string,
+    },
+    representation?: string,
+    status: {
+        state: string,
+    },
 };
 
 type FolderUploadItem = {
@@ -826,7 +855,7 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    advisoryMessage?: string,
+    definition?: string,
     name: string,
 };
 
@@ -854,13 +883,12 @@ type WithLoggerProps = {
 };
 
 type ActivityFeedFeatures = {
-    tasks?: {|
-        createButton?: boolean, // Show the Create Task button (requires newApi)
-        createFromComment?: boolean, // Show the Add Task checkbox
-        feedbackUrl?: string, // URL used for feedback form for tasks
-        newApi?: boolean, // Use new service
-        newCards?: boolean, // Show new task card layout (requires on newApi)
-    |},
+    appActivity: {
+        enabled: boolean,
+    },
+    tasks: {
+        anyTask: boolean,
+    },
 };
 
 type ContentSidebarFeatures = {
@@ -875,5 +903,3 @@ type AdditionalVersionInfo = {
     currentVersionId?: ?string,
     updateVersionToCurrent: () => void,
 };
-
-type OnVersionChange = (version: ?BoxItemVersion, additionalVersionInfo: ?AdditionalVersionInfo) => void;

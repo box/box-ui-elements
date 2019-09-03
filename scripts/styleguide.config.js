@@ -47,6 +47,7 @@ const allSections = [
             '../src/components/dropdown-menu/DropdownMenu.js',
             '../src/components/error-mask/ErrorMask.js',
             '../src/components/flyout/Flyout.js',
+            '../src/components/ghost/Ghost.js',
             '../src/components/flyout/Overlay.js',
             '../src/components/focus-trap/FocusTrap.js',
             '../src/components/footer-indicator/FooterIndicator.js',
@@ -103,6 +104,19 @@ const allSections = [
         description: 'Box UI Elements components implement the reusable building blocks of the Box Design Language',
         sectionDepth: 2,
         usageMode: 'expand',
+        sections: [
+            {
+                name: 'Media',
+                components: [
+                    '../src/components/media/Media.js',
+                    '../src/components/media/MediaFigure.js',
+                    '../src/components/media/MediaBody.js',
+                    '../src/components/media/MediaMenu.js',
+                ],
+                description: 'Implements the "media object" layout',
+                usageMode: 'expand',
+            },
+        ],
     },
     {
         name: 'Icons',
@@ -271,6 +285,7 @@ module.exports = {
     },
     pagePerSection: true,
     require: [path.resolve(__dirname, 'styleguide.setup.js'), path.resolve(__dirname, 'styleguide.styles.scss')],
+    showSidebar: process.env.BROWSERSLIST_ENV !== 'test',
     styleguideDir: path.join(__dirname, '../styleguide'),
     sections: allSections,
     styles: {

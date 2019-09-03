@@ -212,13 +212,11 @@ class Xhr {
      * @return {Object} Headers
      */
     async getHeaders(id?: string, args: StringMap = {}) {
-        const headers: StringMap = Object.assign(
-            {
-                Accept: 'application/json',
-                [HEADER_CONTENT_TYPE]: 'application/json',
-            },
-            args,
-        );
+        const headers: StringMap = {
+            Accept: 'application/json',
+            [HEADER_CONTENT_TYPE]: 'application/json',
+            ...args,
+        };
 
         if (this.language && !headers[HEADER_ACCEPT_LANGUAGE]) {
             headers[HEADER_ACCEPT_LANGUAGE] = this.language;

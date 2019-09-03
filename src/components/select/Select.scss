@@ -12,14 +12,14 @@
     }
 
     .tooltip-icon-container {
-        margin-left: 10px;
-        margin-top: 9px;
         position: absolute;
+        margin-top: 9px;
+        margin-left: 10px;
     }
 
     &.show-error {
         .select-overlay {
-            border-color: $amaranth;
+            border-color: $bdl-watermelon-red;
         }
     }
 }

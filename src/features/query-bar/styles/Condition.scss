@@ -1,15 +1,15 @@
 @import '../../../styles/variables';
 
 @mixin dropdown-input {
-    border: 1px solid #d2d2d2;
-    border-radius: 5px;
-    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
+    position: auto;
+    width: 160px;
     height: 34px;
     margin: auto;
     margin-top: auto;
     padding: 8px;
-    position: auto;
-    width: 160px;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
 }
 
 @mixin error-border {
@@ -19,41 +19,41 @@
 .condition-container {
     display: flex;
     flex-direction: row;
+    width: 100%;
     height: 100%;
     padding-bottom: 10px;
-    width: 100%;
 
     .condition-delete-button {
-        align-items: center;
         display: flex;
+        align-items: center;
         width: 35px;
 
         .delete-button {
-            background: none;
-            border: 0;
-            color: $downtown-grey;
-            cursor: pointer;
+            position: relative;
             display: flex;
-            font-size: 11px;
-            font-weight: bold;
+            padding-top: 0;
             padding-bottom: 0;
             padding-left: 10px;
-            padding-top: 0;
-            position: relative;
+            color: $bdl-gray-50;
+            font-weight: bold;
+            font-size: 11px;
+            background: none;
+            border: 0;
+            cursor: pointer;
         }
     }
 
     .condition-connector {
-        align-items: center;
         display: flex;
-        padding-left: 10px;
-        padding-right: 70px;
+        align-items: center;
         width: 70px;
+        padding-right: 70px;
+        padding-left: 10px;
 
         .condition-connector-text {
-            color: $black;
-            margin: auto;
             position: relative;
+            margin: auto;
+            color: $black;
         }
     }
 
@@ -66,12 +66,12 @@
 
         .select-field {
             .select-button {
-                border-radius: 5px;
                 width: 160px;
+                border-radius: 5px;
             }
 
             .select-button.placeholder {
-                color: $seventy-sixers;
+                color: $bdl-gray-62;
             }
         }
     }
@@ -84,9 +84,9 @@
         }
 
         .select-container {
-            padding-left: 10px;
-            padding-right: 10px;
             width: 110px;
+            padding-right: 10px;
+            padding-left: 10px;
 
             .select-button {
                 border-radius: 5px;
@@ -139,12 +139,12 @@
             width: 100%;
 
             .select-button {
-                border-radius: 5px;
                 width: 160px;
+                border-radius: 5px;
             }
 
             .select-button.placeholder {
-                color: $seventy-sixers;
+                color: $bdl-gray-62;
             }
         }
     }
@@ -172,8 +172,8 @@
     }
 
     .condition-error-icon-status {
-        align-items: center;
         display: flex;
+        align-items: center;
 
         .icon-alert-default {
             display: block;

@@ -4,37 +4,37 @@
 $arrow-size: 6px;
 
 .nav-link-callout {
-    background-color: $blue-purple;
-    border-color: $blue-purple;
-    border-radius: 4px;
-    color: $white;
+    position: relative;
     max-width: 330px;
     padding: 20px;
-    position: relative;
+    color: $white;
     word-wrap: break-word;
+    background-color: $bdl-purple-rain;
+    border-color: $bdl-purple-rain;
+    border-radius: 4px;
 
     &::before {
-        border: $arrow-size solid transparent;
-        content: '';
-        height: 0;
         position: absolute;
         width: 0;
+        height: 0;
+        border: $arrow-size solid transparent;
+        content: '';
     }
 
     .nav-link-callout-target-attached-middle.nav-link-callout-target-attached-right > & {
         &::before {
-            border-right-color: inherit;
-            margin-top: -$arrow-size;
-            right: 100%;
             top: 50%;
+            right: 100%;
+            margin-top: -$arrow-size;
+            border-right-color: inherit;
         }
     }
 }
 
 .nav-link-callout-close-button {
-    cursor: pointer;
     position: absolute;
     right: 20px;
+    cursor: pointer;
 }
 
 .nav-link-callout-element {
@@ -42,34 +42,34 @@ $arrow-size: 6px;
 }
 
 .left-nav-callout {
-    cursor: default;
     display: flex;
     flex-flow: column;
-    font-size: 13px;
     font-weight: normal;
-    letter-spacing: .3px;
+    font-size: 13px;
     line-height: 1.54;
+    letter-spacing: .3px;
+    cursor: default;
 
     .left-nav-callout-title {
-        font-size: 16px;
-        font-weight: 600;
-        letter-spacing: .4px;
-        line-height: 1;
         margin-bottom: 6px;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 1;
+        letter-spacing: .4px;
     }
 
     .left-nav-callout-button-container {
         margin-left: auto;
 
         .left-nav-callout-button {
-            border-radius: 4px;
             padding: 10px;
+            border-radius: 4px;
         }
 
         .left-nav-callout-secondary-button {
+            color: $white;
             background: transparent;
             border-color: $white;
-            color: $white;
         }
     }
 }

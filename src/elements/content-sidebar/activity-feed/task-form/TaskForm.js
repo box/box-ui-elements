@@ -5,28 +5,41 @@
 
 import * as React from 'react';
 import noop from 'lodash/noop';
+import getProp from 'lodash/get';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import commonMessages from '../../../../common/messages';
 import messages from './messages';
-import apiMessages from '../../../../api/messages';
-import approvalCommentFormMessages from '../approval-comment-form/messages';
+import commentFormMessages from '../comment-form/messages';
 import Form from '../../../../components/form-elements/form/Form';
 import ContactDatalistItem from '../../../../components/contact-datalist-item/ContactDatalistItem';
 import TextArea from '../../../../components/text-area';
 import DatePicker from '../../../../components/date-picker/DatePicker';
+import Checkbox from '../../../../components/checkbox';
 import PillSelectorDropdown from '../../../../components/pill-selector-dropdown/PillSelectorDropdown';
 import Button from '../../../../components/button/Button';
+import { FeatureFlag } from '../../../common/feature-checking';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
-import InlineError from '../../../../components/inline-error/InlineError';
-import { TASK_EDIT_MODE_CREATE, TASK_EDIT_MODE_EDIT } from '../../../../constants';
+import {
+    TASK_COMPLETION_RULE_ANY,
+    TASK_COMPLETION_RULE_ALL,
+    TASK_EDIT_MODE_CREATE,
+    TASK_EDIT_MODE_EDIT,
+} from '../../../../constants';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
-import type { TaskCollabAssignee, TaskType, TaskEditMode, TaskUpdatePayload } from '../../../../common/types/tasks';
+import type {
+    TaskCompletionRule,
+    TaskCollabAssignee,
+    TaskType,
+    TaskEditMode,
+    TaskUpdatePayload,
+} from '../../../../common/types/tasks';
+import TaskError from './TaskError';
 
 import './TaskForm.scss';
 
 type TaskFormProps = {|
-    error?: any,
+    error?: { status: number }, // TODO: update to ElementsXhrError once API supports it
     isDisabled?: boolean,
     onCancel: () => any,
     onSubmitError: (e: ElementsXhrError) => any,
@@ -36,6 +49,7 @@ type TaskFormProps = {|
 
 type TaskFormFieldProps = {|
     approvers: Array<TaskCollabAssignee>,
+    completionRule: TaskCompletionRule,
     dueDate?: ?string,
     id: string,
     message: string,
@@ -50,6 +64,7 @@ type TaskFormConsumerProps = {|
         approvers: SelectorItems,
         taskType: TaskType,
         dueDate: ?string,
+        completionRule: TaskCompletionRule,
         onSuccess: ?Function,
         onError: ?Function,
     ) => any,
@@ -65,6 +80,7 @@ type TaskFormFieldName = 'taskName' | 'taskAssignees' | 'taskDueDate';
 
 type State = {|
     approvers: Array<TaskCollabAssignee>,
+    completionRule: TaskCompletionRule,
     dueDate?: ?Date,
     formValidityState: { [key: TaskFormFieldName]: ?{ code: string, message: string } },
     id: string,
@@ -98,9 +114,10 @@ class TaskForm extends React.Component<Props, State> {
     state = this.getInitialFormState();
 
     getInitialFormState() {
-        const { dueDate, id, message, approvers } = this.props;
+        const { dueDate, id, message, approvers, completionRule } = this.props;
         return {
             id,
+            completionRule: completionRule || TASK_COMPLETION_RULE_ALL,
             approvers,
             dueDate: dueDate ? new Date(dueDate) : null,
             formValidityState: {},
@@ -200,7 +217,7 @@ class TaskForm extends React.Component<Props, State> {
 
     handleValidSubmit = (): void => {
         const { id, createTask, editTask, editMode, taskType } = this.props;
-        const { message, approvers: currentApprovers, dueDate, isValid } = this.state;
+        const { message, approvers: currentApprovers, dueDate, completionRule, isValid } = this.state;
         const dueDateString = dueDate && dueDate.toISOString();
 
         if (!isValid) return;
@@ -211,6 +228,7 @@ class TaskForm extends React.Component<Props, State> {
             editTask(
                 {
                     id,
+                    completion_rule: completionRule,
                     description: message,
                     due_at: dueDateString,
                     addedAssignees: convertAssigneesToSelectorItems(this.getAddedAssignees()),
@@ -225,6 +243,7 @@ class TaskForm extends React.Component<Props, State> {
                 convertAssigneesToSelectorItems(currentApprovers),
                 taskType,
                 dueDateString,
+                completionRule,
                 this.handleSubmitSuccess,
                 this.handleSubmitError,
             );
@@ -242,6 +261,10 @@ class TaskForm extends React.Component<Props, State> {
 
         this.setState({ dueDate: dateValue });
         this.validateForm('taskDueDate');
+    };
+
+    handleCompletionRuleChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
+        this.setState({ completionRule: event.target.checked ? TASK_COMPLETION_RULE_ANY : TASK_COMPLETION_RULE_ALL });
     };
 
     handleApproverSelectorInput = (value: any): void => {
@@ -290,8 +313,8 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     render() {
-        const { approverSelectorContacts, className, error, isDisabled, intl, editMode } = this.props;
-        const { dueDate, approvers, message, formValidityState, isLoading } = this.state;
+        const { approverSelectorContacts, className, error, isDisabled, intl, editMode, taskType } = this.props;
+        const { dueDate, approvers, message, formValidityState, isLoading, completionRule } = this.state;
         const inputContainerClassNames = classNames('bcs-task-input-container', 'bcs-task-input-is-open', className);
         const isCreateEditMode = editMode === TASK_EDIT_MODE_CREATE;
         const renderApprovers = convertAssigneesToSelectorItems(approvers);
@@ -309,19 +332,15 @@ class TaskForm extends React.Component<Props, State> {
         const submitButtonMessage = isCreateEditMode
             ? messages.tasksAddTaskFormSubmitLabel
             : messages.tasksEditTaskFormSubmitLabel;
-
-        const taskErrorMessage = isCreateEditMode
-            ? apiMessages.taskCreateErrorMessage
-            : messages.taskUpdateErrorMessage;
+        const shouldShowCompletionRule = approvers.length > 0;
+        const isCompletionRuleCheckboxDisabled = approvers.length <= 1;
+        const isCompletionRuleCheckboxChecked = completionRule === TASK_COMPLETION_RULE_ANY;
+        const isForbiddenErrorOnEdit = isLoading || (getProp(error, 'status') === 403 && !isCreateEditMode);
 
         return (
             <div className={inputContainerClassNames} data-resin-component="taskform">
                 <div className="bcs-task-input-form-container">
-                    {error ? (
-                        <InlineError title={<FormattedMessage {...messages.taskCreateErrorTitle} />}>
-                            <FormattedMessage {...taskErrorMessage} />
-                        </InlineError>
-                    ) : null}
+                    <TaskError editMode={editMode} error={error} taskType={taskType} />
                     <Form
                         formValidityState={formValidityState}
                         onInvalidSubmit={this.handleInvalidSubmit}
@@ -330,7 +349,7 @@ class TaskForm extends React.Component<Props, State> {
                         <PillSelectorDropdown
                             className={pillSelectorOverlayClasses}
                             error={this.getErrorByFieldname('taskAssignees')}
-                            disabled={isLoading}
+                            disabled={isForbiddenErrorOnEdit}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
@@ -339,7 +358,7 @@ class TaskForm extends React.Component<Props, State> {
                             onInput={this.handleApproverSelectorInput}
                             onRemove={this.handleApproverSelectorRemove}
                             onSelect={this.handleApproverSelectorSelect}
-                            placeholder={intl.formatMessage(approvalCommentFormMessages.approvalAddAssignee)}
+                            placeholder={intl.formatMessage(commentFormMessages.approvalAddAssignee)}
                             selectedOptions={renderApprovers}
                             selectorOptions={approverOptions}
                             validateForError={() => this.validateForm('taskAssignees')}
@@ -353,17 +372,32 @@ class TaskForm extends React.Component<Props, State> {
                                 />
                             ))}
                         </PillSelectorDropdown>
+
+                        {shouldShowCompletionRule && (
+                            <FeatureFlag feature="activityFeed.tasks.anyTask">
+                                <Checkbox
+                                    data-testid="task-form-completion-rule-checkbox"
+                                    isChecked={isCompletionRuleCheckboxChecked}
+                                    isDisabled={isCompletionRuleCheckboxDisabled || isForbiddenErrorOnEdit}
+                                    label={<FormattedMessage {...messages.taskAnyCheckboxLabel} />}
+                                    tooltip={intl.formatMessage(messages.taskAnyInfoTooltip)}
+                                    name="completionRule"
+                                    onChange={this.handleCompletionRuleChange}
+                                />
+                            </FeatureFlag>
+                        )}
+
                         <TextArea
                             className="bcs-task-name-input"
                             data-testid="task-form-name-input"
-                            disabled={isDisabled || isLoading}
+                            disabled={isDisabled || isForbiddenErrorOnEdit}
                             error={this.getErrorByFieldname('taskName')}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormMessageLabel} />}
                             name="taskName"
                             onBlur={() => this.validateForm('taskName')}
                             onChange={this.handleChangeMessage}
-                            placeholder={intl.formatMessage(approvalCommentFormMessages.commentWrite)}
+                            placeholder={intl.formatMessage(commentFormMessages.commentWrite)}
                             value={message}
                         />
                         <DatePicker
@@ -373,14 +407,13 @@ class TaskForm extends React.Component<Props, State> {
                                 [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                                 'data-testid': 'task-form-date-input',
                             }}
-                            isDisabled={isLoading}
+                            isDisabled={isForbiddenErrorOnEdit}
                             isRequired={false}
-                            isTextInputAllowed
                             label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
                             minDate={new Date()}
                             name="taskDueDate"
                             onChange={this.handleDueDateChange}
-                            placeholder={intl.formatMessage(approvalCommentFormMessages.approvalSelectDate)}
+                            placeholder={intl.formatMessage(commentFormMessages.approvalSelectDate)}
                             value={dueDate || undefined}
                         />
                         <div className="bcs-task-input-controls">
@@ -399,7 +432,7 @@ class TaskForm extends React.Component<Props, State> {
                                 className="bcs-task-input-submit-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
                                 data-testid="task-form-submit-button"
-                                isDisabled={isLoading}
+                                isDisabled={isForbiddenErrorOnEdit}
                                 isLoading={isLoading}
                                 {...this.addResinInfo()}
                             >

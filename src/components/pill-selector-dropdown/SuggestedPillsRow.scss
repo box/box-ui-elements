@@ -1,12 +1,12 @@
 @import '../../styles/variables';
 
 .pill-selector-suggested {
-    align-items: center;
-    color: $downtown-grey;
     display: flex;
     flex-flow: wrap;
-    margin-top: 1rem;
+    align-items: center;
     width: 100%;
+    margin-top: 1rem;
+    color: $bdl-gray-50;
 
     > span {
         margin-left: 3px;
@@ -17,9 +17,9 @@
     }
 
     .suggested-pill {
-        color: $downtown-grey;
         margin: 0 3px;
         padding: 0;
+        color: $bdl-gray-50;
         text-decoration: underline;
         transition: 100ms ease;
     }
@@ -33,6 +33,6 @@
     }
 
     .invisible-button:hover .suggested-pill {
-        color: $sunset-grey;
+        color: $bdl-gray-80;
     }
 }

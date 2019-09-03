@@ -1,9 +1,9 @@
 @import '../../styles/variables';
 
 .custom-new-field {
-    background-color: $off-white;
-    border-radius: 3px;
     padding: 10px 25px 20px;
+    background-color: $bdl-gray-10;
+    border-radius: 3px;
 
     .text-input-container {
         flex: 1;
@@ -15,12 +15,12 @@
     }
 
     .custom-new-field-header {
-        align-items: center;
         display: flex;
+        align-items: center;
 
         h5 {
-            font-size: 14px;
             margin: 8px 5px 8px 0;
+            font-size: 14px;
         }
 
         > div {

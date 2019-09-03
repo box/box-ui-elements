@@ -85,7 +85,7 @@ class CustomInstance extends React.PureComponent<Props, State> {
         const canAddFields = canEdit && (isAddFieldVisible || fields.length === 0);
 
         return (
-            <React.Fragment>
+            <>
                 {fields.map((key, index) => (
                     <CustomField
                         key={key}
@@ -107,7 +107,7 @@ class CustomInstance extends React.PureComponent<Props, State> {
                         properties={this.props.data}
                     />
                 )}
-            </React.Fragment>
+            </>
         );
     }
 }

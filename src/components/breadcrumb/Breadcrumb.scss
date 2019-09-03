@@ -5,25 +5,25 @@
  **************************************/
 
 .breadcrumbs {
-    align-items: center;
     display: flex;
-    font-size: 15px;
+    align-items: center;
     min-width: 0;
+    font-size: 15px;
 
     > ol {
         display: flex;
-        margin: 0;
         min-width: 0;
+        margin: 0;
     }
 
     .breadcrumb-item {
-        align-items: center;
         display: flex;
+        align-items: center;
         min-width: 20px;
 
         &.breadcrumb-item-last {
             * {
-                color: $sunset-grey;
+                color: $bdl-gray-80;
             }
         }
 
@@ -32,45 +32,45 @@
         }
 
         * {
-            color: $downtown-grey;
             overflow: hidden;
-            text-overflow: ellipsis;
+            color: $bdl-gray-50;
             white-space: nowrap;
+            text-overflow: ellipsis;
 
             &:hover {
-                color: $sunset-grey;
+                color: $bdl-gray-80;
             }
         }
 
         .breadcrumb-toggler {
-            cursor: pointer;
             font-size: 25px;
+            cursor: pointer;
 
             &:hover,
             &:focus {
-                color: $sunset-grey;
+                color: $bdl-gray-80;
                 outline: none;
             }
         }
 
         & + .breadcrumb-item::before {
-            border-color: $downtown-grey;
-            border-style: solid solid none none;
-            border-width: 2px;
-            content: '';
             display: inline-block;
             flex: none;
+            width: 8px;
             height: 8px;
             margin: 8px 10px 6px 6px;
+            border-color: $bdl-gray-50;
+            border-style: solid solid none none;
+            border-width: 2px;
             transform: rotate(45deg);
-            width: 8px;
+            content: '';
         }
     }
 
     .icon-home {
         svg {
-            height: 16px;
             width: 16px;
+            height: 16px;
         }
     }
 

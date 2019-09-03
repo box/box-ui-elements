@@ -3,16 +3,17 @@
 .be-modal.be-modal-share {
     .bce-shared-access-select {
         height: 27px;
+        line-height: 15px;
     }
 
     .be-modal-content {
         position: relative;
 
         input[type='text'] {
-            border-radius: 3px 0 0 3px;
-            border-right: 0 none;
-            text-overflow: ellipsis;
             width: 296px;
+            text-overflow: ellipsis;
+            border-right: 0 none;
+            border-radius: 3px 0 0 3px;
 
             .be-is-small & {
                 width: 237px;
@@ -21,15 +22,15 @@
     }
 
     .be-modal-button-copy {
-        border-radius: 0 3px 3px 0;
-        font-size: 10px;
-        font-weight: bold;
-        height: 34px;
-        letter-spacing: 1px;
-        line-height: 34px;
+        height: 36px;
         margin: 0 0 0 -5px;
         padding: 0 10px;
+        font-weight: bold;
+        font-size: 10px;
+        line-height: 34px;
+        letter-spacing: 1px;
         text-transform: uppercase;
+        border-radius: 0 3px 3px 0;
     }
 
     .be-modal-btns {

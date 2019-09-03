@@ -118,7 +118,7 @@ const icons = [
                             }
 
                             .icon-task-general-example .background-color {
-                                fill: #0061d5;
+                                fill: #26c281;
                             }
                         `}
                     </style>
@@ -140,7 +140,7 @@ const icons = [
                             }
 
                             .icon-task-approval-example .background-color {
-                                fill: #0061d5;
+                                fill: #f5b31b;
                             }
                         `}
                     </style>
@@ -168,6 +168,28 @@ const icons = [
                     </style>
                     <IconWorkflow height={24} width={24} />
                     <IconWorkflow className="icon-workflow-example" height={24} width={24} />
+                </div>
+            );
+        },
+    }, {
+        name: 'IconCollectionItemLink',
+        content: () => {
+            const IconCollectionItemLink = require('./IconCollectionItemLink').default;
+            return (
+                <div>
+                    <style>
+                        {`
+                            .icon-workflow-example .foreground-color {
+                                fill: #909090;
+                            }
+
+                            .icon-workflow-example .background-color {
+                                fill: #ccc;
+                            }
+                        `}
+                    </style>
+                    <IconCollectionItemLink height={24} width={24} />
+                    <IconCollectionItemLink className="icon-workflow-example" height={24} width={24} />
                 </div>
             );
         },

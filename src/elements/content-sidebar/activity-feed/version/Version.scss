@@ -1,41 +1,40 @@
 @import '../../../common/variables';
 
 .be {
-    .bcs-collapsed-version,
-    .bcs-version {
-        align-items: center;
-        background-color: fade-out($thats-mint, .9);
-        border-radius: 4px;
-        color: $shady-acres;
+    .bcs-Version {
         display: flex;
+        align-items: center;
         justify-content: space-between;
+        width: 100%;
         margin-top: 10px;
         padding: 9px;
-        width: 100%;
+        color: $bdl-green-light;
+        background-color: fade-out($bdl-green-light, .9);
+        border-radius: 4px;
+    }
 
-        .bcs-version-actions {
-            display: flex;
-            justify-content: flex-end;
+    .bcs-Version-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .bcs-Version-info {
+        flex: none;
+        width: 16px;
+        height: 16px;
+
+        path {
+            fill: $bdl-green-light;
         }
+    }
 
-        .bcs-version-message {
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .bcs-Version-message {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-        .bcs-version-info {
-            flex: none;
-            height: 16px;
-            width: 16px;
-
-            path {
-                fill: $shady-acres;
-            }
-        }
-
-        .bcs-version-range {
-            white-space: nowrap;
-        }
+    .bcs-Version-range {
+        white-space: nowrap;
     }
 }

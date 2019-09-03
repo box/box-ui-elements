@@ -5,14 +5,13 @@
  */
 
 import * as React from 'react';
-import { eees } from '../../../styles/variables';
+import { bdlGray10 } from '../../../styles/variables';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
-import './AdditionalTabs.scss';
 
 const MoreTabPlaceholder = () => {
     return (
         <div className="bdl-AdditionalTabPlaceholder">
-            <IconEllipsis color={eees} className="bdl-AdditionalTabPlaceholder-moreIcon" />
+            <IconEllipsis color={bdlGray10} className="bdl-AdditionalTabPlaceholder-moreIcon" />
         </div>
     );
 };

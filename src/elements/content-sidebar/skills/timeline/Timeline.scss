@@ -1,11 +1,11 @@
 @import '../../../common/variables';
 
 .be-timeline {
-    color: $sevens;
     display: flex;
     flex-direction: column;
-    font-size: 12px;
     margin: 15px 0 0;
+    color: $bdl-gray-62;
+    font-size: 12px;
 
     &:last-child {
         padding-bottom: 5px;
@@ -16,18 +16,18 @@
     }
 
     .be-timeline-line-wrapper {
+        position: relative;
         flex: 1;
         height: 6px;
-        position: relative;
     }
 
     .be-timeline-line {
-        background-color: $blue;
-        border-radius: 6px;
-        height: 6px;
-        opacity: .25;
         position: absolute;
         width: 290px; // match with timeslice.js
+        height: 6px;
+        background-color: $blue;
+        border-radius: 6px;
+        opacity: .25;
     }
 
     .be-timeline-btns {
@@ -38,7 +38,7 @@
         }
 
         .btn-plain:hover svg path {
-            fill: $twos;
+            fill: $bdl-gray;
         }
     }
 }

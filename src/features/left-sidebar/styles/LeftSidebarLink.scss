@@ -2,23 +2,23 @@
 @import './sizes.media';
 
 .left-sidebar-removeable-link-container {
-    display: flex;
     position: relative;
+    display: flex;
 
     &:active,
     &:focus,
     &:hover {
-        background-color: $lsb-menu-hover-link-bg;
-        color: $twos;
+        color: $bdl-gray;
         text-decoration: none;
+        background-color: $lsb-menu-hover-link-bg;
 
         .left-sidebar-link:not(.is-selected) {
-            color: $twos;
+            color: $bdl-gray;
         }
 
         .lsb-remove-button {
-            opacity: 1;
             padding: 0 8px 0 7px;
+            opacity: 1;
 
             .lsb-remove-button-icon {
                 transform: scale(1, 1);
@@ -31,7 +31,7 @@
         &:focus,
         &:hover {
             .fill-color {
-                fill: $twos;
+                fill: $bdl-gray;
             }
         }
     }
@@ -40,7 +40,7 @@
         &:active,
         &:focus {
             .left-sidebar-link-text {
-                color: $twos;
+                color: $bdl-gray;
                 text-decoration: none;
             }
         }
@@ -49,14 +49,14 @@
 
 .left-sidebar-link-text {
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    text-overflow: ellipsis;
 
     // @NOTE (04-23-2018): Safari automatically overrides showing of tooltips
     // https://stackoverflow.com/questions/20974276/prevent-safari-from-showing-tooltip-when-text-overflow-is-hidden-with-ellipsis
     &::after {
-        content: '';
         display: block;
+        content: '';
     }
 
     @include medium-size {

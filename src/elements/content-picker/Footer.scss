@@ -1,13 +1,13 @@
 @import '../common/variables';
 
 .bcp-footer {
-    align-items: center;
-    background-color: $almost-white;
-    border-top: 1px solid $off-white;
     display: flex;
     flex: 0 1 70px;
+    align-items: center;
     justify-content: space-between;
     padding: 0 20px;
+    background-color: $almost-white;
+    border-top: 1px solid $bdl-gray-10;
 
     .bcp-footer-left {
         flex: 0 1 100%;
@@ -15,32 +15,32 @@
     }
 
     .bcp-selected {
-        margin: 0;
         max-width: 100%;
+        margin: 0;
 
         .btn-content {
             display: inline-block;
-            line-height: 13px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             width: 100%;
+            overflow: hidden;
+            line-height: 13px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
 
     .bcp-selected-max {
-        animation: be_pulse .5s 2 linear;
-        color: $red;
         display: inline-block;
-        font-size: 11px;
         margin-left: 5px;
+        color: $red;
+        font-size: 11px;
+        animation: be_pulse .5s 2 linear;
     }
 
     .bcp-footer-actions {
         .btn {
+            width: 40px;
             height: 32px;
             padding: 0;
-            width: 40px;
         }
 
         .btn:first-child {
@@ -58,8 +58,8 @@
     }
 
     .btn-group {
-        margin-left: 5px;
         margin-right: 5px;
+        margin-left: 5px;
     }
 }
 
