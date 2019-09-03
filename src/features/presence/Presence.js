@@ -239,12 +239,12 @@ class Presence extends Component {
         });
 
         const overlayContent = showActivityPrompt ? (
-            <React.Fragment>
+            <>
                 <FormattedMessage {...messages.previewPresenceFlyoutCopy} />
                 <Button className="btn-primary" onClick={this._showRecentsFlyout}>
                     <FormattedMessage {...messages.previewPresenceFlyoutActivityCTA} />
                 </Button>
-            </React.Fragment>
+            </>
         ) : (
             <PresenceDropdown
                 className="presence-dropdown"

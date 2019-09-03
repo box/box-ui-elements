@@ -21,7 +21,7 @@ const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }:
     let action = null;
     if (taskType === TASK_TYPE_APPROVAL) {
         action = (
-            <React.Fragment>
+            <>
                 <Button
                     className="bcs-TaskActions-button"
                     data-testid="approve-task"
@@ -38,7 +38,7 @@ const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }:
                 >
                     <FormattedMessage {...messages.tasksFeedRejectAction} />
                 </Button>
-            </React.Fragment>
+            </>
         );
     } else if (taskType === TASK_TYPE_GENERAL) {
         action = (

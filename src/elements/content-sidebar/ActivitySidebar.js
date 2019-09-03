@@ -6,21 +6,21 @@
 
 import * as React from 'react';
 import debounce from 'lodash/debounce';
-import noop from 'lodash/noop';
 import flow from 'lodash/flow';
+import noop from 'lodash/noop';
+import { FormattedMessage } from 'react-intl';
+import ActivityFeed from './activity-feed';
+import AddTaskButton from './AddTaskButton';
+import API from '../../api';
 import messages from '../common/messages';
+import SidebarContent from './SidebarContent';
+import { EVENT_JS_READY } from '../common/logger/constants';
+import { getBadUserError, getBadItemError } from '../../utils/error';
+import { mark } from '../../utils/performance';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
-import { getBadUserError, getBadItemError } from '../../utils/error';
-import API from '../../api';
 import { withLogger } from '../common/logger';
-import { mark } from '../../utils/performance';
-import { EVENT_JS_READY } from '../common/logger/constants';
-import ActivityFeed from './activity-feed';
-import SidebarContent from './SidebarContent';
-import AddTaskButton from './AddTaskButton';
-import SidebarUtils from './SidebarUtils';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ORIGIN_ACTIVITY_SIDEBAR,
@@ -575,7 +575,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 className="bcs-activity"
                 elementId={elementId}
                 sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_ACTIVITY)}
+                title={<FormattedMessage {...messages.sidebarActivityTitle} />}
             >
                 <ActivityFeed
                     file={file}

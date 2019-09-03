@@ -164,12 +164,13 @@ class APIFactory {
      * @return {API} Api instance
      */
     constructor(options: Options) {
-        this.options = Object.assign({}, options, {
+        this.options = {
+            ...options,
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
             cache: options.cache || new Cache(),
             language: options.language,
-        });
+        };
     }
 
     /**

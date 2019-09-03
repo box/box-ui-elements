@@ -57,14 +57,14 @@ const AccessStatsItem = ({
     const labelMessage = statAttributes.message;
 
     const itemContent = (
-        <React.Fragment>
+        <>
             <IconComponent color={ICON_COLOR} height={10} width={14} />
             <span className="access-stats-label">
                 <FormattedMessage {...labelMessage} />
             </span>
             <FormattedNumber value={count} />
             {hasCountOverflowed && '+'}
-        </React.Fragment>
+        </>
     );
 
     return (

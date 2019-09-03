@@ -27,7 +27,7 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
     }
 
     return (
-        <React.Fragment>
+        <>
             {hasLeftNavigation && (
                 <PlainButton
                     className="bcpr-navigate-left"
@@ -48,7 +48,7 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
                     <IconNavigateRight />
                 </PlainButton>
             )}
-        </React.Fragment>
+        </>
     );
 };
 

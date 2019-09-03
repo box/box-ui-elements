@@ -9,7 +9,7 @@ import PlainButton from '../plain-button';
 import DropdownMenu, { MenuToggle } from '../dropdown-menu';
 import { Menu, MenuItem } from '../menu';
 
-import HotkeyFriendlyModal from './HotkeyFriendlyModal';
+import HotkeyFriendlyModal from './HotkeyFriendlyModal'; // eslint-disable-line import/no-cycle
 import messages from './messages';
 
 import './HotkeyHelpModal.scss';

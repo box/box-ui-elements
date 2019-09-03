@@ -53,6 +53,7 @@ class SharedLinkSettingsModal extends Component {
         isOpen: PropTypes.bool,
         onRequestClose: PropTypes.func,
         submitting: PropTypes.bool,
+        warnOnPublic: PropTypes.bool,
         /** Function called on form submission. Format is:
          * ({
          *      expirationTimestamp: number (in milliseconds),

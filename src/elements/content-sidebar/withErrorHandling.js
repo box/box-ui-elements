@@ -35,12 +35,12 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
     }
     if (inlineError) {
         return (
-            <React.Fragment>
+            <>
                 <InlineError title={<FormattedMessage {...inlineError.title} />}>
                     {<FormattedMessage {...inlineError.content} />}
                 </InlineError>
                 <WrappedComponent {...rest} />
-            </React.Fragment>
+            </>
         );
     }
 

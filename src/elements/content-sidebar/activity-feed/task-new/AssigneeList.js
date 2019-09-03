@@ -35,6 +35,8 @@ const Datestamp = ({ date }: { date: ISODate | Date }) => {
     return <ReadableTime timestamp={new Date(date).getTime()} alwaysShowTime relativeThreshold={0} />;
 };
 
+// TODO: Move to a separate component with its own Props type
+/* eslint-disable react/prop-types */
 const AvatarDetails = React.memo(({ user, status, completedAt, className }) => {
     const statusMessage = statusMessages[status] || null;
     return (
@@ -50,6 +52,7 @@ const AvatarDetails = React.memo(({ user, status, completedAt, className }) => {
         </div>
     );
 });
+/* eslint-enable react/prop-types */
 
 function AssigneeList(props: Props) {
     const {

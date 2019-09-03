@@ -10,6 +10,6 @@ import uiElementsLocaleData from 'box-ui-elements-locale-data'; // eslint-disabl
 declare var __LANGUAGE__: string;
 
 const language = __LANGUAGE__;
-const messages = Object.assign({}, uiElementsLocaleData);
+const messages = { ...uiElementsLocaleData };
 
 export default { language, messages, localeData };
