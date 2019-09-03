@@ -9,20 +9,20 @@ import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
 import IconClose from '../../icons/general/IconClose';
 import messages from '../common/messages';
+import { STATUS_ERROR, STATUS_IN_PROGRESS, STATUS_STAGED } from '../../constants';
 
 type Props = {
-    isFailed: boolean,
-    isUploading: boolean,
-    onClick: Function,
+    onClick: (item: UploadItem) => void,
+    status: UploadStatus,
 };
 
-const ItemRemove = ({ isFailed, isUploading, onClick }: Props) => {
+const ItemRemove = ({ onClick, status }: Props) => {
     const resin = {};
     let target = null;
 
-    if (isUploading) {
+    if (status === STATUS_IN_PROGRESS) {
         target = 'uploadcancel';
-    } else if (isFailed) {
+    } else if (status === STATUS_ERROR) {
         target = 'remove-failed';
     }
 
@@ -33,7 +33,7 @@ const ItemRemove = ({ isFailed, isUploading, onClick }: Props) => {
     return (
         <div className="bcu-item-action">
             <Tooltip position="top-left" text={<FormattedMessage {...messages.remove} />}>
-                <PlainButton onClick={onClick} type="button" {...resin}>
+                <PlainButton onClick={onClick} type="button" isDisabled={status === STATUS_STAGED} {...resin}>
                     <IconClose />
                 </PlainButton>
             </Tooltip>
