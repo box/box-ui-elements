@@ -30,7 +30,7 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
     let icon = <IconClose />;
     let target = null;
     let resin = {};
-    let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
+    let tooltip;
 
     if (isFolder && status !== STATUS_PENDING) {
         return null;
@@ -39,15 +39,13 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
     switch (status) {
         case STATUS_COMPLETE:
             icon = <IconCheck color={ICON_CHECK_COLOR} />;
-            tooltip = intl.formatMessage(messages.remove);
+            if (!isResumableUploadsEnabled) {
+                tooltip = messages.remove;
+            }
             break;
         case STATUS_ERROR:
             icon = <IconRetry height={24} width={24} />;
-            if (isResumableUploadsEnabled) {
-                tooltip = intl.formatMessage(messages.resume);
-            } else {
-                tooltip = intl.formatMessage(messages.retry);
-            }
+            tooltip = isResumableUploadsEnabled ? messages.resume : messages.retry;
             target = 'uploadretry';
             break;
         case STATUS_IN_PROGRESS:
@@ -56,12 +54,18 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
                 icon = <LoadingIndicator />;
             } else {
                 icon = <IconInProgress />;
+                tooltip = messages.uploadsCancelButtonTooltip;
+                target = 'uploadcancel';
             }
-            target = 'uploadcancel';
             break;
         case STATUS_PENDING:
         default:
-        // empty
+            if (isResumableUploadsEnabled) {
+                icon = <LoadingIndicator />;
+            } else {
+                tooltip = messages.uploadsCancelButtonTooltip;
+            }
+            break;
     }
 
     if (target) {
@@ -70,8 +74,8 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
 
     return (
         <div className="bcu-item-action">
-            {!isResumableUploadsEnabled || status === STATUS_ERROR ? (
-                <Tooltip position="top-left" text={tooltip}>
+            {tooltip ? (
+                <Tooltip position="top-left" text={intl.formatMessage(tooltip)}>
                     <PlainButton onClick={onClick} type="button" isDisabled={status === STATUS_STAGED} {...resin}>
                         {icon}
                     </PlainButton>
