@@ -5,7 +5,12 @@ import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../../co
 
 let metadataQuery;
 let cache;
-const successResponse = { entries: [], next_marker: 'abc123' };
+const queryMarker = 'abc123';
+const successResponse = { entries: [], next_marker: queryMarker };
+const flattenedSuccessResponse = {
+    items: [],
+    nextMarker: queryMarker,
+};
 const url = 'https://api.box.com/2.0/metadata_queries/execute';
 const mockQuery = {
     query: 'enteprise_1234.tempalteKey.type = :arg1',
@@ -86,7 +91,8 @@ describe('api/MetadataQuery', () => {
             metadataQuery.queryMetadataSuccessHandler({
                 data: successResponse,
             });
-            expect(cache.set).toHaveBeenCalledWith(metadataQuery.key, successResponse);
+
+            expect(cache.set).toHaveBeenCalledWith(metadataQuery.key, flattenedSuccessResponse);
             expect(metadataQuery.finish).toHaveBeenCalled();
         });
     });

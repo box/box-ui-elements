@@ -1,19 +1,19 @@
 // @flow
-type MetadataQeuryResponseEntryEnterprise = {
+type MetadataQueryResponseEntryEnterprise = {
     [string]: MetadataInstanceV2,
 };
 
-type MetadataQeuryResponseEntryMetadata = {
-    [string]: MetadataQeuryResponseEntryEnterprise,
+type MetadataQueryResponseEntryMetadata = {
+    [string]: MetadataQueryResponseEntryEnterprise,
 };
 
-type MetadataQeuryResponseEntry = {
+type MetadataQueryResponseEntry = {
     item: BoxItem,
-    metadata: MetadataQeuryResponseEntryMetadata,
+    metadata: MetadataQueryResponseEntryMetadata,
 };
 
 type MetadataQueryResponse = {
-    entries: Array<MetadataQeuryResponseEntry>,
+    entries: Array<MetadataQueryResponseEntry>,
     next_marker?: string,
 };
 
@@ -31,11 +31,36 @@ type MetadataQuery = {
     query_params: Object,
 };
 
+type MetadataColumnsToShow = Array<string>;
+
+type FlattenedMetadataQueryResponseEntry = {
+    id: typeof undefined | string,
+    metadata: {
+        data?: StringAnyMap,
+        id?: string,
+        metadataTemplate?: {
+            templateKey: string,
+            type: string,
+        },
+    },
+    name: typeof undefined | string,
+    size: typeof undefined | number,
+};
+
+type FlattenedMetadataQueryResponseCollection = {
+    items: Array<FlattenedMetadataQueryResponseEntry>,
+    nextMarker: string,
+    percentLoaded: Number,
+};
+
 export type {
+    FlattenedMetadataQueryResponseCollection,
+    FlattenedMetadataQueryResponseEntry,
+    MetadataColumnsToShow,
     MetadataQuery,
     MetadataQueryOrderByClause,
     MetadataQueryResponse,
-    MetadataQeuryResponseEntry,
-    MetadataQeuryResponseEntryMetadata,
-    MetadataQeuryResponseEntryEnterprise,
+    MetadataQueryResponseEntry,
+    MetadataQueryResponseEntryEnterprise,
+    MetadataQueryResponseEntryMetadata,
 };

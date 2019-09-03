@@ -7,6 +7,7 @@
 import Base from './Base';
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponse } from '../common/types/metadataQueries';
 import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../constants';
+import flattenResponse from '../utils/flattenMetadataQueryResponse';
 
 class MetadataQuery extends Base {
     /**
@@ -72,7 +73,8 @@ class MetadataQuery extends Base {
      */
     queryMetadataSuccessHandler = ({ data }: { data: MetadataQueryResponse }): void => {
         const cache: APICache = this.getCache();
-        cache.set(this.key, data);
+        // Flatten the metadata query response and set it in cache
+        cache.set(this.key, flattenResponse(data));
         this.finish();
     };
 
