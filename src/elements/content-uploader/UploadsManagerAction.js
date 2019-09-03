@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from '../common/messages';
 import PrimaryButton from '../../components/primary-button';
 import { STATUS_ERROR } from '../../constants';
+import './UploadsManagerAction.scss';
 
 type Props = {
     hasMultipleFailedUploads: boolean,
@@ -23,9 +24,11 @@ const UploadsManagerAction = ({ onClick, hasMultipleFailedUploads }: Props) => {
     const resumeMessage = hasMultipleFailedUploads ? messages.resumeAll : messages.resume;
 
     return (
-        <PrimaryButton onClick={handleResumeClick} type="button">
-            <FormattedMessage {...resumeMessage} />
-        </PrimaryButton>
+        <div className="bcu-uploads-manager-action">
+            <PrimaryButton onClick={handleResumeClick} type="button">
+                <FormattedMessage {...resumeMessage} />
+            </PrimaryButton>
+        </div>
     );
 };
 

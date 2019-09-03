@@ -18,7 +18,7 @@ type Props = {
     isVisible: boolean,
     items: UploadItem[],
     onItemActionClick: Function,
-    onRemoveActionClick: UploadItem => void,
+    onRemoveActionClick: (item: UploadItem) => void,
     onUploadsManagerActionClick: Function,
     toggleUploadsManager: Function,
     view: View,

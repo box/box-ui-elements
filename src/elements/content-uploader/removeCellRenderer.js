@@ -11,7 +11,7 @@ type Props = {
     rowData: UploadItem,
 };
 
-export default (onClick: UploadItem => void) => ({ rowData }: Props) => {
+export default (onClick: (item: UploadItem) => void) => ({ rowData }: Props) => {
     if (rowData.isFolder) {
         return null;
     }

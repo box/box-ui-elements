@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import noop from 'lodash/noop';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import nameCellRenderer from './nameCellRenderer';
@@ -16,10 +17,10 @@ type Props = {
     isResumableUploadsEnabled?: boolean,
     items: UploadItem[],
     onClick: Function,
-    onRemoveClick?: UploadItem => void,
+    onRemoveClick?: (item: UploadItem) => void,
 };
 
-const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveClick }: Props) => (
+const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveClick = noop }: Props) => (
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer(isResumableUploadsEnabled);

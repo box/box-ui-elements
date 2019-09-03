@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_COMPLETE 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with complete 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -30,7 +30,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_COMPLETE and resumable uploads enabled 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with complete and resumable uploads enabled 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -40,7 +40,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_ERROR 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with error 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -74,7 +74,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 
 exports[`elements/content-uploader/ItemAction should render correctly with STATUS_ERROR and item is folder 1`] = `""`;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_ERROR and resumable uploads enabled 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with error and resumable uploads enabled 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -106,7 +106,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_IN_PROGRESS 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with inprogress 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -135,7 +135,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_IN_PROGRESS and resumable uploads enabled 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with inprogress and resumable uploads enabled 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -143,7 +143,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_PENDING 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with pending 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -171,7 +171,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_PENDING and resumable uploads enabled 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with pending and resumable uploads enabled 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -179,7 +179,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_STAGED 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with staged 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -208,7 +208,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_STAGED and resumable uploads enabled 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with staged and resumable uploads enabled 1`] = `
 <div
   className="bcu-item-action"
 >
