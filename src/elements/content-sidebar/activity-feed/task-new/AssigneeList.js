@@ -44,12 +44,7 @@ function AssigneeList(props: Props) {
                         user={target}
                         getAvatarUrl={getAvatarUrl}
                     />
-                    <AssigneeDetails
-                        className="bcs-AssigneeList-listItemDetails"
-                        user={target}
-                        status={status}
-                        completedAt={completedAt}
-                    />
+                    <AssigneeDetails user={target} status={status} completedAt={completedAt} />
                 </li>
             );
         });

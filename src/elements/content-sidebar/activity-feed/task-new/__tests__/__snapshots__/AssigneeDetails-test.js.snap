@@ -11,14 +11,14 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
     }
   }
 >
-  <div>
-    <div
-      className="bcs-AssigneeList-detailsName"
-    >
+  <div
+    className="bcs-AssigneeDetails"
+  >
+    <div>
       user one
     </div>
     <div
-      className="bcs-AssigneeList-detailsStatus"
+      className="bcs-AssigneeDetails-status"
     >
       <FormattedMessage
         defaultMessage="Approved {dateTime}"
@@ -49,14 +49,14 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
     }
   }
 >
-  <div>
-    <div
-      className="bcs-AssigneeList-detailsName"
-    >
+  <div
+    className="bcs-AssigneeDetails"
+  >
+    <div>
       user one
     </div>
     <div
-      className="bcs-AssigneeList-detailsStatus"
+      className="bcs-AssigneeDetails-status"
     >
       <FormattedMessage
         defaultMessage="Approved {dateTime}"
@@ -87,10 +87,10 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
     }
   }
 >
-  <div>
-    <div
-      className="bcs-AssigneeList-detailsName"
-    >
+  <div
+    className="bcs-AssigneeDetails"
+  >
+    <div>
       user one
     </div>
   </div>
@@ -108,14 +108,14 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
     }
   }
 >
-  <div>
-    <div
-      className="bcs-AssigneeList-detailsName"
-    >
+  <div
+    className="bcs-AssigneeDetails"
+  >
+    <div>
       user one
     </div>
     <div
-      className="bcs-AssigneeList-detailsStatus"
+      className="bcs-AssigneeDetails-status"
     >
       <FormattedMessage
         defaultMessage="Rejected {dateTime}"
@@ -146,10 +146,10 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
     }
   }
 >
-  <div>
-    <div
-      className="bcs-AssigneeList-detailsName"
-    >
+  <div
+    className="bcs-AssigneeDetails"
+  >
+    <div>
       user one
     </div>
   </div>
@@ -167,10 +167,10 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
     }
   }
 >
-  <div>
-    <div
-      className="bcs-AssigneeList-detailsName"
-    >
+  <div
+    className="bcs-AssigneeDetails"
+  >
+    <div>
       user one
     </div>
   </div>
