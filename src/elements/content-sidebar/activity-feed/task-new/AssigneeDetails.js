@@ -28,7 +28,7 @@ type Props = {
     user: { name: string },
 };
 
-const AvatarDetails = React.memo<Props>(({ user, status, completedAt, className }) => {
+const AvatarDetails = React.memo<Props>(({ user, status, completedAt, className }: Props) => {
     const statusMessage = statusMessages[status] || null;
     return (
         <div className={classNames(className, 'bcs-AssigneeDetails')}>
