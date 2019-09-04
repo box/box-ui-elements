@@ -28,7 +28,7 @@ $avatar-colors: $bdl-light-blue $bdl-box-blue $bdl-secondary-blue $bdl-gray-62 $
         @extend %circle;
     }
 
-    %avatar-initials {
+    .avatar-initials {
         @extend %circle;
 
         display: flex;
@@ -42,9 +42,7 @@ $avatar-colors: $bdl-light-blue $bdl-box-blue $bdl-secondary-blue $bdl-gray-62 $
     @for $i from 1 through length($avatar-colors) {
         $backgroundColor: nth($avatar-colors, $i);
 
-        .avatar-initials-#{$i - 1} {
-            @extend %avatar-initials;
-
+        .avatar-initials[data-bg-idx='#{$i - 1}'] {
             background-color: $backgroundColor;
         }
     }

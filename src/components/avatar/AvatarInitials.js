@@ -41,7 +41,11 @@ const AvatarInitials = ({ className = '', id, name }: Props) => {
     const avatarColorSelector = parseInt(id, 10) || 0;
     const backgroundColorIndex = avatarColorSelector % AVATAR_COLORS.length;
 
-    return <span className={`avatar-initials-${backgroundColorIndex} ${className}`}>{getInitials(name)}</span>;
+    return (
+        <span className={`avatar-initials ${className}`} data-bg-idx={backgroundColorIndex}>
+            {getInitials(name)}
+        </span>
+    );
 };
 
 export default AvatarInitials;
