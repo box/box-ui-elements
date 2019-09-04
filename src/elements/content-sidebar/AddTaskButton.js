@@ -45,7 +45,7 @@ class AddTaskButton extends React.Component<Props, State> {
         const { isTaskFormOpen, taskType, error } = this.state;
 
         return (
-            <React.Fragment>
+            <>
                 <AddTaskMenu isDisabled={isDisabled} onMenuItemClick={this.handleClickMenuItem} />
                 <TaskModal
                     error={error}
@@ -56,7 +56,7 @@ class AddTaskButton extends React.Component<Props, State> {
                     taskFormProps={taskFormProps}
                     taskType={taskType}
                 />
-            </React.Fragment>
+            </>
         );
     }
 }

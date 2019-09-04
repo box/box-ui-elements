@@ -15,6 +15,7 @@ import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import SidebarNavButton from './SidebarNavButton';
 import SidebarToggle from './SidebarToggle';
 import AdditionalTabs from './additional-tabs';
+import SidebarNavTablist from './SidebarNavTablist';
 import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
@@ -25,6 +26,7 @@ import './SidebarNav.scss';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
+    elementId: string,
     fileId: string,
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
@@ -37,6 +39,7 @@ type Props = {
 
 const SidebarNav = ({
     additionalTabs,
+    elementId,
     fileId,
     hasActivity,
     hasAdditionalTabs,
@@ -47,16 +50,14 @@ const SidebarNav = ({
     isOpen,
     onNavigate,
 }: Props) => (
-    <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)} role="tablist">
+    <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
         <div className="bcs-SidebarNav-tabs">
-            <div className="bcs-SidebarNav-main">
+            <SidebarNavTablist elementId={elementId} isOpen={isOpen} onNavigate={onNavigate}>
                 {hasActivity && (
                     <SidebarNavButton
                         data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
                         data-testid="sidebaractivity"
-                        isOpen={isOpen}
                         sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                        onNavigate={onNavigate}
                         tooltip={<FormattedMessage {...messages.sidebarActivityTitle} />}
                     >
                         <IconChatRound />
@@ -66,9 +67,7 @@ const SidebarNav = ({
                     <SidebarNavButton
                         data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
                         data-testid="sidebardetails"
-                        isOpen={isOpen}
                         sidebarView={SIDEBAR_VIEW_DETAILS}
-                        onNavigate={onNavigate}
                         tooltip={<FormattedMessage {...messages.sidebarDetailsTitle} />}
                     >
                         <IconDocInfo />
@@ -78,9 +77,7 @@ const SidebarNav = ({
                     <SidebarNavButton
                         data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
                         data-testid="sidebarskills"
-                        isOpen={isOpen}
                         sidebarView={SIDEBAR_VIEW_SKILLS}
-                        onNavigate={onNavigate}
                         tooltip={<FormattedMessage {...messages.sidebarSkillsTitle} />}
                     >
                         <IconMagicWand />
@@ -90,15 +87,13 @@ const SidebarNav = ({
                     <SidebarNavButton
                         data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
                         data-testid="sidebarmetadata"
-                        isOpen={isOpen}
                         sidebarView={SIDEBAR_VIEW_METADATA}
-                        onNavigate={onNavigate}
                         tooltip={<FormattedMessage {...messages.sidebarMetadataTitle} />}
                     >
                         <IconMetadataThick />
                     </SidebarNavButton>
                 )}
-            </div>
+            </SidebarNavTablist>
 
             {hasAdditionalTabs && (
                 <div className="bcs-SidebarNav-overflow">

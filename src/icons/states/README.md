@@ -129,6 +129,10 @@ const icons = [
         component: require('./SyncEmptyState').default,
     },
     {
+        name: 'TaskEmptyState',
+        component: require('./TaskEmptyState').default,
+    },
+    {
         name: 'TrashEmptyState',
         component: require('./TrashEmptyState').default,
     },

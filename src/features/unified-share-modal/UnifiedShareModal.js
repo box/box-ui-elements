@@ -527,7 +527,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
         };
 
         return (
-            <React.Fragment>
+            <>
                 <Tooltip {...ftuxTooltipProps}>
                     <div className="invite-collaborator-container">
                         <EmailForm
@@ -558,7 +558,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                         </EmailForm>
                     </div>
                 </Tooltip>
-            </React.Fragment>
+            </>
         );
     }
 

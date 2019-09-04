@@ -7,7 +7,7 @@ import { TaskFormUnwrapped as TaskForm } from '..';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('../../../../../components/date-picker/DatePicker', () => props => (
-    <input type="date" {...props} {...props.inputProps} />
+    <input type="date" {...props} {...props.inputProps} /> // eslint-disable-line react/prop-types
 ));
 
 const mockIntl = {
@@ -189,14 +189,6 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             ],
         });
         expect(wrapper.find('PillSelectorDropdown').hasClass('scrollable'));
-    });
-
-    test('should show inline error when error prop is passed', () => {
-        const wrapper = render({
-            createTask: jest.fn(),
-            error: 'error',
-        });
-        expect(wrapper.find('.inline-alert').length).toBe(1);
     });
 
     describe('handleDueDateChange()', () => {

@@ -535,7 +535,7 @@ class Feed extends Base {
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
-    updateTaskNew = (
+    updateTaskNew = async (
         file: BoxItem,
         task: TaskUpdatePayload,
         successCallback: () => void = noop,
@@ -545,21 +545,36 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
+        let updatedWithoutError = true;
+        let removeAssigneeError;
+
         this.file = file;
         this.errorCallback = errorCallback;
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.updateFeedItem({ isPending: true }, task.id);
 
-        Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)))
-            .then(() => {
-                return Promise.all(
-                    task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
-                );
-            })
-            .then(() => {
+        try {
+            await Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)));
+            await new Promise((resolve, reject) => {
                 this.tasksNewAPI.updateTask({
                     file,
                     task,
+                    successCallback: resolve,
+                    errorCallback: reject,
+                });
+            });
+
+            await Promise.all(
+                task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
+            ).catch((e: ElementsXhrError) => {
+                updatedWithoutError = false;
+                removeAssigneeError = e;
+            });
+
+            await new Promise((resolve, reject) => {
+                this.tasksNewAPI.getTask({
+                    file,
+                    id: task.id,
                     successCallback: (taskData: Task) => {
                         this.updateFeedItem(
                             {
@@ -569,20 +584,28 @@ class Feed extends Base {
                             task.id,
                         );
 
-                        if (!this.isDestroyed()) {
-                            successCallback();
+                        if (!updatedWithoutError) {
+                            this.feedErrorCallback(false, removeAssigneeError, ERROR_CODE_UPDATE_TASK);
                         }
+
+                        resolve();
                     },
                     errorCallback: (e: ElementsXhrError) => {
                         this.updateFeedItem({ isPending: false }, task.id);
                         this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
+                        reject();
                     },
                 });
-            })
-            .catch((e: ElementsXhrError) => {
-                this.updateFeedItem({ isPending: false }, task.id);
-                this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
             });
+
+            // everything succeeded, so call the passed in success callback
+            if (!this.isDestroyed() && updatedWithoutError) {
+                successCallback();
+            }
+        } catch (e) {
+            this.updateFeedItem({ isPending: false }, task.id);
+            this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
+        }
     };
 
     /**

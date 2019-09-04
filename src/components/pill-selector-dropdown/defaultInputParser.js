@@ -16,24 +16,22 @@ function defaultInputParser(inputValue: string, options: Array<Option>, selected
     let mappedOptions;
     const inputTokens = parseCSV(inputValue);
 
-    mappedOptions = inputTokens.map(
-        (inputToken: string): Option => {
-            const trimmedInputToken = inputToken.replace(/\s/g, '');
-            const escapedInputToken = escapeRegExp(trimmedInputToken);
-            const regex = new RegExp(`^${escapedInputToken}$`, 'i');
+    mappedOptions = inputTokens.map((inputToken: string): Option => {
+        const trimmedInputToken = inputToken.replace(/\s/g, '');
+        const escapedInputToken = escapeRegExp(trimmedInputToken);
+        const regex = new RegExp(`^${escapedInputToken}$`, 'i');
 
-            const existingOption = options.find(
-                ({ displayText, value }: Option) =>
-                    // Match name without whitespace or commas
-                    regex.test(displayText.replace(/\s|,/g, '')) || regex.test(String(value)),
-            );
-            const mappedOption = existingOption || {
-                displayText: inputToken,
-                value: inputToken,
-            };
-            return mappedOption;
-        },
-    );
+        const existingOption = options.find(
+            ({ displayText, value }: Option) =>
+                // Match name without whitespace or commas
+                regex.test(displayText.replace(/\s|,/g, '')) || regex.test(String(value)),
+        );
+        const mappedOption = existingOption || {
+            displayText: inputToken,
+            value: inputToken,
+        };
+        return mappedOption;
+    });
     // Remove duplicate values
     mappedOptions = uniqBy(mappedOptions, mappedOption => mappedOption.value);
     // Remove previously selected values

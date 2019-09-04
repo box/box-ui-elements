@@ -1,23 +1,20 @@
 import React from 'react';
+import { render } from 'enzyme';
 
 import InlineError from '..';
 
 describe('components/inline-error/InlineError', () => {
     test('should correctly render', () => {
         const children = 'this is a message to put in the notice';
-        const title = 'title';
+        const title = 'this is the title';
+        const className = 'some-class';
 
-        const wrapper = shallow(<InlineError title={title}>{children}</InlineError>);
+        const wrapper = render(
+            <InlineError title={title} className={className}>
+                {children}
+            </InlineError>,
+        );
 
-        expect(wrapper.hasClass('inline-alert')).toBe(true);
-        expect(wrapper.hasClass('inline-alert-visible')).toBe(true);
-        expect(wrapper.hasClass('inline-alert-error')).toBe(true);
-        expect(wrapper.find('b').text()).toEqual(title);
-        expect(
-            wrapper
-                .children()
-                .find('div')
-                .text(),
-        ).toEqual(children);
+        expect(wrapper).toMatchSnapshot();
     });
 });

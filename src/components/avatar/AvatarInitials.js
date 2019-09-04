@@ -3,7 +3,7 @@ import React from 'react';
 import {
     bdlLightBlue,
     bdlBoxBlue,
-    bdlSecondaryBlue,
+    bdlDarkBlue,
     bdlGray62,
     bdlGreenLight,
     bdlYellorange,
@@ -15,7 +15,7 @@ import {
 const AVATAR_COLORS = [
     bdlLightBlue,
     bdlBoxBlue,
-    bdlSecondaryBlue,
+    bdlDarkBlue,
     bdlGray62,
     bdlGreenLight,
     bdlYellorange,

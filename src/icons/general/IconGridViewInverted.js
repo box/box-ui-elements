@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import { bdlNeutral03 } from '../../styles/variables';
+import { bdlGray50 } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
     width?: number,
 };
 
-const IconGridViewInverted = ({ className = '', color = bdlNeutral03, height = 16, title, width = 16 }: Props) => (
+const IconGridViewInverted = ({ className = '', color = bdlGray50, height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={`icon-grid-view-inverted ${className}`}
         title={title}

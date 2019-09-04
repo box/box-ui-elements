@@ -25,11 +25,11 @@ const RetentionPolicy = ({ dispositionTime, openModal, policyType, retentionPoli
     }
 
     return (
-        <React.Fragment>
+        <>
             <FormattedMessage tagName="dt" {...messages.retentionPolicyDescription} />
             <dd>{retentionPolicyDescription}</dd>
             {policyType !== 'indefinite' ? (
-                <React.Fragment>
+                <>
                     <FormattedMessage tagName="dt" {...messages.retentionPolicyExpiration} />
                     {dispositionTime ? (
                         <dd>
@@ -41,9 +41,9 @@ const RetentionPolicy = ({ dispositionTime, openModal, policyType, retentionPoli
                             ) : null}
                         </dd>
                     ) : null}
-                </React.Fragment>
+                </>
             ) : null}
-        </React.Fragment>
+        </>
     );
 };
 
