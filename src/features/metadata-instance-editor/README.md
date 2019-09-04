@@ -2,7 +2,7 @@
 
 
 ### Demo
-Ignore border, its for example only
+Ignore border; it's for example only
 ```
 const MetadataExamples = require('examples').MetadataExamples;
 

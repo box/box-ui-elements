@@ -317,18 +317,16 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render templated metadata instance with included fields', () => {
+    test('should correctly render templated metadata instance with included field IDs', () => {
         const wrapper = shallow(
             <Instance
                 data={data}
                 dataValue="value"
-                includedFields={{
-                    includedFields: ['style', 'color', 'texture'],
-                    includedTemplateKey: 'sofas',
-                }}
+                includedFieldIds={new Set(['field8', 'field9'])}
                 intl={intl}
                 template={{
                     fields,
+                    templateKey: 'sofas',
                 }}
             />,
         );

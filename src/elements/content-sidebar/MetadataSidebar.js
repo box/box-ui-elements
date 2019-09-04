@@ -36,6 +36,7 @@ import './MetadataSidebar.scss';
 
 type ExternalProps = {
     isFeatureEnabled: boolean,
+    templateFilters?: MetadataTemplateFilters,
 };
 
 type PropsWithoutContext = {
@@ -54,7 +55,6 @@ type State = {
     error?: MessageDescriptor,
     file?: BoxItem,
     isLoading: boolean,
-    templateFilters?: MetadataTemplateFilters,
     templates?: Array<MetadataTemplate>,
 };
 
@@ -373,16 +373,13 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { editors, file, error, isLoading, templateFilters, templates }: State = this.state;
-        const { elementId }: Props = this.props;
+        const { editors, file, error, isLoading, templates }: State = this.state;
+        const { elementId, templateFilters }: Props = this.props;
         const showEditor = !!file && !!templates && !!editors;
         const showLoadingIndicator = !error && !showEditor;
         const canEdit = this.canEdit();
         const showTemplateDropdown = showEditor && canEdit;
         const showEmptyContent = showEditor && ((editors: any): Array<MetadataEditor>).length === 0;
-        if (templateFilters) {
-            templateFilters.includedFields = new Set(templateFilters.includedFields);
-        }
 
         return (
             <SidebarContent

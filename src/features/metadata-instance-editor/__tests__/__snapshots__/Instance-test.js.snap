@@ -544,7 +544,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 </div>
 `;
 
-exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance with included fields 1`] = `
+exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance with included field IDs 1`] = `
 <div>
   <Collapsible
     animationDuration={550}
@@ -591,14 +591,10 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             }
           }
           errors={Object {}}
-          includedFields={
-            Object {
-              "includedFields": Array [
-                "style",
-                "color",
-                "texture",
-              ],
-              "includedTemplateKey": "sofas",
+          includedFieldIds={
+            Set {
+              "field8",
+              "field9",
             }
           }
           onFieldChange={[Function]}
@@ -712,6 +708,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
                   "type": "multiSelect",
                 },
               ],
+              "templateKey": "sofas",
             }
           }
         />

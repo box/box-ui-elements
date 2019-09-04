@@ -61,7 +61,12 @@ var ContentSidebar = require('./ContentSidebar').default;
 #### MetadataSidebarProps
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| *tbd* | - | - | - |
+| templateFilters | `{ includedFieldIds?: Array<string>, includedTemplateKey: string }` |  | Filters for metadata templates. The template corresponding |
+|                 |                                                                     |  | to  `includedTemplateKey` will be opened by default, and   |
+|                 |                                                                     |  | only the fields from that template that are in the         |
+|                 |                                                                     |  | `includedFieldIds` array will be visible and editable.     |
+|                 |                                                                     |  | However, if no `includedFieldIds` are provided, then all   |
+|                 |                                                                     |  | fields from the template will be visible and editable.     |
 
 #### SkillsSidebarProps
 | Prop | Type | Default | Description |

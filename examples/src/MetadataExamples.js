@@ -885,7 +885,7 @@ const templatesOnServer = [
     ...getExtraTemplates(1),
 ];
 
-// State of instnaces from server
+// State of instances from server
 const editorsOnServer = [
     editor0,
     editor1,
@@ -955,7 +955,7 @@ class MetadataExamples extends React.PureComponent {
     };
 
     onSave = (id, ops, cascadePolicy = {}) => {
-        // Whats being sent to the server to show in the examples page
+        // What's being sent to the server to show in the examples page
         document.querySelector('.metadata-operations').textContent = JSON.stringify(ops, null, 2);
         document.querySelector('.metadata-cascading-policy').textContent = JSON.stringify(cascadePolicy, null, 2);
 
@@ -1099,6 +1099,30 @@ class MetadataExamples extends React.PureComponent {
                 <div>
                     <h3>Data to be saved</h3>
                     <pre className="metadata-operations" />
+                </div>
+                <br />
+                <br />
+                <br />
+                <h3>Metadata Filtered by Template and Fields</h3>
+                <div className="metadata-container">
+                    <MetadataInstanceEditor
+                        canAdd
+                        editors={this.state.editors}
+                        onAdd={this.onAdd}
+                        onModification={this.onModification}
+                        onRemove={this.onRemove}
+                        onSave={this.onSave}
+                        templateFilters={{
+                            includedFieldIds: ['field4', 'field5', 'field8'],
+                            includedTemplateKey: 'template3',
+                        }}
+                        templates={this.state.templates}
+                    />
+                    {this.state.isBusy && (
+                        <div className="metadata-is-busy">
+                            <LoadingIndicator />
+                        </div>
+                    )}
                 </div>
             </div>
         );

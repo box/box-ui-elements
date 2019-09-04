@@ -187,4 +187,21 @@ describe('features/metadata-editor-editor/Instances', () => {
         const wrapper = shallow(<Instances editors={editorsOnServer} />);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should correctly render editors with template filters', () => {
+        const wrapper = shallow(
+            <Instances
+                editors={editorsOnServer}
+                templateFilters={{ includedFieldIds: ['field0', 'field5', 'field7'], includedTemplateKey: 'template2' }}
+            />,
+        );
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should correctly render editors with an included template and no specified included field IDs', () => {
+        const wrapper = shallow(
+            <Instances editors={editorsOnServer} templateFilters={{ includedTemplateKey: 'template2' }} />,
+        );
+        expect(wrapper).toMatchSnapshot();
+    });
 });

@@ -304,7 +304,7 @@ type MetadataTemplate = {
 };
 
 type MetadataTemplateFilters = {
-    includedFields: Array<string>,
+    includedFieldIds?: Array<string>,
     includedTemplateKey: string,
 };
 

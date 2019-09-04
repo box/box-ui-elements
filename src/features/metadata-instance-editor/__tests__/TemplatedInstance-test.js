@@ -9,7 +9,7 @@ const data = {
     datefield: '2018-06-20T00:00:00.000Z',
 };
 
-const includedFields = new Set(['field2', 'field3', 'field5']);
+const includedFieldIds = new Set(['field2', 'field3', 'field5']);
 
 const fields = [
     {
@@ -163,13 +163,13 @@ describe('features/metadata-instance-editor/fields/TemplatedInstance', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render included fields only', () => {
+    test('should correctly render fields corresponding to the included field IDs only', () => {
         const wrapper = shallow(
             <TemplatedInstance
                 data={data}
                 dataValue="value"
                 errors={{}}
-                includedFields={includedFields}
+                includedFieldIds={includedFieldIds}
                 template={{
                     fields,
                 }}

@@ -11,7 +11,7 @@ type Props = {
     canEdit: boolean,
     data: MetadataFields,
     errors: { [string]: React.Node },
-    includedFields?: Set<string>,
+    includedFieldIds?: Set<string>,
     onFieldChange?: (key: string, value: MetadataFieldValue, type: string) => void,
     onFieldRemove?: (key: string) => void,
     template: MetadataTemplate,
@@ -21,7 +21,7 @@ const TemplatedInstance = ({
     canEdit,
     data = {},
     errors,
-    includedFields,
+    includedFieldIds,
     onFieldChange,
     onFieldRemove,
     template,
@@ -37,7 +37,7 @@ const TemplatedInstance = ({
             {hasVisibleFields &&
                 fields.map(field => {
                     const { id: fieldId } = field;
-                    const isFilteredOut = includedFields && !includedFields.has(fieldId);
+                    const isFilteredOut = !!includedFieldIds && !includedFieldIds.has(fieldId);
                     return (
                         <Field
                             key={fieldId}
