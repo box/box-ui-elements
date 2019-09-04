@@ -15,42 +15,37 @@ describe('elements/content-uploader/ItemAction', () => {
             />,
         );
 
-    test('should render correctly with STATUS_COMPLETE', () => {
-        const wrapper = getWrapper({
-            status: STATUS_COMPLETE,
-        });
+    test.each`
+        status
+        ${STATUS_COMPLETE}
+        ${STATUS_IN_PROGRESS}
+        ${STATUS_STAGED}
+        ${STATUS_ERROR}
+        ${STATUS_PENDING}
+    `('should render correctly with $status', ({ status }) => {
+        const wrapper = shallow(
+            <ItemAction intl={{ formatMessage: data => <span {...data} /> }} onClick={noop} status={status} />,
+        );
 
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render correctly with STATUS_IN_PROGRESS', () => {
-        const wrapper = getWrapper({
-            status: STATUS_IN_PROGRESS,
-        });
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render correctly with STATUS_STAGED', () => {
-        const wrapper = getWrapper({
-            status: STATUS_STAGED,
-        });
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render correctly with STATUS_ERROR', () => {
-        const wrapper = getWrapper({
-            status: STATUS_ERROR,
-        });
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render correctly with STATUS_PENDING', () => {
-        const wrapper = getWrapper({
-            status: STATUS_PENDING,
-        });
+    test.each`
+        status
+        ${STATUS_COMPLETE}
+        ${STATUS_IN_PROGRESS}
+        ${STATUS_STAGED}
+        ${STATUS_ERROR}
+        ${STATUS_PENDING}
+    `('should render correctly with $status and resumable uploads enabled', ({ status }) => {
+        const wrapper = shallow(
+            <ItemAction
+                intl={{ formatMessage: data => <span {...data} /> }}
+                onClick={noop}
+                status={status}
+                isResumableUploadsEnabled
+            />,
+        );
 
         expect(wrapper).toMatchSnapshot();
     });

@@ -1,6 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_COMPLETE 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with STATUS_ERROR and item is folder 1`] = `""`;
+
+exports[`elements/content-uploader/ItemAction should render correctly with complete 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -30,7 +32,17 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_ERROR 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with complete and resumable uploads enabled 1`] = `
+<div
+  className="bcu-item-action"
+>
+  <IconCheck
+    color="#26C281"
+  />
+</div>
+`;
+
+exports[`elements/content-uploader/ItemAction should render correctly with error 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -53,15 +65,48 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
       onClick={[Function]}
       type="button"
     >
-      <IconRetry />
+      <IconRetry
+        height={24}
+        width={24}
+      />
     </PlainButton>
   </Tooltip>
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_ERROR and item is folder 1`] = `""`;
+exports[`elements/content-uploader/ItemAction should render correctly with error and resumable uploads enabled 1`] = `
+<div
+  className="bcu-item-action"
+>
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
+    position="top-left"
+    text={
+      <span
+        defaultMessage="Resume"
+        id="be.resume"
+      />
+    }
+    theme="default"
+  >
+    <PlainButton
+      data-resin-target="uploadretry"
+      isDisabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      <IconRetry
+        height={24}
+        width={24}
+      />
+    </PlainButton>
+  </Tooltip>
+</div>
+`;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_IN_PROGRESS 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with inprogress 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -90,7 +135,15 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_PENDING 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with inprogress and resumable uploads enabled 1`] = `
+<div
+  className="bcu-item-action"
+>
+  <LoadingIndicator />
+</div>
+`;
+
+exports[`elements/content-uploader/ItemAction should render correctly with pending 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -118,7 +171,15 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
 </div>
 `;
 
-exports[`elements/content-uploader/ItemAction should render correctly with STATUS_STAGED 1`] = `
+exports[`elements/content-uploader/ItemAction should render correctly with pending and resumable uploads enabled 1`] = `
+<div
+  className="bcu-item-action"
+>
+  <LoadingIndicator />
+</div>
+`;
+
+exports[`elements/content-uploader/ItemAction should render correctly with staged 1`] = `
 <div
   className="bcu-item-action"
 >
@@ -144,5 +205,13 @@ exports[`elements/content-uploader/ItemAction should render correctly with STATU
       <IconInProgress />
     </PlainButton>
   </Tooltip>
+</div>
+`;
+
+exports[`elements/content-uploader/ItemAction should render correctly with staged and resumable uploads enabled 1`] = `
+<div
+  className="bcu-item-action"
+>
+  <LoadingIndicator />
 </div>
 `;
