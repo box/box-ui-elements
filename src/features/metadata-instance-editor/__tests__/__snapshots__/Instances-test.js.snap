@@ -227,7 +227,6 @@ Array [
     }
     hasError={false}
     id="editor1"
-    includedFieldIds={null}
     isCascadingPolicyApplicable={false}
     isDirty={false}
     isOpen={false}
@@ -332,7 +331,6 @@ Array [
     }
     hasError={false}
     id="editor2"
-    includedFieldIds={null}
     isCascadingPolicyApplicable={false}
     isDirty={true}
     isOpen={true}
@@ -442,7 +440,6 @@ Array [
     }
     hasError={false}
     id="editor1"
-    includedFieldIds={null}
     isCascadingPolicyApplicable={false}
     isDirty={false}
     isOpen={false}

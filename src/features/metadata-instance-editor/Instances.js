@@ -14,7 +14,7 @@ type Props = {
         cascadingPolicy?: MetadataCascadingPolicyData,
         rawData: Object,
     ) => void,
-    templateFilters: MetadataTemplateFilters,
+    templateFilters?: MetadataTemplateFilters,
 };
 
 const Instances = ({
@@ -33,8 +33,9 @@ const Instances = ({
             // Open the included template by default, and only display the included fields in the template
             if (templateFilters) {
                 isOpen = templateKey === templateFilters.includedTemplateKey;
-                includedFieldIds =
-                    isOpen && templateFilters.includedFieldIds ? new Set(templateFilters.includedFieldIds) : null;
+                if (isOpen && templateFilters.includedFieldIds) {
+                    includedFieldIds = new Set(templateFilters.includedFieldIds);
+                }
             } else if (editors.length === 1) {
                 isOpen = true;
             }
