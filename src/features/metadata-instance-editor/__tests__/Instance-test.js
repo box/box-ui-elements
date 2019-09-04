@@ -317,6 +317,24 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should correctly render templated metadata instance with included fields', () => {
+        const wrapper = shallow(
+            <Instance
+                data={data}
+                dataValue="value"
+                includedFields={{
+                    includedFields: ['style', 'color', 'texture'],
+                    includedTemplateKey: 'sofas',
+                }}
+                intl={intl}
+                template={{
+                    fields,
+                }}
+            />,
+        );
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('isOpen should be true if the prop is not undefined', () => {
         const wrapper = shallow(
             <Instance

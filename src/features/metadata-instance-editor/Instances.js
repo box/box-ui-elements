@@ -18,23 +18,33 @@ type Props = {
 
 const Instances = ({ isCascadingPolicyApplicable = false, editors = [], onModification, onRemove, onSave }: Props) =>
     editors.map<React.Element<typeof Instance>>(
-        ({ isDirty = false, instance, hasError = false, template }: MetadataEditor) => (
-            <Instance
-                canEdit={instance.canEdit}
-                cascadePolicy={instance.cascadePolicy}
-                data={instance.data}
-                hasError={hasError}
-                id={instance.id}
-                isCascadingPolicyApplicable={isCascadingPolicyApplicable}
-                isDirty={isDirty}
-                isOpen={editors.length === 1}
-                key={`${instance.id}-${template.templateKey}`}
-                onModification={onModification}
-                onSave={onSave}
-                onRemove={onRemove}
-                template={template}
-            />
-        ),
+        ({ isDirty = false, instance, hasError = false, template, templateFilters }: MetadataEditor) => {
+            const { templateKey } = template;
+            let isOpen = false;
+            if (templateFilters) {
+                isOpen = templateKey === templateFilters.includedTemplateKey;
+            } else if (editors.length === 1) {
+                isOpen = true;
+            }
+            return (
+                <Instance
+                    canEdit={instance.canEdit}
+                    cascadePolicy={instance.cascadePolicy}
+                    data={instance.data}
+                    hasError={hasError}
+                    id={instance.id}
+                    includedFields={templateFilters ? templateFilters.includedFields : null}
+                    isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                    isDirty={isDirty}
+                    isOpen={isOpen}
+                    key={`${instance.id}-${templateKey}`}
+                    onModification={onModification}
+                    onSave={onSave}
+                    onRemove={onRemove}
+                    template={template}
+                />
+            );
+        },
     );
 
 export default Instances;

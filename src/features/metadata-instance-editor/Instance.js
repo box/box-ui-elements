@@ -41,6 +41,7 @@ type Props = {
     data: MetadataFields,
     hasError: boolean,
     id: string,
+    includedFields: Array<string>,
     isCascadingPolicyApplicable?: boolean,
     isDirty: boolean,
     isOpen: boolean,
@@ -573,7 +574,14 @@ class Instance extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { cascadePolicy = {}, isDirty, isCascadingPolicyApplicable, isOpen, template }: Props = this.props;
+        const {
+            cascadePolicy = {},
+            includedFields,
+            isDirty,
+            isCascadingPolicyApplicable,
+            isOpen,
+            template,
+        }: Props = this.props;
         const { fields = [] } = template;
         const {
             data,
@@ -642,6 +650,7 @@ class Instance extends React.PureComponent<Props, State> {
                                         canEdit={isEditing}
                                         data={data}
                                         errors={errors}
+                                        includedFields={includedFields}
                                         onFieldChange={this.onFieldChange}
                                         onFieldRemove={this.onFieldRemove}
                                         template={template}

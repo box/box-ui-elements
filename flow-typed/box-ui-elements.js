@@ -303,6 +303,11 @@ type MetadataTemplate = {
     templateKey: string, // V3
 };
 
+type MetadataTemplateFilters = {
+    includedFields: Array<string>,
+    includedTemplateKey: string,
+};
+
 type MetadataCascadePolicy = {
     canEdit?: boolean,
     id?: string,

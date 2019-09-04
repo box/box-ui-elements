@@ -14,6 +14,7 @@ Array [
     }
     hasError={false}
     id="editor1"
+    includedFields={null}
     isCascadingPolicyApplicable={false}
     isDirty={false}
     isOpen={false}
@@ -118,6 +119,7 @@ Array [
     }
     hasError={false}
     id="editor2"
+    includedFields={null}
     isCascadingPolicyApplicable={false}
     isDirty={true}
     isOpen={false}
