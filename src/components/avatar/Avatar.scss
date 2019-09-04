@@ -3,6 +3,7 @@
 /**************************************
  * Avatars
  **************************************/
+$avatar-colors: $bdl-light-blue $bdl-box-blue $bdl-secondary-blue $bdl-gray-62 $bdl-green-light $bdl-yellorange $bdl-grimace $bdl-purple-rain $bdl-watermelon-red;
 
 .avatar {
     position: relative;
@@ -27,7 +28,7 @@
         @extend %circle;
     }
 
-    .avatar-initials {
+    %avatar-initials {
         @extend %circle;
 
         display: flex;
@@ -36,6 +37,16 @@
         color: $white;
         font-weight: bold;
         line-height: 1;
+    }
+
+    @for $i from 1 through length($avatar-colors) {
+        $backgroundColor: nth($avatar-colors, $i);
+
+        .avatar-initials-#{$i - 1} {
+            @extend %avatar-initials;
+
+            background-color: $backgroundColor;
+        }
     }
 
     &.avatar--large {

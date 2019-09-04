@@ -28,13 +28,11 @@ describe('components/avatar/Avatar', () => {
     });
 
     test('should render an AvatarInitials when name is passed in', () => {
-        const initialsStyle = { color: 'blue' };
-        const wrapper = shallow(<Avatar id="1" initialsStyle={initialsStyle} name="hello world" />);
+        const wrapper = shallow(<Avatar id="1" name="hello world" />);
         const avatarInitials = wrapper.find('AvatarInitials');
         expect(avatarInitials.length).toEqual(1);
         expect(avatarInitials.prop('name')).toEqual('hello world');
         expect(avatarInitials.prop('id')).toEqual('1');
-        expect(avatarInitials.prop('style')).toEqual(initialsStyle);
     });
 
     test('should render an UnknownUserAvatar when no params are passed', () => {

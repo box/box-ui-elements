@@ -20,8 +20,6 @@ type Props = {
     className?: string,
     /** Users id */
     id?: ?string | number,
-    /** Style override for initials */
-    initialsStyle?: Object,
     /**
      * Users full name.
      *
@@ -57,7 +55,7 @@ class Avatar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { avatarUrl, className, name, id, initialsStyle, size = '' }: Props = this.props;
+        const { avatarUrl, className, name, id, size = '' }: Props = this.props;
         const { hasImageErrored }: State = this.state;
         const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
@@ -65,7 +63,7 @@ class Avatar extends React.PureComponent<Props, State> {
         if (avatarUrl && !hasImageErrored) {
             avatar = <AvatarImage onError={this.onImageError} url={avatarUrl} />;
         } else if (name) {
-            avatar = <AvatarInitials id={id} name={name} style={initialsStyle} />;
+            avatar = <AvatarInitials id={id} name={name} />;
         } else {
             avatar = <UnknownUserAvatar className="avatar-icon" />;
         }

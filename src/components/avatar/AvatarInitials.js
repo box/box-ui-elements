@@ -12,6 +12,7 @@ import {
     bdlWatermelonRed,
 } from '../../styles/variables';
 
+// NOTE: The same list exists in Avatar.scss
 const AVATAR_COLORS = [
     bdlLightBlue,
     bdlBoxBlue,
@@ -34,17 +35,13 @@ type Props = {
     className?: string,
     id?: ?string | number,
     name: string,
-    style?: Object,
 };
 
-const AvatarInitials = ({ className = '', id, name, style = {} }: Props) => {
+const AvatarInitials = ({ className = '', id, name }: Props) => {
     const avatarColorSelector = parseInt(id, 10) || 0;
-    const backgroundColor = AVATAR_COLORS[avatarColorSelector % AVATAR_COLORS.length];
-    return (
-        <span className={`avatar-initials ${className}`} style={{ backgroundColor, ...style }}>
-            {getInitials(name)}
-        </span>
-    );
+    const backgroundColorIndex = avatarColorSelector % AVATAR_COLORS.length;
+
+    return <span className={`avatar-initials-${backgroundColorIndex} ${className}`}>{getInitials(name)}</span>;
 };
 
 export default AvatarInitials;
