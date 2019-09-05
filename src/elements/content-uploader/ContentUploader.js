@@ -768,6 +768,7 @@ class ContentUploader extends Component<Props, State> {
         item.api = this.getUploadAPI(file, options);
         item.progress = 0;
         item.status = STATUS_PENDING;
+        delete item.error;
 
         const { items } = this.state;
         items[items.indexOf(item)] = item;
