@@ -38,10 +38,8 @@
     }
 
     @for $i from 1 through length($avatar-colors) {
-        $backgroundColor: nth($avatar-colors, $i);
-
         .avatar-initials[data-bg-idx='#{$i - 1}'] {
-            background-color: $backgroundColor;
+            background-color: nth($avatar-colors, $i);
         }
     }
 
