@@ -46,6 +46,7 @@ async function main() {
     } catch (err) {
         priorJson = {};
     }
+
     if (!isEqual(priorJson, newJson)) {
         await writeFile(outputJs, `${moduleHeader}${moduleString}`);
         await writeFile(outputJson, jsonString);
