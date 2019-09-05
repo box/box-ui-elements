@@ -38,6 +38,12 @@
         line-height: 1;
     }
 
+    @for $i from 1 through length($avatar-colors) {
+        .avatar-initials[data-bg-idx='#{$i - 1}'] {
+            background-color: nth($avatar-colors, $i);
+        }
+    }
+
     &.avatar--large {
         width: 44px;
         height: 44px;
