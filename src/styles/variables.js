@@ -64,6 +64,7 @@ export const bdlWatermelonRed10 = "#fdebee"; // bdl-watermelon-red-10
 export const bdlWatermelonRed05 = "#fef5f6"; // bdl-watermelon-red-05
 export const bdlWatermelonRed02 = "#fffbfc"; // bdl-watermelon-red-02
 export const bdlLineHeight = "20px"; // bdl-line-height
+export const avatarColors = "#2486fc #0061d5 #003c84 #767676 #26c281 #f5b31b #4826c2 #9f3fed #ed3757"; // avatar-colors
 export const modalDialogZIndex = "160"; // modal-dialog-z-index
 export const menuZIndex = "170"; // menu-z-index
 export const notificationsWrapperZIndex = "180"; // notifications-wrapper-z-index
