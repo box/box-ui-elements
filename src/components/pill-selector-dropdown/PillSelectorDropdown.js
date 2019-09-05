@@ -184,9 +184,9 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     };
 
     handlePaste = (event: SyntheticClipboardEvent<HTMLInputElement>) => {
-        event.nativeEvent.preventDefault();
+        event.preventDefault();
 
-        const inputValue: string = event.clipboardData.getData('Text');
+        const inputValue: string = event.clipboardData.getData('text');
         this.setState({ inputValue });
         this.props.onInput(inputValue, event);
         this.addPillsFromInput(inputValue);

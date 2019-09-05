@@ -451,9 +451,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                         return mockPastedValue;
                     },
                 },
-                nativeEvent: {
-                    preventDefault: jest.fn(),
-                },
+                preventDefault: jest.fn(),
             };
             const wrapper = shallow(
                 <PillSelectorDropdown
@@ -484,9 +482,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                         return mockPastedValue;
                     },
                 },
-                nativeEvent: {
-                    preventDefault: jest.fn(),
-                },
+                preventDefault: jest.fn(),
             };
             const wrapper = shallow(
                 <PillSelectorDropdown

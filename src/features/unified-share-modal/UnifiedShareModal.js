@@ -363,11 +363,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
                 }
             });
         }
-
-        this.setState({
-            shouldRenderFTUXTooltip: false,
-            isInviteSectionExpanded: true,
-        });
     };
 
     openInviteCollaborators = (value: string) => {
