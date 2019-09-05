@@ -61,7 +61,17 @@
     "bdl-watermelon-red-05": "#fef5f6",
     "bdl-watermelon-red-02": "#fffbfc",
     "bdl-line-height": "20px",
-    "avatar-colors": "#2486fc #0061d5 #003c84 #767676 #26c281 #f5b31b #4826c2 #9f3fed #ed3757",
+    "avatar-colors": [
+        "#2486fc",
+        "#0061d5",
+        "#003c84",
+        "#767676",
+        "#26c281",
+        "#f5b31b",
+        "#4826c2",
+        "#9f3fed",
+        "#ed3757"
+    ],
     "modal-dialog-z-index": "160",
     "menu-z-index": "170",
     "notifications-wrapper-z-index": "180",

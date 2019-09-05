@@ -16,7 +16,7 @@ type Props = {
 
 const AvatarInitials = ({ className = '', id, name }: Props) => {
     const avatarColorSelector = parseInt(id, 10) || 0;
-    const backgroundColorIndex = avatarColorSelector % avatarColors.split(' ').length;
+    const backgroundColorIndex = avatarColorSelector % avatarColors.length;
 
     return (
         <span className={`avatar-initials ${className}`} data-bg-idx={backgroundColorIndex}>
