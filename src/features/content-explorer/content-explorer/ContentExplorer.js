@@ -135,7 +135,7 @@ class ContentExplorer extends Component {
         document.addEventListener('click', this.handleDocumentClick, true);
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const { initialFoldersPath } = this.props;
 
         if (nextProps.initialFoldersPath !== initialFoldersPath) {

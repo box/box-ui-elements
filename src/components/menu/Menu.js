@@ -47,7 +47,7 @@ class Menu extends React.Component<Props> {
         this.setInitialFocusIndex();
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         if (nextProps.isSubmenu && !nextProps.isHidden && this.props.isHidden) {
             // If updating submenu, use the upcoming props instead of current props.
             this.setMenuItemEls();

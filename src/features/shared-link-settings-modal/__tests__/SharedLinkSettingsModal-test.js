@@ -61,7 +61,7 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
             />,
         );
 
-    describe('componentWillReceiveProps()', () => {
+    describe('UNSAFE_componentWillReceiveProps()', () => {
         test('should update errors in state when error props change', () => {
             const wrapper = getWrapper({ expirationError: 'first error' });
 

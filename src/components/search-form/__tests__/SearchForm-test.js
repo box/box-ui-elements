@@ -104,7 +104,7 @@ describe('components/search-form/SearchForm', () => {
         expect(searchActions.find('.clear-button').prop('onClick')).toEqual(onClearHandler);
     });
 
-    describe('componentWillReceiveProps()', () => {
+    describe('UNSAFE_componentWillReceiveProps()', () => {
         test('should set isEmpty state to true when controlled input becomes empty', () => {
             const wrapper = shallow(<SearchForm intl={intlShape} value="test" />).shallow();
             wrapper.setState({ isEmpty: false });

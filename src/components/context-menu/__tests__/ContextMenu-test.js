@@ -194,7 +194,7 @@ describe('components/context-menu/ContextMenu', () => {
         });
     });
 
-    describe('componentWillReceiveProps()', () => {
+    describe('UNSAFE_componentWillReceiveProps()', () => {
         test('should close menu when context menu becomes disabled and the menu is currently open', () => {
             const wrapper = shallow(
                 <ContextMenu>
@@ -207,7 +207,7 @@ describe('components/context-menu/ContextMenu', () => {
             const instance = wrapper.instance();
             sandbox.mock(instance).expects('handleMenuClose');
 
-            instance.componentWillReceiveProps({ isDisabled: true });
+            instance.UNSAFE_componentWillReceiveProps({ isDisabled: true });
         });
     });
 

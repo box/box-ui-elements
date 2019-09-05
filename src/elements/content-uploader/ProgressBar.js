@@ -39,7 +39,7 @@ class ProgressBar extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { percent } = nextProps;
         this.setState({ percent });
     }

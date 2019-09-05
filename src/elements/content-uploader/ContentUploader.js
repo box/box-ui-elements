@@ -184,7 +184,7 @@ class ContentUploader extends Component<Props, State> {
      * @param {Props} nextProps
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { files, dataTransferItems, useUploadsManager } = nextProps;
 
         const hasFiles = Array.isArray(files) && files.length > 0;

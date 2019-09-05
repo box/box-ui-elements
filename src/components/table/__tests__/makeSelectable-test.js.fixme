@@ -34,7 +34,7 @@ describe('components/table/makeSelectable', () => {
         });
     });
 
-    describe('componentWillUpdate()', () => {
+    describe('UNSAFE_componentWillUpdate()', () => {
         test('should call onFocus handler when focused index changes', () => {
             const onFocus = jest.fn();
             const wrapper = getWrapper({

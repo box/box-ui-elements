@@ -49,7 +49,7 @@ class HotkeyHelpModal extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (!nextProps.isOpen) {
             return;
         }

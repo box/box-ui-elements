@@ -55,7 +55,7 @@ describe('components/datalist-item/DatalistItem', () => {
     });
 
     describe('setActiveItemID()', () => {
-        test('should call setActiveItemID() in componentWillMount() when isActive is true', () => {
+        test('should call setActiveItemID() in UNSAFE_componentWillMount() when isActive is true', () => {
             const setActiveItemIDSpy = sandbox.spy();
             shallow(
                 <DatalistItem isActive setActiveItemID={setActiveItemIDSpy}>

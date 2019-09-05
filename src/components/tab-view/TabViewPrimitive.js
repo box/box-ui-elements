@@ -49,7 +49,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
         }
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { focusedIndex, isDynamic, selectedIndex } = nextProps;
         if (isDynamic) {
             if (focusedIndex !== this.props.focusedIndex) {
