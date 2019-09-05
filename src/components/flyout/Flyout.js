@@ -189,7 +189,7 @@ class Flyout extends React.Component<Props, State> {
         };
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.overlayID = uniqueId('overlay');
         this.overlayButtonID = uniqueId('flyoutbutton');
     }

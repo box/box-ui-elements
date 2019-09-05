@@ -393,11 +393,11 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 });
             });
 
-            describe('componentWillReceiveProps', () => {
+            describe('UNSAFE_componentWillReceiveProps', () => {
                 test('should do nothing if it is not dynamic', () => {
                     const instance = component.instance();
                     instance.scrollToTab = sinon.mock();
-                    instance.componentWillReceiveProps({
+                    instance.UNSAFE_componentWillReceiveProps({
                         focusedIndex: 0,
                         isDynamic: false,
                         selectedIndex: 0,
@@ -409,7 +409,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     const instance = component.instance();
                     instance.scrollToTab = sinon.mock();
                     const focusedIndex = 2;
-                    instance.componentWillReceiveProps({
+                    instance.UNSAFE_componentWillReceiveProps({
                         focusedIndex,
                         isDynamic: true,
                         selectedIndex: component.props().selectedIndex,
@@ -421,7 +421,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     const instance = component.instance();
                     instance.scrollToTab = sinon.mock();
                     const selectedIndex = 2;
-                    instance.componentWillReceiveProps({
+                    instance.UNSAFE_componentWillReceiveProps({
                         focusedIndex: component.props().focusedIndex,
                         isDynamic: true,
                         selectedIndex,
@@ -434,7 +434,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 test('should not call focusOnTabElment if component is not dynamic', () => {
                     const instance = component.instance();
                     instance.focusOnTabElement = sinon.mock();
-                    instance.componentWillReceiveProps({
+                    instance.UNSAFE_componentWillReceiveProps({
                         focusedIndex: 0,
                         isDynamic: false,
                     });

@@ -61,7 +61,7 @@ class Form extends Component {
         };
     }
 
-    componentWillUpdate(nextProps, nextState) {
+    UNSAFE_componentWillUpdate(nextProps, nextState) {
         if (nextProps.formValidityState) {
             Object.keys(nextProps.formValidityState).forEach(key => {
                 if (nextState.registeredInputs[key]) {

@@ -205,7 +205,7 @@ class DatePicker extends React.Component<Props> {
         }
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { value: nextValue, minDate: nextMinDate, maxDate: nextMaxDate } = nextProps;
         const { value, minDate, maxDate, isTextInputAllowed } = this.props;
 

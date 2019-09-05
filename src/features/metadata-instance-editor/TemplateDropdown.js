@@ -70,7 +70,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
      * @param {Object} nextProps - next props
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         this.setState({
             templates: getAvailableTemplates(nextProps.templates, nextProps.usedTemplates),
         });

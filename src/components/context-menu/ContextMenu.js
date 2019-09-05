@@ -37,12 +37,12 @@ class ContextMenu extends React.Component<Props, State> {
         targetOffset: '',
     };
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.menuID = uniqueId('contextmenu');
         this.menuTargetID = uniqueId('contextmenutarget');
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         // if the menu becomes disabled while it is open, we should close it
         if (!this.props.isDisabled && nextProps.isDisabled && this.state.isOpen) {
             this.handleMenuClose();

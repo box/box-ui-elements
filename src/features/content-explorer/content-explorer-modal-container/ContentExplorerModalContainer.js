@@ -115,7 +115,7 @@ class ContentExplorerModalContainer extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const { initialFoldersPath } = this.props;
 
         if (nextProps.initialFoldersPath !== initialFoldersPath) {

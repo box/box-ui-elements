@@ -71,7 +71,7 @@ class SearchForm extends React.Component<Props, State> {
         isEmpty: true,
     };
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const { value } = nextProps;
         // update state if input is controlled and becomes empty
         if (typeof value !== 'undefined' && !value.trim()) {

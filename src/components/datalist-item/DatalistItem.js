@@ -24,13 +24,13 @@ class DatalistItem extends React.Component<Props> {
         this.id = uniqueId('datalistitem');
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         if (this.props.isActive) {
             this.setActiveItemID();
         }
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         if (nextProps.isActive && !this.props.isActive) {
             this.setActiveItemID();
         }
