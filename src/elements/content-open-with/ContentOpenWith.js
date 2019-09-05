@@ -358,9 +358,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         }
 
         // These window features will open the new window directly on top of the current window at the same
-        const windowFeatures = `left=${window.screenX},top=${window.screenY},height=${window.outerHeight},width=${
-            window.innerWidth
-        },toolbar=0`;
+        const windowFeatures = `left=${window.screenX},top=${window.screenY},height=${window.outerHeight},width=${window.innerWidth},toolbar=0`;
 
         // window.open() is immediately invoked to avoid popup-blockers
         // The name is included to be the target of a form if the integration is a POST integration.

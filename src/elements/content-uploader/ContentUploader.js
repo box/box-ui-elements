@@ -627,7 +627,7 @@ class ContentUploader extends Component<Props, State> {
      * @param {UploadItem} item - Item to remove
      * @return {void}
      */
-    removeFileFromUploadQueue(item: UploadItem) {
+    removeFileFromUploadQueue = (item: UploadItem) => {
         const { onCancel, useUploadsManager } = this.props;
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
@@ -644,7 +644,7 @@ class ContentUploader extends Component<Props, State> {
         onCancel([item]);
         this.updateViewAndCollection(items, callback);
         this.upload();
-    }
+    };
 
     /**
      * Aborts uploads in progress and clears upload list.
@@ -1133,6 +1133,7 @@ class ContentUploader extends Component<Props, State> {
                             isVisible={isVisible}
                             items={items}
                             onItemActionClick={this.onClick}
+                            onRemoveActionClick={this.removeFileFromUploadQueue}
                             onUploadsManagerActionClick={this.clickAllWithStatus}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}

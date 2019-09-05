@@ -121,7 +121,7 @@ class SharedLinkSection extends React.Component<Props> {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <div className="shared-link-field-row">
                     <Tooltip
                         className="usm-ftux-tooltip"
@@ -203,7 +203,7 @@ class SharedLinkSection extends React.Component<Props> {
                         <FormattedMessage {...messages.sharedLinkPubliclyAvailable} />
                     </div>
                 )}
-            </React.Fragment>
+            </>
         );
     }
 

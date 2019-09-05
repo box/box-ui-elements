@@ -6,10 +6,10 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import AsyncLoad from '../common/async-load';
+import messages from '../common/messages';
 import SidebarLoading from './SidebarLoading';
 import SidebarLoadingError from './SidebarLoadingError';
 import { hasSkills as hasSkillsData } from './skills/skillUtils';
-import messages from '../common/messages';
 import { mark } from '../../utils/performance';
 import {
     SIDEBAR_VIEW_SKILLS,

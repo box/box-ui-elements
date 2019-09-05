@@ -134,7 +134,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
         });
 
         return (
-            <React.Fragment>
+            <>
                 <SelectorDropdown
                     className="metadata-instance-editor-template-dropdown-menu"
                     title={title}
@@ -148,7 +148,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
                     {indicatorOrMessage ? null : renderedTemplates}
                 </SelectorDropdown>
                 {indicatorOrMessage}
-            </React.Fragment>
+            </>
         );
     };
 

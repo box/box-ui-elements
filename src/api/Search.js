@@ -167,9 +167,7 @@ class Search extends Base {
         this.itemCache = (this.itemCache || []).concat(flattened);
 
         this.getCache().set(this.key, {
-            item_collection: Object.assign({}, data, {
-                entries: this.itemCache,
-            }),
+            item_collection: { ...data, entries: this.itemCache },
         });
 
         this.finish();

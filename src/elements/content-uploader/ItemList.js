@@ -4,24 +4,29 @@
  */
 
 import React from 'react';
+import noop from 'lodash/noop';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import nameCellRenderer from './nameCellRenderer';
 import progressCellRenderer from './progressCellRenderer';
 import actionCellRenderer from './actionCellRenderer';
+import removeCellRenderer from './removeCellRenderer';
 import './ItemList.scss';
 
 type Props = {
+    isResumableUploadsEnabled?: boolean,
     items: UploadItem[],
     onClick: Function,
+    onRemoveClick?: (item: UploadItem) => void,
 };
 
-const ItemList = ({ items, onClick }: Props) => (
+const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveClick = noop }: Props) => (
     <AutoSizer>
         {({ width, height }) => {
-            const nameCell = nameCellRenderer();
+            const nameCell = nameCellRenderer(isResumableUploadsEnabled);
             const progressCell = progressCellRenderer();
-            const actionCell = actionCellRenderer(onClick);
+            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick);
+            const removeCell = removeCellRenderer(onRemoveClick);
 
             return (
                 <Table
@@ -45,12 +50,21 @@ const ItemList = ({ items, onClick }: Props) => (
                         width={300}
                     />
                     <Column
+                        className={isResumableUploadsEnabled ? '' : 'bcu-item-list-action-column'}
                         cellRenderer={actionCell}
                         dataKey="status"
                         flexShrink={0}
-                        style={{ marginRight: 18 }}
                         width={25}
                     />
+                    {isResumableUploadsEnabled && (
+                        <Column
+                            className="bcu-item-list-action-column"
+                            cellRenderer={removeCell}
+                            dataKey="remove"
+                            flexShrink={0}
+                            width={25}
+                        />
+                    )}
                 </Table>
             );
         }}

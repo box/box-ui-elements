@@ -10,4 +10,6 @@ type Props = {
     rowData: UploadItem,
 };
 
-export default () => ({ rowData }: Props) => <IconName {...rowData} />;
+export default (isResumableUploadsEnabled: boolean) => ({ rowData }: Props) => (
+    <IconName isResumableUploadsEnabled={isResumableUploadsEnabled} {...rowData} />
+);

@@ -24,7 +24,7 @@ const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldR
     const showHiddenFieldsMessage = hasFields && !hasVisibleFields;
 
     return (
-        <React.Fragment>
+        <>
             {hasVisibleFields &&
                 fields.map(field => (
                     <Field
@@ -60,7 +60,7 @@ const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldR
                     <FormattedMessage {...messages.noAttributesForTemplate} />
                 </div>
             )}
-        </React.Fragment>
+        </>
     );
 };
 

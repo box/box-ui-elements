@@ -18,6 +18,7 @@ type Props = {
     isVisible: boolean,
     items: UploadItem[],
     onItemActionClick: Function,
+    onRemoveActionClick: (item: UploadItem) => void,
     onUploadsManagerActionClick: Function,
     toggleUploadsManager: Function,
     view: View,
@@ -27,6 +28,7 @@ const UploadsManager = ({
     items,
     view,
     onItemActionClick,
+    onRemoveActionClick,
     onUploadsManagerActionClick,
     toggleUploadsManager,
     isExpanded,
@@ -89,7 +91,13 @@ const UploadsManager = ({
                 view={view}
             />
             <div className="bcu-uploads-manager-item-list">
-                <ItemList items={items} onClick={onItemActionClick} view={view} />
+                <ItemList
+                    isResumableUploadsEnabled={isResumableUploadsEnabled}
+                    items={items}
+                    onClick={onItemActionClick}
+                    onRemoveClick={onRemoveActionClick}
+                    view={view}
+                />
             </div>
         </div>
     );

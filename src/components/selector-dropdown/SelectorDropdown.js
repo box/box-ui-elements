@@ -285,10 +285,10 @@ class SelectorDropdown extends React.Component<Props, State> {
                     const hasDivider = index === dividerIndex;
 
                     return (
-                        <React.Fragment>
+                        <>
                             {hasDivider && <hr className="SelectorDropdown-divider" />}
                             {React.cloneElement(item, itemProps)}
-                        </React.Fragment>
+                        </>
                     );
                 })}
             </ul>

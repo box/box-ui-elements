@@ -74,7 +74,7 @@ const PreviewHeader = ({
 
             <div className="bcpr-PreviewHeader-controls">
                 {isPreviewingCurrentVersion && (
-                    <React.Fragment>
+                    <>
                         {shouldRenderOpenWith && (
                             <LoadableContentOpenWith
                                 className="bcpr-bcow-btn"
@@ -84,7 +84,7 @@ const PreviewHeader = ({
                             />
                         )}
                         {canAnnotate && (
-                            <React.Fragment>
+                            <>
                                 <PlainButton
                                     aria-label={drawMsg}
                                     className="bcpr-PreviewHeader-button bp-btn-annotate-draw bp-is-hidden"
@@ -101,7 +101,7 @@ const PreviewHeader = ({
                                 >
                                     <IconPointAnnotation color={bdlGray50} height={18} width={18} />
                                 </PlainButton>
-                            </React.Fragment>
+                            </>
                         )}
                         {canDownload && (
                             <PlainButton
@@ -125,7 +125,7 @@ const PreviewHeader = ({
                                 <IconDownload color={bdlGray50} height={18} width={18} />
                             </PlainButton>
                         )}
-                    </React.Fragment>
+                    </>
                 )}
 
                 {onClose && (

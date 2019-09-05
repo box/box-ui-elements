@@ -10,6 +10,6 @@ type Props = {
     rowData: UploadItem,
 };
 
-export default (onClick: Function) => ({ rowData }: Props) => (
-    <ItemAction {...rowData} onClick={() => onClick(rowData)} />
+export default (isResumableUploadsEnabled: boolean, onClick: Function) => ({ rowData }: Props) => (
+    <ItemAction {...rowData} isResumableUploadsEnabled={isResumableUploadsEnabled} onClick={() => onClick(rowData)} />
 );

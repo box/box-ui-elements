@@ -77,6 +77,8 @@ const FileVersionListItem = ({
 };
 
 FileVersionListItem.propTypes = {
+    canDelete: PropTypes.bool,
+    canUpload: PropTypes.bool,
     intl: intlShape.isRequired,
     isOverVersionLimit: PropTypes.bool, // This value cannot be computed within this component
     isProcessing: PropTypes.bool,

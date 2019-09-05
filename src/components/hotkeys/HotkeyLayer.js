@@ -5,7 +5,7 @@ import HotkeyRecord, { HotkeyPropType } from './HotkeyRecord';
 import HotkeyService from './HotkeyService';
 
 import Hotkeys from './Hotkeys';
-import HotkeyHelpModal from './HotkeyHelpModal';
+import HotkeyHelpModal from './HotkeyHelpModal'; // eslint-disable-line import/no-cycle
 
 import './HotkeyLayer.scss';
 
