@@ -99,8 +99,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
 
     state = { inputValue: '', isInCompositionMode: false };
 
-    parsePills = () => {
-        const { inputValue } = this.state;
+    parsePills = (inputValue: string) => {
         const { allowInvalidPills, parseItems, validator } = this.props;
         let pills = parseItems ? parseItems(inputValue) : parseCSV(inputValue);
 
@@ -124,7 +123,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         return normalizedPills;
     };
 
-    addPillsFromInput = () => {
+    addPillsFromInput = (inputValue: string) => {
         const {
             allowCustomPills,
             onPillCreate,
@@ -133,7 +132,6 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             shouldClearUnmatchedInput,
             validateForError,
         } = this.props;
-        const { inputValue } = this.state;
 
         // Do nothing if custom pills are not allowed
         if (!allowCustomPills) {
@@ -141,7 +139,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         }
 
         // Parse pills from input
-        const pills = this.parsePills();
+        const pills = this.parsePills(inputValue);
 
         // "Select" the pills
         if (pills.length > 0) {
@@ -165,7 +163,8 @@ class PillSelectorDropdown extends React.Component<Props, State> {
 
     handleBlur = (event: SyntheticInputEvent<HTMLInputElement>) => {
         const { onBlur } = this.props;
-        this.addPillsFromInput();
+        const { inputValue } = this.state;
+        this.addPillsFromInput(inputValue);
         onBlur(event);
     };
 
@@ -177,21 +176,20 @@ class PillSelectorDropdown extends React.Component<Props, State> {
     };
 
     handleEnter = (event: SyntheticEvent<>) => {
-        const { isInCompositionMode } = this.state;
+        const { isInCompositionMode, inputValue } = this.state;
         if (!isInCompositionMode) {
             event.preventDefault();
-            this.addPillsFromInput();
+            this.addPillsFromInput(inputValue);
         }
     };
 
-    handlePaste = () => {
-        /**
-         * NOTE (ishay): setTimeout is necessary because
-         * otherwise addPillsFromInput gets triggered as soon
-         * as the user "paste's", but before the inputValue
-         * is actually updated.
-         */
-        setTimeout(this.addPillsFromInput, 0);
+    handlePaste = (event: SyntheticClipboardEvent<HTMLInputElement>) => {
+        event.preventDefault();
+
+        const inputValue: string = event.clipboardData.getData('text');
+        this.setState({ inputValue });
+        this.props.onInput(inputValue, event);
+        this.addPillsFromInput(inputValue);
     };
 
     handleSelect = (index: number, event: SyntheticEvent<>) => {
