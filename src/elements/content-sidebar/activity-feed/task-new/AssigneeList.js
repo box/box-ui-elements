@@ -16,8 +16,8 @@ type Props = {|
     getAvatarUrl: GetAvatarUrlCallback,
     initialAssigneeCount: number,
     isOpen: boolean,
-    onCollapse: Function,
-    onExpand: Function,
+    onCollapse: () => void | Promise<void>,
+    onExpand: () => void | Promise<void>,
     users: TaskAssigneeCollection,
 |};
 

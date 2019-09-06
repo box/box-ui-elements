@@ -33,3 +33,28 @@ module.name_mapper='draft-js/Modifier' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.j
 module.name_mapper='react-measure' -> '<PROJECT_ROOT>/flow/ReactMeasure.js.flow'
 server.max_workers=1
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+
+# Options to enforce in files with strict header: // @flow strict
+# https://flow.org/en/docs/strict/
+[strict]
+
+ # Bans imports from untyped modules:
+untyped-import
+
+# Bans use of Object, Function, any:
+unclear-type
+
+ # Ban get/set:
+unsafe-getters-setters
+
+# Ban type imports from untyped files:
+untyped-type-import
+
+# Ban deprecated $Supertype or $Subtype utility types
+deprecated-utility
+
+# Bans imports from non-strict modules (many deps are not strictly typed so this rule is impractical):
+# nonstrict-import
+
+# Error when doing an existence check on a value that could be null/undefined or falsey (impractical because of noise):
+# sketchy-null
