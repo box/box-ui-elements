@@ -31,7 +31,7 @@ import {
     JSON_PATCH_OP_TEST,
 } from './constants';
 import { isValidValue } from './fields/validateField';
-import isHidden from './metadataUtil';
+import { isHidden } from './metadataUtil';
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import './Instance.scss';
 
@@ -41,7 +41,6 @@ type Props = {
     data: MetadataFields,
     hasError: boolean,
     id: string,
-    includedFieldIds?: Set<string>,
     isCascadingPolicyApplicable?: boolean,
     isDirty: boolean,
     isOpen: boolean,
@@ -54,6 +53,7 @@ type Props = {
         rawData: Object,
     ) => void,
     template: MetadataTemplate,
+    templateFilters?: Set<string>,
 };
 
 type State = {
@@ -576,7 +576,7 @@ class Instance extends React.PureComponent<Props, State> {
     render() {
         const {
             cascadePolicy = {},
-            includedFieldIds,
+            templateFilters,
             isDirty,
             isCascadingPolicyApplicable,
             isOpen,
@@ -650,7 +650,7 @@ class Instance extends React.PureComponent<Props, State> {
                                         canEdit={isEditing}
                                         data={data}
                                         errors={errors}
-                                        includedFieldIds={includedFieldIds}
+                                        templateFilters={templateFilters}
                                         onFieldChange={this.onFieldChange}
                                         onFieldRemove={this.onFieldRemove}
                                         template={template}

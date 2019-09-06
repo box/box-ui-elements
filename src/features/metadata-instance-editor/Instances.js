@@ -14,7 +14,8 @@ type Props = {
         cascadingPolicy?: MetadataCascadingPolicyData,
         rawData: Object,
     ) => void,
-    templateFilters?: MetadataTemplateFilters,
+    selectedTemplateKey?: string,
+    templateFilters?: Set<string>,
 };
 
 const Instances = ({
@@ -23,22 +24,14 @@ const Instances = ({
     onModification,
     onRemove,
     onSave,
+    selectedTemplateKey,
     templateFilters,
 }: Props) =>
     editors.map<React.Element<typeof Instance>>(
         ({ isDirty = false, instance, hasError = false, template }: MetadataEditor) => {
             const { templateKey } = template;
-            let isOpen = false;
-            let includedFieldIds;
             // Open the included template by default, and only display the included fields in the template
-            if (templateFilters) {
-                isOpen = templateKey === templateFilters.includedTemplateKey;
-                if (isOpen && templateFilters.includedFieldIds) {
-                    includedFieldIds = new Set(templateFilters.includedFieldIds);
-                }
-            } else if (editors.length === 1) {
-                isOpen = true;
-            }
+            const isOpen = templateKey === selectedTemplateKey || (!selectedTemplateKey && editors.length === 1);
             return (
                 <Instance
                     canEdit={instance.canEdit}
@@ -46,7 +39,6 @@ const Instances = ({
                     data={instance.data}
                     hasError={hasError}
                     id={instance.id}
-                    includedFieldIds={includedFieldIds}
                     isCascadingPolicyApplicable={isCascadingPolicyApplicable}
                     isDirty={isDirty}
                     isOpen={isOpen}
@@ -55,6 +47,7 @@ const Instances = ({
                     onSave={onSave}
                     onRemove={onRemove}
                     template={template}
+                    templateFilters={templateFilters}
                 />
             );
         },

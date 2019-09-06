@@ -6,6 +6,7 @@ import ScrollWrapper from '../../components/scroll-wrapper';
 import Header from './Header';
 import Instances from './Instances';
 import EmptyContent from './EmptyContent';
+import { convertTemplateFilters } from './metadataUtil';
 import './MetadataInstanceEditor.scss';
 
 type Props = {
@@ -22,7 +23,8 @@ type Props = {
         cascadingPolicy?: MetadataCascadingPolicyData,
         rawData: Object,
     ) => void,
-    templateFilters?: MetadataTemplateFilters,
+    selectedTemplateKey?: string,
+    templateFilters?: Array<string> | string,
     templates: Array<MetadataTemplate>,
     title?: React.Node,
 };
@@ -36,6 +38,7 @@ const MetadataInstanceEditor = ({
     onRemove,
     onAdd,
     onSave,
+    selectedTemplateKey,
     templateFilters,
     templates,
     title,
@@ -59,7 +62,8 @@ const MetadataInstanceEditor = ({
                     onModification={onModification}
                     onRemove={onRemove}
                     onSave={onSave}
-                    templateFilters={templateFilters}
+                    selectedTemplateKey={selectedTemplateKey}
+                    templateFilters={templateFilters ? convertTemplateFilters(templateFilters) : undefined}
                 />
             </ScrollWrapper>
         )}

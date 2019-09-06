@@ -18,6 +18,7 @@ import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingI
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
 import TemplateDropdown from '../../features/metadata-instance-editor/TemplateDropdown';
+import { convertTemplateFilters } from '../../features/metadata-instance-editor/metadataUtil';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { isUserCorrectableError } from '../../utils/error';
 import { mark } from '../../utils/performance';
@@ -36,7 +37,8 @@ import './MetadataSidebar.scss';
 
 type ExternalProps = {
     isFeatureEnabled: boolean,
-    templateFilters?: MetadataTemplateFilters,
+    selectedTemplateKey?: string,
+    templateFilters?: Array<string> | string,
 };
 
 type PropsWithoutContext = {
@@ -374,7 +376,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
     render() {
         const { editors, file, error, isLoading, templates }: State = this.state;
-        const { elementId, templateFilters }: Props = this.props;
+        const { elementId, selectedTemplateKey, templateFilters }: Props = this.props;
         const showEditor = !!file && !!templates && !!editors;
         const showLoadingIndicator = !error && !showEditor;
         const canEdit = this.canEdit();
@@ -417,7 +419,8 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                                 onModification={this.onModification}
                                 onRemove={this.onRemove}
                                 onSave={this.onSave}
-                                templateFilters={templateFilters}
+                                selectedTemplateKey={selectedTemplateKey}
+                                templateFilters={templateFilters ? convertTemplateFilters(templateFilters) : undefined}
                             />
                         )}
                     </LoadingIndicatorWrapper>

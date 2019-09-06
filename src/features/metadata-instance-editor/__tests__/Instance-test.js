@@ -317,20 +317,20 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render templated metadata instance with included field IDs', () => {
+    test('should correctly render templated metadata instance with template filters', () => {
+        const templateFilters = new Set(['field8', 'field9']);
         const wrapper = shallow(
             <Instance
                 data={data}
                 dataValue="value"
-                includedFieldIds={new Set(['field8', 'field9'])}
                 intl={intl}
+                templateFilters={templateFilters}
                 template={{
                     fields,
-                    templateKey: 'sofas',
                 }}
             />,
         );
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('TemplatedInstance').prop('templateFilters')).toEqual(templateFilters);
     });
 
     test('isOpen should be true if the prop is not undefined', () => {

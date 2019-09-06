@@ -1112,10 +1112,8 @@ class MetadataExamples extends React.PureComponent {
                         onModification={this.onModification}
                         onRemove={this.onRemove}
                         onSave={this.onSave}
-                        templateFilters={{
-                            includedFieldIds: ['field4', 'field5', 'field8'],
-                            includedTemplateKey: 'template3',
-                        }}
+                        selectedTemplateKey="template3"
+                        templateFilters={['field4', 'field5', 'field8']}
                         templates={this.state.templates}
                     />
                     {this.state.isBusy && (

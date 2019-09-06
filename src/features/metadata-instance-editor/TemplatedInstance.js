@@ -4,24 +4,24 @@ import { FormattedMessage } from 'react-intl';
 
 import Field from './fields/Field';
 import messages from './messages';
-import isHidden from './metadataUtil';
+import { isHidden } from './metadataUtil';
 import './TemplatedInstance.scss';
 
 type Props = {
     canEdit: boolean,
     data: MetadataFields,
     errors: { [string]: React.Node },
-    includedFieldIds?: Set<string>,
     onFieldChange?: (key: string, value: MetadataFieldValue, type: string) => void,
     onFieldRemove?: (key: string) => void,
     template: MetadataTemplate,
+    templateFilters?: Set<string>,
 };
 
 const TemplatedInstance = ({
     canEdit,
     data = {},
     errors,
-    includedFieldIds,
+    templateFilters,
     onFieldChange,
     onFieldRemove,
     template,
@@ -37,7 +37,7 @@ const TemplatedInstance = ({
             {hasVisibleFields &&
                 fields.map(field => {
                     const { id: fieldId } = field;
-                    const isFilteredOut = !!includedFieldIds && !includedFieldIds.has(fieldId);
+                    const isFilteredOut = !!templateFilters && !templateFilters.has(fieldId);
                     return (
                         <Field
                             key={fieldId}

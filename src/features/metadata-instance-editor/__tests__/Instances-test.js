@@ -188,20 +188,22 @@ describe('features/metadata-editor-editor/Instances', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render editors with template filters', () => {
+    test('should correctly render editors with a selected template and filters', () => {
+        const templateFilters = new Set(['field0', 'field5', 'field7']);
         const wrapper = shallow(
-            <Instances
-                editors={editorsOnServer}
-                templateFilters={{ includedFieldIds: ['field0', 'field5', 'field7'], includedTemplateKey: 'template2' }}
-            />,
+            <Instances editors={editorsOnServer} selectedTemplateKey="template1" templateFilters={templateFilters} />,
         );
-        expect(wrapper).toMatchSnapshot();
+        const selectedTemplate = wrapper.find('Instance').at(0);
+        expect(selectedTemplate.prop('isOpen')).toBe(true);
+        expect(selectedTemplate.prop('id')).toBe('editor1');
+        expect(selectedTemplate.prop('templateFilters')).toEqual(templateFilters);
     });
 
-    test('should correctly render editors with an included template and no specified included field IDs', () => {
-        const wrapper = shallow(
-            <Instances editors={editorsOnServer} templateFilters={{ includedTemplateKey: 'template2' }} />,
-        );
-        expect(wrapper).toMatchSnapshot();
+    test('should correctly render editors with a selected template and no filters', () => {
+        const wrapper = shallow(<Instances editors={editorsOnServer} selectedTemplateKey="template2" />);
+        const selectedTemplate = wrapper.find('Instance').at(1);
+        expect(selectedTemplate.prop('isOpen')).toBe(true);
+        expect(selectedTemplate.prop('id')).toBe('editor2');
+        expect(selectedTemplate.prop('templateFilters')).toBe(undefined);
     });
 });

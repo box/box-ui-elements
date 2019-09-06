@@ -1,102 +1,125 @@
 // @flow
-import isHidden from '../metadataUtil';
+import { convertTemplateFilters, isHidden } from '../metadataUtil';
 
-[
-    {
-        object: {
-            id: '1',
-            scope: 'scope 1',
-            templateKey: 'template',
-            displayName: 'template 1',
-            fields: [],
-            hidden: true,
+describe('isHidden()', () => {
+    [
+        {
+            object: {
+                id: '1',
+                scope: 'scope 1',
+                templateKey: 'template',
+                displayName: 'template 1',
+                fields: [],
+                hidden: true,
+            },
+            description: 'Hidden MetadataTemplate 1',
+            expected: true,
         },
-        description: 'Hidden MetadataTemplate 1',
-        expected: true,
-    },
-    {
-        object: {
-            id: '2',
-            scope: 'scope 2',
-            templateKey: 'template',
-            displayName: 'template 2',
-            fields: [],
-            isHidden: true,
+        {
+            object: {
+                id: '2',
+                scope: 'scope 2',
+                templateKey: 'template',
+                displayName: 'template 2',
+                fields: [],
+                isHidden: true,
+            },
+            description: 'Hidden MetadataTemplate 2',
+            expected: true,
         },
-        description: 'Hidden MetadataTemplate 2',
-        expected: true,
-    },
-    {
-        object: {
-            id: '3',
-            scope: 'scope 3',
-            templateKey: 'template',
-            displayName: 'template 3',
-            fields: [],
-            isHidden: false,
+        {
+            object: {
+                id: '3',
+                scope: 'scope 3',
+                templateKey: 'template',
+                displayName: 'template 3',
+                fields: [],
+                isHidden: false,
+            },
+            description: 'Visible MetadataTemplate 3',
+            expected: false,
         },
-        description: 'Visible MetadataTemplate 3',
-        expected: false,
-    },
-    {
-        object: {
-            id: '4',
-            scope: 'scope 4',
-            templateKey: 'template',
-            displayName: 'template 4',
-            fields: [],
-            hidden: false,
+        {
+            object: {
+                id: '4',
+                scope: 'scope 4',
+                templateKey: 'template',
+                displayName: 'template 4',
+                fields: [],
+                hidden: false,
+            },
+            description: 'Visible MetadataTemplate 4',
+            expected: false,
         },
-        description: 'Visible MetadataTemplate 4',
-        expected: false,
-    },
-    {
-        object: {
-            id: '5',
-            type: 'date',
-            key: 'field 5',
-            displayName: 'field 5',
-            isHidden: true,
+        {
+            object: {
+                id: '5',
+                type: 'date',
+                key: 'field 5',
+                displayName: 'field 5',
+                isHidden: true,
+            },
+            description: 'Hidden Field 5',
+            expected: true,
         },
-        description: 'Hidden Field 5',
-        expected: true,
-    },
-    {
-        object: {
-            id: '6',
-            type: 'date',
-            key: 'field 6',
-            displayName: 'field 6',
-            hidden: true,
+        {
+            object: {
+                id: '6',
+                type: 'date',
+                key: 'field 6',
+                displayName: 'field 6',
+                hidden: true,
+            },
+            description: 'Hidden Field 6',
+            expected: true,
         },
-        description: 'Hidden Field 6',
-        expected: true,
-    },
-    {
-        object: {
-            id: '7',
-            type: 'date',
-            key: 'field 7',
-            displayName: 'field 7',
-            isHidden: false,
+        {
+            object: {
+                id: '7',
+                type: 'date',
+                key: 'field 7',
+                displayName: 'field 7',
+                isHidden: false,
+            },
+            description: 'Visible Field 7',
+            expected: false,
         },
-        description: 'Visible Field 7',
-        expected: false,
-    },
-    {
-        object: {
-            id: '8',
-            type: 'date',
-            key: 'field 8',
-            displayName: 'field 8',
-            isHidden: false,
+        {
+            object: {
+                id: '8',
+                type: 'date',
+                key: 'field 8',
+                displayName: 'field 8',
+                isHidden: false,
+            },
+            description: 'Visible Field 8',
+            expected: false,
         },
-        description: 'Visible Field 8',
-        expected: false,
-    },
-].forEach(({ description, object, expected }) => {
-    test(description, () => {
-        const actual = isHidden(object);
-        expect(actual).toEqual(expected);
+    ].forEach(({ description, object, expected }) => {
+        test(description, () => {
+            const actual = isHidden(object);
+            expect(actual).toEqual(expected);
+        });
+    });
+});
+
+describe('convertTemplateFilters()', () => {
+    const singleFilter = 'abcde';
+    const multipleFilters = ['ghijk', 'lmnop', 'uvxyz'];
+    [
+        {
+            filters: singleFilter,
+            description: 'should convert a single filter into a Set object with one item',
+            expected: new Set([singleFilter]),
+        },
+        {
+            filters: multipleFilters,
+            description: 'should convert multiple template filters into a Set object',
+            expected: new Set(multipleFilters),
+        },
+    ].forEach(({ description, filters, expected }) => {
+        test(description, () => {
+            expect(convertTemplateFilters(filters)).toEqual(expected);
+        });
     });
 });
