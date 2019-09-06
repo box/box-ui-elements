@@ -32,7 +32,7 @@ class ActivityMessage extends React.Component<Props, State> {
         isTranslation: false,
     };
 
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { translatedTaggedMessage, translationFailed } = nextProps;
         if (translatedTaggedMessage || translationFailed) {
             this.setState({ isLoading: false });

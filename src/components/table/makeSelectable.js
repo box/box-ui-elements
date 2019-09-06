@@ -69,7 +69,7 @@ function makeSelectable(BaseTable) {
             document.addEventListener('keypress', this.handleKeyboardSearch);
         }
 
-        componentWillUpdate(nextProps, nextState) {
+        UNSAFE_componentWillUpdate(nextProps, nextState) {
             if (nextState.focusedIndex !== this.state.focusedIndex && this.props.onFocus) {
                 this.props.onFocus(nextState.focusedIndex);
             }

@@ -328,7 +328,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    componentWillReceiveProps(): void {
+    UNSAFE_componentWillReceiveProps(): void {
         /* no-op */
     }
 

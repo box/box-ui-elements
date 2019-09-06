@@ -479,7 +479,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
         });
     });
 
-    describe('componentWillReceiveProps()', () => {
+    describe('UNSAFE_componentWillReceiveProps()', () => {
         [
             // No Children
             {

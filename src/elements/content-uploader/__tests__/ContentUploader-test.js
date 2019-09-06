@@ -103,6 +103,37 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('resetFile()', () => {
+        test('should call getUploadAPI and updateViewAndCollection', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const item = { api: { cancel: jest.fn() }, file: { size: 10 } };
+            instance.getUploadAPI = jest.fn();
+            instance.updateViewAndCollection = jest.fn();
+
+            instance.resetFile(item);
+            expect(instance.getUploadAPI).toBeCalled();
+            expect(instance.updateViewAndCollection).toBeCalled();
+        });
+
+        test('should reset progress, status, and existing item error', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const item = {
+                api: { cancel: jest.fn() },
+                file: { size: 10 },
+                progress: 85,
+                status: STATUS_ERROR,
+                error: { name: 'testerror' },
+            };
+
+            instance.resetFile(item);
+            expect(item.progress).toBe(0);
+            expect(item.status).toBe(STATUS_PENDING);
+            expect(item.error).toBeUndefined();
+        });
+    });
+
     describe('resumeFile()', () => {
         test('should call resume from api and call updateViewAndCollection', () => {
             const wrapper = getWrapper();

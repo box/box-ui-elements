@@ -7,7 +7,7 @@ type WrapperProps = {
     features: FeatureConfig,
 };
 
-function withFeatureProvider(WrappedComponent: React.ComponentType<any>) {
+function withFeatureProvider(WrappedComponent: React.ComponentType<{}>) {
     function wrapComponent({ features, ...props }: WrapperProps, ref) {
         return (
             <FeatureProvider features={features}>

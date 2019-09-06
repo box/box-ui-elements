@@ -35,7 +35,7 @@ class ModalDialog extends React.Component<Props> {
         closeButtonProps: {},
     };
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.modalID = uniqueId('modal');
     }
 

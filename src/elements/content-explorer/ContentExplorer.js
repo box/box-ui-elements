@@ -303,7 +303,7 @@ class ContentExplorer extends Component<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { currentFolderId }: Props = nextProps;
         const {
             currentCollection: { id },

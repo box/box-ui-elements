@@ -514,7 +514,7 @@ describe('components/date-picker/DatePicker', () => {
             });
         });
 
-        describe('componentWillReceiveProps()', () => {
+        describe('UNSAFE_componentWillReceiveProps()', () => {
             test('should call setDate() when value changes', () => {
                 const wrapper = renderDatepicker();
                 const nextValue = new Date(123);

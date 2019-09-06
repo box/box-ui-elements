@@ -39,7 +39,7 @@ class DropdownMenu extends React.Component<Props, State> {
         isOpen: false,
     };
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.menuID = uniqueId('menu');
         this.menuButtonID = uniqueId('menubutton');
     }
