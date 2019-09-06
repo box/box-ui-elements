@@ -5,7 +5,104 @@ import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../../co
 
 let metadataQuery;
 let cache;
-const successResponse = { entries: [], next_marker: 'abc123' };
+const marker = 'marker_123456789';
+const templateKey = 'awesomeTemplateKey';
+const templateType = 'metadata-template';
+const metadataInstanceId1 = 'c614dcaa-ebdc-4c88-b242-15cad4f7b787';
+const metadataInstanceId2 = 'ee348ed1-9460-44f3-9c34-aa580a93efda';
+
+const mockMetadataQuerySuccessResponse = {
+    entries: [
+        {
+            item: {
+                type: 'file',
+                id: '1234',
+                name: 'filename1.pdf',
+                size: 10000,
+            },
+            metadata: {
+                enterprise_2222: {
+                    awesomeTemplateKey: {
+                        $id: metadataInstanceId1,
+                        $parent: 'file_998877',
+                        $type: 'awesomeTemplateKey-asdlk-1234-asd1',
+                        $typeScope: 'enterprise_2222',
+                        $typeVersion: 0,
+                        $version: 0,
+                        type: 'bill', // metadata template field
+                        amount: 500, // metadata template field
+                        approved: 'yes', // metadata template field
+                    },
+                },
+            },
+        },
+        {
+            item: {
+                type: 'file',
+                id: '9876',
+                name: 'filename2.mp4',
+                size: 389027,
+            },
+            metadata: {
+                enterprise_2222: {
+                    awesomeTemplateKey: {
+                        $id: metadataInstanceId2,
+                        $parent: 'file_998877',
+                        $type: 'awesomeTemplateKey-asdlk-1234-asd1',
+                        $typeScope: 'enterprise_2222',
+                        $typeVersion: 0,
+                        $version: 0,
+                        type: 'receipt', // metadata template field
+                        amount: 2735, // metadata template field
+                        approved: 'no', // metadata template field
+                    },
+                },
+            },
+        },
+    ],
+    next_marker: marker,
+};
+
+const flattenedMockMetadataQuerySuccessResponse = {
+    items: [
+        {
+            id: '1234',
+            metadata: {
+                data: {
+                    type: 'bill',
+                    amount: 500,
+                    approved: 'yes',
+                },
+                id: metadataInstanceId1,
+                metadataTemplate: {
+                    type: templateType,
+                    templateKey,
+                },
+            },
+            name: 'filename1.pdf',
+            size: 10000,
+        },
+        {
+            id: '9876',
+            metadata: {
+                data: {
+                    type: 'receipt',
+                    amount: 2735,
+                    approved: 'no',
+                },
+                id: metadataInstanceId2,
+                metadataTemplate: {
+                    type: templateType,
+                    templateKey,
+                },
+            },
+            name: 'filename2.mp4',
+            size: 389027,
+        },
+    ],
+    nextMarker: marker,
+};
+
 const url = 'https://api.box.com/2.0/metadata_queries/execute';
 const mockQuery = {
     query: 'enteprise_1234.tempalteKey.type = :arg1',
@@ -51,7 +148,7 @@ describe('api/MetadataQuery', () => {
 
         test('should return true when loaded', () => {
             metadataQuery.key = 'key';
-            cache.set('key', successResponse);
+            cache.set('key', mockMetadataQuerySuccessResponse);
             expect(metadataQuery.isLoaded()).toBe(true);
         });
     });
@@ -59,7 +156,7 @@ describe('api/MetadataQuery', () => {
     describe('finish()', () => {
         beforeEach(() => {
             metadataQuery.key = `${CACHE_PREFIX_METADATA_QUERY}_foo`;
-            cache.set(metadataQuery.key, successResponse);
+            cache.set(metadataQuery.key, mockMetadataQuerySuccessResponse);
         });
 
         test('should not do anything if destroyed', () => {
@@ -74,7 +171,36 @@ describe('api/MetadataQuery', () => {
         test('should call success callback with proper collection', () => {
             metadataQuery.successCallback = jest.fn();
             metadataQuery.finish();
-            expect(metadataQuery.successCallback).toHaveBeenCalledWith(successResponse);
+            expect(metadataQuery.successCallback).toHaveBeenCalledWith(mockMetadataQuerySuccessResponse);
+        });
+    });
+
+    describe('filterMetdataQueryResponse()', () => {
+        test('should return query response with entries of type file only', () => {
+            const entries = [
+                { item: { type: 'file' }, metadata: {} },
+                { item: { type: 'folder' }, metadata: {} },
+                { item: { type: 'file' }, metadata: {} },
+                { item: { type: 'folder' }, metadata: {} },
+                { item: { type: 'file' }, metadata: {} },
+            ];
+            const next_marker = 'marker_123456789';
+            const metadataQueryResponse = {
+                entries,
+                next_marker,
+            };
+
+            const filteredResponse = metadataQuery.filterMetdataQueryResponse(metadataQueryResponse);
+            const isEveryEntryOfTypeFile = filteredResponse.entries.every(entry => entry.item.type === 'file');
+            expect(isEveryEntryOfTypeFile).toBe(true);
+        });
+    });
+
+    describe('flattenMetdataQueryResponse()', () => {
+        test('should flatten the metadata query api response successfully', () => {
+            expect(metadataQuery.flattenMetdataQueryResponse(mockMetadataQuerySuccessResponse)).toEqual(
+                flattenedMockMetadataQuerySuccessResponse,
+            );
         });
     });
 
@@ -84,9 +210,10 @@ describe('api/MetadataQuery', () => {
             metadataQuery.finish = jest.fn();
 
             metadataQuery.queryMetadataSuccessHandler({
-                data: successResponse,
+                data: mockMetadataQuerySuccessResponse,
             });
-            expect(cache.set).toHaveBeenCalledWith(metadataQuery.key, successResponse);
+
+            expect(cache.set).toHaveBeenCalledWith(metadataQuery.key, flattenedMockMetadataQuerySuccessResponse);
             expect(metadataQuery.finish).toHaveBeenCalled();
         });
     });
@@ -103,7 +230,7 @@ describe('api/MetadataQuery', () => {
         });
 
         test('should make xhr call to metadata_queries/execute endpoint and call success callback', async () => {
-            const mockAPIResponse = { data: successResponse };
+            const mockAPIResponse = { data: mockMetadataQuerySuccessResponse };
 
             metadataQuery.isDestroyed = jest.fn().mockReturnValueOnce(false);
             metadataQuery.xhr = {

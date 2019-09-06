@@ -1,10 +1,13 @@
 /**
- * @flow
+ * @flow strict
  * @file Helper for throwing errors
  * @author Box
  */
 
+import getProp from 'lodash/get';
 import { TYPED_ID_FILE_PREFIX, TYPED_ID_FOLDER_PREFIX, FILE_EXTENSION_BOX_NOTE } from '../constants';
+
+const FILE_EXT_REGEX = /\.([0-9a-z]+)$/i; // Case insensitive regex to extract file extension without "."
 
 /**
  * Returns typed id for file. Useful for when
@@ -33,4 +36,18 @@ export function getTypedFolderId(id: string): string {
  */
 export function isBoxNote(file: BoxItem): boolean {
     return file.extension === FILE_EXTENSION_BOX_NOTE;
+}
+
+/**
+ * Returns the extension from the file name
+ * @param {string} filename a Box file
+ * @return {string} typed id for file
+ */
+export function getFileExtension(filename: string | void): string {
+    if (typeof filename !== 'string') {
+        return '';
+    }
+
+    const result = FILE_EXT_REGEX.exec(filename);
+    return getProp(result, '[1]', '');
 }

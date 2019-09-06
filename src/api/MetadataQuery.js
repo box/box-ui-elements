@@ -4,9 +4,20 @@
  * @author Box
  */
 
+import getProp from 'lodash/get';
+import omit from 'lodash/omit';
 import Base from './Base';
-import type { MetadataQuery as MetadataQueryType, MetadataQueryResponse } from '../common/types/metadataQueries';
 import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../constants';
+import { ITEM_TYPE_FILE } from '../common/constants';
+import type {
+    MetadataQuery as MetadataQueryType,
+    FlattenedMetadataQueryResponse,
+    FlattenedMetadataQueryResponseEntry,
+    FlattenedMetadataQueryResponseEntryMetadata,
+    MetadataQueryResponse,
+    MetadataQueryResponseEntry,
+    MetadataQueryResponseEntryMetadata,
+} from '../common/types/metadataQueries';
 
 class MetadataQuery extends Base {
     /**
@@ -68,11 +79,89 @@ class MetadataQuery extends Base {
     }
 
     /**
+     * Returns the response object with entries of type 'file' only.
+     *
+     * @param {Object} response
+     * @return {Object}
+     */
+    filterMetdataQueryResponse = (response: MetadataQueryResponse): MetadataQueryResponse => {
+        const { entries = [], next_marker } = response;
+        return {
+            entries: entries.filter(entry => getProp(entry, 'item.type') === ITEM_TYPE_FILE), // return only file items
+            next_marker,
+        };
+    };
+
+    /**
+     * Extracts flattened metadata from the metadata response object
+     * @param {Object} - metadata from the query response entry
+     * @return {Object} - flattened metadata entry without the $ fields
+     */
+    flattenMetadata = (metadata: MetadataQueryResponseEntryMetadata): FlattenedMetadataQueryResponseEntryMetadata => {
+        let flattenedMetadata = {};
+
+        Object.keys(metadata).forEach(scope => {
+            Object.keys(metadata[scope]).forEach(templateKey => {
+                const nonconformingInstance = metadata[scope][templateKey];
+                const data = omit(nonconformingInstance, [
+                    '$id',
+                    '$parent',
+                    '$type',
+                    '$typeScope',
+                    '$typeVersion',
+                    '$version',
+                ]);
+
+                flattenedMetadata = {
+                    data,
+                    id: nonconformingInstance.$id,
+                    metadataTemplate: {
+                        type: 'metadata-template',
+                        templateKey,
+                    },
+                };
+            });
+        });
+
+        return flattenedMetadata;
+    };
+
+    /**
+     * Converts metadata query response entry to a flattened one
+     * @param {Object} - metadata query response entry
+     * @return {Object} - flattened metadata query response entry
+     */
+    flattenResponseEntry = ({ item, metadata }: MetadataQueryResponseEntry): FlattenedMetadataQueryResponseEntry => {
+        const { id, name, size } = item;
+
+        return {
+            id,
+            metadata: this.flattenMetadata(metadata),
+            name,
+            size,
+        };
+    };
+
+    /**
+     * Flattens metadata query response
+     * @param {Object} - metadata query response object
+     * @return {Object} - flattened metadata query response object
+     */
+    flattenMetdataQueryResponse = ({ entries, next_marker }: MetadataQueryResponse): FlattenedMetadataQueryResponse => {
+        return {
+            items: entries.map<FlattenedMetadataQueryResponseEntry>(this.flattenResponseEntry),
+            nextMarker: next_marker,
+        };
+    };
+
+    /**
      * @param {Object} response
      */
     queryMetadataSuccessHandler = ({ data }: { data: MetadataQueryResponse }): void => {
         const cache: APICache = this.getCache();
-        cache.set(this.key, data);
+        const filteredResponse = this.filterMetdataQueryResponse(data);
+        // Flatten the filtered metadata query response and set it in cache
+        cache.set(this.key, this.flattenMetdataQueryResponse(filteredResponse));
         this.finish();
     };
 

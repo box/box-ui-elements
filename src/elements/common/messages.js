@@ -612,6 +612,11 @@ const messages = defineMessages({
         description: 'Message shown when there are no folder items.',
         defaultMessage: 'There are no items in this folder.',
     },
+    metadataState: {
+        id: 'be.metadataState',
+        description: 'Message shown when there are no items for provided metadata query.',
+        defaultMessage: 'There are no items in this folder.',
+    },
     recentsState: {
         id: 'be.recentsState',
         description: 'Message shown when there are no recent items.',
