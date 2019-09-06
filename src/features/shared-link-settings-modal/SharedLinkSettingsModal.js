@@ -152,7 +152,7 @@ class SharedLinkSettingsModal extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const { expirationError, passwordError, vanityNameError } = nextProps;
 
         if (

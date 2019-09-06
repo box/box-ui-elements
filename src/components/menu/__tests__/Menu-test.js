@@ -122,7 +122,7 @@ describe('components/menu/Menu', () => {
         });
     });
 
-    describe('componentWillReceiveProps()', () => {
+    describe('UNSAFE_componentWillReceiveProps()', () => {
         test('should call setInitialFocusIndex() when isSubmenu is true and isHidden changes from false to true', () => {
             const wrapper = shallow(
                 <Menu className="awesome-menu" isHidden>
@@ -133,7 +133,7 @@ describe('components/menu/Menu', () => {
             const instance = wrapper.instance();
             instance.setInitialFocusIndex = sandbox.mock();
 
-            instance.componentWillReceiveProps({
+            instance.UNSAFE_componentWillReceiveProps({
                 isHidden: false,
                 isSubmenu: true,
             });

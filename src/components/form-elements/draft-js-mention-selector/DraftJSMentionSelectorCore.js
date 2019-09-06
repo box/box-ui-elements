@@ -86,7 +86,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @param {object} nextProps Props the component is receiving
      * @returns {void}
      */
-    componentWillReceiveProps(nextProps: Props, nextState: State) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props, nextState: State) {
         const { contacts: newContacts } = nextProps;
         const { contacts: currentContacts } = this.props;
         const { activeMention } = nextState;

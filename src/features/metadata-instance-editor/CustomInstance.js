@@ -32,7 +32,7 @@ class CustomInstance extends React.PureComponent<Props, State> {
         };
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         this.setState({
             isAddFieldVisible: false,
             properties: { ...nextProps.data },

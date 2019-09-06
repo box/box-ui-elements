@@ -1,28 +1,6 @@
 // @flow
 import React from 'react';
-import {
-    bdlLightBlue,
-    bdlBoxBlue,
-    bdlDarkBlue,
-    bdlGray62,
-    bdlGreenLight,
-    bdlYellorange,
-    bdlGrimace,
-    bdlPurpleRain,
-    bdlWatermelonRed,
-} from '../../styles/variables';
-
-const AVATAR_COLORS = [
-    bdlLightBlue,
-    bdlBoxBlue,
-    bdlDarkBlue,
-    bdlGray62,
-    bdlGreenLight,
-    bdlYellorange,
-    bdlGrimace,
-    bdlPurpleRain,
-    bdlWatermelonRed,
-];
+import { avatarColors } from '../../styles/variables';
 
 const getInitials = name => {
     const firstInitial = name.slice(0, 1);
@@ -38,9 +16,10 @@ type Props = {
 
 const AvatarInitials = ({ className = '', id, name }: Props) => {
     const avatarColorSelector = parseInt(id, 10) || 0;
-    const backgroundColor = AVATAR_COLORS[avatarColorSelector % AVATAR_COLORS.length];
+    const backgroundColorIndex = avatarColorSelector % avatarColors.length;
+
     return (
-        <span className={`avatar-initials ${className}`} style={{ backgroundColor }}>
+        <span className={`avatar-initials ${className}`} data-bg-idx={backgroundColorIndex}>
             {getInitials(name)}
         </span>
     );

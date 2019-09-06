@@ -99,7 +99,7 @@ class Instance extends React.PureComponent<Props, State> {
         this.fieldKeyToTypeMap = createFieldKeyToTypeMap(props.template.fields);
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { hasError, isDirty }: Props = nextProps;
         const { isEditing }: State = this.state;
 

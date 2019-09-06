@@ -32,7 +32,7 @@ class EditableURL extends React.Component<Props, State> {
         value: this.props.value,
     };
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { value } = nextProps;
         if (value !== this.props.value) {
             this.setState({ value });

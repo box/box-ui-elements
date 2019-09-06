@@ -111,9 +111,10 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 <PillSelectorDropdown onInput={onInputStub} onRemove={onRemoveStub} onSelect={onSelectStub} />,
             );
             const instance = wrapper.instance();
-            wrapper.setState({ inputValue: 'value1, value2,value3' });
+            const inputValues = 'value1, value2,value3';
+            wrapper.setState({ inputValue: inputValues });
 
-            const result = instance.parsePills();
+            const result = instance.parsePills(inputValues);
             expect(result).toEqual([
                 { displayText: 'value1', text: 'value1', value: 'value1' },
                 { displayText: 'value2', text: 'value2', value: 'value2' },
@@ -137,11 +138,12 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 />,
             );
             const instance = wrapper.instance();
+            const inputValues = 'aaron@example.com, bademail,hello@gmail.com';
             wrapper.setState({
-                inputValue: 'aaron@example.com, bademail,hello@gmail.com',
+                inputValue: inputValues,
             });
 
-            const result = instance.parsePills();
+            const result = instance.parsePills(inputValues);
             expect(result).toEqual([
                 { displayText: 'aaron@example.com', text: 'aaron@example.com', value: 'aaron@example.com' },
                 { displayText: 'hello@gmail.com', text: 'hello@gmail.com', value: 'hello@gmail.com' },
@@ -165,11 +167,12 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 />,
             );
             const instance = wrapper.instance();
+            const inputValues = 'aaron@example.com, bademail, hello@gmail.com';
             wrapper.setState({
-                inputValue: 'aaron@example.com, bademail, hello@gmail.com',
+                inputValue: inputValues,
             });
 
-            const result = instance.parsePills();
+            const result = instance.parsePills(inputValues);
             expect(result).toEqual([
                 { displayText: 'aaron@example.com', text: 'aaron@example.com', value: 'aaron@example.com' },
                 { displayText: 'bademail', text: 'bademail', value: 'bademail' },
@@ -196,7 +199,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 }));
 
             wrapper.setProps({ parseItems: stringParser });
-            expect(parsePills()).toStrictEqual([
+            expect(parsePills('a,b')).toStrictEqual([
                 {
                     displayText: 'a',
                     text: 'a',
@@ -210,7 +213,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             ]);
 
             wrapper.setProps({ parseItems: optionParser });
-            expect(parsePills()).toStrictEqual([
+            expect(parsePills('a,b')).toStrictEqual([
                 {
                     customProp: 'a',
                 },
@@ -232,9 +235,10 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 />,
             );
             const instance = wrapper.instance();
-            wrapper.setState({ inputValue: 'value' });
+            const inputValue = 'value';
+            wrapper.setState({ inputValue });
 
-            instance.addPillsFromInput();
+            instance.addPillsFromInput(inputValue);
         });
 
         test('should "select" each pill, create a user pill, reset inputValue, and not call props.validateForError if valid pills exist', () => {
@@ -342,7 +346,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 />,
             );
             const instance = wrapper.instance();
-            wrapper.setState({ inputValue: '' });
+            const inputValue = '';
+            wrapper.setState({ inputValue });
 
             sandbox
                 .mock(instance)
@@ -350,7 +355,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 .once()
                 .returns(pills);
 
-            instance.addPillsFromInput();
+            instance.addPillsFromInput(inputValue);
         });
 
         test('should clear unmatched input after attempting to add pills when shouldClearUnmatchedInput is set to true', () => {
@@ -363,18 +368,19 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 />,
             );
             const onInput = jest.fn();
+            const initialValue = 'abc';
             const { addPillsFromInput } = wrapper.instance();
 
             wrapper.setProps({ onInput, parseItems: () => [] });
-            wrapper.setState({ inputValue: 'abc' });
+            wrapper.setState({ inputValue: initialValue });
 
             wrapper.setProps({ shouldClearUnmatchedInput: false });
-            addPillsFromInput();
-            expect(wrapper.state().inputValue).toBe('abc');
+            addPillsFromInput(initialValue);
+            expect(wrapper.state().inputValue).toBe(initialValue);
             expect(onInput).toHaveBeenCalledTimes(0);
 
             wrapper.setProps({ shouldClearUnmatchedInput: true });
-            addPillsFromInput();
+            addPillsFromInput(initialValue);
             expect(wrapper.state().inputValue).toBe('');
             expect(onInput).toHaveBeenCalledWith('');
             expect(onInput).toHaveBeenCalledTimes(1);
@@ -435,19 +441,64 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     });
 
     describe('handlePaste', () => {
-        test('should call addPillsFromInput', () => {
+        test('should not call onPillCreate prop method with invalid input', () => {
+            const mockOnInput = jest.fn();
+            const mockOnPillCreate = jest.fn();
+            const mockPastedValue = 'pastedValue';
+            const mockEvent = {
+                clipboardData: {
+                    getData: () => {
+                        return mockPastedValue;
+                    },
+                },
+                preventDefault: jest.fn(),
+            };
             const wrapper = shallow(
-                <PillSelectorDropdown onInput={onInputStub} onRemove={onRemoveStub} onSelect={onSelectStub} />,
+                <PillSelectorDropdown
+                    allowCustomPills
+                    allowInvalidPills={false}
+                    onInput={mockOnInput}
+                    onRemove={onRemoveStub}
+                    onSelect={onSelectStub}
+                    onPillCreate={mockOnPillCreate}
+                    validator={() => false}
+                />,
             );
             const instance = wrapper.instance();
 
-            sandbox
-                .mock(instance)
-                .expects('addPillsFromInput')
-                .once();
+            instance.handlePaste(mockEvent);
 
-            instance.handlePaste();
-            clock.tick(100);
+            expect(mockOnInput).toHaveBeenCalledWith(mockPastedValue, mockEvent);
+            expect(mockOnPillCreate).not.toHaveBeenCalled();
+        });
+
+        test('should call onPillCreate prop method with valid input', () => {
+            const mockOnInput = jest.fn();
+            const mockOnPillCreate = jest.fn();
+            const mockPastedValue = 'test@example.com';
+            const mockEvent = {
+                clipboardData: {
+                    getData: () => {
+                        return mockPastedValue;
+                    },
+                },
+                preventDefault: jest.fn(),
+            };
+            const wrapper = shallow(
+                <PillSelectorDropdown
+                    allowCustomPills
+                    onInput={mockOnInput}
+                    onRemove={jest.fn()}
+                    onSelect={jest.fn()}
+                    onPillCreate={mockOnPillCreate}
+                />,
+            );
+            const instance = wrapper.instance();
+
+            instance.handlePaste(mockEvent);
+
+            expect(mockOnInput).toHaveBeenCalledWith(mockPastedValue, mockEvent);
+            expect(mockOnPillCreate).toHaveBeenCalled();
         });
     });
 
