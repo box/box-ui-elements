@@ -6,7 +6,6 @@ import ScrollWrapper from '../../components/scroll-wrapper';
 import Header from './Header';
 import Instances from './Instances';
 import EmptyContent from './EmptyContent';
-import { convertTemplateFilters } from './metadataUtil';
 import './MetadataInstanceEditor.scss';
 
 type Props = {
@@ -39,7 +38,6 @@ const MetadataInstanceEditor = ({
     onAdd,
     onSave,
     selectedTemplateKey,
-    templateFilters,
     templates,
     title,
 }: Props) => (
@@ -63,7 +61,6 @@ const MetadataInstanceEditor = ({
                     onRemove={onRemove}
                     onSave={onSave}
                     selectedTemplateKey={selectedTemplateKey}
-                    templateFilters={templateFilters ? convertTemplateFilters(templateFilters) : undefined}
                 />
             </ScrollWrapper>
         )}

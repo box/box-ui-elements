@@ -15,7 +15,6 @@ type Props = {
         rawData: Object,
     ) => void,
     selectedTemplateKey?: string,
-    templateFilters?: Set<string>,
 };
 
 const Instances = ({
@@ -25,13 +24,11 @@ const Instances = ({
     onRemove,
     onSave,
     selectedTemplateKey,
-    templateFilters,
 }: Props) =>
     editors.map<React.Element<typeof Instance>>(
         ({ isDirty = false, instance, hasError = false, template }: MetadataEditor) => {
             const { templateKey } = template;
-            // Open the included template by default, and only display the included fields in the template
-            const isOpen = templateKey === selectedTemplateKey || (!selectedTemplateKey && editors.length === 1);
+            const isOpen = editors.length === 1 || templateKey === selectedTemplateKey;
             return (
                 <Instance
                     canEdit={instance.canEdit}
@@ -47,7 +44,6 @@ const Instances = ({
                     onSave={onSave}
                     onRemove={onRemove}
                     template={template}
-                    templateFilters={templateFilters}
                 />
             );
         },

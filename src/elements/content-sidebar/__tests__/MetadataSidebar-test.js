@@ -6,13 +6,13 @@ import EmptyContent from '../../../features/metadata-instance-editor/EmptyConten
 import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
 import LoadingIndicatorWrapper from '../../../components/loading-indicator/LoadingIndicatorWrapper';
 import InlineError from '../../../components/inline-error/InlineError';
-import { convertTemplateFilters } from '../../../features/metadata-instance-editor/metadataUtil';
+import { normalizeTemplates } from '../../../features/metadata-instance-editor/metadataUtil';
 import messages from '../../common/messages';
 import { MetadataSidebarComponent as MetadataSidebar } from '../MetadataSidebar';
 import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS } from '../../../constants';
 
 jest.mock('../../../features/metadata-instance-editor/metadataUtil', () => ({
-    convertTemplateFilters: jest.fn(),
+    normalizeTemplates: jest.fn(),
 }));
 
 describe('elements/content-sidebar/Metadata/MetadataSidebar', () => {
@@ -82,30 +82,30 @@ describe('elements/content-sidebar/Metadata/MetadataSidebar', () => {
         expect(api.getFileAPI).toHaveBeenCalled();
     });
 
-    test.each('abcde', ['ghijk', 'lmnop', 'uvxyz'])(
-        'should render Metadata Sidebar component with template filters',
-        templateFilters => {
-            const getFile = jest.fn();
-            const api = {
-                getFileAPI: jest.fn().mockReturnValueOnce({
-                    getFile,
-                }),
-            };
-            const wrapper = getWrapper({
-                api,
-                templateFilters,
-            });
-            wrapper.setState({ file: {}, templates: [], editors: [{}] });
-            expect(wrapper.find(LoadingIndicatorWrapper)).toHaveLength(1);
-            expect(wrapper.find(Instances)).toHaveLength(1);
-            expect(wrapper.find(EmptyContent)).toHaveLength(0);
-            expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
-            expect(wrapper.find(InlineError)).toHaveLength(0);
-            expect(getFile).toHaveBeenCalled();
-            expect(api.getFileAPI).toHaveBeenCalled();
-            expect(convertTemplateFilters).toHaveBeenCalledWith(templateFilters);
-        },
-    );
+    test('should render Metadata Sidebar component with template filters', () => {
+        const templates = [];
+        const selectedTemplateKey = 'narwhals';
+        const getFile = jest.fn();
+        const api = {
+            getFileAPI: jest.fn().mockReturnValueOnce({
+                getFile,
+            }),
+        };
+        const wrapper = getWrapper({
+            api,
+            selectedTemplateKey,
+        });
+        wrapper.setState({ file: {}, templates, editors: [{}] });
+        const instances = wrapper.find(Instances);
+        expect(instances).toHaveLength(1);
+        expect(instances.prop('selectedTemplateKey')).toBe(selectedTemplateKey);
+        expect(wrapper.find(LoadingIndicatorWrapper)).toHaveLength(1);
+        expect(wrapper.find(EmptyContent)).toHaveLength(0);
+        expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
+        expect(wrapper.find(InlineError)).toHaveLength(0);
+        expect(getFile).toHaveBeenCalled();
+        expect(api.getFileAPI).toHaveBeenCalled();
+    });
 
     test('should render loading indicator component when templates are not available', () => {
         const getFile = jest.fn();
@@ -889,6 +889,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebar', () => {
         test('should set state with the new file object', () => {
             const editors = ['editor1', 'editor2'];
             const templates = ['template1', 'template2'];
+            normalizeTemplates.mockReturnValue(templates);
             const wrapper = getWrapper(
                 {
                     fileId: 'fileId',
@@ -909,6 +910,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebar', () => {
                 isLoading: false,
                 templates,
             });
+            expect(normalizeTemplates).toHaveBeenCalledWith(templates, undefined, undefined);
         });
     });
 

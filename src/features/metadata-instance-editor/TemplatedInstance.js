@@ -14,18 +14,9 @@ type Props = {
     onFieldChange?: (key: string, value: MetadataFieldValue, type: string) => void,
     onFieldRemove?: (key: string) => void,
     template: MetadataTemplate,
-    templateFilters?: Set<string>,
 };
 
-const TemplatedInstance = ({
-    canEdit,
-    data = {},
-    errors,
-    templateFilters,
-    onFieldChange,
-    onFieldRemove,
-    template,
-}: Props) => {
+const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldRemove, template }: Props) => {
     const { fields = [] } = template;
     const hasFields = fields.length > 0;
     const hasVisibleFields = hasFields && fields.some(field => !isHidden(field));
@@ -36,18 +27,16 @@ const TemplatedInstance = ({
         <>
             {hasVisibleFields &&
                 fields.map(field => {
-                    const { id: fieldId } = field;
-                    const isFilteredOut = !!templateFilters && !templateFilters.has(fieldId);
                     return (
                         <Field
-                            key={fieldId}
+                            key={field.id}
                             canEdit={canEdit}
                             dataKey={field.key}
                             dataValue={data[field.key]}
                             description={field.description}
                             displayName={field.displayName}
                             error={errors[field.key]}
-                            isHidden={isHidden(field) || isFilteredOut} // Checking both isHidden and hidden attributes due to differences in V2 and V3 APIs
+                            isHidden={isHidden(field)} // Checking both isHidden and hidden attributes due to differences in V2 and V3 APIs
                             onChange={(key: string, value: MetadataFieldValue) => {
                                 if (canEdit && onFieldChange) {
                                     onFieldChange(key, value, field.type);

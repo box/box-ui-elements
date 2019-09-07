@@ -26,6 +26,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
       onModification={[Function]}
       onRemove={[Function]}
       onSave={[Function]}
+      templates={Array []}
     />
   </LoadingIndicatorWrapper>
 </SidebarContent>
@@ -93,6 +94,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
       onModification={[Function]}
       onRemove={[Function]}
       onSave={[Function]}
+      templates={Array []}
     />
   </LoadingIndicatorWrapper>
 </SidebarContent>

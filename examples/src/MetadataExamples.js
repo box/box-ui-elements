@@ -1100,28 +1100,6 @@ class MetadataExamples extends React.PureComponent {
                     <h3>Data to be saved</h3>
                     <pre className="metadata-operations" />
                 </div>
-                <br />
-                <br />
-                <br />
-                <h3>Metadata Filtered by Template and Fields</h3>
-                <div className="metadata-container">
-                    <MetadataInstanceEditor
-                        canAdd
-                        editors={this.state.editors}
-                        onAdd={this.onAdd}
-                        onModification={this.onModification}
-                        onRemove={this.onRemove}
-                        onSave={this.onSave}
-                        selectedTemplateKey="template3"
-                        templateFilters={['field4', 'field5', 'field8']}
-                        templates={this.state.templates}
-                    />
-                    {this.state.isBusy && (
-                        <div className="metadata-is-busy">
-                            <LoadingIndicator />
-                        </div>
-                    )}
-                </div>
             </div>
         );
     }

@@ -2,11 +2,6 @@ import React from 'react';
 
 import MetadataInstanceEditor from '../MetadataInstanceEditor';
 import Instances from '../Instances';
-import { convertTemplateFilters } from '../metadataUtil';
-
-jest.mock('../../../features/metadata-instance-editor/metadataUtil', () => ({
-    convertTemplateFilters: jest.fn(),
-}));
 
 // Templates
 
@@ -462,19 +457,17 @@ describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test.each('abcde', ['ghijk', 'lmnop', 'uvxyz'])(
-        'should correctly render editors with template filters',
-        templateFilters => {
-            const wrapper = shallow(
-                <MetadataInstanceEditor
-                    editors={editorsOnServer}
-                    templateFilters={templateFilters}
-                    templates={templatesOnServer}
-                />,
-            );
-
-            expect(wrapper.find(Instances)).toHaveLength(1);
-            expect(convertTemplateFilters).toHaveBeenCalledWith(templateFilters);
-        },
-    );
+    test('should correctly render editors with template filters', () => {
+        const selectedTemplateKey = 'armadillos';
+        const wrapper = shallow(
+            <MetadataInstanceEditor
+                editors={editorsOnServer}
+                selectedTemplateKey={selectedTemplateKey}
+                templates={templatesOnServer}
+            />,
+        );
+        const instances = wrapper.find(Instances);
+        expect(instances).toHaveLength(1);
+        expect(instances.prop('selectedTemplateKey')).toBe(selectedTemplateKey);
+    });
 });

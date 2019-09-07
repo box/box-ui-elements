@@ -9,8 +9,6 @@ const data = {
     datefield: '2018-06-20T00:00:00.000Z',
 };
 
-const templateFilters = new Set(['field2', 'field3', 'field5']);
-
 const fields = [
     {
         id: 'field0',
@@ -161,48 +159,5 @@ describe('features/metadata-instance-editor/fields/TemplatedInstance', () => {
             />,
         );
         expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should correctly render fields corresponding to the template filters only', () => {
-        const wrapper = shallow(
-            <TemplatedInstance
-                data={data}
-                dataValue="value"
-                errors={{}}
-                templateFilters={templateFilters}
-                template={{
-                    fields,
-                }}
-            />,
-        );
-        const includedIndices = new Set([2, 3, 5]);
-        expect(
-            wrapper.find('Field').forEach((field, index) => {
-                if (includedIndices.has(index)) {
-                    expect(field.prop('isHidden')).toBe(false);
-                } else {
-                    expect(field.prop('isHidden')).toBe(true);
-                }
-            }),
-        );
-    });
-
-    test('should correctly render fields based on hidden or isHidden property if no template filters are specified', () => {
-        const wrapper = shallow(
-            <TemplatedInstance
-                data={data}
-                dataValue="value"
-                errors={{}}
-                template={{
-                    fields,
-                }}
-            />,
-        );
-        expect(
-            wrapper.find('Field').forEach((field, index) => {
-                const isHidden = !!(fields[index].isHidden || fields[index].hidden);
-                expect(field.prop('isHidden')).toBe(isHidden);
-            }),
-        );
     });
 });

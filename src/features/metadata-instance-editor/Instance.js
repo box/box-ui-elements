@@ -53,7 +53,6 @@ type Props = {
         rawData: Object,
     ) => void,
     template: MetadataTemplate,
-    templateFilters?: Set<string>,
 };
 
 type State = {
@@ -574,14 +573,7 @@ class Instance extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const {
-            cascadePolicy = {},
-            templateFilters,
-            isDirty,
-            isCascadingPolicyApplicable,
-            isOpen,
-            template,
-        }: Props = this.props;
+        const { cascadePolicy = {}, isDirty, isCascadingPolicyApplicable, isOpen, template }: Props = this.props;
         const { fields = [] } = template;
         const {
             data,
@@ -650,7 +642,6 @@ class Instance extends React.PureComponent<Props, State> {
                                         canEdit={isEditing}
                                         data={data}
                                         errors={errors}
-                                        templateFilters={templateFilters}
                                         onFieldChange={this.onFieldChange}
                                         onFieldRemove={this.onFieldRemove}
                                         template={template}

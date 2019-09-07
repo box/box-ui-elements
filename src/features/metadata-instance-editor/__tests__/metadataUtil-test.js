@@ -1,5 +1,5 @@
 // @flow
-import { convertTemplateFilters, isHidden } from '../metadataUtil';
+import { isHidden, normalizeTemplateFilters, normalizeTemplates } from '../metadataUtil';
 
 describe('isHidden()', () => {
     [
@@ -103,23 +103,170 @@ describe('isHidden()', () => {
     });
 });
 
-describe('convertTemplateFilters()', () => {
-    const singleFilter = 'abcde';
-    const multipleFilters = ['ghijk', 'lmnop', 'uvxyz'];
-    [
+describe('normalizeTemplateFilters()', () => {
+    test.each`
+        description                                                         | filters                        | expected
+        ${'should convert a single filter into a Set object with one item'} | ${'abcde'}                     | ${new Set(['abcde'])}
+        ${'should convert multiple template filters into a Set object'}     | ${['ghijk', 'lmnop', 'uvxyz']} | ${new Set(['ghijk', 'lmnop', 'uvxyz'])}
+    `('$description', ({ filters, expected }) => {
+        expect(normalizeTemplateFilters(filters)).toEqual(expected);
+    });
+});
+
+describe('normalizeTemplates()', () => {
+    const sampleTemplates = [
         {
-            filters: singleFilter,
-            description: 'should convert a single filter into a Set object with one item',
-            expected: new Set([singleFilter]),
+            displayName: 'Animals',
+            fields: [
+                {
+                    displayName: 'Species',
+                    id: 'species',
+                    key: 'species',
+                    options: [{ id: 'armadillo', key: 'armadillo' }, { id: 'narwhal', key: 'narwhal' }],
+                    type: 'multiSelect',
+                },
+                {
+                    displayName: 'Name',
+                    id: 'name',
+                    key: 'name',
+                    type: 'string',
+                },
+                {
+                    displayName: 'Date of birth',
+                    id: 'dob',
+                    key: 'dob',
+                    type: 'date',
+                },
+                {
+                    displayName: 'Weight',
+                    id: 'weight',
+                    key: 'weight',
+                    type: 'float',
+                },
+                {
+                    displayName: 'Color',
+                    id: 'color',
+                    key: 'color',
+                    options: [
+                        { id: 'brown', key: 'brown' },
+                        { id: 'gray', key: 'gray' },
+                        { id: 'pink', key: 'pink' },
+                        { id: 'blue', key: 'blue' },
+                        { id: 'mottled', key: 'mottled' },
+                        { id: 'striped', key: 'striped' },
+                    ],
+                    type: 'multiSelect',
+                },
+            ],
+            id: 'animals',
+            templateKey: 'animals',
         },
         {
-            filters: multipleFilters,
-            description: 'should convert multiple template filters into a Set object',
-            expected: new Set(multipleFilters),
+            displayName: 'Sofas',
+            fields: [
+                {
+                    displayName: 'Style',
+                    id: 'style',
+                    key: 'style',
+                    options: [
+                        { id: 'midCenturyModern', key: 'Mid-century modern' },
+                        { id: 'farmhouse', key: 'Farmhouse' },
+                        { id: 'glam', key: 'Glam' },
+                        { id: 'bohemian', key: 'Bohemian' },
+                        { id: 'frenchCountry', key: 'French country' },
+                        { id: 'coastal', key: 'Coastal' },
+                    ],
+                    type: 'multiSelect',
+                },
+                {
+                    displayName: 'Cost',
+                    id: 'cost',
+                    key: 'cost',
+                    type: 'float',
+                },
+                {
+                    displayName: 'Handmade',
+                    id: 'handmade',
+                    key: 'handmade',
+                    options: [{ id: 'yes', key: 'yes' }, { id: 'no', key: 'no' }],
+                    type: 'multiSelect',
+                },
+            ],
+            id: 'sofas',
+            templateKey: 'sofas',
         },
-    ].forEach(({ description, filters, expected }) => {
-        test(description, () => {
-            expect(convertTemplateFilters(filters)).toEqual(expected);
-        });
+        {
+            displayName: 'Books',
+            fields: [
+                {
+                    displayName: 'Genre',
+                    id: 'genre',
+                    key: 'genre',
+                    options: [
+                        { id: 'scienceFiction', key: 'Science Fiction' },
+                        { id: 'fantasy', key: 'Fantasy' },
+                        { id: 'mystery', key: 'Mystery' },
+                        { id: 'thriller', key: 'Thriller' },
+                        { id: 'postmodern', key: 'Postmodern' },
+                        { id: 'drama', key: 'Drama' },
+                    ],
+                    type: 'multiSelect',
+                },
+                {
+                    displayName: 'Cost',
+                    id: 'cost',
+                    key: 'cost',
+                    type: 'float',
+                },
+                {
+                    displayName: 'Status',
+                    id: 'status',
+                    key: 'status',
+                    options: [{ id: 'read', key: 'Read' }, { id: 'wantToRead', key: 'Want to read' }],
+                    type: 'multiSelect',
+                },
+            ],
+            id: 'books',
+            templateKey: 'books',
+        },
+    ];
+    const templateWithFilteredFields = [
+        {
+            displayName: 'Books',
+            fields: [
+                {
+                    displayName: 'Genre',
+                    id: 'genre',
+                    key: 'genre',
+                    options: [
+                        { id: 'scienceFiction', key: 'Science Fiction' },
+                        { id: 'fantasy', key: 'Fantasy' },
+                        { id: 'mystery', key: 'Mystery' },
+                        { id: 'thriller', key: 'Thriller' },
+                        { id: 'postmodern', key: 'Postmodern' },
+                        { id: 'drama', key: 'Drama' },
+                    ],
+                    type: 'multiSelect',
+                },
+                {
+                    displayName: 'Status',
+                    id: 'status',
+                    key: 'status',
+                    options: [{ id: 'read', key: 'Read' }, { id: 'wantToRead', key: 'Want to read' }],
+                    type: 'multiSelect',
+                },
+            ],
+            id: 'books',
+            templateKey: 'books',
+        },
+    ];
+    test.only.each`
+        description                                                                                     | templates          | selectedTemplateKey               | templateFilters              | expected
+        ${'should return an empty array if the provided template key is not found'}                     | ${sampleTemplates} | ${'cars'}                         | ${['make', 'model', 'year']} | ${[]}
+        ${'should return an array of templates if no selected template is provided'}                    | ${sampleTemplates} | ${undefined}                      | ${['genre', 'status']}       | ${sampleTemplates}
+        ${'should return an array of one template with all fields if no template filters are provided'} | ${sampleTemplates} | ${sampleTemplates[0].templateKey} | ${undefined}                 | ${[sampleTemplates[0]]}
+        ${'should return an array of one template with filtered fields'}                                | ${sampleTemplates} | ${sampleTemplates[2].templateKey} | ${['genre', 'status']}       | ${templateWithFilteredFields}
+    `('$description', ({ templates, selectedTemplateKey, templateFilters, expected }) => {
+        expect(normalizeTemplates(templates, selectedTemplateKey, templateFilters)).toEqual(expected);
     });
 });
