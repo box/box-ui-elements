@@ -30,9 +30,10 @@ const normalizeTemplates = (
         return clonedTemplates;
     }
     clonedTemplates = clonedTemplates.filter(template => template.templateKey === selectedTemplateKey);
-    if (templateFilters && clonedTemplates.length > 0) {
+    const fields = clonedTemplates[0] ? clonedTemplates[0].fields : null;
+    if (templateFilters && fields) {
         const normalizedFilters = normalizeTemplateFilters(templateFilters);
-        clonedTemplates[0].fields = clonedTemplates[0].fields.filter(field => normalizedFilters.has(field.id));
+        clonedTemplates[0].fields = fields.filter(field => normalizedFilters.has(field.id));
     }
     return clonedTemplates;
 };

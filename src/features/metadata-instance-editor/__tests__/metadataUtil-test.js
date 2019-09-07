@@ -260,7 +260,7 @@ describe('normalizeTemplates()', () => {
             templateKey: 'books',
         },
     ];
-    test.only.each`
+    test.each`
         description                                                                                     | templates          | selectedTemplateKey               | templateFilters              | expected
         ${'should return an empty array if the provided template key is not found'}                     | ${sampleTemplates} | ${'cars'}                         | ${['make', 'model', 'year']} | ${[]}
         ${'should return an array of templates if no selected template is provided'}                    | ${sampleTemplates} | ${undefined}                      | ${['genre', 'status']}       | ${sampleTemplates}
