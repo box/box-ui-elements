@@ -25,11 +25,10 @@ const normalizeTemplates = (
     selectedTemplateKey?: string,
     templateFilters?: Array<string> | string,
 ): Array<MetadataTemplate> => {
-    let clonedTemplates = templates.slice(0); // cloned for editing purposes
     if (!selectedTemplateKey) {
-        return clonedTemplates;
+        return [...templates];
     }
-    clonedTemplates = clonedTemplates.filter(template => template.templateKey === selectedTemplateKey);
+    const clonedTemplates = templates.filter(template => template.templateKey === selectedTemplateKey);
     const fields = clonedTemplates[0] ? clonedTemplates[0].fields : null;
     if (templateFilters && fields) {
         const normalizedFilters = normalizeTemplateFilters(templateFilters);
