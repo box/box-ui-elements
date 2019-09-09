@@ -22,6 +22,8 @@ type Props = {
         cascadingPolicy?: MetadataCascadingPolicyData,
         rawData: Object,
     ) => void,
+    selectedTemplateKey?: string,
+    templateFilters?: Array<string> | string,
     templates: Array<MetadataTemplate>,
     title?: React.Node,
 };
@@ -35,6 +37,7 @@ const MetadataInstanceEditor = ({
     onRemove,
     onAdd,
     onSave,
+    selectedTemplateKey,
     templates,
     title,
 }: Props) => (
@@ -57,6 +60,7 @@ const MetadataInstanceEditor = ({
                     onModification={onModification}
                     onRemove={onRemove}
                     onSave={onSave}
+                    selectedTemplateKey={selectedTemplateKey}
                 />
             </ScrollWrapper>
         )}

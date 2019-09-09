@@ -1,6 +1,7 @@
 import React from 'react';
 
 import MetadataInstanceEditor from '../MetadataInstanceEditor';
+import Instances from '../Instances';
 
 // Templates
 
@@ -454,5 +455,19 @@ describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
         );
 
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should correctly render editors with template filters', () => {
+        const selectedTemplateKey = 'armadillos';
+        const wrapper = shallow(
+            <MetadataInstanceEditor
+                editors={editorsOnServer}
+                selectedTemplateKey={selectedTemplateKey}
+                templates={templatesOnServer}
+            />,
+        );
+        const instances = wrapper.find(Instances);
+        expect(instances).toHaveLength(1);
+        expect(instances.prop('selectedTemplateKey')).toBe(selectedTemplateKey);
     });
 });

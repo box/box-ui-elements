@@ -31,7 +31,7 @@ import {
     JSON_PATCH_OP_TEST,
 } from './constants';
 import { isValidValue } from './fields/validateField';
-import isHidden from './metadataUtil';
+import { isHidden } from './metadataUtil';
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import './Instance.scss';
 

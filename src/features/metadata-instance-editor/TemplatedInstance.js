@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Field from './fields/Field';
 import messages from './messages';
-import isHidden from './metadataUtil';
+import { isHidden } from './metadataUtil';
 import './TemplatedInstance.scss';
 
 type Props = {

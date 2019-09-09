@@ -14,27 +14,39 @@ type Props = {
         cascadingPolicy?: MetadataCascadingPolicyData,
         rawData: Object,
     ) => void,
+    selectedTemplateKey?: string,
 };
 
-const Instances = ({ isCascadingPolicyApplicable = false, editors = [], onModification, onRemove, onSave }: Props) =>
+const Instances = ({
+    isCascadingPolicyApplicable = false,
+    editors = [],
+    onModification,
+    onRemove,
+    onSave,
+    selectedTemplateKey,
+}: Props) =>
     editors.map<React.Element<typeof Instance>>(
-        ({ isDirty = false, instance, hasError = false, template }: MetadataEditor) => (
-            <Instance
-                canEdit={instance.canEdit}
-                cascadePolicy={instance.cascadePolicy}
-                data={instance.data}
-                hasError={hasError}
-                id={instance.id}
-                isCascadingPolicyApplicable={isCascadingPolicyApplicable}
-                isDirty={isDirty}
-                isOpen={editors.length === 1}
-                key={`${instance.id}-${template.templateKey}`}
-                onModification={onModification}
-                onSave={onSave}
-                onRemove={onRemove}
-                template={template}
-            />
-        ),
+        ({ isDirty = false, instance, hasError = false, template }: MetadataEditor) => {
+            const { templateKey } = template;
+            const isOpen = editors.length === 1 || templateKey === selectedTemplateKey;
+            return (
+                <Instance
+                    canEdit={instance.canEdit}
+                    cascadePolicy={instance.cascadePolicy}
+                    data={instance.data}
+                    hasError={hasError}
+                    id={instance.id}
+                    isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                    isDirty={isDirty}
+                    isOpen={isOpen}
+                    key={`${instance.id}-${templateKey}`}
+                    onModification={onModification}
+                    onSave={onSave}
+                    onRemove={onRemove}
+                    template={template}
+                />
+            );
+        },
     );
 
 export default Instances;

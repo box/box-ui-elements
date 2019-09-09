@@ -61,7 +61,12 @@ var ContentSidebar = require('./ContentSidebar').default;
 #### MetadataSidebarProps
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| *tbd* | - | - | - |
+| selectedTemplateKey | `string`         |  | `templateKey` for the template to show. If provided, |
+|                     |                  |  | no other templates will be visible. |
+| templateFilters     | `Array<string>`  |  | Template field IDs for fields that should be visible and editable. |
+|                     | or `string`      |  | To show a single field, pass the ID as a string; to show multiple |
+|                     |                  |  | fields, pass an array of IDs as strings. If no `templateFilters` are |
+|                     |                  |  | provided, then all fields will be visible and editable. |
 
 #### SkillsSidebarProps
 | Prop | Type | Default | Description |

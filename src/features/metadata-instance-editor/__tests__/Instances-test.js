@@ -187,4 +187,21 @@ describe('features/metadata-editor-editor/Instances', () => {
         const wrapper = shallow(<Instances editors={editorsOnServer} />);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should correctly render instances with editors and a selected template', () => {
+        const wrapper = shallow(<Instances editors={editorsOnServer} selectedTemplateKey="template1" />);
+        const selectedTemplate = wrapper.find('Instance').at(0);
+        expect(selectedTemplate.prop('isOpen')).toBe(true);
+        expect(selectedTemplate.prop('id')).toBe('editor1');
+    });
+
+    test('should correctly render instances with a selected template and multiple editors', () => {
+        const wrapper = shallow(<Instances editors={editorsOnServer} selectedTemplateKey="template2" />);
+        const selectedTemplate = wrapper.find('Instance').at(1);
+        expect(selectedTemplate.prop('isOpen')).toBe(true);
+        expect(selectedTemplate.prop('id')).toBe('editor2');
+        const unselectedTemplate = wrapper.find('Instance').at(0);
+        expect(unselectedTemplate.prop('isOpen')).toBe(false);
+        expect(unselectedTemplate.prop('id')).toBe('editor1');
+    });
 });
