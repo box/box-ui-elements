@@ -6,6 +6,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     <AddTaskButton
       isDisabled={false}
       onTaskModalClose={[Function]}
+      onTaskModalOpen={[Function]}
       taskFormProps={
         Object {
           "approverSelectorContacts": undefined,
