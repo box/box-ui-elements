@@ -20,10 +20,13 @@ import { mark } from '../../utils/performance';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
+import LocalStore from '../../utils/LocalStore';
 import { withLogger } from '../common/logger';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ORIGIN_ACTIVITY_SIDEBAR,
+    SIDEBAR_FORCE_KEY,
+    SIDEBAR_FORCE_VALUE_OPEN,
     SIDEBAR_VIEW_ACTIVITY,
     TASK_COMPLETION_RULE_ALL,
 } from '../../constants';
@@ -87,6 +90,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onTaskDelete: noop,
         onTaskUpdate: noop,
     };
+
+    store: LocalStore = new LocalStore();
 
     constructor(props: Props) {
         super(props);
@@ -533,6 +538,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         });
     };
 
+    onTaskModalOpen = () => {
+        this.store.setItem(SIDEBAR_FORCE_KEY, SIDEBAR_FORCE_VALUE_OPEN);
+    };
+
     refresh(): void {
         this.fetchFeedItems(true);
     }
@@ -540,10 +549,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     renderAddTaskButton = () => {
         const { isDisabled } = this.props;
         const { approverSelectorContacts } = this.state;
-        const { getApproverWithQuery, getAvatarUrl, createTask, onTaskModalClose } = this;
+        const { getApproverWithQuery, getAvatarUrl, createTask, onTaskModalClose, onTaskModalOpen } = this;
         const props = {
             isDisabled,
             onTaskModalClose,
+            onTaskModalOpen,
         };
         const taskFormProps = {
             approverSelectorContacts,

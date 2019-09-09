@@ -22,6 +22,7 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
+import { SIDEBAR_FORCE_KEY, SIDEBAR_FORCE_VALUE_OPEN, SIDEBAR_FORCE_VALUE_CLOSED } from '../../constants';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -53,11 +54,6 @@ type Props = {
 type State = {
     isDirty: boolean,
 };
-
-export const SIDEBAR_FORCE_KEY: 'bcs.force' = 'bcs.force';
-export const SIDEBAR_FORCE_VALUE_CLOSED: 'closed' = 'closed';
-export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
-
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
         isDefaultOpen: true,

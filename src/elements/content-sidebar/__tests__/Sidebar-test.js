@@ -1,12 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { SIDEBAR_FORCE_KEY, SIDEBAR_FORCE_VALUE_OPEN, SIDEBAR_FORCE_VALUE_CLOSED } from '../../../constants';
 import LocalStore from '../../../utils/LocalStore';
-import {
-    SIDEBAR_FORCE_KEY,
-    SIDEBAR_FORCE_VALUE_CLOSED,
-    SIDEBAR_FORCE_VALUE_OPEN,
-    SidebarComponent as Sidebar,
-} from '../Sidebar';
+import { SidebarComponent as Sidebar } from '../Sidebar';
 
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');

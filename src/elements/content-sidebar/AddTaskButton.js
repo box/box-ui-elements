@@ -9,6 +9,7 @@ import type { TaskType } from '../../common/types/tasks';
 type Props = {|
     isDisabled: boolean,
     onTaskModalClose: () => void,
+    onTaskModalOpen: () => void,
     taskFormProps: TaskFormProps,
 |};
 
@@ -29,7 +30,10 @@ class AddTaskButton extends React.Component<Props, State> {
         isDisabled: false,
     };
 
-    handleClickMenuItem = (taskType: TaskType) => this.setState({ isTaskFormOpen: true, taskType });
+    handleClickMenuItem = (taskType: TaskType) => {
+        this.props.onTaskModalOpen();
+        this.setState({ isTaskFormOpen: true, taskType });
+    };
 
     handleModalClose = () => {
         this.props.onTaskModalClose();
