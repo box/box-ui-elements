@@ -44,6 +44,7 @@ import {
     VIEW_FOLDER,
     VIEW_ERROR,
     VIEW_RECENTS,
+    VIEW_METADATA,
     VIEW_MODE_LIST,
     TYPE_FILE,
     TYPE_WEBLINK,
@@ -53,11 +54,13 @@ import {
     DEFAULT_PAGE_SIZE,
     DEFAULT_VIEW_FILES,
     DEFAULT_VIEW_RECENTS,
+    DEFAULT_VIEW_METADATA,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
+import type { MetadataQuery, MetadataQueryResponse, MetadataColumnsToShow } from '../../common/types/metadataQueries';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -94,6 +97,8 @@ type Props = {
     logoUrl?: string,
     measureRef?: Function,
     messages?: StringMap,
+    metadataColumnsToShow: MetadataColumnsToShow,
+    metadataQuery: MetadataQuery,
     onCreate: Function,
     onDelete: Function,
     onDownload: Function,
@@ -288,10 +293,15 @@ class ContentExplorer extends Component<Props, State> {
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
-        if (defaultView === DEFAULT_VIEW_RECENTS) {
-            this.showRecents();
-        } else {
-            this.fetchFolder(currentFolderId);
+        switch (defaultView) {
+            case DEFAULT_VIEW_RECENTS:
+                this.showRecents();
+                break;
+            case DEFAULT_VIEW_METADATA:
+                this.showMetadataQueryResults();
+                break;
+            default:
+                this.fetchFolder(currentFolderId);
         }
     }
 
@@ -312,6 +322,46 @@ class ContentExplorer extends Component<Props, State> {
         if (typeof currentFolderId === 'string' && id !== currentFolderId) {
             this.fetchFolder(currentFolderId);
         }
+    }
+
+    /**
+     * Metadata queries success callback
+     *
+     * @private
+     * @param {Object} metadataQueryCollection - Metadata query response collection
+     * @return {void}
+     */
+    showMetadataQueryResultsSuccessCallback(metadataQueryCollection: MetadataQueryResponse) {
+        const { currentCollection }: State = this.state;
+        this.setState({
+            currentCollection: { ...currentCollection, ...metadataQueryCollection, percentLoaded: 100 },
+        });
+    }
+
+    /**
+     * Queries metadata_queries/execute API and fetches the result
+     *
+     * @private
+     * @return {void}
+     */
+    showMetadataQueryResults() {
+        const { metadataQuery }: Props = this.props;
+        // Reset search state, the view and show busy indicator
+        this.setState({
+            searchQuery: '',
+            currentCollection: this.currentUnloadedCollection(),
+            view: VIEW_METADATA,
+        });
+
+        // Fetch the Metadata Query Results
+        this.api.getMetadataQueryAPI().queryMetadata(
+            metadataQuery,
+            (metadataQueryCollection: MetadataQueryResponse) => {
+                this.showMetadataQueryResultsSuccessCallback(metadataQueryCollection);
+            },
+            this.errorCallback,
+            { forceFetch: true },
+        );
     }
 
     /**
@@ -1357,6 +1407,7 @@ class ContentExplorer extends Component<Props, State> {
             requestInterceptor,
             responseInterceptor,
             contentPreviewProps,
+            metadataColumnsToShow,
         }: Props = this.props;
 
         const {
@@ -1383,6 +1434,7 @@ class ContentExplorer extends Component<Props, State> {
         const styleClassName = classNames('be bce', className);
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
+        const hasHeader: boolean = view !== VIEW_METADATA; // Show Header and SubHeader when it's not metadata view
 
         const viewMode = this.getViewMode();
         const maxGridColumnCount = this.getMaxNumberOfGridViewColumnsForWidth();
@@ -1393,33 +1445,37 @@ class ContentExplorer extends Component<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
-                        <Header
-                            view={view}
-                            isSmall={isSmall}
-                            searchQuery={searchQuery}
-                            logoUrl={logoUrl}
-                            onSearch={this.search}
-                        />
-                        <SubHeader
-                            view={view}
-                            viewMode={viewMode}
-                            rootId={rootFolderId}
-                            isSmall={isSmall}
-                            rootName={rootName}
-                            currentCollection={currentCollection}
-                            canUpload={allowUpload}
-                            canCreateNewFolder={allowCreate}
-                            gridColumnCount={gridColumnCount}
-                            gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
-                            gridMinColumns={GRID_VIEW_MIN_COLUMNS}
-                            maxGridColumnCountForWidth={maxGridColumnCount}
-                            onUpload={this.upload}
-                            onCreate={this.createFolder}
-                            onGridViewSliderChange={this.onGridViewSliderChange}
-                            onItemClick={this.fetchFolder}
-                            onSortChange={this.sort}
-                            onViewModeChange={this.changeViewMode}
-                        />
+                        {hasHeader && (
+                            <>
+                                <Header
+                                    view={view}
+                                    isSmall={isSmall}
+                                    searchQuery={searchQuery}
+                                    logoUrl={logoUrl}
+                                    onSearch={this.search}
+                                />
+                                <SubHeader
+                                    view={view}
+                                    viewMode={viewMode}
+                                    rootId={rootFolderId}
+                                    isSmall={isSmall}
+                                    rootName={rootName}
+                                    currentCollection={currentCollection}
+                                    canUpload={allowUpload}
+                                    canCreateNewFolder={allowCreate}
+                                    gridColumnCount={gridColumnCount}
+                                    gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                                    gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                                    maxGridColumnCountForWidth={maxGridColumnCount}
+                                    onUpload={this.upload}
+                                    onCreate={this.createFolder}
+                                    onGridViewSliderChange={this.onGridViewSliderChange}
+                                    onItemClick={this.fetchFolder}
+                                    onSortChange={this.sort}
+                                    onViewModeChange={this.changeViewMode}
+                                />
+                            </>
+                        )}
                         <Content
                             canDelete={canDelete}
                             canDownload={canDownload}
@@ -1446,6 +1502,7 @@ class ContentExplorer extends Component<Props, State> {
                             tableRef={this.tableRef}
                             view={view}
                             viewMode={viewMode}
+                            metadataColumnsToShow={metadataColumnsToShow}
                         />
                         <Footer>
                             <Pagination
