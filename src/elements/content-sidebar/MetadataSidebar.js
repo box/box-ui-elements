@@ -421,7 +421,6 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                                 onRemove={this.onRemove}
                                 onSave={this.onSave}
                                 selectedTemplateKey={selectedTemplateKey}
-                                templates={templates}
                             />
                         )}
                     </LoadingIndicatorWrapper>
