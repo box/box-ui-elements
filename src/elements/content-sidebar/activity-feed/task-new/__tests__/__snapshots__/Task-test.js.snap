@@ -82,7 +82,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           </MenuItem>
         </MediaMenu>
       </TetherComponent>
-      <div>
+      <div
+        className="bcs-Task-headline"
+      >
         <FormattedMessage
           defaultMessage="{user} assigned you a Task"
           id="be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineGeneralCurrentUser"

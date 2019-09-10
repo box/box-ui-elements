@@ -61,7 +61,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           </MenuItem>
         </MediaMenu>
       </TetherComponent>
-      <div>
+      <div
+        className="bcs-Comment-headline"
+      >
         <UserLink
           data-resin-target="activityfeed-profilelink"
           id={10}
@@ -105,7 +107,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       />
     </MediaFigure>
     <MediaBody>
-      <div>
+      <div
+        className="bcs-Comment-headline"
+      >
         <UserLink
           data-resin-target="activityfeed-profilelink"
           id={10}
@@ -150,7 +154,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
       />
     </MediaFigure>
     <MediaBody>
-      <div>
+      <div
+        className="bcs-Comment-headline"
+      >
         <UserLink
           data-resin-target="activityfeed-profilelink"
           id={10}
@@ -198,7 +204,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
       />
     </MediaFigure>
     <MediaBody>
-      <div>
+      <div
+        className="bcs-Comment-headline"
+      >
         <UserLink
           data-resin-target="activityfeed-profilelink"
           id={10}
