@@ -20,7 +20,6 @@ import { mark } from '../../utils/performance';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
-import LocalStore from '../../utils/LocalStore';
 import { withLogger } from '../common/logger';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
@@ -88,8 +87,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onTaskDelete: noop,
         onTaskUpdate: noop,
     };
-
-    store: LocalStore = new LocalStore();
 
     constructor(props: Props) {
         super(props);
