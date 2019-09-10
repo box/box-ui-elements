@@ -31,6 +31,10 @@ class AddTaskButton extends React.Component<Props, State> {
         isDisabled: false,
     };
 
+    /* 
+    1. Pushing the open state into history keeps the sidebar open upon resize and refresh
+    2. Preventing the sidebar from closing keeps the task modal open upon edit and resize 
+    */
     handleClickMenuItem = (taskType: TaskType) => {
         this.props.history.replace({ state: { open: true } });
         this.setState({ isTaskFormOpen: true, taskType });

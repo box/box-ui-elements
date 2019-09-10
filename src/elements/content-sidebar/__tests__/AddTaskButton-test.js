@@ -5,7 +5,7 @@ import { AddTaskButtonComponent as AddTaskButton } from '../AddTaskButton';
 describe('elements/content-sidebar/AddTaskButton', () => {
     /* 
     1. Pushing the open state into history keeps the sidebar open upon resize and refresh
-    2. Preventing the sidebar from closing keeps the task modal open during edit 
+    2. Preventing the sidebar from closing keeps the task modal open upon edit and resize 
     */
 
     test('should call history.replace state with force open state when task menu items are clicked', () => {
