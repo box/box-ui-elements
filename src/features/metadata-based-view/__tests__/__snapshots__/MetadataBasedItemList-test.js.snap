@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/metadata-based-view/MetadataBasedItemList render() should render a default component correctly 1`] = `
+<MetadataBasedItemList
+  currentCollection={
+    Object {
+      "items": Array [
+        Object {
+          "metadata": Object {
+            "data": Object {
+              "amount": 500,
+              "type": "bill",
+            },
+          },
+          "name": "name1.pdf",
+        },
+        Object {
+          "metadata": Object {
+            "data": Object {
+              "amount": 200,
+              "type": "receipt",
+            },
+          },
+          "name": "name2.mp4",
+        },
+      ],
+      "nextMarker": "abc",
+    }
+  }
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  metadataColumnsToShow={
+    Array [
+      "type",
+      "amount",
+    ]
+  }
+>
+  <Component>
+    AutoSizer
+  </Component>
+</MetadataBasedItemList>
+`;
