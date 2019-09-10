@@ -33,4 +33,15 @@ describe('elements/content-sidebar/Skills/Keywords/EditableKeywords', () => {
             expect(instance.onBlur).not.toBeCalled();
         });
     });
+
+    describe('Component Lifecycle', () => {
+        test('should reset when new keywords are given', () => {
+            const wrapper = shallow(<EditableKeywords />);
+
+            wrapper.setState({ keyword: 'Test Case' });
+            wrapper.setProps({ keywords: ['Test'] });
+
+            expect(wrapper.state('keyword')).toEqual('');
+        });
+    });
 });

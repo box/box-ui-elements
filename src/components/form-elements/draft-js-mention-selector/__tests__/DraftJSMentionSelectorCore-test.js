@@ -388,4 +388,24 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
             expect(editorStateCall.getCurrentContent().getPlainText()).toEqual('Hey @Fool Name ');
         });
     });
+
+    describe('componentDidUpdate()', () => {
+        test('should set active mention to null if empty contacts are passed in', () => {
+            const contact = {
+                id: 1,
+                item: {},
+                name: 'John',
+                value: '867-5309',
+            };
+            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} contacts={[contact]} />);
+
+            wrapper.setState({
+                activeMention: oneMentionExpectedMention,
+            });
+
+            wrapper.setProps({ contacts: [] });
+
+            expect(wrapper.state('activeMention')).toBe(null);
+        });
+    });
 });

@@ -323,16 +323,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
     };
 
     /**
-     * Called when the Open With button gets new properties
-     *
-     * @private
-     * @return {void}
-     */
-    UNSAFE_componentWillReceiveProps(): void {
-        /* no-op */
-    }
-
-    /**
      * Click handler when an integration is clicked
      *
      * @private

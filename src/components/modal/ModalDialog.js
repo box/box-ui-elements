@@ -35,10 +35,6 @@ class ModalDialog extends React.Component<Props> {
         closeButtonProps: {},
     };
 
-    UNSAFE_componentWillMount() {
-        this.modalID = uniqueId('modal');
-    }
-
     /**
      * Handles clicking on the close button
      * @param {SyntheticMouseEvent} event
@@ -51,7 +47,7 @@ class ModalDialog extends React.Component<Props> {
         }
     };
 
-    modalID: string;
+    modalID: string = uniqueId('modal');
 
     /**
      * Renders a button if onRequestClose is passed in

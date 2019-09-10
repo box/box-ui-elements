@@ -34,15 +34,14 @@ class DropdownMenu extends React.Component<Props, State> {
         isRightAligned: false,
     };
 
+    menuID = uniqueId('menu');
+
+    menuButtonID = uniqueId('menubutton');
+
     state = {
         initialFocusIndex: null,
         isOpen: false,
     };
-
-    UNSAFE_componentWillMount() {
-        this.menuID = uniqueId('menu');
-        this.menuButtonID = uniqueId('menubutton');
-    }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
         if (!prevState.isOpen && this.state.isOpen) {

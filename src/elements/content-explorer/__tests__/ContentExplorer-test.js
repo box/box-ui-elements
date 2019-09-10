@@ -253,6 +253,22 @@ describe('elements/content-explorer/ContentExplorer', () => {
         });
     });
 
+    describe('lifecycle methods', () => {
+        test('componentDidUpdate', () => {
+            const props = {
+                currentFolderId: '123',
+            };
+
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+            instance.fetchFolder = jest.fn();
+
+            wrapper.setProps({ currentFolderId: '345' });
+
+            expect(instance.fetchFolder).toBeCalledWith('345');
+        });
+    });
+
     describe('getMaxNumberOfGridViewColumnsForWidth()', () => {
         test('should be able to display 7 columns if isVeryLarge', () => {
             const wrapper = getWrapper({ isVeryLarge: true });

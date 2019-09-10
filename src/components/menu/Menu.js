@@ -47,15 +47,15 @@ class Menu extends React.Component<Props> {
         this.setInitialFocusIndex();
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps: Props) {
-        if (nextProps.isSubmenu && !nextProps.isHidden && this.props.isHidden) {
-            // If updating submenu, use the upcoming props instead of current props.
-            this.setMenuItemEls();
-            this.setInitialFocusIndex(nextProps);
-        }
-    }
-
     componentDidUpdate(prevProps: Props) {
+        if (this.props.isSubmenu && prevProps.isHidden && !this.props.isHidden) {
+            // If updating submenu, use the current props instead of previous props.
+            this.setMenuItemEls();
+            this.setInitialFocusIndex(this.props);
+
+            return;
+        }
+
         // update focus index and menu item elements when the number of children changes
         if (React.Children.toArray(prevProps.children).length !== React.Children.toArray(this.props.children).length) {
             const focusedMenuItemEl = this.menuItemEls[this.focusIndex];

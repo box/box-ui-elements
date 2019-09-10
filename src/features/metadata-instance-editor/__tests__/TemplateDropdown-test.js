@@ -249,4 +249,12 @@ describe('features/metadata-instance-editor/fields/', () => {
         expect(onDropdownToggle).toHaveBeenCalledWith(false);
         expect(wrapper.state('isDropdownOpen')).toBe(false);
     });
+
+    test('componentDidUpdate()', () => {
+        const wrapper = getWrapper({ templates: [], usedTemplates: [] });
+        const mockTemplates = { templates: ['test'] };
+
+        wrapper.setProps(mockTemplates);
+        expect(wrapper.state('templates')).toEqual(['test']);
+    });
 });

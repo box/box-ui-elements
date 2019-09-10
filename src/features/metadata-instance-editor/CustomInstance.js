@@ -24,19 +24,22 @@ class CustomInstance extends React.PureComponent<Props, State> {
         data: {},
     };
 
+    static getDerivedStateFromProps(props: Props, state: State): any {
+        if (props.data !== state.properties) {
+            return {
+                properties: { ...props.data },
+            };
+        }
+
+        return null;
+    }
+
     constructor(props: Props) {
         super(props);
         this.state = {
             isAddFieldVisible: false,
             properties: { ...props.data },
         };
-    }
-
-    UNSAFE_componentWillReceiveProps(nextProps: Props) {
-        this.setState({
-            isAddFieldVisible: false,
-            properties: { ...nextProps.data },
-        });
     }
 
     /**

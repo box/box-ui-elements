@@ -49,10 +49,10 @@ class CommentForm extends React.Component<Props, State> {
         commentEditorState: createMentionSelectorState(this.props.tagged_message),
     };
 
-    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
-        const { isOpen } = nextProps;
+    componentDidUpdate({ isOpen: prevIsOpen }: Props): void {
+        const { isOpen } = this.props;
 
-        if (isOpen !== this.props.isOpen && !isOpen) {
+        if (isOpen !== prevIsOpen && !isOpen) {
             this.setState({
                 commentEditorState: createMentionSelectorState(),
             });

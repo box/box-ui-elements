@@ -99,17 +99,19 @@ class Instance extends React.PureComponent<Props, State> {
         this.fieldKeyToTypeMap = createFieldKeyToTypeMap(props.template.fields);
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps: Props) {
-        const { hasError, isDirty }: Props = nextProps;
-        const { isEditing }: State = this.state;
+    componentDidUpdate({ hasError: prevHasError }: Props, prevState: State): void {
+        const element = this.collapsibleRef.current;
+        const { hasError, isDirty }: Props = this.props;
+        const { isEditing }: State = prevState;
 
-        // This only handles cases when an error occurred
-        // or when the dirty state of the instance has changed.
-        // The dirty state can change when either
-        // the metadata was saved OR when the metadata manually
-        // reverted to its original state.
+        if (element && this.state.shouldConfirmRemove) {
+            scrollIntoView(element, {
+                block: 'start',
+                behavior: 'smooth',
+            });
+        }
 
-        if (hasError) {
+        if (hasError && hasError !== prevHasError) {
             // If hasError is true, which means an error occurred while
             // doing a network operation and hence hide the busy indicator
             // Saving also disables isEditing, so need to enable that back.
@@ -128,16 +130,6 @@ class Instance extends React.PureComponent<Props, State> {
                 // For a successfull save we reset cascading overwrite radio
                 this.setState({ isBusy: false, isCascadingOverwritten: false });
             }
-        }
-    }
-
-    componentDidUpdate() {
-        const element = this.collapsibleRef.current;
-        if (element && this.state.shouldConfirmRemove) {
-            scrollIntoView(element, {
-                block: 'start',
-                behavior: 'smooth',
-            });
         }
     }
 
