@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { withRouter, type RouterHistory } from 'react-router-dom';
 import AddTaskMenu from './AddTaskMenu';
 import TaskModal from './TaskModal';
 import { TASK_TYPE_APPROVAL } from '../../constants';
@@ -7,9 +8,9 @@ import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
 import type { TaskType } from '../../common/types/tasks';
 
 type Props = {|
+    history: RouterHistory,
     isDisabled: boolean,
     onTaskModalClose: () => void,
-    onTaskModalOpen: () => void,
     taskFormProps: TaskFormProps,
 |};
 
@@ -31,7 +32,7 @@ class AddTaskButton extends React.Component<Props, State> {
     };
 
     handleClickMenuItem = (taskType: TaskType) => {
-        this.props.onTaskModalOpen();
+        this.props.history.replace({ state: { open: true } });
         this.setState({ isTaskFormOpen: true, taskType });
     };
 
@@ -65,4 +66,5 @@ class AddTaskButton extends React.Component<Props, State> {
     }
 }
 
-export default AddTaskButton;
+export { AddTaskButton as AddTaskButtonComponent };
+export default withRouter(AddTaskButton);

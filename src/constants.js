@@ -331,9 +331,6 @@ export const X_REP_HINT_PNG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
 export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}]`;
 
 /* ------------------ Sidebar View ---------------------- */
-export const SIDEBAR_FORCE_KEY: 'bcs.force' = 'bcs.force';
-export const SIDEBAR_FORCE_VALUE_CLOSED: 'closed' = 'closed';
-export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
 export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';
 export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
