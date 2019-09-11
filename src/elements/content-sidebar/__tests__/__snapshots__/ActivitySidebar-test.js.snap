@@ -3,7 +3,7 @@
 exports[`elements/content-sidebar/ActivitySidebar render() should render the activity feed sidebar 1`] = `
 <SidebarContent
   actions={
-    <AddTaskButton
+    <withRouter(AddTaskButton)
       isDisabled={false}
       onTaskModalClose={[Function]}
       taskFormProps={

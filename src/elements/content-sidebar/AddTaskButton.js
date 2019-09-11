@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { withRouter, type RouterHistory } from 'react-router-dom';
 import AddTaskMenu from './AddTaskMenu';
 import TaskModal from './TaskModal';
 import { TASK_TYPE_APPROVAL } from '../../constants';
@@ -7,6 +8,7 @@ import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
 import type { TaskType } from '../../common/types/tasks';
 
 type Props = {|
+    history: RouterHistory,
     isDisabled: boolean,
     onTaskModalClose: () => void,
     taskFormProps: TaskFormProps,
@@ -29,7 +31,14 @@ class AddTaskButton extends React.Component<Props, State> {
         isDisabled: false,
     };
 
-    handleClickMenuItem = (taskType: TaskType) => this.setState({ isTaskFormOpen: true, taskType });
+    /* 
+    1. Pushing the open state into history keeps the sidebar open upon resize and refresh
+    2. Preventing the sidebar from closing keeps the task modal open upon edit and resize 
+    */
+    handleClickMenuItem = (taskType: TaskType) => {
+        this.props.history.replace({ state: { open: true } });
+        this.setState({ isTaskFormOpen: true, taskType });
+    };
 
     handleModalClose = () => {
         this.props.onTaskModalClose();
@@ -61,4 +70,5 @@ class AddTaskButton extends React.Component<Props, State> {
     }
 }
 
-export default AddTaskButton;
+export { AddTaskButton as AddTaskButtonComponent };
+export default withRouter(AddTaskButton);
