@@ -323,7 +323,7 @@ class Task extends React.Component<Props, State> {
                                 )}
                             </TetherComponent>
                         )}
-                        <div>
+                        <div className="bcs-Task-headline">
                             <FormattedMessage
                                 {...getMessageForTask(!!currentUserAssignment, task_type)}
                                 values={{
