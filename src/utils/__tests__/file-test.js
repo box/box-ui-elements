@@ -1,4 +1,4 @@
-import { isBoxNote, getTypedFileId, getTypedFolderId } from '../file';
+import { isBoxNote, getTypedFileId, getTypedFolderId, getFileExtension } from '../file';
 
 describe('util/file', () => {
     describe('isBoxNote()', () => {
@@ -28,6 +28,18 @@ describe('util/file', () => {
     describe('getTypedFolderId()', () => {
         test('should return typed folder id correctly', () => {
             expect(getTypedFolderId('foo')).toBe('folder_foo');
+        });
+    });
+
+    describe('getFileExtension()', () => {
+        test.each([
+            ['filename.txt', 'txt'],
+            ['filename.backup.mp4', 'mp4'],
+            ['filename..temp.pdf', 'pdf'],
+            [{ name: 'test.pdf' }, ''],
+            ['invalidfilenamepdf', ''],
+        ])('should return extension of file correctly', (filename, extension) => {
+            expect(getFileExtension(filename)).toBe(extension);
         });
     });
 });

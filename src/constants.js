@@ -25,6 +25,7 @@ export const VIEW_ERROR: 'error' = 'error';
 export const VIEW_UPLOAD_EMPTY: 'upload-empty' = 'upload-empty';
 export const VIEW_UPLOAD_IN_PROGRESS: 'upload-inprogress' = 'upload-inprogress';
 export const VIEW_UPLOAD_SUCCESS: 'upload-success' = 'upload-success';
+export const VIEW_METADATA: 'metadata' = 'metadata';
 
 /* ----------------------- ViewModes ---------------------------- */
 export const VIEW_MODE_LIST: 'list' = 'list';
@@ -174,6 +175,7 @@ export const DEFAULT_FETCH_START = 0;
 export const DEFAULT_FETCH_END = 1000;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
+export const DEFAULT_VIEW_METADATA: 'metadata' = 'metadata';
 export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
 export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
 export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';

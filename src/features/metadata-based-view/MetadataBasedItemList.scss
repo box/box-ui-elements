@@ -1,0 +1,24 @@
+@import '../../styles/variables';
+
+.bdl-MetadataBasedItemList {
+    // sass-lint:disable class-name-format
+    .ReactVirtualized__Grid {
+        outline: none;
+    }
+}
+
+.bdl-MetadataBasedItemList-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: $bdl-gray-62;
+    border-bottom: 1px solid $bdl-gray-10;
+
+    svg {
+        margin: 0 10px;
+    }
+}
+
+.bdl-MetadataBasedItemList-cell--filename {
+    color: $bdl-gray;
+}

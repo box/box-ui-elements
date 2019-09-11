@@ -172,7 +172,7 @@ class Comment extends React.Component<Props, State> {
                                 )}
                             </TetherComponent>
                         )}
-                        <div>
+                        <div className="bcs-Comment-headline">
                             <UserLink
                                 data-resin-target={ACTIVITY_TARGETS.PROFILE}
                                 id={createdByUser.id}
