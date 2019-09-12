@@ -45,12 +45,6 @@ class AddTaskButton extends React.Component<Props, State> {
         this.setState({ isTaskFormOpen: false, error: null });
     };
 
-    handleSubmitSuccess = () => {
-        const { onTaskModalClose } = this.props;
-        this.setState({ isTaskFormOpen: false, error: null });
-        onTaskModalClose();
-    };
-
     handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
 
     render() {
@@ -63,7 +57,7 @@ class AddTaskButton extends React.Component<Props, State> {
                 <TaskModal
                     error={error}
                     onSubmitError={this.handleSubmitError}
-                    onSubmitSuccess={this.handleSubmitSuccess}
+                    onSubmitSuccess={this.handleModalClose}
                     onModalClose={this.handleModalClose}
                     isTaskFormOpen={isTaskFormOpen}
                     taskFormProps={taskFormProps}
