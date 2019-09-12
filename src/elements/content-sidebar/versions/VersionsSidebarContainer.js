@@ -18,6 +18,7 @@ import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
 import type { VersionActionCallback, VersionChangeCallback } from './flowTypes';
+import { ERROR_CODE_FETCH_VERSION } from '../../../constants';
 
 type Props = {
     api: API,
@@ -95,8 +96,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         return this.api
             .deleteVersion(this.findVersion(versionId))
-            .then(this.api.fetchData)
-            .then(this.handleFetchSuccess)
+            .then(() => this.api.fetchVersion(versionId))
+            .then(this.mergeResponse)
             .then(() => this.handleDeleteSuccess(versionId))
             .then(() => this.props.onVersionDelete(versionId))
             .catch(() => this.handleActionError(messages.versionActionDeleteError));
@@ -115,30 +116,6 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.props.onVersionPreview(versionId);
     };
 
-    restoreSuccessCallback = (data: BoxItemVersion, resolve: Function, reject: Function) => {
-        const { versions } = this.state;
-        const { id: versionId } = data;
-        if (!versionId) {
-            reject();
-            return;
-        }
-
-        const newVersions = JSON.parse(JSON.stringify(versions)).map(version => {
-            if (version.id !== versionId) {
-                return version;
-            }
-            return Object.assign(version, data);
-        });
-
-        this.setState({
-            error: undefined,
-            isLoading: false,
-            versions: newVersions,
-        });
-
-        resolve();
-    };
-
     handleActionPromote = (versionId: string): Promise<void> => {
         this.setState({ isLoading: true });
 
@@ -155,7 +132,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState({ isLoading: true });
 
         return this.api
-            .restoreVersion(this.findVersion(versionId), this.restoreSuccessCallback)
+            .restoreVersion(this.findVersion(versionId))
+            .then(this.mergeResponse)
             .then(() => this.props.onVersionRestore(versionId))
             .catch(() => this.handleActionError(messages.versionActionRestoreError));
     };
@@ -237,6 +215,30 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     getCurrentVersionId = (): ?string => {
         const { versions } = this.state;
         return versions[0] ? versions[0].id : null;
+    };
+
+    mergeResponse = (data: BoxItemVersion) => {
+        const { versions } = this.state;
+        const { id: versionId } = data;
+
+        if (!versionId) {
+            return Promise.reject(ERROR_CODE_FETCH_VERSION);
+        }
+
+        const newVersions = JSON.parse(JSON.stringify(versions)).map(version => {
+            if (version.id !== versionId) {
+                return version;
+            }
+            return Object.assign(version, data);
+        });
+
+        this.setState({
+            error: undefined,
+            isLoading: false,
+            versions: newVersions,
+        });
+
+        return Promise.resolve();
     };
 
     refresh(): void {

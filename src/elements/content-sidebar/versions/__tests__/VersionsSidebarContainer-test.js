@@ -3,6 +3,7 @@ import { shallow } from 'enzyme/build';
 import messages from '../messages';
 import openUrlInsideIframe from '../../../../utils/iframe';
 import VersionsSidebar from '../VersionsSidebarContainer';
+import { ERROR_CODE_FETCH_VERSION } from '../../../../constants';
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -73,15 +74,15 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             const version = { id: '456' };
 
             instance.api.deleteVersion = jest.fn().mockResolvedValueOnce();
-            instance.api.fetchData = jest.fn().mockResolvedValueOnce();
+            instance.api.fetchVersion = jest.fn().mockResolvedValueOnce();
             instance.findVersion = jest.fn(() => version);
-            instance.handleFetchSuccess = jest.fn();
+            instance.mergeResponse = jest.fn();
             instance.handleDeleteSuccess = jest.fn();
 
             instance.handleActionDelete(version.id).then(() => {
                 expect(instance.api.deleteVersion).toHaveBeenCalledWith(version);
-                expect(instance.api.fetchData).toHaveBeenCalled();
-                expect(instance.handleFetchSuccess).toHaveBeenCalled();
+                expect(instance.api.fetchVersion).toHaveBeenCalled();
+                expect(instance.mergeResponse).toHaveBeenCalled();
                 expect(instance.handleDeleteSuccess).toHaveBeenCalledWith(version.id);
                 expect(handleDelete).toHaveBeenCalledWith(version.id);
             });
@@ -139,40 +140,13 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             instance.api.restoreVersion = jest.fn().mockResolvedValueOnce();
             instance.findVersion = jest.fn(() => version);
-            instance.restoreSuccessCallback = jest.fn();
+            instance.mergeResponse = jest.fn();
 
             instance.handleActionRestore(version.id).then(() => {
-                expect(instance.api.restoreVersion).toHaveBeenCalledWith(version, instance.restoreSuccessCallback);
+                expect(instance.api.restoreVersion).toHaveBeenCalledWith(version);
+                expect(instance.mergeResponse).toHaveBeenCalled();
                 expect(handleRestore).toHaveBeenCalledWith(version.id);
             });
-        });
-    });
-
-    describe('restoreSuccessCallback', () => {
-        test('should update state', () => {
-            const wrapper = getWrapper();
-            wrapper.setState({
-                error: 'error',
-                isLoading: true,
-                versions,
-            });
-            const instance = wrapper.instance();
-
-            const response = { id: versions[1].id, trashed_at: null };
-            const resolve = jest.fn();
-            const reject = jest.fn();
-
-            instance.restoreSuccessCallback(response, resolve, reject);
-
-            expect(wrapper.state('error')).toBe(undefined);
-            expect(wrapper.state('isLoading')).toBe(false);
-            expect(wrapper.state('versions')[0]).toEqual(versions[0]);
-            expect(wrapper.state('versions')[1]).toEqual(Object.assign(versions[1], response));
-            expect(resolve).toBeCalled();
-
-            const badResponse = {};
-            instance.restoreSuccessCallback(badResponse, resolve, reject);
-            expect(reject).toBeCalled();
         });
     });
 
@@ -250,6 +224,34 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             expect(instance.findVersion('456')).toEqual(versions[1]);
             expect(instance.findVersion('abc')).toEqual(undefined);
+        });
+    });
+
+    describe('mergeResponse', () => {
+        test('should update state', async () => {
+            const wrapper = getWrapper();
+            wrapper.setState({
+                error: 'error',
+                isLoading: true,
+                versions,
+            });
+            const instance = wrapper.instance();
+
+            const response = { id: versions[1].id, trashed_at: null };
+
+            instance.mergeResponse(response);
+
+            expect(wrapper.state('error')).toBe(undefined);
+            expect(wrapper.state('isLoading')).toBe(false);
+            expect(wrapper.state('versions')[0]).toEqual(versions[0]);
+            expect(wrapper.state('versions')[1]).toEqual(Object.assign(versions[1], response));
+
+            const badResponse = {};
+            try {
+                await instance.mergeResponse(badResponse);
+            } catch (error) {
+                expect(error).toEqual(ERROR_CODE_FETCH_VERSION);
+            }
         });
     });
 

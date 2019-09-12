@@ -219,6 +219,7 @@ export const ERROR_CODE_FETCH_WEBLINK = 'fetch_weblink_error';
 export const ERROR_CODE_FETCH_CLASSIFICATION = 'fetch_classification_error';
 export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';
 export const ERROR_CODE_FETCH_CURRENT_VERSION = 'fetch_current_version_error';
+export const ERROR_CODE_FETCH_VERSION = 'fetch_version_error';
 export const ERROR_CODE_FETCH_VERSIONS = 'fetch_versions_error';
 export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
 export const ERROR_CODE_FETCH_CURRENT_USER = 'fetch_current_user_error';

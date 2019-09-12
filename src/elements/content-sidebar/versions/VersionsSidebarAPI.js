@@ -67,6 +67,12 @@ export default class VersionsSidebarAPI {
         );
     };
 
+    fetchVersion = (versionId: string): Promise<BoxItemVersion> => {
+        return new Promise((resolve, reject) =>
+            this.api.getVersionsAPI(false).getVersion(this.fileId, versionId, resolve, reject),
+        );
+    };
+
     deleteVersion = (version: ?BoxItemVersion): Promise<null> => {
         const { id: versionId, permissions = {} } = version || {};
 
@@ -95,17 +101,14 @@ export default class VersionsSidebarAPI {
         );
     };
 
-    restoreVersion = (
-        version: ?BoxItemVersion,
-        successCallback: (BoxItemVersion, Function, Function) => void,
-    ): Promise<any> => {
+    restoreVersion = (version: ?BoxItemVersion): Promise<any> => {
         const { id: versionId, permissions = {} } = version || {};
 
         return new Promise((resolve, reject) =>
             this.api.getVersionsAPI(false).restoreVersion({
                 fileId: this.fileId,
                 permissions,
-                successCallback: data => successCallback(data, resolve, reject),
+                successCallback: resolve,
                 errorCallback: reject,
                 versionId,
             }),
