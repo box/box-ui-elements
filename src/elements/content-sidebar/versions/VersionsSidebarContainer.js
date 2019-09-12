@@ -115,6 +115,30 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.props.onVersionPreview(versionId);
     };
 
+    restoreSuccessCallback = (data: BoxItemVersion, resolve: Function, reject: Function) => {
+        const { versions } = this.state;
+        const { id: versionId } = data;
+        if (!versionId) {
+            reject();
+            return;
+        }
+
+        const newVersions = JSON.parse(JSON.stringify(versions)).map(version => {
+            if (version.id !== versionId) {
+                return version;
+            }
+            return Object.assign(version, data);
+        });
+
+        this.setState({
+            error: undefined,
+            isLoading: false,
+            versions: newVersions,
+        });
+
+        resolve();
+    };
+
     handleActionPromote = (versionId: string): Promise<void> => {
         this.setState({ isLoading: true });
 
@@ -131,9 +155,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState({ isLoading: true });
 
         return this.api
-            .restoreVersion(this.findVersion(versionId))
-            .then(this.api.fetchData)
-            .then(this.handleFetchSuccess)
+            .restoreVersion(this.findVersion(versionId), this.restoreSuccessCallback)
             .then(() => this.props.onVersionRestore(versionId))
             .catch(() => this.handleActionError(messages.versionActionRestoreError));
     };

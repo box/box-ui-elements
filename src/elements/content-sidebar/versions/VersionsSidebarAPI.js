@@ -95,14 +95,17 @@ export default class VersionsSidebarAPI {
         );
     };
 
-    restoreVersion = (version: ?BoxItemVersion): Promise<any> => {
+    restoreVersion = (
+        version: ?BoxItemVersion,
+        successCallback: (BoxItemVersion, Function, Function) => void,
+    ): Promise<any> => {
         const { id: versionId, permissions = {} } = version || {};
 
         return new Promise((resolve, reject) =>
             this.api.getVersionsAPI(false).restoreVersion({
                 fileId: this.fileId,
                 permissions,
-                successCallback: resolve,
+                successCallback: data => successCallback(data, resolve, reject),
                 errorCallback: reject,
                 versionId,
             }),

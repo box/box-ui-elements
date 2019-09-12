@@ -137,17 +137,42 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             const instance = wrapper.instance();
             const version = { id: '456' };
 
-            instance.api.fetchData = jest.fn().mockResolvedValueOnce();
             instance.api.restoreVersion = jest.fn().mockResolvedValueOnce();
             instance.findVersion = jest.fn(() => version);
-            instance.handleFetchSuccess = jest.fn();
+            instance.restoreSuccessCallback = jest.fn();
 
             instance.handleActionRestore(version.id).then(() => {
-                expect(instance.api.restoreVersion).toHaveBeenCalledWith(version);
-                expect(instance.api.fetchData).toHaveBeenCalled();
-                expect(instance.handleFetchSuccess).toHaveBeenCalled();
+                expect(instance.api.restoreVersion).toHaveBeenCalledWith(version, instance.restoreSuccessCallback);
                 expect(handleRestore).toHaveBeenCalledWith(version.id);
             });
+        });
+    });
+
+    describe('restoreSuccessCallback', () => {
+        test('should update state', () => {
+            const wrapper = getWrapper();
+            wrapper.setState({
+                error: 'error',
+                isLoading: true,
+                versions,
+            });
+            const instance = wrapper.instance();
+
+            const response = { id: versions[1].id, trashed_at: null };
+            const resolve = jest.fn();
+            const reject = jest.fn();
+
+            instance.restoreSuccessCallback(response, resolve, reject);
+
+            expect(wrapper.state('error')).toBe(undefined);
+            expect(wrapper.state('isLoading')).toBe(false);
+            expect(wrapper.state('versions')[0]).toEqual(versions[0]);
+            expect(wrapper.state('versions')[1]).toEqual(Object.assign(versions[1], response));
+            expect(resolve).toBeCalled();
+
+            const badResponse = {};
+            instance.restoreSuccessCallback(badResponse, resolve, reject);
+            expect(reject).toBeCalled();
         });
     });
 
