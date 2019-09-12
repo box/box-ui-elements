@@ -41,8 +41,9 @@ class AddTaskButton extends React.Component<Props, State> {
     };
 
     handleModalClose = () => {
-        this.props.onTaskModalClose();
+        const { onTaskModalClose } = this.props;
         this.setState({ isTaskFormOpen: false, error: null });
+        onTaskModalClose();
     };
 
     handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
