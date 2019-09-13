@@ -21,6 +21,10 @@
 
 .bdl-MetadataBasedItemList-cell--filename {
     color: $bdl-gray;
+
+    & .btn-plain {
+        outline: none;
+    }
 }
 
 .bdl-MetadataBasedItemList-cell--hover {

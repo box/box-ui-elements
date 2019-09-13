@@ -5,19 +5,27 @@ import classNames from 'classnames';
 import { injectIntl, type IntlShape } from 'react-intl';
 import MultiGrid from 'react-virtualized/dist/es/MultiGrid/MultiGrid';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
+import getProp from 'lodash/get';
 import FileIcon from '../../icons/file-icon';
 import messages from '../../elements/common/messages';
+import PlainButton from '../../components/plain-button';
 import { getFileExtension } from '../../utils/file';
 import './MetadataBasedItemList.scss';
 
-import type { FlattenedMetadataQueryResponseCollection } from '../../common/types/metadataQueries';
+import type {
+    FlattenedMetadataQueryResponseCollection,
+    FlattenedMetadataQueryResponseEntry,
+} from '../../common/types/metadataQueries';
 
-const FILE_ICON_SIZE = 32;
+const FILE_ICON_COLUMN_INDEX = 0;
 const FILE_ICON_COLUMN_WIDTH = 54;
-const FILENAME_COLUMN_WIDTH = 350;
-const MIN_METADATA_COLUMN_WIDTH = 250;
+const FILE_ICON_SIZE = 32;
+const FILE_NAME_COLUMN_INDEX = 1;
+const FILE_NAME_COLUMN_WIDTH = 350;
 const FIXED_COLUMNS_NUMBER = 2; // 2 Sticky columns - 1. file-icon, 2. file-name for each row
 const FIXED_ROW_NUMBER = 1; // Header row
+const HEADER_ROW_INDEX = 0;
+const MIN_METADATA_COLUMN_WIDTH = 250;
 
 type State = {
     hoveredRowIndex: number,
@@ -27,6 +35,7 @@ type Props = {
     currentCollection: FlattenedMetadataQueryResponseCollection,
     intl: IntlShape,
     metadataColumnsToShow: Array<string>,
+    onItemClick: FlattenedMetadataQueryResponseEntry => void,
 } & InjectIntlProvidedProps;
 
 type CellRendererArgs = {
@@ -53,35 +62,55 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         const { metadataColumnsToShow }: Props = this.props;
 
         return ({ index }: { index: number }): number => {
-            if (index === 0) {
+            if (index === FILE_ICON_COLUMN_INDEX) {
                 return FILE_ICON_COLUMN_WIDTH;
             }
 
-            if (index === 1) {
-                return FILENAME_COLUMN_WIDTH;
+            if (index === FILE_NAME_COLUMN_INDEX) {
+                return FILE_NAME_COLUMN_WIDTH;
             }
 
-            const availableWidth = width - FILENAME_COLUMN_WIDTH - FILE_ICON_COLUMN_WIDTH; // total width minus width of sticky columns
+            const availableWidth = width - FILE_NAME_COLUMN_WIDTH - FILE_ICON_COLUMN_WIDTH; // total width minus width of sticky columns
             // Maintain min column width, else occupy the rest of the space equally
             return Math.max(availableWidth / metadataColumnsToShow.length, MIN_METADATA_COLUMN_WIDTH);
         };
     }
 
-    getGridCellData(columnIndex: number, rowIndex: number): Element<typeof FileIcon> | string {
-        const { currentCollection, metadataColumnsToShow }: Props = this.props;
-        const { items } = currentCollection;
-        const { name = '', metadata = {} } = items[rowIndex - 1];
+    handleOnClick(item: FlattenedMetadataQueryResponseEntry): void {
+        const { onItemClick }: Props = this.props;
+        /*
+            - @TODO: Remove permissions object once its part of API response.
+            - In Content Explorer element, if can_preview permission is false, there is no action taken onClick(item).
+            - Until the response has permissions, add "can_preview: true" so that users can click to launch the Preview modal. If users don't have access, they will see the error when Preview loads.
+        */
+        const permissions = { can_preview: true };
+        const itemWithPreviewPermission = { ...item, permissions };
+
+        onItemClick(itemWithPreviewPermission);
+    }
+
+    getGridCellData(columnIndex: number, rowIndex: number): Element<typeof FileIcon | typeof PlainButton> | string {
+        const {
+            currentCollection: { items },
+            metadataColumnsToShow,
+        }: Props = this.props;
+        const item = items[rowIndex - 1];
+        const { name } = item;
         let cellData;
 
         switch (columnIndex) {
-            case 0:
+            case FILE_ICON_COLUMN_INDEX:
                 cellData = <FileIcon dimension={FILE_ICON_SIZE} extension={getFileExtension(name)} />;
                 break;
-            case 1:
-                cellData = name;
+            case FILE_NAME_COLUMN_INDEX:
+                cellData = (
+                    <PlainButton type="button" onClick={() => this.handleOnClick(item)}>
+                        {name}
+                    </PlainButton>
+                );
                 break;
             default: {
-                const { data = {} } = metadata;
+                const data = getProp(item, 'metadata.data', {});
                 const mdFieldName = metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER];
                 cellData = data[mdFieldName];
             }
@@ -95,11 +124,11 @@ class MetadataBasedItemList extends React.Component<Props, State> {
 
         let headerData;
 
-        if (columnIndex === 1) {
+        if (columnIndex === FILE_NAME_COLUMN_INDEX) {
             headerData = intl.formatMessage(messages.name); // "Name" column header
         }
 
-        if (columnIndex > 1) {
+        if (columnIndex > FILE_NAME_COLUMN_INDEX) {
             headerData = metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER]; // column header
         }
 
@@ -112,11 +141,17 @@ class MetadataBasedItemList extends React.Component<Props, State> {
 
     cellRenderer = ({ columnIndex, rowIndex, key, style }: CellRendererArgs): Element<'div'> => {
         const { hoveredRowIndex } = this.state;
-        const data = rowIndex === 0 ? this.getGridHeaderData(columnIndex) : this.getGridCellData(columnIndex, rowIndex);
+        const isHeaderRow = rowIndex === HEADER_ROW_INDEX;
+        const isFileIconCell = !isHeaderRow && columnIndex === FILE_ICON_COLUMN_INDEX;
+        const isFileNameCell = !isHeaderRow && columnIndex === FILE_NAME_COLUMN_INDEX;
+        const isGridRowHovered = !isHeaderRow && rowIndex === hoveredRowIndex;
+
+        const data = isHeaderRow ? this.getGridHeaderData(columnIndex) : this.getGridCellData(columnIndex, rowIndex);
+
         const classes = classNames('bdl-MetadataBasedItemList-cell', {
-            'bdl-MetadataBasedItemList-cell--fileIcon': rowIndex > 0 && columnIndex === 0, // file icon cell
-            'bdl-MetadataBasedItemList-cell--filename': columnIndex === 1, // file name cell
-            'bdl-MetadataBasedItemList-cell--hover': rowIndex > 0 && rowIndex === hoveredRowIndex,
+            'bdl-MetadataBasedItemList-cell--fileIcon': isFileIconCell,
+            'bdl-MetadataBasedItemList-cell--filename': isFileNameCell,
+            'bdl-MetadataBasedItemList-cell--hover': isGridRowHovered,
         });
 
         return (
