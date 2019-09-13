@@ -51,7 +51,7 @@ export default class VersionsSidebarAPI {
         const { file_version = {} } = fileResponse;
 
         return new Promise((resolve, reject) =>
-            this.api.getVersionsAPI(false).getCurrentVersion(
+            this.api.getVersionsAPI(false).getVersion(
                 this.fileId,
                 file_version.id,
                 (currentVersionResponse: BoxItemVersion) => {

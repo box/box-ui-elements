@@ -7,6 +7,7 @@
 import React from 'react';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
+import merge from 'lodash/merge';
 import noop from 'lodash/noop';
 import { generatePath, withRouter } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
@@ -18,7 +19,6 @@ import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
 import type { VersionActionCallback, VersionChangeCallback } from './flowTypes';
-import { ERROR_CODE_FETCH_VERSION } from '../../../constants';
 
 type Props = {
     api: API,
@@ -97,8 +97,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         return this.api
             .deleteVersion(this.findVersion(versionId))
             .then(() => this.api.fetchVersion(versionId))
-            .then(this.mergeResponse)
-            .then(() => this.handleDeleteSuccess(versionId))
+            .then(this.handleDeleteSuccess)
             .then(() => this.props.onVersionDelete(versionId))
             .catch(() => this.handleActionError(messages.versionActionDeleteError));
     };
@@ -133,7 +132,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         return this.api
             .restoreVersion(this.findVersion(versionId))
-            .then(this.mergeResponse)
+            .then(() => this.api.fetchVersion(versionId))
+            .then(this.handleRestoreSuccess)
             .then(() => this.props.onVersionRestore(versionId))
             .catch(() => this.handleActionError(messages.versionActionRestoreError));
     };
@@ -145,13 +145,20 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         });
     };
 
-    handleDeleteSuccess = (versionId: string) => {
+    handleDeleteSuccess = (data: BoxItemVersion): void => {
         const { versionId: selectedVersionId } = this.props;
+        const { id: versionId } = data;
+
+        this.mergeResponse(data);
 
         // Bump the user to the current version if they deleted their selected version
         if (versionId === selectedVersionId) {
             this.updateVersionToCurrent();
         }
+    };
+
+    handleRestoreSuccess = (data: BoxItemVersion): void => {
+        this.mergeResponse(data);
     };
 
     handleFetchError = (): void => {
@@ -217,28 +224,20 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         return versions[0] ? versions[0].id : null;
     };
 
-    mergeResponse = (data: BoxItemVersion) => {
+    mergeVersions = (newVersion: BoxItemVersion): Array<BoxItemVersion> => {
         const { versions } = this.state;
-        const { id: versionId } = data;
+        const newVersionId = newVersion ? newVersion.id : '';
+        return versions.map(version => (version.id === newVersionId ? merge({ ...version }, newVersion) : version));
+    };
 
-        if (!versionId) {
-            return Promise.reject(ERROR_CODE_FETCH_VERSION);
-        }
-
-        const newVersions = JSON.parse(JSON.stringify(versions)).map(version => {
-            if (version.id !== versionId) {
-                return version;
-            }
-            return Object.assign(version, data);
-        });
+    mergeResponse = (data: BoxItemVersion): void => {
+        const newVersions = this.mergeVersions(data);
 
         this.setState({
             error: undefined,
             isLoading: false,
             versions: newVersions,
         });
-
-        return Promise.resolve();
     };
 
     refresh(): void {

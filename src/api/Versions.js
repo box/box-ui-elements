@@ -11,7 +11,6 @@ import {
     DEFAULT_FETCH_END,
     DEFAULT_FETCH_START,
     ERROR_CODE_DELETE_VERSION,
-    ERROR_CODE_FETCH_CURRENT_VERSION,
     ERROR_CODE_FETCH_VERSION,
     ERROR_CODE_FETCH_VERSIONS,
     ERROR_CODE_PROMOTE_VERSION,
@@ -169,35 +168,7 @@ class Versions extends OffsetBasedAPI {
         errorCallback: ElementsErrorCallback,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_VERSION;
-        this.get({
-            id: fileId,
-            successCallback,
-            errorCallback,
-            url: this.getVersionUrl(fileId, fileVersionId),
-            requestData: {
-                params: {
-                    fields: FILE_VERSIONS_FIELDS_TO_FETCH.toString(),
-                },
-            },
-        });
-    }
 
-    /**
-     * API for fetching the current version for a file
-     *
-     * @param {string} fileId - a box file id
-     * @param {string} fileVersionId - a box file version id
-     * @param {Function} successCallback - the success callback
-     * @param {Function} errorCallback - the error callback
-     * @returns {void}
-     */
-    getCurrentVersion(
-        fileId: string,
-        fileVersionId: string,
-        successCallback: BoxItemVersion => void,
-        errorCallback: ElementsErrorCallback,
-    ): void {
-        this.errorCode = ERROR_CODE_FETCH_CURRENT_VERSION;
         this.get({
             id: fileId,
             successCallback,

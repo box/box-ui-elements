@@ -172,12 +172,12 @@ describe('api/Versions', () => {
             });
         });
 
-        describe('getCurrentVersion()', () => {
-            test('should return the current version information', () => {
+        describe('getVersion()', () => {
+            test('should return the version information', () => {
                 const url = 'https://box.com/api/file/fileID/versions';
                 versions.getVersionUrl = jest.fn().mockReturnValue(url);
 
-                versions.getCurrentVersion(fileId, file.file_version.id, successCallback, errorCallback);
+                versions.getVersion(fileId, file.file_version.id, successCallback, errorCallback);
 
                 expect(versions.get).toBeCalledWith({
                     id: fileId,
