@@ -3,6 +3,7 @@
  * @file Active state component for Activity Feed
  */
 import * as React from 'react';
+import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AppActivity from '../app-activity';
 import Comment from '../comment';
@@ -12,6 +13,9 @@ import Keywords from '../keywords';
 import withErrorHandling from '../../withErrorHandling';
 
 type Props = {
+    activeFeedItemId?: string,
+    activeFeedItemRef: { current: null | HTMLElement },
+    activeFeedItemType?: string,
     approverSelectorContacts?: SelectorItems,
     currentUser?: User,
     getApproverWithQuery?: Function,
@@ -32,6 +36,9 @@ type Props = {
 };
 
 const ActiveState = ({
+    activeFeedItemId,
+    activeFeedItemType,
+    activeFeedItemRef,
     approverSelectorContacts,
     currentUser,
     items,
@@ -53,11 +60,18 @@ const ActiveState = ({
     <ul className="bcs-activity-feed-active-state">
         {items.map((item: any) => {
             const { type, id, versions, permissions } = item;
+            const isFocused = activeFeedItemId === id && activeFeedItemType === type;
+            const refValue = isFocused ? activeFeedItemRef : undefined;
 
             switch (type) {
                 case 'comment':
                     return (
-                        <li key={type + id} className="bcs-activity-feed-comment" data-testid="comment">
+                        <li
+                            key={type + id}
+                            className={classNames('bcs-activity-feed-comment', { 'bcs-is-focused': isFocused })}
+                            data-testid="comment"
+                            ref={refValue}
+                        >
                             <Comment
                                 {...item}
                                 currentUser={currentUser}
@@ -77,7 +91,12 @@ const ActiveState = ({
                     );
                 case 'task':
                     return (
-                        <li key={type + id} className="bcs-activity-feed-task-new" data-testid="task">
+                        <li
+                            key={type + id}
+                            className={classNames('bcs-activity-feed-task-new', { 'bcs-is-focused': isFocused })}
+                            data-testid="task"
+                            ref={refValue}
+                        >
                             <TaskNew
                                 {...item}
                                 approverSelectorContacts={approverSelectorContacts}

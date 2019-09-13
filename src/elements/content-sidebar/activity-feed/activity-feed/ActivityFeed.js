@@ -7,6 +7,7 @@ import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
+import { scrollIntoView } from '../../../../utils/dom';
 import ActiveState from './ActiveState';
 import CommentForm from '../comment-form';
 import EmptyState from './EmptyState';
@@ -14,6 +15,8 @@ import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import './ActivityFeed.scss';
 
 type Props = {
+    activeFeedItemId?: string,
+    activeFeedItemType?: string,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -47,6 +50,8 @@ class ActivityFeed extends React.Component<Props, State> {
         isInputOpen: false,
     };
 
+    activeFeedItemRef = React.createRef<null | HTMLElement>();
+
     feedContainer: null | HTMLElement;
 
     componentDidMount() {
@@ -70,6 +75,19 @@ class ActivityFeed extends React.Component<Props, State> {
         if (hasLoaded || hasMoreItems || hasNewItems || hasInputOpened) {
             this.resetFeedScroll();
         }
+
+        // do the scroll only once after first fetch of feed items
+        if (prevFeedItems === undefined && currFeedItems !== undefined) {
+            this.scrollToActiveFeedItem();
+        }
+    }
+
+    scrollToActiveFeedItem() {
+        const { activeFeedItemId } = this.props;
+        if (!activeFeedItemId) {
+            return;
+        }
+        scrollIntoView(this.activeFeedItemRef.current);
     }
 
     /**
@@ -160,6 +178,8 @@ class ActivityFeed extends React.Component<Props, State> {
             onTaskAssignmentUpdate,
             onTaskModalClose,
             feedItems,
+            activeFeedItemId,
+            activeFeedItemType,
         } = this.props;
         const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -202,6 +222,9 @@ class ActivityFeed extends React.Component<Props, State> {
                             getMentionWithQuery={getMentionWithQuery}
                             approverSelectorContacts={approverSelectorContacts}
                             getApproverWithQuery={getApproverWithQuery}
+                            activeFeedItemId={activeFeedItemId}
+                            activeFeedItemType={activeFeedItemType}
+                            activeFeedItemRef={this.activeFeedItemRef}
                         />
                     )}
                 </div>

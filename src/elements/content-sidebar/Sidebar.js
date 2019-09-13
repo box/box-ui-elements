@@ -22,6 +22,7 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
+import { SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS, SIDEBAR_VIEW_METADATA } from '../../constants';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -101,6 +102,19 @@ class Sidebar extends React.Component<Props, State> {
         }
     }
 
+    getUrlPrefix = (pathname: string) => {
+        if (pathname.startsWith(`/${SIDEBAR_VIEW_ACTIVITY}`)) {
+            return SIDEBAR_VIEW_ACTIVITY;
+        }
+        if (pathname.startsWith(`/${SIDEBAR_VIEW_DETAILS}`)) {
+            return SIDEBAR_VIEW_DETAILS;
+        }
+        if (pathname.startsWith(`/${SIDEBAR_VIEW_METADATA}`)) {
+            return SIDEBAR_VIEW_METADATA;
+        }
+        return SIDEBAR_VIEW_ACTIVITY;
+    };
+
     /**
      * Handle version history click
      *
@@ -112,11 +126,13 @@ class Sidebar extends React.Component<Props, State> {
         const { file_version: currentVersion } = file;
         const fileVersionSlug = currentVersion ? `/${currentVersion.id}` : '';
 
+        const urlPrefix = this.getUrlPrefix(history.location.pathname);
+
         if (event.preventDefault) {
             event.preventDefault();
         }
 
-        history.push(`${history.location.pathname}/versions${fileVersionSlug}`);
+        history.push(`/${urlPrefix}/versions${fileVersionSlug}`);
     };
 
     /**

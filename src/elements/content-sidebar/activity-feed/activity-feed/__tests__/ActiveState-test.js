@@ -120,4 +120,17 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         const wrapper = shallow(<ActiveState inlineError={activityFeedError} items={[]} currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should correctly handle an actively focused feed item', () => {
+        const wrapper = mount(
+            <ActiveState
+                items={[comment, fileVersion, taskWithAssignment, appActivity]}
+                currentUser={currentUser}
+                activeFeedItemId={comment.id}
+                activeFeedItemType={comment.type}
+            />,
+        );
+
+        expect(wrapper.find('.bcs-activity-feed-comment.bcs-is-focused')).toHaveLength(1);
+    });
 });

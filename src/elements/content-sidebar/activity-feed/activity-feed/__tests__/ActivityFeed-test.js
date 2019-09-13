@@ -2,10 +2,12 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import ActivityFeed from '../ActivityFeed';
+import { scrollIntoView } from '../../../../../utils/dom';
 
 jest.mock('../../Avatar', () => 'Avatar');
 jest.mock('../ActiveState', () => 'ActiveState');
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
+jest.mock('../../../../../utils/dom');
 
 const comments = {
     total_count: 1,
@@ -205,6 +207,28 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         );
 
         expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
+    test('should scroll to active feed item', () => {
+        const wrapper = shallow(
+            <ActivityFeed
+                currentUser={currentUser}
+                feedItems={[{ type: 'comment' }]}
+                activeFeedItemId={comments.entries[0].id}
+            />,
+        );
+        const instance = wrapper.instance();
+
+        instance.componentDidUpdate(
+            {
+                feedItems: undefined,
+                currentUser,
+                activeFeedItemId: comments.entries[0].id,
+            },
+            { isInputOpen: false },
+        );
+
+        expect(scrollIntoView).toHaveBeenCalled();
     });
 
     test('should show input when commentFormFocusHandler is called', () => {
