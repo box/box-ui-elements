@@ -38,6 +38,7 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
       "amount",
     ]
   }
+  onItemClick={[MockFunction]}
 >
   <Component>
     AutoSizer

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import FileIcon from '../../../icons/file-icon';
+import PlainButton from '../../../components/plain-button';
 
 import { MetadataBasedItemListComponent as MetadataBasedItemList } from '../MetadataBasedItemList';
 
@@ -9,6 +10,8 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
     let wrapper;
     let instance;
     const intl = { formatMessage: jest.fn().mockReturnValue('Name') };
+    const onItemClick = jest.fn();
+    const onClick = expect.any(Function);
     const currentCollection = {
         items: [
             {
@@ -27,6 +30,17 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         nextMarker: 'abc',
     };
     const metadataColumnsToShow = ['type', 'amount'];
+
+    const pdfNameButton = (
+        <PlainButton onClick={onClick} type="button">
+            {currentCollection.items[0].name}
+        </PlainButton>
+    );
+    const mp4NameButton = (
+        <PlainButton onClick={onClick} type="button">
+            {currentCollection.items[1].name}
+        </PlainButton>
+    );
     const pdfIcon = <FileIcon dimension={32} extension="pdf" />;
     const mp4Icon = <FileIcon dimension={32} extension="mp4" />;
 
@@ -34,6 +48,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         currentCollection,
         metadataColumnsToShow,
         intl,
+        onItemClick,
     };
 
     const getWrapper = (props = defaultProps) => mount(<MetadataBasedItemList {...props} />);
@@ -60,11 +75,11 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         test.each`
             columnIndex | rowIndex | cellData
             ${0}        | ${1}     | ${pdfIcon}
-            ${1}        | ${1}     | ${'name1.pdf'}
+            ${1}        | ${1}     | ${pdfNameButton}
             ${2}        | ${1}     | ${'bill'}
             ${3}        | ${1}     | ${500}
             ${0}        | ${2}     | ${mp4Icon}
-            ${1}        | ${2}     | ${'name2.mp4'}
+            ${1}        | ${2}     | ${mp4NameButton}
             ${2}        | ${2}     | ${'receipt'}
             ${3}        | ${2}     | ${200}
         `('cellData for row: $rowIndex, column: $columnIndex', ({ columnIndex, rowIndex, cellData }) => {
@@ -83,6 +98,16 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         `('headerData for column $columnIndex', ({ columnIndex, headerData }) => {
             const data = instance.getGridHeaderData(columnIndex);
             expect(data).toEqual(headerData);
+        });
+    });
+
+    describe('handleOnClick(item)', () => {
+        test('should invoke the onItemClick after adding can_preview permissions', () => {
+            const permissions = { can_preview: true };
+            const item = currentCollection.items[0];
+            const itemWithPreviewPermission = { ...item, ...{ permissions } };
+            instance.handleOnClick(item);
+            expect(onItemClick).toHaveBeenCalledWith(itemWithPreviewPermission);
         });
     });
 
