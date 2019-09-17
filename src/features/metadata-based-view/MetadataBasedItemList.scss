@@ -22,3 +22,15 @@
 .bdl-MetadataBasedItemList-cell--filename {
     color: $bdl-gray;
 }
+
+.bdl-MetadataBasedItemList-cell--hover {
+    background-color: $bdl-light-blue-10;
+}
+
+.bdl-MetadataBasedItemList-cell--fileIcon {
+    border-left: 2px solid transparent;
+
+    &.bdl-MetadataBasedItemList-cell--hover {
+        border-left-color: $bdl-dark-blue;
+    }
+}

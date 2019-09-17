@@ -13,11 +13,15 @@ import './MetadataBasedItemList.scss';
 import type { FlattenedMetadataQueryResponseCollection } from '../../common/types/metadataQueries';
 
 const FILE_ICON_SIZE = 32;
-const FILE_ICON_COLUMN_WIDTH = 52;
+const FILE_ICON_COLUMN_WIDTH = 54;
 const FILENAME_COLUMN_WIDTH = 350;
 const MIN_METADATA_COLUMN_WIDTH = 250;
 const FIXED_COLUMNS_NUMBER = 2; // 2 Sticky columns - 1. file-icon, 2. file-name for each row
 const FIXED_ROW_NUMBER = 1; // Header row
+
+type State = {
+    hoveredRowIndex: number,
+};
 
 type Props = {
     currentCollection: FlattenedMetadataQueryResponseCollection,
@@ -34,8 +38,16 @@ type CellRendererArgs = {
 
 type ColumnWidthCallback = ({ index: number }) => number;
 
-class MetadataBasedItemList extends React.Component<Props> {
+class MetadataBasedItemList extends React.Component<Props, State> {
     props: Props;
+
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            hoveredRowIndex: -1, // initial MultiGrid load
+        };
+    }
 
     getColumnWidth(width: number): ColumnWidthCallback {
         const { metadataColumnsToShow }: Props = this.props;
@@ -94,14 +106,27 @@ class MetadataBasedItemList extends React.Component<Props> {
         return headerData;
     }
 
+    handleMouseEnter = (rowIndex: number): void => this.setState({ hoveredRowIndex: rowIndex });
+
+    handleMouseLeave = (): void => this.setState({ hoveredRowIndex: -1 });
+
     cellRenderer = ({ columnIndex, rowIndex, key, style }: CellRendererArgs): Element<'div'> => {
+        const { hoveredRowIndex } = this.state;
         const data = rowIndex === 0 ? this.getGridHeaderData(columnIndex) : this.getGridCellData(columnIndex, rowIndex);
         const classes = classNames('bdl-MetadataBasedItemList-cell', {
+            'bdl-MetadataBasedItemList-cell--fileIcon': rowIndex > 0 && columnIndex === 0, // file icon cell
             'bdl-MetadataBasedItemList-cell--filename': columnIndex === 1, // file name cell
+            'bdl-MetadataBasedItemList-cell--hover': rowIndex > 0 && rowIndex === hoveredRowIndex,
         });
 
         return (
-            <div key={key} className={classes} style={style}>
+            <div
+                key={key}
+                className={classes}
+                style={style}
+                onMouseLeave={this.handleMouseLeave}
+                onMouseEnter={() => this.handleMouseEnter(rowIndex)}
+            >
                 {data}
             </div>
         );
@@ -135,4 +160,5 @@ class MetadataBasedItemList extends React.Component<Props> {
     }
 }
 
+export { MetadataBasedItemList as MetadataBasedItemListComponent };
 export default injectIntl(MetadataBasedItemList);
