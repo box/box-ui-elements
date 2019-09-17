@@ -55,30 +55,21 @@ const currentUser = { name: 'Kanye West', id: 10 };
 const getWrapper = props => shallow(<ActivityFeed currentUser={currentUser} file={file} {...props} />);
 
 describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
-    test('should correctly render empty loading state', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
-        expect(wrapper).toMatchSnapshot();
+    test('should correctly render loading state', () => {
+        const wrapper = shallow(<ActivityFeed currentUser={undefined} feedItems={undefined} />);
+        expect(wrapper.find('EmptyState').exists()).toBe(false);
+        expect(wrapper.find('LoadingIndicator').exists()).toBe(true);
     });
 
     test('should correctly render empty state', () => {
-        const items = {
-            total_count: 0,
-            entries: [],
-        };
-        const wrapper = shallow(
-            <ActivityFeed comments={items} currentUser={currentUser} file={file} tasks={items} versions={items} />,
-        );
-        expect(wrapper).toMatchSnapshot();
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} feedItems={[]} />);
+        expect(wrapper.find('EmptyState').exists()).toBe(true);
     });
 
     test('should render empty state when there is 1 version (current version from file)', () => {
-        const oneVersion = {
-            total_count: 1,
-            entries: [first_version],
-        };
-
         const wrapper = getWrapper({
-            versions: oneVersion,
+            currentUser,
+            feedItems: [first_version],
         });
         expect(wrapper.find('EmptyState').exists()).toBe(true);
     });
@@ -214,21 +205,23 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             <ActivityFeed
                 currentUser={currentUser}
                 feedItems={[{ type: 'comment' }]}
-                activeFeedItemId={comments.entries[0].id}
+                activeFeedEntryId={comments.entries[0].id}
             />,
         );
         const instance = wrapper.instance();
+        const li = document.createElement('li');
+        instance.activeFeedItemRef.current = li;
 
         instance.componentDidUpdate(
             {
                 feedItems: undefined,
                 currentUser,
-                activeFeedItemId: comments.entries[0].id,
+                activeFeedEntryId: comments.entries[0].id,
             },
             { isInputOpen: false },
         );
 
-        expect(scrollIntoView).toHaveBeenCalled();
+        expect(scrollIntoView).toHaveBeenCalledWith(li);
     });
 
     test('should show input when commentFormFocusHandler is called', () => {

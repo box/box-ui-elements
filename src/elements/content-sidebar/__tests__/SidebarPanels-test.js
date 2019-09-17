@@ -47,7 +47,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 const wrapper = getWrapper({ hasActivity: true });
                 expect(wrapper).toMatchSnapshot();
             });
-
             test('should render with tasks deeplink', () => {
                 const wrapper = mount(
                     <MemoryRouter initialEntries={['/activity/tasks/12345']} initialIndex={0}>
@@ -55,11 +54,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     </MemoryRouter>,
                 );
                 expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-                    activeFeedItemType: 'task',
-                    activeFeedItemId: '12345',
+                    activeFeedEntryType: 'task',
+                    activeFeedEntryId: '12345',
                 });
             });
-
             test('should render with comments deeplink', () => {
                 const wrapper = mount(
                     <MemoryRouter initialEntries={['/activity/comments/12345']} initialIndex={0}>
@@ -67,8 +65,8 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     </MemoryRouter>,
                 );
                 expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-                    activeFeedItemType: 'comment',
-                    activeFeedItemId: '12345',
+                    activeFeedEntryType: 'comment',
+                    activeFeedEntryId: '12345',
                 });
             });
 
@@ -94,7 +92,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 const wrapper = getWrapper({ hasVersions: true });
                 expect(wrapper).toMatchSnapshot();
             });
-
             test('should render with versions deeplink', () => {
                 const wrapper = mount(
                     <MemoryRouter initialEntries={['/details/versions/12345']} initialIndex={0}>

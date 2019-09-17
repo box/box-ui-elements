@@ -4,12 +4,7 @@ exports[`elements/content-sidebar/SidebarPanels render activity sidebar should r
 <Switch>
   <Route
     exact={true}
-    path={
-      Array [
-        "/activity",
-        "/activity/:activeFeedItemType/:activeFeedItemId",
-      ]
-    }
+    path="/activity/:activeFeedEntryType(comments|tasks)?/:activeFeedEntryId?"
     render={[Function]}
   />
   <Route

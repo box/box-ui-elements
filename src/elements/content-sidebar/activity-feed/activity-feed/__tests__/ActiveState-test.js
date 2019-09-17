@@ -103,6 +103,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         const wrapper = shallow(
             <ActiveState items={[comment, fileVersion, taskWithAssignment, appActivity]} currentUser={currentUser} />,
         ).dive();
+
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -126,8 +127,8 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
             <ActiveState
                 items={[comment, fileVersion, taskWithAssignment, appActivity]}
                 currentUser={currentUser}
-                activeFeedItemId={comment.id}
-                activeFeedItemType={comment.type}
+                activeFeedEntryId={comment.id}
+                activeFeedEntryType={comment.type}
             />,
         );
 

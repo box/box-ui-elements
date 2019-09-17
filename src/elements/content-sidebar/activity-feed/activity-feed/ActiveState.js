@@ -13,9 +13,9 @@ import Keywords from '../keywords';
 import withErrorHandling from '../../withErrorHandling';
 
 type Props = {
-    activeFeedItemId?: string,
+    activeFeedEntryId?: string,
+    activeFeedEntryType?: string,
     activeFeedItemRef: { current: null | HTMLElement },
-    activeFeedItemType?: string,
     approverSelectorContacts?: SelectorItems,
     currentUser?: User,
     getApproverWithQuery?: Function,
@@ -36,8 +36,8 @@ type Props = {
 };
 
 const ActiveState = ({
-    activeFeedItemId,
-    activeFeedItemType,
+    activeFeedEntryId,
+    activeFeedEntryType,
     activeFeedItemRef,
     approverSelectorContacts,
     currentUser,
@@ -60,7 +60,7 @@ const ActiveState = ({
     <ul className="bcs-activity-feed-active-state">
         {items.map((item: any) => {
             const { type, id, versions, permissions } = item;
-            const isFocused = activeFeedItemId === id && activeFeedItemType === type;
+            const isFocused = activeFeedEntryId === id && activeFeedEntryType === type;
             const refValue = isFocused ? activeFeedItemRef : undefined;
 
             switch (type) {

@@ -115,6 +115,13 @@
         }
     }
 
+    .bcs-activity-feed-loading-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+
     .bcs-activity-feed-comment-input {
         flex: 0 0 auto;
         min-height: 93px;

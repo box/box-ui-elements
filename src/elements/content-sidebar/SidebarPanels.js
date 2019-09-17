@@ -210,13 +210,10 @@ class SidebarPanels extends React.Component<Props> {
                 {hasActivity && (
                     <Route
                         exact
-                        path={[
-                            `/${SIDEBAR_VIEW_ACTIVITY}`,
-                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedItemType/:activeFeedItemId`,
-                        ]}
+                        path={`/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)?/:activeFeedEntryId?`}
                         render={({ match }) => {
-                            const activeFeedItemType = match.params.activeFeedItemType
-                                ? URL_TO_FEED_ITEM_TYPE[match.params.activeFeedItemType]
+                            const activeFeedEntryType = match.params.activeFeedEntryType
+                                ? URL_TO_FEED_ITEM_TYPE[match.params.activeFeedEntryType]
                                 : undefined;
                             return (
                                 <LoadableActivitySidebar
@@ -226,8 +223,8 @@ class SidebarPanels extends React.Component<Props> {
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     ref={this.activitySidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-                                    activeFeedItemId={match.params.activeFeedItemId}
-                                    activeFeedItemType={activeFeedItemType}
+                                    activeFeedEntryId={match.params.activeFeedEntryId}
+                                    activeFeedEntryType={activeFeedEntryType}
                                     {...activitySidebarProps}
                                 />
                             );
