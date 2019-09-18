@@ -251,7 +251,7 @@ class Feed extends Base {
 
         return new Promise(resolve => {
             const { file_version = {} } = this.file;
-            this.versionsAPI.getCurrentVersion(
+            this.versionsAPI.getVersion(
                 this.file.id,
                 file_version.id,
                 resolve,

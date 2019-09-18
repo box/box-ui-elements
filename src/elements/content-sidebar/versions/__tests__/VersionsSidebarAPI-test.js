@@ -13,7 +13,7 @@ describe('VersionsSidebarAPI', () => {
         addPermissions: jest.fn(),
         deleteVersion: jest.fn(),
         getVersions: jest.fn(),
-        getCurrentVersion: jest.fn(),
+        getVersion: jest.fn(),
         promoteVersion: jest.fn(),
         restoreVersion: jest.fn(),
         sortVersions: jest.fn(),
@@ -100,7 +100,21 @@ describe('VersionsSidebarAPI', () => {
             const versions = { entries: [mockVersion], total_count: 1 };
 
             expect(instance.fetchVersionCurrent([file, versions])).toBeInstanceOf(Promise);
-            expect(versionsAPI.getCurrentVersion).toBeCalledWith(
+            expect(versionsAPI.getVersion).toBeCalledWith(
+                defaultFileId,
+                defaultVersionId,
+                expect.any(Function),
+                expect.any(Function),
+            );
+        });
+    });
+
+    describe('fetchVersion', () => {
+        test('should call getVersion', () => {
+            const instance = getInstance();
+
+            expect(instance.fetchVersion(defaultVersionId)).toBeInstanceOf(Promise);
+            expect(versionsAPI.getVersion).toBeCalledWith(
                 defaultFileId,
                 defaultVersionId,
                 expect.any(Function),

@@ -71,18 +71,17 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             const wrapper = getWrapper({ onVersionDelete: handleDelete, versionId: '123' });
             const instance = wrapper.instance();
             const version = { id: '456' };
+            const newVersion = { id: '456', trash_at: '' };
 
             instance.api.deleteVersion = jest.fn().mockResolvedValueOnce();
-            instance.api.fetchData = jest.fn().mockResolvedValueOnce();
+            instance.api.fetchVersion = jest.fn().mockResolvedValueOnce(newVersion);
             instance.findVersion = jest.fn(() => version);
-            instance.handleFetchSuccess = jest.fn();
             instance.handleDeleteSuccess = jest.fn();
 
             instance.handleActionDelete(version.id).then(() => {
                 expect(instance.api.deleteVersion).toHaveBeenCalledWith(version);
-                expect(instance.api.fetchData).toHaveBeenCalled();
-                expect(instance.handleFetchSuccess).toHaveBeenCalled();
-                expect(instance.handleDeleteSuccess).toHaveBeenCalledWith(version.id);
+                expect(instance.api.fetchVersion).toHaveBeenCalled();
+                expect(instance.handleDeleteSuccess).toHaveBeenCalledWith(newVersion);
                 expect(handleDelete).toHaveBeenCalledWith(version.id);
             });
         });
@@ -136,18 +135,51 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             const wrapper = getWrapper({ onVersionRestore: handleRestore, versionId: '123' });
             const instance = wrapper.instance();
             const version = { id: '456' };
+            const newVersion = { id: '456', restored_by: '' };
 
-            instance.api.fetchData = jest.fn().mockResolvedValueOnce();
             instance.api.restoreVersion = jest.fn().mockResolvedValueOnce();
+            instance.api.fetchVersion = jest.fn().mockResolvedValueOnce(newVersion);
             instance.findVersion = jest.fn(() => version);
-            instance.handleFetchSuccess = jest.fn();
+            instance.handleRestoreSuccess = jest.fn();
 
             instance.handleActionRestore(version.id).then(() => {
                 expect(instance.api.restoreVersion).toHaveBeenCalledWith(version);
-                expect(instance.api.fetchData).toHaveBeenCalled();
-                expect(instance.handleFetchSuccess).toHaveBeenCalled();
+                expect(instance.api.fetchVersion).toHaveBeenCalled();
+                expect(instance.handleRestoreSuccess).toHaveBeenCalledWith(newVersion);
                 expect(handleRestore).toHaveBeenCalledWith(version.id);
             });
+        });
+    });
+
+    describe('handleDeleteSuccess', () => {
+        test('should update version if the same id', () => {
+            const wrapper = getWrapper({
+                versionId: '123',
+            });
+            const instance = wrapper.instance();
+            const version = { id: '123' };
+
+            instance.updateVersionToCurrent = jest.fn();
+            instance.mergeResponse = jest.fn();
+
+            instance.handleDeleteSuccess(version);
+
+            expect(instance.updateVersionToCurrent).toHaveBeenCalled();
+            expect(instance.mergeResponse).toHaveBeenCalledWith(version);
+        });
+    });
+
+    describe('handleRestoreSuccess', () => {
+        test('should call mergeResponse', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const version = { id: '123' };
+
+            instance.mergeResponse = jest.fn();
+
+            instance.handleRestoreSuccess(version);
+
+            expect(instance.mergeResponse).toHaveBeenCalledWith(version);
         });
     });
 
@@ -225,6 +257,44 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             expect(instance.findVersion('456')).toEqual(versions[1]);
             expect(instance.findVersion('abc')).toEqual(undefined);
+        });
+    });
+
+    describe('mergeVersions', () => {
+        test('should update state', () => {
+            const wrapper = getWrapper();
+            wrapper.setState({
+                versions,
+            });
+            const instance = wrapper.instance();
+            const newVersion = { id: versions[1].id, trashed_at: null };
+
+            const newVersions = instance.mergeVersions(newVersion);
+
+            expect(newVersions[0]).toEqual(versions[0]);
+            expect(newVersions[1]).toEqual(Object.assign(versions[1], newVersion));
+        });
+    });
+
+    describe('mergeResponse', () => {
+        test('should update state', () => {
+            const wrapper = getWrapper();
+            wrapper.setState({
+                error: 'error',
+                isLoading: true,
+                versions,
+            });
+            const instance = wrapper.instance();
+            const response = { id: '000', name: 'Version 0' };
+            const newVersions = [response];
+            instance.mergeVersions = jest.fn().mockReturnValue(newVersions);
+
+            instance.mergeResponse(response);
+
+            expect(wrapper.state('error')).toBe(undefined);
+            expect(wrapper.state('isLoading')).toBe(false);
+            expect(wrapper.state('versions')).toEqual(newVersions);
+            expect(instance.mergeVersions).toHaveBeenCalledWith(response);
         });
     });
 

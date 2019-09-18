@@ -245,7 +245,7 @@ jest.mock('../Comments', () =>
 jest.mock('../Versions', () => {
     return jest.fn().mockImplementation(() => ({
         getVersions: jest.fn(() => mockFirstVersion),
-        getCurrentVersion: jest.fn(() => mockCurrentVersion),
+        getVersion: jest.fn(() => mockCurrentVersion),
     }));
 });
 
@@ -439,7 +439,7 @@ describe('api/Feed', () => {
             feed.fetchAppActivity = jest.fn().mockReturnValue(appActivities);
             feed.setCachedItems = jest.fn();
             feed.versionsAPI = {
-                getCurrentVersion: jest.fn().mockReturnValue(versions),
+                getVersion: jest.fn().mockReturnValue(versions),
                 addCurrentVersion: jest.fn().mockReturnValue(versionsWithCurrent),
             };
             successCb = jest.fn();
@@ -570,7 +570,7 @@ describe('api/Feed', () => {
             test('should return a promise and call the versions api', () => {
                 const currentVersion = feed.fetchCurrentVersion();
                 expect(currentVersion instanceof Promise).toBeTruthy();
-                expect(feed.versionsAPI.getCurrentVersion).toBeCalled();
+                expect(feed.versionsAPI.getVersion).toBeCalled();
             });
         });
 
