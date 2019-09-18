@@ -79,6 +79,7 @@ type Props = TaskFormProps & TaskFormConsumerProps & InjectIntlProvidedProps;
 type TaskFormFieldName = 'taskName' | 'taskAssignees' | 'taskDueDate';
 
 type State = {|
+    approverTextInput: string, // partial text input value for approver field before autocomplete/select
     approvers: Array<TaskCollabAssignee>,
     completionRule: TaskCompletionRule,
     dueDate?: ?Date,
@@ -119,6 +120,7 @@ class TaskForm extends React.Component<Props, State> {
             id,
             completionRule: completionRule || TASK_COMPLETION_RULE_ALL,
             approvers,
+            approverTextInput: '',
             dueDate: dueDate ? new Date(dueDate) : null,
             formValidityState: {},
             message,
@@ -130,17 +132,23 @@ class TaskForm extends React.Component<Props, State> {
     validateForm = (only?: TaskFormFieldName) => {
         this.setState(state => {
             const { intl } = this.props;
-            const { approvers, message } = state;
-            const assigneeFieldError = {
+            const { approvers, message, approverTextInput } = state;
+            const assigneeFieldMissingError = {
                 code: 'required',
                 message: intl.formatMessage(commonMessages.requiredFieldError),
+            };
+            const assigneeFieldInvalidError = {
+                code: 'invalid',
+                message: intl.formatMessage(commonMessages.invalidUserError),
             };
             const messageFieldError = {
                 code: 'required',
                 message: intl.formatMessage(commonMessages.requiredFieldError),
             };
             const formValidityState = {
-                taskAssignees: approvers.length ? null : assigneeFieldError,
+                taskAssignees:
+                    (approverTextInput.length ? assigneeFieldInvalidError : null) ||
+                    (approvers.length ? null : assigneeFieldMissingError),
                 taskName: message ? null : messageFieldError,
                 taskDueDate: null,
             };
@@ -269,6 +277,7 @@ class TaskForm extends React.Component<Props, State> {
 
     handleApproverSelectorInput = (value: any): void => {
         const { getApproverWithQuery = noop } = this.props;
+        this.setState({ approverTextInput: value });
         getApproverWithQuery(value);
     };
 
@@ -290,6 +299,7 @@ class TaskForm extends React.Component<Props, State> {
                     };
                 }),
             ),
+            approverTextInput: '',
         });
 
         this.validateForm('taskAssignees');
@@ -361,6 +371,8 @@ class TaskForm extends React.Component<Props, State> {
                             placeholder={intl.formatMessage(commentFormMessages.approvalAddAssignee)}
                             selectedOptions={renderApprovers}
                             selectorOptions={approverOptions}
+                            shouldSetActiveItemOnOpen
+                            shouldClearUnmatchedInput
                             validateForError={() => this.validateForm('taskAssignees')}
                         >
                             {approverOptions.map(({ id, name, email }) => (
