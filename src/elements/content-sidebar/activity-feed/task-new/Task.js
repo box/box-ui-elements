@@ -147,15 +147,6 @@ class Task extends React.Component<Props, State> {
         }
     };
 
-    handleEditSubmitSuccess = () => {
-        this.setState({ isEditing: false });
-        const { onModalClose } = this.props;
-
-        if (onModalClose) {
-            onModalClose();
-        }
-    };
-
     handleEditSubmitError = (error: ElementsXhrError) => {
         this.setState({ modalError: error });
     };
@@ -406,7 +397,7 @@ class Task extends React.Component<Props, State> {
                     error={modalError}
                     feedbackUrl={getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || ''}
                     onSubmitError={this.handleEditSubmitError}
-                    onSubmitSuccess={this.handleEditSubmitSuccess}
+                    onSubmitSuccess={this.handleEditModalClose}
                     onModalClose={this.handleEditModalClose}
                     isTaskFormOpen={isEditing}
                     taskFormProps={{

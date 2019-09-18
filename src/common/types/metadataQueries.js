@@ -46,6 +46,7 @@ type FlattenedMetadataQueryResponseEntry = {
     id: string,
     metadata: FlattenedMetadataQueryResponseEntryMetadata,
     name?: string,
+    permissions?: BoxItemPermission,
     size?: number,
 };
 

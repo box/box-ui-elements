@@ -14,7 +14,7 @@ type Props = {
 };
 
 const ClassifiedBadge = ({ name, tooltipPosition = 'bottom-center', tooltipText }: Props) => (
-    <Tooltip isDisabled={!tooltipText} position={tooltipPosition} text={tooltipText}>
+    <Tooltip isDisabled={!tooltipText} position={tooltipPosition} text={tooltipText} isTabbable={false}>
         <h1 className="bdl-ClassifiedBadge">
             <IconSecurityClassification color={bdlYellorange} height={10} width={10} strokeWidth={3} />
             <span className="bdl-ClassifiedBadge-name">{name}</span>

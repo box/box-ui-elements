@@ -541,10 +541,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { isDisabled } = this.props;
         const { approverSelectorContacts } = this.state;
         const { getApproverWithQuery, getAvatarUrl, createTask, onTaskModalClose } = this;
-        const props = {
-            isDisabled,
-            onTaskModalClose,
-        };
         const taskFormProps = {
             approverSelectorContacts,
             completionRule: TASK_COMPLETION_RULE_ALL,
@@ -555,7 +551,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             message: '',
             approvers: [],
         };
-        return <AddTaskButton {...props} taskFormProps={taskFormProps} />;
+        return (
+            <AddTaskButton isDisabled={isDisabled} onTaskModalClose={onTaskModalClose} taskFormProps={taskFormProps} />
+        );
     };
 
     render() {
