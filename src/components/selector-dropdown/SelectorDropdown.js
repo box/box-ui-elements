@@ -114,9 +114,9 @@ class SelectorDropdown extends React.Component<Props, State> {
     haveChildrenChanged = (prevChildren?: React.Node) => {
         const { children } = this.props;
         const childrenCount = React.Children.count(children);
-        const nextChildrenCount = React.Children.count(prevChildren);
+        const prevChildrenCount = React.Children.count(prevChildren);
 
-        if (childrenCount !== nextChildrenCount) {
+        if (childrenCount !== prevChildrenCount) {
             return true;
         }
 
@@ -125,8 +125,8 @@ class SelectorDropdown extends React.Component<Props, State> {
         }
 
         const childrenKeys = React.Children.map(children, child => child.key);
-        const nextChildrenKeys = React.Children.map(prevChildren, child => child.key);
-        return childrenKeys.some((childKey, index) => childKey !== nextChildrenKeys[index]);
+        const prevChildrenKeys = React.Children.map(prevChildren, child => child.key);
+        return childrenKeys.some((childKey, index) => childKey !== prevChildrenKeys[index]);
     };
 
     resetActiveItem = () => {

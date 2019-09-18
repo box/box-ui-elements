@@ -100,12 +100,12 @@ class Instance extends React.PureComponent<Props, State> {
     }
 
     componentDidUpdate({ hasError: prevHasError }: Props, prevState: State): void {
-        const element = this.collapsibleRef.current;
+        const currentElement = this.collapsibleRef.current;
         const { hasError, isDirty }: Props = this.props;
         const { isEditing }: State = prevState;
 
-        if (element && this.state.shouldConfirmRemove) {
-            scrollIntoView(element, {
+        if (currentElement && this.state.shouldConfirmRemove) {
+            scrollIntoView(currentElement, {
                 block: 'start',
                 behavior: 'smooth',
             });

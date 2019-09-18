@@ -50,22 +50,23 @@ class TabViewPrimitive extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props) {
-        const { focusedIndex, selectedIndex } = prevProps;
+        const { focusedIndex: prevFocusedIndex, selectedIndex: prevSelectedIndex } = prevProps;
+        const { focusedIndex, selectedIndex } = this.props;
 
         if (this.props.isDynamic) {
-            if (focusedIndex !== this.props.focusedIndex) {
-                this.scrollToTab(this.props.focusedIndex);
+            if (prevFocusedIndex !== focusedIndex) {
+                this.scrollToTab(focusedIndex);
             }
 
             // update tabsContainerOffsetLeft state when receiving a new prop
-            if (selectedIndex !== this.props.selectedIndex) {
-                this.scrollToTab(this.props.selectedIndex);
+            if (prevSelectedIndex !== selectedIndex) {
+                this.scrollToTab(selectedIndex);
             }
         }
 
-        if (focusedIndex !== this.props.focusedIndex) {
+        if (prevFocusedIndex !== focusedIndex) {
             // have to focus after render otherwise, the focus will be lost
-            this.focusOnTabElement(this.props.focusedIndex);
+            this.focusOnTabElement(focusedIndex);
         }
     }
 
