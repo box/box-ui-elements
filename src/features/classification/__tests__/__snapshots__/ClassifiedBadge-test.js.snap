@@ -5,6 +5,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable={false}
   position="bottom-center"
   text="fubar"
   theme="default"
@@ -32,6 +33,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={true}
+  isTabbable={false}
   position="bottom-center"
   theme="default"
 >
