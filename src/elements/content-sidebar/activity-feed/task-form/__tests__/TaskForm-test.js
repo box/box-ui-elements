@@ -4,6 +4,7 @@ import DatePicker from '../../../../../components/date-picker/DatePicker'; // es
 import { TASK_EDIT_MODE_EDIT } from '../../../../../constants';
 import FeatureProvider from '../../../../common/feature-checking/FeatureProvider';
 import { TaskFormUnwrapped as TaskForm } from '..';
+import commonMessages from '../../../../../common/messages';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('../../../../../components/date-picker/DatePicker', () => props => (
@@ -189,6 +190,22 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             ],
         });
         expect(wrapper.find('PillSelectorDropdown').hasClass('scrollable'));
+    });
+
+    describe('approver input', () => {
+        test('should show error when approver input is incomplete (no pill selected)', () => {
+            const value = 'not-a-user';
+            const getApproverWithQuery = jest.fn();
+            const wrapper = render({ getApproverWithQuery });
+            let input = wrapper.find('PillSelector[data-testid="task-form-assignee-input"]');
+
+            input.prop('onInput')({ target: { value } });
+            input.prop('onBlur')();
+            wrapper.update();
+
+            input = wrapper.find('PillSelector[data-testid="task-form-assignee-input"]');
+            expect(input.prop('error')).toBe(commonMessages.invalidUserError.defaultMessage); // 'Invalid User'
+        });
     });
 
     describe('handleDueDateChange()', () => {
