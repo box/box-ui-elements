@@ -71,10 +71,10 @@ class SearchForm extends React.Component<Props, State> {
         isEmpty: true,
     };
 
-    static getDerivedStateFromProps(props, state) {
+    static getDerivedStateFromProps(props: Props): any {
         const { value } = props;
 
-        if (value !== state.value && value !== 'undefined' && !value.trim()) {
+        if (value && !!value.trim()) {
             return {
                 isEmpty: true,
             };
