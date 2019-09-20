@@ -152,13 +152,13 @@ class SharedLinkSettingsModal extends Component {
         };
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        const { expirationError, passwordError, vanityNameError } = nextProps;
+    componentDidUpdate(prevProps) {
+        const { expirationError, passwordError, vanityNameError } = this.props;
 
         if (
-            this.props.expirationError !== expirationError ||
-            this.props.passwordError !== passwordError ||
-            this.props.vanityNameError !== vanityNameError
+            prevProps.expirationError !== expirationError ||
+            prevProps.passwordError !== passwordError ||
+            prevProps.vanityNameError !== vanityNameError
         ) {
             this.setState({
                 expirationError,

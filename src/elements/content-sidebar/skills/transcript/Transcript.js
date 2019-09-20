@@ -55,7 +55,11 @@ class Transcript extends React.PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    UNSAFE_componentWillReceiveProps(): void {
+    componentDidUpdate(prevProps: Props): void {
+        if (prevProps === this.props) {
+            return;
+        }
+
         const wasEditing = typeof this.state.isEditingIndex === 'number';
         this.setState({
             isEditingIndex: wasEditing ? -1 : undefined,

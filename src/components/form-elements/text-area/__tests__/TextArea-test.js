@@ -18,6 +18,14 @@ describe('components/form-elements/text-area/TextArea', () => {
         expect(wrapper.find('TextArea').length).toEqual(1);
     });
 
+    test('should update state if value prop changes', () => {
+        const wrapper = shallow(<TextArea label="label" name="textarea" value="test" />);
+
+        wrapper.setProps({ value: 'new prop' });
+
+        expect(wrapper.state('value')).toEqual('new prop');
+    });
+
     test('should mark required fields invalid when empty', () => {
         const wrapper = mount(<TextArea className="coverage" isRequired label="label" name="input" />);
         const textarea = wrapper.find('textarea');

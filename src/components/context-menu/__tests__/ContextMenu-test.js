@@ -194,23 +194,6 @@ describe('components/context-menu/ContextMenu', () => {
         });
     });
 
-    describe('UNSAFE_componentWillReceiveProps()', () => {
-        test('should close menu when context menu becomes disabled and the menu is currently open', () => {
-            const wrapper = shallow(
-                <ContextMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </ContextMenu>,
-            );
-            wrapper.setState({ isOpen: true });
-
-            const instance = wrapper.instance();
-            sandbox.mock(instance).expects('handleMenuClose');
-
-            instance.UNSAFE_componentWillReceiveProps({ isDisabled: true });
-        });
-    });
-
     describe('componentDidUpdate()', () => {
         test('should add click and contextmenu listeners when opening menu', () => {
             const wrapper = mount(
@@ -274,6 +257,21 @@ describe('components/context-menu/ContextMenu', () => {
                 .never();
 
             instance.setState({ isOpen: true });
+        });
+
+        test('should close menu when context menu becomes disabled and the menu is currently open', () => {
+            const wrapper = shallow(
+                <ContextMenu>
+                    <FakeButton />
+                    <FakeMenu />
+                </ContextMenu>,
+            );
+            wrapper.setState({ isOpen: true });
+
+            const instance = wrapper.instance();
+            sandbox.mock(instance).expects('handleMenuClose');
+
+            instance.componentDidUpdate({ isDisabled: true }, { isOpen: true });
         });
     });
 

@@ -57,8 +57,12 @@ class EditableKeywords extends React.PureComponent<Props, State> {
      * @param {Object} nextProps - component props
      * @return {void}
      */
-    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
-        this.setState({ pills: getPills(nextProps.keywords), keyword: '' });
+    componentDidUpdate({ keywords: prevKeywords }: Props): void {
+        const { keywords } = this.props;
+
+        if (prevKeywords !== keywords) {
+            this.setState({ pills: getPills(keywords), keyword: '' });
+        }
     }
 
     /**
