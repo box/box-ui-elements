@@ -25,6 +25,8 @@ type Props = {
 };
 
 const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Props) => {
+    const MAX_VERSIONS = 1000;
+    const maxVersions = versions.length >= 1000;
     const showVersions = !!versions.length;
     const showEmpty = !isLoading && !showVersions;
     const showError = !!error;
@@ -57,6 +59,16 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Pr
                 {showVersions && (
                     <div className="bcs-Versions-menu">
                         <VersionsMenu versions={versions} {...rest} />
+                    </div>
+                )}
+                {maxVersions && (
+                    <div className="bcs-Versions-max-entries">
+                        <FormattedMessage
+                            {...messages.versionMaxEntries}
+                            values={{
+                                maxVersions: MAX_VERSIONS,
+                            }}
+                        />
                     </div>
                 )}
             </LoadingIndicatorWrapper>

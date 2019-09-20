@@ -27,5 +27,12 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
             expect(wrapper.exists(InlineError)).toBe(true);
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should show max versions text if max versions provided', () => {
+            const versions = Array.from({ length: 1000 }).map((item, index) => ({ id: index }));
+            const wrapper = getWrapper({ versions });
+
+            expect(wrapper.find('.bcs-Versions-max-entries').length).toEqual(1);
+        });
     });
 });
