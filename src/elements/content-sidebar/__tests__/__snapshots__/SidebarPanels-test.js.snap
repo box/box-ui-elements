@@ -29,7 +29,7 @@ exports[`elements/content-sidebar/SidebarPanels render details sidebar should re
 exports[`elements/content-sidebar/SidebarPanels render details sidebar should render versions 1`] = `
 <Switch>
   <Route
-    path="/:sidebar/versions/:versionId?"
+    path="/:sidebar(activity|details)/versions/:versionId?"
     render={[Function]}
   />
   <Route
