@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import isEqual from 'lodash/isEqual';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import DatalistItem from '../../components/datalist-item';
@@ -73,7 +74,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
     componentDidUpdate({ templates: prevTemplates, usedTemplates: prevUsedTemplates }: Props) {
         const { templates, usedTemplates } = this.props;
 
-        if (prevTemplates !== templates || prevUsedTemplates !== usedTemplates) {
+        if (!isEqual(prevTemplates, templates) || !isEqual(prevUsedTemplates, usedTemplates)) {
             this.setState({
                 templates: getAvailableTemplates(templates, usedTemplates),
             });

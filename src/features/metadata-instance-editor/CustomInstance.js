@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import isEqual from 'lodash/isEqual';
 
 import CustomNewField from './CustomInstanceNewField';
 import CustomField from './fields/CustomField';
@@ -24,10 +25,10 @@ class CustomInstance extends React.PureComponent<Props, State> {
         data: {},
     };
 
-    static getDerivedStateFromProps(props: Props, state: State): any {
-        if (props.data !== state.properties) {
+    static getDerivedStateFromProps({ data }: Props, { properties }: State): any {
+        if (!isEqual(data, properties)) {
             return {
-                properties: { ...props.data },
+                properties: { ...data },
             };
         }
 
