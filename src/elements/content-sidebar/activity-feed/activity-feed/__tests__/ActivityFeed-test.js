@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-
 import ActivityFeed from '../ActivityFeed';
 import { scrollIntoView } from '../../../../../utils/dom';
 
-jest.mock('../../Avatar', () => 'Avatar');
-jest.mock('../ActiveState', () => 'ActiveState');
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 jest.mock('../../../../../utils/dom');
+jest.mock('../../Avatar', () => 'Avatar');
+jest.mock('../ActiveState', () => 'ActiveState');
 
 const comments = {
     total_count: 1,

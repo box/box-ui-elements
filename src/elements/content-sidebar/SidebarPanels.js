@@ -154,6 +154,33 @@ class SidebarPanels extends React.Component<Props> {
                         )}
                     />
                 )}
+                {/* This handles both the default activity sidebar and the activity sidebar with a
+                comment or task deeplink.  */}
+                {hasActivity && (
+                    <Route
+                        exact
+                        path={`/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)?/:activeFeedEntryId?`}
+                        render={({ match }) => {
+                            const matchEntryType = match.params.activeFeedEntryType;
+                            const activeFeedEntryType = matchEntryType
+                                ? URL_TO_FEED_ITEM_TYPE[matchEntryType]
+                                : undefined;
+                            return (
+                                <LoadableActivitySidebar
+                                    elementId={elementId}
+                                    currentUser={currentUser}
+                                    file={file}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                    ref={this.activitySidebar}
+                                    startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
+                                    activeFeedEntryId={match.params.activeFeedEntryId}
+                                    activeFeedEntryType={activeFeedEntryType}
+                                    {...activitySidebarProps}
+                                />
+                            );
+                        }}
+                    />
+                )}
                 {hasDetails && (
                     <Route
                         exact
@@ -191,7 +218,7 @@ class SidebarPanels extends React.Component<Props> {
                     matched properly due to the :sidebar wildcard. */}
                 {hasVersions && (
                     <Route
-                        path="/:sidebar/versions/:versionId?"
+                        path="/:sidebar(activity|details)/versions/:versionId?"
                         render={({ match }) => (
                             <LoadableVersionsSidebar
                                 fileId={fileId}
@@ -203,32 +230,6 @@ class SidebarPanels extends React.Component<Props> {
                                 {...versionsSidebarProps}
                             />
                         )}
-                    />
-                )}
-                {/* This handles both the default activity sidebar and the activity sidebar with a
-                comment or task deeplink.  */}
-                {hasActivity && (
-                    <Route
-                        exact
-                        path={`/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)?/:activeFeedEntryId?`}
-                        render={({ match }) => {
-                            const activeFeedEntryType = match.params.activeFeedEntryType
-                                ? URL_TO_FEED_ITEM_TYPE[match.params.activeFeedEntryType]
-                                : undefined;
-                            return (
-                                <LoadableActivitySidebar
-                                    elementId={elementId}
-                                    currentUser={currentUser}
-                                    file={file}
-                                    onVersionHistoryClick={onVersionHistoryClick}
-                                    ref={this.activitySidebar}
-                                    startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-                                    activeFeedEntryId={match.params.activeFeedEntryId}
-                                    activeFeedEntryType={activeFeedEntryType}
-                                    {...activitySidebarProps}
-                                />
-                            );
-                        }}
                     />
                 )}
                 <Route

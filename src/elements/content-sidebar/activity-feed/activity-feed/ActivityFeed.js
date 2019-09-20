@@ -81,14 +81,13 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     scrollToActiveFeedItem() {
+        const { current: activeFeedItemRef } = this.activeFeedItemRef;
         const { activeFeedEntryId } = this.props;
         if (!activeFeedEntryId) {
             return;
         }
-        if (activeFeedEntryId && this.activeFeedItemRef.current) {
-            /* can scroll to the current element */
-            scrollIntoView(this.activeFeedItemRef.current);
-        }
+
+        scrollIntoView(activeFeedItemRef);
     }
 
     /**
@@ -204,8 +203,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 >
                     {isLoading && (
                         <div className="bcs-activity-feed-loading-state">
-                            {' '}
-                            <LoadingIndicator />{' '}
+                            <LoadingIndicator />
                         </div>
                     )}
 

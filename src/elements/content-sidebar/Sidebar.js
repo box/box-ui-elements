@@ -22,7 +22,6 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
-import { SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS, SIDEBAR_VIEW_METADATA } from '../../constants';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -105,12 +104,8 @@ class Sidebar extends React.Component<Props, State> {
     getUrlPrefix = (pathname: string) => {
         const pathNameParts = pathname.substring(1).split('/');
         const basePath = pathNameParts[0];
-        const pathNameMap = {
-            activity: SIDEBAR_VIEW_ACTIVITY,
-            details: SIDEBAR_VIEW_DETAILS,
-            metadata: SIDEBAR_VIEW_METADATA,
-        };
-        return pathNameMap[basePath] || SIDEBAR_VIEW_ACTIVITY;
+
+        return basePath;
     };
 
     /**
