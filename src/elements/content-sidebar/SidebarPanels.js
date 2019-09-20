@@ -214,8 +214,6 @@ class SidebarPanels extends React.Component<Props> {
                         )}
                     />
                 )}
-                {/* This is before the activity feed subroutes because otherwise it doesn't get
-                    matched properly due to the :sidebar wildcard. */}
                 {hasVersions && (
                     <Route
                         path="/:sidebar(activity|details)/versions/:versionId?"
