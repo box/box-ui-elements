@@ -1,4 +1,5 @@
 @import '../../../common/variables';
+$container-padding: 25px;
 
 .be .bcs-activity-feed {
     position: relative;
@@ -47,32 +48,23 @@
                 margin-top: 0;
             }
 
-            &.bcs-is-focused::before {
-                position: absolute;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                margin-right: -25px;
-                margin-left: -25px;
-                background-color: transparent;
-                animation: fade-out 6s ease-out;
-                content: '';
+            &.bcs-is-focused {
+                margin-right: -$container-padding;
+                margin-left: -$container-padding;
+                padding-right: $container-padding;
+                padding-left: $container-padding;
+                background-color: $bdl-box-blue-05;
+                border-bottom: none;
+                box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
+                animation: fade-out 6s ease-out 2s 1 normal forwards;
 
                 @keyframes fade-out {
                     0% {
-                        background-color: $bdl-box-blue;
-                        opacity: .05;
-                    }
-
-                    67% {
-                        background-color: $bdl-box-blue;
-                        opacity: .05;
+                        background-color: $bdl-box-blue-05;
                     }
 
                     100% {
                         background-color: transparent;
-                        opacity: 0;
                     }
                 }
             }
