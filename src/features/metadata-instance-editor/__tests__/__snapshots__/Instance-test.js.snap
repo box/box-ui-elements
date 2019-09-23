@@ -924,6 +924,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <Footer
           onCancel={[Function]}
           onRemove={[Function]}
+          showSave={false}
         />
       </Form>
     </LoadingIndicatorWrapper>
@@ -1032,6 +1033,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <Footer
           onCancel={[Function]}
           onRemove={[Function]}
+          showSave={false}
         />
       </Form>
     </LoadingIndicatorWrapper>
@@ -1125,6 +1127,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <Footer
           onCancel={[Function]}
           onRemove={[Function]}
+          showSave={false}
         />
       </Form>
     </LoadingIndicatorWrapper>
@@ -1301,6 +1304,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <Footer
           onCancel={[Function]}
           onRemove={[Function]}
+          showSave={true}
         />
       </Form>
     </LoadingIndicatorWrapper>

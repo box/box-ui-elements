@@ -651,7 +651,13 @@ class Instance extends React.PureComponent<Props, State> {
                                         />
                                     )}
                                 </div>
-                                {isEditing && <Footer onCancel={this.onCancel} onRemove={this.onConfirmRemove} />}
+                                {isEditing && (
+                                    <Footer
+                                        onCancel={this.onCancel}
+                                        onRemove={this.onConfirmRemove}
+                                        showSave={isDirty}
+                                    />
+                                )}
                             </Form>
                         </LoadingIndicatorWrapper>
                     )}

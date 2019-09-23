@@ -29,14 +29,6 @@ exports[`features/metadata-instance-editor/fields/Footer should correctly render
         id="boxui.metadataInstanceEditor.metadataCancel"
       />
     </Button>
-    <PrimaryButton
-      data-resin-target="metadata-instancesave"
-    >
-      <FormattedMessage
-        defaultMessage="Save"
-        id="boxui.metadataInstanceEditor.metadataSave"
-      />
-    </PrimaryButton>
   </div>
 </div>
 `;
