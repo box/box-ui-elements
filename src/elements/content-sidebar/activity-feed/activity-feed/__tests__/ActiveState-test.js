@@ -132,6 +132,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
             />,
         );
 
-        expect(wrapper.find('.bcs-activity-feed-comment.bcs-is-focused')).toHaveLength(1);
+        // expect(wrapper.find('.bcs-activity-feed-comment.bcs-is-focused')).toHaveLength(1);
+        expect(wrapper.find('[data-testid="comment"]').hasClass('bcs-is-focused')).toEqual(true);
     });
 });

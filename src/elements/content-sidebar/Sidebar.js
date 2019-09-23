@@ -102,9 +102,7 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     getUrlPrefix = (pathname: string) => {
-        const pathNameParts = pathname.substring(1).split('/');
-        const basePath = pathNameParts[0];
-
+        const basePath = pathname.substring(1).split('/')[0];
         return basePath;
     };
 

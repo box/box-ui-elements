@@ -1,5 +1,4 @@
 @import '../../../common/variables';
-$container-padding: 25px;
 
 .be .bcs-activity-feed {
     position: relative;
@@ -49,6 +48,8 @@ $container-padding: 25px;
             }
 
             &.bcs-is-focused {
+                $container-padding: 25px;
+
                 margin-right: -$container-padding;
                 margin-left: -$container-padding;
                 padding-right: $container-padding;
