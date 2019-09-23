@@ -32,7 +32,7 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
             const versions = Array.from({ length: 1000 }).map((item, index) => ({ id: index }));
             const wrapper = getWrapper({ versions });
 
-            expect(wrapper.find('.bcs-Versions-max-entries').length).toEqual(1);
+            expect(wrapper.exists('[data-testid="max-versions"]')).toBe(true);
         });
     });
 });

@@ -11,8 +11,11 @@ import messages from './messages';
 import SidebarContent from '../SidebarContent';
 import VersionsMenu from './VersionsMenu';
 import { BackButton } from '../../common/nav-button';
+import { DEFAULT_FETCH_END } from '../../../constants';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import './VersionsSidebar.scss';
+
+const MAX_VERSIONS = DEFAULT_FETCH_END;
 
 type Props = {
     error?: MessageDescriptor,
@@ -25,8 +28,7 @@ type Props = {
 };
 
 const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Props) => {
-    const MAX_VERSIONS = 1000;
-    const maxVersions = versions.length >= 1000;
+    const showLimit = versions.length >= MAX_VERSIONS;
     const showVersions = !!versions.length;
     const showEmpty = !isLoading && !showVersions;
     const showError = !!error;
@@ -61,8 +63,8 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Pr
                         <VersionsMenu versions={versions} {...rest} />
                     </div>
                 )}
-                {maxVersions && (
-                    <div className="bcs-Versions-max-entries">
+                {showLimit && (
+                    <div className="bcs-Versions-max-entries" data-testid="max-versions">
                         <FormattedMessage
                             {...messages.versionMaxEntries}
                             values={{
