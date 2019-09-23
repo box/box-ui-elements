@@ -132,6 +132,11 @@ const messages = defineMessages({
         defaultMessage: 'Unknown',
         description: 'Name displayed for unknown or deleted users.',
     },
+    versionMaxEntries: {
+        id: 'be.sidebarVersions.versionMaxEntries',
+        defaultMessage: 'Version history is limited to the last {maxVersions} entries.',
+        description: 'Max supported entries for version history',
+    },
 });
 
 export default messages;
