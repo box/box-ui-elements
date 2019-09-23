@@ -64,7 +64,7 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Pr
                     </div>
                 )}
                 {showLimit && (
-                    <div className="bcs-Versions-max-entries" data-testid="max-versions">
+                    <div className="bcs-Versions-maxEntries" data-testid="max-versions">
                         <FormattedMessage
                             {...messages.versionMaxEntries}
                             values={{
