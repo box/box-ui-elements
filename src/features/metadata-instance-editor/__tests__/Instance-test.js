@@ -689,4 +689,32 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
             );
         });
     });
+
+    describe('Lifecycle methods', () => {
+        describe('componentDidUpdate()', () => {
+            test('should mark is editing and remove loader if errored', () => {
+                const wrapper = shallow(<Instance template={{ fields }} canEdit />);
+                wrapper.setProps({ hasError: true });
+                expect(wrapper.state('isBusy')).toEqual(false);
+                expect(wrapper.state('isEditing')).toEqual(true);
+            });
+
+            test('form has switched from dirty to a clean state', () => {
+                const wrapper = shallow(<Instance isDirty template={{ fields }} canEdit />);
+                wrapper.setState({ isEditing: true });
+                wrapper.setProps({ isDirty: false });
+
+                expect(wrapper.state('isBusy')).toEqual(false);
+            });
+
+            test('form has switched from dirty to a clean state', () => {
+                const wrapper = shallow(<Instance isDirty template={{ fields }} canEdit />);
+                wrapper.setState({ isEditing: false });
+                wrapper.setProps({ isDirty: false });
+
+                expect(wrapper.state('isBusy')).toEqual(false);
+                expect(wrapper.state('isCascadingOverwritten')).toEqual(false);
+            });
+        });
+    });
 });

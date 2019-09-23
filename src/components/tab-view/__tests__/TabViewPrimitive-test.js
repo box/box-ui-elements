@@ -393,51 +393,16 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 });
             });
 
-            describe('UNSAFE_componentWillReceiveProps', () => {
-                test('should do nothing if it is not dynamic', () => {
-                    const instance = component.instance();
-                    instance.scrollToTab = sinon.mock();
-                    instance.UNSAFE_componentWillReceiveProps({
-                        focusedIndex: 0,
-                        isDynamic: false,
-                        selectedIndex: 0,
-                    });
-                    expect(instance.scrollToTab.never).toBeTruthy();
-                });
-
-                test('should call scrollToTab with focusedIndex if it was changed', () => {
-                    const instance = component.instance();
-                    instance.scrollToTab = sinon.mock();
-                    const focusedIndex = 2;
-                    instance.UNSAFE_componentWillReceiveProps({
-                        focusedIndex,
-                        isDynamic: true,
-                        selectedIndex: component.props().selectedIndex,
-                    });
-                    expect(instance.scrollToTab.calledWith(focusedIndex)).toBeTruthy();
-                });
-
-                test('should call scrollToTab with selectedIndex if it was changed', () => {
-                    const instance = component.instance();
-                    instance.scrollToTab = sinon.mock();
-                    const selectedIndex = 2;
-                    instance.UNSAFE_componentWillReceiveProps({
-                        focusedIndex: component.props().focusedIndex,
-                        isDynamic: true,
-                        selectedIndex,
-                    });
-                    expect(instance.scrollToTab.calledWith(selectedIndex)).toBeTruthy();
-                });
-            });
-
             describe('componentDidUpdate', () => {
                 test('should not call focusOnTabElment if component is not dynamic', () => {
                     const instance = component.instance();
                     instance.focusOnTabElement = sinon.mock();
-                    instance.UNSAFE_componentWillReceiveProps({
+
+                    component.setProps({
                         focusedIndex: 0,
                         isDynamic: false,
                     });
+
                     expect(instance.focusOnTabElement.never).toBeTruthy();
                 });
 
@@ -451,6 +416,44 @@ describe('components/tab-view/TabViewPrimitive', () => {
                         isDynamic: true,
                     });
                     expect(instance.focusOnTabElement.calledWith(newFocusedIndex)).toBeTruthy();
+                });
+
+                test('should do nothing if it is not dynamic', () => {
+                    const instance = component.instance();
+                    instance.scrollToTab = sinon.mock();
+                    instance.componentDidUpdate({
+                        focusedIndex: 0,
+                        isDynamic: false,
+                        selectedIndex: 0,
+                    });
+                    expect(instance.scrollToTab.never).toBeTruthy();
+                });
+
+                test('should call scrollToTab with focusedIndex if it was changed', () => {
+                    const instance = component.instance();
+                    instance.scrollToTab = sinon.mock();
+
+                    component.setProps({
+                        focusedIndex: 2,
+                        isDynamic: true,
+                        selectedIndex: component.props().selectedIndex,
+                    });
+
+                    expect(instance.scrollToTab.calledWith(2)).toBeTruthy();
+                });
+
+                test('should call scrollToTab with selectedIndex if it was changed', () => {
+                    const instance = component.instance();
+                    instance.scrollToTab = sinon.mock();
+                    const selectedIndex = 2;
+
+                    component.setProps({
+                        focusedIndex: component.props().focusedIndex,
+                        isDynamic: true,
+                        selectedIndex,
+                    });
+
+                    expect(instance.scrollToTab.calledWith(selectedIndex)).toBeTruthy();
                 });
             });
         });

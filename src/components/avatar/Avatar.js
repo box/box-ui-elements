@@ -40,8 +40,8 @@ class Avatar extends React.PureComponent<Props, State> {
         hasImageErrored: false,
     };
 
-    UNSAFE_componentWillReceiveProps(nextProps: Props) {
-        if (this.state.hasImageErrored && this.props.avatarUrl !== nextProps.avatarUrl) {
+    componentDidUpdate(prevProps: Props, prevState: State): void {
+        if (prevState.hasImageErrored && prevProps.avatarUrl !== this.props.avatarUrl) {
             this.setState({
                 hasImageErrored: false,
             });

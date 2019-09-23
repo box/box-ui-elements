@@ -85,10 +85,10 @@ class KeyBinder extends PureComponent<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
-        const { id, scrollToColumn, scrollToRow }: Props = nextProps;
-        const { id: prevId }: Props = this.props;
-        const { scrollToColumn: prevScrollToColumn, scrollToRow: prevScrollToRow }: State = this.state;
+    componentDidUpdate(prevProps: Props, prevState: State): void {
+        const { id, scrollToColumn, scrollToRow }: Props = this.props;
+        const { id: prevId }: Props = prevProps;
+        const { scrollToColumn: prevScrollToColumn, scrollToRow: prevScrollToRow }: State = prevState;
         const newState = {};
 
         if (id !== prevId) {

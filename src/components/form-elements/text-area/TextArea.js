@@ -48,11 +48,11 @@ class TextArea extends React.Component<Props, State> {
         };
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps: Props) {
+    componentDidUpdate({ value: prevValue }: Props) {
         // If a new value is passed by prop, set it
-        if (nextProps.value !== this.props.value) {
+        if (prevValue !== this.props.value) {
             this.setState({
-                value: nextProps.value,
+                value: this.props.value,
             });
         }
     }
