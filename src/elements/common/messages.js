@@ -754,33 +754,39 @@ const messages = defineMessages({
     },
     versionDeleted: {
         id: 'be.versionDeleted',
-        defaultMessage: '{ name } deleted version { version_number }',
+        defaultMessage: '{name} deleted v{version_number}',
         description:
-            'Message displayed in the activity feed for a deleted version. {name} is the user who performed the action. { version_number } is the file version string.',
+            'Message displayed in the activity feed for a deleted version. {name} is the user who performed the action. {version_number} is the file version string.',
+    },
+    versionPromoted: {
+        id: 'be.versionPromoted',
+        defaultMessage: '{name} promoted v{version_promoted} to v{version_number}',
+        description:
+            'Message displayed in the activity feed for a promoted version. {name} is the user who performed the action. {version_promoted} is the originating file version string. {version_number} is the file version string.',
     },
     versionRestored: {
         id: 'be.versionRestored',
-        defaultMessage: '{ name } restored version { version_number }',
+        defaultMessage: '{name} restored v{version_number}',
         description:
-            'Message displayed in the activity feed for a restored version. {name} is the user who performed the action. { version_number } is the file version string.',
+            'Message displayed in the activity feed for a restored version. {name} is the user who performed the action. {version_number} is the file version string.',
     },
     versionMultipleUsersUploaded: {
         id: 'be.versionMultipleUsersUploaded',
-        defaultMessage: '{ numberOfCollaborators } collaborators uploaded versions { versions }',
+        defaultMessage: '{numberOfCollaborators} collaborators uploaded v{versions}',
         description:
-            'Message displayed in the activity feed to represent the range of versions uploaded by multiple users. { numberOfCollaborators } is a number and { versions } is a range of versions.',
+            'Message displayed in the activity feed to represent the range of versions uploaded by multiple users. {numberOfCollaborators} is a number and {versions} is a range of versions.',
     },
     versionUploadCollapsed: {
         id: 'be.versionUploadCollapsed',
-        defaultMessage: '{ name } uploaded versions { versions }',
+        defaultMessage: '{name} uploaded v{versions}',
         description:
-            'Message displayed in the activity feed to represent the range of versions uploaded by a single user. { name } is the user who uploaded. { versions } is a range of versions.',
+            'Message displayed in the activity feed to represent the range of versions uploaded by a single user. {name} is the user who uploaded. {versions} is a range of versions.',
     },
     versionUploaded: {
         id: 'be.versionUploaded',
-        defaultMessage: '{ name } uploaded version { version_number }',
+        defaultMessage: '{name} uploaded v{version_number}',
         description:
-            'Message displayed in the activity feed for a newly uploaded version. {name} is the user who performed the action. { version_number } is the file version string.',
+            'Message displayed in the activity feed for a newly uploaded version. {name} is the user who performed the action. {version_number} is the file version string.',
     },
     defaultInlineErrorContentMessage: {
         id: 'be.defaultInlineErrorContentMessage',
