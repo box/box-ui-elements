@@ -13,7 +13,12 @@ import VersionsItemActions from './VersionsItemActions';
 import VersionsItemButton from './VersionsItemButton';
 import VersionsItemBadge from './VersionsItemBadge';
 import { ReadableTime } from '../../../components/time';
-import { VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION, VERSION_UPLOAD_ACTION } from '../../../constants';
+import {
+    VERSION_DELETE_ACTION,
+    VERSION_PROMOTE_ACTION,
+    VERSION_RESTORE_ACTION,
+    VERSION_UPLOAD_ACTION,
+} from '../../../constants';
 import type { VersionActionCallback } from './flowTypes';
 import './VersionsItem.scss';
 
@@ -35,6 +40,7 @@ type Props = {
 const ACTION_MAP = {
     [VERSION_DELETE_ACTION]: messages.versionDeletedBy,
     [VERSION_RESTORE_ACTION]: messages.versionRestoredBy,
+    [VERSION_PROMOTE_ACTION]: messages.versionPromotedBy,
     [VERSION_UPLOAD_ACTION]: messages.versionUploadedBy,
 };
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
@@ -62,6 +68,7 @@ const VersionsItem = ({
         size,
         trashed_at: trashedAt,
         version_number: versionNumber,
+        version_promoted: versionPromoted,
     } = version;
     const { can_delete, can_download, can_preview, can_upload } = permissions;
 
@@ -117,7 +124,10 @@ const VersionsItem = ({
                     )}
 
                     <div className="bcs-VersionsItem-log" data-testid="bcs-VersionsItem-log" title={versionUserName}>
-                        <FormattedMessage {...ACTION_MAP[versionAction]} values={{ name: versionUserName }} />
+                        <FormattedMessage
+                            {...ACTION_MAP[versionAction]}
+                            values={{ name: versionUserName, versionPromoted }}
+                        />
                     </div>
                     <div className="bcs-VersionsItem-info">
                         {versionTimestamp && (

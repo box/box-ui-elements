@@ -207,7 +207,7 @@ describe('api/Versions', () => {
                 expect(result.total_count).toEqual(nonCurrentVersions.entries.length + 1);
 
                 const resultCurrentVersion = result.entries.pop();
-                expect(resultCurrentVersion.version_restored).toEqual(firstVersion.version_number);
+                expect(resultCurrentVersion.version_promoted).toEqual(firstVersion.version_number);
             });
         });
 
