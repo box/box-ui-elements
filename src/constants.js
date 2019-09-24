@@ -361,6 +361,7 @@ export const HTTP_STATUS_CODE_GATEWAY_TIMEOUT: 504 = 504;
 
 /* ------------------ Version Action Types  ---------------------- */
 export const VERSION_DELETE_ACTION: 'delete' = 'delete';
+export const VERSION_PROMOTE_ACTION: 'promote' = 'promote';
 export const VERSION_RESTORE_ACTION: 'restore' = 'restore';
 export const VERSION_UPLOAD_ACTION: 'upload' = 'upload';
 
