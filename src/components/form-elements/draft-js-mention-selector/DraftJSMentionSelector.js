@@ -163,10 +163,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // manually check for content length if isRequired is true
         const editorState: EditorState = internalEditorState || externalEditorState;
-        const length = editorState
+        const { length } = editorState
             .getCurrentContent()
             .getPlainText()
-            .trim().length;
+            .trim();
 
         if (isRequired && !length) {
             return messages.valueMissing();

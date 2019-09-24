@@ -88,4 +88,24 @@ describe('elements/content-sidebar/Skills/Transcript/Transcript', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    describe('Component Lifecycle', () => {
+        test('componentDidUpdate()', () => {
+            const props = {
+                card: {
+                    duration: 100,
+                    entries: [{ text: 'foo' }, { text: 'bar' }],
+                },
+                transcript: { duration: 100 },
+                isEditable: true,
+                onSkillChange: jest.fn(),
+            };
+
+            const wrapper = shallow(<Transcript {...props} />);
+            wrapper.setState({ newTranscriptText: 'lorem ipsum dolar' });
+            wrapper.setProps({ isEditable: false });
+
+            expect(wrapper.state('newTranscriptText')).toEqual('');
+        });
+    });
 });

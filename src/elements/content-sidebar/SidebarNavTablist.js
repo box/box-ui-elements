@@ -22,7 +22,7 @@ const SidebarNavTablist = ({ children, history, elementId, isOpen, onNavigate }:
     const tablist = React.Children.map(children, child => child && `/${child.props.sidebarView}`);
     const handleKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const currentIndex = tablist.indexOf(history.location.pathname);
-        const length = tablist.length;
+        const { length } = tablist;
         let nextIndex = currentIndex;
         switch (event.key) {
             case KEYS.arrowUp:

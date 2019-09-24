@@ -23,7 +23,7 @@ const constructChildren = (children, threshold) => {
 
 const renderBreadcrumbs = (children, threshold) => {
     let newChildren = children;
-    let length = children.length;
+    let { length } = children;
     let hasEllipsis = false;
 
     if (length > threshold) {

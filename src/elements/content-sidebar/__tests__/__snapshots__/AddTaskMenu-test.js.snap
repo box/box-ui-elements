@@ -46,7 +46,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
           className="bcs-AddTaskMenu-description"
         >
           <FormattedMessage
-            defaultMessage="Keep track of work that needs to get done"
+            defaultMessage="Assignees will be responsible for marking tasks as complete"
             id="be.contentSidebar.addTask.general.description"
           />
         </div>
@@ -77,7 +77,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
           className="bcs-AddTaskMenu-description"
         >
           <FormattedMessage
-            defaultMessage="Request an approval to move work forward"
+            defaultMessage="Assignees will be responsible for approving or rejecting tasks"
             id="be.contentSidebar.addTask.approval.description"
           />
         </div>
