@@ -10,7 +10,12 @@ import messages from '../../../common/messages';
 import PlainButton from '../../../../components/plain-button';
 import selectors from '../../../common/selectors/version';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import { VERSION_UPLOAD_ACTION, VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
+import {
+    VERSION_UPLOAD_ACTION,
+    VERSION_DELETE_ACTION,
+    VERSION_PROMOTE_ACTION,
+    VERSION_RESTORE_ACTION,
+} from '../../../../constants';
 import './Version.scss';
 
 type Props = {
@@ -18,18 +23,19 @@ type Props = {
     modified_by: User,
     onInfo?: Function,
     version_number: string,
-    version_restored?: string,
+    version_promoted?: string,
 } & InjectIntlProvidedProps;
 
 const ACTION_MAP = {
     [VERSION_DELETE_ACTION]: messages.versionDeleted,
+    [VERSION_PROMOTE_ACTION]: messages.versionPromoted,
     [VERSION_RESTORE_ACTION]: messages.versionRestored,
     [VERSION_UPLOAD_ACTION]: messages.versionUploaded,
 };
 
 const Version = (props: Props): React.Node => {
     const action = selectors.getVersionAction(props);
-    const { id, intl, onInfo, version_number, version_restored } = props;
+    const { id, intl, onInfo, version_number, version_promoted } = props;
     const { name } = selectors.getVersionUser(props);
 
     return (
@@ -39,7 +45,8 @@ const Version = (props: Props): React.Node => {
                     {...ACTION_MAP[action]}
                     values={{
                         name: <strong>{name}</strong>,
-                        version_number: version_restored || version_number,
+                        version_number,
+                        version_promoted,
                     }}
                 />
             </span>

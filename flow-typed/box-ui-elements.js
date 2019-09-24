@@ -371,7 +371,7 @@ type BoxItemVersion = {
     type: string,
     version_end?: number,
     version_number: string,
-    version_restored?: string,
+    version_promoted?: string,
     version_start?: number,
     versions?: Array<BoxItemVersion>,
 };
