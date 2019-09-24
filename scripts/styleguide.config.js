@@ -233,7 +233,6 @@ const allSections = [
             '../src/features/shared-link-modal/SharedLinkModal.js',
             '../src/features/shared-link-settings-modal/SharedLinkSettingsModal.js',
             '../src/features/unified-share-modal/UnifiedShareModal.js',
-            '../src/features/version-history-modal/VersionHistoryModal.js',
         ],
         sections: [
             {
