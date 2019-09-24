@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
@@ -31,11 +31,11 @@ type Props = {
 };
 
 function Avatar({ avatarUrl, className, name, id, size = '' }: Props) {
-    const [hasImageErrored, setHasImageErrored] = useState(false);
+    const [hasImageErrored, setHasImageErrored] = React.useState(false);
     const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
     // Reset hasImageErrored state when avatarUrl changes
-    useEffect(() => {
+    React.useEffect(() => {
         setHasImageErrored(false);
     }, [avatarUrl]);
 
