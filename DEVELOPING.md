@@ -28,15 +28,17 @@ A published version of the style guide can be seen at https://opensource.box.com
 
 ### Webpack Setup
 
-`box-ui-elements` must use the same `react` and `react-dom` instances as the parent application for React hooks to work properly. Application repositories must add the following webpack `resolve` configuration to satify this requirement:
+`box-ui-elements` must use the same `react` and `react-dom` instances as the parent application for React hooks to work properly. Application repositories must add the following webpack `resolve` alias configuration to satify this requirement:
 
 ```js
 // webpack.config.js
 {
     ...
     resolve: {
-        'react': path.resolve('node_modules/react'),
-        'react-dom': path.resolve('node_modules/react-dom'),
+        alias: {
+            'react': path.resolve('node_modules/react'),
+            'react-dom': path.resolve('node_modules/react-dom'),
+        }
     }
     ...
 }
