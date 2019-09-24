@@ -34,6 +34,7 @@ exports[`icons/states/UsersEmptyState should override color in svg when specifie
       className="fill-color"
       d="M67.5242615,93.487395 C72.3591913,87.9794825 79.4686815,84.5 87.3947368,84.5 C95.1274446,84.5 102.08294,87.8117966 106.907344,93.0879584 C101.713335,97.9929356 94.7078361,101 87,101 C79.5036503,101 72.6716257,98.1556865 67.5242615,93.487395 Z"
       fill="#abc"
+      fillOpacity="0.07"
     />
     <path
       className="stroke-color"
@@ -69,6 +70,7 @@ exports[`icons/states/UsersEmptyState should override color in svg when specifie
       className="fill-color"
       d="M22.5242615,93.487395 C27.3591913,87.9794825 34.4686815,84.5 42.3947368,84.5 C50.1274446,84.5 57.0829397,87.8117966 61.9073441,93.0879584 C56.7133346,97.9929356 49.7078361,101 42,101 C34.5036503,101 27.6716257,98.1556865 22.5242615,93.487395 Z"
       fill="#abc"
+      fillOpacity="0.07"
     />
     <path
       className="stroke-color"
@@ -99,6 +101,7 @@ exports[`icons/states/UsersEmptyState should override color in svg when specifie
       cx="65.5"
       cy="132"
       fill="#abc"
+      fillOpacity="0.07"
       rx="32.5"
       ry="3"
     />
