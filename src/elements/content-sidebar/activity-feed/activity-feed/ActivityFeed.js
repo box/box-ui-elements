@@ -7,13 +7,17 @@ import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
+import { scrollIntoView } from '../../../../utils/dom';
 import ActiveState from './ActiveState';
 import CommentForm from '../comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
+import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import './ActivityFeed.scss';
 
 type Props = {
+    activeFeedEntryId?: string,
+    activeFeedEntryType?: string,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -47,6 +51,8 @@ class ActivityFeed extends React.Component<Props, State> {
         isInputOpen: false,
     };
 
+    activeFeedItemRef = React.createRef<null | HTMLElement>();
+
     feedContainer: null | HTMLElement;
 
     componentDidMount() {
@@ -55,21 +61,33 @@ class ActivityFeed extends React.Component<Props, State> {
 
     componentDidUpdate(prevProps: Props, prevState: State) {
         const { feedItems: prevFeedItems } = prevProps;
-        const { feedItems: currFeedItems } = this.props;
+        const { feedItems: currFeedItems, activeFeedEntryId } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
         const { isInputOpen: currIsInputOpen } = this.state;
 
-        const isEmpty = this.isEmpty(this.props);
-        const wasEmpty = this.isEmpty(prevProps);
-        const hasLoaded = isEmpty !== wasEmpty && !isEmpty;
-
+        const hasLoaded = this.hasLoaded();
         const hasMoreItems = prevFeedItems && currFeedItems && prevFeedItems.length < currFeedItems.length;
-        const hasNewItems = !prevFeedItems && currFeedItems;
+        const didLoadFeedItems = prevFeedItems === undefined && currFeedItems !== undefined;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
 
-        if (hasLoaded || hasMoreItems || hasNewItems || hasInputOpened) {
+        if ((hasLoaded || hasMoreItems || didLoadFeedItems || hasInputOpened) && activeFeedEntryId === undefined) {
             this.resetFeedScroll();
         }
+
+        // do the scroll only once after first fetch of feed items
+        if (didLoadFeedItems) {
+            this.scrollToActiveFeedItem();
+        }
+    }
+
+    scrollToActiveFeedItem() {
+        const { current: activeFeedItemRef } = this.activeFeedItemRef;
+        const { activeFeedEntryId } = this.props;
+        if (!activeFeedEntryId) {
+            return;
+        }
+
+        scrollIntoView(activeFeedItemRef);
     }
 
     /**
@@ -77,11 +95,15 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {object} currentUser - The user that is logged into the account
      * @param {object} feedItems - Items in the activity feed
      */
-    isEmpty = ({ currentUser, feedItems }: Props = this.props): boolean =>
-        !currentUser ||
-        !feedItems ||
-        feedItems.length === 0 ||
-        (feedItems.length === 1 && feedItems[0].type === ItemTypes.fileVersion);
+    isEmpty = ({ feedItems }: Props = this.props): boolean => {
+        if (feedItems === undefined) {
+            return false;
+        }
+        return feedItems.length === 0 || (feedItems.length === 1 && feedItems[0].type === ItemTypes.fileVersion);
+    };
+
+    hasLoaded = ({ currentUser, feedItems }: Props = this.props): boolean =>
+        currentUser !== undefined && feedItems !== undefined;
 
     /**
      * Scrolls the container to the bottom
@@ -160,13 +182,15 @@ class ActivityFeed extends React.Component<Props, State> {
             onTaskAssignmentUpdate,
             onTaskModalClose,
             feedItems,
+            activeFeedEntryId,
+            activeFeedEntryType,
         } = this.props;
         const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
-        const isLoading = !feedItems || !currentUser;
+        const isLoading = !this.hasLoaded();
 
         return (
             // eslint-disable-next-line
@@ -177,9 +201,15 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className="bcs-activity-feed-items-container"
                 >
-                    {isEmpty ? (
-                        <EmptyState isLoading={isLoading} showCommentMessage={showCommentForm} />
-                    ) : (
+                    {isLoading && (
+                        <div className="bcs-activity-feed-loading-state">
+                            <LoadingIndicator />
+                        </div>
+                    )}
+
+                    {isEmpty && !isLoading && <EmptyState showCommentMessage={showCommentForm} />}
+
+                    {!isEmpty && !isLoading && (
                         <ActiveState
                             {...activityFeedError}
                             items={collapseFeedState(feedItems)}
@@ -202,6 +232,9 @@ class ActivityFeed extends React.Component<Props, State> {
                             getMentionWithQuery={getMentionWithQuery}
                             approverSelectorContacts={approverSelectorContacts}
                             getApproverWithQuery={getApproverWithQuery}
+                            activeFeedEntryId={activeFeedEntryId}
+                            activeFeedEntryType={activeFeedEntryType}
+                            activeFeedItemRef={this.activeFeedItemRef}
                         />
                     )}
                 </div>

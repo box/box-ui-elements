@@ -70,7 +70,7 @@ class TextInput extends React.Component<Props, State> {
     }
 
     onChange = ({ currentTarget }: SyntheticEvent<HTMLInputElement>) => {
-        const value = currentTarget.value;
+        const { value } = currentTarget;
         if (this.state.error) {
             this.setState(
                 {

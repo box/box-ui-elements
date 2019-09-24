@@ -1,14 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/SidebarPanels render should render activity sidebar 1`] = `
+exports[`elements/content-sidebar/SidebarPanels render activity sidebar should render default component 1`] = `
 <Switch>
+  <Route
+    exact={true}
+    path="/activity/:activeFeedEntryType(comments|tasks)?/:activeFeedEntryId?"
+    render={[Function]}
+  />
   <Route
     render={[Function]}
   />
 </Switch>
 `;
 
-exports[`elements/content-sidebar/SidebarPanels render should render details sidebar 1`] = `
+exports[`elements/content-sidebar/SidebarPanels render details sidebar should render default component 1`] = `
 <Switch>
   <Route
     exact={true}
@@ -21,7 +26,19 @@ exports[`elements/content-sidebar/SidebarPanels render should render details sid
 </Switch>
 `;
 
-exports[`elements/content-sidebar/SidebarPanels render should render metadata sidebar 1`] = `
+exports[`elements/content-sidebar/SidebarPanels render details sidebar should render versions 1`] = `
+<Switch>
+  <Route
+    path="/:sidebar(activity|details)/versions/:versionId?"
+    render={[Function]}
+  />
+  <Route
+    render={[Function]}
+  />
+</Switch>
+`;
+
+exports[`elements/content-sidebar/SidebarPanels render metadata sidebar should render default component 1`] = `
 <Switch>
   <Route
     exact={true}
@@ -42,23 +59,11 @@ exports[`elements/content-sidebar/SidebarPanels render should render no sidebar 
 </Switch>
 `;
 
-exports[`elements/content-sidebar/SidebarPanels render should render skills sidebar 1`] = `
+exports[`elements/content-sidebar/SidebarPanels render skills sidebar should render default component 1`] = `
 <Switch>
   <Route
     exact={true}
     path="/skills"
-    render={[Function]}
-  />
-  <Route
-    render={[Function]}
-  />
-</Switch>
-`;
-
-exports[`elements/content-sidebar/SidebarPanels render should render versions 1`] = `
-<Switch>
-  <Route
-    path="/:sidebar/versions/:versionId?"
     render={[Function]}
   />
   <Route

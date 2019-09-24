@@ -222,9 +222,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
                     const ariaControls = `${this.tabviewID}-panel-${i + 1}`;
                     const ariaSelected = i === selectedIndex;
                     const id = `${this.tabviewID}-tab-${i + 1}`;
-                    const href = tab.props.href;
-                    const component = tab.props.component;
-                    const refProp = tab.props.refProp;
+                    const { href, component, refProp } = tab.props;
 
                     const tabIndex = i === selectedIndex ? '0' : '-1';
 
