@@ -49,13 +49,4 @@ describe('icons/states/UsersEmptyState', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
-
-    test('should override opacity in svg when specified', () => {
-        const opacity = '0.5';
-        const wrapper = getWrapper({
-            opacity,
-        });
-
-        expect(wrapper).toMatchSnapshot();
-    });
 });

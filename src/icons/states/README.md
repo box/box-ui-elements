@@ -158,15 +158,7 @@ const icons = [
     },
     {
         name: 'UsersEmptyState',
-        content: () => {
-            const UsersEmptyState = require('./UsersEmptyState').default;
-            return (
-                <div>
-                    <UsersEmptyState />
-                    <UsersEmptyState opacity = "0.5" />
-                </div>
-            )
-        },
+        component: require('./UsersEmptyState').default,
     },
 ];
 
