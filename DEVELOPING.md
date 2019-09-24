@@ -26,6 +26,42 @@ A published version of the style guide can be seen at https://opensource.box.com
 
 ## Testing UI Elements in a Parent Project
 
+### Webpack Setup
+
+`box-ui-elements` must use the same `react` and `react-dom` instances as the parent application for React hooks to work properly. Application repositories must add the following webpack `resolve` alias configuration to satify this requirement:
+
+```js
+// webpack.config.js
+{
+    ...
+    resolve: {
+        alias: {
+            'react': path.resolve('node_modules/react'),
+            'react-dom': path.resolve('node_modules/react-dom'),
+        }
+    }
+    ...
+}
+```
+
+This will ensure that `box-ui-elements` does not use it's own `react` and `react-dom` modules when linked. Improper setup is the primary reason for "**Invalid Hook**" errors due to React version mismatch.
+
+We also recommend using `yarn resolutions` to fix the version of `react` and `react-dom` in your application:
+
+```js
+// package.json
+{
+    ...
+    "resolutions": {
+        "react": "16.9.0",
+        "react-dom": "16.9.0"
+    },
+    ...
+}
+```
+
+### Linking `box-ui-elements`
+
 To test the Box UI Elements with your own project use local Yarn linking.
 
 1. In the UI Elements project run `yarn link` as a one time setup.
@@ -48,6 +84,19 @@ To test the Box UI Elements with your own project use local Yarn linking.
 - `yarn release` to run a release.
 
 For more script commands see `package.json`. Test coverage reports are available under reports/coverage.
+
+## Best Practices
+
+### `import * as React from 'react'`
+
+You should always use this syntax over `import React, { ... } from 'react'` because it automatically includes flow types.
+
+Consequently, you must use the `React` prefix for related functions and components.
+
+- ~~`Component`~~ => `React.Component`
+- ~~`useState`~~ => `React.useState`
+
+For more information, please see https://flow.org/en/docs/react/components/#toc-class-components
 
 ## Useful Plugins
 
@@ -74,4 +123,49 @@ Under most circumstances you should be using the style guide as mentioned earlie
 
 ## Unit Testing
 
-The project is setup with Jest for unit testing. For debugging follow instructions provided in the [jest documentation](https://jestjs.io/docs/en/troubleshooting).
+### `jest` and `enzyme`
+
+The project uses the `jest` testing framework and `enzyme` for component testing.
+
+Please refer to the relevant documentation pages for tutorials and troubleshooting:
+
+- Jest: https://jestjs.io
+- Enzyme: https://airbnb.io/enzyme/
+
+### Testing Hooks with `enzyme`
+
+Most hooks can be tested with `shallow` rendering except for lifecycle hooks such as `useEffect` and `useLayoutEffect`.
+
+To test a `useEffect` hook, you must use `act()` from `react-dom/test-utils` and `mount()` from `enzyme`.
+
+```jsx
+import { act } from 'react-dom/test-utils';
+
+test('something happens', () => {
+    let wrapper;
+
+    // Perform initial render
+    act(() => {
+        wrapper = mount(<SomeComponent foo="bar">Content</SomeComponent>);
+    });
+
+    // Assert
+    expect(wrapper...);
+
+    // Perform re-render
+    act(() => {
+        // Update props to exercise lifecycle methods
+        wrapper.setProps({
+            foo: 'baz'
+        });
+    });
+
+    // Update wrapper - This must be after act()
+    wrapper.update();
+
+    // Assert
+    expect(wrapper...);
+}
+```
+
+See [React Testing Recipes](https://reactjs.org/docs/testing-recipes.html) for more examples.

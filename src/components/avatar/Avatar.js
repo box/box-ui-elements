@@ -30,50 +30,36 @@ type Props = {
     size?: $Keys<typeof SIZES>,
 };
 
-type State = {
-    /** boolean to determine if image did not load correctly */
-    hasImageErrored: boolean,
-};
+function Avatar({ avatarUrl, className, name, id, size = '' }: Props) {
+    const [hasImageErrored, setHasImageErrored] = React.useState(false);
+    const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
-class Avatar extends React.PureComponent<Props, State> {
-    state = {
-        hasImageErrored: false,
-    };
+    // Reset hasImageErrored state when avatarUrl changes
+    React.useEffect(() => {
+        setHasImageErrored(false);
+    }, [avatarUrl]);
 
-    componentDidUpdate(prevProps: Props, prevState: State): void {
-        if (prevState.hasImageErrored && prevProps.avatarUrl !== this.props.avatarUrl) {
-            this.setState({
-                hasImageErrored: false,
-            });
-        }
-    }
-
-    onImageError = () => {
-        this.setState({
-            hasImageErrored: true,
-        });
-    };
-
-    render() {
-        const { avatarUrl, className, name, id, size = '' }: Props = this.props;
-        const { hasImageErrored }: State = this.state;
-        const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
-
-        let avatar;
-        if (avatarUrl && !hasImageErrored) {
-            avatar = <AvatarImage onError={this.onImageError} url={avatarUrl} />;
-        } else if (name) {
-            avatar = <AvatarInitials id={id} name={name} />;
-        } else {
-            avatar = <UnknownUserAvatar className="avatar-icon" />;
-        }
-
-        return (
-            <span className={classes} role="presentation">
-                {avatar}
-            </span>
+    let avatar;
+    if (avatarUrl && !hasImageErrored) {
+        avatar = (
+            <AvatarImage
+                onError={() => {
+                    setHasImageErrored(true);
+                }}
+                url={avatarUrl}
+            />
         );
+    } else if (name) {
+        avatar = <AvatarInitials id={id} name={name} />;
+    } else {
+        avatar = <UnknownUserAvatar className="avatar-icon" />;
     }
+
+    return (
+        <span className={classes} role="presentation">
+            {avatar}
+        </span>
+    );
 }
 
 export default Avatar;
