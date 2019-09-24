@@ -1,14 +1,14 @@
 // @flow
 import React from 'react';
 
-import IconNoUsers from '../IconNoUsers';
+import UsersEmptyState from '../UsersEmptyState';
 
-describe('icons/general/IconNoUsers', () => {
-    const getWrapper = (props = {}) => shallow(<IconNoUsers {...props} />);
+describe('icons/states/UsersEmptyState', () => {
+    const getWrapper = (props = {}) => shallow(<UsersEmptyState {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
-        expect(wrapper.hasClass('icon-no-users')).toBeTruthy();
+        expect(wrapper.hasClass('users-empty-state')).toBeTruthy();
     });
 
     test('should correctly render the icon with specified class', () => {
@@ -45,6 +45,15 @@ describe('icons/general/IconNoUsers', () => {
         const color = '#abc';
         const wrapper = getWrapper({
             color,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should override opacity in svg when specified', () => {
+        const opacity = '0.5';
+        const wrapper = getWrapper({
+            opacity,
         });
 
         expect(wrapper).toMatchSnapshot();
