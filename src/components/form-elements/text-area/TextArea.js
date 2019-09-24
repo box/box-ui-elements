@@ -58,7 +58,7 @@ class TextArea extends React.Component<Props, State> {
     }
 
     onChange = ({ currentTarget }: SyntheticEvent<HTMLTextAreaElement>) => {
-        const value = currentTarget.value;
+        const { value } = currentTarget;
         if (this.state.error) {
             this.setState(
                 {
