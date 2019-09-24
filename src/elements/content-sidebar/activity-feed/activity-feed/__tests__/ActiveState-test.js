@@ -103,6 +103,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         const wrapper = shallow(
             <ActiveState items={[comment, fileVersion, taskWithAssignment, appActivity]} currentUser={currentUser} />,
         ).dive();
+
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -119,5 +120,18 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     test('should correctly render with an inline error if some feed items fail to fetch', () => {
         const wrapper = shallow(<ActiveState inlineError={activityFeedError} items={[]} currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should correctly handle an actively focused feed item', () => {
+        const wrapper = mount(
+            <ActiveState
+                items={[comment, fileVersion, taskWithAssignment, appActivity]}
+                currentUser={currentUser}
+                activeFeedEntryId={comment.id}
+                activeFeedEntryType={comment.type}
+            />,
+        );
+
+        expect(wrapper.find('[data-testid="comment"]').hasClass('bcs-is-focused')).toEqual(true);
     });
 });

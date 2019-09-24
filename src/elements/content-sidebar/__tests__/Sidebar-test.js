@@ -69,6 +69,54 @@ describe('elements/content-sidebar/Sidebar', () => {
         });
     });
 
+    describe('handleVersionHistoryClick', () => {
+        test('should handle url with deeplink', () => {
+            const historyMock = {
+                push: jest.fn(),
+                location: {
+                    pathname: '/activity/comments/1234',
+                },
+            };
+
+            const preventDefaultMock = jest.fn();
+
+            const event = {
+                preventDefault: preventDefaultMock,
+            };
+
+            const wrapper = getWrapper({ history: historyMock, file: { id: '1234', file_version: { id: '4567' } } });
+            const instance = wrapper.instance();
+
+            instance.handleVersionHistoryClick(event);
+
+            expect(preventDefaultMock).toHaveBeenCalled();
+            expect(historyMock.push).toHaveBeenCalledWith('/activity/versions/4567');
+        });
+
+        test('should handle url without deeplink', () => {
+            const historyMock = {
+                push: jest.fn(),
+                location: {
+                    pathname: '/details',
+                },
+            };
+
+            const preventDefaultMock = jest.fn();
+
+            const event = {
+                preventDefault: preventDefaultMock,
+            };
+
+            const wrapper = getWrapper({ history: historyMock, file: { id: '1234', file_version: { id: '4567' } } });
+            const instance = wrapper.instance();
+
+            instance.handleVersionHistoryClick(event);
+
+            expect(preventDefaultMock).toHaveBeenCalled();
+            expect(historyMock.push).toHaveBeenCalledWith('/details/versions/4567');
+        });
+    });
+
     describe('isForced', () => {
         test('returns the current value from the localStore', () => {
             LocalStore.mockImplementationOnce(() => ({
