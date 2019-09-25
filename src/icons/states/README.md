@@ -156,6 +156,10 @@ const icons = [
         name: 'UploadSuccessState',
         component: require('./UploadSuccessState').default,
     },
+    {
+        name: 'UsersEmptyState',
+        component: require('./UsersEmptyState').default,
+    },
 ];
 
 <IconsExample icons={icons} />;

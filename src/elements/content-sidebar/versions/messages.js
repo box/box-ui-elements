@@ -88,7 +88,7 @@ const messages = defineMessages({
     },
     versionDeletedBy: {
         id: 'be.sidebarVersions.deletedBy',
-        defaultMessage: 'Deleted by { name }',
+        defaultMessage: 'Deleted by {name}',
         description: 'Message displayed for a deleted version. {name} is the user who performed the action.',
     },
     versionFetchError: {
@@ -112,9 +112,14 @@ const messages = defineMessages({
         defaultMessage: 'Version number {versionNumber}',
         description: 'Label given to the version badge for screen readers.',
     },
+    versionPromotedBy: {
+        id: 'be.sidebarVersions.promotedBy',
+        defaultMessage: 'Promoted from v{versionPromoted} by {name}',
+        description: 'Message displayed for a restored version. {name} is the user who performed the action.',
+    },
     versionRestoredBy: {
         id: 'be.sidebarVersions.restoredBy',
-        defaultMessage: 'Restored by { name }',
+        defaultMessage: 'Restored by {name}',
         description: 'Message displayed for a restored version. {name} is the user who performed the action.',
     },
     versionServerError: {
@@ -124,7 +129,7 @@ const messages = defineMessages({
     },
     versionUploadedBy: {
         id: 'be.sidebarVersions.uploadedBy',
-        defaultMessage: 'Uploaded by { name }',
+        defaultMessage: 'Uploaded by {name}',
         description: 'Message displayed for an uploaded version. {name} is the user who performed the action.',
     },
     versionUserUnknown: {

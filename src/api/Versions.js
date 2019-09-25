@@ -185,7 +185,8 @@ class Versions extends OffsetBasedAPI {
     /**
      * Decorates the current version and adds it to an existing FileVersions object
      *
-     * @param {BoxItemVersion} version - a box version
+     * @param {BoxItemVersion} currentVersion - a box version
+     * @param {FileVersions} versions - versions response
      * @param {BoxItem} file - a box file
      * @returns {FileVersions} - a FileVersions object containing the decorated current version
      */
@@ -198,11 +199,11 @@ class Versions extends OffsetBasedAPI {
             return { entries: [currentVersion], total_count: 1 };
         }
 
-        const restoredFromId = getProp(file, 'restored_from.id');
-        const restoredVersion = versions.entries.find(version => version.id === restoredFromId);
+        const promotedFromId = getProp(file, 'restored_from.id');
+        const promotedVersion = versions.entries.find(version => version.id === promotedFromId);
 
-        if (restoredVersion) {
-            currentVersion.version_restored = restoredVersion.version_number;
+        if (promotedVersion) {
+            currentVersion.version_promoted = promotedVersion.version_number;
         }
 
         return { entries: [...versions.entries, currentVersion], total_count: versions.total_count + 1 };
