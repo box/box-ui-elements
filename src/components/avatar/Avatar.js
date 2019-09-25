@@ -9,15 +9,13 @@ import './Avatar.scss';
 
 const SIZES = { large: true };
 
-type URLProp = ?string;
-
 type Props = {
     /**
      * Url to avatar image.  If passed in, component will render the avatar image instead of the initials
      *
      * Required if "name" is not specified.
      */
-    avatarUrl?: URLProp,
+    avatarUrl?: ?string,
     /** classname to add to the container element. */
     className?: string,
     /** Users id */
@@ -34,7 +32,7 @@ type Props = {
 
 function Avatar({ avatarUrl, className, name, id, size = '' }: Props) {
     const [hasImageErrored, setHasImageErrored] = React.useState<boolean>(false);
-    const [prevAvatarUrl, setPrevAvatarUrl] = React.useState<URLProp>(null);
+    const [prevAvatarUrl, setPrevAvatarUrl] = React.useState<$PropertyType<Props, 'avatarUrl'>>(null);
 
     const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
