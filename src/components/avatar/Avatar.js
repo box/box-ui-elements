@@ -31,13 +31,16 @@ type Props = {
 };
 
 function Avatar({ avatarUrl, className, name, id, size = '' }: Props) {
-    const [hasImageErrored, setHasImageErrored] = React.useState(false);
+    const [hasImageErrored, setHasImageErrored] = React.useState<boolean>(false);
+    const [prevAvatarUrl, setPrevAvatarUrl] = React.useState<string | null>(null);
+
     const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
 
     // Reset hasImageErrored state when avatarUrl changes
-    React.useEffect(() => {
+    if (avatarUrl !== prevAvatarUrl) {
         setHasImageErrored(false);
-    }, [avatarUrl]);
+        setPrevAvatarUrl(avatarUrl);
+    }
 
     let avatar;
     if (avatarUrl && !hasImageErrored) {
