@@ -70,74 +70,84 @@ const PreviewHeader = ({
                 'bcpr-PreviewHeader--basic': !isPreviewingCurrentVersion,
             })}
         >
-            <FileInfo file={file} version={selectedVersion} />
+            {/*
+                bp-header and bp-base-header are used by box-annotations,
+                and must be put one level under bcpr-PreviewHeader
+            */}
+            <div className="bcpr-PreviewHeader-content bp-header bp-base-header">
+                <FileInfo file={file} version={selectedVersion} />
 
-            <div className="bcpr-PreviewHeader-controls">
-                {isPreviewingCurrentVersion && (
-                    <>
-                        {shouldRenderOpenWith && (
-                            <LoadableContentOpenWith
-                                className="bcpr-bcow-btn"
-                                fileId={fileId}
-                                token={token}
-                                {...contentOpenWithProps}
-                            />
-                        )}
-                        {canAnnotate && (
-                            <>
+                <div className="bcpr-PreviewHeader-controls">
+                    {isPreviewingCurrentVersion && (
+                        <>
+                            {shouldRenderOpenWith && (
+                                <LoadableContentOpenWith
+                                    className="bcpr-bcow-btn"
+                                    fileId={fileId}
+                                    token={token}
+                                    {...contentOpenWithProps}
+                                />
+                            )}
+                            {canAnnotate && (
+                                <>
+                                    <PlainButton
+                                        aria-label={drawMsg}
+                                        className="bcpr-PreviewHeader-button bp-btn-annotate-draw bp-is-hidden"
+                                        title={drawMsg}
+                                        type="button"
+                                    >
+                                        <IconDrawAnnotationMode color={bdlGray50} height={18} width={18} />
+                                    </PlainButton>
+                                    <PlainButton
+                                        aria-label={pointMsg}
+                                        className="bcpr-PreviewHeader-button bp-btn-annotate-point bp-is-hidden"
+                                        title={pointMsg}
+                                        type="button"
+                                    >
+                                        <IconPointAnnotation color={bdlGray50} height={18} width={18} />
+                                    </PlainButton>
+                                </>
+                            )}
+                            {canDownload && (
                                 <PlainButton
-                                    aria-label={drawMsg}
-                                    className="bcpr-PreviewHeader-button bp-btn-annotate-draw bp-is-hidden"
-                                    title={drawMsg}
+                                    aria-label={printMsg}
+                                    className="bcpr-PreviewHeader-button"
+                                    onClick={onPrint}
+                                    title={printMsg}
                                     type="button"
                                 >
-                                    <IconDrawAnnotationMode color={bdlGray50} height={18} width={18} />
+                                    <IconPrint color={bdlGray50} height={22} width={22} />
                                 </PlainButton>
+                            )}
+                            {canDownload && (
                                 <PlainButton
-                                    aria-label={pointMsg}
-                                    className="bcpr-PreviewHeader-button bp-btn-annotate-point bp-is-hidden"
-                                    title={pointMsg}
+                                    aria-label={downloadMsg}
+                                    className="bcpr-PreviewHeader-button"
+                                    onClick={onDownload}
+                                    title={downloadMsg}
                                     type="button"
                                 >
-                                    <IconPointAnnotation color={bdlGray50} height={18} width={18} />
+                                    <IconDownload color={bdlGray50} height={18} width={18} />
                                 </PlainButton>
-                            </>
-                        )}
-                        {canDownload && (
-                            <PlainButton
-                                aria-label={printMsg}
-                                className="bcpr-PreviewHeader-button"
-                                onClick={onPrint}
-                                title={printMsg}
-                                type="button"
-                            >
-                                <IconPrint color={bdlGray50} height={22} width={22} />
-                            </PlainButton>
-                        )}
-                        {canDownload && (
-                            <PlainButton
-                                aria-label={downloadMsg}
-                                className="bcpr-PreviewHeader-button"
-                                onClick={onDownload}
-                                title={downloadMsg}
-                                type="button"
-                            >
-                                <IconDownload color={bdlGray50} height={18} width={18} />
-                            </PlainButton>
-                        )}
-                    </>
-                )}
+                            )}
+                        </>
+                    )}
 
-                {onClose && (
-                    <PlainButton
-                        aria-label={isPreviewingCurrentVersion && closeMsg}
-                        className="bcpr-PreviewHeader-button bcpr-PreviewHeader-button-close"
-                        onClick={onClose}
-                        type="button"
-                    >
-                        {isPreviewingCurrentVersion ? <IconClose color={bdlGray50} height={24} width={24} /> : closeMsg}
-                    </PlainButton>
-                )}
+                    {onClose && (
+                        <PlainButton
+                            aria-label={isPreviewingCurrentVersion && closeMsg}
+                            className="bcpr-PreviewHeader-button bcpr-PreviewHeader-button-close"
+                            onClick={onClose}
+                            type="button"
+                        >
+                            {isPreviewingCurrentVersion ? (
+                                <IconClose color={bdlGray50} height={24} width={24} />
+                            ) : (
+                                closeMsg
+                            )}
+                        </PlainButton>
+                    )}
+                </div>
             </div>
         </header>
     );
