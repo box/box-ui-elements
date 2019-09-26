@@ -58,6 +58,13 @@
     text-overflow: ellipsis;
 }
 
+.bcs-VersionsItem-retention {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    color: $bdl-gray-62;
+}
+
 .bcs-VersionsItem-size {
     overflow: hidden;
     text-overflow: ellipsis;

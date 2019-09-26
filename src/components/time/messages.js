@@ -27,6 +27,11 @@ const messages = defineMessages({
         description: 'The time that an event occurred at a given date without the year included',
         id: 'boxui.readableTime.eventTimeDateShort',
     },
+    eventTimeWeekdayLong: {
+        defaultMessage: '{weekday}, {time, date, medium}',
+        description: 'The time that an event occurred at a given date with the weekday included',
+        id: 'boxui.readableTime.eventTimeWeekdayLong',
+    },
 });
 
 export default messages;

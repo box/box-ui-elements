@@ -142,6 +142,11 @@ const messages = defineMessages({
         defaultMessage: 'Version history is limited to the last {maxVersions} entries.',
         description: 'Max supported entries for version history',
     },
+    versionRetention: {
+        id: 'be.sidebarVersions.versionRetention',
+        defaultMessage: 'Will be {action} {time} by retention policy.',
+        description: 'Retention message describing the disposition action and time',
+    },
 });
 
 export default messages;

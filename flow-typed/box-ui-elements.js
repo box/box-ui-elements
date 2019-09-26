@@ -364,6 +364,7 @@ type BoxItemVersion = {
     permissions?: BoxItemVersionPermission,
     restored_at?: string,
     restored_by?: ?User,
+    retention?: Object,
     sha1?: string,
     size?: number,
     trashed_at: ?string,

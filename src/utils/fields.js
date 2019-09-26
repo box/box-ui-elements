@@ -54,6 +54,7 @@ import {
     FIELD_APP,
     FIELD_OCCURRED_AT,
     FIELD_RENDERED_TEXT,
+    FIELD_RETENTION,
     PLACEHOLDER_USER,
 } from '../constants';
 
@@ -147,6 +148,7 @@ const FILE_VERSIONS_FIELDS_TO_FETCH = [
     FIELD_TRASHED_AT,
     FIELD_TRASHED_BY,
     FIELD_VERSION_NUMBER,
+    FIELD_RETENTION,
 ];
 
 // Fields needed for Content Picker to show shared link permissions

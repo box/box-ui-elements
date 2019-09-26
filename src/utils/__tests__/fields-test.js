@@ -53,6 +53,7 @@ import {
     FIELD_ASSIGNED_TO,
     FIELD_STATUS,
     FIELD_RESTORED_FROM,
+    FIELD_RETENTION,
     PLACEHOLDER_USER,
 } from '../../constants';
 
@@ -151,6 +152,7 @@ describe('util/fields', () => {
             FIELD_TRASHED_AT,
             FIELD_TRASHED_BY,
             FIELD_VERSION_NUMBER,
+            FIELD_RETENTION,
         ]);
     });
 
