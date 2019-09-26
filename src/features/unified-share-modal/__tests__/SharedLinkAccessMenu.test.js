@@ -31,7 +31,7 @@ describe('features/unified-share-modal/SharedLinkAccessMenu', () => {
                 submitting: false,
             },
         ].forEach(({ submitting }) => {
-            test('should render correct menu', () => {
+            test(`should render correct menu when submitting is ${submitting}`, () => {
                 const sharedLinkAccessMenu = getWrapper({ submitting });
                 expect(sharedLinkAccessMenu).toMatchSnapshot();
             });
@@ -39,6 +39,32 @@ describe('features/unified-share-modal/SharedLinkAccessMenu', () => {
 
         test('should render tooltipContent if provided', () => {
             const sharedLinkAccessMenu = getWrapper({ tooltipContent: 'Hello, world!' });
+            expect(sharedLinkAccessMenu).toMatchSnapshot();
+        });
+
+        test('should render no access level menu items if disabled by something other than access policy', () => {
+            const sharedLinkAccessMenu = getWrapper({
+                allowedAccessLevels: {
+                    peopleInThisItem: true,
+                    peopleInYourCompany: false,
+                    peopleWithTheLink: false,
+                },
+            });
+            expect(sharedLinkAccessMenu).toMatchSnapshot();
+        });
+
+        test('should render tooltips for access level menu items if disabled by access policy', () => {
+            const sharedLinkAccessMenu = getWrapper({
+                accessLevelsDisabledReason: {
+                    peopleInYourCompany: 'access_policy',
+                    peopleWithTheLink: 'access_policy',
+                },
+                allowedAccessLevels: {
+                    peopleInThisItem: true,
+                    peopleInYourCompany: false,
+                    peopleWithTheLink: false,
+                },
+            });
             expect(sharedLinkAccessMenu).toMatchSnapshot();
         });
     });
