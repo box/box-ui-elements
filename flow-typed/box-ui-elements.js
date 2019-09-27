@@ -169,6 +169,14 @@ type BoxItemVersionPermission = {
     can_upload?: boolean,
 };
 
+type BoxItemVersionRetention = {
+    applied_at: string,
+    disposition_action: 'delete' | 'remove',
+    disposition_at: string,
+    id: string,
+    type: 'file_version_retention',
+};
+
 type User = {
     avatar_url?: string,
     email?: string,
@@ -364,7 +372,7 @@ type BoxItemVersion = {
     permissions?: BoxItemVersionPermission,
     restored_at?: string,
     restored_by?: ?User,
-    retention?: Object,
+    retention?: BoxItemVersionRetention,
     sha1?: string,
     size?: number,
     trashed_at: ?string,

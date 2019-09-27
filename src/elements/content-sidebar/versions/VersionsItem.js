@@ -66,24 +66,27 @@ const VersionsItem = ({
         is_download_available,
         permissions = {},
         restored_at: restoredAt,
+        retention = {},
         size,
         trashed_at: trashedAt,
         version_number: versionNumber,
         version_promoted: versionPromoted,
     } = version;
     const { can_delete, can_download, can_preview, can_upload } = permissions;
+    const {
+        disposition_action: versionDispositionAction,
+        disposition_at: versionDispositionTime,
+        applied_at: versionAppliedTime,
+    } = retention;
 
     // Version info helpers
     const versionAction = selectors.getVersionAction(version);
     const versionInteger = versionNumber ? parseInt(versionNumber, 10) : 1;
-    const versionRetention = version.retention;
-    const versionDispositionAction = versionRetention && versionRetention.disposition_action;
     const versionDispositionMessage =
         versionDispositionAction === VERSION_RETENTION_REMOVE_ACTION
             ? messages.versionRetentionRemove
             : messages.versionRetentionDelete;
-    const versionDispositionTime = versionRetention && versionRetention.disposition_at;
-    const versionDispositionTimestamp = versionDispositionTime && new Date(versionDispositionTime).getTime();
+    const versionDispositionTimestamp = versionDispositionTime ? new Date(versionDispositionTime).getTime() : null;
     const versionTime = restoredAt || trashedAt || createdAt;
     const versionTimestamp = versionTime && new Date(versionTime).getTime();
     const versionUserName = selectors.getVersionUser(version).name || (
@@ -95,12 +98,12 @@ const VersionsItem = ({
     const isDownloadable = !!is_download_available;
     const isLimited = versionCount - versionInteger >= versionLimit;
     const isRestricted = isWatermarked && !isCurrent; // Watermarked files do not support prior version preview
-    const isRetained = versionRetention && versionRetention.applied_at;
-    const isRetentionActive = isRetained && (!versionDispositionTime || new Date(versionDispositionTime) > new Date());
+    const isRetentionActive =
+        !!versionAppliedTime && (!versionDispositionTimestamp || versionDispositionTimestamp > new Date().getTime());
 
     // Version action helpers
-    const canDelete = !isRetentionActive;
     const canPreview = can_preview && !isDeleted && !isLimited && !isRestricted;
+    const enableDelete = !isRetentionActive;
     const showDelete = can_delete && !isDeleted && !isCurrent;
     const showDownload = can_download && !isDeleted && isDownloadable;
     const showPromote = can_upload && !isDeleted && !isCurrent;
@@ -176,7 +179,7 @@ const VersionsItem = ({
 
             {!isLimited && hasActions && (
                 <VersionsItemActions
-                    canDelete={canDelete}
+                    enableDelete={enableDelete}
                     fileId={fileId}
                     isCurrent={isCurrent}
                     onDelete={handleAction(onDelete)}

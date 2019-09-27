@@ -149,8 +149,8 @@ const messages = defineMessages({
     },
     versionRetentionRemove: {
         id: 'be.sidebarVersions.versionRetentionRemove',
-        defaultMessage: 'The retention policy will be removed {time}.',
-        description: 'Retention message describing when the policy will be removed.',
+        defaultMessage: 'Retention time period ends on {time}.',
+        description: 'Retention message describing when the retention policy will be removed.',
     },
 });
 

@@ -200,7 +200,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             const actions = wrapper.find(VersionsItemActions);
             const retention = wrapper.find('.bcs-VersionsItem-retention');
 
-            expect(actions.prop('canDelete')).toBe(false);
+            expect(actions.prop('enableDelete')).toBe(false);
             expect(retention).toBeTruthy();
         });
     });

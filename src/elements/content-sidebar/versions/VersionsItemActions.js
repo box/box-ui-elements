@@ -20,7 +20,7 @@ import { Menu } from '../../../components/menu';
 import './VersionsItemActions.scss';
 
 type Props = {
-    canDelete?: boolean,
+    enableDelete?: boolean,
     fileId: string,
     isCurrent?: boolean,
     onDelete?: () => void,
@@ -46,7 +46,7 @@ const handleToggleClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
 };
 
 const VersionsItemActions = ({
-    canDelete = true,
+    enableDelete = true,
     fileId,
     isCurrent = false,
     onDelete,
@@ -121,7 +121,7 @@ const VersionsItemActions = ({
                         action="remove"
                         fileId={fileId}
                         isCurrent={isCurrent}
-                        isDisabled={!canDelete}
+                        isDisabled={!enableDelete}
                         onClick={onDelete}
                     >
                         <IconTrash {...ICON_SIZE} />
