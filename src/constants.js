@@ -365,7 +365,8 @@ export const VERSION_DELETE_ACTION: 'delete' = 'delete';
 export const VERSION_PROMOTE_ACTION: 'promote' = 'promote';
 export const VERSION_RESTORE_ACTION: 'restore' = 'restore';
 export const VERSION_UPLOAD_ACTION: 'upload' = 'upload';
-export const VERSION_DISPOSITION_DEFAULT_ACTION: 'deleted' = 'deleted';
+export const VERSION_RETENTION_DELETE_ACTION: 'delete' = 'delete';
+export const VERSION_RETENTION_REMOVE_ACTION: 'remove' = 'remove';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER: UserMini = { type: 'user', id: '2', name: '' };

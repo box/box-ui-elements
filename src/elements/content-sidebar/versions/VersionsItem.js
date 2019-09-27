@@ -18,7 +18,7 @@ import {
     VERSION_PROMOTE_ACTION,
     VERSION_RESTORE_ACTION,
     VERSION_UPLOAD_ACTION,
-    VERSION_DISPOSITION_DEFAULT_ACTION,
+    VERSION_RETENTION_REMOVE_ACTION,
 } from '../../../constants';
 import type { VersionActionCallback } from './flowTypes';
 import './VersionsItem.scss';
@@ -77,10 +77,11 @@ const VersionsItem = ({
     const versionAction = selectors.getVersionAction(version);
     const versionInteger = versionNumber ? parseInt(versionNumber, 10) : 1;
     const versionRetention = version.retention;
-    const versionDispositionAction =
-        versionRetention && versionRetention.disposition_action
-            ? `${versionRetention.disposition_action}d`
-            : VERSION_DISPOSITION_DEFAULT_ACTION;
+    const versionDispositionAction = versionRetention && versionRetention.disposition_action;
+    const versionDispositionMessage =
+        versionDispositionAction === VERSION_RETENTION_REMOVE_ACTION
+            ? messages.versionRetentionRemove
+            : messages.versionRetentionDelete;
     const versionDispositionTime = versionRetention && versionRetention.disposition_at;
     const versionDispositionTimestamp = versionDispositionTime && new Date(versionDispositionTime).getTime();
     const versionTime = restoredAt || trashedAt || createdAt;
@@ -157,9 +158,8 @@ const VersionsItem = ({
                     {versionDispositionTimestamp && (
                         <div className="bcs-VersionsItem-retention">
                             <FormattedMessage
-                                {...messages.versionRetention}
+                                {...versionDispositionMessage}
                                 values={{
-                                    action: versionDispositionAction,
                                     time: <ReadableTime timestamp={versionDispositionTimestamp} showWeekday />,
                                 }}
                             />
