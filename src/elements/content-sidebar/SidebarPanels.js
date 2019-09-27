@@ -132,7 +132,7 @@ class SidebarPanels extends React.Component<Props> {
             versionsSidebarProps,
         }: Props = this.props;
 
-        if (!isOpen) {
+        if (!isOpen || (!hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
         }
 

@@ -92,6 +92,9 @@ describe('ContentSidebar', () => {
 
     describe('version history', () => {
         beforeEach(() => {
+            cy.server();
+            cy.route('GET', '**/files/*', 'fixture:content-sidebar/restored-file.json');
+
             helpers.load({
                 fileId: Cypress.env('FILE_ID_DOC_VERSIONED'),
             });
@@ -113,6 +116,17 @@ describe('ContentSidebar', () => {
                 .contains('Back')
                 .click();
             cy.get('@versionHistory').should('not.exist');
+        });
+
+        it('should display the current version as restored', () => {
+            cy.getByTestId('version').within($versionItem => {
+                cy.wrap($versionItem).contains('promoted v6 to v10');
+            });
+            cy.getByTestId('sidebardetails').click();
+            cy.getByTestId('versionhistory').click();
+
+            cy.contains('[data-testid="bcs-content"]', 'Version History').as('versionHistory');
+            cy.get('@versionHistory').contains('Restored by');
         });
     });
 
