@@ -36,28 +36,31 @@
 
 .bcs-VersionsItem-details {
     flex: 1 1 100%;
-    margin-right: 35px; // Avoid flowing under action toggle button
     overflow: hidden;
 
-    .bcs-VersionsItem-log {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+    & > :not(.bcs-VersionsItem-info) {
+        margin-right: 35px; // Avoid flowing under action toggle button
     }
+}
 
-    .bcs-VersionsItem-info {
-        display: flex;
-        align-items: center;
-        color: $bdl-gray-62;
-        white-space: nowrap;
-    }
+.bcs-VersionsItem-log {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
-    .bcs-VersionsItem-retention {
-        display: flex;
-        align-items: center;
-        margin-top: 8px;
-        color: $bdl-gray-62;
-    }
+.bcs-VersionsItem-info {
+    display: flex;
+    align-items: center;
+    color: $bdl-gray-62;
+    white-space: nowrap;
+}
+
+.bcs-VersionsItem-retention {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    color: $bdl-gray-62;
 }
 
 .bcs-VersionsItem-footer {

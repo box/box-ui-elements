@@ -1,5 +1,127 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`elements/content-sidebar/versions/VersionsItemActions render should disable tooltip when enable delete 1`] = `
+<DropdownMenu
+  className="bcs-VersionsItemActions"
+  constrainToScrollParent={true}
+  constrainToWindow={true}
+  isRightAligned={true}
+  onMenuClose={[Function]}
+>
+  <PlainButton
+    className="bcs-VersionsItemActions-toggle"
+    data-resin-iscurrent={false}
+    data-resin-target="overflow"
+    onClick={[Function]}
+    type="button"
+  >
+    <IconEllipsis
+      height={4}
+      width={14}
+    />
+    <FormattedMessage
+      defaultMessage="Toggle Actions Menu"
+      id="be.sidebarVersions.toggle"
+    >
+      <Component />
+    </FormattedMessage>
+  </PlainButton>
+  <Menu
+    className="bcs-VersionsItemActions-menu"
+    data-resin-component="preview"
+    data-resin-feature="versions"
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={true}
+      isTabbable={false}
+      position="middle-left"
+      text="Disabled by retention policy"
+      theme="default"
+    >
+      <VersionsItemAction
+        action="remove"
+        isCurrent={false}
+        isDisabled={false}
+      >
+        <IconTrash
+          height={12}
+          width={12}
+        />
+        <FormattedMessage
+          defaultMessage="Delete"
+          id="be.sidebarVersions.delete"
+        />
+      </VersionsItemAction>
+    </Tooltip>
+  </Menu>
+</DropdownMenu>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsItemActions render should disable tooltip when enable delete 2`] = `
+<DropdownMenu
+  className="bcs-VersionsItemActions"
+  constrainToScrollParent={true}
+  constrainToWindow={true}
+  isRightAligned={true}
+  onMenuClose={[Function]}
+>
+  <PlainButton
+    className="bcs-VersionsItemActions-toggle"
+    data-resin-iscurrent={false}
+    data-resin-target="overflow"
+    onClick={[Function]}
+    type="button"
+  >
+    <IconEllipsis
+      height={4}
+      width={14}
+    />
+    <FormattedMessage
+      defaultMessage="Toggle Actions Menu"
+      id="be.sidebarVersions.toggle"
+    >
+      <Component />
+    </FormattedMessage>
+  </PlainButton>
+  <Menu
+    className="bcs-VersionsItemActions-menu"
+    data-resin-component="preview"
+    data-resin-feature="versions"
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      isTabbable={false}
+      position="middle-left"
+      text="Disabled by retention policy"
+      theme="default"
+    >
+      <VersionsItemAction
+        action="remove"
+        isCurrent={false}
+        isDisabled={true}
+      >
+        <IconTrash
+          height={12}
+          width={12}
+        />
+        <FormattedMessage
+          defaultMessage="Delete"
+          id="be.sidebarVersions.delete"
+        />
+      </VersionsItemAction>
+    </Tooltip>
+  </Menu>
+</DropdownMenu>
+`;
+
 exports[`elements/content-sidebar/versions/VersionsItemActions render should return the correct menu items based on options 1`] = `
 <DropdownMenu
   className="bcs-VersionsItemActions"
@@ -85,20 +207,30 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         id="be.sidebarVersions.restore"
       />
     </VersionsItemAction>
-    <VersionsItemAction
-      action="remove"
-      isCurrent={false}
-      isDisabled={false}
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={true}
+      isTabbable={false}
+      position="middle-left"
+      text="Disabled by retention policy"
+      theme="default"
     >
-      <IconTrash
-        height={12}
-        width={12}
-      />
-      <FormattedMessage
-        defaultMessage="Delete"
-        id="be.sidebarVersions.delete"
-      />
-    </VersionsItemAction>
+      <VersionsItemAction
+        action="remove"
+        isCurrent={false}
+        isDisabled={false}
+      >
+        <IconTrash
+          height={12}
+          width={12}
+        />
+        <FormattedMessage
+          defaultMessage="Delete"
+          id="be.sidebarVersions.delete"
+        />
+      </VersionsItemAction>
+    </Tooltip>
   </Menu>
 </DropdownMenu>
 `;

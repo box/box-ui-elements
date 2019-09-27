@@ -18,6 +18,7 @@ import {
     VERSION_PROMOTE_ACTION,
     VERSION_RESTORE_ACTION,
     VERSION_UPLOAD_ACTION,
+    VERSION_RETENTION_DELETE_ACTION,
     VERSION_RETENTION_REMOVE_ACTION,
 } from '../../../constants';
 import type { VersionActionCallback } from './flowTypes';
@@ -44,6 +45,10 @@ const ACTION_MAP = {
     [VERSION_PROMOTE_ACTION]: messages.versionPromotedBy,
     [VERSION_UPLOAD_ACTION]: messages.versionUploadedBy,
 };
+const RETENTION_MAP = {
+    [VERSION_RETENTION_DELETE_ACTION]: messages.versionRetentionDelete,
+    [VERSION_RETENTION_REMOVE_ACTION]: messages.versionRetentionRemove,
+};
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 const VersionsItem = ({
@@ -66,7 +71,7 @@ const VersionsItem = ({
         is_download_available,
         permissions = {},
         restored_at: restoredAt,
-        retention = {},
+        retention,
         size,
         trashed_at: trashedAt,
         version_number: versionNumber,
@@ -74,19 +79,15 @@ const VersionsItem = ({
     } = version;
     const { can_delete, can_download, can_preview, can_upload } = permissions;
     const {
-        disposition_action: versionDispositionAction,
-        disposition_at: versionDispositionTime,
-        applied_at: versionAppliedTime,
-    } = retention;
+        disposition_action: retentionDispositionAction,
+        disposition_at: retentionDispositionTime,
+        applied_at: retentionAppliedTime,
+    } = retention || {};
 
     // Version info helpers
     const versionAction = selectors.getVersionAction(version);
     const versionInteger = versionNumber ? parseInt(versionNumber, 10) : 1;
-    const versionDispositionMessage =
-        versionDispositionAction === VERSION_RETENTION_REMOVE_ACTION
-            ? messages.versionRetentionRemove
-            : messages.versionRetentionDelete;
-    const versionDispositionTimestamp = versionDispositionTime ? new Date(versionDispositionTime).getTime() : null;
+    const retentionDispositionTimestamp = retentionDispositionTime && new Date(retentionDispositionTime).getTime();
     const versionTime = restoredAt || trashedAt || createdAt;
     const versionTimestamp = versionTime && new Date(versionTime).getTime();
     const versionUserName = selectors.getVersionUser(version).name || (
@@ -98,12 +99,12 @@ const VersionsItem = ({
     const isDownloadable = !!is_download_available;
     const isLimited = versionCount - versionInteger >= versionLimit;
     const isRestricted = isWatermarked && !isCurrent; // Watermarked files do not support prior version preview
-    const isRetentionActive =
-        !!versionAppliedTime && (!versionDispositionTimestamp || versionDispositionTimestamp > new Date().getTime());
+    const isRetained =
+        !!retentionAppliedTime &&
+        (!retentionDispositionTimestamp || retentionDispositionTimestamp > new Date().getTime());
 
     // Version action helpers
     const canPreview = can_preview && !isDeleted && !isLimited && !isRestricted;
-    const enableDelete = !isRetentionActive;
     const showDelete = can_delete && !isDeleted && !isCurrent;
     const showDownload = can_download && !isDeleted && isDownloadable;
     const showPromote = can_upload && !isDeleted && !isCurrent;
@@ -158,12 +159,12 @@ const VersionsItem = ({
                         {!!size && <span className="bcs-VersionsItem-size">{sizeUtil(size)}</span>}
                     </div>
 
-                    {versionDispositionTimestamp && (
+                    {retentionDispositionTimestamp && (
                         <div className="bcs-VersionsItem-retention">
                             <FormattedMessage
-                                {...versionDispositionMessage}
+                                {...RETENTION_MAP[retentionDispositionAction]}
                                 values={{
-                                    time: <ReadableTime timestamp={versionDispositionTimestamp} showWeekday />,
+                                    time: <ReadableTime timestamp={retentionDispositionTimestamp} showWeekday />,
                                 }}
                             />
                         </div>
@@ -179,7 +180,7 @@ const VersionsItem = ({
 
             {!isLimited && hasActions && (
                 <VersionsItemActions
-                    enableDelete={enableDelete}
+                    enableDelete={!isRetained}
                     fileId={fileId}
                     isCurrent={isCurrent}
                     onDelete={handleAction(onDelete)}
