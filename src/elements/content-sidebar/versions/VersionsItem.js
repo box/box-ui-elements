@@ -18,6 +18,8 @@ import {
     VERSION_PROMOTE_ACTION,
     VERSION_RESTORE_ACTION,
     VERSION_UPLOAD_ACTION,
+    VERSION_RETENTION_DELETE_ACTION,
+    VERSION_RETENTION_REMOVE_ACTION,
 } from '../../../constants';
 import type { VersionActionCallback } from './flowTypes';
 import './VersionsItem.scss';
@@ -43,6 +45,10 @@ const ACTION_MAP = {
     [VERSION_PROMOTE_ACTION]: messages.versionPromotedBy,
     [VERSION_UPLOAD_ACTION]: messages.versionUploadedBy,
 };
+const RETENTION_MAP = {
+    [VERSION_RETENTION_DELETE_ACTION]: messages.versionRetentionDelete,
+    [VERSION_RETENTION_REMOVE_ACTION]: messages.versionRetentionRemove,
+};
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 const VersionsItem = ({
@@ -65,12 +71,19 @@ const VersionsItem = ({
         is_download_available,
         permissions = {},
         restored_at: restoredAt,
+        retention,
         size,
         trashed_at: trashedAt,
         version_number: versionNumber,
         version_promoted: versionPromoted,
     } = version;
     const { can_delete, can_download, can_preview, can_upload } = permissions;
+    const {
+        disposition_action: retentionDispositionAction,
+        disposition_at: retentionDispositionTime,
+        applied_at: retentionAppliedTime,
+    } = retention || {};
+    const retentionDispositionTimestamp = retentionDispositionTime && new Date(retentionDispositionTime).getTime();
 
     // Version info helpers
     const versionAction = selectors.getVersionAction(version);
@@ -86,6 +99,9 @@ const VersionsItem = ({
     const isDownloadable = !!is_download_available;
     const isLimited = versionCount - versionInteger >= versionLimit;
     const isRestricted = isWatermarked && !isCurrent; // Watermarked files do not support prior version preview
+    const isRetained =
+        !!retentionAppliedTime &&
+        (!retentionDispositionTimestamp || retentionDispositionTimestamp > new Date().getTime());
 
     // Version action helpers
     const canPreview = can_preview && !isDeleted && !isLimited && !isRestricted;
@@ -129,9 +145,10 @@ const VersionsItem = ({
                             values={{ name: versionUserName, versionPromoted }}
                         />
                     </div>
+
                     <div className="bcs-VersionsItem-info">
                         {versionTimestamp && (
-                            <time className="bcs-VersionsItem-date" dateTime={createdAt}>
+                            <time className="bcs-VersionsItem-date" dateTime={versionTime}>
                                 <ReadableTime
                                     alwaysShowTime
                                     relativeThreshold={FIVE_MINUTES_MS}
@@ -141,6 +158,17 @@ const VersionsItem = ({
                         )}
                         {!!size && <span className="bcs-VersionsItem-size">{sizeUtil(size)}</span>}
                     </div>
+
+                    {retentionDispositionTimestamp && (
+                        <div className="bcs-VersionsItem-retention">
+                            <FormattedMessage
+                                {...RETENTION_MAP[retentionDispositionAction]}
+                                values={{
+                                    time: <ReadableTime timestamp={retentionDispositionTimestamp} showWeekday />,
+                                }}
+                            />
+                        </div>
+                    )}
 
                     {isLimited && hasActions && (
                         <div className="bcs-VersionsItem-footer">
@@ -152,6 +180,7 @@ const VersionsItem = ({
 
             {!isLimited && hasActions && (
                 <VersionsItemActions
+                    enableDelete={!isRetained}
                     fileId={fileId}
                     isCurrent={isCurrent}
                     onDelete={handleAction(onDelete)}

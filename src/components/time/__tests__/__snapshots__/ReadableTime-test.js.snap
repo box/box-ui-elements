@@ -12,6 +12,7 @@ exports[`components/time/ReadableTime should render two days ago with format "mm
         value={1506378656000}
       />,
       "time": 1506378656000,
+      "weekday": null,
     }
   }
 />
@@ -33,6 +34,7 @@ exports[`components/time/ReadableTime should render with distant past format "mm
     Object {
       "date": null,
       "time": 946627200000,
+      "weekday": null,
     }
   }
 />
@@ -58,6 +60,7 @@ exports[`components/time/ReadableTime should render with format "Today at hh:mm"
     Object {
       "date": null,
       "time": 1506558656000,
+      "weekday": null,
     }
   }
 />
@@ -71,6 +74,7 @@ exports[`components/time/ReadableTime should render with format "Yesterday at hh
     Object {
       "date": null,
       "time": 1506465056000,
+      "weekday": null,
     }
   }
 />
@@ -79,5 +83,22 @@ exports[`components/time/ReadableTime should render with format "Yesterday at hh
 exports[`components/time/ReadableTime should render with format "in 30 minutes" when timestamp is within relative threshold (ahead) 1`] = `
 <FormattedRelative
   value={1506553256000}
+/>
+`;
+
+exports[`components/time/ReadableTime should render with weekday when we show weekday 1`] = `
+<FormattedMessage
+  defaultMessage="{weekday}, {time, date, medium}"
+  id="boxui.readableTime.eventTimeWeekdayLong"
+  values={
+    Object {
+      "date": null,
+      "time": 1506378656000,
+      "weekday": <FormattedDate
+        value={1506378656000}
+        weekday="long"
+      />,
+    }
+  }
 />
 `;

@@ -15,11 +15,13 @@ import IconTrash from '../../../icons/general/IconTrash';
 import IconUpload from '../../../icons/general/IconUpload';
 import messages from './messages';
 import PlainButton from '../../../components/plain-button';
+import Tooltip from '../../../components/tooltip/Tooltip';
 import VersionsItemAction from './VersionsItemAction';
 import { Menu } from '../../../components/menu';
 import './VersionsItemActions.scss';
 
 type Props = {
+    enableDelete?: boolean,
     fileId: string,
     isCurrent?: boolean,
     onDelete?: () => void,
@@ -45,6 +47,7 @@ const handleToggleClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
 };
 
 const VersionsItemActions = ({
+    enableDelete = true,
     fileId,
     isCurrent = false,
     onDelete,
@@ -115,10 +118,23 @@ const VersionsItemActions = ({
                     </VersionsItemAction>
                 )}
                 {showDelete && (
-                    <VersionsItemAction action="remove" fileId={fileId} isCurrent={isCurrent} onClick={onDelete}>
-                        <IconTrash {...ICON_SIZE} />
-                        <FormattedMessage {...messages.versionActionDelete} />
-                    </VersionsItemAction>
+                    <Tooltip
+                        position="middle-left"
+                        text="Disabled by retention policy"
+                        isTabbable={false}
+                        isDisabled={enableDelete}
+                    >
+                        <VersionsItemAction
+                            action="remove"
+                            fileId={fileId}
+                            isCurrent={isCurrent}
+                            isDisabled={!enableDelete}
+                            onClick={onDelete}
+                        >
+                            <IconTrash {...ICON_SIZE} />
+                            <FormattedMessage {...messages.versionActionDelete} />
+                        </VersionsItemAction>
+                    </Tooltip>
                 )}
             </Menu>
         </DropdownMenu>
