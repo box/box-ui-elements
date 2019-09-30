@@ -132,7 +132,7 @@ class SidebarPanels extends React.Component<Props> {
             versionsSidebarProps,
         }: Props = this.props;
 
-        if (!isOpen) {
+        if (!isOpen || (!hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
         }
 
@@ -159,7 +159,10 @@ class SidebarPanels extends React.Component<Props> {
                 {hasActivity && (
                     <Route
                         exact
-                        path={`/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)?/:activeFeedEntryId?`}
+                        path={[
+                            `/${SIDEBAR_VIEW_ACTIVITY}`,
+                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)/:activeFeedEntryId?`,
+                        ]}
                         render={({ match }) => {
                             const matchEntryType = match.params.activeFeedEntryType;
                             const activeFeedEntryType = matchEntryType

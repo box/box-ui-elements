@@ -181,16 +181,10 @@ class ContentUploader extends Component<Props, State> {
     /**
      * Adds new items to the queue when files prop gets updated in window view
      *
-     * @param {Props} prevProps
      * @return {void}
      */
-    componentDidUpdate(prevProps: Props): void {
+    componentDidUpdate(): void {
         const { files, dataTransferItems, useUploadsManager } = this.props;
-        const { files: prevFiles } = prevProps;
-
-        if (files === prevFiles) {
-            return;
-        }
 
         const hasFiles = Array.isArray(files) && files.length > 0;
         const hasItems = Array.isArray(dataTransferItems) && dataTransferItems.length > 0;

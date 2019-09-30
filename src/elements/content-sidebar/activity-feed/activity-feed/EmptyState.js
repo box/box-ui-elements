@@ -23,7 +23,6 @@ const EmptyState = ({ showCommentMessage }: Props): React.Node => (
                 </aside>
             ) : null}
         </div>
-        )
     </div>
 );
 

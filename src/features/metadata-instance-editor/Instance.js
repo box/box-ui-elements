@@ -99,7 +99,7 @@ class Instance extends React.PureComponent<Props, State> {
         this.fieldKeyToTypeMap = createFieldKeyToTypeMap(props.template.fields);
     }
 
-    componentDidUpdate({ hasError: prevHasError }: Props, prevState: State): void {
+    componentDidUpdate({ hasError: prevHasError, isDirty: prevIsDirty }: Props, prevState: State): void {
         const currentElement = this.collapsibleRef.current;
         const { hasError, isDirty }: Props = this.props;
         const { isEditing }: State = prevState;
@@ -117,7 +117,7 @@ class Instance extends React.PureComponent<Props, State> {
             // Saving also disables isEditing, so need to enable that back.
             // isDirty remains as it was before.
             this.setState({ isBusy: false, isEditing: true });
-        } else if (this.props.isDirty && !isDirty) {
+        } else if (prevIsDirty && !isDirty) {
             // If the form was dirty and now its not dirty
             // we know a successful save may have happened.
             // We don't modify isEditing here because we maintain the
