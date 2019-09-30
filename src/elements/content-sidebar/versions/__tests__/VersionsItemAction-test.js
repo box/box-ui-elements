@@ -15,8 +15,15 @@ describe('elements/content-sidebar/versions/VersionsItemAction', () => {
     describe('render', () => {
         test('should render the correct menu item', () => {
             const wrapper = getWrapper();
+            const menuItem = wrapper.find(MenuItem);
 
-            expect(wrapper.find(MenuItem)).toBeTruthy();
+            expect(menuItem.exists()).toBe(true);
+            expect(menuItem.prop('className')).toEqual('bcs-VersionsItemAction');
+            expect(menuItem.prop('data-resin-iscurrent')).toEqual(defaultProps.isCurrent);
+            expect(menuItem.prop('data-resin-itemid')).toEqual(defaultProps.fileId);
+            expect(menuItem.prop('data-resin-target')).toEqual(defaultProps.action);
+            expect(menuItem.children()).toHaveLength(1);
+
             expect(wrapper).toMatchSnapshot();
         });
     });

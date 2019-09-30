@@ -83,11 +83,11 @@ const VersionsItem = ({
         disposition_at: retentionDispositionTime,
         applied_at: retentionAppliedTime,
     } = retention || {};
+    const retentionDispositionTimestamp = retentionDispositionTime && new Date(retentionDispositionTime).getTime();
 
     // Version info helpers
     const versionAction = selectors.getVersionAction(version);
     const versionInteger = versionNumber ? parseInt(versionNumber, 10) : 1;
-    const retentionDispositionTimestamp = retentionDispositionTime && new Date(retentionDispositionTime).getTime();
     const versionTime = restoredAt || trashedAt || createdAt;
     const versionTimestamp = versionTime && new Date(versionTime).getTime();
     const versionUserName = selectors.getVersionUser(version).name || (
