@@ -4,12 +4,15 @@ import KeyBinder from '../KeyBinder';
 
 describe('KeyBinder', () => {
     let onScrollToChangeMock;
-    let getEvent;
-    let wrapper;
-
-    beforeEach(() => {
-        onScrollToChangeMock = jest.fn();
-        wrapper = shallow(
+    const getEvent = type => {
+        return {
+            key: type,
+            stopPropagation: jest.fn(),
+            preventDefault: jest.fn(),
+        };
+    };
+    const getWrapper = props => {
+        return shallow(
             <KeyBinder
                 id="123"
                 onScrollToChange={onScrollToChangeMock}
@@ -18,30 +21,34 @@ describe('KeyBinder', () => {
                 columnCount={10}
                 scrollToRow={0}
                 scrollToColumn={0}
+                {...props}
             >
                 {() => {}}
             </KeyBinder>,
         );
-        getEvent = type => {
-            return {
-                key: type,
-                stopPropagation: jest.fn(),
-                preventDefault: jest.fn(),
-            };
-        };
+    };
+
+    beforeEach(() => {
+        onScrollToChangeMock = jest.fn();
     });
 
-    test('it should update scrollToRow when props change', () => {
+    test('should update scrollToRow when props change', () => {
+        const wrapper = getWrapper();
+
         wrapper.setProps({ scrollToRow: 5 });
         expect(wrapper.state('scrollToRow')).toEqual(5);
     });
 
-    test('it should update scrollToColumn when props change', () => {
+    test('should update scrollToColumn when props change', () => {
+        const wrapper = getWrapper();
+
         wrapper.setProps({ scrollToColumn: 5 });
         expect(wrapper.state('scrollToColumn')).toEqual(5);
     });
 
-    test('it should update scrollToColumn and scrollToRow when props change', () => {
+    test('should update scrollToColumn and scrollToRow when props change', () => {
+        const wrapper = getWrapper();
+
         wrapper.setProps({ scrollToColumn: 5, scrollToRow: 5 });
         expect(wrapper.state('scrollToColumn')).toEqual(5);
         expect(wrapper.state('scrollToRow')).toEqual(5);
@@ -53,13 +60,15 @@ describe('KeyBinder', () => {
         ${'ArrowDown'}  | ${'scrollToRow'}    | ${8}
         ${'ArrowLeft'}  | ${'scrollToColumn'} | ${2}
         ${'ArrowRight'} | ${'scrollToColumn'} | ${8}
-    `('Arrow Handlers', ({ eventType, scrollType, result }) => {
+    `('should exercise the $eventType key for $scrollType', ({ eventType, scrollType, result }) => {
         const event = getEvent(eventType);
+        const wrapper = getWrapper({ [`${scrollType}`]: 5 });
+        const instance = wrapper.instance();
 
-        wrapper.setProps({ [`${scrollType}`]: 5 });
-        wrapper.simulate('keyDown', event);
-        wrapper.simulate('keyDown', event);
-        wrapper.simulate('keyDown', event);
+        instance.onKeyDown(event);
+        instance.onKeyDown(event);
+        instance.onKeyDown(event);
+
         expect(onScrollToChangeMock).toBeCalled();
         expect(wrapper.state(scrollType)).toEqual(result);
     });

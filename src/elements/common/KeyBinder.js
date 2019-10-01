@@ -28,7 +28,7 @@ type Props = {
 
 type State = {
     focusOnRender: boolean,
-    prevId: number,
+    prevId: string | void,
     prevScrollToColumn: number,
     prevScrollToRow: number,
     scrollToColumn: number,
@@ -65,7 +65,7 @@ class KeyBinder extends PureComponent<Props, State> {
      * @inheritdoc
      * @return {State|null}
      */
-    static getDerivedStateFromProps(props: Props, state: State): void {
+    static getDerivedStateFromProps(props: Props, state: State) {
         const { prevId, prevScrollToColumn, prevScrollToRow }: State = state;
         const { id, scrollToColumn: scrollToColumnProp, scrollToRow: scrollToRowProp }: Props = props;
 
