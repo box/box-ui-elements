@@ -12,7 +12,7 @@ import './Footer.scss';
 type Props = {
     onCancel: () => void,
     onRemove: () => void,
-    showSave: Boolean,
+    showSave: boolean,
 };
 
 const Footer = ({ onCancel, onRemove, showSave }: Props) => (
