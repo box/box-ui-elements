@@ -5,17 +5,29 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
-import FeedInlineError from './FeedInlineError';
+import { FormattedMessage } from 'react-intl';
+import InlineError from '../../../../components/inline-error/InlineError';
 import AppActivity from '../app-activity';
 import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import Keywords from '../keywords';
 import withErrorHandling from '../../withErrorHandling';
+import type { FocusableFeedItemType } from '../../../../common/types/feed';
+import messages from './messages';
+
+const errorMessageByEntryType = {
+    comment: messages.commentDelete,
+    task: messages.taskDelete,
+};
+
+const hasErrorMessageForEntryType = feedEntryType => {
+    return !!errorMessageByEntryType[feedEntryType];
+};
 
 type Props = {
     activeFeedEntryId?: string,
-    activeFeedEntryType?: FeedItemType,
+    activeFeedEntryType?: FocusableFeedItemType,
     activeFeedItemRef: { current: null | HTMLElement },
     approverSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -58,22 +70,13 @@ const ActiveState = ({
     getAvatarUrl,
     getUserProfileUrl,
 }: Props): React.Node => {
-    const activeEntriesInFeed = items.filter(item => {
-        if (item.id === activeFeedEntryId && item.type === activeFeedEntryType) {
-            return true;
-        }
-        return false;
-    });
-
-    const isValidType = feedEntryType => {
-        return feedEntryType === 'task' || feedEntryType === 'comment';
-    };
+    const activeEntry = items.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
 
     return (
         <ul className="bcs-activity-feed-active-state">
             {items.map((item: any) => {
                 const { type, id, versions, permissions } = item;
-                const isFocused = activeFeedEntryId === id && activeFeedEntryType === type;
+                const isFocused = item === activeEntry;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
 
                 switch (type) {
@@ -152,8 +155,12 @@ const ActiveState = ({
                 }
             })}
 
-            {activeEntriesInFeed.length === 0 && isValidType(activeFeedEntryType) ? (
-                <FeedInlineError activeFeedEntryType={activeFeedEntryType} />
+            {activeFeedEntryType && !activeEntry && hasErrorMessageForEntryType(activeFeedEntryType) ? (
+                <li>
+                    <InlineError title={<FormattedMessage {...messages.feedInlineErrorTitle} />}>
+                        <FormattedMessage {...errorMessageByEntryType[activeFeedEntryType]} />
+                    </InlineError>
+                </li>
             ) : null}
         </ul>
     );

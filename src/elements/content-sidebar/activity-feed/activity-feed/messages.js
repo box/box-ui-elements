@@ -7,6 +7,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    feedInlineErrorTitle: {
+        id: 'be.activitySidebar.activityFeed.feedInlineErrorTitle',
+        defaultMessage: 'Error',
+        description: 'Error title',
+    },
     taskDelete: {
         id: 'be.activitySidebar.activityFeed.taskDelete',
         defaultMessage: 'This task no longer exists',

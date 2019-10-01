@@ -161,7 +161,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         );
 
         expect(wrapper.find('[data-testid="comment"]').hasClass('bcs-is-focused')).toEqual(false);
-        expect(wrapper.find('FeedInlineError').length).toBe(1);
+        expect(wrapper.find('InlineError').length).toBe(1);
     });
 
     test('should correctly handle an inline error for a task id being invalid', () => {
@@ -175,7 +175,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         );
 
         expect(wrapper.find('[data-testid="task"]').hasClass('bcs-is-focused')).toEqual(false);
-        expect(wrapper.find('FeedInlineError').length).toBe(1);
+        expect(wrapper.find('InlineError').length).toBe(1);
     });
 
     test('should not render inline error if the type is invalid', () => {
@@ -188,6 +188,6 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
             />,
         );
 
-        expect(wrapper.find('FeedInlineError').length).toBe(0);
+        expect(wrapper.find('InlineError').length).toBe(0);
     });
 });

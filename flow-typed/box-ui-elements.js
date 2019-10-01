@@ -733,8 +733,6 @@ type AppActivityItems = {
 type FeedItem = Comment | Task | TaskNew | BoxItemVersion | AppActivityItem;
 type FeedItems = Array<FeedItem>;
 
-type FeedItemType = 'task' | 'comment';
-
 type Collaborators = {
     entries: Array<SelectorItem>,
     next_marker: 'string' | null,

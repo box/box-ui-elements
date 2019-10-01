@@ -199,50 +199,36 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(instance.feedContainer.scrollTop).toEqual(100);
     });
 
+    test('should pass activeFeedItemRef to the ActiveState', () => {
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} activeFeedEntryId={comments.entries[0].id} />);
+        const instance = wrapper.instance();
+        wrapper.setProps({
+            feedItems: [{ type: 'comment' }],
+        });
+
+        expect(wrapper.find('ActiveState').prop('activeFeedItemRef')).toEqual(instance.activeFeedItemRef);
+    });
+
     test('should scroll to active feed item when activeFeedItemRef has a value', () => {
-        const wrapper = shallow(
-            <ActivityFeed
-                currentUser={currentUser}
-                feedItems={[{ type: 'comment' }]}
-                activeFeedEntryId={comments.entries[0].id}
-            />,
-        );
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} activeFeedEntryId={comments.entries[0].id} />);
         const instance = wrapper.instance();
         const li = document.createElement('li');
         instance.activeFeedItemRef.current = li;
-
-        instance.componentDidUpdate(
-            {
-                feedItems: undefined,
-                currentUser,
-                activeFeedEntryId: comments.entries[0].id,
-            },
-            { isInputOpen: false },
-        );
+        wrapper.setProps({
+            feedItems: [{ type: 'comment' }],
+        });
         expect(scrollIntoView).toHaveBeenCalledWith(li);
     });
 
     test('should not scroll to active feed item when activeFeedItemRef is null', () => {
-        const wrapper = shallow(
-            <ActivityFeed
-                currentUser={currentUser}
-                feedItems={[{ type: 'comment' }]}
-                activeFeedEntryId={comments.entries[0].id}
-            />,
-        );
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} activeFeedEntryId={comments.entries[0].id} />);
         const instance = wrapper.instance();
-        const li = document.createElement('li');
-        instance.activeFeedItemRef.current = null;
 
-        instance.componentDidUpdate(
-            {
-                feedItems: undefined,
-                currentUser,
-                activeFeedEntryId: comments.entries[0].id,
-            },
-            { isInputOpen: false },
-        );
-        expect(scrollIntoView).not.toHaveBeenCalledWith(li);
+        instance.activeFeedItemRef.current = null;
+        wrapper.setProps({
+            feedItems: [{ type: 'comment' }],
+        });
+        expect(scrollIntoView).not.toHaveBeenCalled();
     });
 
     test('should show input when commentFormFocusHandler is called', () => {

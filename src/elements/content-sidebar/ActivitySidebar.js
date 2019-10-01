@@ -28,11 +28,12 @@ import {
     TASK_COMPLETION_RULE_ALL,
 } from '../../constants';
 import type { TaskCompletionRule, TaskType, TaskNew, TaskUpdatePayload } from '../../common/types/tasks';
+import type { FocusableFeedItemType } from '../../common/types/feed';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {
     activeFeedEntryId?: string,
-    activeFeedEntryType?: FeedItemType,
+    activeFeedEntryType?: FocusableFeedItemType,
     currentUser?: User,
     getUserProfileUrl?: GetProfileUrlCallback,
     onCommentCreate: Function,
