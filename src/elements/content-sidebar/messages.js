@@ -19,7 +19,7 @@ const messages = defineMessages({
     },
     taskAddTaskGeneralDescription: {
         id: 'be.contentSidebar.addTask.general.description',
-        defaultMessage: 'Keep track of work that needs to get done',
+        defaultMessage: 'Assignees will be responsible for marking tasks as complete',
         description: 'description for menu item that opens general task popup',
     },
     taskAddTaskApproval: {
@@ -29,7 +29,7 @@ const messages = defineMessages({
     },
     taskAddTaskApprovalDescription: {
         id: 'be.contentSidebar.addTask.approval.description',
-        defaultMessage: 'Request an approval to move work forward',
+        defaultMessage: 'Assignees will be responsible for approving or rejecting tasks',
         description: 'description for menu item that opens approval task popup',
     },
     tasksCreateGeneralTaskFormTitle: {

@@ -88,7 +88,7 @@ const messages = defineMessages({
     },
     versionDeletedBy: {
         id: 'be.sidebarVersions.deletedBy',
-        defaultMessage: 'Deleted by { name }',
+        defaultMessage: 'Deleted by {name}',
         description: 'Message displayed for a deleted version. {name} is the user who performed the action.',
     },
     versionFetchError: {
@@ -112,9 +112,14 @@ const messages = defineMessages({
         defaultMessage: 'Version number {versionNumber}',
         description: 'Label given to the version badge for screen readers.',
     },
+    versionPromotedBy: {
+        id: 'be.sidebarVersions.promotedBy',
+        defaultMessage: 'Promoted from v{versionPromoted} by {name}',
+        description: 'Message displayed for a restored version. {name} is the user who performed the action.',
+    },
     versionRestoredBy: {
         id: 'be.sidebarVersions.restoredBy',
-        defaultMessage: 'Restored by { name }',
+        defaultMessage: 'Restored by {name}',
         description: 'Message displayed for a restored version. {name} is the user who performed the action.',
     },
     versionServerError: {
@@ -124,13 +129,28 @@ const messages = defineMessages({
     },
     versionUploadedBy: {
         id: 'be.sidebarVersions.uploadedBy',
-        defaultMessage: 'Uploaded by { name }',
+        defaultMessage: 'Uploaded by {name}',
         description: 'Message displayed for an uploaded version. {name} is the user who performed the action.',
     },
     versionUserUnknown: {
         id: 'be.sidebarVersions.versionUserUnknown',
         defaultMessage: 'Unknown',
         description: 'Name displayed for unknown or deleted users.',
+    },
+    versionMaxEntries: {
+        id: 'be.sidebarVersions.versionMaxEntries',
+        defaultMessage: 'Version history is limited to the last {maxVersions} entries.',
+        description: 'Max supported entries for version history',
+    },
+    versionRetentionDelete: {
+        id: 'be.sidebarVersions.versionRetentionDelete',
+        defaultMessage: 'Will be deleted {time} by retention policy.',
+        description: 'Retention message describing when the version will be deleted.',
+    },
+    versionRetentionRemove: {
+        id: 'be.sidebarVersions.versionRetentionRemove',
+        defaultMessage: 'Retention policy expires on {time}.',
+        description: 'Retention message describing when the retention policy will be removed.',
     },
 });
 

@@ -13,7 +13,7 @@ describe('features/item-details/EditableURL', () => {
             />,
         );
 
-    describe('UNSAFE_componentWillReceiveProps()', () => {
+    describe('componentDidUpdate()', () => {
         test('should update state value when prop value changes', () => {
             const value = 'http://box.com';
             const wrapper = getWrapper();

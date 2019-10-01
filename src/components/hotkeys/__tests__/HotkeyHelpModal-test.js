@@ -50,7 +50,7 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
         });
     });
 
-    describe('UNSAFE_componentWillReceiveProps()', () => {
+    describe('componentDidUpdate()', () => {
         test('should set state.currentType when state.currentType is null', () => {
             const wrapper = getWrapper();
             wrapper.setState({ currentType: null });
@@ -67,7 +67,7 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
 
             wrapper.setProps({ isOpen: true });
 
-            // should've been called once in constructor and once in UNSAFE_componentWillReceiveProps
+            // should've been called once in constructor and once in componentDidMount
             expect(HotkeyServiceMock.getActiveHotkeys.calledTwice).toBe(true);
             expect(HotkeyServiceMock.getActiveTypes.calledTwice).toBe(true);
         });

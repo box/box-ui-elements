@@ -185,5 +185,23 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             expect(actions.prop('showPreview')).toBe(false);
             expect(button.prop('isDisabled')).toBe(true);
         });
+
+        test('should disable delete if the retention is active and render retention info', () => {
+            const disposition_time = new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000); // Future time
+            const wrapper = getWrapper({
+                version: getVersion({
+                    retention: {
+                        applied_at: defaultDate,
+                        disposition_at: disposition_time,
+                        disposition_action: 'delete',
+                    },
+                }),
+            });
+            const actions = wrapper.find(VersionsItemActions);
+            const retention = wrapper.find('.bcs-VersionsItem-retention');
+
+            expect(actions.prop('enableDelete')).toBe(false);
+            expect(retention).toBeTruthy();
+        });
     });
 });

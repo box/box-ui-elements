@@ -2,6 +2,7 @@ import selectors from '../version';
 import {
     PLACEHOLDER_USER,
     VERSION_DELETE_ACTION,
+    VERSION_PROMOTE_ACTION,
     VERSION_RESTORE_ACTION,
     VERSION_UPLOAD_ACTION,
 } from '../../../../constants';
@@ -15,17 +16,17 @@ describe('elements/common/selectors/version', () => {
 
     describe('getVersionAction()', () => {
         test.each`
-            restored_at    | trashed_at     | version_restored | expected
+            restored_at    | trashed_at     | version_promoted | expected
             ${null}        | ${null}        | ${null}          | ${VERSION_UPLOAD_ACTION}
             ${restoreDate} | ${null}        | ${null}          | ${VERSION_RESTORE_ACTION}
             ${restoreDate} | ${trashedDate} | ${null}          | ${VERSION_RESTORE_ACTION}
-            ${null}        | ${null}        | ${'1'}           | ${VERSION_RESTORE_ACTION}
+            ${null}        | ${null}        | ${'1'}           | ${VERSION_PROMOTE_ACTION}
             ${null}        | ${trashedDate} | ${null}          | ${VERSION_DELETE_ACTION}
-        `('should return the most relevant action', ({ expected, restored_at, trashed_at, version_restored }) => {
+        `('should return the most relevant action', ({ expected, restored_at, trashed_at, version_promoted }) => {
             const version = {
                 restored_at,
                 trashed_at,
-                version_restored,
+                version_promoted,
             };
 
             expect(selectors.getVersionAction(version)).toEqual(expected);

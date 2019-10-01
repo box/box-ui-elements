@@ -1566,10 +1566,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@box/frontend@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-4.0.1.tgz#333d07d013601ea0d5739e7a9651583d3f5cbc48"
-  integrity sha512-DxfynN2qBsk+HochiqincmE47A/3B5NwntLvIU8ZBtPNG+vjoBjI2xgdP7r/YP1Dtk4JbH3caTLH+raGmlRT+w==
+"@box/frontend@^4.0.6":
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-4.0.6.tgz#22af095f2b6ec8677f9282548f2839b8d199e880"
+  integrity sha512-wkay1TFM1iszDRihEVLdb+hMpYytZ/IC49NlnFWl4SRQ7pnoEu6JzdNOs+Wl+NSq36MoQLUN8OPFBSc1qqAn0Q==
   dependencies:
     properties-parser "^0.3.1"
     rimraf "^3.0.0"
@@ -6990,10 +6990,10 @@ eslint-config-airbnb@^18.0.1:
     object.assign "^4.1.0"
     object.entries "^1.1.0"
 
-eslint-config-prettier@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-6.2.0.tgz#80e0b8714e3f6868c4ac2a25fbf39c02e73527a7"
-  integrity sha512-VLsgK/D+S/FEsda7Um1+N8FThec6LqE3vhcMyp8mlmto97y3fGf3DX7byJexGuOb1QY0Z/zz222U5t+xSfcZDQ==
+eslint-config-prettier@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-6.3.0.tgz#e73b48e59dc49d950843f3eb96d519e2248286a3"
+  integrity sha512-EWaGjlDAZRzVFveh2Jsglcere2KK5CJBhkNSa1xs3KfMUGdRiT7lG089eqPdvlzWHpAqaekubOsOMu8W8Yk71A==
   dependencies:
     get-stdin "^6.0.0"
 
@@ -7051,10 +7051,10 @@ eslint-plugin-import@^2.18.2:
     read-pkg-up "^2.0.0"
     resolve "^1.11.0"
 
-eslint-plugin-jest@^22.16.0:
-  version "22.16.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.16.0.tgz#30c4e0e9dc331beb2e7369b70dd1363690c1ce05"
-  integrity sha512-eBtSCDhO1k7g3sULX/fuRK+upFQ7s548rrBtxDyM1fSoY7dTWp/wICjrJcDZKVsW7tsFfH22SG+ZaxG5BZodIg==
+eslint-plugin-jest@^22.17.0:
+  version "22.17.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.17.0.tgz#dc170ec8369cd1bff9c5dd8589344e3f73c88cf6"
+  integrity sha512-WT4DP4RoGBhIQjv+5D0FM20fAdAUstfYAf/mkufLNTojsfgzc5/IYW22cIg/Q4QBavAZsROQlqppiWDpFZDS8Q==
   dependencies:
     "@typescript-eslint/experimental-utils" "^1.13.0"
 

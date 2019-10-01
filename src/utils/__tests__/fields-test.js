@@ -53,6 +53,7 @@ import {
     FIELD_ASSIGNED_TO,
     FIELD_STATUS,
     FIELD_RESTORED_FROM,
+    FIELD_RETENTION,
     PLACEHOLDER_USER,
 } from '../../constants';
 
@@ -147,6 +148,7 @@ describe('util/fields', () => {
             FIELD_PERMISSIONS,
             FIELD_RESTORED_AT,
             FIELD_RESTORED_BY,
+            FIELD_RETENTION,
             FIELD_SIZE,
             FIELD_TRASHED_AT,
             FIELD_TRASHED_BY,

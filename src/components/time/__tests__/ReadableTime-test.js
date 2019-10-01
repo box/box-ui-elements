@@ -95,6 +95,11 @@ describe('components/time/ReadableTime', () => {
             alwaysShowTime: true,
         },
         {
+            description: 'should render with weekday when we show weekday',
+            timestamp: msTwoDaysAgo,
+            showWeekday: true,
+        },
+        {
             description: 'should render with format "Today at hh:mm" when there is a future time stamp',
             timestamp: relativeThreshold * 2 + now,
         },
@@ -113,20 +118,23 @@ describe('components/time/ReadableTime', () => {
                 'should render with format "30 minutes ago" when timestamp is within relative threshold (behind)',
             timestamp: withinRelativeThresholdBehind,
         },
-    ].forEach(({ description, timestamp, allowFutureTimestamps = true, alwaysShowTime = false }) => {
-        test(description, () => {
-            const wrapper = shallow(
-                <ReadableTime
-                    allowFutureTimestamps={allowFutureTimestamps}
-                    alwaysShowTime={alwaysShowTime}
-                    relativeThreshold={oneHourInMs}
-                    timestamp={timestamp}
-                />,
-            );
+    ].forEach(
+        ({ description, timestamp, allowFutureTimestamps = true, alwaysShowTime = false, showWeekday = false }) => {
+            test(description, () => {
+                const wrapper = shallow(
+                    <ReadableTime
+                        allowFutureTimestamps={allowFutureTimestamps}
+                        alwaysShowTime={alwaysShowTime}
+                        relativeThreshold={oneHourInMs}
+                        showWeekday={showWeekday}
+                        timestamp={timestamp}
+                    />,
+                );
 
-            expect(wrapper).toMatchSnapshot();
-        });
-    });
+                expect(wrapper).toMatchSnapshot();
+            });
+        },
+    );
 
     test('should use default relative threshold if not provided', () => {
         const wrapper = shallow(<ReadableTime timestamp={withinRelativeThresholdAhead} />);

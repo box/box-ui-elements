@@ -8,7 +8,7 @@ exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should c
     className="bcs-Version-message"
   >
     <FormattedMessage
-      defaultMessage="{numberOfCollaborators} collaborators uploaded versions {versions}"
+      defaultMessage="{numberOfCollaborators} collaborators uploaded v{versions}"
       id="be.versionMultipleUsersUploaded"
       values={
         Object {
@@ -45,7 +45,7 @@ exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should c
     className="bcs-Version-message"
   >
     <FormattedMessage
-      defaultMessage="{name} uploaded versions {versions}"
+      defaultMessage="{name} uploaded v{versions}"
       id="be.versionUploadCollapsed"
       values={
         Object {

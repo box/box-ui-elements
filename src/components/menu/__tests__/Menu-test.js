@@ -122,24 +122,6 @@ describe('components/menu/Menu', () => {
         });
     });
 
-    describe('UNSAFE_componentWillReceiveProps()', () => {
-        test('should call setInitialFocusIndex() when isSubmenu is true and isHidden changes from false to true', () => {
-            const wrapper = shallow(
-                <Menu className="awesome-menu" isHidden>
-                    <li />
-                </Menu>,
-            );
-
-            const instance = wrapper.instance();
-            instance.setInitialFocusIndex = sandbox.mock();
-
-            instance.UNSAFE_componentWillReceiveProps({
-                isHidden: false,
-                isSubmenu: true,
-            });
-        });
-    });
-
     describe('componentDidUpdate()', () => {
         test('should call setMenuItemEls() and setFocus() when the number of children changes', () => {
             const clock = sandbox.useFakeTimers();
@@ -181,6 +163,22 @@ describe('components/menu/Menu', () => {
                 .never();
 
             wrapper.setProps({ className: 'test' });
+        });
+
+        test('should call setInitialFocusIndex() when isSubmenu is true and isHidden changes from false to true', () => {
+            const wrapper = shallow(
+                <Menu className="awesome-menu" isHidden>
+                    <li />
+                </Menu>,
+            );
+
+            const instance = wrapper.instance();
+            sandbox.mock(instance).expects('setInitialFocusIndex');
+
+            wrapper.setProps({
+                isHidden: false,
+                isSubmenu: true,
+            });
         });
     });
 

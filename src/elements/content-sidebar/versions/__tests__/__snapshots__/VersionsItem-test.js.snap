@@ -32,6 +32,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
           values={
             Object {
               "name": "Test User",
+              "versionPromoted": undefined,
             }
           }
         />
@@ -58,6 +59,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
     </div>
   </VersionsItemButton>
   <VersionsItemActions
+    enableDelete={true}
     fileId="123"
     isCurrent={false}
     onDelete={[Function]}
@@ -106,6 +108,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
           values={
             Object {
               "name": "Test User",
+              "versionPromoted": undefined,
             }
           }
         />
@@ -132,6 +135,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
     </div>
   </VersionsItemButton>
   <VersionsItemActions
+    enableDelete={true}
     fileId="123"
     isCurrent={false}
     onDelete={[Function]}
@@ -180,6 +184,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
           values={
             Object {
               "name": "Test User",
+              "versionPromoted": undefined,
             }
           }
         />
@@ -206,6 +211,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
     </div>
   </VersionsItemButton>
   <VersionsItemActions
+    enableDelete={true}
     fileId="123"
     isCurrent={false}
     onDelete={[Function]}

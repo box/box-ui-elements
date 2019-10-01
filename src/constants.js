@@ -139,6 +139,7 @@ export const FIELD_ACTIVITY_TEMPLATE: 'activity_template' = 'activity_template';
 export const FIELD_APP: 'app' = 'app';
 export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
 export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
+export const FIELD_RETENTION: 'retention' = 'retention';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -361,8 +362,11 @@ export const HTTP_STATUS_CODE_GATEWAY_TIMEOUT: 504 = 504;
 
 /* ------------------ Version Action Types  ---------------------- */
 export const VERSION_DELETE_ACTION: 'delete' = 'delete';
+export const VERSION_PROMOTE_ACTION: 'promote' = 'promote';
 export const VERSION_RESTORE_ACTION: 'restore' = 'restore';
 export const VERSION_UPLOAD_ACTION: 'upload' = 'upload';
+export const VERSION_RETENTION_DELETE_ACTION: 'delete' = 'delete';
+export const VERSION_RETENTION_REMOVE_ACTION: 'remove' = 'remove';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER: UserMini = { type: 'user', id: '2', name: '' };

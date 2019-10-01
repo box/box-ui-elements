@@ -49,18 +49,20 @@ class HotkeyHelpModal extends Component {
         };
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        if (!nextProps.isOpen) {
+    componentDidUpdate({ isOpen: prevIsOpen }, { currentType: prevType }) {
+        const { isOpen } = this.props;
+
+        if (!isOpen) {
             return;
         }
 
         // modal is being opened; refresh hotkeys
-        if (nextProps.isOpen && !this.props.isOpen) {
+        if (!prevIsOpen && isOpen) {
             this.hotkeys = this.context.hotkeyLayer.getActiveHotkeys();
             this.types = this.context.hotkeyLayer.getActiveTypes();
         }
 
-        if (!this.state.currentType) {
+        if (!prevType) {
             this.setState({
                 currentType: this.types.length ? this.types[0] : null,
             });

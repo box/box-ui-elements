@@ -62,7 +62,7 @@ class ContactsField extends React.Component<Props, State> {
 
         const suggestedSelectorOptions = contacts
             .filter(option => {
-                const id = option.id;
+                const { id } = option;
                 return id && suggestedCollaborators[id.toString()];
             })
             .sort((optionA, optionB) => {

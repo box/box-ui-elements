@@ -38,12 +38,36 @@
         .bcs-activity-feed-task-new,
         .bcs-activity-feed-comment,
         .bcs-activity-feed-app-activity {
-            margin-top: 20px;
+            position: relative;
+            padding-top: 20px;
             padding-bottom: 20px;
             border-bottom: 1px solid $bdl-gray-10;
 
             &:first-child .bcs-comment {
                 margin-top: 0;
+            }
+
+            &.bcs-is-focused {
+                $container-padding: 25px;
+
+                margin-right: -$container-padding;
+                margin-left: -$container-padding;
+                padding-right: $container-padding;
+                padding-left: $container-padding;
+                background-color: $bdl-box-blue-05;
+                border-bottom: none;
+                box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
+                animation: fade-out 6s ease-out 2s 1 normal forwards;
+
+                @keyframes fade-out {
+                    0% {
+                        background-color: $bdl-box-blue-05;
+                    }
+
+                    100% {
+                        background-color: transparent;
+                    }
+                }
             }
         }
 
@@ -82,6 +106,13 @@
             margin-top: 60px;
             margin-bottom: 15px;
         }
+    }
+
+    .bcs-activity-feed-loading-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
     }
 
     .bcs-activity-feed-comment-input {

@@ -6,6 +6,7 @@ import IconEllipsis from '../../../../icons/general/IconEllipsis';
 import IconOpenWith from '../../../../icons/general/IconOpenWith';
 import IconTrash from '../../../../icons/general/IconTrash';
 import IconUpload from '../../../../icons/general/IconUpload';
+import Tooltip from '../../../../components/tooltip/Tooltip';
 import VersionsItemActions from '../VersionsItemActions';
 
 describe('elements/content-sidebar/versions/VersionsItemActions', () => {
@@ -27,6 +28,16 @@ describe('elements/content-sidebar/versions/VersionsItemActions', () => {
             expect(wrapper.find(IconOpenWith).exists()).toBe(option);
             expect(wrapper.find(IconTrash).exists()).toBe(option);
             expect(wrapper.find(IconUpload).exists()).toBe(option);
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test.each([true, false])('should disable tooltip when enable delete', option => {
+            const wrapper = getWrapper({
+                showDelete: true,
+                enableDelete: option,
+            });
+
+            expect(wrapper.find(Tooltip).prop('isDisabled')).toBe(option);
             expect(wrapper).toMatchSnapshot();
         });
     });

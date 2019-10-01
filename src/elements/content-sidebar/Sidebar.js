@@ -101,6 +101,11 @@ class Sidebar extends React.Component<Props, State> {
         }
     }
 
+    getUrlPrefix = (pathname: string) => {
+        const basePath = pathname.substring(1).split('/')[0];
+        return basePath;
+    };
+
     /**
      * Handle version history click
      *
@@ -112,11 +117,13 @@ class Sidebar extends React.Component<Props, State> {
         const { file_version: currentVersion } = file;
         const fileVersionSlug = currentVersion ? `/${currentVersion.id}` : '';
 
+        const urlPrefix = this.getUrlPrefix(history.location.pathname);
+
         if (event.preventDefault) {
             event.preventDefault();
         }
 
-        history.push(`${history.location.pathname}/versions${fileVersionSlug}`);
+        history.push(`/${urlPrefix}/versions${fileVersionSlug}`);
     };
 
     /**
