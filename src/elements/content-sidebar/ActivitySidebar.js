@@ -32,7 +32,7 @@ import './ActivitySidebar.scss';
 
 type ExternalProps = {
     activeFeedEntryId?: string,
-    activeFeedEntryType?: string,
+    activeFeedEntryType?: FeedItemType,
     currentUser?: User,
     getUserProfileUrl?: GetProfileUrlCallback,
     onCommentCreate: Function,

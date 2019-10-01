@@ -199,7 +199,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(instance.feedContainer.scrollTop).toEqual(100);
     });
 
-    test('should scroll to active feed item', () => {
+    test('should scroll to active feed item when activeFeedItemRef has a value', () => {
         const wrapper = shallow(
             <ActivityFeed
                 currentUser={currentUser}
@@ -219,8 +219,30 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             },
             { isInputOpen: false },
         );
-
         expect(scrollIntoView).toHaveBeenCalledWith(li);
+    });
+
+    test('should not scroll to active feed item when activeFeedItemRef is null', () => {
+        const wrapper = shallow(
+            <ActivityFeed
+                currentUser={currentUser}
+                feedItems={[{ type: 'comment' }]}
+                activeFeedEntryId={comments.entries[0].id}
+            />,
+        );
+        const instance = wrapper.instance();
+        const li = document.createElement('li');
+        instance.activeFeedItemRef.current = null;
+
+        instance.componentDidUpdate(
+            {
+                feedItems: undefined,
+                currentUser,
+                activeFeedEntryId: comments.entries[0].id,
+            },
+            { isInputOpen: false },
+        );
+        expect(scrollIntoView).not.toHaveBeenCalledWith(li);
     });
 
     test('should show input when commentFormFocusHandler is called', () => {

@@ -17,7 +17,7 @@ import './ActivityFeed.scss';
 
 type Props = {
     activeFeedEntryId?: string,
-    activeFeedEntryType?: string,
+    activeFeedEntryType?: FeedItemType,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -86,8 +86,11 @@ class ActivityFeed extends React.Component<Props, State> {
         if (!activeFeedEntryId) {
             return;
         }
-
-        scrollIntoView(activeFeedItemRef);
+        if (activeFeedItemRef !== null) {
+            scrollIntoView(activeFeedItemRef);
+        } else {
+            this.resetFeedScroll();
+        }
     }
 
     /**
