@@ -17,8 +17,8 @@ import type { FocusableFeedItemType } from '../../../../common/types/feed';
 import messages from './messages';
 
 const errorMessageByEntryType = {
-    comment: messages.commentDelete,
-    task: messages.taskDelete,
+    comment: messages.commentMissingError,
+    task: messages.taskMissingError,
 };
 
 const hasErrorMessageForEntryType = feedEntryType => {

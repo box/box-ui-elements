@@ -92,7 +92,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         // if there was supposed to be an active feed item but the feed item does not exist
         // scroll to the bottom to show the inline error message
-        if (activeFeedItemRef == null) {
+        if (activeFeedItemRef === null) {
             this.resetFeedScroll();
             return;
         }

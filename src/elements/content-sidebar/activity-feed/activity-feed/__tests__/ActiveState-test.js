@@ -92,6 +92,14 @@ const appActivity = {
 };
 
 const activityFeedError = { title: 't', content: 'm' };
+const getWrapper = (params = {}) =>
+    mount(
+        <ActiveState
+            items={[comment, fileVersion, taskWithAssignment, appActivity]}
+            currentUser={currentUser}
+            {...params}
+        />,
+    );
 
 describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () => {
     test('should render empty state', () => {
@@ -108,9 +116,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     });
 
     test('should render card for item type', () => {
-        const wrapper = mount(
-            <ActiveState items={[comment, fileVersion, taskWithAssignment, appActivity]} currentUser={currentUser} />,
-        );
+        const wrapper = getWrapper();
         expect(wrapper.find('[data-testid="comment"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="version"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="task"]')).toHaveLength(1);
@@ -122,72 +128,31 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly handle an actively focused @mention comment feed item', () => {
-        const wrapper = mount(
-            <ActiveState
-                items={[comment, fileVersion, taskWithAssignment, appActivity]}
-                currentUser={currentUser}
-                activeFeedEntryId={comment.id}
-                activeFeedEntryType={comment.type}
-            />,
-        );
-
-        expect(wrapper.find('[data-testid="comment"]').hasClass('bcs-is-focused')).toEqual(true);
-        expect(wrapper.find('FeedInlineError').length).toBe(0);
-    });
-
-    test('should correctly handle an actively focused task feed item', () => {
-        const wrapper = mount(
-            <ActiveState
-                items={[fileVersion, taskWithAssignment, appActivity]}
-                currentUser={currentUser}
-                activeFeedEntryId={taskWithAssignment.id}
-                activeFeedEntryType={taskWithAssignment.type}
-            />,
-        );
-
-        expect(wrapper.find('[data-testid="task"]').hasClass('bcs-is-focused')).toEqual(true);
-        expect(wrapper.find('FeedInlineError').length).toBe(0);
-    });
-
     test('should correctly handle an inline error for a comment id being invalid', () => {
-        const wrapper = mount(
-            <ActiveState
-                items={[comment, fileVersion, taskWithAssignment, appActivity]}
-                currentUser={currentUser}
-                activeFeedEntryId={0}
-                activeFeedEntryType={comment.type}
-            />,
-        );
+        const wrapper = getWrapper({
+            activeFeedEntryId: 0,
+            activeFeedEntryType: comment.type,
+        });
 
         expect(wrapper.find('[data-testid="comment"]').hasClass('bcs-is-focused')).toEqual(false);
-        expect(wrapper.find('InlineError').length).toBe(1);
+        expect(wrapper.exists('InlineError')).toBe(true);
     });
 
     test('should correctly handle an inline error for a task id being invalid', () => {
-        const wrapper = mount(
-            <ActiveState
-                items={[taskWithAssignment, fileVersion, appActivity]}
-                currentUser={currentUser}
-                activeFeedEntryId={0}
-                activeFeedEntryType={taskWithAssignment.type}
-            />,
-        );
-
+        const wrapper = getWrapper({
+            activeFeedEntryId: 0,
+            activeFeedEntryType: taskWithAssignment.type,
+        });
         expect(wrapper.find('[data-testid="task"]').hasClass('bcs-is-focused')).toEqual(false);
-        expect(wrapper.find('InlineError').length).toBe(1);
+        expect(wrapper.exists('InlineError')).toBe(true);
     });
 
     test('should not render inline error if the type is invalid', () => {
-        const wrapper = mount(
-            <ActiveState
-                items={[comment, fileVersion, taskWithAssignment, appActivity]}
-                currentUser={currentUser}
-                activeFeedEntryId={0}
-                activeFeedEntryType="tasksss"
-            />,
-        );
+        const wrapper = getWrapper({
+            activeFeedEntryId: 0,
+            activeFeedEntryType: 'tasksss',
+        });
 
-        expect(wrapper.find('InlineError').length).toBe(0);
+        expect(wrapper.exists('InlineError')).toBe(false);
     });
 });

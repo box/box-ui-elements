@@ -12,13 +12,13 @@ const messages = defineMessages({
         defaultMessage: 'Error',
         description: 'Error title',
     },
-    taskDelete: {
-        id: 'be.activitySidebar.activityFeed.taskDelete',
+    taskMissingError: {
+        id: 'be.activitySidebar.activityFeed.taskMissingError',
         defaultMessage: 'This task no longer exists',
         description: 'Text to show when a task no longer exists',
     },
-    commentDelete: {
-        id: 'be.activitySidebar.activityFeed.commentDelete',
+    commentMissingError: {
+        id: 'be.activitySidebar.activityFeed.commentMissingError',
         defaultMessage: 'This comment no longer exists',
         description: 'Text to show when comment no longer exists',
     },
