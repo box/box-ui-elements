@@ -45,6 +45,7 @@ const TextField = ({
             error={error}
             hideOptionalLabel
             label={displayName}
+            name={dataKey}
             onChange={(event: SyntheticKeyboardEvent<HTMLInputElement>) => {
                 const currentTarget = (event.currentTarget: HTMLInputElement);
                 if (currentTarget.value) {

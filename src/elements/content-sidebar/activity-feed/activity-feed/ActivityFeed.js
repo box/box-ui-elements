@@ -13,11 +13,12 @@ import CommentForm from '../comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
+import type { FocusableFeedItemType } from '../../../../common/types/feed';
 import './ActivityFeed.scss';
 
 type Props = {
     activeFeedEntryId?: string,
-    activeFeedEntryType?: string,
+    activeFeedEntryType?: FocusableFeedItemType,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -76,14 +77,23 @@ class ActivityFeed extends React.Component<Props, State> {
 
         // do the scroll only once after first fetch of feed items
         if (didLoadFeedItems) {
-            this.scrollToActiveFeedItem();
+            this.scrollToActiveFeedItemOrErrorMessage();
         }
     }
 
-    scrollToActiveFeedItem() {
+    scrollToActiveFeedItemOrErrorMessage() {
         const { current: activeFeedItemRef } = this.activeFeedItemRef;
         const { activeFeedEntryId } = this.props;
+
+        // if there is no active item, do not scroll
         if (!activeFeedEntryId) {
+            return;
+        }
+
+        // if there was supposed to be an active feed item but the feed item does not exist
+        // scroll to the bottom to show the inline error message
+        if (activeFeedItemRef === null) {
+            this.resetFeedScroll();
             return;
         }
 
