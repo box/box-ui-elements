@@ -55,13 +55,20 @@ const getWrapper = props => shallow(<ActivityFeed currentUser={currentUser} file
 
 describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     test('should correctly render loading state', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={undefined} feedItems={undefined} />);
+        const wrapper = getWrapper({
+            currentUser: undefined,
+            feedItems: undefined,
+        });
+
         expect(wrapper.find('EmptyState').exists()).toBe(false);
         expect(wrapper.find('LoadingIndicator').exists()).toBe(true);
     });
 
     test('should correctly render empty state', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} feedItems={[]} />);
+        const wrapper = getWrapper({
+            feedItems: [],
+        });
+
         expect(wrapper.find('EmptyState').exists()).toBe(true);
     });
 
@@ -82,13 +89,15 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
     test('should not render approval comment form if only comment submit handler is not passed in', () => {
         file.permissions.can_comment = true;
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
+        const wrapper = getWrapper();
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not render approval comment form if comment permissions are not present', () => {
         file.permissions.can_comment = false;
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} onCommentCreate={jest.fn()} />);
+        const wrapper = getWrapper({
+            onCommentCreate: jest.fn(),
+        });
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -101,13 +110,15 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
     test('should not expose add approval ui if task submit handler is not passed', () => {
         file.permissions.can_comment = true;
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} onCommentCreate={jest.fn()} />);
+        const wrapper = getWrapper({
+            onCommentCreate: jest.fn(),
+        });
 
         expect(wrapper.find('[name="addApproval"]').length).toEqual(0);
     });
 
     test('should set scrollTop to be the scrollHeight if feedContainer ref is set', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+        const wrapper = getWrapper();
         const instance = wrapper.instance();
         instance.feedContainer = {
             scrollTop: 0,
@@ -119,7 +130,9 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
     });
 
     test('should set scrollTop to be the scrollHeight if feedContainer exists and prevProps feedItems is undefined and this.props.feedItems is defined', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} feedItems={[{ type: 'comment' }]} />);
+        const wrapper = getWrapper({
+            feedItems: [{ type: 'comment' }],
+        });
         const instance = wrapper.instance();
         instance.feedContainer = {
             scrollTop: 0,
@@ -138,9 +151,10 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
     });
 
     test('should set scrollTop to be the scrollHeight if more feedItems are added', () => {
-        const wrapper = shallow(
-            <ActivityFeed currentUser={currentUser} feedItems={[{ type: 'comment' }, { type: 'comment' }]} />,
-        );
+        const wrapper = getWrapper({
+            feedItems: [{ type: 'comment' }, { type: 'comment' }],
+        });
+
         const instance = wrapper.instance();
         instance.feedContainer = {
             scrollTop: 0,
@@ -159,7 +173,9 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
     });
 
     test('should set scrollTop to be the scrollHeight if the user becomes defined', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} feedItems={[{ type: 'comment' }]} />);
+        const wrapper = getWrapper({
+            feedItems: [{ type: 'comment' }],
+        });
         const instance = wrapper.instance();
         instance.feedContainer = {
             scrollTop: 0,
@@ -178,7 +194,9 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
     });
 
     test('should set scrollTop to be the scrollHeight if input opens', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} feedItems={[{ type: 'comment' }]} />);
+        const wrapper = getWrapper({
+            feedItems: [{ type: 'comment' }],
+        });
         wrapper.setState({
             isInputOpen: true,
         });
@@ -199,32 +217,46 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(instance.feedContainer.scrollTop).toEqual(100);
     });
 
-    test('should scroll to active feed item', () => {
-        const wrapper = shallow(
-            <ActivityFeed
-                currentUser={currentUser}
-                feedItems={[{ type: 'comment' }]}
-                activeFeedEntryId={comments.entries[0].id}
-            />,
-        );
+    test('should pass activeFeedItemRef to the ActiveState', () => {
+        const wrapper = getWrapper({
+            activeFeedEntryId: comments.entries[0].id,
+        });
+        const instance = wrapper.instance();
+        wrapper.setProps({
+            feedItems: [{ type: 'comment' }],
+        });
+
+        expect(wrapper.find('ActiveState').prop('activeFeedItemRef')).toEqual(instance.activeFeedItemRef);
+    });
+
+    test('should scroll to active feed item when activeFeedItemRef has a value', () => {
+        const wrapper = getWrapper({
+            activeFeedEntryId: comments.entries[0].id,
+        });
         const instance = wrapper.instance();
         const li = document.createElement('li');
         instance.activeFeedItemRef.current = li;
-
-        instance.componentDidUpdate(
-            {
-                feedItems: undefined,
-                currentUser,
-                activeFeedEntryId: comments.entries[0].id,
-            },
-            { isInputOpen: false },
-        );
-
+        wrapper.setProps({
+            feedItems: [{ type: 'comment' }],
+        });
         expect(scrollIntoView).toHaveBeenCalledWith(li);
     });
 
+    test('should not scroll to active feed item when activeFeedItemRef is null', () => {
+        const wrapper = getWrapper({
+            activeFeedEntryId: comments.entries[0].id,
+        });
+        const instance = wrapper.instance();
+
+        instance.activeFeedItemRef.current = null;
+        wrapper.setProps({
+            feedItems: [{ type: 'comment' }],
+        });
+        expect(scrollIntoView).not.toHaveBeenCalled();
+    });
+
     test('should show input when commentFormFocusHandler is called', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+        const wrapper = getWrapper();
 
         const instance = wrapper.instance();
         instance.commentFormFocusHandler();
@@ -233,7 +265,9 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
     });
 
     test('should hide input when commentFormCancelHandler is called', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={jest.fn()} />);
+        const wrapper = getWrapper({
+            onCommentCreate: jest.fn(),
+        });
 
         const instance = wrapper.instance();
         instance.commentFormFocusHandler();
@@ -245,14 +279,10 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
     test('should call create comment handler and close input on valid comment submit', () => {
         const createCommentSpy = jest.fn().mockReturnValue(Promise.resolve({}));
-        const wrapper = shallow(
-            <ActivityFeed
-                currentUser={currentUser}
-                feedItems={feedItems}
-                file={file}
-                onCommentCreate={createCommentSpy}
-            />,
-        );
+        const wrapper = getWrapper({
+            feedItems,
+            onCommentCreate: createCommentSpy,
+        });
 
         const instance = wrapper.instance();
         const commentForm = wrapper.find('CommentForm').first();
@@ -266,7 +296,9 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
     });
 
     test('should stop event propagation onKeyDown', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={jest.fn()} />);
+        const wrapper = getWrapper({
+            onCommentCreate: jest.fn(),
+        });
         const stopPropagationSpy = jest.fn();
         wrapper.find('.bcs-activity-feed').simulate('keydown', {
             nativeEvent: {
