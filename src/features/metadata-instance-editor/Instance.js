@@ -4,8 +4,10 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
+import noop from 'lodash/noop';
 
 import Collapsible from '../../components/collapsible/Collapsible';
+import Form from '../../components/form-elements/form/Form';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
@@ -610,43 +612,45 @@ class Instance extends React.PureComponent<Props, State> {
                     )}
                     {!shouldConfirmRemove && (
                         <LoadingIndicatorWrapper isLoading={isBusy}>
-                            <div className="metadata-instance-editor-instance">
-                                {isCascadingPolicyApplicable && (
-                                    <CascadePolicy
-                                        canEdit={isEditing && !!cascadePolicy.canEdit}
-                                        isCascadingEnabled={isCascadingEnabled}
-                                        isCascadingOverwritten={isCascadingOverwritten}
-                                        isCustomMetadata={isProperties}
-                                        onCascadeModeChange={this.onCascadeModeChange}
-                                        onCascadeToggle={this.onCascadeToggle}
-                                        shouldShowCascadeOptions={shouldShowCascadeOptions}
+                            <Form onValidSubmit={isDirty ? this.onSave : noop}>
+                                <div className="metadata-instance-editor-instance">
+                                    {isCascadingPolicyApplicable && (
+                                        <CascadePolicy
+                                            canEdit={isEditing && !!cascadePolicy.canEdit}
+                                            isCascadingEnabled={isCascadingEnabled}
+                                            isCascadingOverwritten={isCascadingOverwritten}
+                                            isCustomMetadata={isProperties}
+                                            onCascadeModeChange={this.onCascadeModeChange}
+                                            onCascadeToggle={this.onCascadeToggle}
+                                            shouldShowCascadeOptions={shouldShowCascadeOptions}
+                                        />
+                                    )}
+                                    {isProperties ? (
+                                        <CustomInstance
+                                            canEdit={isEditing}
+                                            data={data}
+                                            onFieldChange={this.onFieldChange}
+                                            onFieldRemove={this.onFieldRemove}
+                                        />
+                                    ) : (
+                                        <TemplatedInstance
+                                            canEdit={isEditing}
+                                            data={data}
+                                            errors={errors}
+                                            onFieldChange={this.onFieldChange}
+                                            onFieldRemove={this.onFieldRemove}
+                                            template={template}
+                                        />
+                                    )}
+                                </div>
+                                {isEditing && (
+                                    <Footer
+                                        onCancel={this.onCancel}
+                                        onRemove={this.onConfirmRemove}
+                                        showSave={isDirty}
                                     />
                                 )}
-                                {isProperties ? (
-                                    <CustomInstance
-                                        canEdit={isEditing}
-                                        data={data}
-                                        onFieldChange={this.onFieldChange}
-                                        onFieldRemove={this.onFieldRemove}
-                                    />
-                                ) : (
-                                    <TemplatedInstance
-                                        canEdit={isEditing}
-                                        data={data}
-                                        errors={errors}
-                                        onFieldChange={this.onFieldChange}
-                                        onFieldRemove={this.onFieldRemove}
-                                        template={template}
-                                    />
-                                )}
-                            </div>
-                            {isEditing && (
-                                <Footer
-                                    onCancel={this.onCancel}
-                                    onRemove={this.onConfirmRemove}
-                                    onSave={isDirty ? this.onSave : undefined}
-                                />
-                            )}
+                            </Form>
                         </LoadingIndicatorWrapper>
                     )}
                 </Collapsible>
