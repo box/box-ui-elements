@@ -171,10 +171,17 @@ type BoxItemVersionPermission = {
 
 type BoxItemVersionRetention = {
     applied_at: string,
-    disposition_action: 'delete' | 'remove',
     disposition_at: string,
     id: string,
     type: 'file_version_retention',
+    winning_retention_policy: BoxItemVersionRetentionPolicy,
+};
+
+type BoxItemVersionRetentionPolicy = {
+    disposition_action: 'permanently_delete' | 'remove_retention',
+    id: string,
+    policy_name: string,
+    type: 'retention_policy',
 };
 
 type User = {

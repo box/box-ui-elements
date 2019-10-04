@@ -59,9 +59,9 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
     </div>
   </VersionsItemButton>
   <VersionsItemActions
-    enableDelete={true}
     fileId="123"
     isCurrent={false}
+    isRetained={false}
     onDelete={[Function]}
     onDownload={[Function]}
     onPreview={[Function]}
@@ -135,9 +135,9 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
     </div>
   </VersionsItemButton>
   <VersionsItemActions
-    enableDelete={true}
     fileId="123"
     isCurrent={false}
+    isRetained={false}
     onDelete={[Function]}
     onDownload={[Function]}
     onPreview={[Function]}
@@ -211,9 +211,9 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
     </div>
   </VersionsItemButton>
   <VersionsItemActions
-    enableDelete={true}
     fileId="123"
     isCurrent={false}
+    isRetained={false}
     onDelete={[Function]}
     onDownload={[Function]}
     onPreview={[Function]}

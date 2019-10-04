@@ -365,8 +365,10 @@ export const VERSION_DELETE_ACTION: 'delete' = 'delete';
 export const VERSION_PROMOTE_ACTION: 'promote' = 'promote';
 export const VERSION_RESTORE_ACTION: 'restore' = 'restore';
 export const VERSION_UPLOAD_ACTION: 'upload' = 'upload';
-export const VERSION_RETENTION_DELETE_ACTION: 'delete' = 'delete';
-export const VERSION_RETENTION_REMOVE_ACTION: 'remove' = 'remove';
+
+/* ------------------ Version Retention Policy Action Types  ---------------------- */
+export const VERSION_RETENTION_DELETE_ACTION: 'permanently_delete' = 'permanently_delete';
+export const VERSION_RETENTION_REMOVE_ACTION: 'remove_retention' = 'remove_retention';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER: UserMini = { type: 'user', id: '2', name: '' };

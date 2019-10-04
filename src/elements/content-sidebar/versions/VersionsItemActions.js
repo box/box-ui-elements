@@ -21,9 +21,9 @@ import { Menu } from '../../../components/menu';
 import './VersionsItemActions.scss';
 
 type Props = {
-    enableDelete?: boolean,
     fileId: string,
     isCurrent?: boolean,
+    isRetained?: boolean,
     onDelete?: () => void,
     onDownload?: () => void,
     onPreview?: () => void,
@@ -47,9 +47,9 @@ const handleToggleClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
 };
 
 const VersionsItemActions = ({
-    enableDelete = true,
     fileId,
     isCurrent = false,
+    isRetained = false,
     onDelete,
     onDownload,
     onPreview,
@@ -83,7 +83,7 @@ const VersionsItemActions = ({
             >
                 <IconEllipsis height={4} width={14} />
                 <FormattedMessage {...messages.versionActionToggle}>
-                    {text => <span className="accessibility-hidden">{text}</span>}
+                    {(text: string) => <span className="accessibility-hidden">{text}</span>}
                 </FormattedMessage>
             </PlainButton>
 
@@ -120,15 +120,15 @@ const VersionsItemActions = ({
                 {showDelete && (
                     <Tooltip
                         position="middle-left"
-                        text="Disabled by retention policy"
+                        text={<FormattedMessage {...messages.versionActionDisabledRetention} />}
                         isTabbable={false}
-                        isDisabled={enableDelete}
+                        isDisabled={!isRetained}
                     >
                         <VersionsItemAction
                             action="remove"
                             fileId={fileId}
                             isCurrent={isCurrent}
-                            isDisabled={!enableDelete}
+                            isDisabled={isRetained}
                             onClick={onDelete}
                         >
                             <IconTrash {...ICON_SIZE} />

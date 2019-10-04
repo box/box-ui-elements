@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsItemActions render should disable tooltip when enable delete 1`] = `
+exports[`elements/content-sidebar/versions/VersionsItemActions render should enable/disable actions and tooltips if isRetained is false 1`] = `
 <DropdownMenu
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
@@ -39,7 +39,12 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should dis
       isDisabled={true}
       isTabbable={false}
       position="middle-left"
-      text="Disabled by retention policy"
+      text={
+        <FormattedMessage
+          defaultMessage="Disabled by retention policy"
+          id="be.sidebarVersions.disabledByRetention"
+        />
+      }
       theme="default"
     >
       <VersionsItemAction
@@ -61,7 +66,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should dis
 </DropdownMenu>
 `;
 
-exports[`elements/content-sidebar/versions/VersionsItemActions render should disable tooltip when enable delete 2`] = `
+exports[`elements/content-sidebar/versions/VersionsItemActions render should enable/disable actions and tooltips if isRetained is true 1`] = `
 <DropdownMenu
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
@@ -100,7 +105,12 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should dis
       isDisabled={false}
       isTabbable={false}
       position="middle-left"
-      text="Disabled by retention policy"
+      text={
+        <FormattedMessage
+          defaultMessage="Disabled by retention policy"
+          id="be.sidebarVersions.disabledByRetention"
+        />
+      }
       theme="default"
     >
       <VersionsItemAction
@@ -213,7 +223,12 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       isDisabled={true}
       isTabbable={false}
       position="middle-left"
-      text="Disabled by retention policy"
+      text={
+        <FormattedMessage
+          defaultMessage="Disabled by retention policy"
+          id="be.sidebarVersions.disabledByRetention"
+        />
+      }
       theme="default"
     >
       <VersionsItemAction
