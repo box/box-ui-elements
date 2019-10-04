@@ -38,20 +38,20 @@ const SubHeaderRight = ({
     gridMaxColumns,
     gridMinColumns,
     maxGridColumnCountForWidth,
-    onGridViewSliderChange,
     onCreate,
-    onViewModeChange,
+    onGridViewSliderChange,
     onSortChange,
     onUpload,
+    onViewModeChange,
     view,
     viewMode,
 }: Props) => {
     const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
+    const hasGridView: boolean = !!gridColumnCount;
     const hasItems: boolean = items.length > 0;
     const isFolder: boolean = view === VIEW_FOLDER;
     const showSort: boolean = isFolder && hasItems;
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
-
     return (
         <div className="be-sub-header-right">
             {hasItems && viewMode === VIEW_MODE_GRID && (
@@ -63,7 +63,9 @@ const SubHeaderRight = ({
                     onChange={onGridViewSliderChange}
                 />
             )}
-            {hasItems && <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />}
+            {hasItems && hasGridView && (
+                <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />
+            )}
             {showSort && !!sortBy && !!sortDirection && (
                 <Sort onSortChange={onSortChange} sortBy={sortBy} sortDirection={sortDirection} />
             )}
