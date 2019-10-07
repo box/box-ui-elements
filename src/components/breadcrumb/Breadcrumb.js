@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 
 import { MenuLinkItem } from '../menu';
 import EllipsisCrumb from './EllipsisCrumb';

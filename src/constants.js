@@ -403,10 +403,6 @@ export const TASK_COMPLETION_RULE_ANY: 'ANY_ASSIGNEE' = 'ANY_ASSIGNEE';
 export const TASK_EDIT_MODE_CREATE: 'CREATE' = 'CREATE';
 export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';
 
-/* ------------------ Comment types ----------------- */
-export const COMMENT_TYPE_DEFAULT: 'comment' = 'comment';
-export const COMMENT_TYPE_TASK: 'task' = 'task';
-
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {
     arrowDown: 'ArrowDown',
