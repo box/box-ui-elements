@@ -181,6 +181,7 @@ type BoxItemVersionRetentionPolicy = {
     disposition_action: 'permanently_delete' | 'remove_retention',
     id: string,
     policy_name: string,
+    retention_length: 'indefinite' | string, // length in days
     type: 'retention_policy',
 };
 

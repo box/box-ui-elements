@@ -7,7 +7,11 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ReadableTime } from '../../../components/time';
-import { VERSION_RETENTION_DELETE_ACTION, VERSION_RETENTION_REMOVE_ACTION } from '../../../constants';
+import {
+    VERSION_RETENTION_DELETE_ACTION,
+    VERSION_RETENTION_REMOVE_ACTION,
+    VERSION_RETENTION_INDEFINITE,
+} from '../../../constants';
 import messages from './messages';
 
 type Props = {
@@ -21,22 +25,22 @@ const RETENTION_MAP = {
 
 const VersionsItemRetention = ({ retention }: Props) => {
     const { disposition_at: dispositionAt, winning_retention_policy: retentionPolicy } = retention || {};
-    const { disposition_action: dispositionAction } = retentionPolicy || {};
+    const { disposition_action: dispositionAction, retention_length: retentionLength } = retentionPolicy || {};
     const dispositionAtTime = dispositionAt && new Date(dispositionAt).getTime();
 
     if (!dispositionAction) {
         return null;
     }
 
-    return dispositionAtTime ? (
+    return retentionLength === VERSION_RETENTION_INDEFINITE || !dispositionAtTime ? (
+        <FormattedMessage {...messages.versionRetentionIndefinite} />
+    ) : (
         <FormattedMessage
             {...RETENTION_MAP[dispositionAction]}
             values={{
                 time: <ReadableTime timestamp={dispositionAtTime} showWeekday />,
             }}
         />
-    ) : (
-        <FormattedMessage {...messages.versionRetentionIndefinite} />
     );
 };
 
