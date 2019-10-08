@@ -1,3 +1,2 @@
 // @flow
-// eslint-disable-next-line import/prefer-default-export
-export { default as SecurityBadge } from './SecurityBadge';
+export { default } from './SecurityBadge';

@@ -13,13 +13,13 @@
     .icon-alert-default {
         width: 16px;
         height: 16px;
+        margin: 0 -3px;
     }
 }
 
 .bdl-SecurityBadge-name {
     @include bdl-SecurityBadge-name;
 
-    margin-left: 0;
     color: $bdl-gray !important; // To inhibit overriding
     text-transform: uppercase;
 }

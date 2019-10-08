@@ -12,15 +12,15 @@ type Props = {
     message: string,
 };
 
-const SecurityBadge = ({ className, icon, message, ...rest }: Props) => {
-    const iconElement = icon || <IconAlertDefault color={bdlYellorange} height={22} width={22} strokeWidth={3} />;
+const SecurityBadge = ({ className, icon, message, ...rest }: Props) => (
+    <h1 className={classNames('bdl-SecurityBadge', className)} {...rest}>
+        {icon}
+        <span className="bdl-SecurityBadge-name">{message}</span>
+    </h1>
+);
 
-    return (
-        <h1 className={classNames('bdl-SecurityBadge', className)} {...rest}>
-            {iconElement}
-            <span className="bdl-SecurityBadge-name">{message}</span>
-        </h1>
-    );
+SecurityBadge.defaultProps = {
+    icon: <IconAlertDefault color={bdlYellorange} height={22} width={22} strokeWidth={3} />,
 };
 
 export default SecurityBadge;

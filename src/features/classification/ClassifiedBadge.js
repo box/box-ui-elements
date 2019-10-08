@@ -3,10 +3,9 @@ import * as React from 'react';
 
 import Tooltip from '../../components/tooltip';
 import IconSecurityClassification from '../../icons/general/IconSecurityClassification';
-import { SecurityBadge } from '../security';
+import SecurityBadge from '../security';
 import { bdlYellorange } from '../../styles/variables';
 import type { Position } from '../../components/tooltip';
-import './ClassifiedBadge.scss';
 
 type Props = {
     name: string,
