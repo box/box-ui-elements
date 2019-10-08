@@ -32,31 +32,91 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const wrapper = getWrapper({ collection, currentIndex });
             expect(wrapper).toMatchSnapshot();
         });
-        // test('should render left navigation correctly from deeplinked URL', () => {
-        //     const onNavigateLeftMock = jest.fn();
-        //     const wrapper = getWrapper({ path: '/activity/tasks/12345', onNavigateLeft: onNavigateLeftMock });
-        //     expect(wrapper.find('PlainButton')).to.have.lengthOf(1);
-        //     expect(onNavigateLeftMock).toHaveBeenCalled();
-        //     expect(wrapper.find('Route').props()).toMatchObject({
-        //         path: '/activity',
-        //     });
-        // });
+
+        test('should render left navigation correctly from tasks deeplinked URL', () => {
+            const onNavigateLeftMock = jest.fn();
+            const historyMock = {
+                location: { pathname: '/activity/tasks/1234', hash: '' },
+                listen: jest.fn(),
+                push: jest.fn(),
+                entries: [{}],
+            };
+            const wrapper = mount(
+                <PreviewNavigation
+                    intl={{
+                        formatMessage: jest.fn(),
+                    }}
+                    collection={['a', 'b', 'c']}
+                    currentIndex={2}
+                    onNavigateLeft={onNavigateLeftMock}
+                    onNavigateRight={jest.fn()}
+                    history={historyMock}
+                />,
+            );
+            // console.log(wrapper.debug({ verbose: true }));
+            expect(wrapper.find('PlainButton')).toHaveLength(1);
+            wrapper.find('PlainButton').simulate('click');
+
+            expect(historyMock.push).toBeCalledTimes(1);
+            expect(historyMock.push).toBeCalledWith('/activity');
+            expect(onNavigateLeftMock).toHaveBeenCalled();
+        });
+
+        test('should render right navigation correctly from tasks deeplinked URL ', () => {
+            const onNavigateRightMock = jest.fn();
+            const historyMock = {
+                location: { pathname: '/activity/tasks/1234', hash: '' },
+                listen: jest.fn(),
+                push: jest.fn(),
+                entries: [{}],
+            };
+            const wrapper = mount(
+                <PreviewNavigation
+                    intl={{
+                        formatMessage: jest.fn(),
+                    }}
+                    collection={['a', 'b', 'c']}
+                    currentIndex={0}
+                    onNavigateLeft={jest.fn()}
+                    onNavigateRight={onNavigateRightMock}
+                    history={historyMock}
+                />,
+            );
+            // console.log(wrapper.debug({ verbose: true }));
+            expect(wrapper.find('PlainButton')).toHaveLength(1);
+            wrapper.find('PlainButton').simulate('click');
+
+            expect(historyMock.push).toBeCalledTimes(1);
+            expect(historyMock.push).toBeCalledWith('/activity');
+            expect(onNavigateRightMock).toHaveBeenCalled();
+        });
+        test.only('should render navigation correctly from comments deeplinked URL ', () => {
+            const onNavigateRightMock = jest.fn();
+            const historyMock = {
+                location: { pathname: '/activity/comments/1234', hash: '' },
+                listen: jest.fn(),
+                push: jest.fn(),
+                entries: [{}],
+            };
+            const wrapper = mount(
+                <PreviewNavigation
+                    intl={{
+                        formatMessage: jest.fn(),
+                    }}
+                    collection={['a', 'b', 'c']}
+                    currentIndex={0}
+                    onNavigateLeft={jest.fn()}
+                    onNavigateRight={onNavigateRightMock}
+                    history={historyMock}
+                />,
+            );
+            // console.log(wrapper.debug({ verbose: true }));
+            expect(wrapper.find('PlainButton')).toHaveLength(1);
+            wrapper.find('PlainButton').simulate('click');
+
+            expect(historyMock.push).toBeCalledTimes(1);
+            expect(historyMock.push).toBeCalledWith('/activity');
+            expect(onNavigateRightMock).toHaveBeenCalled();
+        });
     });
-
-    // describe('activity sidebar', () => {
-    //     test('should render with comments deeplink', () => {
-    //         const wrapper = getWrapper({ path: '/activity/comments/12345' });
-    //         expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-    //             activeFeedEntryType: 'comment',
-    //             activeFeedEntryId: '12345',
-    //         });
-    //     });
-
-    //     test('should render with versions deeplink', () => {
-    //         const wrapper = getWrapper({ path: '/activity/versions/12345' });
-    //         expect(wrapper.find('VersionsSidebar').props()).toMatchObject({
-    //             versionId: '12345',
-    //         });
-    //     });
-    // });
 });
