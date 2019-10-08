@@ -83,6 +83,17 @@ jobs:
           name: E2E tests
           command: yarn test:e2e
 
+  visual-tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - run:
+          name: Visual tests
+          command: yarn test:visuals
+
 workflows:
   version: 2
   lint_test_build:
@@ -90,3 +101,6 @@ workflows:
       - lint
       - build-unit-tests
       - e2e-tests
+  visual_regression:
+    jobs:
+      - visual-tests

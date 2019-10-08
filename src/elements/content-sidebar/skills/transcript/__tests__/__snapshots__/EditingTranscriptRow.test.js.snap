@@ -24,7 +24,10 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
       className="be-transcript-buttons"
     >
       <Button
+        className=""
         data-resin-target="skill-transcripteditcancel"
+        isLoading={false}
+        showRadar={false}
         type="button"
       >
         <FormattedMessage
@@ -65,7 +68,10 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
       className="be-transcript-buttons"
     >
       <Button
+        className=""
         data-resin-target="skill-transcripteditcancel"
+        isLoading={false}
+        showRadar={false}
         type="button"
       >
         <FormattedMessage

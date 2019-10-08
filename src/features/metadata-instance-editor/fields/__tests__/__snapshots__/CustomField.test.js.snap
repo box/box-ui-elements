@@ -26,8 +26,11 @@ exports[`features/metadata-instance-editor/fields/CustomField should correctly r
     className="metadata-instance-editor-field-custom-actions"
   >
     <Button
+      className=""
       data-resin-target="metadata-customfieldremove"
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
       type="button"
     >
       <IconMinusThin

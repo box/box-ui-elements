@@ -21,5 +21,7 @@ module.exports = {
     globals: {
         shallow: true,
         mount: true,
+        page: true,
+        takeScreenshot: true,
     },
 };

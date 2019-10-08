@@ -7,21 +7,35 @@ import LoadingIndicator from '../loading-indicator';
 import RadarAnimation from '../radar';
 
 type Props = {
-    /** Child components */
+    /** Child components for the button, generally localized text */
     children?: React.Node,
-    /** Adds a class to the component */
+    /** Custom class for the button */
     className?: string,
+    /** whether the button is disabled or not */
     isDisabled?: boolean,
-    isLoading?: boolean,
+    /** whether the button is loading or not */
+    isLoading: boolean,
+    /** whether the button is selected or not */
     isSelected?: boolean,
+    /** onClick handler for the button */
     onClick?: Function,
+    /** to set buttons inner ref */
     setRef?: Function,
-    showRadar?: boolean,
-    type?: 'button' | 'reset' | 'submit',
+    /** whether to show a radar */
+    showRadar: boolean,
+    /** type for the button */
+    type: 'button' | 'reset' | 'submit',
 };
 
 class Button extends React.Component<Props> {
     btnElement: ?HTMLButtonElement;
+
+    static defaultProps = {
+        className: '',
+        isLoading: false,
+        showRadar: false,
+        type: 'submit',
+    };
 
     handleClick = (event: SyntheticEvent<HTMLButtonElement>) => {
         const { isDisabled, onClick } = this.props;
@@ -36,17 +50,7 @@ class Button extends React.Component<Props> {
     };
 
     render() {
-        const {
-            children,
-            className = '',
-            isDisabled,
-            isLoading = false,
-            isSelected,
-            setRef,
-            type = 'submit',
-            showRadar = false,
-            ...rest
-        } = this.props;
+        const { children, className, isDisabled, isLoading, isSelected, setRef, type, showRadar, ...rest } = this.props;
 
         const buttonProps = omit(rest, ['onClick']);
         if (isDisabled) {
