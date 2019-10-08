@@ -75,7 +75,9 @@
         "start:npm": "yarn setup; yarn build:dev:es",
         "test": "BABEL_ENV=test NODE_ENV=test yarn jest",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:run",
-        "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:open"
+        "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:open",
+        "storybook": "start-storybook -p 6006",
+        "build-storybook": "build-storybook"
     },
     "browserslist": {
         "production": [
@@ -149,6 +151,10 @@
         "@commitlint/config-conventional": "^8.1.0",
         "@commitlint/travis-cli": "^8.1.0",
         "@hapi/address": "^2.0.0",
+        "@sambego/storybook-state": "^1.3.6",
+        "@storybook/addon-links": "^5.2.1",
+        "@storybook/addon-notes": "^5.2.1",
+        "@storybook/react": "^5.2.1",
         "autoprefixer": "^9.6.1",
         "axios": "0.18.1",
         "babel-core": "^7.0.0-bridge.0",
@@ -296,5 +302,6 @@
         "scroll-into-view-if-needed": "^2.2.20",
         "tabbable": "^1.1.2",
         "uuid": "^3.3.2"
-    }
+    },
+    "dependencies": {}
 }
