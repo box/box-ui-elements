@@ -9,7 +9,7 @@ import './SecurityBadge.scss';
 type Props = {
     className?: string,
     icon?: React.Node,
-    message: string,
+    message: React.Node,
 };
 
 const SecurityBadge = ({ className, icon, message, ...rest }: Props) => (
