@@ -1,0 +1,25 @@
+@import '../../styles/variables';
+@import './mixins';
+
+.bdl-SecurityBadge,
+.bdl-SecurityBadge:hover {
+    @include bdl-SecurityBadge;
+
+    background-color: $bdl-yellorange-10;
+    border-color: $bdl-yellorange;
+}
+
+.bdl-SecurityBadge {
+    .icon-alert-default {
+        width: 16px;
+        height: 16px;
+        margin: 0 -3px;
+    }
+}
+
+.bdl-SecurityBadge-name {
+    @include bdl-SecurityBadge-name;
+
+    color: $bdl-gray !important; // To inhibit overriding
+    text-transform: uppercase;
+}
