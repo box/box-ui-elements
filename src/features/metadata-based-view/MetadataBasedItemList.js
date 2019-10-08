@@ -15,6 +15,8 @@ import './MetadataBasedItemList.scss';
 import type {
     FlattenedMetadataQueryResponseCollection,
     FlattenedMetadataQueryResponseEntry,
+    MetadataColumnConfig,
+    MetadataColumnsToShow,
 } from '../../common/types/metadataQueries';
 
 const FILE_ICON_COLUMN_INDEX = 0;
@@ -34,7 +36,7 @@ type State = {
 type Props = {
     currentCollection: FlattenedMetadataQueryResponseCollection,
     intl: IntlShape,
-    metadataColumnsToShow: Array<string>,
+    metadataColumnsToShow: MetadataColumnsToShow,
     onItemClick: FlattenedMetadataQueryResponseEntry => void,
 } & InjectIntlProvidedProps;
 
@@ -56,6 +58,10 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         this.state = {
             hoveredRowIndex: -1, // initial MultiGrid load
         };
+    }
+
+    getMetadataColumnName(column: MetadataColumnConfig | string): string {
+        return typeof column === 'string' ? column : getProp(column, 'name');
     }
 
     getColumnWidth(width: number): ColumnWidthCallback {
@@ -111,7 +117,9 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 break;
             default: {
                 const data = getProp(item, 'metadata.data', {});
-                const mdFieldName = metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER];
+                const mdFieldName = this.getMetadataColumnName(
+                    metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER],
+                );
                 cellData = data[mdFieldName];
             }
         }
@@ -129,7 +137,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         }
 
         if (columnIndex > FILE_NAME_COLUMN_INDEX) {
-            headerData = metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER]; // column header
+            headerData = this.getMetadataColumnName(metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER]); // column header
         }
 
         return headerData;
