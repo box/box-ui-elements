@@ -1,46 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 1`] = `
-<Fragment>
-  <PlainButton
-    className="bcpr-navigate-right"
-    onClick={[Function]}
-    type="button"
+<NavRouter>
+  <Route
+    path={
+      Array [
+        "/:activeTab/:deeplink",
+        "/",
+      ]
+    }
   >
-    <IconNavigateRight />
-  </PlainButton>
-</Fragment>
+    <Component />
+  </Route>
+</NavRouter>
 `;
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 2`] = `
-<Fragment>
-  <PlainButton
-    className="bcpr-navigate-left"
-    onClick={[Function]}
-    type="button"
+<NavRouter>
+  <Route
+    path={
+      Array [
+        "/:activeTab/:deeplink",
+        "/",
+      ]
+    }
   >
-    <IconNavigateLeft />
-  </PlainButton>
-  <PlainButton
-    className="bcpr-navigate-right"
-    onClick={[Function]}
-    type="button"
-  >
-    <IconNavigateRight />
-  </PlainButton>
-</Fragment>
+    <Component />
+  </Route>
+</NavRouter>
 `;
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 3`] = `
-<Fragment>
-  <PlainButton
-    className="bcpr-navigate-left"
-    onClick={[Function]}
-    type="button"
+<NavRouter>
+  <Route
+    path={
+      Array [
+        "/:activeTab/:deeplink",
+        "/",
+      ]
+    }
   >
-    <IconNavigateLeft />
-  </PlainButton>
-</Fragment>
+    <Component />
+  </Route>
+</NavRouter>
 `;
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with an empty collection 1`] = `""`;

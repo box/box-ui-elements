@@ -32,5 +32,31 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const wrapper = getWrapper({ collection, currentIndex });
             expect(wrapper).toMatchSnapshot();
         });
+        // test('should render left navigation correctly from deeplinked URL', () => {
+        //     const onNavigateLeftMock = jest.fn();
+        //     const wrapper = getWrapper({ path: '/activity/tasks/12345', onNavigateLeft: onNavigateLeftMock });
+        //     expect(wrapper.find('PlainButton')).to.have.lengthOf(1);
+        //     expect(onNavigateLeftMock).toHaveBeenCalled();
+        //     expect(wrapper.find('Route').props()).toMatchObject({
+        //         path: '/activity',
+        //     });
+        // });
     });
+
+    // describe('activity sidebar', () => {
+    //     test('should render with comments deeplink', () => {
+    //         const wrapper = getWrapper({ path: '/activity/comments/12345' });
+    //         expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
+    //             activeFeedEntryType: 'comment',
+    //             activeFeedEntryId: '12345',
+    //         });
+    //     });
+
+    //     test('should render with versions deeplink', () => {
+    //         const wrapper = getWrapper({ path: '/activity/versions/12345' });
+    //         expect(wrapper.find('VersionsSidebar').props()).toMatchObject({
+    //             versionId: '12345',
+    //         });
+    //     });
+    // });
 });
