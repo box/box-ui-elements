@@ -43,14 +43,16 @@ describe('elements/content-uploader/ContentUploader', () => {
     };
 
     describe('onBeforeUpload()', () => {
-        const onBeforeUpload = jest.fn();
-        const wrapper = getWrapper({
-            onBeforeUpload,
+        test('should call onBeforeUpload', () => {
+            const onBeforeUpload = jest.fn();
+            const wrapper = getWrapper({
+                onBeforeUpload,
+            });
+
+            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+
+            expect(onBeforeUpload).toBeCalled();
         });
-
-        wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
-
-        expect(onBeforeUpload).toBeCalled();
     });
 
     describe('updateViewAndCollection()', () => {
@@ -77,6 +79,17 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             const expected = { yoyo: true };
             expect(wrapper.state().itemIds).toMatchObject(expected);
+        });
+
+        test('should add generated itemId', () => {
+            const wrapper = getWrapper({ rootFolderId: 0 });
+
+            global.Date.now = jest.fn(() => 10000);
+
+            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+
+            const expected = { yoyo: true, yoyo_0_10000: true };
+            expect(wrapper.state().itemIds).toEqual(expected);
         });
     });
 
