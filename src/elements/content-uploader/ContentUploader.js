@@ -304,26 +304,27 @@ class ContentUploader extends Component<Props, State> {
             newItemIds[getFileId(file, rootFolderId)] = true;
         });
 
-        this.setState(state => ({
-            itemIds: {
-                ...state.itemIds,
-                ...newItemIds,
-            },
-        }));
-
         clearTimeout(this.resetItemsTimeout);
 
         const firstFile = getFile(newFiles[0]);
 
-        // webkitRelativePath should be ignored when the upload destination folder is known
-        if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
-            this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
-            return;
-        }
-
-        onBeforeUpload(newFiles);
-
-        this.addFilesWithoutRelativePathToQueue(newFiles, itemUpdateCallback);
+        this.setState(
+            state => ({
+                itemIds: {
+                    ...state.itemIds,
+                    ...newItemIds,
+                },
+            }),
+            () => {
+                onBeforeUpload(newFiles);
+                if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
+                    // webkitRelativePath should be ignored when the upload destination folder is known
+                    this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
+                } else {
+                    this.addFilesWithoutRelativePathToQueue(newFiles, itemUpdateCallback);
+                }
+            },
+        );
     };
 
     /**
