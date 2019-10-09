@@ -65,7 +65,6 @@ const PreviewNavigation = ({
                                     if (match.params.deeplink) {
                                         history.push(`/${match.params.activeTab}`);
                                     }
-
                                     onNavigateRight();
                                 }}
                                 title={intl.formatMessage(messages.nextFile)}
