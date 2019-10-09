@@ -53,7 +53,6 @@ describe('elements/content-preview/PreviewNavigation', () => {
                     history={historyMock}
                 />,
             );
-            // console.log(wrapper.debug({ verbose: true }));
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 
@@ -82,7 +81,6 @@ describe('elements/content-preview/PreviewNavigation', () => {
                     history={historyMock}
                 />,
             );
-            // console.log(wrapper.debug({ verbose: true }));
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 
@@ -110,7 +108,6 @@ describe('elements/content-preview/PreviewNavigation', () => {
                     history={historyMock}
                 />,
             );
-            // console.log(wrapper.debug({ verbose: true }));
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 

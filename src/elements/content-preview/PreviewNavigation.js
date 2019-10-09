@@ -42,7 +42,6 @@ const PreviewNavigation = ({
             <Route path={['/:activeTab/:deeplink', '/']}>
                 {({ match }) => (
                     <>
-                        {/* {console.log(match)} */}
                         {hasLeftNavigation && (
                             <PlainButton
                                 className="bcpr-navigate-left"
