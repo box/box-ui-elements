@@ -29,7 +29,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         ],
         nextMarker: 'abc',
     };
-    const metadataColumnsToShow = ['type', 'amount'];
+    const metadataColumnsToShow = ['type', { name: 'amount', canEdit: true }];
 
     const pdfNameButton = (
         <PlainButton onClick={onClick} type="button">

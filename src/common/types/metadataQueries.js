@@ -31,7 +31,12 @@ type MetadataQuery = {
     query_params: Object,
 };
 
-type MetadataColumnsToShow = Array<string>;
+type MetadataColumnConfig = {
+    canEdit?: boolean,
+    name: string,
+};
+
+type MetadataColumnsToShow = Array<MetadataColumnConfig | string>;
 
 type FlattenedMetadataQueryResponseEntryMetadata = {
     data?: StringAnyMap,
@@ -66,6 +71,7 @@ export type {
     FlattenedMetadataQueryResponseCollection,
     FlattenedMetadataQueryResponseEntry,
     FlattenedMetadataQueryResponseEntryMetadata,
+    MetadataColumnConfig,
     MetadataColumnsToShow,
     MetadataQuery,
     MetadataQueryOrderByClause,

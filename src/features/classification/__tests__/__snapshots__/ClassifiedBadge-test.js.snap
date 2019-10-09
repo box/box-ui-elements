@@ -10,21 +10,18 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   text="fubar"
   theme="default"
 >
-  <h1
+  <SecurityBadge
     className="bdl-ClassifiedBadge"
-  >
-    <IconSecurityClassification
-      color="#f5b31b"
-      height={10}
-      strokeWidth={3}
-      width={10}
-    />
-    <span
-      className="bdl-ClassifiedBadge-name"
-    >
-      Confidential
-    </span>
-  </h1>
+    icon={
+      <IconSecurityClassification
+        color="#f5b31b"
+        height={10}
+        strokeWidth={3}
+        width={10}
+      />
+    }
+    message="Confidential"
+  />
 </Tooltip>
 `;
 
@@ -37,20 +34,17 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   position="bottom-center"
   theme="default"
 >
-  <h1
+  <SecurityBadge
     className="bdl-ClassifiedBadge"
-  >
-    <IconSecurityClassification
-      color="#f5b31b"
-      height={10}
-      strokeWidth={3}
-      width={10}
-    />
-    <span
-      className="bdl-ClassifiedBadge-name"
-    >
-      Confidential
-    </span>
-  </h1>
+    icon={
+      <IconSecurityClassification
+        color="#f5b31b"
+        height={10}
+        strokeWidth={3}
+        width={10}
+      />
+    }
+    message="Confidential"
+  />
 </Tooltip>
 `;

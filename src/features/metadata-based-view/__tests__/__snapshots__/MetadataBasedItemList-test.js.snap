@@ -35,7 +35,10 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
   metadataColumnsToShow={
     Array [
       "type",
-      "amount",
+      Object {
+        "canEdit": true,
+        "name": "amount",
+      },
     ]
   }
   onItemClick={[MockFunction]}
