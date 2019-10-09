@@ -8,6 +8,7 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import { Route } from 'react-router-dom';
 import type { RouterHistory } from 'react-router-dom';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import NavRouter from '../common/nav-router';
 import IconNavigateLeft from '../../icons/general/IconNavigateLeft';
 import IconNavigateRight from '../../icons/general/IconNavigateRight';
@@ -17,7 +18,7 @@ import messages from '../common/messages';
 type Props = {
     collection: Array<string | BoxItem>,
     currentIndex: number,
-    history: RouterHistory,
+    history?: ?RouterHistory,
     onNavigateLeft: Function,
     onNavigateRight: Function,
 } & InjectIntlProvidedProps;
@@ -28,7 +29,7 @@ const PreviewNavigation = ({
     intl,
     onNavigateLeft,
     onNavigateRight,
-    history,
+    history: historyProp,
 }: Props) => {
     const hasLeftNavigation = collection.length > 1 && currentIndex > 0 && currentIndex < collection.length;
     const hasRightNavigation = collection.length > 1 && currentIndex > -1 && currentIndex < collection.length - 1;
@@ -38,9 +39,9 @@ const PreviewNavigation = ({
     }
 
     return (
-        <NavRouter history={history}>
+        <NavRouter history={historyProp}>
             <Route path={['/:activeTab/:deeplink', '/']}>
-                {({ match }) => (
+                {({ match, history }) => (
                     <>
                         {hasLeftNavigation && (
                             <PlainButton

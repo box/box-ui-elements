@@ -1189,9 +1189,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             <PreviewNavigation
                                 collection={collection}
                                 currentIndex={this.getFileIndex()}
+                                history={history}
                                 onNavigateLeft={this.navigateLeft}
                                 onNavigateRight={this.navigateRight}
-                                history={history}
                             />
                         </div>
                         {file && (
