@@ -1,10 +1,10 @@
 import React from 'react';
 import noop from 'lodash/noop';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { PreviewNavigationComponent as PreviewNavigation } from '../PreviewNavigation';
 
 const getWrapper = ({ onNavigateLeft = noop, onNavigateRight = noop, ...rest }) =>
-    shallow(
+    mount(
         <PreviewNavigation
             intl={{
                 formatMessage: jest.fn(),
@@ -88,7 +88,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(historyMock.push).toBeCalledWith('/activity');
             expect(onNavigateRightMock).toHaveBeenCalled();
         });
-        test.only('should render navigation correctly from comments deeplinked URL ', () => {
+        test('should render navigation correctly from comments deeplinked URL ', () => {
             const onNavigateRightMock = jest.fn();
             const historyMock = {
                 location: { pathname: '/activity/comments/1234', hash: '' },
