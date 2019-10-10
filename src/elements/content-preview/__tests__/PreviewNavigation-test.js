@@ -3,6 +3,13 @@ import noop from 'lodash/noop';
 import { mount } from 'enzyme';
 import { PreviewNavigationComponent as PreviewNavigation } from '../PreviewNavigation';
 
+const historyMock = {
+    location: { pathname: '/activity/tasks/1234', hash: '' },
+    listen: jest.fn(),
+    push: jest.fn(),
+    entries: [{}],
+};
+
 const getWrapper = ({ onNavigateLeft = noop, onNavigateRight = noop, ...rest }) =>
     mount(
         <PreviewNavigation
@@ -11,9 +18,14 @@ const getWrapper = ({ onNavigateLeft = noop, onNavigateRight = noop, ...rest }) 
             }}
             onNavigateLeft={onNavigateLeft}
             onNavigateRight={onNavigateRight}
+            history={historyMock}
             {...rest}
         />,
     );
+
+afterEach(() => {
+    jest.resetAllMocks();
+});
 
 describe('elements/content-preview/PreviewNavigation', () => {
     describe('render()', () => {
@@ -35,12 +47,6 @@ describe('elements/content-preview/PreviewNavigation', () => {
 
         test('should render left navigation correctly from tasks deeplinked URL', () => {
             const onNavigateLeftMock = jest.fn();
-            const historyMock = {
-                location: { pathname: '/activity/tasks/1234', hash: '' },
-                listen: jest.fn(),
-                push: jest.fn(),
-                entries: [{}],
-            };
             const wrapper = mount(
                 <PreviewNavigation
                     intl={{
@@ -63,12 +69,6 @@ describe('elements/content-preview/PreviewNavigation', () => {
 
         test('should render right navigation correctly from tasks deeplinked URL ', () => {
             const onNavigateRightMock = jest.fn();
-            const historyMock = {
-                location: { pathname: '/activity/tasks/1234', hash: '' },
-                listen: jest.fn(),
-                push: jest.fn(),
-                entries: [{}],
-            };
             const wrapper = mount(
                 <PreviewNavigation
                     intl={{
@@ -90,12 +90,6 @@ describe('elements/content-preview/PreviewNavigation', () => {
         });
         test('should render navigation correctly from comments deeplinked URL ', () => {
             const onNavigateRightMock = jest.fn();
-            const historyMock = {
-                location: { pathname: '/activity/comments/1234', hash: '' },
-                listen: jest.fn(),
-                push: jest.fn(),
-                entries: [{}],
-            };
             const wrapper = mount(
                 <PreviewNavigation
                     intl={{
