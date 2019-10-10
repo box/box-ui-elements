@@ -52,7 +52,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             "entries": Array [
               Object {
                 "hash": "",
-                "key": "979qlc",
+                "key": "q61e7a",
                 "pathname": "/",
                 "search": "",
                 "state": undefined,
@@ -66,7 +66,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             "listen": [Function],
             "location": Object {
               "hash": "",
-              "key": "979qlc",
+              "key": "q61e7a",
               "pathname": "/",
               "search": "",
               "state": undefined,
@@ -195,7 +195,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             "entries": Array [
               Object {
                 "hash": "",
-                "key": "85bp5o",
+                "key": "tveyrf",
                 "pathname": "/",
                 "search": "",
                 "state": undefined,
@@ -209,7 +209,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             "listen": [Function],
             "location": Object {
               "hash": "",
-              "key": "85bp5o",
+              "key": "tveyrf",
               "pathname": "/",
               "search": "",
               "state": undefined,
@@ -370,7 +370,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             "entries": Array [
               Object {
                 "hash": "",
-                "key": "mta65v",
+                "key": "xqo0ks",
                 "pathname": "/",
                 "search": "",
                 "state": undefined,
@@ -384,7 +384,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             "listen": [Function],
             "location": Object {
               "hash": "",
-              "key": "mta65v",
+              "key": "xqo0ks",
               "pathname": "/",
               "search": "",
               "state": undefined,
