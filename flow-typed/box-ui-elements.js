@@ -82,6 +82,9 @@ import {
     METRIC_TYPE_PREVIEW,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
     METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC,
+    VERSION_RETENTION_DELETE_ACTION,
+    VERSION_RETENTION_REMOVE_ACTION,
+    VERSION_RETENTION_INDEFINITE,
 } from '../src/constants';
 
 import {
@@ -178,10 +181,10 @@ type BoxItemVersionRetention = {
 };
 
 type BoxItemVersionRetentionPolicy = {
-    disposition_action: 'permanently_delete' | 'remove_retention',
+    disposition_action: typeof VERSION_RETENTION_DELETE_ACTION | typeof VERSION_RETENTION_REMOVE_ACTION,
     id: string,
     policy_name: string,
-    retention_length: 'indefinite' | string, // length in days
+    retention_length: typeof VERSION_RETENTION_INDEFINITE | string, // length in days
     type: 'retention_policy',
 };
 
