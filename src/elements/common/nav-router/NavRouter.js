@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Sidebar Router Component
+ * @file Common Router Navigation Component
  * @author Box
  */
 import * as React from 'react';
@@ -12,7 +12,7 @@ type Props = {
     history?: RouterHistory,
 };
 
-const SidebarRouter = ({ children, history, ...rest }: Props) => {
+const NavRouter = ({ children, history, ...rest }: Props) => {
     if (history) {
         return <Router history={history}>{children}</Router>;
     }
@@ -20,4 +20,4 @@ const SidebarRouter = ({ children, history, ...rest }: Props) => {
     return <MemoryRouter {...rest}>{children}</MemoryRouter>;
 };
 
-export default SidebarRouter;
+export default NavRouter;
