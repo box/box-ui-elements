@@ -31,13 +31,13 @@ describe('elements/content-sidebar/versions/VersionsItemActions', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test.each([true, false])('should disable tooltip when enable delete', option => {
+        test.each([true, false])('should enable/disable actions and tooltips if isRetained is %s', option => {
             const wrapper = getWrapper({
+                isRetained: option,
                 showDelete: true,
-                enableDelete: option,
             });
 
-            expect(wrapper.find(Tooltip).prop('isDisabled')).toBe(option);
+            expect(wrapper.find(Tooltip).prop('isDisabled')).toBe(!option);
             expect(wrapper).toMatchSnapshot();
         });
     });

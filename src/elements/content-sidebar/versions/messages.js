@@ -1,3 +1,5 @@
+// @flow strict
+
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
@@ -45,6 +47,11 @@ const messages = defineMessages({
         id: 'be.sidebarVersions.deleteError',
         defaultMessage: 'File version could not be deleted.',
         description: 'Error message for the version delete action.',
+    },
+    versionActionDisabledRetention: {
+        id: 'be.sidebarVersions.disabledByRetention',
+        defaultMessage: 'Disabled by retention policy',
+        description: 'Tooltip message for actions disabled by retention policy.',
     },
     versionActionDownload: {
         id: 'be.sidebarVersions.download',
@@ -145,12 +152,17 @@ const messages = defineMessages({
     versionRetentionDelete: {
         id: 'be.sidebarVersions.versionRetentionDelete',
         defaultMessage: 'Will be deleted {time} by retention policy.',
-        description: 'Retention message describing when the version will be deleted.',
+        description: 'Message describing when the version will be deleted due to an applied retention policy.',
+    },
+    versionRetentionIndefinite: {
+        id: 'be.sidebarVersions.versionRetentionIndefinite',
+        defaultMessage: 'Retained indefinitely by retention policy.',
+        description: 'Message describing that the version retention policy is indefinite and will not expire.',
     },
     versionRetentionRemove: {
         id: 'be.sidebarVersions.versionRetentionRemove',
         defaultMessage: 'Retention policy expires on {time}.',
-        description: 'Retention message describing when the retention policy will be removed.',
+        description: 'Message describing when the version retention policy will expire.',
     },
 });
 
