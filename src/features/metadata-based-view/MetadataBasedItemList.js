@@ -1,20 +1,24 @@
 // @flow strict
 
-import React, { type Element } from 'react';
+import React, { type Element, Fragment } from 'react';
 import classNames from 'classnames';
 import { injectIntl, type IntlShape } from 'react-intl';
 import MultiGrid from 'react-virtualized/dist/es/MultiGrid/MultiGrid';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import getProp from 'lodash/get';
 import FileIcon from '../../icons/file-icon';
+import IconPencil from '../../icons/general/IconPencil';
 import messages from '../../elements/common/messages';
 import PlainButton from '../../components/plain-button';
+import Tooltip from '../../components/tooltip';
 import { getFileExtension } from '../../utils/file';
 import './MetadataBasedItemList.scss';
 
 import type {
     FlattenedMetadataQueryResponseCollection,
     FlattenedMetadataQueryResponseEntry,
+    MetadataColumnConfig,
+    MetadataColumnsToShow,
 } from '../../common/types/metadataQueries';
 
 const FILE_ICON_COLUMN_INDEX = 0;
@@ -28,13 +32,14 @@ const HEADER_ROW_INDEX = 0;
 const MIN_METADATA_COLUMN_WIDTH = 250;
 
 type State = {
+    hoveredColumnIndex: number,
     hoveredRowIndex: number,
 };
 
 type Props = {
     currentCollection: FlattenedMetadataQueryResponseCollection,
     intl: IntlShape,
-    metadataColumnsToShow: Array<string>,
+    metadataColumnsToShow: MetadataColumnsToShow,
     onItemClick: FlattenedMetadataQueryResponseEntry => void,
 } & InjectIntlProvidedProps;
 
@@ -46,6 +51,7 @@ type CellRendererArgs = {
 };
 
 type ColumnWidthCallback = ({ index: number }) => number;
+type GridCellData = Element<typeof FileIcon | typeof PlainButton | typeof Fragment>;
 
 class MetadataBasedItemList extends React.Component<Props, State> {
     props: Props;
@@ -54,8 +60,14 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            hoveredRowIndex: -1, // initial MultiGrid load
+            // initial MultiGrid load
+            hoveredRowIndex: -1,
+            hoveredColumnIndex: -1,
         };
+    }
+
+    getMetadataColumnName(column: MetadataColumnConfig | string): string {
+        return typeof column === 'string' ? column : getProp(column, 'name');
     }
 
     getColumnWidth(width: number): ColumnWidthCallback {
@@ -89,11 +101,16 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         onItemClick(itemWithPreviewPermission);
     }
 
-    getGridCellData(columnIndex: number, rowIndex: number): Element<typeof FileIcon | typeof PlainButton> | string {
+    getGridCellData(columnIndex: number, rowIndex: number): GridCellData {
         const {
             currentCollection: { items },
+            intl,
             metadataColumnsToShow,
         }: Props = this.props;
+        const { hoveredColumnIndex, hoveredRowIndex }: State = this.state;
+        const isCellHovered = columnIndex === hoveredColumnIndex && rowIndex === hoveredRowIndex;
+        const metadataColumn = metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER];
+        const isCellEditable = isCellHovered && !!getProp(metadataColumn, 'canEdit', false);
         const item = items[rowIndex - 1];
         const { name } = item;
         let cellData;
@@ -111,8 +128,19 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 break;
             default: {
                 const data = getProp(item, 'metadata.data', {});
-                const mdFieldName = metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER];
-                cellData = data[mdFieldName];
+                const mdFieldName = this.getMetadataColumnName(metadataColumn);
+                cellData = (
+                    <>
+                        {data[mdFieldName]}
+                        {isCellEditable && (
+                            <Tooltip text={intl.formatMessage(messages.editLabel)}>
+                                <PlainButton type="button">
+                                    <IconPencil />
+                                </PlainButton>
+                            </Tooltip>
+                        )}
+                    </>
+                );
             }
         }
 
@@ -129,15 +157,23 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         }
 
         if (columnIndex > FILE_NAME_COLUMN_INDEX) {
-            headerData = metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER]; // column header
+            headerData = this.getMetadataColumnName(metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER]); // column header
         }
 
         return headerData;
     }
 
-    handleMouseEnter = (rowIndex: number): void => this.setState({ hoveredRowIndex: rowIndex });
+    handleMouseEnter = (columnIndex: number, rowIndex: number): void =>
+        this.setState({
+            hoveredColumnIndex: columnIndex,
+            hoveredRowIndex: rowIndex,
+        });
 
-    handleMouseLeave = (): void => this.setState({ hoveredRowIndex: -1 });
+    handleMouseLeave = (): void =>
+        this.setState({
+            hoveredRowIndex: -1,
+            hoveredColumnIndex: -1,
+        });
 
     cellRenderer = ({ columnIndex, rowIndex, key, style }: CellRendererArgs): Element<'div'> => {
         const { hoveredRowIndex } = this.state;
@@ -160,7 +196,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 className={classes}
                 style={style}
                 onMouseLeave={this.handleMouseLeave}
-                onMouseEnter={() => this.handleMouseEnter(rowIndex)}
+                onMouseEnter={() => this.handleMouseEnter(columnIndex, rowIndex)}
             >
                 {data}
             </div>

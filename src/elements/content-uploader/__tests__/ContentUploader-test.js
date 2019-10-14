@@ -9,6 +9,9 @@ import {
     STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
+    VIEW_ERROR,
+    VIEW_UPLOAD_EMPTY,
+    VIEW_UPLOAD_IN_PROGRESS,
     VIEW_UPLOAD_SUCCESS,
 } from '../../../constants';
 
@@ -43,14 +46,16 @@ describe('elements/content-uploader/ContentUploader', () => {
     };
 
     describe('onBeforeUpload()', () => {
-        const onBeforeUpload = jest.fn();
-        const wrapper = getWrapper({
-            onBeforeUpload,
+        test('should call onBeforeUpload', () => {
+            const onBeforeUpload = jest.fn();
+            const wrapper = getWrapper({
+                onBeforeUpload,
+            });
+
+            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+
+            expect(onBeforeUpload).toBeCalled();
         });
-
-        wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
-
-        expect(onBeforeUpload).toBeCalled();
     });
 
     describe('updateViewAndCollection()', () => {
@@ -78,28 +83,63 @@ describe('elements/content-uploader/ContentUploader', () => {
             const expected = { yoyo: true };
             expect(wrapper.state().itemIds).toMatchObject(expected);
         });
+
+        test('should add generated itemId', () => {
+            const wrapper = getWrapper({ rootFolderId: 0 });
+
+            global.Date.now = jest.fn(() => 10000);
+
+            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+
+            const expected = { yoyo: true, yoyo_0_10000: true };
+            expect(wrapper.state().itemIds).toEqual(expected);
+        });
     });
 
     describe('removeFileFromUploadQueue()', () => {
-        test('should cancel and remove item from uploading queue', () => {
-            const wrapper = getWrapper();
-            const item = {
-                api: {
-                    cancel: jest.fn(),
-                },
-                status: STATUS_IN_PROGRESS,
-            };
+        const item = {
+            api: {
+                cancel: jest.fn(),
+            },
+            status: STATUS_IN_PROGRESS,
+        };
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper();
             wrapper.setState({
                 items: [item],
             });
-            const instance = wrapper.instance();
-            instance.upload = jest.fn();
+            instance = wrapper.instance();
+        });
 
+        test('should cancel and remove item from uploading queue', () => {
             instance.removeFileFromUploadQueue(item);
 
             expect(item.api.cancel).toBeCalled();
             expect(wrapper.state().items.length).toBe(0);
-            expect(instance.upload).toBeCalled();
+        });
+
+        test.each`
+            view                       | action
+            ${VIEW_ERROR}              | ${'should not'}
+            ${VIEW_UPLOAD_EMPTY}       | ${'should not'}
+            ${VIEW_UPLOAD_IN_PROGRESS} | ${'should'}
+            ${VIEW_UPLOAD_SUCCESS}     | ${'should not'}
+        `('$action call upload if the view is $view', option => {
+            wrapper.setState({
+                view: option,
+            });
+
+            instance.upload = jest.fn();
+
+            instance.removeFileFromUploadQueue(item);
+
+            if (option === VIEW_UPLOAD_IN_PROGRESS) {
+                expect(instance.upload).toBeCalled();
+            } else {
+                expect(instance.upload).not.toBeCalled();
+            }
         });
     });
 

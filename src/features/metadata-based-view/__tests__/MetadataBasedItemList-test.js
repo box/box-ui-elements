@@ -1,6 +1,8 @@
 import * as React from 'react';
 import FileIcon from '../../../icons/file-icon';
+import IconPencil from '../../../icons/general/IconPencil';
 import PlainButton from '../../../components/plain-button';
+import Tooltip from '../../../components/tooltip';
 
 import { MetadataBasedItemListComponent as MetadataBasedItemList } from '../MetadataBasedItemList';
 
@@ -29,7 +31,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         ],
         nextMarker: 'abc',
     };
-    const metadataColumnsToShow = ['type', 'amount'];
+    const metadataColumnsToShow = ['type', { name: 'amount', canEdit: true }];
 
     const pdfNameButton = (
         <PlainButton onClick={onClick} type="button">
@@ -67,7 +69,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         `('getColumnWidth() for $desc', ({ columnIndex, columnWidth }) => {
             const availableWidth = 500; // width provided to AutoSizer Component
             const getWidth = instance.getColumnWidth(availableWidth);
-            expect(getWidth({ index: columnIndex })).toEqual(columnWidth);
+            expect(getWidth({ index: columnIndex })).toBe(columnWidth);
         });
     });
 
@@ -83,8 +85,28 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             ${2}        | ${2}     | ${'receipt'}
             ${3}        | ${2}     | ${200}
         `('cellData for row: $rowIndex, column: $columnIndex', ({ columnIndex, rowIndex, cellData }) => {
+            const editableColumnIndex = 3; // amount field is editable
+
+            if (columnIndex === editableColumnIndex) {
+                // Set state reflecting mouse-over action for every cell in editable column
+                instance.handleMouseEnter(columnIndex, rowIndex);
+            }
+
             const data = instance.getGridCellData(columnIndex, rowIndex);
-            expect(data).toEqual(cellData);
+            if (columnIndex < 2) {
+                // i.e. FileIcon and FileName columns
+                expect(data).toEqual(cellData);
+                return;
+            }
+
+            const wrap = mount(data);
+            expect(wrap.contains(cellData.toString())).toBe(true);
+
+            if (columnIndex === editableColumnIndex) {
+                // Expect edit icon for editable column
+                expect(wrap.contains(Tooltip)).toBe(true);
+                expect(wrap.contains(IconPencil)).toBe(true);
+            }
         });
     });
 
@@ -97,7 +119,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             ${3}        | ${'amount'}
         `('headerData for column $columnIndex', ({ columnIndex, headerData }) => {
             const data = instance.getGridHeaderData(columnIndex);
-            expect(data).toEqual(headerData);
+            expect(data).toBe(headerData);
         });
     });
 
@@ -113,15 +135,16 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     describe('handleMouseEnter()', () => {
         test('should handle mouse over event by setting state accordingly', () => {
-            instance.handleMouseEnter(5);
-            expect(instance.state.hoveredRowIndex).toEqual(5);
+            instance.handleMouseEnter(5, 8);
+            expect(instance.state.hoveredColumnIndex).toBe(5);
+            expect(instance.state.hoveredRowIndex).toBe(8);
         });
     });
 
     describe('handleMouseLeave()', () => {
         test('should handle mouse leave event by setting state accordingly', () => {
             instance.handleMouseLeave();
-            expect(instance.state.hoveredRowIndex).toEqual(-1);
+            expect(instance.state.hoveredRowIndex).toBe(-1);
         });
     });
 
@@ -131,19 +154,20 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             [{ columnIndex: 1, rowIndex: 2, key: 'key', style: {} }, false, true],
         ])('should have correct class names', (arg, hasFileIconClass, hasFileNameClass) => {
             const cell = shallow(instance.cellRenderer(arg));
-            expect(cell.hasClass('bdl-MetadataBasedItemList-cell')).toEqual(true);
-            expect(cell.hasClass('bdl-MetadataBasedItemList-cell--fileIcon')).toEqual(hasFileIconClass);
-            expect(cell.hasClass('bdl-MetadataBasedItemList-cell--filename')).toEqual(hasFileNameClass);
+            expect(cell.hasClass('bdl-MetadataBasedItemList-cell')).toBe(true);
+            expect(cell.hasClass('bdl-MetadataBasedItemList-cell--fileIcon')).toBe(hasFileIconClass);
+            expect(cell.hasClass('bdl-MetadataBasedItemList-cell--filename')).toBe(hasFileNameClass);
         });
 
         test('should have hovered class for adding background color on row hover', () => {
-            const hoverCellIndex = 1;
-            instance.handleMouseEnter(hoverCellIndex); // Hover over row
+            const hoverRowIndex = 1;
+            const hoverColumnIndex = 1;
+            instance.handleMouseEnter(hoverColumnIndex, hoverRowIndex); // Hover over row
 
             const cell = shallow(
-                instance.cellRenderer({ columnIndex: 0, rowIndex: hoverCellIndex, key: 'key', style: {} }),
+                instance.cellRenderer({ columnIndex: 0, rowIndex: hoverRowIndex, key: 'key', style: {} }),
             );
-            expect(cell.hasClass('bdl-MetadataBasedItemList-cell--hover')).toEqual(true);
+            expect(cell.hasClass('bdl-MetadataBasedItemList-cell--hover')).toBe(true);
         });
     });
 

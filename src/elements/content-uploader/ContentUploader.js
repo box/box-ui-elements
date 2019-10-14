@@ -304,26 +304,27 @@ class ContentUploader extends Component<Props, State> {
             newItemIds[getFileId(file, rootFolderId)] = true;
         });
 
-        this.setState(state => ({
-            itemIds: {
-                ...state.itemIds,
-                ...newItemIds,
-            },
-        }));
-
         clearTimeout(this.resetItemsTimeout);
 
         const firstFile = getFile(newFiles[0]);
 
-        // webkitRelativePath should be ignored when the upload destination folder is known
-        if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
-            this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
-            return;
-        }
-
-        onBeforeUpload(newFiles);
-
-        this.addFilesWithoutRelativePathToQueue(newFiles, itemUpdateCallback);
+        this.setState(
+            state => ({
+                itemIds: {
+                    ...state.itemIds,
+                    ...newItemIds,
+                },
+            }),
+            () => {
+                onBeforeUpload(newFiles);
+                if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
+                    // webkitRelativePath should be ignored when the upload destination folder is known
+                    this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
+                } else {
+                    this.addFilesWithoutRelativePathToQueue(newFiles, itemUpdateCallback);
+                }
+            },
+        );
     };
 
     /**
@@ -552,7 +553,7 @@ class ContentUploader extends Component<Props, State> {
      */
     addToQueue = (newItems: UploadItem[], itemUpdateCallback: Function) => {
         const { fileLimit, useUploadsManager } = this.props;
-        const { view, items, isUploadsManagerExpanded } = this.state;
+        const { items, isUploadsManagerExpanded } = this.state;
 
         let updatedItems = [];
         const prevItemsNum = items.length;
@@ -580,12 +581,17 @@ class ContentUploader extends Component<Props, State> {
             }
         }
 
-        this.updateViewAndCollection(updatedItems, itemUpdateCallback);
+        this.updateViewAndCollection(updatedItems, () => {
+            if (itemUpdateCallback) {
+                itemUpdateCallback();
+            }
 
-        // Automatically start upload if other files are being uploaded
-        if (view === VIEW_UPLOAD_IN_PROGRESS) {
-            this.upload();
-        }
+            const { view } = this.state;
+            // Automatically start upload if other files are being uploaded
+            if (view === VIEW_UPLOAD_IN_PROGRESS) {
+                this.upload();
+            }
+        });
     };
 
     /**
@@ -628,21 +634,27 @@ class ContentUploader extends Component<Props, State> {
      */
     removeFileFromUploadQueue = (item: UploadItem) => {
         const { onCancel, useUploadsManager } = this.props;
+        const { items } = this.state;
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
 
         const { api } = item;
         api.cancel();
 
-        const { items } = this.state;
         items.splice(items.indexOf(item), 1);
 
-        // Minimize uploads manager if there are no more items
-        const callback = useUploadsManager && !items.length ? this.minimizeUploadsManager : noop;
-
         onCancel([item]);
-        this.updateViewAndCollection(items, callback);
-        this.upload();
+        this.updateViewAndCollection(items, () => {
+            // Minimize uploads manager if there are no more items
+            if (useUploadsManager && !items.length) {
+                this.minimizeUploadsManager();
+            }
+
+            const { view } = this.state;
+            if (view === VIEW_UPLOAD_IN_PROGRESS) {
+                this.upload();
+            }
+        });
     };
 
     /**
@@ -808,8 +820,12 @@ class ContentUploader extends Component<Props, State> {
             onUpload(item.boxFile);
         }
 
-        this.updateViewAndCollection(items);
-        this.upload();
+        this.updateViewAndCollection(items, () => {
+            const { view } = this.state;
+            if (view === VIEW_UPLOAD_IN_PROGRESS) {
+                this.upload();
+            }
+        });
     };
 
     resetUploadManagerExpandState = () => {
@@ -908,14 +924,16 @@ class ContentUploader extends Component<Props, State> {
 
         onError(errorData);
 
-        this.updateViewAndCollection(newItems);
-
-        if (useUploadsManager) {
-            this.isAutoExpanded = true;
-            this.expandUploadsManager();
-        }
-
-        this.upload();
+        this.updateViewAndCollection(newItems, () => {
+            if (useUploadsManager) {
+                this.isAutoExpanded = true;
+                this.expandUploadsManager();
+            }
+            const { view } = this.state;
+            if (view === VIEW_UPLOAD_IN_PROGRESS) {
+                this.upload();
+            }
+        });
     };
 
     /**
