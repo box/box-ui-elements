@@ -29,7 +29,7 @@ type Props = {
     error?: ActionItemError,
     id: string,
     intl: IntlShape,
-    isPending: boolean,
+    isPending?: boolean,
     onDelete: ({ id: string, permissions?: {} }) => void,
     permissions?: BoxItemPermission,
     rendered_text: string,

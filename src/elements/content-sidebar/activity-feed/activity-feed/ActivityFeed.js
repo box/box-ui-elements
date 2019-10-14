@@ -6,15 +6,27 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { scrollIntoView } from '../../../../utils/dom';
-import ActiveState from './ActiveState';
+import ActivityFeedItem from './ActivityFeedItem';
 import CommentForm from '../comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
+import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import type { FocusableFeedItemType } from '../../../../common/types/feed';
 import './ActivityFeed.scss';
+import messages from './messages';
+
+const errorMessageByEntryType = {
+    comment: messages.commentMissingError,
+    task: messages.taskMissingError,
+};
+
+const hasErrorMessageForEntryType = feedEntryType => {
+    return !!errorMessageByEntryType[feedEntryType];
+};
 
 type Props = {
     activeFeedEntryId?: string,
@@ -82,6 +94,7 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     scrollToActiveFeedItemOrErrorMessage() {
+        console.log('Line 97: ', this.activeFeedItemRef);
         const { current: activeFeedItemRef } = this.activeFeedItemRef;
         const { activeFeedEntryId } = this.props;
 
@@ -98,6 +111,7 @@ class ActivityFeed extends React.Component<Props, State> {
         }
 
         scrollIntoView(activeFeedItemRef);
+        console.log('Scroll into view 114: ', activeFeedItemRef);
     }
 
     /**
@@ -169,6 +183,20 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
+    renderInlineError = (activeEntry: FeedItem) => {
+        const { activeFeedEntryType } = this.props;
+        if (activeFeedEntryType && !activeEntry && hasErrorMessageForEntryType(activeFeedEntryType)) {
+            return (
+                <li>
+                    <InlineError title={<FormattedMessage {...messages.feedInlineErrorTitle} />}>
+                        <FormattedMessage {...errorMessageByEntryType[activeFeedEntryType]} />
+                    </InlineError>
+                </li>
+            );
+        }
+        return null;
+    };
+
     render(): React.Node {
         const {
             translations,
@@ -202,6 +230,9 @@ class ActivityFeed extends React.Component<Props, State> {
         const isEmpty = this.isEmpty(this.props);
         const isLoading = !this.hasLoaded();
 
+        const activeEntry = collapseFeedState(feedItems).find(
+            ({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType,
+        );
         return (
             // eslint-disable-next-line
             <div className="bcs-activity-feed" data-testid="activityfeed" onKeyDown={this.onKeyDown}>
@@ -216,37 +247,99 @@ class ActivityFeed extends React.Component<Props, State> {
                             <LoadingIndicator />
                         </div>
                     )}
-
-                    {isEmpty && !isLoading && <EmptyState showCommentMessage={showCommentForm} />}
-
-                    {!isEmpty && !isLoading && (
-                        <ActiveState
-                            {...activityFeedError}
-                            items={collapseFeedState(feedItems)}
-                            isDisabled={isDisabled}
-                            currentUser={currentUser}
-                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                            onAppActivityDelete={onAppActivityDelete}
-                            onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
-                            onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
-                            // We don't know task edit/delete specific permissions,
-                            // but you must at least be able to comment to do these operations.
-                            onTaskDelete={hasCommentPermission ? onTaskDelete : noop}
-                            onTaskEdit={hasCommentPermission ? onTaskUpdate : noop}
-                            onTaskModalClose={onTaskModalClose}
-                            onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
-                            translations={translations}
-                            getAvatarUrl={getAvatarUrl}
-                            getUserProfileUrl={getUserProfileUrl}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            getMentionWithQuery={getMentionWithQuery}
-                            approverSelectorContacts={approverSelectorContacts}
-                            getApproverWithQuery={getApproverWithQuery}
-                            activeFeedEntryId={activeFeedEntryId}
-                            activeFeedEntryType={activeFeedEntryType}
-                            activeFeedItemRef={this.activeFeedItemRef}
-                        />
+                    {!isLoading && (
+                        <ul className="bcs-activity-feed-active-state">
+                            {isEmpty && <EmptyState showCommentMessage={showCommentForm} />}
+                            {!isEmpty &&
+                                collapseFeedState(feedItems).map((item: FeedItem) => {
+                                    const { type, id } = item;
+                                    const isFocused = item === activeEntry;
+                                    const refValue = isFocused ? this.activeFeedItemRef : null;
+                                    console.log('Line 245 refvalue: ', refValue);
+                                    return (
+                                        <ActivityFeedItem
+                                            {...activityFeedError}
+                                            item={item}
+                                            isDisabled={isDisabled}
+                                            key={type + id}
+                                            currentUser={currentUser}
+                                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                                            onAppActivityDelete={onAppActivityDelete}
+                                            onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
+                                            onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                                            // We don't know task edit/delete specific permissions,
+                                            // but you must at least be able to comment to do these operations.
+                                            onTaskDelete={hasCommentPermission ? onTaskDelete : noop}
+                                            onTaskEdit={hasCommentPermission ? onTaskUpdate : noop}
+                                            onTaskModalClose={onTaskModalClose}
+                                            onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
+                                            translations={translations}
+                                            getAvatarUrl={getAvatarUrl}
+                                            getUserProfileUrl={getUserProfileUrl}
+                                            mentionSelectorContacts={mentionSelectorContacts}
+                                            getMentionWithQuery={getMentionWithQuery}
+                                            approverSelectorContacts={approverSelectorContacts}
+                                            getApproverWithQuery={getApproverWithQuery}
+                                            activeFeedEntryId={activeFeedEntryId}
+                                            activeFeedEntryType={activeFeedEntryType}
+                                            // ref={this.activeFeedItemRef}
+                                            activeFeedItemRef={refValue}
+                                            isFocused={isFocused}
+                                        />
+                                    );
+                                })}
+                            {this.renderInlineError(activeEntry)}
+                        </ul>
                     )}
+
+                    {/* {isEmpty && !isLoading && (
+                        <ul className="bcs-activity-feed-active-state">
+                            <EmptyState showCommentMessage={showCommentForm} />
+                            {this.renderInlineError(activeEntry)}
+                        </ul>
+                    )}
+                    {!isEmpty && !isLoading && (
+                        <ul className="bcs-activity-feed-active-state">
+                            {collapseFeedState(feedItems).map((item: any) => {
+                                const { type, id } = item;
+                                const isFocused = item === activeEntry;
+                                const refValue = isFocused ? this.activeFeedItemRef : null;
+                                console.log('Line 245 refvalue: ', refValue);
+                                return (
+                                    <ActivityFeedItem
+                                        {...activityFeedError}
+                                        item={item}
+                                        isDisabled={isDisabled}
+                                        key={type + id}
+                                        currentUser={currentUser}
+                                        onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                                        onAppActivityDelete={onAppActivityDelete}
+                                        onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
+                                        onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                                        // We don't know task edit/delete specific permissions,
+                                        // but you must at least be able to comment to do these operations.
+                                        onTaskDelete={hasCommentPermission ? onTaskDelete : noop}
+                                        onTaskEdit={hasCommentPermission ? onTaskUpdate : noop}
+                                        onTaskModalClose={onTaskModalClose}
+                                        onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
+                                        translations={translations}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        approverSelectorContacts={approverSelectorContacts}
+                                        getApproverWithQuery={getApproverWithQuery}
+                                        activeFeedEntryId={activeFeedEntryId}
+                                        activeFeedEntryType={activeFeedEntryType}
+                                        // ref={this.activeFeedItemRef}
+                                        activeFeedItemRef={refValue}
+                                        isFocused={isFocused}
+                                    />
+                                );
+                            })}
+                            {this.renderInlineError(activeEntry)}
+                        </ul>
+                    )} */}
                 </div>
                 {showCommentForm ? (
                     <CommentForm

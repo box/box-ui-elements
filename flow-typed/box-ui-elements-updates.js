@@ -82,9 +82,6 @@ import {
     METRIC_TYPE_PREVIEW,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
     METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC,
-    VERSION_RETENTION_DELETE_ACTION,
-    VERSION_RETENTION_REMOVE_ACTION,
-    VERSION_RETENTION_INDEFINITE,
 } from '../src/constants';
 
 import {
@@ -179,18 +176,10 @@ type BoxItemVersionPermission = {
 
 type BoxItemVersionRetention = {
     applied_at: string,
+    disposition_action: 'delete' | 'remove',
     disposition_at: string,
     id: string,
     type: 'file_version_retention',
-    winning_retention_policy: BoxItemVersionRetentionPolicy,
-};
-
-type BoxItemVersionRetentionPolicy = {
-    disposition_action: typeof VERSION_RETENTION_DELETE_ACTION | typeof VERSION_RETENTION_REMOVE_ACTION,
-    id: string,
-    policy_name: string,
-    retention_length: typeof VERSION_RETENTION_INDEFINITE | string, // length in days
-    type: 'retention_policy',
 };
 
 type User = {
