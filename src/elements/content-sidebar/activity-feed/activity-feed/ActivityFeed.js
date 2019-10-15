@@ -94,7 +94,6 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     scrollToActiveFeedItemOrErrorMessage() {
-        console.log('Line 97: ', this.activeFeedItemRef);
         const { current: activeFeedItemRef } = this.activeFeedItemRef;
         const { activeFeedEntryId } = this.props;
 
@@ -111,7 +110,6 @@ class ActivityFeed extends React.Component<Props, State> {
         }
 
         scrollIntoView(activeFeedItemRef);
-        console.log('Scroll into view 114: ', activeFeedItemRef);
     }
 
     /**
@@ -254,8 +252,8 @@ class ActivityFeed extends React.Component<Props, State> {
                                 collapseFeedState(feedItems).map((item: FeedItem) => {
                                     const { type, id } = item;
                                     const isFocused = item === activeEntry;
-                                    const refValue = isFocused ? this.activeFeedItemRef : null;
-                                    console.log('Line 245 refvalue: ', refValue);
+                                    const refValue = isFocused ? this.activeFeedItemRef : { current: null };
+
                                     return (
                                         <ActivityFeedItem
                                             {...activityFeedError}
@@ -282,7 +280,6 @@ class ActivityFeed extends React.Component<Props, State> {
                                             getApproverWithQuery={getApproverWithQuery}
                                             activeFeedEntryId={activeFeedEntryId}
                                             activeFeedEntryType={activeFeedEntryType}
-                                            // ref={this.activeFeedItemRef}
                                             activeFeedItemRef={refValue}
                                             isFocused={isFocused}
                                         />
@@ -291,55 +288,6 @@ class ActivityFeed extends React.Component<Props, State> {
                             {this.renderInlineError(activeEntry)}
                         </ul>
                     )}
-
-                    {/* {isEmpty && !isLoading && (
-                        <ul className="bcs-activity-feed-active-state">
-                            <EmptyState showCommentMessage={showCommentForm} />
-                            {this.renderInlineError(activeEntry)}
-                        </ul>
-                    )}
-                    {!isEmpty && !isLoading && (
-                        <ul className="bcs-activity-feed-active-state">
-                            {collapseFeedState(feedItems).map((item: any) => {
-                                const { type, id } = item;
-                                const isFocused = item === activeEntry;
-                                const refValue = isFocused ? this.activeFeedItemRef : null;
-                                console.log('Line 245 refvalue: ', refValue);
-                                return (
-                                    <ActivityFeedItem
-                                        {...activityFeedError}
-                                        item={item}
-                                        isDisabled={isDisabled}
-                                        key={type + id}
-                                        currentUser={currentUser}
-                                        onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                                        onAppActivityDelete={onAppActivityDelete}
-                                        onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
-                                        onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
-                                        // We don't know task edit/delete specific permissions,
-                                        // but you must at least be able to comment to do these operations.
-                                        onTaskDelete={hasCommentPermission ? onTaskDelete : noop}
-                                        onTaskEdit={hasCommentPermission ? onTaskUpdate : noop}
-                                        onTaskModalClose={onTaskModalClose}
-                                        onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
-                                        translations={translations}
-                                        getAvatarUrl={getAvatarUrl}
-                                        getUserProfileUrl={getUserProfileUrl}
-                                        mentionSelectorContacts={mentionSelectorContacts}
-                                        getMentionWithQuery={getMentionWithQuery}
-                                        approverSelectorContacts={approverSelectorContacts}
-                                        getApproverWithQuery={getApproverWithQuery}
-                                        activeFeedEntryId={activeFeedEntryId}
-                                        activeFeedEntryType={activeFeedEntryType}
-                                        // ref={this.activeFeedItemRef}
-                                        activeFeedItemRef={refValue}
-                                        isFocused={isFocused}
-                                    />
-                                );
-                            })}
-                            {this.renderInlineError(activeEntry)}
-                        </ul>
-                    )} */}
                 </div>
                 {showCommentForm ? (
                     <CommentForm

@@ -18,7 +18,7 @@ import type { ContentSidebarProps } from '../src/elements/content-sidebar';
 import type { ContentOpenWithProps } from '../src/elements/content-open-with';
 import type { ContentPreviewProps } from '../src/elements/content-preview';
 import type { FeatureConfig } from '../src/elements/common/feature-checking';
-// import type { TaskNew } from '../src/common/types/tasks';
+import type { TaskNew } from '../src/common/types/tasks';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
@@ -755,9 +755,7 @@ type AppActivityItems = {
     entries: Array<AppActivityItem>,
     total_count: number,
 };
-type TaskNew = {
-    type: 'task',
-};
+
 type FeedItem = Comment | TaskNew | BoxItemVersion | AppActivityItem;
 type FeedItems = Array<FeedItem>;
 

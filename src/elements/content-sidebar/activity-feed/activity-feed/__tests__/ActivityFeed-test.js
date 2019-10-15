@@ -6,7 +6,9 @@ import { scrollIntoView } from '../../../../../utils/dom';
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 jest.mock('../../../../../utils/dom');
 jest.mock('../../Avatar', () => 'Avatar');
-jest.mock('../ActiveState', () => 'ActiveState');
+jest.mock('../ActivityFeedItem', () => 'ActivityFeedItem');
+
+const otherUser = { name: 'Akon', id: 11 };
 
 const comments = {
     total_count: 1,
@@ -19,6 +21,48 @@ const comments = {
             created_by: { name: 'Akon', id: 11 },
         },
     ],
+};
+
+const taskWithAssignment = {
+    type: 'task',
+    id: 't_345',
+    created_at: '2018-07-03T14:43:52-07:00',
+    created_by: otherUser,
+    modified_at: '2018-07-03T14:43:52-07:00',
+    description: 'test',
+    due_at: '2018-07-03T14:43:52-07:00',
+    assigned_to: {
+        entries: [
+            {
+                id: 'ta_123',
+                permissions: { can_delete: true, can_update: true },
+                role: 'ASSIGNEE',
+                status: 'NOT_STARTED',
+                target: otherUser,
+                type: 'task_collaborator',
+            },
+        ],
+        limit: 20,
+        next_marker: null,
+    },
+    status: 'NOT_STARTED',
+    permissions: {
+        can_create_task_collaborator: true,
+        can_create_task_link: true,
+        can_delete: true,
+        can_update: true,
+    },
+    task_type: 'GENERAL',
+    task_links: {
+        entries: [
+            {
+                target: {
+                    id: 'f_123',
+                    type: 'file',
+                },
+            },
+        ],
+    },
 };
 
 const first_version = {
@@ -105,7 +149,8 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         const wrapper = getWrapper({
             feedItems,
         });
-        expect(wrapper.find('ActiveState')).toHaveLength(1);
+
+        expect(wrapper.find('ActivityFeedItem')).toHaveLength(1);
     });
 
     test('should not expose add approval ui if task submit handler is not passed', () => {
@@ -217,7 +262,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(instance.feedContainer.scrollTop).toEqual(100);
     });
 
-    test('should pass activeFeedItemRef to the ActiveState', () => {
+    test('should pass activeFeedItemRef to the ActivityFeedItem', () => {
         const wrapper = getWrapper({
             activeFeedEntryId: comments.entries[0].id,
         });
@@ -226,7 +271,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             feedItems: [{ type: 'comment' }],
         });
 
-        expect(wrapper.find('ActiveState').prop('activeFeedItemRef')).toEqual(instance.activeFeedItemRef);
+        expect(wrapper.find('ActivityFeedItem').prop('activeFeedItemRef')).toEqual(instance.activeFeedItemRef);
     });
 
     test('should scroll to active feed item when activeFeedItemRef has a value', () => {
@@ -306,5 +351,47 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             },
         });
         expect(stopPropagationSpy).toHaveBeenCalled();
+    });
+
+    test('should correctly handle an inline error for when a comment id is invalid', () => {
+        const wrapper = getWrapper({
+            feedItems,
+            activeFeedEntryId: 'invalid id',
+            activeFeedEntryType: comments.entries[0].type,
+        });
+
+        expect(wrapper.exists('InlineError')).toBe(true);
+    });
+
+    test('should correctly handle an inline error for a task id being invalid', () => {
+        const wrapper = getWrapper({
+            feedItems,
+            activeFeedEntryId: 'invalid id',
+            activeFeedEntryType: taskWithAssignment.type,
+        });
+
+        expect(wrapper.exists('InlineError')).toBe(true);
+    });
+
+    test('should correctly handle inline error for when  deeplinked item is deleted and empty state occurs', () => {
+        const wrapper = getWrapper({
+            feedItems: [],
+            activeFeedEntryId: 'invalid id',
+            activeFeedEntryType: taskWithAssignment.type,
+        });
+
+        expect(wrapper.exists('EmptyState')).toBe(true);
+        expect(wrapper.exists('InlineError')).toBe(true);
+    });
+
+    test('should not render inline error if the type is invalid', () => {
+        const wrapper = getWrapper({
+            feedItems,
+            activeFeedEntryId: 0,
+            activeFeedEntryType: 'tasksss',
+        });
+
+        expect(wrapper.exists('InlineError')).toBe(false);
+        expect(wrapper.exists('ActivityFeedItem')).toBe(true);
     });
 });

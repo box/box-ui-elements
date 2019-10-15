@@ -1,0 +1,3374 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivityFeedItem/activity-feed/ActivityFeedItem should correctly render with an inline error if some feed items fail to fetch 1`] = `
+<Fragment>
+  <InlineError
+    title={
+      <FormattedMessage
+        0="t"
+      />
+    }
+  >
+    <FormattedMessage
+      0="m"
+    />
+  </InlineError>
+  <ActivityFeedItem
+    currentUser={
+      Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      }
+    }
+    item={Array []}
+  />
+</Fragment>
+`;
+
+exports[`elements/content-sidebar/ActivityFeedItem/activity-feed/ActivityFeedItem should render card for item type 1`] = `
+<Component
+  currentUser={
+    Object {
+      "id": "user_123445",
+      "name": "Rihanna",
+    }
+  }
+  item={
+    Object {
+      "created_at": "2018-07-03T14:43:52-07:00",
+      "created_by": Object {
+        "id": 11,
+        "name": "Akon",
+      },
+      "id": "c_123",
+      "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
+      "type": "comment",
+    }
+  }
+>
+  <ActivityFeedItem
+    currentUser={
+      Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      }
+    }
+    item={
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "id": "c_123",
+        "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
+        "type": "comment",
+      }
+    }
+  >
+    <li
+      className="bcs-activity-feed-comment"
+      data-testid="comment"
+    >
+      <Comment
+        created_at="2018-07-03T14:43:52-07:00"
+        created_by={
+          Object {
+            "id": 11,
+            "name": "Akon",
+          }
+        }
+        currentUser={
+          Object {
+            "id": "user_123445",
+            "name": "Rihanna",
+          }
+        }
+        id="c_123"
+        onDelete={[Function]}
+        onEdit={[Function]}
+        permissions={
+          Object {
+            "can_delete": false,
+            "can_edit": false,
+          }
+        }
+        tagged_message="test @[123:Jeezy] @[10:Kanye West]"
+        type="comment"
+      >
+        <div
+          className="bcs-Comment"
+        >
+          <Media
+            as="div"
+            className="bcs-Comment-media"
+          >
+            <div
+              className="bdl-Media bcs-Comment-media"
+            >
+              <MediaFigure
+                as="figure"
+              >
+                <figure
+                  className="bdl-Media-figure"
+                >
+                  <Avatar
+                    user={
+                      Object {
+                        "id": 11,
+                        "name": "Akon",
+                      }
+                    }
+                  >
+                    <Avatar
+                      avatarUrl={null}
+                      id={11}
+                      name="Akon"
+                    >
+                      <span
+                        className="avatar"
+                        role="presentation"
+                      >
+                        <AvatarInitials
+                          id={11}
+                          name="Akon"
+                        >
+                          <span
+                            className="avatar-initials "
+                            data-bg-idx={2}
+                          >
+                            AA
+                          </span>
+                        </AvatarInitials>
+                      </span>
+                    </Avatar>
+                  </Avatar>
+                </figure>
+              </MediaFigure>
+              <MediaBody>
+                <div
+                  className="bdl-Media-body"
+                >
+                  <div
+                    className="bcs-Comment-headline"
+                  >
+                    <UserLink
+                      data-resin-target="activityfeed-profilelink"
+                      id={11}
+                      name="Akon"
+                    >
+                      <span
+                        data-resin-target="activityfeed-profilelink"
+                        id={11}
+                      >
+                        Akon
+                      </span>
+                    </UserLink>
+                  </div>
+                  <div>
+                    <ActivityTimestamp
+                      date={1530654232000}
+                    >
+                      <Tooltip
+                        constrainToScrollParent={false}
+                        constrainToWindow={true}
+                        isDisabled={false}
+                        position="top-center"
+                        text={
+                          <FormattedMessage
+                            defaultMessage="{time, date, full} at {time, time, short}"
+                            id="be.activityFeed.fullDateTime"
+                            values={
+                              Object {
+                                "time": 1530654232000,
+                              }
+                            }
+                          />
+                        }
+                        theme="default"
+                      >
+                        <TetherComponent
+                          attachment="bottom center"
+                          bodyElement={<body />}
+                          classPrefix="tooltip"
+                          constraints={
+                            Array [
+                              Object {
+                                "attachment": "together",
+                                "to": "window",
+                              },
+                            ]
+                          }
+                          enabled={false}
+                          renderElementTag="div"
+                          renderElementTo={null}
+                          targetAttachment="top center"
+                        >
+                          <small
+                            className="bcs-ActivityTimestamp"
+                            key=".0"
+                            onBlur={[Function]}
+                            onFocus={[Function]}
+                            onKeyDown={[Function]}
+                            onMouseEnter={[Function]}
+                            onMouseLeave={[Function]}
+                            tabIndex="0"
+                          >
+                            <ReadableTime
+                              alwaysShowTime={true}
+                              relativeThreshold={0}
+                              timestamp={1530654232000}
+                            >
+                              <FormattedMessage
+                                defaultMessage="{time, date, medium} at {time, time, short}"
+                                id="boxui.readableTime.eventTimeDate"
+                                values={
+                                  Object {
+                                    "date": null,
+                                    "time": 1530654232000,
+                                    "weekday": null,
+                                  }
+                                }
+                              >
+                                <div />
+                              </FormattedMessage>
+                            </ReadableTime>
+                          </small>
+                        </TetherComponent>
+                      </Tooltip>
+                    </ActivityTimestamp>
+                  </div>
+                  <ActivityMessage
+                    id="c_123"
+                    tagged_message="test @[123:Jeezy] @[10:Kanye West]"
+                    translationEnabled={false}
+                    translationFailed={null}
+                  >
+                    <div
+                      className="bcs-ActivityMessage"
+                    >
+                      test 
+                      <UserLink
+                        className="bcs-comment-mention"
+                        data-resin-target="activityfeed-mentionlink"
+                        id="123"
+                        key="1-c_123"
+                        name="@Jeezy"
+                      >
+                        <span
+                          data-resin-target="activityfeed-mentionlink"
+                          id="123"
+                        >
+                          @Jeezy
+                        </span>
+                      </UserLink>
+                       
+                      <UserLink
+                        className="bcs-comment-mention"
+                        data-resin-target="activityfeed-mentionlink"
+                        id="10"
+                        key="3-c_123"
+                        name="@Kanye West"
+                      >
+                        <span
+                          data-resin-target="activityfeed-mentionlink"
+                          id="10"
+                        >
+                          @Kanye West
+                        </span>
+                      </UserLink>
+                    </div>
+                  </ActivityMessage>
+                </div>
+              </MediaBody>
+            </div>
+          </Media>
+        </div>
+      </Comment>
+    </li>
+  </ActivityFeedItem>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeedItem/activity-feed/ActivityFeedItem should render card for item type 2`] = `
+<Component
+  currentUser={
+    Object {
+      "id": "user_123445",
+      "name": "Rihanna",
+    }
+  }
+  item={
+    Object {
+      "assigned_to": Object {
+        "entries": Array [
+          Object {
+            "id": "ta_123",
+            "permissions": Object {
+              "can_delete": true,
+              "can_update": true,
+            },
+            "role": "ASSIGNEE",
+            "status": "NOT_STARTED",
+            "target": Object {
+              "id": 11,
+              "name": "Akon",
+            },
+            "type": "task_collaborator",
+          },
+        ],
+        "limit": 20,
+        "next_marker": null,
+      },
+      "created_at": "2018-07-03T14:43:52-07:00",
+      "created_by": Object {
+        "id": 11,
+        "name": "Akon",
+      },
+      "description": "test",
+      "due_at": "2018-07-03T14:43:52-07:00",
+      "id": "t_345",
+      "modified_at": "2018-07-03T14:43:52-07:00",
+      "permissions": Object {
+        "can_create_task_collaborator": true,
+        "can_create_task_link": true,
+        "can_delete": true,
+        "can_update": true,
+      },
+      "status": "NOT_STARTED",
+      "task_links": Object {
+        "entries": Array [
+          Object {
+            "target": Object {
+              "id": "f_123",
+              "type": "file",
+            },
+          },
+        ],
+      },
+      "task_type": "GENERAL",
+      "type": "task",
+    }
+  }
+>
+  <ActivityFeedItem
+    currentUser={
+      Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      }
+    }
+    item={
+      Object {
+        "assigned_to": Object {
+          "entries": Array [
+            Object {
+              "id": "ta_123",
+              "permissions": Object {
+                "can_delete": true,
+                "can_update": true,
+              },
+              "role": "ASSIGNEE",
+              "status": "NOT_STARTED",
+              "target": Object {
+                "id": 11,
+                "name": "Akon",
+              },
+              "type": "task_collaborator",
+            },
+          ],
+          "limit": 20,
+          "next_marker": null,
+        },
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "description": "test",
+        "due_at": "2018-07-03T14:43:52-07:00",
+        "id": "t_345",
+        "modified_at": "2018-07-03T14:43:52-07:00",
+        "permissions": Object {
+          "can_create_task_collaborator": true,
+          "can_create_task_link": true,
+          "can_delete": true,
+          "can_update": true,
+        },
+        "status": "NOT_STARTED",
+        "task_links": Object {
+          "entries": Array [
+            Object {
+              "target": Object {
+                "id": "f_123",
+                "type": "file",
+              },
+            },
+          ],
+        },
+        "task_type": "GENERAL",
+        "type": "task",
+      }
+    }
+  >
+    <li
+      className="bcs-activity-feed-task-new"
+      data-testid="task"
+    >
+      <ForwardRef
+        assigned_to={
+          Object {
+            "entries": Array [
+              Object {
+                "id": "ta_123",
+                "permissions": Object {
+                  "can_delete": true,
+                  "can_update": true,
+                },
+                "role": "ASSIGNEE",
+                "status": "NOT_STARTED",
+                "target": Object {
+                  "id": 11,
+                  "name": "Akon",
+                },
+                "type": "task_collaborator",
+              },
+            ],
+            "limit": 20,
+            "next_marker": null,
+          }
+        }
+        created_at="2018-07-03T14:43:52-07:00"
+        created_by={
+          Object {
+            "id": 11,
+            "name": "Akon",
+          }
+        }
+        currentUser={
+          Object {
+            "id": "user_123445",
+            "name": "Rihanna",
+          }
+        }
+        description="test"
+        due_at="2018-07-03T14:43:52-07:00"
+        id="t_345"
+        modified_at="2018-07-03T14:43:52-07:00"
+        permissions={
+          Object {
+            "can_create_task_collaborator": true,
+            "can_create_task_link": true,
+            "can_delete": true,
+            "can_update": true,
+          }
+        }
+        status="NOT_STARTED"
+        task_links={
+          Object {
+            "entries": Array [
+              Object {
+                "target": Object {
+                  "id": "f_123",
+                  "type": "file",
+                },
+              },
+            ],
+          }
+        }
+        task_type="GENERAL"
+        type="task"
+      >
+        <ForwardRef(withFeatureConsumer(Task))
+          assigned_to={
+            Object {
+              "entries": Array [
+                Object {
+                  "id": "ta_123",
+                  "permissions": Object {
+                    "can_delete": true,
+                    "can_update": true,
+                  },
+                  "role": "ASSIGNEE",
+                  "status": "NOT_STARTED",
+                  "target": Object {
+                    "id": 11,
+                    "name": "Akon",
+                  },
+                  "type": "task_collaborator",
+                },
+              ],
+              "limit": 20,
+              "next_marker": null,
+            }
+          }
+          created_at="2018-07-03T14:43:52-07:00"
+          created_by={
+            Object {
+              "id": 11,
+              "name": "Akon",
+            }
+          }
+          currentUser={
+            Object {
+              "id": "user_123445",
+              "name": "Rihanna",
+            }
+          }
+          description="test"
+          due_at="2018-07-03T14:43:52-07:00"
+          id="t_345"
+          modified_at="2018-07-03T14:43:52-07:00"
+          permissions={
+            Object {
+              "can_create_task_collaborator": true,
+              "can_create_task_link": true,
+              "can_delete": true,
+              "can_update": true,
+            }
+          }
+          status="NOT_STARTED"
+          task_links={
+            Object {
+              "entries": Array [
+                Object {
+                  "target": Object {
+                    "id": "f_123",
+                    "type": "file",
+                  },
+                },
+              ],
+            }
+          }
+          task_type="GENERAL"
+          type="task"
+        >
+          <Task
+            assigned_to={
+              Object {
+                "entries": Array [
+                  Object {
+                    "id": "ta_123",
+                    "permissions": Object {
+                      "can_delete": true,
+                      "can_update": true,
+                    },
+                    "role": "ASSIGNEE",
+                    "status": "NOT_STARTED",
+                    "target": Object {
+                      "id": 11,
+                      "name": "Akon",
+                    },
+                    "type": "task_collaborator",
+                  },
+                ],
+                "limit": 20,
+                "next_marker": null,
+              }
+            }
+            completion_rule="ALL_ASSIGNEES"
+            created_at="2018-07-03T14:43:52-07:00"
+            created_by={
+              Object {
+                "id": 11,
+                "name": "Akon",
+              }
+            }
+            currentUser={
+              Object {
+                "id": "user_123445",
+                "name": "Rihanna",
+              }
+            }
+            description="test"
+            due_at="2018-07-03T14:43:52-07:00"
+            features={Object {}}
+            id="t_345"
+            modified_at="2018-07-03T14:43:52-07:00"
+            permissions={
+              Object {
+                "can_create_task_collaborator": true,
+                "can_create_task_link": true,
+                "can_delete": true,
+                "can_update": true,
+              }
+            }
+            status="NOT_STARTED"
+            task_links={
+              Object {
+                "entries": Array [
+                  Object {
+                    "target": Object {
+                      "id": "f_123",
+                      "type": "file",
+                    },
+                  },
+                ],
+              }
+            }
+            task_type="GENERAL"
+            type="task"
+          >
+            <div
+              className="bcs-Task"
+            >
+              <Media
+                as="div"
+                className="bcs-Task-media"
+                data-testid="task-card"
+              >
+                <div
+                  className="bdl-Media bcs-Task-media"
+                  data-testid="task-card"
+                >
+                  <MediaFigure
+                    as="figure"
+                    className="bcs-Task-avatar"
+                  >
+                    <figure
+                      className="bdl-Media-figure bcs-Task-avatar"
+                    >
+                      <Avatar
+                        user={
+                          Object {
+                            "id": "2",
+                            "name": "",
+                            "type": "user",
+                          }
+                        }
+                      >
+                        <Avatar
+                          avatarUrl={null}
+                          id="2"
+                          name=""
+                        >
+                          <span
+                            className="avatar"
+                            role="presentation"
+                          >
+                            <UnknownUserAvatar
+                              className="avatar-icon"
+                              height={28}
+                              width={28}
+                            >
+                              <AccessibleSVG
+                                className="unknown-user-avatar avatar-icon"
+                                height={28}
+                                viewBox="0 0 28 28"
+                                width={28}
+                              >
+                                <svg
+                                  className="unknown-user-avatar avatar-icon"
+                                  focusable="false"
+                                  height={28}
+                                  role="presentation"
+                                  viewBox="0 0 28 28"
+                                  width={28}
+                                >
+                                  <defs>
+                                    <circle
+                                      cx="14"
+                                      cy="14"
+                                      id="unknown-user-avatar2-a"
+                                      r="14"
+                                    />
+                                  </defs>
+                                  <g
+                                    fill="none"
+                                    fillRule="evenodd"
+                                  >
+                                    <use
+                                      className="background-fill-color"
+                                      fill="#EDEDED"
+                                      xlinkHref="#unknown-user-avatar2-a"
+                                    />
+                                    <path
+                                      className="fill-color"
+                                      d="M5.5 25.1C6.7 21 10 18 14 18s7.3 3 8.5 7.1a14 14 0 0 1-17 0zM14 16a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"
+                                      fill="#C3C3C3"
+                                    />
+                                  </g>
+                                </svg>
+                              </AccessibleSVG>
+                            </UnknownUserAvatar>
+                          </span>
+                        </Avatar>
+                      </Avatar>
+                      <IconTaskGeneral
+                        className="bcs-Task-avatarBadge"
+                        height={20}
+                        width={20}
+                      >
+                        <AccessibleSVG
+                          className="bdl-IconTaskGeneral bcs-Task-avatarBadge"
+                          height={20}
+                          viewBox="0 0 32 32"
+                          width={20}
+                        >
+                          <svg
+                            className="bdl-IconTaskGeneral bcs-Task-avatarBadge"
+                            focusable="false"
+                            height={20}
+                            role="presentation"
+                            viewBox="0 0 32 32"
+                            width={20}
+                          >
+                            <g
+                              fill="none"
+                              fillRule="nonzero"
+                            >
+                              <circle
+                                className="background-color"
+                                cx="16.162"
+                                cy="16.162"
+                                fill="#0061d5"
+                                r="16"
+                              />
+                              <path
+                                className="foreground-color"
+                                d="M11.717 8.162v.889c0 1.472.995 2.666 2.222 2.666h4.445c1.227 0 2.222-1.194 2.222-2.666v-.89h1.281c.766 0 1.386.62 1.386 1.386v13.23c0 .764-.62 1.385-1.386 1.385H10.436c-.765 0-1.385-.62-1.385-1.386V9.546c0-.764.62-1.384 1.385-1.384h1.281zm6.463 6.503l-2.741 2.924-1.354-1.203a.889.889 0 1 0-1.18 1.329l2 1.778c.36.32.909.295 1.238-.057l3.334-3.555a.889.889 0 1 0-1.297-1.216zm-4.981-6.503h5.926v.889c0 .49-.332.888-.741.888h-4.445c-.409 0-.74-.398-.74-.888v-.89z"
+                                fill="#fff"
+                              />
+                            </g>
+                          </svg>
+                        </AccessibleSVG>
+                      </IconTaskGeneral>
+                    </figure>
+                  </MediaFigure>
+                  <MediaBody>
+                    <div
+                      className="bdl-Media-body"
+                    >
+                      <TetherComponent
+                        attachment="top right"
+                        className="bcs-Task-deleteConfirmationModal"
+                        constraints={
+                          Array [
+                            Object {
+                              "attachment": "together",
+                              "to": "scrollParent",
+                            },
+                          ]
+                        }
+                        renderElementTag="div"
+                        renderElementTo={null}
+                        targetAttachment="bottom right"
+                      >
+                        <MediaMenu
+                          data-testid="task-actions-menu"
+                          dropdownProps={Object {}}
+                          isDisabled={false}
+                          key=".0"
+                          menuProps={
+                            Object {
+                              "data-resin-component": "activityfeedtask",
+                            }
+                          }
+                        >
+                          <DropdownMenu
+                            constrainToScrollParent={true}
+                            constrainToWindow={false}
+                            isRightAligned={true}
+                          >
+                            <TetherComponent
+                              attachment="top right"
+                              bodyElement={<body />}
+                              classPrefix="dropdown-menu"
+                              constraints={
+                                Array [
+                                  Object {
+                                    "attachment": "together",
+                                    "to": "scrollParent",
+                                  },
+                                ]
+                              }
+                              enabled={false}
+                              renderElementTag="div"
+                              renderElementTo={null}
+                              targetAttachment="bottom right"
+                            >
+                              <PlainButton
+                                aria-expanded="false"
+                                aria-haspopup="true"
+                                className="bdl-Media-menu"
+                                data-testid="task-actions-menu"
+                                id="menubutton6"
+                                isDisabled={false}
+                                key=".$menubutton6"
+                                onClick={[Function]}
+                                onKeyDown={[Function]}
+                                type="button"
+                              >
+                                <button
+                                  aria-expanded="false"
+                                  aria-haspopup="true"
+                                  className="btn-plain bdl-Media-menu"
+                                  data-testid="task-actions-menu"
+                                  id="menubutton6"
+                                  onClick={[Function]}
+                                  onKeyDown={[Function]}
+                                  type="button"
+                                >
+                                  <IconEllipsis
+                                    color="#909090"
+                                    height={16}
+                                    width={16}
+                                  >
+                                    <AccessibleSVG
+                                      className="icon-ellipsis "
+                                      height={16}
+                                      viewBox="0 0 10 2"
+                                      width={16}
+                                    >
+                                      <svg
+                                        className="icon-ellipsis "
+                                        focusable="false"
+                                        height={16}
+                                        role="presentation"
+                                        viewBox="0 0 10 2"
+                                        width={16}
+                                      >
+                                        <path
+                                          className="fill-color"
+                                          d="M1 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zm8 0c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zM5 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1z"
+                                          fill="#909090"
+                                          fillRule="evenodd"
+                                        />
+                                      </svg>
+                                    </AccessibleSVG>
+                                  </IconEllipsis>
+                                </button>
+                              </PlainButton>
+                            </TetherComponent>
+                          </DropdownMenu>
+                        </MediaMenu>
+                      </TetherComponent>
+                      <div
+                        className="bcs-Task-headline"
+                      >
+                        <FormattedMessage
+                          defaultMessage="{user} assigned a Task"
+                          id="be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineGeneral"
+                          values={
+                            Object {
+                              "user": <UserLink
+                                data-resin-target="activityfeed-profilelink"
+                                id="2"
+                                name=""
+                                type="user"
+                              />,
+                            }
+                          }
+                        >
+                          <div />
+                        </FormattedMessage>
+                      </div>
+                      <div>
+                        <ActivityTimestamp
+                          date={1530654232000}
+                        >
+                          <Tooltip
+                            constrainToScrollParent={false}
+                            constrainToWindow={true}
+                            isDisabled={false}
+                            position="top-center"
+                            text={
+                              <FormattedMessage
+                                defaultMessage="{time, date, full} at {time, time, short}"
+                                id="be.activityFeed.fullDateTime"
+                                values={
+                                  Object {
+                                    "time": 1530654232000,
+                                  }
+                                }
+                              />
+                            }
+                            theme="default"
+                          >
+                            <TetherComponent
+                              attachment="bottom center"
+                              bodyElement={<body />}
+                              classPrefix="tooltip"
+                              constraints={
+                                Array [
+                                  Object {
+                                    "attachment": "together",
+                                    "to": "window",
+                                  },
+                                ]
+                              }
+                              enabled={false}
+                              renderElementTag="div"
+                              renderElementTo={null}
+                              targetAttachment="top center"
+                            >
+                              <small
+                                className="bcs-ActivityTimestamp"
+                                key=".0"
+                                onBlur={[Function]}
+                                onFocus={[Function]}
+                                onKeyDown={[Function]}
+                                onMouseEnter={[Function]}
+                                onMouseLeave={[Function]}
+                                tabIndex="0"
+                              >
+                                <ReadableTime
+                                  alwaysShowTime={true}
+                                  relativeThreshold={0}
+                                  timestamp={1530654232000}
+                                >
+                                  <FormattedMessage
+                                    defaultMessage="{time, date, medium} at {time, time, short}"
+                                    id="boxui.readableTime.eventTimeDate"
+                                    values={
+                                      Object {
+                                        "date": null,
+                                        "time": 1530654232000,
+                                        "weekday": null,
+                                      }
+                                    }
+                                  >
+                                    <div />
+                                  </FormattedMessage>
+                                </ReadableTime>
+                              </small>
+                            </TetherComponent>
+                          </Tooltip>
+                        </ActivityTimestamp>
+                      </div>
+                      <div>
+                        <ActivityMessage
+                          id="t_345"
+                          tagged_message="test"
+                          translationEnabled={false}
+                          translationFailed={null}
+                        >
+                          <div
+                            className="bcs-ActivityMessage"
+                          >
+                            test
+                          </div>
+                        </ActivityMessage>
+                      </div>
+                      <div
+                        className="bcs-Task-statusContainer"
+                      >
+                        <TaskDueDate
+                          dueDate="2018-07-03T14:43:52-07:00"
+                          status="NOT_STARTED"
+                        >
+                          <div
+                            className="bcs-TaskDueDate bcs-is-taskOverdue"
+                            data-testid="task-due-date"
+                          >
+                            <FormattedMessage
+                              defaultMessage="Due: {date}"
+                              id="be.contentSidebar.activityFeed.taskNew.taskDueDateLabel"
+                              values={
+                                Object {
+                                  "date": <ReadableTime
+                                    alwaysShowTime={true}
+                                    timestamp={1530654232000}
+                                  />,
+                                }
+                              }
+                            >
+                              <div />
+                            </FormattedMessage>
+                          </div>
+                        </TaskDueDate>
+                        <Component
+                          status="NOT_STARTED"
+                        >
+                          <FormattedMessage
+                            defaultMessage="Status: {taskStatus}"
+                            id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
+                            values={
+                              Object {
+                                "taskStatus": <span
+                                  className="bcs-TaskStatus-message notStarted"
+                                >
+                                  <FormattedMessage
+                                    defaultMessage="In Progress"
+                                    id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressLabel"
+                                  />
+                                </span>,
+                              }
+                            }
+                          >
+                            <div />
+                          </FormattedMessage>
+                        </Component>
+                        <TaskCompletionRuleIcon
+                          completionRule="ALL_ASSIGNEES"
+                        />
+                      </div>
+                      <div
+                        className="bcs-Task-assigneeListContainer"
+                      >
+                        <AssigneeList
+                          initialAssigneeCount={3}
+                          isOpen={false}
+                          onCollapse={[Function]}
+                          onExpand={[Function]}
+                          users={
+                            Object {
+                              "entries": Array [
+                                Object {
+                                  "id": "ta_123",
+                                  "permissions": Object {
+                                    "can_delete": true,
+                                    "can_update": true,
+                                  },
+                                  "role": "ASSIGNEE",
+                                  "status": "NOT_STARTED",
+                                  "target": Object {
+                                    "id": 11,
+                                    "name": "Akon",
+                                  },
+                                  "type": "task_collaborator",
+                                },
+                              ],
+                              "limit": 20,
+                              "next_marker": null,
+                            }
+                          }
+                        >
+                          <div
+                            className="bcs-AssigneeList"
+                          >
+                            <ul
+                              className="bcs-AssigneeList-list"
+                              data-testid="task-assignee-list"
+                            >
+                              <li
+                                className="bcs-AssigneeList-listItem"
+                                data-testid="assignee-list-item"
+                                key="ta_123"
+                              >
+                                <Component
+                                  className="bcs-AssigneeList-listItemAvatar"
+                                  status="NOT_STARTED"
+                                  user={
+                                    Object {
+                                      "id": 11,
+                                      "name": "Akon",
+                                    }
+                                  }
+                                >
+                                  <div
+                                    className="bcs-AvatarGroupAvatar bcs-AssigneeList-listItemAvatar"
+                                    data-testid="avatar-group-avatar-container"
+                                  >
+                                    <Avatar
+                                      className="bcs-AvatarGroupAvatar-avatar"
+                                      user={
+                                        Object {
+                                          "id": 11,
+                                          "name": "Akon",
+                                        }
+                                      }
+                                    >
+                                      <Avatar
+                                        avatarUrl={null}
+                                        className="bcs-AvatarGroupAvatar-avatar"
+                                        id={11}
+                                        name="Akon"
+                                      >
+                                        <span
+                                          className="avatar bcs-AvatarGroupAvatar-avatar"
+                                          role="presentation"
+                                        >
+                                          <AvatarInitials
+                                            id={11}
+                                            name="Akon"
+                                          >
+                                            <span
+                                              className="avatar-initials "
+                                              data-bg-idx={2}
+                                            >
+                                              AA
+                                            </span>
+                                          </AvatarInitials>
+                                        </span>
+                                      </Avatar>
+                                    </Avatar>
+                                    <StatusIcon
+                                      className="bcs-AvatarGroupAvatar-statusIcon notStarted"
+                                      height={12}
+                                      status="NOT_STARTED"
+                                      title={
+                                        <FormattedMessage
+                                          defaultMessage="Completed"
+                                          id="be.contentSidebar.activityFeed.taskNew.taskAssignmentCompleted"
+                                        />
+                                      }
+                                      width={12}
+                                    />
+                                  </div>
+                                </Component>
+                                <Component
+                                  status="NOT_STARTED"
+                                  user={
+                                    Object {
+                                      "id": 11,
+                                      "name": "Akon",
+                                    }
+                                  }
+                                >
+                                  <div
+                                    className="bcs-AssigneeDetails"
+                                  >
+                                    <div>
+                                      Akon
+                                    </div>
+                                  </div>
+                                </Component>
+                              </li>
+                            </ul>
+                          </div>
+                        </AssigneeList>
+                      </div>
+                    </div>
+                  </MediaBody>
+                </div>
+              </Media>
+              <TaskModal
+                editMode="EDIT"
+                feedbackUrl=""
+                isTaskFormOpen={false}
+                onModalClose={[Function]}
+                onSubmitError={[Function]}
+                onSubmitSuccess={[Function]}
+                taskFormProps={
+                  Object {
+                    "approverSelectorContacts": undefined,
+                    "approvers": Array [
+                      Object {
+                        "id": "ta_123",
+                        "permissions": Object {
+                          "can_delete": true,
+                          "can_update": true,
+                        },
+                        "role": "ASSIGNEE",
+                        "status": "NOT_STARTED",
+                        "target": Object {
+                          "id": 11,
+                          "name": "Akon",
+                        },
+                        "type": "task_collaborator",
+                      },
+                    ],
+                    "completionRule": "ALL_ASSIGNEES",
+                    "createTask": [Function],
+                    "dueDate": "2018-07-03T14:43:52-07:00",
+                    "editTask": undefined,
+                    "getApproverWithQuery": undefined,
+                    "getAvatarUrl": undefined,
+                    "id": "t_345",
+                    "message": "test",
+                  }
+                }
+                taskType="GENERAL"
+              >
+                <Modal
+                  className="be-modal task-modal"
+                  data-testid="create-task-modal"
+                  focusElementSelector=".task-modal textarea, .task-modal input"
+                  isOpen={false}
+                  onRequestClose={[Function]}
+                  style={
+                    Object {
+                      "backdrop": Object {},
+                      "dialog": Object {},
+                    }
+                  }
+                  title={
+                    <FormattedMessage
+                      defaultMessage="Modify General Task"
+                      id="be.contentSidebar.editTask.general.title"
+                    />
+                  }
+                />
+              </TaskModal>
+            </div>
+          </Task>
+        </ForwardRef(withFeatureConsumer(Task))>
+      </ForwardRef>
+    </li>
+  </ActivityFeedItem>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeedItem/activity-feed/ActivityFeedItem should render card for item type 3`] = `
+<Component
+  currentUser={
+    Object {
+      "id": "user_123445",
+      "name": "Rihanna",
+    }
+  }
+  item={
+    Object {
+      "created_at": "2018-07-03T14:43:52-07:00",
+      "id": "f_123",
+      "modified_at": "2018-07-03T14:43:52-07:00",
+      "modified_by": Object {
+        "id": 11,
+        "name": "Akon",
+      },
+      "trashed_at": "2018-07-03T14:43:52-07:00",
+      "type": "file_version",
+    }
+  }
+>
+  <ActivityFeedItem
+    currentUser={
+      Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      }
+    }
+    item={
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "id": "f_123",
+        "modified_at": "2018-07-03T14:43:52-07:00",
+        "modified_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "trashed_at": "2018-07-03T14:43:52-07:00",
+        "type": "file_version",
+      }
+    }
+  >
+    <li
+      className="bcs-version-item"
+      data-testid="version"
+      key="file_versionf_123"
+    >
+      <Version
+        created_at="2018-07-03T14:43:52-07:00"
+        id="f_123"
+        modified_at="2018-07-03T14:43:52-07:00"
+        modified_by={
+          Object {
+            "id": 11,
+            "name": "Akon",
+          }
+        }
+        trashed_at="2018-07-03T14:43:52-07:00"
+        type="file_version"
+      >
+        <Version
+          created_at="2018-07-03T14:43:52-07:00"
+          id="f_123"
+          intl={
+            Object {
+              "formatDate": [Function],
+              "formatMessage": [Function],
+            }
+          }
+          modified_at="2018-07-03T14:43:52-07:00"
+          modified_by={
+            Object {
+              "id": 11,
+              "name": "Akon",
+            }
+          }
+          trashed_at="2018-07-03T14:43:52-07:00"
+          type="file_version"
+        >
+          <div
+            className="bcs-Version"
+          >
+            <span
+              className="bcs-Version-message"
+            >
+              <FormattedMessage
+                defaultMessage="{name} deleted v{version_number}"
+                id="be.versionDeleted"
+                values={
+                  Object {
+                    "name": <strong>
+                      Akon
+                    </strong>,
+                    "version_number": undefined,
+                    "version_promoted": undefined,
+                  }
+                }
+              >
+                <div />
+              </FormattedMessage>
+            </span>
+          </div>
+        </Version>
+      </Version>
+    </li>
+  </ActivityFeedItem>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeedItem/activity-feed/ActivityFeedItem should render card for item type 4`] = `
+<Component
+  currentUser={
+    Object {
+      "id": "user_123445",
+      "name": "Rihanna",
+    }
+  }
+  item={
+    Object {
+      "activity_template": Object {
+        "id": "template_09887654",
+      },
+      "app": Object {
+        "icon_url": "foo.jpg",
+        "id": "app_123456",
+        "name": "My App",
+      },
+      "created_at": "2018-07-03T14:43:52-07:00",
+      "created_by": Object {
+        "id": "user_12345567",
+      },
+      "currentUser": Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      },
+      "id": "app_activity_12344556",
+      "permissions": Object {
+        "can_delete": true,
+      },
+      "rendered_text": "this is text and a <a>link</a>",
+      "type": "app_activity",
+    }
+  }
+>
+  <ActivityFeedItem
+    currentUser={
+      Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      }
+    }
+    item={
+      Object {
+        "activity_template": Object {
+          "id": "template_09887654",
+        },
+        "app": Object {
+          "icon_url": "foo.jpg",
+          "id": "app_123456",
+          "name": "My App",
+        },
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": "user_12345567",
+        },
+        "currentUser": Object {
+          "id": "user_123445",
+          "name": "Rihanna",
+        },
+        "id": "app_activity_12344556",
+        "permissions": Object {
+          "can_delete": true,
+        },
+        "rendered_text": "this is text and a <a>link</a>",
+        "type": "app_activity",
+      }
+    }
+  >
+    <li
+      className="bcs-activity-feed-app-activity"
+      data-testid="app-activity"
+      key="app_activityapp_activity_12344556"
+    >
+      <AppActivity
+        activity_template={
+          Object {
+            "id": "template_09887654",
+          }
+        }
+        app={
+          Object {
+            "icon_url": "foo.jpg",
+            "id": "app_123456",
+            "name": "My App",
+          }
+        }
+        created_at="2018-07-03T14:43:52-07:00"
+        created_by={
+          Object {
+            "id": "user_12345567",
+          }
+        }
+        currentUser={
+          Object {
+            "id": "user_123445",
+            "name": "Rihanna",
+          }
+        }
+        id="app_activity_12344556"
+        permissions={
+          Object {
+            "can_delete": true,
+          }
+        }
+        rendered_text="this is text and a <a>link</a>"
+        type="app_activity"
+      >
+        <AppActivity
+          activity_template={
+            Object {
+              "id": "template_09887654",
+            }
+          }
+          app={
+            Object {
+              "icon_url": "foo.jpg",
+              "id": "app_123456",
+              "name": "My App",
+            }
+          }
+          created_at="2018-07-03T14:43:52-07:00"
+          created_by={
+            Object {
+              "id": "user_12345567",
+            }
+          }
+          currentUser={
+            Object {
+              "id": "user_123445",
+              "name": "Rihanna",
+            }
+          }
+          id="app_activity_12344556"
+          intl={
+            Object {
+              "formatDate": [Function],
+              "formatMessage": [Function],
+            }
+          }
+          onDelete={[Function]}
+          permissions={
+            Object {
+              "can_delete": true,
+            }
+          }
+          rendered_text="this is text and a <a>link</a>"
+          type="app_activity"
+        >
+          <Media
+            as="div"
+            className="bcs-AppActivity"
+            data-resin-feature="appActivityCardtemplate_09887654"
+            data-resin-target="loaded"
+          >
+            <div
+              className="bdl-Media bcs-AppActivity"
+              data-resin-feature="appActivityCardtemplate_09887654"
+              data-resin-target="loaded"
+            >
+              <MediaFigure
+                as="figure"
+              >
+                <figure
+                  className="bdl-Media-figure"
+                >
+                  <img
+                    alt="My App Icon"
+                    className="bcs-AppActivity-icon"
+                    src="foo.jpg"
+                  />
+                </figure>
+              </MediaFigure>
+              <MediaBody
+                className="bcs-AppActivity-body"
+              >
+                <div
+                  className="bdl-Media-body bcs-AppActivity-body"
+                >
+                  <TetherComponent
+                    attachment="top right"
+                    className="bcs-AppActivity-confirm"
+                    constraints={
+                      Array [
+                        Object {
+                          "attachment": "together",
+                          "to": "scrollParent",
+                        },
+                      ]
+                    }
+                    renderElementTag="div"
+                    renderElementTo={null}
+                    targetAttachment="bottom right"
+                  >
+                    <MediaMenu
+                      dropdownProps={Object {}}
+                      isDisabled={false}
+                      key=".0"
+                      menuProps={Object {}}
+                    >
+                      <DropdownMenu
+                        constrainToScrollParent={true}
+                        constrainToWindow={false}
+                        isRightAligned={true}
+                      >
+                        <TetherComponent
+                          attachment="top right"
+                          bodyElement={<body />}
+                          classPrefix="dropdown-menu"
+                          constraints={
+                            Array [
+                              Object {
+                                "attachment": "together",
+                                "to": "scrollParent",
+                              },
+                            ]
+                          }
+                          enabled={false}
+                          renderElementTag="div"
+                          renderElementTo={null}
+                          targetAttachment="bottom right"
+                        >
+                          <PlainButton
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            className="bdl-Media-menu"
+                            id="menubutton10"
+                            isDisabled={false}
+                            key=".$menubutton10"
+                            onClick={[Function]}
+                            onKeyDown={[Function]}
+                            type="button"
+                          >
+                            <button
+                              aria-expanded="false"
+                              aria-haspopup="true"
+                              className="btn-plain bdl-Media-menu"
+                              id="menubutton10"
+                              onClick={[Function]}
+                              onKeyDown={[Function]}
+                              type="button"
+                            >
+                              <IconEllipsis
+                                color="#909090"
+                                height={16}
+                                width={16}
+                              >
+                                <AccessibleSVG
+                                  className="icon-ellipsis "
+                                  height={16}
+                                  viewBox="0 0 10 2"
+                                  width={16}
+                                >
+                                  <svg
+                                    className="icon-ellipsis "
+                                    focusable="false"
+                                    height={16}
+                                    role="presentation"
+                                    viewBox="0 0 10 2"
+                                    width={16}
+                                  >
+                                    <path
+                                      className="fill-color"
+                                      d="M1 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zm8 0c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zM5 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1z"
+                                      fill="#909090"
+                                      fillRule="evenodd"
+                                    />
+                                  </svg>
+                                </AccessibleSVG>
+                              </IconEllipsis>
+                            </button>
+                          </PlainButton>
+                        </TetherComponent>
+                      </DropdownMenu>
+                    </MediaMenu>
+                  </TetherComponent>
+                  <figcaption
+                    className="bcs-AppActivity-headline"
+                  >
+                    My App
+                  </figcaption>
+                  <div>
+                    <ActivityTimestamp
+                      date={1530654232000}
+                    >
+                      <Tooltip
+                        constrainToScrollParent={false}
+                        constrainToWindow={true}
+                        isDisabled={false}
+                        position="top-center"
+                        text={
+                          <FormattedMessage
+                            defaultMessage="{time, date, full} at {time, time, short}"
+                            id="be.activityFeed.fullDateTime"
+                            values={
+                              Object {
+                                "time": 1530654232000,
+                              }
+                            }
+                          />
+                        }
+                        theme="default"
+                      >
+                        <TetherComponent
+                          attachment="bottom center"
+                          bodyElement={<body />}
+                          classPrefix="tooltip"
+                          constraints={
+                            Array [
+                              Object {
+                                "attachment": "together",
+                                "to": "window",
+                              },
+                            ]
+                          }
+                          enabled={false}
+                          renderElementTag="div"
+                          renderElementTo={null}
+                          targetAttachment="top center"
+                        >
+                          <small
+                            className="bcs-ActivityTimestamp"
+                            key=".0"
+                            onBlur={[Function]}
+                            onFocus={[Function]}
+                            onKeyDown={[Function]}
+                            onMouseEnter={[Function]}
+                            onMouseLeave={[Function]}
+                            tabIndex="0"
+                          >
+                            <ReadableTime
+                              alwaysShowTime={true}
+                              relativeThreshold={0}
+                              timestamp={1530654232000}
+                            >
+                              <FormattedMessage
+                                defaultMessage="{time, date, medium} at {time, time, short}"
+                                id="boxui.readableTime.eventTimeDate"
+                                values={
+                                  Object {
+                                    "date": null,
+                                    "time": 1530654232000,
+                                    "weekday": null,
+                                  }
+                                }
+                              >
+                                <div />
+                              </FormattedMessage>
+                            </ReadableTime>
+                          </small>
+                        </TetherComponent>
+                      </Tooltip>
+                    </ActivityTimestamp>
+                  </div>
+                  this is text and a 
+                  <Link
+                    className="bcs-AppActivity-link"
+                    href=""
+                    key="app_actvity_link_"
+                    rel="roreferrer noopener"
+                    target="_blank"
+                  >
+                    <LinkBase
+                      className="link bcs-AppActivity-link"
+                      href=""
+                      rel="roreferrer noopener"
+                      target="_blank"
+                    >
+                      <a
+                        className="link bcs-AppActivity-link"
+                        href=""
+                        rel="roreferrer noopener"
+                        target="_blank"
+                      >
+                        link
+                      </a>
+                    </LinkBase>
+                  </Link>
+                </div>
+              </MediaBody>
+            </div>
+          </Media>
+        </AppActivity>
+      </AppActivity>
+    </li>
+  </ActivityFeedItem>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeedItem/activity-feed/ActivityFeedItem should render items 1`] = `
+<Component
+  currentUser={
+    Object {
+      "id": "user_123445",
+      "name": "Rihanna",
+    }
+  }
+  item={
+    Object {
+      "created_at": "2018-07-03T14:43:52-07:00",
+      "created_by": Object {
+        "id": 11,
+        "name": "Akon",
+      },
+      "id": "c_123",
+      "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
+      "type": "comment",
+    }
+  }
+>
+  <ActivityFeedItem
+    currentUser={
+      Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      }
+    }
+    item={
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "id": "c_123",
+        "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
+        "type": "comment",
+      }
+    }
+  >
+    <li
+      className="bcs-activity-feed-comment"
+      data-testid="comment"
+    >
+      <Comment
+        created_at="2018-07-03T14:43:52-07:00"
+        created_by={
+          Object {
+            "id": 11,
+            "name": "Akon",
+          }
+        }
+        currentUser={
+          Object {
+            "id": "user_123445",
+            "name": "Rihanna",
+          }
+        }
+        id="c_123"
+        onDelete={[Function]}
+        onEdit={[Function]}
+        permissions={
+          Object {
+            "can_delete": false,
+            "can_edit": false,
+          }
+        }
+        tagged_message="test @[123:Jeezy] @[10:Kanye West]"
+        type="comment"
+      >
+        <div
+          className="bcs-Comment"
+        >
+          <Media
+            as="div"
+            className="bcs-Comment-media"
+          >
+            <div
+              className="bdl-Media bcs-Comment-media"
+            >
+              <MediaFigure
+                as="figure"
+              >
+                <figure
+                  className="bdl-Media-figure"
+                >
+                  <Avatar
+                    user={
+                      Object {
+                        "id": 11,
+                        "name": "Akon",
+                      }
+                    }
+                  >
+                    <Avatar
+                      avatarUrl={null}
+                      id={11}
+                      name="Akon"
+                    >
+                      <span
+                        className="avatar"
+                        role="presentation"
+                      >
+                        <AvatarInitials
+                          id={11}
+                          name="Akon"
+                        >
+                          <span
+                            className="avatar-initials "
+                            data-bg-idx={2}
+                          >
+                            AA
+                          </span>
+                        </AvatarInitials>
+                      </span>
+                    </Avatar>
+                  </Avatar>
+                </figure>
+              </MediaFigure>
+              <MediaBody>
+                <div
+                  className="bdl-Media-body"
+                >
+                  <div
+                    className="bcs-Comment-headline"
+                  >
+                    <UserLink
+                      data-resin-target="activityfeed-profilelink"
+                      id={11}
+                      name="Akon"
+                    >
+                      <span
+                        data-resin-target="activityfeed-profilelink"
+                        id={11}
+                      >
+                        Akon
+                      </span>
+                    </UserLink>
+                  </div>
+                  <div>
+                    <ActivityTimestamp
+                      date={1530654232000}
+                    >
+                      <Tooltip
+                        constrainToScrollParent={false}
+                        constrainToWindow={true}
+                        isDisabled={false}
+                        position="top-center"
+                        text={
+                          <FormattedMessage
+                            defaultMessage="{time, date, full} at {time, time, short}"
+                            id="be.activityFeed.fullDateTime"
+                            values={
+                              Object {
+                                "time": 1530654232000,
+                              }
+                            }
+                          />
+                        }
+                        theme="default"
+                      >
+                        <TetherComponent
+                          attachment="bottom center"
+                          bodyElement={<body />}
+                          classPrefix="tooltip"
+                          constraints={
+                            Array [
+                              Object {
+                                "attachment": "together",
+                                "to": "window",
+                              },
+                            ]
+                          }
+                          enabled={false}
+                          renderElementTag="div"
+                          renderElementTo={null}
+                          targetAttachment="top center"
+                        >
+                          <small
+                            className="bcs-ActivityTimestamp"
+                            key=".0"
+                            onBlur={[Function]}
+                            onFocus={[Function]}
+                            onKeyDown={[Function]}
+                            onMouseEnter={[Function]}
+                            onMouseLeave={[Function]}
+                            tabIndex="0"
+                          >
+                            <ReadableTime
+                              alwaysShowTime={true}
+                              relativeThreshold={0}
+                              timestamp={1530654232000}
+                            >
+                              <FormattedMessage
+                                defaultMessage="{time, date, medium} at {time, time, short}"
+                                id="boxui.readableTime.eventTimeDate"
+                                values={
+                                  Object {
+                                    "date": null,
+                                    "time": 1530654232000,
+                                    "weekday": null,
+                                  }
+                                }
+                              >
+                                <div />
+                              </FormattedMessage>
+                            </ReadableTime>
+                          </small>
+                        </TetherComponent>
+                      </Tooltip>
+                    </ActivityTimestamp>
+                  </div>
+                  <ActivityMessage
+                    id="c_123"
+                    tagged_message="test @[123:Jeezy] @[10:Kanye West]"
+                    translationEnabled={false}
+                    translationFailed={null}
+                  >
+                    <div
+                      className="bcs-ActivityMessage"
+                    >
+                      test 
+                      <UserLink
+                        className="bcs-comment-mention"
+                        data-resin-target="activityfeed-mentionlink"
+                        id="123"
+                        key="1-c_123"
+                        name="@Jeezy"
+                      >
+                        <span
+                          data-resin-target="activityfeed-mentionlink"
+                          id="123"
+                        >
+                          @Jeezy
+                        </span>
+                      </UserLink>
+                       
+                      <UserLink
+                        className="bcs-comment-mention"
+                        data-resin-target="activityfeed-mentionlink"
+                        id="10"
+                        key="3-c_123"
+                        name="@Kanye West"
+                      >
+                        <span
+                          data-resin-target="activityfeed-mentionlink"
+                          id="10"
+                        >
+                          @Kanye West
+                        </span>
+                      </UserLink>
+                    </div>
+                  </ActivityMessage>
+                </div>
+              </MediaBody>
+            </div>
+          </Media>
+        </div>
+      </Comment>
+    </li>
+  </ActivityFeedItem>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeedItem/activity-feed/ActivityFeedItem should render items 2`] = `
+<Component
+  currentUser={
+    Object {
+      "id": "user_123445",
+      "name": "Rihanna",
+    }
+  }
+  item={
+    Object {
+      "assigned_to": Object {
+        "entries": Array [
+          Object {
+            "id": "ta_123",
+            "permissions": Object {
+              "can_delete": true,
+              "can_update": true,
+            },
+            "role": "ASSIGNEE",
+            "status": "NOT_STARTED",
+            "target": Object {
+              "id": 11,
+              "name": "Akon",
+            },
+            "type": "task_collaborator",
+          },
+        ],
+        "limit": 20,
+        "next_marker": null,
+      },
+      "created_at": "2018-07-03T14:43:52-07:00",
+      "created_by": Object {
+        "id": 11,
+        "name": "Akon",
+      },
+      "description": "test",
+      "due_at": "2018-07-03T14:43:52-07:00",
+      "id": "t_345",
+      "modified_at": "2018-07-03T14:43:52-07:00",
+      "permissions": Object {
+        "can_create_task_collaborator": true,
+        "can_create_task_link": true,
+        "can_delete": true,
+        "can_update": true,
+      },
+      "status": "NOT_STARTED",
+      "task_links": Object {
+        "entries": Array [
+          Object {
+            "target": Object {
+              "id": "f_123",
+              "type": "file",
+            },
+          },
+        ],
+      },
+      "task_type": "GENERAL",
+      "type": "task",
+    }
+  }
+>
+  <ActivityFeedItem
+    currentUser={
+      Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      }
+    }
+    item={
+      Object {
+        "assigned_to": Object {
+          "entries": Array [
+            Object {
+              "id": "ta_123",
+              "permissions": Object {
+                "can_delete": true,
+                "can_update": true,
+              },
+              "role": "ASSIGNEE",
+              "status": "NOT_STARTED",
+              "target": Object {
+                "id": 11,
+                "name": "Akon",
+              },
+              "type": "task_collaborator",
+            },
+          ],
+          "limit": 20,
+          "next_marker": null,
+        },
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "description": "test",
+        "due_at": "2018-07-03T14:43:52-07:00",
+        "id": "t_345",
+        "modified_at": "2018-07-03T14:43:52-07:00",
+        "permissions": Object {
+          "can_create_task_collaborator": true,
+          "can_create_task_link": true,
+          "can_delete": true,
+          "can_update": true,
+        },
+        "status": "NOT_STARTED",
+        "task_links": Object {
+          "entries": Array [
+            Object {
+              "target": Object {
+                "id": "f_123",
+                "type": "file",
+              },
+            },
+          ],
+        },
+        "task_type": "GENERAL",
+        "type": "task",
+      }
+    }
+  >
+    <li
+      className="bcs-activity-feed-task-new"
+      data-testid="task"
+    >
+      <ForwardRef
+        assigned_to={
+          Object {
+            "entries": Array [
+              Object {
+                "id": "ta_123",
+                "permissions": Object {
+                  "can_delete": true,
+                  "can_update": true,
+                },
+                "role": "ASSIGNEE",
+                "status": "NOT_STARTED",
+                "target": Object {
+                  "id": 11,
+                  "name": "Akon",
+                },
+                "type": "task_collaborator",
+              },
+            ],
+            "limit": 20,
+            "next_marker": null,
+          }
+        }
+        created_at="2018-07-03T14:43:52-07:00"
+        created_by={
+          Object {
+            "id": 11,
+            "name": "Akon",
+          }
+        }
+        currentUser={
+          Object {
+            "id": "user_123445",
+            "name": "Rihanna",
+          }
+        }
+        description="test"
+        due_at="2018-07-03T14:43:52-07:00"
+        id="t_345"
+        modified_at="2018-07-03T14:43:52-07:00"
+        permissions={
+          Object {
+            "can_create_task_collaborator": true,
+            "can_create_task_link": true,
+            "can_delete": true,
+            "can_update": true,
+          }
+        }
+        status="NOT_STARTED"
+        task_links={
+          Object {
+            "entries": Array [
+              Object {
+                "target": Object {
+                  "id": "f_123",
+                  "type": "file",
+                },
+              },
+            ],
+          }
+        }
+        task_type="GENERAL"
+        type="task"
+      >
+        <ForwardRef(withFeatureConsumer(Task))
+          assigned_to={
+            Object {
+              "entries": Array [
+                Object {
+                  "id": "ta_123",
+                  "permissions": Object {
+                    "can_delete": true,
+                    "can_update": true,
+                  },
+                  "role": "ASSIGNEE",
+                  "status": "NOT_STARTED",
+                  "target": Object {
+                    "id": 11,
+                    "name": "Akon",
+                  },
+                  "type": "task_collaborator",
+                },
+              ],
+              "limit": 20,
+              "next_marker": null,
+            }
+          }
+          created_at="2018-07-03T14:43:52-07:00"
+          created_by={
+            Object {
+              "id": 11,
+              "name": "Akon",
+            }
+          }
+          currentUser={
+            Object {
+              "id": "user_123445",
+              "name": "Rihanna",
+            }
+          }
+          description="test"
+          due_at="2018-07-03T14:43:52-07:00"
+          id="t_345"
+          modified_at="2018-07-03T14:43:52-07:00"
+          permissions={
+            Object {
+              "can_create_task_collaborator": true,
+              "can_create_task_link": true,
+              "can_delete": true,
+              "can_update": true,
+            }
+          }
+          status="NOT_STARTED"
+          task_links={
+            Object {
+              "entries": Array [
+                Object {
+                  "target": Object {
+                    "id": "f_123",
+                    "type": "file",
+                  },
+                },
+              ],
+            }
+          }
+          task_type="GENERAL"
+          type="task"
+        >
+          <Task
+            assigned_to={
+              Object {
+                "entries": Array [
+                  Object {
+                    "id": "ta_123",
+                    "permissions": Object {
+                      "can_delete": true,
+                      "can_update": true,
+                    },
+                    "role": "ASSIGNEE",
+                    "status": "NOT_STARTED",
+                    "target": Object {
+                      "id": 11,
+                      "name": "Akon",
+                    },
+                    "type": "task_collaborator",
+                  },
+                ],
+                "limit": 20,
+                "next_marker": null,
+              }
+            }
+            completion_rule="ALL_ASSIGNEES"
+            created_at="2018-07-03T14:43:52-07:00"
+            created_by={
+              Object {
+                "id": 11,
+                "name": "Akon",
+              }
+            }
+            currentUser={
+              Object {
+                "id": "user_123445",
+                "name": "Rihanna",
+              }
+            }
+            description="test"
+            due_at="2018-07-03T14:43:52-07:00"
+            features={Object {}}
+            id="t_345"
+            modified_at="2018-07-03T14:43:52-07:00"
+            permissions={
+              Object {
+                "can_create_task_collaborator": true,
+                "can_create_task_link": true,
+                "can_delete": true,
+                "can_update": true,
+              }
+            }
+            status="NOT_STARTED"
+            task_links={
+              Object {
+                "entries": Array [
+                  Object {
+                    "target": Object {
+                      "id": "f_123",
+                      "type": "file",
+                    },
+                  },
+                ],
+              }
+            }
+            task_type="GENERAL"
+            type="task"
+          >
+            <div
+              className="bcs-Task"
+            >
+              <Media
+                as="div"
+                className="bcs-Task-media"
+                data-testid="task-card"
+              >
+                <div
+                  className="bdl-Media bcs-Task-media"
+                  data-testid="task-card"
+                >
+                  <MediaFigure
+                    as="figure"
+                    className="bcs-Task-avatar"
+                  >
+                    <figure
+                      className="bdl-Media-figure bcs-Task-avatar"
+                    >
+                      <Avatar
+                        user={
+                          Object {
+                            "id": "2",
+                            "name": "",
+                            "type": "user",
+                          }
+                        }
+                      >
+                        <Avatar
+                          avatarUrl={null}
+                          id="2"
+                          name=""
+                        >
+                          <span
+                            className="avatar"
+                            role="presentation"
+                          >
+                            <UnknownUserAvatar
+                              className="avatar-icon"
+                              height={28}
+                              width={28}
+                            >
+                              <AccessibleSVG
+                                className="unknown-user-avatar avatar-icon"
+                                height={28}
+                                viewBox="0 0 28 28"
+                                width={28}
+                              >
+                                <svg
+                                  className="unknown-user-avatar avatar-icon"
+                                  focusable="false"
+                                  height={28}
+                                  role="presentation"
+                                  viewBox="0 0 28 28"
+                                  width={28}
+                                >
+                                  <defs>
+                                    <circle
+                                      cx="14"
+                                      cy="14"
+                                      id="unknown-user-avatar2-a"
+                                      r="14"
+                                    />
+                                  </defs>
+                                  <g
+                                    fill="none"
+                                    fillRule="evenodd"
+                                  >
+                                    <use
+                                      className="background-fill-color"
+                                      fill="#EDEDED"
+                                      xlinkHref="#unknown-user-avatar2-a"
+                                    />
+                                    <path
+                                      className="fill-color"
+                                      d="M5.5 25.1C6.7 21 10 18 14 18s7.3 3 8.5 7.1a14 14 0 0 1-17 0zM14 16a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"
+                                      fill="#C3C3C3"
+                                    />
+                                  </g>
+                                </svg>
+                              </AccessibleSVG>
+                            </UnknownUserAvatar>
+                          </span>
+                        </Avatar>
+                      </Avatar>
+                      <IconTaskGeneral
+                        className="bcs-Task-avatarBadge"
+                        height={20}
+                        width={20}
+                      >
+                        <AccessibleSVG
+                          className="bdl-IconTaskGeneral bcs-Task-avatarBadge"
+                          height={20}
+                          viewBox="0 0 32 32"
+                          width={20}
+                        >
+                          <svg
+                            className="bdl-IconTaskGeneral bcs-Task-avatarBadge"
+                            focusable="false"
+                            height={20}
+                            role="presentation"
+                            viewBox="0 0 32 32"
+                            width={20}
+                          >
+                            <g
+                              fill="none"
+                              fillRule="nonzero"
+                            >
+                              <circle
+                                className="background-color"
+                                cx="16.162"
+                                cy="16.162"
+                                fill="#0061d5"
+                                r="16"
+                              />
+                              <path
+                                className="foreground-color"
+                                d="M11.717 8.162v.889c0 1.472.995 2.666 2.222 2.666h4.445c1.227 0 2.222-1.194 2.222-2.666v-.89h1.281c.766 0 1.386.62 1.386 1.386v13.23c0 .764-.62 1.385-1.386 1.385H10.436c-.765 0-1.385-.62-1.385-1.386V9.546c0-.764.62-1.384 1.385-1.384h1.281zm6.463 6.503l-2.741 2.924-1.354-1.203a.889.889 0 1 0-1.18 1.329l2 1.778c.36.32.909.295 1.238-.057l3.334-3.555a.889.889 0 1 0-1.297-1.216zm-4.981-6.503h5.926v.889c0 .49-.332.888-.741.888h-4.445c-.409 0-.74-.398-.74-.888v-.89z"
+                                fill="#fff"
+                              />
+                            </g>
+                          </svg>
+                        </AccessibleSVG>
+                      </IconTaskGeneral>
+                    </figure>
+                  </MediaFigure>
+                  <MediaBody>
+                    <div
+                      className="bdl-Media-body"
+                    >
+                      <TetherComponent
+                        attachment="top right"
+                        className="bcs-Task-deleteConfirmationModal"
+                        constraints={
+                          Array [
+                            Object {
+                              "attachment": "together",
+                              "to": "scrollParent",
+                            },
+                          ]
+                        }
+                        renderElementTag="div"
+                        renderElementTo={null}
+                        targetAttachment="bottom right"
+                      >
+                        <MediaMenu
+                          data-testid="task-actions-menu"
+                          dropdownProps={Object {}}
+                          isDisabled={false}
+                          key=".0"
+                          menuProps={
+                            Object {
+                              "data-resin-component": "activityfeedtask",
+                            }
+                          }
+                        >
+                          <DropdownMenu
+                            constrainToScrollParent={true}
+                            constrainToWindow={false}
+                            isRightAligned={true}
+                          >
+                            <TetherComponent
+                              attachment="top right"
+                              bodyElement={<body />}
+                              classPrefix="dropdown-menu"
+                              constraints={
+                                Array [
+                                  Object {
+                                    "attachment": "together",
+                                    "to": "scrollParent",
+                                  },
+                                ]
+                              }
+                              enabled={false}
+                              renderElementTag="div"
+                              renderElementTo={null}
+                              targetAttachment="bottom right"
+                            >
+                              <PlainButton
+                                aria-expanded="false"
+                                aria-haspopup="true"
+                                className="bdl-Media-menu"
+                                data-testid="task-actions-menu"
+                                id="menubutton6"
+                                isDisabled={false}
+                                key=".$menubutton6"
+                                onClick={[Function]}
+                                onKeyDown={[Function]}
+                                type="button"
+                              >
+                                <button
+                                  aria-expanded="false"
+                                  aria-haspopup="true"
+                                  className="btn-plain bdl-Media-menu"
+                                  data-testid="task-actions-menu"
+                                  id="menubutton6"
+                                  onClick={[Function]}
+                                  onKeyDown={[Function]}
+                                  type="button"
+                                >
+                                  <IconEllipsis
+                                    color="#909090"
+                                    height={16}
+                                    width={16}
+                                  >
+                                    <AccessibleSVG
+                                      className="icon-ellipsis "
+                                      height={16}
+                                      viewBox="0 0 10 2"
+                                      width={16}
+                                    >
+                                      <svg
+                                        className="icon-ellipsis "
+                                        focusable="false"
+                                        height={16}
+                                        role="presentation"
+                                        viewBox="0 0 10 2"
+                                        width={16}
+                                      >
+                                        <path
+                                          className="fill-color"
+                                          d="M1 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zm8 0c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zM5 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1z"
+                                          fill="#909090"
+                                          fillRule="evenodd"
+                                        />
+                                      </svg>
+                                    </AccessibleSVG>
+                                  </IconEllipsis>
+                                </button>
+                              </PlainButton>
+                            </TetherComponent>
+                          </DropdownMenu>
+                        </MediaMenu>
+                      </TetherComponent>
+                      <div
+                        className="bcs-Task-headline"
+                      >
+                        <FormattedMessage
+                          defaultMessage="{user} assigned a Task"
+                          id="be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineGeneral"
+                          values={
+                            Object {
+                              "user": <UserLink
+                                data-resin-target="activityfeed-profilelink"
+                                id="2"
+                                name=""
+                                type="user"
+                              />,
+                            }
+                          }
+                        >
+                          <div />
+                        </FormattedMessage>
+                      </div>
+                      <div>
+                        <ActivityTimestamp
+                          date={1530654232000}
+                        >
+                          <Tooltip
+                            constrainToScrollParent={false}
+                            constrainToWindow={true}
+                            isDisabled={false}
+                            position="top-center"
+                            text={
+                              <FormattedMessage
+                                defaultMessage="{time, date, full} at {time, time, short}"
+                                id="be.activityFeed.fullDateTime"
+                                values={
+                                  Object {
+                                    "time": 1530654232000,
+                                  }
+                                }
+                              />
+                            }
+                            theme="default"
+                          >
+                            <TetherComponent
+                              attachment="bottom center"
+                              bodyElement={<body />}
+                              classPrefix="tooltip"
+                              constraints={
+                                Array [
+                                  Object {
+                                    "attachment": "together",
+                                    "to": "window",
+                                  },
+                                ]
+                              }
+                              enabled={false}
+                              renderElementTag="div"
+                              renderElementTo={null}
+                              targetAttachment="top center"
+                            >
+                              <small
+                                className="bcs-ActivityTimestamp"
+                                key=".0"
+                                onBlur={[Function]}
+                                onFocus={[Function]}
+                                onKeyDown={[Function]}
+                                onMouseEnter={[Function]}
+                                onMouseLeave={[Function]}
+                                tabIndex="0"
+                              >
+                                <ReadableTime
+                                  alwaysShowTime={true}
+                                  relativeThreshold={0}
+                                  timestamp={1530654232000}
+                                >
+                                  <FormattedMessage
+                                    defaultMessage="{time, date, medium} at {time, time, short}"
+                                    id="boxui.readableTime.eventTimeDate"
+                                    values={
+                                      Object {
+                                        "date": null,
+                                        "time": 1530654232000,
+                                        "weekday": null,
+                                      }
+                                    }
+                                  >
+                                    <div />
+                                  </FormattedMessage>
+                                </ReadableTime>
+                              </small>
+                            </TetherComponent>
+                          </Tooltip>
+                        </ActivityTimestamp>
+                      </div>
+                      <div>
+                        <ActivityMessage
+                          id="t_345"
+                          tagged_message="test"
+                          translationEnabled={false}
+                          translationFailed={null}
+                        >
+                          <div
+                            className="bcs-ActivityMessage"
+                          >
+                            test
+                          </div>
+                        </ActivityMessage>
+                      </div>
+                      <div
+                        className="bcs-Task-statusContainer"
+                      >
+                        <TaskDueDate
+                          dueDate="2018-07-03T14:43:52-07:00"
+                          status="NOT_STARTED"
+                        >
+                          <div
+                            className="bcs-TaskDueDate bcs-is-taskOverdue"
+                            data-testid="task-due-date"
+                          >
+                            <FormattedMessage
+                              defaultMessage="Due: {date}"
+                              id="be.contentSidebar.activityFeed.taskNew.taskDueDateLabel"
+                              values={
+                                Object {
+                                  "date": <ReadableTime
+                                    alwaysShowTime={true}
+                                    timestamp={1530654232000}
+                                  />,
+                                }
+                              }
+                            >
+                              <div />
+                            </FormattedMessage>
+                          </div>
+                        </TaskDueDate>
+                        <Component
+                          status="NOT_STARTED"
+                        >
+                          <FormattedMessage
+                            defaultMessage="Status: {taskStatus}"
+                            id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
+                            values={
+                              Object {
+                                "taskStatus": <span
+                                  className="bcs-TaskStatus-message notStarted"
+                                >
+                                  <FormattedMessage
+                                    defaultMessage="In Progress"
+                                    id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressLabel"
+                                  />
+                                </span>,
+                              }
+                            }
+                          >
+                            <div />
+                          </FormattedMessage>
+                        </Component>
+                        <TaskCompletionRuleIcon
+                          completionRule="ALL_ASSIGNEES"
+                        />
+                      </div>
+                      <div
+                        className="bcs-Task-assigneeListContainer"
+                      >
+                        <AssigneeList
+                          initialAssigneeCount={3}
+                          isOpen={false}
+                          onCollapse={[Function]}
+                          onExpand={[Function]}
+                          users={
+                            Object {
+                              "entries": Array [
+                                Object {
+                                  "id": "ta_123",
+                                  "permissions": Object {
+                                    "can_delete": true,
+                                    "can_update": true,
+                                  },
+                                  "role": "ASSIGNEE",
+                                  "status": "NOT_STARTED",
+                                  "target": Object {
+                                    "id": 11,
+                                    "name": "Akon",
+                                  },
+                                  "type": "task_collaborator",
+                                },
+                              ],
+                              "limit": 20,
+                              "next_marker": null,
+                            }
+                          }
+                        >
+                          <div
+                            className="bcs-AssigneeList"
+                          >
+                            <ul
+                              className="bcs-AssigneeList-list"
+                              data-testid="task-assignee-list"
+                            >
+                              <li
+                                className="bcs-AssigneeList-listItem"
+                                data-testid="assignee-list-item"
+                                key="ta_123"
+                              >
+                                <Component
+                                  className="bcs-AssigneeList-listItemAvatar"
+                                  status="NOT_STARTED"
+                                  user={
+                                    Object {
+                                      "id": 11,
+                                      "name": "Akon",
+                                    }
+                                  }
+                                >
+                                  <div
+                                    className="bcs-AvatarGroupAvatar bcs-AssigneeList-listItemAvatar"
+                                    data-testid="avatar-group-avatar-container"
+                                  >
+                                    <Avatar
+                                      className="bcs-AvatarGroupAvatar-avatar"
+                                      user={
+                                        Object {
+                                          "id": 11,
+                                          "name": "Akon",
+                                        }
+                                      }
+                                    >
+                                      <Avatar
+                                        avatarUrl={null}
+                                        className="bcs-AvatarGroupAvatar-avatar"
+                                        id={11}
+                                        name="Akon"
+                                      >
+                                        <span
+                                          className="avatar bcs-AvatarGroupAvatar-avatar"
+                                          role="presentation"
+                                        >
+                                          <AvatarInitials
+                                            id={11}
+                                            name="Akon"
+                                          >
+                                            <span
+                                              className="avatar-initials "
+                                              data-bg-idx={2}
+                                            >
+                                              AA
+                                            </span>
+                                          </AvatarInitials>
+                                        </span>
+                                      </Avatar>
+                                    </Avatar>
+                                    <StatusIcon
+                                      className="bcs-AvatarGroupAvatar-statusIcon notStarted"
+                                      height={12}
+                                      status="NOT_STARTED"
+                                      title={
+                                        <FormattedMessage
+                                          defaultMessage="Completed"
+                                          id="be.contentSidebar.activityFeed.taskNew.taskAssignmentCompleted"
+                                        />
+                                      }
+                                      width={12}
+                                    />
+                                  </div>
+                                </Component>
+                                <Component
+                                  status="NOT_STARTED"
+                                  user={
+                                    Object {
+                                      "id": 11,
+                                      "name": "Akon",
+                                    }
+                                  }
+                                >
+                                  <div
+                                    className="bcs-AssigneeDetails"
+                                  >
+                                    <div>
+                                      Akon
+                                    </div>
+                                  </div>
+                                </Component>
+                              </li>
+                            </ul>
+                          </div>
+                        </AssigneeList>
+                      </div>
+                    </div>
+                  </MediaBody>
+                </div>
+              </Media>
+              <TaskModal
+                editMode="EDIT"
+                feedbackUrl=""
+                isTaskFormOpen={false}
+                onModalClose={[Function]}
+                onSubmitError={[Function]}
+                onSubmitSuccess={[Function]}
+                taskFormProps={
+                  Object {
+                    "approverSelectorContacts": undefined,
+                    "approvers": Array [
+                      Object {
+                        "id": "ta_123",
+                        "permissions": Object {
+                          "can_delete": true,
+                          "can_update": true,
+                        },
+                        "role": "ASSIGNEE",
+                        "status": "NOT_STARTED",
+                        "target": Object {
+                          "id": 11,
+                          "name": "Akon",
+                        },
+                        "type": "task_collaborator",
+                      },
+                    ],
+                    "completionRule": "ALL_ASSIGNEES",
+                    "createTask": [Function],
+                    "dueDate": "2018-07-03T14:43:52-07:00",
+                    "editTask": undefined,
+                    "getApproverWithQuery": undefined,
+                    "getAvatarUrl": undefined,
+                    "id": "t_345",
+                    "message": "test",
+                  }
+                }
+                taskType="GENERAL"
+              >
+                <Modal
+                  className="be-modal task-modal"
+                  data-testid="create-task-modal"
+                  focusElementSelector=".task-modal textarea, .task-modal input"
+                  isOpen={false}
+                  onRequestClose={[Function]}
+                  style={
+                    Object {
+                      "backdrop": Object {},
+                      "dialog": Object {},
+                    }
+                  }
+                  title={
+                    <FormattedMessage
+                      defaultMessage="Modify General Task"
+                      id="be.contentSidebar.editTask.general.title"
+                    />
+                  }
+                />
+              </TaskModal>
+            </div>
+          </Task>
+        </ForwardRef(withFeatureConsumer(Task))>
+      </ForwardRef>
+    </li>
+  </ActivityFeedItem>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeedItem/activity-feed/ActivityFeedItem should render items 3`] = `
+<Component
+  currentUser={
+    Object {
+      "id": "user_123445",
+      "name": "Rihanna",
+    }
+  }
+  item={
+    Object {
+      "created_at": "2018-07-03T14:43:52-07:00",
+      "id": "f_123",
+      "modified_at": "2018-07-03T14:43:52-07:00",
+      "modified_by": Object {
+        "id": 11,
+        "name": "Akon",
+      },
+      "trashed_at": "2018-07-03T14:43:52-07:00",
+      "type": "file_version",
+    }
+  }
+>
+  <ActivityFeedItem
+    currentUser={
+      Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      }
+    }
+    item={
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "id": "f_123",
+        "modified_at": "2018-07-03T14:43:52-07:00",
+        "modified_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "trashed_at": "2018-07-03T14:43:52-07:00",
+        "type": "file_version",
+      }
+    }
+  >
+    <li
+      className="bcs-version-item"
+      data-testid="version"
+      key="file_versionf_123"
+    >
+      <Version
+        created_at="2018-07-03T14:43:52-07:00"
+        id="f_123"
+        modified_at="2018-07-03T14:43:52-07:00"
+        modified_by={
+          Object {
+            "id": 11,
+            "name": "Akon",
+          }
+        }
+        trashed_at="2018-07-03T14:43:52-07:00"
+        type="file_version"
+      >
+        <Version
+          created_at="2018-07-03T14:43:52-07:00"
+          id="f_123"
+          intl={
+            Object {
+              "formatDate": [Function],
+              "formatMessage": [Function],
+            }
+          }
+          modified_at="2018-07-03T14:43:52-07:00"
+          modified_by={
+            Object {
+              "id": 11,
+              "name": "Akon",
+            }
+          }
+          trashed_at="2018-07-03T14:43:52-07:00"
+          type="file_version"
+        >
+          <div
+            className="bcs-Version"
+          >
+            <span
+              className="bcs-Version-message"
+            >
+              <FormattedMessage
+                defaultMessage="{name} deleted v{version_number}"
+                id="be.versionDeleted"
+                values={
+                  Object {
+                    "name": <strong>
+                      Akon
+                    </strong>,
+                    "version_number": undefined,
+                    "version_promoted": undefined,
+                  }
+                }
+              >
+                <div />
+              </FormattedMessage>
+            </span>
+          </div>
+        </Version>
+      </Version>
+    </li>
+  </ActivityFeedItem>
+</Component>
+`;
+
+exports[`elements/content-sidebar/ActivityFeedItem/activity-feed/ActivityFeedItem should render items 4`] = `
+<Component
+  currentUser={
+    Object {
+      "id": "user_123445",
+      "name": "Rihanna",
+    }
+  }
+  item={
+    Object {
+      "activity_template": Object {
+        "id": "template_09887654",
+      },
+      "app": Object {
+        "icon_url": "foo.jpg",
+        "id": "app_123456",
+        "name": "My App",
+      },
+      "created_at": "2018-07-03T14:43:52-07:00",
+      "created_by": Object {
+        "id": "user_12345567",
+      },
+      "currentUser": Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      },
+      "id": "app_activity_12344556",
+      "permissions": Object {
+        "can_delete": true,
+      },
+      "rendered_text": "this is text and a <a>link</a>",
+      "type": "app_activity",
+    }
+  }
+>
+  <ActivityFeedItem
+    currentUser={
+      Object {
+        "id": "user_123445",
+        "name": "Rihanna",
+      }
+    }
+    item={
+      Object {
+        "activity_template": Object {
+          "id": "template_09887654",
+        },
+        "app": Object {
+          "icon_url": "foo.jpg",
+          "id": "app_123456",
+          "name": "My App",
+        },
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": "user_12345567",
+        },
+        "currentUser": Object {
+          "id": "user_123445",
+          "name": "Rihanna",
+        },
+        "id": "app_activity_12344556",
+        "permissions": Object {
+          "can_delete": true,
+        },
+        "rendered_text": "this is text and a <a>link</a>",
+        "type": "app_activity",
+      }
+    }
+  >
+    <li
+      className="bcs-activity-feed-app-activity"
+      data-testid="app-activity"
+      key="app_activityapp_activity_12344556"
+    >
+      <AppActivity
+        activity_template={
+          Object {
+            "id": "template_09887654",
+          }
+        }
+        app={
+          Object {
+            "icon_url": "foo.jpg",
+            "id": "app_123456",
+            "name": "My App",
+          }
+        }
+        created_at="2018-07-03T14:43:52-07:00"
+        created_by={
+          Object {
+            "id": "user_12345567",
+          }
+        }
+        currentUser={
+          Object {
+            "id": "user_123445",
+            "name": "Rihanna",
+          }
+        }
+        id="app_activity_12344556"
+        permissions={
+          Object {
+            "can_delete": true,
+          }
+        }
+        rendered_text="this is text and a <a>link</a>"
+        type="app_activity"
+      >
+        <AppActivity
+          activity_template={
+            Object {
+              "id": "template_09887654",
+            }
+          }
+          app={
+            Object {
+              "icon_url": "foo.jpg",
+              "id": "app_123456",
+              "name": "My App",
+            }
+          }
+          created_at="2018-07-03T14:43:52-07:00"
+          created_by={
+            Object {
+              "id": "user_12345567",
+            }
+          }
+          currentUser={
+            Object {
+              "id": "user_123445",
+              "name": "Rihanna",
+            }
+          }
+          id="app_activity_12344556"
+          intl={
+            Object {
+              "formatDate": [Function],
+              "formatMessage": [Function],
+            }
+          }
+          onDelete={[Function]}
+          permissions={
+            Object {
+              "can_delete": true,
+            }
+          }
+          rendered_text="this is text and a <a>link</a>"
+          type="app_activity"
+        >
+          <Media
+            as="div"
+            className="bcs-AppActivity"
+            data-resin-feature="appActivityCardtemplate_09887654"
+            data-resin-target="loaded"
+          >
+            <div
+              className="bdl-Media bcs-AppActivity"
+              data-resin-feature="appActivityCardtemplate_09887654"
+              data-resin-target="loaded"
+            >
+              <MediaFigure
+                as="figure"
+              >
+                <figure
+                  className="bdl-Media-figure"
+                >
+                  <img
+                    alt="My App Icon"
+                    className="bcs-AppActivity-icon"
+                    src="foo.jpg"
+                  />
+                </figure>
+              </MediaFigure>
+              <MediaBody
+                className="bcs-AppActivity-body"
+              >
+                <div
+                  className="bdl-Media-body bcs-AppActivity-body"
+                >
+                  <TetherComponent
+                    attachment="top right"
+                    className="bcs-AppActivity-confirm"
+                    constraints={
+                      Array [
+                        Object {
+                          "attachment": "together",
+                          "to": "scrollParent",
+                        },
+                      ]
+                    }
+                    renderElementTag="div"
+                    renderElementTo={null}
+                    targetAttachment="bottom right"
+                  >
+                    <MediaMenu
+                      dropdownProps={Object {}}
+                      isDisabled={false}
+                      key=".0"
+                      menuProps={Object {}}
+                    >
+                      <DropdownMenu
+                        constrainToScrollParent={true}
+                        constrainToWindow={false}
+                        isRightAligned={true}
+                      >
+                        <TetherComponent
+                          attachment="top right"
+                          bodyElement={<body />}
+                          classPrefix="dropdown-menu"
+                          constraints={
+                            Array [
+                              Object {
+                                "attachment": "together",
+                                "to": "scrollParent",
+                              },
+                            ]
+                          }
+                          enabled={false}
+                          renderElementTag="div"
+                          renderElementTo={null}
+                          targetAttachment="bottom right"
+                        >
+                          <PlainButton
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            className="bdl-Media-menu"
+                            id="menubutton10"
+                            isDisabled={false}
+                            key=".$menubutton10"
+                            onClick={[Function]}
+                            onKeyDown={[Function]}
+                            type="button"
+                          >
+                            <button
+                              aria-expanded="false"
+                              aria-haspopup="true"
+                              className="btn-plain bdl-Media-menu"
+                              id="menubutton10"
+                              onClick={[Function]}
+                              onKeyDown={[Function]}
+                              type="button"
+                            >
+                              <IconEllipsis
+                                color="#909090"
+                                height={16}
+                                width={16}
+                              >
+                                <AccessibleSVG
+                                  className="icon-ellipsis "
+                                  height={16}
+                                  viewBox="0 0 10 2"
+                                  width={16}
+                                >
+                                  <svg
+                                    className="icon-ellipsis "
+                                    focusable="false"
+                                    height={16}
+                                    role="presentation"
+                                    viewBox="0 0 10 2"
+                                    width={16}
+                                  >
+                                    <path
+                                      className="fill-color"
+                                      d="M1 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zm8 0c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1zM5 2c.6 0 1-.4 1-1s-.4-1-1-1-1 .4-1 1 .4 1 1 1z"
+                                      fill="#909090"
+                                      fillRule="evenodd"
+                                    />
+                                  </svg>
+                                </AccessibleSVG>
+                              </IconEllipsis>
+                            </button>
+                          </PlainButton>
+                        </TetherComponent>
+                      </DropdownMenu>
+                    </MediaMenu>
+                  </TetherComponent>
+                  <figcaption
+                    className="bcs-AppActivity-headline"
+                  >
+                    My App
+                  </figcaption>
+                  <div>
+                    <ActivityTimestamp
+                      date={1530654232000}
+                    >
+                      <Tooltip
+                        constrainToScrollParent={false}
+                        constrainToWindow={true}
+                        isDisabled={false}
+                        position="top-center"
+                        text={
+                          <FormattedMessage
+                            defaultMessage="{time, date, full} at {time, time, short}"
+                            id="be.activityFeed.fullDateTime"
+                            values={
+                              Object {
+                                "time": 1530654232000,
+                              }
+                            }
+                          />
+                        }
+                        theme="default"
+                      >
+                        <TetherComponent
+                          attachment="bottom center"
+                          bodyElement={<body />}
+                          classPrefix="tooltip"
+                          constraints={
+                            Array [
+                              Object {
+                                "attachment": "together",
+                                "to": "window",
+                              },
+                            ]
+                          }
+                          enabled={false}
+                          renderElementTag="div"
+                          renderElementTo={null}
+                          targetAttachment="top center"
+                        >
+                          <small
+                            className="bcs-ActivityTimestamp"
+                            key=".0"
+                            onBlur={[Function]}
+                            onFocus={[Function]}
+                            onKeyDown={[Function]}
+                            onMouseEnter={[Function]}
+                            onMouseLeave={[Function]}
+                            tabIndex="0"
+                          >
+                            <ReadableTime
+                              alwaysShowTime={true}
+                              relativeThreshold={0}
+                              timestamp={1530654232000}
+                            >
+                              <FormattedMessage
+                                defaultMessage="{time, date, medium} at {time, time, short}"
+                                id="boxui.readableTime.eventTimeDate"
+                                values={
+                                  Object {
+                                    "date": null,
+                                    "time": 1530654232000,
+                                    "weekday": null,
+                                  }
+                                }
+                              >
+                                <div />
+                              </FormattedMessage>
+                            </ReadableTime>
+                          </small>
+                        </TetherComponent>
+                      </Tooltip>
+                    </ActivityTimestamp>
+                  </div>
+                  this is text and a 
+                  <Link
+                    className="bcs-AppActivity-link"
+                    href=""
+                    key="app_actvity_link_"
+                    rel="roreferrer noopener"
+                    target="_blank"
+                  >
+                    <LinkBase
+                      className="link bcs-AppActivity-link"
+                      href=""
+                      rel="roreferrer noopener"
+                      target="_blank"
+                    >
+                      <a
+                        className="link bcs-AppActivity-link"
+                        href=""
+                        rel="roreferrer noopener"
+                        target="_blank"
+                      >
+                        link
+                      </a>
+                    </LinkBase>
+                  </Link>
+                </div>
+              </MediaBody>
+            </div>
+          </Media>
+        </AppActivity>
+      </AppActivity>
+    </li>
+  </ActivityFeedItem>
+</Component>
+`;
