@@ -3,6 +3,8 @@
 .select-field {
     .overlay {
         min-width: 100%;
+        max-height: calc(100vh - 260px);
+        overflow-y: auto;
     }
 
     li[role='separator'] {
