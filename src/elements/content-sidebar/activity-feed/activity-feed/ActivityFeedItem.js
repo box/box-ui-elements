@@ -15,7 +15,6 @@ import withErrorHandling from '../../withErrorHandling';
 import type { FocusableFeedItemType } from '../../../../common/types/feed';
 
 type Props = {
-    action: string | 'applied',
     activeFeedEntryId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
     activeFeedItemRef: { current: null | HTMLElement },
