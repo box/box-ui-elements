@@ -681,7 +681,7 @@ type Task = {
 
 type Tasks = {
     entries: Array<Task>,
-    next_marker: 'string' | null,
+    next_marker: ?string,
 };
 
 type Comment = {
@@ -749,7 +749,7 @@ type FeedItems = Array<FeedItem>;
 
 type Collaborators = {
     entries: Array<SelectorItem>,
-    next_marker: 'string' | null,
+    next_marker: ?string,
 };
 
 type Translations = {
