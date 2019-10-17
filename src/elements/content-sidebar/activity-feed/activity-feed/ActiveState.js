@@ -11,7 +11,6 @@ import AppActivity from '../app-activity';
 import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
-import Keywords from '../keywords';
 import withErrorHandling from '../../withErrorHandling';
 import type { FocusableFeedItemType } from '../../../../common/types/feed';
 import messages from './messages';
@@ -74,16 +73,15 @@ const ActiveState = ({
 
     return (
         <ul className="bcs-activity-feed-active-state">
-            {items.map((item: any) => {
-                const { type, id, versions, permissions } = item;
+            {items.map((item: FeedItem) => {
                 const isFocused = item === activeEntry;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
 
-                switch (type) {
+                switch (item.type) {
                     case 'comment':
                         return (
                             <li
-                                key={type + id}
+                                key={item.type + item.id}
                                 className={classNames('bcs-activity-feed-comment', { 'bcs-is-focused': isFocused })}
                                 data-testid="comment"
                                 ref={refValue}
@@ -98,8 +96,8 @@ const ActiveState = ({
                                     onDelete={onCommentDelete}
                                     onEdit={onCommentEdit}
                                     permissions={{
-                                        can_delete: getProp(permissions, 'can_delete', false),
-                                        can_edit: getProp(permissions, 'can_edit', false),
+                                        can_delete: getProp(item.permissions, 'can_delete', false),
+                                        can_edit: getProp(item.permissions, 'can_edit', false),
                                     }}
                                     translations={translations}
                                 />
@@ -108,7 +106,7 @@ const ActiveState = ({
                     case 'task':
                         return (
                             <li
-                                key={type + id}
+                                key={item.type + item.id}
                                 className={classNames('bcs-activity-feed-task-new', { 'bcs-is-focused': isFocused })}
                                 data-testid="task"
                                 ref={refValue}
@@ -130,23 +128,21 @@ const ActiveState = ({
                         );
                     case 'file_version':
                         return (
-                            <li key={type + id} className="bcs-version-item" data-testid="version">
-                                {versions ? (
+                            <li key={item.type + item.id} className="bcs-version-item" data-testid="version">
+                                {item.versions ? (
                                     <CollapsedVersion {...item} onInfo={onVersionInfo} />
                                 ) : (
                                     <Version {...item} onInfo={onVersionInfo} />
                                 )}
                             </li>
                         );
-                    case 'keywords':
-                        return (
-                            <li key={type + id} className="bcs-keywords-item" data-testid="keyword">
-                                <Keywords {...item} />
-                            </li>
-                        );
                     case 'app_activity':
                         return (
-                            <li key={type + id} className="bcs-activity-feed-app-activity" data-testid="app-activity">
+                            <li
+                                key={item.type + item.id}
+                                className="bcs-activity-feed-app-activity"
+                                data-testid="app-activity"
+                            >
                                 <AppActivity currentUser={currentUser} onDelete={onAppActivityDelete} {...item} />
                             </li>
                         );

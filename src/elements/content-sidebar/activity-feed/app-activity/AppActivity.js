@@ -25,11 +25,11 @@ type Props = {
     app: AppItem,
     created_at: string,
     created_by: User,
-    currentUser: User,
+    currentUser?: User,
     error?: ActionItemError,
     id: string,
     intl: IntlShape,
-    isPending: boolean,
+    isPending?: boolean,
     onDelete: ({ id: string, permissions?: {} }) => void,
     permissions?: BoxItemPermission,
     rendered_text: string,
@@ -112,7 +112,7 @@ class AppActivity extends React.PureComponent<Props, State> {
             permissions,
         } = this.props;
 
-        const canDelete = getProp(permissions, 'can_delete', false) || currentUser.id === createdBy.id;
+        const canDelete = getProp(permissions, 'can_delete', false) || (currentUser && currentUser.id === createdBy.id);
         const createdAtTimestamp = new Date(createdAt).getTime();
         const isMenuVisible = canDelete && !isPending;
         const { isConfirmingDelete } = this.state;
