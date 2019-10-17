@@ -359,7 +359,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const { file, api, features } = this.props;
-        const shouldShowNewTasks = true;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
@@ -367,8 +366,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
-            shouldShowNewTasks,
-            shouldShowAppActivity,
+            { shouldShowAppActivity },
         );
     }
 

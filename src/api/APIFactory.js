@@ -14,8 +14,6 @@ import SearchAPI from './Search';
 import RecentsAPI from './Recents';
 import VersionsAPI from './Versions';
 import CommentsAPI from './Comments';
-import TasksAPI from './tasks/Tasks';
-import TaskAssignmentsAPI from './tasks/TaskAssignments';
 import TasksNewAPI from './tasks/TasksNew';
 import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
@@ -80,16 +78,6 @@ class APIFactory {
      * @property {CommentsAPI}
      */
     commentsAPI: CommentsAPI;
-
-    /**
-     * @property {TasksAPI}
-     */
-    tasksAPI: TasksAPI;
-
-    /**
-     * @property {TaskAssignmentsAPI}
-     */
-    taskAssignmentsAPI: TaskAssignmentsAPI;
 
     /**
      * @property {TasksNewAPI}
@@ -223,11 +211,6 @@ class APIFactory {
         if (this.fileAccessStatsAPI) {
             this.fileAccessStatsAPI.destroy();
             delete this.fileAccessStatsAPI;
-        }
-
-        if (this.tasksAPI) {
-            this.tasksAPI.destroy();
-            delete this.tasksAPI;
         }
 
         if (this.tasksNewAPI) {
@@ -443,36 +426,6 @@ class APIFactory {
 
         this.commentsAPI = new CommentsAPI(this.options);
         return this.commentsAPI;
-    }
-
-    /**
-     * API for tasks
-     *
-     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {TasksAPI} TasksAPI instance
-     */
-    getTasksAPI(shouldDestroy: boolean): TasksAPI {
-        if (shouldDestroy) {
-            this.destroy();
-        }
-
-        this.tasksAPI = new TasksAPI(this.options);
-        return this.tasksAPI;
-    }
-
-    /**
-     * API for tasks
-     *
-     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {TasksAPI} TaskAssignmentsAPI instance
-     */
-    getTaskAssignmentsAPI(shouldDestroy: boolean): TaskAssignmentsAPI {
-        if (shouldDestroy) {
-            this.destroy();
-        }
-
-        this.taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
-        return this.taskAssignmentsAPI;
     }
 
     /**

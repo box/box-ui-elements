@@ -4,6 +4,8 @@
  * @author Box
  */
 /* eslint-disable no-use-before-define, no-unused-vars */
+// NOTE: all of these imports resolve to `any`
+// see https://github.com/facebook/flow/issues/7574
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor, InjectIntlProvidedProps } from 'react-intl';
@@ -163,6 +165,16 @@ type BoxItemPermission = {
     can_set_share_access?: boolean,
     can_share?: boolean,
     can_upload?: boolean,
+};
+
+type BoxCommentPermission = {
+    can_delete?: boolean,
+    can_edit?: boolean,
+};
+
+type BoxTaskPermission = {
+    can_delete?: boolean,
+    can_update?: boolean,
 };
 
 type BoxItemVersionPermission = {
@@ -388,7 +400,7 @@ type BoxItemVersion = {
     size?: number,
     trashed_at: ?string,
     trashed_by?: ?User,
-    type: string,
+    type: 'file_version',
     version_end?: number,
     version_number: string,
     version_promoted?: string,
@@ -658,31 +670,18 @@ type FileAccessStats = {
     preview_count?: number,
 };
 
-type TaskAssignment = {
-    assigned_to: User,
-    id: string,
-    status: TaskAssignmentStatus,
-    type: 'task_assignment',
-};
-
-type TaskAssignments = {
-    entries: Array<TaskAssignment>,
-    total_count: number,
-};
-
+// this is a subset of TaskNew, which imports as `any`
 type Task = {
     created_at: string,
     created_by: User,
-    due_at?: string,
     id: string,
-    message: string,
-    task_assignment_collection: TaskAssignments,
+    permissions: BoxTaskPermission,
     type: 'task',
 };
 
 type Tasks = {
     entries: Array<Task>,
-    total_count: number,
+    next_marker: ?string,
 };
 
 type Comment = {
@@ -692,6 +691,7 @@ type Comment = {
     is_reply_comment?: boolean,
     message?: string,
     modified_at: string,
+    permissions: BoxCommentPermission,
     tagged_message: string,
     type: 'comment',
 };
@@ -713,40 +713,43 @@ type AppItem = {|
     type: 'app',
 |};
 
-type BaseAppActivityItem = {
+type BaseAppActivityItem = {|
     activity_template: ActivityTemplateItem,
     app: AppItem,
     created_by: User,
     id: string,
     rendered_text: string,
     type: 'app_activity',
-};
+|};
 
-type AppActivityAPIItem = {
+type AppActivityAPIItem = {|
     occurred_at: string,
-} & BaseAppActivityItem;
+    ...BaseAppActivityItem,
+|};
 
 type AppActivityAPIItems = {
     entries: Array<AppActivityAPIItem>,
     total_count: number,
 };
 
-type AppActivityItem = {
+type AppActivityItem = {|
     created_at: string,
     permissions: BoxItemPermission,
-} & BaseAppActivityItem;
+    ...BaseAppActivityItem,
+|};
 
 type AppActivityItems = {
     entries: Array<AppActivityItem>,
     total_count: number,
 };
 
-type FeedItem = Comment | Task | TaskNew | BoxItemVersion | AppActivityItem;
+type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem;
+
 type FeedItems = Array<FeedItem>;
 
 type Collaborators = {
     entries: Array<SelectorItem>,
-    next_marker: 'string' | null,
+    next_marker: ?string,
 };
 
 type Translations = {
