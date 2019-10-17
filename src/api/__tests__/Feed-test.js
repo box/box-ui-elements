@@ -383,7 +383,7 @@ describe('api/Feed', () => {
             });
         });
 
-        test('should use the app activity api if the { shouldShowAppActivity } option in the last is true', done => {
+        test('should use the app activity api if the { shouldShowAppActivity } option in the last argument is true', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAppActivity: true });
             setImmediate(() => {
                 expect(feed.fetchAppActivity).toHaveBeenCalled();
@@ -391,7 +391,7 @@ describe('api/Feed', () => {
             });
         });
 
-        test('should note use the app activity api if the { shouldShowAppActivity } option in the is false', done => {
+        test('should not use the app activity api if the { shouldShowAppActivity } option in the last argument is false', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAppActivity: false });
             setImmediate(() => {
                 expect(feed.fetchAppActivity).not.toHaveBeenCalled();
