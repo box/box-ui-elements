@@ -1,5 +1,6 @@
 import Cache from '../../utils/Cache';
-import MetadataQuery from '../MetadataQuery';
+import MetadataQueryAPI from '../MetadataQuery';
+import MetadataAPI from '../Metadata';
 
 import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../../constants';
 
@@ -7,9 +8,39 @@ let metadataQuery;
 let cache;
 const marker = 'marker_123456789';
 const templateKey = 'awesomeTemplateKey';
-const templateType = 'metadata-template';
+const templateScope = 'enterprise_2222';
 const metadataInstanceId1 = 'c614dcaa-ebdc-4c88-b242-15cad4f7b787';
 const metadataInstanceId2 = 'ee348ed1-9460-44f3-9c34-aa580a93efda';
+const metadataTemplateEnumOptions = [
+    {
+        id: 'abc123',
+        key: 'yes',
+    },
+    {
+        id: 'pqr456',
+        key: 'no',
+    },
+];
+const metadataTemplate = {
+    fields: [
+        {
+            displayName: 'type',
+            key: 'type',
+            type: 'string',
+        },
+        {
+            displayName: 'amount',
+            key: 'amount',
+            type: 'float',
+        },
+        {
+            displayName: 'approved',
+            key: 'approved',
+            type: 'enum',
+            options: metadataTemplateEnumOptions,
+        },
+    ],
+};
 
 const mockMetadataQuerySuccessResponse = {
     entries: [
@@ -21,8 +52,8 @@ const mockMetadataQuerySuccessResponse = {
                 size: 10000,
             },
             metadata: {
-                enterprise_2222: {
-                    awesomeTemplateKey: {
+                [templateScope]: {
+                    [templateKey]: {
                         $id: metadataInstanceId1,
                         $parent: 'file_998877',
                         $type: 'awesomeTemplateKey-asdlk-1234-asd1',
@@ -44,8 +75,8 @@ const mockMetadataQuerySuccessResponse = {
                 size: 389027,
             },
             metadata: {
-                enterprise_2222: {
-                    awesomeTemplateKey: {
+                [templateScope]: {
+                    [templateKey]: {
                         $id: metadataInstanceId2,
                         $parent: 'file_998877',
                         $type: 'awesomeTemplateKey-asdlk-1234-asd1',
@@ -68,16 +99,25 @@ const flattenedMockMetadataQuerySuccessResponse = {
         {
             id: '1234',
             metadata: {
-                data: {
-                    type: 'bill',
-                    amount: 500,
-                    approved: 'yes',
-                },
                 id: metadataInstanceId1,
-                metadataTemplate: {
-                    type: templateType,
-                    templateKey,
-                },
+                fields: [
+                    {
+                        name: 'type',
+                        value: 'bill',
+                        type: 'string',
+                    },
+                    {
+                        name: 'amount',
+                        value: 500,
+                        type: 'float',
+                    },
+                    {
+                        name: 'approved',
+                        value: 'yes',
+                        type: 'enum',
+                        options: metadataTemplateEnumOptions,
+                    },
+                ],
             },
             name: 'filename1.pdf',
             size: 10000,
@@ -85,16 +125,25 @@ const flattenedMockMetadataQuerySuccessResponse = {
         {
             id: '9876',
             metadata: {
-                data: {
-                    type: 'receipt',
-                    amount: 2735,
-                    approved: 'no',
-                },
                 id: metadataInstanceId2,
-                metadataTemplate: {
-                    type: templateType,
-                    templateKey,
-                },
+                fields: [
+                    {
+                        name: 'type',
+                        value: 'receipt',
+                        type: 'string',
+                    },
+                    {
+                        name: 'amount',
+                        value: 2735,
+                        type: 'float',
+                    },
+                    {
+                        name: 'approved',
+                        value: 'no',
+                        type: 'enum',
+                        options: metadataTemplateEnumOptions,
+                    },
+                ],
             },
             name: 'filename2.mp4',
             size: 389027,
@@ -118,9 +167,13 @@ const mockAPIRequestParams = {
 
 describe('api/MetadataQuery', () => {
     beforeEach(() => {
-        metadataQuery = new MetadataQuery({});
+        metadataQuery = new MetadataQueryAPI({});
         cache = new Cache();
         metadataQuery.getCache = jest.fn().mockReturnValueOnce(cache);
+        metadataQuery.metadataQueryResponse = mockMetadataQuerySuccessResponse;
+        metadataQuery.templateKey = templateKey;
+        metadataQuery.templateScope = templateScope;
+        metadataQuery.metadataTemplate = metadataTemplate;
     });
 
     describe('getCacheKey()', () => {
@@ -204,42 +257,63 @@ describe('api/MetadataQuery', () => {
         });
     });
 
-    describe('queryMetadataSuccessHandler()', () => {
+    describe('successHandler()', () => {
         test('should set up the chache with success response and finish the processing', () => {
             cache.set = jest.fn();
             metadataQuery.finish = jest.fn();
+            metadataQuery.metadataQueryResponse = mockMetadataQuerySuccessResponse;
 
-            metadataQuery.queryMetadataSuccessHandler({
-                data: mockMetadataQuerySuccessResponse,
-            });
+            metadataQuery.successHandler({ data: metadataTemplate });
 
             expect(cache.set).toHaveBeenCalledWith(metadataQuery.key, flattenedMockMetadataQuerySuccessResponse);
             expect(metadataQuery.finish).toHaveBeenCalled();
         });
     });
 
+    describe('getTemplateSchemaInfo()', () => {
+        test('should not make API call to get template info if entries is empty', async () => {
+            const response = await metadataQuery.getTemplateSchemaInfo({ data: {} });
+            expect(response).toBeUndefined();
+        });
+
+        test('should make API call to get template info if there are entries', async () => {
+            metadataQuery.metadataAPI = {
+                getSchemaByTemplateKey: jest.fn().mockReturnValueOnce(Promise.resolve(metadataTemplate)),
+            };
+            const response = await metadataQuery.getTemplateSchemaInfo({ data: mockMetadataQuerySuccessResponse });
+            expect(metadataQuery.metadataAPI.getSchemaByTemplateKey).toHaveBeenCalledWith(templateKey);
+            expect(response).toBe(metadataTemplate);
+        });
+    });
+
     describe('queryMetadataRequest()', () => {
         beforeEach(() => {
-            metadataQuery.queryMetadataSuccessHandler = jest.fn();
+            metadataQuery.successHandler = jest.fn();
             metadataQuery.errorHandler = jest.fn();
         });
 
-        test('should not do anything if destroyed', () => {
+        test('should not do anything if destroyed', async () => {
             metadataQuery.isDestroyed = jest.fn().mockReturnValueOnce(true);
-            return expect(metadataQuery.queryMetadataRequest()).toBeUndefined();
+            return expect(await metadataQuery.queryMetadataRequest()).toBeUndefined();
         });
 
         test('should make xhr call to metadata_queries/execute endpoint and call success callback', async () => {
             const mockAPIResponse = { data: mockMetadataQuerySuccessResponse };
+            const mockTemplateSchemaResponse = { data: metadataTemplate };
 
             metadataQuery.isDestroyed = jest.fn().mockReturnValueOnce(false);
             metadataQuery.xhr = {
                 post: jest.fn().mockReturnValueOnce(Promise.resolve(mockAPIResponse)),
             };
+            metadataQuery.getTemplateSchemaInfo = jest
+                .fn()
+                .mockReturnValueOnce(Promise.resolve(mockTemplateSchemaResponse));
+            metadataQuery.successHandler = jest.fn();
 
             await metadataQuery.queryMetadataRequest(mockQuery);
             expect(metadataQuery.xhr.post).toHaveBeenCalledWith(mockAPIRequestParams);
-            expect(metadataQuery.queryMetadataSuccessHandler).toHaveBeenCalledWith(mockAPIResponse);
+            expect(metadataQuery.getTemplateSchemaInfo).toHaveBeenCalledWith(mockAPIResponse);
+            expect(metadataQuery.successHandler).toHaveBeenCalledWith(mockTemplateSchemaResponse);
             expect(metadataQuery.errorHandler).not.toHaveBeenCalled();
         });
 
@@ -301,7 +375,7 @@ describe('api/MetadataQuery', () => {
             metadataQuery.queryMetadataRequest = jest.fn();
             metadataQuery.isLoaded = jest.fn();
 
-            metadataQuery.queryMetadata(mockQuery, successCallback, errorCallback, options);
+            metadataQuery.queryMetadata(mockQuery, MetadataAPI, successCallback, errorCallback, options);
             expect(cache.unset).toHaveBeenCalledWith(mockCacheKey);
             expect(metadataQuery.queryMetadataRequest).toHaveBeenCalledWith(mockQuery);
         });

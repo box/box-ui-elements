@@ -38,13 +38,16 @@ type MetadataColumnConfig = {
 
 type MetadataColumnsToShow = Array<MetadataColumnConfig | string>;
 
+type FlattenedMetadataQueryResponseEntryMetadataField = {
+    name: string,
+    options?: MetadataTemplateFieldOption,
+    type: string,
+    value: string,
+};
+
 type FlattenedMetadataQueryResponseEntryMetadata = {
-    data?: StringAnyMap,
+    fields?: Array<FlattenedMetadataQueryResponseEntryMetadataField>,
     id?: string,
-    metadataTemplate?: {
-        templateKey: string,
-        type: string,
-    },
 };
 
 type FlattenedMetadataQueryResponseEntry = {
@@ -66,13 +69,19 @@ type FlattenedMetadataQueryResponseCollection = {
     percentLoaded: Number,
 };
 
+type MetadataTemplateSchemaResponse = {
+    data?: MetadataTemplate,
+};
+
 export type {
     FlattenedMetadataQueryResponse,
     FlattenedMetadataQueryResponseCollection,
     FlattenedMetadataQueryResponseEntry,
     FlattenedMetadataQueryResponseEntryMetadata,
+    FlattenedMetadataQueryResponseEntryMetadataField,
     MetadataColumnConfig,
     MetadataColumnsToShow,
+    MetadataTemplateSchemaResponse,
     MetadataQuery,
     MetadataQueryOrderByClause,
     MetadataQueryResponse,

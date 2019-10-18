@@ -6,6 +6,7 @@ import { injectIntl, type IntlShape } from 'react-intl';
 import MultiGrid from 'react-virtualized/dist/es/MultiGrid/MultiGrid';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import getProp from 'lodash/get';
+import find from 'lodash/find';
 import FileIcon from '../../icons/file-icon';
 import IconPencil from '../../icons/general/IconPencil';
 import messages from '../../elements/common/messages';
@@ -113,6 +114,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         const isCellEditable = isCellHovered && !!getProp(metadataColumn, 'canEdit', false);
         const item = items[rowIndex - 1];
         const { name } = item;
+        const fields = getProp(item, 'metadata.fields', []);
         let cellData;
 
         switch (columnIndex) {
@@ -127,12 +129,12 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 );
                 break;
             default: {
-                const data = getProp(item, 'metadata.data', {});
                 const mdFieldName = this.getMetadataColumnName(metadataColumn);
+                const data = getProp(find(fields, ['name', mdFieldName]), 'value'); // find field and get value
                 cellData = (
                     <>
-                        {data[mdFieldName]}
-                        {isCellEditable && (
+                        {data}
+                        {data && isCellEditable && (
                             <Tooltip text={intl.formatMessage(messages.editLabel)}>
                                 <PlainButton type="button">
                                     <IconPencil />

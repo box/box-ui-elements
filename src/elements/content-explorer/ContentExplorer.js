@@ -360,6 +360,7 @@ class ContentExplorer extends Component<Props, State> {
         // Fetch the Metadata Query Results
         this.api.getMetadataQueryAPI().queryMetadata(
             metadataQuery,
+            this.api.getMetadataAPI(false),
             (metadataQueryCollection: MetadataQueryResponse) => {
                 this.showMetadataQueryResultsSuccessCallback(metadataQueryCollection);
             },

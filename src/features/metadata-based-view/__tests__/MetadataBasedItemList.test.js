@@ -17,16 +17,44 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
     const currentCollection = {
         items: [
             {
+                id: '1',
                 metadata: {
-                    data: { type: 'bill', amount: 500 },
+                    id: '11',
+                    fields: [
+                        {
+                            name: 'type',
+                            type: 'string',
+                            value: 'bill',
+                        },
+                        {
+                            name: 'amount',
+                            type: 'float',
+                            value: 100,
+                        },
+                    ],
                 },
                 name: 'name1.pdf',
+                size: '123',
             },
             {
+                id: '2',
                 metadata: {
-                    data: { type: 'receipt', amount: 200 },
+                    id: '22',
+                    fields: [
+                        {
+                            name: 'type',
+                            type: 'string',
+                            value: 'receipt',
+                        },
+                        {
+                            name: 'amount',
+                            type: 'float',
+                            value: 200,
+                        },
+                    ],
                 },
                 name: 'name2.mp4',
+                size: '456',
             },
         ],
         nextMarker: 'abc',
@@ -79,7 +107,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             ${0}        | ${1}     | ${pdfIcon}
             ${1}        | ${1}     | ${pdfNameButton}
             ${2}        | ${1}     | ${'bill'}
-            ${3}        | ${1}     | ${500}
+            ${3}        | ${1}     | ${100}
             ${0}        | ${2}     | ${mp4Icon}
             ${1}        | ${2}     | ${mp4NameButton}
             ${2}        | ${2}     | ${'receipt'}

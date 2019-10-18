@@ -5,35 +5,43 @@
  */
 
 import getProp from 'lodash/get';
-import omit from 'lodash/omit';
+import find from 'lodash/find';
+import includes from 'lodash/includes';
 import Base from './Base';
+import MetadataAPI from './Metadata';
 import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../constants';
-import { ITEM_TYPE_FILE } from '../common/constants';
+import { METADATA_FIELD_TYPE_ENUM, METADATA_FIELD_TYPE_MULTISELECT, ITEM_TYPE_FILE } from '../common/constants';
+
 import type {
     MetadataQuery as MetadataQueryType,
     FlattenedMetadataQueryResponse,
     FlattenedMetadataQueryResponseEntry,
     FlattenedMetadataQueryResponseEntryMetadata,
+    FlattenedMetadataQueryResponseEntryMetadataField,
+    MetadataTemplateSchemaResponse,
     MetadataQueryResponse,
     MetadataQueryResponseEntry,
     MetadataQueryResponseEntryMetadata,
 } from '../common/types/metadataQueries';
 
+const SELECT_TYPES: Array<'enum' | 'multiSelect'> = [METADATA_FIELD_TYPE_ENUM, METADATA_FIELD_TYPE_MULTISELECT];
+
 class MetadataQuery extends Base {
-    /**
-     * @property {string}
-     */
     key: string;
 
-    /**
-     * @property {Function}
-     */
+    templateKey: string;
+
+    templateScope: string;
+
+    metadataTemplate: ?MetadataTemplate;
+
+    metadataQueryResponse: MetadataQueryResponse;
+
     successCallback: Function;
 
-    /**
-     * @property {Function}
-     */
     errorCallback: ElementsErrorCallback;
+
+    metadataAPI: MetadataAPI;
 
     /**
      * Creates a key for the metadata cache
@@ -98,32 +106,35 @@ class MetadataQuery extends Base {
      * @return {Object} - flattened metadata entry without the $ fields
      */
     flattenMetadata = (metadata: MetadataQueryResponseEntryMetadata): FlattenedMetadataQueryResponseEntryMetadata => {
-        let flattenedMetadata = {};
+        const templateFields = getProp(this.metadataTemplate, 'fields', []);
+        const instance = getProp(metadata, `${this.templateScope}.${this.templateKey}`);
 
-        Object.keys(metadata).forEach(scope => {
-            Object.keys(metadata[scope]).forEach(templateKey => {
-                const nonconformingInstance = metadata[scope][templateKey];
-                const data = omit(nonconformingInstance, [
-                    '$id',
-                    '$parent',
-                    '$type',
-                    '$typeScope',
-                    '$typeVersion',
-                    '$version',
-                ]);
+        if (!instance) {
+            return {};
+        }
 
-                flattenedMetadata = {
-                    data,
-                    id: nonconformingInstance.$id,
-                    metadataTemplate: {
-                        type: 'metadata-template',
-                        templateKey,
-                    },
+        const fields = Object.keys(instance)
+            .filter(key => !key.startsWith('$'))
+            .map(key => {
+                const templateField = find(templateFields, ['key', key]);
+                const type = getProp(templateField, 'type'); // get data type
+                const field: FlattenedMetadataQueryResponseEntryMetadataField = {
+                    name: key,
+                    value: instance[key],
+                    type,
                 };
-            });
-        });
 
-        return flattenedMetadata;
+                if (includes(SELECT_TYPES, type)) {
+                    field.options = getProp(templateField, 'options'); // get "options"
+                }
+
+                return field;
+            });
+
+        return {
+            fields,
+            id: instance.$id,
+        };
     };
 
     /**
@@ -147,7 +158,8 @@ class MetadataQuery extends Base {
      * @param {Object} - metadata query response object
      * @return {Object} - flattened metadata query response object
      */
-    flattenMetdataQueryResponse = ({ entries, next_marker }: MetadataQueryResponse): FlattenedMetadataQueryResponse => {
+    flattenMetdataQueryResponse = (): FlattenedMetadataQueryResponse => {
+        const { entries, next_marker }: MetadataQueryResponse = this.metadataQueryResponse;
         return {
             items: entries.map<FlattenedMetadataQueryResponseEntry>(this.flattenResponseEntry),
             nextMarker: next_marker,
@@ -155,14 +167,40 @@ class MetadataQuery extends Base {
     };
 
     /**
+     * Success handler function storing flattened response in Cache
+     * @param {Object} templateSchemaResponse - metadata template schema response
+     */
+    successHandler = (templateSchemaResponse: ?MetadataTemplateSchemaResponse): void => {
+        this.metadataTemplate = getProp(templateSchemaResponse, 'data');
+        const cache: APICache = this.getCache();
+        // Flatten the filtered metadata query response and set it in cache
+        cache.set(this.key, this.flattenMetdataQueryResponse());
+        this.finish();
+    };
+
+    /**
+     * Gets template schema
      * @param {Object} response
      */
-    queryMetadataSuccessHandler = ({ data }: { data: MetadataQueryResponse }): void => {
-        const cache: APICache = this.getCache();
-        const filteredResponse = this.filterMetdataQueryResponse(data);
-        // Flatten the filtered metadata query response and set it in cache
-        cache.set(this.key, this.flattenMetdataQueryResponse(filteredResponse));
-        this.finish();
+    getTemplateSchemaInfo = ({
+        data,
+    }: {
+        data: MetadataQueryResponse,
+    }): Promise<MetadataTemplateSchemaResponse | void> => {
+        this.metadataQueryResponse = this.filterMetdataQueryResponse(data);
+        const { entries } = data;
+
+        if (!entries || entries.length === 0) {
+            // if no items found for provided query, don't make API call to get template info
+            return Promise.resolve();
+        }
+
+        const metadata = getProp(entries, '[0].metadata');
+        this.templateScope = Object.keys(metadata)[0];
+        const instance = metadata[this.templateScope];
+        this.templateKey = Object.keys(instance)[0];
+
+        return this.metadataAPI.getSchemaByTemplateKey(this.templateKey);
     };
 
     /**
@@ -170,24 +208,26 @@ class MetadataQuery extends Base {
      * @param {Object} query query object with SQL Clauses like properties
      * @return {void}
      */
-    queryMetadataRequest(query: MetadataQueryType): void {
+    queryMetadataRequest(query: MetadataQueryType): Promise<void> {
         if (this.isDestroyed()) {
-            return;
+            Promise.resolve();
         }
 
         this.errorCode = ERROR_CODE_METADATA_QUERY;
-        this.xhr
+        return this.xhr
             .post({
                 url: this.getUrl(),
                 data: query,
             })
-            .then(this.queryMetadataSuccessHandler)
+            .then(this.getTemplateSchemaInfo)
+            .then(this.successHandler)
             .catch(this.errorHandler);
     }
 
     /**
      * API for querying enterprise metadata
      * @param {Object} query - metadata query object
+     * @param {Object} metadataAPI - metadata API
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
      * @param {boolean|void} [options.forceFetch] - Bypasses the cache
@@ -195,6 +235,7 @@ class MetadataQuery extends Base {
      */
     queryMetadata(
         query: MetadataQueryType,
+        metadataAPI: MetadataAPI,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
         options: Object = {},
@@ -207,6 +248,7 @@ class MetadataQuery extends Base {
         this.key = this.getCacheKey(context.id);
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
+        this.metadataAPI = metadataAPI;
 
         // Clear the cache if needed
         if (options.forceFetch) {
