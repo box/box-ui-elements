@@ -23,18 +23,13 @@ describe('features/unified-share-modal/SharedLinkAccessMenu', () => {
         );
 
     describe('render()', () => {
-        [
-            {
-                submitting: true,
-            },
-            {
-                submitting: false,
-            },
-        ].forEach(({ submitting }) => {
-            test(`should render correct menu when submitting is ${submitting}`, () => {
-                const sharedLinkAccessMenu = getWrapper({ submitting });
-                expect(sharedLinkAccessMenu).toMatchSnapshot();
-            });
+        test.each`
+            submitting
+            ${true}
+            ${false}
+        `('should render correct menu when submitting is $submitting', ({ submitting }) => {
+            const sharedLinkAccessMenu = getWrapper({ submitting });
+            expect(sharedLinkAccessMenu).toMatchSnapshot();
         });
 
         test('should render tooltipContent if provided', () => {
