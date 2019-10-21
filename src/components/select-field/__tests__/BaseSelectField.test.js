@@ -3,6 +3,7 @@ import sinon from 'sinon';
 
 import { scrollIntoView } from '../../../utils/dom';
 import BaseSelectField from '../BaseSelectField';
+import { BASE_SELECT_FIELD_OFFSET_TOP_PADDING } from '../../../constants';
 
 const sandbox = sinon.sandbox.create();
 
@@ -32,6 +33,7 @@ describe('components/select-field/BaseSelectField', () => {
                 options={options}
                 {...props}
             />,
+            { disableLifecycleMethods: true },
         );
 
     describe('renderButtonText()', () => {
@@ -853,6 +855,42 @@ describe('components/select-field/BaseSelectField', () => {
                 .withArgs(options[index]); // audio + video
 
             instance.selectMultiOption(index);
+        });
+    });
+
+    describe('componentDidMount()', () => {
+        test('should set the value of offsetTopValue', () => {
+            const wrapper = shallowRenderSelectField({
+                defaultValue: '',
+                selectedValues: [''],
+            });
+            const instance = wrapper.instance();
+            instance.calculateOffsetTopValue = jest.fn();
+            instance.componentDidMount();
+            expect(instance.calculateOffsetTopValue).toHaveBeenCalled();
+        });
+    });
+
+    describe('calculateOffsetTopValue()', () => {
+        test('should set the value of this.offsetTopValue', () => {
+            global.pageYOffset = 200;
+            const mockBoundingRectTop = 100;
+            const wrapper = shallowRenderSelectField({
+                defaultValue: '',
+                selectedValues: [''],
+            });
+            const instance = wrapper.instance();
+            instance.fieldRef = {
+                current: {
+                    getBoundingClientRect: jest.fn().mockReturnValue({
+                        top: mockBoundingRectTop,
+                    }),
+                },
+            };
+            instance.calculateOffsetTopValue();
+            expect(instance.offsetTopValue).toEqual(
+                global.pageYOffset + mockBoundingRectTop + BASE_SELECT_FIELD_OFFSET_TOP_PADDING,
+            );
         });
     });
 });

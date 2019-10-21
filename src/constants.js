@@ -420,3 +420,4 @@ export const KEYS = {
 
 /* ----------------- Other ----------------------- */
 export const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
+export const BASE_SELECT_FIELD_OFFSET_TOP_PADDING = 75;
