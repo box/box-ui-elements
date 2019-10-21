@@ -2,9 +2,14 @@
 
 .be.bcu-uploads-manager-container {
     position: fixed;
+    right: 56px;
     bottom: 0;
-    width: 100%;
+    left: 288px;
+    width: unset;
     max-height: 0;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-shadow: 0 2px 25px 0 rgba(0, 0, 0, .1);
     transition: max-height .5s;
 
     .bcu-progress-container {
