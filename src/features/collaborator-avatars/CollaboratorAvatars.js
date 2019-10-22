@@ -6,8 +6,8 @@ import classNames from 'classnames';
 import type { collaboratorType } from '../unified-share-modal/flowTypes';
 
 import CollaboratorAvatarItem from './CollaboratorAvatarItem';
+import PlainButton from '../../components/plain-button';
 import messages from './messages';
-import { KEYS } from '../../constants';
 
 import './CollaboratorAvatars.scss';
 
@@ -56,29 +56,18 @@ class CollaboratorAvatars extends Component<Props> {
             : `+${collaborators.length - maxDisplayedUserAvatars}`;
     }
 
-    handleActivate = (event: SyntheticKeyboardEvent<HTMLAnchorElement> | SyntheticMouseEvent<HTMLAnchorElement>) => {
-        const { onClick } = this.props;
-        // bail if it's a keyboard event but not the enter key
-        if (event.key && event.key !== KEYS.enter) {
-            return;
-        }
-        onClick();
-    };
-
     render() {
-        const { collaborators, maxDisplayedUserAvatars, containerAttributes } = this.props;
+        const { collaborators, maxDisplayedUserAvatars, containerAttributes, onClick } = this.props;
 
         return (
-            <a
+            <PlainButton
                 className={classNames('collaborator-avatar-container', {
                     'are-avatars-hidden': !this.isVisible(),
                 })}
-                onClick={this.handleActivate}
-                onKeyDown={this.handleActivate}
+                onClick={onClick}
                 {...containerAttributes}
                 aria-hidden={this.isVisible() ? 'false' : 'true'}
-                tabIndex="0"
-                role="button"
+                type="button"
             >
                 <div className="avatars-label">
                     <FormattedMessage {...messages.collaboratorAvatarsLabel} />
@@ -102,7 +91,7 @@ class CollaboratorAvatars extends Component<Props> {
                 {this.isVisible() && this.hasAdditionalCollaborators() && (
                     <div className="avatars-count">{this.formatAdditionalCollaboratorCount()}</div>
                 )}
-            </a>
+            </PlainButton>
         );
     }
 }
