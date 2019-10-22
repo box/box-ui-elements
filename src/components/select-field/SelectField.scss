@@ -3,7 +3,7 @@
 .select-field {
     .overlay {
         min-width: 100%;
-        min-height: 34px;
+        max-height: 340px; // show at most 12 items in the dropdown menu
         overflow-y: auto;
     }
 

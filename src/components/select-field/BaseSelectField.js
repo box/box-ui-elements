@@ -8,7 +8,7 @@ import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
 import DatalistItem from '../datalist-item';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
-import { BASE_SELECT_FIELD_OFFSET_TOP_PADDING, OVERLAY_WRAPPER_CLASS } from '../../constants';
+import { OVERLAY_WRAPPER_CLASS } from '../../constants';
 
 import './SelectField.scss';
 
@@ -85,24 +85,6 @@ class BaseSelectField extends React.Component<Props, State> {
             isOpen: false,
             shouldScrollIntoView: false,
         };
-
-        this.fieldRef = React.createRef();
-    }
-
-    componentDidMount() {
-        this.calculateOffsetTopValue();
-    }
-
-    /**
-     * Calculate this field's distance from the top.
-     * This allows us to create an overflow container for the field's dropdown menu that is navigable using both
-     * the mouse and arrow keys and will always fit within the current viewport.
-     */
-    calculateOffsetTopValue() {
-        this.offsetTopValue =
-            window.pageYOffset +
-            this.fieldRef.current.getBoundingClientRect().top +
-            BASE_SELECT_FIELD_OFFSET_TOP_PADDING;
     }
 
     setActiveItem = (index: number, shouldScrollIntoView?: boolean = true) => {
@@ -400,7 +382,6 @@ class BaseSelectField extends React.Component<Props, State> {
                 className={classNames(className, 'select-container')}
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
-                ref={this.fieldRef}
             >
                 <div className="select-field">
                     {this.renderSelectButton()}
@@ -415,7 +396,6 @@ class BaseSelectField extends React.Component<Props, State> {
                             role="listbox"
                             // preventDefault on mousedown so blur doesn't happen before click
                             onMouseDown={event => event.preventDefault()}
-                            style={{ maxHeight: `calc(100vh - ${this.offsetTopValue}px)` }}
                             {...listboxProps}
                         >
                             {this.renderSelectOptions()}
