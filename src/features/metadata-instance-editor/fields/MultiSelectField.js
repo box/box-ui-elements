@@ -48,6 +48,7 @@ const MultiSelectField = ({
                         value: option.key,
                     }))}
                     placeholder={placeholder}
+                    scrollable
                     selectedValues={dataValue}
                 />
             </Label>

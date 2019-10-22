@@ -31,6 +31,7 @@ exports[`features/metadata-instance-editor/fields/EnumField should correctly ren
           },
         ]
       }
+      scrollable={true}
       selectedValue="value"
     />
   </Label>
@@ -73,6 +74,7 @@ exports[`features/metadata-instance-editor/fields/EnumField should correctly ren
           },
         ]
       }
+      scrollable={true}
       selectedValue="value"
     />
   </Label>

@@ -53,6 +53,7 @@ const EnumField = ({ dataKey, dataValue, displayName, description, intl, onChang
                         }
                     }}
                     options={selectOptions}
+                    scrollable
                     selectedValue={
                         // Conditional to make flow happy, dataValue should never be an array
                         Array.isArray(dataValue) ? dataValue.join(', ') : dataValue || defaultValue

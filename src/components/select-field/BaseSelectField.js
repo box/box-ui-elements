@@ -49,6 +49,8 @@ type Props = {
     options: Array<SelectOptionProp>,
     /** The select button text shown when no options are selected. */
     placeholder?: string | React.Element<any>,
+    /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
+    scrollable?: boolean,
     /** The currently selected option values (can be empty) */
     selectedValues: Array<SelectOptionValueProp>,
     /** Array of ordered indices indicating where to insert separators (ex. index 2 means insert a separator after option 2) */
@@ -64,12 +66,15 @@ type State = {
     shouldScrollIntoView: boolean,
 };
 
+export const OVERLAY_SCROLLABLE_CLASS = 'bdl-SelectField-overlay--scrollable';
+
 class BaseSelectField extends React.Component<Props, State> {
     static defaultProps = {
         buttonProps: {},
         isDisabled: false,
         multiple: false,
         options: [],
+        scrollable: false,
         selectedValues: [],
         separatorIndices: [],
     };
@@ -361,7 +366,7 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     render() {
-        const { className, multiple } = this.props;
+        const { className, multiple, scrollable } = this.props;
         const { isOpen } = this.state;
 
         // @TODO: Need invariants on specific conditions.
@@ -391,7 +396,9 @@ class BaseSelectField extends React.Component<Props, State> {
                         })}
                     >
                         <ul
-                            className="overlay"
+                            className={classNames('overlay', {
+                                [OVERLAY_SCROLLABLE_CLASS]: scrollable,
+                            })}
                             id={this.selectFieldID}
                             role="listbox"
                             // preventDefault on mousedown so blur doesn't happen before click

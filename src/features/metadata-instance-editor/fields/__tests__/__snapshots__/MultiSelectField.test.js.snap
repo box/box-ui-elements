@@ -14,6 +14,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
           id="boxui.metadataInstanceEditor.fieldMultiSelectValue"
         />
       }
+      scrollable={true}
       selectedValues={
         Array [
           "value",
@@ -43,6 +44,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
           id="boxui.metadataInstanceEditor.fieldMultiSelectValue"
         />
       }
+      scrollable={true}
       selectedValues={
         Array [
           "value",
