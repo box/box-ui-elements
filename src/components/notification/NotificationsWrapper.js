@@ -9,11 +9,9 @@ type Props = {
 };
 
 const NotificationsWrapper = ({ children }: Props) => (
-    <FocusTrap>
-        <Portal className="notifications-wrapper" aria-live="polite">
-            {children}
-        </Portal>
-    </FocusTrap>
+    <Portal className="notifications-wrapper" aria-live="polite">
+        {children ? <FocusTrap>{children}</FocusTrap> : null}
+    </Portal>
 );
 
 export default NotificationsWrapper;

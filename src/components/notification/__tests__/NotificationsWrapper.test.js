@@ -6,16 +6,26 @@ import Notification from '../Notification';
 describe('components/notification/NotificationsWrapper', () => {
     test('should render a Portal with the notifications-wrapper class', () => {
         const wrapper = shallow(<NotificationsWrapper />);
+        expect(wrapper.is('Portal')).toBeTruthy();
         const portal = wrapper.find('Portal');
-        expect(portal.length).toEqual(1);
-        expect(portal.hasClass('notifications-wrapper')).toBeTruthy();
+        expect(wrapper.hasClass('notifications-wrapper')).toBeTruthy();
         expect(portal.props('aria-live')).toBeTruthy();
     });
 
     test('should render a focus trap', () => {
-        const wrapper = shallow(<NotificationsWrapper />);
+        const wrapper = shallow(
+            <NotificationsWrapper>
+                <Notification>test1</Notification>
+            </NotificationsWrapper>,
+        );
         const focusTrap = wrapper.find('FocusTrap');
         expect(focusTrap.length).toEqual(1);
+    });
+
+    test('should not render focusTrap if there are no children', () => {
+        const wrapper = shallow(<NotificationsWrapper />);
+        const focusTrap = wrapper.find('FocusTrap');
+        expect(focusTrap.length).toEqual(0);
     });
 
     test('should render child notifications when passed in children', () => {
