@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import type { collaboratorType } from '../unified-share-modal/flowTypes';
 
 import CollaboratorAvatarItem from './CollaboratorAvatarItem';
+import PlainButton from '../../components/plain-button';
 import messages from './messages';
 
 import './CollaboratorAvatars.scss';
@@ -59,16 +60,14 @@ class CollaboratorAvatars extends Component<Props> {
         const { collaborators, maxDisplayedUserAvatars, containerAttributes, onClick } = this.props;
 
         return (
-            // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-            <a
+            <PlainButton
                 className={classNames('collaborator-avatar-container', {
                     'are-avatars-hidden': !this.isVisible(),
                 })}
                 onClick={onClick}
                 {...containerAttributes}
                 aria-hidden={this.isVisible() ? 'false' : 'true'}
-                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                tabIndex="0"
+                type="button"
             >
                 <div className="avatars-label">
                     <FormattedMessage {...messages.collaboratorAvatarsLabel} />
@@ -92,7 +91,7 @@ class CollaboratorAvatars extends Component<Props> {
                 {this.isVisible() && this.hasAdditionalCollaborators() && (
                     <div className="avatars-count">{this.formatAdditionalCollaboratorCount()}</div>
                 )}
-            </a>
+            </PlainButton>
         );
     }
 }
