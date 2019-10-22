@@ -13,7 +13,6 @@ const NotificationsWrapper = ({ children }: Props) => (
         <Portal className="notifications-wrapper" aria-live="polite">
             {children}
         </Portal>
-        ;
     </FocusTrap>
 );
 
