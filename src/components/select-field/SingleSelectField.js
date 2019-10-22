@@ -10,12 +10,12 @@ type Props = {
     fieldType?: string,
     /** The select field is disabled if true */
     isDisabled?: boolean,
+    /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
+    isScrollable?: boolean,
     /** The currently selected option value */
     onChange: Function,
     /** The placeholder text for the field  */
     placeholder?: string | React.Node,
-    /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
-    scrollable?: boolean,
     /** Function will be called with the selected option after user selects a new option */
     selectedValue?: SelectOptionValueProp,
 };

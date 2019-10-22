@@ -220,9 +220,9 @@ describe('components/select-field/BaseSelectField', () => {
         });
 
         test.each([[true, true], [false, false]])(
-            'should apply the correct CSS classes to the overlay element when scrollable is %s',
-            (scrollable, result) => {
-                const wrapper = shallowRenderSelectField({ scrollable });
+            'should apply the correct CSS classes to the overlay element when isScrollable is %s',
+            (isScrollable, result) => {
+                const wrapper = shallowRenderSelectField({ isScrollable });
                 const overlay = wrapper.find('.overlay');
                 expect(overlay.hasClass(OVERLAY_SCROLLABLE_CLASS)).toBe(result);
             },

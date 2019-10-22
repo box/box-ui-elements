@@ -38,6 +38,8 @@ type Props = {
     error?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
+    /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
+    isScrollable?: boolean,
     multiple: boolean,
     /** Function will be called with an array of all selected options after user selects a new option */
     onChange: Function,
@@ -49,8 +51,6 @@ type Props = {
     options: Array<SelectOptionProp>,
     /** The select button text shown when no options are selected. */
     placeholder?: string | React.Element<any>,
-    /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
-    scrollable?: boolean,
     /** The currently selected option values (can be empty) */
     selectedValues: Array<SelectOptionValueProp>,
     /** Array of ordered indices indicating where to insert separators (ex. index 2 means insert a separator after option 2) */
@@ -72,9 +72,9 @@ class BaseSelectField extends React.Component<Props, State> {
     static defaultProps = {
         buttonProps: {},
         isDisabled: false,
+        isScrollable: false,
         multiple: false,
         options: [],
-        scrollable: false,
         selectedValues: [],
         separatorIndices: [],
     };
@@ -366,7 +366,7 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     render() {
-        const { className, multiple, scrollable } = this.props;
+        const { className, multiple, isScrollable } = this.props;
         const { isOpen } = this.state;
 
         // @TODO: Need invariants on specific conditions.
@@ -397,7 +397,7 @@ class BaseSelectField extends React.Component<Props, State> {
                     >
                         <ul
                             className={classNames('overlay', {
-                                [OVERLAY_SCROLLABLE_CLASS]: scrollable,
+                                [OVERLAY_SCROLLABLE_CLASS]: isScrollable,
                             })}
                             id={this.selectFieldID}
                             role="listbox"
