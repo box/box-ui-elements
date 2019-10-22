@@ -7,6 +7,7 @@ import type { collaboratorType } from '../unified-share-modal/flowTypes';
 
 import CollaboratorAvatarItem from './CollaboratorAvatarItem';
 import messages from './messages';
+import { KEYS } from '../../constants';
 
 import './CollaboratorAvatars.scss';
 
@@ -55,20 +56,29 @@ class CollaboratorAvatars extends Component<Props> {
             : `+${collaborators.length - maxDisplayedUserAvatars}`;
     }
 
+    handleActivate = (event: SyntheticKeyboardEvent<HTMLAnchorElement> | SyntheticMouseEvent<HTMLAnchorElement>) => {
+        const { onClick } = this.props;
+        // bail if it's a keyboard event but not the enter key
+        if (event.key && event.key !== KEYS.enter) {
+            return;
+        }
+        onClick();
+    };
+
     render() {
-        const { collaborators, maxDisplayedUserAvatars, containerAttributes, onClick } = this.props;
+        const { collaborators, maxDisplayedUserAvatars, containerAttributes } = this.props;
 
         return (
-            // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
             <a
                 className={classNames('collaborator-avatar-container', {
                     'are-avatars-hidden': !this.isVisible(),
                 })}
-                onClick={onClick}
+                onClick={this.handleActivate}
+                onKeyDown={this.handleActivate}
                 {...containerAttributes}
                 aria-hidden={this.isVisible() ? 'false' : 'true'}
-                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 tabIndex="0"
+                role="button"
             >
                 <div className="avatars-label">
                     <FormattedMessage {...messages.collaboratorAvatarsLabel} />

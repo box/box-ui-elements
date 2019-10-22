@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import CollaboratorAvatars from '../CollaboratorAvatars';
+import { KEYS } from '../../../constants';
 
 describe('features/collaborator-avatars/CollaboratorAvatars', () => {
     const defaultCollaborators = [
@@ -216,6 +217,32 @@ describe('features/collaborator-avatars/CollaboratorAvatars', () => {
             });
 
             expect(wrapper.instance().formatAdditionalCollaboratorCount()).toEqual('99+');
+        });
+    });
+
+    describe('handleActivate()', () => {
+        test('should call onClick for mouse click', () => {
+            const onClickMock = jest.fn();
+            const wrapper = getWrapper({ onClick: onClickMock });
+            const event = { type: 'click' };
+            wrapper.instance().handleActivate(event);
+            expect(onClickMock).toBeCalled();
+        });
+
+        test('should call onClick for keyboard enter key', () => {
+            const onClickMock = jest.fn();
+            const wrapper = getWrapper({ onClick: onClickMock });
+            const event = { key: KEYS.enter, type: 'keydown' };
+            wrapper.instance().handleActivate(event);
+            expect(onClickMock).toBeCalled();
+        });
+
+        test('should not call onClick for keyboard key other than enter', () => {
+            const onClickMock = jest.fn();
+            const wrapper = getWrapper({ onClick: onClickMock });
+            const event = { key: KEYS.escape, type: 'keydown' };
+            wrapper.instance().handleActivate(event);
+            expect(onClickMock).not.toBeCalled();
         });
     });
 });

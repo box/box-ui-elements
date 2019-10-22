@@ -4,6 +4,9 @@ exports[`features/collaborator-avatars/CollaboratorAvatars render() should rende
 <a
   aria-hidden="false"
   className="collaborator-avatar-container"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
   tabIndex="0"
 >
   <div
@@ -47,6 +50,9 @@ exports[`features/collaborator-avatars/CollaboratorAvatars render() should rende
 <a
   aria-hidden="false"
   className="collaborator-avatar-container"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
   tabIndex="0"
 >
   <div
@@ -84,6 +90,9 @@ exports[`features/collaborator-avatars/CollaboratorAvatars render() should rende
 <a
   aria-hidden="false"
   className="collaborator-avatar-container"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
   tabIndex="0"
 >
   <div
