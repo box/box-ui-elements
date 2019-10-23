@@ -388,6 +388,17 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             });
         });
 
+        test('shoud not stop esc propagation if dropdown is closed', () => {
+            const wrapper = getWrapper();
+            wrapper.setState({ isOpen: false });
+
+            wrapper.find(FakeButton).simulate('keydown', {
+                key: 'Escape',
+                preventDefault: sandbox.mock(),
+                stopPropagation: sandbox.mock().never(),
+            });
+        });
+
         test('should call openMenuAndSetFocus(-1) to last item when "up" is pressed', () => {
             const wrapper = shallow(
                 <DropdownMenu>
