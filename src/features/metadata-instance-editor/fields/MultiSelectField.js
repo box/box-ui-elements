@@ -36,6 +36,7 @@ const MultiSelectField = ({
             <Label text={displayName}>
                 {!!description && <i className="metadata-instance-editor-field-multi-select-desc">{description}</i>}
                 <MultiSelect
+                    isScrollable
                     onChange={(selectedOptions: Array<SelectOptionProp>) => {
                         if (selectedOptions.length) {
                             onChange(dataKey, selectedOptions.map(({ value }) => value));
