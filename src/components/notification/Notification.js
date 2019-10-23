@@ -8,6 +8,7 @@ import IconBell from '../../icons/general/IconBell';
 import IconClose from '../../icons/general/IconClose';
 import IconInfoThin from '../../icons/general/IconInfoThin';
 import IconSync from '../../icons/general/IconSync';
+import { KEYS } from '../../constants';
 
 import './Notification.scss';
 
@@ -50,11 +51,13 @@ type Props = {
      */
     children: React.Node,
     /** Function that gets executed when close button is clicked or when duration expires. */
-    duration?: 'short' | 'long',
+    closeOnClick?: boolean,
     /** `duration`: When set, dictates how long the notification will exist before calling `onClose`.
      *  If unset, the notification will not automatically call `onClose`.
      * - `short`: 5s
      * - `long`: 10s */
+    duration?: 'short' | 'long',
+    /** If set it forces the notification to stay open and only close when clicked on buttons inside it */
     intl: Object,
     onClose?: Function,
     /**
@@ -75,7 +78,11 @@ class Notification extends React.Component<Props> {
     };
 
     componentDidMount() {
-        const { duration, onClose } = this.props;
+        const { closeOnClick, duration, onClose } = this.props;
+        if (closeOnClick) {
+            return;
+        }
+
         this.timeout = duration && onClose ? setTimeout(onClose, DURATION_TIMES[duration]) : null;
     }
 
@@ -86,6 +93,14 @@ class Notification extends React.Component<Props> {
         }
         if (onClose) {
             onClose(event);
+        }
+    };
+
+    handleKeyDown = (event: SyntheticKeyboardEvent<>) => {
+        if (event.key === KEYS.escape) {
+            event.stopPropagation();
+            event.preventDefault();
+            this.onClose();
         }
     };
 
@@ -103,7 +118,7 @@ class Notification extends React.Component<Props> {
         const classes = classNames('notification', type, overflow);
 
         return (
-            <div className={classes}>
+            <div className={classes} onKeyDown={this.handleKeyDown} role="presentation">
                 {React.cloneElement(ICON_RENDERER[type](), {
                     color: '#fff',
                     height: 20,
@@ -115,6 +130,7 @@ class Notification extends React.Component<Props> {
                     className="close-btn"
                     onClick={this.onClose}
                     type="button"
+                    tabIndex="0"
                 >
                     <IconClose color="#FFF" height={18} width={18} />
                 </button>
