@@ -2,7 +2,7 @@ import React from 'react';
 import sinon from 'sinon';
 
 import { scrollIntoView } from '../../../utils/dom';
-import BaseSelectField from '../BaseSelectField';
+import BaseSelectField, { OVERLAY_SCROLLABLE_CLASS } from '../BaseSelectField';
 
 const sandbox = sinon.sandbox.create();
 
@@ -218,6 +218,15 @@ describe('components/select-field/BaseSelectField', () => {
 
             expect(overlay.prop('aria-multiselectable')).toBe(true);
         });
+
+        test.each([[true, true], [false, false]])(
+            'should apply the correct CSS classes to the overlay element when isScrollable is %s',
+            (isScrollable, result) => {
+                const wrapper = shallowRenderSelectField({ isScrollable });
+                const overlay = wrapper.find('.overlay');
+                expect(overlay.hasClass(OVERLAY_SCROLLABLE_CLASS)).toBe(result);
+            },
+        );
     });
 
     describe('onBlur', () => {

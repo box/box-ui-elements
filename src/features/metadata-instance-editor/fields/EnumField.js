@@ -45,6 +45,7 @@ const EnumField = ({ dataKey, dataValue, displayName, description, intl, onChang
             <Label text={displayName}>
                 {!!description && <i className="metadata-instance-editor-field-enum-desc">{description}</i>}
                 <SingleSelectField
+                    isScrollable
                     onChange={(option: Option) => {
                         if (option.isSelectable) {
                             onChange(dataKey, option.value);

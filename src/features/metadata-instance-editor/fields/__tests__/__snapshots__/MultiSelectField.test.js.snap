@@ -6,6 +6,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
 >
   <Label>
     <MultiSelectField
+      isScrollable={true}
       onChange={[Function]}
       options={Array []}
       placeholder={
@@ -35,6 +36,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
       description
     </i>
     <MultiSelectField
+      isScrollable={true}
       onChange={[Function]}
       options={Array []}
       placeholder={
