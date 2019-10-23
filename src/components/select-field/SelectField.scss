@@ -21,4 +21,11 @@
     flex: none;
     width: 20px;
     height: 16px;
+    margin-left: -5px;
+    text-align: left;
+}
+
+.bdl-SelectField-overlay--scrollable {
+    max-height: 340px; // show at most 12 items in the dropdown menu
+    overflow-y: auto;
 }

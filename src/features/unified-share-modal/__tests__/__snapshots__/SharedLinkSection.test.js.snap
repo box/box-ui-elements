@@ -124,6 +124,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
+      accessLevelsDisabledReason={Object {}}
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
@@ -267,6 +268,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
+      accessLevelsDisabledReason={Object {}}
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
@@ -441,6 +443,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
+      accessLevelsDisabledReason={Object {}}
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
@@ -618,6 +621,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
     className="shared-link-access-row"
   >
     <SharedLinkAccessMenu
+      accessLevelsDisabledReason={Object {}}
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       itemType="file"
@@ -754,6 +758,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
+      accessLevelsDisabledReason={Object {}}
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
@@ -884,6 +889,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
+      accessLevelsDisabledReason={Object {}}
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
@@ -1039,6 +1045,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInThisItem"
+      accessLevelsDisabledReason={Object {}}
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
