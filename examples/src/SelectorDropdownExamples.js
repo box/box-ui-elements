@@ -56,7 +56,7 @@ class SelectorDropdownContainer extends Component {
         const dropdownTitle = <div>This is a Title</div>;
 
         return (
-            <div>
+            <div style={{ paddingBottom: '330px' }}>
                 <SelectorDropdown
                     onSelect={this.handleItemSelection}
                     selector={

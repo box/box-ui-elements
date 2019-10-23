@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import uniqueId from 'lodash/uniqueId';
 
 import IconVerified from '../../icons/general/IconVerified';
 
@@ -53,6 +54,13 @@ const TextInput = ({
         'show-error': !!error,
     });
 
+    const errorMessageID = React.useRef(uniqueId('errorMessage')).current;
+    const ariaAttrs = {
+        'aria-invalid': !!error,
+        'aria-required': isRequired,
+        'aria-errormessage': errorMessageID,
+    };
+
     return (
         <div className={classes}>
             <Label
@@ -63,10 +71,13 @@ const TextInput = ({
             >
                 {!!description && <i className="text-input-description">{description}</i>}
                 <Tooltip isShown={!!error} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
-                    <input ref={inputRef} required={isRequired} {...rest} />
+                    <input ref={inputRef} required={isRequired} {...ariaAttrs} {...rest} />
                 </Tooltip>
                 {isLoading && !isValid && <LoadingIndicator className="text-input-loading" />}
                 {isValid && !isLoading && <IconVerified className="text-input-verified" />}
+                <span id={errorMessageID} className="accessibility-hidden" role="alert">
+                    {error}
+                </span>
             </Label>
         </div>
     );

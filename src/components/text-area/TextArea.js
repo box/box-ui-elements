@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import uniqueId from 'lodash/uniqueId';
 
 import Label from '../label';
 import Tooltip from '../tooltip';
@@ -38,6 +39,13 @@ const TextArea = ({
         'show-error': !!error,
     });
 
+    const errorMessageID = React.useRef(uniqueId('errorMessage')).current;
+    const ariaAttrs = {
+        'aria-invalid': !!error,
+        'aria-required': isRequired,
+        'aria-errormessage': errorMessageID,
+    };
+
     return (
         <div className={classes}>
             <Label hideLabel={hideLabel} showOptionalText={!hideOptionalLabel && !isRequired} text={label}>
@@ -46,9 +54,13 @@ const TextArea = ({
                         ref={textareaRef}
                         required={isRequired}
                         style={{ resize: isResizable ? '' : 'none' }}
+                        {...ariaAttrs}
                         {...rest}
                     />
                 </Tooltip>
+                <span id={errorMessageID} className="accessibility-hidden" role="alert">
+                    {error}
+                </span>
             </Label>
         </div>
     );

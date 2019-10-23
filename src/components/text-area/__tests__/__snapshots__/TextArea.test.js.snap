@@ -18,6 +18,8 @@ exports[`components/text-area/TextArea should not show optional text when hideOp
       theme="error"
     >
       <textarea
+        aria-errormessage="errorMessage10"
+        aria-invalid={false}
         style={
           Object {
             "resize": "none",
@@ -25,6 +27,11 @@ exports[`components/text-area/TextArea should not show optional text when hideOp
         }
       />
     </Tooltip>
+    <span
+      className="accessibility-hidden"
+      id="errorMessage10"
+      role="alert"
+    />
   </Label>
 </div>
 `;
@@ -47,6 +54,8 @@ exports[`components/text-area/TextArea should show optional text when hideOption
       theme="error"
     >
       <textarea
+        aria-errormessage="errorMessage11"
+        aria-invalid={false}
         style={
           Object {
             "resize": "none",
@@ -54,6 +63,11 @@ exports[`components/text-area/TextArea should show optional text when hideOption
         }
       />
     </Tooltip>
+    <span
+      className="accessibility-hidden"
+      id="errorMessage11"
+      role="alert"
+    />
   </Label>
 </div>
 `;

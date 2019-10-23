@@ -20,10 +20,13 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
     <span
       aria-hidden="true"
       className="accessibility-hidden"
+      data-testid="pill-selection-helper"
       onBlur={[Function]}
       tabIndex={-1}
     />
     <textarea
+      aria-errormessage="errorMessage2"
+      aria-invalid={false}
       autoComplete="off"
       className="pill-selector-input"
       disabled={true}
@@ -32,6 +35,11 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
     />
     <SuggestedPillsRow
       selectedPillsValues={Array []}
+    />
+    <span
+      className="accessibility-hidden"
+      id="errorMessage2"
+      role="alert"
     />
   </span>
 </Tooltip>

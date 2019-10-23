@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import uniqueId from 'lodash/uniqueId';
 
 import Tooltip from '../tooltip';
 import { KEYS } from '../../constants';
@@ -140,6 +141,8 @@ class PillSelector extends React.Component<Props, State> {
         }
     };
 
+    errorMessageID = uniqueId('errorMessage');
+
     hiddenRef = (hiddenEl: ?HTMLSpanElement) => {
         if (hiddenEl) {
             this.hiddenEl = hiddenEl;
@@ -178,6 +181,10 @@ class PillSelector extends React.Component<Props, State> {
             'show-error': !!error,
             'pill-selector-suggestions-enabled': suggestedPillsEnabled,
         });
+        const ariaAttrs = {
+            'aria-invalid': !!error,
+            'aria-errormessage': this.errorMessageID,
+        };
 
         return (
             <Tooltip isShown={!!error} text={error || ''} position="middle-right" theme="error">
@@ -207,8 +214,10 @@ class PillSelector extends React.Component<Props, State> {
                         onBlur={this.resetSelectedIndex}
                         ref={this.hiddenRef}
                         tabIndex={-1}
+                        data-testid="pill-selection-helper"
                     />
                     <textarea
+                        {...ariaAttrs}
                         {...rest}
                         {...inputProps}
                         autoComplete="off"
@@ -227,6 +236,9 @@ class PillSelector extends React.Component<Props, State> {
                         suggestedPillsData={suggestedPillsData}
                         title={suggestedPillsTitle}
                     />
+                    <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
+                        {error}
+                    </span>
                 </span>
             </Tooltip>
         );
