@@ -14,6 +14,7 @@ import iconCellRenderer from '../common/item/iconCellRenderer';
 import { isFocusableElement, focus } from '../../utils/dom';
 import shareAccessCellRenderer from './shareAccessCellRenderer';
 import checkboxCellRenderer from './checkboxCellRenderer';
+import radioCellRenderer from './radioCellRenderer';
 import isRowSelectable from './cellRendererHelper';
 import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
 
@@ -25,6 +26,7 @@ type Props = {
     extensionsWhitelist: string[],
     focusedRow: number,
     hasHitSelectionLimit: boolean,
+    isSingleSelect: boolean,
     isSmall: boolean,
     onFocusChange: Function,
     onItemClick: Function,
@@ -46,6 +48,7 @@ const ItemList = ({
     selectableType,
     canSetShareAccess,
     hasHitSelectionLimit,
+    isSingleSelect,
     extensionsWhitelist,
     onItemSelect,
     onItemClick,
@@ -57,6 +60,7 @@ const ItemList = ({
     const iconCell = iconCellRenderer();
     const nameCell = nameCellRenderer(rootId, view, onItemClick);
     const checkboxCell = checkboxCellRenderer(onItemSelect, selectableType, extensionsWhitelist, hasHitSelectionLimit);
+    const radioCell = radioCellRenderer(onItemSelect, selectableType, extensionsWhitelist, hasHitSelectionLimit);
     const shareAccessCell = shareAccessCellRenderer(
         onShareAccessChange,
         canSetShareAccess,
@@ -154,7 +158,7 @@ const ItemList = ({
                             )}
                             <Column
                                 dataKey={FIELD_ID}
-                                cellRenderer={checkboxCell}
+                                cellRenderer={isSingleSelect ? radioCell : checkboxCell}
                                 width={isSmall ? 20 : 30}
                                 flexShrink={0}
                             />
