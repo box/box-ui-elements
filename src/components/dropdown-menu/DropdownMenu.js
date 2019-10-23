@@ -107,6 +107,8 @@ class DropdownMenu extends React.Component<Props, State> {
     };
 
     handleButtonKeyDown = (event: SyntheticKeyboardEvent<>) => {
+        const { isOpen } = this.state;
+
         switch (event.key) {
             case ' ': // Spacebar
             case 'Enter':
@@ -125,7 +127,10 @@ class DropdownMenu extends React.Component<Props, State> {
                 break;
 
             case 'Escape':
-                event.stopPropagation();
+                if (isOpen) {
+                    event.stopPropagation();
+                }
+
                 event.preventDefault();
                 this.closeMenu();
                 break;
