@@ -3,6 +3,7 @@ import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
 import DropdownMenu from '../DropdownMenu';
+import { KEYS } from '../../../constants';
 
 const sandbox = sinon.sandbox.create();
 
@@ -357,13 +358,13 @@ describe('components/dropdown-menu/DropdownMenu', () => {
     describe('handleButtonKeyDown()', () => {
         [
             {
-                key: ' ',
+                key: KEYS.space,
             },
             {
-                key: 'Enter',
+                key: KEYS.enter,
             },
             {
-                key: 'ArrowDown',
+                key: KEYS.arrowDown,
             },
         ].forEach(({ key }) => {
             test('should call openMenuAndSetFocus(0) when an open keystroke is pressed', () => {
@@ -393,7 +394,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             wrapper.setState({ isOpen: false });
 
             wrapper.find(FakeButton).simulate('keydown', {
-                key: 'Escape',
+                key: KEYS.escape,
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock().never(),
             });
@@ -404,7 +405,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             wrapper.setState({ isOpen: true });
 
             wrapper.find(FakeButton).simulate('keydown', {
-                key: 'Escape',
+                key: KEYS.escape,
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             });
