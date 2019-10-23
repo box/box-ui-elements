@@ -1,16 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should render disabled pill selector 1`] = `
-<SelectorDropdown
-  className="pill-selector-wrapper"
-  onEnter={[Function]}
-  onSelect={[Function]}
-  selector={
-    <Label
-      text=""
-    >
+<Label
+  text=""
+>
+  <SelectorDropdown
+    className="pill-selector-wrapper"
+    onEnter={[Function]}
+    onSelect={[Function]}
+    selector={
       <PillSelector
         allowInvalidPills={false}
+        aria-label="test"
         disabled={true}
         error=""
         inputProps={Object {}}
@@ -20,14 +21,21 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should 
         onCompositionStart={[Function]}
         onInput={[Function]}
         onPaste={[Function]}
-        onRemove={[Function]}
+        onRemove={[MockFunction]}
         placeholder=""
         selectedOptions={Array []}
         validator={[Function]}
         value=""
       />
-    </Label>
-  }
-  shouldSetActiveItemOnOpen={false}
-/>
+    }
+    shouldSetActiveItemOnOpen={false}
+  >
+    <div>
+      Option 1
+    </div>
+    <div>
+      Option 2
+    </div>
+  </SelectorDropdown>
+</Label>
 `;
