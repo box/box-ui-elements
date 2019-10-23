@@ -130,7 +130,6 @@ class Notification extends React.Component<Props> {
                     className="close-btn"
                     onClick={this.onClose}
                     type="button"
-                    tabIndex="0"
                 >
                     <IconClose color="#FFF" height={18} width={18} />
                 </button>
