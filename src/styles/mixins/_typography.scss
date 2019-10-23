@@ -19,8 +19,24 @@
     font-size: 13px;
 }
 
+@mixin fonts-deja-blue {
+    @include font-family;
+    @include font-aliasing;
+
+    font-weight: normal;
+    font-size: 14px;
+}
+
 @mixin common-typography {
     @include fonts;
+
+    color: $bdl-gray;
+    line-height: $bdl-line-height;
+    letter-spacing: .3px;
+}
+
+@mixin common-typography-deja-blue {
+    @include fonts-deja-blue;
 
     color: $bdl-gray;
     line-height: $bdl-line-height;
