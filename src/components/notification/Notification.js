@@ -50,14 +50,14 @@ type Props = {
      * - Notification buttons must be the `<Button />` component.
      */
     children: React.Node,
-    /** Function that gets executed when close button is clicked or when duration expires. */
+    /** If set it forces the notification to stay open and only close when clicked on buttons inside it */
     closeOnClick?: boolean,
+    /** Function that gets executed when close button is clicked or when duration expires. */
+    duration?: 'short' | 'long',
     /** `duration`: When set, dictates how long the notification will exist before calling `onClose`.
      *  If unset, the notification will not automatically call `onClose`.
      * - `short`: 5s
      * - `long`: 10s */
-    duration?: 'short' | 'long',
-    /** If set it forces the notification to stay open and only close when clicked on buttons inside it */
     intl: Object,
     onClose?: Function,
     /**
