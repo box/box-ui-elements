@@ -125,6 +125,21 @@ describe('util/Tokenservice', () => {
             expect(Tokenservice.getReadToken('file_123', junkTokenGenerator)).rejects.toThrow(/Bad id or auth token/));
     });
 
+    describe('getReadTokens()', () => {
+        test('should call Tokenservice.getReadToken', () => {
+            Tokenservice.getReadToken = jest.fn();
+            return Tokenservice.getReadTokens('file_123', readTokenGenerator).then(() => {
+                expect(Tokenservice.getReadToken).toHaveBeenCalledWith('file_123', readTokenGenerator);
+            });
+        });
+        test('should return a token map', () => {
+            expect(Tokenservice.getReadTokens(['file_123', 'file_456'], readTokenGenerator)).resolves.toEqual({
+                file_123: 'read_token',
+                file_456: 'read_token',
+            });
+        });
+    });
+
     describe('cacheTokens()', () => {
         test('should call the token generator function', async () => {
             const generator = jest.fn();
