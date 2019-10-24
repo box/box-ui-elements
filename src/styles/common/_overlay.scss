@@ -6,23 +6,38 @@ $opacity-duration: .075s;
 $transform-duration: .125s;
 
 .overlay-wrapper {
+    $overlay-padding: 8px 0;
+
     position: relative;
     display: inherit;
 
     .overlay {
         position: absolute;
         z-index: 90;
+        height: 0;
+        padding: 0;
+        overflow-x: hidden;
+        border: 0;
         transform: rotateY(-10deg) rotateX(-10deg);
         transform-origin: left top;
         transform-style: preserve-3d;
         visibility: hidden;
         opacity: 0;
-        transition: visibility 0s linear $opacity-duration, opacity $opacity-duration, transform $transform-duration;
+        transition: height 0s linear, visibility 0s linear $opacity-duration, opacity $opacity-duration, transform $transform-duration;
         pointer-events: none;
+
+        &.offscreen {
+            height: auto;
+            padding: $overlay-padding;
+            border: 1px solid $bdl-gray-30;
+        }
     }
 
     &.is-visible {
         .overlay {
+            height: auto;
+            padding: $overlay-padding;
+            border: 1px solid $bdl-gray-30;
             transform: rotateY(0deg) rotateX(0deg);
             visibility: visible;
             opacity: 1;

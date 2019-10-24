@@ -120,3 +120,25 @@ export function scrollIntoView(itemEl: ?HTMLElement, options?: Object = {}): voi
         });
     }
 }
+
+export function isInViewport(bounding) {
+    return (
+        bounding.top >= 0 &&
+        bounding.left >= 0 &&
+        bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+
+export function getDimensions(element) {
+    if (!element) {
+        return {};
+    }
+
+    const boundingClientRect = element.getBoundingClientRect();
+
+    return {
+        height: boundingClientRect.height,
+        width: boundingClientRect.width,
+    };
+}

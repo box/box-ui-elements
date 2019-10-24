@@ -7,8 +7,8 @@ import { scrollIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
 import DatalistItem from '../datalist-item';
+import Overlay from './Overlay';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
-import { OVERLAY_WRAPPER_CLASS } from '../../constants';
 
 import './SelectField.scss';
 
@@ -389,12 +389,8 @@ class BaseSelectField extends React.Component<Props, State> {
                 onKeyDown={this.handleKeyDown}
             >
                 <div className="select-field">
-                    {this.renderSelectButton()}
-                    <div
-                        className={classNames(OVERLAY_WRAPPER_CLASS, {
-                            'is-visible': isOpen,
-                        })}
-                    >
+                    <Overlay isOpen={isOpen}>
+                        {this.renderSelectButton()}
                         <ul
                             className={classNames('overlay', {
                                 [OVERLAY_SCROLLABLE_CLASS]: isScrollable,
@@ -407,7 +403,7 @@ class BaseSelectField extends React.Component<Props, State> {
                         >
                             {this.renderSelectOptions()}
                         </ul>
-                    </div>
+                    </Overlay>
                 </div>
             </div>
         );

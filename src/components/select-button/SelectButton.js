@@ -12,19 +12,24 @@ type Props = {
     isDisabled: boolean,
 };
 
-const SelectButton = ({ children, className = '', error, isDisabled = false, ...rest }: Props) => (
-    <Tooltip isShown={!!error} position="middle-right" text={error} theme="error">
-        <button
-            className={classNames(className, 'select-button', {
-                'is-invalid': !!error,
-            })}
-            disabled={isDisabled}
-            type="button"
-            {...rest}
-        >
-            {children}
-        </button>
-    </Tooltip>
-);
+const SelectButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
+    const { children, className = '', error, isDisabled = false, ...rest } = props;
+
+    return (
+        <Tooltip isShown={!!error} position="middle-right" text={error} theme="error">
+            <button
+                className={classNames(className, 'select-button', {
+                    'is-invalid': !!error,
+                })}
+                disabled={isDisabled}
+                ref={ref}
+                type="button"
+                {...rest}
+            >
+                {children}
+            </button>
+        </Tooltip>
+    );
+});
 
 export default SelectButton;
