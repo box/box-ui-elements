@@ -1,4 +1,5 @@
 {
+    "bdl-transition-duration-200ms": "0.2s",
     "white": "#fff",
     "black": "#000",
     "bdl-box-blue": "#0061d5",
@@ -60,7 +61,12 @@
     "bdl-watermelon-red-10": "#fdebee",
     "bdl-watermelon-red-05": "#fef5f6",
     "bdl-watermelon-red-02": "#fffbfc",
-    "bdl-line-height": "20px",
+    "modal-dialog-z-index": "160",
+    "menu-z-index": "170",
+    "notifications-wrapper-z-index": "180",
+    "overlay-z-index": "190",
+    "tooltip-z-index": "190",
+    "bdl-border-radius-size": "4px",
     "avatar-colors": [
         "#2486fc",
         "#0061d5",
@@ -72,11 +78,7 @@
         "#9f3fed",
         "#ed3757"
     ],
-    "modal-dialog-z-index": "160",
-    "menu-z-index": "170",
-    "notifications-wrapper-z-index": "180",
-    "overlay-z-index": "190",
-    "tooltip-z-index": "190",
-    "bdl-border-radius-size": "4px",
-    "bdl-transition-duration-200ms": "0.2s"
+    "bdl-line-height": "20px",
+    "bdl-font-size": "13px",
+    "bdl-font-size--dejablue": "14px"
 }
