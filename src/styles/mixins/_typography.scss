@@ -16,15 +16,15 @@
     @include font-aliasing;
 
     font-weight: normal;
-    font-size: $bdl-font-size;
+    font-size: $bdl-fontSize;
 }
 
-@mixin fonts-dejablue {
+@mixin bdl-fonts-dejaBlue {
     @include font-family;
     @include font-aliasing;
 
     font-weight: normal;
-    font-size: $bdl-font-size--dejablue;
+    font-size: $bdl-fontSize--dejaBlue;
 }
 
 @mixin common-typography {
@@ -35,8 +35,8 @@
     letter-spacing: .3px;
 }
 
-@mixin common-typography-dejablue {
-    @include fonts-dejablue;
+@mixin bdl-commonTypography-dejaBlue {
+    @include bdl-fonts-dejaBlue;
 
     color: $bdl-gray;
     line-height: $bdl-line-height;

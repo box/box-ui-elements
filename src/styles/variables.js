@@ -72,5 +72,5 @@ export const tooltipZIndex = "190"; // tooltip-z-index
 export const bdlBorderRadiusSize = "4px"; // bdl-border-radius-size
 export const avatarColors = ["#2486fc","#0061d5","#003c84","#767676","#26c281","#f5b31b","#4826c2","#9f3fed","#ed3757"]; // avatar-colors
 export const bdlLineHeight = "20px"; // bdl-line-height
-export const bdlFontSize = "13px"; // bdl-font-size
-export const bdlFontSizeDejablue = "14px"; // bdl-font-size--dejablue
+export const bdlFontSize = "13px"; // bdl-fontSize
+export const bdlFontSizeDejaBlue = "14px"; // bdl-fontSize--dejaBlue

@@ -20,7 +20,7 @@ body {
 }
 
 body.is-deja-blue {
-    @include common-typography-dejablue;
+    @include bdl-commonTypography-dejaBlue;
 }
 
 p {

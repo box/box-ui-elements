@@ -79,6 +79,6 @@
         "#ed3757"
     ],
     "bdl-line-height": "20px",
-    "bdl-font-size": "13px",
-    "bdl-font-size--dejablue": "14px"
+    "bdl-fontSize": "13px",
+    "bdl-fontSize--dejaBlue": "14px"
 }
