@@ -10,6 +10,8 @@ type Props = {
     fieldType?: string,
     /** The select field is disabled if true */
     isDisabled?: boolean,
+    /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
+    isScrollable?: boolean,
     /** The currently selected option value */
     onChange: Function,
     /** The placeholder text for the field  */

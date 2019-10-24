@@ -3,6 +3,7 @@ import * as React from 'react';
 import TetherComponent from 'react-tether';
 import uniqueId from 'lodash/uniqueId';
 
+import { KEYS } from '../../constants';
 import './DropdownMenu.scss';
 
 type Props = {
@@ -107,25 +108,30 @@ class DropdownMenu extends React.Component<Props, State> {
     };
 
     handleButtonKeyDown = (event: SyntheticKeyboardEvent<>) => {
+        const { isOpen } = this.state;
+
         switch (event.key) {
-            case ' ': // Spacebar
-            case 'Enter':
-            case 'ArrowDown':
+            case KEYS.space:
+            case KEYS.enter:
+            case KEYS.arrowDown:
                 event.stopPropagation();
                 event.preventDefault();
 
                 this.openMenuAndSetFocusIndex(0);
                 break;
 
-            case 'ArrowUp':
+            case KEYS.arrowUp:
                 event.stopPropagation();
                 event.preventDefault();
 
                 this.openMenuAndSetFocusIndex(-1);
                 break;
 
-            case 'Escape':
-                event.stopPropagation();
+            case KEYS.escape:
+                if (isOpen) {
+                    event.stopPropagation();
+                }
+
                 event.preventDefault();
                 this.closeMenu();
                 break;

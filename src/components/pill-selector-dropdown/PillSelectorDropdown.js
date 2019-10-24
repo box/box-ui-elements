@@ -243,16 +243,16 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         } = this.props;
 
         return (
-            <SelectorDropdown
-                className={classNames('pill-selector-wrapper', className)}
-                dividerIndex={dividerIndex}
-                onEnter={this.handleEnter}
-                onSelect={this.handleSelect}
-                overlayTitle={overlayTitle}
-                scrollBoundarySelector={dropdownScrollBoundarySelector}
-                shouldSetActiveItemOnOpen={shouldSetActiveItemOnOpen}
-                selector={
-                    <Label text={label}>
+            <Label text={label}>
+                <SelectorDropdown
+                    className={classNames('pill-selector-wrapper', className)}
+                    dividerIndex={dividerIndex}
+                    onEnter={this.handleEnter}
+                    onSelect={this.handleSelect}
+                    overlayTitle={overlayTitle}
+                    scrollBoundarySelector={dropdownScrollBoundarySelector}
+                    shouldSetActiveItemOnOpen={shouldSetActiveItemOnOpen}
+                    selector={
                         <PillSelector
                             onChange={noop} // fix console error
                             onCompositionEnd={this.handleCompositionEnd}
@@ -274,11 +274,11 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             validator={validator}
                             value={this.state.inputValue}
                         />
-                    </Label>
-                }
-            >
-                {children}
-            </SelectorDropdown>
+                    }
+                >
+                    {children}
+                </SelectorDropdown>
+            </Label>
         );
     }
 }

@@ -53,8 +53,6 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    /** If item is classified this property contains the classification name */
-    classificationName?: string,
     /** Message warning about restrictions regarding inviting collaborators to the item */
     collaborationRestrictionWarning: React.Node,
     /** List of existing collaborators */
@@ -655,7 +653,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
         const {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
-            classificationName,
             focusSharedLinkOnLoad,
             item,
             onSettingsClick,
@@ -724,7 +721,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 triggerCopyOnLoad={focusSharedLinkOnLoad}
                                 changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                                 changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
-                                classificationName={classificationName}
                                 intl={intl}
                                 item={item}
                                 itemType={item.type}

@@ -23,22 +23,43 @@ describe('features/unified-share-modal/SharedLinkAccessMenu', () => {
         );
 
     describe('render()', () => {
-        [
-            {
-                submitting: true,
-            },
-            {
-                submitting: false,
-            },
-        ].forEach(({ submitting }) => {
-            test('should render correct menu', () => {
-                const sharedLinkAccessMenu = getWrapper({ submitting });
-                expect(sharedLinkAccessMenu).toMatchSnapshot();
-            });
+        test.each`
+            submitting
+            ${true}
+            ${false}
+        `('should render correct menu when submitting is $submitting', ({ submitting }) => {
+            const sharedLinkAccessMenu = getWrapper({ submitting });
+            expect(sharedLinkAccessMenu).toMatchSnapshot();
         });
 
         test('should render tooltipContent if provided', () => {
             const sharedLinkAccessMenu = getWrapper({ tooltipContent: 'Hello, world!' });
+            expect(sharedLinkAccessMenu).toMatchSnapshot();
+        });
+
+        test('should render no access level menu items if disabled by something other than access policy', () => {
+            const sharedLinkAccessMenu = getWrapper({
+                allowedAccessLevels: {
+                    peopleInThisItem: true,
+                    peopleInYourCompany: false,
+                    peopleWithTheLink: false,
+                },
+            });
+            expect(sharedLinkAccessMenu).toMatchSnapshot();
+        });
+
+        test('should render tooltips for access level menu items if disabled by access policy', () => {
+            const sharedLinkAccessMenu = getWrapper({
+                accessLevelsDisabledReason: {
+                    peopleInYourCompany: 'access_policy',
+                    peopleWithTheLink: 'access_policy',
+                },
+                allowedAccessLevels: {
+                    peopleInThisItem: true,
+                    peopleInYourCompany: false,
+                    peopleWithTheLink: false,
+                },
+            });
             expect(sharedLinkAccessMenu).toMatchSnapshot();
         });
     });
