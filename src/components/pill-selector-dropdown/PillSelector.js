@@ -175,19 +175,20 @@ class PillSelector extends React.Component<Props, State> {
             ...rest
         } = this.props;
         const suggestedPillsEnabled = suggestedPillsData && suggestedPillsData.length > 0;
+        const hasError = !!error;
         const classes = classNames('pill-selector-input-wrapper', {
             'is-disabled': disabled,
             'is-focused': isFocused,
-            'show-error': !!error,
+            'show-error': hasError,
             'pill-selector-suggestions-enabled': suggestedPillsEnabled,
         });
         const ariaAttrs = {
-            'aria-invalid': !!error,
+            'aria-invalid': hasError,
             'aria-errormessage': this.errorMessageID,
         };
 
         return (
-            <Tooltip isShown={!!error} text={error || ''} position="middle-right" theme="error">
+            <Tooltip isShown={hasError} text={error || ''} position="middle-right" theme="error">
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <span
                     className={classes}
