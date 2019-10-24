@@ -50,13 +50,14 @@ const TextInput = ({
     labelTooltip,
     ...rest
 }: Props) => {
+    const hasError = !!error;
     const classes = classNames(className, 'text-input-container', {
-        'show-error': !!error,
+        'show-error': hasError,
     });
 
     const errorMessageID = React.useRef(uniqueId('errorMessage')).current;
     const ariaAttrs = {
-        'aria-invalid': !!error,
+        'aria-invalid': hasError,
         'aria-required': isRequired,
         'aria-errormessage': errorMessageID,
     };
@@ -70,7 +71,7 @@ const TextInput = ({
                 tooltip={labelTooltip}
             >
                 {!!description && <i className="text-input-description">{description}</i>}
-                <Tooltip isShown={!!error} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
+                <Tooltip isShown={hasError} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
                     <input ref={inputRef} required={isRequired} {...ariaAttrs} {...rest} />
                 </Tooltip>
                 {isLoading && !isValid && <LoadingIndicator className="text-input-loading" />}
