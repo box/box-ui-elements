@@ -338,7 +338,7 @@ class EmailForm extends React.Component<Props, State> {
                             <FormattedMessage {...commonMessages.cancel} />
                         </Button>
                         <PrimaryButton
-                            isDisabled={submitting || selectedContacts.length === 0 || contactsFieldError} // Check selectedContacts.length === 0 for initial render when contactsFieldError is empty
+                            isDisabled={submitting}
                             isLoading={submitting}
                             type="submit"
                             {...sendButtonProps}
