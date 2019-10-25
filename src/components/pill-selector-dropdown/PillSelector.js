@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import uniqueId from 'lodash/uniqueId';
 
 import Tooltip from '../tooltip';
 import { KEYS } from '../../constants';
@@ -140,6 +141,8 @@ class PillSelector extends React.Component<Props, State> {
         }
     };
 
+    errorMessageID = uniqueId('errorMessage');
+
     hiddenRef = (hiddenEl: ?HTMLSpanElement) => {
         if (hiddenEl) {
             this.hiddenEl = hiddenEl;
@@ -172,15 +175,20 @@ class PillSelector extends React.Component<Props, State> {
             ...rest
         } = this.props;
         const suggestedPillsEnabled = suggestedPillsData && suggestedPillsData.length > 0;
+        const hasError = !!error;
         const classes = classNames('pill-selector-input-wrapper', {
             'is-disabled': disabled,
             'is-focused': isFocused,
-            'show-error': !!error,
+            'show-error': hasError,
             'pill-selector-suggestions-enabled': suggestedPillsEnabled,
         });
+        const ariaAttrs = {
+            'aria-invalid': hasError,
+            'aria-errormessage': this.errorMessageID,
+        };
 
         return (
-            <Tooltip isShown={!!error} text={error || ''} position="middle-right" theme="error">
+            <Tooltip isShown={hasError} text={error || ''} position="middle-right" theme="error">
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <span
                     className={classes}
@@ -207,8 +215,10 @@ class PillSelector extends React.Component<Props, State> {
                         onBlur={this.resetSelectedIndex}
                         ref={this.hiddenRef}
                         tabIndex={-1}
+                        data-testid="pill-selection-helper"
                     />
                     <textarea
+                        {...ariaAttrs}
                         {...rest}
                         {...inputProps}
                         autoComplete="off"
@@ -227,6 +237,9 @@ class PillSelector extends React.Component<Props, State> {
                         suggestedPillsData={suggestedPillsData}
                         title={suggestedPillsTitle}
                     />
+                    <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
+                        {error}
+                    </span>
                 </span>
             </Tooltip>
         );

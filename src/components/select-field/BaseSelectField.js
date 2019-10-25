@@ -38,6 +38,8 @@ type Props = {
     error?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
+    /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
+    isScrollable?: boolean,
     multiple: boolean,
     /** Function will be called with an array of all selected options after user selects a new option */
     onChange: Function,
@@ -64,10 +66,13 @@ type State = {
     shouldScrollIntoView: boolean,
 };
 
+export const OVERLAY_SCROLLABLE_CLASS = 'bdl-SelectField-overlay--scrollable';
+
 class BaseSelectField extends React.Component<Props, State> {
     static defaultProps = {
         buttonProps: {},
         isDisabled: false,
+        isScrollable: false,
         multiple: false,
         options: [],
         selectedValues: [],
@@ -361,7 +366,7 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     render() {
-        const { className, multiple } = this.props;
+        const { className, multiple, isScrollable } = this.props;
         const { isOpen } = this.state;
 
         // @TODO: Need invariants on specific conditions.
@@ -391,7 +396,9 @@ class BaseSelectField extends React.Component<Props, State> {
                         })}
                     >
                         <ul
-                            className="overlay"
+                            className={classNames('overlay', {
+                                [OVERLAY_SCROLLABLE_CLASS]: isScrollable,
+                            })}
                             id={this.selectFieldID}
                             role="listbox"
                             // preventDefault on mousedown so blur doesn't happen before click

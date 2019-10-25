@@ -137,9 +137,9 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             ).toBe(true);
         });
 
-        test('should render hidden element', () => {
+        test('should render hidden pill selection helper', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
-            const hidden = wrapper.find('.accessibility-hidden');
+            const hidden = wrapper.find('[data-testid="pill-selection-helper"]');
             const instance = wrapper.instance();
 
             expect(hidden.length).toBe(1);
@@ -328,7 +328,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
 
-            sandbox.mock(wrapper.find('.accessibility-hidden').getDOMNode()).expects('focus');
+            sandbox.mock(wrapper.find('[data-testid="pill-selection-helper"]').getDOMNode()).expects('focus');
 
             wrapper.simulate('keyDown', {
                 key: 'ArrowLeft',

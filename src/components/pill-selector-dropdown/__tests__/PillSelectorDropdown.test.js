@@ -1,115 +1,83 @@
 import React from 'react';
 import { List, Record } from 'immutable';
-import sinon from 'sinon';
 
 import PillSelectorDropdown from '../PillSelectorDropdown';
 
-const sandbox = sinon.sandbox.create();
-let clock;
-
 describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
-    const onInputStub = sandbox.stub();
-    const onRemoveStub = sandbox.stub();
-    const onSelectStub = sandbox.stub();
-    const onPillCreateStub = sandbox.stub();
     const OptionRecord = Record({
         text: '',
         value: '',
     });
 
-    beforeEach(() => {
-        clock = sinon.useFakeTimers();
-    });
-
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-        clock.restore();
-    });
+    const getWrapper = (props, children) => {
+        const options = children || (
+            <>
+                <div>Option 1</div>
+                <div>Option 2</div>
+            </>
+        );
+        return shallow(
+            <PillSelectorDropdown
+                inputProps={{ 'aria-label': 'test' }}
+                onInput={jest.fn()}
+                onRemove={jest.fn()}
+                onSelect={jest.fn()}
+                {...props}
+            >
+                {options}
+            </PillSelectorDropdown>,
+        );
+    };
 
     describe('render()', () => {
         test('should render selector dropdown', () => {
             const className = 'test';
             const children = 'hi';
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    className={className}
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onSelect={onSelectStub}
-                >
-                    {children}
-                </PillSelectorDropdown>,
-            );
+            const wrapper = getWrapper({ className }, children);
             const instance = wrapper.instance();
+            const selectorDropdown = wrapper.find('SelectorDropdown');
 
-            expect(wrapper.is('SelectorDropdown')).toBe(true);
-            expect(wrapper.hasClass('pill-selector-wrapper')).toBe(true);
-            expect(wrapper.hasClass(className)).toBe(true);
-            expect(wrapper.prop('onEnter')).toEqual(instance.handleEnter);
-            expect(wrapper.prop('onSelect')).toEqual(instance.handleSelect);
-            expect(wrapper.contains(children)).toBe(true);
+            expect(selectorDropdown.is('SelectorDropdown')).toBe(true);
+            expect(selectorDropdown.hasClass('pill-selector-wrapper')).toBe(true);
+            expect(selectorDropdown.hasClass(className)).toBe(true);
+            expect(selectorDropdown.prop('onEnter')).toEqual(instance.handleEnter);
+            expect(selectorDropdown.prop('onSelect')).toEqual(instance.handleSelect);
+            expect(selectorDropdown.contains(children)).toBe(true);
         });
 
         test('should render pill selector', () => {
             const inputProps = { 'aria-label': 'test' };
-            const onFocusStub = sandbox.stub();
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    inputProps={inputProps}
-                    onFocus={onFocusStub}
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onSelect={onSelectStub}
-                />,
-            );
+            const wrapper = getWrapper({ inputProps });
             wrapper.setState({ inputValue: 'value' });
-            const instance = wrapper.instance();
-            const component = shallow(wrapper.prop('selector'));
-            const pillSelector = component.find('PillSelector');
-
+            const pillSelector = shallow(wrapper.find('SelectorDropdown').prop('selector'));
+            const instance = pillSelector.instance();
             expect(pillSelector.prop('onInput')).toEqual(instance.handleInput);
             expect(pillSelector.prop('onPaste')).toEqual(instance.handlePaste);
-            expect(pillSelector.prop('value')).toEqual('value');
+            expect(pillSelector.instance().props.value).toEqual('value');
         });
 
         test('should render disabled pill selector', () => {
-            const wrapper = shallow(
-                <PillSelectorDropdown disabled onInput={() => {}} onRemove={() => {}} onSelect={() => {}} />,
-            );
+            const wrapper = getWrapper({ disabled: true });
+
             wrapper.setState();
 
             expect(wrapper).toMatchSnapshot();
         });
 
         test('should call addPillsFromInput when pill selector is blurred', () => {
-            const inputProps = { 'aria-label': 'test' };
-            const onFocusStub = sandbox.stub();
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    inputProps={inputProps}
-                    onFocus={onFocusStub}
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onSelect={onSelectStub}
-                />,
-            );
+            const wrapper = getWrapper();
             wrapper.setState({ inputValue: 'value' });
             const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('addPillsFromInput')
-                .once();
-            const component = shallow(wrapper.prop('selector'));
-            const pillSelector = component.find('PillSelector');
-            pillSelector.simulate('blur');
+            const addPillsFromInputMock = jest.fn();
+            instance.addPillsFromInput = addPillsFromInputMock;
+            instance.handleBlur();
+            expect(addPillsFromInputMock).toHaveBeenCalledTimes(1);
         });
     });
 
     describe('parsePills', () => {
         test('should return a formatted map of pills', () => {
-            const wrapper = shallow(
-                <PillSelectorDropdown onInput={onInputStub} onRemove={onRemoveStub} onSelect={onSelectStub} />,
-            );
+            const wrapper = getWrapper();
             const instance = wrapper.instance();
             const inputValues = 'value1, value2,value3';
             wrapper.setState({ inputValue: inputValues });
@@ -129,14 +97,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 return pattern.test(text);
             };
 
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onSelect={onSelectStub}
-                    validator={validator}
-                />,
-            );
+            const wrapper = getWrapper({ validator });
             const instance = wrapper.instance();
             const inputValues = 'aaron@example.com, bademail,hello@gmail.com';
             wrapper.setState({
@@ -157,15 +118,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 return pattern.test(text);
             };
 
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    allowInvalidPills
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onSelect={onSelectStub}
-                    validator={validator}
-                />,
-            );
+            const wrapper = getWrapper({ allowInvalidPills: true, validator });
+
             const instance = wrapper.instance();
             const inputValues = 'aaron@example.com, bademail, hello@gmail.com';
             wrapper.setState({
@@ -181,14 +135,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should not map pills to options when custom parser returns array of objects', () => {
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    allowInvalidPills
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onSelect={onSelectStub}
-                />,
-            );
+            const wrapper = getWrapper({ allowInvalidPills: true });
             wrapper.setState({ inputValue: 'a,b' });
 
             const { parsePills } = wrapper.instance();
@@ -226,19 +173,16 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
     describe('addPillsFromInput', () => {
         test('should not call onSelect and onPillCreate if allowCustomPills prop is not provided', () => {
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onPillCreate={sandbox.mock().never()}
-                    onSelect={sandbox.mock().never()}
-                />,
-            );
+            const onPillCreateMock = jest.fn();
+            const onSelectMock = jest.fn();
+            const wrapper = getWrapper({ onPillCreate: onPillCreateMock, onSelect: onSelectMock });
             const instance = wrapper.instance();
             const inputValue = 'value';
             wrapper.setState({ inputValue });
 
             instance.addPillsFromInput(inputValue);
+            expect(onPillCreateMock).not.toHaveBeenCalled();
+            expect(onSelectMock).not.toHaveBeenCalled();
         });
 
         test('should "select" each pill, create a user pill, reset inputValue, and not call props.validateForError if valid pills exist', () => {
@@ -247,126 +191,120 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 { text: 'value2', value: 'value2' },
                 { text: 'value3', value: 'value3' },
             ];
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    allowCustomPills
-                    onInput={sandbox
-                        .mock()
-                        .once()
-                        .withExactArgs('')}
-                    onRemove={onRemoveStub}
-                    onPillCreate={sandbox
-                        .mock()
-                        .once()
-                        .withExactArgs(pills)}
-                    onSelect={sandbox
-                        .mock()
-                        .once()
-                        .withExactArgs(pills)}
-                    validateForError={sandbox.mock().never()}
-                />,
-            );
+            const onInputMock = jest.fn();
+            const onPillCreateMock = jest.fn();
+            const onSelectMock = jest.fn();
+            const validateForErrorMock = jest.fn();
+            const wrapper = getWrapper({
+                allowCustomPills: true,
+                onInput: onInputMock,
+                onPillCreate: onPillCreateMock,
+                onSelect: onSelectMock,
+                validateForError: validateForErrorMock,
+            });
+
             const instance = wrapper.instance();
-
-            sandbox
-                .mock(instance)
-                .expects('parsePills')
-                .once()
-                .returns(pills);
-
+            instance.parsePills = jest.fn().mockReturnValue(pills);
             instance.addPillsFromInput();
 
             expect(wrapper.state('inputValue')).toEqual('');
+            expect(onInputMock).toBeCalledWith('');
+            expect(onPillCreateMock).toBeCalledWith(pills);
+            expect(onSelectMock).toBeCalledWith(pills);
+            expect(validateForErrorMock).not.toBeCalled();
         });
 
         test('should call props.validateForError if no pills were added but input exists', () => {
             const pills = [];
             const selectedOptions = [{ text: 'a pill', value: 'pill' }];
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    allowCustomPills
-                    onInput={sandbox.mock().never()}
-                    onRemove={onRemoveStub}
-                    onPillCreate={sandbox.mock().never()}
-                    onSelect={sandbox.mock().never()}
-                    selectedOptions={selectedOptions}
-                    validateForError={sandbox.mock()}
-                />,
-            );
+            const onInputMock = jest.fn();
+            const onPillCreateMock = jest.fn();
+            const onSelectMock = jest.fn();
+            const validateForErrorMock = jest.fn();
+            const wrapper = getWrapper({
+                allowCustomPills: true,
+                onInput: onInputMock,
+                onPillCreate: onPillCreateMock,
+                onSelect: onSelectMock,
+                selectedOptions,
+                validateForError: validateForErrorMock,
+            });
+
             const instance = wrapper.instance();
             wrapper.setState({ inputValue: 'value1' });
-
-            sandbox
-                .mock(instance)
-                .expects('parsePills')
-                .once()
-                .returns(pills);
-
+            instance.parsePills = jest.fn().mockReturnValue(pills);
             instance.addPillsFromInput();
+
+            expect(onInputMock).not.toBeCalled();
+            expect(onPillCreateMock).not.toBeCalled();
+            expect(onSelectMock).not.toBeCalled();
+            expect(validateForErrorMock).toBeCalled();
         });
 
         test('should call props.validateForError if no pills were added and no options are selected', () => {
             const pills = [];
             const selectedOptions = [];
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    allowCustomPills
-                    onInput={sandbox.mock().never()}
-                    onRemove={onRemoveStub}
-                    onPillCreate={sandbox.mock().never()}
-                    onSelect={sandbox.mock().never()}
-                    selectedOptions={selectedOptions}
-                    validateForError={sandbox.mock()}
-                />,
-            );
+            const onInputMock = jest.fn();
+            const onPillCreateMock = jest.fn();
+            const onSelectMock = jest.fn();
+            const validateForErrorMock = jest.fn();
+            const wrapper = getWrapper({
+                allowCustomPills: true,
+                onInput: onInputMock,
+                onPillCreate: onPillCreateMock,
+                onSelect: onSelectMock,
+                selectedOptions,
+                validateForError: validateForErrorMock,
+            });
+
             const instance = wrapper.instance();
             wrapper.setState({ inputValue: '' });
-
-            sandbox
-                .mock(instance)
-                .expects('parsePills')
-                .once()
-                .returns(pills);
-
+            instance.parsePills = jest.fn().mockReturnValue(pills);
             instance.addPillsFromInput();
+
+            expect(onInputMock).not.toBeCalled();
+            expect(onPillCreateMock).not.toBeCalled();
+            expect(onSelectMock).not.toBeCalled();
+            expect(validateForErrorMock).toBeCalled();
         });
 
         test('should not call props.validateForError if no pills were added, input is empty, and options are selected', () => {
             const pills = [];
             const selectedOptions = [{ text: 'a pill', value: 'pill' }];
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    allowCustomPills
-                    onInput={sandbox.mock().never()}
-                    onRemove={onRemoveStub}
-                    onPillCreate={sandbox.mock().never()}
-                    onSelect={sandbox.mock().never()}
-                    selectedOptions={selectedOptions}
-                    validateForError={sandbox.mock().never()}
-                />,
-            );
+            const onInputMock = jest.fn();
+            const onPillCreateMock = jest.fn();
+            const onSelectMock = jest.fn();
+            const validateForErrorMock = jest.fn();
+            const wrapper = getWrapper({
+                allowCustomPills: true,
+                onInput: onInputMock,
+                onPillCreate: onPillCreateMock,
+                onSelect: onSelectMock,
+                selectedOptions,
+                validateForError: validateForErrorMock,
+            });
+
             const instance = wrapper.instance();
             const inputValue = '';
             wrapper.setState({ inputValue });
-
-            sandbox
-                .mock(instance)
-                .expects('parsePills')
-                .once()
-                .returns(pills);
-
+            instance.parsePills = jest.fn().mockReturnValue(pills);
             instance.addPillsFromInput(inputValue);
+
+            expect(onInputMock).not.toBeCalled();
+            expect(onPillCreateMock).not.toBeCalled();
+            expect(onSelectMock).not.toBeCalled();
+            expect(validateForErrorMock).not.toBeCalled();
         });
 
         test('should clear unmatched input after attempting to add pills when shouldClearUnmatchedInput is set to true', () => {
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    allowCustomPills
-                    onRemove={onRemoveStub}
-                    onPillCreate={sandbox.mock().never()}
-                    onSelect={sandbox.mock().never()}
-                />,
-            );
+            const onPillCreateMock = jest.fn();
+            const onSelectMock = jest.fn();
+            const wrapper = getWrapper({
+                allowCustomPills: true,
+                onPillCreate: onPillCreateMock,
+                onSelect: onSelectMock,
+            });
+
             const onInput = jest.fn();
             const initialValue = 'abc';
             const { addPillsFromInput } = wrapper.instance();
@@ -384,14 +322,16 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             expect(wrapper.state().inputValue).toBe('');
             expect(onInput).toHaveBeenCalledWith('');
             expect(onInput).toHaveBeenCalledTimes(1);
+
+            expect(onPillCreateMock).not.toBeCalled();
+            expect(onSelectMock).not.toBeCalled();
         });
     });
 
     describe('handleInput', () => {
         test('should update inputValue state when called', () => {
-            const wrapper = shallow(
-                <PillSelectorDropdown onInput={onInputStub} onRemove={onRemoveStub} onSelect={onSelectStub} />,
-            );
+            const wrapper = getWrapper();
+
             const instance = wrapper.instance();
 
             instance.handleInput({ target: { value: 'test' } });
@@ -400,20 +340,19 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should call onInput() with value when called', () => {
-            const wrapper = shallow(
-                <PillSelectorDropdown onInput={onInputStub} onRemove={onRemoveStub} onSelect={onSelectStub} />,
-            );
+            const onInputMock = jest.fn();
+            const wrapper = getWrapper({ onInput: onInputMock });
             const instance = wrapper.instance();
 
             instance.handleInput({ target: { value: 'test' } });
 
-            expect(onInputStub.calledWith('test', { target: { value: 'test' } })).toBe(true);
+            expect(onInputMock).toBeCalledWith('test', { target: { value: 'test' } });
         });
     });
 
     describe('handleEnter()', () => {
         test('should do nothing when in composition mode', () => {
-            const wrapper = shallow(<PillSelectorDropdown />);
+            const wrapper = getWrapper();
             const instance = wrapper.instance();
             const event = { preventDefault: jest.fn() };
             instance.addPillsFromInput = jest.fn();
@@ -424,26 +363,26 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should call addPillsFromInput and prevent default when called', () => {
-            const wrapper = shallow(
-                <PillSelectorDropdown onInput={onInputStub} onRemove={onRemoveStub} onSelect={onSelectStub} />,
-            );
+            const wrapper = getWrapper();
+            const addPillsFromInputMock = jest.fn();
+            const preventDefaultMock = jest.fn();
             const instance = wrapper.instance();
 
-            sandbox
-                .mock(instance)
-                .expects('addPillsFromInput')
-                .once();
+            instance.addPillsFromInput = addPillsFromInputMock;
 
             instance.handleEnter({
-                preventDefault: sandbox.mock(),
+                preventDefault: preventDefaultMock,
             });
+
+            expect(addPillsFromInputMock).toBeCalledTimes(1);
+            expect(preventDefaultMock).toBeCalled();
         });
     });
 
     describe('handlePaste', () => {
         test('should not call onPillCreate prop method with invalid input', () => {
-            const mockOnInput = jest.fn();
-            const mockOnPillCreate = jest.fn();
+            const onInputMock = jest.fn();
+            const onPillCreateMock = jest.fn();
             const mockPastedValue = 'pastedValue';
             const mockEvent = {
                 clipboardData: {
@@ -453,28 +392,24 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 },
                 preventDefault: jest.fn(),
             };
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    allowCustomPills
-                    allowInvalidPills={false}
-                    onInput={mockOnInput}
-                    onRemove={onRemoveStub}
-                    onSelect={onSelectStub}
-                    onPillCreate={mockOnPillCreate}
-                    validator={() => false}
-                />,
-            );
+            const wrapper = getWrapper({
+                allowCustomPills: true,
+                allowInvalidPills: false,
+                onInput: onInputMock,
+                onPillCreate: onPillCreateMock,
+                validator: () => false,
+            });
             const instance = wrapper.instance();
 
             instance.handlePaste(mockEvent);
 
-            expect(mockOnInput).toHaveBeenCalledWith(mockPastedValue, mockEvent);
-            expect(mockOnPillCreate).not.toHaveBeenCalled();
+            expect(onInputMock).toHaveBeenCalledWith(mockPastedValue, mockEvent);
+            expect(onPillCreateMock).not.toHaveBeenCalled();
         });
 
         test('should call onPillCreate prop method with valid input', () => {
-            const mockOnInput = jest.fn();
-            const mockOnPillCreate = jest.fn();
+            const onInputMock = jest.fn();
+            const onPillCreateMock = jest.fn();
             const mockPastedValue = 'test@example.com';
             const mockEvent = {
                 clipboardData: {
@@ -484,21 +419,17 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 },
                 preventDefault: jest.fn(),
             };
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    allowCustomPills
-                    onInput={mockOnInput}
-                    onRemove={jest.fn()}
-                    onSelect={jest.fn()}
-                    onPillCreate={mockOnPillCreate}
-                />,
-            );
+            const wrapper = getWrapper({
+                allowCustomPills: true,
+                onInput: onInputMock,
+                onPillCreate: onPillCreateMock,
+            });
             const instance = wrapper.instance();
 
             instance.handlePaste(mockEvent);
 
-            expect(mockOnInput).toHaveBeenCalledWith(mockPastedValue, mockEvent);
-            expect(mockOnPillCreate).toHaveBeenCalled();
+            expect(onInputMock).toHaveBeenCalledWith(mockPastedValue, mockEvent);
+            expect(onPillCreateMock).toHaveBeenCalled();
         });
     });
 
@@ -506,70 +437,56 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         test('should call onSelect() with option and event when called', () => {
             const option = { text: 'b', value: 'b' };
             const options = [{ text: 'a', value: 'a' }, option];
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onPillCreate={onPillCreateStub}
-                    onSelect={onSelectStub}
-                    selectorOptions={options}
-                />,
-            );
+            const onSelectMock = jest.fn();
+            const onPillCreateMock = jest.fn();
+            const wrapper = getWrapper({
+                onSelect: onSelectMock,
+                onPillCreate: onPillCreateMock,
+                selectorOptions: options,
+            });
             const instance = wrapper.instance();
             const event = { type: 'click' };
 
             instance.handleSelect(1, event);
 
-            expect(onSelectStub.calledWith([option], event)).toBe(true);
-            expect(onPillCreateStub.calledWith([option])).toBe(true);
+            expect(onSelectMock).toBeCalledWith([option], event);
+            expect(onPillCreateMock).toBeCalledWith([option]);
         });
 
         test('should call onSelect() with immutable option and event when called', () => {
             const option = new OptionRecord({ text: 'b', value: 'b' });
             const options = new List([new OptionRecord({ text: 'a', value: 'a' }), option]);
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onPillCreate={onPillCreateStub}
-                    onSelect={onSelectStub}
-                    selectorOptions={options}
-                />,
-            );
+            const onSelectMock = jest.fn();
+            const onPillCreateMock = jest.fn();
+            const wrapper = getWrapper({
+                onSelect: onSelectMock,
+                onPillCreate: onPillCreateMock,
+                selectorOptions: options,
+            });
             const instance = wrapper.instance();
             const event = { type: 'click' };
 
             instance.handleSelect(1, event);
 
-            expect(onSelectStub.calledWith([option], event)).toBe(true);
-            expect(onPillCreateStub.calledWith([option])).toBe(true);
+            expect(onSelectMock).toBeCalledWith([option], event);
+            expect(onPillCreateMock).toBeCalledWith([option]);
         });
 
         test('should call handleInput() with empty string value when called', () => {
             const options = [{ text: 'a', value: 'a' }];
-            const wrapper = shallow(
-                <PillSelectorDropdown
-                    onInput={onInputStub}
-                    onRemove={onRemoveStub}
-                    onSelect={onSelectStub}
-                    selectorOptions={options}
-                />,
-            );
+            const handleInputMock = jest.fn();
+            const wrapper = getWrapper({ selectorOptions: options });
             const instance = wrapper.instance();
-
-            sandbox
-                .mock(instance)
-                .expects('handleInput')
-                .withArgs({ target: { value: '' } });
-
+            instance.handleInput = handleInputMock;
             instance.handleSelect(0, {});
+            expect(handleInputMock).toBeCalledWith({ target: { value: '' } });
         });
     });
 
     describe('handleBlur', () => {
         test('should call onBlur() and addPillsFromInput() when underlying input is blurred', () => {
             const onBlur = jest.fn();
-            const wrapper = shallow(<PillSelectorDropdown onBlur={onBlur} />);
+            const wrapper = getWrapper({ onBlur });
             const instance = wrapper.instance();
             const event = { type: 'blur' };
 
@@ -583,7 +500,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
     describe('handleCompositionStart()', () => {
         test('should set composition mode', () => {
-            const wrapper = shallow(<PillSelectorDropdown />);
+            const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.setState = jest.fn();
             instance.handleCompositionStart();
@@ -593,7 +510,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
     describe('handleCompositionEnd()', () => {
         test('should unset composition mode', () => {
-            const wrapper = shallow(<PillSelectorDropdown />);
+            const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.setState = jest.fn();
             instance.handleCompositionEnd();
