@@ -32,7 +32,9 @@ const AvatarDetails = React.memo<Props>(({ user, status, completedAt, className 
     const statusMessage = statusMessages[status] || null;
     return (
         <div className={classNames(className, 'bcs-AssigneeDetails')}>
-            <div>{user.name ? user.name : <FormattedMessage {...commonMessages.priorCollaborator} />}</div>
+            <div className="bcs-AssigneeDetails-name">
+                {user.name ? user.name : <FormattedMessage {...commonMessages.priorCollaborator} />}
+            </div>
             {statusMessage && completedAt && (
                 <div className="bcs-AssigneeDetails-status">
                     <FormattedMessage {...statusMessage} values={{ dateTime: <Datestamp date={completedAt} /> }} />

@@ -18,6 +18,7 @@
 // the main content, e.g. title and message
 .bdl-Media-body {
     flex: 1 1 100%;
+    overflow: hidden;
     word-wrap: break-word; // old IE
     word-break: break-word; // CJK scripts
     // handle wrapping long words in text content without breaking
