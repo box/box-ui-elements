@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import { getDimensions, isInViewport } from '../../utils/dom';
-import { OVERLAY_WRAPPER_CLASS } from '../../constants';
+import { getDimensions, getViewportIntersections } from '../../utils/dom';
+import { OVERLAY_WRAPPER_CLASS, VIEWPORT_BORDERS } from '../../constants';
 
 type Props = {
     children: React.Node,
@@ -10,7 +10,17 @@ type Props = {
     isOpen?: boolean,
 };
 
-function getDimensionsWhileHidden(element) {
+type Dimensions = {
+    height?: number,
+    width?: number,
+};
+
+type Translations = {
+    x?: number,
+    y?: number,
+};
+
+function getDimensionsWhileHidden(element: HTMLElement): Dimensions {
     if (!element) {
         return {};
     }
@@ -32,7 +42,7 @@ class Overlay extends React.Component<Props, State> {
         this.overlayRef = React.createRef();
     }
 
-    getOverlayContentDimensions = () => {
+    getOverlayContentDimensions = (): Dimensions => {
         const node = this.overlayRef.current;
         const content = node && node.firstChild;
 
@@ -41,7 +51,7 @@ class Overlay extends React.Component<Props, State> {
         return dimensions;
     };
 
-    doesOverlayNeedRepositioning = () => {
+    getOverlayIntersections = (): Array<string> => {
         const { isOpen } = this.props;
         const node = this.overlayRef.current;
 
@@ -58,14 +68,31 @@ class Overlay extends React.Component<Props, State> {
             right: boundingClientRect.left + dimensions.width,
         };
 
-        return !isInViewport(bounding);
+        return getViewportIntersections(bounding);
     };
 
-    getOverlayTranslations = () => {
-        const { height: overlayHeight } = this.getOverlayContentDimensions();
-        const { height: buttonHeight } = this.buttonRef.current.getBoundingClientRect();
+    getOverlayTranslations = (intersections: Array<string>): Translations => {
+        const { height: overlayHeight, width: overlayWidth } = this.getOverlayContentDimensions();
+        const { height: buttonHeight, width: buttonWidth } = this.buttonRef.current.getBoundingClientRect();
+        const translations = { x: 0, y: 0 };
 
-        return { x: 0, y: buttonHeight + overlayHeight };
+        if (intersections.length >= 3) {
+            return translations;
+        }
+
+        intersections.forEach(edge => {
+            switch (edge) {
+                case VIEWPORT_BORDERS.bottom:
+                    translations.y = -(buttonHeight + overlayHeight);
+                    break;
+                case VIEWPORT_BORDERS.right:
+                    translations.x = -(overlayWidth - buttonWidth);
+                    break;
+                default:
+            }
+        });
+
+        return translations;
     };
 
     render() {
@@ -79,9 +106,9 @@ class Overlay extends React.Component<Props, State> {
         const button = elements[0];
         const overlayContent = elements[1];
 
-        const needsRepositioning = this.doesOverlayNeedRepositioning();
-        const translations = needsRepositioning ? this.getOverlayTranslations() : null;
-        const inlineStyle = translations && { top: `-${translations.y}px` };
+        const intersections = this.getOverlayIntersections();
+        const translations = intersections.length ? this.getOverlayTranslations(intersections) : null;
+        const inlineStyle = translations && { top: `${translations.y}px`, left: `${translations.x}px` };
 
         return (
             <>

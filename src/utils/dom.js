@@ -4,7 +4,7 @@
  * @author Box
  */
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
-import { KEYS, OVERLAY_WRAPPER_CLASS } from '../constants';
+import { KEYS, OVERLAY_WRAPPER_CLASS, VIEWPORT_BORDERS } from '../constants';
 import './domPolyfill';
 
 /**
@@ -121,15 +121,39 @@ export function scrollIntoView(itemEl: ?HTMLElement, options?: Object = {}): voi
     }
 }
 
-export function isInViewport(bounding) {
-    return (
-        bounding.top >= 0 &&
-        bounding.left >= 0 &&
-        bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
+/**
+ * Gets the viewport intersections.
+ *
+ * @param {Object} bounding - Object describing the position relative to the viewport. Typically retrieved from getBoundingClientRect()
+ * @return {Array} Returns an array of the boundary intersections ['top', 'left', 'bottom', 'right']
+ */
+export function getViewportIntersections(bounding) {
+    const boundaryIntersections = [];
+    if (bounding.top < 0) {
+        boundaryIntersections.push(VIEWPORT_BORDERS.top);
+    }
+
+    if (bounding.left < 0) {
+        boundaryIntersections.push(VIEWPORT_BORDERS.left);
+    }
+
+    if (bounding.bottom > (window.innerHeight || document.documentElement.clientHeight)) {
+        boundaryIntersections.push(VIEWPORT_BORDERS.bottom);
+    }
+
+    if (bounding.right > (window.innerWidth || document.documentElement.clientWidth)) {
+        boundaryIntersections.push(VIEWPORT_BORDERS.right);
+    }
+
+    return boundaryIntersections;
 }
 
+/**
+ * Gets an HTMLElement's dimensions (width and height)
+ *
+ * @param {HTMLElement} element - The HTML element
+ * @return {Object} Object containing the width and height of the element
+ */
 export function getDimensions(element) {
     if (!element) {
         return {};
