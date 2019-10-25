@@ -283,13 +283,14 @@ describe('util/Xhr', () => {
 
     describe('abort()', () => {
         test('should cancel axios request', () => {
-            xhrInstance.axiosSource = {
+            const mockSource = {
                 cancel: jest.fn(),
             };
+            xhrInstance.axiosSource = mockSource;
 
             xhrInstance.abort();
 
-            expect(xhrInstance.axiosSource.cancel).toHaveBeenCalled();
+            expect(mockSource.cancel).toHaveBeenCalled();
         });
     });
 
