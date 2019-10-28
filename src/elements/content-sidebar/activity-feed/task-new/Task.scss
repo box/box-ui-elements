@@ -11,6 +11,10 @@ $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
     &.bcs-is-pending {
         opacity: .4;
     }
+
+    .bdl-Media-body {
+        overflow: hidden;
+    }
 }
 
 .bcs-Task-avatar {
