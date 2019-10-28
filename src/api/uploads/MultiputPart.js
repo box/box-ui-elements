@@ -257,11 +257,7 @@ class MultiputPart extends BaseMultiput {
 
         const eventInfoString = JSON.stringify(eventInfo);
 
-        try {
-            if (!this.sessionEndpoints.logEvent) {
-                throw new Error('logEvent endpoint not found');
-            }
-
+        if (this.sessionEndpoints.logEvent) {
             retryNumOfTimes(
                 (resolve: Function, reject: Function): void => {
                     this.logEvent('part_failure', eventInfoString)
@@ -270,9 +266,9 @@ class MultiputPart extends BaseMultiput {
                 },
                 this.config.retries,
                 this.config.initialRetryDelayMs,
-            );
-        } catch (err) {
-            this.consoleLog('Failure in logEvent ', error);
+            ).catch(e => this.consoleLog(`Failure in logEvent: ${e.message}`));
+        } else {
+            this.consoleLog('logEvent endpoint not found');
         }
 
         if (this.numUploadRetriesPerformed >= this.config.retries) {

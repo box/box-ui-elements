@@ -485,7 +485,7 @@ class MultiputUpload extends BaseMultiput {
 
         // Reset uploading process for parts that were in progress when the upload failed
         let nextUploadIndex = this.firstUnuploadedPartIndex;
-        while (this.numPartsUploading > 0 || this.numPartsDigestComputing > 0) {
+        while (this.numPartsUploading > 0) {
             const part = this.parts[nextUploadIndex];
             if (part && part.state === PART_STATE_UPLOADING) {
                 part.state = PART_STATE_DIGEST_READY;
