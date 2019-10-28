@@ -6,7 +6,7 @@ describe('icons/general/IconFolderTree', () => {
     test('should correctly render default icon', () => {
         const wrapper = shallow(<IconFolderTree />);
 
-        expect(wrapper.hasClass('icon-folder-tree')).toEqual(true);
+        expect(wrapper.hasClass('bdl-IconFolderTree')).toEqual(true);
     });
 
     test('should correctly render icon with specified color', () => {

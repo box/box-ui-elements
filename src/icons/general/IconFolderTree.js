@@ -7,7 +7,7 @@ import type { Icon } from '../flowTypes';
 
 const IconFolderTree = ({ className = '', color = bdlGray50, height = 16, title, width = 16 }: Icon) => (
     <AccessibleSVG
-        className={`icon-folder-tree ${className}`}
+        className={`bdl-IconFolderTree ${className}`}
         height={height}
         title={title}
         viewBox="0 0 16 16"
