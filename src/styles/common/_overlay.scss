@@ -13,36 +13,34 @@ $transform-duration: .125s;
 
     .overlay {
         position: absolute;
+        left: -99999px;
         z-index: 90;
-        height: 0;
-        padding: 0;
         overflow-x: hidden;
-        border: 0;
-        transform: rotateY(-10deg) rotateX(-10deg);
         transform-origin: left top;
         transform-style: preserve-3d;
-        visibility: hidden;
-        opacity: 0;
-        transition: height 0s linear, visibility 0s linear $opacity-duration, opacity $opacity-duration, transform $transform-duration;
         pointer-events: none;
-
-        &.offscreen {
-            height: auto;
-            padding: $overlay-padding;
-            border: 1px solid $bdl-gray-30;
-        }
     }
 
     &.is-visible {
         .overlay {
-            height: auto;
-            padding: $overlay-padding;
-            border: 1px solid $bdl-gray-30;
-            transform: rotateY(0deg) rotateX(0deg);
-            visibility: visible;
-            opacity: 1;
-            transition-delay: 0s;
+            left: 0;
+            animation: overlay-open $transform-duration forwards;
             pointer-events: all;
+        }
+    }
+
+    @keyframes overlay-open {
+        0% {
+            transform: rotateY(-10deg) rotateX(-10deg);
+            opacity: 0;
+        }
+
+        60% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: rotateY(0deg) rotateX(0deg);
         }
     }
 }

@@ -29,11 +29,3 @@
     max-height: 340px; // show at most 12 items in the dropdown menu
     overflow-y: auto;
 }
-
-.offscreen {
-    position: absolute;
-    left: -99999px;
-    display: block !important;
-    transform: unset !important;
-    transition: none !important;
-}

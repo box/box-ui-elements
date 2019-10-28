@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import { getDimensions, getViewportIntersections } from '../../utils/dom';
+import { getDimensions, getViewportIntersections, type ElementDimensions } from '../../utils/dom';
 import { OVERLAY_WRAPPER_CLASS, VIEWPORT_BORDERS } from '../../constants';
 
 type Props = {
@@ -10,27 +10,10 @@ type Props = {
     isOpen?: boolean,
 };
 
-type Dimensions = {
-    height?: number,
-    width?: number,
-};
-
 type Translations = {
     x?: number,
     y?: number,
 };
-
-function getDimensionsWhileHidden(element: HTMLElement): Dimensions {
-    if (!element) {
-        return {};
-    }
-
-    element.classList.add('offscreen');
-    const dimensions = getDimensions(element);
-    element.classList.remove('offscreen');
-    return dimensions;
-}
-
 class Overlay extends React.Component<Props, State> {
     overlayRef: ?HTMLDivElement;
 
@@ -42,24 +25,24 @@ class Overlay extends React.Component<Props, State> {
         this.overlayRef = React.createRef();
     }
 
-    getOverlayContentDimensions = (): Dimensions => {
+    getOverlayContentDimensions = (): ElementDimensions => {
         const node = this.overlayRef.current;
         const content = node && node.firstChild;
 
-        const dimensions = content.clientHeight ? getDimensions(content) : getDimensionsWhileHidden(content);
+        const dimensions = getDimensions(content);
 
         return dimensions;
     };
 
     getOverlayIntersections = (): Array<string> => {
         const { isOpen } = this.props;
-        const node = this.overlayRef.current;
 
         if (!isOpen) {
-            return false;
+            return [];
         }
 
         const dimensions = this.getOverlayContentDimensions();
+        const node = this.overlayRef.current;
         const boundingClientRect = node && node.getBoundingClientRect();
         const bounding = {
             top: boundingClientRect.top,
@@ -76,7 +59,9 @@ class Overlay extends React.Component<Props, State> {
         const { height: buttonHeight, width: buttonWidth } = this.buttonRef.current.getBoundingClientRect();
         const translations = { x: 0, y: 0 };
 
-        if (intersections.length >= 3) {
+        // If there are more than 2 intersections then it is likely that the overlay will extend beyond
+        // the viewport in at least one direction, therefore, there is no need to reposition the overlay
+        if (intersections.length > 2) {
             return translations;
         }
 
@@ -108,7 +93,7 @@ class Overlay extends React.Component<Props, State> {
 
         const intersections = this.getOverlayIntersections();
         const translations = intersections.length ? this.getOverlayTranslations(intersections) : null;
-        const inlineStyle = translations && { top: `${translations.y}px`, left: `${translations.x}px` };
+        const inlineStyle = translations ? { top: `${translations.y}px`, left: `${translations.x}px` } : null;
 
         return (
             <>

@@ -127,7 +127,7 @@ export function scrollIntoView(itemEl: ?HTMLElement, options?: Object = {}): voi
  * @param {Object} bounding - Object describing the position relative to the viewport. Typically retrieved from getBoundingClientRect()
  * @return {Array} Returns an array of the boundary intersections ['top', 'left', 'bottom', 'right']
  */
-export function getViewportIntersections(bounding) {
+export function getViewportIntersections(bounding: DOMRectReadOnly): Array<string> {
     const boundaryIntersections = [];
     if (bounding.top < 0) {
         boundaryIntersections.push(VIEWPORT_BORDERS.top);
@@ -148,13 +148,18 @@ export function getViewportIntersections(bounding) {
     return boundaryIntersections;
 }
 
+export type ElementDimensions = {
+    height?: number,
+    width?: number,
+};
+
 /**
  * Gets an HTMLElement's dimensions (width and height)
  *
  * @param {HTMLElement} element - The HTML element
  * @return {Object} Object containing the width and height of the element
  */
-export function getDimensions(element) {
+export function getDimensions(element?: HTMLElement): ElementDimensions {
     if (!element) {
         return {};
     }
