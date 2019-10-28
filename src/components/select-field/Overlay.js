@@ -1,8 +1,11 @@
 // @flow
 import * as React from 'react';
+import getProp from 'lodash/get';
 import classNames from 'classnames';
 import { getDimensions, getViewportIntersections, type ElementDimensions } from '../../utils/dom';
-import { OVERLAY_WRAPPER_CLASS, VIEWPORT_BORDERS } from '../../constants';
+import { VIEWPORT_BORDERS } from '../../constants';
+
+import './Overlay.scss';
 
 type Props = {
     children: React.Node,
@@ -71,7 +74,7 @@ class Overlay extends React.Component<Props, State> {
                     translations.y = -(buttonHeight + overlayHeight);
                     break;
                 case VIEWPORT_BORDERS.right:
-                    translations.x = -(overlayWidth - buttonWidth);
+                    translations.x = -Math.floor(overlayWidth - buttonWidth);
                     break;
                 default:
             }
@@ -90,19 +93,20 @@ class Overlay extends React.Component<Props, State> {
 
         const button = elements[0];
         const overlayContent = elements[1];
+        const overlayContentExistingClassnames = getProp(overlayContent, 'props.className');
 
         const intersections = this.getOverlayIntersections();
         const translations = intersections.length ? this.getOverlayTranslations(intersections) : null;
         const inlineStyle = translations ? { top: `${translations.y}px`, left: `${translations.x}px` } : null;
+        const overlayContentClassnames = classNames('bdl-Overlay-content', overlayContentExistingClassnames, {
+            'bdl-Overlay-content--visible': isOpen,
+        });
 
         return (
             <>
                 {React.cloneElement(button, { ref: this.buttonRef })}
-                <div
-                    ref={this.overlayRef}
-                    className={classNames(className, OVERLAY_WRAPPER_CLASS, { 'is-visible': isOpen })}
-                >
-                    {React.cloneElement(overlayContent, { style: inlineStyle })}
+                <div ref={this.overlayRef} className={classNames(className, 'bdl-Overlay')}>
+                    {React.cloneElement(overlayContent, { className: overlayContentClassnames, style: inlineStyle })}
                 </div>
             </>
         );

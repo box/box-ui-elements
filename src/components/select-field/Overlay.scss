@@ -1,0 +1,53 @@
+@import '../../styles/variables';
+
+.bdl-Overlay {
+    position: relative;
+    display: inherit;
+}
+
+.bdl-Overlay-content {
+    $overlay-padding: 8px 0;
+
+    position: absolute;
+    left: -99999px;
+    z-index: 90;
+    margin: 0;
+    padding: $overlay-padding;
+    overflow-x: hidden;
+    background: $white;
+    border: 1px solid $bdl-gray-30;
+    box-shadow: 0 2px 6px 0 fade-out($black, .9);
+    transform-origin: left top;
+    transform-style: preserve-3d;
+    pointer-events: none;
+
+    hr {
+        height: 0;
+        margin: $overlay-padding;
+        border: 0;
+        border-top: 1px solid $bdl-gray-30;
+    }
+}
+
+.bdl-Overlay-content--visible {
+    $open-animation-duration: .125s;
+
+    left: 0;
+    animation: overlay-open $open-animation-duration forwards;
+    pointer-events: all;
+
+    @keyframes overlay-open {
+        0% {
+            transform: rotateY(-10deg) rotateX(-10deg);
+            opacity: 0;
+        }
+
+        60% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+    }
+}

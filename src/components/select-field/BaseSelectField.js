@@ -12,6 +12,8 @@ import type { SelectOptionValueProp, SelectOptionProp } from './props';
 
 import './SelectField.scss';
 
+export const OVERLAY_SCROLLABLE_CLASS = 'bdl-SelectField-overlay--scrollable';
+
 function stopDefaultEvent(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -65,8 +67,6 @@ type State = {
     isOpen: boolean,
     shouldScrollIntoView: boolean,
 };
-
-export const OVERLAY_SCROLLABLE_CLASS = 'bdl-SelectField-overlay--scrollable';
 
 class BaseSelectField extends React.Component<Props, State> {
     static defaultProps = {
@@ -392,7 +392,7 @@ class BaseSelectField extends React.Component<Props, State> {
                     <Overlay isOpen={isOpen}>
                         {this.renderSelectButton()}
                         <ul
-                            className={classNames('overlay', {
+                            className={classNames({
                                 [OVERLAY_SCROLLABLE_CLASS]: isScrollable,
                             })}
                             id={this.selectFieldID}
