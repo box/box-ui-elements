@@ -53,8 +53,8 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
         isDisabled={false}
       >
         <IconTrash
-          height={12}
-          width={12}
+          height={14}
+          width={14}
         />
         <FormattedMessage
           defaultMessage="Delete"
@@ -119,8 +119,8 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
         isDisabled={true}
       >
         <IconTrash
-          height={12}
-          width={12}
+          height={14}
+          width={14}
         />
         <FormattedMessage
           defaultMessage="Delete"
@@ -183,8 +183,8 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       isCurrent={false}
     >
       <IconDownload
-        height={12}
-        width={12}
+        height={14}
+        width={14}
       />
       <FormattedMessage
         defaultMessage="Download"
@@ -196,8 +196,8 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       isCurrent={false}
     >
       <IconUpload
-        height={12}
-        width={12}
+        height={14}
+        width={14}
       />
       <FormattedMessage
         defaultMessage="Make Current"
@@ -237,8 +237,8 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         isDisabled={false}
       >
         <IconTrash
-          height={12}
-          width={12}
+          height={14}
+          width={14}
         />
         <FormattedMessage
           defaultMessage="Delete"

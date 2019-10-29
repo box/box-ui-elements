@@ -74,6 +74,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           >
             <IconTrash
               color="#4e4e4e"
+              height={14}
+              width={14}
             />
             <FormattedMessage
               defaultMessage="Delete task"

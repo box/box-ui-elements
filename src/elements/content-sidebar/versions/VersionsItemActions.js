@@ -101,13 +101,13 @@ const VersionsItemActions = ({
 
                 {showDownload && (
                     <VersionsItemAction action="download" fileId={fileId} isCurrent={isCurrent} onClick={onDownload}>
-                        <IconDownload {...ICON_SIZE} />
+                        <IconDownload height={14} width={14} />
                         <FormattedMessage {...messages.versionActionDownload} />
                     </VersionsItemAction>
                 )}
                 {showPromote && (
                     <VersionsItemAction action="promote" fileId={fileId} isCurrent={isCurrent} onClick={onPromote}>
-                        <IconUpload {...ICON_SIZE} />
+                        <IconUpload height={14} width={14} />
                         <FormattedMessage {...messages.versionActionPromote} />
                     </VersionsItemAction>
                 )}
@@ -131,7 +131,7 @@ const VersionsItemActions = ({
                             isDisabled={isRetained}
                             onClick={onDelete}
                         >
-                            <IconTrash {...ICON_SIZE} />
+                            <IconTrash height={14} width={14} />
                             <FormattedMessage {...messages.versionActionDelete} />
                         </VersionsItemAction>
                     </Tooltip>

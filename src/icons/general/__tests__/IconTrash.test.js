@@ -13,7 +13,7 @@ describe('icons/general/IconTrash', () => {
         const color = '#ffffff';
         const wrapper = shallow(<IconTrash color={color} />);
 
-        expect(wrapper.find('g').prop('fill')).toEqual(color);
+        expect(wrapper.find('path').prop('fill')).toEqual(color);
     });
 
     test('should correctly render icon with specified width and height', () => {
