@@ -214,9 +214,7 @@ class ActivityFeed extends React.Component<Props, State> {
             task: messages.taskMissingError,
         };
 
-        const hasErrorMessageForEntryType = feedEntryType => {
-            return !!errorMessageByEntryType[feedEntryType];
-        };
+        const hasErrorMessageForEntryType = feedEntryType => !!errorMessageByEntryType[feedEntryType];
 
         return (
             // eslint-disable-next-line
