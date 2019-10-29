@@ -159,6 +159,20 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
             wrapper.prop('onRemove')();
             expect(instance.handleRemove).toHaveBeenCalled();
         });
+
+        test('should default value to empty array when its not been initialized', () => {
+            const onChange = jest.fn();
+            const wrapper = getWrapper({
+                field: {
+                    name: 'pill',
+                    onChange,
+                },
+            });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.handleRemove('bar', 1);
+            expect(onChange).toHaveBeenCalledWith({ target: { name: 'pill', value: [] } });
+        });
     });
 
     describe('handleParseItems()', () => {
@@ -192,6 +206,17 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
             expect(inputParser).toHaveBeenCalledTimes(1);
             expect(inputParser).toHaveBeenCalledWith('abc', options, field.value);
+        });
+
+        test('should default value to empty array when its not been initialized', () => {
+            const inputParser = jest.fn();
+            const field = {};
+            const wrapper = getWrapper({ inputParser, options, field });
+
+            wrapper.instance().handleParseItems('abc');
+
+            expect(inputParser).toHaveBeenCalledTimes(1);
+            expect(inputParser).toHaveBeenCalledWith('abc', options, []);
         });
     });
 
