@@ -237,7 +237,7 @@
         "react-process-string": "^1.2.0",
         "react-router-dom": "^5.0.0",
         "react-styleguidist": "^8.0.6",
-        "react-tether": "1.0.1",
+        "react-tether": "1.0.5",
         "react-textarea-autosize": "^7.1.0",
         "react-virtualized": "^9.21.0",
         "regenerator-runtime": "^0.13.2",

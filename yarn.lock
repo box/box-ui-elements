@@ -15370,13 +15370,13 @@ react-test-renderer@^16.0.0-0:
     react-is "^16.9.0"
     scheduler "^0.15.0"
 
-react-tether@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-tether/-/react-tether-1.0.1.tgz#6e5173764d4f9b8bef6d1b20ff51972909674942"
-  integrity sha512-OsgGk2hmsIpnpMl1Uq9aYKopG4V7bDuz2msNYPaRosF0CBbpa1YVF9P1qJ8MRsf1Zj/oK/I2uH++S+ffqxL98A==
+react-tether@1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-tether/-/react-tether-1.0.5.tgz#6d106e0039b1aa0e14d1266925486cd9cff2d217"
+  integrity sha512-dehXHK82Xx0aXZldYiGR6dzlIAruAvnDvtp5O6AyT1EC1TTMYem/kIXNHsyjFNEA1hhhL7c98GmP6ANYVbq+GQ==
   dependencies:
-    prop-types "^15.5.8"
-    tether "^1.4.3"
+    prop-types "^15.6.2"
+    tether "^1.4.5"
 
 react-textarea-autosize@^7.1.0:
   version "7.1.0"
@@ -17955,10 +17955,10 @@ test-exclude@^5.0.0:
     read-pkg-up "^4.0.0"
     require-main-filename "^1.0.1"
 
-tether@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/tether/-/tether-1.4.3.tgz#fd547024c47b6e5c9b87e1880f997991a9a6ad54"
-  integrity sha512-YCfE/Ym9MpZpzUmzbek7MiLEyTofxx2YS0rJfSOUXX0aZtfQgxcgw7/Re2oGJUsREWZtEF0DzBKCjqH+DzgL6A==
+tether@^1.4.5:
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/tether/-/tether-1.4.7.tgz#d56a818590d8fe72e387f77a67f93ab96d8e1fb2"
+  integrity sha512-Z0J1aExjoFU8pybVkQAo/vD2wfSO63r+XOPfWQMC5qtf1bI7IWqNk4MiyBcgvvnY8kqnY06dVdvwTK2S3PU/Fw==
 
 text-encoding@0.6.4:
   version "0.6.4"
