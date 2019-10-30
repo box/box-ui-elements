@@ -5,24 +5,12 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
-import { FormattedMessage } from 'react-intl';
-import InlineError from '../../../../components/inline-error/InlineError';
 import AppActivity from '../app-activity';
 import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
 import type { FocusableFeedItemType } from '../../../../common/types/feed';
-import messages from './messages';
-
-const errorMessageByEntryType = {
-    comment: messages.commentMissingError,
-    task: messages.taskMissingError,
-};
-
-const hasErrorMessageForEntryType = feedEntryType => {
-    return !!errorMessageByEntryType[feedEntryType];
-};
 
 type Props = {
     activeFeedEntryId?: string,
@@ -150,14 +138,6 @@ const ActiveState = ({
                         return null;
                 }
             })}
-
-            {activeFeedEntryType && !activeEntry && hasErrorMessageForEntryType(activeFeedEntryType) ? (
-                <li>
-                    <InlineError title={<FormattedMessage {...messages.feedInlineErrorTitle} />}>
-                        <FormattedMessage {...errorMessageByEntryType[activeFeedEntryType]} />
-                    </InlineError>
-                </li>
-            ) : null}
         </ul>
     );
 };
