@@ -8,7 +8,6 @@ type Props = {
     className?: string,
     /** Description of the input */
     description?: React.Node,
-    inputProps?: Object, // @TODO: eventually get rid of this
     isDisabled?: boolean, // @TODO: eventually call this `disabled`
     /** Toggle state */
     isOn?: boolean, // @TODO: eventually call this `checked`
@@ -29,7 +28,6 @@ type Props = {
 const Toggle = ({
     className = '',
     description,
-    inputProps = {},
     isDisabled,
     isOn,
     isToggleRightAligned = false,
@@ -37,6 +35,7 @@ const Toggle = ({
     name,
     onBlur,
     onChange,
+    ...rest
 }: Props) => {
     const classes = classNames('toggle-container', className, {
         'is-toggle-right-aligned': isToggleRightAligned,
@@ -64,7 +63,7 @@ const Toggle = ({
                     onBlur={onBlur}
                     onChange={onChange}
                     type="checkbox"
-                    {...inputProps}
+                    {...rest}
                 />
                 {toggleElements}
             </label>
