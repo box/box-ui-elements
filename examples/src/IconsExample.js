@@ -7,7 +7,7 @@ type Props = {
     icons: Array<{
         component: React.ComponentType<{}>,
         name: string,
-        propsExample: React.ComponentType<{}>,
+        propsDocumentation: React.ComponentType<{}>,
     }>,
 };
 
@@ -72,7 +72,7 @@ class IconsExample extends React.Component<Props, State> {
                 <div className={classNames('icon-set', { dark: this.state.darkBackgroundEnabled })}>
                     {icons.map(icon => {
                         const Component = icon.component;
-                        const PropsComponent = icon.propsExample;
+                        const PropsComponent = icon.propsDocumentation;
                         const isExpanded = icon.name === this.state.expandedPropsComponent;
                         return (
                             <div className={classNames('icon', { 'is-expanded': isExpanded })} key={icon.name}>

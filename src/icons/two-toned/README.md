@@ -12,7 +12,7 @@ Use provided SASS mix-ins to modify styles of these icons. Each mix-in name is i
 
 ```jsx
 const IconsExample = require('../../../examples/src/IconsExample').default;
-const propsExample = require('../../../examples/src/IconsExampleTwoTonedIconType').default;
+const propsDocumentation = require('../../../examples/src/IconsExampleTwoTonedIconDocs').default;
 
 const icons = [
     {
@@ -37,7 +37,7 @@ const icons = [
                 </div>
             );
         },
-        propsExample,
+        propsDocumentation,
     },
     {
         name: 'IconExclamationMark',
@@ -61,7 +61,7 @@ const icons = [
                 </div>
             );
         },
-        propsExample,
+        propsDocumentation,
     },
     {
         name: 'IconLightning',
@@ -85,7 +85,7 @@ const icons = [
                 </div>
             );
         },
-        propsExample,
+        propsDocumentation,
     },
     {
         name: 'IconSharedLink',
@@ -109,7 +109,7 @@ const icons = [
                 </div>
             );
         },
-        propsExample,
+        propsDocumentation,
     },
     {
         name: 'IconTaskGeneral',
@@ -133,7 +133,7 @@ const icons = [
                 </div>
             );
         },
-        propsExample,
+        propsDocumentation,
     },
     {
         name: 'IconTaskApproval',
@@ -157,7 +157,7 @@ const icons = [
                 </div>
             );
         },
-        propsExample,
+        propsDocumentation,
     },
     {
         name: 'IconWorkflow',
@@ -181,7 +181,7 @@ const icons = [
                 </div>
             );
         },
-        propsExample,
+        propsDocumentation,
     },
     {
         name: 'IconCollectionItemLink',
@@ -205,7 +205,7 @@ const icons = [
                 </div>
             );
         },
-        propsExample,
+        propsDocumentation,
     },
 ];
 
