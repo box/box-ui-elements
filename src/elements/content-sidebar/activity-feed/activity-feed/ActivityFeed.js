@@ -214,9 +214,11 @@ class ActivityFeed extends React.Component<Props, State> {
             task: messages.taskMissingError,
         };
 
-        const errorMessage = activeFeedEntryType ? errorMessageByEntryType[activeFeedEntryType] : undefined;
+        const inlineFeedItemErrorMessage = activeFeedEntryType
+            ? errorMessageByEntryType[activeFeedEntryType]
+            : undefined;
 
-        const isErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
+        const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
 
         return (
             // eslint-disable-next-line
@@ -262,14 +264,14 @@ class ActivityFeed extends React.Component<Props, State> {
                             activeFeedItemRef={this.activeFeedItemRef}
                         />
                     )}
-                    {isErrorVisible && errorMessage ? (
+                    {isInlineFeedItemErrorVisible && inlineFeedItemErrorMessage && (
                         <InlineError
                             title={<FormattedMessage {...messages.feedInlineErrorTitle} />}
                             className="bcs-feedItemInlineError"
                         >
-                            <FormattedMessage {...errorMessage} />
+                            <FormattedMessage {...inlineFeedItemErrorMessage} />
                         </InlineError>
-                    ) : null}
+                    )}
                 </div>
 
                 {showCommentForm ? (
