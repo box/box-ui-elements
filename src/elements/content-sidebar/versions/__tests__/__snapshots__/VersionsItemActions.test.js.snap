@@ -52,10 +52,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
         isCurrent={false}
         isDisabled={false}
       >
-        <IconTrash
-          height={14}
-          width={14}
-        />
+        <IconTrash />
         <FormattedMessage
           defaultMessage="Delete"
           id="be.sidebarVersions.delete"
@@ -118,10 +115,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
         isCurrent={false}
         isDisabled={true}
       >
-        <IconTrash
-          height={14}
-          width={14}
-        />
+        <IconTrash />
         <FormattedMessage
           defaultMessage="Delete"
           id="be.sidebarVersions.delete"
@@ -182,10 +176,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       action="download"
       isCurrent={false}
     >
-      <IconDownload
-        height={14}
-        width={14}
-      />
+      <IconDownload />
       <FormattedMessage
         defaultMessage="Download"
         id="be.sidebarVersions.download"
@@ -195,10 +186,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       action="promote"
       isCurrent={false}
     >
-      <IconUpload
-        height={14}
-        width={14}
-      />
+      <IconUpload />
       <FormattedMessage
         defaultMessage="Make Current"
         id="be.sidebarVersions.promote"
@@ -236,10 +224,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         isCurrent={false}
         isDisabled={false}
       >
-        <IconTrash
-          height={14}
-          width={14}
-        />
+        <IconTrash />
         <FormattedMessage
           defaultMessage="Delete"
           id="be.sidebarVersions.delete"

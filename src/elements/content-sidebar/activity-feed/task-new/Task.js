@@ -298,7 +298,7 @@ class Task extends React.Component<Props, State> {
                                             data-testid="delete-task"
                                             onClick={this.handleDeleteClick}
                                         >
-                                            <IconTrash color={bdlGray80} height={14} width={14} />
+                                            <IconTrash color={bdlGray80} />
                                             <FormattedMessage {...messages.taskDeleteMenuItem} />
                                         </MenuItem>
                                     )}

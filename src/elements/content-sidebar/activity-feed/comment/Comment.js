@@ -156,7 +156,7 @@ class Comment extends React.Component<Props, State> {
                                             data-testid="delete-comment"
                                             onClick={this.handleDeleteClick}
                                         >
-                                            <IconTrash color={bdlGray80} height={14} width={14} />
+                                            <IconTrash color={bdlGray80} />
                                             <FormattedMessage {...messages.commentDeleteMenuItem} />
                                         </MenuItem>
                                     )}

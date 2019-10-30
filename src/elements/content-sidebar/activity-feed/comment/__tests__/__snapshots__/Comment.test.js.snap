@@ -53,8 +53,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           >
             <IconTrash
               color="#4e4e4e"
-              height={14}
-              width={14}
             />
             <FormattedMessage
               defaultMessage="Delete"
