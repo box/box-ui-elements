@@ -3,7 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import AccessibleSVG from '../accessible-svg';
-import { bdlGray50 } from '../../styles/variables';
+import { bdlGray80 } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -14,19 +14,19 @@ type Props = {
     width?: number,
 };
 
-const IconCollectionsStar = ({ className = '', color = bdlGray50, height = 32, title, width = 32 }: Props) => (
+const IconCollectionsStar = ({ className = '', color = bdlGray80, height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={classNames('bdl-IconCollectionsStar', className)}
         height={height}
         title={title}
-        viewBox="0 0 32 32"
+        viewBox="0 0 16 16"
         width={width}
     >
         <path
             className="fill-color"
-            d="M7.896 0h21.642A2.462 2.462 0 0 1 32 2.462v21.642a2.462 2.462 0 0 1-2.462 2.462H7.896a2.462 2.462 0 0 1-2.462-2.462V2.462A2.462 2.462 0 0 1 7.896 0zm.615 23.49h20.412V3.076H8.511v20.412zm6.646-2.932c-.691.378-1.486-.258-1.35-1.081l.672-4.07-2.852-2.888c-.575-.583-.268-1.625.513-1.743l3.97-.6 1.769-3.724c.349-.736 1.323-.736 1.672 0l1.77 3.725 3.969.6c.781.117 1.088 1.159.513 1.742l-2.852 2.888.672 4.07c.136.823-.659 1.46-1.35 1.081l-3.558-1.944-3.558 1.944zM1.51 13.283c.834 0 1.51.676 1.51 1.51V26.52a2.462 2.462 0 0 0 2.46 2.46h11.728a1.51 1.51 0 0 1 0 3.019H4.923A4.923 4.923 0 0 1 0 27.077V14.792a1.51 1.51 0 0 1 1.51-1.509z"
             fill={color}
-            fillRule="nonzero"
+            fillRule="evenodd"
+            d="M13.888 1C14.502 1 15 1.498 15 2.112v9.776c0 .614-.498 1.112-1.112 1.112H4.112A1.112 1.112 0 0 1 3 11.888V2.112C3 1.498 3.498 1 4.112 1h9.776zM14 2H4v10h10V2zM7.555 9.955c-.281.153-.604-.105-.549-.44l.273-1.653L6.121 6.69c-.234-.237-.11-.66.208-.708l1.613-.244.718-1.513a.37.37 0 0 1 .68 0l.719 1.513 1.612.244c.317.048.442.471.208.708l-1.158 1.173.273 1.653c.055.335-.268.594-.549.44L9 9.165l-1.445.79zM1.5 7c.25 0 .5.135.5.5v5.103C2 13.504 2.5 14 3.397 14H8.5c.358.01.5.25.5.5s-.142.49-.5.5H3.154A2.154 2.154 0 0 1 1 12.847V7.5c0-.364.25-.5.5-.5z"
         />
     </AccessibleSVG>
 );

@@ -2,6 +2,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
+import { bdlGray80 } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -12,12 +13,13 @@ type Props = {
     width?: number,
 };
 
-const IconMail = ({ className = '', color = '#444444', height = 11, title, width = 14 }: Props) => (
-    <AccessibleSVG className={`icon-mail ${className}`} height={height} title={title} viewBox="0 0 14 11" width={width}>
+const IconMail = ({ className = '', color = bdlGray80, height = 16, title, width = 16 }: Props) => (
+    <AccessibleSVG className={`icon-mail ${className}`} height={height} title={title} viewBox="0 0 16 16" width={width}>
         <path
             className="fill-color"
-            d="M13 0H1C.4 0 0 .4 0 1v9c0 .6.5 1 1 1h12c.6 0 1-.4 1-1V1c0-.6-.5-1-1-1zM7 5.5L1.8 1h10.5L7 5.5zM1 1zm12 9H1V1.7l5.7 4.8.3.3.3-.3L13 1.7V10z"
             fill={color}
+            fillRule="evenodd"
+            d="M14 3H2c-.6 0-1 .4-1 1v9c0 .6.5 1 1 1h12c.6 0 1-.4 1-1V4c0-.6-.5-1-1-1zM8 8.5L2.8 4h10.5L8 8.5zm6 4.5H2V4.7l5.7 4.8.3.3.3-.3L14 4.7V13z"
         />
     </AccessibleSVG>
 );

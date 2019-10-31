@@ -3,14 +3,15 @@
 exports[`icons/general/IconMail should correctly render default icon 1`] = `
 <AccessibleSVG
   className="icon-mail "
-  height={11}
-  viewBox="0 0 14 11"
-  width={14}
+  height={16}
+  viewBox="0 0 16 16"
+  width={16}
 >
   <path
     className="fill-color"
-    d="M13 0H1C.4 0 0 .4 0 1v9c0 .6.5 1 1 1h12c.6 0 1-.4 1-1V1c0-.6-.5-1-1-1zM7 5.5L1.8 1h10.5L7 5.5zM1 1zm12 9H1V1.7l5.7 4.8.3.3.3-.3L13 1.7V10z"
-    fill="#444444"
+    d="M14 3H2c-.6 0-1 .4-1 1v9c0 .6.5 1 1 1h12c.6 0 1-.4 1-1V4c0-.6-.5-1-1-1zM8 8.5L2.8 4h10.5L8 8.5zm6 4.5H2V4.7l5.7 4.8.3.3.3-.3L14 4.7V13z"
+    fill="#4e4e4e"
+    fillRule="evenodd"
   />
 </AccessibleSVG>
 `;
@@ -20,13 +21,14 @@ exports[`icons/general/IconMail should correctly render icon with additional pro
   className="icon-mail class"
   height={100}
   title="title"
-  viewBox="0 0 14 11"
+  viewBox="0 0 16 16"
   width={200}
 >
   <path
     className="fill-color"
-    d="M13 0H1C.4 0 0 .4 0 1v9c0 .6.5 1 1 1h12c.6 0 1-.4 1-1V1c0-.6-.5-1-1-1zM7 5.5L1.8 1h10.5L7 5.5zM1 1zm12 9H1V1.7l5.7 4.8.3.3.3-.3L13 1.7V10z"
+    d="M14 3H2c-.6 0-1 .4-1 1v9c0 .6.5 1 1 1h12c.6 0 1-.4 1-1V4c0-.6-.5-1-1-1zM8 8.5L2.8 4h10.5L8 8.5zm6 4.5H2V4.7l5.7 4.8.3.3.3-.3L14 4.7V13z"
     fill="#000"
+    fillRule="evenodd"
   />
 </AccessibleSVG>
 `;
