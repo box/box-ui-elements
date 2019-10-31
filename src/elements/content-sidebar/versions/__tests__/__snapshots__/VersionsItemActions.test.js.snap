@@ -163,10 +163,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       action="preview"
       isCurrent={false}
     >
-      <IconOpenWith
-        height={12}
-        width={12}
-      />
+      <IconOpenWith />
       <FormattedMessage
         defaultMessage="Preview"
         id="be.sidebarVersions.preview"
