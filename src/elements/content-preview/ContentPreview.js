@@ -700,8 +700,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const fileOpts = { ...fileOptions };
-        const typedId: string = getTypedFileId(fileId);
-        const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
+        const token = typedId => TokenService.getReadTokens(typedId, tokenOrTokenFunction);
 
         if (selectedVersion) {
             fileOpts[fileId] = fileOpts[fileId] || {};

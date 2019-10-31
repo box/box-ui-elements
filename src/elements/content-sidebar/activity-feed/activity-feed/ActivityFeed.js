@@ -6,13 +6,16 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { scrollIntoView } from '../../../../utils/dom';
 import ActiveState from './ActiveState';
 import CommentForm from '../comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
+import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
+import messages from './messages';
 import type { FocusableFeedItemType } from '../../../../common/types/feed';
 import './ActivityFeed.scss';
 
@@ -202,6 +205,21 @@ class ActivityFeed extends React.Component<Props, State> {
         const isEmpty = this.isEmpty(this.props);
         const isLoading = !this.hasLoaded();
 
+        const activeEntry =
+            Array.isArray(feedItems) &&
+            feedItems.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
+
+        const errorMessageByEntryType = {
+            comment: messages.commentMissingError,
+            task: messages.taskMissingError,
+        };
+
+        const inlineFeedItemErrorMessage = activeFeedEntryType
+            ? errorMessageByEntryType[activeFeedEntryType]
+            : undefined;
+
+        const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
+
         return (
             // eslint-disable-next-line
             <div className="bcs-activity-feed" data-testid="activityfeed" onKeyDown={this.onKeyDown}>
@@ -218,7 +236,6 @@ class ActivityFeed extends React.Component<Props, State> {
                     )}
 
                     {isEmpty && !isLoading && <EmptyState showCommentMessage={showCommentForm} />}
-
                     {!isEmpty && !isLoading && (
                         <ActiveState
                             {...activityFeedError}
@@ -247,7 +264,16 @@ class ActivityFeed extends React.Component<Props, State> {
                             activeFeedItemRef={this.activeFeedItemRef}
                         />
                     )}
+                    {isInlineFeedItemErrorVisible && inlineFeedItemErrorMessage && (
+                        <InlineError
+                            title={<FormattedMessage {...messages.feedInlineErrorTitle} />}
+                            className="bcs-feedItemInlineError"
+                        >
+                            <FormattedMessage {...inlineFeedItemErrorMessage} />
+                        </InlineError>
+                    )}
                 </div>
+
                 {showCommentForm ? (
                     <CommentForm
                         onSubmit={this.resetFeedScroll}
