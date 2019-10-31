@@ -3,7 +3,7 @@ import * as React from 'react';
 import { State, Store } from '@sambego/storybook-state';
 import DatalistItem from '../../datalist-item/DatalistItem';
 import PillSelectorDropdown from '../PillSelectorDropdown';
-import mdNotes from '../README.md';
+import mdNotes from './README.md';
 
 export default {
     title: 'PillSelectorDropdown',
