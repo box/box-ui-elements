@@ -21,8 +21,16 @@ exports[`components/text-input/TextInput should render text input with descripti
       text=""
       theme="error"
     >
-      <input />
+      <input
+        aria-errormessage="errorMessage20"
+        aria-invalid={false}
+      />
     </Tooltip>
+    <span
+      className="accessibility-hidden"
+      id="errorMessage20"
+      role="alert"
+    />
   </Label>
 </div>
 `;

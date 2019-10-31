@@ -214,7 +214,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       />
     </Button>
     <PrimaryButton
-      isDisabled={true}
+      isDisabled={false}
       isLoading={false}
       type="submit"
     >
@@ -292,7 +292,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       />
     </Button>
     <PrimaryButton
-      isDisabled={true}
+      isDisabled={false}
       isLoading={false}
       type="submit"
     >
@@ -420,7 +420,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       />
     </Button>
     <PrimaryButton
-      isDisabled={true}
+      isDisabled={false}
       isLoading={false}
       type="submit"
     >
@@ -503,7 +503,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       />
     </Button>
     <PrimaryButton
-      isDisabled={true}
+      isDisabled={false}
       isLoading={false}
       type="submit"
     >
@@ -597,7 +597,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       />
     </Button>
     <PrimaryButton
-      isDisabled={true}
+      isDisabled={false}
       isLoading={false}
       type="submit"
     >

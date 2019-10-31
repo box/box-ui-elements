@@ -54,4 +54,12 @@ describe('components/toggle/Toggle', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render properly when random props are passed in', () => {
+        const wrapper = getWrapper({
+            'data-resin-target': 'toggle',
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });

@@ -37,12 +37,12 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
     }
 
     &.is-error {
-        color: $bdl-watermelon-red;
+        color: $bdl-gray;
         background-color: $bdl-watermelon-red-10;
-        border: 1px solid $bdl-watermelon-red;
+        border: 1px solid $bdl-watermelon-red-50;
 
         .tooltip-close-button .icon-close .fill-color {
-            fill: $bdl-watermelon-red;
+            fill: $bdl-gray;
         }
     }
 
@@ -56,13 +56,13 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
     }
 
     &.with-close-button {
-        padding-right: 24px;
+        padding-right: 28px;
     }
 
     .tooltip-close-button {
         position: absolute;
-        top: 4px;
-        right: 0;
+        top: 9px;
+        right: 3px;
         cursor: pointer;
 
         .icon-close {
