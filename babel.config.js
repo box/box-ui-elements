@@ -45,6 +45,7 @@ module.exports = {
             plugins: [
                 '@babel/plugin-transform-modules-commonjs',
                 'dynamic-import-node', // https://github.com/facebook/jest/issues/5920
+                'require-context-hook',
             ],
         },
     },

@@ -4,5 +4,7 @@ export default create({
     base: 'light',
     brandTitle: 'Box UI Elements',
     brandUrl: 'https://opensource.box.com/box-ui-elements/',
-    fontBase: 'Lato',
+    fontBase: 'Lato, Helvetica Neue, Helvetica, Arial, sans-serif',
+}, {
+    layoutMargin: 20,
 });
