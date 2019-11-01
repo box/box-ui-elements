@@ -29,7 +29,7 @@ const IconWithTooltip = ({ className, onClick, tooltipText, type }: Props): Elem
             icon = <IconClose color={bdlGray62} width={16} height={16} />;
             break;
         case EDIT_ICON_TYPE:
-            icon = <IconPencil />;
+            icon = <IconPencil color={bdlGray62} />;
             break;
         case SAVE_ICON_TYPE:
             icon = <IconCheck color={bdlGray62} width={16} height={16} />;

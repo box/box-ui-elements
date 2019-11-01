@@ -9,7 +9,7 @@ describe('features/metadata-based-view/IconWithTooltip', () => {
     const getWrapper = props => shallow(<IconWithTooltip {...props} />);
     const onClick = () => {};
 
-    test('get IconClose with Tooltip to cancel edited value', () => {
+    test('should get IconClose with Tooltip having text "cancel"', () => {
         const props = {
             className: 'bdl-MetadataBasedItemList-cell--cancelIcon',
             onClick,
@@ -20,7 +20,7 @@ describe('features/metadata-based-view/IconWithTooltip', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('get IconSave with Tooltip to save edited value', () => {
+    test('should get IconSave with Tooltip having text "save"', () => {
         const props = {
             className: 'bdl-MetadataBasedItemList-cell--saveIcon',
             onClick,
@@ -31,7 +31,7 @@ describe('features/metadata-based-view/IconWithTooltip', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('get IconPencil with Tooltip to enter edit mode', () => {
+    test('should get IconPencil with Tooltip having text "edit"', () => {
         const props = {
             onClick,
             tooltipText: messages.editLabel,
