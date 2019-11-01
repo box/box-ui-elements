@@ -6,22 +6,44 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
     Object {
       "items": Array [
         Object {
+          "id": "1",
           "metadata": Object {
-            "data": Object {
-              "amount": 500,
-              "type": "bill",
-            },
+            "fields": Array [
+              Object {
+                "name": "type",
+                "type": "string",
+                "value": "bill",
+              },
+              Object {
+                "name": "amount",
+                "type": "float",
+                "value": 100.12,
+              },
+            ],
+            "id": "11",
           },
           "name": "name1.pdf",
+          "size": "123",
         },
         Object {
+          "id": "2",
           "metadata": Object {
-            "data": Object {
-              "amount": 200,
-              "type": "receipt",
-            },
+            "fields": Array [
+              Object {
+                "name": "type",
+                "type": "string",
+                "value": "receipt",
+              },
+              Object {
+                "name": "amount",
+                "type": "float",
+                "value": 200.88,
+              },
+            ],
+            "id": "22",
           },
           "name": "name2.mp4",
+          "size": "456",
         },
       ],
       "nextMarker": "abc",

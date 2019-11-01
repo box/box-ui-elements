@@ -14,8 +14,26 @@
     color: $bdl-gray-62;
     border-bottom: 1px solid $bdl-gray-10;
 
-    svg {
-        margin: 0 10px;
+    & .icon-pencil {
+        margin-left: 10px;
+    }
+}
+
+.bdl-MetadataBasedItemList-cell--edit {
+    display: flex;
+    height: 32px;
+    background-color: $white;
+    border: 1px solid $bdl-gray-20;
+    border-radius: 3px;
+
+    .bdl-MetadataBasedItemList-cell--cancelIcon,
+    .bdl-MetadataBasedItemList-cell--saveIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-left: 1px solid $bdl-gray-20;
     }
 }
 
@@ -36,5 +54,9 @@
 
     &.bdl-MetadataBasedItemList-cell--hover {
         border-left-color: $bdl-dark-blue;
+    }
+
+    svg {
+        margin: 0 10px;
     }
 }
