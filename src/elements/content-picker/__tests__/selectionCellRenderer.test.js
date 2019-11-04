@@ -9,10 +9,17 @@ const rowData = {
 };
 
 describe('selectionCellRenderer', () => {
-    test.each([[false, 'Checkbox'], [true, 'RadioButton']])('isRadio is %s should render %s', (expected, type) => {
-        const Element = selectionCellRenderer(() => {}, 'file, web_link', [], false, expected);
+    test.each([['Checkbox', false], ['RadioButton', true]])('should render %s if isRadio is %s', (type, isRadio) => {
+        const Element = selectionCellRenderer(() => {}, 'file, web_link', [], false, isRadio);
 
         const wrapper = shallow(<Element rowData={rowData} />);
         expect(wrapper.exists(type)).toBe(true);
+    });
+
+    test.each([['isSelected', true], ['isChecked', false]])('should render %s if selected', (type, isRadio) => {
+        const Element = selectionCellRenderer(() => {}, 'file, web_link', [], false, isRadio);
+
+        const wrapper = shallow(<Element rowData={rowData} />);
+        expect(wrapper.prop(type)).toBe(true);
     });
 });
