@@ -428,7 +428,7 @@ type BoxItem = {
     metadata?: MetadataType,
     modified_at?: string,
     modified_by?: User,
-    name: string,
+    name?: string,
     owned_by?: User,
     parent?: BoxItem,
     path_collection?: BoxPathCollection,
