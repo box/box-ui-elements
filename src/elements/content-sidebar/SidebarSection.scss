@@ -8,7 +8,7 @@
     margin: 0 8px 20px 25px;
 }
 
-.be .btn-plain.bcs-section-title {
+.be .bdl-Button--plain.bcs-section-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -33,6 +33,6 @@
     }
 }
 
-.be .bcs-section-open .btn-plain.bcs-section-title .icon-caret-down {
+.be .bcs-section-open .bdl-Button--plain.bcs-section-title .icon-caret-down {
     transform: rotateZ(180deg);
 }

@@ -91,7 +91,7 @@
     text-indent: -999px;
     cursor: pointer;
 
-    &.is-disabled {
+    &.bdl-is-disabled {
         cursor: default;
         opacity: .2;
     }
@@ -178,7 +178,7 @@
     cursor: pointer;
 }
 
-.is-disabled .pika-button,
+.bdl-is-disabled .pika-button,
 .is-outside-current-month .pika-button {
     cursor: default;
     opacity: .3;

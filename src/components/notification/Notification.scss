@@ -73,8 +73,8 @@
         flex: none;
         color: $white;
 
-        &.btn.is-disabled,
-        &.btn:not(.is-disabled) {
+        &.bdl-Button.bdl-is-disabled,
+        &.bdl-Button:not(.bdl-is-disabled) {
             margin: 0 5px;
             padding: 7px 13px;
             background-color: transparent;

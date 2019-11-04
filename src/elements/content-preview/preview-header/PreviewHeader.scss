@@ -61,8 +61,8 @@
         .ba-btn-annotate-draw-undo,
         button.ba-btn-annotate-draw-redo,
         button.ba-btn-annotate-draw-undo,
-        .is-disabled.ba-btn-annotate-draw-redo,
-        .is-disabled.ba-btn-annotate-draw-undo {
+        .bdl-is-disabled.ba-btn-annotate-draw-redo,
+        .bdl-is-disabled.ba-btn-annotate-draw-undo {
             margin: 5px;
             background: none;
             border: none;
@@ -98,7 +98,7 @@
     }
 }
 
-.bcpr-PreviewHeader-button.btn-plain {
+.bcpr-PreviewHeader-button.bdl-Button--plain {
     display: flex;
     align-items: center;
     padding: 5px 10px;
@@ -114,7 +114,7 @@
     }
 }
 
-.bcpr-PreviewHeader-button-close.btn-plain {
+.bcpr-PreviewHeader-button-close.bdl-Button--plain {
     font-weight: bold;
 
     .icon-close {

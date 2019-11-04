@@ -3,19 +3,19 @@
 /**************************************
  * Button Group
  **************************************/
-.btn-group {
+.bdl-ButtonGroup {
     position: relative;
 
     .toggle-overlay {
         display: inline;
 
-        > .btn {
+        > .bdl-Button {
             margin-left: 0;
             padding-right: 11px;
             padding-left: 11px;
             border-radius: 0 4px 4px 0;
 
-            &.btn-primary {
+            &.bdl-Button--primary {
                 border-left-color: darken($primary-color, 10%);
             }
         }
@@ -39,11 +39,11 @@
         }
     }
 
-    > .btn {
+    > .bdl-Button {
         margin: 5px 0 5px -1px;
         border-radius: 0;
 
-        &.btn-primary {
+        &.bdl-Button--primary {
             margin: 5px 0;
             border-right-color: darken($primary-color, 10%);
 
@@ -60,17 +60,17 @@
         }
     }
 
-    > .btn:first-child {
+    > .bdl-Button:first-child {
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
     }
 
-    > .btn:last-child {
+    > .bdl-Button:last-child {
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
     }
 
-    > .btn.is-selected {
+    > .bdl-Button.is-selected {
         z-index: 2; /* place on top of siblings */
         color: $bdl-gray-80;
         background-color: $bdl-gray-10;
@@ -78,12 +78,12 @@
         box-shadow: none;
     }
 
-    > .btn:focus {
+    > .bdl-Button:focus {
         z-index: 3; /* place on top of all other buttons for accessibility */
     }
 
-    &.is-disabled {
-        > .btn {
+    &.bdl-is-disabled {
+        > .bdl-Button {
             color: $bdl-gray-62;
             background-color: $bdl-gray-02;
             border: 1px solid $bdl-gray-30;
@@ -92,7 +92,7 @@
             opacity: .4;
         }
 
-        > .btn-primary {
+        > .bdl-Button--primary {
             color: $white;
             background-color: $primary-color;
             border-color: $primary-color;

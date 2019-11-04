@@ -6,11 +6,11 @@
     justify-content: space-between;
     margin-top: 10px;
 
-    .metadata-instance-editor-footer-delete .btn-plain {
+    .metadata-instance-editor-footer-delete .bdl-Button--plain {
         color: $bdl-watermelon-red;
     }
 
-    .metadata-instance-editor-footer-save-cancel .btn:last-child {
+    .metadata-instance-editor-footer-save-cancel .bdl-Button:last-child {
         margin-right: 0;
     }
 }
