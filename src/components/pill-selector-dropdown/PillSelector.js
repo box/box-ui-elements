@@ -177,7 +177,7 @@ class PillSelector extends React.Component<Props, State> {
         const suggestedPillsEnabled = suggestedPillsData && suggestedPillsData.length > 0;
         const hasError = !!error;
         const classes = classNames('pill-selector-input-wrapper', {
-            'is-disabled': disabled,
+            'bdl-is-disabled': disabled,
             'is-focused': isFocused,
             'show-error': hasError,
             'pill-selector-suggestions-enabled': suggestedPillsEnabled,

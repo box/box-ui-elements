@@ -7,7 +7,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   isRightAligned={false}
 >
   <PlainButton
-    className="lnk is-disabled"
+    className="lnk bdl-is-disabled"
     disabled={true}
   >
     <MenuToggle>
@@ -37,12 +37,12 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
         <small
           className="usm-menu-description"
         >
-           
+
           <FormattedMessage
             defaultMessage="Users can view and download"
             id="boxui.unifiedShare.sharedLinkPermissionsViewDownloadDescription"
           />
-           
+
         </small>
       </div>
     </SelectMenuItem>
@@ -61,12 +61,12 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
         <small
           className="usm-menu-description"
         >
-           
+
           <FormattedMessage
             defaultMessage="Users can view only"
             id="boxui.unifiedShare.sharedLinkPermissionsViewOnlyDescription"
           />
-           
+
         </small>
       </div>
     </SelectMenuItem>
@@ -111,12 +111,12 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
         <small
           className="usm-menu-description"
         >
-           
+
           <FormattedMessage
             defaultMessage="Users can view and download"
             id="boxui.unifiedShare.sharedLinkPermissionsViewDownloadDescription"
           />
-           
+
         </small>
       </div>
     </SelectMenuItem>
@@ -135,12 +135,12 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
         <small
           className="usm-menu-description"
         >
-           
+
           <FormattedMessage
             defaultMessage="Users can view only"
             id="boxui.unifiedShare.sharedLinkPermissionsViewOnlyDescription"
           />
-           
+
         </small>
       </div>
     </SelectMenuItem>
@@ -155,7 +155,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   isRightAligned={false}
 >
   <PlainButton
-    className="lnk is-disabled"
+    className="lnk bdl-is-disabled"
     disabled={true}
   >
     <MenuToggle>
@@ -185,12 +185,12 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
         <small
           className="usm-menu-description"
         >
-           
+
           <FormattedMessage
             defaultMessage="Users can view and download"
             id="boxui.unifiedShare.sharedLinkPermissionsViewDownloadDescription"
           />
-           
+
         </small>
       </div>
     </SelectMenuItem>
@@ -209,12 +209,12 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
         <small
           className="usm-menu-description"
         >
-           
+
           <FormattedMessage
             defaultMessage="Users can view only"
             id="boxui.unifiedShare.sharedLinkPermissionsViewOnlyDescription"
           />
-           
+
         </small>
       </div>
     </SelectMenuItem>
@@ -259,12 +259,12 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
         <small
           className="usm-menu-description"
         >
-           
+
           <FormattedMessage
             defaultMessage="Users can view and download"
             id="boxui.unifiedShare.sharedLinkPermissionsViewDownloadDescription"
           />
-           
+
         </small>
       </div>
     </SelectMenuItem>
@@ -283,12 +283,12 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
         <small
           className="usm-menu-description"
         >
-           
+
           <FormattedMessage
             defaultMessage="Users can view only"
             id="boxui.unifiedShare.sharedLinkPermissionsViewOnlyDescription"
           />
-           
+
         </small>
       </div>
     </SelectMenuItem>

@@ -15,7 +15,7 @@ exports[`components/button/Button should render a RadarAnimation if showRadar is
     type="submit"
   >
     <span
-      className="btn-content"
+      className="bdl-Button-content"
     >
       Test
     </span>

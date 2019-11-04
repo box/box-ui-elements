@@ -19,7 +19,7 @@ const PillCloud = ({ options, onSelect, selectedOptions = [], buttonProps = {} }
             options.map(option => (
                 <Button
                     key={option.value}
-                    className={classNames('pill', 'pill-cloud-button', {
+                    className={classNames('pill bdl-Pill', 'pill-cloud-button', {
                         'is-selected': selectedOptions.find(op => isEqual(op, option)),
                     })}
                     onClick={onSelect ? () => onSelect(option) : undefined}

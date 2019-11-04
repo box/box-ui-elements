@@ -11,7 +11,7 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
   theme="error"
 >
   <span
-    className="pill-selector-input-wrapper is-disabled"
+    className="pill-selector-input-wrapper bdl-is-disabled"
     onBlur={[Function]}
     onClick={[Function]}
     onFocus={[Function]}

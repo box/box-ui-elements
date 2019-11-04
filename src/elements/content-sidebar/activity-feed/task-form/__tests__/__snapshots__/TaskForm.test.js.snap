@@ -50,7 +50,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
       type="button"
     >
       <span
-        className="btn-content"
+        className="bdl-Button-content"
       >
         <FormattedMessage
           defaultMessage="Cancel"
@@ -128,7 +128,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
         type="submit"
       >
         <span
-          className="btn-content"
+          className="bdl-Button-content"
         >
           <FormattedMessage
             defaultMessage="Update"

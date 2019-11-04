@@ -33,7 +33,7 @@ type Props = {
 
 const Label = ({ text, tooltip, infoTooltip, infoIconProps, showOptionalText, hideLabel, children }: Props) => {
     const labelContent = [
-        <span key="labelText">{text}</span>,
+        <span key="label bdl-LabelText">{text}</span>,
         showOptionalText ? <OptionalFormattedMessage key="optionalMessage" /> : null,
     ];
 

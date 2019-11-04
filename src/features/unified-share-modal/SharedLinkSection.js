@@ -293,7 +293,7 @@ class SharedLinkSection extends React.Component<Props> {
                     isDisabled={!isToggleEnabled}
                     isOn={isSharedLinkEnabled}
                     label={linkText}
-                    name="toggle"
+                    name="toggle bdl-Toggle"
                     onChange={onToggleSharedLink}
                 />
             </div>
@@ -348,7 +348,7 @@ class SharedLinkSection extends React.Component<Props> {
                 <hr />
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label>
-                    <span className="label">
+                    <span className="label bdl-Label">
                         <FormattedMessage {...messages.sharedLinkSectionLabel} />
                     </span>
                 </label>

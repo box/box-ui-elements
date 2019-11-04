@@ -16,15 +16,15 @@ describe('components/button/Button', () => {
         const wrapper = shallow(<Button>{children}</Button>);
 
         expect(wrapper.hasClass('btn')).toBe(true);
-        expect(wrapper.find('.btn-content').length).toEqual(1);
+        expect(wrapper.find('.bdl-Button-content').length).toEqual(1);
         expect(wrapper.text()).toEqual(children);
     });
 
     test('should correctly render loading indicator, disable button and hide button content if button is in loading state', () => {
         const wrapper = shallow(<Button isLoading>Test</Button>);
 
-        expect(wrapper.find('.btn-loading-indicator').length).toEqual(1);
-        expect(wrapper.hasClass('is-loading')).toBe(true);
+        expect(wrapper.find('.bdl-Button-loadingIndicator').length).toEqual(1);
+        expect(wrapper.hasClass('bdl-is-loading')).toBe(true);
     });
 
     test('simulates click events', () => {
@@ -57,7 +57,7 @@ describe('components/button/Button', () => {
         sinon.assert.calledOnce(stopPropagation);
     });
 
-    test('should not call onClick when className has is-disabled', () => {
+    test('should not call onClick when className has bdl-is-disabled', () => {
         const onClickHandler = sinon.spy();
         const preventDefault = sinon.spy();
         const stopPropagation = sinon.spy();

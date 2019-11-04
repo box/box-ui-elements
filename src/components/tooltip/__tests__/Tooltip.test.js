@@ -212,7 +212,7 @@ describe('components/tooltip/Tooltip', () => {
                 </Tooltip>,
             );
 
-            expect(wrapper.find('[role="tooltip"]').hasClass('is-error')).toBe(true);
+            expect(wrapper.find('[role="tooltip"]').hasClass('bdl-is-error')).toBe(true);
         });
 
         test('should render children only when tooltip is disabled', () => {

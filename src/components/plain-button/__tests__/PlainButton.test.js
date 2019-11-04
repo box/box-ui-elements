@@ -10,7 +10,7 @@ describe('components/plain-button/PlainButton', () => {
 
         const wrapper = shallow(<PlainButton>{children}</PlainButton>);
 
-        expect(wrapper.hasClass('btn-plain')).toBe(true);
+        expect(wrapper.hasClass('bdl-Button--plain')).toBe(true);
         expect(wrapper.text()).toEqual(children);
     });
 

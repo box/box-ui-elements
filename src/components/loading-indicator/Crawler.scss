@@ -37,7 +37,7 @@
     transform: scale(2);
 }
 
-.is-loading .crawler div {
+.bdl-is-loading .crawler div {
     transform: translateZ(0);
     will-change: transform, opacity;
 }

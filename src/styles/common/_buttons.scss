@@ -54,17 +54,17 @@
     }
 
     &.bdl-is-disabled,
-    &.is-loading {
+    &.bdl-is-loading {
         top: 0; /* prevents disabled button from being depressed on click */
         cursor: default;
     }
 
-    &.is-loading {
-        .btn-content {
+    &.bdl-is-loading {
+        .bdl-Button-content {
             visibility: hidden;
         }
 
-        .btn-loading-indicator {
+        .bdl-Button-loadingIndicator {
             position: absolute;
             top: 0;
             left: 0;
@@ -133,8 +133,8 @@ button svg {
         }
     }
 
-    &.is-loading {
-        .btn-content {
+    &.bdl-is-loading {
+        .bdl-Button-content {
             background-color: $bdl-gray-30;
         }
     }

@@ -112,7 +112,7 @@ const makePopup = (kit: string) => (Wrapped: any) =>
             const wrappedProps = omit(rest, ['onCancel', 'onChoose', 'onClose', 'modal']);
             const {
                 buttonLabel = 'Missing modal.buttonLabel in options',
-                buttonClassName = 'btn btn-primary',
+                buttonClassName = 'btn bdl-Button btn-primary',
                 modalClassName = 'be-modal-wrapper-content',
                 overlayClassName = 'be-modal-wrapper-overlay',
             }: ModalOptions = modal;
