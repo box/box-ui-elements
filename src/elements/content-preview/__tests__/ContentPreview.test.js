@@ -179,21 +179,6 @@ describe('elements/content-preview/ContentPreview', () => {
             file = { id: '123' };
         });
 
-        test('should get read token for preview', async () => {
-            props = {
-                token: 'token',
-                fileId: file.id,
-            };
-            const origGetReadToken = TokenService.default.getReadToken;
-            TokenService.default.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
-            const wrapper = getWrapper(props);
-            wrapper.setState({ file });
-            const instance = wrapper.instance();
-            await instance.loadPreview();
-            expect(TokenService.default.getReadToken).toHaveBeenCalledWith('file_123', props.token);
-            TokenService.default.getReadToken = origGetReadToken;
-        });
-
         test('should bind onPreviewError prop to preview "preview_error" event', async () => {
             props = {
                 onError: jest.fn(),
@@ -241,14 +226,13 @@ describe('elements/content-preview/ContentPreview', () => {
                 token: 'token',
                 fileId: file.id,
             };
-            TokenService.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
             const instance = wrapper.instance();
             await instance.loadPreview();
             expect(instance.preview.show).toHaveBeenCalledWith(
                 file.id,
-                props.token,
+                expect.any(Function),
                 expect.objectContaining({
                     showDownload: false,
                     skipServerUpdate: true,
@@ -265,7 +249,6 @@ describe('elements/content-preview/ContentPreview', () => {
                 token: 'token',
                 fileId: file.id,
             };
-            TokenService.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
             const wrapper = getWrapper(props);
             wrapper.setState({
                 file,
@@ -277,7 +260,7 @@ describe('elements/content-preview/ContentPreview', () => {
             await instance.loadPreview();
             expect(instance.preview.show).toHaveBeenCalledWith(
                 file.id,
-                props.token,
+                expect.any(Function),
                 expect.objectContaining({
                     container: expect.stringContaining('.bcpr-content'),
                     header: 'none',

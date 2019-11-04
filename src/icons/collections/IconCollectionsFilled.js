@@ -14,17 +14,17 @@ type Props = {
     width?: number,
 };
 
-const IconCollectionsFilled = ({ className = '', color = bdlGray50, height = 32, title, width = 32 }: Props) => (
+const IconCollectionsFilled = ({ className = '', color = bdlGray50, height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={classNames('bdl-IconCollectionsFilled', className)}
         height={height}
         title={title}
-        viewBox="0 0 32 32"
+        viewBox="0 0 16 16"
         width={width}
     >
         <path
             className="fill-color"
-            d="M7.896 0h21.642A2.462 2.462 0 0 1 32 2.462v21.642a2.462 2.462 0 0 1-2.462 2.462H7.896a2.462 2.462 0 0 1-2.462-2.462V2.462A2.462 2.462 0 0 1 7.896 0zM1.509 13.283c.834 0 1.51.676 1.51 1.51V26.52a2.462 2.462 0 0 0 2.461 2.46h11.728a1.51 1.51 0 0 1 0 3.019H4.923A4.923 4.923 0 0 1 0 27.077V14.792a1.51 1.51 0 0 1 1.51-1.509z"
+            d="M4.112 1h9.776C14.502 1 15 1.498 15 2.112v9.776c0 .614-.498 1.112-1.112 1.112H4.112A1.112 1.112 0 0 1 3 11.888V2.112C3 1.498 3.498 1 4.112 1zM1.5 7c.25 0 .5.135.5.5v5.103C2 13.504 2.5 14 3.397 14H8.5c.358.01.5.25.5.5s-.142.49-.5.5H3.154A2.154 2.154 0 0 1 1 12.847V7.5c0-.364.25-.5.5-.5z"
             fill={color}
             fillRule="evenodd"
         />

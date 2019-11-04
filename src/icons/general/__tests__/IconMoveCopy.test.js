@@ -7,11 +7,11 @@ describe('icons/general/IconMoveCopy', () => {
         const wrapper = shallow(<IconMoveCopy />);
 
         expect(wrapper.is('AccessibleSVG')).toBe(true);
-        expect(wrapper.prop('height')).toEqual(14);
-        expect(wrapper.prop('width')).toEqual(13);
+        expect(wrapper.prop('height')).toEqual(16);
+        expect(wrapper.prop('width')).toEqual(16);
         const fillColors = wrapper.find('.fill-color');
         for (let i = 0; i < fillColors.length; i += 1) {
-            expect(fillColors.at(i).prop('fill')).toEqual('#444');
+            expect(fillColors.at(i).prop('fill')).toEqual('#4e4e4e');
         }
     });
 

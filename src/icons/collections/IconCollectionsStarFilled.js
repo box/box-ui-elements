@@ -3,7 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import AccessibleSVG from '../accessible-svg';
-import { bdlGray } from '../../styles/variables';
+import { bdlGray50 } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -14,17 +14,17 @@ type Props = {
     width?: number,
 };
 
-const IconCollectionsStarFilled = ({ className = '', color = bdlGray, height = 32, title, width = 32 }: Props) => (
+const IconCollectionsStarFilled = ({ className = '', color = bdlGray50, height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
         className={classNames('bdl-IconCollectionsStarFilled', className)}
         height={height}
         title={title}
-        viewBox="0 0 32 32"
+        viewBox="0 0 16 16"
         width={width}
     >
         <path
             className="fill-color"
-            d="M7.462 0h21.642a2.462 2.462 0 0 1 2.462 2.462v21.642a2.462 2.462 0 0 1-2.462 2.462H7.462A2.462 2.462 0 0 1 5 24.104V2.462A2.462 2.462 0 0 1 7.462 0zm7.265 20.558l3.558-1.944 3.558 1.944c.691.378 1.486-.258 1.35-1.081l-.672-4.07 2.852-2.888c.575-.583.268-1.625-.513-1.743l-3.97-.6-1.769-3.724c-.349-.736-1.323-.736-1.672 0l-1.77 3.725-3.969.6c-.781.117-1.088 1.159-.513 1.742l2.852 2.888-.672 4.07c-.136.823.659 1.46 1.35 1.081zM1.51 13.283c.834 0 1.51.676 1.51 1.51V26.52A2.462 2.462 0 0 0 5.48 28.98h11.728a1.51 1.51 0 0 1 0 3.019H4.923A4.923 4.923 0 0 1 0 27.077V14.792c0-.833.676-1.509 1.51-1.509z"
+            d="M4.112 1h9.776C14.502 1 15 1.498 15 2.112v9.776c0 .614-.498 1.112-1.112 1.112H4.112A1.112 1.112 0 0 1 3 11.888V2.112C3 1.498 3.498 1 4.112 1zm3.443 8.955c-.281.153-.604-.105-.549-.44l.273-1.653L6.121 6.69c-.234-.237-.11-.66.208-.708l1.613-.244.718-1.513a.37.37 0 0 1 .68 0l.719 1.513 1.612.244c.317.048.442.471.208.708l-1.158 1.173.273 1.653c.055.335-.268.594-.549.44L9 9.165l-1.445.79zM1.5 7c.25 0 .5.135.5.5v5.103C2 13.504 2.5 14 3.397 14H8.5c.358.01.5.25.5.5s-.142.49-.5.5H3.154A2.154 2.154 0 0 1 1 12.847V7.5c0-.364.25-.5.5-.5z"
             fill={color}
             fillRule="evenodd"
         />

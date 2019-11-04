@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import FileIcon from '../../../icons/file-icon';
 import IconPencil from '../../../icons/general/IconPencil';
 import PlainButton from '../../../components/plain-button';
 import Tooltip from '../../../components/tooltip';
 
-import { MetadataBasedItemListComponent as MetadataBasedItemList } from '../MetadataBasedItemList';
+import MetadataBasedItemList from '../MetadataBasedItemList';
 
 jest.mock('react-virtualized/dist/es/AutoSizer', () => () => 'AutoSizer');
 
@@ -17,16 +18,44 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
     const currentCollection = {
         items: [
             {
+                id: '1',
                 metadata: {
-                    data: { type: 'bill', amount: 500 },
+                    id: '11',
+                    fields: [
+                        {
+                            name: 'type',
+                            type: 'string',
+                            value: 'bill',
+                        },
+                        {
+                            name: 'amount',
+                            type: 'float',
+                            value: 100.12,
+                        },
+                    ],
                 },
                 name: 'name1.pdf',
+                size: '123',
             },
             {
+                id: '2',
                 metadata: {
-                    data: { type: 'receipt', amount: 200 },
+                    id: '22',
+                    fields: [
+                        {
+                            name: 'type',
+                            type: 'string',
+                            value: 'receipt',
+                        },
+                        {
+                            name: 'amount',
+                            type: 'float',
+                            value: 200.88,
+                        },
+                    ],
                 },
                 name: 'name2.mp4',
+                size: '456',
             },
         ],
         nextMarker: 'abc',
@@ -79,11 +108,11 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             ${0}        | ${1}     | ${pdfIcon}
             ${1}        | ${1}     | ${pdfNameButton}
             ${2}        | ${1}     | ${'bill'}
-            ${3}        | ${1}     | ${500}
+            ${3}        | ${1}     | ${100.12}
             ${0}        | ${2}     | ${mp4Icon}
             ${1}        | ${2}     | ${mp4NameButton}
             ${2}        | ${2}     | ${'receipt'}
-            ${3}        | ${2}     | ${200}
+            ${3}        | ${2}     | ${200.88}
         `('cellData for row: $rowIndex, column: $columnIndex', ({ columnIndex, rowIndex, cellData }) => {
             const editableColumnIndex = 3; // amount field is editable
 
@@ -119,16 +148,21 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             ${3}        | ${'amount'}
         `('headerData for column $columnIndex', ({ columnIndex, headerData }) => {
             const data = instance.getGridHeaderData(columnIndex);
-            expect(data).toBe(headerData);
+            if (columnIndex === 1) {
+                const formatMessageWrap = mount(data);
+                expect(formatMessageWrap.find(FormattedMessage)).toHaveLength(1);
+            } else {
+                expect(data).toBe(headerData);
+            }
         });
     });
 
-    describe('handleOnClick(item)', () => {
+    describe('handleItemClick(item)', () => {
         test('should invoke the onItemClick after adding can_preview permissions', () => {
             const permissions = { can_preview: true };
             const item = currentCollection.items[0];
             const itemWithPreviewPermission = { ...item, ...{ permissions } };
-            instance.handleOnClick(item);
+            instance.handleItemClick(item);
             expect(onItemClick).toHaveBeenCalledWith(itemWithPreviewPermission);
         });
     });

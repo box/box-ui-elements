@@ -17,7 +17,7 @@ describe('icons/general/IconUpload', () => {
             wrapper
                 .find('path')
                 .first()
-                .prop('stroke'),
+                .prop('fill'),
         ).toEqual(color);
     });
 

@@ -7,8 +7,8 @@ describe('icons/general/IconDownload', () => {
         const wrapper = shallow(<IconDownload />);
 
         expect(wrapper.is('AccessibleSVG')).toBe(true);
-        expect(wrapper.prop('height')).toEqual(14);
-        expect(wrapper.prop('width')).toEqual(12);
+        expect(wrapper.prop('height')).toEqual(16);
+        expect(wrapper.prop('width')).toEqual(16);
         const strokeColors = wrapper.find('.stroke-color');
         for (let i = 0; i < strokeColors.length; i += 1) {
             expect(strokeColors.at(i).prop('stroke')).toEqual('#444');
