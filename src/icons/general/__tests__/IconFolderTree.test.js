@@ -1,33 +1,33 @@
 import React from 'react';
 
-import IconTrash from '../IconTrash';
+import IconFolderTree from '../IconFolderTree';
 
-describe('icons/general/IconTrash', () => {
+describe('icons/general/IconFolderTree', () => {
     test('should correctly render default icon', () => {
-        const wrapper = shallow(<IconTrash />);
+        const wrapper = shallow(<IconFolderTree />);
 
-        expect(wrapper.hasClass('icon-trash')).toEqual(true);
+        expect(wrapper.hasClass('bdl-IconFolderTree')).toEqual(true);
     });
 
     test('should correctly render icon with specified color', () => {
         const color = '#ffffff';
-        const wrapper = shallow(<IconTrash color={color} />);
+        const wrapper = shallow(<IconFolderTree color={color} />);
 
         expect(wrapper.find('path').prop('fill')).toEqual(color);
     });
 
     test('should correctly render icon with specified width and height', () => {
-        const width = 17;
-        const height = 17;
-        const wrapper = shallow(<IconTrash height={height} width={width} />);
+        const width = 20;
+        const height = 20;
+        const wrapper = shallow(<IconFolderTree height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);
     });
 
     test('should correctly render icon with title', () => {
-        const title = 'fool';
-        const wrapper = shallow(<IconTrash title={title} />);
+        const title = 'Folder tree';
+        const wrapper = shallow(<IconFolderTree title={title} />);
 
         expect(wrapper.find('AccessibleSVG').prop('title')).toEqual(title);
     });

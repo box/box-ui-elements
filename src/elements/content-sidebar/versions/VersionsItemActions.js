@@ -36,8 +36,6 @@ type Props = {
     showRestore?: boolean,
 };
 
-const ICON_SIZE = { height: 12, width: 12 };
-
 const handleMenuClose = (event: SyntheticEvent<>) => {
     event.stopPropagation();
 };
@@ -94,20 +92,20 @@ const VersionsItemActions = ({
             >
                 {showPreview && (
                     <VersionsItemAction action="preview" fileId={fileId} isCurrent={isCurrent} onClick={onPreview}>
-                        <IconOpenWith {...ICON_SIZE} />
+                        <IconOpenWith />
                         <FormattedMessage {...messages.versionActionPreview} />
                     </VersionsItemAction>
                 )}
 
                 {showDownload && (
                     <VersionsItemAction action="download" fileId={fileId} isCurrent={isCurrent} onClick={onDownload}>
-                        <IconDownload {...ICON_SIZE} />
+                        <IconDownload />
                         <FormattedMessage {...messages.versionActionDownload} />
                     </VersionsItemAction>
                 )}
                 {showPromote && (
                     <VersionsItemAction action="promote" fileId={fileId} isCurrent={isCurrent} onClick={onPromote}>
-                        <IconUpload {...ICON_SIZE} />
+                        <IconUpload />
                         <FormattedMessage {...messages.versionActionPromote} />
                     </VersionsItemAction>
                 )}
@@ -131,7 +129,7 @@ const VersionsItemActions = ({
                             isDisabled={isRetained}
                             onClick={onDelete}
                         >
-                            <IconTrash {...ICON_SIZE} />
+                            <IconTrash />
                             <FormattedMessage {...messages.versionActionDelete} />
                         </VersionsItemAction>
                     </Tooltip>

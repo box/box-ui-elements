@@ -92,7 +92,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
 
     handleRemove = (option: Option, index: number) => {
         const { field } = this.props;
-        const { name, onChange, value } = field;
+        const { name, onChange, value = [] } = field;
         const options = value.slice();
         options.splice(index, 1);
         onChange(this.createFakeEventTarget(name, options));
@@ -100,7 +100,7 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
 
     handleParseItems = (inputValue: string): ?Array<Option> => {
         const { field, inputParser, options } = this.props;
-        const { value: selectedOptions } = field;
+        const { value: selectedOptions = [] } = field;
         return inputParser(inputValue, options, selectedOptions);
     };
 

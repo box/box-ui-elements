@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import uniqueId from 'lodash/uniqueId';
 
 import IconVerified from '../../icons/general/IconVerified';
 
@@ -49,9 +50,17 @@ const TextInput = ({
     labelTooltip,
     ...rest
 }: Props) => {
+    const hasError = !!error;
     const classes = classNames(className, 'text-input-container', {
-        'show-error': !!error,
+        'show-error': hasError,
     });
+
+    const errorMessageID = React.useRef(uniqueId('errorMessage')).current;
+    const ariaAttrs = {
+        'aria-invalid': hasError,
+        'aria-required': isRequired,
+        'aria-errormessage': errorMessageID,
+    };
 
     return (
         <div className={classes}>
@@ -62,11 +71,14 @@ const TextInput = ({
                 tooltip={labelTooltip}
             >
                 {!!description && <i className="text-input-description">{description}</i>}
-                <Tooltip isShown={!!error} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
-                    <input ref={inputRef} required={isRequired} {...rest} />
+                <Tooltip isShown={hasError} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
+                    <input ref={inputRef} required={isRequired} {...ariaAttrs} {...rest} />
                 </Tooltip>
                 {isLoading && !isValid && <LoadingIndicator className="text-input-loading" />}
                 {isValid && !isLoading && <IconVerified className="text-input-verified" />}
+                <span id={errorMessageID} className="accessibility-hidden" role="alert">
+                    {error}
+                </span>
             </Label>
         </div>
     );

@@ -127,32 +127,4 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         const wrapper = shallow(<ActiveState inlineError={activityFeedError} items={[]} currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
     });
-
-    test('should correctly handle an inline error for a comment id being invalid', () => {
-        const wrapper = getWrapper({
-            activeFeedEntryId: 0,
-            activeFeedEntryType: comment.type,
-        });
-
-        expect(wrapper.find('[data-testid="comment"]').hasClass('bcs-is-focused')).toEqual(false);
-        expect(wrapper.exists('InlineError')).toBe(true);
-    });
-
-    test('should correctly handle an inline error for a task id being invalid', () => {
-        const wrapper = getWrapper({
-            activeFeedEntryId: 0,
-            activeFeedEntryType: taskWithAssignment.type,
-        });
-        expect(wrapper.find('[data-testid="task"]').hasClass('bcs-is-focused')).toEqual(false);
-        expect(wrapper.exists('InlineError')).toBe(true);
-    });
-
-    test('should not render inline error if the type is invalid', () => {
-        const wrapper = getWrapper({
-            activeFeedEntryId: 0,
-            activeFeedEntryType: 'tasksss',
-        });
-
-        expect(wrapper.exists('InlineError')).toBe(false);
-    });
 });

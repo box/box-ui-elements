@@ -14,7 +14,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
   <div
     className="bcs-AssigneeDetails"
   >
-    <div>
+    <div
+      className="bcs-AssigneeDetails-name"
+    >
       user one
     </div>
     <div
@@ -52,7 +54,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
   <div
     className="bcs-AssigneeDetails"
   >
-    <div>
+    <div
+      className="bcs-AssigneeDetails-name"
+    >
       user one
     </div>
     <div
@@ -90,7 +94,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
   <div
     className="bcs-AssigneeDetails"
   >
-    <div>
+    <div
+      className="bcs-AssigneeDetails-name"
+    >
       user one
     </div>
   </div>
@@ -111,7 +117,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
   <div
     className="bcs-AssigneeDetails"
   >
-    <div>
+    <div
+      className="bcs-AssigneeDetails-name"
+    >
       user one
     </div>
     <div
@@ -149,7 +157,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
   <div
     className="bcs-AssigneeDetails"
   >
-    <div>
+    <div
+      className="bcs-AssigneeDetails-name"
+    >
       user one
     </div>
   </div>
@@ -170,7 +180,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
   <div
     className="bcs-AssigneeDetails"
   >
-    <div>
+    <div
+      className="bcs-AssigneeDetails-name"
+    >
       user one
     </div>
   </div>
