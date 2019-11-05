@@ -26,10 +26,10 @@ export default (
     return (
         <Component
             hideLabel
-            label={((name: string): string)}
-            name={((name: string): string)}
+            label={name}
+            name={name}
             onChange={() => onItemSelect(rowData)}
-            value={((name: string): string)}
+            value={name}
             {...{ [isRadio ? 'isSelected' : 'isChecked']: selected }}
         />
     );
