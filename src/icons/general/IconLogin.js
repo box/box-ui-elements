@@ -15,7 +15,7 @@ type Props = {
 
 const IconLogin = ({ className = '', color = bdlGray80, height = 16, title, width = 16 }: Props) => (
     <AccessibleSVG
-        className={`icon-login ${className}`}
+        className={`bdl-IconLogin ${className}`}
         height={height}
         title={title}
         viewBox="0 0 16 16"

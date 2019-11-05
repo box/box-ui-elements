@@ -9,13 +9,13 @@ describe('icons/general/IconAlignLeft', () => {
         expect(wrapper.is('AccessibleSVG')).toBe(true);
         expect(wrapper.prop('height')).toEqual(12);
         expect(wrapper.prop('width')).toEqual(16);
-        expect(wrapper.find('path').prop('fill')).toEqual('#3FB87F');
+        expect(wrapper.find('path').prop('fill')).toEqual('#26c281');
     });
 
     test('should correctly render icon with specified class', () => {
         const wrapper = shallow(<IconStorage className="test" />);
 
-        expect(wrapper.hasClass('icon-storage')).toBe(true);
+        expect(wrapper.hasClass('bdl-IconStorage')).toBe(true);
         expect(wrapper.hasClass('test')).toBe(true);
     });
 

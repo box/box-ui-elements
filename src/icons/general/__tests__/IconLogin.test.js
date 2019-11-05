@@ -15,7 +15,7 @@ describe('icons/general/IconLogin', () => {
     test('should correctly render icon with specified class', () => {
         const wrapper = shallow(<IconLogin className="test" />);
 
-        expect(wrapper.hasClass('icon-login')).toBe(true);
+        expect(wrapper.hasClass('bdl-IconLogin')).toBe(true);
         expect(wrapper.hasClass('test')).toBe(true);
     });
 
