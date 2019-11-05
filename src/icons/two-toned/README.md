@@ -12,11 +12,12 @@ Use provided SASS mix-ins to modify styles of these icons. Each mix-in name is i
 
 ```jsx
 const IconsExample = require('../../../examples/src/IconsExample').default;
+const propsDocumentation = require('../../../examples/src/IconsExampleTwoTonedIconDocs').default;
 
 const icons = [
     {
         name: 'IconChatBubble',
-        content: () => {
+        component: () => {
             const IconChatBubble = require('./IconChatBubble').default;
             return (
                 <div>
@@ -36,10 +37,11 @@ const icons = [
                 </div>
             );
         },
+        propsDocumentation,
     },
     {
         name: 'IconExclamationMark',
-        content: () => {
+        component: () => {
             const IconExclamationMark = require('./IconExclamationMark').default;
             return (
                 <div>
@@ -59,10 +61,11 @@ const icons = [
                 </div>
             );
         },
+        propsDocumentation,
     },
     {
         name: 'IconLightning',
-        content: () => {
+        component: () => {
             const IconLightning = require('./IconLightning').default;
             return (
                 <div>
@@ -82,10 +85,11 @@ const icons = [
                 </div>
             );
         },
+        propsDocumentation,
     },
     {
         name: 'IconSharedLink',
-        content: () => {
+        component: () => {
             const IconSharedLink = require('./IconSharedLink').default;
             return (
                 <div>
@@ -105,9 +109,11 @@ const icons = [
                 </div>
             );
         },
-    }, {
+        propsDocumentation,
+    },
+    {
         name: 'IconTaskGeneral',
-        content: () => {
+        component: () => {
             const IconTaskGeneral = require('./IconTaskGeneral').default;
             return (
                 <div>
@@ -127,9 +133,11 @@ const icons = [
                 </div>
             );
         },
-    }, {
+        propsDocumentation,
+    },
+    {
         name: 'IconTaskApproval',
-        content: () => {
+        component: () => {
             const IconTaskApproval = require('./IconTaskApproval').default;
             return (
                 <div>
@@ -149,9 +157,11 @@ const icons = [
                 </div>
             );
         },
-    }, {
+        propsDocumentation,
+    },
+    {
         name: 'IconWorkflow',
-        content: () => {
+        component: () => {
             const IconWorkflow = require('./IconWorkflow').default;
             return (
                 <div>
@@ -171,9 +181,11 @@ const icons = [
                 </div>
             );
         },
-    }, {
+        propsDocumentation,
+    },
+    {
         name: 'IconCollectionItemLink',
-        content: () => {
+        component: () => {
             const IconCollectionItemLink = require('./IconCollectionItemLink').default;
             return (
                 <div>
@@ -193,6 +205,7 @@ const icons = [
                 </div>
             );
         },
+        propsDocumentation,
     },
 ];
 

@@ -39,15 +39,19 @@ const pillSelectorValidator = option => {
             errors.textarea = 'Required';
         }
 
-        if (!pillselector.every((pill => pillSelectorValidator(pill)))) {
+        if (Array.isArray(pillselector) && !pillselector.every((pill => pillSelectorValidator(pill)))) {
             errors.pillselector = 'Bad colors';
         }
 
         return errors;
     }}
-    render={props => (
+>
+    {props => (
         <React.Fragment>
-            <Form>
+            <Form
+                style={{
+                    display: 'inline-block',
+                }}>
                 <Field
                     name="checkbox"
                     label="Checkbox Field"
@@ -162,19 +166,19 @@ const pillSelectorValidator = option => {
                     ))}
                 />
             </Form>
-            <br />
-            <br />
             <pre
                 style={{
                     color: '#fff',
                     background: '#0061D5',
                     fontSize: '14px',
                     padding: '.5rem',
+                    float: 'right',
+                    display: 'inline-block',
                 }}
             >
                 <strong>Formik State</strong> = {JSON.stringify(props, null, 2)}
             </pre>
         </React.Fragment>
     )}
-/>
+</Formik>
 ```

@@ -57,7 +57,7 @@ class TokenService {
      *
      * @public
      * @param {string} id - box item typed id
-     * @param {string} tokenOrTokenFunction - Optional token or token function
+     * @param {Token} tokenOrTokenFunction - Optional token or token function
      * @return {Promise} that resolves to a token
      */
     static async getReadToken(id: string, tokenOrTokenFunction: Token): Promise<?string> {
@@ -67,6 +67,27 @@ class TokenService {
         }
 
         return token;
+    }
+
+    /**
+     * Gets read tokens.
+     *
+     * @public
+     * @param {string|string[]} id - box item typed id(s)
+     * @param {Token} tokenOrTokenFunction - Token to use or token generation function
+     * @return {Promise} Promise that resolves with id to token map
+     */
+    static async getReadTokens(id: string | string[], tokenOrTokenFunction: Token): Promise<Object> {
+        const ids: string[] = Array.isArray(id) ? id : [id];
+        const promises: Promise<?string>[] = ids.map((typedId: string) =>
+            TokenService.getReadToken(typedId, tokenOrTokenFunction),
+        );
+        const tokens: (?string)[] = await Promise.all(promises);
+        const tokenMap = {};
+        tokens.forEach((token, index) => {
+            tokenMap[ids[index]] = token;
+        });
+        return Promise.resolve(tokenMap);
     }
 
     /**

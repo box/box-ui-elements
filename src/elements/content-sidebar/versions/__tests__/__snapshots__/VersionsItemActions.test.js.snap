@@ -52,10 +52,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
         isCurrent={false}
         isDisabled={false}
       >
-        <IconTrash
-          height={12}
-          width={12}
-        />
+        <IconTrash />
         <FormattedMessage
           defaultMessage="Delete"
           id="be.sidebarVersions.delete"
@@ -118,10 +115,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
         isCurrent={false}
         isDisabled={true}
       >
-        <IconTrash
-          height={12}
-          width={12}
-        />
+        <IconTrash />
         <FormattedMessage
           defaultMessage="Delete"
           id="be.sidebarVersions.delete"
@@ -169,10 +163,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       action="preview"
       isCurrent={false}
     >
-      <IconOpenWith
-        height={12}
-        width={12}
-      />
+      <IconOpenWith />
       <FormattedMessage
         defaultMessage="Preview"
         id="be.sidebarVersions.preview"
@@ -182,10 +173,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       action="download"
       isCurrent={false}
     >
-      <IconDownload
-        height={12}
-        width={12}
-      />
+      <IconDownload />
       <FormattedMessage
         defaultMessage="Download"
         id="be.sidebarVersions.download"
@@ -195,10 +183,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       action="promote"
       isCurrent={false}
     >
-      <IconUpload
-        height={12}
-        width={12}
-      />
+      <IconUpload />
       <FormattedMessage
         defaultMessage="Make Current"
         id="be.sidebarVersions.promote"
@@ -236,10 +221,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
         isCurrent={false}
         isDisabled={false}
       >
-        <IconTrash
-          height={12}
-          width={12}
-        />
+        <IconTrash />
         <FormattedMessage
           defaultMessage="Delete"
           id="be.sidebarVersions.delete"

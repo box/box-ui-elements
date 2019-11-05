@@ -8,6 +8,7 @@ jest.mock('../../../../../utils/dom');
 jest.mock('../../Avatar', () => 'Avatar');
 jest.mock('../ActiveState', () => 'ActiveState');
 
+const otherUser = { name: 'Akon', id: 11 };
 const comments = {
     total_count: 1,
     entries: [
@@ -49,8 +50,51 @@ const file = {
     version_number: '3',
 };
 
+const taskWithAssignment = {
+    type: 'task',
+    id: 't_345',
+    created_at: '2018-07-03T14:43:52-07:00',
+    created_by: otherUser,
+    modified_at: '2018-07-03T14:43:52-07:00',
+    description: 'test',
+    due_at: '2018-07-03T14:43:52-07:00',
+    assigned_to: {
+        entries: [
+            {
+                id: 'ta_123',
+                permissions: { can_delete: true, can_update: true },
+                role: 'ASSIGNEE',
+                status: 'NOT_STARTED',
+                target: otherUser,
+                type: 'task_collaborator',
+            },
+        ],
+        limit: 20,
+        next_marker: null,
+    },
+    status: 'NOT_STARTED',
+    permissions: {
+        can_create_task_collaborator: true,
+        can_create_task_link: true,
+        can_delete: true,
+        can_update: true,
+    },
+    task_type: 'GENERAL',
+    task_links: {
+        entries: [
+            {
+                target: {
+                    id: 'f_123',
+                    type: 'file',
+                },
+            },
+        ],
+    },
+};
+
 const feedItems = [...comments.entries];
 const currentUser = { name: 'Kanye West', id: 10 };
+
 const getWrapper = props => shallow(<ActivityFeed currentUser={currentUser} file={file} {...props} />);
 
 describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
@@ -306,5 +350,33 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             },
         });
         expect(stopPropagationSpy).toHaveBeenCalled();
+    });
+
+    test('should correctly handle an inline error for a comment id being invalid', () => {
+        const wrapper = getWrapper({
+            feedItems,
+            activeFeedEntryId: 'invalid id',
+            activeFeedEntryType: comments.entries[0].type,
+        });
+        expect(wrapper.exists('InlineError')).toBe(true);
+    });
+
+    test('should correctly handle an inline error for a task id being invalid', () => {
+        const wrapper = getWrapper({
+            feedItems,
+            activeFeedEntryId: 'invalid id',
+            activeFeedEntryType: taskWithAssignment.type,
+        });
+        expect(wrapper.exists('InlineError')).toBe(true);
+    });
+
+    test('should not render inline error if the type is invalid', () => {
+        const wrapper = getWrapper({
+            feedItems,
+            activeFeedEntryId: 0,
+            activeFeedEntryType: 'tasksss',
+        });
+
+        expect(wrapper.exists('InlineError')).toBe(false);
     });
 });
