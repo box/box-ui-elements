@@ -16,7 +16,7 @@ describe('selectionCellRenderer', () => {
         expect(wrapper.exists(type)).toBe(true);
     });
 
-    test.each([['isSelected', true], ['isChecked', false]])('should render %s if selected', (type, isRadio) => {
+    test.each([['isSelected', true], ['isChecked', false]])('should render %s if isRadio is %s', (type, isRadio) => {
         const Element = selectionCellRenderer(() => {}, 'file, web_link', [], false, isRadio);
 
         const wrapper = shallow(<Element rowData={rowData} />);
