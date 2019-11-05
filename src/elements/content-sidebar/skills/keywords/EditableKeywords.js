@@ -154,7 +154,7 @@ class EditableKeywords extends React.PureComponent<Props, State> {
         const { onSave, onCancel }: Props = this.props;
         const { pills, keyword }: State = this.state;
         return (
-            <span className="bdl-PillSelector-wrapper">
+            <span className="bdl-PillSelectorWrapper">
                 <PillSelector
                     onBlur={this.onBlur}
                     onCompositionEnd={this.onCompositionEnd}

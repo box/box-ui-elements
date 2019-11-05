@@ -1,5 +1,5 @@
 .email-shared-link {
-    .bdl-PillSelector-wrapper {
+    .bdl-PillSelectorWrapper {
         margin: 0;
     }
 
@@ -14,13 +14,13 @@
         transition: height .2s;
     }
 
-    .bdl-PillSelector-inputWrapper,
+    .bdl-PillSelector,
     textarea {
         width: 100%;
     }
 
     &.is-expanded {
-        .bdl-PillSelector-wrapper {
+        .bdl-PillSelectorWrapper {
             margin-bottom: 20px;
         }
 
@@ -28,7 +28,7 @@
             height: 100px;
         }
 
-        .bdl-PillSelector-inputWrapper {
+        .bdl-PillSelector {
             height: 58px;
         }
     }

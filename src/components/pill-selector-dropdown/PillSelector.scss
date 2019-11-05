@@ -9,11 +9,11 @@
     visibility: hidden;
 }
 
-.bdl-PillSelector-wrapper {
+.bdl-PillSelectorWrapper {
     position: relative;
     margin: 0 0 20px;
 
-    .bdl-PillSelector-inputWrapper {
+    .bdl-PillSelector {
         display: flex;
         flex-flow: row wrap;
         align-content: flex-start;
@@ -83,7 +83,7 @@
             margin-top: 0 !important;
         }
 
-        .bdl-Pills-list {
+        .bdl-PillsList {
             margin: 0;
 
             li {

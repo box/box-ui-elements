@@ -2,7 +2,7 @@
 
 exports[`components/select/Select should not show Tooltip when no error exists 1`] = `
 <div
-  className="bdl-Select-inputContainer"
+  className="bdl-Select"
 >
   <Label
     hideLabel={false}
@@ -21,7 +21,7 @@ exports[`components/select/Select should not show Tooltip when no error exists 1
         className="bdl-Select-container"
       >
         <span
-          className="bdl-Select-container-inner"
+          className="bdl-Select-innerContainer"
         >
           <select />
           <span
@@ -36,7 +36,7 @@ exports[`components/select/Select should not show Tooltip when no error exists 1
 
 exports[`components/select/Select should not show error outline if not specified 1`] = `
 <div
-  className="bdl-Select-inputContainer"
+  className="bdl-Select"
 >
   <Label
     hideLabel={false}
@@ -55,7 +55,7 @@ exports[`components/select/Select should not show error outline if not specified
         className="bdl-Select-container"
       >
         <span
-          className="bdl-Select-container-inner"
+          className="bdl-Select-innerContainer"
         >
           <select />
           <span
@@ -70,7 +70,7 @@ exports[`components/select/Select should not show error outline if not specified
 
 exports[`components/select/Select should render infoTooltip when specified 1`] = `
 <div
-  className="bdl-Select-inputContainer"
+  className="bdl-Select"
 >
   <Label
     hideLabel={false}
@@ -89,7 +89,7 @@ exports[`components/select/Select should render infoTooltip when specified 1`] =
         className="bdl-Select-container"
       >
         <span
-          className="bdl-Select-container-inner"
+          className="bdl-Select-innerContainer"
         >
           <select
             name="select"
@@ -124,7 +124,7 @@ exports[`components/select/Select should render infoTooltip when specified 1`] =
 
 exports[`components/select/Select should show Tooltip when error exists 1`] = `
 <div
-  className="bdl-Select-inputContainer bdl-show-error"
+  className="bdl-Select bdl-show-error"
 >
   <Label
     hideLabel={false}
@@ -143,7 +143,7 @@ exports[`components/select/Select should show Tooltip when error exists 1`] = `
         className="bdl-Select-container"
       >
         <span
-          className="bdl-Select-container-inner"
+          className="bdl-Select-innerContainer"
         >
           <select />
           <span
@@ -158,7 +158,7 @@ exports[`components/select/Select should show Tooltip when error exists 1`] = `
 
 exports[`components/select/Select should show error outline if specified 1`] = `
 <div
-  className="bdl-Select-inputContainer bdl-show-error"
+  className="bdl-Select bdl-show-error"
 >
   <Label
     hideLabel={false}
@@ -177,7 +177,7 @@ exports[`components/select/Select should show error outline if specified 1`] = `
         className="bdl-Select-container"
       >
         <span
-          className="bdl-Select-container-inner"
+          className="bdl-Select-innerContainer"
         >
           <select />
           <span

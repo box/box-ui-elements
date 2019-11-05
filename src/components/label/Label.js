@@ -11,7 +11,7 @@ import HiddenLabel from './HiddenLabel';
 import './Label.scss';
 
 const OptionalFormattedMessage = () => (
-    <span className="bdl-Label--optional">
+    <span className="bdl-Label-optionalText">
         (<FormattedMessage {...commonMessages.optional} />)
     </span>
 );
@@ -33,7 +33,7 @@ type Props = {
 
 const Label = ({ text, tooltip, infoTooltip, infoIconProps, showOptionalText, hideLabel, children }: Props) => {
     const labelContent = [
-        <span key="label bdl-LabelText">{text}</span>,
+        <span key="labelText">{text}</span>,
         showOptionalText ? <OptionalFormattedMessage key="optionalMessage" /> : null,
     ];
 

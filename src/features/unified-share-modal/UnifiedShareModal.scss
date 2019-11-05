@@ -91,17 +91,17 @@
         margin-bottom: 20px;
     }
 
-    .bdl-PillSelector-wrapper .bdl-PillSelector-inputWrapper, // need both selectors for specificity
+    .bdl-PillSelectorWrapper .bdl-PillSelector, // need both selectors for specificity
     textarea {
         /* override for DOM element in `TextArea` which provides no id/class for targeting */
         width: 100%;
     }
 
-    .bdl-PillSelector-wrapper {
+    .bdl-PillSelectorWrapper {
         margin-bottom: 10px;
     }
 
-    .bdl-PillSelector-wrapper.scrollable {
+    .bdl-PillSelectorWrapper.scrollable {
         .overlay-wrapper {
             position: absolute;
             height: 280px;
@@ -124,12 +124,12 @@
             color: $bdl-gray-50;
         }
 
-        .bdl-PillSelector-inputWrapper {
+        .bdl-PillSelector {
             min-height: 68px;
         }
     }
 
-    .bdl-PillSelector-inputWrapper {
+    .bdl-PillSelector {
         margin-top: 10px;
         border: 1px solid $bdl-gray-20;
 

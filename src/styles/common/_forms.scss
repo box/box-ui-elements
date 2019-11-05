@@ -181,7 +181,7 @@ textarea {
 }
 
 .bdl-Select-container .bdl-SelectButton,
-.bdl-Select-container .bdl-Select-container-inner {
+.bdl-Select-container .bdl-Select-innerContainer {
     display: inline-block;
     width: 100%;
     overflow: hidden;
@@ -284,23 +284,23 @@ textarea {
     background-color: $bdl-gray-10;
 }
 
-.bdl-Select-container-x-small {
+.bdl-Select-container--xSmall {
     width: 50px;
 }
 
-.bdl-Select-container-small {
+.bdl-Select-container--small {
     width: 100px;
 }
 
-.bdl-Select-container-medium {
+.bdl-Select-container--medium {
     width: 200px;
 }
 
-.bdl-Select-container-large {
+.bdl-Select-container--large {
     width: 262px;
 }
 
-.bdl-Select-container-x-large {
+.bdl-Select-container--xLarge {
     width: 345px;
 }
 

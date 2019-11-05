@@ -1,7 +1,7 @@
 @import '../../styles/variables';
 @import 'PillSelector';
 
-.bdl-PillSelector-inputWrapper {
+.bdl-PillSelector {
     &.bdl-show-error {
         border-color: $bdl-watermelon-red;
     }
