@@ -8,7 +8,7 @@ import messages from './messages';
 import './Classification.scss';
 
 const STYLE_INLINE: 'inline' = 'inline';
-const STYLE_TOOLTIP: 'tooltip bdl-Tooltip' = 'tooltip bdl-Tooltip';
+const STYLE_TOOLTIP: 'bdl-Tooltip' = 'bdl-Tooltip';
 
 type Props = {
     className?: string,

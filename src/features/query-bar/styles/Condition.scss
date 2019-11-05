@@ -83,7 +83,7 @@
             flex: 1;
         }
 
-        .select-container {
+        .bdl-Select-container {
             width: 110px;
             padding-right: 10px;
             padding-left: 10px;
@@ -135,7 +135,7 @@
             flex: 1;
         }
 
-        .select-container {
+        .bdl-Select-container {
             width: 100%;
 
             .bdl-SelectButton {
@@ -149,8 +149,8 @@
         }
     }
 
-    .condition-value-dropdown-container.show-error {
-        .select-container {
+    .condition-value-dropdown-container.bdl-show-error {
+        .bdl-Select-container {
             button.bdl-SelectButton {
                 @include error-border();
             }

@@ -46,7 +46,7 @@ describe('components/menu/MenuLinkItem', () => {
 
         const link = wrapper.find('a');
         expect(link.length).toBe(1);
-        expect(link.hasClass('is-selected')).toBe(true);
+        expect(link.hasClass('bdl-is-selected')).toBe(true);
         expect(link.prop('aria-checked')).toBe(true);
     });
 });

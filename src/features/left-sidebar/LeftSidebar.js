@@ -311,7 +311,7 @@ class LeftSidebar extends React.Component<Props, State> {
         } = props;
 
         const linkClassNames = classNames('left-sidebar-link', className, {
-            'is-selected': selected,
+            'bdl-is-selected': selected,
         });
 
         const linkProps = {

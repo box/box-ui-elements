@@ -7,7 +7,7 @@
         margin: 0 10px 10px 0;
     }
 
-    .bdl-Button--plain.be-face {
+    .bdl-PlainButton.be-face {
         overflow: hidden;
         border-radius: 100%;
 
@@ -38,12 +38,12 @@
         }
     }
 
-    .be-face-unselected .bdl-Button--plain.be-face img {
+    .be-face-unselected .bdl-PlainButton.be-face img {
         opacity: .4;
         filter: none;
     }
 
-    .bdl-Button--plain.be-face-delete {
+    .bdl-PlainButton.be-face-delete {
         position: absolute;
         top: -3px;
         right: -5px;
@@ -56,7 +56,7 @@
     }
 
     &.be-faces-is-editing {
-        .bdl-Button--plain.be-face:hover img {
+        .bdl-PlainButton.be-face:hover img {
             transform: none;
             cursor: default;
         }

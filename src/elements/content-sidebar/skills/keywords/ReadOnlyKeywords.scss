@@ -1,18 +1,18 @@
 @import '../../../common/variables';
 
 .be-keywords {
-    .pill-cloud-container {
+    .bdl-PillCloud {
         padding: 0;
         overflow: hidden;
         border: 0 none;
 
-        .bdl-Button.bdl-Pill.pill-cloud-button {
+        .bdl-Button.bdl-Pill.bdl-PillCloud-button {
             margin: 0 5px 5px 0;
             color: inherit;
             border: 1px solid $bdl-gray-20;
 
             &:hover,
-            &.is-selected {
+            &.bdl-is-selected {
                 color: $white;
                 background-color: $blue;
                 border-color: $blue;

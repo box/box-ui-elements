@@ -30,7 +30,6 @@ exports[`features/classification/Classification should render a classified badge
 >
   <ClassifiedBadge
     name="Confidential"
-    tooltipText="fubar"
   />
 </article>
 `;

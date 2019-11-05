@@ -9,9 +9,9 @@
         right: 15px;
     }
 
-    .bdl-Button--plain.be-transcript-edit,
-    .bdl-Button--plain.be-transcript-copy,
-    .bdl-Button--plain.be-transcript-expand {
+    .bdl-PlainButton.be-transcript-edit,
+    .bdl-PlainButton.be-transcript-copy,
+    .bdl-PlainButton.be-transcript-expand {
         width: 24px;
         height: 24px;
         margin-left: 7px;
@@ -31,7 +31,7 @@
         }
     }
 
-    .bdl-Button--plain.be-transcript-copy.be-transcript-copied {
+    .bdl-PlainButton.be-transcript-copy.be-transcript-copied {
         background-color: $bdl-gray-10;
         transition: background-color 1s;
 

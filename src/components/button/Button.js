@@ -58,7 +58,7 @@ class Button extends React.Component<Props> {
             {
                 'bdl-is-disabled': isDisabled,
                 'bdl-is-loading': isLoading,
-                'is-selected': isSelected,
+                'bdl-is-selected': isSelected,
             },
             className,
         );

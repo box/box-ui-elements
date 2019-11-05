@@ -18,14 +18,14 @@ describe('elements/common/nav-button/NavButton', () => {
         test('applies a custom activeClassName instead of the default', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity']}>
-                    <NavButton to="/activity" activeClassName="bdl-is-selected">
+                    <NavButton to="/activity" activeClassName="bdl-bdl-is-selected">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
             );
 
             expect(button.hasClass('bdl-is-active')).toBe(false);
-            expect(button.hasClass('bdl-is-selected')).toBe(true);
+            expect(button.hasClass('bdl-bdl-is-selected')).toBe(true);
         });
     });
 
@@ -43,14 +43,14 @@ describe('elements/common/nav-button/NavButton', () => {
         test('does not apply its activeClassName', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity']}>
-                    <NavButton to="/details" activeClassName="bdl-is-selected">
+                    <NavButton to="/details" activeClassName="bdl-bdl-is-selected">
                         Details
                     </NavButton>
                 </MemoryRouter>,
             );
 
             expect(button.hasClass('bdl-is-active')).toBe(false);
-            expect(button.hasClass('bdl-is-selected')).toBe(false);
+            expect(button.hasClass('bdl-bdl-is-selected')).toBe(false);
         });
     });
 
@@ -92,25 +92,25 @@ describe('elements/common/nav-button/NavButton', () => {
         test('applies custom activeClassName for exact matches', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity']}>
-                    <NavButton exact to="/activity" activeClassName="bdl-is-selected">
+                    <NavButton exact to="/activity" activeClassName="bdl-bdl-is-selected">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
             );
 
-            expect(button.hasClass('bdl-is-selected')).toBe(true);
+            expect(button.hasClass('bdl-bdl-is-selected')).toBe(true);
         });
 
         test('applies custom activeClassName for partial matches', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity/versions']}>
-                    <NavButton exact to="/activity" activeClassName="bdl-is-selected">
+                    <NavButton exact to="/activity" activeClassName="bdl-bdl-is-selected">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
             );
 
-            expect(button.hasClass('bdl-is-selected')).toBe(false);
+            expect(button.hasClass('bdl-bdl-is-selected')).toBe(false);
         });
     });
 
@@ -166,25 +166,25 @@ describe('elements/common/nav-button/NavButton', () => {
         test('applies custom activeClassName for strict matches', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity/']}>
-                    <NavButton strict to="/activity/" activeClassName="bdl-is-selected">
+                    <NavButton strict to="/activity/" activeClassName="bdl-bdl-is-selected">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
             );
 
-            expect(button.hasClass('bdl-is-selected')).toBe(true);
+            expect(button.hasClass('bdl-bdl-is-selected')).toBe(true);
         });
 
         test('does not apply custom activeClassName for non-strict matches', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity']}>
-                    <NavButton strict to="/activity/" activeClassName="bdl-is-selected">
+                    <NavButton strict to="/activity/" activeClassName="bdl-bdl-is-selected">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
             );
 
-            expect(button.hasClass('bdl-is-selected')).toBe(false);
+            expect(button.hasClass('bdl-bdl-is-selected')).toBe(false);
         });
     });
 

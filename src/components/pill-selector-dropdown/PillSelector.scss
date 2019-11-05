@@ -4,16 +4,16 @@
  * Pill Selector
  **************************************/
 
-.pill-selector-hidden-input {
+.bdl-PillSelector-hiddenInput {
     position: absolute;
     visibility: hidden;
 }
 
-.pill-selector-wrapper {
+.bdl-PillSelector-wrapper {
     position: relative;
     margin: 0 0 20px;
 
-    .pill-selector-input-wrapper {
+    .bdl-PillSelector-inputWrapper {
         display: flex;
         flex-flow: row wrap;
         align-content: flex-start;
@@ -51,15 +51,15 @@
             box-shadow: none;
         }
 
-        &.show-error {
+        &.bdl-show-error {
             border-color: $bdl-watermelon-red;
         }
 
-        &.pill-selector-suggestions-enabled {
+        &.bdl-PillSelector--suggestionsEnabled {
             min-height: $bdl-line-height * 4;
         }
 
-        &:not(.show-error) {
+        &:not(.bdl-show-error) {
             .icon-alert {
                 display: none;
             }
@@ -91,7 +91,7 @@
             }
         }
 
-        .pill-selector-input {
+        .bdl-PillSelector-input {
             flex: 1;
             box-sizing: content-box !important;
             min-width: 0;

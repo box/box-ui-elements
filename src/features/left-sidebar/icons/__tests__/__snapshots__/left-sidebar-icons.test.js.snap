@@ -860,7 +860,7 @@ exports[`icons/left-sidebar should correctly render icon with title 15`] = `
 
 exports[`icons/left-sidebar should respect selected state 1`] = `
 <AccessibleSVG
-  className="icon-admin-console is-selected"
+  className="icon-admin-console bdl-is-selected"
   title="pity"
   viewBox="0 0 14 16"
   width={14}
@@ -876,7 +876,7 @@ exports[`icons/left-sidebar should respect selected state 1`] = `
 
 exports[`icons/left-sidebar should respect selected state 2`] = `
 <AccessibleSVG
-  className="icon-automations is-selected"
+  className="icon-automations bdl-is-selected"
   viewBox="0 0 14 14"
   width={14}
 >
@@ -891,7 +891,7 @@ exports[`icons/left-sidebar should respect selected state 2`] = `
 
 exports[`icons/left-sidebar should respect selected state 3`] = `
 <AccessibleSVG
-  className="icon-box-relay is-selected"
+  className="icon-box-relay bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -908,7 +908,7 @@ exports[`icons/left-sidebar should respect selected state 3`] = `
 
 exports[`icons/left-sidebar should respect selected state 4`] = `
 <AccessibleSVG
-  className="icon-all-files is-selected"
+  className="icon-all-files bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -924,7 +924,7 @@ exports[`icons/left-sidebar should respect selected state 4`] = `
 
 exports[`icons/left-sidebar should respect selected state 5`] = `
 <AccessibleSVG
-  className="icon-dev-console is-selected"
+  className="icon-dev-console bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -940,7 +940,7 @@ exports[`icons/left-sidebar should respect selected state 5`] = `
 
 exports[`icons/left-sidebar should respect selected state 6`] = `
 <AccessibleSVG
-  className="icon-favorites is-selected"
+  className="icon-favorites bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -956,7 +956,7 @@ exports[`icons/left-sidebar should respect selected state 6`] = `
 
 exports[`icons/left-sidebar should respect selected state 7`] = `
 <AccessibleSVG
-  className="icon-feed is-selected"
+  className="icon-feed bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -972,7 +972,7 @@ exports[`icons/left-sidebar should respect selected state 7`] = `
 
 exports[`icons/left-sidebar should respect selected state 8`] = `
 <AccessibleSVG
-  className="icon-notes is-selected"
+  className="icon-notes bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -988,7 +988,7 @@ exports[`icons/left-sidebar should respect selected state 8`] = `
 
 exports[`icons/left-sidebar should respect selected state 9`] = `
 <AccessibleSVG
-  className="icon-notifications is-selected"
+  className="icon-notifications bdl-is-selected"
   title="pity"
   viewBox="0 0 14 16.1"
   width={14}
@@ -1004,7 +1004,7 @@ exports[`icons/left-sidebar should respect selected state 9`] = `
 
 exports[`icons/left-sidebar should respect selected state 10`] = `
 <AccessibleSVG
-  className="icon-owned-by-me is-selected"
+  className="icon-owned-by-me bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -1020,7 +1020,7 @@ exports[`icons/left-sidebar should respect selected state 10`] = `
 
 exports[`icons/left-sidebar should respect selected state 11`] = `
 <AccessibleSVG
-  className="icon-recents is-selected"
+  className="icon-recents bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -1036,7 +1036,7 @@ exports[`icons/left-sidebar should respect selected state 11`] = `
 
 exports[`icons/left-sidebar should respect selected state 12`] = `
 <AccessibleSVG
-  className="icon-relay is-selected"
+  className="icon-relay bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -1052,7 +1052,7 @@ exports[`icons/left-sidebar should respect selected state 12`] = `
 
 exports[`icons/left-sidebar should respect selected state 13`] = `
 <AccessibleSVG
-  className="icon-shared-with-me is-selected"
+  className="icon-shared-with-me bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -1068,7 +1068,7 @@ exports[`icons/left-sidebar should respect selected state 13`] = `
 
 exports[`icons/left-sidebar should respect selected state 14`] = `
 <AccessibleSVG
-  className="icon-synced is-selected"
+  className="icon-synced bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}
@@ -1084,7 +1084,7 @@ exports[`icons/left-sidebar should respect selected state 14`] = `
 
 exports[`icons/left-sidebar should respect selected state 15`] = `
 <AccessibleSVG
-  className="icon-trash is-selected"
+  className="icon-trash bdl-is-selected"
   title="pity"
   viewBox="0 0 14 14"
   width={14}

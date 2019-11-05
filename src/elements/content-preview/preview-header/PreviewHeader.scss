@@ -98,7 +98,7 @@
     }
 }
 
-.bcpr-PreviewHeader-button.bdl-Button--plain {
+.bcpr-PreviewHeader-button.bdl-PlainButton {
     display: flex;
     align-items: center;
     padding: 5px 10px;
@@ -114,7 +114,7 @@
     }
 }
 
-.bcpr-PreviewHeader-button-close.bdl-Button--plain {
+.bcpr-PreviewHeader-button-close.bdl-PlainButton {
     font-weight: bold;
 
     .icon-close {

@@ -273,7 +273,7 @@ const Condition = ({
         const error = getErrorMessage();
 
         const classnames = classNames('condition-value-dropdown-container', {
-            'show-error': error,
+            'bdl-show-error': error,
         });
 
         return (

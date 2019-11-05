@@ -82,9 +82,9 @@
     }
 }
 
-.bdl-Button--plain,
-.bdl-Button--plain:hover,
-.bdl-Button--plain:active {
+.bdl-PlainButton,
+.bdl-PlainButton:hover,
+.bdl-PlainButton:active {
     margin: 0;
     padding: 0;
     font-weight: normal;
@@ -92,16 +92,16 @@
     cursor: pointer;
 }
 
-.bdl-Button--plain,
-.bdl-Button--plain:hover,
-.bdl-Button--plain:active,
-.bdl-Button--plain:focus {
+.bdl-PlainButton,
+.bdl-PlainButton:hover,
+.bdl-PlainButton:active,
+.bdl-PlainButton:focus {
     background: transparent;
     box-shadow: none;
 }
 
 /* This setting is being used to override the dotted border on a firefox button */
-button.bdl-Button--plain::-moz-focus-inner {
+button.bdl-PlainButton::-moz-focus-inner {
     border: 0 none;
 }
 
@@ -109,7 +109,7 @@ button svg {
     pointer-events: none;
 }
 
-.bdl-Button--primary {
+.bdl-PrimaryButton {
     color: $white;
     background-color: $primary-color;
     border-color: $primary-color;

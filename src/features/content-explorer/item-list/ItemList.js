@@ -130,7 +130,7 @@ const ItemList = ({
         let result = index === -1 ? 'table-header' : 'table-row';
 
         if (isItemSelected(item.id, selectedItems)) {
-            result = classNames('is-selected', result);
+            result = classNames('bdl-is-selected', result);
         }
         if (item && (item.isDisabled || item.isLoading)) {
             result = classNames('disabled', result);

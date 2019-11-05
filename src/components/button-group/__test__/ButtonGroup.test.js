@@ -14,7 +14,7 @@ describe('components/button-group/ButtonGroup', () => {
             </ButtonGroup>,
         );
 
-        expect(wrapper.find('.btn-group')).toBeTruthy();
-        expect(wrapper.find('.btn').length).toBe(3);
+        expect(wrapper.find('.bdl-ButtonGroup')).toBeTruthy();
+        expect(wrapper.find('.bdl-Button').length).toBe(3);
     });
 });

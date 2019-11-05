@@ -40,7 +40,7 @@ describe('components/menu/MenuItem', () => {
                 </MenuItem>,
             );
 
-            expect(wrapper.hasClass('is-selected')).toBe(true);
+            expect(wrapper.hasClass('bdl-is-selected')).toBe(true);
             expect(wrapper.prop('aria-checked')).toBe(true);
         });
 

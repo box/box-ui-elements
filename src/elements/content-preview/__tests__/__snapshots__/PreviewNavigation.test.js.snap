@@ -133,7 +133,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           type="button"
         >
           <button
-            className="bdl-Button--plain bcpr-navigate-right"
+            className="bdl-PlainButton bcpr-navigate-right"
             onClick={[Function]}
             type="button"
           >
@@ -318,7 +318,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           type="button"
         >
           <button
-            className="bdl-Button--plain bcpr-navigate-left"
+            className="bdl-PlainButton bcpr-navigate-left"
             onClick={[Function]}
             type="button"
           >
@@ -360,7 +360,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           type="button"
         >
           <button
-            className="bdl-Button--plain bcpr-navigate-right"
+            className="bdl-PlainButton bcpr-navigate-right"
             onClick={[Function]}
             type="button"
           >
@@ -535,7 +535,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           type="button"
         >
           <button
-            className="bdl-Button--plain bcpr-navigate-left"
+            className="bdl-PlainButton bcpr-navigate-left"
             onClick={[Function]}
             type="button"
           >

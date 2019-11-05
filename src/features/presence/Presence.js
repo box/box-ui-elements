@@ -241,7 +241,7 @@ class Presence extends Component {
         const overlayContent = showActivityPrompt ? (
             <>
                 <FormattedMessage {...messages.previewPresenceFlyoutCopy} />
-                <Button className="btn-primary" onClick={this._showRecentsFlyout}>
+                <Button className="bdl-PrimaryButton" onClick={this._showRecentsFlyout}>
                     <FormattedMessage {...messages.previewPresenceFlyoutActivityCTA} />
                 </Button>
             </>

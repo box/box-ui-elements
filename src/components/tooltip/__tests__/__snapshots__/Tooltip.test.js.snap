@@ -4,7 +4,7 @@ exports[`components/tooltip/Tooltip render() should not render the close button 
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -28,7 +28,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -52,7 +52,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -67,13 +67,13 @@ exports[`components/tooltip/Tooltip render() should not render with close button
   targetAttachment="top center"
 >
   <div
-    aria-describedby="tooltip3"
+    aria-describedby="bdl-Tooltip3"
   >
     Hello
   </div>
   <div
-    className="tooltip"
-    id="tooltip3"
+    className="bdl-Tooltip"
+    id="bdl-Tooltip3"
     role="tooltip"
   >
     hi
@@ -91,7 +91,7 @@ exports[`components/tooltip/Tooltip render() should render children wrapped in t
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -122,7 +122,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -137,13 +137,13 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
   targetAttachment="top center"
 >
   <div
-    aria-describedby="tooltip5"
+    aria-describedby="bdl-Tooltip5"
   >
     Hello
   </div>
   <div
-    className="tooltip is-callout"
-    id="tooltip5"
+    className="bdl-Tooltip is-callout"
+    id="bdl-Tooltip5"
     role="tooltip"
   >
     hi
@@ -155,7 +155,7 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -170,13 +170,13 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
   targetAttachment="top center"
 >
   <div
-    aria-describedby="tooltip1"
+    aria-describedby="bdl-Tooltip1"
   >
     Hello
   </div>
   <div
-    className="tooltip with-close-button"
-    id="tooltip1"
+    className="bdl-Tooltip with-close-button"
+    id="bdl-Tooltip1"
     role="tooltip"
   >
     hi

@@ -29,8 +29,8 @@ const writeFile = promisify(fs.writeFile);
 const conversionMap = {
     'btn': 'bdl-Button',
     'btn-group': 'bdl-ButtonGroup',
-    'btn-plain': 'bdl-Button--plain',
-    'btn-primary': 'bdl-Button--primary',
+    'btn-plain': 'bdl-PlainButton',
+    'btn-primary': 'bdl-PrimaryButton',
     'is-disabled': 'bdl-is-disabled',
     'label': 'bdl-Label',
     'pill': 'bdl-Pill',

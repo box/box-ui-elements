@@ -11,7 +11,7 @@ type Props = {
 const LabelPrimitive = ({ children, className, labelContent, ...rest }: Props) => (
     // eslint-disable-next-line jsx-a11y/label-has-for
     <label>
-        <span className={classNames('label bdl-Label', className)} {...rest}>
+        <span className={classNames('bdl-Label', className)} {...rest}>
             {labelContent}
         </span>
         {children}

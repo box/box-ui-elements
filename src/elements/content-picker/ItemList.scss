@@ -20,7 +20,7 @@
         background-color: $light-blue;
         border-top-color: $grey-blue;
 
-        .be & .bdl-Button--plain,
+        .be & .bdl-PlainButton,
         .be-item-label {
             color: $dark-cerulean;
             outline: none;
@@ -84,7 +84,7 @@
             }
         }
 
-        .be & .bdl-Button--plain,
+        .be & .bdl-PlainButton,
         .be-item-label {
             color: $dark-cerulean;
         }

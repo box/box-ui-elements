@@ -30,14 +30,14 @@ describe('components/form-elements/text-area/TextArea', () => {
         const wrapper = mount(<TextArea className="coverage" isRequired label="label" name="input" />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
-        expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeTruthy();
+        expect(wrapper.find('.text-area-container').hasClass('bdl-show-error')).toBeTruthy();
     });
 
     test('should mark required fields valid when not empty', () => {
         const wrapper = mount(<TextArea isRequired label="label" name="textarea" value="baba" />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
-        expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeFalsy();
+        expect(wrapper.find('.text-area-container').hasClass('bdl-show-error')).toBeFalsy();
     });
 
     test('should correctly validate when change event is fired', () => {
@@ -45,7 +45,7 @@ describe('components/form-elements/text-area/TextArea', () => {
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 
-        expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeTruthy();
+        expect(wrapper.find('.text-area-container').hasClass('bdl-show-error')).toBeTruthy();
 
         wrapper.setProps({ value: 'a' });
         textarea.simulate('blur');
@@ -55,7 +55,7 @@ describe('components/form-elements/text-area/TextArea', () => {
             },
         });
 
-        expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeFalsy();
+        expect(wrapper.find('.text-area-container').hasClass('bdl-show-error')).toBeFalsy();
     });
 
     test('should set an textarea as valid when the validityFn returns an void', () => {
@@ -145,7 +145,7 @@ describe('components/form-elements/text-area/TextArea', () => {
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 
-        expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeTruthy();
+        expect(wrapper.find('.text-area-container').hasClass('bdl-show-error')).toBeTruthy();
 
         wrapper.setProps({ value: 'abba' });
 
@@ -157,7 +157,7 @@ describe('components/form-elements/text-area/TextArea', () => {
         });
         wrapper.update();
 
-        expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeFalsy();
+        expect(wrapper.find('.text-area-container').hasClass('bdl-show-error')).toBeFalsy();
     });
 
     test('should validate onChange when textarea is already in error state', () => {
@@ -165,7 +165,7 @@ describe('components/form-elements/text-area/TextArea', () => {
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 
-        expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeTruthy();
+        expect(wrapper.find('.text-area-container').hasClass('bdl-show-error')).toBeTruthy();
 
         const textareaEl = textarea.getDOMNode();
         textareaEl.value = 'a';
@@ -174,7 +174,7 @@ describe('components/form-elements/text-area/TextArea', () => {
         });
         wrapper.update();
 
-        expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeFalsy();
+        expect(wrapper.find('.text-area-container').hasClass('bdl-show-error')).toBeFalsy();
     });
 
     test('should set validity state when set validity state handler is called with custom error', () => {

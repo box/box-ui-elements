@@ -17,13 +17,13 @@
         font-family: inherit;
     }
 
-    &:not(.show-error) {
+    &:not(.bdl-show-error) {
         .caution {
             display: none;
         }
     }
 
-    &.show-error {
+    &.bdl-show-error {
         textarea {
             border-color: $bdl-watermelon-red;
         }

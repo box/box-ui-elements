@@ -15,8 +15,8 @@ type Props = {
 const SelectButton = ({ children, className = '', error, isDisabled = false, ...rest }: Props) => (
     <Tooltip isShown={!!error} position="middle-right" text={error} theme="error">
         <button
-            className={classNames(className, 'select-button bdl-SelectButton', {
-                'is-invalid': !!error,
+            className={classNames(className, 'bdl-SelectButton', {
+                'bdl-is-invalid': !!error,
             })}
             disabled={isDisabled}
             type="button"

@@ -85,8 +85,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
         );
 
         const tabs = component.find('.tabs').find('button');
-        expect(tabs.at(0).hasClass('is-selected')).toBe(false);
-        expect(tabs.at(1).hasClass('is-selected')).toBe(true);
+        expect(tabs.at(0).hasClass('bdl-is-selected')).toBe(false);
+        expect(tabs.at(1).hasClass('bdl-is-selected')).toBe(true);
     });
 
     test('should call onTabSelect when tab selected', () => {

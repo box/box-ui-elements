@@ -5,9 +5,9 @@
 
     .access-stats-item-content {
         &,
-        &.bdl-Button--plain,
-        &.bdl-Button--plain:focus,
-        &.bdl-Button--plain:hover {
+        &.bdl-PlainButton,
+        &.bdl-PlainButton:focus,
+        &.bdl-PlainButton:hover {
             display: flex;
             align-items: center;
             width: 100%;
@@ -20,8 +20,8 @@
             border-radius: 2px;
         }
 
-        &.bdl-Button--plain:focus,
-        &.bdl-Button--plain:hover {
+        &.bdl-PlainButton:focus,
+        &.bdl-PlainButton:hover {
             .access-stats-label {
                 text-decoration: underline;
             }

@@ -1,7 +1,7 @@
 @import '../../styles/variables';
 
 .bdl-SelectButton {
-    &.is-invalid {
+    &.bdl-is-invalid {
         border-color: $bdl-watermelon-red;
     }
 }

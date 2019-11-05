@@ -16,14 +16,14 @@ describe('components/slide-carousel/SlideButton', () => {
 
     const getWrapper = props => shallow(<SlideButton {...defaultProps} {...props} />);
 
-    test('should have the is-selected class when selected', () => {
+    test('should have the bdl-is-selected class when selected', () => {
         const wrapper = getWrapper({ isSelected: true });
-        expect(wrapper.hasClass('is-selected')).toBe(true);
+        expect(wrapper.hasClass('bdl-is-selected')).toBe(true);
     });
 
-    test('should not have the is-selected class when not selected', () => {
+    test('should not have the bdl-is-selected class when not selected', () => {
         const wrapper = getWrapper({ isSelected: false });
-        expect(wrapper.hasClass('is-selected')).not.toBe(true);
+        expect(wrapper.hasClass('bdl-is-selected')).not.toBe(true);
     });
 
     test('should call onClick prop when clicked', () => {

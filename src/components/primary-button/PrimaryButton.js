@@ -13,7 +13,7 @@ type Props = {
 
 const PrimaryButton = ({ children, className = '', isDisabled, isSelected, isLoading, ...rest }: Props) => (
     <Button
-        className={`btn-primary ${className}`}
+        className={`bdl-PrimaryButton ${className}`}
         isDisabled={isDisabled}
         isLoading={isLoading}
         isSelected={isSelected}

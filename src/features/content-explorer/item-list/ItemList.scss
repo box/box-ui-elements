@@ -19,7 +19,7 @@
             opacity: .3;
         }
 
-        &:not(.is-selected):not(.disabled):hover {
+        &:not(.bdl-is-selected):not(.disabled):hover {
             background-color: $hover-blue-background;
         }
 

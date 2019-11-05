@@ -10,7 +10,7 @@ describe('components/primary-button/PrimaryButton', () => {
         const wrapper = shallow(<PrimaryButton>{children}</PrimaryButton>);
 
         expect(wrapper.find(Button).length).toEqual(1);
-        expect(wrapper.hasClass('btn-primary')).toBe(true);
+        expect(wrapper.hasClass('bdl-PrimaryButton')).toBe(true);
         expect(wrapper.contains(children)).toBe(true);
     });
 });

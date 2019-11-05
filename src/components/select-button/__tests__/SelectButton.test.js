@@ -8,7 +8,7 @@ describe('components/select-button/SelectButton', () => {
 
         const wrapper = shallow(<SelectButton>{children}</SelectButton>).find('button');
 
-        expect(wrapper.hasClass('select-button')).toBe(true);
+        expect(wrapper.hasClass('bdl-SelectButton')).toBe(true);
         expect(wrapper.contains(children)).toBe(true);
         expect(wrapper.prop('disabled')).toBe(false);
     });

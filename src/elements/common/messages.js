@@ -224,7 +224,7 @@ const messages = defineMessages({
     },
     uploader: {
         id: 'be.itemUploader',
-        description: 'label bdl-Label for item uploader.',
+        description: 'bdl-Label for item uploader.',
         defaultMessage: 'Uploader',
     },
     interacted: {

@@ -112,7 +112,7 @@
         }
     }
 
-    .bdl-Button--plain.metadata-template-dropdown-select-template {
+    .bdl-PlainButton.metadata-template-dropdown-select-template {
         display: flex;
         align-items: center;
         width: 100%;
@@ -125,7 +125,7 @@
         text-align: inherit;
         text-overflow: ellipsis;
 
-        &.metadata-template-dropdown-is-selected {
+        &.metadata-template-dropdown-bdl-is-selected {
             color: $bdl-box-blue;
         }
 

@@ -42,8 +42,8 @@ const Select = ({
     showLabel = true,
     ...rest
 }: Props) => {
-    const classes = classNames(className, 'select-input-container', {
-        'show-error': !!error || showErrorOutline,
+    const classes = classNames(className, 'bdl-Select-inputContainer', {
+        'bdl-show-error': !!error || showErrorOutline,
         'bdl-is-disabled': isDisabled,
     });
 
@@ -51,17 +51,17 @@ const Select = ({
         <div className={classes}>
             <Label hideLabel={!showLabel} text={label} tooltip={labelTooltip}>
                 <Tooltip isShown={!!error} position="middle-right" text={error || ''} theme="error">
-                    <span className="select-container">
-                        <span className="select-container-inner">
+                    <span className="bdl-Select-container">
+                        <span className="bdl-Select-container-inner">
                             {/* eslint-disable-next-line jsx-a11y/no-onchange */}
                             <select disabled={isDisabled} name={name} onChange={onChange} {...rest}>
                                 {children}
                             </select>
-                            <span className="select-overlay" />
+                            <span className="bdl-Select-overlay" />
                         </span>
                         {infoTooltip && (
                             <Tooltip position="middle-right" text={infoTooltip}>
-                                <span className="tooltip-icon-container">
+                                <span className="bdl-Tooltip-iconContainer">
                                     <IconInfo height={16} width={16} {...infoIconProps} />
                                 </span>
                             </Tooltip>

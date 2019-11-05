@@ -113,7 +113,7 @@ describe('components/link/Link', () => {
         const wrapper = mount(<LinkPrimaryButton>a link</LinkPrimaryButton>);
 
         expect(wrapper.find('a').hasClass('btn')).toBe(true);
-        expect(wrapper.find('a').hasClass('btn-primary')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-PrimaryButton')).toBe(true);
         expect(wrapper.find('a').prop('children')).toEqual('a link');
         expect(wrapper.find('a').prop('href')).toEqual('#');
     });
@@ -122,7 +122,7 @@ describe('components/link/Link', () => {
         const wrapper = mount(<LinkPrimaryButton href="foo">a link</LinkPrimaryButton>);
 
         expect(wrapper.find('a').hasClass('btn')).toBe(true);
-        expect(wrapper.find('a').hasClass('btn-primary')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-PrimaryButton')).toBe(true);
         expect(wrapper.find('a').prop('children')).toEqual('a link');
         expect(wrapper.find('a').prop('href')).toEqual('foo');
     });

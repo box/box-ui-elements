@@ -2,7 +2,7 @@
 
 exports[`components/label/InfoIconWithTooltip should render correctly 1`] = `
 <span
-  className="test-class tooltip-icon-container"
+  className="test-class bdl-Tooltip-iconContainer"
   key="infoIcon"
 >
   <Tooltip

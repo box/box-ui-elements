@@ -9,7 +9,7 @@ type Props = {
 };
 
 const LinkPrimaryButton = ({ className = '', ...rest }: Props) => (
-    <LinkButton className={`btn-primary ${className}`} {...rest} />
+    <LinkButton className={`bdl-PrimaryButton ${className}`} {...rest} />
 );
 
 export default LinkPrimaryButton;

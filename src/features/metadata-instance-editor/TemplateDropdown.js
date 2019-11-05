@@ -125,7 +125,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
             const isTemplateSelected = activeTemplate && activeTemplate.id === template.id;
 
             const buttonClassName = classNames('metadata-template-dropdown-select-template', {
-                'metadata-template-dropdown-is-selected': isTemplateSelected,
+                'metadata-template-dropdown-bdl-is-selected': isTemplateSelected,
             });
 
             return (

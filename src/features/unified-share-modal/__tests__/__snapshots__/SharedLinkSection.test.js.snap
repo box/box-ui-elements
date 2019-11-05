@@ -5,7 +5,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -56,7 +56,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
             </Tooltip>
           </span>
         }
-        name="toggle"
+        name="bdl-Toggle"
       />
     </div>
   </div>
@@ -163,7 +163,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -199,7 +199,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
               id="boxui.unifiedShare.linkShareOn"
             />
           }
-          name="toggle"
+          name="bdl-Toggle"
         />
       </div>
     </Tooltip>
@@ -303,7 +303,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -339,7 +339,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
               id="boxui.unifiedShare.linkShareOff"
             />
           }
-          name="toggle"
+          name="bdl-Toggle"
         />
       </div>
     </Tooltip>
@@ -352,7 +352,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -375,7 +375,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
             id="boxui.unifiedShare.linkShareOn"
           />
         }
-        name="toggle"
+        name="bdl-Toggle"
       />
     </div>
   </div>
@@ -482,7 +482,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -505,7 +505,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
             id="boxui.unifiedShare.linkShareOff"
           />
         }
-        name="toggle"
+        name="bdl-Toggle"
       />
     </div>
   </div>
@@ -517,7 +517,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -553,7 +553,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
               id="boxui.unifiedShare.linkShareOn"
             />
           }
-          name="toggle"
+          name="bdl-Toggle"
         />
       </div>
     </Tooltip>
@@ -667,7 +667,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -690,7 +690,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.unifiedShare.linkShareOn"
           />
         }
-        name="toggle"
+        name="bdl-Toggle"
       />
     </div>
   </div>
@@ -798,7 +798,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -821,7 +821,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.unifiedShare.linkShareOn"
           />
         }
-        name="toggle"
+        name="bdl-Toggle"
       />
     </div>
   </div>
@@ -954,7 +954,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -977,7 +977,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
             id="boxui.unifiedShare.linkShareOn"
           />
         }
-        name="toggle"
+        name="bdl-Toggle"
       />
     </div>
   </div>

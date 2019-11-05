@@ -11,7 +11,7 @@ type Props = {
 };
 
 const InfoIconWithTooltip = ({ className = '', iconProps, tooltipText }: Props) => (
-    <span key="infoIcon" className={`${className} tooltip-icon-container`}>
+    <span key="infoIcon" className={`${className} bdl-Tooltip-iconContainer`}>
         <Tooltip position="top-center" text={tooltipText}>
             <span className="info-icon-container">
                 <IconInfo height={16} width={16} {...iconProps} />

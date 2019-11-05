@@ -4,21 +4,21 @@
  * Select
  **************************************/
 
-.select-input-container {
+.bdl-Select-inputContainer {
     margin: 0 0 20px;
 
-    .select-container {
+    .bdl-Select-container {
         margin-top: 5px;
     }
 
-    .tooltip-icon-container {
+    .bdl-Tooltip-iconContainer {
         position: absolute;
         margin-top: 9px;
         margin-left: 10px;
     }
 
-    &.show-error {
-        .select-overlay {
+    &.bdl-show-error {
+        .bdl-Select-overlay {
             border-color: $bdl-watermelon-red;
         }
     }
