@@ -34,6 +34,7 @@ type Props = {
     rootElement?: HTMLElement,
     rootId: string,
     selectableType: string,
+    selected: Array<BoxItem>,
     tableRef: Function,
     view: View,
 };
@@ -54,6 +55,7 @@ const ItemList = ({
     onShareAccessChange,
     onFocusChange,
     currentCollection,
+    selected,
     tableRef,
 }: Props) => {
     const iconCell = iconCellRenderer();
@@ -64,6 +66,7 @@ const ItemList = ({
         extensionsWhitelist,
         hasHitSelectionLimit,
         isSingleSelect,
+        selected,
     );
     const shareAccessCell = shareAccessCellRenderer(
         onShareAccessChange,
@@ -71,6 +74,7 @@ const ItemList = ({
         selectableType,
         extensionsWhitelist,
         hasHitSelectionLimit,
+        selected,
     );
     const { id, items = [] }: Collection = currentCollection;
     const rowCount: number = items.length;
@@ -80,10 +84,17 @@ const ItemList = ({
             return '';
         }
 
-        const { selected, type } = items[index];
-        const isSelectable = isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, items[index]);
+        const { id: itemId, type } = items[index];
+        const isSelected = !!selected.find(sel => sel.id === itemId && sel.type === type);
+        const isSelectable = isRowSelectable(
+            selectableType,
+            extensionsWhitelist,
+            hasHitSelectionLimit,
+            items[index],
+            isSelected,
+        );
         return classNames(`bcp-item-row bcp-item-row-${index}`, {
-            'bcp-item-row-selected': selected && view !== VIEW_SELECTED,
+            'bcp-item-row-selected': isSelected && view !== VIEW_SELECTED,
             'bcp-item-row-unselectable': type !== TYPE_FOLDER && !isSelectable, // folder row should never dim
         });
     };
@@ -97,9 +108,11 @@ const ItemList = ({
         index: number,
         rowData: BoxItem,
     }) => {
+        const { id: itemId, type } = rowData;
+        const isSelected = !!selected.find(sel => sel.id === itemId && sel.type === type);
         // If the click is happening on a clickable element on the item row, ignore row selection
         if (
-            isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) &&
+            isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData, isSelected) &&
             !isFocusableElement(event.target)
         ) {
             onItemSelect(rowData);

@@ -11,9 +11,10 @@ function isRowSelectable(
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
     rowData: BoxItem,
+    isSelected: boolean,
 ): boolean {
-    const { type, extension = '', selected }: BoxItem = rowData;
-    const shouldAllowSelection: boolean = hasHitSelectionLimit ? !!selected : true;
+    const { type, extension = '' }: BoxItem = rowData;
+    const shouldAllowSelection: boolean = hasHitSelectionLimit ? isSelected : true;
     const isTypeSelectable: boolean = !!type && selectableType.indexOf(type) > -1;
     const isFilePicker: boolean = selectableType.indexOf(TYPE_FILE) > -1;
     const isExtensionWhitelisted: boolean =
