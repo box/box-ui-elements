@@ -13,7 +13,7 @@ import nameCellRenderer from '../common/item/nameCellRenderer';
 import iconCellRenderer from '../common/item/iconCellRenderer';
 import { isFocusableElement, focus } from '../../utils/dom';
 import shareAccessCellRenderer from './shareAccessCellRenderer';
-import checkboxCellRenderer from './checkboxCellRenderer';
+import selectionCellRenderer from './selectionCellRenderer';
 import isRowSelectable from './cellRendererHelper';
 import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
 
@@ -25,6 +25,7 @@ type Props = {
     extensionsWhitelist: string[],
     focusedRow: number,
     hasHitSelectionLimit: boolean,
+    isSingleSelect: boolean,
     isSmall: boolean,
     onFocusChange: Function,
     onItemClick: Function,
@@ -46,6 +47,7 @@ const ItemList = ({
     selectableType,
     canSetShareAccess,
     hasHitSelectionLimit,
+    isSingleSelect,
     extensionsWhitelist,
     onItemSelect,
     onItemClick,
@@ -56,7 +58,13 @@ const ItemList = ({
 }: Props) => {
     const iconCell = iconCellRenderer();
     const nameCell = nameCellRenderer(rootId, view, onItemClick);
-    const checkboxCell = checkboxCellRenderer(onItemSelect, selectableType, extensionsWhitelist, hasHitSelectionLimit);
+    const selectionCell = selectionCellRenderer(
+        onItemSelect,
+        selectableType,
+        extensionsWhitelist,
+        hasHitSelectionLimit,
+        isSingleSelect,
+    );
     const shareAccessCell = shareAccessCellRenderer(
         onShareAccessChange,
         canSetShareAccess,
@@ -154,7 +162,7 @@ const ItemList = ({
                             )}
                             <Column
                                 dataKey={FIELD_ID}
-                                cellRenderer={checkboxCell}
+                                cellRenderer={selectionCell}
                                 width={isSmall ? 20 : 30}
                                 flexShrink={0}
                             />

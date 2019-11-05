@@ -18,6 +18,7 @@ type Props = {
     extensionsWhitelist: string[],
     focusedRow: number,
     hasHitSelectionLimit: boolean,
+    isSingleSelect: boolean,
     isSmall: boolean,
     onFocusChange: Function,
     onItemClick: Function,
@@ -53,6 +54,7 @@ const Content = ({
     currentCollection,
     tableRef,
     canSetShareAccess,
+    isSingleSelect,
     onItemClick,
     onItemSelect,
     onShareAccessChange,
@@ -76,6 +78,7 @@ const Content = ({
                 tableRef={tableRef}
                 canSetShareAccess={canSetShareAccess}
                 hasHitSelectionLimit={hasHitSelectionLimit}
+                isSingleSelect={isSingleSelect}
                 selectableType={selectableType}
                 onItemSelect={onItemSelect}
                 onItemClick={onItemClick}

@@ -1153,7 +1153,8 @@ class ContentPicker extends Component<Props, State> {
         const { id, offset, permissions, totalCount }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const selectedCount: number = Object.keys(selected).length;
-        const hasHitSelectionLimit: boolean = selectedCount === maxSelectable && maxSelectable !== 1;
+        const isSingleSelect = maxSelectable === 1;
+        const hasHitSelectionLimit: boolean = selectedCount === maxSelectable && !isSingleSelect;
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
         const styleClassName = classNames('be bcp', className);
@@ -1195,6 +1196,7 @@ class ContentPicker extends Component<Props, State> {
                             extensionsWhitelist={extensions}
                             hasHitSelectionLimit={hasHitSelectionLimit}
                             currentCollection={currentCollection}
+                            isSingleSelect={isSingleSelect}
                             tableRef={this.tableRef}
                             onItemSelect={this.select}
                             onItemClick={this.onItemClick}
@@ -1204,6 +1206,7 @@ class ContentPicker extends Component<Props, State> {
                         <Footer
                             selectedCount={selectedCount}
                             hasHitSelectionLimit={hasHitSelectionLimit}
+                            isSingleSelect={isSingleSelect}
                             onSelectedClick={this.showSelected}
                             onChoose={this.choose}
                             onCancel={this.cancel}
