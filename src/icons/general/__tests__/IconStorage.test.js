@@ -1,8 +1,7 @@
 import React from 'react';
-
 import IconStorage from '../IconStorage';
 
-describe('icons/general/IconAlignLeft', () => {
+describe('icons/general/IconStorage', () => {
     test('should correctly render default icon', () => {
         const wrapper = shallow(<IconStorage />);
 

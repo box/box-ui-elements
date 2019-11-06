@@ -1,5 +1,4 @@
 import React from 'react';
-
 import IconLogin from '../IconLogin';
 
 describe('icons/general/IconLogin', () => {
