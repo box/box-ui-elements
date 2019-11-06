@@ -95,6 +95,16 @@ class Metadata extends File {
     }
 
     /**
+     * API URL for getting metadata template schema by template key
+     *
+     * @param {string} templateKey - metadata template key
+     * @return {string} API url for getting template schema by template key
+     */
+    getMetadataTemplateSchemaUrl(templateKey: string): string {
+        return `${this.getMetadataTemplateUrl()}/enterprise/${templateKey}/schema`;
+    }
+
+    /**
      * API URL for metadata templates
      *
      * @param {string} scope - metadata scope or id
@@ -177,6 +187,17 @@ class Metadata extends File {
         }
 
         return getProp(templates, 'data.entries', []);
+    }
+
+    /**
+     * Gets metadata template schema by template key
+     *
+     * @param {string} templateKey - template key
+     * @return {Promise} Promise object of metadata template
+     */
+    getSchemaByTemplateKey(templateKey: string): Promise<{ data?: MetadataTemplate }> {
+        const url = this.getMetadataTemplateSchemaUrl(templateKey);
+        return this.xhr.get({ url });
     }
 
     /**

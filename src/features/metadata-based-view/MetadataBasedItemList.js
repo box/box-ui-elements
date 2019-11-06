@@ -18,12 +18,7 @@ import messages from '../../elements/common/messages';
 
 import './MetadataBasedItemList.scss';
 
-import type {
-    FlattenedMetadataQueryResponseCollection,
-    FlattenedMetadataQueryResponseEntry,
-    MetadataColumnConfig,
-    MetadataColumnsToShow,
-} from '../../common/types/metadataQueries';
+import type { MetadataColumnConfig, MetadataColumnsToShow } from '../../common/types/metadataQueries';
 
 import {
     CANCEL_ICON_TYPE,
@@ -48,9 +43,9 @@ type State = {
 };
 
 type Props = {
-    currentCollection: FlattenedMetadataQueryResponseCollection,
+    currentCollection: Collection,
     metadataColumnsToShow: MetadataColumnsToShow,
-    onItemClick: FlattenedMetadataQueryResponseEntry => void,
+    onItemClick: BoxItem => void,
 };
 
 type CellRendererArgs = {
@@ -100,7 +95,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         };
     }
 
-    handleItemClick(item: FlattenedMetadataQueryResponseEntry): void {
+    handleItemClick(item: BoxItem): void {
         const { onItemClick }: Props = this.props;
         /*
             - @TODO: Remove permissions object once its part of API response.
@@ -145,7 +140,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
 
     getGridCellData(columnIndex: number, rowIndex: number): GridCellData | void {
         const {
-            currentCollection: { items },
+            currentCollection: { items = [] },
             metadataColumnsToShow,
         }: Props = this.props;
         const { hoveredColumnIndex, hoveredRowIndex, editedColumnIndex, editedRowIndex }: State = this.state;
@@ -155,7 +150,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         const isCellEditable = !isCellBeingEdited && isCellHovered && !!getProp(metadataColumn, 'canEdit', false);
         const item = items[rowIndex - 1];
         const { name } = item;
-        const fields = getProp(item, 'metadata.fields', []);
+        const fields = getProp(item, 'metadata.enterprise.fields', []);
         let cellData;
 
         switch (columnIndex) {

@@ -20,19 +20,21 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             {
                 id: '1',
                 metadata: {
-                    id: '11',
-                    fields: [
-                        {
-                            name: 'type',
-                            type: 'string',
-                            value: 'bill',
-                        },
-                        {
-                            name: 'amount',
-                            type: 'float',
-                            value: 100.12,
-                        },
-                    ],
+                    enterprise: {
+                        id: '11',
+                        fields: [
+                            {
+                                name: 'type',
+                                type: 'string',
+                                value: 'bill',
+                            },
+                            {
+                                name: 'amount',
+                                type: 'float',
+                                value: 100.12,
+                            },
+                        ],
+                    },
                 },
                 name: 'name1.pdf',
                 size: '123',
@@ -40,19 +42,21 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             {
                 id: '2',
                 metadata: {
-                    id: '22',
-                    fields: [
-                        {
-                            name: 'type',
-                            type: 'string',
-                            value: 'receipt',
-                        },
-                        {
-                            name: 'amount',
-                            type: 'float',
-                            value: 200.88,
-                        },
-                    ],
+                    enterprise: {
+                        id: '22',
+                        fields: [
+                            {
+                                name: 'type',
+                                type: 'string',
+                                value: 'receipt',
+                            },
+                            {
+                                name: 'amount',
+                                type: 'float',
+                                value: 200.88,
+                            },
+                        ],
+                    },
                 },
                 name: 'name2.mp4',
                 size: '456',

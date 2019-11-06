@@ -21,6 +21,7 @@ import makeResponsive from '../common/makeResponsive';
 import openUrlInsideIframe from '../../utils/iframe';
 import Internationalize from '../common/Internationalize';
 import API from '../../api';
+import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
 import Footer from './Footer';
 import PreviewDialog from './PreviewDialog';
 import ShareDialog from './ShareDialog';
@@ -60,7 +61,7 @@ import {
     TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
-import type { MetadataQuery, MetadataQueryResponse, MetadataColumnsToShow } from '../../common/types/metadataQueries';
+import type { MetadataQuery, MetadataColumnsToShow } from '../../common/types/metadataQueries';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -163,6 +164,8 @@ class ContentExplorer extends Component<Props, State> {
     firstLoad: boolean = true; // Keeps track of very 1st load
 
     store: LocalStore = new LocalStore();
+
+    metadataQueryAPIHelper: MetadataQueryAPIHelper;
 
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -335,12 +338,16 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Object} metadataQueryCollection - Metadata query response collection
      * @return {void}
      */
-    showMetadataQueryResultsSuccessCallback(metadataQueryCollection: MetadataQueryResponse) {
+    showMetadataQueryResultsSuccessCallback = (metadataQueryCollection: Collection): void => {
         const { currentCollection }: State = this.state;
         this.setState({
-            currentCollection: { ...currentCollection, ...metadataQueryCollection, percentLoaded: 100 },
+            currentCollection: {
+                ...currentCollection,
+                ...metadataQueryCollection,
+                percentLoaded: 100,
+            },
         });
-    }
+    };
 
     /**
      * Queries metadata_queries/execute API and fetches the result
@@ -356,15 +363,11 @@ class ContentExplorer extends Component<Props, State> {
             currentCollection: this.currentUnloadedCollection(),
             view: VIEW_METADATA,
         });
-
-        // Fetch the Metadata Query Results
-        this.api.getMetadataQueryAPI().queryMetadata(
+        this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
+        this.metadataQueryAPIHelper.fetchMetadataQueryResults(
             metadataQuery,
-            (metadataQueryCollection: MetadataQueryResponse) => {
-                this.showMetadataQueryResultsSuccessCallback(metadataQueryCollection);
-            },
+            this.showMetadataQueryResultsSuccessCallback,
             this.errorCallback,
-            { forceFetch: true },
         );
     }
 
@@ -1493,6 +1496,7 @@ class ContentExplorer extends Component<Props, State> {
                             isMedium={isMedium}
                             isSmall={isSmall}
                             isTouch={isTouch}
+                            metadataColumnsToShow={metadataColumnsToShow}
                             onItemClick={this.onItemClick}
                             onItemDelete={this.delete}
                             onItemDownload={this.download}
@@ -1506,7 +1510,6 @@ class ContentExplorer extends Component<Props, State> {
                             tableRef={this.tableRef}
                             view={view}
                             viewMode={viewMode}
-                            metadataColumnsToShow={metadataColumnsToShow}
                         />
                         <Footer>
                             <Pagination
