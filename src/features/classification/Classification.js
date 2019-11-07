@@ -15,15 +15,14 @@ type Props = {
     definition?: string,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
     name?: string,
+    onClick?: () => void,
 };
 
-const Classification = ({ definition, className = '', messageStyle, name }: Props) => {
+const Classification = ({ definition, className = '', messageStyle, name, onClick }: Props) => {
     const isClassified = !!name;
-    const hasMessage = !!definition;
-
-    const isTooltipMessageEnabled = isClassified && hasMessage && messageStyle === STYLE_TOOLTIP;
-    const isInlineMessageEnabled = isClassified && hasMessage && messageStyle === STYLE_INLINE;
-
+    const hasDefinition = !!definition;
+    const isTooltipMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_TOOLTIP;
+    const isInlineMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_INLINE;
     const isNotClassifiedMessageVisible = !isClassified && messageStyle === STYLE_INLINE;
 
     return (
@@ -31,6 +30,7 @@ const Classification = ({ definition, className = '', messageStyle, name }: Prop
             {isClassified && (
                 <ClassifiedBadge
                     name={((name: any): string)}
+                    onClick={onClick}
                     tooltipText={isTooltipMessageEnabled ? definition : undefined}
                 />
             )}

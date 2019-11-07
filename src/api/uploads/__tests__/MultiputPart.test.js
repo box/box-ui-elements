@@ -220,7 +220,7 @@ describe('api/uploads/MultiputPart', () => {
             const entries = [1];
             MultiputPart.updateQueryParameters = jest.fn().mockReturnValueOnce(endpoint);
             MultiputPartTest.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ entries })),
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { entries } })),
             };
 
             const res = await MultiputPartTest.listParts(1, 1);

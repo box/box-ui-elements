@@ -19,4 +19,13 @@ describe('features/classification/ClassifiedBadge', () => {
         });
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render a classified badge within a button when onClick is provided', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            tooltipText: 'fubar',
+            onClick: () => {},
+        });
+        expect(wrapper).toMatchSnapshot();
+    });
 });

@@ -44,4 +44,14 @@ describe('features/classification/Classification', () => {
         });
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render a classified badge with click functionality', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            definition: 'fubar',
+            messageStyle: 'tooltip',
+            onClick: () => {},
+        });
+        expect(wrapper).toMatchSnapshot();
+    });
 });
