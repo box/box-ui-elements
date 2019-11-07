@@ -13,10 +13,11 @@ export default (
     selectableType: string,
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
+    isSelected: boolean,
 ): Function => ({ rowData }: { rowData: BoxItem }) => {
     const { name, selected = false } = rowData;
 
-    if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData)) {
+    if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData, isSelected)) {
         return <span />;
     }
 
