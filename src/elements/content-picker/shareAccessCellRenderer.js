@@ -16,14 +16,17 @@ export default (
     selectableType: string,
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
+    selected: Array<BoxItem>,
 ) => ({ rowData }: { rowData: BoxItem }) => {
+    const { id, type } = rowData;
     const itemCanSetShareAccess = getProp(rowData, 'permissions.can_set_share_access', false);
+    const isSelected = !!selected.find(sel => sel.id === id && sel.type === type);
 
     if (
         !canSetShareAccess ||
         !itemCanSetShareAccess ||
-        !isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) ||
-        !rowData.selected
+        !isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData, isSelected) ||
+        !isSelected
     ) {
         return <span />;
     }

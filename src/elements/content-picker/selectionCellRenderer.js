@@ -15,11 +15,13 @@ export default (
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
     isRadio: boolean,
+    selected: Array<BoxItem>,
 ): (({ rowData: BoxItem }) => {}) => ({ rowData }: { rowData: BoxItem }) => {
-    const { name = '', selected = false } = rowData;
+    const { name = '', id, type } = rowData;
     const Component = isRadio ? RadioButton : Checkbox;
+    const isSelected = !!selected.find(sel => sel.id === id && sel.type === type);
 
-    if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData)) {
+    if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData, isSelected)) {
         return <span />;
     }
 
@@ -30,7 +32,7 @@ export default (
             name={name}
             onChange={() => onItemSelect(rowData)}
             value={name}
-            {...{ [isRadio ? 'isSelected' : 'isChecked']: selected }}
+            {...{ [isRadio ? 'isSelected' : 'isChecked']: isSelected }}
         />
     );
 };

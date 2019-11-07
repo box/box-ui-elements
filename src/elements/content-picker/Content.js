@@ -27,6 +27,7 @@ type Props = {
     rootElement?: HTMLElement,
     rootId: string,
     selectableType: string,
+    selected: Array<BoxItem>,
     tableRef: Function,
     view: View,
 };
@@ -60,6 +61,7 @@ const Content = ({
     onShareAccessChange,
     onFocusChange,
     extensionsWhitelist,
+    selected,
 }: Props) => (
     <div className="bcp-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
@@ -85,6 +87,7 @@ const Content = ({
                 onFocusChange={onFocusChange}
                 onShareAccessChange={onShareAccessChange}
                 extensionsWhitelist={extensionsWhitelist}
+                selected={selected}
             />
         )}
     </div>
