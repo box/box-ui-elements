@@ -14,10 +14,9 @@ import BaseMultiput from './BaseMultiput';
 import { HTTP_PUT } from '../../constants';
 
 const PART_STATE_NOT_STARTED: 0 = 0;
-const PART_STATE_COMPUTING_DIGEST: 1 = 1;
-const PART_STATE_DIGEST_READY: 2 = 2;
-const PART_STATE_UPLOADING: 3 = 3;
-const PART_STATE_UPLOADED: 4 = 4;
+const PART_STATE_DIGEST_READY: 1 = 1;
+const PART_STATE_UPLOADING: 2 = 2;
+const PART_STATE_UPLOADED: 3 = 3;
 
 class MultiputPart extends BaseMultiput {
     index: number;
@@ -34,7 +33,6 @@ class MultiputPart extends BaseMultiput {
 
     state:
         | typeof PART_STATE_NOT_STARTED
-        | typeof PART_STATE_COMPUTING_DIGEST
         | typeof PART_STATE_DIGEST_READY
         | typeof PART_STATE_UPLOADING
         | typeof PART_STATE_UPLOADED;
@@ -176,7 +174,6 @@ class MultiputPart extends BaseMultiput {
         this.state = PART_STATE_UPLOADING;
 
         this.startTimestamp = Date.now();
-
         this.xhr.uploadFile({
             url: this.sessionEndpoints.uploadPart,
             data: this.blob,
@@ -260,12 +257,8 @@ class MultiputPart extends BaseMultiput {
 
         const eventInfoString = JSON.stringify(eventInfo);
 
-        try {
-            if (!this.sessionEndpoints.logEvent) {
-                throw new Error('logEvent endpoint not found');
-            }
-
-            await retryNumOfTimes(
+        if (this.sessionEndpoints.logEvent) {
+            retryNumOfTimes(
                 (resolve: Function, reject: Function): void => {
                     this.logEvent('part_failure', eventInfoString)
                         .then(resolve)
@@ -273,9 +266,9 @@ class MultiputPart extends BaseMultiput {
                 },
                 this.config.retries,
                 this.config.initialRetryDelayMs,
-            );
-        } catch (err) {
-            this.consoleLog('Failure in logEvent ', error);
+            ).catch(e => this.consoleLog(`Failure in logEvent: ${e.message}`));
+        } else {
+            this.consoleLog('logEvent endpoint not found');
         }
 
         if (this.numUploadRetriesPerformed >= this.config.retries) {
@@ -305,11 +298,6 @@ class MultiputPart extends BaseMultiput {
         }
 
         try {
-            if (this.uploadedBytes < this.partSize) {
-                // Not all bytes were uploaded to the server. So upload part again.
-                throw new Error('Incomplete part.');
-            }
-
             const parts = await this.listParts(this.index, 1);
 
             if (parts && parts.length === 1 && parts[0].offset === this.offset && parts[0].part_id) {
@@ -366,15 +354,9 @@ class MultiputPart extends BaseMultiput {
             url: endpoint,
         });
 
-        return response.entries;
+        return response.data.entries;
     };
 }
 
 export default MultiputPart;
-export {
-    PART_STATE_NOT_STARTED,
-    PART_STATE_COMPUTING_DIGEST,
-    PART_STATE_DIGEST_READY,
-    PART_STATE_UPLOADING,
-    PART_STATE_UPLOADED,
-};
+export { PART_STATE_NOT_STARTED, PART_STATE_DIGEST_READY, PART_STATE_UPLOADING, PART_STATE_UPLOADED };
