@@ -15,6 +15,7 @@ import { isFocusableElement, focus } from '../../utils/dom';
 import shareAccessCellRenderer from './shareAccessCellRenderer';
 import selectionCellRenderer from './selectionCellRenderer';
 import isRowSelectable from './cellRendererHelper';
+import { isSelected as isRowSelected } from './itemSelectionHelper';
 import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
 
 import './ItemList.scss';
@@ -84,8 +85,8 @@ const ItemList = ({
             return '';
         }
 
-        const { id: itemId, type } = items[index];
-        const isSelected = !!selected.find(sel => sel.id === itemId && sel.type === type);
+        const { type } = items[index];
+        const isSelected = !!isRowSelected(items[index], selected);
         const isSelectable = isRowSelectable(
             selectableType,
             extensionsWhitelist,
@@ -109,8 +110,7 @@ const ItemList = ({
         index: number,
         rowData: BoxItem,
     }) => {
-        const { id: itemId, type } = rowData;
-        const isSelected = !!selected.find(sel => sel.id === itemId && sel.type === type);
+        const isSelected = !!isRowSelected(rowData, selected);
 
         // If the click is happening on a clickable element on the item row, ignore row selection
         if (

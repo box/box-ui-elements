@@ -19,6 +19,7 @@ import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
 import Pagination from '../common/pagination/Pagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import { isSelected, containsItem } from './itemSelectionHelper';
 import API from '../../api';
 import Content from './Content';
 import Footer from './Footer';
@@ -781,10 +782,8 @@ class ContentPicker extends Component<Props, State> {
         const newSelected: Array<BoxItem> = isSingleFileSelection ? [] : [...selected];
         const selectedCount: number = newSelected.length;
         const hasHitSelectionLimit: boolean = selectedCount === maxSelectable;
-        const existingIndex: number = newSelected.findIndex(sel => sel.id === id && sel.type === type);
-        const isAlreadySelected =
-            existingIndex !== -1 ||
-            (isSingleFileSelection && selected[0] && selected[0].id === id && selected[0].type === type);
+        const existingIndex: number = newSelected.findIndex(containsItem(item));
+        const isAlreadySelected = existingIndex !== -1 || (isSingleFileSelection && isSelected(item, selected));
         const itemCanSetShareAccess = getProp(item, 'permissions.can_set_share_access', false);
 
         if (isAlreadySelected) {

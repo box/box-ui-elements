@@ -8,6 +8,7 @@ import React from 'react';
 import Checkbox from '../../components/checkbox';
 import RadioButton from '../../components/radio/RadioButton';
 import isRowSelectable from './cellRendererHelper';
+import { isSelected as isRowSelected } from './itemSelectionHelper';
 
 export default (
     onItemSelect: (rowData: BoxItem) => {},
@@ -17,9 +18,9 @@ export default (
     isRadio: boolean,
     selected: Array<BoxItem>,
 ): (({ rowData: BoxItem }) => {}) => ({ rowData }: { rowData: BoxItem }) => {
-    const { name = '', id, type } = rowData;
+    const { name = '' } = rowData;
     const Component = isRadio ? RadioButton : Checkbox;
-    const isSelected = !!selected.find(sel => sel.id === id && sel.type === type);
+    const isSelected = !!isRowSelected(rowData, selected);
 
     if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData, isSelected)) {
         return <span />;
