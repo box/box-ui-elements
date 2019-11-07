@@ -21,7 +21,6 @@ import MultiputPart, {
     PART_STATE_UPLOADED,
     PART_STATE_UPLOADING,
     PART_STATE_DIGEST_READY,
-    PART_STATE_COMPUTING_DIGEST,
     PART_STATE_NOT_STARTED,
 } from './MultiputPart';
 import BaseMultiput from './BaseMultiput';
@@ -486,7 +485,7 @@ class MultiputUpload extends BaseMultiput {
 
         // Reset uploading process for parts that were in progress when the upload failed
         let nextUploadIndex = this.firstUnuploadedPartIndex;
-        while (this.numPartsUploading > 0 || this.numPartsDigestComputing > 0) {
+        while (this.numPartsUploading > 0) {
             const part = this.parts[nextUploadIndex];
             if (part && part.state === PART_STATE_UPLOADING) {
                 part.state = PART_STATE_DIGEST_READY;
@@ -496,13 +495,6 @@ class MultiputUpload extends BaseMultiput {
 
                 this.numPartsUploading -= 1;
                 this.numPartsDigestReady += 1;
-            } else if (part && part.state === PART_STATE_COMPUTING_DIGEST) {
-                part.state = PART_STATE_NOT_STARTED;
-                part.numDigestRetriesPerformed = 0;
-                part.timing = {};
-
-                this.numPartsDigestComputing -= 1;
-                this.numPartsNotStarted += 1;
             }
             nextUploadIndex += 1;
         }

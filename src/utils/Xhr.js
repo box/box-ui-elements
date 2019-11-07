@@ -472,7 +472,6 @@ class Xhr {
                         progressHandler(event);
                     };
                 }
-
                 this.axios({
                     url,
                     data,
@@ -525,6 +524,7 @@ class Xhr {
         }
         if (this.axiosSource) {
             this.axiosSource.cancel();
+            this.axiosSource = axios.CancelToken.source();
         }
     }
 }

@@ -5,7 +5,6 @@ import MultiputUpload from '../MultiputUpload';
 import MultiputPart, {
     PART_STATE_UPLOADED,
     PART_STATE_UPLOADING,
-    PART_STATE_COMPUTING_DIGEST,
     PART_STATE_DIGEST_READY,
     PART_STATE_NOT_STARTED,
 } from '../MultiputPart';
@@ -88,12 +87,11 @@ describe('api/uploads/MultiputUpload', () => {
         test('should process first not started part by uploading it if sha-1 ready', () => {
             // Setup
             multiputUploadTest.parts[0].state = PART_STATE_UPLOADED;
-            multiputUploadTest.parts[1].state = PART_STATE_COMPUTING_DIGEST;
-            multiputUploadTest.parts[2].state = PART_STATE_DIGEST_READY;
+            multiputUploadTest.parts[1].state = PART_STATE_DIGEST_READY;
             multiputUploadTest.numPartsDigestReady = 1;
 
             // Expectations
-            multiputUploadTest.parts[2].upload = jest.fn();
+            multiputUploadTest.parts[1].upload = jest.fn();
 
             // Execute
             multiputUploadTest.uploadNextPart();
@@ -101,7 +99,7 @@ describe('api/uploads/MultiputUpload', () => {
             // Verify
             expect(multiputUploadTest.numPartsDigestReady).toBe(0);
             expect(multiputUploadTest.numPartsUploading).toBe(1);
-            expect(multiputUploadTest.parts[2].upload).toHaveBeenCalled();
+            expect(multiputUploadTest.parts[1].upload).toHaveBeenCalled();
         });
 
         test('should upload only one part', () => {
@@ -170,7 +168,7 @@ describe('api/uploads/MultiputUpload', () => {
 
         test('should update firstUnuploadedPartIndex correctly when first part not done', () => {
             // Setup
-            multiputUploadTest.parts[0].state = PART_STATE_COMPUTING_DIGEST;
+            multiputUploadTest.parts[0].state = PART_STATE_DIGEST_READY;
             multiputUploadTest.parts[1].state = PART_STATE_UPLOADED;
 
             // Execute
@@ -193,7 +191,7 @@ describe('api/uploads/MultiputUpload', () => {
             // Setup
             multiputUploadTest.parts[0].state = PART_STATE_UPLOADED;
             multiputUploadTest.parts[1].state = PART_STATE_UPLOADED;
-            multiputUploadTest.parts[2].state = PART_STATE_COMPUTING_DIGEST;
+            multiputUploadTest.parts[2].state = PART_STATE_DIGEST_READY;
             multiputUploadTest.firstUnuploadedPartIndex = firstUnuploadedPart;
             // Execute
             multiputUploadTest.updateFirstUnuploadedPartIndex();
@@ -482,26 +480,6 @@ describe('api/uploads/MultiputUpload', () => {
 
             expect(multiputUploadTest.processNextParts).toHaveBeenCalled();
         });
-
-        test('should set parts that were in digest computing state back to not started', () => {
-            // Setup
-            multiputUploadTest.numPartsUploaded = 20;
-            multiputUploadTest.numPartsDigestComputing = 1;
-            multiputUploadTest.numPartsNotStarted = 4;
-            multiputUploadTest.firstUnuploadedPartIndex = 0;
-            multiputUploadTest.parts = [{ state: PART_STATE_COMPUTING_DIGEST, numDigestRetriesPerformed: 3 }];
-
-            multiputUploadTest.processNextParts = jest.fn();
-
-            // Execute
-            multiputUploadTest.getSessionSuccessHandler(response.data);
-            expect(multiputUploadTest.numPartsDigestComputing).toBe(0);
-            expect(multiputUploadTest.numPartsNotStarted).toBe(5);
-            expect(multiputUploadTest.parts[0].state).toBe(PART_STATE_NOT_STARTED);
-            expect(multiputUploadTest.parts[0].numDigestRetriesPerformed).toBe(0);
-            expect(multiputUploadTest.parts[0].timing).toStrictEqual({});
-            expect(multiputUploadTest.processNextParts).toHaveBeenCalled();
-        });
     });
 
     describe('getSessionErrorHandler()', () => {
@@ -724,8 +702,7 @@ describe('api/uploads/MultiputUpload', () => {
 
         test('should process first not started part by calling computeDigestForPart', () => {
             multiputUploadTest.parts[0].state = PART_STATE_UPLOADED;
-            multiputUploadTest.parts[1].state = PART_STATE_COMPUTING_DIGEST;
-            multiputUploadTest.parts[2].state = PART_STATE_NOT_STARTED;
+            multiputUploadTest.parts[1].state = PART_STATE_NOT_STARTED;
             multiputUploadTest.numPartsNotStarted = 1;
             multiputUploadTest.computeDigestForPart = jest.fn();
 
@@ -735,7 +712,7 @@ describe('api/uploads/MultiputUpload', () => {
             // Verify
             expect(multiputUploadTest.numPartsNotStarted).toBe(0);
             expect(multiputUploadTest.numPartsDigestComputing).toBe(1);
-            expect(multiputUploadTest.computeDigestForPart).toHaveBeenCalledWith(multiputUploadTest.parts[2]);
+            expect(multiputUploadTest.computeDigestForPart).toHaveBeenCalledWith(multiputUploadTest.parts[1]);
         });
 
         test('should process only one part', () => {

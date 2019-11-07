@@ -24,6 +24,18 @@ exports[`features/classification/Classification should render a classified badge
 </article>
 `;
 
+exports[`features/classification/Classification should render a classified badge with click functionality 1`] = `
+<article
+  className="bdl-Classification "
+>
+  <ClassifiedBadge
+    name="Confidential"
+    onClick={[Function]}
+    tooltipText="fubar"
+  />
+</article>
+`;
+
 exports[`features/classification/Classification should render a classified badge with definition in tooltip 1`] = `
 <article
   className="bdl-Classification "
