@@ -1116,6 +1116,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             history,
             isLarge,
             isVeryLarge,
+            logoUrl,
             onClose,
             measureRef,
             sharedLink,
@@ -1158,6 +1159,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     {hasHeader && (
                         <PreviewHeader
                             file={file}
+                            logoUrl={logoUrl}
                             token={token}
                             onClose={onHeaderClose}
                             onPrint={this.print}
