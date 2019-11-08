@@ -2,11 +2,13 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
+import { Manager, Reference, Popper } from 'react-popper';
 
 import { scrollIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
 import DatalistItem from '../datalist-item';
+import SelectDropdownList from './SelectDropdownList';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
 import { OVERLAY_WRAPPER_CLASS } from '../../constants';
 
@@ -38,6 +40,8 @@ type Props = {
     error?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
+    /** Whether to align the dropdown to the right */
+    isRightAligned: boolean,
     /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
     isScrollable?: boolean,
     multiple: boolean,
@@ -66,12 +70,11 @@ type State = {
     shouldScrollIntoView: boolean,
 };
 
-export const OVERLAY_SCROLLABLE_CLASS = 'bdl-SelectField-overlay--scrollable';
-
 class BaseSelectField extends React.Component<Props, State> {
     static defaultProps = {
         buttonProps: {},
         isDisabled: false,
+        isRightAligned: false,
         isScrollable: false,
         multiple: false,
         options: [],
@@ -365,8 +368,23 @@ class BaseSelectField extends React.Component<Props, State> {
         return selectOptions;
     };
 
+    getSelectButtonWidth = (): null | number => {
+        if (!this.selectButtonRef) {
+            return 0;
+        }
+
+        const { width } = this.selectButtonRef.getBoundingClientRect();
+
+        return width;
+    };
+
+    setSelectButtonRef = setReferenceNode => node => {
+        this.selectButtonRef = node;
+        setReferenceNode(node);
+    };
+
     render() {
-        const { className, multiple, isScrollable } = this.props;
+        const { className, multiple, isRightAligned, isScrollable, selectedValues } = this.props;
         const { isOpen } = this.state;
 
         // @TODO: Need invariants on specific conditions.
@@ -381,6 +399,8 @@ class BaseSelectField extends React.Component<Props, State> {
             listboxProps['aria-multiselectable'] = true;
         }
 
+        const dropdownPlacement = isRightAligned ? 'bottom-end' : 'bottom-start';
+
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
@@ -388,27 +408,38 @@ class BaseSelectField extends React.Component<Props, State> {
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
             >
-                <div className="select-field">
-                    {this.renderSelectButton()}
-                    <div
-                        className={classNames(OVERLAY_WRAPPER_CLASS, {
-                            'is-visible': isOpen,
-                        })}
-                    >
-                        <ul
-                            className={classNames('overlay', {
-                                [OVERLAY_SCROLLABLE_CLASS]: isScrollable,
-                            })}
-                            id={this.selectFieldID}
-                            role="listbox"
-                            // preventDefault on mousedown so blur doesn't happen before click
-                            onMouseDown={event => event.preventDefault()}
-                            {...listboxProps}
-                        >
-                            {this.renderSelectOptions()}
-                        </ul>
-                    </div>
-                </div>
+                <Manager>
+                    <Reference>
+                        {({ ref }) =>
+                            // Need to store the select button reference so we can calculate the button width
+                            // in order to set it as the min width of the dropdown list
+                            React.cloneElement(this.renderSelectButton(), { ref: this.setSelectButtonRef(ref) })
+                        }
+                    </Reference>
+                    {isOpen && (
+                        <Popper placement={dropdownPlacement} className={OVERLAY_WRAPPER_CLASS}>
+                            {({ ref, style, placement, scheduleUpdate }) => {
+                                const buttonWidth = this.getSelectButtonWidth();
+                                const updatedStyle = { ...style, minWidth: buttonWidth };
+
+                                return (
+                                    <SelectDropdownList
+                                        popperRef={ref}
+                                        style={updatedStyle}
+                                        data-placement={placement}
+                                        isScrollable={isScrollable}
+                                        multiple
+                                        scheduleUpdate={scheduleUpdate}
+                                        selectedValues={selectedValues}
+                                        selectFieldID={this.selectFieldID}
+                                    >
+                                        {this.renderSelectOptions()}
+                                    </SelectDropdownList>
+                                );
+                            }}
+                        </Popper>
+                    )}
+                </Manager>
             </div>
         );
     }
