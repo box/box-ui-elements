@@ -63,8 +63,12 @@ checkout_branch() {
     elif [[ "$HOTFIX" != true ]] && [[ "$BRANCH" == "release" ]]; then
         printf "${blue}This is a stable branch release, using latest dist-tag...${end}"
         DISTTAG='latest'
+        if [[ $(git branch | grep -w "release") != "" ]] ; then
+            git branch -D release || return 1
+            printf "${green}Deleted stale release branch!${end}"
+        fi
         printf "${blue}Checking out release...${end}"
-        git checkout release || return 1
+        git checkout -b release || return 1
         GIT_BRANCH=release
         printf "${blue}Resetting to remote release/master...${end}"
         git reset --hard release/master || return 1
