@@ -68,7 +68,7 @@ describe('elements/content-sidebar/versions/VersionsItemButton', () => {
                 isSelected: true,
             });
 
-            expect(wrapper.prop('className')).toContain('bdl-is-selected');
+            expect(wrapper.prop('className')).toContain('bcs-is-selected');
             expect(wrapper).toMatchSnapshot();
         });
     });

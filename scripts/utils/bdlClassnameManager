@@ -30,7 +30,7 @@ const conversionMap = {
     // 'btn': 'bdl-Button',
     // 'btn-group': 'bdl-ButtonGroup',
     // 'btn-plain': 'bdl-PlainButton',
-    // 'btn-primary': 'bdl-PrimaryButton',
+    // 'btn-primary': 'bdl-Button--primary',
     // 'is-disabled': 'bdl-is-disabled',
     // 'label': 'bdl-Label',
     // 'pill': 'bdl-Pill',

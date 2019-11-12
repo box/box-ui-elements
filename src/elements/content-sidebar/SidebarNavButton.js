@@ -45,10 +45,10 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 return (
                     <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
                         <NavButton
-                            activeClassName="bdl-is-selected"
+                            activeClassName="bcs-is-selected"
                             aria-selected={isActiveValue}
                             aria-controls={`${id}-content`}
-                            className="bcs-NavButton"
+                            className="bdl-NavButton"
                             data-resin-target={dataResinTarget}
                             data-testid={dataTestId}
                             getDOMRef={ref}

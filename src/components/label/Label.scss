@@ -9,14 +9,14 @@
     color: $bdl-gray-62;
     font-weight: bold;
 
-    .bdl-label-optional {
+    .bdl-Label-optional {
         padding-left: 3px;
     }
 
     .bdl-InfoIconWithTooltip {
         padding-left: 3px;
 
-        .bdl-Tooltip-icon {
+        .bdl-Label-infoIcon {
             position: relative;
             top: 3px;
         }

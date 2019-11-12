@@ -217,12 +217,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
                 {React.Children.map(children, (tab, i) => {
                     const buttonProps = omit(tab.props, ['className', 'children', 'title']);
 
-                    const classes = classNames(
-                        'bdl-Button',
-                        'bdl-PlainButton',
-                        'tab',
-                        i === selectedIndex ? 'bdl-is-selected' : '',
-                    );
+                    const classes = classNames('bdl-PlainButton', 'tab', i === selectedIndex ? 'bdl-is-selected' : '');
 
                     const ariaControls = `${this.tabviewID}-panel-${i + 1}`;
                     const ariaSelected = i === selectedIndex;
@@ -284,7 +279,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div className="dynamic-tabs-bar" onKeyDown={this.handleKeyDown}>
                 <button
-                    className={classNames('bdl-Button bdl-PlainButton svg-container left-arrow', {
+                    className={classNames('bdl-PlainButton svg-container left-arrow', {
                         hidden: !this.isLeftArrowVisible(),
                     })}
                     onClick={() => onTabFocus(focusedIndex - 1)}
@@ -295,7 +290,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
                 </button>
                 <div className="dynamic-tabs-wrapper">{this.renderTabs()}</div>
                 <button
-                    className={classNames('bdl-Button bdl-PlainButton svg-container right-arrow', {
+                    className={classNames('bdl-PlainButton svg-container right-arrow', {
                         hidden: !this.isRightArrowVisible(),
                     })}
                     onClick={() => onTabFocus(focusedIndex + 1)}

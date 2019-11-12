@@ -33,7 +33,7 @@ exports[`elements/content-sidebar/versions/VersionsItemButton render should rend
 exports[`elements/content-sidebar/versions/VersionsItemButton render should render in enabled state correctly 2`] = `
 <PlainButton
   aria-disabled={false}
-  className="bcs-VersionsItemButton bdl-is-selected"
+  className="bcs-VersionsItemButton bcs-is-selected"
   data-resin-iscurrent={false}
   data-resin-target="select"
   data-testid="versions-item-button"
