@@ -27,17 +27,17 @@ const writeFile = promisify(fs.writeFile);
 */
 
 const conversionMap = {
-    // 'btn': 'bdl-Button',
-    // 'btn-group': 'bdl-ButtonGroup',
-    // 'btn-plain': 'bdl-PlainButton',
-    // 'btn-primary': 'bdl-Button--primary',
-    // 'is-disabled': 'bdl-is-disabled',
-    // 'label': 'bdl-Label',
-    // 'pill': 'bdl-Pill',
-    // 'pill-error': 'bdl-Pill--error',
-    // 'select-button': 'bdl-SelectButton',
-    // 'toggle': 'bdl-Toggle',
-    // 'tooltip': 'bdl-Tooltip',
+    'btn': 'bdl-Button',
+    'btn-group': 'bdl-ButtonGroup',
+    'btn-plain': 'bdl-PlainButton',
+    'btn-primary': 'bdl-Button--primary',
+    'is-disabled': 'bdl-is-disabled',
+    'label': 'bdl-Label',
+    'pill': 'bdl-Pill',
+    'pill-error': 'bdl-Pill--error',
+    'select-button': 'bdl-SelectButton',
+    'toggle': 'bdl-Toggle',
+    'tooltip': 'bdl-Tooltip',
 };
 const scssPrefix = '.';
 const jsPrefixes = ["'", '"', '`'];
