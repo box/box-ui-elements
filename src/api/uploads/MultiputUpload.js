@@ -127,6 +127,7 @@ class MultiputUpload extends BaseMultiput {
         this.commitRetryCount = 0;
         this.clientId = null;
         this.isResumableUploadsEnabled = false;
+        this.numResumeRetries = 0;
     }
 
     /**
@@ -145,6 +146,7 @@ class MultiputUpload extends BaseMultiput {
         this.createSessionNumRetriesPerformed = 0;
         this.partSize = 0;
         this.commitRetryCount = 0;
+        this.numResumeRetries = 0;
     }
 
     /**
@@ -536,8 +538,8 @@ class MultiputUpload extends BaseMultiput {
         } else if (errorData && errorData.status >= 500) {
             this.retryTimeout = setTimeout(this.getSessionInfo, 2 ** this.numResumeRetries * MS_IN_S);
             this.numResumeRetries += 1;
-        } else {
-            // Restart upload process for errors resulting from invalid session
+        } else if (errorData && errorData.status >= 400 && errorData.status < 500) {
+            // Restart upload process for errors resulting from invalid/expired session or no permission
             this.parts.forEach(part => {
                 part.cancel();
             });
@@ -558,6 +560,10 @@ class MultiputUpload extends BaseMultiput {
                 fileId: this.fileId,
             };
             this.upload(uploadOptions);
+        } else {
+            // Handle internet disconnects (error.request && !error.response) and (!error.request) as well as any other unhandled error
+            this.retryTimeout = setTimeout(this.getSessionInfo, 2 ** this.numResumeRetries * MS_IN_S);
+            this.numResumeRetries += 1;
         }
     }
 
