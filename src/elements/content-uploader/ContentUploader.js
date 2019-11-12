@@ -72,7 +72,7 @@ type Props = {
     onError: Function,
     onMinimize?: Function,
     onResume: Function,
-    onSuccess: Function,
+    onUpload: Function,
     overwrite: boolean,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
@@ -126,7 +126,7 @@ class ContentUploader extends Component<Props, State> {
         onComplete: noop,
         onError: noop,
         onResume: noop,
-        onSuccess: noop,
+        onUpload: noop,
         overwrite: true,
         useUploadsManager: false,
         files: [],
@@ -799,7 +799,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     handleUploadSuccess = (item: UploadItem, entries?: BoxItem[]) => {
-        const { onSuccess, useUploadsManager } = this.props;
+        const { onUpload, useUploadsManager } = this.props;
 
         item.progress = 100;
         if (!item.error) {
@@ -817,10 +817,10 @@ class ContentUploader extends Component<Props, State> {
 
         // Broadcast that a file has been uploaded
         if (useUploadsManager) {
-            onSuccess(item);
+            onUpload(item);
             this.checkClearUploadItems();
         } else {
-            onSuccess(item.boxFile);
+            onUpload(item.boxFile);
         }
 
         this.updateViewAndCollection(items, () => {
