@@ -112,7 +112,7 @@ class Notification extends React.Component<Props> {
                 {contents}
                 <button
                     aria-label={formatMessage(messages.clearNotificationButtonText)}
-                    className="close-btn"
+                    className="bdl-CloseButton"
                     onClick={this.onClose}
                     type="button"
                 >

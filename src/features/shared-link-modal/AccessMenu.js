@@ -106,7 +106,7 @@ class AccessMenu extends Component<Props, State> {
                 <DropdownMenu {...accessDropdownMenuProps}>
                     <PlainButton
                         className={classNames('lnk', {
-                            'is-disabled': submitting,
+                            'bdl-is-disabled': submitting,
                         })}
                         disabled={submitting}
                         {...accessMenuButtonProps}

@@ -8,17 +8,17 @@ describe('components/pill-selector-dropdown/Pill', () => {
     test('should render default component', () => {
         const wrapper = shallow(<Pill onRemove={onRemoveStub} text="box" />);
 
-        expect(wrapper.hasClass('pill')).toBe(true);
-        expect(wrapper.hasClass('is-selected')).toBe(false);
+        expect(wrapper.hasClass('bdl-Pill')).toBe(true);
+        expect(wrapper.hasClass('bdl-is-selected')).toBe(false);
         expect(wrapper.childAt(0).text()).toEqual('box');
-        expect(wrapper.childAt(1).hasClass('close-btn')).toBe(true);
-        expect(wrapper.find('.close-btn').prop('onClick')).toEqual(onRemoveStub);
+        expect(wrapper.childAt(1).hasClass('bdl-CloseButton')).toBe(true);
+        expect(wrapper.find('.bdl-CloseButton').prop('onClick')).toEqual(onRemoveStub);
     });
 
     test('should have the selected class when isSelected is true', () => {
         const wrapper = shallow(<Pill isSelected isDisabled={false} onRemove={onRemoveStub} text="box" />);
 
-        expect(wrapper.hasClass('is-selected')).toBe(true);
+        expect(wrapper.hasClass('bdl-is-selected')).toBe(true);
     });
 
     test('should generate pill with invalid class when pill is not valid', () => {
@@ -38,11 +38,11 @@ describe('components/pill-selector-dropdown/Pill', () => {
         const wrapper = shallow(<Pill onRemove={onRemoveStub} text="box" />);
 
         wrapper.setProps({ isDisabled: true });
-        wrapper.find('.close-btn').simulate('click');
+        wrapper.find('.bdl-CloseButton').simulate('click');
         expect(onRemoveStub).toHaveBeenCalledTimes(0);
 
         wrapper.setProps({ isDisabled: false });
-        wrapper.find('.close-btn').simulate('click');
+        wrapper.find('.bdl-CloseButton').simulate('click');
         expect(onRemoveStub).toHaveBeenCalledTimes(1);
     });
 });

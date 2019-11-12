@@ -24,7 +24,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       <TetherComponent
         attachment="middle right"
         bodyElement={<body />}
-        classPrefix="tooltip"
+        classPrefix="bdl-Tooltip"
         constraints={
           Array [
             Object {
@@ -52,7 +52,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         >
           <button
             aria-label="Show Sidebar"
-            className="btn-plain bdl-SidebarToggleButton bdl-is-collapsed"
+            className="bdl-PlainButton bdl-SidebarToggleButton bdl-is-collapsed"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -121,7 +121,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       <TetherComponent
         attachment="middle left"
         bodyElement={<body />}
-        classPrefix="tooltip"
+        classPrefix="bdl-Tooltip"
         constraints={
           Array [
             Object {
@@ -149,7 +149,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         >
           <button
             aria-label="Show Sidebar"
-            className="btn-plain bdl-SidebarToggleButton bdl-is-collapsed"
+            className="bdl-PlainButton bdl-SidebarToggleButton bdl-is-collapsed"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -218,7 +218,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       <TetherComponent
         attachment="middle left"
         bodyElement={<body />}
-        classPrefix="tooltip"
+        classPrefix="bdl-Tooltip"
         constraints={
           Array [
             Object {
@@ -246,7 +246,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         >
           <button
             aria-label="Hide Sidebar"
-            className="btn-plain bdl-SidebarToggleButton"
+            className="bdl-PlainButton bdl-SidebarToggleButton"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -313,7 +313,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       <TetherComponent
         attachment="middle right"
         bodyElement={<body />}
-        classPrefix="tooltip"
+        classPrefix="bdl-Tooltip"
         constraints={
           Array [
             Object {
@@ -341,7 +341,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         >
           <button
             aria-label="Hide Sidebar"
-            className="btn-plain bdl-SidebarToggleButton"
+            className="bdl-PlainButton bdl-SidebarToggleButton"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}

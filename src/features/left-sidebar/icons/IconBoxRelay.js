@@ -17,7 +17,7 @@ const iconName = 'icon-box-relay';
 const IconBoxRelay = ({ className = '', width = 14, color = '#c4c4c4', selected = false, title }: Props) => (
     <AccessibleSVG
         className={classNames(iconName, className, {
-            'is-selected': selected,
+            'bdl-is-selected': selected,
         })}
         title={title}
         viewBox="0 0 14 14"

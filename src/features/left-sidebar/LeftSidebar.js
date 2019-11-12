@@ -246,8 +246,8 @@ class LeftSidebar extends React.Component<Props, State> {
             );
 
         const classes = classNames('left-sidebar-list', className, {
-            'is-loading-empty': showLoadingIndicator && menuItems && menuItems.length === 0,
-            'is-loading': showLoadingIndicator && menuItems && menuItems.length > 0,
+            'bdl-is-loading--empty': showLoadingIndicator && menuItems && menuItems.length === 0,
+            'bdl-is-loading': showLoadingIndicator && menuItems && menuItems.length > 0,
             'lsb-scrollable-shadow-top': this.state.isScrollableAbove,
             'lsb-scrollable-shadow-bottom': this.state.isScrollableBelow,
         });
@@ -311,7 +311,7 @@ class LeftSidebar extends React.Component<Props, State> {
         } = props;
 
         const linkClassNames = classNames('left-sidebar-link', className, {
-            'is-selected': selected,
+            'bdl-is-selected': selected,
         });
 
         const linkProps = {

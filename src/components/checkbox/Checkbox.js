@@ -69,8 +69,8 @@ const Checkbox = ({
     );
 
     return (
-        <div className={`checkbox-container ${className} ${isDisabled ? 'is-disabled' : ''}`}>
-            {fieldLabel && <div className="label">{fieldLabel}</div>}
+        <div className={`checkbox-container ${className} ${isDisabled ? 'bdl-is-disabled' : ''}`}>
+            {fieldLabel && <div className="bdl-Label">{fieldLabel}</div>}
             {tooltip ? <CheckboxTooltip label={checkboxLabel} tooltip={tooltip} /> : checkboxLabel}
             {description ? <div className="checkbox-description">{description}</div> : null}
             {subsection ? <div className="checkbox-subsection">{subsection}</div> : null}

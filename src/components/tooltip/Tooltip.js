@@ -243,17 +243,17 @@ class Tooltip extends React.Component<Props, State> {
 
         const bodyEl = bodyElement instanceof HTMLElement ? bodyElement : document.body;
 
-        const classes = classNames('tooltip', className, {
-            'is-callout': theme === CALLOUT_THEME,
-            'is-error': theme === ERROR_THEME,
-            'with-close-button': withCloseButton,
+        const classes = classNames('bdl-Tooltip', className, {
+            'bdl-is-callout': theme === CALLOUT_THEME,
+            'bdl-is-error': theme === ERROR_THEME,
+            'bdl-has-closeButton': withCloseButton,
         });
 
         return (
             <TetherComponent
                 attachment={tetherPosition.attachment}
                 bodyElement={bodyEl}
-                classPrefix="tooltip"
+                classPrefix="bdl-Tooltip"
                 constraints={constraints}
                 enabled={showTooltip}
                 targetAttachment={tetherPosition.targetAttachment}
@@ -264,7 +264,7 @@ class Tooltip extends React.Component<Props, State> {
                     <div className={classes} id={this.tooltipID} role="tooltip">
                         {text}
                         {withCloseButton && (
-                            <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
+                            <PlainButton className="bdl-Tooltip-closeButton" onClick={this.closeTooltip}>
                                 <IconClose />
                             </PlainButton>
                         )}

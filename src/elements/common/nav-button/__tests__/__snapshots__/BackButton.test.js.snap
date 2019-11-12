@@ -9,7 +9,7 @@ exports[`elements/common/nav-button/BackButton should match its snapshot 1`] = `
       type="button"
     >
       <button
-        className="btn-plain bdl-BackButton"
+        className="bdl-PlainButton bdl-BackButton"
         onClick={[Function]}
         type="button"
       >

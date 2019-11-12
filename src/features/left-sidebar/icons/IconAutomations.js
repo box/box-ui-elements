@@ -17,7 +17,7 @@ const iconName = 'icon-automations';
 const IconAutomations = ({ className = '', width = 14, color = '#c4c4c4', selected = false }: Props) => (
     <AccessibleSVG
         className={classNames(iconName, className, {
-            'is-selected': selected,
+            'bdl-is-selected': selected,
         })}
         viewBox="0 0 14 14"
         width={width}

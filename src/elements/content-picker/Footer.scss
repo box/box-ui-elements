@@ -18,7 +18,7 @@
         max-width: 100%;
         margin: 0;
 
-        .btn-content {
+        .bdl-Button-content {
             display: inline-block;
             width: 100%;
             overflow: hidden;
@@ -37,17 +37,17 @@
     }
 
     .bcp-footer-actions {
-        .btn {
+        .bdl-Button {
             width: 40px;
             height: 32px;
             padding: 0;
         }
 
-        .btn:first-child {
+        .bdl-Button:first-child {
             border-right: 0;
         }
 
-        .btn-primary svg {
+        .bdl-Button--primary svg {
             fill: #fff;
         }
     }
@@ -57,7 +57,7 @@
         flex: 1 0 auto;
     }
 
-    .btn-group {
+    .bdl-ButtonGroup {
         margin-right: 5px;
         margin-left: 5px;
     }

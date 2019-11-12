@@ -360,7 +360,7 @@ class Flyout extends React.Component<Props, State> {
         const tetherPosition = positions[position];
 
         if (elements.length !== 2) {
-            throw new Error('Flyout must have exactly two children: A button component and a <Overlay>');
+            throw new Error('Flyout must have exactly two children: A button component and an <Overlay>');
         }
 
         const overlayButton = elements[0];

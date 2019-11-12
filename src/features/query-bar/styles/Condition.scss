@@ -65,12 +65,12 @@
         }
 
         .select-field {
-            .select-button {
+            .bdl-SelectButton {
                 width: 160px;
                 border-radius: 5px;
             }
 
-            .select-button.placeholder {
+            .bdl-SelectButton.placeholder {
                 color: $bdl-gray-62;
             }
         }
@@ -83,12 +83,12 @@
             flex: 1;
         }
 
-        .select-container {
+        .bdl-Select-content {
             width: 110px;
             padding-right: 10px;
             padding-left: 10px;
 
-            .select-button {
+            .bdl-SelectButton {
                 border-radius: 5px;
             }
         }
@@ -135,23 +135,23 @@
             flex: 1;
         }
 
-        .select-container {
+        .bdl-Select-content {
             width: 100%;
 
-            .select-button {
+            .bdl-SelectButton {
                 width: 160px;
                 border-radius: 5px;
             }
 
-            .select-button.placeholder {
+            .bdl-SelectButton.placeholder {
                 color: $bdl-gray-62;
             }
         }
     }
 
-    .condition-value-dropdown-container.show-error {
-        .select-container {
-            button.select-button {
+    .condition-value-dropdown-container.bdl-has-error {
+        .bdl-Select-content {
+            button.bdl-SelectButton {
                 @include error-border();
             }
         }
@@ -166,7 +166,7 @@
             @include error-border();
         }
 
-        .select-button.placeholder {
+        .bdl-SelectButton.placeholder {
             @include error-border();
         }
     }

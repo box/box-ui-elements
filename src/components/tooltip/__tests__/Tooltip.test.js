@@ -116,7 +116,7 @@ describe('components/tooltip/Tooltip', () => {
             const tooltip = wrapper.childAt(1);
             expect(wrapper.prop('enabled')).toBe(true);
             expect(tooltip.is('div')).toBe(true);
-            expect(tooltip.hasClass('tooltip')).toBe(true);
+            expect(tooltip.hasClass('bdl-Tooltip')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
             expect(tooltip.text()).toEqual('hi');
         });
@@ -200,7 +200,7 @@ describe('components/tooltip/Tooltip', () => {
             expect(component.prop('onMouseLeave')).toBeFalsy();
             expect(component.prop('tabIndex')).toBeFalsy();
             expect(tooltip.is('div')).toBe(true);
-            expect(tooltip.hasClass('tooltip')).toBe(true);
+            expect(tooltip.hasClass('bdl-Tooltip')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
             expect(tooltip.text()).toEqual('hi');
         });
@@ -212,7 +212,7 @@ describe('components/tooltip/Tooltip', () => {
                 </Tooltip>,
             );
 
-            expect(wrapper.find('[role="tooltip"]').hasClass('is-error')).toBe(true);
+            expect(wrapper.find('[role="tooltip"]').hasClass('bdl-is-error')).toBe(true);
         });
 
         test('should render children only when tooltip is disabled', () => {

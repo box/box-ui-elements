@@ -88,16 +88,16 @@
         margin-bottom: 0;
     }
 
-    &.is-loading {
+    &.bdl-is-loading {
         margin-bottom: 0;
     }
 
-    &.is-loading-empty {
+    &.bdl-is-loading--empty {
         margin-bottom: 40px;
     }
 
     // Override nav-list default color for link
-    .left-sidebar-link:not(.is-selected) {
+    .left-sidebar-link:not(.bdl-is-selected) {
         color: $light-charcoal;
 
         &:hover {
@@ -278,7 +278,7 @@
         }
     }
 
-    &.is-selected,
+    &.bdl-is-selected,
     &.nav-link-callout-enabled {
         color: $charcoal;
         font-weight: bold;
@@ -287,12 +287,12 @@
             fill: $lsb-menu-selected-bg-highlight;
         }
 
-        .is-selected .fill-color {
+        .bdl-is-selected .fill-color {
             fill: currentColor;
         }
     }
 
-    &.is-selected:not(.nav-link-callout-enabled) {
+    &.bdl-is-selected:not(.nav-link-callout-enabled) {
         box-shadow: inset 2px 0 0 $lsb-menu-selected-bg-highlight;
 
         @include medium-size {

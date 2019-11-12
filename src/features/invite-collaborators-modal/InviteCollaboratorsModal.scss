@@ -1,7 +1,7 @@
 @import '../../styles/variables';
 
 .invite-collaborators-modal {
-    .label {
+    .bdl-Label {
         color: $bdl-gray-62;
         font-weight: bold;
     }
@@ -31,11 +31,11 @@
         margin-bottom: 20px;
     }
 
-    .select-container {
+    .bdl-Select-content {
         width: 100%;
     }
 
-    .select-input-container {
+    .bdl-Select {
         margin: 0;
     }
 
@@ -47,7 +47,7 @@
             overflow: auto;
         }
 
-        .pill-selector-input-wrapper {
+        .bdl-PillSelector {
             width: 100%;
             height: 60px;
         }

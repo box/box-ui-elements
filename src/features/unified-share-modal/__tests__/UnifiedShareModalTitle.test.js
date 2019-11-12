@@ -28,7 +28,7 @@ describe('features/unified-share-modal/HeaderTitle', () => {
         wrapper = getWrapper();
     });
 
-    test('should render classifiction label with title', () => {
+    test('should render classification label with title', () => {
         expect(wrapper).toMatchSnapshot();
     });
 });

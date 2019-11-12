@@ -2,16 +2,16 @@
 
 exports[`components/pill-selector-dropdown/Pill should generate pill with invalid class when pill is not valid 1`] = `
 <span
-  className="pill is-selected is-invalid"
+  className="bdl-Pill bdl-is-selected bdl-is-invalid"
 >
   <span
-    className="pill-text"
+    className="bdl-Pill-text"
   >
     box
   </span>
   <span
     aria-hidden="true"
-    className="close-btn"
+    className="bdl-CloseButton"
     onClick={[MockFunction]}
   >
     ✕

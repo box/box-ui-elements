@@ -18,7 +18,7 @@ const iconName = 'icon-notes';
 const IconNotes = ({ className = '', color = '#c4c4c4', title, width = 14, selected = false }: Props) => (
     <AccessibleSVG
         className={classNames(iconName, className, {
-            'is-selected': selected,
+            'bdl-is-selected': selected,
         })}
         title={title}
         viewBox="0 0 14 14"

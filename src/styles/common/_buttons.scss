@@ -2,7 +2,7 @@
  * Buttons
  **************************************/
 
-.btn {
+.bdl-Button {
     position: relative;
     display: inline-block;
     box-sizing: border-box;
@@ -37,7 +37,7 @@
         outline: none;
     }
 
-    &:not(.is-disabled) {
+    &:not(.bdl-is-disabled) {
         &:hover {
             background-color: darken($white, 3%);
         }
@@ -53,18 +53,18 @@
         }
     }
 
-    &.is-disabled,
-    &.is-loading {
+    &.bdl-is-disabled,
+    &.bdl-is-loading {
         top: 0; /* prevents disabled button from being depressed on click */
         cursor: default;
     }
 
-    &.is-loading {
-        .btn-content {
+    &.bdl-is-loading {
+        .bdl-Button-content {
             visibility: hidden;
         }
 
-        .btn-loading-indicator {
+        .bdl-Button-loadingIndicator {
             position: absolute;
             top: 0;
             left: 0;
@@ -76,15 +76,15 @@
         }
     }
 
-    &.is-disabled {
+    &.bdl-is-disabled {
         box-shadow: none;
         opacity: .4;
     }
 }
 
-.btn-plain,
-.btn-plain:hover,
-.btn-plain:active {
+.bdl-PlainButton,
+.bdl-PlainButton:hover,
+.bdl-PlainButton:active {
     margin: 0;
     padding: 0;
     font-weight: normal;
@@ -92,16 +92,16 @@
     cursor: pointer;
 }
 
-.btn-plain,
-.btn-plain:hover,
-.btn-plain:active,
-.btn-plain:focus {
+.bdl-PlainButton,
+.bdl-PlainButton:hover,
+.bdl-PlainButton:active,
+.bdl-PlainButton:focus {
     background: transparent;
     box-shadow: none;
 }
 
 /* This setting is being used to override the dotted border on a firefox button */
-button.btn-plain::-moz-focus-inner {
+button.bdl-PlainButton::-moz-focus-inner {
     border: 0 none;
 }
 
@@ -109,13 +109,13 @@ button svg {
     pointer-events: none;
 }
 
-.btn-primary {
+.bdl-Button--primary {
     color: $white;
     background-color: $primary-color;
     border-color: $primary-color;
     -webkit-font-smoothing: antialiased;
 
-    &:not(.is-disabled) {
+    &:not(.bdl-is-disabled) {
         &:focus {
             border-color: $primary-color;
             box-shadow: inset 0 0 0 1px fade-out($white, .2), 0 1px 2px fade-out($black, .9);
@@ -133,8 +133,8 @@ button svg {
         }
     }
 
-    &.is-loading {
-        .btn-content {
+    &.bdl-is-loading {
+        .bdl-Button-content {
             background-color: $bdl-gray-30;
         }
     }

@@ -25,7 +25,7 @@ describe('components/checkbox/Checkbox', () => {
         ).toEqual('checkbox-pointer-target');
         expect(wrapper.find('label').text()).toEqual('Check things');
         expect(wrapper.find('input').prop('checked')).toBeFalsy();
-        expect(wrapper.find('.label').length).toBe(0);
+        expect(wrapper.find('.bdl-Label').length).toBe(0);
     });
 
     test('should pass rest of props to input', () => {
@@ -79,7 +79,7 @@ describe('components/checkbox/Checkbox', () => {
         const fieldLabel = 'Label';
         wrapper.setProps({ fieldLabel });
 
-        const label = wrapper.find('.label');
+        const label = wrapper.find('.bdl-Label');
         expect(label.length).toBe(1);
         expect(label.contains(fieldLabel)).toBe(true);
     });

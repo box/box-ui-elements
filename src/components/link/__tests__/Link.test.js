@@ -85,7 +85,7 @@ describe('components/link/Link', () => {
     test('should correctly render LinkButton', () => {
         const wrapper = mount(<LinkButton>a link</LinkButton>);
 
-        expect(wrapper.find('a').hasClass('btn')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-Button')).toBe(true);
         expect(wrapper.find('a').prop('children')).toEqual('a link');
         expect(wrapper.find('a').prop('href')).toEqual('#');
     });
@@ -93,7 +93,7 @@ describe('components/link/Link', () => {
     test('should correctly render LinkButton with proper href', () => {
         const wrapper = mount(<LinkButton href="foo">a link</LinkButton>);
 
-        expect(wrapper.find('a').hasClass('btn')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-Button')).toBe(true);
         expect(wrapper.find('a').prop('children')).toEqual('a link');
         expect(wrapper.find('a').prop('href')).toEqual('foo');
     });
@@ -112,8 +112,8 @@ describe('components/link/Link', () => {
     test('should correctly render LinkPrimaryButton', () => {
         const wrapper = mount(<LinkPrimaryButton>a link</LinkPrimaryButton>);
 
-        expect(wrapper.find('a').hasClass('btn')).toBe(true);
-        expect(wrapper.find('a').hasClass('btn-primary')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-Button')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-Button--primary')).toBe(true);
         expect(wrapper.find('a').prop('children')).toEqual('a link');
         expect(wrapper.find('a').prop('href')).toEqual('#');
     });
@@ -121,8 +121,8 @@ describe('components/link/Link', () => {
     test('should correctly render LinkPrimaryButton with proper href', () => {
         const wrapper = mount(<LinkPrimaryButton href="foo">a link</LinkPrimaryButton>);
 
-        expect(wrapper.find('a').hasClass('btn')).toBe(true);
-        expect(wrapper.find('a').hasClass('btn-primary')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-Button')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-Button--primary')).toBe(true);
         expect(wrapper.find('a').prop('children')).toEqual('a link');
         expect(wrapper.find('a').prop('href')).toEqual('foo');
     });

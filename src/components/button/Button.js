@@ -25,7 +25,7 @@ class Button extends React.Component<Props> {
 
     handleClick = (event: SyntheticEvent<HTMLButtonElement>) => {
         const { isDisabled, onClick } = this.props;
-        if (isDisabled || (this.btnElement && this.btnElement.classList.contains('is-disabled'))) {
+        if (isDisabled || (this.btnElement && this.btnElement.classList.contains('bdl-is-disabled'))) {
             event.preventDefault();
             event.stopPropagation();
             return;
@@ -54,11 +54,11 @@ class Button extends React.Component<Props> {
         }
 
         const styleClassName = classNames(
-            'btn',
+            'bdl-Button',
             {
-                'is-disabled': isDisabled,
-                'is-loading': isLoading,
-                'is-selected': isSelected,
+                'bdl-is-disabled': isDisabled,
+                'bdl-is-loading': isLoading,
+                'bdl-is-selected': isSelected,
             },
             className,
         );
@@ -77,8 +77,8 @@ class Button extends React.Component<Props> {
                 type={type}
                 {...buttonProps}
             >
-                <span className="btn-content">{children}</span>
-                {isLoading && <LoadingIndicator className="btn-loading-indicator" />}
+                <span className="bdl-Button-content">{children}</span>
+                {isLoading && <LoadingIndicator className="bdl-Button-loadingIndicator" />}
             </button>
         );
         if (showRadar) {

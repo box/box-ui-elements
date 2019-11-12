@@ -8,7 +8,7 @@ $arrow-size: 6px;
 $horizontal-offset: 10px;
 $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
 
-.tooltip {
+.bdl-Tooltip {
     position: relative;
     max-width: 200px;
     padding: 8px $horizontal-offset;
@@ -28,7 +28,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         content: '';
     }
 
-    &.is-error::after {
+    &.bdl-is-error::after {
         position: absolute;
         width: 0;
         height: 0;
@@ -36,17 +36,17 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         content: '';
     }
 
-    &.is-error {
+    &.bdl-is-error {
         color: $bdl-gray;
         background-color: $bdl-watermelon-red-10;
         border: 1px solid $bdl-watermelon-red-50;
 
-        .tooltip-close-button .icon-close .fill-color {
+        .bdl-Tooltip-closeButton .icon-close .fill-color {
             fill: $bdl-gray;
         }
     }
 
-    &.is-callout {
+    &.bdl-is-callout {
         background-color: $bdl-purple-rain;
         border-color: $bdl-purple-rain;
     }
@@ -55,11 +55,11 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-left: -8px;
     }
 
-    &.with-close-button {
+    &.bdl-has-closeButton {
         padding-right: 28px;
     }
 
-    .tooltip-close-button {
+    .bdl-Tooltip-closeButton {
         position: absolute;
         top: 9px;
         right: 3px;
@@ -74,7 +74,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
     }
 
-    .tooltip-target-attached-top.tooltip-target-attached-center > & {
+    .bdl-Tooltip-target-attached-top.bdl-Tooltip-target-attached-center > & {
         margin-bottom: $arrow-size + $tooltip-offset;
 
         &::before {
@@ -84,7 +84,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
             border-top-color: inherit;
         }
 
-        &.is-error::after {
+        &.bdl-is-error::after {
             top: 100%;
             left: 50%;
             margin-left: -$arrow-size + 1;
@@ -92,7 +92,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
     }
 
-    .tooltip-target-attached-top.tooltip-target-attached-left > & {
+    .bdl-Tooltip-target-attached-top.bdl-Tooltip-target-attached-left > & {
         margin-bottom: $arrow-size + $tooltip-offset;
 
         &::before {
@@ -101,14 +101,14 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
             border-top-color: inherit;
         }
 
-        &.is-error::after {
+        &.bdl-is-error::after {
             top: 100%;
             left: $horizontal-offset + 1;
             border-top-color: $bdl-watermelon-red-10;
         }
     }
 
-    .tooltip-target-attached-top.tooltip-target-attached-right > & {
+    .bdl-Tooltip-target-attached-top.bdl-Tooltip-target-attached-right > & {
         margin-bottom: $arrow-size + $tooltip-offset;
 
         &::before {
@@ -117,14 +117,14 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
             border-top-color: inherit;
         }
 
-        &.is-error::after {
+        &.bdl-is-error::after {
             top: 100%;
             right: $horizontal-offset + 1;
             border-top-color: $bdl-watermelon-red-10;
         }
     }
 
-    .tooltip-target-attached-middle.tooltip-target-attached-right > & {
+    .bdl-Tooltip-target-attached-middle.bdl-Tooltip-target-attached-right > & {
         margin-left: $arrow-size + $tooltip-offset;
 
         &::before {
@@ -134,7 +134,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
             border-right-color: inherit;
         }
 
-        &.is-error::after {
+        &.bdl-is-error::after {
             top: 50%;
             right: 100%;
             margin-top: -$arrow-size + 1;
@@ -142,7 +142,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
     }
 
-    .tooltip-target-attached-middle.tooltip-target-attached-left > & {
+    .bdl-Tooltip-target-attached-middle.bdl-Tooltip-target-attached-left > & {
         margin-right: $arrow-size + $tooltip-offset;
 
         &::before {
@@ -152,7 +152,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
             border-left-color: inherit;
         }
 
-        &.is-error::after {
+        &.bdl-is-error::after {
             top: 50%;
             left: 100%;
             margin-top: -$arrow-size + 1;
@@ -160,7 +160,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
     }
 
-    .tooltip-target-attached-bottom.tooltip-target-attached-center > & {
+    .bdl-Tooltip-target-attached-bottom.bdl-Tooltip-target-attached-center > & {
         margin-top: $arrow-size + $tooltip-offset;
 
         &::before {
@@ -170,7 +170,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
             border-bottom-color: inherit;
         }
 
-        &.is-error::after {
+        &.bdl-is-error::after {
             bottom: 100%;
             left: 50%;
             margin-left: -$arrow-size + 1;
@@ -178,7 +178,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
     }
 
-    .tooltip-target-attached-bottom.tooltip-target-attached-left > & {
+    .bdl-Tooltip-target-attached-bottom.bdl-Tooltip-target-attached-left > & {
         margin-top: $arrow-size + $tooltip-offset;
 
         &::before {
@@ -187,14 +187,14 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
             border-bottom-color: inherit;
         }
 
-        &.is-error::after {
+        &.bdl-is-error::after {
             bottom: 100%;
             left: $horizontal-offset + 1;
             border-bottom-color: $bdl-watermelon-red-10;
         }
     }
 
-    .tooltip-target-attached-bottom.tooltip-target-attached-right > & {
+    .bdl-Tooltip-target-attached-bottom.bdl-Tooltip-target-attached-right > & {
         margin-top: $arrow-size + $tooltip-offset;
 
         &::before {
@@ -203,7 +203,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
             border-bottom-color: inherit;
         }
 
-        &.is-error::after {
+        &.bdl-is-error::after {
             right: $horizontal-offset + 1;
             bottom: 100%;
             border-bottom-color: $bdl-watermelon-red-10;
@@ -214,7 +214,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
 // tooltip is a tethered element and as such attached to body
 // however the body may not have box specific classes and hence the
 // tooltip needs to manually inherit few of the body styles to look correct.
-.tooltip-element {
+.bdl-Tooltip-element {
     @include box-sizing;
     @include common-typography;
 

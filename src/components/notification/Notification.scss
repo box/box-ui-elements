@@ -73,15 +73,15 @@
         flex: none;
         color: $white;
 
-        &.btn.is-disabled,
-        &.btn:not(.is-disabled) {
+        &.bdl-Button.bdl-is-disabled,
+        &.bdl-Button:not(.bdl-is-disabled) {
             margin: 0 5px;
             padding: 7px 13px;
             background-color: transparent;
             border-color: $bdl-gray-10;
         }
 
-        &.close-btn {
+        &.bdl-CloseButton {
             display: flex;
             padding: 2px 7px;
             font-weight: bold;

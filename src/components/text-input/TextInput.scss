@@ -19,7 +19,7 @@
         margin-left: -24px;
     }
 
-    .label {
+    .bdl-Label {
         word-wrap: break-word;
     }
 
@@ -47,7 +47,7 @@
     }
 
     &.is-required,
-    &.show-error {
+    &.bdl-has-error {
         input {
             border-color: $bdl-watermelon-red;
         }

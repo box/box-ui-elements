@@ -26,7 +26,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} placeholder={placeholder} />,
             );
             const input = wrapper.find('textarea');
-            const selector = wrapper.find('.pill-selector-input-wrapper');
+            const selector = wrapper.find('.bdl-PillSelector');
 
             expect(wrapper.find('Tooltip').exists()).toBe(true);
             expect(selector.length).toBe(1);
@@ -41,30 +41,30 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should add is-focused class when input is focused', () => {
+        test('should add bdl-is-focused class when input is focused', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
             wrapper.setState({ isFocused: true });
 
-            expect(wrapper.find('.is-focused').length).toBe(1);
+            expect(wrapper.find('.bdl-is-focused').length).toBe(1);
         });
 
-        test('should not add is-focused class when input is not focused', () => {
+        test('should not add bdl-is-focused class when input is not focused', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
             wrapper.setState({ isFocused: false });
 
-            expect(wrapper.find('.is-focused').length).toBe(0);
+            expect(wrapper.find('.bdl-is-focused').length).toBe(0);
         });
 
-        test('should add show-error class when error is given', () => {
+        test('should add bdl-has-error class when error is given', () => {
             const wrapper = shallow(<PillSelector error="hello" onInput={onInputStub} onRemove={onRemoveStub} />);
 
-            expect(wrapper.find('.show-error').length).toBe(1);
+            expect(wrapper.find('.bdl-has-error').length).toBe(1);
         });
 
-        test('should not add show-error class when error is not given', () => {
+        test('should not add bdl-has-error class when error is not given', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
 
-            expect(wrapper.find('.show-error').length).toBe(0);
+            expect(wrapper.find('.bdl-has-error').length).toBe(0);
         });
 
         test('should render pills when there are selected options using legacy text attribute', () => {
@@ -153,7 +153,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             );
             const input = wrapper.find('textarea');
 
-            expect(input.hasClass('pill-selector-input')).toBe(true);
+            expect(input.hasClass('bdl-PillSelector-input')).toBe(true);
             expect(input.hasClass(className)).toBe(true);
         });
 
@@ -198,7 +198,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
         test('should set isFocused to false when called', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
             wrapper.setState({ isFocused: true });
-            const inputWrapper = wrapper.find('.pill-selector-input-wrapper');
+            const inputWrapper = wrapper.find('.bdl-PillSelector');
             inputWrapper.simulate('blur');
             expect(wrapper.state('isFocused')).toBe(false);
         });
@@ -217,7 +217,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
     describe('onFocus', () => {
         test('should set isFocused to true when called', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
-            const inputWrapper = wrapper.find('.pill-selector-input-wrapper');
+            const inputWrapper = wrapper.find('.bdl-PillSelector');
             inputWrapper.simulate('focus');
             expect(wrapper.state('isFocused')).toBe(true);
         });

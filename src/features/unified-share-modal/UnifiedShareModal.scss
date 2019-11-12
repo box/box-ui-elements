@@ -15,7 +15,7 @@
         font-weight: bold;
     }
 
-    .tooltip-close-button {
+    .bdl-Tooltip-closeButton {
         top: 8px;
         right: 4px;
     }
@@ -44,13 +44,13 @@
     }
 }
 
-.usm-share-access-menu .menu-item.is-select-item.is-selected::before,
-.usm-share-permissions-menu .menu-item.is-select-item.is-selected::before {
+.usm-share-access-menu .menu-item.is-select-item.bdl-is-selected::before,
+.usm-share-permissions-menu .menu-item.is-select-item.bdl-is-selected::before {
     bottom: inherit;
 }
 
 .unified-share-modal {
-    /** title and classifiction label */
+    /** title and classification label */
     .bdl-UnifiedShareModalTitle {
         display: flex;
         flex-flow: row wrap;
@@ -91,17 +91,17 @@
         margin-bottom: 20px;
     }
 
-    .pill-selector-wrapper .pill-selector-input-wrapper, // need both selectors for specificity
+    .bdl-PillSelectorWrapper .bdl-PillSelector, // need both selectors for specificity
     textarea {
         /* override for DOM element in `TextArea` which provides no id/class for targeting */
         width: 100%;
     }
 
-    .pill-selector-wrapper {
+    .bdl-PillSelectorWrapper {
         margin-bottom: 10px;
     }
 
-    .pill-selector-wrapper.scrollable {
+    .bdl-PillSelectorWrapper.scrollable {
         .overlay-wrapper {
             position: absolute;
             height: 280px;
@@ -124,25 +124,25 @@
             color: $bdl-gray-50;
         }
 
-        .pill-selector-input-wrapper {
+        .bdl-PillSelector {
             min-height: 68px;
         }
     }
 
-    .pill-selector-input-wrapper {
+    .bdl-PillSelector {
         margin-top: 10px;
         border: 1px solid $bdl-gray-20;
 
-        .pill-selector-input::placeholder {
+        .bdl-PillSelector-input::placeholder {
             color: $bdl-gray-50;
         }
 
-        &.is-disabled {
+        &.bdl-is-disabled {
             color: $bdl-gray-30;
             background-color: $bdl-gray-02;
             box-shadow: none;
 
-            .pill-selector-input::placeholder {
+            .bdl-PillSelector-input::placeholder {
                 color: $bdl-gray-50;
             }
 
@@ -168,7 +168,7 @@
                 margin-bottom: 0;
             }
 
-            .toggle-simple-label {
+            .bdl-Toggle-labelContent {
                 color: $bdl-gray;
                 cursor: pointer;
             }
@@ -214,7 +214,7 @@
     }
 
     .shared-link-access-row {
-        .btn-plain {
+        .bdl-PlainButton {
             margin-right: 10px;
 
             &.can-edit-btn {

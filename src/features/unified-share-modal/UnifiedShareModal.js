@@ -692,8 +692,8 @@ class UnifiedShareModal extends React.Component<Props, State> {
         // focus logic at modal level
         const extendedModalProps = {
             focusElementSelector: canInvite
-                ? '.pill-selector-input' // focus on invite collabs field
-                : '.toggle-simple', // focus on shared link toggle
+                ? '.bdl-PillSelector-input' // focus on invite collabs field
+                : '.bdl-Toggle-label', // focus on shared link toggle
             ...modalProps,
         };
 

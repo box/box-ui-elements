@@ -43,7 +43,7 @@
             margin: 0;
         }
 
-        &:not(.show-error) input {
+        &:not(.bdl-has-error) input {
             height: 16px;
             padding: 0;
             border: none;
