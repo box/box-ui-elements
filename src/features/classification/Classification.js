@@ -15,7 +15,7 @@ type Props = {
     definition?: string,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
     name?: string,
-    onClick?: () => void,
+    onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
 };
 
 const Classification = ({ definition, className = '', messageStyle, name, onClick }: Props) => {

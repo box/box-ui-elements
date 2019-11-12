@@ -1,3 +1,5 @@
+<img width="50%" alt="Box Elements" src="https://repository-images.githubusercontent.com/95743138/c161b500-021b-11ea-8bf9-3aa8776acdec" />
+
 [![Project Status](https://img.shields.io/badge/status-active-brightgreen.svg)](http://opensource.box.com/badges)
 [![build status](https://travis-ci.com/box/box-ui-elements.svg?branch=master)](https://travis-ci.com/box/box-ui-elements)
 [![CircleCI](https://circleci.com/gh/box/box-ui-elements/tree/master.svg?style=shield)](https://circleci.com/gh/box/box-ui-elements/tree/master)

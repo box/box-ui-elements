@@ -91,7 +91,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @param {Object} [newState] - optional state to set
      * @return {void}
      */
-    onApiError(error: ElementsXhrError, code: string, newState: Object = {}) {
+    onApiError = (error: ElementsXhrError, code: string, newState: Object = {}) => {
         const { onError }: Props = this.props;
         const { status } = error;
         const isValidError = isUserCorrectableError(status);
@@ -104,7 +104,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             error,
             [IS_ERROR_DISPLAYED]: isValidError,
         });
-    }
+    };
 
     /**
      * Checks upload permission

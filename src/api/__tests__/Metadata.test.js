@@ -72,6 +72,15 @@ describe('api/Metadata', () => {
         });
     });
 
+    describe('getMetadataTemplateSchemaUrl()', () => {
+        test('should return url for to get metadata schema using template key', () => {
+            const templateKey = 'templateKey_123';
+            expect(metadata.getMetadataTemplateSchemaUrl(templateKey)).toBe(
+                `https://api.box.com/2.0/metadata_templates/enterprise/${templateKey}/schema`,
+            );
+        });
+    });
+
     describe('getMetadataTemplateUrlForScope()', () => {
         test('should return correct template url for scope', () => {
             expect(metadata.getMetadataTemplateUrlForScope('scope')).toBe(
@@ -245,6 +254,20 @@ describe('api/Metadata', () => {
                     limit: 1000,
                 },
             });
+        });
+    });
+
+    describe('getSchemaByTemplateKey()', () => {
+        test('should return metadata template for provided template key', async () => {
+            const metadataTemplate = 'metadataTemplate';
+            const templateKey = 'templateKey_123';
+            const url = `https://api.box.com/2.0/metadata_templates/enterprise/${templateKey}/schema`;
+            metadata.xhr.get = jest.fn().mockReturnValueOnce(Promise.resolve(metadataTemplate));
+
+            const response = await metadata.getSchemaByTemplateKey(templateKey);
+
+            expect(metadata.xhr.get).toHaveBeenCalledWith({ url });
+            expect(response).toBe(metadataTemplate);
         });
     });
 

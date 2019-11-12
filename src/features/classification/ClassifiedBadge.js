@@ -11,7 +11,7 @@ import './ClassifiedBadge.scss';
 
 type Props = {
     name: string,
-    onClick?: () => void,
+    onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
     tooltipPosition?: Position,
     tooltipText?: string,
 };

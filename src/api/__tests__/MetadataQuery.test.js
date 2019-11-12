@@ -6,8 +6,6 @@ import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../../co
 let metadataQuery;
 let cache;
 const marker = 'marker_123456789';
-const templateKey = 'awesomeTemplateKey';
-const templateType = 'metadata-template';
 const metadataInstanceId1 = 'c614dcaa-ebdc-4c88-b242-15cad4f7b787';
 const metadataInstanceId2 = 'ee348ed1-9460-44f3-9c34-aa580a93efda';
 
@@ -61,46 +59,6 @@ const mockMetadataQuerySuccessResponse = {
         },
     ],
     next_marker: marker,
-};
-
-const flattenedMockMetadataQuerySuccessResponse = {
-    items: [
-        {
-            id: '1234',
-            metadata: {
-                data: {
-                    type: 'bill',
-                    amount: 500,
-                    approved: 'yes',
-                },
-                id: metadataInstanceId1,
-                metadataTemplate: {
-                    type: templateType,
-                    templateKey,
-                },
-            },
-            name: 'filename1.pdf',
-            size: 10000,
-        },
-        {
-            id: '9876',
-            metadata: {
-                data: {
-                    type: 'receipt',
-                    amount: 2735,
-                    approved: 'no',
-                },
-                id: metadataInstanceId2,
-                metadataTemplate: {
-                    type: templateType,
-                    templateKey,
-                },
-            },
-            name: 'filename2.mp4',
-            size: 389027,
-        },
-    ],
-    nextMarker: marker,
 };
 
 const url = 'https://api.box.com/2.0/metadata_queries/execute';
@@ -175,35 +133,6 @@ describe('api/MetadataQuery', () => {
         });
     });
 
-    describe('filterMetdataQueryResponse()', () => {
-        test('should return query response with entries of type file only', () => {
-            const entries = [
-                { item: { type: 'file' }, metadata: {} },
-                { item: { type: 'folder' }, metadata: {} },
-                { item: { type: 'file' }, metadata: {} },
-                { item: { type: 'folder' }, metadata: {} },
-                { item: { type: 'file' }, metadata: {} },
-            ];
-            const next_marker = 'marker_123456789';
-            const metadataQueryResponse = {
-                entries,
-                next_marker,
-            };
-
-            const filteredResponse = metadataQuery.filterMetdataQueryResponse(metadataQueryResponse);
-            const isEveryEntryOfTypeFile = filteredResponse.entries.every(entry => entry.item.type === 'file');
-            expect(isEveryEntryOfTypeFile).toBe(true);
-        });
-    });
-
-    describe('flattenMetdataQueryResponse()', () => {
-        test('should flatten the metadata query api response successfully', () => {
-            expect(metadataQuery.flattenMetdataQueryResponse(mockMetadataQuerySuccessResponse)).toEqual(
-                flattenedMockMetadataQuerySuccessResponse,
-            );
-        });
-    });
-
     describe('queryMetadataSuccessHandler()', () => {
         test('should set up the chache with success response and finish the processing', () => {
             cache.set = jest.fn();
@@ -213,7 +142,7 @@ describe('api/MetadataQuery', () => {
                 data: mockMetadataQuerySuccessResponse,
             });
 
-            expect(cache.set).toHaveBeenCalledWith(metadataQuery.key, flattenedMockMetadataQuerySuccessResponse);
+            expect(cache.set).toHaveBeenCalledWith(metadataQuery.key, mockMetadataQuerySuccessResponse);
             expect(metadataQuery.finish).toHaveBeenCalled();
         });
     });
