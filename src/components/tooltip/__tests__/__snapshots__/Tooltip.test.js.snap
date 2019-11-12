@@ -4,7 +4,7 @@ exports[`components/tooltip/Tooltip render() should not render the close button 
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -28,7 +28,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -52,7 +52,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -72,7 +72,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
     Hello
   </div>
   <div
-    className="tooltip"
+    className="bdl-Tooltip"
     id="tooltip3"
     role="tooltip"
   >
@@ -91,7 +91,7 @@ exports[`components/tooltip/Tooltip render() should render children wrapped in t
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -122,7 +122,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -142,7 +142,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
     Hello
   </div>
   <div
-    className="tooltip is-callout"
+    className="bdl-Tooltip bdl-is-callout"
     id="tooltip5"
     role="tooltip"
   >
@@ -155,7 +155,7 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
-  classPrefix="tooltip"
+  classPrefix="bdl-Tooltip"
   constraints={
     Array [
       Object {
@@ -175,13 +175,13 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     Hello
   </div>
   <div
-    className="tooltip with-close-button"
+    className="bdl-Tooltip bdl-has-closeButton"
     id="tooltip1"
     role="tooltip"
   >
     hi
     <PlainButton
-      className="tooltip-close-button"
+      className="bdl-Tooltip-closeButton"
       onClick={[Function]}
     >
       <IconClose />

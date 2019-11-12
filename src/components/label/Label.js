@@ -11,7 +11,7 @@ import HiddenLabel from './HiddenLabel';
 import './Label.scss';
 
 const OptionalFormattedMessage = () => (
-    <span className="label-optional">
+    <span className="bdl-Label-optional">
         (<FormattedMessage {...commonMessages.optional} />)
     </span>
 );
@@ -41,7 +41,7 @@ const Label = ({ text, tooltip, infoTooltip, infoIconProps, showOptionalText, hi
         labelContent.push(
             <InfoIconWithTooltip
                 key="infoTooltip"
-                iconProps={{ className: 'tooltip-icon', ...infoIconProps }}
+                iconProps={{ className: 'bdl-Label-infoIcon', ...infoIconProps }}
                 tooltipText={infoTooltip}
             />,
         );

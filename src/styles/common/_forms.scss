@@ -50,27 +50,27 @@ input:-ms-input-placeholder {
     color: $bdl-gray-20;
 }
 
-input[type='text'].is-invalid,
-input[type='password'].is-invalid,
-input[type='search'].is-invalid,
-input[type='email'].is-invalid,
-input[type='url'].is-invalid,
-input[type='tel'].is-invalid,
-input[type='number'].is-invalid,
-div[contentEditable='true'].is-invalid,
-textarea.is-invalid {
+input[type='text'].bdl-is-invalid,
+input[type='password'].bdl-is-invalid,
+input[type='search'].bdl-is-invalid,
+input[type='email'].bdl-is-invalid,
+input[type='url'].bdl-is-invalid,
+input[type='tel'].bdl-is-invalid,
+input[type='number'].bdl-is-invalid,
+div[contentEditable='true'].bdl-is-invalid,
+textarea.bdl-is-invalid {
     border: 1px solid $bdl-watermelon-red;
 }
 
-input[type='text'].is-invalid:focus,
-input[type='password'].is-invalid:focus,
-input[type='search'].is-invalid:focus,
-input[type='email'].is-invalid:focus,
-input[type='url'].is-invalid:focus,
-input[type='tel'].is-invalid:focus,
-input[type='number'].is-invalid:focus,
-div[contentEditable='true'].is-invalid:focus,
-textarea.is-invalid:focus {
+input[type='text'].bdl-is-invalid:focus,
+input[type='password'].bdl-is-invalid:focus,
+input[type='search'].bdl-is-invalid:focus,
+input[type='email'].bdl-is-invalid:focus,
+input[type='url'].bdl-is-invalid:focus,
+input[type='tel'].bdl-is-invalid:focus,
+input[type='number'].bdl-is-invalid:focus,
+div[contentEditable='true'].bdl-is-invalid:focus,
+textarea.bdl-is-invalid:focus {
     border: 1px solid #f44;
 }
 
@@ -149,8 +149,8 @@ textarea {
 
 /* Select component with container */
 
-.select-container select,
-.select-container .select-button {
+.bdl-Select-content select,
+.bdl-Select-content .bdl-SelectButton {
     position: relative;
     z-index: 1; /* captures click */
     display: inline-block;
@@ -163,25 +163,25 @@ textarea {
     appearance: none;
 }
 
-.select-container select {
+.bdl-Select-content select {
     padding-right: 25px;
     color: $bdl-gray;
     background: none;
     border: none;
 }
 
-.select-container .select-button:disabled,
-.select-container select:disabled {
+.bdl-Select-content .bdl-SelectButton:disabled,
+.bdl-Select-content select:disabled {
     cursor: default;
 }
 
-.select-container {
+.bdl-Select-content {
     position: relative;
     display: inline-block;
 }
 
-.select-container .select-button,
-.select-container .select-container-inner {
+.bdl-Select-content .bdl-SelectButton,
+.bdl-Select-content .bdl-Select-contentBody {
     display: inline-block;
     width: 100%;
     overflow: hidden;
@@ -191,7 +191,7 @@ textarea {
     vertical-align: top;
 }
 
-.select-container .select-overlay {
+.bdl-Select-content .bdl-Select-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -202,8 +202,8 @@ textarea {
     padding: 0;
 }
 
-.select-container .select-overlay,
-.select-container .select-button {
+.bdl-Select-content .bdl-Select-overlay,
+.bdl-Select-content .bdl-SelectButton {
     background-color: $white;
     border: 1px solid $bdl-gray-20;
     border-radius: 2px;
@@ -212,8 +212,8 @@ textarea {
     transition: border-color linear .15s, box-shadow linear .1s;
 }
 
-.select-container .select-overlay::before,
-.select-container .select-button::before {
+.bdl-Select-content .bdl-Select-overlay::before,
+.bdl-Select-content .bdl-SelectButton::before {
     position: absolute;
     top: 15px;
     right: 11px;
@@ -226,85 +226,85 @@ textarea {
     content: '';
 }
 
-.select-container .select-button[aria-expanded='true']::before {
+.bdl-Select-content .bdl-SelectButton[aria-expanded='true']::before {
     transform: rotateZ(180deg);
 }
 
-.select-container .select-button {
+.bdl-Select-content .bdl-SelectButton {
     padding-right: 25px;
     color: $bdl-gray;
 }
 
-.select-container .select-button:focus,
-.select-container select:focus {
+.bdl-Select-content .bdl-SelectButton:focus,
+.bdl-Select-content select:focus {
     outline: none;
 }
 
-.select-container .select-button:focus,
-.select-container select:focus ~ .select-overlay {
+.bdl-Select-content .bdl-SelectButton:focus,
+.bdl-Select-content select:focus ~ .bdl-Select-overlay {
     border: 1px solid $primary-color;
 }
 
-.select-container .select-button:hover,
-.select-container select:hover ~ .select-overlay {
+.bdl-Select-content .bdl-SelectButton:hover,
+.bdl-Select-content select:hover ~ .bdl-Select-overlay {
     border: 1px solid #4c4c4c;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .1);
 }
 
-.select-container .select-button:disabled,
-.select-container select:disabled {
+.bdl-Select-content .bdl-SelectButton:disabled,
+.bdl-Select-content select:disabled {
     color: $bdl-gray-30;
 }
 
-.select-container .select-button:disabled,
-.select-container select:disabled ~ .select-overlay {
+.bdl-Select-content .bdl-SelectButton:disabled,
+.bdl-Select-content select:disabled ~ .bdl-Select-overlay {
     background-color: $bdl-gray-02;
     border-color: $bdl-gray-10;
     box-shadow: none;
 }
 
-.select-container .select-button:disabled:hover,
-.select-container select:disabled:hover ~ .select-overlay {
+.bdl-Select-content .bdl-SelectButton:disabled:hover,
+.bdl-Select-content select:disabled:hover ~ .bdl-Select-overlay {
     box-shadow: none;
 }
 
-.select-container .select-button:disabled::before,
-.select-container select:disabled ~ .select-overlay::before {
+.bdl-Select-content .bdl-SelectButton:disabled::before,
+.bdl-Select-content select:disabled ~ .bdl-Select-overlay::before {
     border-top: 3px solid #d5d5d5;
 }
 
-.select-container.is-invalid select + .select-overlay,
-.select-container.is-invalid .select-button:focus ~ .select-overlay,
-.select-container.is-invalid select:focus ~ .select-overlay,
-.select-container.is-invalid select:hover + .select-overlay {
+.bdl-Select-content.bdl-is-invalid select + .bdl-Select-overlay,
+.bdl-Select-content.bdl-is-invalid .bdl-SelectButton:focus ~ .bdl-Select-overlay,
+.bdl-Select-content.bdl-is-invalid select:focus ~ .bdl-Select-overlay,
+.bdl-Select-content.bdl-is-invalid select:hover + .bdl-Select-overlay {
     border: 1px solid $bdl-watermelon-red;
 }
 
-.select-container .select-button:active {
+.bdl-Select-content .bdl-SelectButton:active {
     background-color: $bdl-gray-10;
 }
 
-.select-container-x-small {
+.bdl-Select-content--xSmall {
     width: 50px;
 }
 
-.select-container-small {
+.bdl-Select-content--small {
     width: 100px;
 }
 
-.select-container-medium {
+.bdl-Select-content--medium {
     width: 200px;
 }
 
-.select-container-large {
+.bdl-Select-content--large {
     width: 262px;
 }
 
-.select-container-x-large {
+.bdl-Select-content--xLarge {
     width: 345px;
 }
 
-.select-container.huge {
+.bdl-Select-content.huge {
     width: 500px;
 }
 

@@ -11,11 +11,11 @@ button.amsterdam-survey-button {
         fill: $white;
     }
 
-    &.btn-plain {
-        background: $box-blue;
-        border-radius: 4px;
+    &.bdl-PlainButton {
+        width: 40px;
         height: 40px;
         margin-right: 100px;
-        width: 40px;
+        background: $box-blue;
+        border-radius: 4px;
     }
 }

@@ -191,7 +191,7 @@ describe('components/select-field/BaseSelectField', () => {
                 className,
             });
 
-            expect(wrapper.hasClass('select-container')).toBe(true);
+            expect(wrapper.hasClass('bdl-Select-content')).toBe(true);
             expect(wrapper.hasClass(className)).toBe(true);
         });
 

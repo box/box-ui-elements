@@ -3,15 +3,15 @@
 .metadata-instance-editor-field-multi-select {
     margin: 0 0 20px;
 
-    .label {
+    .bdl-Label {
         word-wrap: break-word;
     }
 
-    label .select-container {
+    label .bdl-Select-content {
         display: block;
         margin-top: 5px;
 
-        .select-button {
+        .bdl-SelectButton {
             z-index: inherit;
         }
     }

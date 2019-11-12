@@ -99,13 +99,13 @@
 .table-body .table-row {
     border-top: 1px solid $bdl-gray-10;
 
-    .table.has-hover-styles &:not(.is-selected):hover,
-    .table.has-hover-styles &:not(.is-selected).hover-styles {
+    .table.has-hover-styles &:not(.bdl-is-selected):hover,
+    .table.has-hover-styles &:not(.bdl-is-selected).hover-styles {
         color: darken($primary-color, 25%);
         background-color: $hover-blue-background;
         border-top: 1px solid $hover-blue-border;
 
-        & + .table-row:not(.is-selected) {
+        & + .table-row:not(.bdl-is-selected) {
             border-top: 1px solid $hover-blue-border;
         }
 
@@ -118,7 +118,7 @@
         }
     }
 
-    .table &.is-selected {
+    .table &.bdl-is-selected {
         color: darken($primary-color, 25%);
         background-color: $selected-blue-background;
         border-top: 1px solid $selected-blue-border;
@@ -142,7 +142,7 @@
     }
 
     &:focus,
-    &.is-focused {
+    &.bdl-is-focused {
         outline: none;
 
         &::before {
@@ -233,7 +233,7 @@
                 background-color: $bdl-gray-05;
             }
 
-            &.is-selected {
+            &.bdl-is-selected {
                 background-color: fade-out($primary-color, .9);
             }
         }

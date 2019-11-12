@@ -2,7 +2,7 @@
 
 exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correctly render 1`] = `
 <span
-  className="pill-selector-wrapper"
+  className="bdl-PillSelectorWrapper"
 >
   <PillSelector
     allowInvalidPills={false}

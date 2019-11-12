@@ -95,7 +95,7 @@ describe('features/content-explorer/item-list/ItemList', () => {
             const rows = wrapper.find('.table-row');
             rows.forEach((row, i) => {
                 const isSelected = i === 0;
-                expect(row.hasClass('is-selected')).toEqual(isSelected);
+                expect(row.hasClass('bdl-is-selected')).toEqual(isSelected);
                 expect(row.find('RadioButton').prop('isSelected')).toEqual(isSelected);
             });
         });

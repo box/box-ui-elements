@@ -62,7 +62,7 @@ describe('Create Task', () => {
 
         it('shows error state after receiving server error', () => {
             cy.route('POST', '**/undoc/tasks').as('createTaskLink');
-            getSubmitButton().should('not.have.class', 'is-loading');
+            getSubmitButton().should('not.have.class', 'bdl-is-loading');
             cy.getByTestId('create-task-modal').within(() => {
                 getAssigneeField()
                     .type(username)
@@ -74,7 +74,7 @@ describe('Create Task', () => {
             });
 
             // submit button should be in loading state
-            getSubmitButton().should('have.class', 'is-loading');
+            getSubmitButton().should('have.class', 'bdl-is-loading');
 
             // wait for task creation request to finish
             cy.wait('@createTaskLink');

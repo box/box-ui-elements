@@ -9,13 +9,13 @@ $assignee-dropdown-height: 215px;
         display: block;
         text-align: right;
 
-        .btn {
+        .bdl-Button {
             margin-top: 0;
             margin-right: 0;
             margin-bottom: 10px;
         }
 
-        .btn:last-child {
+        .bdl-Button:last-child {
             margin-left: 10px;
         }
     }
@@ -50,15 +50,15 @@ $assignee-dropdown-height: 215px;
             margin-bottom: 15px;
         }
 
-        input.pill-selector-hidden-input {
+        input.bdl-PillSelector-input--hidden {
             width: 1px;
         }
 
-        .pill-selector-wrapper {
+        .bdl-PillSelectorWrapper {
             width: 100%;
             margin-left: 0;
 
-            .pill-selector-input-wrapper {
+            .bdl-PillSelector {
                 width: auto;
             }
 

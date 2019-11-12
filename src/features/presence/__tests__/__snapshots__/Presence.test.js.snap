@@ -936,7 +936,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       id="boxui.presence.previewPresenceFlyoutCopy"
     />
     <Button
-      className="btn-primary"
+      className="bdl-Button--primary"
       onClick={[Function]}
     >
       <FormattedMessage

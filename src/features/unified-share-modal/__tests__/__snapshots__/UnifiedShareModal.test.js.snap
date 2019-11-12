@@ -4,7 +4,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -186,7 +186,7 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -247,7 +247,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -429,7 +429,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -611,7 +611,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -797,7 +797,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -979,7 +979,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -1161,7 +1161,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -1314,7 +1314,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -1497,7 +1497,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -1680,7 +1680,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},
@@ -1863,7 +1863,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},
@@ -2017,7 +2017,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -2084,7 +2084,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     isOpen={false}
     style={
       Object {
@@ -2271,7 +2271,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -2457,7 +2457,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".toggle-simple"
+    focusElementSelector=".bdl-Toggle-label"
     style={
       Object {
         "backdrop": Object {},
@@ -2639,7 +2639,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},
@@ -2820,7 +2820,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},
@@ -2976,7 +2976,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},

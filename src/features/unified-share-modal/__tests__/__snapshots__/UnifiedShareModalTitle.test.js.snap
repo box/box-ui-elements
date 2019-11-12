@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/unified-share-modal/HeaderTitle should render classifiction label with title 1`] = `
+exports[`features/unified-share-modal/HeaderTitle should render classification label with title 1`] = `
 <span
   className="bdl-UnifiedShareModalTitle"
 >

@@ -5,19 +5,19 @@
         margin: 7px -5px 0 0;
         text-align: right;
 
-        .btn {
+        .bdl-Button {
             margin: 0 0 0 5px;
         }
     }
 
-    .pill-selector-wrapper {
+    .bdl-PillSelectorWrapper {
         margin: 0;
 
-        .pill-selector-input-wrapper {
+        .bdl-PillSelector {
             width: 100%;
             margin: 0;
 
-            input[type='text'].pill-selector-input {
+            input[type='text'].bdl-PillSelector-input {
                 min-width: 97%;
                 height: 24px;
                 margin: 2px 0 0 2px;

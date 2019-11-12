@@ -4,19 +4,19 @@
  * Label
  **************************************/
 
-.label {
+.bdl-Label {
     display: block;
     color: $bdl-gray-62;
     font-weight: bold;
 
-    .label-optional {
+    .bdl-Label-optional {
         padding-left: 3px;
     }
 
-    .tooltip-icon-container {
+    .bdl-InfoIconWithTooltip {
         padding-left: 3px;
 
-        .tooltip-icon {
+        .bdl-Label-infoIcon {
             position: relative;
             top: 3px;
         }

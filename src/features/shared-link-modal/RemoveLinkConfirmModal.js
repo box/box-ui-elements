@@ -21,7 +21,7 @@ const RemoveLinkConfirmModal = (props: Props) => {
 
     return (
         <Modal
-            focusElementSelector=".btn-primary"
+            focusElementSelector=".bdl-Button--primary"
             isOpen={isOpen}
             onRequestClose={submitting ? undefined : onRequestClose}
             title={<FormattedMessage {...messages.removeLinkConfirmationTitle} />}

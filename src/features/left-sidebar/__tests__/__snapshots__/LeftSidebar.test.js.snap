@@ -155,7 +155,7 @@ exports[`feature/left-sidebar/LeftSidebar should pass in custom sidebar properti
     className="left-sidebar-container"
   >
     <LeftSidebarLink
-      className="left-sidebar-link is-selected"
+      className="left-sidebar-link bdl-is-selected"
       customTheme={
         Object {
           "contrastColor": "#123",

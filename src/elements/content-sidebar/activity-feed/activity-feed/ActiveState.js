@@ -95,7 +95,9 @@ const ActiveState = ({
                         return (
                             <li
                                 key={item.type + item.id}
-                                className={classNames('bcs-activity-feed-task-new', { 'bcs-is-focused': isFocused })}
+                                className={classNames('bcs-activity-feed-task-new', {
+                                    'bcs-is-focused': isFocused,
+                                })}
                                 data-testid="task"
                                 ref={refValue}
                             >

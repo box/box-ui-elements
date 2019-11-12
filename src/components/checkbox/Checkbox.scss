@@ -89,11 +89,11 @@
 .checkbox-container {
     margin: 0 0 20px;
 
-    &.is-disabled .checkbox-label {
+    &.bdl-is-disabled .checkbox-label {
         color: $bdl-gray-50;
     }
 
-    > .label {
+    > .bdl-Label {
         margin: 8px 0;
     }
 }

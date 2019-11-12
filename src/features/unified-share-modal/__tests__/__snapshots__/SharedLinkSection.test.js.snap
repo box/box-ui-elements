@@ -5,7 +5,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -163,7 +163,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -303,7 +303,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -352,7 +352,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -482,7 +482,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -517,7 +517,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -667,7 +667,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -798,7 +798,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"
@@ -954,7 +954,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
   <hr />
   <label>
     <span
-      className="label"
+      className="bdl-Label"
     >
       <FormattedMessage
         defaultMessage="Share Link"

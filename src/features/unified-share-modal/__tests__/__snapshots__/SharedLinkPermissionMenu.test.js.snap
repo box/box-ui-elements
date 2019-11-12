@@ -7,7 +7,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   isRightAligned={false}
 >
   <PlainButton
-    className="lnk is-disabled"
+    className="lnk bdl-is-disabled"
     disabled={true}
   >
     <MenuToggle>
@@ -155,7 +155,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   isRightAligned={false}
 >
   <PlainButton
-    className="lnk is-disabled"
+    className="lnk bdl-is-disabled"
     disabled={true}
   >
     <MenuToggle>

@@ -38,7 +38,7 @@ class MenuItem extends React.Component<Props> {
 
         menuItemProps.className = classNames('menu-item', className, {
             'is-select-item': isSelectItem,
-            'is-selected': isSelected,
+            'bdl-is-selected': isSelected,
         });
         menuItemProps.role = isSelectItem ? 'menuitemradio' : 'menuitem';
         menuItemProps.tabIndex = -1;

@@ -4,16 +4,16 @@
  * Pill Selector
  **************************************/
 
-.pill-selector-hidden-input {
+.bdl-PillSelector-input--hidden {
     position: absolute;
     visibility: hidden;
 }
 
-.pill-selector-wrapper {
+.bdl-PillSelectorWrapper {
     position: relative;
     margin: 0 0 20px;
 
-    .pill-selector-input-wrapper {
+    .bdl-PillSelector {
         display: flex;
         flex-flow: row wrap;
         align-content: flex-start;
@@ -35,7 +35,7 @@
             border: 1px solid darken($primary-color, 10%);
         }
 
-        &.is-disabled {
+        &.bdl-is-disabled {
             color: $bdl-gray-30;
             background-color: $bdl-gray-02;
             box-shadow: none;
@@ -45,21 +45,21 @@
             }
         }
 
-        &.is-focused {
+        &.bdl-is-focused {
             border-color: $primary-color;
             outline: 0;
             box-shadow: none;
         }
 
-        &.show-error {
+        &.bdl-has-error {
             border-color: $bdl-watermelon-red;
         }
 
-        &.pill-selector-suggestions-enabled {
+        &.bdl-PillSelector--suggestionsEnabled {
             min-height: $bdl-line-height * 4;
         }
 
-        &:not(.show-error) {
+        &:not(.bdl-has-error) {
             .icon-alert {
                 display: none;
             }
@@ -77,13 +77,13 @@
             }
         }
 
-        .tooltip {
+        .bdl-Tooltip {
             top: calc(100% - 5px) !important;
             right: 10px !important;
             margin-top: 0 !important;
         }
 
-        .pills-list {
+        .bdl-PillsList {
             margin: 0;
 
             li {
@@ -91,7 +91,7 @@
             }
         }
 
-        .pill-selector-input {
+        .bdl-PillSelector-input {
             flex: 1;
             box-sizing: content-box !important;
             min-width: 0;

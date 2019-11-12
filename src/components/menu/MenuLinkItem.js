@@ -18,7 +18,7 @@ const MenuLinkItem = ({ children, isSelected = false, isSelectItem = false, ...r
     const linkProps: Object = {
         className: classNames('menu-item', linkEl.props.className, {
             'is-select-item': isSelectItem,
-            'is-selected': isSelected,
+            'bdl-is-selected': isSelected,
         }),
         role: isSelectItem ? 'menuitemradio' : 'menuitem',
         tabIndex: -1,

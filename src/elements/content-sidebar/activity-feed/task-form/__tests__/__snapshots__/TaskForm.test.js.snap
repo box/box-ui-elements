@@ -28,7 +28,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
     type="button"
   >
     <button
-      className="btn bcs-task-input-cancel-btn"
+      className="bdl-Button bcs-task-input-cancel-btn"
       data-resin-assigneesadded={
         Array [
           456,
@@ -50,7 +50,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
       type="button"
     >
       <span
-        className="btn-content"
+        className="bdl-Button-content"
       >
         <FormattedMessage
           defaultMessage="Cancel"
@@ -84,7 +84,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
     isLoading={false}
   >
     <Button
-      className="btn-primary bcs-task-input-submit-btn"
+      className="bdl-Button--primary bcs-task-input-submit-btn"
       data-resin-assigneesadded={
         Array [
           456,
@@ -106,7 +106,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
       isLoading={false}
     >
       <button
-        className="btn btn-primary bcs-task-input-submit-btn"
+        className="bdl-Button bdl-Button--primary bcs-task-input-submit-btn"
         data-resin-assigneesadded={
           Array [
             456,
@@ -128,7 +128,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
         type="submit"
       >
         <span
-          className="btn-content"
+          className="bdl-Button-content"
         >
           <FormattedMessage
             defaultMessage="Update"

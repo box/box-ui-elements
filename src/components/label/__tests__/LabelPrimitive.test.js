@@ -13,10 +13,10 @@ describe('components/label/LabelPrimitive', () => {
         );
 
         expect(wrapper.find('label').length).toEqual(1);
-        expect(wrapper.find('span.label').length).toEqual(1);
-        expect(wrapper.find('.label').prop('children')).toEqual(labelContent);
+        expect(wrapper.find('span.bdl-Label').length).toEqual(1);
+        expect(wrapper.find('.bdl-Label').prop('children')).toEqual(labelContent);
         expect(wrapper.find('input').length).toEqual(1);
-        expect(wrapper.find('.label-optional').length).toEqual(0);
+        expect(wrapper.find('.bdl-Label-optional').length).toEqual(0);
     });
 
     test('should set the passed classNames', () => {
@@ -28,7 +28,7 @@ describe('components/label/LabelPrimitive', () => {
             </LabelPrimitive>,
         );
 
-        expect(wrapper.find('.label').prop('className')).toEqual('label this is a test');
+        expect(wrapper.find('.bdl-Label').prop('className')).toEqual('bdl-Label this is a test');
     });
 
     test('should fire passed mouse enter handler', () => {
@@ -44,7 +44,7 @@ describe('components/label/LabelPrimitive', () => {
             </LabelPrimitive>,
         );
 
-        const label = wrapper.find('.label');
+        const label = wrapper.find('.bdl-Label');
         label.simulate('mouseEnter');
 
         expect(firedCount).toEqual(1);
@@ -63,7 +63,7 @@ describe('components/label/LabelPrimitive', () => {
             </LabelPrimitive>,
         );
 
-        const label = wrapper.find('.label');
+        const label = wrapper.find('.bdl-Label');
         label.simulate('mouseLeave');
 
         expect(firedCount).toEqual(1);

@@ -17,7 +17,7 @@
         }
     }
 
-    .btn {
+    .bdl-Button {
         min-width: 80px;
         margin: 0;
         border-left: 0;
@@ -27,10 +27,10 @@
     }
 
     &.copy-success {
-        .btn,
-        .btn:hover,
-        .btn:active,
-        .btn:active:hover {
+        .bdl-Button,
+        .bdl-Button:hover,
+        .bdl-Button:active,
+        .bdl-Button:active:hover {
             color: $white;
             background-color: $bdl-green-light;
             border-color: $bdl-green-light;

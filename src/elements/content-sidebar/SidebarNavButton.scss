@@ -1,7 +1,7 @@
 @import '../common/variables';
 @import './mixins';
 
-.bcs .bcs-NavButton {
+.bcs .bdl-NavButton {
     @include bdl-SidebarNavButton;
 
     &::before {
