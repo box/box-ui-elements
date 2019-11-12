@@ -1,6 +1,6 @@
 /**
  * @flow strict
- * @file Versions Sidebar API Helper
+ * @file Metadata Queries API Helper
  * @author Box
  */
 import find from 'lodash/find';
@@ -15,8 +15,8 @@ import type {
     MetadataQueryResponseData,
     MetadataQueryResponseEntry,
     MetadataQueryResponseEntryMetadata,
-    MetadataTemplateSchemaResponse,
 } from '../../common/types/metadataQueries';
+import type { MetadataTemplateSchemaResponse } from '../../common/types/metadata';
 
 type SuccessCallback = (metadataQueryCollection: Collection) => void;
 type ErrorCallback = (e: ElementsXhrError) => void;
@@ -87,20 +87,20 @@ export default class MetadataQueryAPIHelper {
         };
     };
 
+    filterMetdataQueryResponse = (response: MetadataQueryResponseData): MetadataQueryResponseData => {
+        const { entries = [], next_marker } = response;
+        return {
+            entries: entries.filter(entry => getProp(entry, 'item.type') === ITEM_TYPE_FILE), // return only file items
+            next_marker,
+        };
+    };
+
     getFlattenedDataWithTypes = (templateSchemaResponse?: MetadataTemplateSchemaResponse): Collection => {
         this.metadataTemplate = getProp(templateSchemaResponse, 'data');
         const { entries, next_marker }: MetadataQueryResponseData = this.metadataQueryResponseData;
         return {
             items: entries.map<BoxItem>(this.flattenResponseEntry),
             nextMarker: next_marker,
-        };
-    };
-
-    filterMetdataQueryResponse = (response: MetadataQueryResponseData): MetadataQueryResponseData => {
-        const { entries = [], next_marker } = response;
-        return {
-            entries: entries.filter(entry => getProp(entry, 'item.type') === ITEM_TYPE_FILE), // return only file items
-            next_marker,
         };
     };
 
@@ -130,8 +130,8 @@ export default class MetadataQueryAPIHelper {
         metadataQuery: MetadataQueryType,
         successsCallback: SuccessCallback,
         errorCallback: ErrorCallback,
-    ): void => {
-        this.queryMetadata(metadataQuery)
+    ): Promise<void> => {
+        return this.queryMetadata(metadataQuery)
             .then(this.getTemplateSchemaInfo)
             .then(this.getFlattenedDataWithTypes)
             .then(successsCallback)

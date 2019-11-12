@@ -294,20 +294,20 @@ type MetadataSkillsTemplate = {
 };
 
 type MetadataType = {
+    enterprise?: MetadataQueryInstanceTemplate,
     global?: MetadataSkillsTemplate,
-    enterprise?: MetadataQueryInstanceTemplate
 };
 
 type MetadataQueryInstanceTypeField = {
     name: string,
-    value: string,
-    type: string,
     options?: MetadataTemplateFieldOption,
+    type: string,
+    value: string,
 };
 
 type MetadataQueryInstanceTemplate = {
+    fields: Array<MetadataQueryInstanceTypeField>,
     id: string,
-    fields: Array<MetadataQueryInstanceTypeField>
 };
 
 type MetadataFieldValue = string | number | Array<any>;

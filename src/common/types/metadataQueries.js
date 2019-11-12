@@ -38,10 +38,6 @@ type MetadataColumnConfig = {
 
 type MetadataColumnsToShow = Array<MetadataColumnConfig | string>;
 
-type MetadataTemplateSchemaResponse = {
-    data?: MetadataTemplate,
-};
-
 export type {
     MetadataColumnConfig,
     MetadataColumnsToShow,
@@ -51,5 +47,4 @@ export type {
     MetadataQueryResponseEntry,
     MetadataQueryResponseEntryEnterprise,
     MetadataQueryResponseEntryMetadata,
-    MetadataTemplateSchemaResponse,
 };
