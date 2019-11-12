@@ -11,7 +11,7 @@ import HiddenLabel from './HiddenLabel';
 import './Label.scss';
 
 const OptionalFormattedMessage = () => (
-    <span className="bdl-Label-optionalText">
+    <span className="bdl-label-optional">
         (<FormattedMessage {...commonMessages.optional} />)
     </span>
 );

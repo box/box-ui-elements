@@ -10,10 +10,10 @@ describe('components/toggle/Toggle', () => {
     test('should correctly render default component', () => {
         const wrapper = getWrapper();
 
-        expect(wrapper.hasClass('toggle-container')).toBeTruthy();
-        expect(wrapper.hasClass('is-toggle-right-aligned')).toBeFalsy();
+        expect(wrapper.hasClass('bdl-Toggle')).toBeTruthy();
+        expect(wrapper.hasClass('bdl-is-toggleRightAligned')).toBeFalsy();
         expect(wrapper.find('input').prop('checked')).toBeFalsy();
-        expect(wrapper.find('.toggle-simple-description').length).toBeFalsy();
+        expect(wrapper.find('.bdl-Toggle-description').length).toBeFalsy();
     });
 
     test('should put className on the container when className is passed in', () => {
@@ -44,7 +44,7 @@ describe('components/toggle/Toggle', () => {
         const wrapper = getWrapper();
         const description = 'foobar';
         wrapper.setProps({ description });
-        expect(wrapper.find('.toggle-simple-description').text()).toEqual(description);
+        expect(wrapper.find('.bdl-Toggle-description').text()).toEqual(description);
     });
 
     test('should render properly when isToggleRightAligned prop is true', () => {

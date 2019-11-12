@@ -41,30 +41,30 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should add is-focused class when input is focused', () => {
+        test('should add bdl-is-focused class when input is focused', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
             wrapper.setState({ isFocused: true });
 
-            expect(wrapper.find('.is-focused').length).toBe(1);
+            expect(wrapper.find('.bdl-is-focused').length).toBe(1);
         });
 
-        test('should not add is-focused class when input is not focused', () => {
+        test('should not add bdl-is-focused class when input is not focused', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
             wrapper.setState({ isFocused: false });
 
-            expect(wrapper.find('.is-focused').length).toBe(0);
+            expect(wrapper.find('.bdl-is-focused').length).toBe(0);
         });
 
-        test('should add bdl-show-error class when error is given', () => {
+        test('should add bdl-has-error class when error is given', () => {
             const wrapper = shallow(<PillSelector error="hello" onInput={onInputStub} onRemove={onRemoveStub} />);
 
-            expect(wrapper.find('.bdl-show-error').length).toBe(1);
+            expect(wrapper.find('.bdl-has-error').length).toBe(1);
         });
 
-        test('should not add bdl-show-error class when error is not given', () => {
+        test('should not add bdl-has-error class when error is not given', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
 
-            expect(wrapper.find('.bdl-show-error').length).toBe(0);
+            expect(wrapper.find('.bdl-has-error').length).toBe(0);
         });
 
         test('should render pills when there are selected options using legacy text attribute', () => {

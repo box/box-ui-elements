@@ -142,7 +142,7 @@
     }
 
     &:focus,
-    &.is-focused {
+    &.bdl-is-focused {
         outline: none;
 
         &::before {

@@ -293,7 +293,7 @@ class SharedLinkSection extends React.Component<Props> {
                     isDisabled={!isToggleEnabled}
                     isOn={isSharedLinkEnabled}
                     label={linkText}
-                    name="bdl-Toggle"
+                    name="toggle"
                     onChange={onToggleSharedLink}
                 />
             </div>

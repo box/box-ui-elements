@@ -45,10 +45,10 @@ describe('components/label/Label', () => {
             </Label>,
         );
 
-        expect(wrapper.find('.bdl-Label-optionalText').length).toEqual(1);
+        expect(wrapper.find('.bdl-label-optional').length).toEqual(1);
 
         // Make sure text 'optional' appears in parentheses like '(optional)'
-        expect(/.*\(.*\).*/.test(wrapper.find('.bdl-Label-optionalText').html())).toEqual(true);
+        expect(/.*\(.*\).*/.test(wrapper.find('.bdl-label-optional').html())).toEqual(true);
     });
 
     describe('with infoToolTip', () => {

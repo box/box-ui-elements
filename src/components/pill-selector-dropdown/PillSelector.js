@@ -178,8 +178,8 @@ class PillSelector extends React.Component<Props, State> {
         const hasError = !!error;
         const classes = classNames('bdl-PillSelector', {
             'bdl-is-disabled': disabled,
-            'is-focused': isFocused,
-            'bdl-show-error': hasError,
+            'bdl-is-focused': isFocused,
+            'bdl-has-error': hasError,
             'bdl-PillSelector--suggestionsEnabled': suggestedPillsEnabled,
         });
         const ariaAttrs = {

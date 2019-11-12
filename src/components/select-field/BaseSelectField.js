@@ -384,7 +384,7 @@ class BaseSelectField extends React.Component<Props, State> {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                className={classNames(className, 'bdl-Select-container')}
+                className={classNames(className, 'bdl-Select-content')}
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
             >

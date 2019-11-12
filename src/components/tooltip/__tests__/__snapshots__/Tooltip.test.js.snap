@@ -67,13 +67,13 @@ exports[`components/tooltip/Tooltip render() should not render with close button
   targetAttachment="top center"
 >
   <div
-    aria-describedby="bdl-Tooltip3"
+    aria-describedby="tooltip3"
   >
     Hello
   </div>
   <div
     className="bdl-Tooltip"
-    id="bdl-Tooltip3"
+    id="tooltip3"
     role="tooltip"
   >
     hi
@@ -137,13 +137,13 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
   targetAttachment="top center"
 >
   <div
-    aria-describedby="bdl-Tooltip5"
+    aria-describedby="tooltip5"
   >
     Hello
   </div>
   <div
-    className="bdl-Tooltip is-callout"
-    id="bdl-Tooltip5"
+    className="bdl-Tooltip bdl-is-callout"
+    id="tooltip5"
     role="tooltip"
   >
     hi
@@ -170,13 +170,13 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
   targetAttachment="top center"
 >
   <div
-    aria-describedby="bdl-Tooltip1"
+    aria-describedby="tooltip1"
   >
     Hello
   </div>
   <div
-    className="bdl-Tooltip with-close-button"
-    id="bdl-Tooltip1"
+    className="bdl-Tooltip bdl-has-closeButton"
+    id="tooltip1"
     role="tooltip"
   >
     hi

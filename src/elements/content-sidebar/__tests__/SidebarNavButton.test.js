@@ -19,7 +19,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         const button = getButton(wrapper);
 
         expect(wrapper.find(Tooltip).prop('text')).toBe('foo');
-        expect(button.hasClass('bcs-bdl-is-selected')).toBe(false);
+        expect(button.hasClass('bdl-is-selected')).toBe(false);
     });
 
     test.each`
@@ -36,7 +36,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         const wrapper = getWrapper(props, '/activity');
         const button = getButton(wrapper);
 
-        expect(button.hasClass('bcs-bdl-is-selected')).toBe(expected);
+        expect(button.hasClass('bdl-is-selected')).toBe(expected);
     });
 
     test.each`
@@ -50,6 +50,6 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         const wrapper = getWrapper({ isOpen: true, sidebarView: 'activity' }, path);
         const button = getButton(wrapper);
 
-        expect(button.hasClass('bcs-bdl-is-selected')).toBe(expected);
+        expect(button.hasClass('bdl-is-selected')).toBe(expected);
     });
 });

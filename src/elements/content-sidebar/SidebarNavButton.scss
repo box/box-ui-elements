@@ -15,7 +15,7 @@
         pointer-events: none;
     }
 
-    &.bcs-bdl-is-selected {
+    &.bdl-is-selected {
         &::before {
             background-color: $blue;
         }
@@ -28,7 +28,7 @@
     &:hover {
         background-color: $bdl-gray-05;
 
-        &:not(.bcs-bdl-is-selected) svg .fill-color {
+        &:not(.bdl-is-selected) svg .fill-color {
             fill: $bdl-gray-80;
         }
     }

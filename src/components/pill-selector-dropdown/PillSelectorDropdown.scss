@@ -2,7 +2,7 @@
 @import 'PillSelector';
 
 .bdl-PillSelector {
-    &.bdl-show-error {
+    &.bdl-has-error {
         border-color: $bdl-watermelon-red;
     }
 }

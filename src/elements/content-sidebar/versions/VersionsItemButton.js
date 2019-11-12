@@ -56,7 +56,7 @@ class VersionsItemButton extends React.Component<Props> {
         const { children, fileId, isCurrent, isDisabled, isSelected, onClick } = this.props;
         const buttonClassName = classNames('bcs-VersionsItemButton', {
             'bcs-is-disabled': isDisabled,
-            'bcs-bdl-is-selected': isSelected && !isDisabled,
+            'bdl-is-selected': isSelected && !isDisabled,
         });
 
         return (

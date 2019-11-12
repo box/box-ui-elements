@@ -46,7 +46,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         }
     }
 
-    &.is-callout {
+    &.bdl-is-callout {
         background-color: $bdl-purple-rain;
         border-color: $bdl-purple-rain;
     }
@@ -55,7 +55,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         margin-left: -8px;
     }
 
-    &.with-close-button {
+    &.bdl-has-closeButton {
         padding-right: 28px;
     }
 

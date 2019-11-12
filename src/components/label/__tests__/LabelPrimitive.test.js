@@ -16,7 +16,7 @@ describe('components/label/LabelPrimitive', () => {
         expect(wrapper.find('span.bdl-Label').length).toEqual(1);
         expect(wrapper.find('.bdl-Label').prop('children')).toEqual(labelContent);
         expect(wrapper.find('input').length).toEqual(1);
-        expect(wrapper.find('.bdl-Label-optionalText').length).toEqual(0);
+        expect(wrapper.find('.bdl-label-optional').length).toEqual(0);
     });
 
     test('should set the passed classNames', () => {

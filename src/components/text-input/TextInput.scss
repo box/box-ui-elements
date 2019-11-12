@@ -47,7 +47,7 @@
     }
 
     &.is-required,
-    &.bdl-show-error {
+    &.bdl-has-error {
         input {
             border-color: $bdl-watermelon-red;
         }

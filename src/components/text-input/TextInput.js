@@ -52,7 +52,7 @@ const TextInput = ({
 }: Props) => {
     const hasError = !!error;
     const classes = classNames(className, 'text-input-container', {
-        'bdl-show-error': hasError,
+        'bdl-has-error': hasError,
     });
 
     const errorMessageID = React.useRef(uniqueId('errorMessage')).current;

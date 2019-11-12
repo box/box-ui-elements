@@ -693,7 +693,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
         const extendedModalProps = {
             focusElementSelector: canInvite
                 ? '.bdl-PillSelector-input' // focus on invite collabs field
-                : '.toggle-simple', // focus on shared link toggle
+                : '.bdl-Toggle-label', // focus on shared link toggle
             ...modalProps,
         };
 

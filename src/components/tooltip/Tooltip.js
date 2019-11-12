@@ -115,7 +115,7 @@ class Tooltip extends React.Component<Props, State> {
         this.state = { isShown: !!props.isShown, wasClosedByUser: false };
     }
 
-    tooltipID = uniqueId('bdl-Tooltip');
+    tooltipID = uniqueId('tooltip');
 
     tetherRef = React.createRef<{ position: () => {} }>();
 
@@ -244,9 +244,9 @@ class Tooltip extends React.Component<Props, State> {
         const bodyEl = bodyElement instanceof HTMLElement ? bodyElement : document.body;
 
         const classes = classNames('bdl-Tooltip', className, {
-            'is-callout': theme === CALLOUT_THEME,
+            'bdl-is-callout': theme === CALLOUT_THEME,
             'bdl-is-error': theme === ERROR_THEME,
-            'with-close-button': withCloseButton,
+            'bdl-has-closeButton': withCloseButton,
         });
 
         return (

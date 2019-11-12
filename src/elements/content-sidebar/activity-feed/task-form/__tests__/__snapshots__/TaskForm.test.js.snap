@@ -84,7 +84,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
     isLoading={false}
   >
     <Button
-      className="bdl-PrimaryButton bcs-task-input-submit-btn"
+      className="bdl-Button--primary bcs-task-input-submit-btn"
       data-resin-assigneesadded={
         Array [
           456,
@@ -106,7 +106,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
       isLoading={false}
     >
       <button
-        className="bdl-Button bdl-PrimaryButton bcs-task-input-submit-btn"
+        className="bdl-Button bdl-Button--primary bcs-task-input-submit-btn"
         data-resin-assigneesadded={
           Array [
             456,

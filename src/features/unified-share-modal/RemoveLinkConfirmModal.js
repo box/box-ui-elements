@@ -42,7 +42,7 @@ class RemoveLinkConfirmModal extends Component<Props> {
 
         return (
             <Modal
-                focusElementSelector=".bdl-PrimaryButton"
+                focusElementSelector=".bdl-Button--primary"
                 isOpen={isOpen}
                 onRequestClose={submitting ? undefined : onRequestClose}
                 title={<FormattedMessage {...messages.removeLinkConfirmationTitle} />}

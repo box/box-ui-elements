@@ -4,7 +4,7 @@
  * Pill Selector
  **************************************/
 
-.bdl-PillSelector-hiddenInput {
+.bdl-PillSelector-input--hidden {
     position: absolute;
     visibility: hidden;
 }
@@ -45,13 +45,13 @@
             }
         }
 
-        &.is-focused {
+        &.bdl-is-focused {
             border-color: $primary-color;
             outline: 0;
             box-shadow: none;
         }
 
-        &.bdl-show-error {
+        &.bdl-has-error {
             border-color: $bdl-watermelon-red;
         }
 
@@ -59,7 +59,7 @@
             min-height: $bdl-line-height * 4;
         }
 
-        &:not(.bdl-show-error) {
+        &:not(.bdl-has-error) {
             .icon-alert {
                 display: none;
             }

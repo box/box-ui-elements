@@ -383,7 +383,7 @@ class DatePicker extends React.Component<Props> {
         const { formatMessage } = intl;
         const classes = classNames(className, 'date-picker-wrapper', {
             'show-clear-btn': !!value,
-            'bdl-show-error': !!error,
+            'bdl-has-error': !!error,
         });
 
         const resinTargetAttr = resinTarget ? { [RESIN_TAG_TARGET]: resinTarget } : {};

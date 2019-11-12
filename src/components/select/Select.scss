@@ -7,17 +7,17 @@
 .bdl-Select {
     margin: 0 0 20px;
 
-    .bdl-Select-container {
+    .bdl-Select-content {
         margin-top: 5px;
     }
 
-    .bdl-Tooltip-iconContainer {
+    .bdl-InfoIconWithTooltip {
         position: absolute;
         margin-top: 9px;
         margin-left: 10px;
     }
 
-    &.bdl-show-error {
+    &.bdl-has-error {
         .bdl-Select-overlay {
             border-color: $bdl-watermelon-red;
         }

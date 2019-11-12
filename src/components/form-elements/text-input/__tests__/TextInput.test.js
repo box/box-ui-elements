@@ -30,14 +30,14 @@ describe('components/form-elements/text-input/TextInput', () => {
         const wrapper = mount(<TextInput className="coverage" isRequired label="label" name="input" />);
         const input = wrapper.find('input');
         input.simulate('blur');
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeTruthy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeTruthy();
     });
 
     test('should mark required fields valid when not empty', () => {
         const wrapper = mount(<TextInput isRequired label="label" name="input" value="baba" />);
         const input = wrapper.find('input');
         input.simulate('blur');
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeFalsy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeFalsy();
     });
 
     test('should correctly validate when change event is fired', () => {
@@ -45,7 +45,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         const input = wrapper.find('input');
         input.simulate('blur');
 
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeTruthy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeTruthy();
 
         wrapper.setProps({ value: 'a' });
         input.simulate('blur');
@@ -55,7 +55,7 @@ describe('components/form-elements/text-input/TextInput', () => {
             currentTarget: inputEl,
         });
 
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeFalsy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeFalsy();
     });
 
     test('should mark email fields invalid when invalid', () => {
@@ -69,7 +69,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         const wrapper = mount(<TextInput label="label" name="input" type="email" value="bob@bob.com" />);
         const input = wrapper.find('input');
         input.simulate('blur');
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeFalsy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeFalsy();
     });
 
     test('should mark url fields invalid when invalid', () => {
@@ -79,7 +79,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         instance.checkValidity();
         wrapper.update();
 
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeTruthy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeTruthy();
     });
 
     test('should mark url fields valid when valid', () => {
@@ -89,7 +89,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         instance.checkValidity();
         wrapper.update();
 
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeFalsy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeFalsy();
         expect(wrapper.state('errorMessage')).toBeFalsy();
     });
 
@@ -184,7 +184,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         const input = wrapper.find('input');
         input.simulate('blur');
 
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeTruthy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeTruthy();
 
         wrapper.setProps({ value: 'abba' });
 
@@ -196,7 +196,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         });
         wrapper.update();
 
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeFalsy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeFalsy();
     });
 
     test('should validate onChange when input is already in error state', () => {
@@ -204,7 +204,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         const input = wrapper.find('input');
         input.simulate('blur');
 
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeTruthy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeTruthy();
 
         const inputEl = input.getDOMNode();
         inputEl.value = 'a';
@@ -213,7 +213,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         });
         wrapper.update();
 
-        expect(wrapper.find('.text-input-container').hasClass('bdl-show-error')).toBeFalsy();
+        expect(wrapper.find('.text-input-container').hasClass('bdl-has-error')).toBeFalsy();
     });
 
     test('should set validity state when set validity state handler is called with custom error', () => {

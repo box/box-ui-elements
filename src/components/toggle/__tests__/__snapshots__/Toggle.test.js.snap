@@ -2,26 +2,26 @@
 
 exports[`components/toggle/Toggle should render properly when isToggleRightAligned prop is true 1`] = `
 <div
-  className="toggle-container is-toggle-right-aligned"
+  className="bdl-Toggle bdl-is-toggleRightAligned"
 >
   <label
-    className="toggle-simple"
+    className="bdl-Toggle-label"
   >
     <input
-      className="toggle-simple-input"
+      className="bdl-Toggle-input"
       name="toggle"
       onChange={[Function]}
       type="checkbox"
     />
     <div
-      className="toggle-simple-label"
-      key="toggle-simple-label"
+      className="bdl-Toggle-labelContent"
+      key="bdl-Toggle-labelContent"
     >
       Enter things
     </div>
     <div
-      className="toggle-simple-switch"
-      key="toggle-simple-switch"
+      className="bdl-Toggle-switch"
+      key="bdl-Toggle-switch"
     />
   </label>
 </div>
@@ -29,25 +29,25 @@ exports[`components/toggle/Toggle should render properly when isToggleRightAlign
 
 exports[`components/toggle/Toggle should render properly when random props are passed in 1`] = `
 <div
-  className="toggle-container"
+  className="bdl-Toggle"
 >
   <label
-    className="toggle-simple"
+    className="bdl-Toggle-label"
   >
     <input
-      className="toggle-simple-input"
+      className="bdl-Toggle-input"
       data-resin-target="toggle"
       name="toggle"
       onChange={[Function]}
       type="checkbox"
     />
     <div
-      className="toggle-simple-switch"
-      key="toggle-simple-switch"
+      className="bdl-Toggle-switch"
+      key="bdl-Toggle-switch"
     />
     <div
-      className="toggle-simple-label"
-      key="toggle-simple-label"
+      className="bdl-Toggle-labelContent"
+      key="bdl-Toggle-labelContent"
     >
       Enter things
     </div>

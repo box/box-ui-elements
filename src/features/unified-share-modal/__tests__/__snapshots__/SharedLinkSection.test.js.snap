@@ -56,7 +56,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
             </Tooltip>
           </span>
         }
-        name="bdl-Toggle"
+        name="toggle"
       />
     </div>
   </div>
@@ -199,7 +199,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
               id="boxui.unifiedShare.linkShareOn"
             />
           }
-          name="bdl-Toggle"
+          name="toggle"
         />
       </div>
     </Tooltip>
@@ -339,7 +339,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
               id="boxui.unifiedShare.linkShareOff"
             />
           }
-          name="bdl-Toggle"
+          name="toggle"
         />
       </div>
     </Tooltip>
@@ -375,7 +375,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
             id="boxui.unifiedShare.linkShareOn"
           />
         }
-        name="bdl-Toggle"
+        name="toggle"
       />
     </div>
   </div>
@@ -505,7 +505,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
             id="boxui.unifiedShare.linkShareOff"
           />
         }
-        name="bdl-Toggle"
+        name="toggle"
       />
     </div>
   </div>
@@ -553,7 +553,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
               id="boxui.unifiedShare.linkShareOn"
             />
           }
-          name="bdl-Toggle"
+          name="toggle"
         />
       </div>
     </Tooltip>
@@ -690,7 +690,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.unifiedShare.linkShareOn"
           />
         }
-        name="bdl-Toggle"
+        name="toggle"
       />
     </div>
   </div>
@@ -821,7 +821,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.unifiedShare.linkShareOn"
           />
         }
-        name="bdl-Toggle"
+        name="toggle"
       />
     </div>
   </div>
@@ -977,7 +977,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
             id="boxui.unifiedShare.linkShareOn"
           />
         }
-        name="bdl-Toggle"
+        name="toggle"
       />
     </div>
   </div>

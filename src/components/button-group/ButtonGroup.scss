@@ -15,7 +15,7 @@
             padding-left: 11px;
             border-radius: 0 4px 4px 0;
 
-            &.bdl-PrimaryButton {
+            &.bdl-Button--primary {
                 border-left-color: darken($primary-color, 10%);
             }
         }
@@ -43,7 +43,7 @@
         margin: 5px 0 5px -1px;
         border-radius: 0;
 
-        &.bdl-PrimaryButton {
+        &.bdl-Button--primary {
             margin: 5px 0;
             border-right-color: darken($primary-color, 10%);
 
@@ -92,7 +92,7 @@
             opacity: .4;
         }
 
-        > .bdl-PrimaryButton {
+        > .bdl-Button--primary {
             color: $white;
             background-color: $primary-color;
             border-color: $primary-color;

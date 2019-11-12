@@ -258,7 +258,7 @@ class InviteCollaboratorsModal extends Component {
         return (
             <div className="invite-permissions-container">
                 <Select
-                    className="bdl-Select-container--medium"
+                    className="bdl-Select-content--medium"
                     data-resin-target="selectpermission"
                     label={<FormattedMessage {...messages.inviteePermissionsFieldLabel} />}
                     name="invite-permission"
