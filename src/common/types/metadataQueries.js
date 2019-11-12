@@ -12,7 +12,7 @@ type MetadataQueryResponseEntry = {
     metadata: MetadataQueryResponseEntryMetadata,
 };
 
-type MetadataQueryResponse = {
+type MetadataQueryResponseData = {
     entries: Array<MetadataQueryResponseEntry>,
     next_marker?: string,
 };
@@ -38,44 +38,12 @@ type MetadataColumnConfig = {
 
 type MetadataColumnsToShow = Array<MetadataColumnConfig | string>;
 
-type FlattenedMetadataQueryResponseEntryMetadata = {
-    data?: StringAnyMap,
-    id?: string,
-    metadataTemplate?: {
-        templateKey: string,
-        type: string,
-    },
-};
-
-type FlattenedMetadataQueryResponseEntry = {
-    id: string,
-    metadata: FlattenedMetadataQueryResponseEntryMetadata,
-    name?: string,
-    permissions?: BoxItemPermission,
-    size?: number,
-};
-
-type FlattenedMetadataQueryResponse = {
-    items: Array<FlattenedMetadataQueryResponseEntry>,
-    nextMarker?: string,
-};
-
-type FlattenedMetadataQueryResponseCollection = {
-    items: Array<FlattenedMetadataQueryResponseEntry>,
-    nextMarker: string,
-    percentLoaded: Number,
-};
-
 export type {
-    FlattenedMetadataQueryResponse,
-    FlattenedMetadataQueryResponseCollection,
-    FlattenedMetadataQueryResponseEntry,
-    FlattenedMetadataQueryResponseEntryMetadata,
     MetadataColumnConfig,
     MetadataColumnsToShow,
     MetadataQuery,
     MetadataQueryOrderByClause,
-    MetadataQueryResponse,
+    MetadataQueryResponseData,
     MetadataQueryResponseEntry,
     MetadataQueryResponseEntryEnterprise,
     MetadataQueryResponseEntryMetadata,
