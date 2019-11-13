@@ -71,6 +71,7 @@ type Props = {
     onComplete: Function,
     onError: Function,
     onMinimize?: Function,
+    onResume: Function,
     onUpload: Function,
     overwrite: boolean,
     requestInterceptor?: Function,
@@ -124,6 +125,7 @@ class ContentUploader extends Component<Props, State> {
         onClose: noop,
         onComplete: noop,
         onError: noop,
+        onResume: noop,
         onUpload: noop,
         overwrite: true,
         useUploadsManager: false,
@@ -733,7 +735,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     resumeFile(item: UploadItem) {
-        const { overwrite, rootFolderId } = this.props;
+        const { overwrite, rootFolderId, onResume } = this.props;
         const { api, file, options } = item;
         const { items } = this.state;
 
@@ -758,6 +760,7 @@ class ContentUploader extends Component<Props, State> {
         delete item.error;
         items[items.indexOf(item)] = item;
 
+        onResume(item);
         api.resume(resumeOptions);
 
         this.updateViewAndCollection(items);
@@ -849,7 +852,10 @@ class ContentUploader extends Component<Props, State> {
         const someUploadHasFailed = items.some(uploadItem => uploadItem.status === STATUS_ERROR);
         const allItemsArePending = !items.some(uploadItem => uploadItem.status !== STATUS_PENDING);
         const noFileIsPendingOrInProgress = items.every(
-            uploadItem => uploadItem.status !== STATUS_PENDING && uploadItem.status !== STATUS_IN_PROGRESS,
+            uploadItem =>
+                (uploadItem.status === STATUS_COMPLETE || uploadItem.status === STATUS_ERROR) &&
+                uploadItem.status !== STATUS_PENDING &&
+                uploadItem.status !== STATUS_IN_PROGRESS,
         );
 
         let view = '';
