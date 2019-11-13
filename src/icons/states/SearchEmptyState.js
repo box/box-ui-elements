@@ -4,16 +4,9 @@ import * as React from 'react';
 import AccessibleSVG from '../accessible-svg';
 import { bdlBoxBlue } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const SearchEmptyState = ({ className = '', color = bdlBoxBlue, height = 180, title, width = 180 }: Props) => (
+const SearchEmptyState = ({ className = '', color = bdlBoxBlue, height = 180, title, width = 180 }: Icon) => (
     <AccessibleSVG
         className={`search-empty-state ${className}`}
         height={height}

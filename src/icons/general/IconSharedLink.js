@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconSharedLink = ({ className = '', color = '#444444', height = 15, title, width = 15 }: Props) => (
+const IconSharedLink = ({ className = '', color = '#444444', height = 15, title, width = 15 }: Icon) => (
     <AccessibleSVG
         className={`icon-shared-link ${className}`}
         height={height}

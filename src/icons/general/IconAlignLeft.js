@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconAlignLeft = ({ className = '', color = '#444', height = 10, title, width = 13 }: Props) => (
+const IconAlignLeft = ({ className = '', color = '#444', height = 10, title, width = 13 }: Icon) => (
     <AccessibleSVG
         className={`icon-align-left ${className}`}
         height={height}

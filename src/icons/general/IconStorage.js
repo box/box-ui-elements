@@ -4,15 +4,9 @@ import * as React from 'react';
 import AccessibleSVG from '../accessible-svg';
 import { bdlGreenLight } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    title?: string,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconStorage = ({ className = '', color = bdlGreenLight, height = 12, title, width = 16 }: Props) => (
+const IconStorage = ({ className = '', color = bdlGreenLight, height = 12, title, width = 16 }: Icon) => (
     <AccessibleSVG
         className={`bdl-IconStorage ${className}`}
         height={height}

@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconEyeInverted = ({ className = '', color = '#444', height = 12, title, width = 16 }: Props) => (
+const IconEyeInverted = ({ className = '', color = '#444', height = 12, title, width = 16 }: Icon) => (
     <AccessibleSVG
         className={`icon-eye-inverted ${className}`}
         height={height}

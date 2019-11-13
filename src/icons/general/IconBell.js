@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconBell = ({ className = '', color = '#FFFFFF', height = 20, title, width = 20 }: Props) => (
+const IconBell = ({ className = '', color = '#FFFFFF', height = 20, title, width = 20 }: Icon) => (
     <AccessibleSVG className={`icon-bell ${className}`} height={height} title={title} viewBox="0 0 20 20" width={width}>
         <g fill="none" fillRule="evenodd" transform="matrix(1 0 0 -1 1 19)">
             <circle className="stroke-color" cx="9" cy="9" r="9" stroke={color} />
