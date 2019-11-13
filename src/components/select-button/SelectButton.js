@@ -12,7 +12,7 @@ type Props = {
     isDisabled: boolean,
 };
 
-const SelectButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
+const SelectButton = React.forwardRef<Props, React.Ref<HTMLButtonElement>>((props: Props, ref: React.Ref<any>) => {
     const { children, className = '', error, isDisabled = false, ...rest } = props;
 
     return (

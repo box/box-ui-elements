@@ -8,26 +8,26 @@ export const OVERLAY_SCROLLABLE_CLASS = 'bdl-SelectField-overlay--scrollable';
 
 type Props = {
     children: React.Node,
+    innerRef: React.Ref,
     isScrollable?: boolean,
     multiple?: boolean,
-    placement: string,
-    popperRef: (?HTMLElement) => void,
-    scheduleUpdate?: () => void,
+    placement?: string,
+    scheduleUpdate: () => void,
     selectFieldID: String,
     selectedValues: Array<SelectOptionValueProp>,
     style: Object,
 };
 
-class SelectDropdownList extends React.Component<Props> {
+class SelectFieldDropdown extends React.Component<Props> {
     componentDidUpdate({ selectedValues: prevSelectedValues }) {
-        const { scheduleUpdate, selectedValues } = this.props;
-        if (scheduleUpdate && prevSelectedValues !== selectedValues) {
+        const { multiple, scheduleUpdate, selectedValues } = this.props;
+        if (multiple && prevSelectedValues !== selectedValues) {
             scheduleUpdate();
         }
     }
 
     render() {
-        const { children, popperRef, style, placement, isScrollable, multiple, selectFieldID } = this.props;
+        const { children, innerRef, style, placement, isScrollable, multiple, selectFieldID } = this.props;
 
         const listboxProps = {};
         if (multiple) {
@@ -36,10 +36,10 @@ class SelectDropdownList extends React.Component<Props> {
 
         return (
             <ul
-                ref={popperRef}
+                ref={innerRef}
                 style={style}
                 data-placement={placement}
-                className={classNames('overlay', {
+                className={classNames('bdl-SelectFieldDropdown', 'overlay', {
                     [OVERLAY_SCROLLABLE_CLASS]: isScrollable,
                 })}
                 id={selectFieldID}
@@ -54,4 +54,6 @@ class SelectDropdownList extends React.Component<Props> {
     }
 }
 
-export default SelectDropdownList;
+export default React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => (
+    <SelectFieldDropdown {...props} innerRef={ref} />
+));

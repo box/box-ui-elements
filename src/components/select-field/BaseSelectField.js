@@ -2,15 +2,15 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
-import { Manager, Reference, Popper } from 'react-popper';
 
 import { scrollIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
 import DatalistItem from '../datalist-item';
-import SelectDropdownList from './SelectDropdownList';
+import PopperComponent from '../popper';
+import SelectFieldDropdown from './SelectFieldDropdown';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
-import { OVERLAY_WRAPPER_CLASS } from '../../constants';
+import { PLACEMENT_BOTTOM_END, PLACEMENT_BOTTOM_START } from '../popper/constants';
 
 import './SelectField.scss';
 
@@ -314,6 +314,8 @@ class BaseSelectField extends React.Component<Props, State> {
         };
 
         return (
+            // Need to store the select button reference so we can calculate the button width
+            // in order to set it as the min width of the dropdown list
             <SelectButton {...buttonProps} error={error}>
                 {buttonText}
             </SelectButton>
@@ -355,7 +357,13 @@ class BaseSelectField extends React.Component<Props, State> {
                     <div className="select-option-check-icon">
                         {isSelected ? <IconCheck height={16} width={16} /> : null}
                     </div>
-                    {optionRenderer ? optionRenderer(item) : displayText}
+                    {optionRenderer ? (
+                        optionRenderer(item)
+                    ) : (
+                        <span className="select-option-text" title={displayText}>
+                            {displayText}
+                        </span>
+                    )}
                 </DatalistItem>
             );
             /* eslint-enable react/jsx-key */
@@ -366,21 +374,6 @@ class BaseSelectField extends React.Component<Props, State> {
         });
 
         return selectOptions;
-    };
-
-    getSelectButtonWidth = (): null | number => {
-        if (!this.selectButtonRef) {
-            return 0;
-        }
-
-        const { width } = this.selectButtonRef.getBoundingClientRect();
-
-        return width;
-    };
-
-    setSelectButtonRef = setReferenceNode => node => {
-        this.selectButtonRef = node;
-        setReferenceNode(node);
     };
 
     render() {
@@ -394,52 +387,26 @@ class BaseSelectField extends React.Component<Props, State> {
         // 4) defaultValue, if defined, should mean selectedValues is never empty
         // 5) defaultValue, if defined, cannot be selected in addition to other options (must be exclusive)
 
-        const listboxProps = {};
-        if (multiple) {
-            listboxProps['aria-multiselectable'] = true;
-        }
-
-        const dropdownPlacement = isRightAligned ? 'bottom-end' : 'bottom-start';
+        const dropdownPlacement = isRightAligned ? PLACEMENT_BOTTOM_END : PLACEMENT_BOTTOM_START;
 
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                className={classNames(className, 'select-container')}
+                className={classNames(className, 'bdl-SelectField', 'select-container')}
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
             >
-                <Manager>
-                    <Reference>
-                        {({ ref }) =>
-                            // Need to store the select button reference so we can calculate the button width
-                            // in order to set it as the min width of the dropdown list
-                            React.cloneElement(this.renderSelectButton(), { ref: this.setSelectButtonRef(ref) })
-                        }
-                    </Reference>
-                    {isOpen && (
-                        <Popper placement={dropdownPlacement} className={OVERLAY_WRAPPER_CLASS}>
-                            {({ ref, style, placement, scheduleUpdate }) => {
-                                const buttonWidth = this.getSelectButtonWidth();
-                                const updatedStyle = { ...style, minWidth: buttonWidth };
-
-                                return (
-                                    <SelectDropdownList
-                                        popperRef={ref}
-                                        style={updatedStyle}
-                                        data-placement={placement}
-                                        isScrollable={isScrollable}
-                                        multiple
-                                        scheduleUpdate={scheduleUpdate}
-                                        selectedValues={selectedValues}
-                                        selectFieldID={this.selectFieldID}
-                                    >
-                                        {this.renderSelectOptions()}
-                                    </SelectDropdownList>
-                                );
-                            }}
-                        </Popper>
-                    )}
-                </Manager>
+                <PopperComponent placement={dropdownPlacement} isOpen={isOpen}>
+                    {this.renderSelectButton()}
+                    <SelectFieldDropdown
+                        isScrollable={isScrollable}
+                        multiple={multiple}
+                        selectedValues={selectedValues}
+                        selectFieldID={this.selectFieldID}
+                    >
+                        {this.renderSelectOptions()}
+                    </SelectFieldDropdown>
+                </PopperComponent>
             </div>
         );
     }
