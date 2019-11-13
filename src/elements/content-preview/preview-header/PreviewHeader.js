@@ -11,13 +11,14 @@ import getProp from 'lodash/get';
 import AsyncLoad from '../../common/async-load';
 import FileInfo from './FileInfo';
 import IconClose from '../../../icons/general/IconClose';
+import IconDownload from '../../../icons/general/IconDownloadSolid';
 import IconDrawAnnotationMode from '../../../icons/annotations/IconDrawAnnotation';
 import IconPointAnnotation from '../../../icons/annotations/IconPointAnnotation';
 import IconPrint from '../../../icons/general/IconPrint';
-import IconDownload from '../../../icons/general/IconDownloadSolid';
+import Logo from '../../common/header/Logo';
 import messages from '../../common/messages';
-import { bdlGray50 } from '../../../styles/variables';
 import PlainButton from '../../../components/plain-button/PlainButton';
+import { bdlGray50 } from '../../../styles/variables';
 
 import './PreviewHeader.scss';
 
@@ -26,6 +27,7 @@ type Props = {
     canDownload: boolean,
     contentOpenWithProps?: ContentOpenWithProps,
     file?: BoxItem,
+    logoUrl?: string,
     onClose?: Function,
     onDownload: Function,
     onPrint: Function,
@@ -43,6 +45,7 @@ const PreviewHeader = ({
     contentOpenWithProps = {},
     file,
     intl,
+    logoUrl,
     onClose,
     onDownload,
     onPrint,
@@ -75,7 +78,7 @@ const PreviewHeader = ({
                 and must be put one level under bcpr-PreviewHeader
             */}
             <div className="bcpr-PreviewHeader-content bp-header bp-base-header">
-                <FileInfo file={file} version={selectedVersion} />
+                {logoUrl ? <Logo url={logoUrl} /> : <FileInfo file={file} version={selectedVersion} />}
 
                 <div className="bcpr-PreviewHeader-controls">
                     {isPreviewingCurrentVersion && (
