@@ -5,16 +5,9 @@ import classNames from 'classnames';
 import AccessibleSVG from '../accessible-svg';
 import { bdlBoxBlue, white } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const UsersEmptyState = ({ className, color = bdlBoxBlue, height = 135, title, width = 130 }: Props) => (
+const UsersEmptyState = ({ className, color = bdlBoxBlue, height = 135, title, width = 130 }: Icon) => (
     <AccessibleSVG
         className={classNames('users-empty-state', className)}
         height={height}

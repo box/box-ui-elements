@@ -4,16 +4,9 @@ import * as React from 'react';
 import AccessibleSVG from '../accessible-svg';
 import { bdlGray40 } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconSearch = ({ className = 'icon-search', color = bdlGray40, height = 14, title, width = 14 }: Props) => (
+const IconSearch = ({ className = 'icon-search', color = bdlGray40, height = 14, title, width = 14 }: Icon) => (
     <AccessibleSVG
         className={`icon-search ${className}`}
         height={height}

@@ -4,16 +4,9 @@ import * as React from 'react';
 import AccessibleSVG from '../accessible-svg';
 import { bdlGray } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconEyeHidden = ({ className = '', color = bdlGray, height = 32, title, width = 32 }: Props) => (
+const IconEyeHidden = ({ className = '', color = bdlGray, height = 32, title, width = 32 }: Icon) => (
     <AccessibleSVG
         className={`bdl-IconEyeHidden ${className}`}
         height={height}

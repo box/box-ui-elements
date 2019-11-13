@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconForward = ({ className = '', color = '#000000', height = 24, title, width = 24 }: Props) => (
+const IconForward = ({ className = '', color = '#000000', height = 24, title, width = 24 }: Icon) => (
     <AccessibleSVG
         className={`icon-forward ${className}`}
         height={height}

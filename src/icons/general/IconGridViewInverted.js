@@ -4,16 +4,9 @@ import * as React from 'react';
 import { bdlGray50 } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconGridViewInverted = ({ className = '', color = bdlGray50, height = 16, title, width = 16 }: Props) => (
+const IconGridViewInverted = ({ className = '', color = bdlGray50, height = 16, title, width = 16 }: Icon) => (
     <AccessibleSVG
         className={`icon-grid-view-inverted ${className}`}
         title={title}

@@ -4,16 +4,9 @@ import { bdlGray80 } from '../../styles/variables';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconDrawAnnotationMode = ({ className = '', color = bdlGray80, height = 21, title, width = 22 }: Props) => (
+const IconDrawAnnotationMode = ({ className = '', color = bdlGray80, height = 21, title, width = 22 }: Icon) => (
     <AccessibleSVG
         className={`icon-annotation-draw ${className}`}
         height={height}

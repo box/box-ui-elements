@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconEdit = ({ className = '', color = '#999', height = 14, title, width = 14 }: Props) => (
+const IconEdit = ({ className = '', color = '#999', height = 14, title, width = 14 }: Icon) => (
     <AccessibleSVG className={`icon-edit ${className}`} height={height} title={title} viewBox="0 0 14 14" width={width}>
         <path
             className="fill-color"

@@ -1,3 +1,0 @@
-```
-<IconAnyTask />
-```

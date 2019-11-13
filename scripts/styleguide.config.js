@@ -157,7 +157,7 @@ const allSections = [
             },
             {
                 name: 'General',
-                components: '../src/icons/general/[A-Z]*.js',
+                content: '../src/icons/general/README.md',
             },
             {
                 name: 'Google Docs',
