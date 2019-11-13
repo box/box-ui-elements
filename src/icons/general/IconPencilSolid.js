@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconPencilSolid = ({ className = '', color = '#000000', height = 10, title, width = 10 }: Props) => (
+const IconPencilSolid = ({ className = '', color = '#000000', height = 10, title, width = 10 }: Icon) => (
     <AccessibleSVG
         className={`icon-pencil-solid ${className}`}
         height={height}

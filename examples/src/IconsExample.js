@@ -42,7 +42,11 @@ class IconsExample extends React.Component<Props, State> {
         }
         return (
             <div className="props-section">
-                {isExpanded && <PropsComponent />}
+                {isExpanded && (
+                    <code className="props-code">
+                        <PropsComponent />
+                    </code>
+                )}
                 <button type="button" className="btn-toggle-props" onClick={() => this.togglePropsSection(iconName)}>
                     {isExpanded ? 'Hide Props' : 'View Props'}
                 </button>

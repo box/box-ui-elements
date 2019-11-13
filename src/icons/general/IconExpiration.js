@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconExpiration = ({ className = '', color = '#444444', height = 15, title, width = 14 }: Props) => (
+const IconExpiration = ({ className = '', color = '#444444', height = 15, title, width = 14 }: Icon) => (
     <AccessibleSVG
         className={`icon-expiration ${className}`}
         height={height}

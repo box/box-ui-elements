@@ -4,16 +4,9 @@ import { bdlGray20 } from '../../styles/variables';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconSmallClose = ({ className = '', color = bdlGray20, height = 8, title, width = 8 }: Props) => (
+const IconSmallClose = ({ className = '', color = bdlGray20, height = 8, title, width = 8 }: Icon) => (
     <AccessibleSVG
         className={`icon-close ${className}`}
         height={height}

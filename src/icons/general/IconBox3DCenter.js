@@ -3,15 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconBox3DCenter = ({ className = '', height = 18, color = '#444', title, width = 18 }: Props) => (
+const IconBox3DCenter = ({ className = '', height = 18, color = '#444', title, width = 18 }: Icon) => (
     <AccessibleSVG
         className={`box3d-center-icon ${className}`}
         height={height}

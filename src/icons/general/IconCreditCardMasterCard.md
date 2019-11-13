@@ -1,3 +1,0 @@
-```
-<IconCreditCardMasterCard />
-```

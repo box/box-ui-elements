@@ -4,16 +4,9 @@ import * as React from 'react';
 import AccessibleSVG from '../accessible-svg';
 import { bdlBoxBlue } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const ActivityFeedEmptyState = ({ className = '', color = bdlBoxBlue, height = 90, title, width = 90 }: Props) => (
+const ActivityFeedEmptyState = ({ className = '', color = bdlBoxBlue, height = 90, title, width = 90 }: Icon) => (
     <AccessibleSVG
         className={`box-ui-activity-feed-empty-state-illustration ${className}`}
         height={height}
