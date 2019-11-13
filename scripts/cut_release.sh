@@ -55,13 +55,17 @@ checkout_branch() {
         fi
         return 1
     else
-        git checkout -t release/$BRANCH || return 1
         GIT_BRANCH=$BRANCH
         if [[ "$HOTFIX" == true ]]; then
-            printf "${blue}This is a hotfix release...${end}"
+            printf "${blue}This is a hotfix release from ${BRANCH}...${end}"
+            git checkout $BRANCH || return 1
+        elif [[ "$BRANCH" == 'master' ]]; then
+            printf "${blue}This is a ${DIST} release, resetting hard from master...${end}"
+            git checkout master || return 1
+            git reset --hard release/master || return 1
         else
-            printf "${blue}This is a regular release, resetting hard from ${BRANCH}...${end}"
-            git reset --hard release/$BRANCH || return 1
+            printf "${blue}This is a ${DIST} release, resetting hard from ${BRANCH}...${end}"
+            git checkout -t release/$BRANCH || return 1
         fi
         printf "${green}${BRANCH} checkout complete and dist-tag=${DIST} determined!${end}"
     fi
