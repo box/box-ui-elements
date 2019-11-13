@@ -86,7 +86,7 @@ const ItemList = ({
         }
 
         const { type } = items[index];
-        const isSelected = !!isRowSelected(items[index], selected);
+        const isSelected = isRowSelected(items[index], selected);
         const isSelectable = isRowSelectable(
             selectableType,
             extensionsWhitelist,
@@ -110,7 +110,7 @@ const ItemList = ({
         index: number,
         rowData: BoxItem,
     }) => {
-        const isSelected = !!isRowSelected(rowData, selected);
+        const isSelected = isRowSelected(rowData, selected);
 
         // If the click is happening on a clickable element on the item row, ignore row selection
         if (

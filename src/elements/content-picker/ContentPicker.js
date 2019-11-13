@@ -855,7 +855,7 @@ class ContentPicker extends Component<Props, State> {
         if (!item[FIELD_SHARED_LINK]) {
             this.changeShareAccess(null, item);
         } else {
-            // if shared link already exists, update the collection in state
+            // if shared link already exists, update the current collection
             this.updateItemInCollection(item);
         }
     };
@@ -896,15 +896,43 @@ class ContentPicker extends Component<Props, State> {
      * @returns {void}
      */
     updateItemInCollection = (item: BoxItem) => {
-        const { currentCollection } = this.state;
-        const { items = [] } = currentCollection;
+        const { currentCollection, selected: selectedItems = [] } = this.state;
+        const { items: collectionItems = [] } = currentCollection;
         const newState = {
             currentCollection: {
                 ...currentCollection,
-                items: items.map(collectionItem => (collectionItem.id === item.id ? item : collectionItem)),
+                items: this.addUpdatedItemToCollection(item, collectionItems),
             },
+            selected: this.addUpdatedItemToCollection(item, selectedItems),
         };
         this.setState(newState);
+    };
+
+    /**
+     * Inserts a given item into a collection of box items
+     * if a matching item is found in the collection.
+     *
+     * @private
+     * @param {BoxItem} item - the item that will be inserted into the collection
+     * @param {Array<BoxItem>} collection - the collection of items to be searched for a match
+     * @return {boolean}
+     */
+
+    addUpdatedItemToCollection = (item: BoxItem, collection: Array<BoxItem>): Array<BoxItem> => {
+        return collection.map(collectionItem => (this.itemsMatch(collectionItem, item) ? item : collectionItem));
+    };
+
+    /**
+     * Determines if two items have the same id and type
+     *
+     * @private
+     * @param {BoxItem} item1 - the first item to compare
+     * @param {BoxItem} item2 - the second item to compare
+     * @return {boolean}
+     */
+
+    itemsMatch = (item1: BoxItem, item2: BoxItem): boolean => {
+        return item1.id === item2.id && item1.type === item2.type;
     };
 
     /**

@@ -4,12 +4,14 @@
  * @author Box
  */
 
-export function containsItem(item: BoxItem) {
+function containsItem(item: BoxItem): (selected: BoxItem) => boolean {
     const { id, type } = item;
 
     return (selected: BoxItem) => selected.id === id && selected.type === type;
 }
 
-export function isSelected(item: BoxItem, selectedItems: Array<BoxItem>) {
+function isSelected(item: BoxItem, selectedItems: Array<BoxItem>): boolean {
     return !!selectedItems.find(containsItem(item));
 }
+
+export { containsItem, isSelected };

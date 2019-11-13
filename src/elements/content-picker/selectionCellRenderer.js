@@ -20,7 +20,7 @@ export default (
 ): (({ rowData: BoxItem }) => {}) => ({ rowData }: { rowData: BoxItem }) => {
     const { name = '' } = rowData;
     const Component = isRadio ? RadioButton : Checkbox;
-    const isSelected = !!isRowSelected(rowData, selected);
+    const isSelected = isRowSelected(rowData, selected);
 
     if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData, isSelected)) {
         return <span />;
