@@ -1,5 +1,10 @@
 module.exports = {
-    branches: ['+([1-9])?(.{+([1-9]),x}).x', 'release', { name: 'master', prerelease: 'beta' }],
+    branches: [
+        '+([1-9])?(.{+([1-9]),x}).x',
+        'release',
+        { name: 'master', prerelease: 'beta' },
+        { name: 'next', prerelease: 'next' },
+    ],
     plugins: [
         '@semantic-release/release-notes-generator',
         [
