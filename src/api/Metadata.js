@@ -28,6 +28,8 @@ import {
     ERROR_CODE_FETCH_SKILLS,
 } from '../constants';
 
+import type { MetadataTemplateSchemaResponse } from '../common/types/metadata';
+
 class Metadata extends File {
     /**
      * Creates a key for the metadata cache
@@ -92,6 +94,16 @@ class Metadata extends File {
      */
     getMetadataTemplateUrlForInstance(id: string): string {
         return `${this.getMetadataTemplateUrl()}?metadata_instance_id=${id}`;
+    }
+
+    /**
+     * API URL for getting metadata template schema by template key
+     *
+     * @param {string} templateKey - metadata template key
+     * @return {string} API url for getting template schema by template key
+     */
+    getMetadataTemplateSchemaUrl(templateKey: string): string {
+        return `${this.getMetadataTemplateUrl()}/enterprise/${templateKey}/schema`;
     }
 
     /**
@@ -177,6 +189,17 @@ class Metadata extends File {
         }
 
         return getProp(templates, 'data.entries', []);
+    }
+
+    /**
+     * Gets metadata template schema by template key
+     *
+     * @param {string} templateKey - template key
+     * @return {Promise} Promise object of metadata template
+     */
+    getSchemaByTemplateKey(templateKey: string): Promise<MetadataTemplateSchemaResponse> {
+        const url = this.getMetadataTemplateSchemaUrl(templateKey);
+        return this.xhr.get({ url });
     }
 
     /**
