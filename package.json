@@ -65,6 +65,7 @@
         "release": "yarn release:beta",
         "release:beta": "BRANCH=master ./scripts/release.sh",
         "release:latest": "BRANCH=release ./scripts/release.sh",
+        "release:next": "BRANCH=next ./scripts/release.sh",
         "release:hotfix": "HOTFIX=true ./scripts/release.sh",
         "release:cdn": "yarn setup; node ./scripts/prod.js",
         "setup": "yarn install --frozen-lockfile; npm-run-all clean build:i18n",

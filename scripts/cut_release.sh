@@ -60,6 +60,14 @@ checkout_branch() {
         GIT_BRANCH=master
         printf "${blue}Resetting to remote release/master...${end}"
         git reset --hard release/master || return 1
+    elif [[ "$HOTFIX" != true ]] && [[ "$BRANCH" == "next" ]]; then
+        printf "${blue}This is a next branch release, using next dist-tag...${end}"
+        DISTTAG='next'
+        printf "${blue}Checking out next...${end}"
+        git checkout next || return 1
+        GIT_BRANCH=next
+        printf "${blue}Resetting to remote release/next...${end}"
+        git reset --hard release/next || return 1
     elif [[ "$HOTFIX" != true ]] && [[ "$BRANCH" == "release" ]]; then
         printf "${blue}This is a stable branch release, using latest dist-tag...${end}"
         DISTTAG='latest'
@@ -81,7 +89,7 @@ checkout_branch() {
         if [[ "$HOTFIX" == true ]]; then
             printf "${red}For hotfix you must pass in the git tag branch, eg: BRANCH=vX.X.X yarn release:hotfix${end}"
         else
-            printf "${red}Branch can only be master or release${end}"
+            printf "${red}Branch can only be master, release, or next${end}"
         fi
         return 1
     else
