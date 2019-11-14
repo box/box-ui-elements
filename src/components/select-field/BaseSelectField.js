@@ -70,6 +70,14 @@ type State = {
     shouldScrollIntoView: boolean,
 };
 
+function defaultOptionRenderer({ displayText }: SelectOptionProp) {
+    return (
+        <span className="bdl-SelectField-optionText" title={displayText}>
+            {displayText}
+        </span>
+    );
+}
+
 class BaseSelectField extends React.Component<Props, State> {
     static defaultProps = {
         buttonProps: {},
@@ -77,6 +85,7 @@ class BaseSelectField extends React.Component<Props, State> {
         isRightAligned: false,
         isScrollable: false,
         multiple: false,
+        optionRenderer: defaultOptionRenderer,
         options: [],
         selectedValues: [],
         separatorIndices: [],
@@ -327,7 +336,7 @@ class BaseSelectField extends React.Component<Props, State> {
         const { activeItemIndex } = this.state;
 
         const selectOptions = options.map<React.Element<typeof DatalistItem | 'li'>>((item, index) => {
-            const { displayText, value } = item;
+            const { value } = item;
 
             const isSelected = selectedValues.includes(value);
 
@@ -357,13 +366,7 @@ class BaseSelectField extends React.Component<Props, State> {
                     <div className="select-option-check-icon">
                         {isSelected ? <IconCheck height={16} width={16} /> : null}
                     </div>
-                    {optionRenderer ? (
-                        optionRenderer(item)
-                    ) : (
-                        <span className="select-option-text" title={displayText}>
-                            {displayText}
-                        </span>
-                    )}
+                    {optionRenderer(item)}
                 </DatalistItem>
             );
             /* eslint-enable react/jsx-key */

@@ -27,9 +27,11 @@ const PopperComponent = (props: Props) => {
             {isOpen && (
                 <Popper placement={popperPlacement} modifiers={modifiers}>
                     {({ ref, style, placement, scheduleUpdate }) => {
+                        const { style: contentStyles } = popperContent.props;
+                        const updatedStyles = { ...contentStyles, ...style };
                         return React.cloneElement(popperContent, {
                             ref,
-                            style,
+                            style: updatedStyles,
                             placement,
                             scheduleUpdate,
                         });
