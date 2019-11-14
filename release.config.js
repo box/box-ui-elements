@@ -1,5 +1,5 @@
-module.exports = {
-    branches: ['+([1-9])?(.{+([1-9]),x}).x', 'release', { name: 'master', prerelease: 'beta' }],
+const config = {
+    branches: ['+([1-9])?(.{+([1-9]),x}).x', 'release'],
     plugins: [
         '@semantic-release/release-notes-generator',
         [
@@ -27,3 +27,22 @@ module.exports = {
         ],
     ],
 };
+
+const branch = process.env.BRANCH;
+const dist = process.env.DIST;
+let prerelease = dist;
+
+if (branch === '' || dist === '') {
+    throw new Error('Bad values for BRANCH and DIST env variables');
+}
+
+if (dist === 'latest') {
+    prerelease = false;
+}
+
+if (!prerelease && branch !== 'master') {
+    throw new Error('Only the master BRANCH can have latest DIST');
+}
+
+config.branches.push({ name: branch, prerelease });
+module.exports = config;
