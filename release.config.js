@@ -1,5 +1,5 @@
 const config = {
-    branches: ['+([1-9])?(.{+([1-9]),x}).x'],
+    branches: ['+([1-9])?(.{+([1-9]),x}).x', 'release'],
     plugins: [
         '@semantic-release/release-notes-generator',
         [
