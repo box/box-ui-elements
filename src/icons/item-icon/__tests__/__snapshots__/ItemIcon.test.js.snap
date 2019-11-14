@@ -55,7 +55,7 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 7`] = `
-<IconFIleDwg32
+<IconFileDwg32
   className="test"
   height={10}
   title="title"
@@ -340,7 +340,7 @@ exports[`icons/item-icon/ItemIcon render() should render default component 6`] =
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 7`] = `
-<IconFIleDwg32
+<IconFileDwg32
   height={32}
   width={32}
 />

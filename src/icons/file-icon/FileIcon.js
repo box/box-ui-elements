@@ -5,7 +5,7 @@ import IconFileAudio from '../imported/Icon/IconFileAudio32';
 import IconFileBoxNote from '../imported/Icon/IconFileBoxNote32';
 import IconFileCode from '../imported/Icon/IconFileCode32';
 import IconFileDefault from '../imported/Icon/IconFileDefault32';
-import IconFileDwg from '../imported/Icon/IconFIleDwg32';
+import IconFileDwg from '../imported/Icon/IconFileDwg32';
 import IconFileExcelSpreadsheet from '../imported/Icon/IconFileExcel32';
 import IconFileGoogleDocs from '../imported/Icon/IconFileDocs32';
 import IconFileGoogleSheets from '../imported/Icon/IconFileSheets32';

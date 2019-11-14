@@ -37,7 +37,7 @@ const icons = [
     },
     {
         name: 'IconFileDwg',
-        component: require('../imported/Icon/IconFIleDwg32').default,
+        component: require('../imported/Icon/IconFileDwg32').default,
     },
     {
         name: 'IconFileExcelSpreadsheet',

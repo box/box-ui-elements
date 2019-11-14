@@ -9,7 +9,7 @@ type SvgProps = {
     width?: number,
 };
 
-const IconFIleDwg32 = (props: SvgProps) => (
+const IconFileDwg32 = (props: SvgProps) => (
     <AccessibleSVG width={32} height={32} viewBox="0 0 32 32" {...props}>
         <g fill="none">
             <path
@@ -26,4 +26,4 @@ const IconFIleDwg32 = (props: SvgProps) => (
     </AccessibleSVG>
 );
 
-export default IconFIleDwg32;
+export default IconFileDwg32;
