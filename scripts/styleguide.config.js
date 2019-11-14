@@ -169,7 +169,7 @@ const allSections = [
             },
             {
                 name: 'Items',
-                components: ['../src/icons/bookmark-icon/BookmarkIcon.js', '../src/icons/item-icon/ItemIcon.js'],
+                components: ['../src/icons/item-icon/ItemIcon.js'],
             },
             {
                 name: 'iWork',

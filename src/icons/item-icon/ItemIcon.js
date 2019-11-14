@@ -1,39 +1,38 @@
 // @flow
 import * as React from 'react';
 
-import IconFileAudio from '../file/IconFileAudio';
-import IconFileBoxNote from '../file/IconFileBoxNote';
-import IconFileCode from '../file/IconFileCode';
-import IconFileDefault from '../file/IconFileDefault';
-import IconFileDocument from '../file/IconFileDocument';
-import IconFileDwg from '../file/IconFileDwg';
-import IconFileExcelSpreadsheet from '../file/IconFileExcelSpreadsheet';
-import IconFileGoogleDocs from '../file/IconFileGoogleDocs';
-import IconFileGoogleSheets from '../file/IconFileGoogleSheets';
-import IconFileGoogleSlides from '../file/IconFileGoogleSlides';
-import IconFileIllustrator from '../file/IconFileIllustrator';
-import IconFileImage from '../file/IconFileImage';
-import IconFileIndesign from '../file/IconFileIndesign';
-import IconFileKeynote from '../file/IconFileKeynote';
-import IconFileNumbers from '../file/IconFileNumbers';
-import IconFilePages from '../file/IconFilePages';
-import IconFilePDF from '../file/IconFilePDF';
-import IconFilePhotoshop from '../file/IconFilePhotoshop';
-import IconFilePowerpointPresentation from '../file/IconFilePowerpointPresentation';
-import IconFilePresentation from '../file/IconFilePresentation';
-import IconFileSpreadsheet from '../file/IconFileSpreadsheet';
-import IconFileText from '../file/IconFileText';
-import IconFileThreeD from '../file/IconFileThreeD';
-import IconFileVector from '../file/IconFileVector';
-import IconFileVideo from '../file/IconFileVideo';
-import IconFileWordDocument from '../file/IconFileWordDocument';
-import IconFileZip from '../file/IconFileZip';
+import IconFileAudio from '../imported/Icon/IconFileAudio32';
+import IconFileBoxNote from '../imported/Icon/IconFileBoxNote32';
+import IconFileCode from '../imported/Icon/IconFileCode32';
+import IconFileDefault from '../imported/Icon/IconFileDefault32';
+import IconFileDwg from '../imported/Icon/IconFIleDwg32';
+import IconFileExcelSpreadsheet from '../imported/Icon/IconFileExcel32';
+import IconFileGoogleDocs from '../imported/Icon/IconFileDocs32';
+import IconFileGoogleSheets from '../imported/Icon/IconFileSheets32';
+import IconFileGoogleSlides from '../imported/Icon/IconFileSlides32';
+import IconFileIllustrator from '../imported/Icon/IconFileIllustrator32';
+import IconFileImage from '../imported/Icon/IconFileImage32';
+import IconFileIndesign from '../imported/Icon/IconFileIndesign32';
+import IconFileKeynote from '../imported/Icon/IconFileKeynote32';
+import IconFileNumbers from '../imported/Icon/IconFileNumbers32';
+import IconFilePages from '../imported/Icon/IconFilePages32';
+import IconFilePDF from '../imported/Icon/IconFilePdf32';
+import IconFilePhotoshop from '../imported/Icon/IconFilePhotoshop32';
+import IconFilePowerpointPresentation from '../imported/Icon/IconFilePowerpoint32';
+import IconFilePresentation from '../imported/Icon/IconFilePresentation32';
+import IconFileSpreadsheet from '../imported/Icon/IconFileSpreadsheet32';
+import IconFileText from '../imported/Icon/IconFileText32';
+import IconFileThreeD from '../imported/Icon/IconFileThreeD32';
+import IconFileVector from '../imported/Icon/IconFileVector32';
+import IconFileVideo from '../imported/Icon/IconFileVideo32';
+import IconFileWordDocument from '../imported/Icon/IconFileWord32';
+import IconFileZip from '../imported/Icon/IconFileZip32';
 
-import BookmarkIcon from '../bookmark-icon';
+import BookmarkIcon from '../imported/Icon/IconFileBookmark32';
 
-import IconFolderCollab from '../folder/IconFolderCollab';
-import IconFolderExternal from '../folder/IconFolderExternal';
-import IconFolderPersonal from '../folder/IconFolderPersonal';
+import IconFolderCollab from '../imported/Icon/IconFolderShared32';
+import IconFolderExternal from '../imported/Icon/IconFolderExternal32';
+import IconFolderPersonal from '../imported/Icon/IconFolderPersonal32';
 
 const itemIconTable = {
     audio: IconFileAudio,
@@ -41,7 +40,7 @@ const itemIconTable = {
     boxnote: IconFileBoxNote,
     code: IconFileCode,
     default: IconFileDefault,
-    document: IconFileDocument,
+    document: IconFileText,
     dwg: IconFileDwg,
     'excel-spreadsheet': IconFileExcelSpreadsheet,
     'folder-collab': IconFolderCollab,
