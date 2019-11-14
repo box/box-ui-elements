@@ -535,9 +535,6 @@ class MultiputUpload extends BaseMultiput {
             }
             this.retryTimeout = setTimeout(this.getSessionInfo, retryAfterMs);
             this.numResumeRetries += 1;
-        } else if (errorData && errorData.status >= 500) {
-            this.retryTimeout = setTimeout(this.getSessionInfo, 2 ** this.numResumeRetries * MS_IN_S);
-            this.numResumeRetries += 1;
         } else if (errorData && errorData.status >= 400 && errorData.status < 500) {
             // Restart upload process for errors resulting from invalid/expired session or no permission
             this.parts.forEach(part => {
@@ -561,7 +558,8 @@ class MultiputUpload extends BaseMultiput {
             };
             this.upload(uploadOptions);
         } else {
-            // Handle internet disconnects (error.request && !error.response) and (!error.request) as well as any other unhandled error
+            // Handle internet disconnects (error.request && !error.response) and (!error.request)
+            // Also handle any 500 error messages
             this.retryTimeout = setTimeout(this.getSessionInfo, 2 ** this.numResumeRetries * MS_IN_S);
             this.numResumeRetries += 1;
         }
