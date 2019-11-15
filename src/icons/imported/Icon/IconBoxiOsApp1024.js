@@ -5,7 +5,7 @@ import AccessibleSVG from '../../accessible-svg';
 import type { Icon } from '../../flowTypes';
 
 const IconBoxiOsApp1024 = (props: Icon) => (
-    <AccessibleSVG width={32} height={32} viewBox="0 0 1024 1024" {...props}>
+    <AccessibleSVG width={1024} height={1024} viewBox="0 0 1024 1024" {...props}>
         <g fillRule="nonzero" fill="none">
             <path fill="#0061D5" d="M0 0h1024v1024H0z" />
             <path
