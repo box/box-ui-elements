@@ -6,35 +6,41 @@ It expects two children where the first child is the reference element and the s
 
 ### Examples
 
-**auto placement**
-
 ```js
-<div style={{position: 'relative'}}>
-    <PopperComponent isOpen>
-        <div className="flex-center-center" style={{border: "1px solid black", width: '200px', height: '100px', cursor: 'pointer'}}>Reference Element</div>
-        <div className="flex-center-center" style={{width: '100px', height: '50px', backgroundColor: '#4e4e4e', color: '#fff'}}>I'm a popper</div>
-    </PopperComponent>
-</div>
-```
+const flexCenter = { display: 'flex', alignItems: 'center', justifyContent: 'center' };
+const containerStyles = { marginTop: '120px' };
+const referenceStyles = { ...flexCenter, border: "1px solid black", width: '200px', height: '100px' };
+const popperStyles = { ...flexCenter, width: '100px', height: '50px', backgroundColor: '#4e4e4e', color: '#fff' };
 
-**bottom-end**
+<React.Fragment>
+    <div>
+        <Label>Auto placement</Label>
+        <div style={{position: 'relative'}}>
+            <PopperComponent isOpen>
+                <div style={referenceStyles}>Reference Element</div>
+                <div style={popperStyles}>I'm a popper</div>
+            </PopperComponent>
+        </div>
+    </div>
 
-```js
-<div style={{position: 'relative'}}>
-    <PopperComponent isOpen placement="bottom-end">
-        <div className="flex-center-center" style={{border: "1px solid black", width: '200px', height: '100px', cursor: 'pointer'}}>Reference Element</div>
-        <div className="flex-center-center" style={{width: '100px', height: '50px', backgroundColor: '#4e4e4e', color: '#fff'}}>I'm a popper</div>
-    </PopperComponent>
-</div>
-```
+    <div style={containerStyles}>
+        <Label>bottom-end</Label>
+        <div style={{position: 'relative'}}>
+            <PopperComponent isOpen placement="bottom-end">
+                <div style={referenceStyles}>Reference Element</div>
+                <div style={popperStyles}>I'm a popper</div>
+            </PopperComponent>
+        </div>
+    </div>
 
-**top-end**
-
-```js
-<div style={{position: 'relative'}}>
-    <PopperComponent isOpen placement="top-end">
-        <div className="flex-center-center" style={{border: "1px solid black", width: '200px', height: '100px', cursor: 'pointer'}}>Reference Element</div>
-        <div className="flex-center-center" style={{width: '100px', height: '50px', backgroundColor: '#4e4e4e', color: '#fff'}}>I'm a popper</div>
-    </PopperComponent>
-</div>
+    <div style={containerStyles}>
+        <Label>top-end</Label>
+        <div style={{position: 'relative'}}>
+            <PopperComponent isOpen placement="top-end">
+                <div style={referenceStyles}>Reference Element</div>
+                <div style={popperStyles}>I'm a popper</div>
+            </PopperComponent>
+        </div>
+    </div>
+</React.Fragment>
 ```

@@ -12,10 +12,8 @@ type Props = {
     isDisabled: boolean,
 };
 
-const SelectButton = React.forwardRef<Props, React.Ref<HTMLButtonElement>>((props: Props, ref: React.Ref<any>) => {
-    const { children, className = '', error, isDisabled = false, ...rest } = props;
-
-    return (
+const SelectButton = React.forwardRef<Props, HTMLButtonElement>(
+    ({ children, className = '', error, isDisabled = false, ...rest }: Props, ref) => (
         <Tooltip isShown={!!error} position="middle-right" text={error} theme="error">
             <button
                 className={classNames(className, 'select-button', {
@@ -29,7 +27,7 @@ const SelectButton = React.forwardRef<Props, React.Ref<HTMLButtonElement>>((prop
                 {children}
             </button>
         </Tooltip>
-    );
-});
+    ),
+);
 
 export default SelectButton;

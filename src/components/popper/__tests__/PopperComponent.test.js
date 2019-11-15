@@ -21,8 +21,8 @@ describe('components/popper/PopperComponent', () => {
             </PopperComponent>,
         );
 
-        expect(wrapper.find(Reference).length).toBe(1);
-        expect(wrapper.find(Popper).length).toBe(0);
+        expect(wrapper.exists(Reference)).toBe(true);
+        expect(wrapper.exists(Popper)).toBe(false);
     });
 
     test('should render popper content if is open', () => {
@@ -33,8 +33,8 @@ describe('components/popper/PopperComponent', () => {
             </PopperComponent>,
         );
 
-        expect(wrapper.find(Reference).length).toBe(1);
-        expect(wrapper.find(Popper).length).toBe(1);
+        expect(wrapper.exists(Reference)).toBe(true);
+        expect(wrapper.exists(Popper)).toBe(true);
     });
 
     test('should apply the placement to the Popper', () => {
@@ -45,7 +45,7 @@ describe('components/popper/PopperComponent', () => {
             </PopperComponent>,
         );
 
-        expect(wrapper.find(Reference).length).toBe(1);
+        expect(wrapper.exists(Reference)).toBe(true);
         const popperWrapper = wrapper.find(Popper);
         expect(popperWrapper.length).toBe(1);
         expect(popperWrapper.prop('placement')).toBe('bottom-end');

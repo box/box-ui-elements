@@ -3,25 +3,23 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import type { SelectOptionValueProp } from './props';
+import type { PopperChildrenProps } from '../popper/props';
 
 export const OVERLAY_SCROLLABLE_CLASS = 'bdl-SelectField-overlay--scrollable';
 
 type Props = {
     children: React.Node,
-    innerRef: React.Ref,
+    innerRef?: React.Ref<any>,
     isScrollable?: boolean,
     multiple?: boolean,
-    placement?: string,
-    scheduleUpdate: () => void,
-    selectFieldID: String,
+    selectFieldID: string,
     selectedValues: Array<SelectOptionValueProp>,
-    style: Object,
-};
+} & PopperChildrenProps;
 
 class SelectFieldDropdown extends React.Component<Props> {
     componentDidUpdate({ selectedValues: prevSelectedValues }) {
         const { multiple, scheduleUpdate, selectedValues } = this.props;
-        if (multiple && prevSelectedValues !== selectedValues) {
+        if (multiple && scheduleUpdate && prevSelectedValues !== selectedValues) {
             scheduleUpdate();
         }
     }
@@ -54,6 +52,6 @@ class SelectFieldDropdown extends React.Component<Props> {
     }
 }
 
-export default React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => (
+export default React.forwardRef<Props, HTMLUListElement>((props: Props, ref) => (
     <SelectFieldDropdown {...props} innerRef={ref} />
 ));

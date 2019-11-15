@@ -50,7 +50,7 @@ type Props = {
     /** Function will be called with the user selected option (even on deselect or when the option was previously selected) */
     onOptionSelect?: Function,
     /** Function that allows custom rendering of select field options. When not provided the component will only render the option's displayText by default */
-    optionRenderer?: (option: SelectOptionProp) => React.Node,
+    optionRenderer: (option: SelectOptionProp) => React.Node,
     /** List of options (displayText, value) */
     options: Array<SelectOptionProp>,
     /** The select button text shown when no options are selected. */
