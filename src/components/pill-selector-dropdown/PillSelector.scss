@@ -4,16 +4,16 @@
  * Pill Selector
  **************************************/
 
-.pill-selector-hidden-input {
+.bdl-PillSelector-input--hidden {
     position: absolute;
     visibility: hidden;
 }
 
-.pill-selector-wrapper {
+.bdl-PillSelectorDropdown {
     position: relative;
     margin: 0 0 20px;
 
-    .pill-selector-input-wrapper {
+    .bdl-PillSelector {
         display: flex;
         flex-flow: row wrap;
         align-content: flex-start;
@@ -55,7 +55,7 @@
             border-color: $bdl-watermelon-red;
         }
 
-        &.pill-selector-suggestions-enabled {
+        &.bdl-PillSelector--suggestionsEnabled {
             min-height: $bdl-line-height * 4;
         }
 
@@ -83,7 +83,7 @@
             margin-top: 0 !important;
         }
 
-        .pills-list {
+        .bdl-PillsList {
             margin: 0;
 
             li {
@@ -91,7 +91,7 @@
             }
         }
 
-        .pill-selector-input {
+        .bdl-PillSelector-input {
             flex: 1;
             box-sizing: content-box !important;
             min-width: 0;
@@ -113,4 +113,32 @@
             }
         }
     }
+}
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.pill-selector-suggestions-enabled {
+    @extend .bdl-PillSelector--suggestionsEnabled;
+}
+
+.pill-selector-hidden-input {
+    @extend .bdl-PillSelector-input--hidden;
+}
+
+.pill-selector-wrapper {
+    @extend .bdl-PillSelectorDropdown;
+}
+
+.pill-selector-input {
+    @extend .bdl-PillSelector-input;
+}
+
+.pill-selector-input-wrapper {
+    @extend .bdl-PillSelector;
+}
+
+.pills-list {
+    @extend .bdl-PillsList;
 }

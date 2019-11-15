@@ -12,7 +12,7 @@ type Props = {
 };
 
 const Pill = ({ isDisabled = false, isSelected = false, isValid = true, onRemove, text }: Props) => {
-    const styles = classNames('pill', {
+    const styles = classNames('bdl-Pill', {
         'is-selected': isSelected && !isDisabled,
         'is-invalid': !isValid,
         'is-disabled': isDisabled,
@@ -21,7 +21,7 @@ const Pill = ({ isDisabled = false, isSelected = false, isValid = true, onRemove
 
     return (
         <span className={styles}>
-            <span className="pill-text">{text}</span>
+            <span className="bdl-Pill-text">{text}</span>
             <span aria-hidden="true" className="close-btn" onClick={onClick}>
                 ✕
             </span>

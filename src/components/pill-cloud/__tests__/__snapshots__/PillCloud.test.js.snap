@@ -2,22 +2,22 @@
 
 exports[`components/pill-cloud/PillCloud should render pills 1`] = `
 <div
-  className="pill-cloud-container"
+  className="bdl-PillCloud"
 >
   <Button
-    className="pill pill-cloud-button"
+    className="bdl-Pill bdl-PillCloud-button"
     key="1"
   >
     Hello
   </Button>
   <Button
-    className="pill pill-cloud-button"
+    className="bdl-Pill bdl-PillCloud-button"
     key="2"
   >
     There
   </Button>
   <Button
-    className="pill pill-cloud-button"
+    className="bdl-Pill bdl-PillCloud-button"
     key="3"
   >
     Sir

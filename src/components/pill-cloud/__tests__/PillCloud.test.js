@@ -21,20 +21,20 @@ describe('components/pill-cloud/PillCloud', () => {
         ];
         const wrapper = shallow(<PillCloud options={pills} />);
 
-        expect(wrapper.find('.pill-cloud-button').length).toEqual(3);
+        expect(wrapper.find('.bdl-PillCloud-button').length).toEqual(3);
     });
 
     test('should be able to handle 0 children', () => {
         const wrapper = shallow(<PillCloud options={[]} />);
 
-        expect(wrapper.find('.pill-cloud-button').length).toEqual(0);
+        expect(wrapper.find('.bdl-PillCloud-button').length).toEqual(0);
     });
 
     test('should be able to handle 1 child', () => {
         const pills = [{ value: 1, displayText: 'Hello' }];
         const wrapper = shallow(<PillCloud options={pills} />);
 
-        expect(wrapper.find('.pill-cloud-button').length).toEqual(1);
+        expect(wrapper.find('.bdl-PillCloud-button').length).toEqual(1);
     });
 
     test('should add selected class to a selected pill when passed by reference', () => {
@@ -44,7 +44,7 @@ describe('components/pill-cloud/PillCloud', () => {
             { value: 3, displayText: 'Sir' },
         ];
         const wrapper = shallow(<PillCloud options={pills} selectedOptions={[pills[1]]} />);
-        const buttons = wrapper.find('.pill-cloud-button');
+        const buttons = wrapper.find('.bdl-PillCloud-button');
         expect(
             buttons
                 .at(1)
@@ -60,7 +60,7 @@ describe('components/pill-cloud/PillCloud', () => {
             { value: 3, displayText: 'Sir' },
         ];
         const wrapper = shallow(<PillCloud options={pills} selectedOptions={[{ value: 3, displayText: 'Sir' }]} />);
-        const buttons = wrapper.find('.pill-cloud-button');
+        const buttons = wrapper.find('.bdl-PillCloud-button');
         expect(
             buttons
                 .at(2)
@@ -81,6 +81,6 @@ describe('components/pill-cloud/PillCloud', () => {
             />,
         );
 
-        wrapper.find('.pill-cloud-button').simulate('click');
+        wrapper.find('.bdl-PillCloud-button').simulate('click');
     });
 });
