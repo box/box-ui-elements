@@ -101,8 +101,13 @@
 .bcpr-PreviewHeader-button.btn-plain {
     display: flex;
     align-items: center;
-    padding: 5px 10px;
     color: $bdl-gray-02;
+
+    &,
+    &:hover,
+    &:active {
+        padding: 5px 10px;
+    }
 
     &:focus,
     &:hover {
