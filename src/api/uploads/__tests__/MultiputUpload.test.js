@@ -525,6 +525,30 @@ describe('api/uploads/MultiputUpload', () => {
             expect(multiputUploadTest.upload).toHaveBeenCalled();
             expect(multiputUploadTest.numResumeRetries).toBe(0);
         });
+
+        test('should retry on network disconnect', () => {
+            multiputUploadTest.numResumeRetries = 1;
+            multiputUploadTest.getErrorResponse = jest.fn(error => error.response);
+            multiputUploadTest.abortSession = jest.fn();
+            multiputUploadTest.upload = jest.fn();
+
+            let networkDisconnectError = { request: {} }; // No response
+
+            multiputUploadTest.getSessionErrorHandler(networkDisconnectError);
+            expect(multiputUploadTest.getErrorResponse).toHaveBeenCalledWith(networkDisconnectError);
+            expect(multiputUploadTest.abortSession).not.toHaveBeenCalled();
+            expect(multiputUploadTest.upload).not.toHaveBeenCalled();
+            expect(multiputUploadTest.numResumeRetries).toBe(2);
+
+            networkDisconnectError = {}; // No request or response
+            multiputUploadTest.numResumeRetries = 1;
+
+            multiputUploadTest.getSessionErrorHandler(networkDisconnectError);
+            expect(multiputUploadTest.getErrorResponse).toHaveBeenCalledWith(networkDisconnectError);
+            expect(multiputUploadTest.abortSession).not.toHaveBeenCalled();
+            expect(multiputUploadTest.upload).not.toHaveBeenCalled();
+            expect(multiputUploadTest.numResumeRetries).toBe(2);
+        });
     });
 
     describe('createSessionErrorHandler()', () => {
