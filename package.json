@@ -51,6 +51,7 @@
         "build:prod:dist": "NODE_ENV=production webpack --config scripts/webpack.config.js --mode production",
         "build:prod:examples": "LANGUAGE=en-US REACT=true NODE_ENV=production node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js build --config scripts/styleguide.config.js --mode production",
         "build:prod:npm": "BABEL_ENV=production OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
+        "build:sync": "LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev RSYNC=true webpack --config scripts/webpack.config.js --mode development",
         "build:variables": "cat `find src/styles/constants -name '*.scss'` > src/styles/variables.scss | node ./scripts/build-style-vars.js src/styles/variables.scss && rm src/styles/variables.scss",
         "clean": "rm -rf dist es i18n/json i18n/*.js reports styleguide",
         "copy:styles": "copyfiles './src/**/*.scss' es --up 1",
