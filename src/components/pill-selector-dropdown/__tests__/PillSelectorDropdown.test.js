@@ -38,7 +38,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const selectorDropdown = wrapper.find('SelectorDropdown');
 
             expect(selectorDropdown.is('SelectorDropdown')).toBe(true);
-            expect(selectorDropdown.hasClass('bdl-PillSelectorWrapper')).toBe(true);
+            expect(selectorDropdown.hasClass('bdl-PillSelectorDropdown')).toBe(true);
             expect(selectorDropdown.hasClass(className)).toBe(true);
             expect(selectorDropdown.prop('onEnter')).toEqual(instance.handleEnter);
             expect(selectorDropdown.prop('onSelect')).toEqual(instance.handleSelect);

@@ -245,7 +245,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         return (
             <Label text={label}>
                 <SelectorDropdown
-                    className={classNames('bdl-PillSelectorWrapper', className)}
+                    className={classNames('bdl-PillSelectorDropdown', className)}
                     dividerIndex={dividerIndex}
                     onEnter={this.handleEnter}
                     onSelect={this.handleSelect}

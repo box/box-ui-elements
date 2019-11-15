@@ -9,7 +9,7 @@
     visibility: hidden;
 }
 
-.bdl-PillSelectorWrapper {
+.bdl-PillSelectorDropdown {
     position: relative;
     margin: 0 0 20px;
 
@@ -128,7 +128,7 @@
 }
 
 .pill-selector-wrapper {
-    @extend .bdl-PillSelectorWrapper;
+    @extend .bdl-PillSelectorDropdown;
 }
 
 .pill-selector-input {
