@@ -2,14 +2,9 @@
 /* eslint-disable react/jsx-sort-props */
 import * as React from 'react';
 import AccessibleSVG from '../../accessible-svg';
+import type { Icon } from '../../flowTypes';
 
-type SvgProps = {
-    height?: number,
-    title?: string | React.Element<any>,
-    width?: number,
-};
-
-const IconPlatformCam32 = (props: SvgProps) => (
+const IconPlatformCam32 = (props: Icon) => (
     <AccessibleSVG width={32} height={32} {...props}>
         <rect width={32} height={32} rx={6} fill="#2486fc" />
         <path
