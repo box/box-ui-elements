@@ -1,0 +1,30 @@
+@import '../../../styles/variables';
+
+.bdl-SecurityControlsItem {
+    padding-left: 1em;
+    color: $bdl-gray-80;
+    font-size: 12.5px;
+    font-style: italic;
+
+    &::before {
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+        color: $bdl-yellorange;
+        font-weight: bold;
+        font-style: normal;
+        content: '\2022';
+    }
+}
+
+.bdl-SecurityControlsItem-tooltipContent {
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.bdl-SecurityControlsItem-tooltipIcon {
+    margin-left: 3px;
+    vertical-align: middle;
+    cursor: pointer;
+}
