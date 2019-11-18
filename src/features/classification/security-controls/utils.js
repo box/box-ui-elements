@@ -3,18 +3,19 @@ import getProp from 'lodash/get';
 
 import type { MessageDescriptor } from 'react-intl';
 
+import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
 import {
     ACCESS_POLICY_RESTRICTIONS,
+    DOWNLOAD_CONTROL_TYPE,
     LIST_ACCESS_LEVEL_TYPE,
-    MANAGED_USERS_COMBINATION,
     MAX_APP_COUNT,
     SHARED_LINK_ACCESS_LEVEL_TYPE,
 } from './constants';
 
 const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTIONS;
+const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL_TYPE;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL_TYPE;
-const { OWNERS_AND_COOWNERS, OWNERS_COOWNERS_AND_EDITORS } = MANAGED_USERS_COMBINATION;
 const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL_TYPE;
 
 const getShortSecurityControlsMessage = (accessPolicy: Object): ?MessageDescriptor => {
@@ -121,44 +122,37 @@ const getApplicationDownloaditems = (accessPolicy: Object): Array<MessageDescrip
 
 const getDownloaditems = (accessPolicy: Object): Array<MessageDescriptor> => {
     const items = [];
-    const { desktop, mobile, web } = getProp(accessPolicy, DOWNLOAD, {});
+    const { web, mobile, desktop } = getProp(accessPolicy, DOWNLOAD, {});
 
-    const map = {
-        '0': 'Box Desktop',
-        '1': 'Mobile',
-        '2': 'Web',
+    const downloadRestrictions = {
+        [WEB]: {
+            platform: WEB,
+            restrictions: web,
+        },
+        [MOBILE]: {
+            platform: MOBILE,
+            restrictions: mobile,
+        },
+        [DESKTOP]: {
+            platform: DESKTOP,
+            restrictions: desktop,
+        },
     };
 
-    [desktop, mobile, web].forEach((platform, i) => {
-        if (!platform) {
+    Object.keys(downloadRestrictions).forEach(platformKey => {
+        const { platform, restrictions } = downloadRestrictions[platformKey];
+
+        if (!restrictions) {
             return;
         }
-        const { restrictExternalUsers, restrictManagedUsers } = platform;
+        const { restrictExternalUsers, restrictManagedUsers } = restrictions;
 
         if (restrictManagedUsers && restrictExternalUsers) {
-            switch (restrictManagedUsers) {
-                case OWNERS_AND_COOWNERS:
-                    items.push({ ...messages.downloadExternalOwners, values: { platform: map[i] } });
-                    break;
-                case OWNERS_COOWNERS_AND_EDITORS:
-                    items.push({ ...messages.downloadExternalOwnersEditors, values: { platform: map[i] } });
-                    break;
-                default:
-                    break;
-            }
+            items.push(downloadRestrictionsMessageMap[platform].externalRestricted[restrictManagedUsers]);
         } else if (restrictManagedUsers) {
-            switch (restrictManagedUsers) {
-                case OWNERS_AND_COOWNERS:
-                    items.push({ ...messages.downloadOwners, values: { platform: map[i] } });
-                    break;
-                case OWNERS_COOWNERS_AND_EDITORS:
-                    items.push({ ...messages.downloadOwnersEditors, values: { platform: map[i] } });
-                    break;
-                default:
-                    break;
-            }
+            items.push(downloadRestrictionsMessageMap[platform].externalAllowed[restrictManagedUsers]);
         } else if (restrictExternalUsers) {
-            items.push(messages.downloadExternal);
+            items.push(downloadRestrictionsMessageMap[platform].externalRestricted.default);
         }
     });
 

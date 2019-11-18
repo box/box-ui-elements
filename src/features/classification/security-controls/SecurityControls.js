@@ -1,5 +1,8 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
+
+import type { Position } from '../../../components/tooltip';
 
 import SecurityControlsItem from './SecurityControlsItem';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
@@ -12,9 +15,10 @@ const { FULL, SHORT, SHORT_WITH_TOOLTIP } = SECURITY_CONTROLS_FORMAT;
 type Props = {
     accessPolicy: Object,
     format: string,
+    tooltipPosition?: Position,
 };
 
-const SecurityControls = ({ accessPolicy, format }: Props) => {
+const SecurityControls = ({ accessPolicy, format, tooltipPosition }: Props) => {
     let items = [];
     let tooltipItems = [];
 
@@ -34,10 +38,19 @@ const SecurityControls = ({ accessPolicy, format }: Props) => {
         return null;
     }
 
+    const className = classNames('bdl-SecurityControls', {
+        'bdl-SecurityControls--summarized': format !== FULL,
+    });
+
     return (
-        <ul className="bdl-SecurityControls">
+        <ul className={className}>
             {items.map((item, index) => (
-                <SecurityControlsItem key={index} message={item} tooltipItems={tooltipItems} />
+                <SecurityControlsItem
+                    key={index}
+                    message={item}
+                    tooltipItems={tooltipItems}
+                    tooltipPosition={tooltipPosition}
+                />
             ))}
         </ul>
     );

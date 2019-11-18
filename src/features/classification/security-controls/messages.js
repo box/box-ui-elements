@@ -33,7 +33,7 @@ const messages = defineMessages({
         id: 'boxui.securityControls.shortDownloadApp',
     },
     shortAllRestrictions: {
-        defaultMessage: 'Sharing, download and app and app and app and restrictions apply',
+        defaultMessage: 'Sharing, download and app and restrictions apply',
         description: 'TODO',
         id: 'boxui.securityControls.shortAllRestrictions',
     },
@@ -72,30 +72,83 @@ const messages = defineMessages({
         description: 'TODO',
         id: 'boxui.securityControls.appDownloadListOverflow',
     },
-    downloadOwners: {
+    // Web Download Restrictions
+    webDownloadOwners: {
         defaultMessage: 'Download restricted on {platform}, except Owners/Co-Owners.',
         description: 'TODO',
-        id: 'boxui.securityControls.downloadOwners',
+        id: 'boxui.securityControls.webDownloadOwners',
     },
-    downloadOwnersEditors: {
+    webDownloadOwnersEditors: {
         defaultMessage: 'Download restricted on {platform}, except Owners/Co-Owners/Editors.',
         description: 'TODO',
-        id: 'boxui.securityControls.downloadOwnersEditors',
+        id: 'boxui.securityControls.webDownloadOwnersEditors',
     },
-    downloadExternal: {
-        defaultMessage: 'Download restricted on {platform} for external users.',
+    webDownloadExternalOwners: {
+        defaultMessage: 'Download restricted on web for external users, except Owners/Co-Owners.',
+        description: 'TODO',
+        id: 'boxui.securityControls.webDownloadExternalOwners',
+    },
+    webDownloadExternalOwnersEditors: {
+        defaultMessage: 'Download restricted on web for external users, except Owners/Co-Owners/Editors.',
+        description: 'TODO',
+        id: 'boxui.securityControls.webDownloadExternalOwnersEditors',
+    },
+    webDownloadExternal: {
+        defaultMessage: 'Download restricted on Box Desktop for external users.',
+        description: 'TODO',
+        id: 'boxui.securityControls.webDownloadExternal',
+    },
+    // Mobile Download Restrictions
+    mobileDownloadOwners: {
+        defaultMessage: 'Download restricted on mobile, except Owners/Co-Owners.',
+        description: 'TODO',
+        id: 'boxui.securityControls.mobileDownloadOwners',
+    },
+    mobileDownloadOwnersEditors: {
+        defaultMessage: 'Download restricted on mobile, except Owners/Co-Owners/Editors.',
+        description: 'TODO',
+        id: 'boxui.securityControls.mobileDownloadOwnersEditors',
+    },
+    mobileDownloadExternalOwners: {
+        defaultMessage: 'Download restricted on mobile for external users, except Owners/Co-Owners.',
+        description: 'TODO',
+        id: 'boxui.securityControls.mobileDownloadExternalOwners',
+    },
+    mobileDownloadExternalOwnersEditors: {
+        defaultMessage: 'Download restricted on mobile for external users, except Owners/Co-Owners/Editors.',
+        description: 'TODO',
+        id: 'boxui.securityControls.mobileDownloadExternalOwnersEditors',
+    },
+    mobileDownloadExternal: {
+        defaultMessage: 'Download restricted on Box Desktop for external users.',
+        description: 'TODO',
+        id: 'boxui.securityControls.mobileDownloadExternal',
+    },
+    // Desktop Download Restrictions
+    desktopDownloadOwners: {
+        defaultMessage: 'Download restricted on Box Drive, except Owners/Co-Owners.',
+        description: 'TODO',
+        id: 'boxui.securityControls.desktopDownloadOwners',
+    },
+    desktopDownloadOwnersEditors: {
+        defaultMessage: 'Download restricted on Box Drive, except Owners/Co-Owners/Editors.',
+        description: 'TODO',
+        id: 'boxui.securityControls.desktopDownloadOwnersEditors',
+    },
+    desktopDownloadExternalOwners: {
+        defaultMessage: 'Download restricted on Box Drive for external users, except Owners/Co-Owners.',
+        description: 'TODO',
+        id: 'boxui.securityControls.desktopDownloadExternalOwners',
+    },
+    desktopDownloadExternalOwnersEditors: {
+        defaultMessage: 'Download restricted on Box Drive for external users, except Owners/Co-Owners/Editors.',
+        description: 'TODO',
+        id: 'boxui.securityControls.desktopDownloadExternalOwnersEditors',
+    },
+    desktopDownloadExternal: {
+        defaultMessage: 'Download restricted on Box Drive for external users.',
         description: 'TODO',
         id: 'boxui.securityControls.downloadExternal',
-    },
-    downloadExternalOwners: {
-        defaultMessage: 'Download restricted on {platform} for external users, except Owners/Co-Owners.',
-        description: 'TODO',
-        id: 'boxui.securityControls.downloadExternalOwners',
-    },
-    downloadExternalOwnersEditors: {
-        defaultMessage: 'Download restricted on {platform} for external users, except Owners/Co-Owners/Editors.',
-        description: 'TODO',
-        id: 'boxui.securityControls.downloadExternalOwnersEditors',
     },
 });
 
