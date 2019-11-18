@@ -1,10 +1,11 @@
 import MetadataQueryAPIHelper from '../MetadataQueryAPIHelper';
-import { ITEM_TYPE_FILE } from '../../../common/constants';
+import { ITEM_TYPE_FILE, JSON_PATCH_OP_REPLACE, JSON_PATCH_OP_TEST } from '../../../common/constants';
 
 describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     let metadataQueryAPIHelper;
     const templateScope = 'enterprise_12345';
     const templateKey = 'awesomeTemplate';
+    const metadataInstance = { instance: 'instance' };
     const metadataInstanceId1 = 'metadataInstanceId1';
     const metadataInstanceId2 = 'metadataInstanceId2';
     const options = [
@@ -175,10 +176,12 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     };
     const getSchemaByTemplateKeyFunc = jest.fn().mockReturnValueOnce(Promise.resolve(templateSchemaResponse));
     const queryMetadataFunc = jest.fn().mockReturnValueOnce(Promise.resolve(metadataQueryResponse));
+    const updateMetadataFunc = jest.fn().mockReturnValueOnce(Promise.resolve(metadataInstance));
     const api = {
         getMetadataAPI: () => {
             return {
                 getSchemaByTemplateKey: getSchemaByTemplateKeyFunc,
+                updateMetadata: updateMetadataFunc,
             };
         },
         getMetadataQueryAPI: () => {
@@ -328,6 +331,60 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             expect(metadataQueryAPIHelper.getFlattenedDataWithTypes).not.toHaveBeenCalled();
             expect(successCallback).not.toHaveBeenCalled();
             expect(errorCallback).toBeCalledWith(err);
+        });
+    });
+
+    describe('createJSONPatchOperations()', () => {
+        test('should return valid JSON patch object for metadata PUT operation', () => {
+            const field = 'amount';
+            const oldValue = 100;
+            const newValue = 200;
+            const expectedJSONPatchOps = [
+                {
+                    op: JSON_PATCH_OP_TEST,
+                    path: `/${field}`,
+                    value: oldValue,
+                },
+                {
+                    op: JSON_PATCH_OP_REPLACE,
+                    path: `/${field}`,
+                    value: newValue,
+                },
+            ];
+
+            expect(metadataQueryAPIHelper.createJSONPatchOperations(field, oldValue, newValue)).toEqual(
+                expectedJSONPatchOps,
+            );
+        });
+    });
+
+    describe('updateMetadata()', () => {
+        test('should update the metadata by calling Metadata api function', async () => {
+            const file = 'file';
+            const field = 'amount';
+            const oldValue = 100;
+            const newValue = 200;
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            const JSONPatchOps = { jsonPatch: 'jsonPatch' };
+            metadataQueryAPIHelper.createJSONPatchOperations = jest.fn().mockReturnValueOnce(JSONPatchOps);
+
+            await metadataQueryAPIHelper.updateMetadata(
+                file,
+                field,
+                oldValue,
+                newValue,
+                successCallback,
+                errorCallback,
+            );
+            expect(metadataQueryAPIHelper.createJSONPatchOperations).toHaveBeenCalledWith(field, oldValue, newValue);
+            expect(metadataQueryAPIHelper.api.getMetadataAPI().updateMetadata).toHaveBeenCalledWith(
+                file,
+                template,
+                JSONPatchOps,
+                successCallback,
+                errorCallback,
+            );
         });
     });
 });

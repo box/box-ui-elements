@@ -86,11 +86,33 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         onItemClick,
     };
 
+    const initialState = {
+        editedColumnIndex: -1,
+        editedRowIndex: -1,
+        hoveredRowIndex: -1,
+        hoveredColumnIndex: -1,
+        valueBeingEdited: null,
+    };
+
     const getWrapper = (props = defaultProps) => mount(<MetadataBasedItemList {...props} />);
 
     beforeEach(() => {
         wrapper = getWrapper();
         instance = wrapper.instance();
+    });
+
+    describe('componentDidUpdate()', () => {
+        test('should call setState when component gets updated with different props', () => {
+            const updatedProps = {
+                currentCollection: [],
+                metadataColumnsToShow,
+                intl,
+                onItemClick,
+            };
+            instance.setState = jest.fn();
+            wrapper.setProps(updatedProps);
+            expect(instance.setState).toHaveBeenCalledWith(initialState);
+        });
     });
 
     describe('getColumnWidth(columnIndex)', () => {
@@ -103,6 +125,12 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             const availableWidth = 500; // width provided to AutoSizer Component
             const getWidth = instance.getColumnWidth(availableWidth);
             expect(getWidth({ index: columnIndex })).toBe(columnWidth);
+        });
+    });
+
+    describe('getInitialState()', () => {
+        test('should return the initial state object when called the method', () => {
+            expect(instance.getInitialState()).toEqual(initialState);
         });
     });
 
@@ -163,7 +191,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     describe('handleItemClick(item)', () => {
         test('should invoke the onItemClick after adding can_preview permissions', () => {
-            const permissions = { can_preview: true };
+            const permissions = { can_preview: true, can_upload: true };
             const item = currentCollection.items[0];
             const itemWithPreviewPermission = { ...item, ...{ permissions } };
             instance.handleItemClick(item);
