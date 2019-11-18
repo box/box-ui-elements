@@ -7,15 +7,12 @@ exports[`icons/general/IconPlusRound should correctly render default icon 1`] = 
   viewBox="0 0 16 16"
   width={16}
 >
-  <g
+  <path
     className="fill-color"
+    d="M7.428 7.428V3.567a.572.572 0 0 1 1.144 0v3.86h3.861a.572.572 0 0 1 0 1.145h-3.86v3.861a.572.572 0 0 1-1.145 0v-3.86H3.567a.572.572 0 0 1 0-1.145h3.86zM8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14z"
     fill="#4e4e4e"
-  >
-    <path
-      d="M7.428 7.428V3.567a.572.572 0 0 1 1.144 0v3.86h3.861a.572.572 0 0 1 0 1.145h-3.86v3.861a.572.572 0 0 1-1.145 0v-3.86H3.567a.572.572 0 0 1 0-1.145h3.86zM8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14z"
-      fillRule="evenodd"
-    />
-  </g>
+    fillRule="evenodd"
+  />
 </AccessibleSVG>
 `;
 
@@ -27,14 +24,11 @@ exports[`icons/general/IconPlusRound should correctly render icon with specified
   viewBox="0 0 16 16"
   width={200}
 >
-  <g
+  <path
     className="fill-color"
+    d="M7.428 7.428V3.567a.572.572 0 0 1 1.144 0v3.86h3.861a.572.572 0 0 1 0 1.145h-3.86v3.861a.572.572 0 0 1-1.145 0v-3.86H3.567a.572.572 0 0 1 0-1.145h3.86zM8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14z"
     fill="#444"
-  >
-    <path
-      d="M7.428 7.428V3.567a.572.572 0 0 1 1.144 0v3.86h3.861a.572.572 0 0 1 0 1.145h-3.86v3.861a.572.572 0 0 1-1.145 0v-3.86H3.567a.572.572 0 0 1 0-1.145h3.86zM8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14z"
-      fillRule="evenodd"
-    />
-  </g>
+    fillRule="evenodd"
+  />
 </AccessibleSVG>
 `;
