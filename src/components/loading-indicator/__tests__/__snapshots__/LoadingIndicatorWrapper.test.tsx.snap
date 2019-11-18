@@ -21,6 +21,7 @@ exports[`components/loading-indicator/LoadingIndicatorWrapper should hide conten
 <div
   className="loading-indicator-wrapper test-name"
 >
+  <div />
   <div
     className="loading-indicator-veil is-with-center-crawler hide-content"
   >
@@ -36,6 +37,7 @@ exports[`components/loading-indicator/LoadingIndicatorWrapper should pass thru a
   className="loading-indicator-wrapper test-name"
   data-resin-target="test"
 >
+  <div />
   <div
     className="loading-indicator-veil is-with-center-crawler blur-content"
   >
@@ -76,7 +78,9 @@ exports[`components/loading-indicator/LoadingIndicatorWrapper should render with
 exports[`components/loading-indicator/LoadingIndicatorWrapper should render with default properties intact 1`] = `
 <div
   className="loading-indicator-wrapper "
-/>
+>
+  <div />
+</div>
 `;
 
 exports[`components/loading-indicator/LoadingIndicatorWrapper should take in crawler position top 1`] = `

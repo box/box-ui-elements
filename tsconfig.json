@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "ES2015",
+        "target": "es5",
+        "jsx": "react",
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "baseUrl": "./",
+        "allowSyntheticDefaultImports": true,
+        "noErrorTruncation": true,
+        "declaration": true,
+        "skipLibCheck": true,
+        "outDir": "./es",
+        "noEmit": true,
+        "allowJs": true,
+        "rootDir": "./src"
+    },
+    "include": ["./src/**/*"],
+    "exclude": ["./src/**/*.js", "node_modules", "es", "dist"],
+    "files": ["./.storybook/typings.d.ts"]
+}

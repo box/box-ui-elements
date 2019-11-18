@@ -67,6 +67,7 @@ function getConfig(isReactExternalized) {
         },
         resolve: {
             modules: ['src', 'node_modules'],
+            extensions: ['.tsx', '.ts', '.js'],
             alias: {
                 'box-ui-elements/es': path.join(__dirname, '../src'), // for examples only
                 examples: path.join(__dirname, '../examples/src'), // for examples only
@@ -85,7 +86,7 @@ function getConfig(isReactExternalized) {
         module: {
             rules: [
                 {
-                    test: /\.(js|mjs)$/,
+                    test: /\.(js|mjs|ts|tsx)$/,
                     loader: 'babel-loader',
                     // For webpack dev build perf we want to exlcude node_modules unless we want to support legacy browsers like IE11
                     exclude: shouldIncludeAllSupportedBrowsers ? /node_modules\/pikaday/ : /node_modules/,

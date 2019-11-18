@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { action } from '@storybook/addon-actions';
 import { boolean } from '@storybook/addon-knobs';
@@ -8,10 +7,10 @@ import notes from './Button.stories.md';
 
 export const regular = () => (
     <Button
-        showRadar={boolean('showRadar', false)}
         isDisabled={boolean('isDisabled', false)}
         isLoading={boolean('isLoading', false)}
         onClick={action('onClick called')}
+        showRadar={boolean('showRadar', false)}
     >
         Click Here
     </Button>

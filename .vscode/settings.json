@@ -1,11 +1,13 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "typescript.validate.enable": false,
-    "typescript.format.enable": false,
     "flow.useNPMPackagedFlow": true,
     "flow.enabled": true,
+    "eslint.autoFixOnSave": true,
     "javascript.validate.enable": false,
-    "prettier.printWidth": 120,
-    "prettier.tabWidth": 4,
-    "prettier.singleQuote": true
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        { "language": "typescript", "autoFix": true },
+        { "language": "typescriptreact", "autoFix": true }
+    ]
 }
