@@ -26,7 +26,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} placeholder={placeholder} />,
             );
             const input = wrapper.find('textarea');
-            const selector = wrapper.find('.pill-selector-input-wrapper');
+            const selector = wrapper.find('.bdl-PillSelector');
 
             expect(wrapper.find('Tooltip').exists()).toBe(true);
             expect(selector.length).toBe(1);
@@ -153,7 +153,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             );
             const input = wrapper.find('textarea');
 
-            expect(input.hasClass('pill-selector-input')).toBe(true);
+            expect(input.hasClass('bdl-PillSelector-input')).toBe(true);
             expect(input.hasClass(className)).toBe(true);
         });
 
@@ -198,7 +198,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
         test('should set isFocused to false when called', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
             wrapper.setState({ isFocused: true });
-            const inputWrapper = wrapper.find('.pill-selector-input-wrapper');
+            const inputWrapper = wrapper.find('.bdl-PillSelector');
             inputWrapper.simulate('blur');
             expect(wrapper.state('isFocused')).toBe(false);
         });
@@ -217,7 +217,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
     describe('onFocus', () => {
         test('should set isFocused to true when called', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
-            const inputWrapper = wrapper.find('.pill-selector-input-wrapper');
+            const inputWrapper = wrapper.find('.bdl-PillSelector');
             inputWrapper.simulate('focus');
             expect(wrapper.state('isFocused')).toBe(true);
         });
