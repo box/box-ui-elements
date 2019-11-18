@@ -6,8 +6,8 @@ import omit from 'lodash/omit';
 
 import IconClear from '../../icons/general/IconClear';
 import IconSearch from '../../icons/general/IconSearch';
-
-import makeLoadable from '../loading-indicator/makeLoadable';
+// $FlowFixMe migrated to TS
+import makeLoadable from '../loading-indicator/makeLoadable'; // eslint-disable-line
 
 import './SearchForm.scss';
 

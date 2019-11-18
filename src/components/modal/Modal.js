@@ -5,7 +5,9 @@ import tabbable from 'tabbable';
 import omit from 'lodash/omit';
 
 import FocusTrap from '../focus-trap';
-import LoadingIndicator from '../loading-indicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../loading-indicator'; // eslint-disable-line
+
 import Portal from '../portal';
 import ModalDialog from './ModalDialog';
 

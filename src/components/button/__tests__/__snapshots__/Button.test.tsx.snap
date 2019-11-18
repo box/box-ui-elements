@@ -4,6 +4,7 @@ exports[`components/button/Button should not render a RadarAnimation if showRada
 
 exports[`components/button/Button should render a RadarAnimation if showRadar is true 1`] = `
 <RadarAnimation
+  className=""
   constrainToScrollParent={false}
   constrainToWindow={true}
   isShown={true}

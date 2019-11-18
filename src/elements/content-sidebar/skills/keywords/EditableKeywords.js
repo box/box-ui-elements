@@ -8,7 +8,8 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PillSelector from '../../../../components/pill-selector-dropdown/PillSelector';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
-import Button from '../../../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../../../components/button/Button'; // eslint-disable-line
 import messages from '../../../common/messages';
 import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import getPills from './keywordUtils';

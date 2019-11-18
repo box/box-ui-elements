@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 
-import Button from '../../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../../components/button'; // eslint-disable-line
 import PlainButton from '../../../components/plain-button';
 import Breadcrumb from '../../../components/breadcrumb';
 import IconChevron from '../../../icons/general/IconChevron';

@@ -11,7 +11,8 @@ import type { IntlShape } from 'react-intl';
 import TextArea from '../../components/text-area';
 import PrimaryButton from '../../components/primary-button';
 import { ModalActions } from '../../components/modal';
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 import Tooltip from '../../components/tooltip';
 import InlineNotice from '../../components/inline-notice';
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';

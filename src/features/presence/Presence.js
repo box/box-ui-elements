@@ -7,7 +7,8 @@ import { Flyout, Overlay } from '../../components/flyout';
 import Tooltip from '../../components/tooltip';
 
 // GROWTH-382
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 
 import { ARROW_DOWN, ENTER, SPACE } from '../../common/keyboard-events';
 

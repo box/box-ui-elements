@@ -6,7 +6,7 @@ import throttle from 'lodash/throttle';
 
 import { NavSidebar, NavList, NavListCollapseHeader } from '../../components/nav-sidebar';
 import FooterIndicator from '../../components/footer-indicator/FooterIndicator';
-import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
+import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper'; // eslint-disable-line
 import { bdlBoxBlue } from '../../styles/variables';
 
 import CopyrightFooter from './CopyrightFooter';

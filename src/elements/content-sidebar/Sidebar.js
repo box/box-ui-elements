@@ -11,7 +11,8 @@ import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
-import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
 import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';

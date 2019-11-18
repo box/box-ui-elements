@@ -7,7 +7,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import ErrorMask from '../../components/error-mask/ErrorMask';
-import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
 import messages from '../common/messages';
 import IntegrationPortal from './IntegrationPortal';
 

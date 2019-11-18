@@ -12,7 +12,10 @@ exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should
     <div
       className="bcs-activity-feed-loading-state"
     >
-      <LoadingIndicator />
+      <LoadingIndicator
+        className=""
+        size="default"
+      />
     </div>
   </div>
 </div>
@@ -30,7 +33,10 @@ exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should
     <div
       className="bcs-activity-feed-loading-state"
     >
-      <LoadingIndicator />
+      <LoadingIndicator
+        className=""
+        size="default"
+      />
     </div>
   </div>
 </div>
@@ -48,7 +54,10 @@ exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should
     <div
       className="bcs-activity-feed-loading-state"
     >
-      <LoadingIndicator />
+      <LoadingIndicator
+        className=""
+        size="default"
+      />
     </div>
   </div>
 </div>

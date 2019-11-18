@@ -5,7 +5,8 @@
  */
 
 import React from 'react';
-import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
 import IconClose from '../../icons/general/IconClose';
 
 const IconInProgress = () => (

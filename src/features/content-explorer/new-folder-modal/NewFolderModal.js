@@ -5,7 +5,8 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import { Modal, ModalActions } from '../../../components/modal';
 import TextInput from '../../../components/text-input';
-import Button from '../../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../../components/button'; // eslint-disable-line
 import PrimaryButton from '../../../components/primary-button';
 
 import messages from '../messages';

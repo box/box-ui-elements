@@ -8,7 +8,8 @@ import React from 'react';
 import Modal from 'react-modal';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import PrimaryButton from '../../components/primary-button/PrimaryButton';
-import Button from '../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button/Button'; // eslint-disable-line
 import messages from '../common/messages';
 import {
     CLASS_MODAL_CONTENT,

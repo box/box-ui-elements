@@ -6,7 +6,8 @@
 import * as React from 'react';
 import { FormattedMessage, type MessageDescriptor } from 'react-intl';
 
-import Button from '../../../../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../../../../components/button'; // eslint-disable-line
 import commonMessages from '../../../../common/messages';
 import PrimaryButton from '../../../../../components/primary-button';
 import { KEYS } from '../../../../../constants';

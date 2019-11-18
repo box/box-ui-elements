@@ -3,7 +3,8 @@ import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 
-import RadarAnimation from '../radar';
+// $FlowFixMe migrated to TS
+import RadarAnimation from '../radar'; // eslint-disable-line
 
 type Props = {
     children: React.Node,

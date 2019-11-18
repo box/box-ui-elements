@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import { EditorState, convertFromRaw } from 'draft-js';
 
-import Button from '../../../../../components/button/Button';
+import Button from '../../../../../components/button/Button'; // eslint-disable-line
 import Media from '../../../../../components/media';
 import { CommentFormUnwrapped as CommentForm } from '../CommentForm';
 

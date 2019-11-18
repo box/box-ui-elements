@@ -1,10 +1,10 @@
 import React from 'react';
-
-import RadarAnimation from '../RadarAnimation';
+import { shallow } from 'enzyme';
+import RadarAnimation, { RadarAnimationProps, RadarAnimationPosition } from '../RadarAnimation';
 
 describe('components/radar/RadarAnimation', () => {
-    const getWrapper = props =>
-        shallow(
+    const getWrapper = (props: RadarAnimationProps) =>
+        shallow<RadarAnimation>(
             <RadarAnimation {...props}>
                 <div>Hello</div>
             </RadarAnimation>,
@@ -13,46 +13,46 @@ describe('components/radar/RadarAnimation', () => {
         {
             // description:
             //     'should render correctly with bottom-center positioning',
-            position: 'bottom-center',
+            position: RadarAnimationPosition.BOTTOM_CENTER,
         },
         {
             // description: 'should render correctly with bottom-left positioning',
-            position: 'bottom-left',
+            position: RadarAnimationPosition.BOTTOM_LEFT,
         },
         {
             // description:
             //     'should render correctly with bottom-right positioning',
-            position: 'bottom-right',
+            position: RadarAnimationPosition.BOTTOM_RIGHT,
         },
         {
             // description:
             //     'should render correctly with middle-center positioning',
-            position: 'middle-center',
+            position: RadarAnimationPosition.MIDDLE_CENTER,
         },
         {
             // description: 'should render correctly with middle-left positioning',
-            position: 'middle-left',
+            position: RadarAnimationPosition.MIDDLE_LEFT,
         },
         {
             // description:
             //     'should render correctly with middle-right positioning',
-            position: 'middle-right',
+            position: RadarAnimationPosition.MIDDLE_RIGHT,
         },
         {
             // description: 'should render correctly with top-center positioning',
-            position: 'top-center',
+            position: RadarAnimationPosition.TOP_CENTER,
         },
         {
             // description: 'should render correctly with top-left positioning',
-            position: 'top-left',
+            position: RadarAnimationPosition.TOP_LEFT,
         },
         {
             // description: 'should render correctly with top-right positioning',
-            position: 'top-right',
+            position: RadarAnimationPosition.TOP_RIGHT,
         },
     ].forEach(({ position }) => {
         test(`should render correctly with ${position} positioning`, () => {
-            const wrapper = getWrapper({ position });
+            const wrapper = getWrapper({ position } as RadarAnimationProps);
             expect(wrapper).toMatchSnapshot();
         });
     });
@@ -60,7 +60,7 @@ describe('components/radar/RadarAnimation', () => {
     describe('isShown', () => {
         test('should be shown when isShown is not provided', () => {
             expect(
-                getWrapper({ isShown: undefined })
+                getWrapper({} as RadarAnimationProps)
                     .find('.radar')
                     .exists(),
             ).toBe(true);
@@ -68,7 +68,7 @@ describe('components/radar/RadarAnimation', () => {
 
         test('should be shown when isShown is true', () => {
             expect(
-                getWrapper({ isShown: true })
+                getWrapper({ isShown: true } as RadarAnimationProps)
                     .find('.radar')
                     .exists(),
             ).toBe(true);
@@ -76,7 +76,7 @@ describe('components/radar/RadarAnimation', () => {
 
         test('should not be shown when isShown is false', () => {
             expect(
-                getWrapper({ isShown: false })
+                getWrapper({ isShown: false } as RadarAnimationProps)
                     .find('.radar')
                     .exists(),
             ).toBe(false);
@@ -84,10 +84,10 @@ describe('components/radar/RadarAnimation', () => {
     });
 
     describe('position instance method', () => {
-        test.each([true, false])(`should only position the tether when shown`, isShown => {
+        test.each([true, false])('should only position the tether when shown', isShown => {
             const positionTetherMock = jest.fn();
 
-            const wrapper = getWrapper({ isShown });
+            const wrapper = getWrapper({ isShown } as RadarAnimationProps);
             wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
 
             wrapper.instance().position();

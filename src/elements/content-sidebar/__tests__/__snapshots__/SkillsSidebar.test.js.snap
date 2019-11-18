@@ -12,7 +12,10 @@ exports[`elements/content-sidebar/Skills/SkillsSidebar should render loading ind
     />
   }
 >
-  <LoadingIndicator />
+  <LoadingIndicator
+    className=""
+    size="default"
+  />
 </SidebarContent>
 `;
 

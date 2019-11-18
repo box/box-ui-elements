@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import IconEdit from '../../../../icons/general/IconEdit';
-import LoadingIndicatorWrapper from '../../../../components/loading-indicator/LoadingIndicatorWrapper';
+import LoadingIndicatorWrapper from '../../../../components/loading-indicator/LoadingIndicatorWrapper'; // eslint-disable-line
 import InlineError from '../../../../components/inline-error/InlineError';
 import Tooltip from '../../../../components/tooltip/Tooltip';
 import messages from '../../../common/messages';

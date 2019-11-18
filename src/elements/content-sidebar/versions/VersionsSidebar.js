@@ -13,7 +13,8 @@ import SidebarContent from '../SidebarContent';
 import VersionsMenu from './VersionsMenu';
 import { BackButton } from '../../common/nav-button';
 import { DEFAULT_FETCH_END } from '../../../constants';
-import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
+// $FlowFixMe migrated to TS
+import { LoadingIndicatorWrapper } from '../../../components/loading-indicator'; // eslint-disable-line
 import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsSidebar.scss';
 

@@ -6,7 +6,8 @@ import uniqueId from 'lodash/uniqueId';
 import IconVerified from '../../icons/general/IconVerified';
 
 import Label from '../label';
-import LoadingIndicator from '../loading-indicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../loading-indicator'; // eslint-disable-line
 import Tooltip from '../tooltip';
 import type { Position } from '../tooltip';
 

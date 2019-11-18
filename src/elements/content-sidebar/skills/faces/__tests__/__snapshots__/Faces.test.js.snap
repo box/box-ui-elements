@@ -3,6 +3,9 @@
 exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render edit button when editable 1`] = `
 <LoadingIndicatorWrapper
   className="be-faces"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <Tooltip
@@ -53,6 +56,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render edi
 exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render error when no faces 1`] = `
 <LoadingIndicatorWrapper
   className="be-faces"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <FormattedMessage
@@ -65,6 +71,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render err
 exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render faces when not editable 1`] = `
 <LoadingIndicatorWrapper
   className="be-faces"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <Face
@@ -93,6 +102,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render fac
 exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render faces without removed faces 1`] = `
 <LoadingIndicatorWrapper
   className="be-faces"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <Face
@@ -111,6 +123,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render fac
 exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render save and cancel button when editable and editing 1`] = `
 <LoadingIndicatorWrapper
   className="be-faces"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <Tooltip
@@ -190,6 +205,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
 exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render time line when face is selected 1`] = `
 <LoadingIndicatorWrapper
   className="be-faces"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <Face
@@ -259,6 +277,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render tim
 exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render when isLoading is true 1`] = `
 <LoadingIndicatorWrapper
   className="be-faces"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={true}
 >
   <Face

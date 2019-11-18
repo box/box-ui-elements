@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PrimaryButton from '..';
-import Button from '../../button';
+import Button from '../../button'; // eslint-disable-line
 
 describe('components/primary-button/PrimaryButton', () => {
     test('should correctly render children in primary button', () => {

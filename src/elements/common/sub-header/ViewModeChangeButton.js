@@ -4,7 +4,8 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
-import Button from '../../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../../components/button'; // eslint-disable-line
 import IconGridViewInverted from '../../../icons/general/IconGridViewInverted';
 import IconListView from '../../../icons/general/IconListView';
 import messages from '../messages';

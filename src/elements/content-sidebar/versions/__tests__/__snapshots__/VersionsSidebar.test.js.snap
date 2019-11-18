@@ -23,6 +23,9 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
   <LoadingIndicatorWrapper
     className="bcs-Versions-content"
     crawlerPosition="top"
+    crawlerSize="default"
+    hideContent={false}
+    isLoading={false}
   >
     <InlineError
       title={
@@ -72,6 +75,9 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show th
   <LoadingIndicatorWrapper
     className="bcs-Versions-content"
     crawlerPosition="top"
+    crawlerSize="default"
+    hideContent={false}
+    isLoading={false}
   >
     <div
       className="bcs-Versions-menu"

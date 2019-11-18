@@ -14,7 +14,7 @@ import IconCopy from '../../../../icons/general/IconCopy';
 import IconExpand from '../../../../icons/general/IconExpand';
 import IconCollapse from '../../../../icons/general/IconCollapse';
 import { formatTime } from '../../../../utils/datetime';
-import LoadingIndicatorWrapper from '../../../../components/loading-indicator/LoadingIndicatorWrapper';
+import LoadingIndicatorWrapper from '../../../../components/loading-indicator/LoadingIndicatorWrapper'; // eslint-disable-line
 import Tooltip from '../../../../components/tooltip/Tooltip';
 import { copy } from '../../../../utils/download';
 import { SKILLS_TARGETS } from '../../../common/interactionTargets';

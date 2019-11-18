@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 import { Modal, ModalActions } from '../../components/modal';
 import commonMessages from '../../common/messages';
 

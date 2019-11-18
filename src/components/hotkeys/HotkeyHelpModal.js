@@ -4,7 +4,8 @@ import { FormattedMessage } from 'react-intl';
 
 import commonMessages from '../../common/messages';
 import { ModalActions } from '../modal';
-import Button from '../button';
+// $FlowFixMe migrated to TS
+import Button from '../button'; // eslint-disable-line
 import PlainButton from '../plain-button';
 import DropdownMenu, { MenuToggle } from '../dropdown-menu';
 import { Menu, MenuItem } from '../menu';

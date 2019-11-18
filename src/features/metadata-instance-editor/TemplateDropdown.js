@@ -8,7 +8,8 @@ import DatalistItem from '../../components/datalist-item';
 import SelectorDropdown from '../../components/selector-dropdown';
 import SearchForm from '../../components/search-form/SearchForm';
 import PlainButton from '../../components/plain-button';
-import LoadingIndicator from '../../components/loading-indicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator'; // eslint-disable-line
 import { Flyout, Overlay } from '../../components/flyout';
 
 import MenuToggle from '../../components/dropdown-menu/MenuToggle';

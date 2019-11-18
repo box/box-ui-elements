@@ -8,7 +8,7 @@ import React from 'react';
 import getProp from 'lodash/get';
 import { injectIntl } from 'react-intl';
 import ItemProperties from '../../features/item-details/ItemProperties';
-import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
+import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper'; // eslint-disable-line
 import getFileSize from '../../utils/getFileSize';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../common/interactionTargets';
 import withErrorHandling from './withErrorHandling';

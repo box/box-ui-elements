@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
-import LoadingIndicator from '../../../../../components/loading-indicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../../../../components/loading-indicator'; // eslint-disable-line
 import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';

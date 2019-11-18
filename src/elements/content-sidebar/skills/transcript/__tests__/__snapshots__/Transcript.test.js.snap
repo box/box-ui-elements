@@ -3,6 +3,9 @@
 exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly render editable Transcript when editable and editmode 1`] = `
 <LoadingIndicatorWrapper
   className="be-transcript"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <div
@@ -86,6 +89,9 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
 exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly render error mask when no Transcript 1`] = `
 <LoadingIndicatorWrapper
   className="be-transcript"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <FormattedMessage
@@ -98,6 +104,9 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
 exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly render expand button 1`] = `
 <LoadingIndicatorWrapper
   className="be-transcript"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <div
@@ -245,6 +254,9 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
 exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly render read only Transcript when not editable 1`] = `
 <LoadingIndicatorWrapper
   className="be-transcript"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <div
@@ -306,6 +318,9 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
 exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly render when isLoading is true 1`] = `
 <LoadingIndicatorWrapper
   className="be-transcript"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={true}
 >
   <div

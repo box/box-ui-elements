@@ -5,7 +5,8 @@ import throttle from 'lodash/throttle';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import { UpgradeBadge } from '../../components/badge';
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 import InlineNotice from '../../components/inline-notice';
 import PrimaryButton from '../../components/primary-button';
 import Select from '../../components/select';

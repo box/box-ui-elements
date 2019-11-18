@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Button from '../../src/components/button';
+import Button from '../../src/components/button'; // eslint-disable-line
 import PrimaryButton from '../../src/components/primary-button';
 import { Notification, NotificationsWrapper } from '../../src/components/notification';
 

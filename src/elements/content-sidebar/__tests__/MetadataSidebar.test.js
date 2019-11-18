@@ -3,8 +3,8 @@ import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import Instances from '../../../features/metadata-instance-editor/Instances';
 import EmptyContent from '../../../features/metadata-instance-editor/EmptyContent';
-import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
-import LoadingIndicatorWrapper from '../../../components/loading-indicator/LoadingIndicatorWrapper';
+import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
+import LoadingIndicatorWrapper from '../../../components/loading-indicator/LoadingIndicatorWrapper'; // eslint-disable-line
 import InlineError from '../../../components/inline-error/InlineError';
 import { normalizeTemplates } from '../../../features/metadata-instance-editor/metadataUtil';
 import messages from '../../common/messages';

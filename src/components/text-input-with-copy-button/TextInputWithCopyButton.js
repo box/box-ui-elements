@@ -6,7 +6,8 @@ import { FormattedMessage } from 'react-intl';
 
 import messages from '../../common/messages';
 import TextInput from '../text-input';
-import Button from '../button';
+// $FlowFixMe migrated to TS
+import Button from '../button'; // eslint-disable-line
 
 import './TextInputWithCopyButton.scss';
 

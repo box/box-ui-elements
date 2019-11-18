@@ -5,7 +5,8 @@ import throttle from 'lodash/throttle';
 import isEmpty from 'lodash/isEmpty';
 import classnames from 'classnames';
 
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 import Link from '../../components/link/LinkBase';
 
 import PresenceAvatar from './PresenceAvatar';

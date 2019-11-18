@@ -8,7 +8,8 @@ import React from 'react';
 import getProp from 'lodash/get';
 import ShareAccessSelect from '../common/share-access-select';
 import isRowSelectable from './cellRendererHelper';
-import LoadingIndicator from '../../components/loading-indicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator'; // eslint-disable-line
 import type { BoxItem } from '../../common/types/core';
 
 export default (

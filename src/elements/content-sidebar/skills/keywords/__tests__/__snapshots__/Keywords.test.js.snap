@@ -3,6 +3,9 @@
 exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly render edit button when editable 1`] = `
 <LoadingIndicatorWrapper
   className="be-keywords"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <Tooltip
@@ -46,6 +49,9 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
 exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly render editable keywords when editable and editmode 1`] = `
 <LoadingIndicatorWrapper
   className="be-keywords"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <Tooltip
@@ -92,6 +98,9 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
 exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly render error mask when no keywords 1`] = `
 <LoadingIndicatorWrapper
   className="be-keywords"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <FormattedMessage
@@ -104,6 +113,9 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
 exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly render keywords which are added but not the ones removed 1`] = `
 <LoadingIndicatorWrapper
   className="be-keywords"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <ReadOnlyselecteds
@@ -125,6 +137,9 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
 exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly render read only keywords when not editable 1`] = `
 <LoadingIndicatorWrapper
   className="be-keywords"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={false}
 >
   <ReadOnlyselecteds
@@ -146,6 +161,9 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
 exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly render when isLoading is true 1`] = `
 <LoadingIndicatorWrapper
   className="be-keywords"
+  crawlerPosition="center"
+  crawlerSize="default"
+  hideContent={false}
   isLoading={true}
 >
   <ReadOnlyselecteds

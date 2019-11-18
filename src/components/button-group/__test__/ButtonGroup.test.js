@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import Button from '../../button';
+import Button from '../../button'; // eslint-disable-line
 import ButtonGroup from '..';
 
 describe('components/button-group/ButtonGroup', () => {

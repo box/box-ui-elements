@@ -1,43 +1,45 @@
-// @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import omit from 'lodash/omit';
-
 import LoadingIndicator from '../loading-indicator';
 import RadarAnimation from '../radar';
 
-type Props = {
+export enum ButtonType {
+    BUTTON = 'button',
+    RESET = 'reset',
+    SUBMIT = 'submit',
+}
+export interface ButtonProps {
     /** Child components for the button, generally localized text */
-    children?: React.Node,
+    children?: React.ReactNode;
     /** Custom class for the button */
-    className?: string,
+    className?: string;
     /** whether the button is disabled or not */
-    isDisabled?: boolean,
+    isDisabled?: boolean;
     /** whether the button is loading or not */
-    isLoading: boolean,
+    isLoading: boolean;
     /** whether the button is selected or not */
-    isSelected?: boolean,
+    isSelected?: boolean;
     /** onClick handler for the button */
-    onClick?: Function,
+    onClick?: Function;
     /** to set buttons inner ref */
-    setRef?: Function,
+    setRef?: Function;
     /** whether to show a radar */
-    showRadar: boolean,
+    showRadar: boolean;
     /** type for the button */
-    type: 'button' | 'reset' | 'submit',
-};
+    type: ButtonType;
+}
 
-class Button extends React.Component<Props> {
-    btnElement: ?HTMLButtonElement;
+class Button extends React.Component<ButtonProps> {
+    btnElement: HTMLButtonElement | null = null;
 
     static defaultProps = {
         className: '',
         isLoading: false,
         showRadar: false,
-        type: 'submit',
+        type: ButtonType.SUBMIT,
     };
 
-    handleClick = (event: SyntheticEvent<HTMLButtonElement>) => {
+    handleClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
         const { isDisabled, onClick } = this.props;
         if (isDisabled || (this.btnElement && this.btnElement.classList.contains('is-disabled'))) {
             event.preventDefault();
@@ -51,12 +53,7 @@ class Button extends React.Component<Props> {
 
     render() {
         const { children, className, isDisabled, isLoading, isSelected, setRef, type, showRadar, ...rest } = this.props;
-
-        const buttonProps = omit(rest, ['onClick']);
-        if (isDisabled) {
-            buttonProps['aria-disabled'] = true;
-        }
-
+        const buttonProps = isDisabled ? { ...rest, 'aria-disabled': true } : rest;
         const styleClassName = classNames(
             'btn',
             {
@@ -77,9 +74,9 @@ class Button extends React.Component<Props> {
                     }
                 }}
                 className={styleClassName}
-                onClick={this.handleClick}
                 type={type}
                 {...buttonProps}
+                onClick={this.handleClick} // Use internal onClick
             >
                 <span className="btn-content">{children}</span>
                 {isLoading && <LoadingIndicator className="btn-loading-indicator" />}

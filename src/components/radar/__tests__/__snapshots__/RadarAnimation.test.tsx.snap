@@ -22,7 +22,7 @@ exports[`components/radar/RadarAnimation should render correctly with bottom-cen
     Hello
   </div>
   <div
-    className="radar "
+    className="radar"
     id="radarAnimation1"
   >
     <div
@@ -57,7 +57,7 @@ exports[`components/radar/RadarAnimation should render correctly with bottom-lef
     Hello
   </div>
   <div
-    className="radar "
+    className="radar"
     id="radarAnimation2"
   >
     <div
@@ -92,7 +92,7 @@ exports[`components/radar/RadarAnimation should render correctly with bottom-rig
     Hello
   </div>
   <div
-    className="radar "
+    className="radar"
     id="radarAnimation3"
   >
     <div
@@ -127,7 +127,7 @@ exports[`components/radar/RadarAnimation should render correctly with middle-cen
     Hello
   </div>
   <div
-    className="radar "
+    className="radar"
     id="radarAnimation4"
   >
     <div
@@ -162,7 +162,7 @@ exports[`components/radar/RadarAnimation should render correctly with middle-lef
     Hello
   </div>
   <div
-    className="radar "
+    className="radar"
     id="radarAnimation5"
   >
     <div
@@ -197,7 +197,7 @@ exports[`components/radar/RadarAnimation should render correctly with middle-rig
     Hello
   </div>
   <div
-    className="radar "
+    className="radar"
     id="radarAnimation6"
   >
     <div
@@ -232,7 +232,7 @@ exports[`components/radar/RadarAnimation should render correctly with top-center
     Hello
   </div>
   <div
-    className="radar "
+    className="radar"
     id="radarAnimation7"
   >
     <div
@@ -267,7 +267,7 @@ exports[`components/radar/RadarAnimation should render correctly with top-left p
     Hello
   </div>
   <div
-    className="radar "
+    className="radar"
     id="radarAnimation8"
   >
     <div
@@ -302,7 +302,7 @@ exports[`components/radar/RadarAnimation should render correctly with top-right 
     Hello
   </div>
   <div
-    className="radar "
+    className="radar"
     id="radarAnimation9"
   >
     <div

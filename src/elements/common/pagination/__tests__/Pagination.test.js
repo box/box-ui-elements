@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Button from '../../../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../../../components/button/Button'; // eslint-disable-line
 import Pagination from '../Pagination';
 
 describe('elements/Pagination/Pagination', () => {

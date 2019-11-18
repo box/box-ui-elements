@@ -4,7 +4,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import messages from './messages';
-import Button from '../../../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../../../components/button'; // eslint-disable-line
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../../../constants';
 import type { TaskType } from '../../../../common/types/tasks';
 

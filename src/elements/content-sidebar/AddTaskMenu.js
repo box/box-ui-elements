@@ -2,7 +2,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 import DropdownMenu from '../../components/dropdown-menu';
 import MenuToggle from '../../components/dropdown-menu/MenuToggle';
 import { Menu, MenuItem } from '../../components/menu';

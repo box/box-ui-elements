@@ -2,7 +2,7 @@ import React, { Component } from 'react'; // eslint-disable-line max-classes-per
 import PropTypes from 'prop-types';
 import { Set } from 'immutable';
 
-import Button from '../../src/components/button';
+import Button from '../../src/components/button'; // eslint-disable-line
 import ContextMenu from '../../src/components/context-menu';
 import DropdownMenu from '../../src/components/dropdown-menu';
 import { Menu, MenuItem } from '../../src/components/menu';

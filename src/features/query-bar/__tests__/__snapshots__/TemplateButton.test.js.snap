@@ -25,6 +25,7 @@ exports[`feature/query-bar/components/TemplateButton render() should render Temp
       <MenuToggle>
         <LoadingIndicator
           className="loading-indicator"
+          size="default"
         />
         <span
           className="button-label"

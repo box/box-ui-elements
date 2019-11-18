@@ -8,7 +8,8 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import MenuToggle from '../../components/dropdown-menu/MenuToggle';
 import IconOpenWith from '../../icons/general/IconOpenWith';
-import Button from '../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button/Button'; // eslint-disable-line
 import Tooltip from '../common/Tooltip';
 import messages from '../common/messages';
 import OpenWithButtonContents from './OpenWithButtonContents';

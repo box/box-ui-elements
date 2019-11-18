@@ -3,7 +3,7 @@ import React from 'react';
 import Classification from '../Classification';
 import ClassifiedBadge from '../ClassifiedBadge';
 import SecurityControls from '../security-controls';
-import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
+import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
 
 describe('features/classification/Classification', () => {
     const getWrapper = (props = {}) => shallow(<Classification {...props} />);

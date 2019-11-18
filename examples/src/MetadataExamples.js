@@ -2,7 +2,7 @@ import * as React from 'react';
 import uniqueId from 'lodash/uniqueId';
 
 import MetadataInstanceEditor from '../../src/features/metadata-instance-editor/MetadataInstanceEditor';
-import LoadingIndicator from '../../src/components/loading-indicator';
+import LoadingIndicator from '../../src/components/loading-indicator'; // eslint-disable-line
 
 // Templates
 const template0 = {

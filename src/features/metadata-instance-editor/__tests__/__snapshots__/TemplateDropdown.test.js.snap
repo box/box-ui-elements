@@ -350,6 +350,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render loadi
     />
     <LoadingIndicator
       className="metadata-instance-editor-template-message template-dropdown-loading-indicator"
+      size="default"
     />
   </Overlay>
 </Flyout>

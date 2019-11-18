@@ -2,7 +2,8 @@
 import * as React from 'react';
 import { boolean } from '@storybook/addon-knobs';
 
-import Button from '../button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../button/Button'; // eslint-disable-line
 import ButtonGroup from './ButtonGroup';
 import notes from './ButtonGroup.stories.md';
 

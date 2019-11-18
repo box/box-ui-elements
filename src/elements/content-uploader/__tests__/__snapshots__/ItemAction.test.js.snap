@@ -139,7 +139,10 @@ exports[`elements/content-uploader/ItemAction should render correctly with inpro
 <div
   className="bcu-item-action"
 >
-  <LoadingIndicator />
+  <LoadingIndicator
+    className=""
+    size="default"
+  />
 </div>
 `;
 
@@ -175,7 +178,10 @@ exports[`elements/content-uploader/ItemAction should render correctly with pendi
 <div
   className="bcu-item-action"
 >
-  <LoadingIndicator />
+  <LoadingIndicator
+    className=""
+    size="default"
+  />
 </div>
 `;
 
@@ -212,6 +218,9 @@ exports[`elements/content-uploader/ItemAction should render correctly with stage
 <div
   className="bcu-item-action"
 >
-  <LoadingIndicator />
+  <LoadingIndicator
+    className=""
+    size="default"
+  />
 </div>
 `;

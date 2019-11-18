@@ -9,7 +9,8 @@ import Modal from 'react-modal';
 import noop from 'lodash/noop';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import PrimaryButton from '../../components/primary-button/PrimaryButton';
-import Button from '../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button/Button'; // eslint-disable-line
 import messages from '../common/messages';
 import ShareAccessSelect from '../common/share-access-select';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';

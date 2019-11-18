@@ -4,7 +4,8 @@
  * @author Box
  */
 import * as React from 'react';
-import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
 import SidebarContent from './SidebarContent';
 import SidebarSection from './SidebarSection';
 import './SidebarLoading.scss';

@@ -14,8 +14,9 @@ import API from '../../api';
 import EmptyContent from '../../features/metadata-instance-editor/EmptyContent';
 import InlineError from '../../components/inline-error/InlineError';
 import Instances from '../../features/metadata-instance-editor/Instances';
-import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
-import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
+import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper'; // eslint-disable-line
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
 import TemplateDropdown from '../../features/metadata-instance-editor/TemplateDropdown';

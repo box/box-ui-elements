@@ -7,7 +7,8 @@
 import React from 'react';
 import range from 'lodash/range';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../../components/button'; // eslint-disable-line
 import DropdownMenu from '../../../components/dropdown-menu';
 import { Menu, MenuItem } from '../../../components/menu';
 import messages from '../messages';

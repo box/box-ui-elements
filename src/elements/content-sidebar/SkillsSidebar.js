@@ -10,7 +10,8 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import API from '../../api';
-import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './skills/SidebarSkills';

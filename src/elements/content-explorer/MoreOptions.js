@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button/Button'; // eslint-disable-line
 import DropdownMenu from '../../components/dropdown-menu/DropdownMenu';
 import Menu from '../../components/menu/Menu';
 import MenuItem from '../../components/menu/MenuItem';

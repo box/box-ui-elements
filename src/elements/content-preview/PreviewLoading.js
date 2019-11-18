@@ -8,7 +8,8 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import IconFileDefault from '../../icons/imported/IconFileDefault32';
 import SecurityBlockedState from '../../icons/states/SecurityBlockedState';
-import makeLoadable from '../../components/loading-indicator/makeLoadable';
+// $FlowFixMe migrated to TS
+import makeLoadable from '../../components/loading-indicator/makeLoadable'; // eslint-disable-line
 import messages from '../common/messages';
 import { ERROR_CODE_FETCH_FILE_DUE_TO_POLICY } from '../../constants';
 import './PreviewLoading.scss';

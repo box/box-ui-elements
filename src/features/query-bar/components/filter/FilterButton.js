@@ -7,7 +7,8 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import IconMetadataFilter from '../../../../icons/metadata-view/IconMetadataFilter';
 import Condition from './Condition';
-import Button from '../../../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../../../components/button/Button'; // eslint-disable-line
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import MenuToggle from '../../../../components/dropdown-menu/MenuToggle';
 import { Flyout, Overlay } from '../../../../components/flyout';

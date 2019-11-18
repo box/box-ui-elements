@@ -17,7 +17,8 @@ import TextArea from '../../../../components/text-area';
 import DatePicker from '../../../../components/date-picker/DatePicker';
 import Checkbox from '../../../../components/checkbox';
 import PillSelectorDropdown from '../../../../components/pill-selector-dropdown/PillSelectorDropdown';
-import Button from '../../../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../../../components/button/Button'; // eslint-disable-line
 import { FeatureFlag } from '../../../common/feature-checking';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import {

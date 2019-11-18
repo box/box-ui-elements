@@ -8,7 +8,7 @@ import noop from 'lodash/noop';
 
 import Collapsible from '../../components/collapsible/Collapsible';
 import Form from '../../components/form-elements/form/Form';
-import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
+import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper'; // eslint-disable-line
 import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
 import IconMetadataColored from '../../icons/general/IconMetadataColored';

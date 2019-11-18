@@ -8,7 +8,8 @@ import { FormattedMessage } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
 import PlainButton from '../../components/plain-button';
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 import TextInputWithCopyButton from '../../components/text-input-with-copy-button';
 import Toggle from '../../components/toggle/Toggle';
 import Tooltip from '../../components/tooltip';

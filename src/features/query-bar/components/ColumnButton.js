@@ -4,7 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
 import { Flyout, Overlay } from '../../../components/flyout';
-import Button from '../../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../../components/button/Button'; // eslint-disable-line
 import MenuToggle from '../../../components/dropdown-menu/MenuToggle';
 import IconMetadataColumns from '../../../icons/metadata-view/IconMetadataColumns';
 import ColumnButtonOverlay from './ColumnButtonOverlay';

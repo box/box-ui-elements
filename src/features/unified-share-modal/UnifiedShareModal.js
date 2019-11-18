@@ -7,10 +7,11 @@ import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
-import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
+import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper'; // eslint-disable-line
 import { Modal } from '../../components/modal';
 import { Link } from '../../components/link';
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 import { UpgradeBadge } from '../../components/badge';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';

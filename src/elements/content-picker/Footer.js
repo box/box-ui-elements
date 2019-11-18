@@ -6,7 +6,8 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 import ButtonGroup from '../../components/button-group';
 import IconCheck from '../../icons/general/IconCheck';
 import IconClose from '../../icons/general/IconClose';

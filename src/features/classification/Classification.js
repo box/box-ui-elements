@@ -3,7 +3,8 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Label from '../../components/label/Label';
-import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
 import ClassifiedBadge from './ClassifiedBadge';
 import SecurityControls from './security-controls';
 import messages from './messages';

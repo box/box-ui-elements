@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
-
-import Button from '../button';
+// $FlowFixMe migrated to TS
+import Button from '../button'; // eslint-disable-line
 
 type Props = {
     children?: React.Node,

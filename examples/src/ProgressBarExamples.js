@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Button from '../../src/components/button';
+import Button from '../../src/components/button'; // eslint-disable-line
 import ProgressBar from '../../src/components/progress-bar';
 
 class ProgressBarExamples extends Component {

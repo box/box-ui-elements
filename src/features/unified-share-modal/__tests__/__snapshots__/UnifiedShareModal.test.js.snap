@@ -30,6 +30,9 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -215,6 +218,9 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -276,6 +282,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={true}
     >
@@ -461,6 +470,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={true}
     >
@@ -646,6 +658,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={true}
     >
@@ -835,6 +850,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={true}
     >
@@ -1020,6 +1038,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={true}
     >
@@ -1205,6 +1226,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -1361,6 +1385,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -1547,6 +1574,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={true}
     >
@@ -1733,6 +1763,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -1919,6 +1952,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -2076,6 +2112,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={true}
     >
@@ -2144,6 +2183,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -2333,6 +2375,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={true}
     >
@@ -2522,6 +2567,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -2707,6 +2755,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -2891,6 +2942,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >
@@ -3050,6 +3104,9 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <LoadingIndicatorWrapper
+      className=""
+      crawlerPosition="center"
+      crawlerSize="default"
       hideContent={true}
       isLoading={false}
     >

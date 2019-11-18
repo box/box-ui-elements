@@ -216,6 +216,9 @@ exports[`feature/left-sidebar/LeftSidebar should render collapsible nested menu 
     <LoadingIndicatorWrapper
       className="favorites-loading-wrapper"
       crawlerPosition="top"
+      crawlerSize="default"
+      hideContent={false}
+      isLoading={false}
       key="loading-indicator-0"
     >
       <NavList
@@ -394,6 +397,9 @@ exports[`feature/left-sidebar/LeftSidebar should render placeholder inside neste
     <LoadingIndicatorWrapper
       className="favorites-loading-wrapper"
       crawlerPosition="top"
+      crawlerSize="default"
+      hideContent={false}
+      isLoading={false}
       key="loading-indicator-0"
     >
       <NavList

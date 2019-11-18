@@ -2,7 +2,8 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import LoadingIndicator from '../../components/loading-indicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../components/loading-indicator'; // eslint-disable-line
 
 import './QuickSearchSelector.scss';
 

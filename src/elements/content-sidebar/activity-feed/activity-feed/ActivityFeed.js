@@ -14,7 +14,8 @@ import CommentForm from '../comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import InlineError from '../../../../components/inline-error/InlineError';
-import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator'; // eslint-disable-line
 import messages from './messages';
 import type { FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
 import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';

@@ -1,87 +1,88 @@
-// @flow
 import * as React from 'react';
 import uniqueId from 'lodash/uniqueId';
 import TetherComponent from 'react-tether';
+import classNames from 'classnames';
 
 import './RadarAnimation.scss';
 
-const BOTTOM_CENTER = 'bottom-center';
-const BOTTOM_LEFT = 'bottom-left';
-const BOTTOM_RIGHT = 'bottom-right';
-const MIDDLE_CENTER = 'middle-center';
-const MIDDLE_LEFT = 'middle-left';
-const MIDDLE_RIGHT = 'middle-right';
-const TOP_CENTER = 'top-center';
-const TOP_LEFT = 'top-left';
-const TOP_RIGHT = 'top-right';
+export enum RadarAnimationPosition {
+    BOTTOM_CENTER = 'bottom-center',
+    BOTTOM_LEFT = 'bottom-left',
+    BOTTOM_RIGHT = 'bottom-right',
+    MIDDLE_CENTER = 'middle-center',
+    MIDDLE_LEFT = 'middle-left',
+    MIDDLE_RIGHT = 'middle-right',
+    TOP_CENTER = 'top-center',
+    TOP_LEFT = 'top-left',
+    TOP_RIGHT = 'top-right',
+}
 
 const positions = {
-    [BOTTOM_CENTER]: {
+    [RadarAnimationPosition.BOTTOM_CENTER]: {
         attachment: 'top center',
         targetAttachment: 'bottom center',
     },
-    [BOTTOM_LEFT]: {
+    [RadarAnimationPosition.BOTTOM_LEFT]: {
         attachment: 'top left',
         targetAttachment: 'bottom left',
     },
-    [BOTTOM_RIGHT]: {
+    [RadarAnimationPosition.BOTTOM_RIGHT]: {
         attachment: 'top right',
         targetAttachment: 'bottom right',
     },
-    [MIDDLE_CENTER]: {
+    [RadarAnimationPosition.MIDDLE_CENTER]: {
         attachment: 'middle center',
         targetAttachment: 'middle center',
     },
-    [MIDDLE_LEFT]: {
+    [RadarAnimationPosition.MIDDLE_LEFT]: {
         attachment: 'middle right',
         targetAttachment: 'middle left',
     },
-    [MIDDLE_RIGHT]: {
+    [RadarAnimationPosition.MIDDLE_RIGHT]: {
         attachment: 'middle left',
         targetAttachment: 'middle right',
     },
-    [TOP_CENTER]: {
+    [RadarAnimationPosition.TOP_CENTER]: {
         attachment: 'bottom center',
         targetAttachment: 'top center',
     },
-    [TOP_LEFT]: {
+    [RadarAnimationPosition.TOP_LEFT]: {
         attachment: 'bottom left',
         targetAttachment: 'top left',
     },
-    [TOP_RIGHT]: {
+    [RadarAnimationPosition.TOP_RIGHT]: {
         attachment: 'bottom right',
         targetAttachment: 'top right',
     },
 };
 
-export type Position = $Keys<typeof positions>;
-
-type Props = {
+export interface RadarAnimationProps {
     /** A React element to put the radar on */
-    children: React.Element<any>,
+    children: React.ReactNode;
     /** A CSS class for the radar */
-    className?: string,
+    className: string;
     /** Whether to constrain the radar to the element's scroll parent. Defaults to `false` */
-    constrainToScrollParent: boolean,
+    constrainToScrollParent: boolean;
     /** Whether to constrain the radar to window. Defaults to `true` */
-    constrainToWindow: boolean,
+    constrainToWindow: boolean;
     /** Forces the radar to be shown or hidden - defaults to true */
-    isShown: boolean,
+    isShown: boolean;
     /** Where to position the radar relative to the wrapped component */
-    position: Position,
-};
+    position: RadarAnimationPosition;
+}
 
-class RadarAnimation extends React.Component<Props> {
+class RadarAnimation extends React.Component<RadarAnimationProps> {
+    tetherRef = React.createRef<TetherComponent>();
+
+    radarAnimationID = uniqueId('radarAnimation');
+
     static defaultProps = {
+        className: '',
         constrainToScrollParent: false,
         constrainToWindow: true,
         isShown: true,
-        position: MIDDLE_RIGHT,
+        position: RadarAnimationPosition.MIDDLE_RIGHT,
     };
-
-    tetherRef = React.createRef<{ position: () => {} }>();
-
-    radarAnimationID = uniqueId('radarAnimation');
 
     // Instance API: Forces the radar to be repositioned
     position = () => {
@@ -92,7 +93,7 @@ class RadarAnimation extends React.Component<Props> {
     };
 
     render() {
-        const { children, className = '', constrainToScrollParent, constrainToWindow, position, isShown } = this.props;
+        const { children, className, constrainToScrollParent, constrainToWindow, position, isShown } = this.props;
 
         const constraints = [];
         if (constrainToScrollParent) {
@@ -108,20 +109,26 @@ class RadarAnimation extends React.Component<Props> {
             });
         }
 
-        const tetherPosition = positions[position];
+        const { attachment, targetAttachment } = positions[position];
+        const classes = classNames('radar', className);
+        const child = React.Children.only(children);
+        const referenceElement = React.cloneElement(child as React.ReactElement, {
+            'aria-describedby': this.radarAnimationID,
+        });
+
+        // Typescript defs seem busted for older versions of react-tether
+        const tetherProps = {
+            attachment,
+            classPrefix: 'radar-animation',
+            constraints,
+            targetAttachment,
+        };
+
         return (
-            <TetherComponent
-                attachment={tetherPosition.attachment}
-                classPrefix="radar-animation"
-                constraints={constraints}
-                targetAttachment={tetherPosition.targetAttachment}
-                ref={this.tetherRef}
-            >
-                {React.cloneElement(React.Children.only(children), {
-                    'aria-describedby': this.radarAnimationID,
-                })}
+            <TetherComponent ref={this.tetherRef} {...tetherProps}>
+                {referenceElement}
                 {isShown && (
-                    <div className={`radar ${className}`} id={this.radarAnimationID}>
+                    <div className={classes} id={this.radarAnimationID}>
                         <div className="radar-dot" />
                         <div className="radar-circle" />
                     </div>

@@ -6,10 +6,12 @@ import classNames from 'classnames';
 import MetadataDefaultBadge from '../../../icons/badges/MetadataDefaultBadge';
 import MetadataActiveBadge from '../../../icons/badges/MetadataActiveBadge';
 import TemplateDropdown from '../../metadata-instance-editor/TemplateDropdown';
-import Button from '../../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../../components/button/Button'; // eslint-disable-line
 import MenuToggle from '../../../components/dropdown-menu/MenuToggle';
 import messages from '../messages';
-import LoadingIndicator from '../../../components/loading-indicator';
+// $FlowFixMe migrated to TS
+import LoadingIndicator from '../../../components/loading-indicator'; // eslint-disable-line
 import type { MetadataTemplate } from '../../../common/types/metadata';
 
 type State = {

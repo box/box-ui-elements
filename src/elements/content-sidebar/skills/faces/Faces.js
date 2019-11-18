@@ -9,10 +9,11 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
-import LoadingIndicatorWrapper from '../../../../components/loading-indicator/LoadingIndicatorWrapper';
+import LoadingIndicatorWrapper from '../../../../components/loading-indicator/LoadingIndicatorWrapper'; // eslint-disable-line
 import InlineError from '../../../../components/inline-error/InlineError';
 import Tooltip from '../../../../components/tooltip/Tooltip';
-import Button from '../../../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../../../components/button/Button'; // eslint-disable-line
 import IconEdit from '../../../../icons/general/IconEdit';
 import messages from '../../../common/messages';
 import { SKILLS_TARGETS } from '../../../common/interactionTargets';

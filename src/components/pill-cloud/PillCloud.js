@@ -2,8 +2,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
-
-import Button from '../button';
+// $FlowFixMe migrated to TS
+import Button from '../button'; // eslint-disable-line
 import type { Option } from '../pill-selector-dropdown/flowTypes';
 
 type Props = {

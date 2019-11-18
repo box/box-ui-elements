@@ -6,7 +6,8 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button/Button'; // eslint-disable-line
 import { Notification, NotificationConstants } from '../../components/notification';
 import messages from '../common/messages';
 import './ReloadNotification.scss';

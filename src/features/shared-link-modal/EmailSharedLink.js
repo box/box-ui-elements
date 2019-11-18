@@ -8,7 +8,8 @@ import ContactDatalistItem from '../../components/contact-datalist-item';
 import TextArea from '../../components/text-area';
 import PrimaryButton from '../../components/primary-button';
 import { ModalActions } from '../../components/modal';
-import Button from '../../components/button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button'; // eslint-disable-line
 import parseEmails from '../../utils/parseEmails';
 import commonMessages from '../../common/messages';
 

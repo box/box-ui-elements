@@ -7,7 +7,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
-import Button from '../../components/button/Button';
+// $FlowFixMe migrated to TS
+import Button from '../../components/button/Button'; // eslint-disable-line
 import IconOpenWith from '../../icons/general/IconOpenWith';
 import Tooltip from '../common/Tooltip';
 import messages from '../common/messages';
