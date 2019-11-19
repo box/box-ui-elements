@@ -8,15 +8,20 @@ const { FULL, SHORT, SHORT_WITH_TOOLTIP } = SECURITY_CONTROLS_FORMAT;
 
 describe('features/classification/security-controls/SecurityControls', () => {
     let wrapper;
-    let accessPolicy;
+    let accessPolicyRestrictions;
 
     const getWrapper = (props = {}) =>
         shallow(
-            <SecurityControls accessPolicy={accessPolicy} format={SHORT} tooltipPosition="middle-left" {...props} />,
+            <SecurityControls
+                accessPolicyRestrictions={accessPolicyRestrictions}
+                format={SHORT}
+                tooltipPosition="middle-left"
+                {...props}
+            />,
         );
 
     beforeEach(() => {
-        accessPolicy = {
+        accessPolicyRestrictions = {
             sharedLink: {
                 accessLevel: 'collabOnly',
             },
@@ -35,8 +40,8 @@ describe('features/classification/security-controls/SecurityControls', () => {
         wrapper = getWrapper();
     });
 
-    test('should render null when access policy does not contain restrictions', () => {
-        wrapper.setProps({ accessPolicy: {} });
+    test('should render null when access policy does not contain accessPolicyRestrictions', () => {
+        wrapper.setProps({ accessPolicyRestrictions: {} });
         expect(wrapper.isEmptyRender()).toBe(true);
     });
 

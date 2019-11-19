@@ -2,24 +2,25 @@
 import getProp from 'lodash/get';
 
 import type { MessageDescriptor } from 'react-intl';
+import type { AccessPolicyRestrictions } from './flowTypes';
 
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
 import {
-    ACCESS_POLICY_RESTRICTIONS,
-    DOWNLOAD_CONTROL_TYPE,
-    LIST_ACCESS_LEVEL_TYPE,
+    ACCESS_POLICY_RESTRICTION,
+    DOWNLOAD_CONTROL,
+    LIST_ACCESS_LEVEL,
     MAX_APP_COUNT,
-    SHARED_LINK_ACCESS_LEVEL_TYPE,
+    SHARED_LINK_ACCESS_LEVEL,
 } from './constants';
 
-const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTIONS;
-const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL_TYPE;
-const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL_TYPE;
-const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL_TYPE;
+const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTION;
+const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
+const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
+const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL;
 
-const getShortSecurityControlsMessage = (accessPolicy: Object): ?MessageDescriptor => {
-    const { sharedLink, download, externalCollab, app } = accessPolicy;
+const getShortSecurityControlsMessage = (accessPolicyRestrictions: AccessPolicyRestrictions): ?MessageDescriptor => {
+    const { sharedLink, download, externalCollab, app } = accessPolicyRestrictions;
 
     if ((sharedLink || externalCollab) && download && app) {
         return messages.shortAllRestrictions;
@@ -52,9 +53,9 @@ const getShortSecurityControlsMessage = (accessPolicy: Object): ?MessageDescript
     return null;
 };
 
-const getSharedLinkitems = (accessPolicy: Object): Array<MessageDescriptor> => {
+const getSharedLinkitems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
-    const accessLevel = getProp(accessPolicy, `${SHARED_LINK}.accessLevel`);
+    const accessLevel = getProp(accessPolicyRestrictions, `${SHARED_LINK}.accessLevel`);
 
     switch (accessLevel) {
         case COLLAB_ONLY:
@@ -70,9 +71,9 @@ const getSharedLinkitems = (accessPolicy: Object): Array<MessageDescriptor> => {
     return items;
 };
 
-const getExternalCollabitems = (accessPolicy: Object): Array<MessageDescriptor> => {
+const getExternalCollabitems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
-    const accessLevel = getProp(accessPolicy, `${EXTERNAL_COLLAB}.accessLevel`);
+    const accessLevel = getProp(accessPolicyRestrictions, `${EXTERNAL_COLLAB}.accessLevel`);
 
     switch (accessLevel) {
         case BLOCK:
@@ -89,9 +90,9 @@ const getExternalCollabitems = (accessPolicy: Object): Array<MessageDescriptor> 
     return items;
 };
 
-const getApplicationDownloaditems = (accessPolicy: Object): Array<MessageDescriptor> => {
+const getApplicationDownloaditems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
-    const accessLevel = getProp(accessPolicy, `${APP}.accessLevel`);
+    const accessLevel = getProp(accessPolicyRestrictions, `${APP}.accessLevel`);
 
     switch (accessLevel) {
         case BLOCK:
@@ -99,7 +100,7 @@ const getApplicationDownloaditems = (accessPolicy: Object): Array<MessageDescrip
             break;
         case WHITELIST:
         case BLACKLIST: {
-            const apps = getProp(accessPolicy, `${APP}.apps`, []);
+            const apps = getProp(accessPolicyRestrictions, `${APP}.apps`, []);
             const appsToDisplay = apps.slice(0, MAX_APP_COUNT);
             const remainingAppCount = apps.slice(MAX_APP_COUNT).length;
             const appNames = appsToDisplay.map(({ displayText }) => displayText).join(', ');
@@ -121,9 +122,9 @@ const getApplicationDownloaditems = (accessPolicy: Object): Array<MessageDescrip
     return items;
 };
 
-const getDownloaditems = (accessPolicy: Object): Array<MessageDescriptor> => {
+const getDownloaditems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
-    const { web, mobile, desktop } = getProp(accessPolicy, DOWNLOAD, {});
+    const { web, mobile, desktop } = getProp(accessPolicyRestrictions, DOWNLOAD, {});
 
     const downloadRestrictions = {
         [WEB]: {
@@ -160,12 +161,14 @@ const getDownloaditems = (accessPolicy: Object): Array<MessageDescriptor> => {
     return items;
 };
 
-const getFullSecurityControlsMessages = (accessPolicy: Object): Array<MessageDescriptor> => {
+const getFullSecurityControlsMessages = (
+    accessPolicyRestrictions: AccessPolicyRestrictions,
+): Array<MessageDescriptor> => {
     const items = [
-        ...getSharedLinkitems(accessPolicy),
-        ...getExternalCollabitems(accessPolicy),
-        ...getDownloaditems(accessPolicy),
-        ...getApplicationDownloaditems(accessPolicy),
+        ...getSharedLinkitems(accessPolicyRestrictions),
+        ...getExternalCollabitems(accessPolicyRestrictions),
+        ...getDownloaditems(accessPolicyRestrictions),
+        ...getApplicationDownloaditems(accessPolicyRestrictions),
     ];
     return items;
 };

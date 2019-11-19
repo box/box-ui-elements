@@ -2,16 +2,16 @@ import messages from '../messages';
 import downloadRestrictionsMessageMap from '../downloadRestrictionsMessageMap';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from '../utils';
 import {
-    DOWNLOAD_CONTROL_TYPE,
-    LIST_ACCESS_LEVEL_TYPE,
-    MANAGED_USERS_COMBINATION,
-    SHARED_LINK_ACCESS_LEVEL_TYPE,
+    DOWNLOAD_CONTROL,
+    LIST_ACCESS_LEVEL,
+    MANAGED_USERS_ACCESS_LEVEL,
+    SHARED_LINK_ACCESS_LEVEL,
 } from '../constants';
 
-const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL_TYPE;
-const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL_TYPE;
-const { OWNERS_AND_COOWNERS, OWNERS_COOWNERS_AND_EDITORS } = MANAGED_USERS_COMBINATION;
-const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL_TYPE;
+const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
+const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
+const { OWNERS_AND_COOWNERS, OWNERS_COOWNERS_AND_EDITORS } = MANAGED_USERS_ACCESS_LEVEL;
+const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL;
 
 describe('features/classification/security-controls/utils', () => {
     let accessPolicy;
