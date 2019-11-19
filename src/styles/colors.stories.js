@@ -9,9 +9,12 @@ Object.keys(colors).forEach(colorKey => {
         colorKey.startsWith('bdl') &&
         !colorKey.includes('Neutral') &&
         colorKey !== 'bdlSecondaryBlue' &&
+        // $FlowFixMe value will a string
         colors[colorKey].startsWith('#')
     ) {
+        // $FlowFixMe match will not return null
         const colorNameBreakDown = colorKey.match(/(bdl)|([A-Z][a-z]+)|(\d+)/g).join('-');
+        // $FlowFixMe match will not return null
         const allowColorKey = colorKey.match(/[A-Z][a-z]+/g).join(' ');
 
         if (!bdlColors[allowColorKey]) {

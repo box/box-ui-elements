@@ -51,7 +51,7 @@ function generateProps(store) {
     const validator = text => {
         // email input validation
         const pattern = /^[^\s<>@,]+@[^\s<>@,/\\]+\.[^\s<>@,]+$/i;
-        return pattern.test(text);
+        return pattern.test(((text: any): string));
     };
 
     const validateForError = text => {
