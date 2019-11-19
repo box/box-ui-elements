@@ -1,0 +1,14 @@
+.bdl-SecurityControls {
+    margin: 0;
+    list-style: none;
+}
+
+.bdl-SecurityControls--summarized {
+    .bdl-SecurityControlsItem {
+        padding-left: 0;
+
+        &::before {
+            margin-left: 0;
+        }
+    }
+}

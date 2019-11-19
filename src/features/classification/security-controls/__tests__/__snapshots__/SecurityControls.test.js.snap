@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/classification/security-controls/SecurityControls should render SecurityControls multiple SecurityControlsItem when using FULL format 1`] = `
+<ul
+  className="bdl-SecurityControls"
+>
+  <SecurityControlsItem
+    key="0"
+    message={
+      Object {
+        "defaultMessage": "Shared links cannot be made publicly accessible.",
+        "id": "boxui.securityControls.sharingCollabOnly",
+      }
+    }
+    tooltipItems={Array []}
+    tooltipPosition="middle-left"
+  />
+  <SecurityControlsItem
+    key="1"
+    message={
+      Object {
+        "defaultMessage": "External collaboration limited to approved domains.",
+        "id": "boxui.securityControls.externalCollabDomainList",
+      }
+    }
+    tooltipItems={Array []}
+    tooltipPosition="middle-left"
+  />
+  <SecurityControlsItem
+    key="2"
+    message={
+      Object {
+        "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
+        "id": "boxui.securityControls.desktopDownloadOwners",
+      }
+    }
+    tooltipItems={Array []}
+    tooltipPosition="middle-left"
+  />
+  <SecurityControlsItem
+    key="3"
+    message={
+      Object {
+        "defaultMessage": "Some applications will be restricted; {appNames}",
+        "id": "boxui.securityControls.appDownloadList",
+        "values": Object {
+          "appNames": "",
+        },
+      }
+    }
+    tooltipItems={Array []}
+    tooltipPosition="middle-left"
+  />
+</ul>
+`;
+
+exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem and tooltip items when using SHORT_WITH_TOOLTIP format 1`] = `
+<ul
+  className="bdl-SecurityControls bdl-SecurityControls--summarized"
+>
+  <SecurityControlsItem
+    key="0"
+    message={
+      Object {
+        "defaultMessage": "Sharing, download and app and restrictions apply",
+        "id": "boxui.securityControls.shortAllRestrictions",
+      }
+    }
+    tooltipItems={
+      Array [
+        Object {
+          "defaultMessage": "Shared links cannot be made publicly accessible.",
+          "id": "boxui.securityControls.sharingCollabOnly",
+        },
+        Object {
+          "defaultMessage": "External collaboration limited to approved domains.",
+          "id": "boxui.securityControls.externalCollabDomainList",
+        },
+        Object {
+          "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
+          "id": "boxui.securityControls.desktopDownloadOwners",
+        },
+        Object {
+          "defaultMessage": "Some applications will be restricted; {appNames}",
+          "id": "boxui.securityControls.appDownloadList",
+          "values": Object {
+            "appNames": "",
+          },
+        },
+      ]
+    }
+    tooltipPosition="middle-left"
+  />
+</ul>
+`;
+
+exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem when using SHORT format 1`] = `
+<ul
+  className="bdl-SecurityControls bdl-SecurityControls--summarized"
+>
+  <SecurityControlsItem
+    key="0"
+    message={
+      Object {
+        "defaultMessage": "Sharing, download and app and restrictions apply",
+        "id": "boxui.securityControls.shortAllRestrictions",
+      }
+    }
+    tooltipItems={Array []}
+    tooltipPosition="middle-left"
+  />
+</ul>
+`;

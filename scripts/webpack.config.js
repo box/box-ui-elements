@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const TranslationsPlugin = require('@box/frontend/webpack/TranslationsPlugin.js');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
@@ -5,14 +6,17 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const RsyncPlugin = require('@box/frontend/webpack/RsyncPlugin');
 const safeParser = require('postcss-safe-parser');
 const packageJSON = require('../package.json');
+const rsyncConf = fs.existsSync('scripts/rsync.json') ? require('./rsync.json') : {}; // eslint-disable-line
 const license = require('./license');
 
 const { BannerPlugin, DefinePlugin, IgnorePlugin } = webpack;
 const noReactSuffix = '.no.react';
-const isRelease = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'dev';
+const isRelease = process.env.NODE_ENV === 'production';
+const isRsync = process.env.RSYNC === 'true' && rsyncConf.location;
 const language = process.env.LANGUAGE;
 const react = process.env.REACT === 'true';
 const examples = process.env.EXAMPLES === 'true';
@@ -139,8 +143,12 @@ function getConfig(isReactExternalized) {
         }
     }
 
-    if (isRelease) {
-        // For release builds, disable code splitting. https://webpack.js.org/api/module-methods/#magic-comments
+    if (isRsync) {
+        config.plugins.push(new RsyncPlugin('dist/.', rsyncConf.location, 'elements assets'));
+    }
+
+    if (isRelease || isRsync) {
+        // Disable code splitting: https://webpack.js.org/api/module-methods/#magic-comments
         config.module.rules = [
             {
                 test: /\.js$/,
@@ -154,6 +162,7 @@ function getConfig(isReactExternalized) {
             ...config.module.rules,
         ];
     }
+
     if (isRelease && language === 'en-US' && shouldAnalyzeBundles) {
         config.plugins.push(
             new BundleAnalyzerPlugin({
@@ -165,12 +174,14 @@ function getConfig(isReactExternalized) {
             }),
         );
     }
+
     if (isReactExternalized) {
         config.externals = {
             react: 'React',
             'react-dom': 'ReactDOM',
         };
     }
+
     return config;
 }
 module.exports = isDev ? [getConfig(false), getConfig(true)] : getConfig(!react);
