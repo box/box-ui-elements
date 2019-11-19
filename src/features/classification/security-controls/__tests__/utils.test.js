@@ -128,7 +128,7 @@ describe('features/classification/security-controls/utils', () => {
         });
 
         test.each([WHITELIST, BLACKLIST])(
-            'should include correct message when app download is restricted by %s and apps are less than four',
+            'should include correct message when app download is restricted by %s and apps are less than maxAppCount',
             listType => {
                 accessPolicy = {
                     app: {
@@ -136,14 +136,14 @@ describe('features/classification/security-controls/utils', () => {
                         apps: [{ displayText: 'a' }, { displayText: 'b' }, { displayText: 'c' }],
                     },
                 };
-                expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([
+                expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
                     { ...messages.appDownloadList, values: { appNames: 'a, b, c' } },
                 ]);
             },
         );
 
         test.each([WHITELIST, BLACKLIST])(
-            'should include correct message when app download is restricted by %s and apps are less than four',
+            'should include correct message when app download is restricted by %s and apps are less than maxAppCount',
             listType => {
                 accessPolicy = {
                     app: {
@@ -151,14 +151,14 @@ describe('features/classification/security-controls/utils', () => {
                         apps: [{ displayText: 'a' }, { displayText: 'b' }, { displayText: 'c' }],
                     },
                 };
-                expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([
+                expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
                     { ...messages.appDownloadList, values: { appNames: 'a, b, c' } },
                 ]);
             },
         );
 
         test.each([WHITELIST, BLACKLIST])(
-            'should include correct message when app download is restricted by %s and apps are less four or more',
+            'should include correct message when app download is restricted by %s and apps are maxAppCount or more',
             listType => {
                 accessPolicy = {
                     app: {
@@ -172,7 +172,7 @@ describe('features/classification/security-controls/utils', () => {
                         ],
                     },
                 };
-                expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([
+                expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
                     {
                         ...messages.appDownloadListOverflow,
                         values: { appNames: 'a, b, c', remainingAppCount: 2 },

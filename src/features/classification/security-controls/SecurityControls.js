@@ -7,7 +7,7 @@ import type { AccessPolicyRestrictions } from './flowTypes';
 
 import SecurityControlsItem from './SecurityControlsItem';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
-import { SECURITY_CONTROLS_FORMAT } from './constants';
+import { DEFAULT_MAX_APP_COUNT, SECURITY_CONTROLS_FORMAT } from './constants';
 
 import './SecurityControls.scss';
 
@@ -15,23 +15,23 @@ const { FULL, SHORT, SHORT_WITH_TOOLTIP } = SECURITY_CONTROLS_FORMAT;
 
 type Props = {
     accessPolicyRestrictions: AccessPolicyRestrictions,
-    format: string,
+    format: $Values<typeof SECURITY_CONTROLS_FORMAT>,
+    maxAppCount: number,
     tooltipPosition?: Position,
 };
 
-const SecurityControls = ({ accessPolicyRestrictions, format, tooltipPosition }: Props) => {
+const SecurityControls = ({ accessPolicyRestrictions, format, maxAppCount, tooltipPosition }: Props) => {
     let items = [];
     let tooltipItems;
 
     if (format === FULL) {
-        items = getFullSecurityControlsMessages(accessPolicyRestrictions);
+        items = getFullSecurityControlsMessages(accessPolicyRestrictions, maxAppCount);
     } else {
         const shortMessage = getShortSecurityControlsMessage(accessPolicyRestrictions);
-
         items = shortMessage ? [shortMessage] : [];
 
         if (items.length && format === SHORT_WITH_TOOLTIP) {
-            tooltipItems = getFullSecurityControlsMessages(accessPolicyRestrictions);
+            tooltipItems = getFullSecurityControlsMessages(accessPolicyRestrictions, maxAppCount);
         }
     }
 
@@ -59,6 +59,7 @@ const SecurityControls = ({ accessPolicyRestrictions, format, tooltipPosition }:
 
 SecurityControls.defaultProps = {
     format: SHORT,
+    maxAppCount: DEFAULT_MAX_APP_COUNT,
 };
 
 export default SecurityControls;

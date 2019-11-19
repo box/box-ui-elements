@@ -15,6 +15,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
             <SecurityControls
                 accessPolicyRestrictions={accessPolicyRestrictions}
                 format={SHORT}
+                maxAppCount={3}
                 tooltipPosition="middle-left"
                 {...props}
             />,
@@ -74,5 +75,25 @@ describe('features/classification/security-controls/SecurityControls', () => {
     test('should pass tooltip possition to security controls item', () => {
         wrapper.setProps({ format: SHORT, tooltipPosition: 'foo' });
         expect(wrapper.find(SecurityControlsItem).props().tooltipPosition).toBe('foo');
+    });
+
+    test('should restrict displayed app names to maxAppCount', () => {
+        accessPolicyRestrictions.app.apps = [
+            { displayText: 'App 1' },
+            { displayText: 'App 2' },
+            { displayText: 'App 3' },
+            { displayText: 'App 4' },
+        ];
+        wrapper.setProps({ format: FULL, accessPolicyRestrictions, maxAppCount: 2 });
+
+        expect(
+            wrapper
+                .find(SecurityControlsItem)
+                .findWhere(item => item.props().message.id === 'boxui.securityControls.appDownloadListOverflow')
+                .props().message.values,
+        ).toEqual({
+            appNames: 'App 1, App 2',
+            remainingAppCount: 2,
+        });
     });
 });

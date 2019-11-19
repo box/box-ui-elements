@@ -1,13 +1,23 @@
 // @flow
-const MAX_APP_COUNT = 3;
+const DEFAULT_MAX_APP_COUNT = 3;
 
-const SECURITY_CONTROLS_FORMAT = {
+const SECURITY_CONTROLS_FORMAT: {
+    FULL: 'full',
+    SHORT: 'short',
+    SHORT_WITH_TOOLTIP: 'shortWithTooltip',
+} = {
     FULL: 'full',
     SHORT: 'short',
     SHORT_WITH_TOOLTIP: 'shortWithTooltip',
 };
 
-const ACCESS_POLICY_RESTRICTION = {
+const ACCESS_POLICY_RESTRICTION: {
+    APP: 'app',
+    DOWNLOAD: 'download',
+    EXTERNAL_COLLAB: 'externalCollab',
+    FTP: 'ftp',
+    SHARED_LINK: 'sharedLink',
+} = {
     SHARED_LINK: 'sharedLink',
     DOWNLOAD: 'download',
     EXTERNAL_COLLAB: 'externalCollab',
@@ -15,7 +25,12 @@ const ACCESS_POLICY_RESTRICTION = {
     FTP: 'ftp',
 };
 
-const DOWNLOAD_CONTROL = {
+const DOWNLOAD_CONTROL: {
+    DESKTOP: 'desktop',
+    FTP: 'ftp',
+    MOBILE: 'mobile',
+    WEB: 'web',
+} = {
     DESKTOP: 'desktop',
     FTP: 'ftp',
     MOBILE: 'mobile',
@@ -52,10 +67,10 @@ const SHARED_LINK_ACCESS_LEVEL: {
 
 export {
     ACCESS_POLICY_RESTRICTION,
+    DEFAULT_MAX_APP_COUNT,
     DOWNLOAD_CONTROL,
     LIST_ACCESS_LEVEL,
     MANAGED_USERS_ACCESS_LEVEL,
-    MAX_APP_COUNT,
     SECURITY_CONTROLS_FORMAT,
     SHARED_LINK_ACCESS_LEVEL,
 };

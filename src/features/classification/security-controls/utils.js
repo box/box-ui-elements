@@ -1,18 +1,13 @@
 // @flow
 import getProp from 'lodash/get';
+import isNil from 'lodash/isNil';
 
 import type { MessageDescriptor } from 'react-intl';
 import type { AccessPolicyRestrictions } from './flowTypes';
 
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
-import {
-    ACCESS_POLICY_RESTRICTION,
-    DOWNLOAD_CONTROL,
-    LIST_ACCESS_LEVEL,
-    MAX_APP_COUNT,
-    SHARED_LINK_ACCESS_LEVEL,
-} from './constants';
+import { ACCESS_POLICY_RESTRICTION, DOWNLOAD_CONTROL, LIST_ACCESS_LEVEL, SHARED_LINK_ACCESS_LEVEL } from './constants';
 
 const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTION;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
@@ -53,7 +48,7 @@ const getShortSecurityControlsMessage = (accessPolicyRestrictions: AccessPolicyR
     return null;
 };
 
-const getSharedLinkitems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getSharedLinkMessages = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
     const accessLevel = getProp(accessPolicyRestrictions, `${SHARED_LINK}.accessLevel`);
 
@@ -71,7 +66,7 @@ const getSharedLinkitems = (accessPolicyRestrictions: AccessPolicyRestrictions):
     return items;
 };
 
-const getExternalCollabitems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getExternalCollabItems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
     const accessLevel = getProp(accessPolicyRestrictions, `${EXTERNAL_COLLAB}.accessLevel`);
 
@@ -90,7 +85,10 @@ const getExternalCollabitems = (accessPolicyRestrictions: AccessPolicyRestrictio
     return items;
 };
 
-const getApplicationDownloaditems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getApplicationDownloadMessages = (
+    accessPolicyRestrictions: AccessPolicyRestrictions,
+    maxAppCount?: number,
+): Array<MessageDescriptor> => {
     const items = [];
     const accessLevel = getProp(accessPolicyRestrictions, `${APP}.accessLevel`);
 
@@ -101,8 +99,10 @@ const getApplicationDownloaditems = (accessPolicyRestrictions: AccessPolicyRestr
         case WHITELIST:
         case BLACKLIST: {
             const apps = getProp(accessPolicyRestrictions, `${APP}.apps`, []);
-            const appsToDisplay = apps.slice(0, MAX_APP_COUNT);
-            const remainingAppCount = apps.slice(MAX_APP_COUNT).length;
+
+            maxAppCount = isNil(maxAppCount) ? apps.length : maxAppCount;
+            const appsToDisplay = apps.slice(0, maxAppCount);
+            const remainingAppCount = apps.slice(maxAppCount).length;
             const appNames = appsToDisplay.map(({ displayText }) => displayText).join(', ');
 
             if (remainingAppCount) {
@@ -122,7 +122,7 @@ const getApplicationDownloaditems = (accessPolicyRestrictions: AccessPolicyRestr
     return items;
 };
 
-const getDownloaditems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getDownloadMessages = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
     const { web, mobile, desktop } = getProp(accessPolicyRestrictions, DOWNLOAD, {});
 
@@ -163,12 +163,13 @@ const getDownloaditems = (accessPolicyRestrictions: AccessPolicyRestrictions): A
 
 const getFullSecurityControlsMessages = (
     accessPolicyRestrictions: AccessPolicyRestrictions,
+    maxAppCount?: number,
 ): Array<MessageDescriptor> => {
     const items = [
-        ...getSharedLinkitems(accessPolicyRestrictions),
-        ...getExternalCollabitems(accessPolicyRestrictions),
-        ...getDownloaditems(accessPolicyRestrictions),
-        ...getApplicationDownloaditems(accessPolicyRestrictions),
+        ...getSharedLinkMessages(accessPolicyRestrictions),
+        ...getExternalCollabItems(accessPolicyRestrictions),
+        ...getDownloadMessages(accessPolicyRestrictions),
+        ...getApplicationDownloadMessages(accessPolicyRestrictions, maxAppCount),
     ];
     return items;
 };
