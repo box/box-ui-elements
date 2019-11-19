@@ -46,7 +46,7 @@ const getShortSecurityControlsMessage = (accessPolicy: Object): ?MessageDescript
     }
 
     if (app) {
-        return messages.shortApplication;
+        return messages.shortApp;
     }
 
     return null;
@@ -93,17 +93,17 @@ const getApplicationDownloaditems = (accessPolicy: Object): Array<MessageDescrip
     const items = [];
     const accessLevel = getProp(accessPolicy, `${APP}.accessLevel`);
 
-    const apps = getProp(accessPolicy, `${APP}.apps`, []);
-    const appsToDisplay = apps.slice(0, MAX_APP_COUNT);
-    const remainingAppCount = apps.slice(MAX_APP_COUNT).length;
-    const appNames = appsToDisplay.map(({ displayText }) => displayText).join(', ');
-
     switch (accessLevel) {
         case BLOCK:
             items.push(messages.appDownloadBlock);
             break;
         case WHITELIST:
-        case BLACKLIST:
+        case BLACKLIST: {
+            const apps = getProp(accessPolicy, `${APP}.apps`, []);
+            const appsToDisplay = apps.slice(0, MAX_APP_COUNT);
+            const remainingAppCount = apps.slice(MAX_APP_COUNT).length;
+            const appNames = appsToDisplay.map(({ displayText }) => displayText).join(', ');
+
             if (remainingAppCount) {
                 items.push({
                     ...messages.appDownloadListOverflow,
@@ -113,6 +113,7 @@ const getApplicationDownloaditems = (accessPolicy: Object): Array<MessageDescrip
                 items.push({ ...messages.appDownloadList, values: { appNames } });
             }
             break;
+        }
         default:
             // no-op
             break;

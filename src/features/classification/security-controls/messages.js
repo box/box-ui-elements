@@ -12,10 +12,10 @@ const messages = defineMessages({
         description: 'TODO',
         id: 'boxui.securityControls.shortDownload',
     },
-    shortApplication: {
+    shortApp: {
         defaultMessage: 'Application restrictions apply',
         description: 'TODO',
-        id: 'boxui.securityControls.shortApplication',
+        id: 'boxui.securityControls.shortApp',
     },
     shortSharingDownload: {
         defaultMessage: 'Sharing and download restrictions apply',

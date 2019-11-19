@@ -20,7 +20,7 @@ type Props = {
 
 const SecurityControls = ({ accessPolicy, format, tooltipPosition }: Props) => {
     let items = [];
-    let tooltipItems = [];
+    let tooltipItems;
 
     if (format === FULL) {
         items = getFullSecurityControlsMessages(accessPolicy);
