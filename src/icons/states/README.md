@@ -97,6 +97,15 @@ const icons = [
         component: require('./RecentsEmptyState').default,
     },
     {
+        name: 'RelayFullEmptyState',
+        component: require('./RelayFullEmptyState').default,
+    },
+    {
+        name: 'RelayLiteEmptyState',
+        component: require('./RelayLiteEmptyState').default,
+    },
+
+    {
         name: 'SandboxesEmptyState',
         component: require('./SandboxesEmptyState').default,
     },
