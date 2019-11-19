@@ -16,7 +16,8 @@ const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL;
 
 const getShortSecurityControlsMessage = (accessPolicyRestrictions: AccessPolicyRestrictions): ?MessageDescriptor => {
     const { sharedLink, download, externalCollab, app } = accessPolicyRestrictions;
-
+    // Shared link and external collab restrictions are grouped
+    // together as generic "sharing" restrictions
     if ((sharedLink || externalCollab) && download && app) {
         return messages.shortAllRestrictions;
     }
