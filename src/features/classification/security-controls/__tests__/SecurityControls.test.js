@@ -61,7 +61,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should set summarized class not using FULL format', () => {
+    test('should set summarized class when not using FULL format', () => {
         wrapper.setProps({ format: FULL });
         expect(wrapper.hasClass('bdl-SecurityControls--summarized')).toBe(false);
 
@@ -72,7 +72,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(wrapper.hasClass('bdl-SecurityControls--summarized')).toBe(true);
     });
 
-    test('should pass tooltip possition to security controls item', () => {
+    test('should pass tooltip position to security controls item', () => {
         wrapper.setProps({ format: SHORT, tooltipPosition: 'foo' });
         expect(wrapper.find(SecurityControlsItem).props().tooltipPosition).toBe('foo');
     });

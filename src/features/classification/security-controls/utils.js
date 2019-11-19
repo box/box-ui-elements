@@ -16,17 +16,18 @@ const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL;
 
 const getShortSecurityControlsMessage = (accessPolicyRestrictions: AccessPolicyRestrictions): ?MessageDescriptor => {
     const { sharedLink, download, externalCollab, app } = accessPolicyRestrictions;
+    const sharing = sharedLink || externalCollab;
     // Shared link and external collab restrictions are grouped
     // together as generic "sharing" restrictions
-    if ((sharedLink || externalCollab) && download && app) {
+    if (sharing && download && app) {
         return messages.shortAllRestrictions;
     }
 
-    if ((sharedLink || externalCollab) && download) {
+    if (sharing && download) {
         return messages.shortSharingDownload;
     }
 
-    if ((sharedLink || externalCollab) && app) {
+    if (sharing && app) {
         return messages.shortSharingApp;
     }
 
@@ -86,7 +87,7 @@ const getExternalCollabItems = (accessPolicyRestrictions: AccessPolicyRestrictio
     return items;
 };
 
-const getApplicationDownloadMessages = (
+const getAppDownloadMessages = (
     accessPolicyRestrictions: AccessPolicyRestrictions,
     maxAppCount?: number,
 ): Array<MessageDescriptor> => {
@@ -170,7 +171,7 @@ const getFullSecurityControlsMessages = (
         ...getSharedLinkMessages(accessPolicyRestrictions),
         ...getExternalCollabItems(accessPolicyRestrictions),
         ...getDownloadMessages(accessPolicyRestrictions),
-        ...getApplicationDownloadMessages(accessPolicyRestrictions, maxAppCount),
+        ...getAppDownloadMessages(accessPolicyRestrictions, maxAppCount),
     ];
     return items;
 };
