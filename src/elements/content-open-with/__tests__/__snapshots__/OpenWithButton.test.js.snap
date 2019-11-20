@@ -9,9 +9,13 @@ exports[`elements/content-open-with/OpenWithButton should force the tooltip open
   text="Box Tools is not installed"
 >
   <Button
+    className=""
     data-testid="singleintegrationbutton"
     isDisabled={true}
+    isLoading={false}
     onClick={[Function]}
+    showRadar={false}
+    type="submit"
   >
     <OpenWithButtonContents>
       <FileIcon
@@ -37,9 +41,13 @@ exports[`elements/content-open-with/OpenWithButton should render as disabled if 
   }
 >
   <Button
+    className=""
     data-testid="singleintegrationbutton"
     isDisabled={true}
+    isLoading={false}
     onClick={[Function]}
+    showRadar={false}
+    type="submit"
   >
     <OpenWithButtonContents>
       <IconAdobeSign
@@ -65,9 +73,13 @@ exports[`elements/content-open-with/OpenWithButton should render as disabled if 
   }
 >
   <Button
+    className=""
     data-testid="singleintegrationbutton"
     isDisabled={true}
+    isLoading={false}
     onClick={[Function]}
+    showRadar={false}
+    type="submit"
   >
     <OpenWithButtonContents>
       <IconOpenWith
@@ -93,9 +105,13 @@ exports[`elements/content-open-with/OpenWithButton should render with the correc
   }
 >
   <Button
+    className=""
     data-testid="singleintegrationbutton"
     isDisabled={false}
+    isLoading={false}
     onClick={[Function]}
+    showRadar={false}
+    type="submit"
   >
     <OpenWithButtonContents>
       <IconGoogleDocs

@@ -204,8 +204,11 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   />
   <ModalActions>
     <Button
+      className=""
       isDisabled={false}
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
       type="button"
     >
       <FormattedMessage
@@ -282,8 +285,11 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   />
   <ModalActions>
     <Button
+      className=""
       isDisabled={false}
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
       type="button"
     >
       <FormattedMessage
@@ -410,8 +416,11 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   />
   <ModalActions>
     <Button
+      className=""
       isDisabled={false}
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
       type="button"
     >
       <FormattedMessage
@@ -493,8 +502,11 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   />
   <ModalActions>
     <Button
+      className=""
       isDisabled={false}
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
       type="button"
     >
       <FormattedMessage
@@ -587,8 +599,11 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   </div>
   <ModalActions>
     <Button
+      className=""
       isDisabled={false}
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
       type="button"
     >
       <FormattedMessage

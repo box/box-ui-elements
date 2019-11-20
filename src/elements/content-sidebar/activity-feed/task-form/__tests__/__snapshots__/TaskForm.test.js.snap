@@ -24,7 +24,9 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
     data-resin-taskid={12345678}
     data-testid="task-form-cancel-button"
     isDisabled={false}
+    isLoading={false}
     onClick={[Function]}
+    showRadar={false}
     type="button"
   >
     <button
@@ -104,6 +106,8 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
       data-testid="task-form-submit-button"
       isDisabled={false}
       isLoading={false}
+      showRadar={false}
+      type="submit"
     >
       <button
         className="btn btn-primary bcs-task-input-submit-btn"
