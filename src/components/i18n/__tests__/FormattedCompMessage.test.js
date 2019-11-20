@@ -6,6 +6,34 @@ import FormattedCompMessage from '../FormattedCompMessage';
 import Param from '../Param';
 import Plural from '../Plural';
 
+jest.unmock('react-intl');
+
+const { IntlProvider, intlShape } = jest.requireActual('react-intl');
+
+// Create the IntlProvider to retrieve context for wrapping around.
+function createIntl(locale, messages) {
+    const intlProvider = new IntlProvider(locale, messages);
+    const { intl } = intlProvider.getChildContext();
+
+    return intl;
+}
+
+const intl = createIntl('en-US', {});
+
+/**
+ * When using React-Intl `injectIntl` on components, props.intl is required.
+ */
+function nodeWithIntlProp(intlObj, node) {
+    return React.cloneElement(node, { intl: intlObj });
+}
+
+function mountWithIntl(intlObj, node) {
+    return mount(nodeWithIntlProp(intlObj, node), {
+        context: { intl: intlObj },
+        childContextTypes: { intl: intlShape },
+    });
+}
+
 function LinkButton(props) {
     return (
         <a className="btn" href={props.to}>
@@ -22,7 +50,10 @@ LinkButton.propTypes = {
 describe('components/i18n', () => {
     describe('components/i18n/FormattedCompMessage', () => {
         test('should correctly render simple FormattedCompMessage', () => {
-            const wrapper = mount(<FormattedCompMessage id="test" description="asdf" defaultMessage="some text" />);
+            const wrapper = mountWithIntl(
+                intl,
+                <FormattedCompMessage id="test" description="asdf" defaultMessage="some text" />,
+            );
 
             const span = wrapper.find('span');
             expect(span.prop('x-resource-id')).toEqual('test');
@@ -30,7 +61,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with children', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     some text
                 </FormattedCompMessage>,
@@ -42,7 +74,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with children snapshot', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     some text
                 </FormattedCompMessage>,
@@ -52,7 +85,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with HTML', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     some <b>bold</b> text
                 </FormattedCompMessage>,
@@ -64,7 +98,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with HTML snapshot', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     some <b>bold</b> text
                 </FormattedCompMessage>,
@@ -74,7 +109,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage which starts with HTML, snapshot', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     <b>bold</b> text. More text.
                 </FormattedCompMessage>,
@@ -84,7 +120,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with subcomponents', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     some <LinkButton to="foo">link</LinkButton> text
                 </FormattedCompMessage>,
@@ -101,7 +138,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with subcomponents snapshot', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     some <LinkButton to="foo">link</LinkButton> text
                 </FormattedCompMessage>,
@@ -111,7 +149,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with simple plurals in English (singular)', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf" count={1}>
                     <Plural category="one">This is the singular.</Plural>
                     <Plural category="other">These are the plurals.</Plural>
@@ -124,7 +163,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with simple plurals in English (plural)', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf" count={21}>
                     <Plural category="one">This is the singular.</Plural>
                     <Plural category="other">These are the plurals.</Plural>
@@ -137,7 +177,15 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with simple plurals in Russian (singular)', () => {
-            const wrapper = mount(
+            const ruIntl = createIntl({
+                locale: 'ru-RU',
+                messages: {
+                    test:
+                        '{count, plural, one {This is the singular in Russian.} other {These are the other plurals in Russian.}}',
+                },
+            });
+            const wrapper = mountWithIntl(
+                ruIntl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf" count={1}>
                     <Plural category="one">This is the singular.</Plural>
                     <Plural category="other">These are the plurals.</Plural>
@@ -146,16 +194,22 @@ describe('components/i18n', () => {
 
             const span = wrapper.find('span');
             expect(span.prop('x-resource-id')).toEqual('test');
-            expect(span.prop('children')).toEqual('This is the singular.');
+            expect(span.prop('children')).toEqual('This is the singular in Russian.');
         });
 
         test('should correctly render FormattedCompMessage with simple plurals in Russian (one)', () => {
-            const wrapper = mount(
+            const ruIntl = createIntl({
+                locale: 'ru-RU',
+                messages: {
+                    test:
+                        '{count, plural, one {This is the singular in Russian.} few {These are the few plurals in Russian.} many {These are the many plurals in Russian.} other {These are the other plurals in Russian.}}',
+                },
+            });
+            const wrapper = mountWithIntl(
+                ruIntl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf" count={21}>
                     <Plural category="one">This is the singular.</Plural>
-                    <Plural category="few">These are the few plurals.</Plural>
-                    <Plural category="many">These are the many plurals.</Plural>
-                    <Plural category="other">These are the other plurals.</Plural>
+                    <Plural category="other">These are the plurals.</Plural>
                 </FormattedCompMessage>,
             );
 
@@ -163,16 +217,22 @@ describe('components/i18n', () => {
             expect(span.prop('x-resource-id')).toEqual('test');
 
             // 21 is singular in Russian!
-            expect(span.prop('children')).toEqual('This is the singular.');
+            expect(span.prop('children')).toEqual('This is the singular in Russian.');
         });
 
         test('should correctly render FormattedCompMessage with simple plurals in Russian (few)', () => {
-            const wrapper = mount(
+            const ruIntl = createIntl({
+                locale: 'ru-RU',
+                messages: {
+                    test:
+                        '{count, plural, one {This is the singular in Russian.} few {These are the few plurals in Russian.} many {These are the many plurals in Russian.} other {These are the other plurals in Russian.}}',
+                },
+            });
+            const wrapper = mountWithIntl(
+                ruIntl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf" count={24}>
                     <Plural category="one">This is the singular.</Plural>
-                    <Plural category="few">These are the few plurals.</Plural>
-                    <Plural category="many">These are the many plurals.</Plural>
-                    <Plural category="other">These are the other plurals.</Plural>
+                    <Plural category="other">These are the plurals.</Plural>
                 </FormattedCompMessage>,
             );
 
@@ -180,16 +240,22 @@ describe('components/i18n', () => {
             expect(span.prop('x-resource-id')).toEqual('test');
 
             // 24 is few in Russian!
-            expect(span.prop('children')).toEqual('These are the few plurals.');
+            expect(span.prop('children')).toEqual('These are the few plurals in Russian.');
         });
 
         test('should correctly render FormattedCompMessage with simple plurals in Russian (many)', () => {
-            const wrapper = mount(
+            const ruIntl = createIntl({
+                locale: 'ru-RU',
+                messages: {
+                    test:
+                        '{count, plural, one {This is the singular in Russian.} few {These are the few plurals in Russian.} many {These are the many plurals in Russian.} other {These are the other plurals in Russian.}}',
+                },
+            });
+            const wrapper = mountWithIntl(
+                ruIntl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf" count={27}>
                     <Plural category="one">This is the singular.</Plural>
-                    <Plural category="few">These are the few plurals.</Plural>
-                    <Plural category="many">These are the many plurals.</Plural>
-                    <Plural category="other">These are the other plurals.</Plural>
+                    <Plural category="other">These are the plurals.</Plural>
                 </FormattedCompMessage>,
             );
 
@@ -197,11 +263,12 @@ describe('components/i18n', () => {
             expect(span.prop('x-resource-id')).toEqual('test');
 
             // 27 is many in Russian!
-            expect(span.prop('children')).toEqual('These are the many plurals.');
+            expect(span.prop('children')).toEqual('These are the many plurals in Russian.');
         });
 
         test('should correctly render FormattedCompMessage with a Param subcomponent', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf">
                     The string is <Param value="asdf" description="asdf" />.
                 </FormattedCompMessage>,
@@ -214,7 +281,8 @@ describe('components/i18n', () => {
         });
 
         test('should correctly render FormattedCompMessage with multiple Param subcomponents', () => {
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf">
                     The string is <Param value="asdf" description="foo" /> and the number is{' '}
                     <Param value={3} description="bar" />.
@@ -229,7 +297,8 @@ describe('components/i18n', () => {
 
         test('should correctly render FormattedCompMessage with a Param subcomponent that has its own value', () => {
             const str = 'a string';
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf">
                     The string is <Param value={str} description="foo" />.
                 </FormattedCompMessage>,
@@ -243,7 +312,8 @@ describe('components/i18n', () => {
 
         test('should correctly render FormattedCompMessage with undefined Param value', () => {
             const str = undefined;
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf">
                     The string is <Param value={str} description="foo" />.
                 </FormattedCompMessage>,
@@ -258,7 +328,8 @@ describe('components/i18n', () => {
 
         test('should correctly render FormattedCompMessage with null Param value', () => {
             const str = null;
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf">
                     The string is <Param value={str} description="foo" />.
                 </FormattedCompMessage>,
@@ -273,7 +344,8 @@ describe('components/i18n', () => {
 
         test('should correctly render FormattedCompMessage with boolean Param value', () => {
             const str = true;
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf">
                     The string is <Param value={str} description="foo" />.
                 </FormattedCompMessage>,
@@ -288,7 +360,8 @@ describe('components/i18n', () => {
 
         test('should correctly render FormattedCompMessage with numeric Param value', () => {
             const str = 123.456;
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage locale="ru-RU" id="test" description="asdf">
                     The string is <Param value={str} description="foo" />.
                 </FormattedCompMessage>,
@@ -305,7 +378,8 @@ describe('components/i18n', () => {
             const str = function str() {
                 return 'Hello!';
             };
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     The string is <Param value={str} description="foo" />.
                 </FormattedCompMessage>,
@@ -320,7 +394,8 @@ describe('components/i18n', () => {
 
         test('should correctly render FormattedCompMessage with replacement parameters within subcomponents', () => {
             const name = 'substituted';
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     some{' '}
                     <LinkButton url="https://foo.com/a/b">
@@ -337,9 +412,54 @@ describe('components/i18n', () => {
             expect(a.text()).toContain('substituted');
         });
 
+        test('should correctly render FormattedCompMessage with replacement parameters inside subcomponents', () => {
+            const folderName = 'substituted';
+            const wrapper = mountWithIntl(
+                intl,
+                <FormattedCompMessage id="test.x.y" description="asdf">
+                    Settings{' '}
+                    <span className="deemphasized">
+                        for <Param description="Folder name" value={folderName} />
+                    </span>
+                </FormattedCompMessage>,
+            );
+
+            const span = wrapper.find('span').first();
+            expect(span.html()).toContain(
+                '<span x-resource-id="test.x.y">Settings <span class="deemphasized">for substituted</span></span>',
+            );
+        });
+
+        test('should correctly render FormattedCompMessage with replacement parameters inside subcomponents and translations', () => {
+            const folderName = 'substituted';
+            const translations = {
+                'test.x.y': 'Einstellungen <c0> für <p0/></c0>',
+            };
+            const deintl = createIntl({
+                locale: 'de',
+                messages: translations,
+            });
+
+            const wrapper = mountWithIntl(
+                deintl,
+                <FormattedCompMessage id="test.x.y" description="asdf">
+                    Settings{' '}
+                    <span className="deemphasized">
+                        for <Param description="Folder name" value={folderName} />
+                    </span>
+                </FormattedCompMessage>,
+            );
+
+            const span = wrapper.find('span').first();
+            expect(span.html()).toContain(
+                '<span x-resource-id="test.x.y">Einstellungen <span class="deemphasized"> für substituted</span></span>',
+            );
+        });
+
         test('should correctly render FormattedCompMessage with HTML jsx replacement parameter values', () => {
             const name = <b>bold!</b>;
-            const wrapper = mount(
+            const wrapper = mountWithIntl(
+                intl,
                 <FormattedCompMessage id="test" description="asdf">
                     some{' '}
                     <i>
@@ -357,7 +477,8 @@ describe('components/i18n', () => {
 
         test('should throw when specifying a count but no nested plurals', () => {
             function testCount() {
-                mount(
+                mountWithIntl(
+                    intl,
                     <FormattedCompMessage id="asdf" description="asdf" count="23">
                         some <b>bold</b> text
                     </FormattedCompMessage>,
@@ -369,7 +490,8 @@ describe('components/i18n', () => {
 
         test('should throw when specifying a count but no "one" plural', () => {
             function testPlural() {
-                mount(
+                mountWithIntl(
+                    intl,
                     <FormattedCompMessage id="asdf" description="asdf" count="23">
                         <Plural category="other">
                             some <b>bold</b> text
@@ -383,7 +505,8 @@ describe('components/i18n', () => {
 
         test('should throw when specifying a count but no "other" plural', () => {
             function testPlural() {
-                mount(
+                mountWithIntl(
+                    intl,
                     <FormattedCompMessage id="asdf" description="asdf" count="23">
                         <Plural category="one">
                             some <b>bold</b> text
