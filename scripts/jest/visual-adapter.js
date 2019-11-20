@@ -6,6 +6,6 @@ expect.extend({ toMatchImageSnapshot });
 
 // Takes image screenshots
 global.takeScreenshot = async id => {
-    await page.goto(`http://localhost:6061/iframe.html?id=${id}`);
-    return page.screenshot();
+    await global.page.goto(`http://localhost:6061/iframe.html?id=${id}`);
+    return global.page.screenshot();
 };
