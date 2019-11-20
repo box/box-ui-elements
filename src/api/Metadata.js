@@ -578,11 +578,13 @@ class Metadata extends File {
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
                 const editor = this.createEditor(metadata.data, template, canEdit);
-                cachedMetadata.editors.splice(
-                    cachedMetadata.editors.findIndex(({ instance }) => instance.id === editor.instance.id),
-                    1,
-                    editor,
-                );
+                if (cachedMetadata && cachedMetadata.editors) {
+                    cachedMetadata.editors.splice(
+                        cachedMetadata.editors.findIndex(({ instance }) => instance.id === editor.instance.id),
+                        1,
+                        editor,
+                    );
+                }
                 this.successHandler(editor);
             }
         } catch (e) {
