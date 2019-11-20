@@ -85,22 +85,24 @@ export const empty = () => {
     const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps(emptyStore);
     return (
         <State store={emptyStore}>
-            <PillSelectorDropdown
-                allowCustomPills
-                error={emptyStore.get('error')}
-                placeholder="Names or email addresses"
-                onInput={handleInput}
-                onRemove={handleRemove}
-                onSelect={handleSelect}
-                selectedOptions={emptyStore.get('selectedOptions')}
-                selectorOptions={emptyStore.get('selectorOptions')}
-                validateForError={validateForError}
-                validator={validator}
-            >
-                {emptyStore.get('selectorOptions').map(option => (
-                    <DatalistItem key={option.value}>{option.displayText}</DatalistItem>
-                ))}
-            </PillSelectorDropdown>
+            {state => (
+                <PillSelectorDropdown
+                    allowCustomPills
+                    error={state.error}
+                    placeholder="Names or email addresses"
+                    onInput={handleInput}
+                    onRemove={handleRemove}
+                    onSelect={handleSelect}
+                    selectedOptions={state.selectedOptions}
+                    selectorOptions={state.selectorOptions}
+                    validateForError={validateForError}
+                    validator={validator}
+                >
+                    {state.selectorOptions.map(option => (
+                        <DatalistItem key={option.value}>{option.displayText}</DatalistItem>
+                    ))}
+                </PillSelectorDropdown>
+            )}
         </State>
     );
 };
@@ -127,22 +129,24 @@ export const withPills = () => {
     const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps(storeWithPills);
     return (
         <State store={storeWithPills}>
-            <PillSelectorDropdown
-                allowCustomPills
-                error={storeWithPills.get('error')}
-                placeholder="Names or email addresses"
-                onInput={handleInput}
-                onRemove={handleRemove}
-                onSelect={handleSelect}
-                selectedOptions={storeWithPills.get('selectedOptions')}
-                selectorOptions={storeWithPills.get('selectorOptions')}
-                validateForError={validateForError}
-                validator={validator}
-            >
-                {storeWithPills.get('selectorOptions').map(option => (
-                    <DatalistItem key={option.value}>{option.displayText}</DatalistItem>
-                ))}
-            </PillSelectorDropdown>
+            {state => (
+                <PillSelectorDropdown
+                    allowCustomPills
+                    error={state.error}
+                    placeholder="Names or email addresses"
+                    onInput={handleInput}
+                    onRemove={handleRemove}
+                    onSelect={handleSelect}
+                    selectedOptions={state.selectedOptions}
+                    selectorOptions={state.selectorOptions}
+                    validateForError={validateForError}
+                    validator={validator}
+                >
+                    {state.selectorOptions.map(option => (
+                        <DatalistItem key={option.value}>{option.displayText}</DatalistItem>
+                    ))}
+                </PillSelectorDropdown>
+            )}
         </State>
     );
 };
