@@ -2,6 +2,7 @@ import React from 'react';
 
 import Classification from '../Classification';
 import ClassifiedBadge from '../ClassifiedBadge';
+import SecurityControls from '../security-controls';
 
 describe('features/classification/Classification', () => {
     const getWrapper = (props = {}) => shallow(<Classification {...props} />);
@@ -53,5 +54,40 @@ describe('features/classification/Classification', () => {
             onClick: () => {},
         });
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render a classified badge with security controls when provided and message style is inline', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            definition: 'fubar',
+            messageStyle: 'inline',
+            securityControlsProps: {
+                controls: {
+                    sharedLink: {
+                        accessLevel: 'collabOnly',
+                    },
+                },
+            },
+        });
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should not render security controls when message style is tooltip', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            definition: 'fubar',
+            messageStyle: 'inline',
+            securityControlsProps: {
+                controls: {
+                    sharedLink: {
+                        accessLevel: 'collabOnly',
+                    },
+                },
+            },
+        });
+
+        expect(wrapper.find(SecurityControls)).toHaveLength(1);
+        wrapper.setProps({ messageStyle: 'tooltip' });
+        expect(wrapper.find(SecurityControls)).toHaveLength(0);
     });
 });

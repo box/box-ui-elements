@@ -8,12 +8,12 @@ const { FULL, SHORT, SHORT_WITH_TOOLTIP } = SECURITY_CONTROLS_FORMAT;
 
 describe('features/classification/security-controls/SecurityControls', () => {
     let wrapper;
-    let accessPolicyRestrictions;
+    let controls;
 
     const getWrapper = (props = {}) =>
         shallow(
             <SecurityControls
-                accessPolicyRestrictions={accessPolicyRestrictions}
+                controls={controls}
                 format={SHORT}
                 maxAppCount={3}
                 tooltipPosition="middle-left"
@@ -22,7 +22,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
         );
 
     beforeEach(() => {
-        accessPolicyRestrictions = {
+        controls = {
             sharedLink: {
                 accessLevel: 'collabOnly',
             },
@@ -41,8 +41,8 @@ describe('features/classification/security-controls/SecurityControls', () => {
         wrapper = getWrapper();
     });
 
-    test('should render null when access policy does not contain accessPolicyRestrictions', () => {
-        wrapper.setProps({ accessPolicyRestrictions: {} });
+    test('should render null when access policy does not contain controls', () => {
+        wrapper.setProps({ controls: {} });
         expect(wrapper.isEmptyRender()).toBe(true);
     });
 
@@ -78,13 +78,13 @@ describe('features/classification/security-controls/SecurityControls', () => {
     });
 
     test('should restrict displayed app names to maxAppCount', () => {
-        accessPolicyRestrictions.app.apps = [
+        controls.app.apps = [
             { displayText: 'App 1' },
             { displayText: 'App 2' },
             { displayText: 'App 3' },
             { displayText: 'App 4' },
         ];
-        wrapper.setProps({ format: FULL, accessPolicyRestrictions, maxAppCount: 2 });
+        wrapper.setProps({ format: FULL, controls, maxAppCount: 2 });
 
         expect(
             wrapper

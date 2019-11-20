@@ -57,6 +57,41 @@ exports[`features/classification/Classification should render a classified badge
 </article>
 `;
 
+exports[`features/classification/Classification should render a classified badge with security controls when provided and message style is inline 1`] = `
+<article
+  className="bdl-Classification "
+>
+  <ClassifiedBadge
+    name="Confidential"
+  />
+  <Label
+    text={
+      <FormattedMessage
+        defaultMessage="Definition"
+        id="boxui.classification.definition"
+      />
+    }
+  >
+    <p
+      className="bdl-Classification-definition"
+    >
+      fubar
+    </p>
+  </Label>
+  <SecurityControls
+    controls={
+      Object {
+        "sharedLink": Object {
+          "accessLevel": "collabOnly",
+        },
+      }
+    }
+    format="short"
+    maxAppCount={3}
+  />
+</article>
+`;
+
 exports[`features/classification/Classification should render not classified message 1`] = `
 <article
   className="bdl-Classification "

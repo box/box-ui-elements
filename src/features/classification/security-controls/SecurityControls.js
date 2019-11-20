@@ -14,24 +14,24 @@ import './SecurityControls.scss';
 const { FULL, SHORT, SHORT_WITH_TOOLTIP } = SECURITY_CONTROLS_FORMAT;
 
 type Props = {
-    accessPolicyRestrictions: AccessPolicyRestrictions,
+    controls: AccessPolicyRestrictions,
     format: $Values<typeof SECURITY_CONTROLS_FORMAT>,
     maxAppCount: number,
     tooltipPosition?: Position,
 };
 
-const SecurityControls = ({ accessPolicyRestrictions, format, maxAppCount, tooltipPosition }: Props) => {
+const SecurityControls = ({ controls, format, maxAppCount, tooltipPosition }: Props) => {
     let items = [];
     let tooltipItems;
 
     if (format === FULL) {
-        items = getFullSecurityControlsMessages(accessPolicyRestrictions, maxAppCount);
+        items = getFullSecurityControlsMessages(controls, maxAppCount);
     } else {
-        const shortMessage = getShortSecurityControlsMessage(accessPolicyRestrictions);
+        const shortMessage = getShortSecurityControlsMessage(controls);
         items = shortMessage ? [shortMessage] : [];
 
         if (items.length && format === SHORT_WITH_TOOLTIP) {
-            tooltipItems = getFullSecurityControlsMessages(accessPolicyRestrictions, maxAppCount);
+            tooltipItems = getFullSecurityControlsMessages(controls, maxAppCount);
         }
     }
 
@@ -62,4 +62,5 @@ SecurityControls.defaultProps = {
     maxAppCount: DEFAULT_MAX_APP_COUNT,
 };
 
+export type { Props as SecurityControlsProps };
 export default SecurityControls;

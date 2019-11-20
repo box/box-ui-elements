@@ -14,8 +14,8 @@ const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
 const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL;
 
-const getShortSecurityControlsMessage = (accessPolicyRestrictions: AccessPolicyRestrictions): ?MessageDescriptor => {
-    const { sharedLink, download, externalCollab, app } = accessPolicyRestrictions;
+const getShortSecurityControlsMessage = (controls: AccessPolicyRestrictions): ?MessageDescriptor => {
+    const { sharedLink, download, externalCollab, app } = controls;
     const sharing = sharedLink || externalCollab;
     // Shared link and external collab restrictions are grouped
     // together as generic "sharing" restrictions
@@ -50,9 +50,9 @@ const getShortSecurityControlsMessage = (accessPolicyRestrictions: AccessPolicyR
     return null;
 };
 
-const getSharedLinkMessages = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getSharedLinkMessages = (controls: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
-    const accessLevel = getProp(accessPolicyRestrictions, `${SHARED_LINK}.accessLevel`);
+    const accessLevel = getProp(controls, `${SHARED_LINK}.accessLevel`);
 
     switch (accessLevel) {
         case COLLAB_ONLY:
@@ -68,9 +68,9 @@ const getSharedLinkMessages = (accessPolicyRestrictions: AccessPolicyRestriction
     return items;
 };
 
-const getExternalCollabItems = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getExternalCollabMessages = (controls: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
-    const accessLevel = getProp(accessPolicyRestrictions, `${EXTERNAL_COLLAB}.accessLevel`);
+    const accessLevel = getProp(controls, `${EXTERNAL_COLLAB}.accessLevel`);
 
     switch (accessLevel) {
         case BLOCK:
@@ -87,12 +87,9 @@ const getExternalCollabItems = (accessPolicyRestrictions: AccessPolicyRestrictio
     return items;
 };
 
-const getAppDownloadMessages = (
-    accessPolicyRestrictions: AccessPolicyRestrictions,
-    maxAppCount?: number,
-): Array<MessageDescriptor> => {
+const getAppDownloadMessages = (controls: AccessPolicyRestrictions, maxAppCount?: number): Array<MessageDescriptor> => {
     const items = [];
-    const accessLevel = getProp(accessPolicyRestrictions, `${APP}.accessLevel`);
+    const accessLevel = getProp(controls, `${APP}.accessLevel`);
 
     switch (accessLevel) {
         case BLOCK:
@@ -100,7 +97,7 @@ const getAppDownloadMessages = (
             break;
         case WHITELIST:
         case BLACKLIST: {
-            const apps = getProp(accessPolicyRestrictions, `${APP}.apps`, []);
+            const apps = getProp(controls, `${APP}.apps`, []);
 
             maxAppCount = isNil(maxAppCount) ? apps.length : maxAppCount;
             const appsToDisplay = apps.slice(0, maxAppCount);
@@ -124,9 +121,9 @@ const getAppDownloadMessages = (
     return items;
 };
 
-const getDownloadMessages = (accessPolicyRestrictions: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getDownloadMessages = (controls: AccessPolicyRestrictions): Array<MessageDescriptor> => {
     const items = [];
-    const { web, mobile, desktop } = getProp(accessPolicyRestrictions, DOWNLOAD, {});
+    const { web, mobile, desktop } = getProp(controls, DOWNLOAD, {});
 
     const downloadRestrictions = {
         [WEB]: {
@@ -164,14 +161,14 @@ const getDownloadMessages = (accessPolicyRestrictions: AccessPolicyRestrictions)
 };
 
 const getFullSecurityControlsMessages = (
-    accessPolicyRestrictions: AccessPolicyRestrictions,
+    controls: AccessPolicyRestrictions,
     maxAppCount?: number,
 ): Array<MessageDescriptor> => {
     const items = [
-        ...getSharedLinkMessages(accessPolicyRestrictions),
-        ...getExternalCollabItems(accessPolicyRestrictions),
-        ...getDownloadMessages(accessPolicyRestrictions),
-        ...getAppDownloadMessages(accessPolicyRestrictions, maxAppCount),
+        ...getSharedLinkMessages(controls),
+        ...getExternalCollabMessages(controls),
+        ...getDownloadMessages(controls),
+        ...getAppDownloadMessages(controls, maxAppCount),
     ];
     return items;
 };
