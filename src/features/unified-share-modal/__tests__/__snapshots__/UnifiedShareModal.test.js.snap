@@ -1680,7 +1680,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},
@@ -1863,7 +1863,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},
@@ -2639,7 +2639,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},
@@ -2820,7 +2820,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},
@@ -2976,7 +2976,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 <div>
   <Modal
     className="unified-share-modal"
-    focusElementSelector=".pill-selector-input"
+    focusElementSelector=".bdl-PillSelector-input"
     style={
       Object {
         "backdrop": Object {},
