@@ -14,8 +14,11 @@ exports[`features/metadata-instance-editor/MetadataInstanceConfirmDialog should 
       className="metadata-instance-confirm-buttons"
     >
       <Button
+        className=""
         data-resin-target="metadata-confirmcancel"
+        isLoading={false}
         onClick={[Function]}
+        showRadar={false}
         type="button"
       >
         <FormattedMessage

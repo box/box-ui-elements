@@ -11,7 +11,12 @@ exports[`elements/content-preview/ReloadNotification render() should render corr
       defaultMessage="A new version of this file is available."
       id="be.previewUpdate"
     />
-    <Button>
+    <Button
+      className=""
+      isLoading={false}
+      showRadar={false}
+      type="submit"
+    >
       <FormattedMessage
         defaultMessage="Reload"
         id="be.reload"

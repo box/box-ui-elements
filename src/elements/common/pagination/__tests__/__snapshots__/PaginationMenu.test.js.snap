@@ -9,6 +9,9 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
 >
   <Button
     className="be-pagination-toggle"
+    isLoading={false}
+    showRadar={false}
+    type="submit"
   >
     <FormattedMessage
       defaultMessage="{pageNumber} of {pageCount}"
@@ -46,6 +49,9 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
 >
   <Button
     className="be-pagination-toggle"
+    isLoading={false}
+    showRadar={false}
+    type="submit"
   >
     <FormattedMessage
       defaultMessage="{pageNumber} of {pageCount}"
@@ -111,6 +117,9 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
 >
   <Button
     className="be-pagination-toggle"
+    isLoading={false}
+    showRadar={false}
+    type="submit"
   >
     <FormattedMessage
       defaultMessage="{pageNumber} of {pageCount}"

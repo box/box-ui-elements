@@ -11,7 +11,11 @@ exports[`elements/content-open-with/MultipleIntegrationsOpenWithButton should pa
   }
 >
   <Button
+    className=""
     data-testid="multipleintegrationsbutton"
+    isLoading={false}
+    showRadar={false}
+    type="submit"
     width={50}
   >
     <MenuToggle>
@@ -39,7 +43,11 @@ exports[`elements/content-open-with/MultipleIntegrationsOpenWithButton should re
   }
 >
   <Button
+    className=""
     data-testid="multipleintegrationsbutton"
+    isLoading={false}
+    showRadar={false}
+    type="submit"
   >
     <MenuToggle>
       <OpenWithButtonContents>
