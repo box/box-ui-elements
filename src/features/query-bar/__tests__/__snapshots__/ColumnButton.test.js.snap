@@ -19,7 +19,9 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   <Button
     className="query-bar-button"
     isDisabled={true}
+    isLoading={false}
     onClick={[Function]}
+    showRadar={false}
     type="button"
   >
     <MenuToggle>
@@ -59,7 +61,9 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   <Button
     className="query-bar-button"
     isDisabled={true}
+    isLoading={false}
     onClick={[Function]}
+    showRadar={false}
     type="button"
   >
     <MenuToggle>
@@ -121,7 +125,9 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   <Button
     className="query-bar-button"
     isDisabled={false}
+    isLoading={false}
     onClick={[Function]}
+    showRadar={false}
     type="button"
   >
     <MenuToggle>

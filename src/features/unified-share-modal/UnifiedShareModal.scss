@@ -91,17 +91,17 @@
         margin-bottom: 20px;
     }
 
-    .pill-selector-wrapper .pill-selector-input-wrapper, // need both selectors for specificity
+    .bdl-PillSelectorDropdown .bdl-PillSelector, // need both selectors for specificity
     textarea {
         /* override for DOM element in `TextArea` which provides no id/class for targeting */
         width: 100%;
     }
 
-    .pill-selector-wrapper {
+    .bdl-PillSelectorDropdown {
         margin-bottom: 10px;
     }
 
-    .pill-selector-wrapper.scrollable {
+    .bdl-PillSelectorDropdown.scrollable {
         .overlay-wrapper {
             position: absolute;
             height: 280px;
@@ -124,16 +124,16 @@
             color: $bdl-gray-50;
         }
 
-        .pill-selector-input-wrapper {
+        .bdl-PillSelector {
             min-height: 68px;
         }
     }
 
-    .pill-selector-input-wrapper {
+    .bdl-PillSelector {
         margin-top: 10px;
         border: 1px solid $bdl-gray-20;
 
-        .pill-selector-input::placeholder {
+        .bdl-PillSelector-input::placeholder {
             color: $bdl-gray-50;
         }
 
@@ -142,7 +142,7 @@
             background-color: $bdl-gray-02;
             box-shadow: none;
 
-            .pill-selector-input::placeholder {
+            .bdl-PillSelector-input::placeholder {
                 color: $bdl-gray-50;
             }
 
