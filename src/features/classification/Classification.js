@@ -8,24 +8,35 @@ import SecurityControls from './security-controls';
 import messages from './messages';
 import './Classification.scss';
 
-import type { SecurityControlsProps } from './security-controls';
+import type { Controls, ControlsFormat } from './flowTypes';
 
 const STYLE_INLINE: 'inline' = 'inline';
 const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
 
 type Props = {
     className?: string,
+    controls?: Controls,
+    controlsFormat?: ControlsFormat,
     definition?: string,
+    maxAppCount?: number,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
     name?: string,
     onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
-    securityControlsProps?: SecurityControlsProps,
 };
 
-const Classification = ({ definition, className = '', messageStyle, name, onClick, securityControlsProps }: Props) => {
+const Classification = ({
+    definition,
+    className = '',
+    controls,
+    controlsFormat,
+    maxAppCount,
+    messageStyle,
+    name,
+    onClick,
+}: Props) => {
     const isClassified = !!name;
     const hasDefinition = !!definition;
-    const hasSecurityControls = !!securityControlsProps;
+    const hasSecurityControls = !!controls;
     const isTooltipMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_TOOLTIP;
     const isInlineMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_INLINE;
     const isSecurityControlsEnabled = isClassified && hasSecurityControls && messageStyle === STYLE_INLINE;
@@ -50,7 +61,9 @@ const Classification = ({ definition, className = '', messageStyle, name, onClic
                     <FormattedMessage {...messages.missing} />
                 </span>
             )}
-            {isSecurityControlsEnabled && <SecurityControls {...securityControlsProps} />}
+            {controls && isSecurityControlsEnabled && (
+                <SecurityControls controls={controls} controlsFormat={controlsFormat} maxAppCount={maxAppCount} />
+            )}
         </article>
     );
 };

@@ -86,7 +86,7 @@ exports[`features/classification/Classification should render a classified badge
         },
       }
     }
-    format="short"
+    controlsFormat="short"
     maxAppCount={3}
   />
 </article>

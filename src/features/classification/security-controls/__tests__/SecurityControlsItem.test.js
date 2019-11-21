@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Tooltip from '../../../../components/tooltip';
-
 import SecurityControlsItem from '../SecurityControlsItem';
 
 describe('features/classification/security-controls/SecurityControlsItem', () => {
@@ -37,11 +35,5 @@ describe('features/classification/security-controls/SecurityControlsItem', () =>
 
         wrapper.setProps({ tooltipItems });
         expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should set tooltip position when provided', () => {
-        const tooltipPosition = 'foo';
-        wrapper.setProps({ tooltipItems: [message], tooltipPosition });
-        expect(wrapper.find(Tooltip).props().position).toBe('foo');
     });
 });

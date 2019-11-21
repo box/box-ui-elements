@@ -61,11 +61,9 @@ describe('features/classification/Classification', () => {
             name: 'Confidential',
             definition: 'fubar',
             messageStyle: 'inline',
-            securityControlsProps: {
-                controls: {
-                    sharedLink: {
-                        accessLevel: 'collabOnly',
-                    },
+            controls: {
+                sharedLink: {
+                    accessLevel: 'collabOnly',
                 },
             },
         });
@@ -77,11 +75,9 @@ describe('features/classification/Classification', () => {
             name: 'Confidential',
             definition: 'fubar',
             messageStyle: 'inline',
-            securityControlsProps: {
-                controls: {
-                    sharedLink: {
-                        accessLevel: 'collabOnly',
-                    },
+            controls: {
+                sharedLink: {
+                    accessLevel: 'collabOnly',
                 },
             },
         });

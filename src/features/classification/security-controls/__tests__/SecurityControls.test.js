@@ -2,7 +2,7 @@ import React from 'react';
 
 import SecurityControlsItem from '../SecurityControlsItem';
 import SecurityControls from '../SecurityControls';
-import { SECURITY_CONTROLS_FORMAT } from '../constants';
+import { SECURITY_CONTROLS_FORMAT } from '../../constants';
 
 const { FULL, SHORT, SHORT_WITH_TOOLTIP } = SECURITY_CONTROLS_FORMAT;
 
@@ -14,7 +14,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
         shallow(
             <SecurityControls
                 controls={controls}
-                format={SHORT}
+                controlsFormat={SHORT}
                 maxAppCount={3}
                 tooltipPosition="middle-left"
                 {...props}
@@ -46,35 +46,30 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(wrapper.isEmptyRender()).toBe(true);
     });
 
-    test('should render SecurityControls with single SecurityControlsItem when using SHORT format', () => {
-        wrapper.setProps({ format: SHORT });
+    test('should render SecurityControls with single SecurityControlsItem when using SHORT controlsFormat', () => {
+        wrapper.setProps({ controlsFormat: SHORT });
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render SecurityControls with single SecurityControlsItem and tooltip items when using SHORT_WITH_TOOLTIP format', () => {
-        wrapper.setProps({ format: SHORT_WITH_TOOLTIP });
+    test('should render SecurityControls with single SecurityControlsItem and tooltip items when using SHORT_WITH_TOOLTIP controlsFormat', () => {
+        wrapper.setProps({ controlsFormat: SHORT_WITH_TOOLTIP });
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render SecurityControls multiple SecurityControlsItem when using FULL format', () => {
-        wrapper.setProps({ format: FULL });
+    test('should render SecurityControls multiple SecurityControlsItem when using FULL controlsFormat', () => {
+        wrapper.setProps({ controlsFormat: FULL });
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should set summarized class when not using FULL format', () => {
-        wrapper.setProps({ format: FULL });
+    test('should set summarized class when not using FULL controlsFormat', () => {
+        wrapper.setProps({ controlsFormat: FULL });
         expect(wrapper.hasClass('bdl-SecurityControls--summarized')).toBe(false);
 
-        wrapper.setProps({ format: SHORT });
+        wrapper.setProps({ controlsFormat: SHORT });
         expect(wrapper.hasClass('bdl-SecurityControls--summarized')).toBe(true);
 
-        wrapper.setProps({ format: SHORT_WITH_TOOLTIP });
+        wrapper.setProps({ controlsFormat: SHORT_WITH_TOOLTIP });
         expect(wrapper.hasClass('bdl-SecurityControls--summarized')).toBe(true);
-    });
-
-    test('should pass tooltip position to security controls item', () => {
-        wrapper.setProps({ format: SHORT, tooltipPosition: 'foo' });
-        expect(wrapper.find(SecurityControlsItem).props().tooltipPosition).toBe('foo');
     });
 
     test('should restrict displayed app names to maxAppCount', () => {
@@ -84,7 +79,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
             { displayText: 'App 3' },
             { displayText: 'App 4' },
         ];
-        wrapper.setProps({ format: FULL, controls, maxAppCount: 2 });
+        wrapper.setProps({ controlsFormat: FULL, controls, maxAppCount: 2 });
 
         expect(
             wrapper

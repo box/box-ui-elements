@@ -1,5 +1,10 @@
 // @flow
-import { LIST_ACCESS_LEVEL, MANAGED_USERS_ACCESS_LEVEL, SHARED_LINK_ACCESS_LEVEL } from './constants';
+import {
+    LIST_ACCESS_LEVEL,
+    MANAGED_USERS_ACCESS_LEVEL,
+    SECURITY_CONTROLS_FORMAT,
+    SHARED_LINK_ACCESS_LEVEL,
+} from './constants';
 
 type DownloadManagedUserAccessLevel = $Values<typeof MANAGED_USERS_ACCESS_LEVEL> | null;
 
@@ -44,9 +49,12 @@ type Controls = {
     sharedLink?: SharedLinkRestrictions,
 };
 
+type ControlsFormat = $Values<typeof SECURITY_CONTROLS_FORMAT>;
+
 export type {
     ApplicationRestriction,
     Controls,
+    ControlsFormat,
     DownloadRestrictions,
     ExternalCollabRestriction,
     SharedLinkRestrictions,

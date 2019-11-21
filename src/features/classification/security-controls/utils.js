@@ -3,11 +3,11 @@ import getProp from 'lodash/get';
 import isNil from 'lodash/isNil';
 
 import type { MessageDescriptor } from 'react-intl';
-import type { Controls } from './flowTypes';
+import type { Controls } from '../flowTypes';
 
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
-import { ACCESS_POLICY_RESTRICTION, DOWNLOAD_CONTROL, LIST_ACCESS_LEVEL, SHARED_LINK_ACCESS_LEVEL } from './constants';
+import { ACCESS_POLICY_RESTRICTION, DOWNLOAD_CONTROL, LIST_ACCESS_LEVEL, SHARED_LINK_ACCESS_LEVEL } from '../constants';
 
 const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTION;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
