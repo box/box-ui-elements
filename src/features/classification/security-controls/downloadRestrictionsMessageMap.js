@@ -1,6 +1,6 @@
 // @flow
 import messages from './messages';
-import { DOWNLOAD_CONTROL, MANAGED_USERS_ACCESS_LEVEL } from './constants';
+import { DOWNLOAD_CONTROL, MANAGED_USERS_ACCESS_LEVEL } from '../constants';
 
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { OWNERS_AND_COOWNERS, OWNERS_COOWNERS_AND_EDITORS } = MANAGED_USERS_ACCESS_LEVEL;

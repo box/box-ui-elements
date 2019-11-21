@@ -6,7 +6,7 @@ import {
     LIST_ACCESS_LEVEL,
     MANAGED_USERS_ACCESS_LEVEL,
     SHARED_LINK_ACCESS_LEVEL,
-} from '../constants';
+} from '../../constants';
 
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
