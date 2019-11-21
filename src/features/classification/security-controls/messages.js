@@ -69,23 +69,23 @@ const messages = defineMessages({
         id: 'boxui.securityControls.appDownloadBlock',
     },
     appDownloadBlacklist: {
-        defaultMessage: 'Some applications will be restricted; {appNames}',
+        defaultMessage: 'Some applications will be restricted: {appNames}',
         description: 'Bullet point that summarizes application download restriction applied to classification',
         id: 'boxui.securityControls.appDownloadBlacklist',
     },
     appDownloadBlacklistOverflow: {
-        defaultMessage: 'Some applications will be restricted; {appNames} +{remainingAppCount} more',
+        defaultMessage: 'Some applications will be restricted: {appNames} +{remainingAppCount} more',
         description:
             'Bullet point that summarizes application download restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold',
         id: 'boxui.securityControls.appDownloadBlacklistOverflow',
     },
     appDownloadWhitelist: {
-        defaultMessage: 'Only select applications are allowed; {appNames}',
+        defaultMessage: 'Only select applications are allowed: {appNames}',
         description: 'Bullet point that summarizes application download restriction applied to classification',
         id: 'boxui.securityControls.appDownloadWhitelist',
     },
     appDownloadWhitelistOverflow: {
-        defaultMessage: 'Only select applications are allowed; {appNames} +{remainingAppCount} more',
+        defaultMessage: 'Only select applications are allowed: {appNames} +{remainingAppCount} more',
         description:
             'Bullet point that summarizes application download restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold',
         id: 'boxui.securityControls.appDownloadWhitelistOverflow',

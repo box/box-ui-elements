@@ -38,7 +38,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     key="3"
     message={
       Object {
-        "defaultMessage": "Only select applications are allowed; {appNames}",
+        "defaultMessage": "Only select applications are allowed: {appNames}",
         "id": "boxui.securityControls.appDownloadWhitelist",
         "values": Object {
           "appNames": "",
@@ -77,7 +77,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.desktopDownloadOwners",
         },
         Object {
-          "defaultMessage": "Only select applications are allowed; {appNames}",
+          "defaultMessage": "Only select applications are allowed: {appNames}",
           "id": "boxui.securityControls.appDownloadWhitelist",
           "values": Object {
             "appNames": "",
