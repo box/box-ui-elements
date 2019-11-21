@@ -5,6 +5,7 @@ import isNil from 'lodash/isNil';
 import type { MessageDescriptor } from 'react-intl';
 import type { Controls } from '../flowTypes';
 
+import appRestrictionsMessageMap from './appRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
 import { ACCESS_POLICY_RESTRICTION, DOWNLOAD_CONTROL, LIST_ACCESS_LEVEL, SHARED_LINK_ACCESS_LEVEL } from '../constants';
@@ -106,11 +107,11 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
 
             if (remainingAppCount) {
                 items.push({
-                    ...messages.appDownloadListOverflow,
+                    ...appRestrictionsMessageMap[accessLevel].overflow,
                     values: { appNames, remainingAppCount },
                 });
             } else {
-                items.push({ ...messages.appDownloadList, values: { appNames } });
+                items.push({ ...appRestrictionsMessageMap[accessLevel].default, values: { appNames } });
             }
             break;
         }
