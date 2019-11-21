@@ -136,7 +136,7 @@ build_examples() {
     printf "${green}Built styleguide!${end}"
     printf "${blue}Building storybook...${end}"
     yarn build:prod:storybook || return 1
-    printf "${green}Built styleguide!${end}"
+    printf "${green}Built storybook!${end}"
 }
 
 push_to_gh_pages() {
