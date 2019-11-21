@@ -197,6 +197,11 @@ width?: number,
         propsDocumentation: iconPropsDocumentation,
     },
     {
+        name: 'IconCaretRound',
+        component: require('./IconCaretRound').default,
+        propsDocumentation: iconPropsDocumentation,
+    },
+    {
         name: 'IconCaretDown',
         component: require('./IconCaretDown').default,
         propsDocumentation: iconPropsDocumentation,
@@ -793,6 +798,11 @@ width?: number,
     {
         name: 'IconPlus',
         component: require('./IconPlus').default,
+        propsDocumentation: iconPropsDocumentation,
+    },
+    {
+        name: 'IconPlusRound',
+        component: require('./IconPlusRound').default,
         propsDocumentation: iconPropsDocumentation,
     },
     {
