@@ -176,10 +176,11 @@ class PillSelector extends React.Component<Props, State> {
         } = this.props;
         const suggestedPillsEnabled = suggestedPillsData && suggestedPillsData.length > 0;
         const hasError = !!error;
-        const classes = classNames('bdl-PillSelector', {
+        const classes = classNames('bdl-PillSelector', 'pill-selector-input-wrapper', {
             'is-disabled': disabled,
             'is-focused': isFocused,
             'show-error': hasError,
+            'pill-selector-suggestions-enabled': suggestedPillsEnabled,
             'bdl-PillSelector--suggestionsEnabled': suggestedPillsEnabled,
         });
         const ariaAttrs = {
@@ -222,7 +223,7 @@ class PillSelector extends React.Component<Props, State> {
                         {...rest}
                         {...inputProps}
                         autoComplete="off"
-                        className={classNames('bdl-PillSelector-input', className)}
+                        className={classNames('bdl-PillSelector-input', 'pill-selector-input', className)}
                         disabled={disabled}
                         onInput={onInput}
                         placeholder={this.getNumSelected() === 0 ? placeholder : ''}

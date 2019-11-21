@@ -11,7 +11,7 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
   theme="error"
 >
   <span
-    className="bdl-PillSelector is-disabled"
+    className="bdl-PillSelector pill-selector-input-wrapper is-disabled"
     onBlur={[Function]}
     onClick={[Function]}
     onFocus={[Function]}
@@ -28,7 +28,7 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
       aria-errormessage="errorMessage2"
       aria-invalid={false}
       autoComplete="off"
-      className="bdl-PillSelector-input"
+      className="bdl-PillSelector-input pill-selector-input"
       disabled={true}
       onInput={[Function]}
       placeholder=""
