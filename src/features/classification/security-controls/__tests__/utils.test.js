@@ -1,4 +1,5 @@
 import messages from '../messages';
+import appRestrictionsMessageMap from '../appRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from '../downloadRestrictionsMessageMap';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from '../utils';
 import {
@@ -137,22 +138,7 @@ describe('features/classification/security-controls/utils', () => {
                     },
                 };
                 expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
-                    { ...messages.appDownloadList, values: { appNames: 'a, b, c' } },
-                ]);
-            },
-        );
-
-        test.each([WHITELIST, BLACKLIST])(
-            'should include correct message when app download is restricted by %s and apps are less than maxAppCount',
-            listType => {
-                accessPolicy = {
-                    app: {
-                        accessLevel: listType,
-                        apps: [{ displayText: 'a' }, { displayText: 'b' }, { displayText: 'c' }],
-                    },
-                };
-                expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
-                    { ...messages.appDownloadList, values: { appNames: 'a, b, c' } },
+                    { ...appRestrictionsMessageMap[listType].default, values: { appNames: 'a, b, c' } },
                 ]);
             },
         );
@@ -174,7 +160,7 @@ describe('features/classification/security-controls/utils', () => {
                 };
                 expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
                     {
-                        ...messages.appDownloadListOverflow,
+                        ...appRestrictionsMessageMap[listType].overflow,
                         values: { appNames: 'a, b, c', remainingAppCount: 2 },
                     },
                 ]);

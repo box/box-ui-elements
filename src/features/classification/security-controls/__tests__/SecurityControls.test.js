@@ -84,7 +84,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(
             wrapper
                 .find(SecurityControlsItem)
-                .findWhere(item => item.props().message.id === 'boxui.securityControls.appDownloadListOverflow')
+                .findWhere(item => item.props().message.id === 'boxui.securityControls.appDownloadWhitelistOverflow')
                 .props().message.values,
         ).toEqual({
             appNames: 'App 1, App 2',
