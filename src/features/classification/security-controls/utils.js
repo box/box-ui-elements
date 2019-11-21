@@ -3,7 +3,7 @@ import getProp from 'lodash/get';
 import isNil from 'lodash/isNil';
 
 import type { MessageDescriptor } from 'react-intl';
-import type { AccessPolicyRestrictions } from './flowTypes';
+import type { Controls } from './flowTypes';
 
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
@@ -14,7 +14,7 @@ const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
 const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL;
 
-const getShortSecurityControlsMessage = (controls: AccessPolicyRestrictions): ?MessageDescriptor => {
+const getShortSecurityControlsMessage = (controls: Controls): ?MessageDescriptor => {
     const { sharedLink, download, externalCollab, app } = controls;
     const sharing = sharedLink || externalCollab;
     // Shared link and external collab restrictions are grouped
@@ -50,7 +50,7 @@ const getShortSecurityControlsMessage = (controls: AccessPolicyRestrictions): ?M
     return null;
 };
 
-const getSharedLinkMessages = (controls: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getSharedLinkMessages = (controls: Controls): Array<MessageDescriptor> => {
     const items = [];
     const accessLevel = getProp(controls, `${SHARED_LINK}.accessLevel`);
 
@@ -68,7 +68,7 @@ const getSharedLinkMessages = (controls: AccessPolicyRestrictions): Array<Messag
     return items;
 };
 
-const getExternalCollabMessages = (controls: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getExternalCollabMessages = (controls: Controls): Array<MessageDescriptor> => {
     const items = [];
     const accessLevel = getProp(controls, `${EXTERNAL_COLLAB}.accessLevel`);
 
@@ -87,7 +87,7 @@ const getExternalCollabMessages = (controls: AccessPolicyRestrictions): Array<Me
     return items;
 };
 
-const getAppDownloadMessages = (controls: AccessPolicyRestrictions, maxAppCount?: number): Array<MessageDescriptor> => {
+const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array<MessageDescriptor> => {
     const items = [];
     const accessLevel = getProp(controls, `${APP}.accessLevel`);
 
@@ -121,7 +121,7 @@ const getAppDownloadMessages = (controls: AccessPolicyRestrictions, maxAppCount?
     return items;
 };
 
-const getDownloadMessages = (controls: AccessPolicyRestrictions): Array<MessageDescriptor> => {
+const getDownloadMessages = (controls: Controls): Array<MessageDescriptor> => {
     const items = [];
     const { web, mobile, desktop } = getProp(controls, DOWNLOAD, {});
 
@@ -160,10 +160,7 @@ const getDownloadMessages = (controls: AccessPolicyRestrictions): Array<MessageD
     return items;
 };
 
-const getFullSecurityControlsMessages = (
-    controls: AccessPolicyRestrictions,
-    maxAppCount?: number,
-): Array<MessageDescriptor> => {
+const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: number): Array<MessageDescriptor> => {
     const items = [
         ...getSharedLinkMessages(controls),
         ...getExternalCollabMessages(controls),

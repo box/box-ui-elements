@@ -3,7 +3,7 @@ export { default } from './SecurityControls';
 export * from './constants';
 
 export type {
-    AccessPolicyRestrictions,
+    Controls,
     ApplicationRestriction,
     DownloadRestrictions,
     ExternalCollabRestriction,

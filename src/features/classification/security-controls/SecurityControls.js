@@ -3,7 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import type { Position } from '../../../components/tooltip';
-import type { AccessPolicyRestrictions } from './flowTypes';
+import type { Controls } from './flowTypes';
 
 import SecurityControlsItem from './SecurityControlsItem';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
@@ -14,7 +14,7 @@ import './SecurityControls.scss';
 const { FULL, SHORT, SHORT_WITH_TOOLTIP } = SECURITY_CONTROLS_FORMAT;
 
 type Props = {
-    controls: AccessPolicyRestrictions,
+    controls: Controls,
     format: $Values<typeof SECURITY_CONTROLS_FORMAT>,
     maxAppCount: number,
     tooltipPosition?: Position,

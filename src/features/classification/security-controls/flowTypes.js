@@ -37,7 +37,7 @@ type SharedLinkRestrictions = {
     accessLevel: SharedLinkAccessLevel,
 };
 
-type AccessPolicyRestrictions = {
+type Controls = {
     app?: ApplicationRestriction,
     download?: DownloadRestrictions,
     externalCollab?: ExternalCollabRestriction,
@@ -45,8 +45,8 @@ type AccessPolicyRestrictions = {
 };
 
 export type {
-    AccessPolicyRestrictions,
     ApplicationRestriction,
+    Controls,
     DownloadRestrictions,
     ExternalCollabRestriction,
     SharedLinkRestrictions,
