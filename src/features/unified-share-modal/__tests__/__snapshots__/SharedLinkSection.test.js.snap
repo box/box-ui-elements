@@ -113,6 +113,8 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
     >
       <Button
         className="email-shared-link-btn"
+        isLoading={false}
+        showRadar={false}
         type="button"
       >
         <IconMail />
@@ -257,6 +259,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
     >
       <Button
         className="email-shared-link-btn"
+        isLoading={false}
+        showRadar={false}
         type="button"
       >
         <IconMail />
@@ -432,6 +436,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     >
       <Button
         className="email-shared-link-btn"
+        isLoading={false}
+        showRadar={false}
         type="button"
       >
         <IconMail />
@@ -611,6 +617,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
     >
       <Button
         className="email-shared-link-btn"
+        isLoading={false}
+        showRadar={false}
         type="button"
       >
         <IconMail />
@@ -747,6 +755,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <Button
         className="email-shared-link-btn"
+        isLoading={false}
+        showRadar={false}
         type="button"
       >
         <IconMail />
@@ -878,6 +888,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <Button
         className="email-shared-link-btn"
+        isLoading={false}
+        showRadar={false}
         type="button"
       >
         <IconMail />
@@ -1034,6 +1046,8 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
     >
       <Button
         className="email-shared-link-btn"
+        isLoading={false}
+        showRadar={false}
         type="button"
       >
         <IconMail />

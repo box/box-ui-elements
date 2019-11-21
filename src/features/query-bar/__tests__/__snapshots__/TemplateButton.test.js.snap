@@ -17,7 +17,9 @@ exports[`feature/query-bar/components/TemplateButton render() should render Temp
     <Button
       className="query-bar-button"
       isDisabled={true}
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
       type="button"
     >
       <MenuToggle>
