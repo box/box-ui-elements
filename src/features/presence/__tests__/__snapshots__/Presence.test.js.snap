@@ -937,7 +937,10 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     />
     <Button
       className="btn-primary"
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
+      type="submit"
     >
       <FormattedMessage
         defaultMessage="View Recent Activity"

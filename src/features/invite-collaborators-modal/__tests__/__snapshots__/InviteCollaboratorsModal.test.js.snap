@@ -58,8 +58,11 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
   <div />
   <ModalActions>
     <Button
+      className=""
       data-resin-target="cancel"
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
       type="button"
     >
       <FormattedMessage

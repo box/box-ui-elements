@@ -6,19 +6,28 @@ exports[`components/pill-cloud/PillCloud should render pills 1`] = `
 >
   <Button
     className="bdl-Pill bdl-PillCloud-button"
+    isLoading={false}
     key="1"
+    showRadar={false}
+    type="submit"
   >
     Hello
   </Button>
   <Button
     className="bdl-Pill bdl-PillCloud-button"
+    isLoading={false}
     key="2"
+    showRadar={false}
+    type="submit"
   >
     There
   </Button>
   <Button
     className="bdl-Pill bdl-PillCloud-button"
+    isLoading={false}
     key="3"
+    showRadar={false}
+    type="submit"
   >
     Sir
   </Button>

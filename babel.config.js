@@ -24,7 +24,7 @@ module.exports = {
         ],
     ],
     env: {
-        dev: {
+        development: {
             plugins: [
                 'flow-react-proptypes',
                 [

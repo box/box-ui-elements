@@ -161,8 +161,11 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
     className="be-faces-buttons"
   >
     <Button
+      className=""
       data-resin-target="skill-faceeditcancel"
+      isLoading={false}
       onClick={[Function]}
+      showRadar={false}
       type="button"
     >
       <FormattedMessage

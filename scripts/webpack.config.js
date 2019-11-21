@@ -14,9 +14,9 @@ const license = require('./license');
 
 const { BannerPlugin, DefinePlugin, IgnorePlugin } = webpack;
 const noReactSuffix = '.no.react';
-const isDev = process.env.NODE_ENV === 'dev';
-const isRelease = process.env.NODE_ENV === 'production';
 const isRsync = process.env.RSYNC === 'true' && rsyncConf.location;
+const isRelease = process.env.NODE_ENV === 'production';
+const isDev = process.env.NODE_ENV === 'development';
 const language = process.env.LANGUAGE;
 const react = process.env.REACT === 'true';
 const examples = process.env.EXAMPLES === 'true';

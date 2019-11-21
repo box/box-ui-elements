@@ -75,7 +75,10 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -318,7 +321,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -500,7 +506,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -682,7 +691,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -868,7 +880,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -1050,7 +1065,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -1232,7 +1250,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -1385,7 +1406,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -1568,7 +1592,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -1751,7 +1778,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -1934,7 +1964,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -2156,7 +2189,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -2342,7 +2378,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -2528,7 +2567,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -2710,7 +2752,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -2891,7 +2936,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"
@@ -3047,7 +3095,10 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
             >
               <Button
                 className="ftux-tooltip-button"
+                isLoading={false}
                 onClick={[Function]}
+                showRadar={false}
+                type="submit"
               >
                 <FormattedMessage
                   defaultMessage="Got it"

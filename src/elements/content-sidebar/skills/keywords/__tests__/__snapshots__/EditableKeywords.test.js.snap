@@ -36,8 +36,11 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
     className="be-keywords-buttons"
   >
     <Button
+      className=""
       data-resin-target="skill-keywordeditcancel"
+      isLoading={false}
       onClick={[MockFunction]}
+      showRadar={false}
       type="button"
     >
       <FormattedMessage
