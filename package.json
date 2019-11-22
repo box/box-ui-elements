@@ -154,7 +154,7 @@
         "babel-loader": "^8.0.6",
         "babel-plugin-dynamic-import-node": "^2.3.0",
         "babel-plugin-flow-react-proptypes": "^25.1.0",
-        "babel-plugin-react-intl": "^5.1.4",
+        "babel-plugin-react-intl": "^4.3.0",
         "babel-plugin-react-remove-properties": "^0.3.0",
         "babel-plugin-rewire": "^1.0.0",
         "babel-preset-react-app": "^9.0.2",
