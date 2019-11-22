@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
 
-import IconFolderCollab from '../imported/Icon/IconFolderShared32';
-import IconFolderExternal from '../imported/Icon/IconFolderExternal32';
-import IconFolderPersonal from '../imported/Icon/IconFolderPersonal32';
+import IconFolderCollab from '../imported/IconFolderShared32';
+import IconFolderExternal from '../imported/IconFolderExternal32';
+import IconFolderPersonal from '../imported/IconFolderPersonal32';
 
 type Props = {
     /** Dimension of the icon */
