@@ -122,7 +122,10 @@ describe('normalizeTemplates()', () => {
                     displayName: 'Species',
                     id: 'species',
                     key: 'species',
-                    options: [{ id: 'armadillo', key: 'armadillo' }, { id: 'narwhal', key: 'narwhal' }],
+                    options: [
+                        { id: 'armadillo', key: 'armadillo' },
+                        { id: 'narwhal', key: 'narwhal' },
+                    ],
                     type: 'multiSelect',
                 },
                 {
@@ -188,7 +191,10 @@ describe('normalizeTemplates()', () => {
                     displayName: 'Handmade',
                     id: 'handmade',
                     key: 'handmade',
-                    options: [{ id: 'yes', key: 'yes' }, { id: 'no', key: 'no' }],
+                    options: [
+                        { id: 'yes', key: 'yes' },
+                        { id: 'no', key: 'no' },
+                    ],
                     type: 'multiSelect',
                 },
             ],
@@ -222,7 +228,10 @@ describe('normalizeTemplates()', () => {
                     displayName: 'Status',
                     id: 'status',
                     key: 'status',
-                    options: [{ id: 'read', key: 'Read' }, { id: 'wantToRead', key: 'Want to read' }],
+                    options: [
+                        { id: 'read', key: 'Read' },
+                        { id: 'wantToRead', key: 'Want to read' },
+                    ],
                     type: 'multiSelect',
                 },
             ],
@@ -252,7 +261,10 @@ describe('normalizeTemplates()', () => {
                     displayName: 'Status',
                     id: 'status',
                     key: 'status',
-                    options: [{ id: 'read', key: 'Read' }, { id: 'wantToRead', key: 'Want to read' }],
+                    options: [
+                        { id: 'read', key: 'Read' },
+                        { id: 'wantToRead', key: 'Want to read' },
+                    ],
                     type: 'multiSelect',
                 },
             ],

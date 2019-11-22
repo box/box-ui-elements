@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status APPROVED 1`] = `
-<Component
+<Memo()
   status="APPROVED"
 >
   <FormattedMessage
@@ -22,11 +22,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   >
     <div />
   </FormattedMessage>
-</Component>
+</Memo()>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status COMPLETED 1`] = `
-<Component
+<Memo()
   status="COMPLETED"
 >
   <FormattedMessage
@@ -47,11 +47,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   >
     <div />
   </FormattedMessage>
-</Component>
+</Memo()>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status IN_PROGRESS 1`] = `
-<Component
+<Memo()
   status="IN_PROGRESS"
 >
   <FormattedMessage
@@ -72,11 +72,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   >
     <div />
   </FormattedMessage>
-</Component>
+</Memo()>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status NOT_STARTED 1`] = `
-<Component
+<Memo()
   status="NOT_STARTED"
 >
   <FormattedMessage
@@ -97,11 +97,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   >
     <div />
   </FormattedMessage>
-</Component>
+</Memo()>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render the correct task status REJECTED 1`] = `
-<Component
+<Memo()
   status="REJECTED"
 >
   <FormattedMessage
@@ -122,5 +122,5 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   >
     <div />
   </FormattedMessage>
-</Component>
+</Memo()>
 `;

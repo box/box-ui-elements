@@ -739,7 +739,7 @@ const messages = defineMessages({
     },
     keywordsList: {
         id: 'be.keywordsList',
-        defaultMessage: 'Keywords: { words }',
+        defaultMessage: 'Keywords: {words}',
         description: 'Label for a list of keywords. {words} are the list of keywords.',
     },
     noActivity: {

@@ -219,7 +219,10 @@ describe('components/select-field/BaseSelectField', () => {
             expect(overlay.prop('aria-multiselectable')).toBe(true);
         });
 
-        test.each([[true, true], [false, false]])(
+        test.each([
+            [true, true],
+            [false, false],
+        ])(
             'should apply the correct CSS classes to the overlay element when isScrollable is %s',
             (isScrollable, result) => {
                 const wrapper = shallowRenderSelectField({ isScrollable });

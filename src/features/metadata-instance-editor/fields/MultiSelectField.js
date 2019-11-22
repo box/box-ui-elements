@@ -39,7 +39,10 @@ const MultiSelectField = ({
                     isScrollable
                     onChange={(selectedOptions: Array<SelectOptionProp>) => {
                         if (selectedOptions.length) {
-                            onChange(dataKey, selectedOptions.map(({ value }) => value));
+                            onChange(
+                                dataKey,
+                                selectedOptions.map(({ value }) => value),
+                            );
                         } else {
                             onRemove(dataKey);
                         }

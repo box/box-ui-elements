@@ -18,22 +18,13 @@ module.exports = {
         [
             'react-intl',
             {
-                enforceDescriptions: true,
                 messagesDir: './i18n/json',
             },
         ],
     ],
     env: {
         development: {
-            plugins: [
-                'flow-react-proptypes',
-                [
-                    'react-intl',
-                    {
-                        enforceDescriptions: false,
-                    },
-                ],
-            ],
+            plugins: ['flow-react-proptypes'],
         },
         npm: {
             plugins: [['react-remove-properties', { properties: ['data-testid'] }]],

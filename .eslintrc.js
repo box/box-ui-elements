@@ -17,7 +17,9 @@ module.exports = {
         'react/no-access-state-in-setstate': 'off', // fixme
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
+        'formatjs/enforce-description': 'error' // fixme
     },
+    plugins: ['formatjs'],
     overrides: [
         {
             files: ['*.test.js'],

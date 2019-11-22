@@ -9,7 +9,10 @@ describe('elements/content-open-with/ExecuteForm', () => {
 
     const executePostData = {
         url: 'foo.com',
-        params: [{ key: 'foo', value: 'bar' }, { key: 'bar', value: 'baz' }],
+        params: [
+            { key: 'foo', value: 'bar' },
+            { key: 'bar', value: 'baz' },
+        ],
     };
 
     const submitStub = jest.fn();

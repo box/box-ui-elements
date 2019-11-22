@@ -68,7 +68,10 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
         });
 
         test('should render pills when there are selected options using legacy text attribute', () => {
-            const options = [{ text: 'test', value: 'test' }, { text: 'blah', value: 'hi' }];
+            const options = [
+                { text: 'test', value: 'test' },
+                { text: 'blah', value: 'hi' },
+            ];
             const wrapper = shallow(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
@@ -77,7 +80,10 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
         });
 
         test('should render pills when there are selected options', () => {
-            const options = [{ displayText: 'test', value: 'test' }, { displayText: 'blah', value: 'hi' }];
+            const options = [
+                { displayText: 'test', value: 'test' },
+                { displayText: 'blah', value: 'hi' },
+            ];
             const wrapper = shallow(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
@@ -94,7 +100,10 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
                 return pattern.test(displayText);
             };
-            const options = [{ displayText: 'test', value: 'test' }, { displayText: 'blah', value: 'hi' }];
+            const options = [
+                { displayText: 'test', value: 'test' },
+                { displayText: 'blah', value: 'hi' },
+            ];
             const wrapper = shallow(
                 <PillSelector
                     allowInvalidPills
@@ -123,7 +132,10 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
         });
 
         test('should render pill as selected when selected index is set', () => {
-            const options = [{ text: 'test', value: 'test' }, { text: 'blah', value: 'hi' }];
+            const options = [
+                { text: 'test', value: 'test' },
+                { text: 'blah', value: 'hi' },
+            ];
             const wrapper = shallow(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
@@ -323,7 +335,10 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
         });
 
         test('should select last pill when left arrow is pressed, input does not have value, and there are pills', () => {
-            const options = [{ text: 'test', value: 'test' }, { text: 'blah', value: 'blah' }];
+            const options = [
+                { text: 'test', value: 'test' },
+                { text: 'blah', value: 'blah' },
+            ];
             const wrapper = mount(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
@@ -353,7 +368,10 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
 
     describe('onKeyDown - ArrowRight', () => {
         test('should deselect last pill when right arrow is pressed and last pill is selected', () => {
-            const options = [{ text: 'test', value: 'test' }, { text: 'blah', value: 'blah' }];
+            const options = [
+                { text: 'test', value: 'test' },
+                { text: 'blah', value: 'blah' },
+            ];
             const wrapper = mount(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
@@ -371,7 +389,10 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
         });
 
         test('should select next pill when right arrow is pressed and selected pill is not last', () => {
-            const options = [{ text: 'test', value: 'test' }, { text: 'blah', value: 'blah' }];
+            const options = [
+                { text: 'test', value: 'test' },
+                { text: 'blah', value: 'blah' },
+            ];
             const wrapper = mount(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );

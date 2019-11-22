@@ -15,30 +15,33 @@ describe('Elements/SubHeader/SubHeaderRight', () => {
         items: ['123'],
     };
 
-    test.each([[VIEW_FOLDER, false], [VIEW_MODE_GRID, true]])(
-        '%s shows grid view slider %s',
-        (viewMode, expectation) => {
-            const wrapper = getWrapper({ viewMode, currentCollection });
+    test.each([
+        [VIEW_FOLDER, false],
+        [VIEW_MODE_GRID, true],
+    ])('%s shows grid view slider %s', (viewMode, expectation) => {
+        const wrapper = getWrapper({ viewMode, currentCollection });
 
-            expect(wrapper.exists(GridViewSlider)).toBe(expectation);
-        },
-    );
+        expect(wrapper.exists(GridViewSlider)).toBe(expectation);
+    });
 
-    test.each([[0, 0], [1, 1]])('should show %i grid view buttons on toolbar', (columns, expectation) => {
+    test.each([
+        [0, 0],
+        [1, 1],
+    ])('should show %i grid view buttons on toolbar', (columns, expectation) => {
         const wrapper = getWrapper({ gridColumnCount: columns, currentCollection });
         expect(wrapper.find(ViewModeChangeButton).length).toEqual(expectation);
     });
 
-    test.each([[VIEW_FOLDER, true], [VIEW_MODE_GRID, false]])(
-        'Add button with %s on toolbar should be %s',
-        (view, expectation) => {
-            const wrapper = getWrapper({
-                canUpload: expectation,
-                canCreateNewFolder: expectation,
-                view,
-                currentCollection,
-            });
-            expect(wrapper.exists(Add)).toBe(expectation);
-        },
-    );
+    test.each([
+        [VIEW_FOLDER, true],
+        [VIEW_MODE_GRID, false],
+    ])('Add button with %s on toolbar should be %s', (view, expectation) => {
+        const wrapper = getWrapper({
+            canUpload: expectation,
+            canCreateNewFolder: expectation,
+            view,
+            currentCollection,
+        });
+        expect(wrapper.exists(Add)).toBe(expectation);
+    });
 });

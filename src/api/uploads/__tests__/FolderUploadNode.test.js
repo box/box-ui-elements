@@ -241,11 +241,18 @@ describe('api/uploads/FolderUploadNode', () => {
 
     describe('createFolderUploadNodesFromEntries()', () => {
         test('should create folders and files from entries', async () => {
-            const entries = [{ name: '1', isFile: true }, { name: '2', isFile: false }, { name: '3', isFile: true }];
+            const entries = [
+                { name: '1', isFile: true },
+                { name: '2', isFile: false },
+                { name: '3', isFile: true },
+            ];
 
             await folderUploadNodeInstance.createFolderUploadNodesFromEntries(entries);
 
-            expect(folderUploadNodeInstance.files).toEqual([{ name: '1', isFile: true }, { name: '3', isFile: true }]);
+            expect(folderUploadNodeInstance.files).toEqual([
+                { name: '1', isFile: true },
+                { name: '3', isFile: true },
+            ]);
             expect(Object.keys(folderUploadNodeInstance.folders)).toHaveLength(1);
             expect(folderUploadNodeInstance.folders['2'].name).toEqual('2');
             expect(folderUploadNodeInstance.folders['2'].entry).toEqual(entries[1]);

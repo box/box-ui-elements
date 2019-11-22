@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should render details for status APPROVED 1`] = `
-<Component
+<Memo()
   completedAt="2019-01-01T00:00:000Z"
   status="APPROVED"
   user={
@@ -37,11 +37,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
       </FormattedMessage>
     </div>
   </div>
-</Component>
+</Memo()>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should render details for status APPROVED 2`] = `
-<Component
+<Memo()
   completedAt={2019-01-01T00:00:00.000Z}
   status="APPROVED"
   user={
@@ -77,11 +77,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
       </FormattedMessage>
     </div>
   </div>
-</Component>
+</Memo()>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should render details for status NOT_STARTED 1`] = `
-<Component
+<Memo()
   completedAt="2019-01-01T00:00:000Z"
   status="NOT_STARTED"
   user={
@@ -100,11 +100,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
       user one
     </div>
   </div>
-</Component>
+</Memo()>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should render details for status REJECTED 1`] = `
-<Component
+<Memo()
   completedAt="2019-01-01T00:00:000Z"
   status="REJECTED"
   user={
@@ -140,11 +140,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
       </FormattedMessage>
     </div>
   </div>
-</Component>
+</Memo()>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should render details for status invalid_string 1`] = `
-<Component
+<Memo()
   completedAt="2019-01-01T00:00:000Z"
   status="invalid_string"
   user={
@@ -163,11 +163,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
       user one
     </div>
   </div>
-</Component>
+</Memo()>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should render details for status null 1`] = `
-<Component
+<Memo()
   completedAt={2019-01-01T00:00:00.000Z}
   status={null}
   user={
@@ -186,5 +186,5 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
       user one
     </div>
   </div>
-</Component>
+</Memo()>
 `;

@@ -96,7 +96,11 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
 
     describe('onEnterFolder', () => {
         test("should call onEnterFolder when clicking the folder's breadcrumb", () => {
-            const foldersPath = [{ id: '0', name: 'item1' }, { id: '1', name: 'item2' }, { id: '2', name: 'item3' }];
+            const foldersPath = [
+                { id: '0', name: 'item1' },
+                { id: '1', name: 'item2' },
+                { id: '2', name: 'item3' },
+            ];
             const clickedFolderIndex = 1;
             const clickedFolder = foldersPath[clickedFolderIndex];
             const onEnterFolderSpy = sandbox.spy();
@@ -111,7 +115,10 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
         });
 
         test('should not call onEnterFolder when clicking the last breadcrumb', () => {
-            const foldersPath = [{ id: '0', name: 'item1' }, { id: '1', name: 'item2' }];
+            const foldersPath = [
+                { id: '0', name: 'item1' },
+                { id: '1', name: 'item2' },
+            ];
             const onEnterFolderSpy = sandbox.spy();
             const wrapper = renderComponent({
                 foldersPath,
@@ -126,7 +133,10 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
 
     describe('onSearchSubmit', () => {
         test('should call onSearchSubmit when clicking the search results breadcrumb', () => {
-            const foldersPath = [{ id: 'search_results_id', name: 'Search Results' }, { id: '0', name: 'folder' }];
+            const foldersPath = [
+                { id: 'search_results_id', name: 'Search Results' },
+                { id: '0', name: 'folder' },
+            ];
             const onSearchSubmitSpy = sandbox.spy();
             const searchInput = 'test';
             const wrapper = renderComponent(
