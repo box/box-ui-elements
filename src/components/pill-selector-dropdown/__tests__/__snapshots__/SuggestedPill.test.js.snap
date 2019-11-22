@@ -16,7 +16,7 @@ exports[`components/pill-selector-dropdown/SuggestedPill render() should render 
     type="button"
   >
     <span
-      className="pill-text suggested-pill"
+      className="bdl-Pill-text pill-text suggested-pill"
     >
       Foo
     </span>

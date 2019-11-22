@@ -302,7 +302,7 @@ type MetadataQueryInstanceTypeField = {
     name: string,
     options?: MetadataTemplateFieldOption,
     type: string,
-    value: string,
+    value: ?MetadataFieldValue,
 };
 
 type MetadataQueryInstanceTemplate = {
@@ -519,6 +519,7 @@ type Collection = {
     id?: string,
     items?: Array<BoxItem>,
     name?: string,
+    nextMarker?: ?string,
     offset?: number,
     percentLoaded?: number,
     permissions?: BoxItemPermission,

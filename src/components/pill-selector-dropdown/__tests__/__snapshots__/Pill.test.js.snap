@@ -2,10 +2,10 @@
 
 exports[`components/pill-selector-dropdown/Pill should generate pill with invalid class when pill is not valid 1`] = `
 <span
-  className="pill is-selected is-invalid"
+  className="bdl-Pill pill is-selected is-invalid"
 >
   <span
-    className="pill-text"
+    className="bdl-Pill-text pill-text"
   >
     box
   </span>

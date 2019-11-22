@@ -50,15 +50,15 @@ $assignee-dropdown-height: 215px;
             margin-bottom: 15px;
         }
 
-        input.pill-selector-hidden-input {
+        input.bdl-PillSelector-input--hidden {
             width: 1px;
         }
 
-        .pill-selector-wrapper {
+        .bdl-PillSelectorDropdown {
             width: 100%;
             margin-left: 0;
 
-            .pill-selector-input-wrapper {
+            .bdl-PillSelector {
                 width: auto;
             }
 

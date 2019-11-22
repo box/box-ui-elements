@@ -18,8 +18,14 @@ module.exports = {
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
     },
-    globals: {
-        shallow: true,
-        mount: true,
-    },
+    overrides: [
+        {
+            files: ['*.test.js'],
+            globals: {
+                shallow: true,
+                mount: true,
+                takeScreenshot: true,
+            },
+        }
+    ]
 };

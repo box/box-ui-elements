@@ -13,12 +13,14 @@
 .github
 .gitignore
 .idea
+.jest
 .mergify.yml
 .npmignore
 .npmrc
 .nvmrc
 .prettierignore
 .prettierrc.js
+.storybook
 .stylelintignore
 .sublime-project
 .swp
@@ -36,6 +38,7 @@ desktop.ini
 examples
 flow/
 flow-typed/npm/
+jest.config.js
 jsconfig.json
 npm-debug.log
 npm-error.log

@@ -5,7 +5,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should 
   text=""
 >
   <SelectorDropdown
-    className="pill-selector-wrapper"
+    className="bdl-PillSelectorDropdown pill-selector-wrapper"
     onEnter={[Function]}
     onSelect={[Function]}
     selector={

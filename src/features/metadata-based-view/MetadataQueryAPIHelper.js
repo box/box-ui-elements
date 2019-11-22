@@ -8,7 +8,13 @@ import getProp from 'lodash/get';
 import includes from 'lodash/includes';
 import API from '../../api';
 
-import { METADATA_FIELD_TYPE_ENUM, METADATA_FIELD_TYPE_MULTISELECT, ITEM_TYPE_FILE } from '../../common/constants';
+import {
+    ITEM_TYPE_FILE,
+    JSON_PATCH_OP_REPLACE,
+    JSON_PATCH_OP_TEST,
+    METADATA_FIELD_TYPE_ENUM,
+    METADATA_FIELD_TYPE_MULTISELECT,
+} from '../../common/constants';
 
 import type {
     MetadataQuery as MetadataQueryType,
@@ -31,7 +37,7 @@ export default class MetadataQueryAPIHelper {
 
     metadataQueryResponseData: MetadataQueryResponseData;
 
-    metadataTemplate: ?MetadataTemplate;
+    metadataTemplate: MetadataTemplate;
 
     templateKey: string;
 
@@ -40,6 +46,23 @@ export default class MetadataQueryAPIHelper {
     constructor(api: API) {
         this.api = api;
     }
+
+    createJSONPatchOperations = (
+        field: string,
+        oldValue: ?MetadataFieldValue,
+        newValue: ?MetadataFieldValue,
+    ): JSONPatchOperations => [
+        {
+            op: JSON_PATCH_OP_TEST,
+            path: `/${field}`,
+            value: oldValue,
+        },
+        {
+            op: JSON_PATCH_OP_REPLACE,
+            path: `/${field}`,
+            value: newValue,
+        },
+    ];
 
     flattenMetadata = (metadata: MetadataQueryResponseEntryMetadata): MetadataType => {
         const templateFields = getProp(this.metadataTemplate, 'fields', []);
@@ -136,5 +159,19 @@ export default class MetadataQueryAPIHelper {
             .then(this.getFlattenedDataWithTypes)
             .then(successsCallback)
             .catch(errorCallback);
+    };
+
+    updateMetadata = (
+        file: BoxItem,
+        field: string,
+        oldValue: ?MetadataFieldValue,
+        newValue: ?MetadataFieldValue,
+        successsCallback: void => void,
+        errorCallback: ErrorCallback,
+    ): Promise<void> => {
+        const operations = this.createJSONPatchOperations(field, oldValue, newValue);
+        return this.api
+            .getMetadataAPI(true)
+            .updateMetadata(file, this.metadataTemplate, operations, successsCallback, errorCallback);
     };
 }
