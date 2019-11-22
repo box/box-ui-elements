@@ -1,5 +1,5 @@
 .email-shared-link {
-    .pill-selector-wrapper {
+    .bdl-PillSelectorDropdown {
         margin: 0;
     }
 
@@ -14,13 +14,13 @@
         transition: height .2s;
     }
 
-    .pill-selector-input-wrapper,
+    .bdl-PillSelector,
     textarea {
         width: 100%;
     }
 
     &.is-expanded {
-        .pill-selector-wrapper {
+        .bdl-PillSelectorDropdown {
             margin-bottom: 20px;
         }
 
@@ -28,7 +28,7 @@
             height: 100px;
         }
 
-        .pill-selector-input-wrapper {
+        .bdl-PillSelector {
             height: 58px;
         }
     }

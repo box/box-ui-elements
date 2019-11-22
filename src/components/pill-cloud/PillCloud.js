@@ -14,12 +14,12 @@ type Props = {
 };
 
 const PillCloud = ({ options, onSelect, selectedOptions = [], buttonProps = {} }: Props) => (
-    <div className="bdl-PillCloud">
+    <div className="bdl-PillCloud pill-cloud-container">
         {options &&
             options.map(option => (
                 <Button
                     key={option.value}
-                    className={classNames('bdl-Pill', 'bdl-PillCloud-button', {
+                    className={classNames('bdl-Pill', 'bdl-PillCloud-button', 'pill', 'pill-cloud-button', {
                         'is-selected': selectedOptions.find(op => isEqual(op, option)),
                     })}
                     onClick={onSelect ? () => onSelect(option) : undefined}

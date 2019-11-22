@@ -17,7 +17,12 @@ exports[`features/metadata-instance-editor/fields/ should correctly render butto
   position="bottom-left"
   shouldDefaultFocus={true}
 >
-  <Button />
+  <Button
+    className=""
+    isLoading={false}
+    showRadar={false}
+    type="submit"
+  />
   <Overlay>
     <SelectorDropdown
       className="metadata-instance-editor-template-dropdown-menu"

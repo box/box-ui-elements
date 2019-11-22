@@ -1,140 +1,140 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`icons/file-icon/FileIcon should render 64 icon when dimension is defined 1`] = `
-<IconFileDefault
+<IconFileDefault32
   height={64}
   width={64}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render default 32 icon when no extension and dimension is defined 1`] = `
-<IconFileDefault
+<IconFileDefault32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 1`] = `
-<IconFileWordDocument
+<IconFileWord32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 2`] = `
-<IconFileWordDocument
+<IconFileWord32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 3`] = `
-<IconFileWordDocument
+<IconFileWord32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 4`] = `
-<IconFileGoogleDocs
+<IconFileDocs32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 5`] = `
-<IconFileGoogleSheets
+<IconFileSheets32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 6`] = `
-<IconFileGoogleSlides
+<IconFileSlides32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 7`] = `
-<IconFileGoogleSlides
+<IconFileSlides32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 8`] = `
-<IconFileKeynote
+<IconFileKeynote32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 9`] = `
-<IconFileNumbers
+<IconFileNumbers32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 10`] = `
-<IconFilePages
+<IconFilePages32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 11`] = `
-<IconFilePowerpointPresentation
+<IconFilePowerpoint32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 12`] = `
-<IconFilePowerpointPresentation
+<IconFilePowerpoint32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 13`] = `
-<IconFilePowerpointPresentation
+<IconFilePowerpoint32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 14`] = `
-<IconFileExcelSpreadsheet
+<IconFileExcel32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 15`] = `
-<IconFileExcelSpreadsheet
+<IconFileExcel32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 16`] = `
-<IconFileExcelSpreadsheet
+<IconFileExcel32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 17`] = `
-<IconFileZip
+<IconFileZip32
   height={32}
   width={32}
 />
 `;
 
 exports[`icons/file-icon/FileIcon should render title when title is defined 1`] = `
-<IconFileDefault
+<IconFileDefault32
   height={32}
   title="title"
   width={32}

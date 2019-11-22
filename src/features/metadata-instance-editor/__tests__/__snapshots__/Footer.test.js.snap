@@ -21,7 +21,10 @@ exports[`features/metadata-instance-editor/fields/Footer should correctly render
     className="metadata-instance-editor-footer-save-cancel"
   >
     <Button
+      className=""
       data-resin-target="metadata-instancecancel"
+      isLoading={false}
+      showRadar={false}
       type="button"
     >
       <FormattedMessage

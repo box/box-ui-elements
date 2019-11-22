@@ -6,14 +6,26 @@ describe('icons/general/IconClock', () => {
     test('should correctly render default icon', () => {
         const wrapper = shallow(<IconClock />);
 
-        expect(wrapper.hasClass('icon-clock')).toEqual(true);
+        expect(wrapper.hasClass('bdl-IconClock')).toEqual(true);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render icon with specified color', () => {
         const color = '#ffffff';
         const wrapper = shallow(<IconClock color={color} />);
 
-        expect(wrapper.find('g').prop('fill')).toEqual(color);
+        expect(
+            wrapper
+                .find('path')
+                .at(0)
+                .prop('fill'),
+        ).toEqual(color);
+        expect(
+            wrapper
+                .find('path')
+                .at(1)
+                .prop('fill'),
+        ).toEqual(color);
     });
 
     test('should correctly render icon with specified width and height', () => {

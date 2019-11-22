@@ -68,16 +68,27 @@ const messages = defineMessages({
         description: 'Bullet point that summarizes application download blocked restriction applied to classification',
         id: 'boxui.securityControls.appDownloadBlock',
     },
-    appDownloadList: {
-        defaultMessage: 'Some applications will be restricted; {appNames}',
+    appDownloadBlacklist: {
+        defaultMessage: 'Some applications will be restricted: {appNames}',
         description: 'Bullet point that summarizes application download restriction applied to classification',
-        id: 'boxui.securityControls.appDownloadList',
+        id: 'boxui.securityControls.appDownloadBlacklist',
     },
-    appDownloadListOverflow: {
-        defaultMessage: 'Only select applications are allowed; {appNames} +{remainingAppCount} more',
+    appDownloadBlacklistOverflow: {
+        defaultMessage: 'Some applications will be restricted: {appNames} +{remainingAppCount} more',
         description:
             'Bullet point that summarizes application download restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold',
-        id: 'boxui.securityControls.appDownloadListOverflow',
+        id: 'boxui.securityControls.appDownloadBlacklistOverflow',
+    },
+    appDownloadWhitelist: {
+        defaultMessage: 'Only select applications are allowed: {appNames}',
+        description: 'Bullet point that summarizes application download restriction applied to classification',
+        id: 'boxui.securityControls.appDownloadWhitelist',
+    },
+    appDownloadWhitelistOverflow: {
+        defaultMessage: 'Only select applications are allowed: {appNames} +{remainingAppCount} more',
+        description:
+            'Bullet point that summarizes application download restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold',
+        id: 'boxui.securityControls.appDownloadWhitelistOverflow',
     },
     // Web Download Restrictions
     webDownloadOwners: {

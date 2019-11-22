@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/classification/security-controls/SecurityControls should render SecurityControls multiple SecurityControlsItem when using FULL format 1`] = `
+exports[`features/classification/security-controls/SecurityControls should render SecurityControls multiple SecurityControlsItem when using FULL controlsFormat 1`] = `
 <ul
   className="bdl-SecurityControls"
 >
@@ -13,7 +13,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     }
     tooltipItems={Array []}
-    tooltipPosition="middle-left"
   />
   <SecurityControlsItem
     key="1"
@@ -24,7 +23,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     }
     tooltipItems={Array []}
-    tooltipPosition="middle-left"
   />
   <SecurityControlsItem
     key="2"
@@ -35,26 +33,24 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     }
     tooltipItems={Array []}
-    tooltipPosition="middle-left"
   />
   <SecurityControlsItem
     key="3"
     message={
       Object {
-        "defaultMessage": "Some applications will be restricted; {appNames}",
-        "id": "boxui.securityControls.appDownloadList",
+        "defaultMessage": "Only select applications are allowed: {appNames}",
+        "id": "boxui.securityControls.appDownloadWhitelist",
         "values": Object {
           "appNames": "",
         },
       }
     }
     tooltipItems={Array []}
-    tooltipPosition="middle-left"
   />
 </ul>
 `;
 
-exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem and tooltip items when using SHORT_WITH_TOOLTIP format 1`] = `
+exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem and tooltip items when using SHORT_WITH_TOOLTIP controlsFormat 1`] = `
 <ul
   className="bdl-SecurityControls bdl-SecurityControls--summarized"
 >
@@ -81,20 +77,19 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.desktopDownloadOwners",
         },
         Object {
-          "defaultMessage": "Some applications will be restricted; {appNames}",
-          "id": "boxui.securityControls.appDownloadList",
+          "defaultMessage": "Only select applications are allowed: {appNames}",
+          "id": "boxui.securityControls.appDownloadWhitelist",
           "values": Object {
             "appNames": "",
           },
         },
       ]
     }
-    tooltipPosition="middle-left"
   />
 </ul>
 `;
 
-exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem when using SHORT format 1`] = `
+exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem when using SHORT controlsFormat 1`] = `
 <ul
   className="bdl-SecurityControls bdl-SecurityControls--summarized"
 >
@@ -107,7 +102,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     }
     tooltipItems={Array []}
-    tooltipPosition="middle-left"
   />
 </ul>
 `;
