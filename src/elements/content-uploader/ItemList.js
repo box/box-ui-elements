@@ -11,6 +11,7 @@ import nameCellRenderer from './nameCellRenderer';
 import progressCellRenderer from './progressCellRenderer';
 import actionCellRenderer from './actionCellRenderer';
 import removeCellRenderer from './removeCellRenderer';
+import 'react-virtualized/styles.css';
 import './ItemList.scss';
 
 type Props = {
@@ -18,14 +19,21 @@ type Props = {
     items: UploadItem[],
     onClick: Function,
     onRemoveClick?: (item: UploadItem) => void,
+    overrideSettings?: {},
 };
 
-const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveClick = noop }: Props) => (
+const ItemList = ({
+    isResumableUploadsEnabled = false,
+    items,
+    onClick,
+    onRemoveClick = noop,
+    overrideSettings = {},
+}: Props) => (
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer(isResumableUploadsEnabled);
             const progressCell = progressCellRenderer();
-            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick);
+            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick, overrideSettings);
             const removeCell = removeCellRenderer(onRemoveClick);
 
             return (
@@ -48,6 +56,7 @@ const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveC
                         flexShrink={1}
                         style={{ textAlign: 'right' }}
                         width={300}
+                        className="bcu-item-col-2"
                     />
                     <Column
                         className={isResumableUploadsEnabled ? '' : 'bcu-item-list-action-column'}

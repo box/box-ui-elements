@@ -1,0 +1,46 @@
+@import '../common/variables';
+@import '../../styles/mixins/responsive';
+
+.bcu-droppable-content-container {
+    position: relative;
+    display: flex;
+    flex: 1 0 280px;
+    background-color: $bdl-box-blue-02;
+    border: dashed 1px $bdl-box-blue;
+    border-radius: 4px;
+
+    .bcu-droppable-content {
+        flex: 1 0 279px;
+    }
+
+    &.bcu-droppable-content-has-items {
+        background-color: $white;
+        border: solid 1px $bdl-gray-30;
+
+        &.bcu-droppable-content-is-disabled {
+            background-color: $bdl-gray-02;
+            border: solid 1px $bdl-gray-10;
+        }
+    }
+
+    &.bcu-droppable-content-is-disabled {
+        opacity: .5;
+    }
+
+    &.bcu-droppable-content-is-over {
+        background-color: $bdl-box-blue-05;
+        border: dashed 1px $bdl-box-blue;
+    }
+
+    .bcu-droppable-content-disabled-overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .bcu-item-col-2 {
+        @include smallScreen {
+            display: none;
+        }
+    }
+}

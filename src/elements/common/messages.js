@@ -527,6 +527,11 @@ const messages = defineMessages({
         description: 'Message shown for upload link for uploading more files when there are no items to upload',
         defaultMessage: 'Browse your device',
     },
+    uploadEmptyFileInputV2: {
+        id: 'be.uploadEmptyFileInputV2',
+        description: 'Message shown for upload link for uploading more files when there are no items to upload',
+        defaultMessage: 'Select Files',
+    },
     uploadEmptyFolderInput: {
         id: 'be.uploadEmptyFolderInput',
         description: 'Message shown for upload link for uploading more folders when there are no items to upload',

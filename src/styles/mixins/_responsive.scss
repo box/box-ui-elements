@@ -1,0 +1,24 @@
+// mixins for responsive design based on screen size
+@mixin smallScreen {
+    @media (max-width: 600px) {
+        @content;
+    }
+}
+
+@mixin mediumScreen {
+    @media (min-width: 600px) {
+        @content;
+    }
+}
+
+@mixin largeScreen {
+    @media (min-width: 760px) {
+        @content;
+    }
+}
+
+@mixin xLargeScreen {
+    @media (min-width: 1440px) {
+        @content;
+    }
+}

@@ -66,6 +66,6 @@ export default () => ({ rowData }: Props) => {
         case STATUS_ERROR:
             return getErrorMessage(code, name);
         default:
-            return null;
+            return <>{rowData.fileSize}</>;
     }
 };

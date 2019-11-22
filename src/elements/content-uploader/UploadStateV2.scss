@@ -1,0 +1,48 @@
+@import '../common/variables';
+
+.bcu-upload-state {
+    &.bcu-is-droppable,
+    &.bcu-is-not-droppable {
+        .bcu-upload-input-container,
+        .bcu-upload-state-message {
+            display: none;
+        }
+    }
+
+    // Show blue indicator when item can be dropped
+    &.bcu-is-droppable .bcu-drag-drop-overlay {
+        display: block;
+        background: $bdl-box-blue-05;
+    }
+
+    &.bcu-has-items {
+        display: none;
+
+        &.bcu-is-droppable {
+            display: none;
+        }
+        // If a file is dragged over, show the prompt on top of items
+        &.bcu-is-not-droppable {
+            .bcu-drag-drop-overlay {
+                display: block;
+            }
+        }
+    }
+}
+
+.bcu-upload-state-message {
+    color: $bdl-dark-blue;
+}
+
+.bcu-upload-input-container {
+    .btn {
+        margin-top: 12px;
+        color: $bdl-dark-blue;
+        background: transparent;
+        border-color: $bdl-box-blue;
+
+        &:hover {
+            background: transparent !important;
+        }
+    }
+}

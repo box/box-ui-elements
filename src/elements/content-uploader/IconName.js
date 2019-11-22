@@ -14,13 +14,14 @@ import './IconName.scss';
 
 type Props = {
     extension: string,
+    fileSize?: string,
     isFolder?: boolean,
     isResumableUploadsEnabled: boolean,
     name: string,
     status: UploadStatus,
 };
 
-const IconName = ({ name, extension, isFolder = false, isResumableUploadsEnabled, status }: Props) => {
+const IconName = ({ name, extension, isFolder = false, isResumableUploadsEnabled, status, fileSize }: Props) => {
     let icon = isFolder ? <IconFolderPersonal /> : <FileIcon extension={extension} />;
 
     if (isResumableUploadsEnabled && status === STATUS_ERROR) {
@@ -36,6 +37,7 @@ const IconName = ({ name, extension, isFolder = false, isResumableUploadsEnabled
             <div className="bcu-item-icon">{icon}</div>
             <div className="bcu-item-name">
                 <ItemName name={name} />
+                {fileSize ? <span className="bcu-item-fize-size">{fileSize}</span> : null}
             </div>
         </div>
     );

@@ -565,6 +565,7 @@ type UploadItem = {
     error?: Object,
     extension: string,
     file: UploadFile,
+    fileSize?: string,
     isFolder?: boolean,
     name: string,
     options?: UploadItemAPIOptions,

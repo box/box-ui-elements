@@ -1,4 +1,5 @@
 @import '../common/variables';
+@import '../../styles/mixins/responsive';
 
 .bcu-item-icon-name {
     display: flex;
@@ -31,5 +32,15 @@
             bottom: -4px;
             left: calc(100% - 16px);
         }
+    }
+}
+
+.bcu-item-fize-size {
+    display: none;
+    color: $bdl-gray-62;
+    font-size: 11px;
+
+    @include smallScreen {
+        display: block;
     }
 }
