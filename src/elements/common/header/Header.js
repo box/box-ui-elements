@@ -31,6 +31,7 @@ const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) 
             <Logo isSmall={isSmall} url={logoUrl} />
             <div className="be-search">
                 <input
+                    aria-label="search"
                     disabled={!isFolder && !isSearch}
                     onChange={search}
                     placeholder={intl.formatMessage(messages.searchPlaceholder)}
