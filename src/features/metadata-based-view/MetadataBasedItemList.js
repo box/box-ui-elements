@@ -41,6 +41,8 @@ type State = {
     editedRowIndex: number,
     hoveredColumnIndex: number,
     hoveredRowIndex: number,
+    scrollLeftOffset: number,
+    scrollRightOffset: number,
     valueBeingEdited: ?MetadataFieldValue,
 };
 
@@ -80,6 +82,13 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         }
     }
 
+    getMinimumViewWidth(): number {
+        const { metadataColumnsToShow }: Props = this.props;
+        return (
+            FILE_ICON_COLUMN_WIDTH + FILE_NAME_COLUMN_WIDTH + metadataColumnsToShow.length * MIN_METADATA_COLUMN_WIDTH
+        );
+    }
+
     getColumnWidth(width: number): ColumnWidthCallback {
         const { metadataColumnsToShow }: Props = this.props;
 
@@ -106,6 +115,8 @@ class MetadataBasedItemList extends React.Component<Props, State> {
             hoveredRowIndex: -1,
             hoveredColumnIndex: -1,
             valueBeingEdited: null,
+            scrollLeftOffset: 0,
+            scrollRightOffset: 0,
         };
     };
 
@@ -298,26 +309,45 @@ class MetadataBasedItemList extends React.Component<Props, State> {
     render() {
         const { currentCollection, metadataColumnsToShow }: Props = this.props;
         const rowCount = currentCollection.items ? currentCollection.items.length : 0;
+        const { scrollLeftOffset, scrollRightOffset } = this.state;
 
         return (
             <AutoSizer>
-                {({ width, height }) => (
-                    <div className="bdl-MetadataBasedItemList">
-                        <MultiGrid
-                            cellRenderer={this.cellRenderer}
-                            columnCount={metadataColumnsToShow.length + FIXED_COLUMNS_NUMBER}
-                            columnWidth={this.getColumnWidth(width)}
-                            fixedColumnCount={FIXED_COLUMNS_NUMBER}
-                            fixedRowCount={FIXED_ROW_NUMBER}
-                            height={height}
-                            hideBottomLeftGridScrollbar
-                            hideTopRightGridScrollbar
-                            rowCount={rowCount + FIXED_ROW_NUMBER}
-                            rowHeight={50}
-                            width={width}
-                        />
-                    </div>
-                )}
+                {({ width, height }) => {
+                    const isViewScrolledLeft = this.getMinimumViewWidth() > width && scrollRightOffset > 0;
+                    const isViewScrolledRight = scrollLeftOffset > 0;
+                    const isViewScrolledInMiddle = isViewScrolledLeft && isViewScrolledRight;
+                    const classesBottmRightGrid = classNames('bdl-MetadataBasedItemList-bottomRightGrid', {
+                        'is-scrolledLeft': isViewScrolledLeft && !isViewScrolledInMiddle, // all the way to left
+                        'is-scrolledRight': isViewScrolledRight && !isViewScrolledInMiddle, // all the way to right
+                        'is-scrolledMiddle': isViewScrolledInMiddle,
+                    });
+                    return (
+                        <div className="bdl-MetadataBasedItemList">
+                            <MultiGrid
+                                cellRenderer={this.cellRenderer}
+                                columnCount={metadataColumnsToShow.length + FIXED_COLUMNS_NUMBER}
+                                columnWidth={this.getColumnWidth(width)}
+                                fixedColumnCount={FIXED_COLUMNS_NUMBER}
+                                fixedRowCount={FIXED_ROW_NUMBER}
+                                height={height}
+                                hideBottomLeftGridScrollbar
+                                hideTopRightGridScrollbar
+                                rowCount={rowCount + FIXED_ROW_NUMBER}
+                                rowHeight={50}
+                                width={width}
+                                classNameBottomRightGrid={classesBottmRightGrid}
+                                onScroll={data => {
+                                    const { clientWidth, scrollLeft, scrollWidth } = data;
+                                    this.setState({
+                                        scrollLeftOffset: scrollLeft,
+                                        scrollRightOffset: scrollWidth - clientWidth - scrollLeft,
+                                    });
+                                }}
+                            />
+                        </div>
+                    );
+                }}
             </AutoSizer>
         );
     }

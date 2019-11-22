@@ -19,6 +19,18 @@
     }
 }
 
+.bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledRight {
+    box-shadow: 5px 0 8px -2px #e8e8e8 inset;
+}
+
+.bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledLeft {
+    box-shadow: -5px 0 8px -1px #e8e8e8 inset;
+}
+
+.bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledMiddle {
+    box-shadow: 5px 0 8px -2px #e8e8e8 inset, -5px 0 8px -1px #e8e8e8 inset;
+}
+
 .bdl-MetadataBasedItemList-cell--edit {
     display: flex;
     height: 32px;
