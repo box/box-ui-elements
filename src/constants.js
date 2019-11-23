@@ -420,3 +420,6 @@ export const KEYS = {
 
 /* ----------------- Other ----------------------- */
 export const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
+export const EMPTY_VALUE = '—';
+export const BYTES_IN_MB = 1048576;
+export const ANONYMOUS_USER_ID = '2';

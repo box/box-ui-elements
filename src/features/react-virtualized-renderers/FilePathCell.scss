@@ -1,0 +1,16 @@
+@import '../../styles/variables';
+
+.FilePathCell {
+    display: flex;
+    align-items: center;
+
+    .breadcrumb-item {
+        font-size: 13px;
+    }
+
+    &.is-external {
+        .breadcrumb-item-last .FilePathCell-breadcrumbName {
+            @include isExternal;
+        }
+    }
+}

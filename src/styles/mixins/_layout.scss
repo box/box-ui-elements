@@ -8,3 +8,46 @@
         box-sizing: border-box !important;
     }
 }
+
+// Virtualized table
+%form-attribute-item {
+    padding-bottom: 20px;
+    border-bottom: 1px solid $bdl-gray-10;
+
+    .section-content {
+        margin-left: 100px;
+    }
+}
+
+@mixin markerColor($borderColor, $backgroundColor) {
+    background-color: $backgroundColor;
+    border-color: $borderColor;
+}
+
+@mixin markerStyle {
+    border: 1px solid;
+    border-radius: 50%;
+
+    &.is-suspicious {
+        @include markerColor($bdl-watermelon-red, $bdl-watermelon-red-10);
+    }
+
+    &.is-user {
+        @include markerColor($bdl-gray, $bdl-gray-10);
+    }
+
+    &.is-typical {
+        @include markerColor($bdl-box-blue, $bdl-box-blue-10);
+    }
+}
+
+@mixin isExternal {
+    color: $bdl-gray-62;
+    font-style: italic;
+}
+
+@mixin itemName {
+    &.is-external {
+        @include isExternal;
+    }
+}

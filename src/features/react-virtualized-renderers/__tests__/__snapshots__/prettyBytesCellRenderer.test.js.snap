@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/react-virtualized-renderers/prettyBytesCellRenderer should render a PrettyBytesCell 1`] = `"2097152000 petaflops"`;

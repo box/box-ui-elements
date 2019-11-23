@@ -3,7 +3,9 @@
  * @file Date and time utilities
  * @author Box
  */
+import * as React from 'react';
 import isNaN from 'lodash/isNaN';
+import { FormattedDate, FormattedTime } from 'react-intl';
 
 const MILLISECONDS_PER_SECOND = 1000;
 // 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
@@ -238,6 +240,54 @@ function convertISOStringToUTCDate(isoString: string): Date {
     return new Date(localizedUnixTimeInMs);
 }
 
+export type DateTimeFormatOptions = {
+    shouldDisplayTime?: boolean,
+    useShortFormat?: boolean,
+};
+
+/**
+ * Format a date object to string
+ * @param {Date} date | string
+ * @param {Object} options
+ */
+function formatDateTime(date: ?(Date | string), options?: DateTimeFormatOptions) {
+    if (!date) {
+        return '';
+    }
+
+    // eslint-disable-next-line no-prototype-builtins
+    const useShortFormat = options && options.hasOwnProperty('useShortFormat') ? options.useShortFormat : true;
+    // eslint-disable-next-line no-prototype-builtins
+    const shouldDisplayTime = options && options.hasOwnProperty('shouldDisplayTime') ? options.useShortFormat : true;
+
+    const datetime = typeof date === 'string' ? new Date(date) : date;
+
+    if (!datetime) {
+        return '';
+    }
+
+    const timeComponent = <FormattedTime value={datetime} timeZoneName="short" />;
+
+    const dateComponent = (
+        <FormattedDate
+            value={datetime}
+            month={useShortFormat ? '2-digit' : 'short'}
+            day={useShortFormat ? '2-digit' : 'numeric'}
+            year={useShortFormat ? '2-digit' : 'numeric'}
+        />
+    );
+
+    return shouldDisplayTime ? (
+        <>
+            {dateComponent}
+            {', '}
+            {timeComponent}
+        </>
+    ) : (
+        dateComponent
+    );
+}
+
 export {
     convertToDate,
     convertToMs,
@@ -252,4 +302,5 @@ export {
     isCurrentYear,
     formatTime,
     addTime,
+    formatDateTime,
 };
