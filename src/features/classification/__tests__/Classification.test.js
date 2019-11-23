@@ -114,4 +114,20 @@ describe('features/classification/Classification', () => {
         expect(wrapper.find(LoadingIndicator)).toHaveLength(1);
         expect(wrapper.find(SecurityControls)).toHaveLength(0);
     });
+
+    test('should not render loading indicator when item is not classified', () => {
+        const wrapper = getWrapper({
+            messageStyle: 'inline',
+            isLoadingControls: true,
+        });
+        expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
+    });
+
+    test('should not render loading indicator when message style is not inline', () => {
+        const wrapper = getWrapper({
+            messageStyle: 'tooltip',
+            isLoadingControls: true,
+        });
+        expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
+    });
 });

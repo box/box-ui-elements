@@ -43,6 +43,7 @@ const Classification = ({
     const isTooltipMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_TOOLTIP;
     const isInlineMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_INLINE;
     const isNotClassifiedMessageVisible = !isClassified && messageStyle === STYLE_INLINE;
+    const isControlsIndicatorEnabled = isClassified && isLoadingControls && messageStyle === STYLE_INLINE;
     const isSecurityControlsEnabled =
         isClassified && !isLoadingControls && hasSecurityControls && messageStyle === STYLE_INLINE;
 
@@ -65,10 +66,10 @@ const Classification = ({
                     <FormattedMessage {...messages.missing} />
                 </span>
             )}
-            {controls && isSecurityControlsEnabled && (
-                <SecurityControls controls={controls} controlsFormat={controlsFormat} maxAppCount={maxAppCount} />
+            {isSecurityControlsEnabled && (
+                <SecurityControls controls={controls || {}} controlsFormat={controlsFormat} maxAppCount={maxAppCount} />
             )}
-            {isLoadingControls && <LoadingIndicator />}
+            {isControlsIndicatorEnabled && <LoadingIndicator />}
         </article>
     );
 };
