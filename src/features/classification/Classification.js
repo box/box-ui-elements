@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Label from '../../components/label/Label';
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import ClassifiedBadge from './ClassifiedBadge';
 import SecurityControls from './security-controls';
 import messages from './messages';
@@ -18,6 +19,7 @@ type Props = {
     controls?: Controls,
     controlsFormat?: ControlsFormat,
     definition?: string,
+    isLoadingControls?: boolean,
     maxAppCount?: number,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
     name?: string,
@@ -29,6 +31,7 @@ const Classification = ({
     className = '',
     controls,
     controlsFormat,
+    isLoadingControls,
     maxAppCount,
     messageStyle,
     name,
@@ -39,8 +42,9 @@ const Classification = ({
     const hasSecurityControls = !!controls;
     const isTooltipMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_TOOLTIP;
     const isInlineMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_INLINE;
-    const isSecurityControlsEnabled = isClassified && hasSecurityControls && messageStyle === STYLE_INLINE;
     const isNotClassifiedMessageVisible = !isClassified && messageStyle === STYLE_INLINE;
+    const isSecurityControlsEnabled =
+        isClassified && !isLoadingControls && hasSecurityControls && messageStyle === STYLE_INLINE;
 
     return (
         <article className={`bdl-Classification ${className}`}>
@@ -64,6 +68,7 @@ const Classification = ({
             {controls && isSecurityControlsEnabled && (
                 <SecurityControls controls={controls} controlsFormat={controlsFormat} maxAppCount={maxAppCount} />
             )}
+            {isLoadingControls && <LoadingIndicator />}
         </article>
     );
 };
