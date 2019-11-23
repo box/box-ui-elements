@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/react-virtualized-renderers/userCellRenderer should render a UserCell 1`] = `
+<React.Fragment>
+  Marlon Rando
+   (a@a.com)
+</React.Fragment>
+`;

@@ -7,9 +7,9 @@ module.exports = {
         'react-intl-locale-data': '<rootDir>/node_modules/react-intl/locale-data/en.js',
         'box-ui-elements-locale-data': '<rootDir>/i18n/en-US.js',
         '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-            '<rootDir>/scripts/jest/fileMock.js',
+            '<rootDir>/scripts/jest/mocks/fileMock.js',
         '\\.(css|less|scss|md)$': '<rootDir>/scripts/jest/mocks/styleMock.js',
-        'react-virtualized/dist/es': 'react-virtualized/dist/commonjs',
+        // 'react-virtualized/dist/es': 'react-virtualized/dist/commonjs',
     },
     transformIgnorePatterns: ['node_modules/(?!(react-virtualized/dist/es))'],
     testPathIgnorePatterns: ['/node_modules/', 'stories.test.js$'],

@@ -1,0 +1,24 @@
+@import '../../styles/variables';
+
+.FileNameCell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .link,
+    .link:active,
+    .link:visited,
+    .link:hover {
+        @include itemName;
+
+        color: $bdl-gray;
+    }
+
+    .link:hover {
+        text-decoration: underline;
+    }
+}
+
+.FileNameCell-link {
+    margin-left: 5px;
+}

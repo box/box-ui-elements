@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/react-virtualized-renderers/lastModifiedByCellRenderer should render a LastModifiedByCell 1`] = `
+<UNDEFINED
+  defaultMessage="{lastModified} by {user}"
+  id="boxui.features.ReactVirtualizedRenderers.lastModifiedBy"
+  values={
+    Object {
+      "lastModified": <UNDEFINED
+        style="numeric"
+        units="day-short"
+        value={1563482709000}
+      />,
+      "user": "123-Rando-a@a.com",
+    }
+  }
+/>
+`;
