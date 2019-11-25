@@ -51,7 +51,11 @@ describe('features/content-explorer/item-list/ItemList', () => {
         });
 
         test('should render component with correct number of items', () => {
-            const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }, { id: '3', name: 'item3' }];
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+                { id: '3', name: 'item3' },
+            ];
             const wrapper = renderComponent({ items });
 
             const rows = wrapper.find('.table-row');
@@ -61,7 +65,10 @@ describe('features/content-explorer/item-list/ItemList', () => {
         });
 
         test('should render component with disabled items when specified', () => {
-            const items = [{ id: '1', name: 'item1', isDisabled: false }, { id: '2', name: 'item2', isDisabled: true }];
+            const items = [
+                { id: '1', name: 'item1', isDisabled: false },
+                { id: '2', name: 'item2', isDisabled: true },
+            ];
             const wrapper = renderComponent({ items });
 
             const rows = wrapper.find('.table-row');
@@ -85,7 +92,11 @@ describe('features/content-explorer/item-list/ItemList', () => {
         });
 
         test('should render component with selected item when specified', () => {
-            const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }, { id: '3', name: 'item3' }];
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+                { id: '3', name: 'item3' },
+            ];
             const selectedItems = { '1': items[0] };
             const wrapper = renderComponent({
                 items,
@@ -101,7 +112,10 @@ describe('features/content-explorer/item-list/ItemList', () => {
         });
 
         test('should render component with default item buttons', () => {
-            const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }];
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+            ];
             const wrapper = renderComponent({ items });
 
             expect(wrapper.find('.item-list-button-col RadioButton').length).toBe(items.length);
@@ -171,7 +185,10 @@ describe('features/content-explorer/item-list/ItemList', () => {
 
     describe('itemIconRenderer', () => {
         test('should use itemIconRenderer when specified', () => {
-            const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }];
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+            ];
             const itemIconRenderer = () => <button type="button" className="icon-test" />;
             const wrapper = renderComponent({
                 items,
@@ -184,7 +201,10 @@ describe('features/content-explorer/item-list/ItemList', () => {
 
     describe('itemButtonRenderer', () => {
         test('should use itemButtonRenderer when specified', () => {
-            const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }];
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+            ];
             const itemButtonRenderer = () => <button type="button" className="button-test" />;
             const wrapper = renderComponent({
                 items,

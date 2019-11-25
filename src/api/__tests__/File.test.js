@@ -528,7 +528,11 @@ describe('api/File', () => {
         });
         test('should do nothing if destroyed', () => {
             file.isDestroyed = jest.fn().mockReturnValue(true);
-            file.getFileExtension('id', () => {}, () => {});
+            file.getFileExtension(
+                'id',
+                () => {},
+                () => {},
+            );
             expect(file.getFile).not.toBeCalled();
         });
 

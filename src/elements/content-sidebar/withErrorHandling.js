@@ -37,7 +37,7 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
         return (
             <>
                 <InlineError title={<FormattedMessage {...inlineError.title} />}>
-                    {<FormattedMessage {...inlineError.content} />}
+                    <FormattedMessage {...inlineError.content} />
                 </InlineError>
                 <WrappedComponent {...rest} />
             </>

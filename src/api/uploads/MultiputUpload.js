@@ -314,8 +314,8 @@ class MultiputUpload extends BaseMultiput {
 
             if (
                 (errorData &&
-                    (errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
-                        errorData.code === ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED)) ||
+                    errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
+                    errorData.code === ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED) ||
                 (errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
                     errorData.code === 'access_denied_insufficient_permissions')
             ) {

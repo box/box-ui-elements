@@ -271,7 +271,11 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
 
         test('should call onSelectItem with the selected item when clicking an item', () => {
             const clickedItemIndex = 1;
-            const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }, { id: '3', name: 'item3' }];
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+                { id: '3', name: 'item3' },
+            ];
             const wrapper = renderComponent({ items, onSelectItem: onSelectItemSpy }, true);
 
             wrapper
@@ -285,7 +289,11 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
         test('should call onSelectItem with the selected item and store the latest item in the selectedItems state when clicking multiple items', () => {
             const clickedItemIndex = 1;
             const clickedItemIndex2 = 2;
-            const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }, { id: '3', name: 'item3' }];
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+                { id: '3', name: 'item3' },
+            ];
             const wrapper = renderComponent({ items, onSelectItem: onSelectItemSpy }, true);
 
             wrapper
@@ -309,7 +317,11 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
         test('should call onSelectItem with the selected items and store all selected item in the selectedItems state when clicking multiple items [Multi-Select mode]', () => {
             const clickedItemIndex = 1;
             const clickedItemIndex2 = 2;
-            const items = [{ id: '1', name: 'item1' }, { id: '2', name: 'item2' }, { id: '3', name: 'item3' }];
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+                { id: '3', name: 'item3' },
+            ];
             const wrapper = renderComponent(
                 {
                     items,
@@ -411,7 +423,10 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
         test('should not show search empty state when viewing folder in search results', () => {
             const wrapper = renderComponent({}, false);
             wrapper.setState({
-                foldersPath: [{ id: '123', name: '123' }, { id: '234', name: '234' }],
+                foldersPath: [
+                    { id: '123', name: '123' },
+                    { id: '234', name: '234' },
+                ],
                 isInSearchMode: true,
             });
             const Component = wrapper.instance().renderItemListEmptyState;

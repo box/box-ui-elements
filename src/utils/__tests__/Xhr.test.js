@@ -347,12 +347,14 @@ describe('util/Xhr', () => {
             jest.spyOn(Math, 'random').mockReturnValue(0.5);
         });
 
-        test.each([[1, 1500], [2, 2500], [3, 4500], [4, 8500]])(
-            'should get exponential retry timeout %#',
-            (retryCount, expected) => {
-                expect(xhrInstance.getExponentialRetryTimeoutInMs(retryCount)).toBe(expected);
-            },
-        );
+        test.each([
+            [1, 1500],
+            [2, 2500],
+            [3, 4500],
+            [4, 8500],
+        ])('should get exponential retry timeout %#', (retryCount, expected) => {
+            expect(xhrInstance.getExponentialRetryTimeoutInMs(retryCount)).toBe(expected);
+        });
     });
 
     describe('errorInterceptor()', () => {

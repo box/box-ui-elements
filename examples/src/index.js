@@ -2,12 +2,8 @@ export { default as AvatarImageExample } from './AvatarImageExample';
 export { default as ContentExplorerExamples } from './ContentExplorerExamples';
 export { default as ContentExplorerModalContainerExamples } from './ContentExplorerModalContainerExamples';
 export { default as ContentExplorerMultiSelectExamples } from './ContentExplorerMultiSelectExamples';
-export {
-    default as ContentExplorerMultiSelectModalContainerExamples,
-} from './ContentExplorerMultiSelectModalContainerExamples';
-export {
-    default as ContextMenuWithSubmenuWithBoundariesElementExample,
-} from './ContextMenuWithSubmenuWithBoundariesElementExample';
+export { default as ContentExplorerMultiSelectModalContainerExamples } from './ContentExplorerMultiSelectModalContainerExamples';
+export { default as ContextMenuWithSubmenuWithBoundariesElementExample } from './ContextMenuWithSubmenuWithBoundariesElementExample';
 export { default as DraftJSMentionSelectorExamples } from './DraftJSMentionSelectorExamples';
 export { default as MentionSelectorContainer } from './MentionSelectorContainer';
 export { default as DraggableListExamples } from './DraggableListExamples';

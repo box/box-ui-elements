@@ -5,6 +5,7 @@ module.exports = {
     rules: {
         camelcase: 'off',
         'class-methods-use-this': 'off',
+        'formatjs/enforce-description': 'error', // fixme
         'jsx-a11y/label-has-associated-control': 'off',
         'import/no-extraneous-dependencies': 'off', // fixme
         'react/default-props-match-prop-types': 'off', // fixme
@@ -18,6 +19,7 @@ module.exports = {
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
     },
+    plugins: ['formatjs'],
     overrides: [
         {
             files: ['*.test.js'],

@@ -196,7 +196,10 @@ describe('api/box-edit/BoxEdit', () => {
 
             const result = await boxEdit.canOpenWithBoxEdit(['pdf', 'xlsx']);
 
-            [['pdf', 'Acrobat'], ['xlsx', '']].forEach(pair => {
+            [
+                ['pdf', 'Acrobat'],
+                ['xlsx', ''],
+            ].forEach(pair => {
                 const [extension, appName] = pair;
                 expect(result.get(extension)).toEqual(appName);
             });
