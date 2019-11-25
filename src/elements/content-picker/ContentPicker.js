@@ -19,6 +19,7 @@ import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
 import Pagination from '../common/pagination/Pagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import { isSelected, containsItem } from './itemSelectionHelper';
 import API from '../../api';
 import Content from './Content';
 import Footer from './Footer';
@@ -102,7 +103,7 @@ type State = {
     isUploadModalOpen: boolean,
     rootName: string,
     searchQuery: string,
-    selected: { [string]: BoxItem },
+    selected: Array<BoxItem>,
     sortBy: SortBy,
     sortDirection: SortDirection,
     view: View,
@@ -199,7 +200,7 @@ class ContentPicker extends Component<Props, State> {
             currentCollection: {},
             currentOffset: initialPageSize * (initialPage - 1),
             currentPageSize: initialPageSize,
-            selected: {},
+            selected: [],
             searchQuery: '',
             view: VIEW_FOLDER,
             isCreateFolderModalOpen: false,
@@ -287,11 +288,10 @@ class ContentPicker extends Component<Props, State> {
     choose = (): void => {
         const { selected }: State = this.state;
         const { onChoose }: Props = this.props;
-        const results: BoxItem[] = Object.keys(selected).map(key => {
-            const clone: BoxItem = { ...selected[key] };
-            delete clone.selected;
-            return clone;
+        const results: BoxItem[] = selected.map(selectedItem => {
+            return { ...selectedItem };
         });
+
         onChoose(results);
     };
 
@@ -304,13 +304,9 @@ class ContentPicker extends Component<Props, State> {
      */
     cancel = (): void => {
         const { onCancel }: Props = this.props;
-        const { selected }: State = this.state;
-
-        // Clear out the selected field
-        Object.keys(selected).forEach(key => delete selected[key].selected);
 
         // Reset the selected state
-        this.setState({ selected: {} }, () => onCancel());
+        this.setState({ selected: [] }, () => onCancel());
     };
 
     /**
@@ -563,7 +559,7 @@ class ContentPicker extends Component<Props, State> {
                     sortBy,
                     sortDirection,
                     percentLoaded: 100,
-                    items: Object.keys(selected).map(key => this.api.getCache().get(key)),
+                    items: selected,
                 },
             },
             this.finishNavigation,
@@ -782,46 +778,24 @@ class ContentPicker extends Component<Props, State> {
             return;
         }
 
-        const selectedKeys: Array<string> = Object.keys(selected);
-        const selectedCount: number = selectedKeys.length;
-        const hasHitSelectionLimit: boolean = selectedCount === maxSelectable;
         const isSingleFileSelection: boolean = maxSelectable === 1;
-        const cacheKey: string = this.api.getAPI(type).getCacheKey(id);
-        const existing: BoxItem = selected[cacheKey];
-        const existingFromCache: BoxItem = this.api.getCache().get(cacheKey);
-        const existInSelected = selectedKeys.indexOf(cacheKey) !== -1;
+        const newSelected: Array<BoxItem> = isSingleFileSelection ? [] : [...selected];
+        const selectedCount: number = newSelected.length;
+        const hasHitSelectionLimit: boolean = selectedCount === maxSelectable;
+        const existingIndex: number = newSelected.findIndex(containsItem(item));
+        const isAlreadySelected = existingIndex !== -1 || (isSingleFileSelection && isSelected(item, selected));
         const itemCanSetShareAccess = getProp(item, 'permissions.can_set_share_access', false);
 
-        // Existing object could have mutated and we just need to update the
-        // reference in the selected map. In that case treat it like a new selection.
-        if (existing && existing === existingFromCache) {
+        if (isAlreadySelected) {
             // We are selecting the same item that was already
             // selected. Unselect it in this case. Toggle case.
-            delete existing.selected;
-            delete selected[cacheKey];
+            newSelected.splice(existingIndex, 1);
         } else {
-            // We are selecting a new item that was never
-            // selected before. However if we are in a single
-            // item selection mode, we should also unselect any
-            // prior item that was item that was selected.
-
-            // Check if we hit the selection limit and if selection
-            // is not already currently in the selected data structure.
-            // Ignore when in single file selection mode.
-            if (hasHitSelectionLimit && !isSingleFileSelection && !existInSelected) {
+            if (hasHitSelectionLimit) {
                 return;
             }
 
-            // Clear out the prior item for single file selection mode
-            if (selectedCount > 0 && isSingleFileSelection) {
-                const prior = selectedKeys[0]; // only one item
-                delete selected[prior].selected;
-                delete selected[prior];
-            }
-
-            // Select the new item
-            item.selected = true;
-            selected[cacheKey] = item;
+            newSelected.push(item);
 
             // If can set share access, fetch the shared link properties of the item
             // In the case where another item is selected, any in flight XHR will get
@@ -832,7 +806,7 @@ class ContentPicker extends Component<Props, State> {
         }
 
         const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
-        this.setState({ selected, focusedRow }, () => {
+        this.setState({ selected: newSelected, focusedRow }, () => {
             if (view === VIEW_SELECTED) {
                 // Need to refresh the selected view
                 this.showSelected();
@@ -881,14 +855,8 @@ class ContentPicker extends Component<Props, State> {
         if (!item[FIELD_SHARED_LINK]) {
             this.changeShareAccess(null, item);
         } else {
-            const { selected } = this.state;
-            const { id, type } = item;
-            const cacheKey = this.api.getAPI(type).getCacheKey(id);
-            // if shared link already exists, update the collection in state
+            // if shared link already exists, update the current collection
             this.updateItemInCollection(item);
-            if (item.selected && item !== selected[cacheKey]) {
-                this.select(item, { forceSharedLink: false });
-            }
         }
     };
 
@@ -918,9 +886,6 @@ class ContentPicker extends Component<Props, State> {
 
         this.api.getAPI(type).share(item, access, (updatedItem: BoxItem) => {
             this.updateItemInCollection(updatedItem);
-            if (item.selected) {
-                this.select(updatedItem, { forceSharedLink: false });
-            }
         });
     };
 
@@ -931,15 +896,43 @@ class ContentPicker extends Component<Props, State> {
      * @returns {void}
      */
     updateItemInCollection = (item: BoxItem) => {
-        const { currentCollection } = this.state;
-        const { items = [] } = currentCollection;
+        const { currentCollection, selected: selectedItems = [] } = this.state;
+        const { items: collectionItems = [] } = currentCollection;
         const newState = {
             currentCollection: {
                 ...currentCollection,
-                items: items.map(collectionItem => (collectionItem.id === item.id ? item : collectionItem)),
+                items: this.addUpdatedItemToCollection(item, collectionItems),
             },
+            selected: this.addUpdatedItemToCollection(item, selectedItems),
         };
         this.setState(newState);
+    };
+
+    /**
+     * Inserts a given item into a collection of box items
+     * if a matching item is found in the collection.
+     *
+     * @private
+     * @param {BoxItem} item - the item that will be inserted into the collection
+     * @param {Array<BoxItem>} collection - the collection of items to be searched for a match
+     * @return {boolean}
+     */
+
+    addUpdatedItemToCollection = (item: BoxItem, collection: Array<BoxItem>): Array<BoxItem> => {
+        return collection.map(collectionItem => (this.itemsMatch(collectionItem, item) ? item : collectionItem));
+    };
+
+    /**
+     * Determines if two items have the same id and type
+     *
+     * @private
+     * @param {BoxItem} item1 - the first item to compare
+     * @param {BoxItem} item2 - the second item to compare
+     * @return {boolean}
+     */
+
+    itemsMatch = (item1: BoxItem, item2: BoxItem): boolean => {
+        return item1.id === item2.id && item1.type === item2.type;
     };
 
     /**
@@ -1152,7 +1145,7 @@ class ContentPicker extends Component<Props, State> {
         }: State = this.state;
         const { id, offset, permissions, totalCount }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
-        const selectedCount: number = Object.keys(selected).length;
+        const { length: selectedCount } = selected;
         const isSingleSelect = maxSelectable === 1;
         const hasHitSelectionLimit: boolean = selectedCount === maxSelectable && !isSingleSelect;
         const allowUpload: boolean = canUpload && !!can_upload;
@@ -1202,6 +1195,7 @@ class ContentPicker extends Component<Props, State> {
                             onItemClick={this.onItemClick}
                             onFocusChange={this.onFocusChange}
                             onShareAccessChange={this.changeShareAccess}
+                            selected={selected}
                         />
                         <Footer
                             selectedCount={selectedCount}

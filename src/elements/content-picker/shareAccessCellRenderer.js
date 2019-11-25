@@ -8,6 +8,7 @@ import React from 'react';
 import getProp from 'lodash/get';
 import ShareAccessSelect from '../common/share-access-select';
 import isRowSelectable from './cellRendererHelper';
+import { isSelected as isRowSelected } from './itemSelectionHelper';
 import LoadingIndicator from '../../components/loading-indicator';
 
 export default (
@@ -16,14 +17,16 @@ export default (
     selectableType: string,
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
+    selected: Array<BoxItem>,
 ) => ({ rowData }: { rowData: BoxItem }) => {
     const itemCanSetShareAccess = getProp(rowData, 'permissions.can_set_share_access', false);
+    const isSelected = isRowSelected(rowData, selected);
 
     if (
         !canSetShareAccess ||
         !itemCanSetShareAccess ||
-        !isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) ||
-        !rowData.selected
+        !isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData, isSelected) ||
+        !isSelected
     ) {
         return <span />;
     }

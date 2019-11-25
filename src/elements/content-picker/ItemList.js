@@ -15,6 +15,7 @@ import { isFocusableElement, focus } from '../../utils/dom';
 import shareAccessCellRenderer from './shareAccessCellRenderer';
 import selectionCellRenderer from './selectionCellRenderer';
 import isRowSelectable from './cellRendererHelper';
+import { isSelected as isRowSelected } from './itemSelectionHelper';
 import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
 
 import './ItemList.scss';
@@ -34,6 +35,7 @@ type Props = {
     rootElement?: HTMLElement,
     rootId: string,
     selectableType: string,
+    selected: Array<BoxItem>,
     tableRef: Function,
     view: View,
 };
@@ -54,6 +56,7 @@ const ItemList = ({
     onShareAccessChange,
     onFocusChange,
     currentCollection,
+    selected,
     tableRef,
 }: Props) => {
     const iconCell = iconCellRenderer();
@@ -64,6 +67,7 @@ const ItemList = ({
         extensionsWhitelist,
         hasHitSelectionLimit,
         isSingleSelect,
+        selected,
     );
     const shareAccessCell = shareAccessCellRenderer(
         onShareAccessChange,
@@ -71,6 +75,7 @@ const ItemList = ({
         selectableType,
         extensionsWhitelist,
         hasHitSelectionLimit,
+        selected,
     );
     const { id, items = [] }: Collection = currentCollection;
     const rowCount: number = items.length;
@@ -80,10 +85,18 @@ const ItemList = ({
             return '';
         }
 
-        const { selected, type } = items[index];
-        const isSelectable = isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, items[index]);
+        const { type } = items[index];
+        const isSelected = isRowSelected(items[index], selected);
+        const isSelectable = isRowSelectable(
+            selectableType,
+            extensionsWhitelist,
+            hasHitSelectionLimit,
+            items[index],
+            isSelected,
+        );
+
         return classNames(`bcp-item-row bcp-item-row-${index}`, {
-            'bcp-item-row-selected': selected && view !== VIEW_SELECTED,
+            'bcp-item-row-selected': isSelected && view !== VIEW_SELECTED,
             'bcp-item-row-unselectable': type !== TYPE_FOLDER && !isSelectable, // folder row should never dim
         });
     };
@@ -97,9 +110,11 @@ const ItemList = ({
         index: number,
         rowData: BoxItem,
     }) => {
+        const isSelected = isRowSelected(rowData, selected);
+
         // If the click is happening on a clickable element on the item row, ignore row selection
         if (
-            isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) &&
+            isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData, isSelected) &&
             !isFocusableElement(event.target)
         ) {
             onItemSelect(rowData);
