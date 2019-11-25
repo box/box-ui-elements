@@ -10,7 +10,7 @@ import { bdlBoxBlue } from '../../../styles/variables';
 
 import './SecurityControlsItem.scss';
 
-const ICON_SIZE = 14;
+const ICON_SIZE = 16;
 
 type Props = {
     message: MessageDescriptor,
@@ -32,7 +32,7 @@ const SecurityControlsItem = ({ message, tooltipItems }: Props) => {
         <li className="bdl-SecurityControlsItem">
             <FormattedMessage {...message} />
             {isTooltipEnabled && (
-                <Tooltip text={tooltipContent} position="middle-left">
+                <Tooltip className="bdl-SecurityControlsItem-tooltip" text={tooltipContent} position="middle-left">
                     <span className="bdl-SecurityControlsItem-tooltipIcon">
                         <IconInfo color={bdlBoxBlue} width={ICON_SIZE} height={ICON_SIZE} />
                     </span>
