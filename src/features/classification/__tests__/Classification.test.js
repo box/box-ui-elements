@@ -121,6 +121,7 @@ describe('features/classification/Classification', () => {
             isLoadingControls: true,
         });
         expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
+        expect(wrapper.find(SecurityControls)).toHaveLength(0);
     });
 
     test('should not render loading indicator when message style is not inline', () => {
@@ -129,5 +130,6 @@ describe('features/classification/Classification', () => {
             isLoadingControls: true,
         });
         expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
+        expect(wrapper.find(SecurityControls)).toHaveLength(0);
     });
 });

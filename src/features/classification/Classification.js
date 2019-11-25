@@ -67,7 +67,7 @@ const Classification = ({
                 </span>
             )}
             {isSecurityControlsEnabled && (
-                <SecurityControls controls={controls || {}} controlsFormat={controlsFormat} maxAppCount={maxAppCount} />
+                <SecurityControls controls={controls} controlsFormat={controlsFormat} maxAppCount={maxAppCount} />
             )}
             {isControlsIndicatorEnabled && <LoadingIndicator />}
         </article>

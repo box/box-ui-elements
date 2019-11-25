@@ -51,6 +51,7 @@ const SecurityControls = ({ controls, controlsFormat, maxAppCount }: Props) => {
 };
 
 SecurityControls.defaultProps = {
+    controls: {},
     controlsFormat: SHORT,
     maxAppCount: DEFAULT_MAX_APP_COUNT,
 };
