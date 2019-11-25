@@ -35,6 +35,8 @@ import type {
     TaskUpdatePayload,
 } from '../../../../common/types/tasks';
 import TaskError from './TaskError';
+import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
+import type { ElementsXhrError } from '../../../../common/types/api';
 
 import './TaskForm.scss';
 

@@ -15,6 +15,7 @@ import {
     ERROR_CODE_DELETE_COMMENT,
     ERROR_CODE_FETCH_COMMENTS,
 } from '../constants';
+import type { ElementsXhrError, ElementsErrorCallback } from '../common/types/api';
 
 class Comments extends OffsetBasedAPI {
     /**

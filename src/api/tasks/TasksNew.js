@@ -13,6 +13,7 @@ import {
     API_PAGE_LIMIT,
 } from '../../constants';
 import type { TaskUpdatePayload } from '../../common/types/tasks';
+import type { ElementsXhrError, ElementsErrorCallback } from '../../common/types/api';
 
 class TasksNew extends TasksBase {
     getUrlForFileTasks(id: string): string {

@@ -49,6 +49,7 @@ import {
     VIEW_SELECTED,
 } from '../../constants';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
+import type { ElementsXhrError } from '../../common/types/api';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';

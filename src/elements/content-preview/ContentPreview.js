@@ -46,7 +46,9 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
-import type { ErrorType } from '../common/flowTypes';
+import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
+import type { WithLoggerProps } from '../../common/types/logging';
+import type { FetchOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { VersionChangeCallback } from '../content-sidebar/versions';
 import '../common/fonts.scss';
 import '../common/base.scss';

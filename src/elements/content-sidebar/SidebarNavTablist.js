@@ -8,6 +8,7 @@ import * as React from 'react';
 import type { RouterHistory } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { KEYS } from '../../constants';
+import type { NavigateOptions } from './flowTypes';
 
 type Props = {
     children: React.Node,

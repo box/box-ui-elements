@@ -33,6 +33,8 @@ import {
     ORIGIN_METADATA_SIDEBAR,
     SIDEBAR_VIEW_METADATA,
 } from '../../constants';
+import type { WithLoggerProps } from '../../common/types/logging';
+import type { ElementsXhrError, ErrorContextProps } from '../../common/types/api';
 import './MetadataSidebar.scss';
 
 type ExternalProps = {

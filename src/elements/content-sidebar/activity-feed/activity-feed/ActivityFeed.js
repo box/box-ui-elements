@@ -17,6 +17,7 @@ import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
 import type { FocusableFeedItemType } from '../../../../common/types/feed';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import './ActivityFeed.scss';
 
 type Props = {

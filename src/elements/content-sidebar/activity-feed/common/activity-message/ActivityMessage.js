@@ -5,6 +5,7 @@ import LoadingIndicator from '../../../../../components/loading-indicator';
 import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
+import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
 import './ActivityMessage.scss';
 
 type Props = {
