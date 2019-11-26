@@ -13,11 +13,11 @@ type Props = FlyoutProps & {
     /** Set className to the overlay wrapper */
     className?: string,
     /** Custom button to trigger for opening/closing the flyout */
-    flyoutButton: React.Element<any>,
+    flyoutButton: ?React.Element<any>,
     /** What content to display in the footer */
-    footer?: React.Element<any>,
+    footer?: ?React.Element<any>,
     /** What content to display in the header */
-    header?: React.Element<any>,
+    header?: ?React.Element<any>,
     /** Optional function to get the scrollRef in parent components */
     scrollRefFn?: any => any,
 };
