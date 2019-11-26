@@ -1,6 +1,6 @@
 // @flow
 import { FormattedMessage } from 'react-intl';
-import { APP_INTEGRATION } from '../../constants';
+import { APP_INTEGRATION, HTTP_POST, HTTP_GET } from '../../constants';
 
 type AppIntegrationAPIMiniItem = {
     id: string,
@@ -32,7 +32,7 @@ type ExecuteAPIParam = {
 
 type ExecuteAPI = {
     integration_type: string,
-    method: HTTP_POST | HTTP_GET,
+    method: typeof HTTP_POST | typeof HTTP_GET,
     params: ?Array<ExecuteAPIParam>,
     url: string,
 };
