@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+// @flow
+import * as React from 'react';
 import classNames from 'classnames';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, type IntlShape, FormattedMessage } from 'react-intl';
 
+import type { ItemType } from '../../common/types/core';
 import { convertToMs, isToday, isYesterday } from '../../utils/datetime';
 import DatalistItem from '../../components/datalist-item';
 import IconSmallFolder from '../../icons/folder/IconSmallFolder';
@@ -16,6 +16,28 @@ import './QuickSearchItem.scss';
 
 const QUERY_SEPARATOR = '<mark>';
 
+type QuickSearchItemData = {
+    extension?: string,
+    iconType: string,
+    id: string,
+    name: string,
+    nameWithMarkedQuery: string,
+    parentName?: string,
+    sharedLink?: string,
+    type: ItemType,
+    updatedBy: string,
+    updatedDate: number,
+};
+
+type Props = {
+    className?: string,
+    closeDropdown?: Function,
+    intl: IntlShape,
+    itemData: QuickSearchItemData,
+    parentFolderRenderer?: Function,
+    shouldNavigateOnItemClick?: boolean,
+};
+
 const QuickSearchItem = ({
     className,
     closeDropdown,
@@ -24,7 +46,7 @@ const QuickSearchItem = ({
     parentFolderRenderer,
     shouldNavigateOnItemClick,
     ...rest
-}) => {
+}: Props) => {
     const { formatMessage } = intl;
     const {
         extension,
@@ -68,7 +90,6 @@ const QuickSearchItem = ({
             }
             break;
         default:
-            itemIconTitle = null;
     }
 
     let updatedText;
@@ -143,7 +164,7 @@ const QuickSearchItem = ({
                                 <span className="parent-folder">{parentName}</span>
                             )}
 
-                            <span className="separator">·</span>
+                            <span className="separator">•</span>
                         </>
                     )}
 
@@ -154,28 +175,6 @@ const QuickSearchItem = ({
             </span>
         </DatalistItem>
     );
-};
-
-const itemDataShape = {
-    extension: PropTypes.string,
-    iconType: PropTypes.string,
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    nameWithMarkedQuery: PropTypes.string.isRequired,
-    parentName: PropTypes.string.isRequired,
-    sharedLink: PropTypes.string,
-    type: PropTypes.string.isRequired,
-    updatedBy: PropTypes.string.isRequired,
-    updatedDate: PropTypes.number.isRequired,
-};
-QuickSearchItem.propTypes = {
-    closeDropdown: PropTypes.func,
-    className: PropTypes.string,
-    intl: intlShape.isRequired,
-    itemData: PropTypes.oneOfType([ImmutablePropTypes.recordOf(itemDataShape), PropTypes.shape(itemDataShape)])
-        .isRequired,
-    parentFolderRenderer: PropTypes.func,
-    shouldNavigateOnItemClick: PropTypes.bool,
 };
 
 export default injectIntl(QuickSearchItem);
