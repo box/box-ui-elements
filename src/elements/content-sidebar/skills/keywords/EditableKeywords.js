@@ -13,6 +13,7 @@ import messages from '../../../common/messages';
 import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import getPills from './keywordUtils';
 import type { Pill, Pills } from './flowTypes';
+import type { SkillCardEntry } from '../../../../common/types/skills';
 import './EditableKeywords.scss';
 
 type Props = {
@@ -74,7 +75,8 @@ class EditableKeywords extends React.PureComponent<Props, State> {
      * @param {number} index - pill index
      * @return {void}
      */
-    onRemove = (option: Pill, index: number): void => { // eslint-disable-line
+    onRemove = (option: Pill, index: number): void => {
+        // eslint-disable-line
         const { onDelete, keywords }: Props = this.props;
         onDelete(keywords[index]);
     };

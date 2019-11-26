@@ -26,6 +26,7 @@ import {
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import type { WithLoggerProps } from '../../common/types/logging';
+import type { SkillCardEntry, SkillCard } from '../../common/types/skills';
 import './SkillsSidebar.scss';
 
 type PropsWithoutContext = {

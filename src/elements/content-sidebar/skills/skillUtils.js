@@ -5,6 +5,7 @@
  */
 
 import getProp from 'lodash/get';
+import type { SkillCard } from '../../../common/types/skills';
 
 /**
  * Returns true if its a valid skills card.

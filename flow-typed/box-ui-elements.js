@@ -21,6 +21,7 @@ import type { ContentOpenWithProps } from '../src/elements/content-open-with';
 import type { ContentPreviewProps } from '../src/elements/content-preview';
 import type { FeatureConfig } from '../src/elements/common/feature-checking';
 import type { User, Order } from '../src/common/types/core';
+import type { SkillCards } from '../src/common/types/skills';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
@@ -48,11 +49,6 @@ import {
     FIELD_RELEVANCE,
     DEFAULT_VIEW_RECENTS,
     DEFAULT_VIEW_FILES,
-    SKILLS_KEYWORD,
-    SKILLS_TIMELINE,
-    SKILLS_TRANSCRIPT,
-    SKILLS_FACE,
-    SKILLS_STATUS,
     SIZE_MEDIUM,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
@@ -169,50 +165,6 @@ type OptionItem = {
 };
 
 type OptionItems = Array<OptionItem>;
-
-type SkillCardType =
-    | typeof SKILLS_KEYWORD
-    | typeof SKILLS_TIMELINE
-    | typeof SKILLS_TRANSCRIPT
-    | typeof SKILLS_FACE
-    | typeof SKILLS_STATUS;
-
-type SkillCardEntryType = 'text' | 'image';
-
-type SkillCardLocalizableType = {
-    code?: string,
-    message?: string,
-};
-
-type SkillCardEntryTimeSlice = {
-    end?: number,
-    start: number,
-};
-
-type SkillCardEntry = {
-    appears?: Array<SkillCardEntryTimeSlice>,
-    image_url?: string,
-    label?: string,
-    text?: string,
-    type?: SkillCardEntryType,
-};
-
-type SkillCard = {
-    duration?: number,
-    entries: Array<SkillCardEntry>,
-    error?: string,
-    file_version: BoxItemVersion,
-    id?: string,
-    skill_card_title: SkillCardLocalizableType,
-    skill_card_type: SkillCardType,
-    status?: SkillCardLocalizableType,
-    title?: string,
-    type: 'skill_card',
-};
-
-type SkillCards = {
-    cards: Array<SkillCard>,
-};
 
 type MetadataSkillsTemplate = {
     boxSkillsCards?: SkillCards,
