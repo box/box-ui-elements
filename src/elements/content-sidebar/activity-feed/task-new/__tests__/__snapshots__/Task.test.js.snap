@@ -116,7 +116,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       <div
         className="bcs-Task-statusContainer"
       >
-        <Component
+        <Memo()
           status="NOT_STARTED"
         />
         <TaskCompletionRuleIcon

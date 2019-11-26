@@ -142,7 +142,10 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
                 {
                     text: 'I hung out with @Becky and @Shania',
                     type: 'unstyled',
-                    entityRanges: [{ offset: 16, length: 6, key: 'first' }, { offset: 27, length: 7, key: 'second' }],
+                    entityRanges: [
+                        { offset: 16, length: 6, key: 'first' },
+                        { offset: 27, length: 7, key: 'second' },
+                    ],
                 },
             ],
             entityMap: {

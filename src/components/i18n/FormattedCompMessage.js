@@ -159,14 +159,12 @@ class FormattedCompMessage extends React.Component<Props, State> {
         }
 
         // react-intl will do the correct plurals if necessary
-        const translation = intl.formatMessage(
-            {
-                id,
-                defaultMessage: source,
-                description,
-            },
-            values,
-        );
+        const descriptor = {
+            id,
+            defaultMessage: source,
+            description,
+        };
+        const translation = intl.formatMessage(descriptor, values);
 
         // always wrap the translated string in a tag to contain everything
         // and to give us a spot to record the id. The resource id is the

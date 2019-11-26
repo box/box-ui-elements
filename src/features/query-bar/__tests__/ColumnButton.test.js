@@ -30,7 +30,10 @@ describe('features/query-bar/components/ColumnButton', () => {
 
         const visibleColumns = [columnForDateType, columnWithFloatType];
         const oneHiddenColumn = [{ ...columnForDateType, isShown: false }];
-        const twoHiddenColumns = [{ ...columnForDateType, isShown: false }, { ...columnWithFloatType, isShown: false }];
+        const twoHiddenColumns = [
+            { ...columnForDateType, isShown: false },
+            { ...columnWithFloatType, isShown: false },
+        ];
 
         test.each`
             columns             | values          | should

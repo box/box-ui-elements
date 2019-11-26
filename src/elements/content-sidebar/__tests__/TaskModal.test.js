@@ -26,12 +26,14 @@ describe('elements/content-sidebar/TaskModal', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test.each([['GENERAL', 'CREATE'], ['GENERAL', 'EDIT'], ['APPROVAL', 'CREATE'], ['APPROVAL', 'EDIT']])(
-            'using type %s and mode %s yields the proper modal title',
-            (taskType, editMode) => {
-                const wrapper = getWrapper({ taskType, editMode });
-                expect(wrapper).toMatchSnapshot();
-            },
-        );
+        test.each([
+            ['GENERAL', 'CREATE'],
+            ['GENERAL', 'EDIT'],
+            ['APPROVAL', 'CREATE'],
+            ['APPROVAL', 'EDIT'],
+        ])('using type %s and mode %s yields the proper modal title', (taskType, editMode) => {
+            const wrapper = getWrapper({ taskType, editMode });
+            expect(wrapper).toMatchSnapshot();
+        });
     });
 });

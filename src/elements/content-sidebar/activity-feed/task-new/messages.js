@@ -76,22 +76,22 @@ const messages = defineMessages({
     },
     tasksFeedHeadlineApprovalCurrentUser: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineApprovalCurrentUser',
-        defaultMessage: '{ user } assigned you an Approval Task',
+        defaultMessage: '{user} assigned you an Approval Task',
         description: 'Comment headline for an approval task assigned to the current user',
     },
     tasksFeedHeadlineApproval: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineApproval',
-        defaultMessage: '{ user } assigned an Approval Task',
+        defaultMessage: '{user} assigned an Approval Task',
         description: 'Comment headline for an approval task',
     },
     tasksFeedHeadlineGeneralCurrentUser: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineGeneralCurrentUser',
-        defaultMessage: '{ user } assigned you a Task',
+        defaultMessage: '{user} assigned you a Task',
         description: 'Comment headline for a general task assigned to the current user',
     },
     tasksFeedHeadlineGeneral: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineGeneral',
-        defaultMessage: '{ user } assigned a Task',
+        defaultMessage: '{user} assigned a Task',
         description: 'Comment headline for a general task',
     },
     tasksFeedMoreAssigneesLabel: {

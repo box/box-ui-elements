@@ -21,7 +21,9 @@ const ActivityError = ({ action, message, title, className, ...rest }: Props): R
         className={classnames('bcs-ActivityError', className)}
         title={<FormattedMessage {...title} {...rest} />}
     >
-        <div>{<FormattedMessage {...message} />}</div>
+        <div>
+            <FormattedMessage {...message} />
+        </div>
         {action ? (
             <PlainButton className="bcs-ActivityError-action lnk" onClick={action.onAction} type="button">
                 {action.text}

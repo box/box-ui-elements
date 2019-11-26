@@ -18,7 +18,11 @@ jest.mock('../../../../utils/iframe', () => ({
     default: jest.fn(),
 }));
 
-const versions = [{ id: '123', name: 'Version 1' }, { id: '456', name: 'Version 2' }, { id: '789', name: 'Version 3' }];
+const versions = [
+    { id: '123', name: 'Version 1' },
+    { id: '456', name: 'Version 2' },
+    { id: '789', name: 'Version 3' },
+];
 
 describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     const versionsAPI = {

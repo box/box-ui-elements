@@ -15,7 +15,7 @@ describe('components/nav-sidebar/NavSidebar', () => {
     test('should render class and custom attributes when specified', () => {
         const sidebar = shallow(
             <NavSidebar className="nav" data-resin-component="leftnav">
-                {'hootie hoo'}
+                hootie hoo
             </NavSidebar>,
         );
 
