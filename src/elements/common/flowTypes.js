@@ -40,4 +40,14 @@ type ElementOrigin =
     | typeof ORIGIN_METADATA_SIDEBAR
     | typeof ORIGIN_OPEN_WITH;
 
-export type { ViewMode, ErrorType, GetAvatarUrlCallback, GetProfileUrlCallback, AdditionalVersionInfo, ElementOrigin };
+type Alignment = 'left' | 'right';
+
+export type {
+    ViewMode,
+    ErrorType,
+    GetAvatarUrlCallback,
+    GetProfileUrlCallback,
+    AdditionalVersionInfo,
+    ElementOrigin,
+    Alignment,
+};

@@ -11,7 +11,9 @@ import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
 import type { FocusableFeedItemType } from '../../../../common/types/feed';
+import type { SelectorItems } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { Translations } from '../../flowTypes';
 
 type Props = {
     activeFeedEntryId?: string,

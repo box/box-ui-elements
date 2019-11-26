@@ -34,4 +34,23 @@ type MarkerPaginatedCollection<T> = {
     next_marker: ?string,
 };
 
-export type { InlineNoticeType, ItemType, FileMini, FolderMini, UserMini, ISODate, MarkerPaginatedCollection };
+type SelectorItem = {
+    id: string,
+    item: Object,
+    name: string,
+    value?: any,
+};
+
+type SelectorItems = Array<SelectorItem>;
+
+export type {
+    InlineNoticeType,
+    ItemType,
+    FileMini,
+    FolderMini,
+    UserMini,
+    ISODate,
+    MarkerPaginatedCollection,
+    SelectorItem,
+    SelectorItems,
+};

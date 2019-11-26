@@ -39,6 +39,7 @@ import type {
     TaskUpdatePayload,
 } from '../common/types/tasks';
 import type { ElementsXhrError, ErrorResponseData } from '../common/types/api';
+import type { SelectorItems, SelectorItem } from '../common/types/core';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 const TASK = 'task';

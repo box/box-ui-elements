@@ -10,6 +10,8 @@ import SelectorDropdown from '../../selector-dropdown';
 
 import messages from './messages';
 
+import type { SelectorItems } from '../../../common/types/core';
+
 import './MentionSelector.scss';
 
 type DefaultSelectorRowProps = {
