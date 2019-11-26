@@ -20,7 +20,7 @@ import type { ContentSidebarProps } from '../src/elements/content-sidebar';
 import type { ContentOpenWithProps } from '../src/elements/content-open-with';
 import type { ContentPreviewProps } from '../src/elements/content-preview';
 import type { FeatureConfig } from '../src/elements/common/feature-checking';
-import type { TaskNew } from '../src/common/types/tasks';
+import type { User, Order } from '../src/common/types/core';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
@@ -64,10 +64,6 @@ import {
     HTTP_DELETE,
     HTTP_OPTIONS,
     HTTP_HEAD,
-    TASK_APPROVED,
-    TASK_COMPLETED,
-    TASK_INCOMPLETE,
-    TASK_REJECTED,
     VERSION_RETENTION_DELETE_ACTION,
     VERSION_RETENTION_REMOVE_ACTION,
     VERSION_RETENTION_INDEFINITE,
@@ -117,20 +113,10 @@ type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
-type TaskAssignmentStatus =
-    | typeof TASK_APPROVED
-    | typeof TASK_COMPLETED
-    | typeof TASK_INCOMPLETE
-    | typeof TASK_REJECTED;
 
 type SharedLink = {
     access: Access,
     url: string,
-};
-
-type Order = {
-    by: SortBy,
-    direction: SortDirection,
 };
 
 type BoxItemPermission = {
@@ -143,16 +129,6 @@ type BoxItemPermission = {
     can_set_share_access?: boolean,
     can_share?: boolean,
     can_upload?: boolean,
-};
-
-type BoxCommentPermission = {
-    can_delete?: boolean,
-    can_edit?: boolean,
-};
-
-type BoxTaskPermission = {
-    can_delete?: boolean,
-    can_update?: boolean,
 };
 
 type BoxItemVersionPermission = {
@@ -176,26 +152,6 @@ type BoxItemVersionRetentionPolicy = {
     policy_name: string,
     retention_length: typeof VERSION_RETENTION_INDEFINITE | string, // length in days
     type: 'retention_policy',
-};
-
-type User = {
-    avatar_url?: string,
-    email?: string,
-    id: string,
-    login?: string,
-    name: string,
-    type: 'user',
-};
-
-type UserCollection = {
-    entries?: Array<User>,
-    isLoaded?: boolean,
-    limit?: number,
-    next_marker?: string,
-    offset?: number,
-    order?: Array<Order>,
-    previous_marker?: string,
-    total_count?: number,
 };
 
 type ActionItemError = {
@@ -593,80 +549,3 @@ type FileAccessStats = {
     has_count_overflowed: boolean,
     preview_count?: number,
 };
-
-// this is a subset of TaskNew, which imports as `any`
-type Task = {
-    created_at: string,
-    created_by: User,
-    id: string,
-    permissions: BoxTaskPermission,
-    type: 'task',
-};
-
-type Tasks = {
-    entries: Array<Task>,
-    next_marker: ?string,
-};
-
-type Comment = {
-    created_at: string,
-    created_by: User,
-    id: string,
-    is_reply_comment?: boolean,
-    message?: string,
-    modified_at: string,
-    permissions: BoxCommentPermission,
-    tagged_message: string,
-    type: 'comment',
-};
-
-type Comments = {
-    entries: Array<Comment>,
-    total_count: number,
-};
-
-type ActivityTemplateItem = {|
-    id: string,
-    type: 'activity_template',
-|};
-
-type AppItem = {|
-    icon_url: string,
-    id: string,
-    name: string,
-    type: 'app',
-|};
-
-type BaseAppActivityItem = {|
-    activity_template: ActivityTemplateItem,
-    app: AppItem,
-    created_by: User,
-    id: string,
-    rendered_text: string,
-    type: 'app_activity',
-|};
-
-type AppActivityAPIItem = {|
-    occurred_at: string,
-    ...BaseAppActivityItem,
-|};
-
-type AppActivityAPIItems = {
-    entries: Array<AppActivityAPIItem>,
-    total_count: number,
-};
-
-type AppActivityItem = {|
-    created_at: string,
-    permissions: BoxItemPermission,
-    ...BaseAppActivityItem,
-|};
-
-type AppActivityItems = {
-    entries: Array<AppActivityItem>,
-    total_count: number,
-};
-
-type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem;
-
-type FeedItems = Array<FeedItem>;

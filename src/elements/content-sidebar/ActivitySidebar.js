@@ -27,8 +27,14 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     TASK_COMPLETION_RULE_ALL,
 } from '../../constants';
-import type { TaskCompletionRule, TaskType, TaskNew, TaskUpdatePayload } from '../../common/types/tasks';
-import type { FocusableFeedItemType } from '../../common/types/feed';
+import type {
+    TaskCompletionRule,
+    TaskType,
+    TaskNew,
+    TaskUpdatePayload,
+    TaskCollabStatus,
+} from '../../common/types/tasks';
+import type { FocusableFeedItemType, FeedItems } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems } from '../../common/types/core';
@@ -240,7 +246,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
-    updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskAssignmentStatus): void => {
+    updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskCollabStatus): void => {
         const { file, api } = this.props;
 
         api.getFeedAPI(false).updateTaskCollaborator(

@@ -6,6 +6,7 @@
 
 import comparator from './comparator';
 import { getBadItemError } from './error';
+import type { Comments, Tasks, AppActivityItems, FeedItems } from '../common/types/feed';
 
 function isSortingNeeded(order?: Order[], sortBy: SortBy, sortDirection: SortDirection): boolean {
     return !Array.isArray(order) || !order.some(entry => entry.by === sortBy && entry.direction === sortDirection);
