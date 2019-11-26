@@ -13,6 +13,8 @@ import BaseMultiput from './BaseMultiput';
 
 import { HTTP_PUT } from '../../constants';
 
+import type { MultiputConfig, MultiputData } from '../../common/types/upload';
+
 const PART_STATE_NOT_STARTED: 0 = 0;
 const PART_STATE_DIGEST_READY: 1 = 1;
 const PART_STATE_UPLOADING: 2 = 2;

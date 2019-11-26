@@ -5,6 +5,14 @@
  */
 import getProp from 'lodash/get';
 
+import type {
+    UploadFile,
+    UploadFileWithAPIOptions,
+    UploadDataTransferItemWithAPIOptions,
+    UploadItemAPIOptions,
+    FileSystemFileEntry,
+} from '../common/types/upload';
+
 const DEFAULT_API_OPTIONS = {};
 
 /**

@@ -10,6 +10,7 @@ import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import IconFolderPersonal from '../../icons/folder/IconFolderPersonal';
 import ItemName from './ItemName';
 import { STATUS_ERROR } from '../../constants';
+import type { UploadStatus } from '../../common/types/upload';
 import './IconName.scss';
 
 type Props = {

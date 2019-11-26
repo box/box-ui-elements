@@ -9,6 +9,7 @@ import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentUploaderPopup from '../content-uploader/ContentUploaderPopup';
 import WrappedContentUploaderComponent from '../content-uploader/ContentUploader';
+import type { UploadFileWithAPIOptions } from '../../common/types/upload';
 
 class ContentUploader extends ES6Wrapper {
     /**

@@ -24,6 +24,7 @@ import MultiputPart, {
     PART_STATE_NOT_STARTED,
 } from './MultiputPart';
 import BaseMultiput from './BaseMultiput';
+import type { MultiputConfig } from '../../common/types/upload';
 
 // Constants used for specifying log event types.
 

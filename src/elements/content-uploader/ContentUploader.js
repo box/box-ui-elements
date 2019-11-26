@@ -45,6 +45,14 @@ import {
     STATUS_ERROR,
     ERROR_CODE_UPLOAD_FILE_LIMIT,
 } from '../../constants';
+import type {
+    UploadItem,
+    UploadDataTransferItemWithAPIOptions,
+    UploadFileWithAPIOptions,
+    UploadFile,
+    UploadItemAPIOptions,
+    UploadStatus,
+} from '../../common/types/upload';
 import '../common/fonts.scss';
 import '../common/base.scss';
 
