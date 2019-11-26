@@ -5,6 +5,7 @@
  */
 import { getTypedFileId } from '../utils/file';
 import Base from './Base';
+import type { ElementsErrorCallback } from '../common/types/api';
 
 type Params = {
     limit: number,

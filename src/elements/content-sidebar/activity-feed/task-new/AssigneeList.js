@@ -6,6 +6,7 @@ import messages from './messages';
 import AvatarGroupAvatar from './AvatarGroupAvatar';
 import AssigneeDetails from './AssigneeDetails';
 import type { TaskAssigneeCollection } from '../../../../common/types/tasks';
+import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
 
 import './AssigneeList.scss';
 

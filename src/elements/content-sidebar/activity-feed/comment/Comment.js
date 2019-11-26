@@ -19,6 +19,7 @@ import CommentForm from '../comment-form';
 import { bdlGray80 } from '../../../../styles/variables';
 import { PLACEHOLDER_USER } from '../../../../constants';
 import messages from './messages';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import './Comment.scss';
 
 type Props = {

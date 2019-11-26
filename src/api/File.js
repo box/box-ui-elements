@@ -20,6 +20,7 @@ import {
 } from '../constants';
 import Item from './Item';
 import TokenService from '../utils/TokenService';
+import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
 
 class File extends Item {
     /**

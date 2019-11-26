@@ -6,6 +6,7 @@
 
 import MarkerBasedAPI from './MarkerBasedAPI';
 import { DEFAULT_MAX_COLLABORATORS } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
 
 class FileCollaborators extends MarkerBasedAPI {
     /**

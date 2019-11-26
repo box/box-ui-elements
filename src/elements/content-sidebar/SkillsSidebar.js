@@ -25,6 +25,7 @@ import {
     ORIGIN_SKILLS_SIDEBAR,
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
+import type { WithLoggerProps } from '../../common/types/logging';
 import './SkillsSidebar.scss';
 
 type PropsWithoutContext = {

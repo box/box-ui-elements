@@ -6,6 +6,7 @@
 
 import Base from './Base';
 import { ERROR_CODE_FETCH_ACCESS_STATS } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
 
 class FileAccessStats extends Base {
     /**

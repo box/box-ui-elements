@@ -6,6 +6,7 @@
 
 import TasksBase from './TasksBase';
 import { ERROR_CODE_CREATE_TASK_LINK } from '../../constants';
+import type { ElementsXhrError } from '../../common/types/api';
 
 class TaskLinks extends TasksBase {
     getUrlForTaskLinkCreate(): string {

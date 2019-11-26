@@ -18,6 +18,7 @@ import {
     PERMISSION_CAN_DELETE,
     PERMISSION_CAN_UPLOAD,
 } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
 
 class Versions extends OffsetBasedAPI {
     /**

@@ -29,6 +29,9 @@ import {
 } from '../../constants';
 import type { TaskCompletionRule, TaskType, TaskNew, TaskUpdatePayload } from '../../common/types/tasks';
 import type { FocusableFeedItemType } from '../../common/types/feed';
+import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
+import type { WithLoggerProps } from '../../common/types/logging';
+import type { GetProfileUrlCallback } from '../common/flowTypes';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {
