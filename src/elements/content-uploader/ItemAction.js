@@ -14,6 +14,7 @@ import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
 import messages from '../common/messages';
 import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
+import type { UploadStatus } from '../../common/types/upload';
 
 import './ItemAction.scss';
 

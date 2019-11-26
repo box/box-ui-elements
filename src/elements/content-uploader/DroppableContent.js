@@ -7,6 +7,7 @@ import React from 'react';
 import makeDroppable from '../common/droppable';
 import ItemList from './ItemList';
 import UploadState from './UploadState';
+import type { UploadItem } from '../../common/types/upload';
 
 import './DroppableContent.scss';
 

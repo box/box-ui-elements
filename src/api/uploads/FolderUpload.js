@@ -12,6 +12,12 @@ import {
     getDataTransferItemAPIOptions,
 } from '../../utils/uploads';
 import FolderUploadNode from './FolderUploadNode';
+import type {
+    UploadDataTransferItemWithAPIOptions,
+    UploadFileWithAPIOptions,
+    UploadFile,
+    FileSystemFileEntry,
+} from '../../common/types/upload';
 
 const PATH_DELIMITER = '/';
 

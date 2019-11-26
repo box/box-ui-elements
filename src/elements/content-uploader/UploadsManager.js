@@ -7,9 +7,10 @@ import React from 'react';
 import classNames from 'classnames';
 import ItemList from './ItemList';
 import OverallUploadsProgressBar from './OverallUploadsProgressBar';
-import './UploadsManager.scss';
-
+import type { UploadItem } from '../../common/types/upload';
 import { STATUS_ERROR } from '../../constants';
+
+import './UploadsManager.scss';
 
 type Props = {
     isDragging: boolean,

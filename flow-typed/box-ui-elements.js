@@ -39,11 +39,6 @@ import {
     TYPE_FILE,
     TYPE_FOLDER,
     TYPE_WEBLINK,
-    STATUS_PENDING,
-    STATUS_IN_PROGRESS,
-    STATUS_STAGED,
-    STATUS_COMPLETE,
-    STATUS_ERROR,
     DELIMITER_SLASH,
     DELIMITER_CARET,
     SIZE_SMALL,
@@ -121,12 +116,6 @@ type View =
 type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE | typeof FIELD_SIZE;
 type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
-type UploadStatus =
-    | typeof STATUS_PENDING
-    | typeof STATUS_IN_PROGRESS
-    | typeof STATUS_STAGED
-    | typeof STATUS_COMPLETE
-    | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 type TaskAssignmentStatus =
@@ -537,45 +526,6 @@ type FileRepresentation = {
     },
 };
 
-type FolderUploadItem = {
-    boxFile?: BoxItem,
-    error?: Object,
-    extension: string,
-    isFolder?: boolean,
-    name: string,
-    options?: UploadItemAPIOptions,
-    progress: number,
-    size: number,
-    status: UploadStatus,
-};
-
-type UploadItem = {
-    api: PlainUploadAPI | MultiputUploadAPI,
-    boxFile?: BoxItem,
-    error?: Object,
-    extension: string,
-    file: UploadFile,
-    isFolder?: boolean,
-    name: string,
-    options?: UploadItemAPIOptions,
-    progress: number,
-    size: number,
-    status: UploadStatus,
-};
-
-type UploadItemAPIOptions = {
-    apiHost?: string,
-    fileId?: string,
-    folderId?: string,
-    token?: Token,
-    uploadInitTimestamp?: number,
-};
-
-type UploadFileWithAPIOptions = {
-    file: UploadFile,
-    options?: UploadItemAPIOptions,
-};
-
 type ModalOptions = {
     buttonClassName: string,
     buttonLabel: string,
@@ -623,26 +573,6 @@ type Recent = {
 type RecentCollection = {
     entries: Array<Recent>,
     order: Order,
-};
-
-type MultiputConfig = {
-    digestReadahead: number,
-    initialRetryDelayMs: number,
-    maxRetryDelayMs: number,
-    parallelism: number,
-    requestTimeoutMs: number,
-    retries: number,
-};
-
-type MultiputPart = {
-    offset: number,
-    part_id: string,
-    sha1: string,
-    size: number,
-};
-
-type MultiputData = {
-    part?: MultiputPart,
 };
 
 type FileVersions = {
@@ -819,22 +749,3 @@ type AdditionalSidebarTab = {
 };
 
 type Alignment = 'left' | 'right';
-
-type FileSystemFileEntry = {
-    createReader: Function,
-    file: Function,
-    isDirectory: boolean,
-    isFile: boolean,
-    name: string,
-};
-
-type UploadDataTransferItemWithAPIOptions = {
-    item: DataTransferItem,
-    options?: UploadItemAPIOptions,
-};
-
-type UploadFile = File & { lastModifiedDate?: Date, webkitRelativePath?: string };
-
-type DirectoryReader = {
-    readEntries: (Function, Function) => void,
-};
