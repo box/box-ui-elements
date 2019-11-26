@@ -15,6 +15,7 @@ import OpenWithButtonContents from './OpenWithButtonContents';
 import utils from './openWithUtils';
 import { CLASS_INTEGRATION_ICON, OPEN_WITH_BUTTON_ICON_SIZE } from '../../constants';
 import getIcon from './IconFileMap';
+import type { DisabledReason, Integration } from '../../common/types/integrations';
 
 type Props = {
     displayIntegration?: ?Integration,

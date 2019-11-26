@@ -20,6 +20,8 @@ import { bdlGray80 } from '../../../../styles/variables';
 import { PLACEHOLDER_USER } from '../../../../constants';
 import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { Translations } from '../../flowTypes';
+import type { SelectorItems } from '../../../../common/types/core';
 import './Comment.scss';
 
 type Props = {

@@ -375,7 +375,7 @@ export const VERSION_RETENTION_INDEFINITE: 'indefinite' = 'indefinite';
 export const PLACEHOLDER_USER: UserMini = { type: 'user', id: '2', name: '' };
 
 /* ------------------ Open With ------------------------- */
-export const APP_INTEGRATION = 'app_integration';
+export const APP_INTEGRATION: 'app_integration' = 'app_integration';
 export const BOX_EDIT_INTEGRATION_ID = '1338';
 export const BOX_EDIT_SFC_INTEGRATION_ID = '13418';
 export const OPEN_WITH_BUTTON_ICON_SIZE = 26;

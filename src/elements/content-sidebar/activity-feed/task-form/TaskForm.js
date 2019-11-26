@@ -37,6 +37,7 @@ import type {
 import TaskError from './TaskError';
 import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
 import type { ElementsXhrError } from '../../../../common/types/api';
+import type { SelectorItems, SelectorItem } from '../../../../common/types/core';
 
 import './TaskForm.scss';
 

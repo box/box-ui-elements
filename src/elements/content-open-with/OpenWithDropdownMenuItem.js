@@ -12,6 +12,7 @@ import messages from '../common/messages';
 import { OPEN_WITH_MENU_ITEM_ICON_SIZE } from '../../constants';
 import getIcon from './IconFileMap';
 import utils from './openWithUtils';
+import type { Integration } from '../../common/types/integrations';
 import './OpenWithDropdownMenuItem.scss';
 
 type Props = {

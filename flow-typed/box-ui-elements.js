@@ -25,7 +25,6 @@ import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
     ACCESS_COMPANY,
-    APP_INTEGRATION,
     VIEW_SEARCH,
     VIEW_FOLDER,
     VIEW_ERROR,
@@ -198,15 +197,6 @@ type UserCollection = {
     previous_marker?: string,
     total_count?: number,
 };
-
-type SelectorItem = {
-    id: string,
-    item: Object,
-    name: string,
-    value?: any,
-};
-
-type SelectorItems = Array<SelectorItem>;
 
 type ActionItemError = {
     action?: {
@@ -680,72 +670,3 @@ type AppActivityItems = {
 type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem;
 
 type FeedItems = Array<FeedItem>;
-
-type Collaborators = {
-    entries: Array<SelectorItem>,
-    next_marker: ?string,
-};
-
-type Translations = {
-    onTranslate?: Function,
-    translationEnabled?: boolean,
-};
-
-type OpenWithAPI = {
-    default_app_integration?: AppIntegrationAPIMiniItem,
-    disabled_reasons?: Array<string>,
-    is_disabled?: boolean,
-    items: Array<OpenWithAPIItem>,
-    should_show_consent_popup?: boolean,
-};
-
-type OpenWithAPIItem = {
-    app_integration: AppIntegrationAPIMiniItem,
-    disabled_reasons: Array<string>,
-    display_description: string,
-    display_name: string,
-    display_order: number,
-    is_disabled: boolean,
-    should_show_consent_popup: boolean,
-};
-
-type AppIntegrationAPIMiniItem = {
-    id: string,
-    type: APP_INTEGRATION,
-};
-
-type ExecuteAPIParam = {
-    key: string,
-    value: string,
-};
-
-type ExecuteAPI = {
-    integration_type: string,
-    method: HTTP_POST | HTTP_GET,
-    params: ?Array<ExecuteAPIParam>,
-    url: string,
-};
-
-type DisabledReason = string | React.Element<typeof FormattedMessage>;
-
-type Integration = {
-    appIntegrationId: string,
-    disabledReasons: Array<DisabledReason>,
-    displayDescription: string,
-    displayName: string,
-    displayOrder: number,
-    extension?: string,
-    isDefault: boolean,
-    isDisabled: boolean,
-    requiresConsent: boolean,
-    type: APP_INTEGRATION,
-};
-
-type AdditionalSidebarTab = {
-    callback: (callbackData: Object) => void,
-    iconUrl?: string,
-    id: number,
-    title: ?string,
-};
-
-type Alignment = 'left' | 'right';
