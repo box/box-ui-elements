@@ -17,6 +17,7 @@ import {
     ERROR_CODE_RENAME_ITEM,
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
 
 class Item extends Base {
     /**

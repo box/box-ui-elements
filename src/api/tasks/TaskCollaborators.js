@@ -13,6 +13,7 @@ import {
     ERROR_CODE_DELETE_TASK_COLLABORATOR,
     API_PAGE_LIMIT,
 } from '../../constants';
+import type { ElementsErrorCallback } from '../../common/types/api';
 
 class TaskCollaborators extends TasksBase {
     getUrlForTaskCollaborators(taskId: string): string {

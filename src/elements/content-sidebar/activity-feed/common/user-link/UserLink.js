@@ -2,6 +2,7 @@
 import * as React from 'react';
 import classnames from 'classnames';
 import { Link } from '../../../../../components/link';
+import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
 import './UserLink.scss';
 
 type Props = {

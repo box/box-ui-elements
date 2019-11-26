@@ -43,6 +43,8 @@ import AssigneeList from './AssigneeList';
 import TaskModal from '../../TaskModal';
 import commonMessages from '../../../common/messages';
 import messages from './messages';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { ElementsXhrError } from '../../../../common/types/api';
 
 import './Task.scss';
 

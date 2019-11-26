@@ -8,6 +8,8 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import { ERROR_CODE_UNEXPECTED_EXCEPTION, IS_ERROR_DISPLAYED } from '../../../constants';
 import DefaultError from './DefaultError';
+import type { ElementsXhrError, ElementsError } from '../../../common/types/api';
+import type { ElementOrigin } from '../flowTypes';
 
 type Props = {
     children: React.Element<any>,

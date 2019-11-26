@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import OpenWithButton from './OpenWithButton';
+import type { ElementsError } from '../../common/types/api';
 
 type Props = {
     error: ElementsError,

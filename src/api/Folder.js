@@ -18,6 +18,7 @@ import {
     FIELD_REPRESENTATIONS,
     X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
 } from '../constants';
+import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
 
 class Folder extends Item {
     /**

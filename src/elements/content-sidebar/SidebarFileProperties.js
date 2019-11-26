@@ -12,6 +12,7 @@ import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingI
 import getFileSize from '../../utils/getFileSize';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../common/interactionTargets';
 import withErrorHandling from './withErrorHandling';
+import type { ClassificationInfo } from './flowTypes';
 
 type Props = {
     classification?: ClassificationInfo,
