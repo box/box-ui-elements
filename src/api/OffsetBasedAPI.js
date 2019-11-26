@@ -6,6 +6,7 @@
 import { getTypedFileId } from '../utils/file';
 import Base from './Base';
 import { DEFAULT_FETCH_START, DEFAULT_FETCH_END } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
 
 type Params = {
     fields?: string,

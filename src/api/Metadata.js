@@ -28,6 +28,7 @@ import {
     ERROR_CODE_FETCH_SKILLS,
 } from '../constants';
 
+import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
 import type { MetadataTemplateSchemaResponse } from '../common/types/metadata';
 
 class Metadata extends File {

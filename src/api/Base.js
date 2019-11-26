@@ -17,6 +17,7 @@ import {
     HTTP_PUT,
     HTTP_DELETE,
 } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
 
 class Base {
     /**

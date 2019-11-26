@@ -27,6 +27,9 @@ import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
+import type { WithLoggerProps } from '../../common/types/logging';
+import type { ElementsXhrError, FetchOptions, ErrorContextProps } from '../../common/types/api';
+
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';

@@ -6,6 +6,7 @@
 
 import Base from './Base';
 import { TYPE_FILE, ERROR_CODE_EXECUTE_INTEGRATION } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
 
 class AppIntegrations extends Base {
     /**

@@ -70,20 +70,10 @@ import {
     HTTP_DELETE,
     HTTP_OPTIONS,
     HTTP_HEAD,
-    ORIGIN_CONTENT_SIDEBAR,
-    ORIGIN_PREVIEW,
-    ORIGIN_CONTENT_PREVIEW,
-    ORIGIN_DETAILS_SIDEBAR,
-    ORIGIN_ACTIVITY_SIDEBAR,
-    ORIGIN_SKILLS_SIDEBAR,
-    ORIGIN_METADATA_SIDEBAR,
     TASK_APPROVED,
     TASK_COMPLETED,
     TASK_INCOMPLETE,
     TASK_REJECTED,
-    METRIC_TYPE_PREVIEW,
-    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
-    METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC,
     VERSION_RETENTION_DELETE_ACTION,
     VERSION_RETENTION_REMOVE_ACTION,
     VERSION_RETENTION_INDEFINITE,
@@ -847,96 +837,4 @@ type UploadFile = File & { lastModifiedDate?: Date, webkitRelativePath?: string 
 
 type DirectoryReader = {
     readEntries: (Function, Function) => void,
-};
-
-type FetchOptions = {
-    fields?: Array<string>,
-    forceFetch?: boolean,
-    noPagination?: boolean,
-    refreshCache?: boolean,
-};
-
-type ErrorResponseData = {
-    code: string,
-    context_info: Object,
-    help_url: string,
-    message: string,
-    request_id: string,
-    status: number,
-    type: 'error',
-};
-
-type ElementsXhrError = $AxiosError<any> | ErrorResponseData;
-
-type ElementOrigin =
-    | typeof ORIGIN_CONTENT_SIDEBAR
-    | typeof ORIGIN_CONTENT_PREVIEW
-    | typeof ORIGIN_PREVIEW
-    | typeof ORIGIN_DETAILS_SIDEBAR
-    | typeof ORIGIN_ACTIVITY_SIDEBAR
-    | typeof ORIGIN_SKILLS_SIDEBAR
-    | typeof ORIGIN_METADATA_SIDEBAR;
-
-type ElementsError = {
-    code: string,
-    context_info: Object,
-    message: string,
-    origin: ElementOrigin,
-    type: 'error',
-};
-
-type ErrorContextProps = {
-    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin: ElementOrigin) => void,
-};
-
-type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
-
-type ClassificationInfo = {
-    definition?: string,
-    name: string,
-};
-
-type MetricType =
-    | typeof METRIC_TYPE_PREVIEW
-    | typeof METRIC_TYPE_ELEMENTS_LOAD_METRIC
-    | typeof METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC;
-
-type ElementsLoadMetricData = {
-    endMarkName: string,
-    startMarkName?: string,
-};
-
-type LoggerProps = {
-    onPreviewMetric: (data: Object) => void,
-    onReadyMetric: (data: ElementsLoadMetricData) => void,
-};
-
-type GetAvatarUrlCallback = string => Promise<?string>;
-
-type GetProfileUrlCallback = string => Promise<string>;
-
-type WithLoggerProps = {
-    logger: LoggerProps,
-};
-
-type ActivityFeedFeatures = {
-    appActivity: {
-        enabled: boolean,
-    },
-    tasks: {
-        anyTask: boolean,
-    },
-};
-
-type ContentSidebarFeatures = {
-    activityFeed?: ActivityFeedFeatures,
-} & FeatureConfig;
-
-type NavigateOptions = {
-    isToggle?: boolean,
-};
-
-type AdditionalVersionInfo = {
-    currentVersionId?: ?string,
-    updateVersionToCurrent: () => void,
 };

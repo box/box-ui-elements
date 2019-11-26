@@ -20,6 +20,7 @@ import {
     X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
     SORT_DESC,
 } from '../constants';
+import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
 
 class Recents extends Base {
     /**

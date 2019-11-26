@@ -19,6 +19,7 @@ import {
     SORT_DESC,
     ERROR_CODE_SEARCH,
 } from '../constants';
+import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
 
 class Search extends Base {
     /**
