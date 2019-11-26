@@ -5,6 +5,8 @@
  */
 
 import noop from 'lodash/noop';
+import type { $AxiosError } from 'axios';
+
 import Xhr from '../utils/Xhr';
 import Cache from '../utils/Cache';
 import { getTypedFileId } from '../utils/file';

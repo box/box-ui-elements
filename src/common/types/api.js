@@ -1,4 +1,5 @@
 // @flow
+import type { $AxiosError } from 'axios';
 import type { ElementOrigin } from '../../elements/common/flowTypes';
 
 type FetchOptions = {

@@ -3,6 +3,8 @@
  * @file Helper for the box App Activity API
  * @author Box
  */
+import type { $AxiosError } from 'axios';
+
 import MarkerBasedAPI from './MarkerBasedAPI';
 import { ERROR_CODE_DELETE_APP_ACTIVITY, HTTP_STATUS_CODE_NOT_FOUND } from '../constants';
 import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../utils/fields';
@@ -79,7 +81,7 @@ class AppActivity extends MarkerBasedAPI {
     /**
      * Generic error handler
      *
-     * @param {AxiosError} error - the error response
+     * @param {$AxiosError} error - the error response
      */
     errorHandler = (error: $AxiosError<any>): void => {
         if (this.isDestroyed() && typeof this.errorCallback !== 'function') {

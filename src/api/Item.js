@@ -6,6 +6,8 @@
 
 import noop from 'lodash/noop';
 import setProp from 'lodash/set';
+import type { $AxiosError } from 'axios';
+
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
 import Base from './Base';
 import {

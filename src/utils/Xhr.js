@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios';
-import type { $AxiosError, $AxiosXHR } from 'axios';
+import type { $AxiosError, $AxiosXHR, Axios, CancelTokenSource } from 'axios';
 import getProp from 'lodash/get';
 import includes from 'lodash/includes';
 import lowerCase from 'lodash/lowerCase';

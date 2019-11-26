@@ -9,7 +9,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor, InjectIntlProvidedProps } from 'react-intl';
-import type { $AxiosXHR, $AxiosError, Axios, CancelTokenSource } from 'axios';
 import type FolderAPI from '../src/api/Folder';
 import type FileAPI from '../src/api/File';
 import type WebLinkAPI from '../src/api/WebLink';
