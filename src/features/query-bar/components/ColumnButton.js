@@ -10,6 +10,7 @@ import IconMetadataColumns from '../../../icons/metadata-view/IconMetadataColumn
 import ColumnButtonOverlay from './ColumnButtonOverlay';
 
 import type { ColumnType } from '../flowTypes';
+import type { MetadataTemplate } from '../../../common/types/metadata';
 
 import messages from '../messages';
 

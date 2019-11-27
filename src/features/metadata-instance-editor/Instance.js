@@ -35,6 +35,14 @@ import {
 import { isValidValue } from './fields/validateField';
 import { isHidden } from './metadataUtil';
 import { RESIN_TAG_TARGET } from '../../common/variables';
+import type {
+    MetadataFields,
+    MetadataTemplate,
+    MetadataCascadePolicy,
+    MetadataCascadingPolicyData,
+    MetadataTemplateField,
+    MetadataFieldValue,
+} from '../../common/types/metadata';
 import './Instance.scss';
 
 type Props = {

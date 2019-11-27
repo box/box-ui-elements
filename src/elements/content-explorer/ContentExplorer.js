@@ -63,6 +63,7 @@ import {
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
 import type { MetadataQuery, MetadataColumnsToShow } from '../../common/types/metadataQueries';
+import type { MetadataFieldValue } from '../../common/types/metadata';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';

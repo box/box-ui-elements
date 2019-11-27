@@ -22,7 +22,13 @@ import type {
     MetadataQueryResponseEntry,
     MetadataQueryResponseEntryMetadata,
 } from '../../common/types/metadataQueries';
-import type { MetadataTemplateSchemaResponse } from '../../common/types/metadata';
+import type {
+    MetadataTemplateSchemaResponse,
+    MetadataTemplate,
+    MetadataFieldValue,
+    MetadataType,
+    MetadataQueryInstanceTypeField,
+} from '../../common/types/metadata';
 import type { ElementsXhrError } from '../../common/types/api';
 
 type SuccessCallback = (metadataQueryCollection: Collection) => void;

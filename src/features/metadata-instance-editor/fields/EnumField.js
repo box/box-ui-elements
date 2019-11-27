@@ -4,8 +4,8 @@ import { injectIntl } from 'react-intl';
 
 import Label from '../../../components/label/Label';
 import SingleSelectField from '../../../components/select-field/SingleSelectField';
-
 import messages from '../messages';
+import type { MetadataFieldValue, MetadataTemplateFieldOption } from '../../../common/types/metadata';
 import './EnumField.scss';
 
 type Option = {

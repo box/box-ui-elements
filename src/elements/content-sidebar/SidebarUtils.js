@@ -19,6 +19,7 @@ import {
     SIDEBAR_VIEW_VERSIONS,
 } from '../../constants';
 import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { MetadataEditor } from '../../common/types/metadata';
 
 class SidebarUtils {
     /**

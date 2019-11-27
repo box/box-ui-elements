@@ -1,4 +1,5 @@
 // @flow
+import type { MetadataTemplateField, MetadataTemplate } from '../../common/types/metadata';
 
 const isHidden = (obj: MetadataTemplate | MetadataTemplateField): boolean => {
     return !!obj.isHidden || !!obj.hidden;

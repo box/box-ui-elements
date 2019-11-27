@@ -21,7 +21,7 @@ import type { ContentOpenWithProps } from '../src/elements/content-open-with';
 import type { ContentPreviewProps } from '../src/elements/content-preview';
 import type { FeatureConfig } from '../src/elements/common/feature-checking';
 import type { User, Order } from '../src/common/types/core';
-import type { SkillCards } from '../src/common/types/skills';
+import type { MetadataType } from '../src/common/types/metadata';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
@@ -50,10 +50,6 @@ import {
     DEFAULT_VIEW_RECENTS,
     DEFAULT_VIEW_FILES,
     SIZE_MEDIUM,
-    SIDEBAR_VIEW_SKILLS,
-    SIDEBAR_VIEW_ACTIVITY,
-    SIDEBAR_VIEW_DETAILS,
-    SIDEBAR_VIEW_METADATA,
     HTTP_GET,
     HTTP_POST,
     HTTP_PUT,
@@ -66,11 +62,6 @@ import {
 } from '../src/constants';
 
 import {
-    FIELD_TYPE_DATE,
-    FIELD_TYPE_ENUM,
-    FIELD_TYPE_FLOAT,
-    FIELD_TYPE_MULTISELECT,
-    FIELD_TYPE_STRING,
     JSON_PATCH_OP_ADD,
     JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_REPLACE,
@@ -165,100 +156,6 @@ type OptionItem = {
 };
 
 type OptionItems = Array<OptionItem>;
-
-type MetadataSkillsTemplate = {
-    boxSkillsCards?: SkillCards,
-};
-
-type MetadataType = {
-    enterprise?: MetadataQueryInstanceTemplate,
-    global?: MetadataSkillsTemplate,
-};
-
-type MetadataQueryInstanceTypeField = {
-    name: string,
-    options?: MetadataTemplateFieldOption,
-    type: string,
-    value: ?MetadataFieldValue,
-};
-
-type MetadataQueryInstanceTemplate = {
-    fields: Array<MetadataQueryInstanceTypeField>,
-    id: string,
-};
-
-type MetadataFieldValue = string | number | Array<any>;
-
-type MetadataFields = { [string]: MetadataFieldValue };
-
-type MetadataFieldType =
-    | typeof FIELD_TYPE_DATE
-    | typeof FIELD_TYPE_ENUM
-    | typeof FIELD_TYPE_FLOAT
-    | typeof FIELD_TYPE_MULTISELECT
-    | typeof FIELD_TYPE_STRING;
-
-type MetadataTemplateFieldOption = {
-    id?: string,
-    key: string,
-};
-
-type MetadataTemplateField = {
-    description?: string,
-    displayName: string,
-    hidden?: boolean,
-    id: string,
-    isHidden?: boolean,
-    key: string, // V2
-    options?: Array<MetadataTemplateFieldOption>, // V3
-    type: MetadataFieldType,
-};
-
-type MetadataTemplate = {
-    displayName?: string,
-    fields?: Array<MetadataTemplateField>,
-    hidden?: boolean,
-    id: string,
-    isHidden?: boolean,
-    scope: string, // V2
-    templateKey: string, // V3
-};
-
-type MetadataCascadePolicy = {
-    canEdit?: boolean,
-    id?: string,
-};
-
-type MetadataCascadingPolicyData = {
-    id?: string,
-    isEnabled: boolean,
-    overwrite: boolean,
-};
-
-type MetadataInstance = {
-    canEdit: boolean,
-    cascadePolicy?: MetadataCascadePolicy,
-    data: MetadataFields,
-    id: string,
-};
-
-type MetadataInstanceV2 = {
-    $canEdit: boolean,
-    $id: string,
-    $parent: string,
-    $scope: string,
-    $template: string,
-    $type: string,
-    $typeVersion: number,
-    $version: number,
-};
-
-type MetadataEditor = {
-    hasError?: boolean,
-    instance: MetadataInstance,
-    isDirty?: boolean,
-    template: MetadataTemplate,
-};
 
 type JSONPatch = {
     op:

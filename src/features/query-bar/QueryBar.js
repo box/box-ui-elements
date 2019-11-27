@@ -6,6 +6,7 @@ import FilterButton from './components/filter/FilterButton';
 import ColumnButton from './components/ColumnButton';
 
 import type { ColumnType, ConditionType } from './flowTypes';
+import type { MetadataTemplate } from '../../common/types/metadata';
 
 import './styles/QueryBarButtons.scss';
 

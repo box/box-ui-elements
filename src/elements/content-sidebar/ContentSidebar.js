@@ -29,6 +29,7 @@ import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsXhrError, FetchOptions, ErrorContextProps } from '../../common/types/api';
+import type { MetadataEditor } from '../../common/types/metadata';
 import type { AdditionalSidebarTab } from './flowTypes';
 
 import '../common/fonts.scss';

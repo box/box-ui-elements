@@ -1,4 +1,6 @@
 // @flow
+import type { MetadataInstanceV2 } from './metadata';
+
 type MetadataQueryResponseEntryEnterprise = {
     [string]: MetadataInstanceV2,
 };

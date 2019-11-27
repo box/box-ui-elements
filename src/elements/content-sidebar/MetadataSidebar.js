@@ -35,6 +35,7 @@ import {
 } from '../../constants';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsXhrError, ErrorContextProps } from '../../common/types/api';
+import type { MetadataEditor, MetadataTemplate } from '../../common/types/metadata';
 import './MetadataSidebar.scss';
 
 type ExternalProps = {
