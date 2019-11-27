@@ -26,7 +26,7 @@ import MultiputPart, {
 import BaseMultiput from './BaseMultiput';
 import type { MultiputConfig } from '../../common/types/upload';
 import type { StringAnyMap } from '../../common/types/core';
-import type { XHROptions } from '../../common/types/api';
+import type { APIOptions } from '../../common/types/api';
 
 // Constants used for specifying log event types.
 
@@ -66,7 +66,7 @@ class MultiputUpload extends BaseMultiput {
 
     progressCallback: Function;
 
-    options: XHROptions;
+    options: APIOptions;
 
     partSize: number;
 
@@ -102,7 +102,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {Options} options
      * @param {MultiputConfig} [config]
      */
-    constructor(options: XHROptions, config?: MultiputConfig) {
+    constructor(options: APIOptions, config?: MultiputConfig) {
         super(
             options,
             {

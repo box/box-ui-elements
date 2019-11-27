@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import {
     FIELD_TYPE_DATE,
     FIELD_TYPE_ENUM,
@@ -49,6 +49,7 @@ type MetadataSkillsTemplate = {
     boxSkillsCards?: SkillCards,
 };
 
+// $FlowFixMe flow strict doesn't like use of "any"
 type MetadataFieldValue = string | number | Array<any>;
 
 type MetadataFields = { [string]: MetadataFieldValue };

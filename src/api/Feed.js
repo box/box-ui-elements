@@ -38,7 +38,7 @@ import type {
     TaskPayload,
     TaskUpdatePayload,
 } from '../common/types/tasks';
-import type { ElementsXhrError, ErrorResponseData, XHROptions } from '../common/types/api';
+import type { ElementsXhrError, ErrorResponseData, APIOptions } from '../common/types/api';
 import type {
     SelectorItems,
     SelectorItem,
@@ -101,7 +101,7 @@ class Feed extends Base {
      */
     hasError: boolean;
 
-    constructor(options: XHROptions) {
+    constructor(options: APIOptions) {
         super(options);
         this.taskCollaboratorsAPI = [];
         this.taskLinksAPI = [];

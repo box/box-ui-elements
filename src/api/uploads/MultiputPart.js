@@ -14,7 +14,7 @@ import BaseMultiput from './BaseMultiput';
 import { HTTP_PUT } from '../../constants';
 
 import type { MultiputConfig, MultiputData } from '../../common/types/upload';
-import type { XHROptions } from '../../common/types/api';
+import type { APIOptions } from '../../common/types/api';
 
 const PART_STATE_NOT_STARTED: 0 = 0;
 const PART_STATE_DIGEST_READY: 1 = 1;
@@ -85,7 +85,7 @@ class MultiputPart extends BaseMultiput {
      * @return {void}
      */
     constructor(
-        options: XHROptions,
+        options: APIOptions,
         index: number,
         offset: number,
         partSize: number,
