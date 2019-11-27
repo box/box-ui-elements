@@ -8,19 +8,18 @@ type Props = {
     children: React.Node,
     isOpen?: boolean,
     modifiers?: Modifiers,
-    placement?: Placement,
+    placement: Placement,
 };
 
 const PopperComponent = (props: Props) => {
-    const { children, isOpen, modifiers, placement: popperPlacement = PLACEMENT_AUTO } = props;
+    const { children, isOpen, modifiers, placement: popperPlacement } = props;
     const elements = React.Children.toArray(children);
 
     if (elements.length !== 2) {
         throw new Error('PopperComponent must have exactly two children: A reference component and the Popper content');
     }
 
-    const reference = elements[0];
-    const popperContent = elements[1];
+    const [reference, popperContent] = elements;
 
     return (
         <Manager>
@@ -40,6 +39,10 @@ const PopperComponent = (props: Props) => {
             )}
         </Manager>
     );
+};
+
+PopperComponent.defaultProps = {
+    placement: PLACEMENT_AUTO,
 };
 
 export default PopperComponent;
