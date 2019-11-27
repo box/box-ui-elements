@@ -217,6 +217,7 @@ class Comment extends React.Component<Props, State> {
                         )}
                     </Media.Body>
                 </Media>
+                {/* $FlowFixMe */}
                 {error ? <ActivityError {...error} /> : null}
             </div>
         );

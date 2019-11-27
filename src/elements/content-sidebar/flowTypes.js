@@ -1,4 +1,5 @@
 // @flow
+import type { MessageDescriptor } from 'react-intl';
 import type { SelectorItem } from '../../common/types/core';
 
 type ClassificationInfo = {

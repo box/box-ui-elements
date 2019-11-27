@@ -418,7 +418,6 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
-        // $FlowFixMe
         const fileAPIOptions: Object = getDataTransferItemAPIOptions(newItems[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
 
@@ -443,7 +442,6 @@ class ContentUploader extends Component<Props, State> {
         }
 
         const { rootFolderId } = this.props;
-        // $FlowFixMe
         const fileAPIOptions: Object = getFileAPIOptions(files[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
         const folderUpload = this.getFolderUploadAPI(folderId);

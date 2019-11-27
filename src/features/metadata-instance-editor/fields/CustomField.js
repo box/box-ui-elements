@@ -53,7 +53,6 @@ const CustomField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChang
 
     return (
         <div className="metadata-instance-editor-field-custom">
-            {/* $FlowFixMe */}
             <Field
                 canEdit={canEdit}
                 dataKey={dataKey}

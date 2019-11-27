@@ -28,6 +28,7 @@ import type {
     BoxItem,
     BoxItemCollection,
 } from '../common/types/core';
+import type APICache from '../utils/Cache';
 
 class Folder extends Item {
     /**

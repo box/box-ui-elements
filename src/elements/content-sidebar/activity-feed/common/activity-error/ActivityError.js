@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import type { MessageDescriptor } from 'react-intl';
 import classnames from 'classnames';
 import InlineError from '../../../../../components/inline-error';
 import PlainButton from '../../../../../components/plain-button';

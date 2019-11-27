@@ -1,4 +1,5 @@
 // @flow strict
+import type { MessageDescriptor } from 'react-intl';
 import type { User, BoxItemPermission, BoxItemVersion } from './core';
 
 // Feed item types that can receive deeplinks inline in the feed

@@ -3,6 +3,7 @@ import { HTTP_GET, HTTP_POST, HTTP_PUT, HTTP_DELETE, HTTP_OPTIONS, HTTP_HEAD } f
 import { JSON_PATCH_OP_ADD, JSON_PATCH_OP_REMOVE, JSON_PATCH_OP_REPLACE, JSON_PATCH_OP_TEST } from '../constants';
 import type { ElementOrigin } from '../../elements/common/flowTypes';
 import type { Token } from './core';
+import type APICache from '../../utils/Cache';
 
 type Method =
     | typeof HTTP_DELETE
