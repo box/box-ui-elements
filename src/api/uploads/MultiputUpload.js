@@ -488,22 +488,7 @@ class MultiputUpload extends BaseMultiput {
             logEvent: session_endpoints.log_event,
         };
 
-        // Reset uploading process for parts that were in progress when the upload failed
-        let nextUploadIndex = this.firstUnuploadedPartIndex;
-        while (this.numPartsUploading > 0) {
-            const part = this.parts[nextUploadIndex];
-            if (part && part.state === PART_STATE_UPLOADING) {
-                part.state = PART_STATE_DIGEST_READY;
-                part.numUploadRetriesPerformed = 0;
-                part.timing = {};
-                part.uploadedBytes = 0;
-
-                this.numPartsUploading -= 1;
-                this.numPartsDigestReady += 1;
-            }
-            nextUploadIndex += 1;
-        }
-
+        console.log('getSessionSuccessHandler');
         this.processNextParts();
     }
 
@@ -655,6 +640,34 @@ class MultiputUpload extends BaseMultiput {
      */
     partUploadErrorHandler = (error: Error, eventInfo: string): void => {
         this.sessionErrorHandler(error, LOG_EVENT_TYPE_PART_UPLOAD_RETRIES_EXCEEDED, eventInfo);
+        // Pause the rest of the parts.
+        // can't cancel parts because cancel destroys the part and parts are only created in createSession call
+        if (this.isResumableUploadsEnabled) {
+            // Reset uploading process for parts that were in progress when the upload failed
+            let nextUploadIndex = this.firstUnuploadedPartIndex;
+            while (this.numPartsUploading > 0) {
+                const part = this.parts[nextUploadIndex];
+                if (part && part.state === PART_STATE_UPLOADING) {
+                    part.state = PART_STATE_DIGEST_READY;
+                    part.numUploadRetriesPerformed = 0;
+                    part.timing = {};
+                    part.uploadedBytes = 0;
+                    part.pause();
+
+                    this.numPartsUploading -= 1;
+                    this.numPartsDigestReady += 1;
+                }
+                nextUploadIndex += 1;
+            }
+
+            console.log(
+                `partUploadErrorHandler numPartsUploading ${this.numPartsUploading} numPartsDigestReady ${
+                    this.numPartsDigestReady
+                }`,
+            );
+
+            // then when resuming, call part.retryupload (see uploadNextPart)
+        }
     };
 
     /**
@@ -688,6 +701,12 @@ class MultiputUpload extends BaseMultiput {
         if (this.failSessionIfFileChangeDetected()) {
             return;
         }
+
+        console.log(
+            `processNextParts numPartsUploading ${this.numPartsUploading} numPartsDigestReady ${
+                this.numPartsDigestReady
+            } numPartsUploaded ${this.numPartsUploaded}`,
+        );
 
         if (this.numPartsUploaded === this.parts.length && this.fileSha1) {
             this.commitSession();
@@ -1056,7 +1075,11 @@ class MultiputUpload extends BaseMultiput {
                 // can get called on retries
                 this.numPartsDigestReady -= 1;
                 this.numPartsUploading += 1;
-                part.upload();
+                if (part.isPaused) {
+                    part.unpause();
+                } else {
+                    part.upload();
+                }
                 break;
             }
         }

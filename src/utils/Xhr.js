@@ -458,6 +458,7 @@ class Xhr {
                 if (withIdleTimeout) {
                     // Func that aborts upload and executes timeout callback
                     const idleTimeoutFunc = () => {
+                        console.log('idleTimeoutFunc called');
                         this.abort();
 
                         if (idleTimeoutHandler) {
@@ -508,6 +509,7 @@ class Xhr {
                         successHandler(response);
                     })
                     .catch(error => {
+                        console.log('catch axios error: ' + error.message);
                         clearTimeout(idleTimeout);
                         errorHandler(error);
                     });
@@ -521,6 +523,8 @@ class Xhr {
      * @return {void}
      */
     abort(): void {
+        console.log('abort() called');
+
         if (this.retryTimeout) {
             clearTimeout(this.retryTimeout);
         }
