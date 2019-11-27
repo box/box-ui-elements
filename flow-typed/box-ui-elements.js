@@ -22,40 +22,8 @@ import type { ContentPreviewProps } from '../src/elements/content-preview';
 import type { FeatureConfig } from '../src/elements/common/feature-checking';
 import type { User, Order } from '../src/common/types/core';
 import type { MetadataType } from '../src/common/types/metadata';
+import type { Crumb } from '../src/elements/common/flowTypes';
 import {
-    ACCESS_OPEN,
-    ACCESS_COLLAB,
-    ACCESS_COMPANY,
-    VIEW_SEARCH,
-    VIEW_FOLDER,
-    VIEW_ERROR,
-    VIEW_SELECTED,
-    VIEW_RECENTS,
-    VIEW_UPLOAD_EMPTY,
-    VIEW_UPLOAD_IN_PROGRESS,
-    VIEW_UPLOAD_SUCCESS,
-    SORT_ASC,
-    SORT_DESC,
-    TYPE_FILE,
-    TYPE_FOLDER,
-    TYPE_WEBLINK,
-    DELIMITER_SLASH,
-    DELIMITER_CARET,
-    SIZE_SMALL,
-    SIZE_LARGE,
-    FIELD_DATE,
-    FIELD_NAME,
-    FIELD_SIZE,
-    FIELD_RELEVANCE,
-    DEFAULT_VIEW_RECENTS,
-    DEFAULT_VIEW_FILES,
-    SIZE_MEDIUM,
-    HTTP_GET,
-    HTTP_POST,
-    HTTP_PUT,
-    HTTP_DELETE,
-    HTTP_OPTIONS,
-    HTTP_HEAD,
     VERSION_RETENTION_DELETE_ACTION,
     VERSION_RETENTION_REMOVE_ACTION,
     VERSION_RETENTION_INDEFINITE,
@@ -67,44 +35,6 @@ import {
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
 } from '../src/features/metadata-instance-editor/constants';
-
-type Method =
-    | typeof HTTP_DELETE
-    | typeof HTTP_GET
-    | typeof HTTP_POST
-    | typeof HTTP_OPTIONS
-    | typeof HTTP_HEAD
-    | typeof HTTP_PUT;
-type Token = null | typeof undefined | string | Function;
-type TokenReadWrite = { read: string, write?: string };
-type TokenLiteral = null | typeof undefined | string | TokenReadWrite;
-type ClassComponent<P, S> = Class<React$Component<P, S>>;
-type StringMap = { [string]: string };
-type StringAnyMap = { [string]: any };
-type StringBooleanMap = { [string]: boolean };
-type NumberBooleanMap = { [number]: boolean };
-type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
-type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
-type DefaultView = typeof DEFAULT_VIEW_RECENTS | typeof DEFAULT_VIEW_FILES;
-type View =
-    | typeof VIEW_ERROR
-    | typeof VIEW_SELECTED
-    | typeof VIEW_RECENTS
-    | typeof VIEW_FOLDER
-    | typeof VIEW_SEARCH
-    | typeof VIEW_UPLOAD_EMPTY
-    | typeof VIEW_UPLOAD_IN_PROGRESS
-    | typeof VIEW_UPLOAD_SUCCESS;
-type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE | typeof FIELD_SIZE;
-type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
-type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
-type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
-type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
-
-type SharedLink = {
-    access: Access,
-    url: string,
-};
 
 type BoxItemPermission = {
     can_comment?: boolean,
@@ -139,15 +69,6 @@ type BoxItemVersionRetentionPolicy = {
     policy_name: string,
     retention_length: typeof VERSION_RETENTION_INDEFINITE | string, // length in days
     type: 'retention_policy',
-};
-
-type ActionItemError = {
-    action?: {
-        onAction: Function,
-        text: MessageDescriptor,
-    },
-    message: MessageDescriptor,
-    title: MessageDescriptor,
 };
 
 type OptionItem = {
@@ -321,26 +242,6 @@ type FileRepresentation = {
     },
 };
 
-type ModalOptions = {
-    buttonClassName: string,
-    buttonLabel: string,
-    modalClassName: string,
-    overlayClassName: string,
-};
-
-type IconType = {
-    className?: string,
-    color?: string,
-    height?: number,
-    secondaryColor?: string,
-    width?: number,
-};
-
-type Crumb = {
-    id?: string,
-    name: string,
-};
-
 type Options = {
     apiHost?: string,
     cache?: APICache,
@@ -373,28 +274,4 @@ type RecentCollection = {
 type FileVersions = {
     entries: Array<BoxItemVersion>,
     total_count: number,
-};
-
-type MaskError = {
-    errorHeader: MessageDescriptor,
-    errorSubHeader?: MessageDescriptor,
-};
-
-type InlineError = {
-    content: MessageDescriptor,
-    title: MessageDescriptor,
-};
-
-type Errors = {
-    error?: MessageDescriptor,
-    inlineError?: InlineError,
-    maskError?: MaskError,
-};
-
-type FileAccessStats = {
-    comment_count?: number,
-    download_count?: number,
-    edit_count?: number,
-    has_count_overflowed: boolean,
-    preview_count?: number,
 };

@@ -21,6 +21,7 @@ import {
     SKILLS_ERROR_UNKNOWN,
 } from '../../../constants';
 import type { SkillCard, SkillCardLocalizableType } from '../../../common/types/skills';
+import type { NumberBooleanMap } from '../../../common/types/core';
 
 type Props = {
     cards: Array<SkillCard>,

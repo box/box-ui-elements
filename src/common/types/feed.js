@@ -91,6 +91,15 @@ type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem;
 
 type FeedItems = Array<FeedItem>;
 
+type ActionItemError = {
+    action?: {
+        onAction: () => void,
+        text: MessageDescriptor,
+    },
+    message: MessageDescriptor,
+    title: MessageDescriptor,
+};
+
 export type {
     FocusableFeedItemType,
     BoxCommentPermission,
@@ -106,4 +115,5 @@ export type {
     AppActivityItems,
     FeedItem,
     FeedItems,
+    ActionItemError,
 };

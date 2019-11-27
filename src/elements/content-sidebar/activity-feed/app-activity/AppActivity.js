@@ -18,7 +18,7 @@ import messages from './messages';
 import { bdlGray80 } from '../../../../styles/variables';
 import { Link } from '../../../../components/link';
 import { MenuItem } from '../../../../components/menu';
-import type { AppItem, ActivityTemplateItem } from '../../../../common/types/feed';
+import type { AppItem, ActivityTemplateItem, ActionItemError } from '../../../../common/types/feed';
 import './AppActivity.scss';
 
 type Props = {

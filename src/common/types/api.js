@@ -1,5 +1,14 @@
 // @flow
+import { HTTP_GET, HTTP_POST, HTTP_PUT, HTTP_DELETE, HTTP_OPTIONS, HTTP_HEAD } from '../../constants';
 import type { ElementOrigin } from '../../elements/common/flowTypes';
+
+type Method =
+    | typeof HTTP_DELETE
+    | typeof HTTP_GET
+    | typeof HTTP_POST
+    | typeof HTTP_OPTIONS
+    | typeof HTTP_HEAD
+    | typeof HTTP_PUT;
 
 type FetchOptions = {
     fields?: Array<string>,
@@ -35,6 +44,7 @@ type ErrorContextProps = {
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 export type {
+    Method,
     FetchOptions,
     ErrorResponseData,
     ElementsXhrError,

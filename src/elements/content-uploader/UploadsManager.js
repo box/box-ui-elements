@@ -7,8 +7,9 @@ import React from 'react';
 import classNames from 'classnames';
 import ItemList from './ItemList';
 import OverallUploadsProgressBar from './OverallUploadsProgressBar';
-import type { UploadItem } from '../../common/types/upload';
 import { STATUS_ERROR } from '../../constants';
+import type { UploadItem } from '../../common/types/upload';
+import type { View } from '../../common/types/core';
 
 import './UploadsManager.scss';
 

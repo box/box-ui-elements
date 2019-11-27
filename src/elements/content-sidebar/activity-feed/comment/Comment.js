@@ -22,7 +22,7 @@ import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems } from '../../../../common/types/core';
-import type { BoxCommentPermission } from '../../../../common/types/feed';
+import type { BoxCommentPermission, ActionItemError } from '../../../../common/types/feed';
 import './Comment.scss';
 
 type Props = {

@@ -27,6 +27,9 @@ import OpenWithAPI from './OpenWith';
 import MetadataQueryAPI from './MetadataQuery';
 import BoxEditAPI from './box-edit';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
+import type { ItemType } from '../common/types/core';
+
+type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
 
 class APIFactory {
     /**

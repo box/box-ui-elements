@@ -39,7 +39,7 @@ import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from 
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems } from '../../common/types/core';
 import type { GetProfileUrlCallback } from '../common/flowTypes';
-import type { Translations, Collaborators } from './flowTypes';
+import type { Translations, Collaborators, Errors } from './flowTypes';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {

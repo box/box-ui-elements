@@ -5,6 +5,7 @@
  */
 
 import { TYPED_ID_FOLDER_PREFIX, TYPED_ID_FILE_PREFIX } from '../constants';
+import type { Token, TokenLiteral } from '../common/types/core';
 
 const error = new Error(
     'Bad id or auth token. ID should be typed id like file_123 or folder_123! Token should be a string or function.',

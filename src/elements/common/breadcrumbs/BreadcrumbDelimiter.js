@@ -7,6 +7,7 @@
 import React from 'react';
 import IconChevron from '../../../icons/general/IconChevron';
 import { DELIMITER_CARET, COLOR_999 } from '../../../constants';
+import type { Delimiter } from '../../../common/types/core';
 
 type Props = {
     delimiter?: Delimiter,

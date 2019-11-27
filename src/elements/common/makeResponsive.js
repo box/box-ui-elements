@@ -17,6 +17,7 @@ import {
     SIZE_SMALL,
     SIZE_VERY_LARGE,
 } from '../../constants';
+import type { Size } from '../../common/types/core';
 
 type PropsShape = {
     className: string,

@@ -25,6 +25,7 @@ import MultiputPart, {
 } from './MultiputPart';
 import BaseMultiput from './BaseMultiput';
 import type { MultiputConfig } from '../../common/types/upload';
+import type { StringAnyMap } from '../../common/types/core';
 
 // Constants used for specifying log event types.
 

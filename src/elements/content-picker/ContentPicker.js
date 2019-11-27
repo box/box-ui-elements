@@ -50,6 +50,17 @@ import {
 } from '../../constants';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
 import type { ElementsXhrError } from '../../common/types/api';
+import type {
+    View,
+    DefaultView,
+    StringAnyMap,
+    StringMap,
+    SortBy,
+    SortDirection,
+    Token,
+    Access,
+} from '../../common/types/core';
+
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -880,10 +891,12 @@ class ContentPicker extends Component<Props, State> {
     handleSharedLinkSuccess = (item: BoxItem) => {
         // if no shared link currently exists, create a shared link with enterprise default
         if (!item[FIELD_SHARED_LINK]) {
+            // $FlowFixMe
             this.changeShareAccess(null, item);
         } else {
             const { selected } = this.state;
             const { id, type } = item;
+            // $FlowFixMe
             const cacheKey = this.api.getAPI(type).getCacheKey(id);
             // if shared link already exists, update the collection in state
             this.updateItemInCollection(item);

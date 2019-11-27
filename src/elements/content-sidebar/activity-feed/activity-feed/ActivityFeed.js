@@ -19,7 +19,7 @@ import messages from './messages';
 import type { FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
 import type { SelectorItems } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations } from '../../flowTypes';
+import type { Translations, Errors } from '../../flowTypes';
 import './ActivityFeed.scss';
 
 type Props = {

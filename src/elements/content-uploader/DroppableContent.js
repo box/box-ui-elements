@@ -8,6 +8,7 @@ import makeDroppable from '../common/droppable';
 import ItemList from './ItemList';
 import UploadState from './UploadState';
 import type { UploadItem } from '../../common/types/upload';
+import type { View } from '../../common/types/core';
 
 import './DroppableContent.scss';
 

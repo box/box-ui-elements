@@ -21,6 +21,7 @@ import {
     SORT_DESC,
 } from '../constants';
 import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type { Crumb } from '../elements/common/flowTypes';
 
 class Recents extends Base {
     /**

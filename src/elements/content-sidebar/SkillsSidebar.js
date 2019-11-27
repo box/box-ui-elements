@@ -27,6 +27,7 @@ import {
 } from '../../constants';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SkillCardEntry, SkillCard } from '../../common/types/skills';
+import type { NumberBooleanMap } from '../../common/types/core';
 import './SkillsSidebar.scss';
 
 type PropsWithoutContext = {

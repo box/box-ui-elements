@@ -19,6 +19,7 @@ import {
     X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
 } from '../constants';
 import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type { SortBy, SortDirection } from '../common/types/core';
 
 class Folder extends Item {
     /**

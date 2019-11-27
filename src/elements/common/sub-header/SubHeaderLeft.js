@@ -9,6 +9,7 @@ import { injectIntl } from 'react-intl';
 import messages from '../messages';
 import { Breadcrumbs } from '../breadcrumbs';
 import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../../constants';
+import type { View } from '../../../common/types/core';
 
 type Props = {
     currentCollection: Collection,

@@ -24,6 +24,8 @@ import {
     HTTP_HEAD,
     HTTP_STATUS_CODE_RATE_LIMIT,
 } from '../constants';
+import type { Method } from '../common/types/api';
+import type { Token, StringAnyMap, StringMap } from '../common/types/core';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
