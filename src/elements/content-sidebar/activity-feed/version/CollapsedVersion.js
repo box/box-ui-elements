@@ -10,6 +10,7 @@ import PlainButton from '../../../../components/plain-button';
 import messages from '../../../common/messages';
 import selectors from '../../../common/selectors/version';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import type { User, FileVersions } from '../../../../common/types/core';
 import './Version.scss';
 
 function getMessageForAction(

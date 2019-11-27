@@ -1,6 +1,6 @@
 // @flow
 import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
-import type { Token } from './core';
+import type { Token, BoxItem } from './core';
 
 type UploadStatus =
     | typeof STATUS_PENDING

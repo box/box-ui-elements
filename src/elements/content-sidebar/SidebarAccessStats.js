@@ -14,6 +14,7 @@ import { isBoxNote } from '../../utils/file';
 import SidebarSection from './SidebarSection';
 import withErrorHandling from './withErrorHandling';
 import type { FileAccessStats } from './flowTypes';
+import type { BoxItem } from '../../common/types/core';
 
 type Props = {
     accessStats?: FileAccessStats,

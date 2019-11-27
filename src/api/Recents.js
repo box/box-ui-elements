@@ -21,7 +21,15 @@ import {
     SORT_DESC,
 } from '../constants';
 import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
-import type { Crumb } from '../elements/common/flowTypes';
+import type {
+    BoxItem,
+    FlattenedBoxItem,
+    FlattenedBoxItemCollection,
+    Collection,
+    Recent,
+    RecentCollection,
+    Crumb,
+} from '../common/types/core';
 
 class Recents extends Base {
     /**

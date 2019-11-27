@@ -21,7 +21,7 @@ import './MetadataBasedItemList.scss';
 
 import type { MetadataColumnConfig, MetadataColumnsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';
-import type { StringAnyMap } from '../../common/types/core';
+import type { StringAnyMap, Collection, BoxItem } from '../../common/types/core';
 
 import {
     CANCEL_ICON_TYPE,

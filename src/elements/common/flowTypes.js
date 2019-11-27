@@ -49,11 +49,6 @@ type ModalOptions = {
     overlayClassName: string,
 };
 
-type Crumb = {
-    id?: string,
-    name: string,
-};
-
 export type {
     ViewMode,
     ErrorType,
@@ -63,5 +58,4 @@ export type {
     ElementOrigin,
     Alignment,
     ModalOptions,
-    Crumb,
 };

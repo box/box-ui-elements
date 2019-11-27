@@ -13,6 +13,7 @@ import getFileSize from '../../utils/getFileSize';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../common/interactionTargets';
 import withErrorHandling from './withErrorHandling';
 import type { ClassificationInfo } from './flowTypes';
+import type { BoxItem } from '../../common/types/core';
 
 type Props = {
     classification?: ClassificationInfo,

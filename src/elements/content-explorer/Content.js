@@ -13,7 +13,7 @@ import MetadataBasedItemList from '../../features/metadata-based-view';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
 import type { MetadataColumnsToShow } from '../../common/types/metadataQueries';
-import type { View } from '../../common/types/core';
+import type { View, Collection } from '../../common/types/core';
 import './Content.scss';
 
 /**

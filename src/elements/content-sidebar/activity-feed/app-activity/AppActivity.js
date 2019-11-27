@@ -19,6 +19,7 @@ import { bdlGray80 } from '../../../../styles/variables';
 import { Link } from '../../../../components/link';
 import { MenuItem } from '../../../../components/menu';
 import type { AppItem, ActivityTemplateItem, ActionItemError } from '../../../../common/types/feed';
+import type { User, BoxItemPermission } from '../../../../common/types/core';
 import './AppActivity.scss';
 
 type Props = {

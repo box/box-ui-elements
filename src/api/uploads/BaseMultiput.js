@@ -5,6 +5,7 @@
  */
 import BaseUpload from './BaseUpload';
 import type { MultiputConfig } from '../../common/types/upload';
+import type { XHROptions } from '../../common/types/api';
 
 const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
     digestReadahead: 5, // How many parts past those currently uploading to precompute digest for
@@ -28,7 +29,7 @@ class BaseMultiput extends BaseUpload {
      * @param {MultiputConfig} [config]
      * @return {void}
      */
-    constructor(options: Options, sessionEndpoints: Object, config?: MultiputConfig): void {
+    constructor(options: XHROptions, sessionEndpoints: Object, config?: MultiputConfig): void {
         super({
             ...options,
             shouldRetry: false, // disable XHR retries as there is already retry logic

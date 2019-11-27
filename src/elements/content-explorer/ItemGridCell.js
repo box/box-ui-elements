@@ -5,6 +5,7 @@ import MoreOptions from './MoreOptions';
 import Name from '../common/item/Name';
 import type { ItemGridProps } from './flowTypes';
 import './ItemGridCell.scss';
+import type { BoxItem } from '../../common/types/core';
 
 type Props = {
     item: BoxItem,

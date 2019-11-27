@@ -19,6 +19,7 @@ import Logo from '../../common/header/Logo';
 import messages from '../../common/messages';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import { bdlGray50 } from '../../../styles/variables';
+import type { BoxItem, BoxItemVersion } from '../../../common/types/core';
 
 import './PreviewHeader.scss';
 

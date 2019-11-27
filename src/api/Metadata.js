@@ -28,7 +28,7 @@ import {
     ERROR_CODE_FETCH_SKILLS,
 } from '../constants';
 
-import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type { FetchOptions, ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
 import type {
     MetadataTemplateSchemaResponse,
     MetadataTemplate,
@@ -36,6 +36,7 @@ import type {
     MetadataEditor,
     MetadataFields,
 } from '../common/types/metadata';
+import type { BoxItem } from '../common/types/core';
 
 class Metadata extends File {
     /**

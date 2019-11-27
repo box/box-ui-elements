@@ -59,6 +59,9 @@ import type {
     SortDirection,
     Token,
     Access,
+    BoxItemPermission,
+    BoxItem,
+    Collection,
 } from '../../common/types/core';
 
 import '../common/fonts.scss';

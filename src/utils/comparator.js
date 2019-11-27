@@ -13,7 +13,7 @@ import {
     FIELD_NAME,
     FIELD_SIZE,
 } from '../constants';
-import type { SortBy, SortDirection, ItemType } from '../common/types/core';
+import type { SortBy, SortDirection, ItemType, BoxItem } from '../common/types/core';
 
 /**
  * Comparator function for sorting files and folders

@@ -14,6 +14,7 @@ import IconNavigateLeft from '../../icons/general/IconNavigateLeft';
 import IconNavigateRight from '../../icons/general/IconNavigateRight';
 import PlainButton from '../../components/plain-button/PlainButton';
 import messages from '../common/messages';
+import type { BoxItem } from '../../common/types/core';
 
 type Props = {
     collection: Array<string | BoxItem>,

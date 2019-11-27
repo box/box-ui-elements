@@ -11,7 +11,7 @@ import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
 import type { FocusableFeedItemType, FeedItem, FeedItems } from '../../../../common/types/feed';
-import type { SelectorItems } from '../../../../common/types/core';
+import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 

@@ -37,7 +37,7 @@ import type {
 import type { FocusableFeedItemType, FeedItems } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
-import type { SelectorItems } from '../../common/types/core';
+import type { SelectorItems, User, BoxItem, BoxItemPermission } from '../../common/types/core';
 import type { GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations, Collaborators, Errors } from './flowTypes';
 import './ActivitySidebar.scss';

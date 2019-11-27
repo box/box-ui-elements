@@ -17,7 +17,7 @@ import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
 import type { FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
-import type { SelectorItems } from '../../../../common/types/core';
+import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations, Errors } from '../../flowTypes';
 import './ActivityFeed.scss';

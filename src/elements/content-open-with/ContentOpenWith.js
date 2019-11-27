@@ -36,7 +36,7 @@ import {
 } from '../../constants';
 import type { Alignment } from '../common/flowTypes';
 import type { ExecuteAPI, Integration } from '../../common/types/integrations';
-import type { StringMap, Token } from '../../common/types/core';
+import type { StringMap, Token, BoxItem } from '../../common/types/core';
 
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';

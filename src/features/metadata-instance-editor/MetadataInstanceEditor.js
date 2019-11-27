@@ -7,6 +7,7 @@ import Header from './Header';
 import Instances from './Instances';
 import EmptyContent from './EmptyContent';
 import type { MetadataEditor, MetadataTemplate, MetadataCascadingPolicyData } from '../../common/types/metadata';
+import type { JSONPatchOperations } from '../../common/types/api';
 import './MetadataInstanceEditor.scss';
 
 type Props = {

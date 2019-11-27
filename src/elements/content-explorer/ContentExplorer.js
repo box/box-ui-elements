@@ -64,7 +64,18 @@ import {
 import type { ViewMode } from '../common/flowTypes';
 import type { MetadataQuery, MetadataColumnsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';
-import type { View, DefaultView, StringMap, SortBy, SortDirection, Token, Access } from '../../common/types/core';
+import type {
+    View,
+    DefaultView,
+    StringMap,
+    SortBy,
+    SortDirection,
+    Token,
+    Access,
+    Collection,
+    BoxItemPermission,
+    BoxItem,
+} from '../../common/types/core';
 
 import '../common/fonts.scss';
 import '../common/base.scss';
