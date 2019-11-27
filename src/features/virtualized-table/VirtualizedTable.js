@@ -1,14 +1,10 @@
 // @flow
 import * as React from 'react';
 import type { Node } from 'react';
-
 import { AutoSizer } from 'react-virtualized/dist/es/AutoSizer/index';
 import { WindowScroller } from 'react-virtualized/dist/es/WindowScroller/index';
-
 import BaseVirtualizedTable from './BaseVirtualizedTable';
-
 import type { SortParams } from './flowTypes';
-
 import './VirtualizedTable.scss';
 
 type SortHandler = SortParams => void;

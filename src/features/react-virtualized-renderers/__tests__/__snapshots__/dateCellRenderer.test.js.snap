@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`features/react-virtualized-renderers/dateCellRenderer should render a DateCell with formatted date 1`] = `"FORMATTED: 2019-07-18T13:45:09-07:00"`;

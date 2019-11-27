@@ -87,30 +87,10 @@ const messages = defineMessages({
         description: 'Error message for when an invalid user is entered',
         id: 'boxui.validation.invalidUserError',
     },
-    anonymousUser: {
-        defaultMessage: 'Anonymous User',
-        description: 'The user is a anonymous user',
-        id: 'boxui.validation.anonymousUser',
-    },
     requiredFieldError: {
         defaultMessage: 'Required Field',
         description: 'Error message for when a required field is missing',
         id: 'boxui.validation.requiredError',
-    },
-    externalFile: {
-        defaultMessage: 'External File',
-        description: 'Text to show when a file is external',
-        id: 'boxui.validation.externalFile',
-    },
-    externalFolder: {
-        defaultMessage: 'External Folder',
-        description: 'Text to show when a folder is external',
-        id: 'boxui.validation.externalFolder',
-    },
-    allFiles: {
-        defaultMessage: 'All Files',
-        description: 'Text to show for root folder is external',
-        id: 'boxui.validation.allFiles',
     },
 });
 

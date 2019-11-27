@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/cell-renderers/fileNameCellRenderer should render a FileNameCell 1`] = `
+<span
+  className="bdl-FileNameCell"
+  title="fancy.jpg"
+>
+  <FileIcon
+    dimension={32}
+    extension="jpg"
+  />
+  <Link
+    className="bdl-FileNameCell-link"
+    href="/file/123"
+    rel="noopener noreferrer"
+    target="_blank"
+  >
+    fancy.jpg
+  </Link>
+</span>
+`;
+
+exports[`features/cell-renderers/fileNameCellRenderer should render external file name when isExternal is true 1`] = `
+<span
+  className="bdl-FileNameCell"
+  title={
+    <FormattedMessage
+      defaultMessage="External File"
+      id="boxui.features.CellRenderers.externalFile"
+    />
+  }
+>
+  <FileIcon
+    dimension={32}
+    extension="jpg"
+  />
+  <Link
+    className="bdl-FileNameCell-link is-external"
+    href="/file/123"
+    rel="noopener noreferrer"
+    target="_blank"
+  >
+    <FormattedMessage
+      defaultMessage="External File"
+      id="boxui.features.CellRenderers.externalFile"
+    />
+  </Link>
+</span>
+`;

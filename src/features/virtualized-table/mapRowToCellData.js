@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
-
-import type { CellRendererParams } from '../react-virtualized-renderers';
+import type { CellRendererParams } from '../cell-renderers';
 
 const mapRowToCellData = (cellRenderer: CellRendererParams => React.Node, ...rowKeys: string[]) => (
     cellRendererParams: CellRendererParams,

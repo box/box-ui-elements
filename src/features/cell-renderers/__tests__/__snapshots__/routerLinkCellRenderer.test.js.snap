@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/cell-renderers/routerLinkCellRenderer should successfully render a Router Link Cell 1`] = `
+<span
+  className="VirtualizedTable-routerLinkCell"
+>
+  <Link
+    className="VirtualizedTable-link"
+    onClick={[Function]}
+    title="label"
+    to="to"
+  >
+    label
+  </Link>
+</span>
+`;

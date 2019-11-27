@@ -3,14 +3,11 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { Table } from 'react-virtualized/dist/es/Table/index';
-
 import { DEFAULT_PAGE_SIZE } from '../../constants';
-
 import { VIRTUALIZED_TABLE_DEFAULTS } from './constants';
-import loadingRowRenderer from '../react-virtualized-renderers/loadingRowRenderer';
-
+import loadingRowRenderer from '../cell-renderers/loadingRowRenderer';
 import type { SortParams } from './flowTypes';
-import type { RowRendererParams } from '../react-virtualized-renderers';
+import type { RowRendererParams } from '../cell-renderers';
 
 const { HEADER_HEIGHT, ROW_HEIGHT, TAB_INDEX } = VIRTUALIZED_TABLE_DEFAULTS;
 
@@ -69,7 +66,7 @@ class BaseVirtualizedTable extends React.PureComponent<Props> {
         return (
             <Table
                 ref={tableRef}
-                className={classNames('VirtualizedTable', className)}
+                className={classNames('bdl-VirtualizedTable', className)}
                 headerHeight={HEADER_HEIGHT}
                 rowCount={displayRowData.length}
                 rowGetter={getRow}

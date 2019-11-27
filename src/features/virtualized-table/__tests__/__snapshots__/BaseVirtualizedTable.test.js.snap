@@ -2,7 +2,7 @@
 
 exports[`features/virtualized-table/BaseVirtualizedTable should successfully render a BaseVirtualizedTable 1`] = `
 <Table
-  className="VirtualizedTable className"
+  className="bdl-VirtualizedTable className"
   disableHeader={false}
   estimatedRowSize={30}
   headerHeight={39}

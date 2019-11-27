@@ -27,7 +27,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
 exports[`features/virtualized-table/VirtualizedTable should successfully render a VirtualizedTable 3`] = `
 <Table
   autoHeight={true}
-  className="VirtualizedTable"
+  className="bdl-VirtualizedTable"
   disableHeader={false}
   estimatedRowSize={30}
   headerHeight={39}
@@ -94,7 +94,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
 
 exports[`features/virtualized-table/VirtualizedTable should successfully render a VirtualizedTable with fixed height 2`] = `
 <Table
-  className="VirtualizedTable"
+  className="bdl-VirtualizedTable"
   disableHeader={false}
   estimatedRowSize={30}
   headerHeight={39}
