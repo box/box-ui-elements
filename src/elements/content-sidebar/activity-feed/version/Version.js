@@ -16,6 +16,7 @@ import {
     VERSION_PROMOTE_ACTION,
     VERSION_RESTORE_ACTION,
 } from '../../../../constants';
+import type { User } from '../../../../common/types/core';
 import './Version.scss';
 
 type Props = {

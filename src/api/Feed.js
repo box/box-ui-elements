@@ -38,8 +38,17 @@ import type {
     TaskPayload,
     TaskUpdatePayload,
 } from '../common/types/tasks';
-import type { ElementsXhrError, ErrorResponseData } from '../common/types/api';
-import type { SelectorItems, SelectorItem } from '../common/types/core';
+import type { ElementsXhrError, ErrorResponseData, APIOptions } from '../common/types/api';
+import type {
+    SelectorItems,
+    SelectorItem,
+    BoxItem,
+    BoxItemPermission,
+    BoxItemVersion,
+    FileVersions,
+    User,
+} from '../common/types/core';
+import type { Comment, Comments, Tasks, Task, FeedItem, FeedItems, AppActivityItems } from '../common/types/feed';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 const TASK = 'task';
@@ -92,7 +101,7 @@ class Feed extends Base {
      */
     hasError: boolean;
 
-    constructor(options: Options) {
+    constructor(options: APIOptions) {
         super(options);
         this.taskCollaboratorsAPI = [];
         this.taskLinksAPI = [];

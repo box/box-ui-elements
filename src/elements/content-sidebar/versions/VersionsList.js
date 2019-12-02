@@ -7,6 +7,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import VersionsItem from './VersionsItem';
+import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsList.scss';
 
 type Props = {

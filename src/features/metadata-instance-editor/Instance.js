@@ -23,18 +23,25 @@ import CustomInstance from './CustomInstance';
 import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
 import Footer from './Footer';
 import messages from './messages';
+import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER, TEMPLATE_CUSTOM_PROPERTIES } from './constants';
 import {
-    FIELD_TYPE_FLOAT,
-    FIELD_TYPE_INTEGER,
-    TEMPLATE_CUSTOM_PROPERTIES,
     JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_ADD,
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
-} from './constants';
+} from '../../common/constants';
 import { isValidValue } from './fields/validateField';
 import { isHidden } from './metadataUtil';
 import { RESIN_TAG_TARGET } from '../../common/variables';
+import type {
+    MetadataFields,
+    MetadataTemplate,
+    MetadataCascadePolicy,
+    MetadataCascadingPolicyData,
+    MetadataTemplateField,
+    MetadataFieldValue,
+} from '../../common/types/metadata';
+import type { JSONPatchOperations } from '../../common/types/api';
 import './Instance.scss';
 
 type Props = {

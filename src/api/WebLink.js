@@ -8,6 +8,7 @@ import Item from './Item';
 import { CACHE_PREFIX_WEBLINK, ERROR_CODE_FETCH_WEBLINK } from '../constants';
 import { findMissingProperties } from '../utils/fields';
 import type { FetchOptions } from '../common/types/api';
+import type { BoxItem } from '../common/types/core';
 
 class WebLink extends Item {
     /**

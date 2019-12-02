@@ -8,6 +8,8 @@ import type { SelectOptionProp } from '../../../components/select-field/props';
 
 import messages from '../messages';
 
+import type { MetadataFieldValue, MetadataTemplateFieldOption } from '../../../common/types/metadata';
+
 import './MultiSelectField.scss';
 
 type Props = {

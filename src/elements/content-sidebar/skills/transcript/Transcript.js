@@ -21,6 +21,7 @@ import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import messages from '../../../common/messages';
 import { isValidTimeSlice } from './timeSliceUtils';
 import TranscriptRow from './TranscriptRow';
+import type { SkillCardEntry, SkillCard, SkillCardEntryTimeSlice } from '../../../../common/types/skills';
 import './Transcript.scss';
 
 type Props = {

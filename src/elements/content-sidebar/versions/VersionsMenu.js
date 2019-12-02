@@ -10,6 +10,7 @@ import { injectIntl, type intlShape } from 'react-intl';
 import * as util from '../../../utils/datetime';
 import messages from './messages';
 import VersionsGroup from './VersionsGroup';
+import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsMenu.scss';
 
 type Props = {

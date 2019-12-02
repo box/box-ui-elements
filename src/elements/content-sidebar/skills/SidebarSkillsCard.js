@@ -10,6 +10,7 @@ import Transcript from './transcript';
 import Keywords from './keywords';
 import Faces from './faces';
 import { SKILLS_TRANSCRIPT, SKILLS_KEYWORD, SKILLS_TIMELINE, SKILLS_FACE, SKILLS_STATUS } from '../../../constants';
+import type { SkillCard } from '../../../common/types/skills';
 
 type Props = {
     card: SkillCard,

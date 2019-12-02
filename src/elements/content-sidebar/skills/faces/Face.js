@@ -11,6 +11,7 @@ import IconClose from '../../../../icons/general/IconClose';
 import IconMinus from '../../../../icons/general/IconMinus';
 import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import { COLOR_999, COLOR_WHITE } from '../../../../constants';
+import type { SkillCardEntry } from '../../../../common/types/skills';
 
 import './Face.scss';
 

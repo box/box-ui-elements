@@ -10,6 +10,8 @@ import ES6Wrapper from './ES6Wrapper';
 import ContentUploaderPopup from '../content-uploader/ContentUploaderPopup';
 import WrappedContentUploaderComponent from '../content-uploader/ContentUploader';
 import type { UploadFileWithAPIOptions } from '../../common/types/upload';
+import type { BoxItem } from '../../common/types/core';
+import type { ModalOptions } from '../common/flowTypes';
 
 class ContentUploader extends ES6Wrapper {
     /**

@@ -53,6 +53,7 @@ import type {
     UploadItemAPIOptions,
     UploadStatus,
 } from '../../common/types/upload';
+import type { StringMap, Token, View, BoxItem } from '../../common/types/core';
 import '../common/fonts.scss';
 import '../common/base.scss';
 

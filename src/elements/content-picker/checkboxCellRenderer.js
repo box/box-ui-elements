@@ -7,6 +7,7 @@
 import React from 'react';
 import Checkbox from '../../components/checkbox/Checkbox';
 import isRowSelectable from './cellRendererHelper';
+import type { BoxItem } from '../../common/types/core';
 
 export default (
     onItemSelect: Function,

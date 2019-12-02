@@ -9,6 +9,7 @@ import PlainButton from '../../../components/plain-button/PlainButton';
 import DropdownMenu from '../../../components/dropdown-menu/DropdownMenu';
 import Menu from '../../../components/menu/Menu';
 import MenuItem from '../../../components/menu/MenuItem';
+import type { Crumb } from '../../../common/types/core';
 import './BreadcrumbDropdown.scss';
 
 type Props = {

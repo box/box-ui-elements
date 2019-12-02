@@ -5,6 +5,7 @@
  */
 
 import type { Pill } from './flowTypes';
+import type { SkillCardEntry } from '../../../../common/types/skills';
 
 /**
  * Converts skill card entries into pills

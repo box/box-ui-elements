@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import TextField from './TextField';
 import { isValidValue } from './validateField';
+import type { MetadataFieldValue } from '../../../common/types/metadata';
 
 type Props = {
     dataKey: string,

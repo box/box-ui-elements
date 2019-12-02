@@ -21,6 +21,7 @@ import {
 import Item from './Item';
 import TokenService from '../utils/TokenService';
 import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type { BoxItem, BoxItemVersion } from '../common/types/core';
 
 class File extends Item {
     /**

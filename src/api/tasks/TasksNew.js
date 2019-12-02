@@ -14,6 +14,7 @@ import {
 } from '../../constants';
 import type { TaskUpdatePayload } from '../../common/types/tasks';
 import type { ElementsXhrError, ElementsErrorCallback } from '../../common/types/api';
+import type { BoxItem } from '../../common/types/core';
 
 class TasksNew extends TasksBase {
     getUrlForFileTasks(id: string): string {
