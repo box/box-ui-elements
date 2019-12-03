@@ -37,7 +37,7 @@ const messages = defineMessages({
         id: 'boxui.securityControls.shortDownloadApp',
     },
     shortAllRestrictions: {
-        defaultMessage: 'Sharing, download and app and restrictions apply',
+        defaultMessage: 'Sharing, download and app restrictions apply',
         description:
             'Short summary displayed for classification when sharing, download and app download restrictions are applied to it',
         id: 'boxui.securityControls.shortAllRestrictions',

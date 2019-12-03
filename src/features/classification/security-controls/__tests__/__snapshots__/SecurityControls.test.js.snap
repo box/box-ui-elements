@@ -58,7 +58,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     key="0"
     message={
       Object {
-        "defaultMessage": "Sharing, download and app and restrictions apply",
+        "defaultMessage": "Sharing, download and app restrictions apply",
         "id": "boxui.securityControls.shortAllRestrictions",
       }
     }
@@ -97,7 +97,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     key="0"
     message={
       Object {
-        "defaultMessage": "Sharing, download and app and restrictions apply",
+        "defaultMessage": "Sharing, download and app restrictions apply",
         "id": "boxui.securityControls.shortAllRestrictions",
       }
     }
