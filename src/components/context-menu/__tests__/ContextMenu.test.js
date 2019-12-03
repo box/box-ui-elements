@@ -30,6 +30,18 @@ describe('components/context-menu/ContextMenu', () => {
     });
 
     describe('render()', () => {
+        test('should pass className to the target div', () => {
+            const className = 'context-menu';
+            const wrapper = shallow(
+                <ContextMenu className={className}>
+                    <FakeButton />
+                    <FakeMenu />
+                </ContextMenu>,
+            );
+
+            expect(wrapper.find(FakeButton).prop('className')).toBe('context-menu');
+        });
+
         test('should throw an error when passed less than 2 children', () => {
             expect(() => {
                 shallow(

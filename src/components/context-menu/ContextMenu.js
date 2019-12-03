@@ -8,6 +8,8 @@ import './ContextMenu.scss';
 type Props = {
     /** A target component to attach to and a menu */
     children: React.Node,
+    /** CSS class for the target div */
+    className?: string,
     /**
      * An array of tether constraints
      *
@@ -132,7 +134,7 @@ class ContextMenu extends React.Component<Props, State> {
     };
 
     render() {
-        const { children, constraints } = this.props;
+        const { children, className, constraints } = this.props;
         const { isOpen, targetOffset } = this.state;
 
         const elements = React.Children.toArray(children);
@@ -146,6 +148,7 @@ class ContextMenu extends React.Component<Props, State> {
 
         const menuTargetProps = {
             id: this.menuTargetID,
+            className,
             key: this.menuTargetID,
             onContextMenu: this.handleContextMenu,
         };
