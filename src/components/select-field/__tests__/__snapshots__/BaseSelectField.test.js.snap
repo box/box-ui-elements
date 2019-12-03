@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/select-field/BaseSelectField renderSelectButton() should send error to select button when error has some value 1`] = `
-<SelectButton
+<ForwardRef
   aria-activedescendant={null}
   aria-autocomplete="list"
   aria-expanded={false}
