@@ -5,6 +5,7 @@
  */
 import API from '../../../api';
 import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../utils/fields';
+import type { BoxItem, FileVersions, BoxItemVersion } from '../../../common/types/core';
 
 export type fetchPayload = [BoxItem, FileVersions];
 

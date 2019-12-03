@@ -22,8 +22,15 @@ import type {
     MetadataQueryResponseEntry,
     MetadataQueryResponseEntryMetadata,
 } from '../../common/types/metadataQueries';
-import type { MetadataTemplateSchemaResponse } from '../../common/types/metadata';
-import type { ElementsXhrError } from '../../common/types/api';
+import type {
+    MetadataTemplateSchemaResponse,
+    MetadataTemplate,
+    MetadataFieldValue,
+    MetadataType,
+    MetadataQueryInstanceTypeField,
+} from '../../common/types/metadata';
+import type { ElementsXhrError, JSONPatchOperations } from '../../common/types/api';
+import type { Collection, BoxItem } from '../../common/types/core';
 
 type SuccessCallback = (metadataQueryCollection: Collection) => void;
 type ErrorCallback = (e: ElementsXhrError) => void;

@@ -13,6 +13,7 @@ import {
     HTTP_STATUS_CODE_SERVICE_UNAVAILABLE,
     HTTP_STATUS_CODE_GATEWAY_TIMEOUT,
 } from '../../constants';
+import type { APIOptions } from '../../common/types/api';
 
 const RETRYABLE = [
     HTTP_STATUS_CODE_RATE_LIMIT,
@@ -24,7 +25,7 @@ const RETRYABLE = [
 ];
 
 class TasksBase extends Base {
-    constructor({ retryableStatusCodes = RETRYABLE, ...options }: Options) {
+    constructor({ retryableStatusCodes = RETRYABLE, ...options }: APIOptions) {
         super({ ...options, retryableStatusCodes });
     }
 }

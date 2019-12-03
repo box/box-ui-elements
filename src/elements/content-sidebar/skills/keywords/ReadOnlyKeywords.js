@@ -10,6 +10,7 @@ import { SKILLS_TARGETS, INTERACTION_TARGET } from '../../../common/interactionT
 import Timeline from '../timeline';
 import getPills from './keywordUtils';
 import type { Pill, Pills } from './flowTypes';
+import type { SkillCardEntry } from '../../../../common/types/skills';
 import './ReadOnlyKeywords.scss';
 
 type Props = {

@@ -13,6 +13,7 @@ import {
     VERSION_RETENTION_INDEFINITE,
 } from '../../../constants';
 import messages from './messages';
+import type { BoxItemVersionRetention } from '../../../common/types/core';
 
 type Props = {
     retention?: BoxItemVersionRetention,

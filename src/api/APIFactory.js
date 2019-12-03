@@ -27,12 +27,16 @@ import OpenWithAPI from './OpenWith';
 import MetadataQueryAPI from './MetadataQuery';
 import BoxEditAPI from './box-edit';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
+import type { ItemType } from '../common/types/core';
+import type { APIOptions } from '../common/types/api';
+
+type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
 
 class APIFactory {
     /**
      * @property {*}
      */
-    options: Options;
+    options: APIOptions;
 
     /**
      * @property {FileAPI}
@@ -151,7 +155,7 @@ class APIFactory {
      * @param {string} [options.uploadHost] - Upload host name
      * @return {API} Api instance
      */
-    constructor(options: Options) {
+    constructor(options: APIOptions) {
         this.options = {
             ...options,
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,

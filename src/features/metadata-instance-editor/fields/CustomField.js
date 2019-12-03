@@ -6,9 +6,9 @@ import Button from '../../../components/button/Button';
 import ButtonGroup from '../../../components/button-group/ButtonGroup';
 import IconMinus from '../../../icons/general/IconMinusThin';
 import IconPlus from '../../../icons/general/IconPlusThin';
-
 import Field from './Field';
 import messages from '../messages';
+import type { MetadataFieldValue } from '../../../common/types/metadata';
 import './CustomField.scss';
 
 type Props = {

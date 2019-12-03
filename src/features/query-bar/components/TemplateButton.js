@@ -8,10 +8,9 @@ import MetadataActiveBadge from '../../../icons/badges/MetadataActiveBadge';
 import TemplateDropdown from '../../metadata-instance-editor/TemplateDropdown';
 import Button from '../../../components/button/Button';
 import MenuToggle from '../../../components/dropdown-menu/MenuToggle';
-
 import messages from '../messages';
-
 import LoadingIndicator from '../../../components/loading-indicator';
+import type { MetadataTemplate } from '../../../common/types/metadata';
 
 type State = {
     isTemplateMenuOpen: boolean,

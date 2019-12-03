@@ -6,6 +6,7 @@
 
 import getProp from 'lodash/get';
 import { TYPED_ID_FILE_PREFIX, TYPED_ID_FOLDER_PREFIX, FILE_EXTENSION_BOX_NOTE } from '../constants';
+import type { BoxItem } from '../common/types/core';
 
 const FILE_EXT_REGEX = /\.([0-9a-z]+)$/i; // Case insensitive regex to extract file extension without "."
 

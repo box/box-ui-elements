@@ -9,6 +9,7 @@ import VersionHistoryLink from '../../features/item-details/VersionHistoryLink';
 
 import { DETAILS_TARGETS } from '../common/interactionTargets';
 import { isBoxNote } from '../../utils/file';
+import type { BoxItem } from '../../common/types/core';
 import './SidebarVersions.scss';
 
 type Props = {

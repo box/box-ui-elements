@@ -9,6 +9,7 @@ import FileIcon from '../../../icons/file-icon/FileIcon';
 import FolderIcon from '../../../icons/folder-icon/FolderIcon';
 import BookmarkIcon from '../../../icons/bookmark-icon/BookmarkIcon';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../../../constants';
+import type { BoxItem } from '../../../common/types/core';
 
 import './IconCell.scss';
 

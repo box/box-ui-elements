@@ -13,6 +13,8 @@ import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../common/
 import { isBoxNote } from '../../utils/file';
 import SidebarSection from './SidebarSection';
 import withErrorHandling from './withErrorHandling';
+import type { FileAccessStats } from './flowTypes';
+import type { BoxItem } from '../../common/types/core';
 
 type Props = {
     accessStats?: FileAccessStats,
@@ -24,7 +26,11 @@ type Props = {
 const SidebarAccessStats = ({
     onAccessStatsClick,
     accessStats = {
+        comment_count: undefined,
+        download_count: undefined,
+        edit_count: undefined,
         has_count_overflowed: false,
+        preview_count: undefined,
     },
     file,
     error,

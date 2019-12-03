@@ -42,6 +42,13 @@ type ElementOrigin =
 
 type Alignment = 'left' | 'right';
 
+type ModalOptions = {
+    buttonClassName: string,
+    buttonLabel: string,
+    modalClassName: string,
+    overlayClassName: string,
+};
+
 export type {
     ViewMode,
     ErrorType,
@@ -50,4 +57,5 @@ export type {
     AdditionalVersionInfo,
     ElementOrigin,
     Alignment,
+    ModalOptions,
 };

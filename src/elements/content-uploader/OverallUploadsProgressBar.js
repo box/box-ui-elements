@@ -9,6 +9,7 @@ import messages from '../common/messages';
 import ProgressBar from './ProgressBar';
 import UploadsManagerItemAction from './UploadsManagerAction';
 import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR, VIEW_UPLOAD_EMPTY } from '../../constants';
+import type { View } from '../../common/types/core';
 
 import './OverallUploadsProgressBar.scss';
 

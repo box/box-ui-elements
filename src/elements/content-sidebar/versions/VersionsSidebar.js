@@ -13,6 +13,7 @@ import VersionsMenu from './VersionsMenu';
 import { BackButton } from '../../common/nav-button';
 import { DEFAULT_FETCH_END } from '../../../constants';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
+import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsSidebar.scss';
 
 const MAX_VERSIONS = DEFAULT_FETCH_END;

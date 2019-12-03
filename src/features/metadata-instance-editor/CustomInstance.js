@@ -6,6 +6,7 @@ import CustomNewField from './CustomInstanceNewField';
 import CustomField from './fields/CustomField';
 import EmptyContent from './EmptyContent';
 import { FIELD_TYPE_STRING } from './constants';
+import type { MetadataFieldValue, MetadataFields } from '../../common/types/metadata';
 
 type Props = {
     canEdit: boolean,

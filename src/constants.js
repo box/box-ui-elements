@@ -5,7 +5,6 @@
  */
 
 import Browser from './utils/Browser';
-import type { UserMini } from './common/types/core';
 
 /* ------------------------ API ---------------------------- */
 export const API_PAGE_LIMIT = 1000; // default limit for paginated api calls
@@ -157,7 +156,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '2.26.1';
+export const DEFAULT_PREVIEW_VERSION = '2.29.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -372,7 +371,7 @@ export const VERSION_RETENTION_REMOVE_ACTION: 'remove_retention' = 'remove_reten
 export const VERSION_RETENTION_INDEFINITE: 'indefinite' = 'indefinite';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
-export const PLACEHOLDER_USER: UserMini = { type: 'user', id: '2', name: '' };
+export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
 
 /* ------------------ Open With ------------------------- */
 export const APP_INTEGRATION: 'app_integration' = 'app_integration';
@@ -381,20 +380,14 @@ export const BOX_EDIT_SFC_INTEGRATION_ID = '13418';
 export const OPEN_WITH_BUTTON_ICON_SIZE = 26;
 export const OPEN_WITH_MENU_ITEM_ICON_SIZE = 30;
 
-/* ------------------ Legacy Task Assignment Statuses ----------------- */
-export const TASK_APPROVED: 'approved' = 'approved';
-export const TASK_COMPLETED: 'completed' = 'completed';
-export const TASK_INCOMPLETE: 'incomplete' = 'incomplete';
-export const TASK_REJECTED: 'rejected' = 'rejected';
-
-/* ------------------ New Task Statuses ----------------- */
+/* ------------------ Task Statuses ----------------- */
 export const TASK_NEW_APPROVED: 'APPROVED' = 'APPROVED';
 export const TASK_NEW_COMPLETED: 'COMPLETED' = 'COMPLETED';
 export const TASK_NEW_NOT_STARTED: 'NOT_STARTED' = 'NOT_STARTED';
 export const TASK_NEW_IN_PROGRESS: 'IN_PROGRESS' = 'IN_PROGRESS';
 export const TASK_NEW_REJECTED: 'REJECTED' = 'REJECTED';
 
-/* ------------------ New Task types ----------------- */
+/* ------------------ Task types ----------------- */
 export const TASK_TYPE_GENERAL: 'GENERAL' = 'GENERAL';
 export const TASK_TYPE_APPROVAL: 'APPROVAL' = 'APPROVAL';
 

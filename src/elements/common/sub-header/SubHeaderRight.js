@@ -11,6 +11,7 @@ import GridViewSlider from '../../../components/grid-view/GridViewSlider';
 import ViewModeChangeButton from './ViewModeChangeButton';
 import { VIEW_FOLDER, VIEW_MODE_GRID } from '../../../constants';
 import type { ViewMode } from '../flowTypes';
+import type { View, Collection } from '../../../common/types/core';
 import './SubHeaderRight.scss';
 
 type Props = {

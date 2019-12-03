@@ -9,6 +9,7 @@ import { formatTime } from '../../../../utils/datetime';
 import ReadOnlyTranscriptRow from './ReadOnlyTranscriptRow';
 import EditingTranscriptRow from './EditingTranscriptRow';
 import { isValidTimeSlice } from './timeSliceUtils';
+import type { SkillCardEntryTimeSlice } from '../../../../common/types/skills';
 
 import './TranscriptRow.scss';
 

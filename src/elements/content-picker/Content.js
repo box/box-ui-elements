@@ -9,6 +9,7 @@ import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
 import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
+import type { View, Collection } from '../../common/types/core';
 
 import './Content.scss';
 

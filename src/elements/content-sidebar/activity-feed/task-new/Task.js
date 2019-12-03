@@ -45,7 +45,8 @@ import commonMessages from '../../../common/messages';
 import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { ElementsXhrError } from '../../../../common/types/api';
-import type { SelectorItems } from '../../../../common/types/core';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { ActionItemError } from '../../../../common/types/feed';
 import type { Translations } from '../../flowTypes';
 
 import './Task.scss';

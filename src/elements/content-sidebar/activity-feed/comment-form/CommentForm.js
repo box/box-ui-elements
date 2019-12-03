@@ -16,7 +16,7 @@ import Form from '../../../../components/form-elements/form/Form';
 import Media from '../../../../components/media';
 import messages from './messages';
 import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
-import type { SelectorItems } from '../../../../common/types/core';
+import type { SelectorItems, User } from '../../../../common/types/core';
 
 import './CommentForm.scss';
 

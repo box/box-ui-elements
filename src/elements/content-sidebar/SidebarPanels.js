@@ -23,6 +23,7 @@ import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
+import type { User, BoxItem } from '../../common/types/core';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,

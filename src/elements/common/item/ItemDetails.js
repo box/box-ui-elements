@@ -8,6 +8,7 @@ import React from 'react';
 import { InlineBreadcrumbs } from '../breadcrumbs';
 import { VIEW_SEARCH, VIEW_SELECTED } from '../../../constants';
 import ItemSubDetails from './ItemSubDetails';
+import type { View, BoxItem } from '../../../common/types/core';
 
 import './ItemDetails.scss';
 

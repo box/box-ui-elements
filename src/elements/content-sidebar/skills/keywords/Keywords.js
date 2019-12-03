@@ -16,6 +16,7 @@ import messages from '../../../common/messages';
 import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
+import type { SkillCardEntry, SkillCard } from '../../../../common/types/skills';
 
 import './Keywords.scss';
 
