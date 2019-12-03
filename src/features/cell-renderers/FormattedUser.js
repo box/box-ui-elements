@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-
+import type { IntlShape } from 'react-intl';
 import messages from './messages';
 import { ANONYMOUS_USER_ID } from './constants';
 
@@ -11,14 +11,14 @@ type Props = {
     name?: string,
 };
 
-const FormattedUser = ({ email, id, name }: Props) => {
-    const { anonymousUser, invalidUserError: unknownUser } = messages;
+const formatUser = ({ email, id, name }: Props, intl: IntlShape, isComponent: boolean = false) => {
+    const { anonymousUser, unknownUser } = messages;
 
-    let targetUser = <FormattedMessage {...unknownUser} />;
+    let targetUser = isComponent ? <FormattedMessage {...unknownUser} /> : intl.formatMessage(unknownUser);
     let targetUserInfo = `(${email || id})`;
 
     if (id === ANONYMOUS_USER_ID) {
-        targetUser = <FormattedMessage {...anonymousUser} />;
+        targetUser = isComponent ? <FormattedMessage {...anonymousUser} /> : intl.formatMessage(anonymousUser);
         targetUserInfo = '';
     } else if (name) {
         targetUser = name;
@@ -28,13 +28,18 @@ const FormattedUser = ({ email, id, name }: Props) => {
         targetUserInfo = `(${email || id})`;
     }
 
-    const formattedUser = (
+    const formattedUser = isComponent ? (
         <>
             {targetUser}
             {targetUserInfo ? ` ${targetUserInfo}` : ''}
         </>
+    ) : (
+        `${String(targetUser)} ${targetUserInfo}`.trim()
     );
     return formattedUser;
 };
 
+const FormattedUser = (props: Props, intl: IntlShape) => formatUser(props, intl, true);
+
+export { formatUser };
 export default FormattedUser;

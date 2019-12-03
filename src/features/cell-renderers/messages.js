@@ -1,6 +1,11 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
+    unknownUser: {
+        defaultMessage: 'Unknown User',
+        description: 'The user is unknown in the database.',
+        id: 'boxui.features.CellRenderers.unknownUser',
+    },
     anonymousUser: {
         defaultMessage: 'Anonymous User',
         description: 'The user is a anonymous user',
@@ -22,9 +27,9 @@ export default defineMessages({
         id: 'boxui.features.CellRenderers.allFiles',
     },
     lastModifiedBy: {
-        id: 'boxui.features.CellRenderers.lastModifiedBy',
         defaultMessage: '{lastModified} by {user}',
         description:
             'Text to show on "modified by" table cell. Note that "lastModified" will contain additional localized text. Example: 2 days ago by John Smith',
+        id: 'boxui.features.CellRenderers.lastModifiedBy',
     },
 });

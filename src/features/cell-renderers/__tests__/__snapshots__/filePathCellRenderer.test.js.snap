@@ -3,6 +3,7 @@
 exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCell when all fields are available 1`] = `
 <span
   className="bdl-FilePathCell"
+  title="YouFooMe > CooMooFoo > fancy.jpg (123 Bytes)"
 >
   <FileIcon
     extension="jpg"
@@ -12,22 +13,21 @@ exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCe
   >
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="0"
+      key="YouFooMe"
     >
       YouFooMe
     </span>
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="1"
+      key="CooMooFoo"
     >
       CooMooFoo
     </span>
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="2"
+      key="fancy.jpg (123 Bytes)"
     >
-      fancy.jpg
-       (123 Bytes)
+      fancy.jpg (123 Bytes)
     </span>
   </Breadcrumb>
 </span>
@@ -36,6 +36,7 @@ exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCe
 exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCell when it is external file and all files 1`] = `
 <span
   className="bdl-FilePathCell is-external"
+  title="[object Object] > [object Object] > [object Object] (123 Bytes)"
 >
   <FileIcon
     extension="jpg"
@@ -45,31 +46,21 @@ exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCe
   >
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="0"
+      key="[object Object]"
     >
-      <FormattedMessage
-        defaultMessage="All Files"
-        id="boxui.features.CellRenderers.allFiles"
-      />
+      <Component />
     </span>
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="1"
+      key="[object Object]"
     >
-      <FormattedMessage
-        defaultMessage="External File"
-        id="boxui.features.CellRenderers.externalFile"
-      />
+      <Component />
     </span>
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="2"
+      key="[object Object] (123 Bytes)"
     >
-      <FormattedMessage
-        defaultMessage="External File"
-        id="boxui.features.CellRenderers.externalFile"
-      />
-       (123 Bytes)
+      [object Object] (123 Bytes)
     </span>
   </Breadcrumb>
 </span>
@@ -78,6 +69,7 @@ exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCe
 exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCell when only id is available 1`] = `
 <span
   className="bdl-FilePathCell"
+  title="123"
 >
   <FileIcon
     extension=""
@@ -87,7 +79,7 @@ exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCe
   >
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="0"
+      key="123"
     >
       123
     </span>

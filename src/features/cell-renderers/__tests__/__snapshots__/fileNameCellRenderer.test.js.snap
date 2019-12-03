@@ -24,10 +24,10 @@ exports[`features/cell-renderers/fileNameCellRenderer should render external fil
 <span
   className="bdl-FileNameCell"
   title={
-    <FormattedMessage
-      defaultMessage="External File"
-      id="boxui.features.CellRenderers.externalFile"
-    />
+    Object {
+      "defaultMessage": "External File",
+      "id": "boxui.features.CellRenderers.externalFile",
+    }
   }
 >
   <FileIcon
@@ -40,10 +40,7 @@ exports[`features/cell-renderers/fileNameCellRenderer should render external fil
     rel="noopener noreferrer"
     target="_blank"
   >
-    <FormattedMessage
-      defaultMessage="External File"
-      id="boxui.features.CellRenderers.externalFile"
-    />
+    <Component />
   </Link>
 </span>
 `;

@@ -1,6 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/virtualized-table/VirtualizedTable should successfully render a VirtualizedTable 1`] = `
+<VirtualizedTable
+  intl={
+    Object {
+      "formatDate": [Function],
+      "formatMessage": [Function],
+    }
+  }
+  rowData={
+    Array [
+      Object {
+        "description": "description1",
+        "name": "name1",
+      },
+      Object {
+        "description": "description2",
+        "name": "name2",
+      },
+      Object {
+        "description": "description3",
+        "name": "name3",
+      },
+    ]
+  }
+>
+  <Column
+    cellDataGetter={[Function]}
+    cellRenderer={[Function]}
+    dataKey="name"
+    defaultSortDirection="ASC"
+    flexGrow={0}
+    flexShrink={1}
+    headerRenderer={[Function]}
+    label="Name"
+    style={Object {}}
+    width={100}
+  />
+  <Column
+    cellDataGetter={[Function]}
+    cellRenderer={[Function]}
+    dataKey="description"
+    defaultSortDirection="ASC"
+    flexGrow={0}
+    flexShrink={1}
+    headerRenderer={[Function]}
+    label="Description"
+    style={Object {}}
+    width={100}
+  />
+</VirtualizedTable>
+`;
+
+exports[`features/virtualized-table/VirtualizedTable should successfully render a VirtualizedTable 2`] = `
 <AutoSizer
   disableHeight={true}
   disableWidth={false}
@@ -11,7 +63,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
 </AutoSizer>
 `;
 
-exports[`features/virtualized-table/VirtualizedTable should successfully render a VirtualizedTable 2`] = `
+exports[`features/virtualized-table/VirtualizedTable should successfully render a VirtualizedTable 3`] = `
 <WindowScroller
   onResize={[Function]}
   onScroll={[Function]}
@@ -24,7 +76,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
 </WindowScroller>
 `;
 
-exports[`features/virtualized-table/VirtualizedTable should successfully render a VirtualizedTable 3`] = `
+exports[`features/virtualized-table/VirtualizedTable should successfully render a VirtualizedTable 4`] = `
 <Table
   autoHeight={true}
   className="bdl-VirtualizedTable"

@@ -45,11 +45,12 @@ describe('features/virtualized-table/VirtualizedTable', () => {
     });
 
     test('should successfully render a VirtualizedTable', () => {
-        const autosizer = wrapper.find(AutoSizer);
-        const windowScroller = wrapper.dive().find(WindowScroller);
+        const autosizer = wrapper.dive().find(AutoSizer);
+        const windowScroller = autosizer.dive().find(WindowScroller);
         const baseTable = windowScroller.dive().find(BaseVirtualizedTable);
         const table = baseTable.dive().find(Table);
 
+        expect(wrapper).toMatchSnapshot();
         expect(autosizer).toMatchSnapshot();
         expect(windowScroller).toMatchSnapshot();
         expect(table).toMatchSnapshot();
@@ -58,7 +59,7 @@ describe('features/virtualized-table/VirtualizedTable', () => {
     test('should successfully render a VirtualizedTable with fixed height', () => {
         wrapper.setProps({ height: 10 });
 
-        const autosizer = wrapper.find(AutoSizer);
+        const autosizer = wrapper.dive().find(AutoSizer);
         const baseTable = autosizer.dive().find(BaseVirtualizedTable);
         const table = baseTable.dive().find(Table);
 
@@ -68,6 +69,8 @@ describe('features/virtualized-table/VirtualizedTable', () => {
 
     test('should get row data object that corresponds to row index', () => {
         const table = wrapper
+            .dive()
+            .find(AutoSizer)
             .dive()
             .find(WindowScroller)
             .dive()
@@ -83,6 +86,8 @@ describe('features/virtualized-table/VirtualizedTable', () => {
     test('should set correct rowCount', () => {
         const table = wrapper
             .dive()
+            .find(AutoSizer)
+            .dive()
             .find(WindowScroller)
             .dive()
             .find(BaseVirtualizedTable)
@@ -93,13 +98,27 @@ describe('features/virtualized-table/VirtualizedTable', () => {
     });
 
     test('should not render WindowScroller when height is set', () => {
-        expect(wrapper.dive().find(WindowScroller)).toHaveLength(1);
+        expect(
+            wrapper
+                .dive()
+                .find(AutoSizer)
+                .dive()
+                .find(WindowScroller),
+        ).toHaveLength(1);
 
         wrapper.setProps({ height: 10 });
 
-        expect(wrapper.dive().find(WindowScroller)).toHaveLength(0);
         expect(
             wrapper
+                .dive()
+                .find(AutoSizer)
+                .dive()
+                .find(WindowScroller),
+        ).toHaveLength(0);
+        expect(
+            wrapper
+                .dive()
+                .find(AutoSizer)
                 .dive()
                 .find(BaseVirtualizedTable)
                 .props().height,
@@ -107,7 +126,12 @@ describe('features/virtualized-table/VirtualizedTable', () => {
     });
 
     test('should set defaultHeight and disableHeight on AutoSizer when height is set', () => {
-        expect(wrapper.find(AutoSizer).props()).toEqual(
+        expect(
+            wrapper
+                .dive()
+                .find(AutoSizer)
+                .props(),
+        ).toEqual(
             expect.objectContaining({
                 defaultHeight: undefined,
                 disableHeight: true,
@@ -116,7 +140,12 @@ describe('features/virtualized-table/VirtualizedTable', () => {
 
         wrapper.setProps({ height: 10 });
 
-        expect(wrapper.find(AutoSizer).props()).toEqual(
+        expect(
+            wrapper
+                .dive()
+                .find(AutoSizer)
+                .props(),
+        ).toEqual(
             expect.objectContaining({
                 defaultHeight: 10,
                 disableHeight: true,

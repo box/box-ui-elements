@@ -1,27 +1,32 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import { FormattedMessage } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import { getFileExtension } from '../../utils/file';
 import messages from './messages';
 import FileIcon from '../../icons/file-icon';
+import FolderIcon from '../../icons/folder-icon';
 import Link from '../../components/link/Link';
 import baseCellRenderer from './baseCellRenderer';
 import type { FileNameCellRendererCellData, FileNameCellRendererParams } from './flowTypes';
 import './FileNameCell.scss';
 
-const fileNameCellRenderer = (cellRendererParams: FileNameCellRendererParams) =>
+const fileNameCellRenderer = (intl: IntlShape) => (cellRendererParams: FileNameCellRendererParams) =>
     baseCellRenderer(cellRendererParams, (cellValue: FileNameCellRendererCellData) => {
-        const { id, name, isExternal } = cellValue;
+        const { id, name, isExternal, type } = cellValue;
         const extension = getFileExtension(name);
-        const displayName = isExternal ? <FormattedMessage {...messages.externalFile} /> : name;
+        const displayName = isExternal ? intl.formatMessage(messages.externalFile) : name;
         const fileNameCellClass = classNames('bdl-FileNameCell-link', {
             'is-external': isExternal,
         });
 
         return (
             <span className="bdl-FileNameCell" title={displayName}>
-                <FileIcon dimension={32} extension={extension} />
+                {type === 'folder' ? (
+                    <FolderIcon dimension={32} isExternal={isExternal} />
+                ) : (
+                    <FileIcon dimension={32} extension={extension} />
+                )}
                 {id ? (
                     <Link className={fileNameCellClass} href={`/file/${id}`} rel="noopener noreferrer" target="_blank">
                         {displayName}

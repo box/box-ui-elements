@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/cell-renderers/sizeCellRenderer should render a PrettyBytesCell 1`] = `"2000 petaflops"`;

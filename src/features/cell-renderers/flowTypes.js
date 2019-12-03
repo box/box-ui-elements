@@ -61,6 +61,7 @@ type FileNameCellRendererCellData = {
     id?: string,
     isExternal?: boolean,
     name: string,
+    type?: string,
 };
 
 type FileItemPath = {
@@ -104,8 +105,8 @@ type UserCellRendererParams = CellRendererParamsBase & {
 };
 
 type LastModifiedByCellRendererCellData = {
-    modifiedAt: string,
-    modifiedBy: User,
+    modified_at: string,
+    modified_by: User,
 };
 
 type LastModifiedByCellRendererParams = CellRendererParamsBase & {

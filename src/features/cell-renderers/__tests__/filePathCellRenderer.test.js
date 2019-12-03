@@ -2,11 +2,15 @@
 import { shallow } from 'enzyme';
 import filePathCellRenderer from '../filePathCellRenderer';
 
+const intl = {
+    formatMessage: jest.fn().mockImplementation(message => message),
+};
+
 describe('features/cell-renderers/filePathCellRenderer', () => {
-    const getWrapper = (props = {}) => shallow(filePathCellRenderer(props));
+    const getWrapper = (props = {}) => shallow(filePathCellRenderer(intl)(props));
 
     test('should render a dash when cellData is missing', () => {
-        expect(filePathCellRenderer({ cellData: null })).toBe('—');
+        expect(filePathCellRenderer(intl)({ cellData: null })).toBe('—');
     });
 
     test('should render a FilePathCell when all fields are available', () => {

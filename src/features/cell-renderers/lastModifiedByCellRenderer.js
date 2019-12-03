@@ -1,7 +1,6 @@
 // @flow
-import * as React from 'react';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
-import FormattedUser from './FormattedUser';
+import type { IntlShape } from 'react-intl';
+import { formatUser } from './FormattedUser';
 import baseCellRenderer from './baseCellRenderer';
 import messages from './messages';
 import type { LastModifiedByCellRendererCellData, LastModifiedByCellRendererParams } from './flowTypes';
@@ -10,22 +9,19 @@ type LastModifiedByCellRendererSettings = {
     dateFormat?: Object,
 };
 
-const lastModifiedByCellRenderer = ({ dateFormat }: LastModifiedByCellRendererSettings = {}) => (
+const lastModifiedByCellRenderer = (intl: IntlShape, { dateFormat }: LastModifiedByCellRendererSettings = {}) => (
     cellRendererParams: LastModifiedByCellRendererParams,
 ) =>
-    baseCellRenderer(cellRendererParams, ({ modifiedAt, modifiedBy }: LastModifiedByCellRendererCellData) => {
-        const lastModified = dateFormat ? (
-            <FormattedDate value={modifiedAt} format={dateFormat} />
-        ) : (
-            // eslint-disable-next-line react/style-prop-object
-            <FormattedRelative value={Date.parse(modifiedAt)} units="day-short" style="numeric" />
-        );
+    baseCellRenderer(cellRendererParams, ({ modified_at, modified_by }: LastModifiedByCellRendererCellData) => {
+        const lastModified = dateFormat
+            ? intl.formatDate(modified_at, dateFormat)
+            : intl.formatRelative(Date.parse(modified_at), { units: 'day-short', style: 'numeric' });
 
-        if (modifiedBy) {
-            const { id, name, email, login } = modifiedBy;
-            const user = <FormattedUser id={id} email={email || login} name={name} />;
+        if (modified_by) {
+            const { id, name, email, login } = modified_by;
+            const user = formatUser({ id, email: email || login, name }, intl);
 
-            return <FormattedMessage {...messages.lastModifiedBy} values={{ lastModified, user }} />;
+            return intl.formatMessage(messages.lastModifiedBy, { lastModified, user });
         }
         return lastModified;
     });

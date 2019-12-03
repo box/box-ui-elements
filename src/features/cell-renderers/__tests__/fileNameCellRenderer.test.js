@@ -4,12 +4,16 @@ import Link from '../../../components/link/Link';
 import FileIcon from '../../../icons/file-icon';
 import fileNameCellRenderer from '../fileNameCellRenderer';
 
+const intl = {
+    formatMessage: jest.fn().mockImplementation(message => message),
+};
+
 describe('features/cell-renderers/fileNameCellRenderer', () => {
     let wrapper;
     let cellRendererParams;
 
     const getWrapper = (props = {}) => {
-        return shallow(fileNameCellRenderer(props));
+        return shallow(fileNameCellRenderer(intl)(props));
     };
 
     beforeEach(() => {
@@ -23,7 +27,7 @@ describe('features/cell-renderers/fileNameCellRenderer', () => {
 
     test('should render a dash when cellData is missing', () => {
         cellRendererParams.cellData = null;
-        expect(fileNameCellRenderer(cellRendererParams)).toBe('—');
+        expect(fileNameCellRenderer(intl)(cellRendererParams)).toBe('—');
     });
 
     test('should render a FileNameCell', () => {
