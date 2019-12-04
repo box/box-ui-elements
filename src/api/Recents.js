@@ -30,6 +30,7 @@ import type {
     RecentCollection,
     Crumb,
 } from '../common/types/core';
+import type APICache from '../utils/Cache';
 
 class Recents extends Base {
     /**

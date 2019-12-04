@@ -39,6 +39,11 @@ type TokenLiteral = null | typeof undefined | string | TokenReadWrite;
 
 type ClassComponent<P, S> = Class<React$Component<P, S>>;
 
+// TODO: Investigate some better types for these different maps, perhaps make use
+// of generic types like:
+// type GenericMap<K, V> = {
+//    [K]: V,
+// }
 type StringMap = { [string]: string };
 type StringAnyMap = { [string]: any };
 type StringBooleanMap = { [string]: boolean };

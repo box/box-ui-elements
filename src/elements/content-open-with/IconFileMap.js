@@ -3,6 +3,7 @@
  * @file Maintains a mapping of integration names to icons.
  * @author Box
  */
+import * as React from 'react';
 import IconAdobeSign from '../../icons/adobe-sign/IconAdobeSign';
 import IconGoogleDocs from '../../icons/google-docs/IconGoogleDocs';
 import IconGoogleSheets from '../../icons/google-docs/IconGoogleSheets';
@@ -19,7 +20,7 @@ const ICON_FILE_MAP = {
     'Google Slides (beta)': IconGoogleSlides,
 };
 
-function getIcon(iconName: string): React.Element<any> {
+function getIcon(iconName: string): React.ComponentType<any> {
     return ICON_FILE_MAP[iconName] || FileIcon;
 }
 

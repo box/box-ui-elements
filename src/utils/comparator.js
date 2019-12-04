@@ -14,6 +14,7 @@ import {
     FIELD_SIZE,
 } from '../constants';
 import type { SortBy, SortDirection, ItemType, BoxItem } from '../common/types/core';
+import type APICache from './Cache';
 
 /**
  * Comparator function for sorting files and folders

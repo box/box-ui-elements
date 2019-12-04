@@ -101,7 +101,6 @@ class TextInput extends React.Component<Props, State> {
             customError,
             patternMismatch,
             tooLong,
-            // $FlowFixMe
             tooShort,
             typeMismatch,
             valid,
