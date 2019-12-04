@@ -488,7 +488,6 @@ class MultiputUpload extends BaseMultiput {
             logEvent: session_endpoints.log_event,
         };
 
-        console.log('getSessionSuccessHandler');
         this.processNextParts();
     }
 
@@ -648,10 +647,7 @@ class MultiputUpload extends BaseMultiput {
             while (this.numPartsUploading > 0) {
                 const part = this.parts[nextUploadIndex];
                 if (part && part.state === PART_STATE_UPLOADING) {
-                    part.state = PART_STATE_DIGEST_READY;
-                    part.numUploadRetriesPerformed = 0;
-                    part.timing = {};
-                    part.uploadedBytes = 0;
+                    part.reset();
                     part.pause();
 
                     this.numPartsUploading -= 1;
@@ -659,14 +655,6 @@ class MultiputUpload extends BaseMultiput {
                 }
                 nextUploadIndex += 1;
             }
-
-            console.log(
-                `partUploadErrorHandler numPartsUploading ${this.numPartsUploading} numPartsDigestReady ${
-                    this.numPartsDigestReady
-                }`,
-            );
-
-            // then when resuming, call part.retryupload (see uploadNextPart)
         }
     };
 
@@ -701,12 +689,6 @@ class MultiputUpload extends BaseMultiput {
         if (this.failSessionIfFileChangeDetected()) {
             return;
         }
-
-        console.log(
-            `processNextParts numPartsUploading ${this.numPartsUploading} numPartsDigestReady ${
-                this.numPartsDigestReady
-            } numPartsUploaded ${this.numPartsUploaded}`,
-        );
 
         if (this.numPartsUploaded === this.parts.length && this.fileSha1) {
             this.commitSession();

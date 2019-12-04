@@ -250,7 +250,7 @@ class MultiputPart extends BaseMultiput {
         const xhr_ready_state = getProp(this.xhr, 'xhr.readyState', null);
         const xhr_status_text = getProp(this.xhr, 'xhr.statusText', '');
 
-        console.log(`Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${xhr_ready_state}.`);
+        this.consoleLog(`Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${xhr_ready_state}.`);
 
         const eventInfo = {
             message: error.message,
@@ -293,7 +293,6 @@ class MultiputPart extends BaseMultiput {
 
         this.numUploadRetriesPerformed += 1;
         this.consoleLog(`Retrying uploading part ${this.toJSON()} in ${retryDelayMs} ms`);
-        console.log(`Retrying uploading part ${this.toJSON()} in ${retryDelayMs} ms`);
         this.retryTimeout = setTimeout(this.retryUpload, retryDelayMs);
     };
 
@@ -311,7 +310,7 @@ class MultiputPart extends BaseMultiput {
             const parts = await this.listParts(this.index, 1);
 
             if (parts && parts.length === 1 && parts[0].offset === this.offset && parts[0].part_id) {
-                console.log(`Part ${this.toJSON()} is available on server. Not re-uploading.`);
+                this.consoleLog(`Part ${this.toJSON()} is available on server. Not re-uploading.`);
                 this.id = parts[0].part_id;
                 this.uploadSuccessHandler({
                     data: {
@@ -321,21 +320,16 @@ class MultiputPart extends BaseMultiput {
                 return;
             }
 
-            console.log(`Part ${this.toJSON()} is not available on server. Re-uploading.`);
+            this.consoleLog(`Part ${this.toJSON()} is not available on server. Re-uploading.`);
             throw new Error('Part not found on the server');
         } catch (error) {
             const { response } = error;
             if (response && response.status) {
-                console.log(`Error ${response.status} while listing part ${this.toJSON()}. Re-uploading.`);
+                this.consoleLog(`Error ${response.status} while listing part ${this.toJSON()}. Re-uploading.`);
             }
-
-            console.log(`Error while listing part. Re-uploading.`);
 
             this.numUploadRetriesPerformed += 1;
-
-            if (!this.isPaused) {
-                this.upload();
-            }
+            this.upload();
         }
     };
 
@@ -351,17 +345,44 @@ class MultiputPart extends BaseMultiput {
         this.destroy();
     }
 
+    /**
+     * Pauses upload for this Part.
+     *
+     * @return {void}
+     */
     pause(): void {
         this.isPaused = true;
-        this.xhr.abort(); //  This calls the error handler .  Should check axis.isCancel(error)
+        this.state = PART_STATE_DIGEST_READY;
+        this.xhr.abort(); //  This calls the error handler.
     }
 
+    /**
+     * Unpauses upload for this Part.
+     *
+     * @return {void}
+     */
     unpause(): void {
         this.isPaused = false;
-        this.state = PART_STATE_UPLOADING; // Set state to uploading because paused uploads have DIGEST_READY state
+        this.state = PART_STATE_UPLOADING;
         this.retryUpload();
     }
 
+    /**
+     * Resets upload for this Part.
+     *
+     * @return {void}
+     */
+    reset(): void {
+        this.numUploadRetriesPerformed = 0;
+        this.timing = {};
+        this.uploadedBytes = 0;
+    }
+
+    /**
+     * Checks if this Part is destroyed or paused
+     *
+     * @return {boolean}
+     */
     isDestroyedOrPaused(): boolean {
         return this.isDestroyed() || this.isPaused;
     }

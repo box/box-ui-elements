@@ -1,4 +1,4 @@
-import MultiputPart, { PART_STATE_UPLOADED } from '../MultiputPart';
+import MultiputPart, { PART_STATE_DIGEST_READY, PART_STATE_UPLOADING, PART_STATE_UPLOADED } from '../MultiputPart';
 
 describe('api/uploads/MultiputPart', () => {
     const options = {};
@@ -27,8 +27,23 @@ describe('api/uploads/MultiputPart', () => {
     });
 
     describe('upload()', () => {
+        test.each`
+            destroyed | isPaused
+            ${false}  | ${true}
+            ${true}   | ${false}
+        `('should noop if destroyed or paused', ({ destroyed, isPaused }) => {
+            MultiputPartTest.destroyed = destroyed;
+            MultiputPartTest.isPaused = isPaused;
+            MultiputPartTest.xhr.uploadFile = jest.fn();
+
+            MultiputPartTest.upload();
+
+            expect(MultiputPartTest.xhr.uploadFile).not.toHaveBeenCalled();
+        });
+
         test('should throw error if sha256 is not available', () => {
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.blob = {};
 
             MultiputPartTest.xhr.uploadFile = jest.fn();
@@ -39,6 +54,7 @@ describe('api/uploads/MultiputPart', () => {
 
         test('should throw error if blob is not available', () => {
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.sha256 = '123';
 
             MultiputPartTest.xhr.uploadFile = jest.fn();
@@ -49,6 +65,7 @@ describe('api/uploads/MultiputPart', () => {
 
         test('should upload file properly', () => {
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.sha256 = '123';
             MultiputPartTest.blob = {};
             MultiputPartTest.xhr.uploadFile = jest.fn();
@@ -58,16 +75,24 @@ describe('api/uploads/MultiputPart', () => {
     });
 
     describe('uploadSuccessHandler()', () => {
-        test('should noop if destroyed', () => {
-            MultiputPartTest.destroyed = true;
+        test.each`
+            destroyed | isPaused | data
+            ${false}  | ${true}  | ${{}}
+            ${true}   | ${false} | ${{}}
+        `('should noop if destroyed or paused', ({ destroyed, isPaused, data }) => {
+            MultiputPartTest.destroyed = destroyed;
+            MultiputPartTest.isPaused = isPaused;
             MultiputPartTest.onSuccess = jest.fn();
-            MultiputPartTest.uploadSuccessHandler({});
+
+            MultiputPartTest.uploadSuccessHandler(data);
+
             expect(MultiputPartTest.onSuccess).not.toHaveBeenCalled();
         });
 
         test('should call onSuccess and update attributes properly', () => {
             const data = { hi: 1 };
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.onSuccess = jest.fn();
             MultiputPartTest.uploadSuccessHandler({ data });
             expect(MultiputPartTest.data).toBe(data);
@@ -78,16 +103,24 @@ describe('api/uploads/MultiputPart', () => {
     });
 
     describe('uploadProgressHandler()', () => {
-        test('should noop if destroyed', () => {
-            MultiputPartTest.destroyed = true;
-            MultiputPartTest.onSuccess = jest.fn();
+        test.each`
+            destroyed | isPaused
+            ${false}  | ${true}
+            ${true}   | ${false}
+        `('should noop if destroyed or paused', ({ destroyed, isPaused }) => {
+            MultiputPartTest.destroyed = destroyed;
+            MultiputPartTest.isPaused = isPaused;
+            MultiputPartTest.onProgress = jest.fn();
+
             MultiputPartTest.uploadProgressHandler();
-            expect(MultiputPartTest.onSuccess).not.toHaveBeenCalled();
+
+            expect(MultiputPartTest.onProgress).not.toHaveBeenCalled();
         });
 
         test('should call onProgress and update attributes properly', () => {
             const event = { loaded: 1 };
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.onProgress = jest.fn();
             MultiputPartTest.uploadProgressHandler(event);
             expect(MultiputPartTest.uploadedBytes).toBe(1);
@@ -104,16 +137,25 @@ describe('api/uploads/MultiputPart', () => {
                 },
             };
         });
-        test('should noop if destroyed', () => {
-            MultiputPartTest.destroyed = true;
-            MultiputPartTest.onSuccess = jest.fn();
+
+        test.each`
+            destroyed | isPaused
+            ${false}  | ${true}
+            ${true}   | ${false}
+        `('should noop if destroyed or paused', ({ destroyed, isPaused }) => {
+            MultiputPartTest.destroyed = destroyed;
+            MultiputPartTest.isPaused = isPaused;
+            MultiputPartTest.onError = jest.fn();
+
             MultiputPartTest.uploadErrorHandler();
-            expect(MultiputPartTest.onSuccess).not.toHaveBeenCalled();
+
+            expect(MultiputPartTest.onError).not.toHaveBeenCalled();
         });
 
         test('should log error, and call onError when retry is exhausted', () => {
             const error = { message: 'no' };
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.numUploadRetriesPerformed = 100;
             MultiputPartTest.config.retries = 1;
             MultiputPartTest.logEvent = jest.fn().mockResolvedValue();
@@ -127,6 +169,7 @@ describe('api/uploads/MultiputPart', () => {
             jest.useFakeTimers();
             MultiputPart.getBoundedExpBackoffRetryDelay = jest.fn().mockReturnValueOnce(10);
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.numUploadRetriesPerformed = 100;
             MultiputPartTest.config.retries = 1000;
             MultiputPartTest.logEvent = jest.fn().mockResolvedValue();
@@ -141,15 +184,23 @@ describe('api/uploads/MultiputPart', () => {
     });
 
     describe('retryUpload()', () => {
-        test('should noop if destroyed', () => {
-            MultiputPartTest.destroyed = true;
-            MultiputPartTest.onSuccess = jest.fn();
+        test.each`
+            destroyed | isPaused
+            ${false}  | ${true}
+            ${true}   | ${false}
+        `('should noop if destroyed or paused', ({ destroyed, isPaused }) => {
+            MultiputPartTest.destroyed = destroyed;
+            MultiputPartTest.isPaused = isPaused;
+            MultiputPartTest.upload = jest.fn();
+
             MultiputPartTest.retryUpload();
-            expect(MultiputPartTest.onSuccess).not.toHaveBeenCalled();
+
+            expect(MultiputPartTest.upload).not.toHaveBeenCalled();
         });
 
         test('should call upload when upload is incomplete', async () => {
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.uploadedBytes = 1;
             MultiputPartTest.size = 100;
             MultiputPartTest.numUploadRetriesPerformed = 0;
@@ -166,6 +217,7 @@ describe('api/uploads/MultiputPart', () => {
             const parts = [part];
 
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.uploadedBytes = 100;
             MultiputPartTest.size = 100;
             MultiputPartTest.offset = 1;
@@ -191,6 +243,7 @@ describe('api/uploads/MultiputPart', () => {
             ${{ offset: 2, part_id: 1 }}
         `('should call upload when upload is not available on the server', async ({ parts }) => {
             MultiputPartTest.destroyed = false;
+            MultiputPartTest.isPaused = false;
             MultiputPartTest.uploadedBytes = 100;
             MultiputPartTest.size = 100;
             MultiputPartTest.numUploadRetriesPerformed = 0;
@@ -214,6 +267,62 @@ describe('api/uploads/MultiputPart', () => {
 
             expect(MultiputPartTest.blob).toBeNull();
             expect(MultiputPartTest.data).toEqual({});
+        });
+    });
+
+    describe('pause()', () => {
+        test('should pause properly', () => {
+            MultiputPartTest.isPaused = false;
+            MultiputPartTest.state = PART_STATE_UPLOADING;
+            MultiputPartTest.xhr.abort = jest.fn();
+
+            MultiputPartTest.pause();
+
+            expect(MultiputPartTest.isPaused).toBe(true);
+            expect(MultiputPartTest.state).toBe(PART_STATE_DIGEST_READY);
+            expect(MultiputPartTest.xhr.abort).toBeCalled();
+        });
+    });
+
+    describe('unpause()', () => {
+        test('should unpause properly', () => {
+            MultiputPartTest.isPaused = true;
+            MultiputPartTest.state = PART_STATE_DIGEST_READY;
+            MultiputPartTest.retryUpload = jest.fn();
+
+            MultiputPartTest.unpause();
+
+            expect(MultiputPartTest.isPaused).toBe(false);
+            expect(MultiputPartTest.state).toBe(PART_STATE_UPLOADING);
+            expect(MultiputPartTest.retryUpload).toBeCalled();
+        });
+    });
+
+    describe('reset()', () => {
+        test('should reset properly', () => {
+            MultiputPartTest.numUploadRetriesPerformed = 1;
+            MultiputPartTest.timing = { partDigestTime: 122 };
+            MultiputPartTest.uploadedBytes = 1024;
+
+            MultiputPartTest.reset();
+
+            expect(MultiputPartTest.numUploadRetriesPerformed).toBe(0);
+            expect(MultiputPartTest.timing).toStrictEqual({});
+            expect(MultiputPartTest.uploadedBytes).toBe(0);
+        });
+    });
+
+    describe('isDestroyedOrPaused()', () => {
+        test.each`
+            destroyed | isPaused | expected
+            ${true}   | ${false} | ${true}
+            ${false}  | ${true}  | ${true}
+            ${false}  | ${false} | ${false}
+        `('should return expected', ({ destroyed, isPaused, expected }) => {
+            MultiputPartTest.destroyed = destroyed;
+            MultiputPartTest.isPaused = isPaused;
+
+            expect(MultiputPartTest.isDestroyedOrPaused()).toBe(expected);
         });
     });
 
