@@ -117,7 +117,7 @@ const messages = defineMessages({
         id: 'boxui.securityControls.webDownloadExternalOwnersEditors',
     },
     webDownloadExternal: {
-        defaultMessage: 'Download restricted on Box Desktop for external users.',
+        defaultMessage: 'Download restricted on web for external users.',
         description:
             'Bullet point that summarizes web download restrictions applied to classification, when restriction applies to external users',
         id: 'boxui.securityControls.webDownloadExternal',
