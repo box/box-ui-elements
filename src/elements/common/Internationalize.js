@@ -6,6 +6,7 @@
 
 import React, { Children } from 'react';
 import { IntlProvider } from 'react-intl';
+import type { StringMap } from '../../common/types/core';
 
 type Props = {
     children?: any,

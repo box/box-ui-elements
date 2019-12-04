@@ -6,6 +6,7 @@ import {
     VERSION_RESTORE_ACTION,
     VERSION_UPLOAD_ACTION,
 } from '../../../constants';
+import type { BoxItemVersion, User } from '../../../common/types/core';
 
 type VersionAction =
     | typeof VERSION_DELETE_ACTION

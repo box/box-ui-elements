@@ -1,5 +1,6 @@
 // @flow
 import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../constants';
+import type { MetadataFieldValue } from '../../../common/types/metadata';
 
 const floatRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
 const integerRegex = /^[-+]?[0-9]+$/;

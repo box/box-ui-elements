@@ -7,6 +7,7 @@
 import React, { PureComponent } from 'react';
 import noop from 'lodash/noop';
 import { isInputElement } from '../../utils/dom';
+import type { BoxItem } from '../../common/types/core';
 
 type Props = {
     children: Function,

@@ -20,6 +20,8 @@ import {
     SKILLS_STATUS,
     SKILLS_ERROR_UNKNOWN,
 } from '../../../constants';
+import type { SkillCard, SkillCardLocalizableType } from '../../../common/types/skills';
+import type { NumberBooleanMap, BoxItem } from '../../../common/types/core';
 
 type Props = {
     cards: Array<SkillCard>,

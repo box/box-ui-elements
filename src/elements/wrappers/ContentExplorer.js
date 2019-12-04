@@ -8,6 +8,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentExplorerReactComponent from '../content-explorer';
+import type { BoxItem } from '../../common/types/core';
 
 class ContentExplorer extends ES6Wrapper {
     /**

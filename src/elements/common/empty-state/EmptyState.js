@@ -12,6 +12,7 @@ import SelectedItemsEmptyState from '../../../icons/states/SelectedItemsEmptySta
 import SearchEmptyState from '../../../icons/states/SearchEmptyState';
 import messages from '../messages';
 import { VIEW_ERROR, VIEW_FOLDER, VIEW_METADATA, VIEW_SEARCH, VIEW_SELECTED } from '../../../constants';
+import type { View } from '../../../common/types/core';
 
 import './EmptyState.scss';
 

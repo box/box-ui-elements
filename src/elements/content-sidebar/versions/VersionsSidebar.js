@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import type { MessageDescriptor } from 'react-intl';
 import InlineError from '../../../components/inline-error';
 import messages from './messages';
 import SidebarContent from '../SidebarContent';
@@ -13,6 +14,7 @@ import VersionsMenu from './VersionsMenu';
 import { BackButton } from '../../common/nav-button';
 import { DEFAULT_FETCH_END } from '../../../constants';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
+import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsSidebar.scss';
 
 const MAX_VERSIONS = DEFAULT_FETCH_END;

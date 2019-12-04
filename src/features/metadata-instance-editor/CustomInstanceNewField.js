@@ -9,6 +9,7 @@ import commonMessages from '../../common/messages';
 import IconInfo from '../../icons/general/IconInfo';
 
 import messages from './messages';
+import type { MetadataFieldValue, MetadataFields } from '../../common/types/metadata';
 import './CustomInstanceNewField.scss';
 
 type Props = {

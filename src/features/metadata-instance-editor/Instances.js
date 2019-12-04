@@ -2,6 +2,8 @@
 import * as React from 'react';
 
 import Instance from './Instance';
+import type { MetadataEditor, MetadataCascadingPolicyData } from '../../common/types/metadata';
+import type { JSONPatchOperations } from '../../common/types/api';
 
 type Props = {
     editors?: Array<MetadataEditor>,

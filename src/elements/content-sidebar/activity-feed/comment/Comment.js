@@ -21,7 +21,8 @@ import { PLACEHOLDER_USER } from '../../../../constants';
 import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
-import type { SelectorItems } from '../../../../common/types/core';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { BoxCommentPermission, ActionItemError } from '../../../../common/types/feed';
 import './Comment.scss';
 
 type Props = {
@@ -216,6 +217,7 @@ class Comment extends React.Component<Props, State> {
                         )}
                     </Media.Body>
                 </Media>
+                {/* $FlowFixMe */}
                 {error ? <ActivityError {...error} /> : null}
             </div>
         );

@@ -13,6 +13,7 @@ import Button from '../../components/button/Button';
 import messages from '../common/messages';
 import ShareAccessSelect from '../common/share-access-select';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
+import type { BoxItem } from '../../common/types/core';
 
 import './ShareDialog.scss';
 

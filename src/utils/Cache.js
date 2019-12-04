@@ -5,6 +5,7 @@
  */
 
 import merge from 'lodash/merge';
+import type { StringAnyMap } from '../common/types/core';
 
 class Cache {
     /**

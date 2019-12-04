@@ -13,7 +13,6 @@
  */
 export default function hexToBase64(str: string): string {
     return btoa(
-        // $FlowFixMe - ignore flow errors from next line
         String.fromCharCode.apply(
             null,
             str

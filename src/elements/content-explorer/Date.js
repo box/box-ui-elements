@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Datefield from '../common/date';
 import messages from '../common/messages';
 import { FIELD_INTERACTED_AT } from '../../constants';
+import type { BoxItem } from '../../common/types/core';
 
 type Props = {
     dataKey: string,

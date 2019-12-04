@@ -12,6 +12,8 @@ import { addTime } from '../../utils/datetime';
 
 import DateField from '../common/date';
 
+import type { BoxItem } from '../../common/types/core';
+
 const ONE_MINUTE_IN_MS = 60000;
 
 const NOTICE_DATE_FORMAT = {

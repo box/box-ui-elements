@@ -10,6 +10,7 @@ import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
 import { VIEW_MODE_LIST } from '../../../constants';
+import type { View, Collection } from '../../../common/types/core';
 
 import './SubHeader.scss';
 

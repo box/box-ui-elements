@@ -53,6 +53,7 @@ import type {
     UploadItemAPIOptions,
     UploadStatus,
 } from '../../common/types/upload';
+import type { StringMap, Token, View, BoxItem } from '../../common/types/core';
 import '../common/fonts.scss';
 import '../common/base.scss';
 
@@ -417,7 +418,6 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
-        // $FlowFixMe
         const fileAPIOptions: Object = getDataTransferItemAPIOptions(newItems[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
 
@@ -442,7 +442,6 @@ class ContentUploader extends Component<Props, State> {
         }
 
         const { rootFolderId } = this.props;
-        // $FlowFixMe
         const fileAPIOptions: Object = getFileAPIOptions(files[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
         const folderUpload = this.getFolderUploadAPI(folderId);

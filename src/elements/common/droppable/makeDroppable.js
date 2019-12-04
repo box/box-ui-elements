@@ -7,6 +7,7 @@
 import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
+import type { ClassComponent } from '../../../common/types/core';
 
 type PropsShape = {
     className: string,

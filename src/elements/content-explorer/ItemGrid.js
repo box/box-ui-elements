@@ -5,6 +5,7 @@ import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import GridView from '../../components/grid-view/GridView';
 import ItemGridCell from './ItemGridCell';
 import type { ItemGridProps } from './flowTypes';
+import type { BoxItem, Collection } from '../../common/types/core';
 
 type Props = {
     currentCollection: Collection,

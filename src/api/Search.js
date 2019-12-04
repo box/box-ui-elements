@@ -20,6 +20,8 @@ import {
     ERROR_CODE_SEARCH,
 } from '../constants';
 import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type { FlattenedBoxItem, FlattenedBoxItemCollection, Collection, BoxItemCollection } from '../common/types/core';
+import type APICache from '../utils/Cache';
 
 class Search extends Base {
     /**

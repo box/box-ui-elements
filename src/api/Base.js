@@ -17,7 +17,8 @@ import {
     HTTP_PUT,
     HTTP_DELETE,
 } from '../constants';
-import type { ElementsErrorCallback } from '../common/types/api';
+import type { ElementsErrorCallback, APIOptions } from '../common/types/api';
+import type APICache from '../utils/Cache';
 
 class Base {
     /**
@@ -48,7 +49,7 @@ class Base {
     /**
      * @property {*}
      */
-    options: Options;
+    options: APIOptions;
 
     /**
      * @property {Function}
@@ -86,7 +87,7 @@ class Base {
      * @param {string} [options.uploadHost] - Upload host name
      * @return {Base} Base instance
      */
-    constructor(options: Options) {
+    constructor(options: APIOptions) {
         this.cache = options.cache || new Cache();
         this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
         this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;

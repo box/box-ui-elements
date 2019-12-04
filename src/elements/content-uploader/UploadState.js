@@ -13,6 +13,7 @@ import messages from '../common/messages';
 import Browser from '../../utils/Browser';
 import UploadStateContent from './UploadStateContent';
 import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
+import type { View } from '../../common/types/core';
 
 import './UploadState.scss';
 

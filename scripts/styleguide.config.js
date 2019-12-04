@@ -78,6 +78,7 @@ const allSections = [
             '../src/components/pill-cloud/PillCloud.js',
             '../src/components/pill-selector-dropdown/PillSelectorDropdown.js',
             '../src/components/plain-button/PlainButton.js',
+            '../src/components/popper/PopperComponent.js',
             '../src/components/primary-button/PrimaryButton.js',
             '../src/components/progress-bar/ProgressBar.js',
             '../src/components/radar/RadarAnimation.js',

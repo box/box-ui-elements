@@ -13,6 +13,7 @@ import {
     columnWithFloatType,
     columnForTemplateFieldName,
 } from '../../src/features/query-bar/components/fixtures';
+import type { MetadataTemplate } from '../../src/common/types/metadata';
 
 type Props = {
     activeTemplate?: MetadataTemplate,

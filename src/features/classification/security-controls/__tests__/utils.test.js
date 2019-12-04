@@ -12,7 +12,7 @@ import {
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
 const { OWNERS_AND_COOWNERS, OWNERS_COOWNERS_AND_EDITORS } = MANAGED_USERS_ACCESS_LEVEL;
-const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL;
+const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVEL;
 
 describe('features/classification/security-controls/utils', () => {
     let accessPolicy;
@@ -24,6 +24,11 @@ describe('features/classification/security-controls/utils', () => {
     describe('getShortSecurityControlsMessage()', () => {
         test('should return null when there are no restrictions', () => {
             expect(getShortSecurityControlsMessage({})).toBeNull();
+        });
+
+        test('should not return messages when shared link restriction has a "public" access level', () => {
+            accessPolicy = { sharedLink: { accessLevel: PUBLIC } };
+            expect(getShortSecurityControlsMessage(accessPolicy)).toBeNull();
         });
 
         test('should return all restrictions message when all restrictions are present', () => {

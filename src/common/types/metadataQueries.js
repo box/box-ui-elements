@@ -1,4 +1,7 @@
 // @flow
+import type { MetadataInstanceV2 } from './metadata';
+import type { SortDirection, BoxItem } from './core';
+
 type MetadataQueryResponseEntryEnterprise = {
     [string]: MetadataInstanceV2,
 };
