@@ -18,6 +18,7 @@ import {
     HTTP_DELETE,
 } from '../constants';
 import type { ElementsErrorCallback, APIOptions } from '../common/types/api';
+import type APICache from '../utils/Cache';
 
 class Base {
     /**

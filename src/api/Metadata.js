@@ -37,6 +37,7 @@ import type {
     MetadataFields,
 } from '../common/types/metadata';
 import type { BoxItem } from '../common/types/core';
+import type APICache from '../utils/Cache';
 
 class Metadata extends File {
     /**

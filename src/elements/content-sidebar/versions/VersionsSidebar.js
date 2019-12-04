@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import type { MessageDescriptor } from 'react-intl';
 import InlineError from '../../../components/inline-error';
 import messages from './messages';
 import SidebarContent from '../SidebarContent';

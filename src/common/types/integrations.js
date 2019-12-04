@@ -1,6 +1,8 @@
 // @flow
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { APP_INTEGRATION, HTTP_POST, HTTP_GET } from '../../constants';
+import BoxToolsInstallMessage from '../../elements/content-open-with/BoxToolsInstallMessage';
 
 type AppIntegrationAPIMiniItem = {
     id: string,
@@ -37,7 +39,9 @@ type ExecuteAPI = {
     url: string,
 };
 
-type DisabledReason = string | React.Element<typeof FormattedMessage>;
+// TODO: is there a way to consolidate BoxToolsInstallMessage,
+// which is just a wrapper around FormattedMessage?
+type DisabledReason = string | React.Element<typeof FormattedMessage> | React.Element<typeof BoxToolsInstallMessage>;
 
 type Integration = {
     appIntegrationId: string,
