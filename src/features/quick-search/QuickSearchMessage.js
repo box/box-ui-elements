@@ -1,30 +1,28 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+// @flow
+import * as React from 'react';
 import classNames from 'classnames';
 
 import './QuickSearchMessage.scss';
 
-// eslint-disable-next-line react/prefer-stateless-function
-class QuickSearchMessage extends Component {
-    static propTypes = {
-        children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
-        isShown: PropTypes.bool.isRequired,
-    };
+type Props = {
+    /** The message to string or elements to show */
+    children: React.Node,
+    /** Boolean to indicate if the message should be shown */
+    isShown: boolean,
+};
 
-    static defaultProps = {
-        isShown: false,
-    };
+const QuickSearchMessage = ({ children, isShown }: Props) => {
+    const className = classNames('overlay-wrapper', { 'is-visible': isShown }, 'quick-search-message');
 
-    render() {
-        const { children, isShown } = this.props;
-        const className = classNames('overlay-wrapper', { 'is-visible': isShown }, 'quick-search-message');
+    return (
+        <div className={className}>
+            <p className="overlay">{children}</p>
+        </div>
+    );
+};
 
-        return (
-            <div className={className}>
-                <p className="overlay">{children}</p>
-            </div>
-        );
-    }
-}
+QuickSearchMessage.defaultProps = {
+    isShown: false,
+};
 
 export default QuickSearchMessage;
