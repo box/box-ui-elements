@@ -2,6 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { injectIntl, type IntlShape, FormattedMessage } from 'react-intl';
+import { RecordOf } from 'immutable';
 
 import type { ItemType } from '../../common/types/core';
 import { convertToMs, isToday, isYesterday } from '../../utils/datetime';
@@ -33,7 +34,7 @@ type Props = {
     className?: string,
     closeDropdown?: Function,
     intl: IntlShape,
-    itemData: QuickSearchItemData,
+    itemData: QuickSearchItemData | RecordOf<QuickSearchItemData>,
     parentFolderRenderer?: Function,
     shouldNavigateOnItemClick?: boolean,
 };

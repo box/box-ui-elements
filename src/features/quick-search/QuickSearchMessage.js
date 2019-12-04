@@ -6,12 +6,12 @@ import './QuickSearchMessage.scss';
 
 type Props = {
     /** The message to string or elements to show */
-    children: string | React.Node,
+    children: React.Node,
     /** Boolean to indicate if the message should be shown */
     isShown: boolean,
 };
 
-const QuickSearchMessage = ({ children, isShown = false }: Props) => {
+const QuickSearchMessage = ({ children, isShown }: Props) => {
     const className = classNames('overlay-wrapper', { 'is-visible': isShown }, 'quick-search-message');
 
     return (
@@ -19,6 +19,10 @@ const QuickSearchMessage = ({ children, isShown = false }: Props) => {
             <p className="overlay">{children}</p>
         </div>
     );
+};
+
+QuickSearchMessage.defaultProps = {
+    isShown: false,
 };
 
 export default QuickSearchMessage;

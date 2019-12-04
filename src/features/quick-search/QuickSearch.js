@@ -17,11 +17,11 @@ type Props = {
     /** Index at which to insert the divider */
     dividerIndex?: number,
     /** Message to display for the error state */
-    errorMessage?: string | React.Node,
+    errorMessage?: React.Node,
     /** Props for the input element (search bar) */
     inputProps: Object,
     /** Message to display when no results are found */
-    noItemsMessage?: string | React.Node,
+    noItemsMessage?: React.Node,
     /** Function called with the index of the selected option and the event (selected by keyboard or click) */
     onSelect?: Function,
 };
