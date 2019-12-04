@@ -43,12 +43,12 @@ const messages = defineMessages({
         id: 'boxui.securityControls.shortAllRestrictions',
     },
     sharingCollabOnly: {
-        defaultMessage: 'Shared links cannot be made publicly accessible.',
+        defaultMessage: 'Shared links allowed for collaborators only.',
         description: 'Bullet point that summarizes shared link restriction applied to classification',
         id: 'boxui.securityControls.sharingCollabOnly',
     },
     sharingCollabAndCompanyOnly: {
-        defaultMessage: 'Shared links allowed for collaborators only.',
+        defaultMessage: 'Shared links cannot be made publicly accessible.',
         description: 'Bullet point that summarizes collaborators shared link restriction applied to classification',
         id: 'boxui.securityControls.sharingCollabAndCompanyOnly',
     },
@@ -104,13 +104,14 @@ const messages = defineMessages({
         id: 'boxui.securityControls.webDownloadOwnersEditors',
     },
     webDownloadExternalOwners: {
-        defaultMessage: 'Download restricted on web for external users, except Owners/Co-Owners.',
+        defaultMessage: 'Download restricted on web, except Owners/Co-Owners. Also restricted for external users.',
         description:
             'Bullet point that summarizes web download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners',
         id: 'boxui.securityControls.webDownloadExternalOwners',
     },
     webDownloadExternalOwnersEditors: {
-        defaultMessage: 'Download restricted on web for external users, except Owners/Co-Owners/Editors.',
+        defaultMessage:
+            'Download restricted on web, except Owners/Co-Owners/Editors. Also restricted for external users.',
         description:
             'Bullet point that summarizes web download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners/Editors',
         id: 'boxui.securityControls.webDownloadExternalOwnersEditors',
@@ -135,13 +136,14 @@ const messages = defineMessages({
         id: 'boxui.securityControls.mobileDownloadOwnersEditors',
     },
     mobileDownloadExternalOwners: {
-        defaultMessage: 'Download restricted on mobile for external users, except Owners/Co-Owners.',
+        defaultMessage: 'Download restricted on mobile, except Owners/Co-Owners. Also restricted for external users.',
         description:
             'Bullet point that summarizes mobile download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners',
         id: 'boxui.securityControls.mobileDownloadExternalOwners',
     },
     mobileDownloadExternalOwnersEditors: {
-        defaultMessage: 'Download restricted on mobile for external users, except Owners/Co-Owners/Editors.',
+        defaultMessage:
+            'Download restricted on mobile, except Owners/Co-Owners/Editors. Also restricted for external users.',
         description:
             'Bullet point that summarizes mobile download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners/Editors',
         id: 'boxui.securityControls.mobileDownloadExternalOwnersEditors',
@@ -166,13 +168,15 @@ const messages = defineMessages({
         id: 'boxui.securityControls.desktopDownloadOwnersEditors',
     },
     desktopDownloadExternalOwners: {
-        defaultMessage: 'Download restricted on Box Drive for external users, except Owners/Co-Owners.',
+        defaultMessage:
+            'Download restricted on Box Drive, except Owners/Co-Owners. Also restricted for external users.',
         description:
             'Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners. Box Drive is a product name and not translated',
         id: 'boxui.securityControls.desktopDownloadExternalOwners',
     },
     desktopDownloadExternalOwnersEditors: {
-        defaultMessage: 'Download restricted on Box Drive for external users, except Owners/Co-Owners/Editors.',
+        defaultMessage:
+            'Download restricted on Box Drive, except Owners/Co-Owners/Editors. Also restricted for external users.',
         description:
             'Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners/Editors. Box Drive is a product name and not translated',
         id: 'boxui.securityControls.desktopDownloadExternalOwnersEditors',
