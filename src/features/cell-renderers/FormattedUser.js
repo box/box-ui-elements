@@ -39,7 +39,7 @@ const formatUser = ({ email, id, name }: Props, intl: IntlShape, isComponent: bo
     return formattedUser;
 };
 
-const FormattedUser = (props: Props, intl: IntlShape) => formatUser(props, intl, true);
+const FormattedUser = (props: Props) => formatUser(props, props.intl, true);
 
 export { formatUser };
 export default FormattedUser;

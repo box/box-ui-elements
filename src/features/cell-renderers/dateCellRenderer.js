@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import baseCellRenderer from './baseCellRenderer';
-import type { CellRendererParams } from './flowTypes';
 import ReadableTime from '../../components/time/ReadableTime';
+import type { CellRendererParams } from './flowTypes';
 
 const dateCellRenderer = (cellRendererParams: CellRendererParams) =>
     baseCellRenderer(cellRendererParams, cellValue => (
