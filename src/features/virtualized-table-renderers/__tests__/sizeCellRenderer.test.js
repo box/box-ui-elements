@@ -4,7 +4,7 @@ import sizeCellRenderer from '../sizeCellRenderer';
 
 jest.mock('../../../utils/size');
 
-describe('features/cell-renderers/sizeCellRenderer', () => {
+describe('features/virtualized-table-renderers/sizeCellRenderer', () => {
     let cellRendererParams;
 
     beforeEach(() => {

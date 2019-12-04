@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/cell-renderers/userCellRenderer should render a UserCell 1`] = `
+exports[`features/virtualized-table-renderers/userCellRenderer should render a UserCell 1`] = `
 <FormattedUser
   email="a@a.com"
   id="123"

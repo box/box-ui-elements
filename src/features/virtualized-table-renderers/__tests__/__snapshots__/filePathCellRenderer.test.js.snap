@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCell when all fields are available 1`] = `
+exports[`features/virtualized-table-renderers/filePathCellRenderer should render a FilePathCell when all fields are available 1`] = `
 <span
   className="bdl-FilePathCell"
   title="YouFooMe > CooMooFoo > fancy.jpg (123 Bytes)"
@@ -33,7 +33,7 @@ exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCe
 </span>
 `;
 
-exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCell when it is external file and all files 1`] = `
+exports[`features/virtualized-table-renderers/filePathCellRenderer should render a FilePathCell when it is external file and all files 1`] = `
 <span
   className="bdl-FilePathCell is-external"
   title="[object Object] > [object Object] > [object Object] (123 Bytes)"
@@ -66,7 +66,7 @@ exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCe
 </span>
 `;
 
-exports[`features/cell-renderers/filePathCellRenderer should render a FilePathCell when only id is available 1`] = `
+exports[`features/virtualized-table-renderers/filePathCellRenderer should render a FilePathCell when only id is available 1`] = `
 <span
   className="bdl-FilePathCell"
   title="123"

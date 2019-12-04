@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/cell-renderers/fileNameCellRenderer should render a FileNameCell 1`] = `
+exports[`features/virtualized-table-renderers/fileNameCellRenderer should render a FileNameCell 1`] = `
 <span
   className="bdl-FileNameCell"
   title="fancy.jpg"
@@ -20,13 +20,13 @@ exports[`features/cell-renderers/fileNameCellRenderer should render a FileNameCe
 </span>
 `;
 
-exports[`features/cell-renderers/fileNameCellRenderer should render external file name when isExternal is true 1`] = `
+exports[`features/virtualized-table-renderers/fileNameCellRenderer should render external file name when isExternal is true 1`] = `
 <span
   className="bdl-FileNameCell"
   title={
     Object {
       "defaultMessage": "External File",
-      "id": "boxui.features.CellRenderers.externalFile",
+      "id": "boxui.features.VirtualizedTableRenderers.externalFile",
     }
   }
 >

@@ -5,9 +5,9 @@ import classNames from 'classnames';
 import { Table } from 'react-virtualized/dist/es/Table/index';
 import { DEFAULT_PAGE_SIZE } from '../../constants';
 import { VIRTUALIZED_TABLE_DEFAULTS } from './constants';
-import loadingRowRenderer from '../cell-renderers/loadingRowRenderer';
+import loadingRowRenderer from '../virtualized-table-renderers/loadingRowRenderer';
 import type { SortParams } from './flowTypes';
-import type { RowRendererParams } from '../cell-renderers';
+import type { RowRendererParams } from '../virtualized-table-renderers';
 
 const { HEADER_HEIGHT, ROW_HEIGHT, TAB_INDEX } = VIRTUALIZED_TABLE_DEFAULTS;
 

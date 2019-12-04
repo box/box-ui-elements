@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/cell-renderers/loadingRowRenderer should successfully render a row and replace cell content with loading state 1`] = `
+exports[`features/virtualized-table-renderers/loadingRowRenderer should successfully render a row and replace cell content with loading state 1`] = `
 <div
   aria-rowindex={4}
   className="ReactVirtualized__Table__row"

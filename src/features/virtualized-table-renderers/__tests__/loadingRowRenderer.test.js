@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import loadingRowRenderer from '../loadingRowRenderer';
 
-describe('features/cell-renderers/loadingRowRenderer', () => {
+describe('features/virtualized-table-renderers/loadingRowRenderer', () => {
     let rowRendererParams;
 
     beforeEach(() => {

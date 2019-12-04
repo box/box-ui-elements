@@ -1,7 +1,7 @@
 // @flow
 import baseCellRenderer from '../baseCellRenderer';
 
-describe('features/cell-renderers/baseCellRenderer', () => {
+describe('features/virtualized-table-renderers/baseCellRenderer', () => {
     let cellRendererParams;
 
     beforeEach(() => {

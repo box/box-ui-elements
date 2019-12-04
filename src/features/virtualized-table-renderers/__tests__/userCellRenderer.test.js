@@ -2,7 +2,7 @@
 import { mount } from 'enzyme';
 import userCellRenderer from '../userCellRenderer';
 
-describe('features/cell-renderers/userCellRenderer', () => {
+describe('features/virtualized-table-renderers/userCellRenderer', () => {
     let cellRendererParams;
 
     beforeEach(() => {

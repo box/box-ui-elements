@@ -5,7 +5,7 @@ jest.mock('../../../utils/datetime', () => ({
     formatDateTime: jest.fn().mockImplementation(value => `FORMATTED: ${value}`),
 }));
 
-describe('features/cell-renderers/dateCellRenderer', () => {
+describe('features/virtualized-table-renderers/dateCellRenderer', () => {
     let cellRendererParams;
 
     beforeEach(() => {

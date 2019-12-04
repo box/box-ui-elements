@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import routerLinkCellRenderer from '../routerLinkCellRenderer';
 
-describe('features/cell-renderers/routerLinkCellRenderer', () => {
+describe('features/virtualized-table-renderers/routerLinkCellRenderer', () => {
     let wrapper;
     let cellData;
 

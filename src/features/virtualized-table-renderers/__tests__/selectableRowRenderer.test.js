@@ -4,7 +4,7 @@ import selectableRowRenderer from '../selectableRowRenderer';
 
 jest.mock('react-virtualized/dist/es/Table/index');
 
-describe('features/cell-renderers/selectableRowRenderer', () => {
+describe('features/virtualized-table-renderers/selectableRowRenderer', () => {
     const alertId = '123';
     const paramsMock = {
         className: 'foo',

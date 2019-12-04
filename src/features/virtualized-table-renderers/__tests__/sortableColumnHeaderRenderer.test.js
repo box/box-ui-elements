@@ -4,7 +4,7 @@ import { SortDirection } from 'react-virtualized/dist/es/Table';
 import IconSortChevron from '../../../icons/general/IconSortChevron';
 import sortableColumnHeaderRenderer from '../sortableColumnHeaderRenderer';
 
-describe('features/cell-renderers/sortableColumnHeaderRenderer', () => {
+describe('features/virtualized-table-renderers/sortableColumnHeaderRenderer', () => {
     let wrapper;
     let props;
 

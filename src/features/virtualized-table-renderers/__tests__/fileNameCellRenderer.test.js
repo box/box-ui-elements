@@ -8,7 +8,7 @@ const intl = {
     formatMessage: jest.fn().mockImplementation(message => message),
 };
 
-describe('features/cell-renderers/fileNameCellRenderer', () => {
+describe('features/virtualized-table-renderers/fileNameCellRenderer', () => {
     let wrapper;
     let cellRendererParams;
 

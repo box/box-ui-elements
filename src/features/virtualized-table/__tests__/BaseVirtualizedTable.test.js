@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { Column, Table } from 'react-virtualized/dist/es/Table';
 
 import BaseVirtualizedTable from '../BaseVirtualizedTable';
-import loadingRowRenderer from '../../cell-renderers/loadingRowRenderer';
+import loadingRowRenderer from '../../virtualized-table-renderers/loadingRowRenderer';
 
 describe('features/virtualized-table/BaseVirtualizedTable', () => {
     let wrapper;

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/cell-renderers/dateCellRenderer should render a DateCell with formatted date 1`] = `
+exports[`features/virtualized-table-renderers/dateCellRenderer should render a DateCell with formatted date 1`] = `
 <ReadableTime
   alwaysShowTime={true}
   timestamp={1563482709000}

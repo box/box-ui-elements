@@ -11,14 +11,14 @@ type Props = {
     name?: string,
 };
 
-const formatUser = ({ email, id, name }: Props, intl: IntlShape, isComponent: boolean = false) => {
+const formatUser = ({ email, id, name }: Props, intl?: IntlShape, isComponent: boolean = false) => {
     const { anonymousUser, unknownUser } = messages;
 
-    let targetUser = isComponent ? <FormattedMessage {...unknownUser} /> : intl.formatMessage(unknownUser);
+    let targetUser = isComponent || !intl ? <FormattedMessage {...unknownUser} /> : intl.formatMessage(unknownUser);
     let targetUserInfo = `(${email || id})`;
 
     if (id === ANONYMOUS_USER_ID) {
-        targetUser = isComponent ? <FormattedMessage {...anonymousUser} /> : intl.formatMessage(anonymousUser);
+        targetUser = isComponent || !intl ? <FormattedMessage {...anonymousUser} /> : intl.formatMessage(anonymousUser);
         targetUserInfo = '';
     } else if (name) {
         targetUser = name;
@@ -39,7 +39,7 @@ const formatUser = ({ email, id, name }: Props, intl: IntlShape, isComponent: bo
     return formattedUser;
 };
 
-const FormattedUser = (props: Props) => formatUser(props, props.intl, true);
+const FormattedUser = (props: Props) => formatUser(props, undefined, true);
 
 export { formatUser };
 export default FormattedUser;

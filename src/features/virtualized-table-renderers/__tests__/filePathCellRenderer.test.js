@@ -6,7 +6,7 @@ const intl = {
     formatMessage: jest.fn().mockImplementation(message => message),
 };
 
-describe('features/cell-renderers/filePathCellRenderer', () => {
+describe('features/virtualized-table-renderers/filePathCellRenderer', () => {
     const getWrapper = (props = {}) => shallow(filePathCellRenderer(intl)(props));
 
     test('should render a dash when cellData is missing', () => {

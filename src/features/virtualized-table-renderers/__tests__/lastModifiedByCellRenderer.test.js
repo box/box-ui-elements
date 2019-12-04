@@ -12,7 +12,7 @@ jest.mock('../FormattedUser', () => ({
     formatUser: jest.fn().mockImplementation(({ id, name, email }) => `${id}-${name}-${email}`),
 }));
 
-describe('features/cell-renderers/lastModifiedByCellRenderer', () => {
+describe('features/virtualized-table-renderers/lastModifiedByCellRenderer', () => {
     let cellRendererParams;
 
     beforeEach(() => {
