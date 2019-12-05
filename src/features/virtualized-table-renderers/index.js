@@ -1,7 +1,7 @@
 // @flow
 export { default as loadingRowRenderer } from './loadingRowRenderer';
 export { default as baseCellRenderer } from './baseCellRenderer';
-export { default as dateCellRenderer } from './dateCellRenderer';
+export { default as readableTimeCellRenderer } from './readableTimeCellRenderer';
 export { default as fileNameCellRenderer } from './fileNameCellRenderer';
 export { default as lastModifiedByCellRenderer } from './lastModifiedByCellRenderer';
 export { default as sizeCellRenderer } from './sizeCellRenderer';
