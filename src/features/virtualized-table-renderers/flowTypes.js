@@ -61,6 +61,7 @@ type FileNameCellRendererCellData = {
     id?: string,
     isExternal?: boolean,
     name: string,
+    onClick?: Function,
     type?: string,
 };
 

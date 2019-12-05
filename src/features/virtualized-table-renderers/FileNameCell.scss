@@ -20,4 +20,8 @@
     line-height: 1.5em;
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    &.link {
+        cursor: pointer;
+    }
 }

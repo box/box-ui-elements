@@ -13,7 +13,7 @@ import './FileNameCell.scss';
 
 const fileNameCellRenderer = (intl: IntlShape) => (cellRendererParams: FileNameCellRendererParams) =>
     baseCellRenderer(cellRendererParams, (cellValue: FileNameCellRendererCellData) => {
-        const { id, name, isExternal, type } = cellValue;
+        const { id, name, isExternal, type, onClick } = cellValue;
         const extension = getFileExtension(name);
         const displayName = isExternal ? intl.formatMessage(messages.externalFile) : name;
         const fileNameCellClass = classNames('bdl-FileNameCell-link', {
@@ -27,8 +27,15 @@ const fileNameCellRenderer = (intl: IntlShape) => (cellRendererParams: FileNameC
                 ) : (
                     <FileIcon dimension={32} extension={extension} />
                 )}
-                {id ? (
-                    <Link className={fileNameCellClass} href={`/file/${id}`} rel="noopener noreferrer" target="_blank">
+                {id || onClick ? (
+                    <Link
+                        className={fileNameCellClass}
+                        href={id && `/file/${id}`}
+                        onClick={onClick}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        component={id ? 'a' : 'span'}
+                    >
                         {displayName}
                     </Link>
                 ) : (

@@ -11,6 +11,7 @@ exports[`features/virtualized-table-renderers/fileNameCellRenderer should render
   />
   <Link
     className="bdl-FileNameCell-link"
+    component="a"
     href="/file/123"
     rel="noopener noreferrer"
     target="_blank"
@@ -36,6 +37,7 @@ exports[`features/virtualized-table-renderers/fileNameCellRenderer should render
   />
   <Link
     className="bdl-FileNameCell-link is-external"
+    component="a"
     href="/file/123"
     rel="noopener noreferrer"
     target="_blank"
