@@ -1,19 +1,19 @@
 // @flow
 import { shallow } from 'enzyme';
-import Link from '../../../components/link/Link';
+import PlainButton from '../../../components/plain-button/PlainButton';
 import FileIcon from '../../../icons/file-icon';
-import fileNameCellRenderer from '../fileNameCellRenderer';
+import itemNameCellRenderer from '../itemNameCellRenderer';
 
 const intl = {
     formatMessage: jest.fn().mockImplementation(message => message),
 };
 
-describe('features/virtualized-table-renderers/fileNameCellRenderer', () => {
+describe('features/virtualized-table-renderers/itemNameCellRenderer', () => {
     let wrapper;
     let cellRendererParams;
 
     const getWrapper = (props = {}) => {
-        return shallow(fileNameCellRenderer(intl)(props));
+        return shallow(itemNameCellRenderer(intl)(props));
     };
 
     beforeEach(() => {
@@ -21,29 +21,32 @@ describe('features/virtualized-table-renderers/fileNameCellRenderer', () => {
             cellData: {
                 id: '123',
                 name: 'fancy.jpg',
+                type: 'file',
             },
         };
     });
 
     test('should render a dash when cellData is missing', () => {
         cellRendererParams.cellData = null;
-        expect(fileNameCellRenderer(intl)(cellRendererParams)).toBe('—');
+        expect(itemNameCellRenderer(intl)(cellRendererParams)).toBe('—');
     });
 
-    test('should render a FileNameCell', () => {
+    test('should render a itemNameCell', () => {
         wrapper = getWrapper(cellRendererParams);
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render a span instead of Link when id is missing', () => {
-        cellRendererParams.cellData.id = '1234';
+    test('should render a span when type is file', () => {
         wrapper = getWrapper(cellRendererParams);
-        expect(wrapper.find(Link).props().href).toBe(`/file/${1234}`);
+        expect(wrapper.find(PlainButton)).toHaveLength(0);
+        expect(wrapper.find('span')).toHaveLength(2);
+    });
 
-        cellRendererParams.cellData.id = '';
+    test('should render a PlainButton when type is folder', () => {
+        cellRendererParams.cellData.type = 'folder';
         wrapper = getWrapper(cellRendererParams);
-        expect(wrapper.find(Link)).toHaveLength(0);
-        expect(wrapper.find('span')).toBeTruthy();
+        expect(wrapper.find(PlainButton)).toHaveLength(1);
+        expect(wrapper.find('span')).toHaveLength(1);
     });
 
     test('should get the extension from the file name and pass it to FileIcon', () => {

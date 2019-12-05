@@ -56,7 +56,7 @@ type RowClickParams = {
     rowData: any,
 };
 
-type FileNameCellRendererCellData = {
+type ItemNameCellRendererCellData = {
     id?: string,
     isExternal?: boolean,
     name: string,
@@ -79,8 +79,8 @@ type FilePathCellRendererCellData = {
     size?: number,
 };
 
-type FileNameCellRendererParams = CellRendererParamsBase & {
-    cellData: ?FileNameCellRendererCellData,
+type ItemNameCellRendererParams = CellRendererParamsBase & {
+    cellData: ?ItemNameCellRendererCellData,
 };
 
 type FilePathCellRendererParams = CellRendererParamsBase & {
@@ -114,8 +114,8 @@ type LastModifiedByCellRendererParams = CellRendererParamsBase & {
 
 export type {
     CellRendererParams,
-    FileNameCellRendererCellData,
-    FileNameCellRendererParams,
+    ItemNameCellRendererCellData,
+    ItemNameCellRendererParams,
     HeaderRendererParams,
     LastModifiedByCellRendererCellData,
     LastModifiedByCellRendererParams,

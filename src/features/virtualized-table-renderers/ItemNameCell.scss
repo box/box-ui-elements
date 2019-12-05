@@ -1,7 +1,7 @@
 @import '../../styles/variables';
 @import './mixins';
 
-.bdl-FileNameCell {
+.bdl-ItemNameCell {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -11,7 +11,7 @@
     }
 }
 
-.bdl-FileNameCell-link {
+.bdl-ItemNameCell-name {
     @include itemName;
 
     margin-left: 5px;
@@ -19,9 +19,11 @@
     color: $bdl-gray;
     line-height: 1.5em;
     white-space: nowrap;
+    text-decoration: none;
     text-overflow: ellipsis;
 
-    &.link {
-        cursor: pointer;
+    &.is-folder:hover {
+        margin-left: 5px;
+        text-decoration: underline;
     }
 }
