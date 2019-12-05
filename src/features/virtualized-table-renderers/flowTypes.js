@@ -1,5 +1,4 @@
 // @flow
-import type { Node } from 'react';
 import { SortDirection as SORT_DIRECTION } from 'react-virtualized/dist/es/Table/index';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../../constants';
 
@@ -61,7 +60,6 @@ type FileNameCellRendererCellData = {
     id?: string,
     isExternal?: boolean,
     name: string,
-    onClick?: Function,
     type?: string,
 };
 
@@ -114,25 +112,6 @@ type LastModifiedByCellRendererParams = CellRendererParamsBase & {
     cellData: ?LastModifiedByCellRendererCellData,
 };
 
-type RouterCellRendererCellDataBase = {
-    label: string,
-    to: string,
-};
-
-type RouterButtonCellRendererCellData = RouterCellRendererCellDataBase;
-
-type RouterButtonCellRendererParams = CellRendererParamsBase & {
-    cellData: RouterButtonCellRendererCellData,
-};
-
-type RouterLinkCellRendererCellData = RouterCellRendererCellDataBase & {
-    icon?: Node,
-};
-
-type RouterLinkCellRendererParams = CellRendererParamsBase & {
-    cellData: RouterLinkCellRendererCellData,
-};
-
 export type {
     CellRendererParams,
     FileNameCellRendererCellData,
@@ -141,10 +120,6 @@ export type {
     LastModifiedByCellRendererCellData,
     LastModifiedByCellRendererParams,
     RowClickParams,
-    RouterButtonCellRendererCellData,
-    RouterButtonCellRendererParams,
-    RouterLinkCellRendererCellData,
-    RouterLinkCellRendererParams,
     RowRendererParams,
     SortDirection,
     SortParams,

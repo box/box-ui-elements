@@ -1,12 +1,12 @@
 // @flow
-import * as React from 'react';
+import type { IntlShape } from 'react-intl';
 import baseCellRenderer from './baseCellRenderer';
-import FormattedUser from './FormattedUser';
+import { formatUser } from './FormattedUser';
 import type { UserCellRendererCellData, UserCellRendererParams } from './flowTypes';
 
-const userCellRenderer = (cellRendererParams: UserCellRendererParams) =>
-    baseCellRenderer(cellRendererParams, ({ id, email, name, login }: UserCellRendererCellData) => (
-        <FormattedUser id={id} email={email || login} name={name} />
-    ));
+const userCellRenderer = (intl: IntlShape) => (cellRendererParams: UserCellRendererParams) =>
+    baseCellRenderer(cellRendererParams, ({ id, email, name, login }: UserCellRendererCellData) =>
+        formatUser({ id, email: email || login, name }, intl),
+    );
 
 export default userCellRenderer;

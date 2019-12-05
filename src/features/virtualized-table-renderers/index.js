@@ -6,10 +6,8 @@ export { default as fileNameCellRenderer } from './fileNameCellRenderer';
 export { default as lastModifiedByCellRenderer } from './lastModifiedByCellRenderer';
 export { default as sizeCellRenderer } from './sizeCellRenderer';
 export { default as userCellRenderer } from './userCellRenderer';
-export { default as routerLinkCellRenderer } from './routerLinkCellRenderer';
 export { default as sortableColumnHeaderRenderer } from './sortableColumnHeaderRenderer';
 export { default as filePathCellRenderer } from './filePathCellRenderer';
-export { default as selectableRowRenderer } from './selectableRowRenderer';
 
 export type {
     CellRendererParams,
@@ -19,10 +17,6 @@ export type {
     LastModifiedByCellRendererCellData,
     LastModifiedByCellRendererParams,
     RowClickParams,
-    RouterButtonCellRendererCellData,
-    RouterButtonCellRendererParams,
-    RouterLinkCellRendererCellData,
-    RouterLinkCellRendererParams,
     RowRendererParams,
     UserCellRendererCellData,
     UserCellRendererParams,

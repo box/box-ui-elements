@@ -13,6 +13,7 @@ exports[`features/virtualized-table-renderers/fileNameCellRenderer should render
     className="bdl-FileNameCell-link"
     component="a"
     href="/file/123"
+    onClick={[Function]}
     rel="noopener noreferrer"
     target="_blank"
   >
@@ -39,6 +40,7 @@ exports[`features/virtualized-table-renderers/fileNameCellRenderer should render
     className="bdl-FileNameCell-link is-external"
     component="a"
     href="/file/123"
+    onClick={[Function]}
     rel="noopener noreferrer"
     target="_blank"
   >
