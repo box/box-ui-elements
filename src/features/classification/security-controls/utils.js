@@ -13,13 +13,14 @@ import { ACCESS_POLICY_RESTRICTION, DOWNLOAD_CONTROL, LIST_ACCESS_LEVEL, SHARED_
 const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTION;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
-const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY } = SHARED_LINK_ACCESS_LEVEL;
+const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVEL;
 
 const getShortSecurityControlsMessage = (controls: Controls): ?MessageDescriptor => {
     const { sharedLink, download, externalCollab, app } = controls;
-    const sharing = sharedLink || externalCollab;
     // Shared link and external collab restrictions are grouped
     // together as generic "sharing" restrictions
+    const sharing = (sharedLink && sharedLink.accessLevel !== PUBLIC) || externalCollab;
+
     if (sharing && download && app) {
         return messages.shortAllRestrictions;
     }
@@ -36,7 +37,7 @@ const getShortSecurityControlsMessage = (controls: Controls): ?MessageDescriptor
         return messages.shortDownloadApp;
     }
 
-    if (sharedLink || externalCollab) {
+    if (sharing) {
         return messages.shortSharing;
     }
 

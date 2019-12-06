@@ -80,6 +80,7 @@ type Props = {
     onComplete: Function,
     onError: Function,
     onMinimize?: Function,
+    onResume: Function,
     onUpload: Function,
     overwrite: boolean,
     requestInterceptor?: Function,
@@ -133,6 +134,7 @@ class ContentUploader extends Component<Props, State> {
         onClose: noop,
         onComplete: noop,
         onError: noop,
+        onResume: noop,
         onUpload: noop,
         overwrite: true,
         useUploadsManager: false,
@@ -418,7 +420,6 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
-        // $FlowFixMe
         const fileAPIOptions: Object = getDataTransferItemAPIOptions(newItems[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
 
@@ -443,7 +444,6 @@ class ContentUploader extends Component<Props, State> {
         }
 
         const { rootFolderId } = this.props;
-        // $FlowFixMe
         const fileAPIOptions: Object = getFileAPIOptions(files[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
         const folderUpload = this.getFolderUploadAPI(folderId);
@@ -742,7 +742,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     resumeFile(item: UploadItem) {
-        const { overwrite, rootFolderId } = this.props;
+        const { overwrite, rootFolderId, onResume } = this.props;
         const { api, file, options } = item;
         const { items } = this.state;
 
@@ -767,6 +767,7 @@ class ContentUploader extends Component<Props, State> {
         delete item.error;
         items[items.indexOf(item)] = item;
 
+        onResume(item);
         api.resume(resumeOptions);
 
         this.updateViewAndCollection(items);
@@ -857,8 +858,8 @@ class ContentUploader extends Component<Props, State> {
         const someUploadIsInProgress = items.some(uploadItem => uploadItem.status !== STATUS_COMPLETE);
         const someUploadHasFailed = items.some(uploadItem => uploadItem.status === STATUS_ERROR);
         const allItemsArePending = !items.some(uploadItem => uploadItem.status !== STATUS_PENDING);
-        const noFileIsPendingOrInProgress = items.every(
-            uploadItem => uploadItem.status !== STATUS_PENDING && uploadItem.status !== STATUS_IN_PROGRESS,
+        const areAllItemsFinished = items.every(
+            uploadItem => uploadItem.status === STATUS_COMPLETE || uploadItem.status === STATUS_ERROR,
         );
 
         let view = '';
@@ -878,7 +879,7 @@ class ContentUploader extends Component<Props, State> {
             }
         }
 
-        if (noFileIsPendingOrInProgress && useUploadsManager) {
+        if (areAllItemsFinished && useUploadsManager) {
             if (this.isAutoExpanded) {
                 this.resetUploadManagerExpandState();
             } // Else manually expanded so don't close

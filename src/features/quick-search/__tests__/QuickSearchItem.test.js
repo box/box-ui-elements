@@ -129,7 +129,6 @@ describe('features/quick-search/QuickSearchItem', () => {
         const itemDataWithoutParent = {
             ...itemData,
             parentName: undefined,
-            parentFolderRenderer: undefined,
         };
         const wrapper = mount(<QuickSearchItem itemData={itemDataWithoutParent} />);
 

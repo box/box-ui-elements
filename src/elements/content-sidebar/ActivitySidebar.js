@@ -40,6 +40,7 @@ import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, BoxItem, BoxItemPermission } from '../../common/types/core';
 import type { GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations, Collaborators, Errors } from './flowTypes';
+import type { FeatureConfig } from '../common/feature-checking';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {

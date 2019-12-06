@@ -87,6 +87,24 @@ describe('features/quick-search/QuickSearch', () => {
 
             expect(wrapper.find('QuickSearchMessage').prop('isShown')).toBe(true);
         });
+
+        test('should render divider when specified', () => {
+            const children = (
+                <>
+                    <li key="1" />
+                    <li key="2" />
+                </>
+            );
+            const dividerIndex = 1;
+            const wrapper = shallow(
+                <QuickSearch dividerIndex={dividerIndex} inputProps={inputProps}>
+                    {children}
+                </QuickSearch>,
+            );
+            const selectorDropdown = wrapper.find('SelectorDropdown');
+
+            expect(selectorDropdown.prop('dividerIndex')).toEqual(1);
+        });
     });
 
     describe('onFocus', () => {

@@ -9,6 +9,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
+import type { MessageDescriptor } from 'react-intl';
 import API from '../../api';
 import EmptyContent from '../../features/metadata-instance-editor/EmptyContent';
 import InlineError from '../../components/inline-error/InlineError';

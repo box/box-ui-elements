@@ -32,6 +32,8 @@ import type { ElementsXhrError, FetchOptions, ErrorContextProps } from '../../co
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
 import type { AdditionalSidebarTab } from './flowTypes';
+import type { FeatureConfig } from '../common/feature-checking';
+import type APICache from '../../utils/Cache';
 
 import '../common/fonts.scss';
 import '../common/base.scss';

@@ -48,6 +48,7 @@ import type { ElementsXhrError } from '../../../../common/types/api';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { ActionItemError } from '../../../../common/types/feed';
 import type { Translations } from '../../flowTypes';
+import type { FeatureConfig } from '../../../common/feature-checking';
 
 import './Task.scss';
 
@@ -261,6 +262,7 @@ class Task extends React.Component<Props, State> {
 
         return (
             <div className="bcs-Task">
+                {/* $FlowFixMe */}
                 {inlineError ? <ActivityError {...inlineError} /> : null}
                 <Media
                     className={classNames('bcs-Task-media', {

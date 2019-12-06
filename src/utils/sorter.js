@@ -15,6 +15,7 @@ import type {
     FlattenedBoxItemCollection,
     FileVersions,
 } from '../common/types/core';
+import type APICache from './Cache';
 
 function isSortingNeeded(order?: Order[], sortBy: SortBy, sortDirection: SortDirection): boolean {
     return !Array.isArray(order) || !order.some(entry => entry.by === sortBy && entry.direction === sortDirection);
