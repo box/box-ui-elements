@@ -36,7 +36,7 @@ exports[`features/virtualized-table-renderers/filePathCellRenderer should render
 exports[`features/virtualized-table-renderers/filePathCellRenderer should render a FilePathCell when it is external file and all files 1`] = `
 <span
   className="bdl-FilePathCell is-external"
-  title="[object Object] > [object Object] > [object Object] (123 Bytes)"
+  title="All Files > External File > External File (123 Bytes)"
 >
   <FileIcon
     extension="jpg"
@@ -46,21 +46,21 @@ exports[`features/virtualized-table-renderers/filePathCellRenderer should render
   >
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="[object Object]"
+      key="All Files"
     >
-      <Component />
+      All Files
     </span>
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="[object Object]"
+      key="External File"
     >
-      <Component />
+      External File
     </span>
     <span
       className="bdl-FilePathCell-breadcrumbName"
-      key="[object Object] (123 Bytes)"
+      key="External File (123 Bytes)"
     >
-      [object Object] (123 Bytes)
+      External File (123 Bytes)
     </span>
   </Breadcrumb>
 </span>

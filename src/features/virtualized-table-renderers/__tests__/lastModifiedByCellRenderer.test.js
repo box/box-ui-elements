@@ -2,18 +2,13 @@
 import { formatUser } from '../FormattedUser';
 import lastModifiedByCellRenderer from '../lastModifiedByCellRenderer';
 
-const intl = {
-    formatDate: jest.fn().mockImplementation(value => value),
-    formatRelative: jest.fn().mockImplementation(value => `${value} eons ago`),
-    formatMessage: jest.fn().mockImplementation((message, { lastModified, user }) => `${lastModified} by ${user}`),
-};
-
 jest.mock('../FormattedUser', () => ({
     formatUser: jest.fn().mockImplementation(({ id, name, email }) => `${id}-${name}-${email}`),
 }));
 
 describe('features/virtualized-table-renderers/lastModifiedByCellRenderer', () => {
     let cellRendererParams;
+    let intl;
 
     beforeEach(() => {
         cellRendererParams = {
@@ -26,6 +21,13 @@ describe('features/virtualized-table-renderers/lastModifiedByCellRenderer', () =
                     login: 'a@a.com',
                 },
             },
+        };
+        intl = {
+            formatDate: jest.fn().mockImplementation(value => value),
+            formatRelative: jest.fn().mockImplementation(value => `${value} eons ago`),
+            formatMessage: jest
+                .fn()
+                .mockImplementation((message, { lastModified, user }) => `${lastModified} by ${user}`),
         };
     });
 

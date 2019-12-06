@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`features/virtualized-table-renderers/userCellRenderer should render a UserCell 1`] = `"Marlon Rando (a@a.com)"`;

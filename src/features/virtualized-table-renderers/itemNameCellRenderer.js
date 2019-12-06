@@ -20,7 +20,7 @@ const itemNameCellRenderer = (intl: IntlShape, onClick?: Function = noop) => (
         const extension = getFileExtension(name);
         const displayName = isExternal ? intl.formatMessage(messages.externalFile) : name;
         const isFolder = type === 'folder';
-        const fileNameCellClass = classNames('bdl-ItemNameCell-name', {
+        const itemNameCellClass = classNames('bdl-ItemNameCell-name', {
             'is-external': isExternal,
             'is-folder': isFolder,
         });
@@ -30,14 +30,14 @@ const itemNameCellRenderer = (intl: IntlShape, onClick?: Function = noop) => (
                 {isFolder ? (
                     <>
                         <FolderIcon dimension={32} isExternal={isExternal} />
-                        <PlainButton className={fileNameCellClass} onClick={() => onClick(cellValue)} type="button">
+                        <PlainButton className={itemNameCellClass} onClick={() => onClick(cellValue)} type="button">
                             {displayName}
                         </PlainButton>
                     </>
                 ) : (
                     <>
                         <FileIcon dimension={32} extension={extension} />
-                        <span className={fileNameCellClass}>{displayName}</span>
+                        <span className={itemNameCellClass}>{displayName}</span>
                     </>
                 )}
             </span>

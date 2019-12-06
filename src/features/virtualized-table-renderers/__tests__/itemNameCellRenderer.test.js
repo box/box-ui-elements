@@ -4,17 +4,12 @@ import PlainButton from '../../../components/plain-button/PlainButton';
 import FileIcon from '../../../icons/file-icon';
 import itemNameCellRenderer from '../itemNameCellRenderer';
 
-const intl = {
-    formatMessage: jest.fn().mockImplementation(message => message),
-};
-
 describe('features/virtualized-table-renderers/itemNameCellRenderer', () => {
     let wrapper;
     let cellRendererParams;
+    let intl;
 
-    const getWrapper = (props = {}) => {
-        return shallow(itemNameCellRenderer(intl)(props));
-    };
+    const getWrapper = (props = {}) => shallow(itemNameCellRenderer(intl)(props));
 
     beforeEach(() => {
         cellRendererParams = {
@@ -24,6 +19,13 @@ describe('features/virtualized-table-renderers/itemNameCellRenderer', () => {
                 type: 'file',
             },
         };
+        intl = {
+            formatMessage: jest.fn().mockImplementation(message => message.defaultMessage),
+        };
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     test('should render a dash when cellData is missing', () => {
@@ -63,6 +65,6 @@ describe('features/virtualized-table-renderers/itemNameCellRenderer', () => {
         cellRendererParams.cellData.isExternal = true;
         wrapper = getWrapper(cellRendererParams);
 
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('.bdl-ItemNameCell-name').text()).toBe('External File');
     });
 });
