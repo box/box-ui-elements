@@ -7,6 +7,7 @@
 import React from 'react';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import { TYPE_FOLDER, TYPE_WEBLINK } from '../../../constants';
+import type { BoxItem } from '../../../common/types/core';
 
 import './ItemName.scss';
 

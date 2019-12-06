@@ -10,6 +10,7 @@ import getSize from '../../../utils/size';
 import Datefield from '../date';
 import messages from '../messages';
 import { VIEW_RECENTS } from '../../../constants';
+import type { View, BoxItem } from '../../../common/types/core';
 import './ItemSubDetails.scss';
 
 type Props = {

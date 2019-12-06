@@ -14,6 +14,7 @@ import {
     API_PAGE_LIMIT,
 } from '../../constants';
 import type { ElementsErrorCallback } from '../../common/types/api';
+import type { BoxItem } from '../../common/types/core';
 
 class TaskCollaborators extends TasksBase {
     getUrlForTaskCollaborators(taskId: string): string {

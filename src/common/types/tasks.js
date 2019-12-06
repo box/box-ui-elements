@@ -1,5 +1,5 @@
 // @flow
-import type { FileMini, FolderMini, ISODate, UserMini, MarkerPaginatedCollection } from './core';
+import type { FileMini, FolderMini, ISODate, UserMini, MarkerPaginatedCollection, SelectorItems } from './core';
 
 type ID = string;
 

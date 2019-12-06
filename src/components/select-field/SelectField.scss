@@ -29,3 +29,15 @@
     max-height: 340px; // show at most 12 items in the dropdown menu
     overflow-y: auto;
 }
+
+.bdl-SelectFieldDropdown {
+    z-index: 4;
+    min-width: 100%;
+    overflow-x: hidden;
+}
+
+.bdl-SelectField-optionText {
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

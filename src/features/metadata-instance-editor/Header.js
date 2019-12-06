@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import TemplateDropdown from './TemplateDropdown';
 import messages from './messages';
 import { isHidden } from './metadataUtil';
+import type { MetadataEditor, MetadataTemplate } from '../../common/types/metadata';
 import './Header.scss';
 
 type Props = {

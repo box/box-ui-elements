@@ -7,8 +7,10 @@ import { scrollIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
 import DatalistItem from '../datalist-item';
+import PopperComponent from '../popper';
+import SelectFieldDropdown from './SelectFieldDropdown';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
-import { OVERLAY_WRAPPER_CLASS } from '../../constants';
+import { PLACEMENT_BOTTOM_END, PLACEMENT_BOTTOM_START } from '../popper/constants';
 
 import './SelectField.scss';
 
@@ -38,6 +40,8 @@ type Props = {
     error?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
+    /** Whether to align the dropdown to the right */
+    isRightAligned: boolean,
     /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
     isScrollable?: boolean,
     multiple: boolean,
@@ -46,7 +50,7 @@ type Props = {
     /** Function will be called with the user selected option (even on deselect or when the option was previously selected) */
     onOptionSelect?: Function,
     /** Function that allows custom rendering of select field options. When not provided the component will only render the option's displayText by default */
-    optionRenderer?: (option: SelectOptionProp) => React.Node,
+    optionRenderer: (option: SelectOptionProp) => React.Node,
     /** List of options (displayText, value) */
     options: Array<SelectOptionProp>,
     /** The select button text shown when no options are selected. */
@@ -66,14 +70,22 @@ type State = {
     shouldScrollIntoView: boolean,
 };
 
-export const OVERLAY_SCROLLABLE_CLASS = 'bdl-SelectField-overlay--scrollable';
+function defaultOptionRenderer({ displayText }: SelectOptionProp) {
+    return (
+        <span className="bdl-SelectField-optionText" title={displayText}>
+            {displayText}
+        </span>
+    );
+}
 
 class BaseSelectField extends React.Component<Props, State> {
     static defaultProps = {
         buttonProps: {},
         isDisabled: false,
+        isRightAligned: false,
         isScrollable: false,
         multiple: false,
+        optionRenderer: defaultOptionRenderer,
         options: [],
         selectedValues: [],
         separatorIndices: [],
@@ -311,6 +323,8 @@ class BaseSelectField extends React.Component<Props, State> {
         };
 
         return (
+            // Need to store the select button reference so we can calculate the button width
+            // in order to set it as the min width of the dropdown list
             <SelectButton {...buttonProps} error={error}>
                 {buttonText}
             </SelectButton>
@@ -322,7 +336,7 @@ class BaseSelectField extends React.Component<Props, State> {
         const { activeItemIndex } = this.state;
 
         const selectOptions = options.map<React.Element<typeof DatalistItem | 'li'>>((item, index) => {
-            const { displayText, value } = item;
+            const { value } = item;
 
             const isSelected = selectedValues.includes(value);
 
@@ -352,7 +366,7 @@ class BaseSelectField extends React.Component<Props, State> {
                     <div className="select-option-check-icon">
                         {isSelected ? <IconCheck height={16} width={16} /> : null}
                     </div>
-                    {optionRenderer ? optionRenderer(item) : displayText}
+                    {optionRenderer(item)}
                 </DatalistItem>
             );
             /* eslint-enable react/jsx-key */
@@ -366,7 +380,7 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     render() {
-        const { className, multiple, isScrollable } = this.props;
+        const { className, multiple, isRightAligned, isScrollable, selectedValues } = this.props;
         const { isOpen } = this.state;
 
         // @TODO: Need invariants on specific conditions.
@@ -376,39 +390,26 @@ class BaseSelectField extends React.Component<Props, State> {
         // 4) defaultValue, if defined, should mean selectedValues is never empty
         // 5) defaultValue, if defined, cannot be selected in addition to other options (must be exclusive)
 
-        const listboxProps = {};
-        if (multiple) {
-            listboxProps['aria-multiselectable'] = true;
-        }
+        const dropdownPlacement = isRightAligned ? PLACEMENT_BOTTOM_END : PLACEMENT_BOTTOM_START;
 
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                className={classNames(className, 'select-container')}
+                className={classNames(className, 'bdl-SelectField', 'select-container')}
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
             >
-                <div className="select-field">
+                <PopperComponent placement={dropdownPlacement} isOpen={isOpen}>
                     {this.renderSelectButton()}
-                    <div
-                        className={classNames(OVERLAY_WRAPPER_CLASS, {
-                            'is-visible': isOpen,
-                        })}
+                    <SelectFieldDropdown
+                        isScrollable={isScrollable}
+                        multiple={multiple}
+                        selectedValues={selectedValues}
+                        selectFieldID={this.selectFieldID}
                     >
-                        <ul
-                            className={classNames('overlay', {
-                                [OVERLAY_SCROLLABLE_CLASS]: isScrollable,
-                            })}
-                            id={this.selectFieldID}
-                            role="listbox"
-                            // preventDefault on mousedown so blur doesn't happen before click
-                            onMouseDown={event => event.preventDefault()}
-                            {...listboxProps}
-                        >
-                            {this.renderSelectOptions()}
-                        </ul>
-                    </div>
-                </div>
+                        {this.renderSelectOptions()}
+                    </SelectFieldDropdown>
+                </PopperComponent>
             </div>
         );
     }

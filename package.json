@@ -82,7 +82,7 @@
         "test": "BABEL_ENV=test NODE_ENV=test yarn jest",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:open",
-        "test:images": "yarn test -c scripts/jest/jest.config.js",
+        "test:images": "yarn test -c scripts/jest/jest.config.js --maxWorkers=4",
         "test:visuals": "start-server-and-test start:storybook:ci http-get://localhost:6061 test:images"
     },
     "browserslist": {
@@ -235,6 +235,7 @@
         "react-intl": "^2.9.0",
         "react-measure": "^2.3.0",
         "react-modal": "^3.8.1",
+        "react-popper": "^1.3.4",
         "react-process-string": "^1.2.0",
         "react-router-dom": "^5.0.0",
         "react-styleguidist": "^8.0.6",
@@ -246,7 +247,7 @@
         "sass-loader": "^8.0.0",
         "sass-variable-parser": "^1.2.2",
         "scroll-into-view-if-needed": "^2.2.20",
-        "semantic-release": "^16.0.0-beta.35",
+        "semantic-release": "^16.0.0-beta.36",
         "sinon": "^2.3.7",
         "start-server-and-test": "^1.10.6",
         "string-replace-loader": "^2.2.0",
@@ -289,6 +290,7 @@
         "react-intl": "^2.9.0",
         "react-measure": "^2.3.0",
         "react-modal": "^3.8.1",
+        "react-popper": "^1.3.4",
         "react-process-string": "^1.2.0",
         "react-router-dom": "^5.0.0",
         "react-tether": "^1.0.0",

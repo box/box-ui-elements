@@ -8,7 +8,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     key="0"
     message={
       Object {
-        "defaultMessage": "Shared links cannot be made publicly accessible.",
+        "defaultMessage": "Shared links allowed for collaborators only.",
         "id": "boxui.securityControls.sharingCollabOnly",
       }
     }
@@ -58,14 +58,14 @@ exports[`features/classification/security-controls/SecurityControls should rende
     key="0"
     message={
       Object {
-        "defaultMessage": "Sharing, download and app and restrictions apply",
+        "defaultMessage": "Sharing, download and app restrictions apply",
         "id": "boxui.securityControls.shortAllRestrictions",
       }
     }
     tooltipItems={
       Array [
         Object {
-          "defaultMessage": "Shared links cannot be made publicly accessible.",
+          "defaultMessage": "Shared links allowed for collaborators only.",
           "id": "boxui.securityControls.sharingCollabOnly",
         },
         Object {
@@ -97,7 +97,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     key="0"
     message={
       Object {
-        "defaultMessage": "Sharing, download and app and restrictions apply",
+        "defaultMessage": "Sharing, download and app restrictions apply",
         "id": "boxui.securityControls.shortAllRestrictions",
       }
     }

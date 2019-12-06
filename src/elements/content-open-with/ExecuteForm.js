@@ -6,6 +6,7 @@
 
 import React, { PureComponent } from 'react';
 import { HTTP_POST } from '../../constants';
+import type { ExecuteAPI } from '../../common/types/integrations';
 
 type Props = {
     executePostData: ExecuteAPI,

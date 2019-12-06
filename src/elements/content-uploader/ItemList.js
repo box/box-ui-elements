@@ -11,6 +11,7 @@ import nameCellRenderer from './nameCellRenderer';
 import progressCellRenderer from './progressCellRenderer';
 import actionCellRenderer from './actionCellRenderer';
 import removeCellRenderer from './removeCellRenderer';
+import type { UploadItem } from '../../common/types/upload';
 import './ItemList.scss';
 
 type Props = {

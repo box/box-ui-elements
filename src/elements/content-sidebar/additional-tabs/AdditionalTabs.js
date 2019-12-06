@@ -7,6 +7,7 @@
 import React, { PureComponent } from 'react';
 import AdditionalTab from './AdditionalTab';
 import AdditionalTabsLoading from './AdditionalTabsLoading';
+import type { AdditionalSidebarTab } from '../flowTypes';
 
 import './AdditionalTabs.scss';
 

@@ -5,6 +5,7 @@
 
 import React from 'react';
 import ItemRemove from './ItemRemove';
+import type { UploadItem } from '../../common/types/upload';
 
 type Props = {
     rowData: UploadItem,

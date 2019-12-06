@@ -2,7 +2,8 @@ import React from 'react';
 import sinon from 'sinon';
 
 import { scrollIntoView } from '../../../utils/dom';
-import BaseSelectField, { OVERLAY_SCROLLABLE_CLASS } from '../BaseSelectField';
+import BaseSelectField from '../BaseSelectField';
+import { OVERLAY_SCROLLABLE_CLASS } from '../SelectFieldDropdown';
 
 const sandbox = sinon.sandbox.create();
 
@@ -80,8 +81,7 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
 
-            const buttonWrapper = wrapper.find('SelectButton');
-            expect(buttonWrapper.length).toBe(1);
+            const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
             expect(buttonWrapper.prop('aria-activedescendant')).toEqual(null);
             expect(buttonWrapper.prop('aria-autocomplete')).toEqual('list');
             expect(buttonWrapper.prop('aria-expanded')).toBe(false);
@@ -97,7 +97,7 @@ describe('components/select-field/BaseSelectField', () => {
                 activeItemID: 'datalistitem-123',
             });
 
-            const buttonWrapper = wrapper.find('SelectButton');
+            const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
             expect(buttonWrapper.length).toBe(1);
             expect(buttonWrapper.prop('aria-activedescendant')).toEqual('datalistitem-123');
             expect(buttonWrapper.prop('aria-expanded')).toBe(true);
@@ -105,7 +105,7 @@ describe('components/select-field/BaseSelectField', () => {
 
         test('should render disabled select button if isDisabled is true', () => {
             const wrapper = shallowRenderSelectField({ isDisabled: true });
-            const buttonWrapper = wrapper.find('SelectButton');
+            const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
             expect(buttonWrapper.prop('isDisabled')).toBe(true);
         });
 
@@ -113,7 +113,7 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField({
                 buttonProps: { 'data-resin-thing': 'hi' },
             });
-            const buttonWrapper = wrapper.find('SelectButton');
+            const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
             expect(buttonWrapper.prop('data-resin-thing')).toBe('hi');
         });
 
@@ -121,7 +121,7 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField({
                 error: 'error',
             });
-            const buttonWrapper = wrapper.find('SelectButton');
+            const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
             expect(buttonWrapper).toMatchSnapshot();
         });
     });
@@ -165,7 +165,7 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField({
                 separatorIndices: [1, 3],
             });
-            const overlayWrapper = wrapper.find('.overlay');
+            const overlayWrapper = wrapper.find('PopperComponent').childAt(1);
             expect(overlayWrapper.childAt(1).prop('role')).toEqual('separator');
             expect(overlayWrapper.childAt(4).prop('role')).toEqual('separator');
         });
@@ -199,11 +199,13 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
 
-            const overlayWrapper = wrapper.find('.overlay-wrapper');
-            const overlay = wrapper.find('.overlay');
+            // Dive past the ForwardRef and SelectFieldDropdown
+            const overlay = wrapper
+                .find('PopperComponent')
+                .childAt(1)
+                .dive()
+                .dive();
 
-            expect(overlayWrapper.length).toBe(1);
-            expect(overlayWrapper.hasClass('is-visible')).toBe(false);
             expect(overlay.length).toBe(1);
             expect(overlay.is('ul')).toBe(true);
             expect(overlay.prop('role')).toEqual('listbox');
@@ -214,7 +216,12 @@ describe('components/select-field/BaseSelectField', () => {
         test('should render a listbox with aria-multiselectable when multiple prop is passed', () => {
             const wrapper = shallowRenderSelectField({ multiple: true });
 
-            const overlay = wrapper.find('.overlay');
+            // Dive past the ForwardRef and SelectFieldDropdown
+            const overlay = wrapper
+                .find('PopperComponent')
+                .childAt(1)
+                .dive()
+                .dive();
 
             expect(overlay.prop('aria-multiselectable')).toBe(true);
         });
@@ -226,7 +233,12 @@ describe('components/select-field/BaseSelectField', () => {
             'should apply the correct CSS classes to the overlay element when isScrollable is %s',
             (isScrollable, result) => {
                 const wrapper = shallowRenderSelectField({ isScrollable });
-                const overlay = wrapper.find('.overlay');
+                // Dive past the ForwardRef and SelectFieldDropdown
+                const overlay = wrapper
+                    .find('PopperComponent')
+                    .childAt(1)
+                    .dive()
+                    .dive();
                 expect(overlay.hasClass(OVERLAY_SCROLLABLE_CLASS)).toBe(result);
             },
         );
@@ -520,7 +532,10 @@ describe('components/select-field/BaseSelectField', () => {
 
             sandbox.mock(instance).expects('openDropdown');
 
-            wrapper.find('SelectButton').simulate('click');
+            wrapper
+                .find('PopperComponent')
+                .childAt(0)
+                .simulate('click');
         });
 
         test('should close dropdown when it is open', () => {
@@ -530,7 +545,10 @@ describe('components/select-field/BaseSelectField', () => {
 
             sandbox.mock(instance).expects('closeDropdown');
 
-            wrapper.find('SelectButton').simulate('click');
+            wrapper
+                .find('PopperComponent')
+                .childAt(0)
+                .simulate('click');
         });
     });
 
@@ -547,22 +565,28 @@ describe('components/select-field/BaseSelectField', () => {
                 const wrapper = shallowRenderSelectField();
                 wrapper.setState({ isOpen: true, activeItemIndex: 2 });
 
-                wrapper.find('SelectButton').simulate('keyDown', {
-                    key,
-                    preventDefault: sandbox.mock(),
-                    stopPropagation: sandbox.mock().never(),
-                });
+                wrapper
+                    .find('PopperComponent')
+                    .childAt(0)
+                    .simulate('keyDown', {
+                        key,
+                        preventDefault: sandbox.mock(),
+                        stopPropagation: sandbox.mock().never(),
+                    });
             });
 
             test('should not preventDefault() when key is space or enter and activeItemIndex == -1', () => {
                 const wrapper = shallowRenderSelectField();
                 wrapper.setState({ isOpen: true, activeItemIndex: -1 });
 
-                wrapper.find('SelectButton').simulate('keyDown', {
-                    key,
-                    preventDefault: sandbox.mock().never(),
-                    stopPropagation: sandbox.mock().never(),
-                });
+                wrapper
+                    .find('PopperComponent')
+                    .childAt(0)
+                    .simulate('keyDown', {
+                        key,
+                        preventDefault: sandbox.mock().never(),
+                        stopPropagation: sandbox.mock().never(),
+                    });
             });
         });
 
@@ -570,11 +594,14 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField();
             wrapper.setState({ isOpen: true, activeItemIndex: 2 });
 
-            wrapper.find('SelectButton').simulate('keyDown', {
-                key: 'ArrowDown',
-                preventDefault: sandbox.mock().never(),
-                stopPropagation: sandbox.mock().never(),
-            });
+            wrapper
+                .find('PopperComponent')
+                .childAt(0)
+                .simulate('keyDown', {
+                    key: 'ArrowDown',
+                    preventDefault: sandbox.mock().never(),
+                    stopPropagation: sandbox.mock().never(),
+                });
         });
     });
 
@@ -594,15 +621,6 @@ describe('components/select-field/BaseSelectField', () => {
                 .simulate('click', {
                     preventDefault: sandbox.mock(),
                 });
-        });
-    });
-
-    describe('onOptionMouseDown', () => {
-        test('should prevent default when mousedown on overlay occurs to prevent blur', () => {
-            const wrapper = shallowRenderSelectField();
-            wrapper.find('.overlay').simulate('mouseDown', {
-                preventDefault: sandbox.mock(),
-            });
         });
     });
 

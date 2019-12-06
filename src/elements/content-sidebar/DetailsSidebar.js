@@ -32,9 +32,10 @@ import {
     IS_ERROR_DISPLAYED,
     SIDEBAR_VIEW_DETAILS,
 } from '../../constants';
-import type { ClassificationInfo } from './flowTypes';
+import type { ClassificationInfo, FileAccessStats, Errors } from './flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
+import type { BoxItem } from '../../common/types/core';
 import './DetailsSidebar.scss';
 
 type ExternalProps = {

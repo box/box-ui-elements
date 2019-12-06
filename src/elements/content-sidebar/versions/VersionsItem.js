@@ -21,6 +21,7 @@ import {
     VERSION_UPLOAD_ACTION,
 } from '../../../constants';
 import type { VersionActionCallback } from './flowTypes';
+import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsItem.scss';
 
 type Props = {

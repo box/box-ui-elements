@@ -6,6 +6,7 @@
 
 import React from 'react';
 import Name from './Name';
+import type { View, BoxItem } from '../../../common/types/core';
 
 export default (
     rootId: string,

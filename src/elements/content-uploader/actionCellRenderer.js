@@ -5,6 +5,7 @@
 
 import React from 'react';
 import ItemAction from './ItemAction';
+import type { UploadItem } from '../../common/types/upload';
 
 type Props = {
     rowData: UploadItem,

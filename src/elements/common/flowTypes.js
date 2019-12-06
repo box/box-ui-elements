@@ -40,4 +40,22 @@ type ElementOrigin =
     | typeof ORIGIN_METADATA_SIDEBAR
     | typeof ORIGIN_OPEN_WITH;
 
-export type { ViewMode, ErrorType, GetAvatarUrlCallback, GetProfileUrlCallback, AdditionalVersionInfo, ElementOrigin };
+type Alignment = 'left' | 'right';
+
+type ModalOptions = {
+    buttonClassName: string,
+    buttonLabel: string,
+    modalClassName: string,
+    overlayClassName: string,
+};
+
+export type {
+    ViewMode,
+    ErrorType,
+    GetAvatarUrlCallback,
+    GetProfileUrlCallback,
+    AdditionalVersionInfo,
+    ElementOrigin,
+    Alignment,
+    ModalOptions,
+};

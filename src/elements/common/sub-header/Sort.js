@@ -13,6 +13,7 @@ import IconCheck from '../../../icons/general/IconCheck';
 import SortButton from './SortButton';
 import messages from '../messages';
 import { FIELD_NAME, FIELD_DATE, FIELD_SIZE, SORT_ASC, SORT_DESC } from '../../../constants';
+import type { SortBy, SortDirection } from '../../../common/types/core';
 import './Sort.scss';
 
 type Props = {
@@ -21,7 +22,9 @@ type Props = {
     sortDirection: SortDirection,
 };
 
-const SORT_ITEMS: Array<Array<SortBy>> = [
+type SortItem = [SortBy, SortDirection];
+
+const SORT_ITEMS: Array<SortItem> = [
     [FIELD_NAME, SORT_ASC],
     [FIELD_NAME, SORT_DESC],
     [FIELD_DATE, SORT_ASC],

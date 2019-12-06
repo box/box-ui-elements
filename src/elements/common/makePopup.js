@@ -11,6 +11,8 @@ import omit from 'lodash/omit';
 
 import { CLIENT_NAME_CONTENT_PICKER, CLIENT_NAME_CONTENT_UPLOADER } from '../../constants';
 
+import type { ModalOptions } from './flowTypes';
+
 type Props = {
     modal: ModalOptions,
     onCancel?: Function,

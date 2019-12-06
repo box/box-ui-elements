@@ -5,6 +5,7 @@
 
 import selectors from '../../../common/selectors/version';
 import { PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
+import type { FeedItems } from '../../../../common/types/feed';
 
 export const ItemTypes = {
     fileVersion: 'file_version',
@@ -46,6 +47,7 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
             const modifiedBy = tmpCurModifiedBy || PLACEHOLDER_USER;
 
             // add collaborators
+            // $FlowFixMe
             collaborators[modifiedBy.id] = { ...modifiedBy };
 
             return collapsedFeedState.concat([

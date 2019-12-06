@@ -22,6 +22,9 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
+import type { AdditionalSidebarTab } from './flowTypes';
+import type { MetadataEditor } from '../../common/types/metadata';
+import type { BoxItem, User } from '../../common/types/core';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,

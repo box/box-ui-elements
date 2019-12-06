@@ -8,6 +8,7 @@ import Base from './Base';
 import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../common/types/metadataQueries';
+import type APICache from '../utils/Cache';
 
 class MetadataQuery extends Base {
     /**

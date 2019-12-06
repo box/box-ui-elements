@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 import TextInput from '../../../components/text-input';
 
 import messages from '../messages';
+import type { MetadataFieldValue } from '../../../common/types/metadata';
 import './TextField.scss';
 
 type Props = {

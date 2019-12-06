@@ -24,6 +24,8 @@ import {
     HTTP_HEAD,
     HTTP_STATUS_CODE_RATE_LIMIT,
 } from '../constants';
+import type { Method, APIOptions } from '../common/types/api';
+import type { Token, StringAnyMap, StringMap } from '../common/types/core';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
@@ -94,7 +96,7 @@ class Xhr {
         requestInterceptor,
         retryableStatusCodes = [HTTP_STATUS_CODE_RATE_LIMIT],
         shouldRetry = true,
-    }: Options = {}) {
+    }: APIOptions = {}) {
         this.clientName = clientName;
         this.id = id;
         this.language = language;

@@ -7,6 +7,7 @@ import DraftJSMentionSelectorCore from './DraftJSMentionSelectorCore';
 import DraftMentionItem from './DraftMentionItem';
 import FormInput from '../form/FormInput';
 import * as messages from '../input-messages';
+import type { SelectorItems } from '../../../common/types/core';
 
 /**
  * Scans a Draft ContentBlock for entity ranges, so they can be annotated

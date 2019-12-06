@@ -9,6 +9,7 @@ import { injectIntl, type IntlShape } from 'react-intl';
 import Logo from './Logo';
 import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
+import type { View } from '../../../common/types/core';
 
 import './Header.scss';
 

@@ -1,6 +1,7 @@
 // @flow
 
 import type { item as LegacyItem } from '../flowTypes';
+import type { BoxItem } from '../../../common/types/core';
 
 /**
  * Take the legacy item data and reformat it to map to the keys specified in the V2

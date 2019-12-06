@@ -26,6 +26,9 @@ import {
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import type { WithLoggerProps } from '../../common/types/logging';
+import type { SkillCardEntry, SkillCard } from '../../common/types/skills';
+import type { NumberBooleanMap, BoxItem } from '../../common/types/core';
+import type { JSONPatchOperations } from '../../common/types/api';
 import './SkillsSidebar.scss';
 
 type PropsWithoutContext = {

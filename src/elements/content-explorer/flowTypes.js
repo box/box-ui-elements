@@ -1,4 +1,6 @@
 // @flow
+import type { View, BoxItem } from '../../common/types/core';
+
 export type CommonGridViewFunctions = {
     onItemDelete: (item: BoxItem) => void,
     onItemDownload: (item: BoxItem) => void,

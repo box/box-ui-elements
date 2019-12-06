@@ -1,10 +1,25 @@
-import PropTypes from 'prop-types';
+// @flow
 import React from 'react';
 import classNames from 'classnames';
 
 import LoadingIndicator from '../../components/loading-indicator';
 
 import './QuickSearchSelector.scss';
+
+type Props = {
+    /** CSS class for the wrapper div */
+    className?: string,
+    /** Props for the input element (search bar) */
+    inputProps?: Object,
+    /** Function to obtain reference to inner input element */
+    inputRef?: Function,
+    /** Current loading state */
+    isLoading?: boolean,
+    /** Function to call on input changes */
+    onInput: Function,
+    /** Placeholder message in input element */
+    placeholder: string,
+};
 
 const QuickSearchSelector = ({
     className,
@@ -14,7 +29,7 @@ const QuickSearchSelector = ({
     onInput,
     placeholder,
     ...rest
-}) => (
+}: Props) => (
     <div className="quick-search-selector">
         <input
             {...rest}
@@ -32,14 +47,5 @@ const QuickSearchSelector = ({
 );
 
 QuickSearchSelector.displayName = 'QuickSearchSelector';
-
-QuickSearchSelector.propTypes = {
-    className: PropTypes.string,
-    inputProps: PropTypes.object,
-    inputRef: PropTypes.func,
-    isLoading: PropTypes.bool,
-    onInput: PropTypes.func.isRequired,
-    placeholder: PropTypes.string.isRequired,
-};
 
 export default QuickSearchSelector;

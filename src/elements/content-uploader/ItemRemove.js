@@ -10,6 +10,7 @@ import Tooltip from '../../components/tooltip';
 import IconClose from '../../icons/general/IconClose';
 import messages from '../common/messages';
 import { STATUS_ERROR, STATUS_IN_PROGRESS, STATUS_STAGED } from '../../constants';
+import type { UploadItem, UploadStatus } from '../../common/types/upload';
 
 type Props = {
     onClick: (item: UploadItem) => void,
