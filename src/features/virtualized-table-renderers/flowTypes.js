@@ -6,7 +6,7 @@ const { ASC, DESC } = SORT_DIRECTION;
 
 type SortDirection = ASC | DESC;
 
-type MouseEvent = ({ event: React.MouseEvent<HTMLElement>, index: Number, rowData: any }) => any;
+type MouseEvent = ({ event: SyntheticEvent<HTMLElement>, index: Number, rowData: any }) => any;
 
 type RowRendererParams = {
     className: string,
