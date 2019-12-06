@@ -11,14 +11,19 @@ export { default as filePathCellRenderer } from './filePathCellRenderer';
 
 export type {
     CellRendererParams,
+    CellRendererParamsBase,
+    FileItemPath,
+    FilePathCellRendererCellData,
+    FilePathCellRendererParams,
+    HeaderRendererParams,
     ItemNameCellRendererCellData,
     ItemNameCellRendererParams,
-    HeaderRendererParams,
     LastModifiedByCellRendererCellData,
     LastModifiedByCellRendererParams,
     RowClickParams,
     RowRendererParams,
+    SortDirection,
+    SortParams,
     UserCellRendererCellData,
     UserCellRendererParams,
-    CellRendererParamsBase,
 } from './flowTypes';

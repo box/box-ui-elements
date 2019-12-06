@@ -33,9 +33,30 @@ exports[`features/virtualized-table-renderers/filePathCellRenderer should render
 </span>
 `;
 
-exports[`features/virtualized-table-renderers/filePathCellRenderer should render a FilePathCell when it is external file and all files 1`] = `
+exports[`features/virtualized-table-renderers/filePathCellRenderer should render a FilePathCell when only id is available 1`] = `
 <span
-  className="bdl-FilePathCell is-external"
+  className="bdl-FilePathCell"
+  title="123"
+>
+  <FileIcon
+    extension=""
+  />
+  <Breadcrumb
+    label="contentPath"
+  >
+    <span
+      className="bdl-FilePathCell-breadcrumbName"
+      key="123"
+    >
+      123
+    </span>
+  </Breadcrumb>
+</span>
+`;
+
+exports[`features/virtualized-table-renderers/filePathCellRenderer should render a FilePathCell with "All Files" text when given an external file 1`] = `
+<span
+  className="bdl-FilePathCell bdl-is-external"
   title="All Files > External File > External File (123 Bytes)"
 >
   <FileIcon
@@ -61,27 +82,6 @@ exports[`features/virtualized-table-renderers/filePathCellRenderer should render
       key="External File (123 Bytes)"
     >
       External File (123 Bytes)
-    </span>
-  </Breadcrumb>
-</span>
-`;
-
-exports[`features/virtualized-table-renderers/filePathCellRenderer should render a FilePathCell when only id is available 1`] = `
-<span
-  className="bdl-FilePathCell"
-  title="123"
->
-  <FileIcon
-    extension=""
-  />
-  <Breadcrumb
-    label="contentPath"
-  >
-    <span
-      className="bdl-FilePathCell-breadcrumbName"
-      key="123"
-    >
-      123
     </span>
   </Breadcrumb>
 </span>

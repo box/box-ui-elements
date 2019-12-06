@@ -9,7 +9,7 @@
         font-size: 13px;
     }
 
-    &.is-external {
+    &.bdl-is-external {
         .breadcrumb-item-last .bdl-FilePathCell-breadcrumbName {
             @include isExternal;
         }

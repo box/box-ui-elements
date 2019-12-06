@@ -45,7 +45,7 @@ describe('features/virtualized-table-renderers/filePathCellRenderer', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render a FilePathCell when it is external file and all files', () => {
+    test('should render a FilePathCell with "All Files" text when given an external file', () => {
         const cellData = {
             id: '123',
             name: 'fancy.jpg',

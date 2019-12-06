@@ -36,7 +36,7 @@ const fileNameCellRenderer = (intl: IntlShape) => (cellRendererParams: FilePathC
         const contentName = getName({ id, isExternal, type: itemType, name }, intl);
         const displayName = `${contentName}${displaySize}`;
         const fullPath = [...path, displayName];
-        const filePathCellClass = classNames('bdl-FilePathCell', { 'is-external': isExternal });
+        const filePathCellClass = classNames('bdl-FilePathCell', { 'bdl-is-external': isExternal });
 
         return (
             <span className={filePathCellClass} title={fullPath.join(' > ')}>

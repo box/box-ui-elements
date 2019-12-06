@@ -8,7 +8,7 @@ export default defineMessages({
     },
     anonymousUser: {
         defaultMessage: 'Anonymous User',
-        description: 'The user is a anonymous user',
+        description: 'The user is an anonymous user',
         id: 'boxui.features.VirtualizedTableRenderers.anonymousUser',
     },
     externalFile: {
@@ -23,7 +23,7 @@ export default defineMessages({
     },
     allFiles: {
         defaultMessage: 'All Files',
-        description: 'Text to show for root folder is external',
+        description: 'Text to show when root folder is external',
         id: 'boxui.features.VirtualizedTableRenderers.allFiles',
     },
     lastModifiedBy: {

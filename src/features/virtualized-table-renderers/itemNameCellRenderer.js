@@ -21,8 +21,8 @@ const itemNameCellRenderer = (intl: IntlShape, onClick?: Function = noop) => (
         const displayName = isExternal ? intl.formatMessage(messages.externalFile) : name;
         const isFolder = type === 'folder';
         const itemNameCellClass = classNames('bdl-ItemNameCell-name', {
-            'is-external': isExternal,
-            'is-folder': isFolder,
+            'bdl-is-external': isExternal,
+            'bdl-is-folder': isFolder,
         });
 
         return (

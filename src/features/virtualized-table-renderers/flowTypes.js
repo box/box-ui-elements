@@ -114,9 +114,13 @@ type LastModifiedByCellRendererParams = CellRendererParamsBase & {
 
 export type {
     CellRendererParams,
+    CellRendererParamsBase,
+    FileItemPath,
+    FilePathCellRendererCellData,
+    FilePathCellRendererParams,
+    HeaderRendererParams,
     ItemNameCellRendererCellData,
     ItemNameCellRendererParams,
-    HeaderRendererParams,
     LastModifiedByCellRendererCellData,
     LastModifiedByCellRendererParams,
     RowClickParams,
@@ -125,8 +129,4 @@ export type {
     SortParams,
     UserCellRendererCellData,
     UserCellRendererParams,
-    FilePathCellRendererParams,
-    FilePathCellRendererCellData,
-    CellRendererParamsBase,
-    FileItemPath,
 };
