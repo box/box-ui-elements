@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/virtualized-table-renderers/itemNameCellRenderer should render a itemNameCell 1`] = `
+<span
+  className="bdl-ItemNameCell"
+  title="fancy.jpg"
+>
+  <FileIcon
+    dimension={32}
+    extension="jpg"
+  />
+  <span
+    className="bdl-ItemNameCell-name"
+  >
+    fancy.jpg
+  </span>
+</span>
+`;
