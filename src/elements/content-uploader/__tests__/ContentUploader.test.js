@@ -62,14 +62,67 @@ describe('elements/content-uploader/ContentUploader', () => {
         test('should set itemIds to be an empty when method is called with an empty array', () => {
             const onComplete = jest.fn();
             const useUploadsManager = false;
+            const isResumableUploadsEnabled = false;
             const wrapper = getWrapper({
                 onComplete,
                 useUploadsManager,
+                isResumableUploadsEnabled,
             });
 
             wrapper.instance().updateViewAndCollection([], null);
 
             expect(wrapper.state().itemIds).toEqual({});
+        });
+
+        test('should not call onComplete when isResumableUploadsEnabled is true and not all items are finished', () => {
+            const onComplete = jest.fn();
+            const useUploadsManager = true;
+            const isResumableUploadsEnabled = true;
+            const wrapper = getWrapper({
+                onComplete,
+                useUploadsManager,
+                isResumableUploadsEnabled,
+            });
+            const instance = wrapper.instance();
+            const items = [{ status: STATUS_PENDING }, { status: STATUS_COMPLETE }, { status: STATUS_ERROR }];
+
+            instance.updateViewAndCollection(items, null);
+
+            expect(onComplete).toHaveBeenCalledTimes(0);
+        });
+
+        test('should call onComplete when isResumableUploadsEnabled is true and all items are finished', () => {
+            const onComplete = jest.fn();
+            const useUploadsManager = true;
+            const isResumableUploadsEnabled = true;
+            const wrapper = getWrapper({
+                onComplete,
+                useUploadsManager,
+                isResumableUploadsEnabled,
+            });
+            const instance = wrapper.instance();
+            const items = [{ status: STATUS_COMPLETE }, { status: STATUS_COMPLETE }, { status: STATUS_ERROR }];
+
+            instance.updateViewAndCollection(items, null);
+
+            expect(onComplete).toHaveBeenCalledTimes(1);
+        });
+
+        test('should call onComplete when isResumableUploadsEnabled is false and not all items are finished', () => {
+            const onComplete = jest.fn();
+            const useUploadsManager = true;
+            const isResumableUploadsEnabled = false;
+            const wrapper = getWrapper({
+                onComplete,
+                useUploadsManager,
+                isResumableUploadsEnabled,
+            });
+            const instance = wrapper.instance();
+            const items = [{ status: STATUS_COMPLETE }, { status: STATUS_STAGED }, { status: STATUS_ERROR }];
+
+            instance.updateViewAndCollection(items, null);
+
+            expect(onComplete).toHaveBeenCalledTimes(1);
         });
     });
 
