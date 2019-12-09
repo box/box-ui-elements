@@ -165,11 +165,12 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     handleKeyDown = (event: SyntheticKeyboardEvent<HTMLDivElement>) => {
+        const { key } = event;
         const { options } = this.props;
         const { activeItemIndex, isOpen } = this.state;
         const itemCount = options.length;
 
-        switch (event.key) {
+        switch (key) {
             case 'ArrowDown':
                 stopDefaultEvent(event);
                 if (isOpen) {
@@ -194,7 +195,7 @@ class BaseSelectField extends React.Component<Props, State> {
                     stopDefaultEvent(event);
                     this.selectOption(activeItemIndex);
                     // Enter always closes dropdown (even for multiselect)
-                    if (event.key === 'Enter') {
+                    if (key === 'Enter') {
                         this.closeDropdown();
                     }
                 }
@@ -205,7 +206,17 @@ class BaseSelectField extends React.Component<Props, State> {
                     this.closeDropdown();
                 }
                 break;
-            // no default
+            default: {
+                stopDefaultEvent(event);
+                const lowerCaseKey = key.toLowerCase();
+                const optionIndex = options.findIndex(
+                    option => option.displayText.toLowerCase().indexOf(lowerCaseKey) === 0,
+                );
+
+                if (optionIndex >= 0) {
+                    this.setActiveItem(optionIndex);
+                }
+            }
         }
     };
 
