@@ -62,15 +62,40 @@ describe('elements/content-uploader/ContentUploader', () => {
         test('should set itemIds to be an empty when method is called with an empty array', () => {
             const onComplete = jest.fn();
             const useUploadsManager = false;
+            const isResumableUploadsEnabled = false;
             const wrapper = getWrapper({
                 onComplete,
                 useUploadsManager,
+                isResumableUploadsEnabled,
             });
 
             wrapper.instance().updateViewAndCollection([], null);
 
             expect(wrapper.state().itemIds).toEqual({});
         });
+
+        test.each([
+            ['not', true, 'not', STATUS_PENDING, 0],
+            ['', true, '', STATUS_COMPLETE, 1],
+            ['', false, 'not', STATUS_STAGED, 1],
+        ])(
+            'should %s call onComplete when isResumableUploadsEnabled is %s and %s all items are finished',
+            (a, isResumableUploadsEnabled, b, status, expected) => {
+                const onComplete = jest.fn();
+                const useUploadsManager = true;
+                const wrapper = getWrapper({
+                    onComplete,
+                    useUploadsManager,
+                    isResumableUploadsEnabled,
+                });
+                const instance = wrapper.instance();
+                const items = [{ status }, { status: STATUS_COMPLETE }, { status: STATUS_ERROR }];
+
+                instance.updateViewAndCollection(items, null);
+
+                expect(onComplete).toHaveBeenCalledTimes(expected);
+            },
+        );
     });
 
     describe('addFilesToUploadQueue()', () => {
