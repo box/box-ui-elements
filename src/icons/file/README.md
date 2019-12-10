@@ -21,107 +21,107 @@ const IconsExample = require('../../../examples/src/IconsExample').default;
 const icons = [
     {
         name: 'IconFileAudio',
-        component: require('../imported/IconFileAudio32').default,
+        component: require('../../icon/content/FileAudio32').default,
     },
     {
         name: 'IconFileBoxNote',
-        component: require('../imported/IconFileBoxNote32').default,
+        component: require('../../icon/content/FileBoxNote32').default,
     },
     {
         name: 'IconFileCode',
-        component: require('../imported/IconFileCode32').default,
+        component: require('../../icon/content/FileCode32').default,
     },
     {
         name: 'IconFileDefault',
-        component: require('../imported/IconFileDefault32').default,
+        component: require('../../icon/content/FileDefault32').default,
     },
     {
         name: 'IconFileDwg',
-        component: require('../imported/IconFileDwg32').default,
+        component: require('../../icon/content/FileDwg32').default,
     },
     {
         name: 'IconFileExcelSpreadsheet',
-        component: require('../imported/IconFileExcel32').default,
+        component: require('../../icon/content/FileExcel32').default,
     },
     {
         name: 'IconFileGoogleDocs',
-        component: require('../imported/IconFileDocs32').default,
+        component: require('../../icon/content/FileDocs32').default,
     },
     {
         name: 'IconFileGoogleSheets',
-        component: require('../imported/IconFileSheets32').default,
+        component: require('../../icon/content/FileSheets32').default,
     },
     {
         name: 'IconFileGoogleSlides',
-        component: require('../imported/IconFileSlides32').default,
+        component: require('../../icon/content/FileSlides32').default,
     },
     {
         name: 'IconFileIllustrator',
-        component: require('../imported/IconFileIllustrator32').default,
+        component: require('../../icon/content/FileIllustrator32').default,
     },
     {
         name: 'IconFileImage',
-        component: require('../imported/IconFileImage32').default,
+        component: require('../../icon/content/FileImage32').default,
     },
     {
         name: 'IconFileIndesign',
-        component: require('../imported/IconFileIndesign32').default,
+        component: require('../../icon/content/FileIndesign32').default,
     },
     {
         name: 'IconFileKeynote',
-        component: require('../imported/IconFileKeynote32').default,
+        component: require('../../icon/content/FileKeynote32').default,
     },
     {
         name: 'IconFileNumbers',
-        component: require('../imported/IconFileNumbers32').default,
+        component: require('../../icon/content/FileNumbers32').default,
     },
     {
         name: 'IconFilePages',
-        component: require('../imported/IconFilePages32').default,
+        component: require('../../icon/content/FilePages32').default,
     },
     {
         name: 'IconFilePDF',
-        component: require('../imported/IconFilePdf32').default,
+        component: require('../../icon/content/FilePdf32').default,
     },
     {
         name: 'IconFilePhotoshop',
-        component: require('../imported/IconFilePhotoshop32').default,
+        component: require('../../icon/content/FilePhotoshop32').default,
     },
     {
         name: 'IconFilePowerpointPresentation',
-        component: require('../imported/IconFilePowerpoint32').default,
+        component: require('../../icon/content/FilePowerpoint32').default,
     },
     {
         name: 'IconFilePresentation',
-        component: require('../imported/IconFilePresentation32').default,
+        component: require('../../icon/content/FilePresentation32').default,
     },
     {
         name: 'IconFileSpreadsheet',
-        component: require('../imported/IconFileSpreadsheet32').default,
+        component: require('../../icon/content/FileSpreadsheet32').default,
     },
     {
         name: 'IconFileText',
-        component: require('../imported/IconFileText32').default,
+        component: require('../../icon/content/FileText32').default,
     },
     {
         name: 'IconFileThreeD',
-        component: require('../imported/IconFileThreeD32').default,
+        component: require('../../icon/content/FileThreeD32').default,
     },
     {
         name: 'IconFileVector',
-        component: require('../imported/IconFileVector32').default,
+        component: require('../../icon/content/FileVector32').default,
     },
     {
         name: 'IconFileVideo',
-        component: require('../imported/IconFileVideo32').default,
+        component: require('../../icon/content/FileVideo32').default,
     },
     {
         name: 'IconFileWordDocument',
-        component: require('../imported/IconFileWord32').default,
+        component: require('../../icon/content/FileWord32').default,
     },
     {
         name: 'IconFileZip',
-        component: require('../imported/IconFileZip32').default,
+        component: require('../../icon/content/FileZip32').default,
     },
 ];
 

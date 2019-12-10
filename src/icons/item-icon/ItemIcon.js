@@ -1,38 +1,38 @@
 // @flow
 import * as React from 'react';
 
-import IconFileAudio from '../imported/IconFileAudio32';
-import IconFileBoxNote from '../imported/IconFileBoxNote32';
-import IconFileCode from '../imported/IconFileCode32';
-import IconFileDefault from '../imported/IconFileDefault32';
-import IconFileDwg from '../imported/IconFileDwg32';
-import IconFileExcelSpreadsheet from '../imported/IconFileExcel32';
-import IconFileGoogleDocs from '../imported/IconFileDocs32';
-import IconFileGoogleSheets from '../imported/IconFileSheets32';
-import IconFileGoogleSlides from '../imported/IconFileSlides32';
-import IconFileIllustrator from '../imported/IconFileIllustrator32';
-import IconFileImage from '../imported/IconFileImage32';
-import IconFileIndesign from '../imported/IconFileIndesign32';
-import IconFileKeynote from '../imported/IconFileKeynote32';
-import IconFileNumbers from '../imported/IconFileNumbers32';
-import IconFilePages from '../imported/IconFilePages32';
-import IconFilePDF from '../imported/IconFilePdf32';
-import IconFilePhotoshop from '../imported/IconFilePhotoshop32';
-import IconFilePowerpointPresentation from '../imported/IconFilePowerpoint32';
-import IconFilePresentation from '../imported/IconFilePresentation32';
-import IconFileSpreadsheet from '../imported/IconFileSpreadsheet32';
-import IconFileText from '../imported/IconFileText32';
-import IconFileThreeD from '../imported/IconFileThreeD32';
-import IconFileVector from '../imported/IconFileVector32';
-import IconFileVideo from '../imported/IconFileVideo32';
-import IconFileWordDocument from '../imported/IconFileWord32';
-import IconFileZip from '../imported/IconFileZip32';
+import IconFileAudio from '../../icon/content/FileAudio32';
+import IconFileBoxNote from '../../icon/content/FileBoxNote32';
+import IconFileCode from '../../icon/content/FileCode32';
+import IconFileDefault from '../../icon/content/FileDefault32';
+import IconFileDwg from '../../icon/content/FileDwg32';
+import IconFileExcelSpreadsheet from '../../icon/content/FileExcel32';
+import IconFileGoogleDocs from '../../icon/content/FileDocs32';
+import IconFileGoogleSheets from '../../icon/content/FileSheets32';
+import IconFileGoogleSlides from '../../icon/content/FileSlides32';
+import IconFileIllustrator from '../../icon/content/FileIllustrator32';
+import IconFileImage from '../../icon/content/FileImage32';
+import IconFileIndesign from '../../icon/content/FileIndesign32';
+import IconFileKeynote from '../../icon/content/FileKeynote32';
+import IconFileNumbers from '../../icon/content/FileNumbers32';
+import IconFilePages from '../../icon/content/FilePages32';
+import IconFilePDF from '../../icon/content/FilePdf32';
+import IconFilePhotoshop from '../../icon/content/FilePhotoshop32';
+import IconFilePowerpointPresentation from '../../icon/content/FilePowerpoint32';
+import IconFilePresentation from '../../icon/content/FilePresentation32';
+import IconFileSpreadsheet from '../../icon/content/FileSpreadsheet32';
+import IconFileText from '../../icon/content/FileText32';
+import IconFileThreeD from '../../icon/content/FileThreeD32';
+import IconFileVector from '../../icon/content/FileVector32';
+import IconFileVideo from '../../icon/content/FileVideo32';
+import IconFileWordDocument from '../../icon/content/FileWord32';
+import IconFileZip from '../../icon/content/FileZip32';
 
-import BookmarkIcon from '../imported/IconFileBookmark32';
+import BookmarkIcon from '../../icon/content/FileBookmark32';
 
-import IconFolderCollab from '../imported/IconFolderShared32';
-import IconFolderExternal from '../imported/IconFolderExternal32';
-import IconFolderPersonal from '../imported/IconFolderPersonal32';
+import IconFolderCollab from '../../icon/content/FolderShared32';
+import IconFolderExternal from '../../icon/content/FolderExternal32';
+import IconFolderPersonal from '../../icon/content/FolderPersonal32';
 
 const itemIconTable = {
     audio: IconFileAudio,

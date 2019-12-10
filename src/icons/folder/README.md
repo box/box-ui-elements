@@ -21,15 +21,15 @@ const IconsExample = require('../../../examples/src/IconsExample').default;
 const icons = [
     {
         name: 'IconFolderCollab',
-        component: require('../imported/IconFolderShared32').default,
+        component: require('../../icon/content/FolderShared32').default,
     },
     {
         name: 'IconFolderExternal',
-        component: require('../imported/IconFolderExternal32').default,
+        component: require('../../icon/content/FolderExternal32').default,
     },
     {
         name: 'IconFolderPersonal',
-        component: require('../imported/IconFolderPersonal32').default,
+        component: require('../../icon/content/FolderPersonal32').default,
     },
     {
         name: 'IconSmallFolder',
