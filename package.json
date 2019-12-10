@@ -82,7 +82,7 @@
         "test": "BABEL_ENV=test NODE_ENV=test yarn jest",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:open",
-        "test:images": "yarn test -c scripts/jest/jest.config.js --maxWorkers=4",
+        "test:images": "yarn test -c scripts/jest/jest.config.js --runInBand",
         "test:visuals": "start-server-and-test start:storybook:ci http-get://localhost:6061 test:images"
     },
     "browserslist": {
