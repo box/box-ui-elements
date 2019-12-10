@@ -247,7 +247,7 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField({ isEscapedWithReference: true });
 
             const props = wrapper.find('PopperComponent').props();
-            expect(props.modifiers.preventOverflow).toBeDefined();
+            expect(props.modifiers.preventOverflow).toEqual({ escapeWithReference: true });
         });
 
         test('should not apply preventOverflow modifier when isEscapedWithReference is not set', () => {
