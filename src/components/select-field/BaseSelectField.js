@@ -41,7 +41,7 @@ type Props = {
     /** The select button is disabled if true */
     isDisabled?: boolean,
     /** Whether to allow the dropdown to overflow its boundaries and remain attached to its reference */
-    isEscapedWithReference?: Boolean,
+    isEscapedWithReference?: boolean,
     /** Whether to align the dropdown to the right */
     isRightAligned: boolean,
     /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
@@ -411,7 +411,7 @@ class BaseSelectField extends React.Component<Props, State> {
         // 5) defaultValue, if defined, cannot be selected in addition to other options (must be exclusive)
 
         const dropdownPlacement = isRightAligned ? PLACEMENT_BOTTOM_END : PLACEMENT_BOTTOM_START;
-        // popper.js modifier to allow dropdown to overflow its bounderies and remain attached to its reference
+        // popper.js modifier to allow dropdown to overflow its boundaries and remain attached to its reference
         const dropdownModifiers = isEscapedWithReference ? { preventOverflow: { escapeWithReference: true } } : {};
 
         return (
