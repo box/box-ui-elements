@@ -40,6 +40,8 @@ type Props = {
     error?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
+    /** Whether to allow the dropdown to overflow its boundaries and remain attached to its reference */
+    isEscapedWithReference?: Boolean,
     /** Whether to align the dropdown to the right */
     isRightAligned: boolean,
     /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
@@ -391,7 +393,14 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     render() {
-        const { className, multiple, isRightAligned, isScrollable, selectedValues } = this.props;
+        const {
+            className,
+            multiple,
+            isEscapedWithReference,
+            isRightAligned,
+            isScrollable,
+            selectedValues,
+        } = this.props;
         const { isOpen } = this.state;
 
         // @TODO: Need invariants on specific conditions.
@@ -402,6 +411,8 @@ class BaseSelectField extends React.Component<Props, State> {
         // 5) defaultValue, if defined, cannot be selected in addition to other options (must be exclusive)
 
         const dropdownPlacement = isRightAligned ? PLACEMENT_BOTTOM_END : PLACEMENT_BOTTOM_START;
+        // popper.js modifier to allow dropdown to overflow its bounderies and remain attached to its reference
+        const dropdownModifiers = isEscapedWithReference ? { preventOverflow: { escapeWithReference: true } } : {};
 
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
@@ -410,7 +421,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
             >
-                <PopperComponent placement={dropdownPlacement} isOpen={isOpen}>
+                <PopperComponent placement={dropdownPlacement} isOpen={isOpen} modifiers={dropdownModifiers}>
                     {this.renderSelectButton()}
                     <SelectFieldDropdown
                         isScrollable={isScrollable}
