@@ -504,6 +504,24 @@ describe('components/select-field/BaseSelectField', () => {
         });
     });
 
+    describe('onAnyKey', () => {
+        test('should set the active item based on letter', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            const instanceMock = sandbox.mock(instance);
+
+            wrapper.setState({ isOpen: true });
+
+            instanceMock.expects('setActiveItem').withArgs(2);
+
+            wrapper.simulate('keyDown', {
+                key: 'd',
+                preventDefault: sandbox.mock(),
+                stopPropagation: sandbox.mock(),
+            });
+        });
+    });
+
     describe('handleChange', () => {
         test('should call props.onChange with list of selected items', () => {
             const wrapper = shallowRenderSelectField();

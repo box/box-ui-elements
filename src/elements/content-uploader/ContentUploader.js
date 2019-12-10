@@ -854,13 +854,17 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     updateViewAndCollection(items: UploadItem[], callback?: Function) {
-        const { onComplete, useUploadsManager }: Props = this.props;
+        const { onComplete, useUploadsManager, isResumableUploadsEnabled }: Props = this.props;
         const someUploadIsInProgress = items.some(uploadItem => uploadItem.status !== STATUS_COMPLETE);
         const someUploadHasFailed = items.some(uploadItem => uploadItem.status === STATUS_ERROR);
         const allItemsArePending = !items.some(uploadItem => uploadItem.status !== STATUS_PENDING);
+        const noFileIsPendingOrInProgress = items.every(
+            uploadItem => uploadItem.status !== STATUS_PENDING && uploadItem.status !== STATUS_IN_PROGRESS,
+        );
         const areAllItemsFinished = items.every(
             uploadItem => uploadItem.status === STATUS_COMPLETE || uploadItem.status === STATUS_ERROR,
         );
+        const uploadItemsStatus = isResumableUploadsEnabled ? areAllItemsFinished : noFileIsPendingOrInProgress;
 
         let view = '';
         if ((items && items.length === 0) || allItemsArePending) {
@@ -879,7 +883,7 @@ class ContentUploader extends Component<Props, State> {
             }
         }
 
-        if (areAllItemsFinished && useUploadsManager) {
+        if (uploadItemsStatus && useUploadsManager) {
             if (this.isAutoExpanded) {
                 this.resetUploadManagerExpandState();
             } // Else manually expanded so don't close
