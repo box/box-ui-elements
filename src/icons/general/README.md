@@ -851,6 +851,12 @@ width?: number,
         propsDocumentation: iconPropsDocumentation,
     },
     {
+        name: 'IconRelayFlag',
+        component: require('./IconRelayFlag').default,
+        propsDocumentation: iconPropsDocumentation,
+
+    },
+    {
         name: 'IconRemove',
         component: require('./IconRemove').default,
         propsDocumentation: iconPropsDocumentation,
