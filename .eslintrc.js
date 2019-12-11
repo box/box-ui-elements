@@ -27,6 +27,7 @@ module.exports = {
                 shallow: true,
                 mount: true,
                 takeScreenshot: true,
+                takeScreenshotAfterInput: true,
             },
         }
     ]

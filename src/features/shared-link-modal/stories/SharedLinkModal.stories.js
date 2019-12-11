@@ -5,10 +5,7 @@ import { State, Store } from '@sambego/storybook-state';
 import { boolean } from '@storybook/addon-knobs';
 
 import Button from '../../../components/button/Button';
-import Flyout from '../../../components/flyout/Flyout';
-import Overlay from '../../../components/flyout/Overlay';
 
-import SharedLink from '../SharedLink';
 import SharedLinkModal from '../SharedLinkModal';
 import notes from './SharedLinkModal.stories.md';
 
@@ -48,7 +45,6 @@ export const basic = () => {
         componentStore.set({ submitting: true });
         return new Promise(resolve => {
             setTimeout(() => {
-                console.log('Request succeeded!');
                 componentStore.set({ submitting: false });
                 resolve();
             }, 500);
@@ -81,7 +77,7 @@ export const basic = () => {
                                     peopleInYourCompany: true,
                                     peopleInThisItem: true,
                                 }}
-                                canRemoveLink
+                                canRemoveLink={boolean('canRemoveLink', true)}
                                 changeAccessLevel={newLevel =>
                                     fakeRequest().then(() => componentStore.set({ accessLevel: newLevel }))
                                 }
@@ -100,14 +96,13 @@ export const basic = () => {
                                 isEditAllowed={state.permissionLevel === 'canEdit'}
                                 isPreviewAllowed={state.permissionLevel === 'canView'}
                                 onRequestClose={closeModal}
-                                onSettingsClick={() => alert('hi!')}
+                                onSettingsClick={() => null}
                                 permissionLevel={state.permissionLevel}
                                 removeLink={() => fakeRequest().then(closeModal)}
                                 removeLinkButtonProps={{ 'data-resin-target': 'remove' }}
-                                sendEmail={({ emails, emailMessage }) =>
+                                sendEmail={() =>
                                     fakeRequest().then(() => {
                                         closeModal();
-                                        console.log(`Sent invite to ${emails} with message "${emailMessage}"`);
                                     })
                                 }
                                 sharedLink="http://box.com/s/abcdefg"

@@ -21,7 +21,6 @@ export const basic = () => {
         componentStore.set({ submitting: true });
         return new Promise(resolve => {
             setTimeout(() => {
-                console.log('Request succeeded!');
                 componentStore.set({ submitting: false });
                 resolve();
             }, 500);
@@ -61,7 +60,7 @@ export const basic = () => {
                                 isEditAllowed={boolean('isEditAllowed', true)}
                                 isPreviewAllowed={boolean('isPreviewAllowed', true)}
                                 itemType="folder"
-                                onSettingsClick={() => alert('opening settings modal')}
+                                onSettingsClick={() => null}
                                 removeLink={fakeRequest}
                                 removeLinkButtonProps={{ 'data-resin-target': 'remove' }}
                                 settingsButtonProps={{ 'data-resin-target': 'settings' }}
