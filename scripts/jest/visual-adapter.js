@@ -1,10 +1,7 @@
 // @flow
-
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
 expect.extend({ toMatchImageSnapshot });
-
-// testing utility functions
 
 type TakeScreenshotParams = {
     action?: string,
@@ -12,6 +9,8 @@ type TakeScreenshotParams = {
     selector?: string,
     userInput?: string,
 };
+
+// testing utility functions
 
 // Takes image screenshots
 global.takeScreenshot = async id => {
