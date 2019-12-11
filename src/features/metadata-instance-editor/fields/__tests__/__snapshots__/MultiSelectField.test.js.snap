@@ -6,6 +6,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
 >
   <Label>
     <MultiSelectField
+      isEscapedWithReference={true}
       isScrollable={true}
       onChange={[Function]}
       options={Array []}
@@ -36,6 +37,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
       description
     </i>
     <MultiSelectField
+      isEscapedWithReference={true}
       isScrollable={true}
       onChange={[Function]}
       options={Array []}

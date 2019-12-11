@@ -242,6 +242,20 @@ describe('components/select-field/BaseSelectField', () => {
                 expect(overlay.hasClass(OVERLAY_SCROLLABLE_CLASS)).toBe(result);
             },
         );
+
+        test('should apply preventOverflow modifier when isEscapedWithReference is true', () => {
+            const wrapper = shallowRenderSelectField({ isEscapedWithReference: true });
+
+            const props = wrapper.find('PopperComponent').props();
+            expect(props.modifiers.preventOverflow).toEqual({ escapeWithReference: true });
+        });
+
+        test('should not apply preventOverflow modifier when isEscapedWithReference is not set', () => {
+            const wrapper = shallowRenderSelectField();
+
+            const props = wrapper.find('PopperComponent').props();
+            expect(props.modifiers.preventOverflow).toBeUndefined();
+        });
     });
 
     describe('onBlur', () => {
