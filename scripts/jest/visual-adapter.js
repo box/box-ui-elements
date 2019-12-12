@@ -21,9 +21,7 @@ global.takeScreenshot = async id => {
 // Takes image screenshots after user input, e.g., clicking or entering text
 global.takeScreenshotAfterInput = async (id, selector, action = 'click', userInput): TakeScreenshotParams => {
     await global.page.goto(`http://localhost:6061/iframe.html?id=${id}`);
-    if (selector) {
-        await global.page.waitForSelector(selector);
-        await global.page[action](selector, userInput);
-    }
+    await global.page.waitForSelector(selector);
+    await global.page[action](selector, userInput);
     return global.page.screenshot();
 };
