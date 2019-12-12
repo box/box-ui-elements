@@ -126,7 +126,7 @@ export const basic = () => {
 };
 
 export default {
-    title: 'Components|SharedLinkModal',
+    title: 'Features|SharedLinkModal',
     component: SharedLinkModal,
     parameters: {
         notes,

@@ -1,5 +1,5 @@
 describe('features/shared-link-modal/SharedLink', () => {
-    const SHARED_LINK_STORY = 'components-sharedlink--basic';
+    const SHARED_LINK_STORY = 'features-sharedlink--basic';
     test(`looks visually correct when using story ${SHARED_LINK_STORY}`, async () => {
         const image = await takeScreenshot(SHARED_LINK_STORY);
         expect(image).toMatchImageSnapshot();

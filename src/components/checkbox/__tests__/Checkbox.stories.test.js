@@ -3,8 +3,8 @@ describe('components/checkbox/Checkbox', () => {
         ['components-checkbox--basic'],
         ['components-checkbox--controlled'],
         ['components-checkbox--disabled'],
-        ['components-checkbox--withTooltip'],
-        ['components-checkbox--withSubsection'],
+        ['components-checkbox--with-tooltip'],
+        ['components-checkbox--with-subsection'],
     ])('looks visually correct when using story %s', async id => {
         const image = await takeScreenshot(id);
         expect(image).toMatchImageSnapshot();
