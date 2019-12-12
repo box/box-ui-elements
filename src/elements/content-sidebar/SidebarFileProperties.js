@@ -7,6 +7,7 @@
 import React from 'react';
 import getProp from 'lodash/get';
 import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import ItemProperties from '../../features/item-details/ItemProperties';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import getFileSize from '../../utils/getFileSize';

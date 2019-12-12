@@ -7,6 +7,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import KeyBinder from '../common/KeyBinder';

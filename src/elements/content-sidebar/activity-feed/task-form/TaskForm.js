@@ -8,6 +8,7 @@ import noop from 'lodash/noop';
 import getProp from 'lodash/get';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import commonMessages from '../../../../common/messages';
 import messages from './messages';
 import commentFormMessages from '../comment-form/messages';

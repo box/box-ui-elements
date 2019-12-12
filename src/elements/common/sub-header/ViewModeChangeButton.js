@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import classNames from 'classnames';
+import noop from 'lodash/noop';
 
 import Button from '../../../components/button';
 import IconGridViewInverted from '../../../icons/general/IconGridViewInverted';
@@ -16,11 +18,11 @@ import './ViewModeChangeButton.scss';
 
 type Props = {
     className?: string,
-    onViewModeChange: (viewMode: ViewMode) => void,
+    onViewModeChange?: (viewMode: ViewMode) => void,
     viewMode: ViewMode,
 } & InjectIntlProvidedProps;
 
-const ViewModeChangeButton = ({ className = '', onViewModeChange, intl, viewMode, ...rest }: Props) => {
+const ViewModeChangeButton = ({ className = '', onViewModeChange = noop, intl, viewMode, ...rest }: Props) => {
     const isGridView = viewMode === VIEW_MODE_GRID;
     const viewMessage = isGridView ? intl.formatMessage(messages.listView) : intl.formatMessage(messages.gridView);
     const onClick = () => {

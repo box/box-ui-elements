@@ -61,6 +61,7 @@ const TaskModal = (props: TaskModalProps) => {
             <div className="be">
                 <TaskForm
                     editMode={editMode}
+                    // $FlowFixMe
                     error={error}
                     onCancel={onModalClose}
                     onSubmitError={onSubmitError}

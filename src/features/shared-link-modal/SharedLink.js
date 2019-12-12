@@ -1,6 +1,7 @@
 /* @flow */
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 
 import TextInputWithCopyButton from '../../components/text-input-with-copy-button';
 import Tooltip from '../../components/tooltip';

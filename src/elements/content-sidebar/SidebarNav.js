@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import IconMagicWand from '../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../icons/general/IconMetadataThick';
 import IconDocInfo from '../../icons/general/IconDocInfo';

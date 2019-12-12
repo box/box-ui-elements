@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import IconCheck from '../../icons/general/IconCheck';
 import IconClose from '../../icons/general/IconClose';
 import IconInProgress from './IconInProgress';
