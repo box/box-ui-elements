@@ -195,6 +195,7 @@ class Comment extends React.Component<Props, State> {
                                 })}
                                 updateComment={this.handleUpdate}
                                 isOpen={isInputOpen}
+                                // $FlowFixMe
                                 user={currentUser}
                                 onCancel={this.commentFormCancelHandler}
                                 onFocus={this.commentFormFocusHandler}

@@ -121,8 +121,10 @@ const ActiveState = ({
                         return (
                             <li key={item.type + item.id} className="bcs-version-item" data-testid="version">
                                 {item.versions ? (
+                                    // $FlowFixMe
                                     <CollapsedVersion {...item} onInfo={onVersionInfo} />
                                 ) : (
+                                    // $FlowFixMe
                                     <Version {...item} onInfo={onVersionInfo} />
                                 )}
                             </li>

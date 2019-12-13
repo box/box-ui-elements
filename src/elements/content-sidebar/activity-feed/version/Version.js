@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
 import messages from '../../../common/messages';
 import PlainButton from '../../../../components/plain-button';
@@ -35,8 +36,10 @@ const ACTION_MAP = {
 };
 
 const Version = (props: Props): React.Node => {
+    // $FlowFixMe
     const action = selectors.getVersionAction(props);
     const { id, intl, onInfo, version_number, version_promoted } = props;
+    // $FlowFixMe
     const { name } = selectors.getVersionUser(props);
 
     return (

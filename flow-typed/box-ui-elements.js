@@ -6,7 +6,6 @@
 /* eslint-disable no-unused-vars */
 // NOTE: all of these imports resolve to `any`
 // see https://github.com/facebook/flow/issues/7574
-import type { InjectIntlProvidedProps } from 'react-intl';
 import type { $AxiosXHR, $AxiosError, Axios, CancelTokenSource } from 'axios';
 import type FolderAPI from '../src/api/Folder';
 import type FileAPI from '../src/api/File';

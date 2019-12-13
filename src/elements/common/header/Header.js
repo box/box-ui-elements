@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { injectIntl, type IntlShape } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import Logo from './Logo';
 import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';

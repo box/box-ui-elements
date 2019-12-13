@@ -7,6 +7,7 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import Avatar from '../Avatar';
 import CommentFormControls from './CommentFormControls';
 import DraftJSMentionSelector, {
@@ -32,7 +33,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems,
     onCancel: Function,
     onFocus: Function,
-    onSubmit: Function,
+    onSubmit?: Function,
     tagged_message?: string,
     updateComment?: Function,
     user: User,

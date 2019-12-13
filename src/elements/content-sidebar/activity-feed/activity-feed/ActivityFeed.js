@@ -288,6 +288,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         createComment={hasCommentPermission ? this.onCommentCreate : noop}
                         getMentionWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
+                        // $FlowFixMe
                         user={currentUser}
                         onCancel={this.commentFormCancelHandler}
                         onFocus={this.commentFormFocusHandler}

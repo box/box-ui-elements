@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
 import PlainButton from '../../../../components/plain-button';
 import messages from '../../../common/messages';
@@ -66,6 +67,7 @@ type Props = {
 } & InjectIntlProvidedProps;
 
 const CollapsedVersion = (props: Props): React.Node => {
+    // $FlowFixMe
     const action = selectors.getVersionAction(props);
     const { collaborators, intl, onInfo, versions, version_start, version_end } = props;
 
