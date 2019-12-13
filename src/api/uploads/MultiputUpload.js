@@ -488,22 +488,6 @@ class MultiputUpload extends BaseMultiput {
             logEvent: session_endpoints.log_event,
         };
 
-        // Reset uploading process for parts that were in progress when the upload failed
-        let nextUploadIndex = this.firstUnuploadedPartIndex;
-        while (this.numPartsUploading > 0) {
-            const part = this.parts[nextUploadIndex];
-            if (part && part.state === PART_STATE_UPLOADING) {
-                part.state = PART_STATE_DIGEST_READY;
-                part.numUploadRetriesPerformed = 0;
-                part.timing = {};
-                part.uploadedBytes = 0;
-
-                this.numPartsUploading -= 1;
-                this.numPartsDigestReady += 1;
-            }
-            nextUploadIndex += 1;
-        }
-
         this.processNextParts();
     }
 
@@ -655,6 +639,23 @@ class MultiputUpload extends BaseMultiput {
      */
     partUploadErrorHandler = (error: Error, eventInfo: string): void => {
         this.sessionErrorHandler(error, LOG_EVENT_TYPE_PART_UPLOAD_RETRIES_EXCEEDED, eventInfo);
+        // Pause the rest of the parts.
+        // can't cancel parts because cancel destroys the part and parts are only created in createSession call
+        if (this.isResumableUploadsEnabled) {
+            // Reset uploading process for parts that were in progress when the upload failed
+            let nextUploadIndex = this.firstUnuploadedPartIndex;
+            while (this.numPartsUploading > 0) {
+                const part = this.parts[nextUploadIndex];
+                if (part && part.state === PART_STATE_UPLOADING) {
+                    part.reset();
+                    part.pause();
+
+                    this.numPartsUploading -= 1;
+                    this.numPartsDigestReady += 1;
+                }
+                nextUploadIndex += 1;
+            }
+        }
     };
 
     /**
@@ -1056,7 +1057,11 @@ class MultiputUpload extends BaseMultiput {
                 // can get called on retries
                 this.numPartsDigestReady -= 1;
                 this.numPartsUploading += 1;
-                part.upload();
+                if (part.isPaused) {
+                    part.unpause();
+                } else {
+                    part.upload();
+                }
                 break;
             }
         }

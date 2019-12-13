@@ -6,6 +6,7 @@ exports[`features/metadata-instance-editor/fields/EnumField should correctly ren
 >
   <Label>
     <SingleSelectField
+      isEscapedWithReference={true}
       isScrollable={true}
       onChange={[Function]}
       options={
@@ -49,6 +50,7 @@ exports[`features/metadata-instance-editor/fields/EnumField should correctly ren
       description
     </i>
     <SingleSelectField
+      isEscapedWithReference={true}
       isScrollable={true}
       onChange={[Function]}
       options={

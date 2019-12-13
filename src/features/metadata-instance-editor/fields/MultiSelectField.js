@@ -38,6 +38,7 @@ const MultiSelectField = ({
             <Label text={displayName}>
                 {!!description && <i className="metadata-instance-editor-field-multi-select-desc">{description}</i>}
                 <MultiSelect
+                    isEscapedWithReference
                     isScrollable
                     onChange={(selectedOptions: Array<SelectOptionProp>) => {
                         if (selectedOptions.length) {

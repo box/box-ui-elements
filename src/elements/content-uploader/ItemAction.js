@@ -13,6 +13,7 @@ import LoadingIndicator from '../../components/loading-indicator';
 import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
 import messages from '../common/messages';
+import { RESIN_TAG_TARGET } from '../../common/variables';
 import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
 import type { UploadStatus } from '../../common/types/upload';
 
@@ -47,7 +48,7 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
         case STATUS_ERROR:
             icon = <IconRetry height={24} width={24} />;
             tooltip = isResumableUploadsEnabled ? messages.resume : messages.retry;
-            target = 'uploadretry';
+            target = isResumableUploadsEnabled ? 'uploadresume' : 'uploadretry';
             break;
         case STATUS_IN_PROGRESS:
         case STATUS_STAGED:
@@ -70,7 +71,7 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
     }
 
     if (target) {
-        resin = { 'data-resin-target': target };
+        resin = { [RESIN_TAG_TARGET]: target };
     }
 
     return (
