@@ -1,17 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/grid-view/GridView should render() 1`] = `
-<Component
+<Table
   className="bdl-GridView"
   disableHeader={true}
+  estimatedRowSize={30}
   gridClassName="bdl-GridView-body"
+  headerHeight={0}
+  headerRowRenderer={[Function]}
+  headerStyle={Object {}}
   height={600}
+  noRowsRenderer={[Function]}
+  onRowsRendered={[Function]}
+  onScroll={[Function]}
+  overscanIndicesGetter={[Function]}
+  overscanRowCount={10}
   rowClassName="bdl-GridView-tableRow"
   rowCount={1}
   rowGetter={[Function]}
   rowHeight={[Function]}
+  rowRenderer={[Function]}
+  rowStyle={Object {}}
+  scrollToAlignment="auto"
   scrollToIndex={0}
   sortDirection="ASC"
+  style={Object {}}
   width={400}
 >
   <Column
@@ -25,5 +38,5 @@ exports[`components/grid-view/GridView should render() 1`] = `
     style={Object {}}
     width={400}
   />
-</Component>
+</Table>
 `;

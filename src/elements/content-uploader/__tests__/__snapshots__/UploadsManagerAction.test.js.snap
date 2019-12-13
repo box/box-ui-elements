@@ -5,6 +5,7 @@ exports[`elements/content-uploader/UploadsManagerAction should render correctly 
   className="bcu-uploads-manager-action"
 >
   <PrimaryButton
+    data-resin-target="uploadresumeheader"
     onClick={[Function]}
     type="button"
   >
@@ -21,6 +22,7 @@ exports[`elements/content-uploader/UploadsManagerAction should render correctly 
   className="bcu-uploads-manager-action"
 >
   <PrimaryButton
+    data-resin-target="uploadresumeheader"
     onClick={[Function]}
     type="button"
   >

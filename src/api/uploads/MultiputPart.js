@@ -68,6 +68,10 @@ class MultiputPart extends BaseMultiput {
 
     fileSize: number;
 
+    isPaused: boolean; // For resumable uploads.  When an error happens, all parts for an upload get paused.  This
+    // is not a separate state because a paused upload transitions to the DIGEST_READY state immediately
+    // so MultiputUpload can upload the part again.
+
     /**
      * [constructor]
      *
@@ -115,6 +119,7 @@ class MultiputPart extends BaseMultiput {
         if (this.rangeEnd > fileSize - 1) {
             this.rangeEnd = fileSize - 1;
         }
+        this.isPaused = false;
 
         this.onSuccess = onSuccess || noop;
         this.onError = onError || noop;
@@ -148,7 +153,7 @@ class MultiputPart extends BaseMultiput {
      * @return {void}
      */
     upload = (): void => {
-        if (this.isDestroyed()) {
+        if (this.isDestroyedOrPaused()) {
             return;
         }
 
@@ -197,7 +202,7 @@ class MultiputPart extends BaseMultiput {
      * @return {void}
      */
     uploadSuccessHandler = ({ data }: { data: Object }) => {
-        if (this.isDestroyed()) {
+        if (this.isDestroyedOrPaused()) {
             return;
         }
 
@@ -219,7 +224,7 @@ class MultiputPart extends BaseMultiput {
      * @return {void}
      */
     uploadProgressHandler = (event: ProgressEvent) => {
-        if (this.isDestroyed()) {
+        if (this.isDestroyedOrPaused()) {
             return;
         }
 
@@ -237,7 +242,8 @@ class MultiputPart extends BaseMultiput {
      * @return {void}
      */
     uploadErrorHandler = async (error: Error) => {
-        if (this.isDestroyed()) {
+        if (this.isDestroyedOrPaused()) {
+            // Ignore abort() error by checking this.isPaused
             return;
         }
 
@@ -296,7 +302,7 @@ class MultiputPart extends BaseMultiput {
      * @return {Promise}
      */
     retryUpload = async (): Promise<any> => {
-        if (this.isDestroyed()) {
+        if (this.isDestroyedOrPaused()) {
             return;
         }
 
@@ -337,6 +343,48 @@ class MultiputPart extends BaseMultiput {
         this.blob = null;
         this.data = {};
         this.destroy();
+    }
+
+    /**
+     * Pauses upload for this Part.
+     *
+     * @return {void}
+     */
+    pause(): void {
+        this.isPaused = true;
+        this.state = PART_STATE_DIGEST_READY;
+        this.xhr.abort(); //  This calls the error handler.
+    }
+
+    /**
+     * Unpauses upload for this Part.
+     *
+     * @return {void}
+     */
+    unpause(): void {
+        this.isPaused = false;
+        this.state = PART_STATE_UPLOADING;
+        this.retryUpload();
+    }
+
+    /**
+     * Resets upload for this Part.
+     *
+     * @return {void}
+     */
+    reset(): void {
+        this.numUploadRetriesPerformed = 0;
+        this.timing = {};
+        this.uploadedBytes = 0;
+    }
+
+    /**
+     * Checks if this Part is destroyed or paused
+     *
+     * @return {boolean}
+     */
+    isDestroyedOrPaused(): boolean {
+        return this.isDestroyed() || this.isPaused;
     }
 
     /**

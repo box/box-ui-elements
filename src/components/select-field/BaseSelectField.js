@@ -40,6 +40,8 @@ type Props = {
     error?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
+    /** Whether to allow the dropdown to overflow its boundaries and remain attached to its reference */
+    isEscapedWithReference?: boolean,
     /** Whether to align the dropdown to the right */
     isRightAligned: boolean,
     /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
@@ -165,11 +167,12 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     handleKeyDown = (event: SyntheticKeyboardEvent<HTMLDivElement>) => {
+        const { key } = event;
         const { options } = this.props;
         const { activeItemIndex, isOpen } = this.state;
         const itemCount = options.length;
 
-        switch (event.key) {
+        switch (key) {
             case 'ArrowDown':
                 stopDefaultEvent(event);
                 if (isOpen) {
@@ -194,7 +197,7 @@ class BaseSelectField extends React.Component<Props, State> {
                     stopDefaultEvent(event);
                     this.selectOption(activeItemIndex);
                     // Enter always closes dropdown (even for multiselect)
-                    if (event.key === 'Enter') {
+                    if (key === 'Enter') {
                         this.closeDropdown();
                     }
                 }
@@ -205,7 +208,17 @@ class BaseSelectField extends React.Component<Props, State> {
                     this.closeDropdown();
                 }
                 break;
-            // no default
+            default: {
+                stopDefaultEvent(event);
+                const lowerCaseKey = key.toLowerCase();
+                const optionIndex = options.findIndex(
+                    option => option.displayText.toLowerCase().indexOf(lowerCaseKey) === 0,
+                );
+
+                if (optionIndex >= 0) {
+                    this.setActiveItem(optionIndex);
+                }
+            }
         }
     };
 
@@ -380,7 +393,14 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     render() {
-        const { className, multiple, isRightAligned, isScrollable, selectedValues } = this.props;
+        const {
+            className,
+            multiple,
+            isEscapedWithReference,
+            isRightAligned,
+            isScrollable,
+            selectedValues,
+        } = this.props;
         const { isOpen } = this.state;
 
         // @TODO: Need invariants on specific conditions.
@@ -391,6 +411,8 @@ class BaseSelectField extends React.Component<Props, State> {
         // 5) defaultValue, if defined, cannot be selected in addition to other options (must be exclusive)
 
         const dropdownPlacement = isRightAligned ? PLACEMENT_BOTTOM_END : PLACEMENT_BOTTOM_START;
+        // popper.js modifier to allow dropdown to overflow its boundaries and remain attached to its reference
+        const dropdownModifiers = isEscapedWithReference ? { preventOverflow: { escapeWithReference: true } } : {};
 
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
@@ -399,7 +421,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
             >
-                <PopperComponent placement={dropdownPlacement} isOpen={isOpen}>
+                <PopperComponent placement={dropdownPlacement} isOpen={isOpen} modifiers={dropdownModifiers}>
                     {this.renderSelectButton()}
                     <SelectFieldDropdown
                         isScrollable={isScrollable}

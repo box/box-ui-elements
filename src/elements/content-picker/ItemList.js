@@ -17,7 +17,7 @@ import selectionCellRenderer from './selectionCellRenderer';
 import isRowSelectable from './cellRendererHelper';
 import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
 import type { View, Collection, BoxItem } from '../../common/types/core';
-
+import 'react-virtualized/styles.css';
 import './ItemList.scss';
 
 type Props = {
