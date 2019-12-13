@@ -109,7 +109,6 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
 
         const { attachment, targetAttachment } = positions[position];
         const child = React.Children.only(children);
-        // eslint-disable-next-line prettier/prettier
         const referenceElement = React.cloneElement(child as React.ReactElement, {
             'aria-describedby': this.radarAnimationID,
         });

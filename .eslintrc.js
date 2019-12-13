@@ -1,4 +1,5 @@
 const eslintrc = require.resolve('@box/frontend/eslint/eslintrc.js');
+const prettierRc = require('./.prettierrc.js');
 
 module.exports = {
     extends: [eslintrc],
@@ -19,6 +20,7 @@ module.exports = {
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
         'import/no-unresolved': 'off', // fixme
+        'import/extensions': 'off',
     },
     plugins: ['formatjs'],
     overrides: [
@@ -35,8 +37,9 @@ module.exports = {
         {
             files: ['*.ts', '*.tsx'],
             rules: {
+                'prettier/prettier': ['error', prettierRc], // migrate to fe
                 '@typescript-eslint/explicit-function-return-type': 'off', // fixme
-                'import/extensions': 'off',
+                'import/extensions': 'off', // migrate to fe
             },
             parser: "@typescript-eslint/parser",
             extends: [

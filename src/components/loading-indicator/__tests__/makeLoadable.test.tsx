@@ -40,8 +40,9 @@ describe('components/loading-indicator/makeLoadable', () => {
 
     test('should pass loadingIndicatorPorps to LoadingIndicator', () => {
         const LoadableComponent = makeLoadable(TestComponent);
-        // eslint-disable-next-line prettier/prettier
-        const wrapper = shallow(<LoadableComponent isLoading loadingIndicatorProps={{ className: 'foobar' } as LoadingIndicatorProps} />);
+        const wrapper = shallow(
+            <LoadableComponent isLoading loadingIndicatorProps={{ className: 'foobar' } as LoadingIndicatorProps} />,
+        );
 
         expect(wrapper.find('LoadingIndicator').prop('className')).toEqual('foobar');
     });

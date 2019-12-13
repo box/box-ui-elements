@@ -1,5 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import omit from 'lodash/omit';
 import LoadingIndicator from '../loading-indicator';
 import RadarAnimation from '../radar';
 
@@ -53,7 +54,12 @@ class Button extends React.Component<ButtonProps> {
 
     render() {
         const { children, className, isDisabled, isLoading, isSelected, setRef, type, showRadar, ...rest } = this.props;
-        const buttonProps = isDisabled ? { ...rest, 'aria-disabled': true } : rest;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const buttonProps: Omit<any, 'onClick'> = omit(rest, ['onClick']);
+        if (isDisabled) {
+            buttonProps['aria-disabled'] = true;
+        }
+
         const styleClassName = classNames(
             'btn',
             {
@@ -74,9 +80,9 @@ class Button extends React.Component<ButtonProps> {
                     }
                 }}
                 className={styleClassName}
+                onClick={this.handleClick}
                 type={type}
                 {...buttonProps}
-                onClick={this.handleClick} // Use internal onClick
             >
                 <span className="btn-content">{children}</span>
                 {isLoading && <LoadingIndicator className="btn-loading-indicator" />}

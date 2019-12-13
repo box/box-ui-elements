@@ -52,7 +52,6 @@ describe('components/radar/RadarAnimation', () => {
         },
     ].forEach(({ position }) => {
         test(`should render correctly with ${position} positioning`, () => {
-            // eslint-disable-next-line prettier/prettier
             const wrapper = getWrapper({ position } as RadarAnimationProps);
             expect(wrapper).toMatchSnapshot();
         });
