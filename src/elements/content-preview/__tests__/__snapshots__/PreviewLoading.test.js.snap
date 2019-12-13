@@ -4,7 +4,7 @@ exports[`elements/content-preview/PreviewLoading render() should render correctl
 <div
   className="bcpr-PreviewLoading"
 >
-  <IconFileDefault32
+  <FileDefault32
     height={160}
     width={160}
   />
