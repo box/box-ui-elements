@@ -20,107 +20,107 @@ const IconsExample = require('../../../examples/src/IconsExample').default;
 
 const icons = [
     {
-        name: 'IconFileAudio',
+        name: 'FileAudio32',
         component: require('../../icon/content/FileAudio32').default,
     },
     {
-        name: 'IconFileBoxNote',
+        name: 'FileBoxNote32',
         component: require('../../icon/content/FileBoxNote32').default,
     },
     {
-        name: 'IconFileCode',
+        name: 'FileCode32',
         component: require('../../icon/content/FileCode32').default,
     },
     {
-        name: 'IconFileDefault',
+        name: 'FileDefault32',
         component: require('../../icon/content/FileDefault32').default,
     },
     {
-        name: 'IconFileDwg',
+        name: 'FileDwg32',
         component: require('../../icon/content/FileDwg32').default,
     },
     {
-        name: 'IconFileExcelSpreadsheet',
+        name: 'FileExcel32',
         component: require('../../icon/content/FileExcel32').default,
     },
     {
-        name: 'IconFileGoogleDocs',
+        name: 'FileDocs32',
         component: require('../../icon/content/FileDocs32').default,
     },
     {
-        name: 'IconFileGoogleSheets',
+        name: 'FileSheets32',
         component: require('../../icon/content/FileSheets32').default,
     },
     {
-        name: 'IconFileGoogleSlides',
+        name: 'FileSlides32',
         component: require('../../icon/content/FileSlides32').default,
     },
     {
-        name: 'IconFileIllustrator',
+        name: 'FileIllustrator32',
         component: require('../../icon/content/FileIllustrator32').default,
     },
     {
-        name: 'IconFileImage',
+        name: 'FileImage32',
         component: require('../../icon/content/FileImage32').default,
     },
     {
-        name: 'IconFileIndesign',
+        name: 'FileIndesign32',
         component: require('../../icon/content/FileIndesign32').default,
     },
     {
-        name: 'IconFileKeynote',
+        name: 'FileKeynote32',
         component: require('../../icon/content/FileKeynote32').default,
     },
     {
-        name: 'IconFileNumbers',
+        name: 'FileNumbers32',
         component: require('../../icon/content/FileNumbers32').default,
     },
     {
-        name: 'IconFilePages',
+        name: 'FilePages32',
         component: require('../../icon/content/FilePages32').default,
     },
     {
-        name: 'IconFilePDF',
+        name: 'FilePdf32',
         component: require('../../icon/content/FilePdf32').default,
     },
     {
-        name: 'IconFilePhotoshop',
+        name: 'FilePhotoshop32',
         component: require('../../icon/content/FilePhotoshop32').default,
     },
     {
-        name: 'IconFilePowerpointPresentation',
+        name: 'FilePowerpoint32',
         component: require('../../icon/content/FilePowerpoint32').default,
     },
     {
-        name: 'IconFilePresentation',
+        name: 'FilePresentation32',
         component: require('../../icon/content/FilePresentation32').default,
     },
     {
-        name: 'IconFileSpreadsheet',
+        name: 'FileSpreadsheet32',
         component: require('../../icon/content/FileSpreadsheet32').default,
     },
     {
-        name: 'IconFileText',
+        name: 'FileText32',
         component: require('../../icon/content/FileText32').default,
     },
     {
-        name: 'IconFileThreeD',
+        name: 'FileThreeD32',
         component: require('../../icon/content/FileThreeD32').default,
     },
     {
-        name: 'IconFileVector',
+        name: 'FileVector32',
         component: require('../../icon/content/FileVector32').default,
     },
     {
-        name: 'IconFileVideo',
+        name: 'FileVideo32',
         component: require('../../icon/content/FileVideo32').default,
     },
     {
-        name: 'IconFileWordDocument',
+        name: 'FileWord32',
         component: require('../../icon/content/FileWord32').default,
     },
     {
-        name: 'IconFileZip',
+        name: 'FileZip32',
         component: require('../../icon/content/FileZip32').default,
     },
 ];
