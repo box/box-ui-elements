@@ -1,9 +1,14 @@
 describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
-    test.each([['components-pillselectordropdown--empty'], ['components-pillselectordropdown--with-pills']])(
-        'looks visually correct when using story %s',
-        async id => {
-            const image = await takeScreenshot(id);
-            expect(image).toMatchImageSnapshot();
-        },
-    );
+    const EMPTY_STATE = 'components-pillselectordropdown--empty';
+    const WITH_PILLS = 'components-pillselectordropdown--with-pills';
+
+    test.each([[EMPTY_STATE], [WITH_PILLS]])('looks visually correct when using story %s', async id => {
+        const image = await takeScreenshot(id);
+        expect(image).toMatchImageSnapshot();
+    });
+
+    test('looks visually correct when typing', async () => {
+        const image = await takeScreenshotAfterInput(EMPTY_STATE, 'textarea', 'type', 'a');
+        expect(image).toMatchImageSnapshot();
+    });
 });
