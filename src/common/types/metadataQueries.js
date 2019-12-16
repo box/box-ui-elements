@@ -26,12 +26,15 @@ type MetadataQueryOrderByClause = {
 };
 
 type MetadataQuery = {
-    ancestor_folder_id: string,
+    ancestor_folder_id?: string,
+    from: string,
     limit?: number,
+    marker?: string,
     next_marker?: string,
     order_by?: Array<MetadataQueryOrderByClause>,
-    query: string,
-    query_params: Object,
+    query?: string,
+    query_params?: Object,
+    use_index?: string,
 };
 
 type MetadataColumnConfig = {

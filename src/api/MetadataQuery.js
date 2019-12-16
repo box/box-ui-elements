@@ -10,6 +10,8 @@ import type { ElementsErrorCallback } from '../common/types/api';
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../common/types/metadataQueries';
 import type APICache from '../utils/Cache';
 
+import { metadataResponse } from '../../fakeData';
+
 class MetadataQuery extends Base {
     /**
      * @property {string}
@@ -89,13 +91,16 @@ class MetadataQuery extends Base {
         }
 
         this.errorCode = ERROR_CODE_METADATA_QUERY;
-        this.xhr
-            .post({
-                url: this.getUrl(),
-                data: query,
-            })
-            .then(this.queryMetadataSuccessHandler)
+        Promise.resolve(metadataResponse)
+            .then(data => this.queryMetadataSuccessHandler(data))
             .catch(this.errorHandler);
+        // this.xhr
+        //     .post({
+        //         url: this.getUrl(),
+        //         data: query,
+        //     })
+        //     .then(this.queryMetadataSuccessHandler)
+        //     .catch(this.errorHandler);
     }
 
     /**

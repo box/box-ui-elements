@@ -63,7 +63,8 @@ const mockMetadataQuerySuccessResponse = {
 
 const url = 'https://api.box.com/2.0/metadata_queries/execute';
 const mockQuery = {
-    query: 'enteprise_1234.tempalteKey.type = :arg1',
+    from: 'enterprise_1234.templateKey',
+    query: 'type = :arg1',
     query_params: {
         arg1: 'bill',
     },
