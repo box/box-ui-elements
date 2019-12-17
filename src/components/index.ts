@@ -9,3 +9,9 @@ export * from './radar';
 
 export { default as LoadingIndicator } from './loading-indicator';
 export * from './loading-indicator';
+
+export { default as Avatar } from './avatar';
+export * from './avatar';
+
+export { default as AccessibleSVG } from './accessible-svg';
+export * from './accessible-svg';

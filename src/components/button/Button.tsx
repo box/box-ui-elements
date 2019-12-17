@@ -54,8 +54,7 @@ class Button extends React.Component<ButtonProps> {
 
     render() {
         const { children, className, isDisabled, isLoading, isSelected, setRef, type, showRadar, ...rest } = this.props;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const buttonProps: Omit<any, 'onClick'> = omit(rest, ['onClick']);
+        const buttonProps: Record<string, boolean> = omit(rest, ['onClick']);
         if (isDisabled) {
             buttonProps['aria-disabled'] = true;
         }

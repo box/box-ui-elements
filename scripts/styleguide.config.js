@@ -33,7 +33,7 @@ const allSections = [
     {
         name: 'Components',
         components: () => [
-            '../src/components/avatar/Avatar.js',
+            '../src/components/avatar/Avatar.tsx',
             '../src/components/badge/Badge.js',
             '../src/components/badgeable/Badgeable.js',
             '../src/components/breadcrumb/Breadcrumb.js',
