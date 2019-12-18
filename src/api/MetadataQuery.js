@@ -41,7 +41,7 @@ class MetadataQuery extends Base {
      * @return {string} base url for files
      */
     getUrl(): string {
-        return `${this.getBaseApiUrl()}/metadata_queries/execute`;
+        return `${this.getBaseApiUrl()}/metadata_queries/execute_read`;
     }
 
     /**

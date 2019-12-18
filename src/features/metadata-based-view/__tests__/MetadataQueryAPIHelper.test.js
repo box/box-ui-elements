@@ -191,8 +191,9 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
         },
     };
     const mdQuery = {
-        query: 'query',
         ancestor_folder_id: '672838458',
+        from: 'enterprise_1234.templateKey',
+        query: 'query',
         query_params: {},
     };
 
@@ -210,7 +211,7 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             ${0}       | ${entries[0].metadata} | ${flattenedMetadataEntries[0]}
             ${1}       | ${entries[1].metadata} | ${flattenedMetadataEntries[1]}
         `(
-            'should return correct flattend metadata for entry $entryIndex',
+            'should return correct flattened metadata for entry $entryIndex',
             ({ metadataResponseEntry, flattenedMetadataEntry }) => {
                 const result = metadataQueryAPIHelper.flattenMetadata(metadataResponseEntry);
                 expect(result).toEqual(flattenedMetadataEntry);
