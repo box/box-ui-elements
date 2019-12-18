@@ -26,7 +26,7 @@ type MetadataQueryOrderByClause = {
 };
 
 type MetadataQuery = {
-    ancestor_folder_id?: string,
+    ancestor_folder_id: string,
     from: string,
     limit?: number,
     marker?: string,

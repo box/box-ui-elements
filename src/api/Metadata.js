@@ -39,8 +39,6 @@ import type {
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
 
-import { templateSchemaInfo } from '../../fakeData';
-
 class Metadata extends File {
     /**
      * Creates a key for the metadata cache
@@ -210,8 +208,7 @@ class Metadata extends File {
      */
     getSchemaByTemplateKey(templateKey: string): Promise<MetadataTemplateSchemaResponse> {
         const url = this.getMetadataTemplateSchemaUrl(templateKey);
-        // return this.xhr.get({ url });
-        return Promise.resolve(templateSchemaInfo);
+        return this.xhr.get({ url });
     }
 
     /**

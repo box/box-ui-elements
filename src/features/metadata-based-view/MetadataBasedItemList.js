@@ -285,13 +285,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         });
 
         return (
-            <div
-                key={key}
-                className={classes}
-                style={style}
-                onMouseLeave={this.handleMouseLeave}
-                onMouseEnter={() => this.handleMouseEnter(columnIndex, rowIndex)}
-            >
+            <div key={key} className={classes} style={style}>
                 {data}
             </div>
         );

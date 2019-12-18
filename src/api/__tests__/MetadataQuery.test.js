@@ -61,14 +61,14 @@ const mockMetadataQuerySuccessResponse = {
     next_marker: marker,
 };
 
-const url = 'https://api.box.com/2.0/metadata_queries/execute';
+const url = 'https://api.box.com/2.0/metadata_queries/execute_read';
 const mockQuery = {
     from: 'enterprise_1234.templateKey',
     query: 'type = :arg1',
     query_params: {
         arg1: 'bill',
     },
-    ancestor_folder_id: 12345,
+    ancestor_folder_id: '12345',
 };
 const mockAPIRequestParams = {
     url,
