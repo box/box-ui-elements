@@ -10,6 +10,8 @@
 /src/features/metadata-instance-editor/     @box/ui-elements
 /src/features/metadata-based-view/          @box/ui-elements
 /src/icons/                                 @box/ui-elements-extended
+/src/icon/                                  @box/ui-elements-extended
+/src/illustration/                          @box/ui-elements-extended
 /src/styles/                                @box/ui-elements-extended
 /src/utils/                                 @box/ui-elements-extended
 
