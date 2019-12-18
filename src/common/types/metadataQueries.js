@@ -33,7 +33,9 @@ type MetadataQuery = {
     next_marker?: string,
     order_by?: Array<MetadataQueryOrderByClause>,
     query?: string,
-    query_params?: Object,
+    query_params?: {
+        [string]: boolean | number | string,
+    },
     use_index?: string,
 };
 
