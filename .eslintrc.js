@@ -1,12 +1,10 @@
 const eslintrc = require.resolve('@box/frontend/eslint/eslintrc.js');
-const prettierRc = require('./.prettierrc.js');
 
 module.exports = {
     extends: [eslintrc],
     rules: {
         camelcase: 'off',
         'class-methods-use-this': 'off',
-        'formatjs/enforce-description': 'error', // fixme
         'jsx-a11y/label-has-associated-control': 'off',
         'import/no-extraneous-dependencies': 'off', // fixme
         'react/default-props-match-prop-types': 'off', // fixme
@@ -20,9 +18,7 @@ module.exports = {
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
         'import/no-unresolved': 'off', // fixme
-        'import/extensions': 'off',
     },
-    plugins: ['formatjs'],
     overrides: [
         {
             files: ['*.test.js', '*.test.tsx'],
@@ -37,31 +33,8 @@ module.exports = {
         {
             files: ['*.ts', '*.tsx'],
             rules: {
-                'prettier/prettier': ['error', prettierRc], // migrate to fe
                 '@typescript-eslint/explicit-function-return-type': 'off', // fixme
-                'import/extensions': 'off', // migrate to fe
-            },
-            parser: "@typescript-eslint/parser",
-            extends: [
-                eslintrc,
-                "plugin:@typescript-eslint/recommended",
-                "prettier/@typescript-eslint",
-            ],
-            "settings": {
-                "import/resolver": {
-                "typescript": {
-                    "directory": "."
-                }
-                }
-            },
-            overrides: [
-                {
-                    files: ['*.stories.tsx', '*.test.tsx'],
-                    rules: {
-                        'import/no-extraneous-dependencies': 'off'
-                    },
-                }
-            ]
+            }
         }
     ]
 };
