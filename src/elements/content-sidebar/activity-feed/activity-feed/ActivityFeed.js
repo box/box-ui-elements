@@ -120,11 +120,11 @@ class ActivityFeed extends React.Component<Props, State> {
 
     /**
      * Determines whether currentUser and feedItems have loaded.
-     * @param prevCurrentUser
-     * @param prevFeedItems
+     * @param prevCurrentUser - The previous value of the currentUser prop
+     * @param prevFeedItems - The previous value of the feedItems prop
      * @returns {boolean}
      */
-    hasLoaded = (prevCurrentUser: User, prevFeedItems: FeedItems): boolean => {
+    hasLoaded = (prevCurrentUser?: User, prevFeedItems?: FeedItems): boolean => {
         const { currentUser, feedItems } = this.props;
         return currentUser !== undefined && feedItems !== undefined && (!prevCurrentUser || !prevFeedItems);
     };
