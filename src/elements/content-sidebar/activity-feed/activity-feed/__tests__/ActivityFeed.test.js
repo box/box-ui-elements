@@ -379,4 +379,21 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
         expect(wrapper.exists('InlineError')).toBe(false);
     });
+
+    describe('hasLoaded()', () => {
+        test.each`
+            prevCurrentUser | prevFeedItems | expected | description
+            ${undefined}    | ${undefined}  | ${true}  | ${'both currentUser and feedItems become defined'}
+            ${undefined}    | ${feedItems}  | ${true}  | ${'currentUser becomes defined'}
+            ${currentUser}  | ${undefined}  | ${true}  | ${'feedItems becomes defined'}
+            ${currentUser}  | ${feedItems}  | ${false} | ${'currentUser and feedItems are already defined'}
+        `('should return $expected when $description', ({ prevCurrentUser, prevFeedItems, expected }) => {
+            const wrapper = getWrapper({
+                currentUser,
+                feedItems,
+            });
+            const instance = wrapper.instance();
+            expect(instance.hasLoaded(prevCurrentUser, prevFeedItems)).toBe(expected);
+        });
+    });
 });
