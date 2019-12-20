@@ -4,6 +4,7 @@
     "flow.enabled": true,
     "eslint.autoFixOnSave": true,
     "javascript.validate.enable": false,
+    "typescript.validate.enable": true,
     "eslint.validate": [
         "javascript",
         "javascriptreact",
